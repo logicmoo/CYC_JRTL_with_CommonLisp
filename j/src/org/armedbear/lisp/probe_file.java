@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: probe_file.java,v 1.1 2003-08-10 00:54:52 piso Exp $
+ * $Id: probe_file.java,v 1.2 2003-08-10 01:25:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,25 +30,31 @@ public final class probe_file extends Lisp
     private static final Primitive1 PROBE_FILE = new Primitive1("probe-file") {
         public LispObject execute(LispObject arg) throws LispError
         {
-            String pathname = LispString.getValue(arg);
+            String namestring;
+            if (arg instanceof LispString)
+                namestring = ((LispString)arg).getValue();
+            else if (arg instanceof Pathname)
+                namestring = ((Pathname)arg).getNamestring();
+            else
+                throw new TypeError(arg, "pathname designator");
             boolean absolute = false;
             if (System.getProperty("os.name").startsWith("Windows")) {
-                if (pathname.length() >= 3) {
-                    if (pathname.charAt(1) == ':')
-                        if (pathname.charAt(2) == '\\')
+                if (namestring.length() >= 3) {
+                    if (namestring.charAt(1) == ':')
+                        if (namestring.charAt(2) == '\\')
                             absolute = true;
                 }
-            } else if (pathname.length() > 0) {
-                if (pathname.charAt(0) == '/')
+            } else if (namestring.length() > 0) {
+                if (namestring.charAt(0) == '/')
                     absolute = true;
             }
             final File file;
             if (absolute)
-                file = new File(pathname);
+                file = new File(namestring);
             else {
                 String dirname =
                     LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
-                file = new File(dirname, pathname);
+                file = new File(dirname, namestring);
             }
             if (!file.exists())
                 return NIL;
