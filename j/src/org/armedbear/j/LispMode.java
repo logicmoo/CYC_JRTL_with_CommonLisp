@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.3 2002-10-13 18:21:46 piso Exp $
+ * $Id: LispMode.java,v 1.4 2002-10-13 18:52:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,23 +115,30 @@ public final class LispMode extends AbstractMode implements Constants, Mode
 
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
-        Position here = new Position(line, 0);
-        Position start = findStartOfDefun(here);
+        int depth = depth(new Position(line, 0), buffer);
+        if (depth > 0)
+            return buffer.getIndentSize() * depth;
+        return 0;
+    }
+
+    private static int depth(Position pos, Buffer buffer)
+    {
+        if (buffer.needsRenumbering())
+            buffer.renumber();
+        Position start = findStartOfDefun(pos);
         LispSyntaxIterator it = new LispSyntaxIterator(start);
         int depth = 0;
-        while (it.getPosition().isBefore(here)) {
+        while (it.getPosition().isBefore(pos)) {
             char c = it.nextChar();
             if (c == '(')
                 ++depth;
             else if (c == ')')
                 --depth;
         }
-        if (depth > 0)
-            return buffer.getIndentSize() * depth;
-        return 0;
+        return depth;
     }
 
-    private Position findStartOfDefun(Position pos)
+    private static Position findStartOfDefun(Position pos)
     {
         Line line = pos.getLine();
         while (true) {
