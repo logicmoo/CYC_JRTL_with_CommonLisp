@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.51 2004-05-22 17:23:43 piso Exp $
+ * $Id: Load.java,v 1.52 2004-05-26 01:24:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -195,11 +195,7 @@ public final class Load extends Lisp
     // ### *fasl-version*
     // internal symbol
     private static final Symbol _FASL_VERSION_ =
-        internSpecial("*FASL-VERSION*", PACKAGE_SYS, new Fixnum(3));
-
-    static {
-        _FASL_VERSION_.setConstant(true);
-    }
+        internConstant("*FASL-VERSION*", PACKAGE_SYS, new Fixnum(3));
 
     // ### *fasl-anonymous-package*
     // internal symbol
@@ -217,7 +213,7 @@ public final class Load extends Lisp
                 if (second.eql(_FASL_VERSION_.getSymbolValue())){
                     // OK
                     final LispThread thread = LispThread.currentThread();
-                    Readtable readtable = new Readtable();
+                    Readtable readtable = new Readtable(NIL);
                     readtable.setDispatchMacroCharacter('#', ':', FASL_SHARP_COLON);
                     thread.bindSpecial(_READTABLE_, readtable);
                     thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_, NIL);
