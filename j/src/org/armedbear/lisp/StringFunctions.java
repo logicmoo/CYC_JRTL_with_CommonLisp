@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.10 2003-10-09 18:00:30 piso Exp $
+ * $Id: StringFunctions.java,v 1.11 2003-10-10 00:49:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,8 @@ public final class StringFunctions extends Lisp
     // ### %string=
     // Case sensitive.
     private static final Primitive _STRING_EQUAL =
-        new Primitive("%string=", PACKAGE_SYS, true) {
+        new Primitive("%string=", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -55,7 +56,8 @@ public final class StringFunctions extends Lisp
     // ### %string/=
     // Case sensitive.
     private static final Primitive _STRING_NOT_EQUAL =
-        new Primitive("%string/=", PACKAGE_SYS, true) {
+        new Primitive("%string/=", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -66,19 +68,32 @@ public final class StringFunctions extends Lisp
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
             int end2 = Fixnum.getInt(args[5]);
-            int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+            int i = start1;
+            int j = start2;
+            while (true) {
+                if (i == end1) {
+                    // Reached end of string1.
+                    if (j == end2)
+                        return NIL; // Strings are identical.
+                    return new Fixnum(i);
+                }
+                if (j == end2) {
+                    // Reached end of string2 before end of string1.
+                    return new Fixnum(i);
+                }
                 if (array1[i] != array2[j])
                     return new Fixnum(i);
+                ++i;
+                ++j;
             }
-            return NIL;
         }
     };
 
     // ### %string-equal
     // Case insensitive.
     private static final Primitive _STRING_EQUAL_IGNORE_CASE =
-        new Primitive("%string-equal", PACKAGE_SYS, true) {
+        new Primitive("%string-equal", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -110,7 +125,8 @@ public final class StringFunctions extends Lisp
     // ### %string-not-equal
     // Case sensitive.
     private static final Primitive _STRING_NOT_EQUAL_IGNORE_CASE =
-        new Primitive("%string-not-equal", PACKAGE_SYS, true) {
+        new Primitive("%string-not-equal", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -121,26 +137,39 @@ public final class StringFunctions extends Lisp
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
             int end2 = Fixnum.getInt(args[5]);
-            int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+            int i = start1;
+            int j = start2;
+            while (true) {
+                if (i == end1) {
+                    // Reached end of string1.
+                    if (j == end2)
+                        return NIL; // Strings are identical.
+                    return new Fixnum(i);
+                }
+                if (j == end2) {
+                    // Reached end of string2.
+                    return new Fixnum(i);
+                }
                 char c1 = array1[i];
                 char c2 = array2[j];
-                if (c1 == c2)
+                if (c1 == c2 ||
+                    Utilities.toUpperCase(c1) == Utilities.toUpperCase(c2) ||
+                    Utilities.toLowerCase(c1) == Utilities.toLowerCase(c2))
+                {
+                    ++i;
+                    ++j;
                     continue;
-                if (Utilities.toUpperCase(c1) == Utilities.toUpperCase(c2))
-                    continue;
-                if (Utilities.toLowerCase(c1) == Utilities.toLowerCase(c2))
-                    continue;
+                }
                 return new Fixnum(i);
             }
-            return NIL;
         }
     };
 
     // ### %string<
     // Case sensitive.
     private static final Primitive _STRING_LESS_THAN =
-        new Primitive("%string<", PACKAGE_SYS, true) {
+        new Primitive("%string<", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -151,26 +180,39 @@ public final class StringFunctions extends Lisp
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
             int end2 = Fixnum.getInt(args[5]);
-            int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+            int i = start1;
+            int j = start2;
+            while (true) {
+                if (i == end1) {
+                    // Reached end of string1.
+                    if (j == end2)
+                        return NIL; // Strings are identical.
+                    return new Fixnum(i);
+                }
+                if (j == end2) {
+                    // Reached end of string2.
+                    return NIL;
+                }
                 char c1 = array1[i];
                 char c2 = array2[j];
-                if (c1 == c2)
+                if (c1 == c2) {
+                    ++i;
+                    ++j;
                     continue;
-                if (c1 > c2)
-                    return NIL;
+                }
                 if (c1 < c2)
                     return new Fixnum(i);
+                // c1 > c2
+                return NIL;
             }
-            // Strings are equal.
-            return NIL;
         }
     };
 
     // ### %string<=
     // Case sensitive.
     private static final Primitive _STRING_GREATER_THAN =
-        new Primitive("%string>", PACKAGE_SYS, true) {
+        new Primitive("%string>", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -181,26 +223,37 @@ public final class StringFunctions extends Lisp
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
             int end2 = Fixnum.getInt(args[5]);
-            int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+            int i = start1;
+            int j = start2;
+            while (true) {
+                if (i == end1) {
+                    // Reached end of string1.
+                    return NIL;
+                }
+                if (j == end2) {
+                    // Reached end of string2.
+                    return new Fixnum(i);
+                }
                 char c1 = array1[i];
                 char c2 = array2[j];
-                if (c1 == c2)
+                if (c1 == c2) {
+                    ++i;
+                    ++j;
                     continue;
+                }
                 if (c1 < c2)
                     return NIL;
-                if (c1 > c2)
-                    return new Fixnum(i);
+                // c1 > c2
+                return new Fixnum(i);
             }
-            // Strings are equal.
-            return NIL;
         }
     };
 
     // ### %string<=
     // Case sensitive.
     private static final Primitive _STRING_LE =
-        new Primitive("%string<=", PACKAGE_SYS, true) {
+        new Primitive("%string<=", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -211,25 +264,37 @@ public final class StringFunctions extends Lisp
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
             int end2 = Fixnum.getInt(args[5]);
-            int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+            int i = start1;
+            int j = start2;
+            while (true) {
+                if (i == end1) {
+                    // Reached end of string1.
+                    return new Fixnum(i);
+                }
+                if (j == end2) {
+                    // Reached end of string2.
+                    return NIL;
+                }
                 char c1 = array1[i];
                 char c2 = array2[j];
-                if (c1 == c2)
+                if (c1 == c2) {
+                    ++i;
+                    ++j;
                     continue;
+                }
                 if (c1 > c2)
                     return NIL;
-                if (c1 < c2)
-                    return new Fixnum(i);
+                // c1 < c2
+                return new Fixnum(i);
             }
-            return new Fixnum(i);
         }
     };
 
     // ### %string<=
     // Case sensitive.
     private static final Primitive _STRING_GE =
-        new Primitive("%string>=", PACKAGE_SYS, true) {
+        new Primitive("%string>=", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -240,27 +305,39 @@ public final class StringFunctions extends Lisp
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
             int end2 = Fixnum.getInt(args[5]);
-            int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+            int i = start1;
+            int j = start2;
+            while (true) {
+                if (i == end1) {
+                    // Reached end of string1.
+                    if (j == end2)
+                        return new Fixnum(i); // Strings are identical.
+                    return NIL;
+                }
+                if (j == end2) {
+                    // Reached end of string2.
+                    return new Fixnum(i);
+                }
                 char c1 = array1[i];
                 char c2 = array2[j];
-                if (c1 == c2)
+                if (c1 == c2) {
+                    ++i;
+                    ++j;
                     continue;
+                }
                 if (c1 < c2)
                     return NIL;
-                if (c1 > c2)
-                    return new Fixnum(i);
+                // c1 > c2
+                return new Fixnum(i);
             }
-            return new Fixnum(i);
-            //             return LispString.equals(string(args[0]), string(args[1]),
-            //                 start1, end1, start2, end2);
         }
     };
 
     // ### %string-lessp
     // Case insensitive.
     private static final Primitive _STRING_LESSP =
-        new Primitive("%string-lessp", PACKAGE_SYS, true) {
+        new Primitive("%string-lessp", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -293,8 +370,8 @@ public final class StringFunctions extends Lisp
                 }
                 if (c1 > c2)
                     return NIL;
-                if (c1 < c2)
-                    return new Fixnum(i);
+                // c1 < c2
+                return new Fixnum(i);
             }
         }
     };
@@ -302,7 +379,8 @@ public final class StringFunctions extends Lisp
     // ### %string-greaterp
     // Case insensitive.
     private static final Primitive _STRING_GREATERP =
-        new Primitive("%string-greaterp", PACKAGE_SYS, true) {
+        new Primitive("%string-greaterp", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -333,8 +411,8 @@ public final class StringFunctions extends Lisp
                 }
                 if (c1 < c2)
                     return NIL;
-                if (c1 > c2)
-                    return new Fixnum(i);
+                // c1 > c2
+                return new Fixnum(i);
             }
         }
     };
@@ -342,7 +420,8 @@ public final class StringFunctions extends Lisp
     // ### %string-not-lessp
     // Case insensitive.
     private static final Primitive _STRING_NOT_LESSP =
-        new Primitive("%string-not-lessp", PACKAGE_SYS, true) {
+        new Primitive("%string-not-lessp", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -375,8 +454,8 @@ public final class StringFunctions extends Lisp
                 }
                 if (c1 > c2)
                     return new Fixnum(i);
-                if (c1 < c2)
-                    return NIL;
+                // c1 < c2
+                return NIL;
             }
         }
     };
@@ -384,7 +463,8 @@ public final class StringFunctions extends Lisp
     // ### %string-not-greaterp
     // Case insensitive.
     private static final Primitive _STRING_NOT_GREATERP =
-        new Primitive("%string-not-greaterp", PACKAGE_SYS, true) {
+        new Primitive("%string-not-greaterp", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
@@ -415,15 +495,16 @@ public final class StringFunctions extends Lisp
                 }
                 if (c1 > c2)
                     return NIL;
-                if (c1 < c2)
-                    return new Fixnum(i);
+                // c1 < c2
+                return new Fixnum(i);
             }
         }
     };
 
     // ### %string-upcase
     private static final Primitive3 _STRING_UPCASE =
-        new Primitive3("%string-upcase", PACKAGE_SYS, true) {
+        new Primitive3("%string-upcase", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
@@ -456,7 +537,8 @@ public final class StringFunctions extends Lisp
 
     // ### %string-downcase
     private static final Primitive3 _STRING_DOWNCASE =
-        new Primitive3("%string-downcase", PACKAGE_SYS, true) {
+        new Primitive3("%string-downcase", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
@@ -489,7 +571,8 @@ public final class StringFunctions extends Lisp
 
     // ### %string-capitalize
     private static final Primitive3 _STRING_CAPITALIZE=
-        new Primitive3("%string-capitalize", PACKAGE_SYS, true) {
+        new Primitive3("%string-capitalize", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
@@ -534,7 +617,8 @@ public final class StringFunctions extends Lisp
 
     // ### %nstring-upcase
     private static final Primitive3 _NSTRING_UPCASE =
-        new Primitive3("%nstring-upcase", PACKAGE_SYS, true) {
+        new Primitive3("%nstring-upcase", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
@@ -561,7 +645,8 @@ public final class StringFunctions extends Lisp
 
     // ### %nstring-downcase
     private static final Primitive3 _NSTRING_DOWNCASE =
-        new Primitive3("%nstring-downcase", PACKAGE_SYS, true) {
+        new Primitive3("%nstring-downcase", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
@@ -588,7 +673,8 @@ public final class StringFunctions extends Lisp
 
     // ### %nstring-capitalize
     private static final Primitive3 _NSTRING_CAPITALIZE =
-        new Primitive3("%nstring-capitalize", PACKAGE_SYS, true) {
+        new Primitive3("%nstring-capitalize", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
