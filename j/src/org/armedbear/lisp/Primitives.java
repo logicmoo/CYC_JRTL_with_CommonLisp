@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.336 2003-08-16 02:12:24 piso Exp $
+ * $Id: Primitives.java,v 1.337 2003-08-16 16:54:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,6 +225,8 @@ public final class Primitives extends Module
                 if (args.length < 1)
                     throw new WrongNumberOfArgumentsException("MIN");
                 LispObject result = args[0];
+                if ((result.getType() & TYPE_REAL) == 0)
+                    throw new TypeError(result, "real");
                 for (int i = 1; i < args.length; i++) {
                     if (args[i].isLessThan(result))
                         result = args[i];
@@ -235,6 +237,8 @@ public final class Primitives extends Module
                 if (args.length < 1)
                     throw new WrongNumberOfArgumentsException("MAX");
                 LispObject result = args[0];
+                if ((result.getType() & TYPE_REAL) == 0)
+                    throw new TypeError(result, "real");
                 for (int i = 1; i < args.length; i++) {
                     if (args[i].isGreaterThan(result))
                         result = args[i];
@@ -4165,17 +4169,22 @@ public final class Primitives extends Module
             else
                 random = (Random) JavaObject.getObject(_RANDOM_STATE_.symbolValueNoThrow());
             if (args[0] instanceof Fixnum) {
-                int limit = Fixnum.getValue(args[0]);
+                int limit = ((Fixnum)args[0]).getValue();
                 int n = random.nextInt((int)limit);
                 Debug.assertTrue(n < limit);
                 return new Fixnum(n);
             }
             if (args[0] instanceof Bignum) {
-                BigInteger limit = Bignum.getValue(args[0]);
+                BigInteger limit = ((Bignum)args[0]).getValue();
                 int bitLength = limit.bitLength();
                 BigInteger rand = new BigInteger(bitLength + 1, random);
                 BigInteger remainder = rand.remainder(limit);
                 return new Bignum(remainder);
+            }
+            if (args[0] instanceof LispFloat) {
+                float limit = ((LispFloat)args[0]).getValue();
+                float rand = random.nextFloat();
+                return new LispFloat(rand * limit);
             }
             throw new TypeError(args[0], "number");
         }
@@ -4703,7 +4712,7 @@ public final class Primitives extends Module
     };
 
     // ### streamp
-    private static final Primitive1 STREAMP = new Primitive1("STREAMP")
+    private static final Primitive1 STREAMP = new Primitive1("streamp")
     {
         public LispObject execute(LispObject arg)
         {
@@ -4712,11 +4721,20 @@ public final class Primitives extends Module
     };
 
     // ### realp
-    private static final Primitive1 REALP = new Primitive1("REALP")
+    private static final Primitive1 REALP = new Primitive1("realp")
     {
         public LispObject execute(LispObject arg)
         {
             return (arg.getType() & TYPE_REAL) != 0 ? T : NIL;
+        }
+    };
+
+    // ### rationalp
+    private static final Primitive1 RATIONALP = new Primitive1("rationalp")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return (arg.getType() & TYPE_RATIONAL) != 0 ? T : NIL;
         }
     };
 }
