@@ -1,8 +1,8 @@
 /*
  * Sort.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: Sort.java,v 1.1.1.1 2002-09-24 16:09:14 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Sort.java,v 1.2 2004-06-06 04:38:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ public final class Sort
 
         public final int compare(Object o1, Object o2)
         {
-            return ((String)o1).compareTo(o2);
+            return ((String)o1).compareTo((String)o2);
         }
     }
 }
