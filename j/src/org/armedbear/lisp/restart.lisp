@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.2 2003-12-06 15:44:42 piso Exp $
+;;; $Id: restart.lisp,v 1.3 2003-12-15 14:07:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -177,14 +177,14 @@
 		  *condition-restarts*)))
        ,@body)))
 
-(defun abort ()
+(defun abort (&optional condition)
   (invoke-restart 'abort)
   (error 'abort-failure))
 
-(defun continue ()
+(defun continue (&optional condition)
   (invoke-restart 'continue))
 
-(defun muffle-warning ()
+(defun muffle-warning (&optional condition)
   (invoke-restart 'muffle-warning))
 
 (defun store-value (value)
@@ -192,3 +192,18 @@
 
 (defun use-value (value)
   (invoke-restart 'use-value value))
+
+;;; Adapted from SBCL.
+(defun warn (datum &rest arguments)
+  (let ((condition (coerce-to-condition datum arguments 'simple-warning 'warn)))
+    (require-type condition 'warning)
+    (restart-case (signal condition)
+                  (muffle-warning ()
+                                  :report "Skip warning."
+                                  (return-from warn nil)))
+    (let ((badness (etypecase condition
+                     (style-warning 'style-warning)
+                     (warning 'warning))))
+      (fresh-line *error-output*)
+      (format *error-output* "~S: ~A~%" badness condition)))
+  nil)
