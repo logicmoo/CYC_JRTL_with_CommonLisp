@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.138 2005-03-02 01:53:00 piso Exp $
+ * $Id: Editor.java,v 1.139 2005-03-02 23:32:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2507,6 +2507,14 @@ public final class Editor extends JPanel implements Constants,
         if (requestedKeyMap != null) {
             KeyMapping mapping =
                 requestedKeyMap.lookup(keyChar, keyCode, modifiers);
+            // FIXME From the xemacs 21.4.17 documentation:
+            // "When both the global and local definitions of a key are other
+            // keymaps, the next character is looked up in both keymaps, with
+            // the local definition overriding the global one. The character
+            // after the `C-x' is looked up in both the major mode's own keymap
+            // for redefined `C-x' commands and in `ctl-x-map'. If the major
+            // mode's own keymap for `C-x' commands contains `nil', the
+            // definition from the global keymap for `C-x' commands is used."
             return mapping;
         }
         // Look in mode-specific key map.
@@ -5264,6 +5272,8 @@ public final class Editor extends JPanel implements Constants,
 
     private void killRegionInternal()
     {
+        if (mark == null)
+            mark = buffer.getMark();
         if (mark != null) {
             if (getMarkLine() != getDotLine() || getMarkOffset() != getDotOffset()) {
                 // A hard update is only necessary if the region spans a line
