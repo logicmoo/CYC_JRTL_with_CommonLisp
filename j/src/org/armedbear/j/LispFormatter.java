@@ -1,8 +1,8 @@
 /*
  * LispFormatter.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispFormatter.java,v 1.35 2004-04-11 19:10:40 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: LispFormatter.java,v 1.36 2005-02-16 12:32:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -552,8 +552,7 @@ public final class LispFormatter extends Formatter
             char c = pos.getChar();
             if (c == EOL) {
                 if (pos.nextLine()) {
-                    changed =
-                        setLineFlags(pos.getLine(), STATE_QUOTE) || changed;
+                    changed |= setLineFlags(pos.getLine(), STATE_QUOTE);
                     continue;
                 } else
                     break; // Reached end of buffer.
@@ -563,8 +562,7 @@ public final class LispFormatter extends Formatter
                 pos.skip();
                 if (pos.getChar() == EOL) {
                     if (pos.nextLine()) {
-                        changed =
-                            setLineFlags(pos.getLine(), STATE_QUOTE) || changed;
+                        changed |= setLineFlags(pos.getLine(), STATE_QUOTE);
                         continue;
                     } else
                         break; // End of buffer.
@@ -592,8 +590,7 @@ public final class LispFormatter extends Formatter
             char c = pos.getChar();
             if (c == EOL) {
                 if (pos.nextLine()) {
-                    changed =
-                        setLineFlags(pos.getLine(), STATE_COMMENT) || changed;
+                    changed |= setLineFlags(pos.getLine(), STATE_COMMENT);
                     continue;
                 } else
                     break; // End of buffer.
