@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaMode.java,v 1.7 2003-05-04 15:55:20 piso Exp $
+ * $Id: JavaMode.java,v 1.8 2003-05-08 02:41:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -390,24 +390,29 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         } else if (buffer.getModeId() == JAVA_MODE) {
             if (s.equals("synchronized"))
                 indent = true;
-            else {
-                RE re = new UncheckedRE("=\\s*new\\s+");
-                if (re.getMatch(pos.getLine().getText()) != null)
-                    indent = true;
-            }
         } else if (buffer.getModeId() == PHP_MODE) {
             if (s.equals("elseif") || s.equals("foreach"))
                 indent = true;
         }
-        int modelIndent;
         if (indent) {
-            modelIndent = buffer.getIndentation(pos.getLine());
+            int modelIndent = buffer.getIndentation(pos.getLine());
             if (textFirstChar != '{' ||
                 buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE))
                 return modelIndent + buffer.getIndentSize();
-        } else
-            modelIndent = buffer.getIndentation(findBeginningOfStatement(pos).getLine());
-        return modelIndent;
+            else
+                return modelIndent;
+        }
+        if (buffer.getModeId() == JAVA_MODE) {
+            RE re = new UncheckedRE("\\s+new\\s+");
+            if (re.getMatch(pos.getLine().getText().substring(0, pos.getOffset())) != null)
+                indent = true;
+        }
+        int modelIndent =
+            buffer.getIndentation(findBeginningOfStatement(pos).getLine());
+        if (indent && (textFirstChar != '{' || buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE)))
+            return modelIndent + buffer.getIndentSize();
+        else
+            return modelIndent;
     }
 
     private final int getIndentationOfEnclosingScope(Line line, Buffer buffer)
