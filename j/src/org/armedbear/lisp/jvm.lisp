@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.369 2005-01-24 18:58:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.370 2005-01-25 02:06:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4814,11 +4814,12 @@
            (setf *arity* arg-count)
            (get-descriptor (list +lisp-object-array+) +lisp-object+)))))
 
-(defun write-class-file (args execute-method class-file)
+(defun write-class-file (class-file)
   (let* ((super (class-file-superclass class-file))
          (this-index (pool-class *this-class*))
          (super-index (pool-class super))
-         (constructor (make-constructor super args)))
+         (constructor (make-constructor super
+                                        (class-file-lambda-list class-file))))
     (pool-name "Code") ; Must be in pool!
 
     ;; Write out the class file.
@@ -4844,7 +4845,10 @@
       ;; methods count
       (write-u2 2 stream)
       ;; methods
-      (write-method execute-method stream)
+      (aver (= (length (class-file-methods class-file)) 1))
+      (let ((execute-method (car (class-file-methods class-file))))
+        (write-method execute-method stream)
+        )
       (write-method constructor stream)
       ;; attributes count
       (write-u2 0 stream))))
@@ -4917,8 +4921,8 @@
          (*declared-functions* (make-hash-table :test 'equal))
          (*declared-strings* (make-hash-table :test 'eq))
          (*declared-fixnums* (make-hash-table :test 'eql))
-         (filespec (class-file-pathname (compiland-class-file compiland)))
-         (*this-class* (class-name-from-filespec filespec))
+         (class-file (compiland-class-file compiland))
+         (*this-class* (class-name-from-filespec (class-file-pathname class-file)))
          (args (cadr p1-result))
          (body (cddr p1-result))
          (*using-arg-array* nil)
@@ -4987,7 +4991,6 @@
                                1))
                  (index 0))
              (dolist (arg args)
-;;                (aver (= index (length (context-vars *context*))))
                (let ((variable (find-visible-variable arg)))
                  (when (null variable)
                    (dformat t "unable to find variable ~S~%" arg)
@@ -4997,7 +5000,6 @@
                  (aver (null (variable-index variable)))
                  (setf (variable-index variable) index)
                  (push variable parameters)
-;;                  (add-variable-to-context variable)
                  (incf register)
                  (incf index))))))
 
@@ -5196,7 +5198,7 @@
     (setf (method-max-locals execute-method) *registers-allocated*)
     (setf (method-handlers execute-method) (nreverse *handlers*))
 
-    (setf (class-file-superclass (compiland-class-file compiland))
+    (setf (class-file-superclass class-file)
           (cond (*child-p*
                  (if *closure-variables*
                      +lisp-ctf-class+
@@ -5208,7 +5210,11 @@
                 (t
                  +lisp-primitive-class+)))
 
-    (write-class-file args execute-method (compiland-class-file compiland))
+    (setf (class-file-lambda-list class-file) args)
+
+    (push execute-method (class-file-methods class-file))
+
+    (write-class-file (compiland-class-file compiland))
     (dformat t "leaving p2-compiland ~S~%" (compiland-name compiland))))
 
 (defun compile-1 (compiland)
