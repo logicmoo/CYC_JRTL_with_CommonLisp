@@ -166,6 +166,20 @@ the text look worse.
 <b>Default value:</b> false
 </dl>
 
+<code><a name="attributesRequireQuotes">attributesRequireQuotes</a></code>
+<dl>
+<dd>
+If true, in HTML mode <a href="commands.html#electricEquals">electricEquals</a>
+automatically inserts a pair of quotation marks after the '=' following an
+attribute name, making it possible to enclose attribute values in quotation
+marks without having to type the quotation marks themselves.
+<p>
+This property is ignored in XML mode; attribute values in XML are always
+enclosed in quotation marks.
+<p>
+<b>Default value:</b> true
+</dl>
+
 <code><a name="attribution">attribution</a></code>
 <dl>
 <dd>
@@ -295,6 +309,38 @@ Width (in pixels) of change marks, which appear in the edit window if
 <a href="#showChangeMarks">showChangeMarks</a>,
 <a href="commands.html#nextChange">nextChange</a>,
 <a href="commands.html#previousChange">previousChange</a>
+</dl>
+
+<code><a name="checkEnabled">checkEnabled</a></code>
+<dl>
+<dd>
+<i>Not documented.</i>
+<p>
+<b>Default value:</b> false
+</dl>
+
+<code><a name="checkIdleBackground">checkIdleBackground</a></code>
+<dl>
+<dd>
+<i>Not documented.</i>
+<p>
+<b>Default value:</b> 10
+</dl>
+
+<code><a name="checkIdleForeground">checkIdleForeground</a></code>
+<dl>
+<dd>
+<i>Not documented.</i>
+<p>
+<b>Default value:</b> 60
+</dl>
+
+<code><a name="checkInterval">checkInterval</a></code>
+<dl>
+<dd>
+<i>Not documented.</i>
+<p>
+<b>Default value:</b> 60
 </dl>
 
 <code><a name="clhsRoot">clhsRoot</a></code>
@@ -809,18 +855,6 @@ matching parenthesis, brace, or bracket, if any, is highlighted.
 <b>See also:</b> <a href="#highlightBrackets">highlightBrackets</a>
 </dl>
 
-<code><a name="HtmlMode.attributesRequireQuotes">HtmlMode.attributesRequireQuotes</a></code>
-<dl>
-<dd>
-
-If true, in HTML mode <a href="commands.html#electricEquals">electricEquals</a>
-automatically inserts a pair of quotation marks after the '=' following an attribute name,
-making it possible to enclose attribute values in quotation marks without having to
-type the quotation marks themselves.
-<p>
-<b>Default value:</b> true
-</dl>
-
 <code><a name="HtmlMode.color.anchor">HtmlMode.color.anchor</a></code>
 <dl>
 <dd>
@@ -1074,6 +1108,18 @@ If false, the indentation will look like this:
 <b>Default value:</b> true
 </dl>
 
+<code><a name="listThreads">listThreads</a></code>
+<dl>
+<dd>
+If > 0, specifies an interval in minutes for writing thread information to the
+log, for debugging purposes only. The list threads task is only installed if
+<a href="#debug">debug</a> is true at startup.
+<p>
+<b>Default value:</b> 0
+<p>
+<b>See also:</b> <a href="logging.html">Logging</a>
+</dl>
+
 <code><a name="Log.enabled">Log.enabled</a></code>
 <dl>
 <dd>
@@ -1110,6 +1156,14 @@ When the log file exceeds its maximum size, it is rolled over to the file
 <p>
 <b>See also:</b> <a href="logging.html">Logging</a>,
 <a href="#Log.maxBackupIndex">Log.maxBackupIndex</a>
+</dl>
+
+<code><a name="nntpReadTimeout">nntpReadTimeout</a></code>
+<dl>
+<dd>
+<i>Not documented.</i>
+<p>
+<b>Default value:</b> 0
 </dl>
 
 <code><a name="org.xml.sax.driver">org.xml.sax.driver</a></code>
@@ -1173,6 +1227,14 @@ server when they are retrieved. Applies only to POP mailboxes.
 <b>Default value:</b> true
 <p>
 <b>See also:</b> <a href="mail.html">Mail</a>
+</dl>
+
+<code><a name="printerFontSize">printerFontSize</a></code>
+<dl>
+<dd>
+Printer font size in points.
+<p>
+<b>Default value:</b> 10
 </dl>
 
 <code><a name="removeTrailingWhitespace">removeTrailingWhitespace</a></code>
@@ -1287,6 +1349,14 @@ Regular expression to match prompts when using ssh.
 <b>Default value:</b> "^[^#$%>]*[#$%>] *|^: *"
 </dl>
 
+<code><a name="sshTimeout">sshTimeout</a></code>
+<dl>
+<dd>
+<i>Not documented.</i>
+<p>
+<b>Default value:</b> 250 milliseconds
+</dl>
+
 <code><a name="showChangeMarks">showChangeMarks</a></code>
 <dl>
 <dd>
@@ -1350,6 +1420,18 @@ SimpleDateFormat</a> object that formats the output string.
 <b>Default value:</b> "MMM d yyyy h:mm a"
 </dl>
 
+<code><a name="StatusBar.displayContext">StatusBar.displayContext</a></code>
+<dl>
+<dd>
+If >= 1, context information (typically identifying the current function or
+method in the source) is displayed in the status bar when there is no other
+information that needs to be displayed there. If > 1, the long form of the
+context string is used; if = 1, the short form is used. If = 0, no context
+information is displayed.
+<p>
+<b>Default value:</b> 1
+</dl>
+
 <code><a name="StatusBar.displayLineCount">StatusBar.displayLineCount</a></code>
 <dl>
 <dd>
@@ -1361,43 +1443,10 @@ If true, the total number of lines in the buffer is displayed in the status bar.
 <code><a name="StatusBar.displayLineSeparator">StatusBar.displayLineSeparator</a></code>
 <dl>
 <dd>
-If true, the line separator for the current buffer (LF, CR, or CR+LF) is displayed in
-the status bar.
+If true, the line separator for the current buffer (LF, CR, or CR+LF) is
+displayed in the status bar.
 <p>
 <b>Default value:</b> false
-</dl>
-
-<code><a name="telnetPromptPattern">telnetPromptPattern</a></code>
-<dl>
-<dd>
-Regular expression to match prompts in a telnet buffer.
-<p>
-<b>Default value:</b> "^[^#$%>]*[#$%>] *|^: *"
-</dl>
-
-<code><a name="ToolBar.isRollover">ToolBar.isRollover</a></code>
-<dl>
-<dd>
-If true, toolbar buttons have dynamic borders which are only painted when the mouse
-cursor is over the button.  If false, toolbar buttons have normal borders.
-<p>
-<b>Default value:</b> true
-</dl>
-
-<code><a name="ToolBar.showIcons">ToolBar.showIcons</a></code>
-<dl>
-<dd>
-If true, toolbar buttons contain icons.
-<p>
-<b>Default value:</b> true
-</dl>
-
-<code><a name="ToolBar.showText">ToolBar.showText</a></code>
-<dl>
-<dd>
-If true, toolbar buttons contain text.
-<p>
-<b>Default value:</b> true
 </dl>
 
 <code><a name="style.comment">style.comment</a></code>
@@ -1480,6 +1529,39 @@ depending on the setting of the <a href="#useTabs">useTabs</a> property.
 Distance between tab stops, in columns, for display purposes.
 <p>
 <b>Default value:</b> 8
+</dl>
+
+<code><a name="telnetPromptPattern">telnetPromptPattern</a></code>
+<dl>
+<dd>
+Regular expression to match prompts in a telnet buffer.
+<p>
+<b>Default value:</b> "^[^#$%>]*[#$%>] *|^: *"
+</dl>
+
+<code><a name="ToolBar.isRollover">ToolBar.isRollover</a></code>
+<dl>
+<dd>
+If true, toolbar buttons have dynamic borders which are only painted when the mouse
+cursor is over the button.  If false, toolbar buttons have normal borders.
+<p>
+<b>Default value:</b> true
+</dl>
+
+<code><a name="ToolBar.showIcons">ToolBar.showIcons</a></code>
+<dl>
+<dd>
+If true, toolbar buttons contain icons.
+<p>
+<b>Default value:</b> true
+</dl>
+
+<code><a name="ToolBar.showText">ToolBar.showText</a></code>
+<dl>
+<dd>
+If true, toolbar buttons contain text.
+<p>
+<b>Default value:</b> true
 </dl>
 
 <code><a name="textFieldFontName">textFieldFontName</a></code>
@@ -1598,6 +1680,15 @@ right margin. If this parameter is zero, no vertical rule is displayed.
 <b>Default value:</b> 0
 <p>
 <b>See also:</b> <a href="#color.verticalRule">color.verticalRule</a>
+</dl>
+
+<code><a name="verticalScrollIncrement">verticalScrollIncrement</a></code>
+<dl>
+<dd>
+The number of lines scrolled when you click on the arrow button at the top or
+bottom of the vertical scroll bar.
+<p>
+<b>Default value:</b> 5
 </dl>
 
 <code><a name="wrapCol">wrapCol</a></code>
