@@ -1,8 +1,8 @@
 /*
  * CVS.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: CVS.java,v 1.4 2003-07-11 18:13:29 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: CVS.java,v 1.5 2004-08-08 00:54:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,7 +171,7 @@ public final class CVS implements Constants
         if (parentBuffer.isModified()) {
             int response =
                 ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                    VC_CHECK_SAVE_PROMPT, title);
+                    CHECK_SAVE_PROMPT, title);
             switch (response) {
                 case RESPONSE_YES:
                     save = true;
@@ -237,7 +237,7 @@ public final class CVS implements Constants
         if (parentBuffer.isModified()) {
             int response =
                 ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                    VC_CHECK_SAVE_PROMPT, cmd);
+                    CHECK_SAVE_PROMPT, cmd);
             switch (response) {
                 case RESPONSE_YES:
                     save = true;

@@ -1,8 +1,8 @@
 /*
  * Constants.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Constants.java,v 1.15 2003-12-29 19:22:55 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Constants.java,v 1.16 2004-08-08 00:54:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ public interface Constants
     int VC_CVS                   = 1;
     int VC_P4                    = 2;
 
-    String VC_CHECK_SAVE_PROMPT  = "Buffer is modified; save it first?";
+    String CHECK_SAVE_PROMPT  = "Buffer is modified; save it first?";
 
     // The following values are arbitrary and must not conflict with any
     // VK_ values defined by Sun!

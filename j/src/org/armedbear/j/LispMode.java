@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.72 2004-08-08 00:44:50 piso Exp $
+ * $Id: LispMode.java,v 1.73 2004-08-08 00:54:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -873,7 +873,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
             if (buffer.isModified()) {
                 int response =
                     ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                                                                    VC_CHECK_SAVE_PROMPT,
+                                                                    CHECK_SAVE_PROMPT,
                                                                     "Load File");
                 switch (response) {
                     case RESPONSE_YES:
@@ -914,7 +914,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
             if (buffer.isModified()) {
                 int response =
                     ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                                                                    VC_CHECK_SAVE_PROMPT,
+                                                                    CHECK_SAVE_PROMPT,
                                                                     "Compile File");
                 switch (response) {
                     case RESPONSE_YES:
@@ -955,7 +955,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
             if (buffer.isModified()) {
                 int response =
                     ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                                                                    VC_CHECK_SAVE_PROMPT,
+                                                                    CHECK_SAVE_PROMPT,
                                                                     "Compile and Load File");
                 switch (response) {
                     case RESPONSE_YES:
