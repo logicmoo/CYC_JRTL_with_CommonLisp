@@ -1,8 +1,8 @@
 /*
  * XmlMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: XmlMode.java,v 1.2 2003-02-25 16:53:46 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: XmlMode.java,v 1.3 2003-06-04 18:12:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -645,30 +645,91 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                 }
             }
 
-            XmlParserImpl parser = new XmlParserImpl();
-            if (parser != null) {
+            final Buffer buffer = editor.getBuffer();
+            XmlParserImpl parser = new XmlParserImpl(buffer);
+            if (parser.initialize()) {
                 editor.setWaitCursor();
-                final Buffer buffer = editor.getBuffer();
-                parser.setBuffer(buffer);
                 parser.setReader(new StringReader(buffer.getText()));
                 parser.run();
                 editor.setDefaultCursor();
-                Exception e = parser.getException();
-                if (e != null) {
-                    if (e instanceof SAXParseException) {
-                        xmlFindError(editor, (SAXParseException)e);
-                        editor.showMessage((SAXParseException)e);
+//                 Exception e = parser.getException();
+//                 if (e != null) {
+//                     if (e instanceof SAXParseException) {
+//                         xmlFindError(editor, (SAXParseException)e);
+//                         editor.showMessage((SAXParseException)e);
+//                     }
+//                 } else if (tree != null) {
+//                     TreeModel treeModel = parser.getTreeModel();
+//                     if (treeModel != null) {
+//                         tree.setParserClassName(parser.getParserClassName());
+//                         tree.setModel(treeModel);
+//                         Debug.assertTrue(tree.getModel() != null);
+//                         Debug.assertTrue(tree.getModel().getRoot() != null);
+//                         xmlEnsureCurrentNodeIsVisible(editor, tree);
+//                     }
+//                     editor.status("No errors");
+//                 }
+                String output = parser.getOutput();
+                // Note that with the current implementation, there will always
+                // be output...
+                if (output != null && output.length() > 0) {
+                    OutputBuffer outputBuffer =
+                        OutputBuffer.getOutputBuffer(output);
+                    Editor otherEditor = editor.getOtherEditor();
+                    if (otherEditor != null) {
+                        outputBuffer.setUnsplitOnClose(
+                            otherEditor.getBuffer().unsplitOnClose());
+                        otherEditor.makeNext(outputBuffer);
+                    } else
+                        outputBuffer.setUnsplitOnClose(true);
+                    editor.displayInOtherWindow(outputBuffer);
+                } else {
+                    if (tree != null) {
+                        TreeModel treeModel = parser.getTreeModel();
+                        if (treeModel != null) {
+                            tree.setParserClassName(parser.getParserClassName());
+                            tree.setModel(treeModel);
+                            Debug.assertTrue(tree.getModel() != null);
+                            Debug.assertTrue(tree.getModel().getRoot() != null);
+                            xmlEnsureCurrentNodeIsVisible(editor, tree);
+                        }
                     }
-                } else if (tree != null) {
-                    TreeModel treeModel = parser.getTreeModel();
-                    if (treeModel != null) {
-                        tree.setParserClassName(parser.getParserClassName());
-                        tree.setModel(treeModel);
-                        Debug.assertTrue(tree.getModel() != null);
-                        Debug.assertTrue(tree.getModel().getRoot() != null);
-                        xmlEnsureCurrentNodeIsVisible(editor, tree);
-                    }
+                    editor.status("No errors");
                 }
+            }
+        }
+    }
+
+    public static void xmlValidateBuffer()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getModeId() == XML_MODE) {
+            final Buffer buffer = editor.getBuffer();
+            XmlParserImpl parser = new XmlParserImpl(buffer);
+            if (parser.initialize()) {
+                try {
+                    editor.setWaitCursor();
+                    parser.enableValidation(true);
+                    parser.setReader(new StringReader(buffer.getText()));
+                    parser.run();
+                }
+                finally {
+                    editor.setDefaultCursor();
+                }
+                String output = parser.getOutput();
+                if (output != null && output.length() > 0) {
+                    OutputBuffer outputBuffer =
+                        OutputBuffer.getOutputBuffer(output);
+                    Editor otherEditor = editor.getOtherEditor();
+                    if (otherEditor != null) {
+                        outputBuffer.setUnsplitOnClose(
+                            otherEditor.getBuffer().unsplitOnClose());
+                        otherEditor.makeNext(outputBuffer);
+                    } else
+                        outputBuffer.setUnsplitOnClose(true);
+                    editor.displayInOtherWindow(outputBuffer);
+                } else
+                    editor.status("No errors");
             }
         }
     }
