@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.1 2003-07-12 14:37:41 piso Exp $
+ * $Id: StructureObject.java,v 1.2 2003-07-12 15:28:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,7 +83,7 @@ public final class StructureObject extends LispObject
             throws LispError
         {
             try {
-                return ((Vector)first).get(((Fixnum)second).getValue());
+                return ((StructureObject)first).get(((Fixnum)second).getValue());
             }
             catch (ClassCastException e) {
                 throw new TypeError();
@@ -100,7 +100,7 @@ public final class StructureObject extends LispObject
             throws LispError
         {
             try {
-                ((Vector)first).set(((Fixnum)second).getValue(), third);
+                ((StructureObject)first).set(((Fixnum)second).getValue(), third);
                 return third;
             }
             catch (ClassCastException e) {
