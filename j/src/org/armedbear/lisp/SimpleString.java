@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.12 2004-03-04 01:56:14 piso Exp $
+ * $Id: SimpleString.java,v 1.13 2004-03-15 19:30:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,26 +77,26 @@ public final class SimpleString extends AbstractString
 
     public LispObject typeOf()
     {
-        return list2(Symbol.SIMPLE_STRING, number(capacity));
+        return list2(Symbol.SIMPLE_STRING, new Fixnum(capacity));
     }
 
-    // FIXME BuiltInClass.SIMPLE_STRING
     public LispClass classOf()
     {
-        return BuiltInClass.STRING;
+        return BuiltInClass.SIMPLE_STRING;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type instanceof Symbol) {
-            if (type == Symbol.SIMPLE_STRING)
-                return T;
-            if (type == Symbol.SIMPLE_BASE_STRING)
-                return T;
-            if (type == Symbol.SIMPLE_ARRAY)
-                return T;
-        }
-        // FIXME BuiltInClass.SIMPLE_STRING, BuiltInClass.SIMPLE_ARRAY
+        if (type == Symbol.SIMPLE_STRING)
+            return T;
+        if (type == Symbol.SIMPLE_BASE_STRING)
+            return T;
+        if (type == Symbol.SIMPLE_ARRAY)
+            return T;
+        if (type == BuiltInClass.SIMPLE_STRING)
+            return T;
+        if (type == BuiltInClass.SIMPLE_ARRAY)
+            return T;
         return super.typep(type);
     }
 
