@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.30 2004-01-04 01:42:46 piso Exp $
+ * $Id: Pathname.java,v 1.31 2004-01-04 15:59:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -361,45 +361,32 @@ public final class Pathname extends LispObject
         }
     };
 
-    // ### %make-pathname
-    // %make-pathname host device directory name type version defaults case =>
-    // pathname
-    // FIXME Incomplete.
-    private static final Primitive _MAKE_PATHNAME =
-        new Primitive("%make-pathname", PACKAGE_SYS, false)
+    private static final Primitive MAKE_PATHNAME =
+        new Primitive("make-pathname", "&key host device directory name type version defaults case")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject[] args)
+            throws ConditionThrowable
         {
-            if (args.length != 8)
-                return signal(new WrongNumberOfArgumentsException(this));
-            Pathname p = new Pathname();
-            p.host = args[0];
-            p.device = args[1];
-            if (args[2] instanceof LispString)
-                p.directory = list2(Keyword.ABSOLUTE, args[2]);
-            else if (args[2] == Keyword.WILD)
-                p.directory = list2(Keyword.ABSOLUTE, Keyword.WILD);
-            else
-                p.directory = args[2];
-            p.name = args[3];
-            p.type = args[4];
-            p.version = args[5]; // Ignored.
-            LispObject defaults = args[6];
-            LispObject _case = args[7]; // Ignored.
-            return p;
+            return _makePathname(args);
         }
     };
 
-    public static Pathname makePathname(LispObject args)
+    public static final Pathname makePathname(LispObject args)
         throws ConditionThrowable
     {
-        if (args.length() % 2 != 0)
+        return _makePathname(args.copyToArray());
+    }
+
+    private static final Pathname _makePathname(LispObject[] args)
+        throws ConditionThrowable
+    {
+        if (args.length % 2 != 0)
             signal(new ProgramError("Odd number of keyword arguments."));
         Pathname p = new Pathname();
-        while (args != NIL) {
-            LispObject key = args.car();
-            LispObject value = args.cadr();
-            args = args.cddr();
+        Pathname defaults = null;
+        for (int i = 0; i < args.length; i += 2) {
+            LispObject key = args[i];
+            LispObject value = args[i+1];
             if (key == Keyword.HOST) {
                 p.host = value;
             } else if (key == Keyword.DEVICE) {
@@ -410,18 +397,51 @@ public final class Pathname extends LispObject
                 else if (value == Keyword.WILD)
                     p.directory = list2(Keyword.ABSOLUTE, Keyword.WILD);
                 else
-                    p.directory = value;
+                    p.directory = validateDirectory(value);
             } else if (key == Keyword.NAME) {
                 p.name = value;
             } else if (key == Keyword.TYPE) {
                 p.type = value;
             } else if (key == Keyword.VERSION) {
                 p.version = value;
+            } else if (key == Keyword.DEFAULTS) {
+                defaults = coerceToPathname(value);
             } else if (key == Keyword.CASE) {
                 ; // Ignored.
             }
         }
+        if (defaults != null) {
+            // Ignore host and device. FIXME Windows!
+            if (p.directory == NIL)
+                p.directory = defaults.directory;
+            if (p.name == NIL)
+                p.name = defaults.name;
+            if (p.type == NIL)
+                p.type = defaults.type;
+        }
         return p;
+    }
+
+    private static final LispObject validateDirectory(LispObject obj)
+        throws ConditionThrowable
+    {
+        LispObject temp = obj;
+        while (temp != NIL) {
+            LispObject first = temp.car();
+            temp = temp.cdr();
+            if (first == Keyword.ABSOLUTE || first == Keyword.WILD_INFERIORS) {
+                LispObject second = temp.car();
+                if (second == Keyword.UP || second == Keyword.BACK) {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append(first);
+                    sb.append(" may not be followed immediately by ");
+                    sb.append(second);
+                    sb.append('.');
+                    return signal(new FileError(sb.toString()));
+                }
+            }
+        }
+        return obj;
     }
 
     // ### pathnamep

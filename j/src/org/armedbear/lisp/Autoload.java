@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.125 2004-01-03 17:45:58 piso Exp $
+ * $Id: Autoload.java,v 1.126 2004-01-04 16:02:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,6 +259,7 @@ public class Autoload extends Function
         autoload("logorc2", "logorc2");
         autoload("logtest", "logtest");
         autoload("logxor", "logxor");
+        autoload("make-pathname", "Pathname");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
         autoload("namestring", "Pathname");
@@ -292,8 +293,8 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
-        autoload(PACKAGE_JAVA, "%jregister-handler", "JHandler");
         autoload(PACKAGE_JAVA, "%jnew-proxy", "JProxy");
+        autoload(PACKAGE_JAVA, "%jregister-handler", "JHandler");
         autoload(PACKAGE_PROF, "%start-profiler", "Profiler", true);
         autoload(PACKAGE_PROF, "stop-profiler", "Profiler", true);
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
@@ -301,7 +302,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
-        autoload(PACKAGE_SYS, "%make-pathname", "Pathname");
         autoload(PACKAGE_SYS, "%make-structure", "StructureObject");
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
