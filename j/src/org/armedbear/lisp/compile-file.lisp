@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.27 2004-06-15 11:23:39 piso Exp $
+;;; $Id: compile-file.lisp,v 1.28 2004-06-15 11:59:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,7 +124,7 @@
                                                     ,classfile)))
                                 `(fset ',name
                                        (make-macro (load-compiled-function
-                                                    ,classfile))))))
+                                                    ,classfile)) ,*source-position*))))
                     (%format t ";  Unable to compile macro ~A~%" name)))))
            (DEFTYPE
             (eval form))
