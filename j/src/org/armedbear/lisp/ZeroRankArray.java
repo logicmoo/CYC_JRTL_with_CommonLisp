@@ -2,7 +2,7 @@
  * ZeroRankArray.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ZeroRankArray.java,v 1.2 2004-02-26 01:15:40 piso Exp $
+ * $Id: ZeroRankArray.java,v 1.3 2004-05-09 17:11:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,10 +108,20 @@ public final class ZeroRankArray extends AbstractArray
         data = obj;
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("#0A");
-        sb.append(data);
-        return sb.toString();
+        if (_PRINT_ARRAY_.symbolValue() != NIL) {
+            StringBuffer sb = new StringBuffer("#0A");
+            sb.append(data.writeToString());
+            return sb.toString();
+        } else {
+            StringBuffer sb = new StringBuffer();
+            if (!adjustable)
+                sb.append("SIMPLE-");
+            sb.append("ARRAY ");
+            sb.append(elementType.writeToString());
+            sb.append(" NIL");
+            return unreadableString(sb.toString());
+        }
     }
 }
