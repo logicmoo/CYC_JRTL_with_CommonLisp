@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Utilities.java,v 1.35 2004-04-22 00:44:27 piso Exp $
+ * $Id: Utilities.java,v 1.36 2004-06-06 04:36:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1679,9 +1679,18 @@ public final class Utilities implements Constants
         return panel;
     }
 
-    // Sun/Blackdown 1.4.x.
-    private static String defaultXMLReaderImpl =
-        "org.apache.crimson.parser.XMLReaderImpl";
+    private static String defaultXMLReaderImpl;
+    static {
+        if (Platform.isJava14()) {
+            // Sun/Blackdown 1.4.x.
+            defaultXMLReaderImpl =
+                "org.apache.crimson.parser.XMLReaderImpl";
+        } else {
+            // 1.5
+            defaultXMLReaderImpl =
+                "com.sun.org.apache.xerces.internal.parsers.SAXParser";
+        }
+    }
 
     public static synchronized XMLReader getDefaultXMLReader()
     {
