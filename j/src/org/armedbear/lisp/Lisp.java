@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.129 2003-09-14 16:45:14 piso Exp $
+ * $Id: Lisp.java,v 1.130 2003-09-14 17:03:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,9 +96,6 @@ public abstract class Lisp
     static final int TYPE_INTEGER  = TYPE_FIXNUM | TYPE_BIGNUM;
     static final int TYPE_RATIONAL = TYPE_INTEGER | TYPE_RATIO;
     static final int TYPE_REAL     = TYPE_RATIONAL | TYPE_FLOAT;
-
-    static final int TYPE_LIST     = TYPE_CONS | TYPE_NULL;
-    static final int TYPE_SEQUENCE = TYPE_VECTOR | TYPE_LIST;
 
     // Functional types.
     static final int FTYPE_SPECIAL_OPERATOR = 1;
@@ -325,7 +322,8 @@ public abstract class Lisp
                     default: {
                         if (debug)
                             return funcall(fun,
-                                evalList(obj.cdr(), env, thread), thread);
+                                           evalList(obj.cdr(), env, thread),
+                                           thread);
                         if (profiling)
                             fun.incrementCallCount();
                         LispObject args = obj.cdr();
