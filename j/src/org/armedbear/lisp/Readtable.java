@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Readtable.java,v 1.37 2005-01-11 17:45:35 piso Exp $
+ * $Id: Readtable.java,v 1.38 2005-02-05 19:53:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,11 +184,36 @@ public final class Readtable extends LispObject
             return attributes[c];
         return ATTR_CONSTITUENT;
     }
-    
+
+    public boolean isInvalid(char c)
+    {
+        switch (c) {
+            case 8:
+            case 9:
+            case 10:
+            case 12:
+            case 13:
+            case 32:
+            case 127:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     public void checkInvalid(char c) throws ConditionThrowable
     {
-        if (c < CHAR_MAX && attributes[c] == ATTR_INVALID)
-            signal(new ReaderError("Invalid character"));
+        // "... no mechanism is provided for changing the constituent trait of
+        // a character." (2.1.4.2)
+        if (isInvalid(c)) {
+            String name = LispCharacter.charToName(c);
+            StringBuffer sb = new StringBuffer("Invalid character");
+            if (name != null) {
+                sb.append(" #\\");
+                sb.append(name);
+            }
+            signal(new ReaderError(sb.toString()));
+        }
     }
 
     public LispObject getReaderMacroFunction(char c)
