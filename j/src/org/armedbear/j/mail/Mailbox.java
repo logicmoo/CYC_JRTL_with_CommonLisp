@@ -1,8 +1,8 @@
 /*
  * Mailbox.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: Mailbox.java,v 1.4 2002-11-23 04:41:58 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: Mailbox.java,v 1.5 2003-07-16 01:26:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,12 +152,12 @@ public abstract class Mailbox extends Buffer
                 oldBuffer = ed.getBuffer();
             messageBuffer.setTransient(true);
             editor.activateInOtherWindow(messageBuffer,
-                messageBuffer.getSplit());
-
+                                         messageBuffer.getSplit());
             previewBuffer = messageBuffer;
-
-            if (oldBuffer != null && oldBuffer.isTransient())
-                oldBuffer.kill();
+            if (oldBuffer != null && oldBuffer != messageBuffer) {
+                if (oldBuffer.isTransient())
+                    oldBuffer.kill();
+            }
         } else
             editor.activate(messageBuffer);
     }
