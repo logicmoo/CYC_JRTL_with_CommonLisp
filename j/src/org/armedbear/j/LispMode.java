@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.22 2002-12-25 16:32:52 piso Exp $
+ * $Id: LispMode.java,v 1.23 2003-01-25 17:50:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,6 +161,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
         if (pos == null) // Top level.
             return 0;
         Debug.bugIfNot(pos.getChar() == '(');
+        int offset = pos.getOffset();
+        if (offset > 0 && pos.getLine().charAt(offset-1) == '\'')
+            return buffer.getCol(pos) + 1;
         Position posFirst = downList(pos);
         if (posFirst != null) {
             if (posFirst.getChar() == '(') {
