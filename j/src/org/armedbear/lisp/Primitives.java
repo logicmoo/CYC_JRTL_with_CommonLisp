@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.8 2003-01-31 00:56:35 piso Exp $
+ * $Id: Primitives.java,v 1.9 2003-01-31 16:23:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2452,6 +2452,38 @@ public final class Primitives extends Module
                     body = new Cons(Symbol.BLOCK, body);
                     body = new Cons(body, NIL);
                     Closure closure = new Closure(parameters, body, env);
+                    ext.bindFunctional(symbol, closure);
+                    defs = defs.cdr();
+                }
+                result = progn(args.cdr(), ext);
+                dynEnv = oldDynEnv;
+            } else
+                result = progn(args.cdr(), env);
+            return result;
+        }
+    };
+
+    // ### labels
+    public static final SpecialOperator LABELS = new SpecialOperator("labels") {
+        public LispObject execute(LispObject args, Environment env)
+            throws LispException
+        {
+            // First argument is a list of local function definitions.
+            LispObject defs = checkList(args.car());
+            LispObject result;
+            if (defs != NIL) {
+                Environment oldDynEnv = dynEnv;
+                Environment ext = new Environment(env);
+                while (defs != NIL) {
+                    LispObject def = checkList(defs.car());
+                    Symbol symbol = checkSymbol(def.car());
+                    LispObject rest = def.cdr();
+                    LispObject parameters = rest.car();
+                    LispObject body = rest.cdr();
+                    body = new Cons(symbol, body);
+                    body = new Cons(Symbol.BLOCK, body);
+                    body = new Cons(body, NIL);
+                    Closure closure = new Closure(parameters, body, ext);
                     ext.bindFunctional(symbol, closure);
                     defs = defs.cdr();
                 }

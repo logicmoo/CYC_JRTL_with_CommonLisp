@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.2 2003-01-30 22:22:42 piso Exp $
+ * $Id: Tests.java,v 1.3 2003-01-31 16:24:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -607,6 +607,11 @@ public class Tests extends TestCase
             "(3 -1)");
         verify("(list (flet ((+ (a b) (- a b))) (+ 3 2)) (+ 3 2))", "(1 5)");
         verify("(flet ((+ (a b) (+ (+ a b a) b))) (+ 3 2))", "10");
+
+        // labels
+        verify("(labels ((queue (l) (if (car l) (queue (cdr l)) 'end))) (queue '(1 2 3)))",
+            "END");
+        verify("(labels ((+ (a b) (* a (+ a a b)))) (+ 1 2 3))", ERROR);
     }
 
     private void verify(String input, String expected)
