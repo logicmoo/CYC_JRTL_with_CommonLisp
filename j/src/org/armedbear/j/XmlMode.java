@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.11 2003-06-29 17:24:02 piso Exp $
+ * $Id: XmlMode.java,v 1.12 2003-07-17 15:11:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -711,9 +711,17 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
             XmlParserImpl parser = new XmlParserImpl(buffer);
             if (parser.initialize()) {
                 editor.setWaitCursor();
-                parser.setReader(new StringReader(buffer.getText()));
-                parser.run();
-                editor.setDefaultCursor();
+                try {
+                    parser.setReader(new StringReader(buffer.getText()));
+                    parser.run();
+                }
+                catch (OutOfMemoryError e) {
+                    outOfMemory();
+                    return;
+                }
+                finally {
+                    editor.setDefaultCursor();
+                }
                 String output = parser.getOutput();
                 // Note that with the current implementation, there will always
                 // be output...
@@ -762,6 +770,10 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                     parser.setReader(new StringReader(buffer.getText()));
                     parser.run();
                 }
+                catch (OutOfMemoryError e) {
+                    outOfMemory();
+                    return;
+                }
                 finally {
                     editor.setDefaultCursor();
                 }
@@ -784,6 +796,13 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                     editor.status("No errors");
             }
         }
+    }
+
+    private static void outOfMemory()
+    {
+        MessageDialog.showMessageDialog(
+            "Not enough memory to run parser",
+            "XML Mode");
     }
 
     public static void xmlFindError(Editor editor, SAXParseException e)
