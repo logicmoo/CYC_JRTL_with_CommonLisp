@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.169 2003-10-25 21:53:57 piso Exp $
+ * $Id: Lisp.java,v 1.170 2003-10-26 18:55:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -247,8 +247,8 @@ public abstract class Lisp
                     obj = autoload.getSymbol().getSymbolFunction();
                 }
                 if (obj instanceof SpecialOperator)
-                    obj = Primitives.get((Symbol)car,
-                        Symbol.MACROEXPAND_MACRO, NIL);
+                    obj = Primitives.get((Symbol)car, Symbol.MACROEXPAND_MACRO,
+                                         NIL);
                 if (obj instanceof MacroObject) {
                     LispObject expander = ((MacroObject)obj).getExpander();
                     if (profiling)
@@ -258,6 +258,21 @@ public abstract class Lisp
                     thread.setValues(results);
                     return results[0];
                 }
+            }
+        } else if (form instanceof Symbol) {
+            Symbol symbol = (Symbol) form;
+            LispObject obj = null;
+            if (symbol.isSpecialVariable())
+                obj = thread.lookupSpecial(symbol);
+            else
+                obj = env.lookup(symbol);
+            if (obj == null)
+                obj = symbol.getSymbolValue();
+            if (obj instanceof SymbolMacro) {
+                results[0] = ((SymbolMacro)obj).getExpansion();
+                results[1] = T;
+                thread.setValues(results);
+                return results[0];
             }
         }
         // Not a macro.
