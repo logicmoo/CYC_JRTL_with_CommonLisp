@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.172 2004-06-11 17:33:31 piso Exp $
+;;; $Id: boot.lisp,v 1.173 2004-06-11 18:14:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,12 +74,12 @@
 (defun sys::output-object (object stream)
   (sys::%output-object object stream))
 
-;; (defun print (object &optional stream)
-;;   (terpri stream)
-;;   (let ((*print-escape* t))
-;;     (output-object object stream))
-;;   (write-char #\space stream)
-;;   object)
+(defun print (object &optional stream)
+  (terpri stream)
+  (let ((*print-escape* t))
+    (output-object object stream))
+  (write-char #\space stream)
+  object)
 
 (defun prin1 (object &optional (stream *standard-output*))
   (let ((*print-escape* t))
