@@ -1,8 +1,8 @@
 /*
  * PerlSyntaxIterator.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: PerlSyntaxIterator.java,v 1.1.1.1 2002-09-24 16:07:55 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: PerlSyntaxIterator.java,v 1.2 2003-04-25 14:20:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public class PerlSyntaxIterator extends DefaultSyntaxIterator
     private static final int STATE_REGEXP  = 2;
     private static final int STATE_SUBST   = 3;
 
-    private static RE matchRE = new UncheckedRE("=~[ \t]+m[^a-zA-Z0-9]");
+    private static RE matchRE = new UncheckedRE("(=~|!~)[ \t]+m[^a-zA-Z0-9]");
 
     public PerlSyntaxIterator(Position pos)
     {
@@ -82,12 +82,14 @@ public class PerlSyntaxIterator extends DefaultSyntaxIterator
                     state = STATE_REGEXP;
                     delimiter = '/';
                 }
-            } else if (c == '=') {
+            } else if (c == '=' || c == '!') {
                 REMatch match = matchRE.getMatch(s.substring(i));
                 if (match != null) {
                     final String m = match.toString();
                     final int len = m.length();
                     delimiter = m.charAt(len - 1);
+                    if (delimiter == '{')
+                        delimiter = '}';
                     state = STATE_REGEXP;
                     i += len - 1;
                 }

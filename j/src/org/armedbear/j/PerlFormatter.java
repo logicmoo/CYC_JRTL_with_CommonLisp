@@ -1,8 +1,8 @@
 /*
  * PerlFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: PerlFormatter.java,v 1.1.1.1 2002-09-24 16:09:14 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: PerlFormatter.java,v 1.2 2003-04-25 14:20:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public final class PerlFormatter extends Formatter
 
     private String endOfText;
 
-    private static RE matchRE = new UncheckedRE("=~[ \t]+m[^a-zA-Z0-9]");
+    private static RE matchRE = new UncheckedRE("(=~|!~)[ \t]+m[^a-zA-Z0-9]");
 
     public PerlFormatter(Buffer buffer)
     {
@@ -224,20 +224,22 @@ public final class PerlFormatter extends Formatter
                 ++i;
                 continue;
             }
-            if (c == '=') {
+            if (c == '=' || c == '!') {
                 REMatch match = matchRE.getMatch(text.substring(i));
                 if (match != null) {
                     final String s = match.toString();
                     final int length = s.length();
                     // End the previous token.
                     endToken(state);
-                    sb.append("=~");
+                    sb.append(s.substring(0, 2));
                     endToken(STATE_NEUTRAL);
                     i += 2;
                     sb.append(s.substring(2));
                     endToken(STATE_REGEXP_DELIMITER);
                     i += length - 2;
                     delimiter = s.charAt(length - 1);
+                    if (delimiter == '{')
+                        delimiter = '}';
                     state = STATE_REGEXP;
                 } else {
                     sb.append(c);
