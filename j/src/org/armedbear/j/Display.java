@@ -1,8 +1,8 @@
 /*
  * Display.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: Display.java,v 1.17 2004-04-01 18:48:42 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Display.java,v 1.18 2005-02-10 17:54:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1295,23 +1295,21 @@ public final class Display extends JComponent implements Constants,
     // Move content down.
     private void scrollPixelsUp(int dy)
     {
-        Point pt1 = editor.getFrame().getLocationOnScreen();
+        Point pt1 = editor.getLocationOnScreen();
         Point pt2 = getLocationOnScreen();
         int x = pt2.x - pt1.x;
         int y = pt2.y - pt1.y;
-        editor.getFrame().getGraphics().copyArea(x, y, getWidth(),
-            getHeight() - dy, 0, dy);
+        editor.getGraphics().copyArea(x, y, getWidth(), getHeight() - dy, 0, dy);
     }
 
     // Move content up.
     private void scrollPixelsDown(int dy)
     {
-        Point pt1 = editor.getFrame().getLocationOnScreen();
+        Point pt1 = editor.getLocationOnScreen();
         Point pt2 = getLocationOnScreen();
         int x = pt2.x - pt1.x;
         int y = pt2.y - pt1.y + dy;
-        editor.getFrame().getGraphics().copyArea(x, y, getWidth(),
-            getHeight() - dy, 0, - dy);
+        editor.getGraphics().copyArea(x, y, getWidth(), getHeight() - dy, 0, - dy);
     }
 
     public Line getBottomLine()
