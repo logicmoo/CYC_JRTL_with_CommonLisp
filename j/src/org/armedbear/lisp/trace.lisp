@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: trace.lisp,v 1.6 2004-07-25 23:43:21 piso Exp $
+;;; $Id: trace.lisp,v 1.7 2004-09-29 00:49:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defconstant *untraced-function* (make-symbol "untraced-function"))
 
@@ -49,15 +49,17 @@
       (let* ((untraced-function (symbol-function symbol))
              (trace-function
               (lambda (&rest args)
-                (%format t (indent "~D: ~S~%") *trace-depth*
-                         (append (list symbol) args))
+                (with-standard-io-syntax
+                  (%format t (indent "~D: ~S~%") *trace-depth*
+                           (append (list symbol) args)))
                 (incf *trace-depth*)
                 (let ((r (multiple-value-list (apply untraced-function args))))
                   (decf *trace-depth*)
-                  (%format t (indent "~D: ~A returned") *trace-depth* symbol)
-                  (dolist (val r)
-                    (%format t " ~S" val))
-                  (%format t "~%")
+                  (with-standard-io-syntax
+                    (%format t (indent "~D: ~A returned") *trace-depth* symbol)
+                    (dolist (val r)
+                      (%format t " ~S" val))
+                    (%format t "~%"))
                   (values-list r)))))
         (setf (symbol-function symbol) trace-function)
         (setf (get symbol *untraced-function*) untraced-function)
