@@ -1,8 +1,8 @@
 /*
  * CFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CFormatter.java,v 1.2 2002-10-08 18:04:20 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: CFormatter.java,v 1.3 2003-12-29 19:25:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,9 @@ public final class CFormatter extends Formatter implements Constants
                 break;
             case LANGUAGE_CPP:
                 mode = CppMode.getMode();
+                break;
+            case LANGUAGE_OBJC:
+                mode = ObjCMode.getMode();
                 break;
             default:
                 Debug.assertTrue(false);
