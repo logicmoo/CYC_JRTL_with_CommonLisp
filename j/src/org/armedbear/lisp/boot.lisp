@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.161 2004-04-20 15:11:48 piso Exp $
+;;; $Id: boot.lisp,v 1.162 2004-04-22 14:46:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,7 +84,26 @@
 (defconstant sys::*keyword-package*
   (find-package "KEYWORD"))
 
+(defun sys::featurep (form)
+  (cond ((atom form)
+         (ext:memq form *features*))
+        ((eq (car form) :not)
+         (not (featurep (cadr form))))
+        ((eq (car form) :and)
+         (dolist (subform (cdr form) t)
+           (unless (featurep subform) (return))))
+        ((eq (car form) :or)
+         (dolist (subform (cdr form) nil)
+           (when (featurep subform) (return t))))
+        (t
+         (error "READ-FEATURE"))))
+
 ;;; READ-CONDITIONAL (from OpenMCL)
+(defun read-feature (stream)
+  (let* ((f (let* ((*package* sys::*keyword-package*))
+              (read stream t nil t))))
+    (if (featurep f) #\+ #\-)))
+
 (defun read-conditional (stream subchar int)
   (cond (*read-suppress*
          (read stream t nil t)
@@ -95,23 +114,6 @@
          (let ((*read-suppress* t))
            (read stream t nil t)
            (values)))))
-
-(defun read-feature (stream)
-  (let* ((f (let* ((*package* sys::*keyword-package*))
-              (read stream t nil t))))
-    (labels ((eval-feature (form)
-                           (cond ((atom form)
-                                  (ext:memql form *features*))
-                                 ((eq (car form) :not)
-                                  (not (eval-feature (cadr form))))
-                                 ((eq (car form) :and)
-                                  (dolist (subform (cdr form) t)
-                                    (unless (eval-feature subform) (return))))
-                                 ((eq (car form) :or)
-                                  (dolist (subform (cdr form) nil)
-                                    (when (eval-feature subform) (return t))))
-                                 (t (error "READ-FEATURE")))))
-            (if (eval-feature f) #\+ #\-))))
 
 (set-dispatch-macro-character #\# #\+ #'read-conditional)
 (set-dispatch-macro-character #\# #\- #'read-conditional)
@@ -178,5 +180,5 @@
 (sys::load-system-file "late-setf")
 (sys::load-system-file "debug")
 
-#-j
-(format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000)))
+(unless (sys::featurep :j)
+  (format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
