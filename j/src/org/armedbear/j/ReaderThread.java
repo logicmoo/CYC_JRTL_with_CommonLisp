@@ -90,6 +90,9 @@ public class ReaderThread extends Thread
         catch (InterruptedException e) {
             return null;
         }
+        catch (Throwable t) {
+            return null;
+        }
         return sb.toString();
     }
 
