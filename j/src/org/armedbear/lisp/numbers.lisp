@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.5 2003-08-23 01:45:15 piso Exp $
+;;; $Id: numbers.lisp,v 1.6 2003-08-24 13:30:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; From CMUCL.
+
+(in-package "SYSTEM")
 
 ;;; If the numbers do not divide exactly and the result of (/ number divisor)
 ;;; would be negative then decrement the quotient and augment the remainder by
@@ -111,3 +113,28 @@
   (multiple-value-bind (res rem)
     (round number divisor)
     (values (float res (if (floatp rem) rem 1.0)) rem)))
+
+
+(defun rational (x)
+  "RATIONAL produces a rational number for any real numeric argument.  This is
+   more efficient than RATIONALIZE, but it assumes that floating-point is
+   completely accurate, giving a result that isn't as pretty."
+  (cond ((floatp x)
+         (multiple-value-bind (bits exp)
+           (integer-decode-float x)
+           (if (eql bits 0)
+               0
+               (let* ((int (if (minusp x) (- bits) bits))
+                      (digits (float-digits x))
+                      (ex (+ exp digits)))
+                 (if (minusp ex)
+                     (/ int (ash 1 (+ digits (- ex))))
+                     (/ (ash int ex) (ash 1 digits)))))))
+        ((rationalp x)
+         x)
+        (t
+         (error 'type-error "wrong type: ~S is not a real number" x))))
+
+;;; FIXME
+(defun rationalize (x)
+  (rational x))
