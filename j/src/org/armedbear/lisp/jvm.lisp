@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.187 2004-06-24 16:24:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.188 2004-06-24 17:49:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2600,10 +2600,12 @@
           *this-class*
           g
           +lisp-symbol+)
+    (ensure-thread-var-initialized)
+    (emit 'aload *thread*)
     (emit-invokevirtual +lisp-symbol-class+
                         "symbolValue"
-                        "()Lorg/armedbear/lisp/LispObject;"
-                        0)
+                        "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
+                        -1)
     (emit-store-value)
     (return-from compile-variable-ref)))
 
