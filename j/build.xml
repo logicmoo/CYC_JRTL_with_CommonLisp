@@ -245,6 +245,7 @@
         <exclude name="**/*.tar"/>
         <exclude name="**/*.tar.gz"/>
         <exclude name="src/test/**"/>
+        <exclude name="src/org/armedbear/lisp/**"/>
         <exclude name="**/Makefile"/>
         <exclude name="**/config.*"/>
         <exclude name="**/classes.stamp"/>
