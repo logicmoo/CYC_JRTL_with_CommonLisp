@@ -390,6 +390,7 @@ special
 special-operator-p
 stable-sort
 store-value
+string
 string-capitalize
 string-downcase
 string-equal
