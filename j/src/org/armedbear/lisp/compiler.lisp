@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.59 2003-11-07 18:26:32 piso Exp $
+;;; $Id: compiler.lisp,v 1.60 2003-11-07 19:13:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -258,18 +258,18 @@
 
 (defun compile-sexp (form)
   (if (atom form) form
-      (let ((first (car form)))
-        (when (symbolp first)
-          (cond ((local-macro-function first)
+      (let ((op (car form)))
+        (when (symbolp op)
+          (cond ((local-macro-function op)
                  (return-from compile-sexp (expand-local-macro form)))
-                ((eq first 'LAMBDA)
+                ((eq op 'LAMBDA)
                  (return-from compile-sexp (list* 'LAMBDA (second form)
                                                   (mapcar #'compile-sexp (cddr form)))))
-                ((special-operator-p first)
+                ((special-operator-p op)
                  (return-from compile-sexp (compile-special form)))
-                ((macro-function first)
+                ((macro-function op)
                  (return-from compile-sexp (compile-sexp (expand-macro form))))))
-        (cons first (mapcar #'compile-sexp (cdr form))))))
+        (cons op (mapcar #'compile-sexp (cdr form))))))
 
 (defun %compile (name &optional definition)
   (unless definition
