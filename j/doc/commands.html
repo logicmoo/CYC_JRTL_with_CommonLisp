@@ -311,6 +311,7 @@
     <li><a href="commands.html#unsplitWindow">unsplitWindow</a></li>
     <li><a href="commands.html#unwrapParagraph">unwrapParagraph</a></li>
     <li><a href="commands.html#up">up</a></li>
+    <li><a href="commands.html#upList">upList</a></li>
     <li><a href="commands.html#upperCaseRegion">upperCaseRegion</a></li>
     <li><a href="commands.html#visibleTabs">visibleTabs</a></li>
     <li><a href="commands.html#whatChar">whatChar</a></li>
@@ -1137,7 +1138,8 @@ Moves forward down one level of parentheses.
 <p>
 <b>Default key mapping:</b> Ctrl Alt D in Lisp mode
 <p>
-<b>See also:</b> <a href="#forwardSexp">forwardSexp</a>,
+<b>See also:</b> <a href="#upList">upList</a>,
+<a href="#forwardSexp">forwardSexp</a>,
 <a href="#backwardSexp">backwardSexp</a>
 <br><br>
 </dl><!--<hr>-->
@@ -4108,6 +4110,18 @@ Removes line breaks from the current paragraph, making it into one lone line.
 Moves the caret up one line.
 <br><br>
 <b>Default key mapping:</b> Up arrow
+<br><br>
+</dl><!--<hr>-->
+
+<a name="upList">upList</a><dl><dd>
+<p>
+Moves the caret backward out of one level of parentheses.
+<br><br>
+<b>Default key mapping:</b> Ctrl Alt U in Lisp mode
+<p>
+<b>See also:</b> <a href="#downList">downList</a>,
+<a href="#forwardSexp">forwardSexp</a>,
+<a href="#backwardSexp">backwardSexp</a>
 <br><br>
 </dl><!--<hr>-->
 
