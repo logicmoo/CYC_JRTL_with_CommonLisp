@@ -123,12 +123,6 @@ public abstract class AbstractVector extends AbstractArray
         signal(new TypeError(sb.toString()));
     }
 
-    public int getFillPointer() throws ConditionThrowable
-    {
-        noFillPointer();
-        return -1; // Not reached.
-    }
-
     public void setFillPointer(int n) throws ConditionThrowable
     {
         noFillPointer();
