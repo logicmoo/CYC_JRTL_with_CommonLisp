@@ -1,7 +1,7 @@
 ;;; define-modify-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: define-modify-macro.lisp,v 1.2 2005-02-03 02:27:44 piso Exp $
+;;; $Id: define-modify-macro.lisp,v 1.3 2005-02-07 16:24:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,17 +17,18 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from CMUCL.
+;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
+;; FIXME See section 5.1.3.
 (defmacro define-modify-macro (name lambda-list function &optional doc-string)
   "Creates a new read-modify-write macro like PUSH or INCF."
   (let ((other-args nil)
 	(rest-arg nil)
 	(env (gensym))
 	(reference (gensym)))
-    ;; Parse out the variable names and rest arg from the lambda list.
+    ;; Parse out the variable names and &REST arg from the lambda list.
     (do ((ll lambda-list (cdr ll))
 	 (arg nil))
 	((null ll))
@@ -36,32 +37,31 @@
 	    ((eq arg '&rest)
 	     (if (symbolp (cadr ll))
 		 (setq rest-arg (cadr ll))
-		 (error "non-symbol &REST arg in definition of ~S" name))
+		 (error "Non-symbol &REST arg in definition of ~S." name))
 	     (if (null (cddr ll))
 		 (return nil)
-		 (error "illegal stuff after &rest arg in DEFINE-MODIFY-MACRO")))
+		 (error "Illegal stuff after &REST argument in DEFINE-MODIFY-MACRO.")))
 	    ((memq arg '(&key &allow-other-keys &aux))
-	     (error "~S not allowed in DEFINE-MODIFY-MACRO lambda list" arg))
+	     (error "~S not allowed in DEFINE-MODIFY-MACRO lambda list." arg))
 	    ((symbolp arg)
 	     (push arg other-args))
 	    ((and (listp arg) (symbolp (car arg)))
 	     (push (car arg) other-args))
-	    (t (error "illegal stuff in lambda list of DEFINE-MODIFY-MACRO"))))
+	    (t (error "Illegal stuff in DEFINE-MODIFY-MACRO lambda list."))))
     (setq other-args (nreverse other-args))
     `(defmacro ,name (,reference ,@lambda-list &environment ,env)
        ,doc-string
        (multiple-value-bind (dummies vals newval setter getter)
-	 (get-setf-expansion ,reference ,env)
+           (get-setf-expansion ,reference ,env)
 	 (do ((d dummies (cdr d))
 	      (v vals (cdr v))
 	      (let-list nil (cons (list (car d) (car v)) let-list)))
 	     ((null d)
-	      (push
-	       (list (car newval)
-		     ,(if rest-arg
-			  `(list* ',function getter ,@other-args ,rest-arg)
-			  `(list ',function getter ,@other-args)))
-	       let-list)
+	      (push (list (car newval)
+                          ,(if rest-arg
+                               `(list* ',function getter ,@other-args ,rest-arg)
+                               `(list ',function getter ,@other-args)))
+                    let-list)
 	      `(let* ,(nreverse let-list)
 		 ,setter)))))))
 
@@ -75,7 +75,13 @@
 
 (defmacro incf (place &optional (delta 1))
   (cond ((symbolp place)
-         `(setq ,place (+ ,place ,delta)))
+         (cond ((constantp delta)
+                `(setq ,place (+ ,place ,delta)))
+               (t
+                ;; See section 5.1.3.
+                (let ((temp (gensym)))
+                  `(let ((,temp ,delta))
+                     (setq ,place (+ ,place ,temp)))))))
         ((and (consp place) (eq (car place) 'THE))
          (let ((res (gensym)))
            `(let ((,res (the ,(second place) (+ ,place ,delta))))
@@ -85,7 +91,13 @@
 
 (defmacro decf (place &optional (delta 1))
   (cond ((symbolp place)
-         `(setq ,place (- ,place ,delta)))
+         (cond ((constantp delta)
+                `(setq ,place (- ,place ,delta)))
+               (t
+                ;; See section 5.1.3.
+                (let ((temp (gensym)))
+                  `(let ((,temp ,delta))
+                     (setq ,place (- ,place ,temp)))))))
         ((and (consp place) (eq (car place) 'THE))
          (let ((res (gensym)))
            `(let ((,res (the ,(second place) (- ,place ,delta))))
