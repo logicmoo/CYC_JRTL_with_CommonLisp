@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.60 2004-11-28 15:43:50 piso Exp $
+ * $Id: Package.java,v 1.61 2005-02-28 17:17:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ public final class Package extends LispObject
 
     private final SymbolHashTable internalSymbols = new SymbolHashTable(16);
     private final SymbolHashTable externalSymbols = new SymbolHashTable(16);
-    
+
     private HashMap shadowingSymbols;
     private ArrayList nicknames;
     private final ArrayList useList = new ArrayList();
@@ -156,12 +156,12 @@ public final class Package extends LispObject
     {
         return (Symbol) externalSymbols.get(name);
     }
-    
+
     public synchronized Symbol findExternalSymbol(AbstractString name, int hash)
     {
         return (Symbol) externalSymbols.get(name, hash);
     }
-    
+
     // Returns null if symbol is not accessible in this package.
     public synchronized Symbol findAccessibleSymbol(String name)
         throws ConditionThrowable
@@ -172,7 +172,7 @@ public final class Package extends LispObject
             return symbol;
         symbol = (Symbol) internalSymbols.get(name);
         if (symbol != null)
-            return symbol;            
+            return symbol;
         // Look in external symbols of used packages.
         for (Iterator it = useList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
@@ -194,7 +194,7 @@ public final class Package extends LispObject
             return thread.setValues(symbol, Keyword.EXTERNAL);
         symbol = (Symbol) internalSymbols.get(name);
         if (symbol != null)
-            return thread.setValues(symbol, Keyword.INTERNAL);            
+            return thread.setValues(symbol, Keyword.INTERNAL);
         // Look in external symbols of used packages.
         for (Iterator it = useList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
@@ -236,7 +236,7 @@ public final class Package extends LispObject
         }
         return symbol;
     }
-    
+
     private synchronized Symbol addSymbol(AbstractString name)
     {
         Symbol symbol = new Symbol(name, this);
@@ -334,6 +334,41 @@ public final class Package extends LispObject
         }
         // Not found.
         return (Symbol) thread.setValues(addSymbol(name), NIL);
+    }
+
+    public synchronized Symbol internAndExport(String symbolName)
+        throws ConditionThrowable
+    {
+        final SimpleString name = new SimpleString(symbolName);
+        final int hash = name.sxhash();
+        // Look in external and internal symbols of this package.
+        Symbol symbol = (Symbol) externalSymbols.get(name, hash);
+        if (symbol != null)
+            return symbol;
+        symbol = (Symbol) internalSymbols.get(name, hash);
+        if (symbol != null) {
+            export(symbol);
+            return symbol;
+        }
+        if (useList.size() > 0) {
+            // Look in external symbols of used packages.
+            for (Iterator it = useList.iterator(); it.hasNext();) {
+                Package pkg = (Package) it.next();
+                symbol = pkg.findExternalSymbol(name, hash);
+                if (symbol != null) {
+                    export(symbol);
+                    return symbol;
+                }
+            }
+        }
+        // Not found.
+        symbol = new Symbol(name, hash, this);
+        if (this == PACKAGE_KEYWORD) {
+            symbol.setSymbolValue(symbol);
+            symbol.setConstant(true);
+        }
+        externalSymbols.put(name, symbol);
+        return symbol;
     }
 
     public synchronized LispObject unintern(Symbol symbol) throws ConditionThrowable
@@ -453,7 +488,7 @@ public final class Package extends LispObject
             }
             // No conflicts.
             internalSymbols.remove(symbolName);
-            externalSymbols.put(symbolName, symbol);                
+            externalSymbols.put(symbolName, symbol);
             return;
         }
         if (externalSymbols.get(symbolName) == symbol)
@@ -495,7 +530,7 @@ public final class Package extends LispObject
     {
         if (shadowingSymbols == null)
             shadowingSymbols = new HashMap();
-        
+
         Symbol symbol = (Symbol) externalSymbols.get(symbolName);
         if (symbol != null) {
             shadowingSymbols.put(symbolName, symbol);
@@ -555,7 +590,7 @@ public final class Package extends LispObject
         Debug.assertTrue(shadowingSymbols.get(symbolName) == null);
         shadowingSymbols.put(symbolName, symbol);
     }
-    
+
     // "USE-PACKAGE causes PACKAGE to inherit all the external symbols of
     // PACKAGES-TO-USE. The inherited symbols become accessible as internal
     // symbols of PACKAGE."
@@ -697,7 +732,7 @@ public final class Package extends LispObject
                 if (shadowingSymbols == null || shadowingSymbols.get(symbol.getName()) == null)
                     list.add(symbol);
             }
-        }            
+        }
         return list;
     }
 
@@ -763,7 +798,7 @@ public final class Package extends LispObject
             Symbol symbol = (Symbol) it.next();
             array[i++] = symbol;
         }
-        return array;            
+        return array;
     }
 
     public String writeToString() throws ConditionThrowable
