@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.97 2004-04-01 01:57:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.98 2004-04-05 01:09:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1629,12 +1629,12 @@
               "Lorg/armedbear/lisp/LispObject;")))
      ((eq fun *defun-name*)
       (emit 'aload 0)) ; this
-;;      ((memq (symbol-package fun) +known-packages+)
-;;       (let ((f (declare-function fun)))
-;;         (emit 'getstatic
-;;               *this-class*
-;;               f
-;;               "Lorg/armedbear/lisp/LispObject;")))
+     ((sys::built-in-function-p fun)
+      (let ((f (declare-function fun)))
+        (emit 'getstatic
+              *this-class*
+              f
+              "Lorg/armedbear/lisp/LispObject;")))
      (t
       (let ((g (declare-symbol fun)))
         (emit 'getstatic
