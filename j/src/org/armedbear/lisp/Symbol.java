@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.148 2004-09-26 18:39:52 piso Exp $
+ * $Id: Symbol.java,v 1.149 2004-09-30 19:09:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,6 +175,7 @@ public class Symbol extends LispObject
     public static final Symbol COMMA_ATSIGN                     = PACKAGE_CL.addInternalSymbol("COMMA-ATSIGN");
     public static final Symbol COMMA_DOT                        = PACKAGE_CL.addInternalSymbol("COMMA-DOT");
     public static final Symbol MACROEXPAND_MACRO                = PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
+    public static final Symbol OUTPUT_OBJECT                    = PACKAGE_SYS.addExternalSymbol("OUTPUT-OBJECT");
     public static final Symbol _SETF_FUNCTION                   = PACKAGE_SYS.addInternalSymbol("%SETF-FUNCTION");
     public static final Symbol _SOURCE                          = PACKAGE_SYS.addInternalSymbol("%SOURCE");
 
