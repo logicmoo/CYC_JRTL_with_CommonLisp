@@ -1,8 +1,8 @@
 /*
  * LispTagger.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispTagger.java,v 1.15 2004-04-11 18:34:51 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: LispTagger.java,v 1.16 2005-03-14 17:54:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,9 +84,12 @@ public final class LispTagger extends Tagger
                 if (state == DEFINITION) {
                     if (definer != null) {
                         if (definer.equals("defun")) {
-                            Position tokenStart = pos.copy();
-                            String name = gatherList(pos);
-                            addTag(name, tokenStart, definer);
+                            String s = gatherToken(pos.copy());
+                            if (s.toLowerCase().equals("setf")) {
+                                Position tokenStart = pos.copy();
+                                String name = gatherList(pos);
+                                addTag(name, tokenStart, definer);
+                            }
                             state = NEUTRAL;
                             definer = null;
                             continue;

@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.89 2005-02-28 19:06:16 piso Exp $
+;;; $Id: precompiler.lisp,v 1.90 2005-03-14 17:52:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -845,8 +845,8 @@
 
 ;; Redefine DEFMACRO to precompile the expansion function on the fly.
 (defmacro defmacro (name lambda-list &rest body)
-  (let* ((form (gensym))
-         (env (gensym))
+  (let* ((form (gensym "WHOLE-"))
+         (env (gensym "ENVIRONMENT-"))
          (body (parse-defmacro lambda-list form body name 'defmacro
                                :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body))))
