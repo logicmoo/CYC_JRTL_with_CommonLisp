@@ -1,8 +1,8 @@
 /*
  * dotimes.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: dotimes.java,v 1.7 2004-03-16 02:41:25 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: dotimes.java,v 1.8 2004-03-16 02:43:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,7 +90,7 @@ public final class dotimes extends SpecialOperator
                 binding = ext.getBinding(var);
             }
             if (limit instanceof Fixnum) {
-                int count = ((Fixnum)limit).getValue();
+                int count = ((Fixnum)limit).value;
                 int i;
                 for (i = 0; i < count; i++) {
                     binding.value = new Fixnum(i);
