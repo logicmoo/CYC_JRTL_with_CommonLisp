@@ -17,21 +17,32 @@
       (rplaca list newval)
       (return newval))))
 
-(defmacro setf (place value)
-  (cond
-   ((symbolp place)
-    `(setq ,place ,value))
-   ((consp place)
-    (let ((expander (get (car place) *setf-expander*)))
-      (cond ((null expander)
-             (error "no SETF expansion for ~A" place))
-            ((symbolp expander)
-             `(,expander ,@(cdr place) ,value))
-            ((functionp expander)
-             `(funcall ,expander ,@(cdr place) value))
-            (t
-             (error "SETF: unhandled case")))))
-   (t nil)))
+(defmacro setf (&rest args)
+  (let ((nargs (length args)))
+    (cond
+     ((= nargs 2)
+      (let ((place (first args))
+            (value (second args)))
+        (cond
+         ((symbolp place)
+          `(setq ,place ,value))
+         ((consp place)
+          (let ((expander (get (car place) *setf-expander*)))
+            (cond ((null expander)
+                   (error "no SETF expansion for ~A" place))
+                  ((symbolp expander)
+                   `(,expander ,@(cdr place) ,value))
+                  ((functionp expander)
+                   `(funcall ,expander ,@(cdr place) value))
+                  (t
+                   (error "SETF: unhandled case")))))
+         (t nil))))
+     ((oddp nargs)
+      (error "odd number of args to SETF"))
+     (t
+      (do ((a args (cddr a)) (l nil))
+        ((null a) `(progn ,@(nreverse l)))
+	(setq l (cons (list 'setf (car a) (cadr a)) l)))))))
 
 (defmacro incf (place &optional (delta 1))
   `(setf ,place (+ ,place ,delta)))
@@ -43,6 +54,7 @@
 
 (%put 'car *setf-expander* '%rplaca)
 (%put 'cdr *setf-expander* '%rplacd)
+(%put 'rest *setf-expander* '%rplacd)
 (%put 'nth *setf-expander* '%setnth)
 (%put 'aref *setf-expander* '%aset)
 (%put 'svref *setf-expander* '%svset)
@@ -55,5 +67,3 @@
 
 (defmacro defsetf (access-function update-function)
   `(%put ',access-function *setf-expander* ',update-function))
-
-(provide "setf")
