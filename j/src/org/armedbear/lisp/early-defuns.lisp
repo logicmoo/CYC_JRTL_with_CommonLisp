@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.16 2004-09-27 18:53:56 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.17 2004-10-20 00:16:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -59,6 +59,10 @@
             (return-from normalize-type '(array base-char (*))))
            (SIMPLE-BASE-STRING
             (return-from normalize-type '(simple-array base-char (*))))
+           (STRING
+            (return-from normalize-type '(string *)))
+           (SIMPLE-STRING
+            (return-from normalize-type '(simple-string *)))
            (t
             (unless (get type 'deftype-definition)
               (return-from normalize-type type)))))
