@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.1 2002-10-13 17:11:00 piso Exp $
+ * $Id: LispShell.java,v 1.2 2002-10-14 23:43:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,8 @@ public final class LispShell extends Shell
 {
     private LispShell(String shellCommand)
     {
-        super(shellCommand);
+        super(shellCommand, LispShellMode.getMode());
+        formatter = mode.getFormatter(this);
     }
 
     private static Shell createLispShell(String shellCommand)
