@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.736 2005-02-12 20:59:43 piso Exp $
+ * $Id: Primitives.java,v 1.737 2005-02-21 18:08:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1654,7 +1654,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %defconstant
+    // ### %defconstant name initial-value documentation => name
     private static final Primitive _DEFCONSTANT =
         new Primitive("%defconstant", PACKAGE_SYS, false)
     {
@@ -1663,10 +1663,12 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(first);
-            if (third instanceof AbstractString)
-                symbol.setVariableDocumentation(third);
-            else if (third != NIL)
-                signal(new TypeError(third, "string"));
+            if (third != NIL) {
+                if (third instanceof AbstractString)
+                    symbol.setVariableDocumentation(third);
+                else
+                    signal(new TypeError(third, Symbol.STRING));
+            }
             symbol.setSymbolValue(second);
             symbol.setSpecial(true);
             symbol.setConstant(true);
