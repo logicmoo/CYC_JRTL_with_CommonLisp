@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.450 2003-09-28 16:25:31 piso Exp $
+ * $Id: Primitives.java,v 1.451 2003-09-28 20:14:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -618,7 +618,7 @@ public final class Primitives extends Module
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             final CharacterOutputStream out;
             if (args.length == 1)
-                out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+                out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
                 out = outSynonymOf(args[1]);
             out.princ(args[0]);
@@ -646,7 +646,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             CharacterOutputStream out =
-                checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+                checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             out.prin1(arg);
             return arg;
         }
@@ -675,7 +675,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             CharacterOutputStream out =
-                checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+                checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             out.terpri();
             out.prin1(arg);
             out.writeString(" ");
@@ -701,7 +701,7 @@ public final class Primitives extends Module
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             final CharacterOutputStream out;
             if (args.length == 0)
-                out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+                out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
                 out = outSynonymOf(args[0]);
             return out.terpri();
@@ -717,7 +717,7 @@ public final class Primitives extends Module
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             CharacterOutputStream out;
             if (args.length == 0)
-                out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+                out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
                 out = outSynonymOf(args[0]);
             return out.freshLine();
@@ -1128,7 +1128,7 @@ public final class Primitives extends Module
                 _args[i] = args[i+1];
             String s = _format(_args);
             if (destination == T) {
-                checkOutputStream(_STANDARD_OUTPUT_.symbolValue()).writeString(s);
+                checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue()).writeString(s);
                 return NIL;
             }
             if (destination == NIL)
@@ -1138,8 +1138,12 @@ public final class Primitives extends Module
                 return NIL;
             }
             if (destination instanceof TwoWayStream) {
-                ((TwoWayStream)destination).getOutputStream().writeString(s);
-                return NIL;
+                LispOutputStream out = ((TwoWayStream)destination).getOutputStream();
+                if (out instanceof CharacterOutputStream) {
+                    ((CharacterOutputStream)out).writeString(s);
+                    return NIL;
+                }
+                throw new ConditionThrowable(new TypeError(destination, "character output stream"));
             }
             // Destination can also be a string with a fill pointer.
 //             throw new ConditionThrowable(new LispError("FORMAT: not implemented"));
@@ -3300,7 +3304,7 @@ public final class Primitives extends Module
             final char c = LispCharacter.getValue(args[0]);
             final CharacterOutputStream out;
             if (args.length == 1)
-                out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+                out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
                 out = outSynonymOf(args[1]);
             out.writeChar(c);
@@ -3365,7 +3369,7 @@ public final class Primitives extends Module
     {
         final CharacterOutputStream out;
         if (args.length == 0)
-            out = checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+            out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
         else
             out = outSynonymOf(args[0]);
         out.flushOutput();
@@ -3381,7 +3385,7 @@ public final class Primitives extends Module
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             final CharacterInputStream in;
             if (args.length == 0)
-                in = checkInputStream(_STANDARD_INPUT_.symbolValue());
+                in = checkCharacterInputStream(_STANDARD_INPUT_.symbolValue());
             else
                 in = inSynonymOf(args[0]);
             in.clearInput();
@@ -3515,15 +3519,18 @@ public final class Primitives extends Module
             int length = args.length;
             if (length > 4)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            CharacterInputStream stream;
+            CharacterInputStream stream = null;
             if (length == 0)
                 stream = getStandardInput();
             else if (args[0] instanceof CharacterInputStream)
                 stream = (CharacterInputStream) args[0];
-            else if (args[0] instanceof TwoWayStream)
-                stream = ((TwoWayStream)args[0]).getInputStream();
-            else
-                throw new ConditionThrowable(new TypeError(args[0], "input stream"));
+            else if (args[0] instanceof TwoWayStream) {
+                LispInputStream in = ((TwoWayStream)args[0]).getInputStream();
+                if (in instanceof CharacterInputStream)
+                    stream = (CharacterInputStream) in;
+            }
+            if (stream == null)
+                throw new ConditionThrowable(new TypeError(args[0], "character input stream"));
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
@@ -3724,7 +3731,7 @@ public final class Primitives extends Module
             if (length > 4)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             CharacterInputStream stream =
-                length > 0 ? checkInputStream(args[0]) : getStandardInput();
+                length > 0 ? checkCharacterInputStream(args[0]) : getStandardInput();
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
@@ -3741,7 +3748,7 @@ public final class Primitives extends Module
             if (length > 4)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             CharacterInputStream stream =
-                length > 0 ? checkInputStream(args[0]) : getStandardInput();
+                length > 0 ? checkCharacterInputStream(args[0]) : getStandardInput();
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
@@ -3758,7 +3765,7 @@ public final class Primitives extends Module
             if (length < 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             CharacterInputStream stream =
-                length > 1 ? checkInputStream(args[1]) : getStandardInput();
+                length > 1 ? checkCharacterInputStream(args[1]) : getStandardInput();
             return stream.unreadChar(checkCharacter(args[0]));
         }
     };

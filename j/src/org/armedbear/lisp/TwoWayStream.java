@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: TwoWayStream.java,v 1.5 2003-09-19 12:32:14 piso Exp $
+ * $Id: TwoWayStream.java,v 1.6 2003-09-28 20:17:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,21 +23,21 @@ package org.armedbear.lisp;
 
 public final class TwoWayStream extends LispStream
 {
-    private final CharacterInputStream in;
-    private final CharacterOutputStream out;
+    private final LispInputStream in;
+    private final LispOutputStream out;
 
-    public TwoWayStream(CharacterInputStream in, CharacterOutputStream out)
+    public TwoWayStream(LispInputStream in, LispOutputStream out)
     {
         this.in = in;
         this.out = out;
     }
 
-    public CharacterInputStream getInputStream()
+    public LispInputStream getInputStream()
     {
         return in;
     }
 
-    public CharacterOutputStream getOutputStream()
+    public LispOutputStream getOutputStream()
     {
         return out;
     }
@@ -68,12 +68,12 @@ public final class TwoWayStream extends LispStream
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            if (!(first instanceof CharacterInputStream))
+            if (!(first instanceof LispInputStream))
                 throw new ConditionThrowable(new TypeError(first, "input stream"));
-            if (!(second instanceof CharacterOutputStream))
+            if (!(second instanceof LispOutputStream))
                 throw new ConditionThrowable(new TypeError(second, "output stream"));
-            return new TwoWayStream((CharacterInputStream) first,
-                (CharacterOutputStream) second);
+            return new TwoWayStream((LispInputStream) first,
+                                    (LispOutputStream) second);
         }
     };
 

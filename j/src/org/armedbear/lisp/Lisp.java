@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.155 2003-09-28 14:14:04 piso Exp $
+ * $Id: Lisp.java,v 1.156 2003-09-28 20:13:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -762,27 +762,33 @@ public abstract class Lisp
         }
     }
 
-    public static final CharacterInputStream checkInputStream(LispObject obj)
+    public static final CharacterInputStream checkCharacterInputStream(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
         if (obj instanceof CharacterInputStream)
             return (CharacterInputStream) obj;
-        if (obj instanceof TwoWayStream)
-            return ((TwoWayStream)obj).getInputStream();
-        throw new ConditionThrowable(new TypeError(obj, "input stream"));
+        if (obj instanceof TwoWayStream) {
+            LispInputStream in = ((TwoWayStream)obj).getInputStream();
+            if (in instanceof CharacterInputStream)
+                return (CharacterInputStream) in;
+        }
+        throw new ConditionThrowable(new TypeError(obj, "character input stream"));
     }
 
-    public static final CharacterOutputStream checkOutputStream(LispObject obj)
+    public static final CharacterOutputStream checkCharacterOutputStream(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
         if (obj instanceof CharacterOutputStream)
             return (CharacterOutputStream) obj;
-        if (obj instanceof TwoWayStream)
-            return ((TwoWayStream)obj).getOutputStream();
+        if (obj instanceof TwoWayStream) {
+            LispOutputStream out = ((TwoWayStream)obj).getOutputStream();
+            if (out instanceof CharacterOutputStream)
+                return (CharacterOutputStream) out;
+        }
         throw new ConditionThrowable(new TypeError(obj, "output stream"));
     }
 
@@ -790,13 +796,16 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         if (obj == T)
-            return checkInputStream(_TERMINAL_IO_.symbolValue());
+            return checkCharacterInputStream(_TERMINAL_IO_.symbolValue());
         if (obj == NIL)
-            return checkInputStream(_STANDARD_INPUT_.symbolValue());
+            return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue());
         if (obj instanceof CharacterInputStream)
             return (CharacterInputStream) obj;
-        if (obj instanceof TwoWayStream)
-            return ((TwoWayStream)obj).getInputStream();
+        if (obj instanceof TwoWayStream) {
+            LispInputStream in = ((TwoWayStream)obj).getInputStream();
+            if (in instanceof CharacterInputStream)
+                return (CharacterInputStream) in;
+        }
         throw new ConditionThrowable(new TypeError(obj, "character input stream"));
     }
 
@@ -804,13 +813,16 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         if (obj == T)
-            return checkOutputStream(_TERMINAL_IO_.symbolValue());
+            return checkCharacterOutputStream(_TERMINAL_IO_.symbolValue());
         if (obj == NIL)
-            return checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+            return checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
         if (obj instanceof CharacterOutputStream)
             return (CharacterOutputStream) obj;
-        if (obj instanceof TwoWayStream)
-            return ((TwoWayStream)obj).getOutputStream();
+        if (obj instanceof TwoWayStream) {
+            LispOutputStream out = ((TwoWayStream)obj).getOutputStream();
+            if (out instanceof CharacterOutputStream)
+                return (CharacterOutputStream) out;
+        }
         throw new ConditionThrowable(new TypeError(obj, "character output stream"));
     }
 
@@ -1043,7 +1055,7 @@ public abstract class Lisp
 
     public static final CharacterOutputStream getStandardOutput() throws ConditionThrowable
     {
-        return checkOutputStream(_STANDARD_OUTPUT_.symbolValueNoThrow());
+        return checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValueNoThrow());
     }
 
     public static final CharacterOutputStream getTraceOutput()
