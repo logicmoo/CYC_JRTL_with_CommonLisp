@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.72 2003-09-15 03:52:12 piso Exp $
+ * $Id: Symbol.java,v 1.73 2003-09-15 04:17:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,11 +176,10 @@ public class Symbol extends LispObject
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
-        if (typeSpecifier instanceof Cons)
-            return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
-
         if (typeSpecifier == Symbol.SYMBOL)
             return T;
+        if (typeSpecifier == Symbol.BOOLEAN)
+            return this == T ? T : NIL;
         if (typeSpecifier instanceof LispClass) {
             final String name = typeSpecifier.getName();
             if (name.equals("SYMBOL"))
