@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.28 2004-05-06 11:06:59 piso Exp $
+ * $Id: BuiltInClass.java,v 1.29 2004-05-23 15:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,11 @@ public class BuiltInClass extends LispClass
         if (type == BuiltInClass.BUILT_IN_CLASS)
             return T;
         return super.typep(type);
+    }
+
+    public LispObject getDescription() throws ConditionThrowable
+    {
+        return new SimpleString(writeToString());
     }
 
     public String writeToString() throws ConditionThrowable

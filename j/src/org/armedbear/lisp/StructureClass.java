@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureClass.java,v 1.9 2004-05-16 11:56:06 piso Exp $
+ * $Id: StructureClass.java,v 1.10 2004-05-23 15:26:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,11 @@ public class StructureClass extends SlotClass
         if (type == BuiltInClass.STRUCTURE_CLASS)
             return T;
         return super.typep(type);
+    }
+
+    public LispObject getDescription() throws ConditionThrowable
+    {
+        return new SimpleString(writeToString());
     }
 
     public String writeToString() throws ConditionThrowable
