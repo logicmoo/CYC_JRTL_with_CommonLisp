@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.17 2002-12-08 02:17:48 piso Exp $
+ * $Id: Buffer.java,v 1.18 2002-12-14 15:49:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1435,7 +1435,6 @@ public class Buffer extends SystemBuffer
 
     private boolean saveSsh(final SshFile file)
     {
-        Log.debug("saveSsh");
         final String title = "Save";
         final Editor editor = Editor.currentEditor();
         boolean succeeded = false;
