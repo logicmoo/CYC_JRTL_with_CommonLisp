@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.19 2003-09-19 14:44:10 piso Exp $
+ * $Id: Load.java,v 1.20 2003-09-24 14:16:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,6 +181,7 @@ public final class Load extends Lisp
             thread.bindSpecial(_LOAD_TRUENAME_, new LispString(truename));
             if (verbose) {
                 CharacterOutputStream out = getStandardOutput();
+                out.freshLine();
                 out.writeString(semicolons);
                 out.writeLine(" Loading " + truename + " ...");
                 out.finishOutput();
@@ -189,6 +190,7 @@ public final class Load extends Lisp
             if (verbose) {
                 long elapsed = System.currentTimeMillis() - start;
                 CharacterOutputStream out = getStandardOutput();
+                out.freshLine();
                 out.writeString(semicolons);
                 out.writeString(" Loaded ");
                 out.writeString(truename);
