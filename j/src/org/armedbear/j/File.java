@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.6 2002-12-07 11:39:04 piso Exp $
+ * $Id: File.java,v 1.7 2002-12-07 12:26:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -753,11 +753,14 @@ public class File implements Comparable
             long start = System.currentTimeMillis();
             FastStringReader reader = new FastStringReader(listing);
             ArrayList list = new ArrayList();
+            int nameColumn = -1;
             String s;
             while ((s = reader.readLine()) != null) {
+                if (nameColumn < 0)
+                    nameColumn = DirectoryEntry.getNameColumn(s);
                 DirectoryEntry entry = DirectoryEntry.getDirectoryEntry(s, null);
                 if (entry != null) {
-                    final String name = entry.extractName();
+                    final String name = entry.extractName(nameColumn);
                     if (name == null || name.equals(".") || name.equals(".."))
                         continue;
                     String path = appendNameToPath(canonicalPath(), name, '/');
