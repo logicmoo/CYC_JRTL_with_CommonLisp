@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.32 2003-11-18 01:55:51 piso Exp $
+;;; $Id: defstruct.lisp,v 1.33 2003-11-18 02:58:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@
 (defvar *ds-copier*)
 (defvar *ds-type*)
 (defvar *ds-named*)
+(defvar *ds-initial-offset*)
 (defvar *ds-predicate*)
 (defvar *ds-print-function*)
 
@@ -33,20 +34,23 @@
          (slot-names (mapcar #'(lambda (x) (if (atom x) x (car x))) slots))
          (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
          (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
-         (keys (cons '&key slot-descriptions)))
+         (keys (cons '&key slot-descriptions))
+         (elements slot-names))
+    (when *ds-named*
+      (push (list 'quote *ds-name*) elements))
+    (when *ds-initial-offset*
+      (dotimes (i *ds-initial-offset*)
+        (push nil elements)))
     (cond ((eq *ds-type* 'list)
-           (if *ds-named*
-               `((defun ,constructor-name ,keys
-                   (list ',*ds-name* ,@slot-names)))
-               `((defun ,constructor-name ,keys
-                   (list ,@slot-names)))))
+           `((defun ,constructor-name ,keys
+               (list ,@elements))))
           ((or (eq *ds-type* 'vector)
                (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
-           (if *ds-named*
-               `((defun ,constructor-name ,keys
-                   (vector ',*ds-name* ,@slot-names)))
-               `((defun ,constructor-name ,keys
-                   (vector ,@slot-names)))))
+           (let ((element-type (if (consp *ds-type*) (cadr *ds-type*) t)))
+             `((defun ,constructor-name ,keys
+                 (make-array ,(length elements)
+                             :element-type ',element-type
+                             :initial-contents (list ,@elements))))))
           (t
            `((defun ,constructor-name ,keys
                (%make-structure ',*ds-name* (list ,@slot-names))))))))
@@ -81,9 +85,11 @@
                  (typep object ',*ds-name*))))))))
 
 (defun get-slot-accessor (slot)
+  (when *ds-initial-offset*
+    (incf slot *ds-initial-offset*))
+  (when *ds-named*
+    (incf slot))
   (cond ((eq *ds-type* 'list)
-         (when *ds-named*
-           (incf slot))
          `(lambda (instance) (elt instance ,slot)))
         ((or (eq *ds-type* 'vector)
              (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
@@ -97,9 +103,11 @@
             `(lambda (instance) (%structure-ref instance ,slot)))))))
 
 (defun get-slot-mutator (slot)
+  (when *ds-initial-offset*
+    (incf slot *ds-initial-offset*))
+  (when *ds-named*
+    (incf slot))
   (cond ((eq *ds-type* 'list)
-         (when *ds-named*
-           (incf slot))
          `(lambda (instance value) (%set-elt instance ,slot value)))
         ((or (eq *ds-type* 'vector)
              (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
@@ -166,6 +174,8 @@
             (numargs (length args)))
        (when (= numargs 1)
           (setf *ds-copier* (car args)))))
+    (:initial-offset
+     (setf *ds-initial-offset* (cadr option)))
     (:predicate
      (when (= (length option) 2)
        (if (null (cadr option))
@@ -200,6 +210,7 @@
         (*ds-copier* nil)
         (*ds-type* nil)
         (*ds-named* nil)
+        (*ds-initial-offset* nil)
         (*ds-predicate* nil)
         (*ds-print-function* nil))
     (parse-name-and-options (if (atom name-and-options)
