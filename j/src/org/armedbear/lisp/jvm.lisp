@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.250 2004-07-28 14:44:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.251 2004-07-28 16:14:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -120,7 +120,7 @@
 (defstruct context vars)
 
 (defun add-variable-to-context (variable)
-  (assert (variable-p variable))
+  (aver (variable-p variable))
   (push variable (context-vars *context*)))
 
 
@@ -524,11 +524,11 @@
          (error "Bad method type descriptor ~S." designator))))
 
 (defun emit-invokestatic (class-name method-name descriptor stack)
-  (assert stack)
+  (aver stack)
   (let ((instruction (emit 'invokestatic
                            class-name method-name (descriptor descriptor))))
     (setf (instruction-stack instruction) stack)
-    (assert (eql (instruction-stack instruction) stack))))
+    (aver (eql (instruction-stack instruction) stack))))
 
 (defun emit-invokespecial (class-name method-name descriptor stack)
   (let ((instruction (emit 'invokespecial
@@ -897,7 +897,7 @@
                   (+ depth (instruction-stack instruction))))
         (return-from walk-code))
       (let ((opcode (instruction-opcode instruction)))
-        (unless (eql opcode 168) ; JSR)
+        (unless (eql opcode 168) ; JSR
           (setf depth (+ depth (instruction-stack instruction))))
         (setf (instruction-depth instruction) depth)
         (if (eql opcode 168) ; JSR
@@ -911,38 +911,40 @@
           (return-from walk-code))))))
 
 (defun analyze-stack ()
-  (sys::require-type *code* 'vector)
-  (dotimes (i (length *code*))
-    (let* ((instruction (aref *code* i))
-           (opcode (instruction-opcode instruction)))
-      (when (eql opcode 202) ; LABEL
-        (let ((label (car (instruction-args instruction))))
-          (set label i)))
-      (if (instruction-stack instruction)
-          (when (opcode-stack-effect opcode)
-            (unless (eql (instruction-stack instruction) (opcode-stack-effect opcode))
-              (format t "instruction-stack = ~S opcode-stack-effect = ~S~%"
-                      (instruction-stack instruction)
-                      (opcode-stack-effect opcode))
-              (format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
-          (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
-      (assert (not (null (instruction-stack instruction))))))
-  (walk-code *code* 0 0)
-  (dolist (handler *handlers*)
-    ;; Stack depth is always 1 when handler is called.
-    (walk-code *code* (symbol-value (handler-code handler)) 1))
-  (let ((max-stack 0))
-    (dotimes (i (length *code*))
-      (let* ((instruction (aref *code* i))
-             (depth (instruction-depth instruction)))
-        (when depth
-          (setf max-stack (max max-stack depth)))))
-    (when *debug*
-      (format t "*defun-name* = ~S~%" *defun-name*)
-      (format t "max-stack = ~D~%" max-stack)
-      (format t "----- after stack analysis -----~%")
-      (print-code))
-    max-stack))
+  (let* ((code *code*)
+         (code-length (length code)))
+    (aver (vectorp code))
+    (dotimes (i code-length)
+      (let* ((instruction (aref code i))
+             (opcode (instruction-opcode instruction)))
+        (when (eql opcode 202) ; LABEL
+          (let ((label (car (instruction-args instruction))))
+            (set label i)))
+        (if (instruction-stack instruction)
+            (when (opcode-stack-effect opcode)
+              (unless (eql (instruction-stack instruction) (opcode-stack-effect opcode))
+                (format t "instruction-stack = ~S opcode-stack-effect = ~S~%"
+                        (instruction-stack instruction)
+                        (opcode-stack-effect opcode))
+                (format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
+            (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
+        (aver (not (null (instruction-stack instruction))))))
+    (walk-code code 0 0)
+    (dolist (handler *handlers*)
+      ;; Stack depth is always 1 when handler is called.
+      (walk-code code (symbol-value (handler-code handler)) 1))
+    (let ((max-stack 0))
+      (dotimes (i code-length)
+        (let* ((instruction (aref code i))
+               (depth (instruction-depth instruction)))
+          (when depth
+            (setf max-stack (max max-stack depth)))))
+      (when *debug*
+        (format t "*defun-name* = ~S~%" *defun-name*)
+        (format t "max-stack = ~D~%" max-stack)
+        (format t "----- after stack analysis -----~%")
+        (print-code))
+      max-stack)))
 
 (defun emit-move-from-stack (target)
   (declare (optimize (speed 3) (safety 0)))
@@ -952,7 +954,7 @@
         ((fixnump target)
          (emit 'astore target))
         (t
-         (assert nil))))
+         (aver nil))))
 
 (defun resolve-variables ()
   (dump-variables (reverse *all-variables*)
@@ -964,7 +966,7 @@
         (206 ; VAR-REF
          (let ((variable (first (instruction-args instruction)))
                (target (second (instruction-args instruction))))
-           (assert (variable-p variable))
+           (aver (variable-p variable))
 ;;            (format t "resolving var-ref, *nesting-level* = ~S~%" *nesting-level*)
 ;;            (dump-1-variable variable)
            (cond ((variable-register variable)
@@ -988,7 +990,7 @@
                  (*child-p*
                   ;; The general case.
                   (emit 'aload *context-register*) ; Array of arrays.
-                  (assert (fixnump (variable-level variable)))
+                  (aver (fixnump (variable-level variable)))
                   (emit 'bipush (variable-level variable))
                   (emit 'aaload) ; Locals array for level in question.
                   (emit 'bipush (variable-index variable))
@@ -1003,8 +1005,8 @@
          (let ((variable (car (instruction-args instruction))))
 ;;            (format t "resolving var-set...~%")
 ;;            (dump-1-variable variable)
-           (assert (variable-p variable))
-           (assert (not (variable-special-p variable)))
+           (aver (variable-p variable))
+           (aver (not (variable-special-p variable)))
            (cond ((variable-register variable)
                   (emit 'astore (variable-register variable)))
                  ((= (variable-level variable) *nesting-level* 0)
@@ -2094,7 +2096,7 @@
   (let* ((fun (car form))
          (args (cdr form))
          (local-function (find fun *local-functions* :key #'local-function-name)))
-    (assert (not (null local-function)))
+    (aver (not (null local-function)))
     (cond ((local-function-variable local-function)
            ;; LABELS
            (emit 'var-ref (local-function-variable local-function) :stack))
@@ -2156,7 +2158,7 @@
            (emit 'astore target))
           (t
            (%format t "line 1876~%")
-           (assert nil)))))
+           (aver nil)))))
 
 (defun compile-test-not/null (form)
   (let ((arg (second form)))
@@ -2347,7 +2349,7 @@
          (emit 'swap) ; array index value
          (emit 'aastore))
         (t
-         (assert nil))))
+         (aver nil))))
 
 (defun compile-multiple-value-bind (form &key (target *val*))
   (let* ((*register* *register*)
@@ -2612,7 +2614,7 @@
             (emit 'if_acmpne NEXT) ;; Jump if not EQ.
             ;; Restore dynamic environment.
             (emit-push-current-thread)
-            (assert (fixnump environment-register))
+            (aver (fixnump environment-register))
             (emit 'aload environment-register)
             (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
             (emit 'goto (tag-label tag))
@@ -2712,7 +2714,7 @@
 ;;            (block-name block) (block-return-p block))
   (unless (block-node-p block)
     (format t "type-of block = ~S~%" (type-of block))
-    (assert (block-node-p block)))
+    (aver (block-node-p block)))
   (let* ((*blocks* (cons block *blocks*))
          (*register* *register*))
     (setf (block-target block) target)
@@ -3202,15 +3204,21 @@
                     (emit-move-from-stack target)))))
           ((and (consp name) (eq (car name) 'SETF))
            ; FIXME Need to check for NOTINLINE declaration!
-           (if (member name *toplevel-defuns* :test #'equal)
-               (let ((g (declare-setf-function name)))
-                 (emit 'getstatic
-                       *this-class*
-                       g
-                       +lisp-object+)
-                 (emit-move-from-stack target))
-               (progn
-                 (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
+           (cond ((member name *toplevel-defuns* :test #'equal)
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-setf-function name)
+                        +lisp-object+)
+                  (emit-move-from-stack target))
+                 ((and (null *compile-file-truename*)
+                       (fdefinition name))
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-object (fdefinition name))
+                        +lisp-object+)
+                  (emit-move-from-stack target))
+                 (t
+                  (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
           ((and (consp name) (eq (car name) 'LAMBDA))
            (compile-lambda name target))
 ;;            (let* ((closure-vars *visible-variables*)
@@ -3419,7 +3427,7 @@
          (emit 'astore target))
         (t
          (%format t "line 2721~%")
-         (assert nil))))
+         (aver nil))))
 
 (defun compile-variable-reference (name target)
   (let ((variable (find-visible-variable name)))
@@ -3691,7 +3699,7 @@
 
 ;; Returns descriptor.
 (defun analyze-args (args)
-  (assert (not (memq '&AUX args)))
+  (aver (not (memq '&AUX args)))
   (when (or *use-locals-vector*
             *child-p*
             (memq '&KEY args)
@@ -3808,7 +3816,7 @@
             (let ((register 1)
                   (index 0))
               (dolist (arg args)
-                (assert (= index (length (context-vars *context*))))
+                (aver (= index (length (context-vars *context*))))
                 (let ((variable (make-variable :name arg
                                                :kind 'ARG
                                                :special-p nil ;; FIXME
@@ -3845,9 +3853,9 @@
               (allocate-register)))
         (cond (*child-p*
                (setf *context-register* (allocate-register))
-               (assert (eql *context-register* 2)))
+               (aver (eql *context-register* 2)))
               (*use-locals-vector*
-               (assert *using-arg-array*)
+               (aver *using-arg-array*)
                (setf *context-register* 1)))
         ;;       (format t "~S *context-register* = ~S~%" *defun-name* *context-register*)
         ;; Reserve the next available slot for the value register.
