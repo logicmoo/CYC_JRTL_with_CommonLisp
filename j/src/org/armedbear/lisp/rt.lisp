@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.51 2003-03-10 19:30:31 piso Exp $
+;;; $Id: rt.lisp,v 1.52 2003-03-10 20:13:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -391,6 +391,31 @@
        (check-scaffold-copy x xcopy)
        (check-copy-list-copy x y)
        y))))
+
+(defun check-union (x y z)
+  (and (listp x)
+       (listp y)
+       (listp z)
+       (loop for e in z always (or (member e x) (member e y)))
+       (loop for e in x always (member e z))
+       (loop for e in y always (member e z))
+       t))
+
+(defun nunion-with-copy (x y &key test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (cond
+   (test (nunion x y :test test))
+   (test-not (nunion x y :test-not test-not))
+   (t (nunion x y))))
+
+(defun nunion-with-copy-and-key (x y key &key test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (cond
+   (test (nunion x y :key key :test test))
+   (test-not (nunion x y :key key :test-not test-not))
+   (t (nunion x y :key key))))
 
 (defun set-exclusive-or-with-check (x y &key (key 'no-key)
 				      test test-not)
