@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.471 2003-10-13 11:35:15 piso Exp $
+ * $Id: Primitives.java,v 1.472 2003-10-13 11:40:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2206,7 +2206,7 @@ public final class Primitives extends Module
             LispObject fun = first;
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
-            if (!(fun instanceof Function))
+            if (!(fun instanceof Function || fun instanceof GenericFunction))
                 throw new ConditionThrowable(new UndefinedFunction(first));
             // Second argument must be a list.
             LispObject list = checkList(second);
@@ -2234,7 +2234,7 @@ public final class Primitives extends Module
             LispObject fun = first;
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
-            if (!(fun instanceof Function))
+            if (!(fun instanceof Function || fun instanceof GenericFunction))
                 throw new ConditionThrowable(new UndefinedFunction(first));
             // Remaining arguments must be lists.
             LispObject list1 = checkList(second);
@@ -2267,7 +2267,7 @@ public final class Primitives extends Module
             LispObject fun = args[0];
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
-            if (!(fun instanceof Function))
+            if (!(fun instanceof Function || fun instanceof GenericFunction))
                 throw new ConditionThrowable(new UndefinedFunction(args[0]));
             // Remaining arguments must be lists.
             int commonLength = -1;
