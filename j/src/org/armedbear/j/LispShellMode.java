@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShellMode.java,v 1.14 2003-12-04 14:54:52 piso Exp $
+ * $Id: LispShellMode.java,v 1.15 2004-09-04 13:29:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,8 +71,12 @@ public final class LispShellMode extends LispMode implements Constants, Mode
 
     public void populateModeMenu(Editor editor, Menu menu)
     {
-        boolean enabled = LispShell.findLisp(null) != null;
-        menu.add(editor, "Reset Lisp", 'R', "resetLisp", enabled);
+        menu.add(editor, "Reset Lisp", 'L', "resetLisp", true);
+        menu.addSeparator();
+        menu.add(editor, "Previous Input", 'P', "shellPreviousInput", true);
+        menu.add(editor, "Next Input", 'N', "shellNextInput", true);
+        menu.add(editor, "Goto Previous Prompt", 'R', "shellPreviousPrompt", true);
+        menu.add(editor, "Goto Next Prompt", 'T', "shellNextPrompt", true);
     }
 
     public boolean isTaggable()
