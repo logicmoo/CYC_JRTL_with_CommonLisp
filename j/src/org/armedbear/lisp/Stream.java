@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.110 2005-02-06 01:15:56 piso Exp $
+ * $Id: Stream.java,v 1.111 2005-02-06 01:36:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -339,7 +339,7 @@ public class Stream extends LispObject
         return signal(new ReaderError("Non-list following #S: " + obj));
     }
 
-    public LispObject readList() throws ConditionThrowable
+    public LispObject readList(boolean requireProper) throws ConditionThrowable
     {
         Cons first = null;
         Cons last = null;
@@ -361,6 +361,12 @@ public class Stream extends LispObject
                             return signal(new ReaderError("Nothing appears before . in list."));
                     }
                     LispObject obj = read(true, NIL, true);
+                    if (requireProper) {
+                        if (!obj.listp())
+                            signal(new ReaderError("The value " +
+                                                   obj.writeToString() +
+                                                   " is not of type LIST."));
+                    }
                     last.setCdr(obj);
                     continue;
                 }
