@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.53 2003-06-10 14:52:57 piso Exp $
+;;; $Id: boot.lisp,v 1.54 2003-06-10 17:47:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -110,13 +110,16 @@
                 "compiler.lisp"
                 "list.lisp"
                 "sequences.lisp"
-                "symbol.lisp"
                 "error.lisp"
                 "chars.lisp"
                 "strings.lisp"
                 "defstruct.lisp"
                 "loop.lisp"))
   (%load name))
+
+(autoload 'remprop "symbol.lisp")
+(autoload 'get-properties "symbol.lisp")
+(autoload 'copy-symbol "symbol.lisp")
 
 
 ;;; Miscellany.
