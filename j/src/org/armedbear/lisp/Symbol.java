@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.28 2003-03-12 18:36:18 piso Exp $
+ * $Id: Symbol.java,v 1.29 2003-03-14 02:54:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,7 @@ public class Symbol extends LispObject
     public static final Symbol CHARACTER            = export("CHARACTER");
     public static final Symbol EXTENDED_CHAR        = export("EXTENDED-CHAR");
     public static final Symbol FIXNUM               = export("FIXNUM");
+    public static final Symbol FLOAT                = export("FLOAT");
     public static final Symbol FUNCTION             = export("FUNCTION");
     public static final Symbol INTEGER              = export("INTEGER");
     public static final Symbol KEYWORD              = export("KEYWORD");
@@ -69,6 +70,7 @@ public class Symbol extends LispObject
     public static final Symbol SIMPLE_BIT_VECTOR    = export("SIMPLE-BIT-VECTOR");
     public static final Symbol SIMPLE_STRING        = export("SIMPLE-STRING");
     public static final Symbol SIMPLE_VECTOR        = export("SIMPLE-VECTOR");
+    public static final Symbol SINGLE_FLOAT         = export("SINGLE-FLOAT");
     public static final Symbol STANDARD_CHAR        = export("STANDARD-CHAR");
     public static final Symbol STRING               = export("STRING");
     public static final Symbol SYMBOL               = export("SYMBOL");
