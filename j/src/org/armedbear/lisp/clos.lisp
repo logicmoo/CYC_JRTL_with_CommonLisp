@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.81 2004-02-10 00:25:13 piso Exp $
+;;; $Id: clos.lisp,v 1.82 2004-02-10 02:14:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1164,15 +1164,18 @@
         (error "The method does not accept all of the keyword arguments defined for the generic function.")))))
 
 (defun ensure-method (gf &rest all-keys)
-  (let ((new-method
+  (let ((method-lambda-list (getf all-keys :lambda-list))
+        (gf-lambda-list (generic-function-lambda-list gf)))
+    (check-method-lambda-list method-lambda-list gf-lambda-list))
+  (let ((method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
               #'make-instance-standard-method
               #'make-instance)
           (generic-function-method-class gf)
           all-keys)))
-    (add-method gf new-method)
-    new-method))
+    (%add-method gf method)
+    method))
 
 (defun make-instance-standard-method (method-class
                                       &key
@@ -1191,13 +1194,16 @@
     method))
 
 (defun add-method (gf method)
+  (let ((method-lambda-list (method-lambda-list method))
+        (gf-lambda-list (generic-function-lambda-list gf)))
+    (check-method-lambda-list method-lambda-list gf-lambda-list))
+  (%add-method gf method))
+
+(defun %add-method (gf method)
   (when (method-generic-function method)
     (error 'simple-error
            :format-control "ADD-METHOD: ~S is a method of ~S."
            :format-arguments (list method (method-generic-function method))))
-  (let ((method-lambda-list (method-lambda-list method))
-        (gf-lambda-list (generic-function-lambda-list gf)))
-    (check-method-lambda-list method-lambda-list gf-lambda-list))
   ;; Remove existing method with same qualifiers and specializers (if any).
   (let ((old-method (find-method gf (method-qualifiers method)
                                  (method-specializers method) nil)))
@@ -1477,6 +1483,15 @@
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
 ;;; generic functions.
+
+;; FIXME
+;; From CLHS section 7.6.5:
+;; "When a generic function or any of its methods mentions &key in a lambda
+;; list, the specific set of keyword arguments accepted by the generic function
+;; varies according to the applicable methods. The set of keyword arguments
+;; accepted by the generic function for a particular call is the union of the
+;; keyword arguments accepted by all applicable methods and the keyword
+;; arguments mentioned after &key in the generic function definition, if any."
 
 (defun kludge-arglist (lambda-list)
   (if (and (member '&key lambda-list)
