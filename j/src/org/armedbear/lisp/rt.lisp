@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.90 2003-07-29 23:31:04 piso Exp $
+;;; $Id: rt.lisp,v 1.91 2003-08-03 16:59:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -233,8 +233,18 @@
                               "loop3"
                               "loop4"
                               "loop5"
+                              "loop6"
+                              "loop7"
                               "loop8"
                               "loop9"
+                              "loop10"
+                              "loop11"
+                              "loop12"
+                              "loop13"
+                              "loop14"
+                              "loop15"
+                              "loop16"
+                              "loop17"
                               "make-array"
                               "make-list"
                               "make-sequence"
