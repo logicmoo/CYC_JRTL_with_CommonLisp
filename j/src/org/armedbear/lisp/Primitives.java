@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.14 2003-02-13 17:47:06 piso Exp $
+ * $Id: Primitives.java,v 1.15 2003-02-13 18:44:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1438,6 +1438,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### handler-bind
     private static final SpecialOperator HANDLER_BIND =
         new SpecialOperator("handler-bind") {
         public LispObject execute(LispObject args, Environment env)
@@ -1452,8 +1453,8 @@ public final class Primitives extends Module
                 while (bindings != NIL) {
                     Cons binding = checkCons(bindings.car());
                     LispObject type = binding.car();
-                    LispObject handler = eval(binding.cadr(), env);
-                    if (isMatch(e, type)) {
+                    if (isConditionOfType(e, type)) {
+                        LispObject handler = eval(binding.cadr(), env);
                         LispObject[] handlerArgs = new LispObject[1];
                         handlerArgs[0] = new JavaObject(e);
                         funcall(handler, handlerArgs); // Might not return.
@@ -1464,12 +1465,45 @@ public final class Primitives extends Module
                 throw e;
             }
         }
+    };
 
-        private boolean isMatch(LispException e, LispObject type)
+    // ### handler-case
+    private static final SpecialOperator HANDLER_CASE =
+        new SpecialOperator("handler-case") {
+        public LispObject execute(LispObject args, Environment env)
+            throws LispException
         {
-            return type == Symbol.ERROR;
+            LispObject form = args.car();
+            LispObject clauses = args.cdr();
+            int depth = stack.size();
+            try {
+                return progn(form, env);
+            }
+            catch (LispException e) {
+                stack.setSize(depth);
+                while (clauses != NIL) {
+                    Cons clause = checkCons(clauses.car());
+                    LispObject type = clause.car();
+                    if (isConditionOfType(e, type)) {
+                        LispObject parameterList = clause.cadr();
+                        LispObject body = clause.cdr().cdr();
+                        Closure handler = new Closure(parameterList, body, env);
+                        LispObject[] handlerArgs = new LispObject[1];
+                        handlerArgs[0] = new JavaObject(e);
+                        return funcall(handler, handlerArgs);
+                    }
+                    clauses = clauses.cdr();
+                }
+                // Re-throw condition.
+                throw e;
+            }
         }
     };
+
+    private static boolean isConditionOfType(LispException e, LispObject type)
+    {
+        return type == Symbol.ERROR;
+    }
 
     // ### make-array
     // We only support one-dimensional arrays for now.
