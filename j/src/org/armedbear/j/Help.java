@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.12 2003-07-18 12:50:37 piso Exp $
+ * $Id: Help.java,v 1.13 2003-07-18 15:26:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,8 +227,9 @@ public final class Help
             KeyMapping mapping = mappings[i];
             FastStringBuffer sb = new FastStringBuffer(64);
             sb.append(mapping.getKeyText());
-            String command = mapping.getCommand();
-            if (command != null) {
+            Object command = mapping.getCommand();
+            if (command instanceof String) {
+                String commandString = (String) command;
                 int spaces = 32 - sb.length();
                 for (int j = spaces; j-- > 0;)
                     sb.append("&nbsp;");
@@ -237,12 +238,12 @@ public final class Help
                     sb.append(docDir.canonicalPath());
                     sb.append(LocalFile.getSeparatorChar());
                     sb.append("commands.html#");
-                    sb.append(command);
+                    sb.append(commandString);
                     sb.append("\">");
-                    sb.append(command);
+                    sb.append(commandString);
                     sb.append("</a>");
                 } else
-                    sb.append(command);
+                    sb.append(commandString);
                 sb.append("<br>\n");
             }
             writer.write(sb.toString());
