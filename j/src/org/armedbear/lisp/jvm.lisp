@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.2 2003-10-24 16:35:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.3 2003-10-25 16:36:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -459,6 +459,8 @@
 (defconstant +lisp-object-class+ "org/armedbear/lisp/LispObject")
 (defconstant +lisp-object+ "Lorg/armedbear/lisp/LispObject;")
 
+(defconstant +lisp-string+ "Lorg/armedbear/lisp/LispString;")
+
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
 
 (defun emit-push-nil ()
@@ -774,8 +776,7 @@
   (write-u2 0)) ; attributes count
 
 (defun declare-field (name descriptor)
-  (let ((field (make-field :name name
-                           :descriptor descriptor)))
+  (let ((field (make-field :name name :descriptor descriptor)))
     (setf (field-access-flags field) (logior #x8 #x2)) ; private static
     (setf (field-name-index field) (pool-name (field-name field)))
     (setf (field-descriptor-index field) (pool-name (field-descriptor field)))
@@ -878,7 +879,7 @@
   (let ((g (symbol-name (gensym)))
         (s (format nil "~S" obj))
         (*code* *static-code*))
-    (declare-field g "Lorg/armedbear/lisp/LispObject;")
+    (declare-field g +lisp-object+)
     (emit 'ldc
           (pool-string s))
     (emit 'invokestatic
@@ -888,9 +889,36 @@
     (emit 'putstatic
           *this-class*
           g
-          "Lorg/armedbear/lisp/LispObject;")
+          +lisp-object+)
     (setq *static-code* *code*)
     g))
+
+(defun declare-object (obj)
+  (let ((key (symbol-name (gensym))))
+    (sys::remember key obj)
+    (let* ((g1 (declare-string key))
+           (g2 (symbol-name (gensym)))
+           (*code* *static-code*))
+      (declare-field g2 +lisp-object+)
+      (emit 'getstatic
+            *this-class*
+            g1
+            +lisp-string+)
+      (emit 'dup)
+      (emit 'invokestatic
+            +lisp-class+
+            "recall"
+            "(Lorg/armedbear/lisp/LispString;)Lorg/armedbear/lisp/LispObject;")
+      (emit 'putstatic
+            *this-class*
+            g2
+            +lisp-object+)
+      (emit 'invokestatic
+            +lisp-class+
+            "forget"
+            "(Lorg/armedbear/lisp/LispString;)V")
+      (setq *static-code* *code*)
+      g2)))
 
 (defun declare-string (string)
   (let ((g (symbol-name (gensym)))
@@ -905,7 +933,7 @@
     (emit 'putstatic
           *this-class*
           g
-          "Lorg/armedbear/lisp/LispString;")
+          +lisp-string+)
     (setq *static-code* *code*)
     g))
 
@@ -969,7 +997,7 @@
    ((symbolp form)
     (when (null (symbol-package form))
       ;; An uninterned symbol.
-      (let ((g (declare-object-as-string form)))
+      (let ((g (declare-object form)))
         (emit 'getstatic
               *this-class*
               g
