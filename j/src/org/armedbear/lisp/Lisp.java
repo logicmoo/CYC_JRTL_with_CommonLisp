@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.219 2004-03-17 16:25:32 piso Exp $
+ * $Id: Lisp.java,v 1.220 2004-03-18 01:08:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,7 +277,10 @@ public abstract class Lisp
                     if (profiling)
                         if (!sampling)
                             expander.incrementCallCount();
-                    return thread.setValues(expander.execute(form, env), T);
+                    Function hook =
+                        coerceToFunction(_MACROEXPAND_HOOK_.symbolValue(thread));
+                    return thread.setValues(hook.execute(expander, form, env),
+                                            T);
                 }
             }
         } else if (form instanceof Symbol) {
@@ -1536,6 +1539,10 @@ public abstract class Lisp
     public static final Symbol _LOAD_PRINT_ =
         exportSpecial("*LOAD-PRINT*", PACKAGE_CL, NIL);
 
+    // ### *load-pathname*
+    public static final Symbol _LOAD_PATHNAME_ =
+        exportSpecial("*LOAD-PATHNAME*", PACKAGE_CL, NIL);
+
     // ### *load-truename*
     public static final Symbol _LOAD_TRUENAME_ =
         exportSpecial("*LOAD-TRUENAME*", PACKAGE_CL, NIL);
@@ -1554,6 +1561,18 @@ public abstract class Lisp
     // internal symbol
     public static final Symbol _AUTOLOAD_VERBOSE_ =
         exportSpecial("*AUTOLOAD-VERBOSE*", PACKAGE_EXT, NIL);
+
+    // ### *compile-file-pathname*
+    public static final Symbol _COMPILE_FILE_PATHNAME_ =
+        exportSpecial("*COMPILE-FILE-PATHNAME*", PACKAGE_CL, NIL);
+
+    // ### *compile-file-truename*
+    public static final Symbol _COMPILE_FILE_TRUENAME_ =
+        exportSpecial("*COMPILE-FILE-TRUENAME*", PACKAGE_CL, NIL);
+
+    // ### *macroexpand-hook*
+    public static final Symbol _MACROEXPAND_HOOK_ =
+        exportSpecial("*MACROEXPAND-HOOK*", PACKAGE_CL, Symbol.FUNCALL);
 
     // ### array-dimension-limit
     public static final int ARRAY_DIMENSION_MAX = 0x1000000;
