@@ -65,6 +65,7 @@
   (let ((impl ""))
     #+allegro   (setf impl "-allegro")
     #+armedbear (setf impl "-armedbear")
+    #+clisp     (setf impl "-clisp")
     #+sbcl      (setf impl "-sbcl")
     (multiple-value-bind (sec min hour day month year)
       (get-decoded-time)
@@ -199,6 +200,7 @@
       (run-benchmark 'cl-bench.clos:make-instances/simple)
       (run-benchmark 'cl-bench.clos:methodcalls/simple)
       (run-benchmark 'cl-bench.clos:methodcalls/simple+after)
+      #-clisp
       (run-benchmark 'cl-bench.clos:methodcalls/complex)
       #+nil
       (run-benchmark 'cl-bench.clos:run-eql-fib)
