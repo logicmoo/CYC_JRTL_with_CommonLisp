@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.17 2004-09-12 17:53:55 piso Exp $
+;;; $Id: slime.lisp,v 1.18 2004-09-13 01:48:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -427,3 +427,5 @@
 (map-key-for-mode "Ctrl Alt K" "(slime:slime-compile-and-load-file)" "Lisp")
 (map-key-for-mode "Ctrl Alt X" "(slime:slime-eval-defun)" "Lisp")
 (map-key-for-mode "Ctrl Alt C" "(slime:slime-compile-defun)" "Lisp")
+
+(pushnew :slime *features*)
