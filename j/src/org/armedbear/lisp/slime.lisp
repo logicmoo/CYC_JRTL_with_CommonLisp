@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.23 2004-09-17 00:46:17 piso Exp $
+;;; $Id: slime.lisp,v 1.24 2004-09-18 18:33:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -169,7 +169,7 @@
              (with-mutex (*continuations-lock*)
                (let ((continuations *continuations*)
                      (id (incf *continuation-counter*)))
-                 (push (cons id 'display-eval-result) *continuations*)
+                 (push (cons id continuation) *continuations*)
                  (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
                  (unless continuations
                    (make-thread #'(lambda () (dispatch-loop))))))
@@ -284,9 +284,11 @@
               (not (slime-busy-p)))
      (let ((names (enclosing-operator-names)))
        (when names
-         (let ((message (slime-eval `(swank:arglist-for-echo-area (quote ,names)))))
-           (when message
-             (status message))))))
+         (slime-eval-async
+          `(swank:arglist-for-echo-area (quote ,names))
+          #'(lambda (message)
+             (when (stringp message)
+               (status (string-trim '(#\") message))))))))
    (insert #\space)))
 
 (defun find-buffer-package ()
