@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.24 2004-03-13 19:35:18 piso Exp $
+;;; $Id: numbers.lisp,v 1.25 2004-03-14 00:26:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,16 +62,6 @@
                      (values (+ tru 1) (- rem divisor))
                      (values (- tru 1) (+ rem divisor))))
                 (t (values tru rem)))))))
-
-(defun mod (number divisor)
-  "Returns second result of FLOOR."
-  (let ((rem (rem number divisor)))
-    (if (and (not (zerop rem))
-	     (if (minusp divisor)
-		 (plusp number)
-		 (minusp number)))
-	(+ rem divisor)
-	rem)))
 
 (defun ffloor (number &optional (divisor 1))
   "Same as FLOOR, but returns first value as a float."
