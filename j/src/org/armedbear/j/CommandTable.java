@@ -1,8 +1,8 @@
 /*
  * CommandTable.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.43 2003-11-24 16:06:14 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: CommandTable.java,v 1.44 2004-04-02 03:26:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,6 +251,7 @@ public class CommandTable
             addCommand("find", "FindDialog");
             addCommand("findInFiles", "FindInFiles");
             addCommand("findOccurrenceAtDot", "ListOccurrences");
+            addCommand("findOccurrenceAtDotAndKillList", "ListOccurrences");
             addCommand("findTag", "TagCommands");
             addCommand("findTagAtDot", "TagCommands");
             addCommand("findTagAtDotOtherWindow", "TagCommands");
