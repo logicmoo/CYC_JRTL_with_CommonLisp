@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.380 2005-01-31 17:28:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.381 2005-02-01 05:20:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,10 +30,9 @@
           sys::define-source-transform
           sys::expand-source-transform))
 
+(require '#:format)
 (require '#:clos)
-
 (require '#:source-transform)
-
 (require '#:opcodes)
 
 (shadow '(method variable))
@@ -5378,12 +5377,9 @@
           (incf i))))
 
     ;; Pass 2.
-;;     (%format t "compile-1 (length *fields*) = ~S~%" (length *fields*))
     (with-class-file (compiland-class-file compiland)
       (p2-compiland compiland)
-      (write-class-file (compiland-class-file compiland))
-      )
-;;     (%format t "compile-1 (length *fields*) = ~S~%" (length *fields*))
+      (write-class-file (compiland-class-file compiland)))
 
     (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
     (class-file-pathname (compiland-class-file compiland))))
@@ -5398,13 +5394,11 @@
     (compile-1 (make-compiland :name name
                                :lambda-expression (precompile-form form t)
                                :class-file (make-class-file :pathname filespec
-                                                            :lambda-list (cadr form))
-;;                                :parent *current-compiland*
-                               ))))
+                                                            :lambda-list (cadr form))))))
 
 (defun handle-warning (condition)
   (fresh-line)
-  (format t "; Caught ~A:~%;   ~A~%" (type-of condition) condition)
+  (format t "~%; Caught ~A:~%;   ~A~%~%" (type-of condition) condition)
   (muffle-warning))
 
 (defun handle-compiler-error (condition)
