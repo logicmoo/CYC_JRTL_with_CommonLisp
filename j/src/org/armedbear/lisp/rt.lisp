@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.74 2003-04-06 18:54:43 piso Exp $
+;;; $Id: rt.lisp,v 1.75 2003-04-07 01:22:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -755,6 +755,7 @@
                               "string-comparisons"
                               "string-downcase"
                               "string-upcase"
+                              "subseq"
                               "substitute"
                               "substitute-if"
                               "substitute-if-not"
@@ -794,4 +795,5 @@
 (load (concatenate 'string rt::*prefix* "search-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "array-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "universe.lsp"))
+(load (concatenate 'string rt::*prefix* "subseq-aux.lsp"))
 #+armedbear (debug)
