@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.53 2004-01-18 19:30:44 piso Exp $
+ * $Id: LispShell.java,v 1.54 2004-04-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.RE;
 import gnu.regexp.REMatch;
 import java.io.IOException;
 import java.util.Iterator;
@@ -126,6 +127,34 @@ public class LispShell extends Shell
         history = new History("lisp.history", 30);
     }
 
+    private final Position findEndOfOutput()
+    {
+        if (posEndOfOutput == null)
+            return null;
+        // The original end-of-output line may no longer be in the buffer,
+        // since undo doesn't update posEndOfOutput.
+        if (contains(posEndOfOutput.getLine()))
+            return posEndOfOutput;
+        RE promptRE = getPromptRE();
+        if (promptRE != null) {
+            Position eob = getEnd();
+            if (eob == null)
+                return null;
+            Line line = eob.getLine();
+            while (line != null) {
+                int flags = line.flags();
+                if (flags == STATE_PROMPT || flags == STATE_INPUT) {
+                    final REMatch match = promptRE.getMatch(line.getText());
+                    if (match != null && match.getStartIndex() == 0) {
+                        return new Position(line, match.getEndIndex());
+                    }
+                }
+                line = line.previous();
+            }
+        }
+        return null;
+    }
+
     public void enter()
     {
         if (!checkProcess())
@@ -134,23 +163,26 @@ public class LispShell extends Shell
         Position dot = editor.getDotCopy();
         if (dot == null)
             return;
+        if (needsRenumbering)
+            renumber();
         final Line dotLine = dot.getLine();
-        if (posEndOfOutput == null) {
+        final Position endOfOutput = findEndOfOutput();
+        if (endOfOutput == null) {
             // Ignore input before first prompt is displayed.
             dotLine.setText("");
             return;
         }
-        if (dot.isBefore(posEndOfOutput)) {
+        if (dot.isBefore(endOfOutput)) {
             editor.newlineAndIndent();
             return; // For now.
         }
-        Line promptLine = posEndOfOutput.getLine();
-        Annotation a = new Annotation(posEndOfOutput.getOffset());
+        Line promptLine = endOfOutput.getLine();
+        Annotation a = new Annotation(endOfOutput.getOffset());
         promptLine.setAnnotation(a);
         promptLine.setFlags(STATE_PROMPT);
-        Position end = editor.getBuffer().getEnd();
+        Position end = getEnd();
         Position pos = LispMode.findContainingSexp(end);
-        boolean isComplete = (pos == null || pos.isBefore(posEndOfOutput));
+        boolean isComplete = (pos == null || pos.isBefore(endOfOutput));
         if (isComplete) {
             // Complete sexp.
             editor.eob();
@@ -169,7 +201,7 @@ public class LispShell extends Shell
         stripEcho = true;
         if (isComplete) {
             // No containing sexp. Send input to lisp process.
-            Position begin = getEndOfOutput();
+            Position begin = endOfOutput;
             end = editor.getDotCopy();
             end.setOffset(end.getLineLength());
             setEndOfOutput(end);
