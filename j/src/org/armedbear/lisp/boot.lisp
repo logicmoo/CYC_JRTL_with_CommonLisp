@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.91 2003-08-16 13:24:13 piso Exp $
+;;; $Id: boot.lisp,v 1.92 2003-08-24 17:13:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -213,6 +213,15 @@
                        ,@(or (cdar typeclauselistr) '(NIL)))
                      condclauselist))))
     `(LET ((,tempvar ,keyform)) (COND ,@(nreverse condclauselist)))))
+
+
+(defmacro etypecase (keyform &rest clauses)
+  (let ((var (gensym)))
+    `(let ((,var ,keyform))
+       (typecase ,var
+         ,@clauses
+         (otherwise
+          (error 'type-error "~S fell through ETYPECASE expression" ,var))))))
 
 
 (defmacro cond (&rest clauses)
