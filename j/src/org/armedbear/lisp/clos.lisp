@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.109 2004-09-26 18:19:39 piso Exp $
+;;; $Id: clos.lisp,v 1.110 2004-10-09 16:12:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -669,13 +669,9 @@
    (argument-precedence-order
     :initarg :argument-precedence-order)
    (classes-to-emf-table      ; :accessor classes-to-emf-table
-    :initform (make-hash-table :test #'equal))
-   (required-args :initform ())))
+    :initform (make-hash-table :test #'equal))))
 
 (defvar the-class-standard-gf (find-class 'standard-generic-function))
-
-(defvar *sgf-required-args-index*
-  (slot-location the-class-standard-gf 'required-args))
 
 (defvar *sgf-classes-to-emf-table-index*
   (slot-location the-class-standard-gf 'classes-to-emf-table))
@@ -913,9 +909,6 @@
   (clrhash (classes-to-emf-table gf))
   (values))
 
-(defun gf-required-args (gf)
-  (instance-ref gf *sgf-required-args-index*))
-
 (defun make-instance-standard-generic-function (generic-function-class
                                                 &key name lambda-list
                                                 method-class
@@ -933,7 +926,7 @@
     (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
     (let* ((plist (analyze-lambda-list (generic-function-lambda-list gf)))
            (required-args (getf plist ':required-args)))
-      (setf (slot-value gf 'required-args) required-args)
+      (%set-gf-required-args gf required-args)
       (setf (slot-value gf 'argument-precedence-order)
             (if argument-precedence-order
                 (canonicalize-argument-precedence-order argument-precedence-order
