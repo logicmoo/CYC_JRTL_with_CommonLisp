@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.267 2004-08-05 02:35:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.268 2004-08-07 17:38:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,10 @@
 
 (shadow '(method variable))
 
+(defmacro show (form)
+  (let ((format-control (concatenate 'string (write-to-string form) " = ~S~%")))
+    `(%format t ,format-control ,form)))
+
 (defvar *use-locals-vector* nil)
 
 ;; FIXME
@@ -48,7 +52,6 @@
 (defvar *pool-entries* nil)
 
 (defvar *stream* nil)
-(defvar *defun-name* nil)
 (defvar *this-class* nil)
 
 (defvar *code* ())
@@ -955,7 +958,7 @@
           (when depth
             (setf max-stack (max max-stack depth)))))
       (when *debug*
-        (format t "*defun-name* = ~S~%" *defun-name*)
+        (format t "compiland name = ~S~%" (compiland-name *current-compiland*))
         (format t "max-stack = ~D~%" max-stack)
         (format t "----- after stack analysis -----~%")
         (print-code))
@@ -973,7 +976,7 @@
 
 (defun resolve-variables ()
   (dump-variables (reverse *all-variables*)
-                  (%format nil "Variables in ~A:~%" *defun-name*))
+                  (%format nil "Variables in ~A:~%" (compiland-name *current-compiland*)))
   (let ((code (nreverse *code*)))
     (setf *code* nil)
     (dolist (instruction code)
@@ -2032,7 +2035,7 @@
            (when (compile-function-call-3 fun args :target target)
              (return-from compile-function-call)))))
       (cond
-       ((eq fun *defun-name*)
+       ((eq fun (compiland-name *current-compiland*))
         (emit 'aload 0)) ; this
        ((inline-ok fun)
         (let ((f (declare-function fun)))
@@ -3723,8 +3726,7 @@
       (setf precompiled-form (p1 precompiled-form))
 
 ;;       (format t "children = ~S~%" (compiland-children *current-compiland*))
-      (let* ((*defun-name* name)
-             (*speed* *speed*)
+      (let* ((*speed* *speed*)
              (*safety* *safety*)
              (*declared-symbols* (make-hash-table :test 'eq))
              (*declared-functions* (make-hash-table :test 'equal))
@@ -3831,7 +3833,7 @@
                      (setf (variable-special-p variable) t))))))
 
         (dump-variables (reverse parameters)
-                        (format nil "Arguments to ~A:~%" *defun-name*))
+                        (format nil "Arguments to ~A:~%" (compiland-name *current-compiland*)))
 
         (allocate-register) ;; "this" pointer
         (if *using-arg-array*
@@ -3846,7 +3848,6 @@
               (*use-locals-vector*
                (aver *using-arg-array*)
                (setf *context-register* 1)))
-        ;;       (format t "~S *context-register* = ~S~%" *defun-name* *context-register*)
         ;; Reserve the next available slot for the value register.
         (setf *val* (allocate-register))
         ;; Reserve the next available slot for the thread register.
@@ -3911,7 +3912,6 @@
               ;;             (emit 'sipush (- (length *all-locals*) (length *args*)))
               ;;               (emit 'sipush (length (context-vars *context*))) ;; FIXME subtract length of args
               ;;               (emit 'iconst_0))
-              ;;             (format t "~S extra = ~S~%" *defun-name* extra)
               (emit 'sipush extra))
             (emit-invokevirtual *this-class*
                                 "processArgs"
@@ -3957,7 +3957,7 @@
                    (t "org.armedbear.lisp.Primitive")))))
          (this-index (pool-class *this-class*))
          (super-index (pool-class super))
-         (constructor (make-constructor super *defun-name* args body)))
+         (constructor (make-constructor super (compiland-name *current-compiland*) args body)))
     (pool-name "Code") ; Must be in pool!
 
     ;; Write out the class file.
