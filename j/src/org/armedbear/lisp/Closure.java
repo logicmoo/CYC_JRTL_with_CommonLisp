@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.78 2004-06-17 10:49:01 piso Exp $
+ * $Id: Closure.java,v 1.79 2004-06-17 19:52:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -538,15 +538,6 @@ public class Closure extends Function
             args[3] = fourth;
             return execute(args);
         }
-    }
-
-    public LispObject execute(LispObject args, Environment env)
-        throws ConditionThrowable
-    {
-        LispObject array[] = new LispObject[2];
-        array[0] = args;
-        array[1] = env;
-        return execute(array);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
