@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.40 2004-12-19 16:53:41 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: top-level.lisp,v 1.41 2005-02-26 17:49:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SB-ACLREPL (originally written by Kevin Rosenberg).
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defvar *inspect-break* nil)
 
@@ -27,7 +27,7 @@
 
 (defvar *inspected-object* nil)
 
-(in-package "TOP-LEVEL")
+(in-package #:top-level)
 
 (import '(sys::%format sys::list-traced-functions sys::trace-1 sys::untrace-1 sys::untrace-all))
 
@@ -70,7 +70,9 @@
                    8))
         (n 0))
     (with-standard-io-syntax
-      (let ((*print-pretty* t))
+      (let ((*print-pretty* t)
+            (*print-readably* nil)
+            (*print-structure* nil))
         (dolist (frame *saved-backtrace*)
           (fresh-line *debug-io*)
           (let ((prefix (format nil "~3D: (" n)))
