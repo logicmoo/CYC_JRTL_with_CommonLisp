@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ObjCTagger.java,v 1.1 2003-12-30 17:33:31 piso Exp $
+ * $Id: ObjCTagger.java,v 1.2 2003-12-30 19:25:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class ObjCTagger extends JavaTagger
     private static final int METHOD_NAME    = 2;
     private static final int PARAMETER_LIST = 3;
 
-    private CMode mode = (CMode) CMode.getMode();
+    private Mode mode = ObjCMode.getMode();
 
     public ObjCTagger(SystemBuffer buffer)
     {
@@ -66,7 +66,7 @@ public final class ObjCTagger extends JavaTagger
                 continue;
             }
             if (c == '#' && pos.getOffset() == 0) {
-                CTagger.skipPreprocessor(pos);
+                skipPreprocessor(pos);
                 continue;
             }
             if (state == METHOD_NAME) {
@@ -163,25 +163,11 @@ public final class ObjCTagger extends JavaTagger
 
     private static final boolean isIdentifierStart(char c)
     {
-        if (c >= 'a' && c <= 'z')
-            return true;
-        if (c >='A' && c <= 'Z')
-            return true;
-        if (c == '_')
-            return true;
-        return false;
+        return CMode.getMode().isIdentifierStart(c);
     }
 
     private static final boolean isIdentifierPart(char c)
     {
-        if (c >= 'a' && c <= 'z')
-            return true;
-        if (c >='A' && c <= 'Z')
-            return true;
-        if (c >= '0' && c <= '9')
-            return true;
-        if (c == '_')
-            return true;
-        return false;
+        return CMode.getMode().isIdentifierPart(c);
     }
 }

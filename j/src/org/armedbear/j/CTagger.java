@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CTagger.java,v 1.7 2002-11-26 02:08:44 piso Exp $
+ * $Id: CTagger.java,v 1.8 2003-12-30 19:27:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ public final class CTagger extends JavaTagger
                     skipBrace();
                     state = NEUTRAL;
                     continue;
-                } else if (isIdentifierStart(c)) {
+                } else if (mode.isIdentifierStart(c)) {
                     state = PARAMETER_LIST;
                     pos.next();
                     continue;
@@ -107,7 +107,7 @@ public final class CTagger extends JavaTagger
                 pos.next();
                 continue;
             }
-            if (isIdentifierStart(c)) {
+            if (mode.isIdentifierStart(c)) {
                 tokenStart = pos.copy();
                 String s = gatherToken(pos);
                 if (s.startsWith("ARGS") && lynxArgsMacroRE.isMatch(s)) {
@@ -162,7 +162,7 @@ public final class CTagger extends JavaTagger
     {
         FastStringBuffer sb = new FastStringBuffer();
         char c;
-        while (isIdentifierPart(c = pos.getChar())) {
+        while (mode.isIdentifierPart(c = pos.getChar())) {
             sb.append(c);
             if (!pos.next())
                 break;
@@ -203,45 +203,5 @@ public final class CTagger extends JavaTagger
                 break;
         }
         return sb.toString();
-    }
-
-    // Also used in CppTagger.java.
-    /*package*/ static void skipPreprocessor(Position pos)
-    {
-        while (true) {
-            Line line = pos.getLine();
-            Line nextLine = line.next();
-            if (nextLine == null) {
-                pos.setOffset(line.length());
-                return;
-            }
-            pos.moveTo(nextLine, 0);
-            if (line.length() == 0 || line.charAt(line.length()-1) != '\\')
-                return;
-        }
-    }
-
-    private static final boolean isIdentifierStart(char c)
-    {
-        if (c >= 'a' && c <= 'z')
-            return true;
-        if (c >='A' && c <= 'Z')
-            return true;
-        if (c == '_')
-            return true;
-        return false;
-    }
-
-    private static final boolean isIdentifierPart(char c)
-    {
-        if (c >= 'a' && c <= 'z')
-            return true;
-        if (c >='A' && c <= 'Z')
-            return true;
-        if (c >= '0' && c <= '9')
-            return true;
-        if (c == '_')
-            return true;
-        return false;
     }
 }

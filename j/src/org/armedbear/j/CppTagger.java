@@ -1,7 +1,7 @@
 /*
  * CppTagger.java
  *
- * Copyright (C) 1998-2002 Peter Graves
+ * Copyright (C) 1998-2003 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,8 @@
 
 package org.armedbear.j;
 
-import java.util.Stack;
 import java.util.ArrayList;
+import java.util.Stack;
 
 public final class CppTagger extends JavaTagger implements Constants
 {
@@ -68,7 +68,7 @@ public final class CppTagger extends JavaTagger implements Constants
                 continue;
             }
             if (c == '#' && pos.getOffset() == 0) {
-                CTagger.skipPreprocessor(pos);
+                skipPreprocessor(pos);
                 continue;
             }
             if (state == METHOD_NAME) {
