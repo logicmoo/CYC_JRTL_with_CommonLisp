@@ -1,8 +1,8 @@
 /*
  * Platform.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Platform.java,v 1.2 2003-02-27 02:38:13 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Platform.java,v 1.3 2003-03-11 13:59:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,11 @@ public final class Platform
     public static final boolean isPlatformWindows()
     {
         return isPlatformWindows;
+    }
+
+    public static final boolean isPlatformMacOSX()
+    {
+        return osName.startsWith("Mac OS X");
     }
 
     public static final boolean isPlatformWindows5()
