@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: arrays.lisp,v 1.18 2005-03-23 18:27:44 piso Exp $
+;;; $Id: arrays.lisp,v 1.19 2005-03-23 18:28:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defconstant array-total-size-limit #x1000000)
 (defconstant array-rank-limit 8)
