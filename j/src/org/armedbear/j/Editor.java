@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.35 2003-02-03 00:44:37 piso Exp $
+ * $Id: Editor.java,v 1.36 2003-02-17 02:40:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4253,8 +4253,10 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         Debug.assertTrue(locationBar != null);
         saveView();
-        splitWindow();
-        final Editor ed = isPrimaryEditor() ? frame.getSecondaryEditor() : frame.getPrimaryEditor();
+        boolean alreadySplit = (getOtherEditor() != null);
+        if (!alreadySplit)
+            splitWindow();
+        final Editor ed = getOtherEditor();
         if (ed.getLocationBar() != null) {
             Runnable r = new Runnable() {
                 public void run()
@@ -4263,6 +4265,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 }
             };
             SwingUtilities.invokeLater(r);
+        }
+        setCurrentEditor(ed);
+        if (alreadySplit) {
+            // Current editor has changed.
+            repaint();
+            ed.repaint();
         }
     }
 
