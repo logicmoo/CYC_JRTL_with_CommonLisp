@@ -1,8 +1,8 @@
 /*
  * RandomState.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: RandomState.java,v 1.1 2003-12-27 07:45:54 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: RandomState.java,v 1.2 2004-06-11 14:43:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,6 +74,11 @@ public final class RandomState extends LispObject
         if (type == BuiltInClass.RANDOM_STATE)
             return T;
         return super.typep(type);
+    }
+
+    public String writeToString()
+    {
+        return unreadableString("RANDOM-STATE");
     }
 
     public LispObject random(LispObject arg) throws ConditionThrowable
