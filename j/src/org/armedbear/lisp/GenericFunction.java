@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: GenericFunction.java,v 1.11 2004-10-09 15:37:04 piso Exp $
+ * $Id: GenericFunction.java,v 1.12 2004-10-10 17:11:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,23 @@ package org.armedbear.lisp;
 public final class GenericFunction extends StandardObject
 {
     private LispObject discriminatingFunction;
+    private LispObject methods;
     private LispObject requiredArgs;
 
     public GenericFunction(LispClass cls, SimpleVector slots)
     {
         super(cls, slots);
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.COMPILED_FUNCTION) {
+            if (discriminatingFunction != null)
+                return discriminatingFunction.typep(type);
+            else
+                return NIL;
+        }
+        return super.typep(type);
     }
 
     public LispObject getDiscriminatingFunction()
@@ -39,6 +51,16 @@ public final class GenericFunction extends StandardObject
     public void setDiscriminatingFunction(LispObject function)
     {
         discriminatingFunction = function;
+    }
+
+    public LispObject getMethods()
+    {
+        return methods;
+    }
+
+    public void setMethods(LispObject methods)
+    {
+        this.methods = methods;
     }
 
     public LispObject getRequiredArgs()
@@ -139,19 +161,19 @@ public final class GenericFunction extends StandardObject
         ++callCount;
     }
 
-    private static final Primitive1 GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
-        new Primitive1("generic-function-discriminating-function", PACKAGE_SYS, false)
+    private static final Primitive GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
+        new Primitive("generic-function-discriminating-function", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof GenericFunction)
                 return ((GenericFunction)arg).getDiscriminatingFunction();
-            return signal(new TypeError(arg, "generic function"));
+            return signal(new TypeError(arg, Symbol.GENERIC_FUNCTION));
         }
     };
 
-    private static final Primitive1 _SET_GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
-        new Primitive1("%set-generic-function-discriminating-function", PACKAGE_SYS, false)
+    private static final Primitive _SET_GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
+        new Primitive("%set-generic-function-discriminating-function", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -160,7 +182,37 @@ public final class GenericFunction extends StandardObject
                 ((GenericFunction)first).setDiscriminatingFunction(second);
                 return second;
             }
-            return signal(new TypeError(first, "generic function"));
+            return signal(new TypeError(first, Symbol.GENERIC_FUNCTION));
+        }
+    };
+
+    private static final Primitive GENERIC_FUNCTION_METHODS =
+        new Primitive("generic-function-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((GenericFunction)arg).getMethods();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.GENERIC_FUNCTION));
+            }
+        }
+    };
+
+    private static final Primitive _SET_GENERIC_FUNCTION_METHODS =
+        new Primitive("%set-generic-function-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((GenericFunction)first).setMethods(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.GENERIC_FUNCTION));
+            }
         }
     };
 
