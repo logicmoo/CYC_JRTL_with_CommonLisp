@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.156 2003-09-28 20:13:26 piso Exp $
+ * $Id: Lisp.java,v 1.157 2003-09-29 14:23:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -789,7 +789,37 @@ public abstract class Lisp
             if (out instanceof CharacterOutputStream)
                 return (CharacterOutputStream) out;
         }
-        throw new ConditionThrowable(new TypeError(obj, "output stream"));
+        throw new ConditionThrowable(new TypeError(obj, "character output stream"));
+    }
+
+    public static final BinaryInputStream checkBinaryInputStream(LispObject obj)
+        throws ConditionThrowable
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        if (obj instanceof BinaryInputStream)
+            return (BinaryInputStream) obj;
+        if (obj instanceof TwoWayStream) {
+            LispInputStream in = ((TwoWayStream)obj).getInputStream();
+            if (in instanceof BinaryInputStream)
+                return (BinaryInputStream) in;
+        }
+        throw new ConditionThrowable(new TypeError(obj, "binary input stream"));
+    }
+
+    public static final BinaryOutputStream checkBinaryOutputStream(LispObject obj)
+        throws ConditionThrowable
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        if (obj instanceof BinaryOutputStream)
+            return (BinaryOutputStream) obj;
+        if (obj instanceof TwoWayStream) {
+            LispOutputStream out = ((TwoWayStream)obj).getOutputStream();
+            if (out instanceof BinaryOutputStream)
+                return (BinaryOutputStream) out;
+        }
+        throw new ConditionThrowable(new TypeError(obj, "binary output stream"));
     }
 
     public static final CharacterInputStream inSynonymOf(LispObject obj)
