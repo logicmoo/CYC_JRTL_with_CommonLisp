@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.14 2003-09-25 15:37:08 piso Exp $
+ * $Id: LispThread.java,v 1.15 2003-09-26 15:04:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,8 +225,14 @@ public final class LispThread extends LispObject
 
     public void backtrace()
     {
+        backtrace(0);
+    }
+
+    public void backtrace(int limit)
+    {
         if (stack.size() > 0) {
             CharacterOutputStream out = getTraceOutput();
+            int count = 0;
             try {
                 out.writeLine("Evaluation stack:");
                 out.flushOutput();
@@ -247,6 +253,8 @@ public final class LispThread extends LispObject
                     pprint(obj, out.getCharPos(), out);
                     out.terpri();
                     out.flushOutput();
+                    if (limit > 0 && ++count == limit)
+                        break;
                 }
             }
             catch (Throwable t) {
@@ -389,6 +397,22 @@ public final class LispThread extends LispObject
         public LispObject execute() throws ConditionThrowable
         {
             return currentThread();
+        }
+    };
+
+    // ### backtrace
+    private static final Primitive BACKTRACE =
+        new Primitive("backtrace", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject[] args)
+            throws ConditionThrowable
+        {
+            if (args.length > 1)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            int count = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
+            LispThread thread = currentThread();
+            thread.backtrace(count);
+            return thread.nothing();
         }
     };
 }
