@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.14 2003-09-03 23:55:48 piso Exp $
+ * $Id: Complex.java,v 1.15 2003-09-04 04:28:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,11 +177,9 @@ public final class Complex extends LispObject
         return new LispFloat(Math.sqrt(real * real + imag * imag));
     }
 
-    public LispObject ZEROP() throws TypeError
+    public boolean zerop() throws TypeError
     {
-        if (realpart.ZEROP() != NIL && imagpart.ZEROP() != NIL)
-            return T;
-        return NIL;
+        return realpart.zerop() && imagpart.zerop();
     }
 
     public LispObject COMPLEXP()

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.35 2003-09-03 23:38:30 piso Exp $
+ * $Id: LispFloat.java,v 1.36 2003-09-04 04:28:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,9 +118,9 @@ public final class LispFloat extends LispObject
         return value < 0;
     }
 
-    public LispObject ZEROP()
+    public boolean zerop()
     {
-        return value == 0 ? T : NIL;
+        return value == 0;
     }
 
     public LispObject FLOATP()
