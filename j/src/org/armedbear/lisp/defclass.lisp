@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.10 2003-10-11 18:49:44 piso Exp $
+;;; $Id: defclass.lisp,v 1.11 2003-10-11 19:44:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -661,7 +661,7 @@
    &key (generic-function-class the-class-standard-gf)
    (method-class the-class-standard-method)
    &allow-other-keys)
-  (format t "ensure-generic-function function-name = ~S~%" function-name)
+;;   (format t "ensure-generic-function function-name = ~S~%" function-name)
 ;;   (when (fboundp function-name)
 ;;     (error "~A already names an ordinary function, macro, or special operator"
 ;;            function-name))
@@ -706,7 +706,7 @@
                                                 &key name lambda-list method-class)
   (declare (ignore generic-function-class))
   (let ((gf (std-allocate-instance the-class-standard-gf)))
-    (format t "gf = ~S~%" gf)
+;;     (format t "gf = ~S~%" gf)
     (setf (generic-function-name gf) name)
     (setf (generic-function-lambda-list gf) lambda-list)
     (setf (generic-function-methods gf) ())
@@ -921,7 +921,7 @@
   (setf (generic-function-methods gf)
         (remove method (generic-function-methods gf)))
   (setf (method-generic-function method) nil)
-  (format t "remove-method method-specializers = ~S~%" (method-specializers method))
+;;   (format t "remove-method method-specializers = ~S~%" (method-specializers method))
   (dolist (class (method-specializers method))
     (setf (class-direct-methods class)
           (remove method (class-direct-methods class))))
