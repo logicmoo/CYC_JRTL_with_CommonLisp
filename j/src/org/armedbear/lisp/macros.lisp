@@ -51,7 +51,7 @@
   `(progn ,@forms))
 
 (defmacro time (form)
-  `(%time #'(lambda () ,form)))
+  `(sys:%time #'(lambda () ,form)))
 
 (defmacro with-open-file (&rest args)
   (let ((var (caar args))

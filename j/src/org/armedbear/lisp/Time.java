@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.1 2003-06-20 18:00:15 piso Exp $
+ * $Id: Time.java,v 1.2 2003-07-02 15:47:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,8 @@ import java.io.File;
 public final class Time extends Lisp
 {
     // ### %time
-    private static final Primitive1 _TIME = new Primitive1("%time") {
+    private static final Primitive1 _TIME =
+        new Primitive1("%time", PACKAGE_SYS, true) {
         public LispObject execute(LispObject arg) throws Condition
         {
             Cons.setCount(0);
