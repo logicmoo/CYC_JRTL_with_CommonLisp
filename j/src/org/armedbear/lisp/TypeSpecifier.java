@@ -2,7 +2,7 @@
  * TypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: TypeSpecifier.java,v 1.6 2003-09-16 19:01:08 piso Exp $
+ * $Id: TypeSpecifier.java,v 1.7 2003-09-17 18:26:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,24 +23,19 @@ package org.armedbear.lisp;
 
 public abstract class TypeSpecifier extends LispObject
 {
-    public static TypeSpecifier getInstance(LispObject arg) throws LispError
-    {
-        if (arg == Symbol.UNSPECIFIED)
-            return UnspecifiedTypeSpecifier.getInstance();
-        if (arg instanceof Symbol)
-            return new AtomicTypeSpecifier((Symbol)arg);
-        if (arg instanceof LispClass)
-            return new ClassTypeSpecifier((LispClass)arg);
-        throw new LispError("bad type specifier: " + arg);
-    }
+//     public static TypeSpecifier getInstance(LispObject arg) throws LispError
+//     {
+//         if (arg == Symbol.UNSPECIFIED)
+//             return UnspecifiedTypeSpecifier.getInstance();
+//         if (arg instanceof Symbol)
+//             return new AtomicTypeSpecifier((Symbol)arg);
+//         if (arg instanceof LispClass)
+//             return new ClassTypeSpecifier((LispClass)arg);
+//         throw new LispError("bad type specifier: " + arg);
+//     }
 
-    public LispObject test(LispObject obj) throws LispError
-    {
-        throw new LispError(String.valueOf(getClass()) + ".test(): not implemented");
-    }
-
-    public LispObject isSubtypeOf(TypeSpecifier ts) throws LispError
-    {
-        return values(NIL, NIL);
-    }
+//     public LispObject test(LispObject obj) throws LispError
+//     {
+//         throw new LispError(String.valueOf(getClass()) + ".test(): not implemented");
+//     }
 }
