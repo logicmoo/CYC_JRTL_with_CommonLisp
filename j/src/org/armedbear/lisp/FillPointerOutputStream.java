@@ -2,7 +2,7 @@
  * FillPointerOutputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.9 2004-02-23 15:11:37 piso Exp $
+ * $Id: FillPointerOutputStream.java,v 1.10 2004-05-28 18:12:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class FillPointerOutputStream extends Stream
                 if (string.getFillPointer() >= 0)
                     return new FillPointerOutputStream(string);
             }
-            return signal(new TypeError(String.valueOf(arg) +
+            return signal(new TypeError(arg.writeToString() +
                                         " is not a string with a fill pointer."));
         }
     };
