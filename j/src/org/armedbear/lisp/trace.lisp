@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: trace.lisp,v 1.7 2004-09-29 00:49:25 piso Exp $
+;;; $Id: trace.lisp,v 1.8 2005-01-10 15:42:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,13 +35,18 @@
       '(list-traced-functions)))
 
 (defun expand-trace (args)
-  (let ((results ()))
+  (let ((results ())
+        (breakp nil))
+    (let ((index (position :break args)))
+      (when index
+        (setf breakp (nth (1+ index) args))
+        (setf args (append (subseq args 0 index) (subseq args (+ index 2))))))
     (dolist (arg args)
-      (if (trace-1 arg)
+      (if (trace-1 arg breakp)
           (push arg results)))
     `',results))
 
-(defun trace-1 (symbol)
+(defun trace-1 (symbol breakp)
   (unless (fboundp symbol)
     (error "~S is not the name of a function" symbol))
   (if (member symbol *traced-functions*)
@@ -50,16 +55,18 @@
              (trace-function
               (lambda (&rest args)
                 (with-standard-io-syntax
-                  (%format t (indent "~D: ~S~%") *trace-depth*
-                           (append (list symbol) args)))
+                    (%format t (indent "~D: ~S~%") *trace-depth*
+                             (append (list symbol) args)))
+                (when breakp
+                  (break))
                 (incf *trace-depth*)
                 (let ((r (multiple-value-list (apply untraced-function args))))
                   (decf *trace-depth*)
                   (with-standard-io-syntax
                     (%format t (indent "~D: ~A returned") *trace-depth* symbol)
-                    (dolist (val r)
-                      (%format t " ~S" val))
-                    (%format t "~%"))
+                      (dolist (val r)
+                        (%format t " ~S" val))
+                      (%format t "~%"))
                   (values-list r)))))
         (setf (symbol-function symbol) trace-function)
         (setf (get symbol *untraced-function*) untraced-function)
