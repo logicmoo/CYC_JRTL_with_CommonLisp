@@ -1,8 +1,8 @@
 /*
  * cxr.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: cxr.java,v 1.5 2003-12-09 20:26:23 asimon Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: cxr.java,v 1.6 2004-09-03 19:04:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public final class cxr extends Lisp
     };
 
     // ### car
-    private static final Primitive1 CAR = new Primitive1("car","x")
+    private static final Primitive1 CAR = new Primitive1("car", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -57,7 +57,7 @@ public final class cxr extends Lisp
     };
 
     // ### cdr
-    private static final Primitive1 CDR = new Primitive1("cdr","x")
+    private static final Primitive1 CDR = new Primitive1("cdr", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -66,7 +66,7 @@ public final class cxr extends Lisp
     };
 
     // ### caar
-    private static final Primitive1 CAAR = new Primitive1("caar","x")
+    private static final Primitive1 CAAR = new Primitive1("caar", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -75,7 +75,7 @@ public final class cxr extends Lisp
     };
 
     // ### cadr
-    private static final Primitive1 CADR = new Primitive1("cadr","x")
+    private static final Primitive1 CADR = new Primitive1("cadr", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -84,7 +84,7 @@ public final class cxr extends Lisp
     };
 
     // ### cdar
-    private static final Primitive1 CDAR = new Primitive1("cdar","x")
+    private static final Primitive1 CDAR = new Primitive1("cdar", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -93,7 +93,7 @@ public final class cxr extends Lisp
     };
 
     // ### cddr
-    private static final Primitive1 CDDR = new Primitive1("cddr","x")
+    private static final Primitive1 CDDR = new Primitive1("cddr", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -102,7 +102,7 @@ public final class cxr extends Lisp
     };
 
     // ### caddr
-    private static final Primitive1 CADDR = new Primitive1("caddr","x")
+    private static final Primitive1 CADDR = new Primitive1("caddr", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -111,7 +111,7 @@ public final class cxr extends Lisp
     };
 
     // ### caadr
-    private static final Primitive1 CAADR = new Primitive1("caadr","x")
+    private static final Primitive1 CAADR = new Primitive1("caadr", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -120,7 +120,7 @@ public final class cxr extends Lisp
     };
 
     // ### caaar
-    private static final Primitive1 CAAAR = new Primitive1("caaar","x")
+    private static final Primitive1 CAAAR = new Primitive1("caaar", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -129,7 +129,7 @@ public final class cxr extends Lisp
     };
 
     // ### cdaar
-    private static final Primitive1 CDAAR = new Primitive1("cdaar","x")
+    private static final Primitive1 CDAAR = new Primitive1("cdaar", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -138,7 +138,7 @@ public final class cxr extends Lisp
     };
 
     // ### cddar
-    private static final Primitive1 CDDAR = new Primitive1("cddar","x")
+    private static final Primitive1 CDDAR = new Primitive1("cddar", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -147,7 +147,7 @@ public final class cxr extends Lisp
     };
 
     // ### cdddr
-    private static final Primitive1 CDDDR = new Primitive1("cdddr","x")
+    private static final Primitive1 CDDDR = new Primitive1("cdddr", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -156,7 +156,7 @@ public final class cxr extends Lisp
     };
 
     // ### cadar
-    private static final Primitive1 CADAR = new Primitive1("cadar","x")
+    private static final Primitive1 CADAR = new Primitive1("cadar", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -165,7 +165,7 @@ public final class cxr extends Lisp
     };
 
     // ### cdadr
-    private static final Primitive1 CDADR = new Primitive1("cdadr","x")
+    private static final Primitive1 CDADR = new Primitive1("cdadr", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
