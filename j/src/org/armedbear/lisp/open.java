@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.5 2003-09-19 14:44:10 piso Exp $
+ * $Id: open.java,v 1.6 2003-10-16 23:13:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,15 +42,7 @@ public final class open extends Lisp
                 namestring = ((Pathname)first).getNamestring();
             else
                 throw new ConditionThrowable(new TypeError(first, "pathname designator"));
-            boolean binary;
-            LispObject elementType = second;
-            if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
-                binary = false;
-            else if (elementType == Symbol.UNSIGNED_BYTE)
-                binary = true;
-            else
-                throw new ConditionThrowable(new LispError(
-                    String.valueOf(elementType).concat(" is not a valid stream element type")));
+            boolean binary = checkBinaryElementType(second);
             File file = new File(namestring);
             LispObject ifExists = third;
             if (ifExists == Keyword.SUPERSEDE) {
@@ -91,15 +83,7 @@ public final class open extends Lisp
                 namestring = ((Pathname)first).getNamestring();
             else
                 throw new ConditionThrowable(new TypeError(first, "pathname designator"));
-            boolean binary;
-            LispObject elementType = second;
-            if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
-                binary = false;
-            else if (elementType == Symbol.UNSIGNED_BYTE)
-                binary = true;
-            else
-                throw new ConditionThrowable(new LispError(
-                    String.valueOf(elementType).concat(" is not a valid stream element type")));
+            boolean binary = checkBinaryElementType(second);
             try {
                 if (binary)
                     return new BinaryInputStream(new FileInputStream(namestring));
@@ -111,4 +95,25 @@ public final class open extends Lisp
             }
         }
     };
+
+    private static final boolean checkBinaryElementType(LispObject elementType)
+        throws ConditionThrowable
+    {
+        if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
+            return false;
+        if (elementType == Symbol.UNSIGNED_BYTE)
+            return true;
+        if (elementType instanceof Cons) {
+            if (elementType.car() == Symbol.UNSIGNED_BYTE) {
+                if (elementType.length() == 2) {
+                    if (elementType.cadr() instanceof Fixnum) {
+                        if (((Fixnum)elementType.cadr()).getValue() == 8)
+                            return true;
+                    }
+                }
+            }
+        }
+        throw new ConditionThrowable(new LispError(String.valueOf(elementType) +
+                                                   " is not a valid stream element type"));
+    }
 }
