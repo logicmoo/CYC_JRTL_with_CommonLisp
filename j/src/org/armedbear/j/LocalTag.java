@@ -2,7 +2,7 @@
  * LocalTag.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LocalTag.java,v 1.2 2002-11-10 00:29:56 piso Exp $
+ * $Id: LocalTag.java,v 1.3 2003-05-07 01:34:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,23 +128,31 @@ public class LocalTag extends Tag implements Constants
         switch (type) {
             case TAG_INTERFACE:
             case TAG_IMPLEMENTS:
+            case TAG_TYPE:      // Lisp
                 if (interfaceIcon == null)
                     interfaceIcon = Utilities.getIconFromFile("interface.png");
                 base = interfaceIcon;
                 break;
             case TAG_CLASS:
             case TAG_EXTENDS:
+            case TAG_CONDITION: // Lisp
+            case TAG_STRUCT:    // Lisp
                 if (classIcon == null)
                     classIcon = Utilities.getIconFromFile("class.png");
                 base = classIcon;
                 break;
             case TAG_METHOD:
+            case TAG_MACRO:     // Lisp
+            case TAG_DEFUN:     // Lisp
             default:
                 if (methodIcon == null)
                     methodIcon = Utilities.getIconFromFile("method.png");
                 base = methodIcon;
                 break;
             case TAG_FIELD:
+            case TAG_CONSTANT:  // Lisp
+            case TAG_PARAMETER: // Lisp
+            case TAG_VAR:       // Lisp
                 if (fieldIcon == null)
                     fieldIcon = Utilities.getIconFromFile("field.png");
                 base = fieldIcon;
