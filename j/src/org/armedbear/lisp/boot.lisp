@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.72 2003-07-07 02:55:47 piso Exp $
+;;; $Id: boot.lisp,v 1.73 2003-07-07 16:21:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -50,6 +50,10 @@
 
 (defvar *features*
   '(:armedbear))
+
+
+(defun make-package (package-name &key nicknames use)
+  (sys::%make-package package-name nicknames use))
 
 
 ;;; READ-CONDITIONAL (from OpenMCL)
