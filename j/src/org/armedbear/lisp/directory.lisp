@@ -1,7 +1,7 @@
 ;;; directory.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: directory.lisp,v 1.1 2004-01-26 14:24:31 piso Exp $
+;;; $Id: directory.lisp,v 1.2 2004-02-02 01:06:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,21 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "SYSTEM")
-
-#-windows
-(defun pathname-match-p (pathname wildcard)
-  (let ((pathname (pathname pathname))
-        (wildcard (pathname wildcard)))
-    (unless (eq (pathname-name wildcard) :wild)
-      (unless (equal (pathname-name pathname) (pathname-name wildcard))
-        (return-from pathname-match-p nil)))
-    (unless (eq (pathname-directory wildcard) :wild)
-      (unless (equal (pathname-directory pathname) (pathname-directory wildcard))
-        (return-from pathname-match-p nil)))
-    (unless (eq (pathname-type wildcard) :wild)
-      (unless (equal (pathname-type pathname) (pathname-type wildcard))
-        (return-from pathname-match-p nil)))
-    t))
 
 (defun directory (pathname &key)
   (let ((merged-pathname (merge-pathnames pathname)))
