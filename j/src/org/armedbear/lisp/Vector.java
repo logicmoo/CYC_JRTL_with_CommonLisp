@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.21 2003-08-17 15:08:49 piso Exp $
+ * $Id: Vector.java,v 1.22 2003-08-27 17:28:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public class Vector extends AbstractVector
 
     public LispObject typeOf()
     {
-        return list(Symbol.VECTOR, T, new Fixnum(capacity));
+        return list3(Symbol.VECTOR, T, new Fixnum(capacity));
     }
 
     public LispObject getElementType()

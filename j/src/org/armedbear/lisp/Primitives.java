@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.357 2003-08-26 17:18:45 piso Exp $
+ * $Id: Primitives.java,v 1.358 2003-08-27 17:28:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1386,13 +1386,13 @@ public final class Primitives extends Module
             LispObject lambdaList = checkList(args.cadr());
             LispObject body = args.cddr();
             LispObject block = new Cons(Symbol.BLOCK, new Cons(symbol, body));
-            LispObject toBeApplied = list(Symbol.LAMBDA, lambdaList, block);
+            LispObject toBeApplied = list3(Symbol.LAMBDA, lambdaList, block);
             LispObject formArg = gensym("FORM-");
             LispObject envArg = gensym("ENV-"); // Ignored.
             LispObject expander =
-                list(Symbol.LAMBDA, list(formArg, envArg),
-                    list(Symbol.APPLY, toBeApplied,
-                        list(Symbol.CDR, formArg)));
+                list3(Symbol.LAMBDA, list2(formArg, envArg),
+                      list3(Symbol.APPLY, toBeApplied,
+                            list2(Symbol.CDR, formArg)));
             Closure expansionFunction =
                 new Closure(expander.cadr(), expander.cddr(), env);
             MacroObject macroObject = new MacroObject(expansionFunction);
@@ -3141,7 +3141,7 @@ public final class Primitives extends Module
                     closure = new Closure(parameters, body, ext);
                 else
                     closure = new Closure(parameters, body, env);
-                closure.setLambdaName(list(Symbol.FLET, symbol));
+                closure.setLambdaName(list2(Symbol.FLET, symbol));
                 ext.bindFunctional(symbol, closure);
                 defs = defs.cdr();
             }
@@ -3171,13 +3171,13 @@ public final class Primitives extends Module
                     LispObject block =
                         new Cons(Symbol.BLOCK, new Cons(symbol, body));
                     LispObject toBeApplied =
-                        list(Symbol.LAMBDA, lambdaList, block);
+                        list3(Symbol.LAMBDA, lambdaList, block);
                     LispObject formArg = gensym("FORM-");
                     LispObject envArg = gensym("ENV-"); // Ignored.
                     LispObject expander =
-                        list(Symbol.LAMBDA, list(formArg, envArg),
-                             list(Symbol.APPLY, toBeApplied,
-                                  list(Symbol.CDR, formArg)));
+                        list3(Symbol.LAMBDA, list2(formArg, envArg),
+                              list3(Symbol.APPLY, toBeApplied,
+                                    list2(Symbol.CDR, formArg)));
                     Closure expansionFunction =
                         new Closure(expander.cadr(), expander.cddr(), env);
                     MacroObject macroObject =

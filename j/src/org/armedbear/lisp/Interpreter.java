@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.28 2003-06-30 19:14:16 piso Exp $
+ * $Id: Interpreter.java,v 1.29 2003-08-27 17:28:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -303,8 +303,8 @@ public final class Interpreter extends Lisp
                 List tokens = tokenize(args);
                 for (Iterator it = tokens.iterator(); it.hasNext();) {
                     String filename = (String) it.next();
-                    result = eval(list(Symbol.LOAD, new LispString(filename)),
-                        new Environment(), LispThread.currentThread());
+                    result = eval(list2(Symbol.LOAD, new LispString(filename)),
+                                  new Environment(), LispThread.currentThread());
                     if (result == NIL)
                         break;
                 }

@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.6 2003-07-15 03:09:48 piso Exp $
+ * $Id: Array.java,v 1.7 2003-08-27 17:28:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ public final class Array extends AbstractArray
 
     public LispObject typeOf()
     {
-        return list(Symbol.SIMPLE_ARRAY, T, getDimensions());
+        return list3(Symbol.SIMPLE_ARRAY, T, getDimensions());
     }
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
