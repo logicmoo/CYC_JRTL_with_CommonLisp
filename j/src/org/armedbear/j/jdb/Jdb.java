@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.25 2003-05-25 02:27:56 piso Exp $
+ * $Id: Jdb.java,v 1.26 2003-05-26 15:21:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,6 +142,7 @@ public final class Jdb extends Buffer implements JdbConstants
     private Jdb(JdbSession session)
     {
         super();
+        supportsUndo = false;
         mode = JdbMode.getMode();
         formatter = mode.getFormatter(this);
         readOnly = true;
