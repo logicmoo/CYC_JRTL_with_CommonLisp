@@ -2,7 +2,7 @@
  * FindInFilesDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFilesDialog.java,v 1.5 2003-07-27 00:51:08 piso Exp $
+ * $Id: FindInFilesDialog.java,v 1.6 2003-07-27 00:59:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
 import java.util.ArrayList;
@@ -161,6 +162,7 @@ public class FindInFilesDialog extends AbstractDialog implements Constants,
         panel.add(Box.createHorizontalStrut(5));
         panel.add(modeComboBox);
         updateModeControl();
+        modeComboBox.addKeyListener(this);
         mainPanel.add(panel);
 
         regExpCheckBox = new CheckBox(
@@ -332,6 +334,25 @@ public class FindInFilesDialog extends AbstractDialog implements Constants,
     {
         if (e.getComponent() == filesControl)
             updateModeControl();
+    }
+
+    public void keyPressed(KeyEvent e)
+    {
+        if (e.getComponent() == modeComboBox) {
+            if (!modeComboBox.isPopupVisible() && e.getModifiers() == 0) {
+                switch (e.getKeyCode()){
+                    case KeyEvent.VK_ENTER:
+                        e.consume();
+                        enter();
+                        break;
+                    case KeyEvent.VK_ESCAPE:
+                        e.consume();
+                        escape();
+                        break;
+                }
+            }
+        } else
+            super.keyPressed(e);
     }
 
     private void updateModeControl()
