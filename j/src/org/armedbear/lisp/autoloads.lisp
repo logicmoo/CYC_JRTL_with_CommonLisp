@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.147 2004-06-13 18:43:21 piso Exp $
+;;; $Id: autoloads.lisp,v 1.148 2004-07-03 15:37:44 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -184,6 +184,8 @@
 (autoload 'jclass-array-p "java")
 (export 'jarray-component-type "JAVA")
 (autoload 'jarray-component-type "java")
+(export 'jarray-length "JAVA")
+(autoload 'jarray-length "java")
 (export 'jnew-array-from-array "JAVA")
 (autoload 'jnew-array-from-array "java")
 (export 'jclass-constructors "JAVA")

@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.11 2003-12-21 14:05:49 asimon Exp $
+;;; $Id: java.lisp,v 1.12 2004-07-03 15:36:11 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -63,6 +63,9 @@
   (assert (jclass-array-p atype))
   (jcall (jmethod "java.lang.Class" "getComponentType") atype))
 
+(defun jarray-length (java-array)
+  (jstatic "getLength" "java.lang.reflect.Array" java-array)  )
+  
 (defun (setf jarray-ref) (new-value java-array &rest indices)
   (apply #'jarray-set java-array new-value indices))
 
