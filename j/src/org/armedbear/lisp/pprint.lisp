@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.10 2004-05-15 14:39:06 piso Exp $
+;;; $Id: pprint.lisp,v 1.11 2004-06-07 01:36:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -87,12 +87,23 @@
 #-armedbear
 (provide "XP")
 
-(shadow '(write print #-armedbear prin1 #-armedbear princ #-armedbear pprint
+(shadow '(write print
+          #-armedbear prin1
+          #-armedbear princ
+          #-armedbear pprint
           #-armedbear format
-          #-armedbear write-to-string #-armedbear princ-to-string
-	  #-armedbear prin1-to-string write-line #-armedbear write-string
-          write-char terpri fresh-line
-	  defstruct finish-output force-output clear-output))
+          #-armedbear write-to-string
+          #-armedbear princ-to-string
+	  #-armedbear prin1-to-string
+          write-line
+          #-armedbear write-string
+          write-char
+          #-armedbear terpri
+          #-armedbear fresh-line
+	  defstruct
+          finish-output
+          force-output
+          clear-output))
 
 (export '(formatter copy-pprint-dispatch pprint-dispatch
 	  set-pprint-dispatch pprint-fill pprint-linear pprint-tabular
@@ -1383,10 +1394,10 @@
   string)
 
 (defun terpri (&optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (if (xp-structure-p stream)
       (pprint-newline+ :unconditional stream)
-      (cl:terpri stream))
+      (sys::%terpri stream))
   nil)
 
 ;This has to violate the XP data abstraction and fool with internal
@@ -1395,11 +1406,12 @@
 (defun fresh-line (&optional (stream *standard-output*))
   (setq stream (decode-stream-arg stream))
   (cond ((xp-structure-p stream)
-	 (attempt-to-output stream T T) ;ok because we want newline
+	 (attempt-to-output stream t t) ;ok because we want newline
 	 (when (not (zerop (LP<-BP stream)))
 	   (pprint-newline+ :fresh stream)
-	   T))
-	(T (cl:fresh-line stream))))
+	   t))
+	(t
+         (sys::%fresh-line stream))))
 
 ;Each of these causes the stream to be pessimistic and insert
 ;newlines wherever it might have to, when forcing the partial output

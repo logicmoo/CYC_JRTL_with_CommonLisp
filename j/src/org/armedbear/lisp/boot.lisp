@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.167 2004-05-26 01:27:43 piso Exp $
+;;; $Id: boot.lisp,v 1.168 2004-06-07 01:34:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -57,6 +57,12 @@
 ;; EVAL is redefined in precompiler.lisp.
 (defun eval (form)
   (sys::%eval form))
+
+(defun terpri (&optional output-stream)
+  (sys::%terpri output-stream))
+
+(defun fresh-line (&optional output-stream)
+  (sys::%fresh-line output-stream))
 
 ;; SYS::OUTPUT-OBJECT is redefined in print.lisp.
 (defun sys::output-object (object stream)
