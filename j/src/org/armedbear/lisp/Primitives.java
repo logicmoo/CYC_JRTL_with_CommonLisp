@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.125 2003-03-15 02:46:16 piso Exp $
+ * $Id: Primitives.java,v 1.126 2003-03-15 03:56:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -534,7 +534,7 @@ public final class Primitives extends Module
             case EQL:                           // ### eql
                 return first.eql(second) ? T : NIL;
             case EQUAL:                         // ### equal
-                return equal(first, second) ? T : NIL;
+                return first.equal(second) ? T : NIL;
             case EQUALP:                        // ### equalp
                 return equalp(first, second) ? T : NIL;
             case MEMBER: {                      // ### member

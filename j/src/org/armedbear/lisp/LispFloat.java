@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.2 2003-03-15 02:46:16 piso Exp $
+ * $Id: LispFloat.java,v 1.3 2003-03-15 03:56:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,17 @@ public final class LispFloat extends LispObject
     }
 
     public boolean eql(LispObject obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof LispFloat) {
+            if (value == ((LispFloat)obj).value)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean equal(LispObject obj)
     {
         if (this == obj)
             return true;

@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.7 2003-03-15 02:46:16 piso Exp $
+ * $Id: Cons.java,v 1.8 2003-03-15 03:56:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,6 +87,17 @@ public final class Cons extends LispObject implements SequenceType
     public final LispObject cddr() throws LispError
     {
         return cdr.cdr();
+    }
+
+    public final boolean equal(LispObject obj) throws LispError
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof Cons) {
+            if (car.equal(obj.car()) && cdr.equal(obj.cdr()))
+                return true;
+        }
+        return false;
     }
 
     public final int length() throws LispError

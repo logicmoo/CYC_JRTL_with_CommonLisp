@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.9 2003-03-14 18:40:24 piso Exp $
+ * $Id: BitVector.java,v 1.10 2003-03-15 03:56:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,6 +79,26 @@ public final class BitVector extends Vector
     public boolean isSimpleVector()
     {
         return fillPointer < 0;
+    }
+
+    public boolean equal(LispObject obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof BitVector) {
+            // FIXME Efficiency!
+            BitVector v = (BitVector) obj;
+            if (length() != v.length())
+                return false;
+            for (int i = 0; i < length(); i++) {
+                LispObject o1 = get(i);
+                LispObject o2 = v.get(i);
+                if (!o1.eql(o2))
+                    return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public void set(int index, LispObject newValue) throws LispError
