@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.325 2003-08-13 01:14:22 piso Exp $
+ * $Id: Primitives.java,v 1.326 2003-08-14 17:15:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1314,7 +1314,7 @@ public final class Primitives extends Module
             Symbol symbol = checkSymbol(first);
             LispObject arglist = checkList(second);
             LispObject body = checkList(third);
-            if (body.car() instanceof LispString) {
+            if (body.car() instanceof LispString && body.cdr() != NIL) {
                 // Documentation.
                 symbol.setFunctionDocumentation(body.car());
                 body = body.cdr();
