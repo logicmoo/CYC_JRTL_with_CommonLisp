@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.37 2003-07-15 15:35:26 piso Exp $
+# $Id: Makefile.in,v 1.38 2003-07-15 17:32:36 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@ CLASSFILES =	AbstractArray.class \
 		CharacterFunctions.class \
 		CharacterInputStream.class \
 		CharacterOutputStream.class \
+		ClassTypeSpecifier.class \
 		Closure.class \
 		CompiledFunction.class \
 		CompoundTypeSpecifier.class \
