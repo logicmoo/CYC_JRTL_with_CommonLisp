@@ -59,6 +59,11 @@ public final class LispTagger extends Tagger
                 }
                 continue;
             }
+            if (c == '#' && pos.lookingAt("#|")) {
+                pos.skip(2);
+                skipComment(pos);
+                continue;
+            }
             if (c == '\"') {
                 pos.skipQuote();
                 continue;
@@ -84,7 +89,7 @@ public final class LispTagger extends Tagger
                     tags.add(tag);
                     state = NEUTRAL;
                     continue;
-                } 
+                }
                 if (state == OPEN_PAREN) {
                     String preceding =
                         pos.getLine().substring(0, pos.getOffset()).trim();
@@ -107,18 +112,18 @@ public final class LispTagger extends Tagger
         }
         buffer.setTags(tags);
     }
-    
+
     private static final String[] tokens = new String[] {
         "defun", "defvar", "defmacro", "defcustom", "defgroup", "defsubst"
     };
-    
+
     // pos points to first char after token.
     private boolean isDefinitionStart(String token, Position pos)
     {
         if (token.startsWith("def"))
             if (Utilities.isOneOf(token, tokens))
                 return true;
-        
+
         return false;
     }
 
@@ -134,13 +139,37 @@ public final class LispTagger extends Tagger
         }
         return sb.toString();
     }
-    
+
     // Advances pos past token.
     private void skipToken(Position pos)
     {
         while (mode.isIdentifierPart(pos.getChar())) {
             if (!pos.next())
                 return;
+        }
+    }
+
+    private void skipComment(Position pos)
+    {
+        while (!pos.atEnd()) {
+            char c = pos.getChar();
+            if (c == '\\') {
+                // Escape.
+                if (pos.getOffset() < pos.getLineLength()-1)
+                    pos.skip(2);
+                else {
+                    Line nextLine = pos.getNextLine();
+                    if (nextLine == null)
+                        break;
+                    pos.moveTo(nextLine, 0);
+                }
+                continue;
+            }
+            if (c == '|' && pos.lookingAt("|#")) {
+                pos.skip(2);
+                return;
+            }
+            pos.next();
         }
     }
 }
