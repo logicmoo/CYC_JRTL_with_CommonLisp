@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.11 2003-06-20 18:03:13 piso Exp $
+ * $Id: Autoload.java,v 1.12 2003-06-20 18:16:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,15 +140,19 @@ public final class Autoload extends Function
 
     static {
         autoload("%make-hash-table", "HashTable");
+        autoload("%time", "Time");
+        autoload("char-equal", "CharacterFunctions");
+        autoload("char-not-greaterp", "CharacterFunctions");
+        autoload("char-not-lessp", "CharacterFunctions");
+        autoload("char=", "CharacterFunctions");
         autoload("coerce", "coerce");
+        autoload("file-write-date", "Time");
+        autoload("get-internal-real-time", "Time");
+        autoload("get-universal-time", "Time");
         autoload("gethash", "HashTable");
         autoload("puthash", "HashTable");
         autoload("remhash", "HashTable");
         autoload("room", "room");
         autoload("sxhash", "HashTable");
-        autoload("%time", "Time");
-        autoload("get-internal-real-time", "Time");
-        autoload("get-universal-time", "Time");
-        autoload("file-write-date", "Time");
     }
 }
