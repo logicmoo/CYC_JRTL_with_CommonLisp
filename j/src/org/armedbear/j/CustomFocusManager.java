@@ -2,7 +2,7 @@
  * CustomFocusManager.java
  *
  * Copyright (C) 1999-2003 Peter Graves
- * $Id: CustomFocusManager.java,v 1.6 2003-06-28 15:42:10 piso Exp $
+ * $Id: CustomFocusManager.java,v 1.7 2003-12-04 16:55:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public final class CustomFocusManager extends DefaultFocusManager
                 if (keyText.equals("\\"))
                     keyText = "\\\\";
                 Editor.invokeHook("key-pressed-hook",
-                    "\"" + keyText + "\"");
+                                  "\"" + keyText + "\"");
             }
         }
         super.processKeyEvent(focusedComponent, e);
@@ -55,6 +55,11 @@ public final class CustomFocusManager extends DefaultFocusManager
             return false;
         if (c == null)
             return false;
+        if (c instanceof HistoryTextField) {
+            HistoryTextField textField = (HistoryTextField) c;
+            if (textField.getHandler() instanceof IncrementalFindTextFieldHandler)
+                return false;
+        }
         if (!Editor.preferences().getBooleanProperty(Property.ENABLE_KEY_PRESSED_HOOK))
             return false;
         while (true) {
