@@ -2,7 +2,7 @@
  * CVS.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CVS.java,v 1.3 2003-06-16 15:31:07 piso Exp $
+ * $Id: CVS.java,v 1.4 2003-07-11 18:13:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -479,7 +479,8 @@ public final class CVS implements Constants
                     }
                 }
             }
-            checkinBuffer.kill();
+            if (Editor.getBufferList().contains(checkinBuffer))
+                checkinBuffer.kill();
             if (editor.getOtherEditor() != null) {
                 editor.otherWindow();
                 editor.unsplitWindow();
