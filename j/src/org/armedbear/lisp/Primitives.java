@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.622 2004-03-29 22:54:36 piso Exp $
+ * $Id: Primitives.java,v 1.623 2004-03-30 17:29:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1489,7 +1489,8 @@ public final class Primitives extends Lisp
 
     // ### make-macro
     private static final Primitive1 MAKE_MACRO =
-        new Primitive1("make-macro", PACKAGE_SYS, false) {
+        new Primitive1("make-macro", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new MacroObject(arg);
@@ -1498,7 +1499,8 @@ public final class Primitives extends Lisp
 
     // ### %defparameter
     private static final Primitive3 _DEFPARAMETER =
-        new Primitive3("%defparameter", PACKAGE_SYS, false) {
+        new Primitive3("%defparameter", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -1516,7 +1518,8 @@ public final class Primitives extends Lisp
 
     // ### %defvar
     private static final Primitive1 _DEFVAR =
-        new Primitive1("%defvar", PACKAGE_SYS, false) {
+        new Primitive1("%defvar", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(arg);
@@ -2793,6 +2796,8 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             checkSymbol(first).setSymbolFunction(second);
+            if (second instanceof Functional)
+                ((Functional)second).setLambdaName(first);
             return second;
         }
     };
@@ -3768,6 +3773,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### %set-lambda-name
     private static final Primitive2 _SET_LAMBDA_NAME =
         new Primitive2("%set-lambda-name", PACKAGE_SYS, false)
     {
@@ -3778,10 +3784,8 @@ public final class Primitives extends Lisp
                 Function f = (Function) first;
                 f.setLambdaName(second);
                 return second;
-            } else {
-                signal(new TypeError(first, "function"));
-                return NIL;
             }
+            return signal(new TypeError(first, "function"));
         }
     };
 
