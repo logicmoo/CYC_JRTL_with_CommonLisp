@@ -1269,7 +1269,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
-version=0.17.1
+version=0.17.1+
 
 
 if test $OSTYPE = cygwin32 || test $OSTYPE = cygwin ; then
