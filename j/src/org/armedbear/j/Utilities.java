@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.14 2003-01-13 18:45:06 piso Exp $
+ * $Id: Utilities.java,v 1.15 2003-01-30 17:45:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1104,7 +1104,6 @@ public final class Utilities implements Constants
                 Thread t = new Thread("Utilities.have(\"" + s + "\") destroy") {
                     public void run()
                     {
-                        Log.debug("Utilities.have(\"" + s + "\") destroy thread run()");
                         try {
                             final BufferedReader reader =
                                 new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -1124,7 +1123,6 @@ public final class Utilities implements Constants
                         catch (InterruptedException e) {
                             Log.error(e);
                         }
-                        Log.debug("Utilities.have(\"" + s + "\") destroy thread exiting");
                     }
                 };
                 t.setDaemon(true);
