@@ -2,7 +2,7 @@
  * PlainTextMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: PlainTextMode.java,v 1.2 2004-09-19 19:00:29 piso Exp $
+ * $Id: PlainTextMode.java,v 1.3 2004-09-21 00:03:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,7 @@ public final class PlainTextMode extends AbstractMode implements Constants, Mode
 
     protected void setKeyMapDefaults(KeyMap km)
     {
-        km.mapKey(KeyEvent.VK_F12, ALT_MASK, "wrapParagraphsInRegion");
+        km.mapKey(KeyEvent.VK_F12, CTRL_MASK | SHIFT_MASK,
+                  "wrapParagraphsInRegion");
     }
 }
