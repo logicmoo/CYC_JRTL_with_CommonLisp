@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.13 2003-07-15 17:43:05 piso Exp $
+ * $Id: Type.java,v 1.14 2003-08-02 18:55:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,13 +138,13 @@ public class Type extends Lisp
 
     // Subtype of SYMBOL
     public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL);
-    public static final Type NULL      = new Type(Symbol.NULL, SYMBOL);
 
     // Subtypes of SEQUENCE
     public static final Type VECTOR    = new Type(Symbol.VECTOR, ARRAY, SEQUENCE);
     public static final Type STRING    = new Type(Symbol.STRING, VECTOR);
     public static final Type LIST      = new Type(Symbol.LIST, SEQUENCE);
     public static final Type CONS      = new Type(Symbol.CONS, LIST);
+    public static final Type NULL      = new Type(Symbol.NULL, SYMBOL, LIST);
 
     // SIMPLE-ARRAY, SIMPLE-VECTOR
     public static final Type SIMPLE_ARRAY =
