@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.32 2004-02-12 01:56:27 piso Exp $
+ * $Id: HashTable.java,v 1.33 2004-02-27 02:24:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,9 +209,9 @@ public final class HashTable extends LispObject
         return null;
     }
 
-    final int hash(LispObject key) throws ConditionThrowable
+    private final int hash(LispObject key) throws ConditionThrowable
     {
-        return key == null ? 0 : (key.sxhash().getValue() % buckets.length);
+        return key == null ? 0 : (key.sxhash().value % buckets.length);
     }
 
     private final boolean equals(LispObject o1, LispObject o2) throws ConditionThrowable
@@ -299,20 +299,29 @@ public final class HashTable extends LispObject
 
     // ### gethash
     // gethash key hash-table &optional default => value, present-p
-    private static final Primitive GETHASH = new Primitive("gethash","key hash-table &optional default") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+    private static final Primitive GETHASH =
+        new Primitive("gethash","key hash-table &optional default")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            final int length = args.length;
-            if (length < 2 || length > 3)
-                return signal(new WrongNumberOfArgumentsException(this));
-            if (args[1] instanceof HashTable) {
-                LispObject key = args[0];
-                HashTable ht = (HashTable) args[1];
-                LispObject defaultValue =
-                    length == 3 ? args[2] : NIL;
-                return ht.gethash(key, defaultValue);
+            try {
+                return ((HashTable)second).gethash(first, NIL);
             }
-            return signal(new TypeError(args[1], "hash-table"));
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.HASH_TABLE));
+            }
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                return ((HashTable)second).gethash(first, third);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.HASH_TABLE));
+            }
         }
     };
 
