@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: TypeError.java,v 1.10 2003-12-12 13:03:15 piso Exp $
+ * $Id: TypeError.java,v 1.11 2003-12-12 13:18:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,8 @@ public class TypeError extends LispError
 
     public TypeError()
     {
+        datum = NIL;
+        expectedType = NIL;
     }
 
     public TypeError(LispObject datum, LispObject expectedType)
@@ -110,4 +112,26 @@ public class TypeError extends LispError
         }
         return sb.toString();
     }
+
+    private static final Primitive1 TYPE_ERROR_DATUM =
+        new Primitive1("type-error-datum", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof TypeError)
+                return ((TypeError)arg).datum;
+            throw new ConditionThrowable(new TypeError(arg, Symbol.TYPE_ERROR));
+        }
+    };
+
+    private static final Primitive1 TYPE_ERROR_EXPECTED_TYPE =
+        new Primitive1("type-error-expected-type", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof TypeError)
+                return ((TypeError)arg).expectedType;
+            throw new ConditionThrowable(new TypeError(arg, Symbol.TYPE_ERROR));
+        }
+    };
 }
