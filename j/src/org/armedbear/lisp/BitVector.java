@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.8 2003-03-03 20:12:32 piso Exp $
+ * $Id: BitVector.java,v 1.9 2003-03-14 18:40:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,7 @@ public final class BitVector extends Vector
 
     public void fill(LispObject obj) throws LispError
     {
-        long n = Fixnum.getValue(obj);
+        int n = Fixnum.getInt(obj);
         if (n == 0 || n == 1) {
             for (int i = length(); i-- > 0;)
                 set(i, new Fixnum(n));
