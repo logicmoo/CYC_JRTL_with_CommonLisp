@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_condition.java,v 1.11 2003-11-03 16:06:51 piso Exp $
+ * $Id: make_condition.java,v 1.12 2003-12-15 14:34:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,12 +59,16 @@ public final class make_condition extends Primitive2
             return new TypeError(initArgs);
         if (type == Symbol.SIMPLE_TYPE_ERROR)
             return new SimpleTypeError(initArgs);
+        if (type == Symbol.SIMPLE_WARNING)
+            return new SimpleWarning(initArgs);
         if (type == Symbol.UNBOUND_SLOT)
             return new UnboundSlot(initArgs);
         if (type == Symbol.UNBOUND_VARIABLE)
             return new UnboundVariable(initArgs);
         if (type == Symbol.UNDEFINED_FUNCTION)
             return new UndefinedFunction(initArgs);
+        if (type == Symbol.WARNING)
+            return new Warning(initArgs);
 
         return NIL;
     }
