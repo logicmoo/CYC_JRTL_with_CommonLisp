@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.22 2004-05-05 19:03:07 piso Exp $
+ * $Id: CompiledFunction.java,v 1.23 2004-05-16 15:29:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,7 +139,8 @@ public class CompiledFunction extends Closure
                     Debug.trace(t);
                 }
             }
-            return signal(new LispError("Unable to load " + pathname));
+            return signal(new LispError("Unable to load " +
+                                        pathname.writeToString()));
         }
     };
 
