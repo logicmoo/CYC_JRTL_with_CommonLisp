@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.67 2004-09-12 02:07:22 piso Exp $
+ * $Id: LispShell.java,v 1.68 2004-09-12 18:45:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,6 +273,8 @@ public class LispShell extends Shell
                                 new Position(lineBeforeLastPrompt,
                                              lineBeforeLastPrompt.length());
                         }
+                        if (isBusy())
+                            setBusy(false);
                     }
                 }
                 updateDisplayInAllFrames();
@@ -470,12 +472,16 @@ public class LispShell extends Shell
         if (Platform.isPlatformWindows())
             if (!Platform.isPlatformWindows5())
                 return;
+        final Editor editor = Editor.currentEditor();
         // Look for an existing LispShell buffer with the same shell command.
         Buffer buf = findLisp(shellCommand);
-        if (buf == null)
+        if (buf == null) {
+            editor.setWaitCursor();
             buf = createLispShell(shellCommand, title, startSlime);
+            buf.setBusy(true);
+            editor.setDefaultCursor();
+        }
         if (buf != null) {
-            final Editor editor = Editor.currentEditor();
             editor.makeNext(buf);
             Buffer b = editor.getBuffer();
             if (b != null && b.isPaired())
