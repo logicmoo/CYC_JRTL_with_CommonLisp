@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.92 2005-02-28 02:50:02 piso Exp $
+ * $Id: Closure.java,v 1.93 2005-02-28 17:20:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -940,7 +940,7 @@ public class Closure extends Function
 
     // ### closure-environment closure => environment
     private static final Primitive CLOSURE_ENVIRONMENT =
-        new Primitive("closure-environment", PACKAGE_SYS, false, "closure")
+        new Primitive("closure-environment", PACKAGE_SYS, true, "closure")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
