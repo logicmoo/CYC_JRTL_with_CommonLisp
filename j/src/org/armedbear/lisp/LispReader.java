@@ -1,8 +1,8 @@
 /*
  * LispReader.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.30 2005-01-11 18:12:13 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: LispReader.java,v 1.31 2005-01-13 11:29:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -191,6 +191,8 @@ public final class LispReader extends Lisp
                     break;
                 }
             }
+            if (_READ_SUPPRESS_.symbolValue() != NIL)
+                return NIL;
             if (n >= 0) {
                 // n was supplied.
                 final int length = sb.length();
