@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2004 Peter Graves
-dnl  $Id: configure.ac,v 1.50 2004-08-19 13:47:19 piso Exp $
+dnl  $Id: configure.ac,v 1.51 2004-08-21 14:07:53 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.50 $)
+AC_REVISION($Revision: 1.51 $)
 
 BOOTFILE=./configure-options
 
@@ -148,7 +148,7 @@ dnl  Make prefix explicit.
 test "x$prefix" = xNONE && prefix=/usr/local
 
 dnl  Make prefix explicit.
-test "x$exec_prefix" = xNONE && exec_prefix=/usr/local
+test "x$exec_prefix" = xNONE && exec_prefix="${prefix}"
 
 dnl  Make datadir and libdir explicit.
 eval "datadir=$datadir"
