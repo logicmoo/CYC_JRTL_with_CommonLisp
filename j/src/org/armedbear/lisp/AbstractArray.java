@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.27 2004-09-29 01:17:52 piso Exp $
+ * $Id: AbstractArray.java,v 1.28 2004-09-29 18:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,18 +176,20 @@ public abstract class AbstractArray extends LispObject
                 sb.append(getRowMajor(index).writeToString());
             } else {
                 final LispThread thread = LispThread.currentThread();
-                final LispObject printLength = _PRINT_LENGTH_.symbolValue(thread);
-                final int maxLength;
-                if (printLength instanceof Fixnum)
-                    maxLength = ((Fixnum)printLength).value;
-                else
-                    maxLength = Integer.MAX_VALUE;
-                final LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
-                final int maxLevel;
-                if (printLevel instanceof Fixnum)
-                    maxLevel = ((Fixnum)printLevel).value;
-                else
-                    maxLevel = Integer.MAX_VALUE;
+                final LispObject printReadably =
+                    _PRINT_READABLY_.symbolValue(thread);
+                int maxLength = Integer.MAX_VALUE;
+                int maxLevel = Integer.MAX_VALUE;
+                if (printReadably == NIL) {
+                    final LispObject printLength =
+                        _PRINT_LENGTH_.symbolValue(thread);
+                    if (printLength instanceof Fixnum)
+                        maxLength = ((Fixnum)printLength).value;
+                    final LispObject printLevel =
+                        _PRINT_LEVEL_.symbolValue(thread);
+                    if (printLevel instanceof Fixnum)
+                        maxLevel = ((Fixnum)printLevel).value;
+                }
                 LispObject currentPrintLevel =
                     _CURRENT_PRINT_LEVEL_.symbolValue(thread);
                 int currentLevel = Fixnum.getValue(currentPrintLevel);
@@ -206,12 +208,12 @@ public abstract class AbstractArray extends LispObject
                         final int limit = Math.min(length, maxLength);
                         for (int i = 0; i < limit; i++) {
                             appendContents(dims, index, sb);
-                            if (i < limit - 1)
+                            if (i < limit - 1 || limit < length)
                                 sb.append(' ');
                             index += count;
                         }
                         if (limit < length)
-                            sb.append(" ...");
+                            sb.append("...");
                         sb.append(')');
                     }
                     finally {
