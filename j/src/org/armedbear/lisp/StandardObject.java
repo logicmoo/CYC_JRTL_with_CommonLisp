@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.34 2004-11-08 18:17:01 piso Exp $
+ * $Id: StandardObject.java,v 1.35 2004-11-12 13:59:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,10 +45,18 @@ public class StandardObject extends LispObject
 
     public LispObject getParts() throws ConditionThrowable
     {
-        LispObject result = NIL;
-        result = result.push(new Cons("LAYOUT", layout));
-        result = result.push(new Cons("SLOTS", slots));
-        return result.nreverse();
+        LispObject parts = NIL;
+        parts = parts.push(new Cons("LAYOUT", layout));
+        if (layout != null) {
+            LispObject[] slotNames = layout.getSlotNames();
+            if (slotNames != null) {
+                for (int i = 0; i < slotNames.length; i++) {
+                    parts = parts.push(new Cons(slotNames[i],
+                                                slots.getRowMajor(i)));
+                }
+            }
+        }
+        return parts.nreverse();
     }
 
     public final LispClass getLispClass()

@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.44 2004-11-03 15:38:52 piso Exp $
+ * $Id: HashTable.java,v 1.45 2004-11-12 13:57:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,20 @@ public abstract class HashTable extends LispObject
         return false;
     }
 
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject parts = NIL;
+        for (int i = 0; i < buckets.length; i++) {
+            HashEntry e = buckets[i];
+            while (e != null) {
+                parts = parts.push(new Cons("KEY [bucket " + i + "]", e.key));
+                parts = parts.push(new Cons("VALUE", e.value));
+                e = e.next;
+            }
+        }
+        return parts.nreverse();
+    }
+
     public synchronized void clear()
     {
         for (int i = buckets.length; i-- > 0;)
@@ -141,7 +155,7 @@ public abstract class HashTable extends LispObject
 
     public String writeToString()
     {
-        StringBuffer sb = new StringBuffer("#<");
+        StringBuffer sb = new StringBuffer();
         switch (test) {
             case TEST_EQ:
                 sb.append("EQ");
@@ -161,10 +175,13 @@ public abstract class HashTable extends LispObject
         sb.append(" hash table, ");
         sb.append(count);
         if (count == 1)
-            sb.append(" entry>");
+            sb.append(" entry");
         else
-            sb.append(" entries>");
-        return sb.toString();
+            sb.append(" entries");
+        sb.append(", ");
+        sb.append(buckets.length);
+        sb.append(" buckets");
+        return unreadableString(sb.toString());
     }
 
     public LispObject get(LispObject key) throws ConditionThrowable
