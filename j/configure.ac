@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2004 Peter Graves
-dnl  $Id: configure.ac,v 1.65 2004-10-03 19:30:22 piso Exp $
+dnl  $Id: configure.ac,v 1.66 2004-10-09 00:02:02 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.65 $)
+AC_REVISION($Revision: 1.66 $)
 
 BOOTFILE=./configure-options
 
@@ -120,9 +120,7 @@ dnl  jikes/javac
 test -z "$JAVAC" && test -x $JDK/Home/bin/javac && JAVAC=$JDK/Home/bin/javac
 test -z "$JAVAC" && JAVAC=$JDK/bin/javac
 AC_SUBST(JAVAC)
-if test basename "$JAVAC" = jikes; then
-    JAVACFLAGS="+D +F"
-fi
+test "$JAVAC" = jikes && JAVACFLAGS="+D +F"
 AC_SUBST(JAVACFLAGS)
 
 dnl javah
