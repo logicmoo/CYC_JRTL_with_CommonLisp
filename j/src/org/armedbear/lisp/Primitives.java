@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.187 2003-05-23 18:27:54 piso Exp $
+ * $Id: Primitives.java,v 1.188 2003-05-24 00:37:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2727,7 +2727,7 @@ public final class Primitives extends Module
         new Primitive1("package-nicknames") {
         public LispObject execute(LispObject arg) throws LispError
         {
-            return coerceToPackage(arg).getNicknames();
+            return coerceToPackage(arg).packageNicknames();
         }
     };
 
