@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.93 2004-03-28 02:03:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.94 2004-03-30 01:51:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1891,7 +1891,8 @@
     (do ((body (cddr form) (cdr body)))
         ((null (cdr body))
          (compile-form (car body) for-effect))
-      (compile-form (car body) t))
+      (compile-form (car body) t)
+      (maybe-emit-clear-values (car body)))
     (when specialp
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
@@ -2146,6 +2147,7 @@
       (compile-form (cadr rest))
       (unless (remove-store-value)
         (emit-push-value))
+      (maybe-emit-clear-values (cadr rest))
       (cond (for-effect
              (emit 'astore index))
             (t
@@ -2160,12 +2162,15 @@
              (emit 'aload 1)
              (emit 'bipush index)
              (compile-form (cadr rest))
-             (emit-push-value)
+             (unless (remove-store-value)
+               (emit-push-value))
              (emit 'aastore))
             (t
              (compile-form (cadr rest))
-             (emit-push-value)
+             (unless (remove-store-value)
+               (emit-push-value))
              (emit 'astore (1+ index))))
+      (maybe-emit-clear-values (cadr rest))
       (return-from compile-setq))
     (when (memq sym *closure-vars*)
       (let ((g (declare-object *env*)))
@@ -2184,6 +2189,7 @@
       (compile-form (cadr rest))
       (unless (remove-store-value)
         (emit-push-value))
+      (maybe-emit-clear-values (cadr rest))
       ;; stack: env sym val
       (emit 'dup_x2)
       (emit-invokevirtual +lisp-environment-class+
@@ -2202,6 +2208,7 @@
       (compile-form (cadr rest))
       (unless (remove-store-value)
         (emit-push-value))
+      (maybe-emit-clear-values (cadr rest))
       (emit-invokestatic +lisp-class+
                          "setSpecialVariable"
                          "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
