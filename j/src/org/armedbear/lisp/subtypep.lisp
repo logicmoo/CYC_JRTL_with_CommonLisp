@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.47 2004-02-13 01:05:42 piso Exp $
+;;; $Id: subtypep.lisp,v 1.48 2004-03-15 19:32:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -413,7 +413,7 @@
                        (values (dimension-subtypep d1 d2) t))
                       (t
                        (values nil t)))))
-             (simple-string
+             ((simple-string simple-bit-vector)
               (let ((element-type (car i2))
                     (dim (cadr i2))
                     (size (car i1)))
@@ -432,6 +432,16 @@
                       (return-from %subtypep (values nil t))))))
              (t
               (values nil t))))
+          ((eq t2 'bit-vector)
+           (let ((size1 (car i1))
+                 (size2 (car i2)))
+             (case t1
+               ((bit-vector simple-bit-vector)
+                (values (if (or (eq size2 '*) (eql size1 size2))
+                            t
+                            nil) t))
+               (t
+                (values nil t)))))
           (t
            (values nil nil)))))
 
