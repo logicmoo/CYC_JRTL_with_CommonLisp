@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.12 2004-07-03 15:36:11 asimon Exp $
+;;; $Id: java.lisp,v 1.13 2004-07-06 16:27:56 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,6 +21,43 @@
 
 (defun jregister-handler (object event handler &key data count)
   (%jregister-handler object event handler data count))
+
+(defun jinterface-implementation (interface &rest method-names-and-defs)
+  "Creates and returns an implementation of a Java interface with
+   methods calling Lisp closures as given in METHOD-NAMES-AND-DEFS.
+
+   INTERFACE is either a Java interface or a string naming one.
+
+   METHOD-NAMES-AND-DEFS is an alternating list of method names
+   (strings) and method definitions (closures).
+
+   For missing methods, a dummy implementation is provided that
+   returns nothing or null depending on whether the return type is 
+   void or not. This is for convenience only, and a warning is issued
+   for each undefined method."
+  (let ((interface (ensure-jclass interface))
+	(implemented-methods
+	 (loop for m in method-names-and-defs
+           for i from 0
+           when (evenp i)
+           collect m)))
+    (loop for method across 
+      (jclass-methods interface :declared nil :public t) 
+      for method-name = (jmethod-name method)
+      with null = (make-immediate-object nil :ref)
+      when (not (member method-name implemented-methods :test #'string=))
+      do
+      (let* ((void-p (string= (jclass-name (jmethod-return-type method)) "void"))
+             (arglist (when (plusp (length (jmethod-params method))) '(&rest ignore)))
+             (def `(lambda 
+                     ,arglist
+                     ,(when arglist '(declare (ignore ignore)))
+                     ,(if void-p '(values) null))))
+        (warn "Implementing dummy method ~a for interface ~a" 
+              method-name (jclass-name interface))
+        (push (coerce def 'function) method-names-and-defs)
+        (push method-name method-names-and-defs)))
+    (apply #'%jnew-proxy interface method-names-and-defs)))
 
 (defun jclass-name (class)
   "Returns the name of CLASS as a Lisp string"

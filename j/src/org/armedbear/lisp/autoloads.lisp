@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.148 2004-07-03 15:37:44 asimon Exp $
+;;; $Id: autoloads.lisp,v 1.149 2004-07-06 16:27:30 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -168,6 +168,8 @@
 (in-package "JAVA")
 (export 'jregister-handler "JAVA")
 (autoload 'jregister-handler "java")
+(export 'jinterface-implementation "JAVA")
+(autoload 'jinterface-implementation "java")
 (export 'jclass-name "JAVA")
 (autoload 'jclass-name "java")
 (export 'jobject-class "JAVA")
