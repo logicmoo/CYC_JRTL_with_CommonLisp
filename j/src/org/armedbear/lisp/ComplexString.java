@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.6 2004-02-24 16:35:26 piso Exp $
+ * $Id: ComplexString.java,v 1.7 2004-02-24 21:00:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,18 @@ public final class ComplexString extends AbstractString
         if (chars == null) {
             // Copy array.
             chars = new char[capacity];
-            System.arraycopy(array.chars(), displacement, chars, 0, capacity);
+            if (array instanceof AbstractString) {
+                AbstractString string = (AbstractString) array;
+                for (int i = 0; i < capacity; i++) {
+                    chars[i] = string.getChar(displacement + i);
+                }
+            } else {
+                for (int i = 0; i < capacity; i++) {
+                    LispCharacter character =
+                        (LispCharacter) array.getRowMajor(displacement + i);
+                    chars[i] = character.value;
+                }
+            }
             array = null;
             displacement = 0;
             isDisplaced = false;

@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.3 2004-02-24 16:35:08 piso Exp $
+ * $Id: ComplexVector.java,v 1.4 2004-02-24 21:00:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,16 +44,12 @@ public final class ComplexVector extends AbstractVector
         this.capacity = capacity;
     }
 
-    public ComplexVector(LispObject list) throws ConditionThrowable
+    public ComplexVector(int capacity, AbstractArray array, int displacement)
     {
-        elements = list.copyToArray();
-        capacity = elements.length;
-    }
-
-    public ComplexVector(LispObject[] array)
-    {
-        elements = array;
-        capacity = array.length;
+        this.capacity = capacity;
+        this.array = array;
+        this.displacement = displacement;
+        isDisplaced = true;
     }
 
     public LispObject typeOf()
@@ -109,6 +105,13 @@ public final class ComplexVector extends AbstractVector
         return isDisplaced;
     }
 
+    public LispObject arrayDisplacement()
+    {
+        if (array != null)
+            return LispThread.currentThread().setValues(array, new Fixnum(displacement));
+        return super.arrayDisplacement();
+    }
+
     public LispObject getElementType()
     {
         return T;
@@ -128,6 +131,15 @@ public final class ComplexVector extends AbstractVector
                                      LispObject initialContents)
         throws ConditionThrowable
     {
+        if (elements == null) {
+            // Copy array.
+            elements = new LispObject[capacity];
+            for (int i = 0; i < capacity; i++)
+                elements[i] = array.getRowMajor(displacement + i);
+            array = null;
+            displacement = 0;
+            isDisplaced = false;
+        }
         if (elements.length != size) {
             LispObject[] newArray = new LispObject[size];
             if (initialContents != NIL) {
@@ -156,6 +168,18 @@ public final class ComplexVector extends AbstractVector
         return this;
     }
 
+    public AbstractArray adjustArray(int size, AbstractArray displacedTo,
+                                     int displacement)
+        throws ConditionThrowable
+    {
+        capacity = size;
+        array = displacedTo;
+        this.displacement = displacement;
+        elements = null;
+        isDisplaced = true;
+        return this;
+    }
+
     public int length()
     {
         return fillPointer >= 0 ? fillPointer : capacity;
@@ -170,57 +194,49 @@ public final class ComplexVector extends AbstractVector
     }
 
     // Ignores fill pointer.
+    // FIXME inline
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
-        try {
-            return elements[Fixnum.getValue(index)];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(Fixnum.getValue(index), elements.length);
-            return NIL; // Not reached.
-        }
+        return get(Fixnum.getValue(index));
     }
 
+    // FIXME inline
     public LispObject getRowMajor(int index) throws ConditionThrowable
     {
-        try {
-            return elements[index];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, elements.length);
-            return NIL; // Not reached.
-        }
+        return get(index);
     }
 
+    // FIXME inline
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
-        try {
-            elements[index] = newValue;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, elements.length);
-        }
+        set(index, newValue);
     }
 
     public LispObject get(int index) throws ConditionThrowable
     {
-        try {
-            return elements[index];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, elements.length);
-            return NIL; // Not reached.
-        }
+        if (elements != null) {
+            try {
+                return elements[index];
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                badIndex(index, elements.length);
+                return NIL; // Not reached.
+            }
+        } else
+            return array.getRowMajor(index + displacement);
     }
 
     public void set(int index, LispObject newValue) throws ConditionThrowable
     {
-        try {
-            elements[index] = newValue;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, elements.length);
-        }
+        if (elements != null) {
+            try {
+                elements[index] = newValue;
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                badIndex(index, elements.length);
+            }
+        } else
+            array.setRowMajor(index + displacement, newValue);
     }
 
     public LispObject subseq(int start, int end) throws ConditionThrowable
@@ -337,16 +353,22 @@ public final class ComplexVector extends AbstractVector
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#(");
-        // FIXME The limit should be based on the value of *PRINT-LENGTH*.
-        final int limit = Math.min(length(), 10);
-        for (int i = 0; i < limit; i++) {
-            if (i > 0)
-                sb.append(' ');
-            sb.append(elements[i]);
+        try {
+            // FIXME The limit should be based on the value of *PRINT-LENGTH*.
+            final int limit = Math.min(length(), 10);
+            for (int i = 0; i < limit; i++) {
+                if (i > 0)
+                    sb.append(' ');
+                sb.append(get(i));
+            }
+            if (limit < length())
+                sb.append(" ...");
+            sb.append(')');
         }
-        if (limit < length())
-            sb.append(" ...");
-        sb.append(')');
+        catch (ConditionThrowable t) {
+            // Shouldn't happen.
+            Debug.trace(t);
+        }
         return sb.toString();
     }
 }

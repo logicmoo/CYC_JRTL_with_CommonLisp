@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.15 2004-02-24 11:23:02 piso Exp $
+ * $Id: make_array.java,v 1.16 2004-02-24 21:00:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,11 +69,18 @@ public final class make_array extends Primitive
                 displacement = Fixnum.getValue(displacedIndexOffset);
             else
                 displacement = 0;
-            if (rank == 1 && array.stringp()) {
-                ComplexString string = new ComplexString(dimv[0], array, displacement);
-                if (fillPointer != NIL)
-                    string.setFillPointer(fillPointer);
-                return string;
+            if (rank == 1) {
+                if (array.getElementType() == Symbol.CHARACTER) {
+                    ComplexString s = new ComplexString(dimv[0], array, displacement);
+                    if (fillPointer != NIL)
+                        s.setFillPointer(fillPointer);
+                    return s;
+                } else {
+                    ComplexVector v = new ComplexVector(dimv[0], array, displacement);
+                    if (fillPointer != NIL)
+                        v.setFillPointer(fillPointer);
+                    return v;
+                }
             }
             DisplacedArray displacedArray = new DisplacedArray(dimv, array, displacement);
             if (rank == 1 && fillPointer != NIL)
