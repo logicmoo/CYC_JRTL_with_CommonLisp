@@ -1,8 +1,8 @@
 /*
  * Search.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Search.java,v 1.7 2003-10-14 00:24:51 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Search.java,v 1.8 2004-09-04 16:49:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,7 +211,7 @@ public class Search implements Cloneable
 
     // Search is restricted to region if restrictToSelection is true and
     // region is not null.
-    private final Position findString(Buffer buffer, Position start)
+    public final Position findString(Buffer buffer, Position start)
     {
         return findString(buffer.getMode(), start);
     }
