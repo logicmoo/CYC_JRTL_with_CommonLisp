@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.122 2004-04-22 15:14:36 piso Exp $
+ * $Id: Editor.java,v 1.123 2004-04-22 19:03:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6261,16 +6261,22 @@ public final class Editor extends JPanel implements Constants,
                     }
                 }
             };
-            if (SwingUtilities.isEventDispatchThread())
+            if (SwingUtilities.isEventDispatchThread()) {
                 r.run();
-            else
-                SwingUtilities.invokeLater(r);
+            } else {
+                try {
+                    SwingUtilities.invokeAndWait(r);
+                }
+                catch (Throwable t) {
+                    Log.debug(t);
+                }
+            }
         }
     }
 
     private static String[] parseCommand(String command)
     {
-        command = command.trim();
+        command = Utilities.trimLeading(command);
         // Command name is terminated by whitespace or '('.
         char delimiter = '\0';
         int index = -1;
