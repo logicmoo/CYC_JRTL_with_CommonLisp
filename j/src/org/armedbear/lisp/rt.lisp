@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.79 2003-05-28 12:42:36 piso Exp $
+;;; $Id: rt.lisp,v 1.80 2003-06-06 18:41:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,6 +155,7 @@
                               "count-if"
                               "count-if-not"
                               "ctypecase"
+                              "cxr"
                               "defconstant"
                               "defparameter"
                               "defvar"
