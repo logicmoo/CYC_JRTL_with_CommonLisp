@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.14 2003-09-11 16:32:32 piso Exp $
+;;; $Id: numbers.lisp,v 1.15 2003-09-18 18:24:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -232,7 +232,9 @@
                   (coerce pi 'double-float)
                   0.0d0))
              (complex
-              (atan (imagpart number) (realpart number)))))
+              (if (zerop (realpart number))
+                  (* (/ pi 2) (signum (imagpart number)))
+                  (atan (imagpart number) (realpart number))))))
 
 (when (and (find-package "JVM")
            (fboundp 'jvm::jvm-compile))
