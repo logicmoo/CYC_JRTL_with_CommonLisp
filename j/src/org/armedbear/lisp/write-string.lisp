@@ -1,7 +1,7 @@
 ;;; write-string.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: write-string.lisp,v 1.1 2003-09-25 16:33:39 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: write-string.lisp,v 1.2 2004-06-07 02:08:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,4 +29,4 @@
 
 (defun write-line (string &optional stream &key start end)
   (prog1 (write-string string stream :start start :end end)
-         (%write-newline stream)))
+         (%terpri stream)))
