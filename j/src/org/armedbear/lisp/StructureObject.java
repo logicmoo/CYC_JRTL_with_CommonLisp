@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.5 2003-07-15 19:28:06 piso Exp $
+ * $Id: StructureObject.java,v 1.6 2003-09-06 17:05:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,8 +92,8 @@ public final class StructureObject extends LispObject
         return sb.toString();
     }
 
-    // ### %instance-ref
-    // %instance-ref instance index => value
+    // ### %structure-ref
+    // %structure-ref instance index => value
     private static final Primitive2 _STRUCTURE_REF =
         new Primitive2("%structure-ref", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
@@ -108,8 +108,8 @@ public final class StructureObject extends LispObject
         }
     };
 
-    // ### %instance-set
-    // %instance-set instance index new-value => new-value
+    // ### %structure-set
+    // %structure-set instance index new-value => new-value
     private static final Primitive3 _STRUCTURE_SET =
         new Primitive3("%structure-set", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
