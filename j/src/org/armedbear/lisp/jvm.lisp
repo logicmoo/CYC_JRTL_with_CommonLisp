@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.227 2004-07-20 21:58:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.228 2004-07-21 01:22:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2536,77 +2536,92 @@
       (or (contains-symbol symbol (car form))
           (contains-symbol symbol (cdr form)))))
 
+(defun contains-go (form)
+  (if (atom form)
+      nil
+      (case (car form)
+        (QUOTE
+         nil)
+        (GO
+         t)
+        (t
+         (dolist (subform form)
+           (when (contains-go subform)
+             (return t)))))))
+
 (defun compile-function (form &key (target *val*))
-   (let ((name (second form))
-         (local-function))
-     (cond ((symbolp name)
-            (cond ((setf local-function (find name *local-functions* :key #'local-function-name))
-                   (error "COMPILE-FUNCTION: local functions are not supported")
-                   (if (local-function-variable local-function)
-                       (emit 'var-ref (local-function-variable local-function) :stack)
-                       (let ((g (if *compile-file-truename*
-                                    (declare-local-function local-function)
-                                    (declare-object (local-function-function local-function)))))
-                         (emit 'getstatic
-                               *this-class*
-                               g
-                               +lisp-object+))) ; Stack: template-function
-                   (emit 'aload *context-register*) ; Stack: template-function context
-                   (emit-invokestatic +lisp-class+
-                                      "makeCompiledClosure"
-                                      "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                      -1) ; Stack: compiled-closure
-                   (emit-move-from-stack target))
-                  ((inline-ok name)
-                   (let ((g (declare-function name)))
-                     (emit 'getstatic
-                           *this-class*
-                           g
-                           +lisp-object+)
-                     (emit-move-from-stack target)))
-                  (t
-                   (let ((g (declare-symbol name)))
-                     (emit 'getstatic
-                           *this-class*
-                           g
-                           +lisp-symbol+)
-                     (emit-invokevirtual +lisp-object-class+
-                                         "getSymbolFunctionOrDie"
-                                         "()Lorg/armedbear/lisp/LispObject;"
-                                         0)
-                     (emit-move-from-stack target)))))
-           ((and (consp name) (eq (car name) 'SETF))
-            ; FIXME Need to check for NOTINLINE declaration!
-            (if (member name *toplevel-defuns* :test #'equal)
-                (let ((g (declare-setf-function name)))
-                  (emit 'getstatic
-                        *this-class*
-                        g
-                        +lisp-object+)
+  (let ((name (second form))
+        (local-function))
+    (cond ((symbolp name)
+           (cond ((setf local-function (find name *local-functions* :key #'local-function-name))
+                  (error "COMPILE-FUNCTION: local functions are not supported")
+                  (if (local-function-variable local-function)
+                      (emit 'var-ref (local-function-variable local-function) :stack)
+                      (let ((g (if *compile-file-truename*
+                                   (declare-local-function local-function)
+                                   (declare-object (local-function-function local-function)))))
+                        (emit 'getstatic
+                              *this-class*
+                              g
+                              +lisp-object+))) ; Stack: template-function
+                  (emit 'aload *context-register*) ; Stack: template-function context
+                  (emit-invokestatic +lisp-class+
+                                     "makeCompiledClosure"
+                                     "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                                     -1) ; Stack: compiled-closure
                   (emit-move-from-stack target))
-                (progn
-                  (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
-;;            ((and (consp name) (eq (car name) 'LAMBDA))
-;;             (let ((closure-vars *visible-variables*)
-;;                   (lambda-body (cddr name)))
-;;               (when closure-vars
-;;                 (dolist (variable closure-vars)
-;;                   (when (contains-symbol (variable-name variable) lambda-body)
-;;                     (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))))
-;;               (when (contains-return lambda-body)
-;;                 (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
-;;               (fresh-line)
-;;               (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
-;;               (let ((g (if *compile-file-truename*
-;;                            (declare-lambda name)
-;;                            (declare-object (sys::coerce-to-function name)))))
-;;                 (emit 'getstatic
-;;                       *this-class*
-;;                       g
-;;                       +lisp-object+)
-;;                 (emit-move-from-stack target))))
-           (t
-            (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
+                 ((inline-ok name)
+                  (let ((g (declare-function name)))
+                    (emit 'getstatic
+                          *this-class*
+                          g
+                          +lisp-object+)
+                    (emit-move-from-stack target)))
+                 (t
+                  (let ((g (declare-symbol name)))
+                    (emit 'getstatic
+                          *this-class*
+                          g
+                          +lisp-symbol+)
+                    (emit-invokevirtual +lisp-object-class+
+                                        "getSymbolFunctionOrDie"
+                                        "()Lorg/armedbear/lisp/LispObject;"
+                                        0)
+                    (emit-move-from-stack target)))))
+          ((and (consp name) (eq (car name) 'SETF))
+           ; FIXME Need to check for NOTINLINE declaration!
+           (if (member name *toplevel-defuns* :test #'equal)
+               (let ((g (declare-setf-function name)))
+                 (emit 'getstatic
+                       *this-class*
+                       g
+                       +lisp-object+)
+                 (emit-move-from-stack target))
+               (progn
+                 (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
+          ((and (consp name) (eq (car name) 'LAMBDA))
+           (let ((closure-vars *visible-variables*)
+                 (lambda-body (cddr name)))
+             (when closure-vars
+               (dolist (variable closure-vars)
+                 (when (contains-symbol (variable-name variable) lambda-body)
+                   (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))))
+             (when (contains-return lambda-body)
+               (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
+             (when (contains-go lambda-body)
+               (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing GO."))
+             (fresh-line)
+             (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
+             (let ((g (if *compile-file-truename*
+                          (declare-lambda name)
+                          (declare-object (sys::coerce-to-function name)))))
+               (emit 'getstatic
+                     *this-class*
+                     g
+                     +lisp-object+)
+               (emit-move-from-stack target))))
+          (t
+           (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
 (defun compile-plus (form &key (target *val*))
   (let ((new-form (rewrite-function-call form)))
