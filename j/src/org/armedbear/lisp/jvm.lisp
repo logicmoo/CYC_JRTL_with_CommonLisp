@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.66 2004-02-09 13:06:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.67 2004-02-10 16:19:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2462,7 +2462,8 @@
       (if name
           (progn
             (%format t "~A Compiling ~S ...~%" prefix name)
-            (when (and (fboundp name) (typep (fdefinition name) 'generic-function))
+            (when (and (fboundp name)
+                       (sys::%typep (fdefinition name) 'generic-function))
               (%format t "~A Unable to compile generic function ~S~%" prefix name)
               (return-from jvm-compile (values name nil t)))
             (unless (symbolp name)
@@ -2563,7 +2564,9 @@
 (defun compile (name &optional definition)
   (when (consp name)
     (return-from compile (values name nil nil)))
-  (when (and name (fboundp name) (typep (symbol-function name) 'generic-function))
+  (when (and name
+             (fboundp name)
+             (sys::%typep (symbol-function name) 'generic-function))
     (return-from compile (values name nil nil)))
   (unless definition
     (setq definition (or (and (symbolp name) (macro-function name))
