@@ -2,7 +2,7 @@
  * FastStringReader.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: FastStringReader.java,v 1.1.1.1 2002-09-24 16:08:25 piso Exp $
+ * $Id: FastStringReader.java,v 1.2 2002-12-07 10:51:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,25 +99,24 @@ public final class FastStringReader extends Reader
 
     public String readLine()
     {
-        if (index >= length)
+        final int limit = length;
+        if (index >= limit)
             return null;
         final int begin = index;
         do {
-            char c = s.charAt(index);
-            if (c == '\n') {
-                ++index;
-                return s.substring(begin, index - 1);
+            switch (s.charAt(index)) {
+                case '\n':
+                    return s.substring(begin, index++);
+                case '\r': {
+                    final int end = index++;
+                    // Skip following LF if any.
+                    if (index < limit && s.charAt(index) == '\n')
+                        ++index;
+                    return s.substring(begin, end);
+                }
+                // Fall through...
             }
-            if (c == '\r') {
-                final int end = index;
-                ++index;
-                // Skip following LF if any.
-                if (index < length && s.charAt(index) == '\n')
-                    ++index;
-                return s.substring(begin, end);
-            }
-            ++index;
-        } while (index < length);
+        } while (++index < limit);
         return s.substring(begin, index);
     }
 
