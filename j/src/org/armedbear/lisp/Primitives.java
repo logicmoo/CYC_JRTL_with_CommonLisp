@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.390 2003-09-14 13:06:26 piso Exp $
+ * $Id: Primitives.java,v 1.391 2003-09-14 15:11:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,7 +297,7 @@ public final class Primitives extends Module
             case ODDP:                          // ### oddp
                 return arg.ODDP();
             case NUMBERP:                       // ### numberp
-                return (arg.getType() & TYPE_NUMBER) != 0 ? T : NIL;
+                return arg.NUMBERP();
             case LENGTH:                        // ### length
                 return arg.LENGTH();
             case CONSP:                         // ### consp
