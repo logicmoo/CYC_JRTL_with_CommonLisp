@@ -2,7 +2,7 @@
  * mod.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: mod.java,v 1.2 2004-03-14 01:21:11 piso Exp $
+ * $Id: mod.java,v 1.3 2004-03-14 01:30:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,20 +32,7 @@ public final class mod extends Primitive2
     public LispObject execute(LispObject number, LispObject divisor)
         throws ConditionThrowable
     {
-        number.truncate(divisor);
-        final LispThread thread = LispThread.currentThread();
-        LispObject remainder = thread._values[1];
-        thread.clearValues();
-        if (!remainder.zerop()) {
-            if (divisor.minusp()) {
-                if (number.plusp())
-                    return remainder.add(divisor);
-            } else {
-                if (number.minusp())
-                    return remainder.add(divisor);
-            }
-        }
-        return remainder;
+        return number.MOD(divisor);
     }
 
     private static final Primitive2 MOD = new mod();
