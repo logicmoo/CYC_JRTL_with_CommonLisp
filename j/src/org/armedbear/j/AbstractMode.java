@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.12 2003-06-13 17:08:18 piso Exp $
+ * $Id: AbstractMode.java,v 1.13 2003-06-18 15:30:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,6 +176,17 @@ public abstract class AbstractMode implements Constants, Mode
     public File getKeyMapFile()
     {
         return keyMapFile;
+    }
+
+    public synchronized final void useDefaultKeyMap()
+    {
+        keyMap = new KeyMap();
+        setKeyMapDefaults(keyMap);
+    }
+
+    public synchronized final void deleteKeyMap()
+    {
+        keyMap = null;
     }
 
     public String getMenuName()
