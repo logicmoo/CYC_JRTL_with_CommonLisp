@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShellMode.java,v 1.12 2003-10-21 19:27:18 piso Exp $
+ * $Id: LispShellMode.java,v 1.13 2003-11-24 16:15:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,8 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_ESCAPE, 0, "shellEscape");
         km.mapKey(KeyEvent.VK_P, CTRL_MASK, "shellPreviousInput");
         km.mapKey(KeyEvent.VK_N, CTRL_MASK, "shellNextInput");
+        km.mapKey(KeyEvent.VK_P, CTRL_MASK | ALT_MASK, "shellPreviousPrompt");
+        km.mapKey(KeyEvent.VK_N, CTRL_MASK | ALT_MASK, "shellNextPrompt");
         km.mapKey(KeyEvent.VK_ENTER, 0, "LispShellMode.enter");
         km.mapKey(KeyEvent.VK_ENTER, ALT_MASK, "newlineAndIndent");
         km.mapKey(KeyEvent.VK_R, CTRL_MASK, "resetLisp");
