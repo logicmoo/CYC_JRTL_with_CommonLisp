@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.15 2003-10-05 00:25:08 piso Exp $
+ * $Id: JLisp.java,v 1.16 2003-10-23 00:30:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,7 +204,7 @@ public final class JLisp extends LispShell
     public static void runStartupScript(File file) throws ConditionThrowable
     {
         if (!Editor.isLispInitialized()) {
-            Interpreter.initialize(true);
+            Interpreter.initializeLisp(true);
             Editor.setLispInitialized(true);
         }
         FastStringBuffer sb = new FastStringBuffer("(load \"");
@@ -226,7 +226,7 @@ public final class JLisp extends LispShell
     public static void runLispCommand(String command) throws ConditionThrowable
     {
         if (!Editor.isLispInitialized()) {
-            Interpreter.initialize(true);
+            Interpreter.initializeLisp(true);
             Editor.setLispInitialized(true);
         }
         Interpreter.evaluate(command);
