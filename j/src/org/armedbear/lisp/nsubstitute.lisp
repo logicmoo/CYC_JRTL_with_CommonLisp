@@ -1,7 +1,7 @@
 ;;; nsubstitute.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: nsubstitute.lisp,v 1.4 2003-07-02 17:59:03 piso Exp $
+;;; $Id: nsubstitute.lisp,v 1.5 2003-07-02 18:43:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,13 +18,13 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 ;;; NSUBSTITUTE (from CMUCL)
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
 ;;; From CMUCL.
 
 (defmacro real-count (count)
   `(cond ((null ,count) most-positive-fixnum)
-         ((sys:fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((fixnump ,count) (if (minusp ,count) 0 ,count))
          ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
          (t ,count)))
 
@@ -33,8 +33,8 @@
        (index start (1+ index)))
       ((or (= index end) (null list) (= count 0)) sequence)
     (when (if test-not
-	      (not (funcall test-not old (sys::apply-key key (car list))))
-	      (funcall test old (sys::apply-key key (car list))))
+	      (not (funcall test-not old (apply-key key (car list))))
+	      (funcall test old (apply-key key (car list))))
       (rplaca list new)
       (setq count (1- count)))))
 
@@ -43,8 +43,8 @@
   (do ((index start (+ index incrementer)))
       ((or (= index end) (= count 0)) sequence)
     (when (if test-not
-	      (not (funcall test-not old (sys::apply-key key (aref sequence index))))
-	      (funcall test old (sys::apply-key key (aref sequence index))))
+	      (not (funcall test-not old (apply-key key (aref sequence index))))
+	      (funcall test old (apply-key key (aref sequence index))))
       (setf (aref sequence index) new)
       (setq count (1- count)))))
 
@@ -71,7 +71,7 @@
   (do ((list (nthcdr start sequence) (cdr list))
        (index start (1+ index)))
       ((or (= index end) (null list) (= count 0)) sequence)
-    (when (funcall test (sys::apply-key key (car list)))
+    (when (funcall test (apply-key key (car list)))
       (rplaca list new)
       (setq count (1- count)))))
 
@@ -79,7 +79,7 @@
                                    start end count key)
   (do ((index start (+ index incrementer)))
       ((or (= index end) (= count 0)) sequence)
-    (when (funcall test (sys::apply-key key (aref sequence index)))
+    (when (funcall test (apply-key key (aref sequence index)))
       (setf (aref sequence index) new)
       (setq count (1- count)))))
 
@@ -105,7 +105,7 @@
   (do ((list (nthcdr start sequence) (cdr list))
        (index start (1+ index)))
       ((or (= index end) (null list) (= count 0)) sequence)
-    (when (not (funcall test (sys::apply-key key (car list))))
+    (when (not (funcall test (apply-key key (car list))))
       (rplaca list new)
       (setq count (1- count)))))
 
@@ -113,7 +113,7 @@
                                        start end count key)
   (do ((index start (+ index incrementer)))
       ((or (= index end) (= count 0)) sequence)
-    (when (not (funcall test (sys::apply-key key (aref sequence index))))
+    (when (not (funcall test (apply-key key (aref sequence index))))
       (setf (aref sequence index) new)
       (setq count (1- count)))))
 
