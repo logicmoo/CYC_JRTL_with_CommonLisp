@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.12 2003-03-06 04:02:24 piso Exp $
+ * $Id: Tests.java,v 1.13 2003-03-07 18:32:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -421,7 +421,7 @@ public class Tests extends TestCase
         verify("(apply #'add '(1 2))", "3");
         verify("(apply #'add '((+ 1 2) 3))", ERROR);
         verify("(apply #'+ ())", "0");
-        verify("(apply #'concatenate 'string '(\"foo\" \"bar\"))", "\"foobar\"");
+//         verify("(apply #'concatenate 'string '(\"foo\" \"bar\"))", "\"foobar\"");
 
         // lambda
         verify("((lambda (x) (+ x x)) 23)", "46");
