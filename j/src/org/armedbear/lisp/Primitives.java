@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.659 2004-06-15 01:56:57 piso Exp $
+ * $Id: Primitives.java,v 1.660 2004-06-15 11:20:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2710,27 +2710,47 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### fset
-    private static final Primitive2 FSET =
-        new Primitive2("fset", PACKAGE_SYS, false)
+    // ### fset name function &optional source-position => function
+    private static final Primitive FSET =
+        new Primitive("fset", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject[] args)
             throws ConditionThrowable
         {
+            if (args.length < 2 || args.length > 3)
+                return signal(new WrongNumberOfArgumentsException(this));
+            LispObject first = args[0];
+            LispObject second = args[1];
             if (first instanceof Symbol) {
                 Symbol symbol = (Symbol) first;
                 symbol.setSymbolFunction(second);
                 LispObject source = Load._FASL_SOURCE_.symbolValue();
-                if (source != NIL)
-                    put(symbol, PACKAGE_SYS.intern("SOURCE"), source);
+                if (source != NIL) {
+                    if (args.length == 3 && args[2] != NIL)
+                        put(symbol, Symbol.SOURCE, new Cons(source, args[2]));
+                    else
+                        put(symbol, Symbol.SOURCE, source);
+                }
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
                 // SETF function
                 Symbol symbol = checkSymbol(first.cadr());
-                put(symbol, PACKAGE_SYS.intern("SETF-FUNCTION"), second);
+                put(symbol, Symbol.SETF_FUNCTION, second);
             } else
                 return signal(new TypeError(first, "valid function name"));
             if (second instanceof Functional)
                 ((Functional)second).setLambdaName(first);
+            return second;
+        }
+    };
+
+    // ### %set-symbol-function
+    private static final Primitive2 _SET_SYMBOL_FUNCTION =
+        new Primitive2("%set-symbol-function", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            checkSymbol(first).setSymbolFunction(second);
             return second;
         }
     };
