@@ -1,7 +1,7 @@
 ;;; key-pressed.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: key-pressed.lisp,v 1.3 2003-06-13 16:23:58 piso Exp $
+;;; $Id: key-pressed.lisp,v 1.4 2003-07-05 02:03:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -101,13 +101,13 @@
 (assign-key "Ctrl W" 'kill-buffer)
 (assign-key "Alt P" 'properties)
 (assign-key "Alt NumPad Right"
-            #'(lambda () (next-buffer) (restore-focus)))
+            #'(lambda () (restore-focus) (next-buffer)))
 (assign-key "Alt Right"
-            #'(lambda () (next-buffer) (restore-focus)))
+            #'(lambda () (restore-focus) (next-buffer)))
 (assign-key "Alt NumPad Left"
-            #'(lambda () (prev-buffer) (restore-focus)))
+            #'(lambda () (restore-focus) (prev-buffer)))
 (assign-key "Alt Left"
-            #'(lambda () (prev-buffer) (restore-focus)))
+            #'(lambda () (restore-focus) (prev-buffer)))
 (assign-key "Ctrl Shift N" 'new-frame)
 (assign-key "Alt X" 'my-execute-command)
 ;; Ctrl P is used for history in textfields.
@@ -147,8 +147,8 @@
 (assign-key "Shift F10" 'unsplit-window)
 (assign-key "Alt O" 'other-window)
 (assign-key "Alt F9"
-            #'(lambda () (shell) (restore-focus)))
+            #'(lambda () (restore-focus) (shell)))
 
 ;;; Enable the hook.
 (add-hook 'key-pressed-hook 'key-pressed)
-(set-global-property "enableKeyPressedHook" "true")
+(setf (variable-value 'enable-key-pressed-hook :global) t)
