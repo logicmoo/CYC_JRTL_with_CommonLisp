@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.275 2004-08-25 17:42:25 piso Exp $
+ * $Id: Lisp.java,v 1.276 2004-08-27 00:50:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -787,8 +787,9 @@ public abstract class Lisp
     }
 
     public static final LispObject loadCompiledFunction(String namestring)
+        throws ConditionThrowable
     {
-        File file = new File(namestring);
+        File file = Utilities.getFile(new Pathname(namestring));
         if (file != null && file.isFile()) {
             try {
                 JavaClassLoader loader = new JavaClassLoader();
@@ -805,7 +806,7 @@ public abstract class Lisp
                 Debug.trace(t);
             }
         }
-        return null;
+        return signal(new LispError("Unable to load \"" + namestring + "\"."));
     }
 
     public static final LispObject makeCompiledClosure(LispObject ctf,
