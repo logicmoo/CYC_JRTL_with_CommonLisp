@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Utilities.java,v 1.8 2004-01-26 00:30:12 piso Exp $
+ * $Id: Utilities.java,v 1.9 2004-10-03 18:54:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,8 @@ import java.io.IOException;
 
 public final class Utilities extends Lisp
 {
-    private static final boolean isPlatformUnix;
-    private static final boolean isPlatformWindows;
+    public static final boolean isPlatformUnix;
+    public static final boolean isPlatformWindows;
 
     static {
         String osName = System.getProperty("os.name");
