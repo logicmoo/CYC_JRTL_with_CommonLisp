@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.18 2003-03-13 16:17:25 piso Exp $
+;;; $Id: list.lisp,v 1.19 2003-03-13 16:25:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -159,12 +159,11 @@
     (rplacd 2nd 3rd)))
 
 (defun require-type (arg type)
-  (if (typep  arg type)
-      arg
-      (error 'type-error)))
+  (unless (typep  arg type)
+    (error 'type-error)))
 
 (defun butlast (list &optional (n 1))
-  (setq list (require-type list 'list))
+  (require-type list 'list)
   (unless (null list)
     (let ((length (do ((list list (cdr list))
 		       (i 0 (1+ i)))
@@ -178,7 +177,7 @@
 	  (setq splice (cdr (rplacd splice (list (car top))))))))))
 
 (defun nbutlast (list &optional (n 1))
-  (setq list (require-type list 'list))
+  (require-type list 'list)
   (unless (null list)
     (let ((length (do ((list list (cdr list))
 		       (i 0 (1+ i)))
