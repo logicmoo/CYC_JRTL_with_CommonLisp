@@ -1,8 +1,8 @@
 /*
  * CVS.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: CVS.java,v 1.6 2004-12-06 17:48:48 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: CVS.java,v 1.7 2005-02-24 00:39:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,7 +171,8 @@ public final class CVS implements Constants
         if (parentBuffer.isModified()) {
             int response =
                 ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                    CHECK_SAVE_PROMPT, title);
+                                                                CHECK_SAVE_PROMPT,
+                                                                title);
             switch (response) {
                 case RESPONSE_YES:
                     save = true;
@@ -448,7 +449,7 @@ public final class CVS implements Constants
                     public void run()
                     {
                         finishCompleted(editor, checkinBuffer, parentBuffer,
-                            cvsCommand, name, tempFile);
+                                        cvsCommand, name, tempFile);
                     }
                 };
                 SwingUtilities.invokeLater(completionRunnable);
@@ -467,6 +468,7 @@ public final class CVS implements Constants
             buf.setTitle("cvs commit ".concat(name));
             editor.makeNext(buf);
             editor.activate(buf);
+            editor.updateDisplay();
         } else {
             // Success. Kill old diff buffer, if any; its contents are no
             // longer correct.
