@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.13 2003-11-17 18:35:06 piso Exp $
+;;; $Id: typep.lisp,v 1.14 2003-12-15 01:53:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -55,7 +55,11 @@
 
 (defun typep (object type)
   (when (atom type)
-    (return-from typep (simple-typep object type)))
+    (unless (and (symbolp type) (get type 'deftype-definition))
+      (return-from typep (simple-typep object type)))
+    (setf type (subtypep-normalize-type type))
+    (when (atom type)
+      (return-from typep (simple-typep object type))))
   (let ((tp (car type))
         (i (cdr type)))
     (case tp
