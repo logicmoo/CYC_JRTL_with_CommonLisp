@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.26 2003-01-02 17:12:39 piso Exp $
+ * $Id: Editor.java,v 1.27 2003-01-02 18:59:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1484,9 +1484,13 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         if (!checkReadOnly())
             return;
+        CompoundEdit compoundEdit = beginCompoundEdit();
+        if (mark != null)
+            deleteRegion();
         addUndo(SimpleEdit.INSERT_LINE_SEP);
         insertLineSeparator();
         moveCaretToDotCol();
+        endCompoundEdit(compoundEdit);
     }
 
     public void newlineAndIndent()
