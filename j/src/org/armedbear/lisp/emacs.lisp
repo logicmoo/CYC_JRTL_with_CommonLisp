@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.3 2005-03-03 19:39:12 piso Exp $
+;;; $Id: emacs.lisp,v 1.4 2005-03-03 19:50:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -121,20 +121,14 @@
 ;; XEmacs uses Ctrl Alt L for switch-to-other-buffer
 (define-key *global-map* "Ctrl Alt L" "listOccurrencesOfPatternAtDot")
 
-;; mapKey(KeyEvent.VK_F3, 0, "findNext");
 (define-key *global-map* "F3" "findNext")
-;; mapKey(KeyEvent.VK_G, CTRL_MASK, "findNext");
-;; mapKey(KeyEvent.VK_F3, SHIFT_MASK, "findPrev");
 (define-key *global-map* "Shift F3" "findPrev")
-;; mapKey(KeyEvent.VK_H, CTRL_MASK, "findPrev");
-;; mapKey(KeyEvent.VK_F6, 0, "findInFiles");
 (define-key *global-map* "F6" "findInFiles")
-;; mapKey(KeyEvent.VK_F, CTRL_MASK | SHIFT_MASK, "findInFiles");
-;; mapKey(KeyEvent.VK_L, CTRL_MASK, "listOccurrences");
-;; mapKey(KeyEvent.VK_L, CTRL_MASK | SHIFT_MASK, "listFiles");
-;; mapKey(KeyEvent.VK_R, CTRL_MASK, "replace");
-(define-key *global-map* "Shift Alt 5" "replace")
-;; mapKey(KeyEvent.VK_R, CTRL_MASK | SHIFT_MASK, "replaceInFiles");
+(define-key *global-map* "Ctrl Shift F" "findInFiles")
+(define-key *global-map* "Ctrl F3" "listOccurrences")
+(define-key *global-map* "Ctrl Shift L" "listFiles")
+(define-key *global-map* "Shift Alt 5" "replace") ; M-%
+(define-key *global-map* "Ctrl Shift R" "replaceInFiles")
 
 ;; mapKey(KeyEvent.VK_K, CTRL_MASK, "killLine");
 (define-key *global-map* "Ctrl K" "killLine")
