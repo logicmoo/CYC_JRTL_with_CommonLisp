@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.2 2003-10-10 14:15:43 piso Exp $
+;;; $Id: defclass.lisp,v 1.3 2003-10-10 17:02:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,6 +49,12 @@
             (mapplist fun (cddr x)))))
 
 (defsetf class-name %set-class-name)
+(defsetf class-direct-superclasses %set-class-direct-superclasses)
+(defsetf class-direct-subclasses %set-class-direct-subclasses)
+(defsetf class-direct-methods %set-class-direct-methods)
+(defsetf class-direct-slots %set-class-direct-slots)
+(defsetf class-precedence-list %set-class-precedence-list)
+(defsetf class-slots %set-class-slots)
 
 (defun canonicalize-direct-slots (direct-slots)
   `(list ,@(mapcar #'canonicalize-direct-slot direct-slots)))
@@ -185,12 +191,151 @@
 (defun (setf slot-definition-allocation) (new-value slot)
   (setf (getf* slot ':allocation) new-value))
 
+;;; finalize-inheritance
+
+(defun std-finalize-inheritance (class)
+  (setf (class-precedence-list class)
+        (funcall (if (eq (class-of class) the-class-standard-class)
+                     #'std-compute-class-precedence-list
+                     #'compute-class-precedence-list)
+                 class))
+  (setf (class-slots class)
+        (funcall (if (eq (class-of class) the-class-standard-class)
+                     #'std-compute-slots
+                     #'compute-slots)
+                 class))
+  (values))
+
+;;; Class precedence lists
+
+(defun std-compute-class-precedence-list (class)
+  (let ((classes-to-order (collect-superclasses* class)))
+    (topological-sort classes-to-order
+                      (remove-duplicates
+                       (mapappend #'local-precedence-ordering
+                                  classes-to-order))
+                      #'std-tie-breaker-rule)))
+
+;;; topological-sort implements the standard algorithm for topologically
+;;; sorting an arbitrary set of elements while honoring the precedence
+;;; constraints given by a set of (X,Y) pairs that indicate that element
+;;; X must precede element Y.  The tie-breaker procedure is called when it
+;;; is necessary to choose from multiple minimal elements; both a list of
+;;; candidates and the ordering so far are provided as arguments.
+
+(defun topological-sort (elements constraints tie-breaker)
+  (let ((remaining-constraints constraints)
+        (remaining-elements elements)
+        (result ()))
+    (loop
+      (let ((minimal-elements
+             (remove-if
+              #'(lambda (class)
+                 (member class remaining-constraints
+                         :key #'cadr))
+              remaining-elements)))
+        (when (null minimal-elements)
+          (if (null remaining-elements)
+              (return-from topological-sort result)
+              (error "Inconsistent precedence graph.")))
+        (let ((choice (if (null (cdr minimal-elements))
+                          (car minimal-elements)
+                          (funcall tie-breaker
+                                   minimal-elements
+                                   result))))
+          (setq result (append result (list choice)))
+          (setq remaining-elements
+                (remove choice remaining-elements))
+          (setq remaining-constraints
+                (remove choice
+                        remaining-constraints
+                        :test #'member)))))))
+
+;;; In the event of a tie while topologically sorting class precedence lists,
+;;; the CLOS Specification says to "select the one that has a direct subclass
+;;; rightmost in the class precedence list computed so far."  The same result
+;;; is obtained by inspecting the partially constructed class precedence list
+;;; from right to left, looking for the first minimal element to show up among
+;;; the direct superclasses of the class precedence list constituent.
+;;; (There's a lemma that shows that this rule yields a unique result.)
+
+(defun std-tie-breaker-rule (minimal-elements cpl-so-far)
+  (dolist (cpl-constituent (reverse cpl-so-far))
+    (let* ((supers (class-direct-superclasses cpl-constituent))
+           (common (intersection minimal-elements supers)))
+      (when (not (null common))
+        (return-from std-tie-breaker-rule (car common))))))
+
+;;; This version of collect-superclasses* isn't bothered by cycles in the class
+;;; hierarchy, which sometimes happen by accident.
+
+(defun collect-superclasses* (class)
+  (labels ((all-superclasses-loop (seen superclasses)
+                                  (let ((to-be-processed
+                                         (set-difference superclasses seen)))
+                                    (if (null to-be-processed)
+                                        superclasses
+                                        (let ((class-to-process
+                                               (car to-be-processed)))
+                                          (all-superclasses-loop
+                                           (cons class-to-process seen)
+                                           (union (class-direct-superclasses
+                                                   class-to-process)
+                                                  superclasses)))))))
+          (all-superclasses-loop () (list class))))
+
+;;; The local precedence ordering of a class C with direct superclasses C_1,
+;;; C_2, ..., C_n is the set ((C C_1) (C_1 C_2) ...(C_n-1 C_n)).
+
+(defun local-precedence-ordering (class)
+  (mapcar #'list
+          (cons class
+                (butlast (class-direct-superclasses class)))
+          (class-direct-superclasses class)))
+
+;;; Slot inheritance
+
+(defun std-compute-slots (class)
+  (let* ((all-slots (mapappend #'class-direct-slots
+                               (class-precedence-list class)))
+         (all-names (remove-duplicates
+                     (mapcar #'slot-definition-name all-slots))))
+    (mapcar #'(lambda (name)
+               (funcall
+                (if (eq (class-of class) the-class-standard-class)
+                    #'std-compute-effective-slot-definition
+                    #'compute-effective-slot-definition)
+                class
+                (remove name all-slots
+                        :key #'slot-definition-name
+                        :test-not #'eq)))
+            all-names)))
+
+(defun std-compute-effective-slot-definition (class direct-slots)
+  (declare (ignore class))
+  (let ((initer (find-if-not #'null direct-slots
+                             :key #'slot-definition-initfunction)))
+    (make-effective-slot-definition
+     :name (slot-definition-name (car direct-slots))
+     :initform (if initer
+                   (slot-definition-initform initer)
+                   nil)
+     :initfunction (if initer
+                       (slot-definition-initfunction initer)
+                       nil)
+     :initargs (remove-duplicates
+                (mapappend #'slot-definition-initargs
+                           direct-slots))
+     :allocation (slot-definition-allocation (car direct-slots)))))
+
 ;;; Simple vectors are used for slot storage.
 
 (defun allocate-slot-storage (size initial-value)
   (make-array size :initial-element initial-value))
 
 ;;; Standard instance allocation
+
+(defvar the-class-standard-class (find-class 'standard-class))
 
 (defparameter secret-unbound-value (list "slot unbound"))
 
@@ -203,21 +348,50 @@
    (allocate-slot-storage (count-if #'instance-slot-p (class-slots class))
                           secret-unbound-value)))
 
-(defun make-instance-standard-class
-  (metaclass &key name direct-superclasses direct-slots
-             &allow-other-keys)
+(defun make-instance-standard-class (metaclass &key name direct-superclasses direct-slots
+                                               &allow-other-keys)
   (declare (ignore metaclass))
+;;   (format t "name = ~S~%" name)
+;;   (format t "direct-superclasses = ~S~%" direct-superclasses)
+;;   (format t "direct-slots = ~S~%" direct-slots)
   (let ((class (std-allocate-instance (find-class 'standard-class))))
     (setf (class-name class) name)
-;;     (setf (class-direct-subclasses class) ())
-;;     (setf (class-direct-methods class) ())
+    (setf (class-direct-subclasses class) ())
+    (setf (class-direct-methods class) ())
     (std-after-initialization-for-classes class
                                           :direct-slots direct-slots
                                           :direct-superclasses direct-superclasses)
     class))
 
 ;; FIXME
-(defun std-after-initialization-for-classes (&rest args) )
+(defun std-after-initialization-for-classes (class
+                                             &key direct-superclasses direct-slots
+                                             &allow-other-keys)
+  (let ((supers
+         (or direct-superclasses
+             (list (find-class 'standard-object)))))
+    (setf (class-direct-superclasses class) supers)
+    (dolist (superclass supers)
+      (push class (class-direct-subclasses superclass))))
+  (let ((slots
+         (mapcar #'(lambda (slot-properties)
+                    (apply #'make-direct-slot-definition
+                           slot-properties))
+                 direct-slots)))
+    (setf (class-direct-slots class) slots)
+;;     (dolist (direct-slot slots)
+;;       (dolist (reader (slot-definition-readers direct-slot))
+;;         (add-reader-method
+;;          class reader (slot-definition-name direct-slot)))
+;;       (dolist (writer (slot-definition-writers direct-slot))
+;;         (add-writer-method
+;;          class writer (slot-definition-name direct-slot))))
+    )
+  (funcall (if (eq (class-of class) (find-class 'standard-class))
+               #'std-finalize-inheritance
+               #'finalize-inheritance)
+           class)
+  (values))
 
 (defun ensure-class (name &rest all-keys &allow-other-keys)
   (let ((class (find-class name nil)))
