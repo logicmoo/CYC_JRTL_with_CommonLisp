@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.19 2005-02-06 13:25:39 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.20 2005-02-26 17:41:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -109,6 +109,7 @@
          (return-from normalize-type (list tp '* '*)))
        (when (= (length i) 1)
          (setf i (append i '(*))))
+       (setf (car i) (normalize-type (car i)))
        (return-from normalize-type (cons tp i)))
       (VECTOR
        (case (length i)
