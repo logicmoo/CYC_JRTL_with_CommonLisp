@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.10 2005-03-06 21:28:19 piso Exp $
+;;; $Id: emacs.lisp,v 1.11 2005-03-07 03:34:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package #:j)
 
-(export '(java-mode-map lisp-mode-map))
+(export '(emacs-mode java-mode-map lisp-mode-map))
 
 (defpackage #:emacs
   (:use #:cl #:ext #:j))
@@ -34,15 +34,15 @@
   (dolist (mapping mappings)
     (define-key map (first mapping) (second mapping))))
 
-(defparameter *global-map* (make-keymap))
+(defparameter *emacs-global-map* (make-keymap))
 (defparameter *esc-map* (make-keymap))
 (defparameter *control-x-map* (make-keymap))
 (defparameter *help-map* (make-keymap))
 (defparameter *java-mode-map* (make-keymap))
 
-(define-key *global-map* "Escape" *esc-map*)
-(define-key *global-map* "Ctrl X" *control-x-map*)
-(define-key *global-map* "Ctrl H" *help-map*)
+(define-key *emacs-global-map* "Escape" *esc-map*)
+(define-key *emacs-global-map* "Ctrl X" *control-x-map*)
+(define-key *emacs-global-map* "Ctrl H" *help-map*)
 
 ;; // File menu.
 (define-key *control-x-map* "Ctrl F" "openFile")
@@ -60,17 +60,17 @@
 
 ;; mapKey(KeyEvent.VK_P, ALT_MASK, "properties");
 ;; mapKey(KeyEvent.VK_N, CTRL_MASK | SHIFT_MASK, "newFrame");
-(define-key *global-map* "Alt X" "executeCommand")
+(define-key *emacs-global-map* "Alt X" "executeCommand")
 (define-key *esc-map* #\x "executecommand")
 ;; mapKey(KeyEvent.VK_P, CTRL_MASK, "print");
 ;; mapKey(KeyEvent.VK_Q, CTRL_MASK | SHIFT_MASK, "saveAllExit");
 (define-key *control-x-map* "Ctrl C" "saveAllExit")
 
-(define-key *global-map* "Ctrl Space" #'set-mark-command)
-(define-key *global-map* "Ctrl Shift 2" #'set-mark-command) ; C-@
+(define-key *emacs-global-map* "Ctrl Space" #'set-mark-command)
+(define-key *emacs-global-map* "Ctrl Shift 2" #'set-mark-command) ; C-@
 
 ;; // Edit menu.
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   `(("Ctrl /"                   "undo")
     ("Ctrl Shift 0x2d"          "undo") ; C-_
     ("Shift Alt 0x2d"           "redo") ; M-_
@@ -94,7 +94,7 @@
 ;; mapKey(KeyEvent.VK_M, CTRL_MASK, "findMatchingChar");
 ;; mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "selectSyntax");
 
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   '(("Ctrl Alt Up"              "findFirstOccurrence")
     ("Ctrl Alt NumPad Up"       "findFirstOccurrence")
     ("Alt Up"                   "findPrevWord")
@@ -104,11 +104,11 @@
 
 ;; mapKey(KeyEvent.VK_N, CTRL_MASK | ALT_MASK, "nextChange");
 ;; mapKey(KeyEvent.VK_P, CTRL_MASK | ALT_MASK, "previousChange");
-(define-key *global-map* "F5" "pushPosition")
-(define-key *global-map* "Shift F5" "popPosition")
+(define-key *emacs-global-map* "F5" "pushPosition")
+(define-key *emacs-global-map* "Shift F5" "popPosition")
 
 ;; // Search menu.
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   '(("Ctrl S"                   "incrementalFind")
     ("Alt F3"                   "find")
     ("F3"                       "findNext")
@@ -122,14 +122,14 @@
 
 ;; Emacs uses Ctrl Alt L for reposition-window
 ;; XEmacs uses Ctrl Alt L for switch-to-other-buffer
-(define-key *global-map* "Ctrl Alt L" "listOccurrencesOfPatternAtDot")
+(define-key *emacs-global-map* "Ctrl Alt L" "listOccurrencesOfPatternAtDot")
 
 ;; mapKey(KeyEvent.VK_K, CTRL_MASK, "killLine");
-(define-key *global-map* "Ctrl K" "killLine")
+(define-key *emacs-global-map* "Ctrl K" "killLine")
 ;; mapKey(KeyEvent.VK_DELETE, CTRL_MASK, "deleteWordRight");
-(define-key *global-map* "Ctrl Delete" "deleteWordRight")
+(define-key *emacs-global-map* "Ctrl Delete" "deleteWordRight")
 
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   '(("Home"                     "home")
     ("Ctrl A"                   "home")
     ("End"                      "end");
@@ -182,20 +182,20 @@
     ))
 
 ;; Emacs uses Ctrl Up for backward-paragraph, which j doesn't have.
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   '(("Ctrl Up"                  "windowUp")
     ("Ctrl NumPad Up"           "windowUp")))
 ;; Emacs uses Ctrl Down for forward-paragraph, which j doesn't have.
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   '(("Ctrl Down"                "windowDown")
     ("Ctrl NumPad Down"         "windowDown")))
 
 ;; Emacs uses Alt Left for backward-word, which is also on Alt B and Ctrl Left.
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   '(("Alt Left"                 "prevBuffer")
     ("Alt NumPad Left"          "prevBuffer")))
 ;; Emacs uses Alt Right for forward-word, which is also on Alt F and Ctrl Right.
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   '(("Alt Right"                "nextBuffer")
     ("Alt NumPad Right"         "nextBuffer")))
 
@@ -206,7 +206,7 @@
 ;; mapKey(KeyEvent.VK_PAGE_UP, CTRL_MASK, "top");
 ;; mapKey(KeyEvent.VK_PAGE_DOWN, CTRL_MASK, "bottom");
 ;; mapKey(KeyEvent.VK_DELETE, 0, "delete");
-(define-keys *global-map*
+(define-keys *emacs-global-map*
   '(("Delete"                   "delete")
     ("Ctrl D"                   "delete")
     ("Backspace"                "backspace")
@@ -217,12 +217,13 @@
     ("Ctrl J"                   "newlineAndIndent")))
 
 ;; keyboard-quit
-(define-key *global-map* "Ctrl G" "escape")
+(define-key *emacs-global-map* "Ctrl G" "escape")
 
 ;; mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "gotoFile");
 ;; mapKey(KeyEvent.VK_B, CTRL_MASK | SHIFT_MASK, "browseFileAtDot");
 
 ;; mapKey(KeyEvent.VK_D, CTRL_MASK, "dir");
+(define-key *control-x-map* #\d "dir")
 
 ;; mapKey(KeyEvent.VK_F2, SHIFT_MASK, "stamp");
 
@@ -259,20 +260,20 @@
 ;; mapKey(KeyEvent.VK_BACK_SLASH, CTRL_MASK | SHIFT_MASK, "selectToTemporaryMarker");
 
 ;; mapKey(KeyEvent.VK_F11, 0, "commentRegion");
-(define-key *global-map* "F11" "commentRegion")
+(define-key *emacs-global-map* "F11" "commentRegion")
 ;; mapKey(KeyEvent.VK_F11, SHIFT_MASK, "uncommentRegion");
-(define-key *global-map* "Shift F11" "uncommentRegion")
+(define-key *emacs-global-map* "Shift F11" "uncommentRegion")
 
 ;; // Duplicate mappings to support IBM 1.3 for Linux.
 ;; mapKey(0xffc8, 0, "commentRegion");
 ;; mapKey(0xffc8, SHIFT_MASK, "uncommentRegion");
 
 ;; mapKey(KeyEvent.VK_F12, 0, "wrapParagraph");
-(define-key *global-map* "F12" "wrapParagraph")
+(define-key *emacs-global-map* "F12" "wrapParagraph")
 ;; mapKey(KeyEvent.VK_F12, SHIFT_MASK, "unwrapParagraph");
-(define-key *global-map* "Shift F12" "unwrapParagraph")
+(define-key *emacs-global-map* "Shift F12" "unwrapParagraph")
 ;; mapKey(KeyEvent.VK_F12, CTRL_MASK, "toggleWrap");
-(define-key *global-map* "Ctrl F12" "toggleWrap")
+(define-key *emacs-global-map* "Ctrl F12" "toggleWrap")
 
 ;; // Duplicate mappings to support IBM 1.3 for Linux.
 ;; mapKey(0xffc9, 0, "wrapParagraph"); // F12
@@ -282,7 +283,7 @@
 ;; mapKey(KeyEvent.VK_T, CTRL_MASK | ALT_MASK, "visibleTabs");
 
 ;; mapKey(KeyEvent.VK_SLASH, ALT_MASK, "expand");
-(define-key *global-map* "Alt /" "expand")
+(define-key *emacs-global-map* "Alt /" "expand")
 
 ;; // On Windows, Alt Space drops down the window menu.
 ;; if (!Platform.isPlatformWindows())
@@ -293,11 +294,11 @@
 ;; mapKey(KeyEvent.VK_W, ALT_MASK, "selectWord");
 
 ;; mapKey(VK_MOUSE_1, 0, "mouseMoveDotToPoint");
-(define-key *global-map* "Mouse-1" "mouseMoveDotToPoint")
+(define-key *emacs-global-map* "Mouse-1" "mouseMoveDotToPoint")
 ;; mapKey(VK_MOUSE_1, SHIFT_MASK, "mouseSelect");
 ;; mapKey(VK_MOUSE_1, CTRL_MASK | SHIFT_MASK, "mouseSelectColumn");
 ;; mapKey(VK_DOUBLE_MOUSE_1, 0, "selectWord");
-(define-key *global-map* "Double Mouse-1" "selectWord")
+(define-key *emacs-global-map* "Double Mouse-1" "selectWord")
 
 ;; if (Platform.isPlatformUnix()) {
 ;; mapKey(VK_MOUSE_2, 0, "pastePrimarySelection");
@@ -328,11 +329,11 @@
 ;; // Map these globally so they're available in the compilation buffer too.
 ;; mapKey(KeyEvent.VK_F4, 0, "nextError");
 (define-key *control-x-map* "`" "nextError")
-(define-key *global-map* "F4" "nextError")
+(define-key *emacs-global-map* "F4" "nextError")
 ;; mapKey(KeyEvent.VK_F4, SHIFT_MASK, "previousError");
-(define-key *global-map* "Shift F4" "previousError")
+(define-key *emacs-global-map* "Shift F4" "previousError")
 ;; mapKey(KeyEvent.VK_M, CTRL_MASK | ALT_MASK, "showMessage");
-(define-key *global-map* "Ctrl Alt M" "showMessage")
+(define-key *emacs-global-map* "Ctrl Alt M" "showMessage")
 
 ;; // Windows VM seems to need this mapping for the tab key to work properly.
 ;; // There's also code in Dispatcher.dispatchKeyTyped to handle the tab key.
@@ -350,7 +351,7 @@
 ;; mapKey(0x2d, CTRL_MASK | SHIFT_MASK, "toTop"); // Ctrl Shift -
 ;; }
 
-(define-key *global-map* "Alt ." "findTagAtDot")
+(define-key *emacs-global-map* "Alt ." "findTagAtDot")
 
 ;; Help.
 (define-keys *help-map*
@@ -418,12 +419,18 @@
 ;; }
 
 
-(defun emacs ()
-  (use-global-map *global-map*)
-  ;; FIXME This is the right idea (so mappings like Alt F will be possible),
-  ;; but it doesn't quite work.
-  (set-global-property "useMenuMnemonics" "false")
-  (j::%execute-command "reloadKeyMaps"))
+(defun emacs-mode (&optional (arg t))
+  (cond (arg
+         ;; FIXME This is the right idea (so mappings like Alt F will be
+         ;; possible), but it doesn't work.
+         (set-global-property "useMenuMnemonics" "false")
+         (set-global-property "emulation" "emacs")
+         (use-global-map *emacs-global-map*)
+         (j::%execute-command "reloadKeyMaps"))
+        ((null arg)
+         (set-global-property "useMenuMnemonics" "false")
+         (set-global-property "emulation" nil)
+         (j::%execute-command "defaultKeyMaps"))))
 
 (defun java-mode-map ()
   *java-mode-map*)

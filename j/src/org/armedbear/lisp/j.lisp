@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.42 2005-03-03 14:09:31 piso Exp $
+;;; $Id: j.lisp,v 1.43 2005-03-07 03:34:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@
           defun-at-point
           delete-region
           editor-buffer
-          emacs
+          emacs-mode
           end-of-line
           execute-command
           find-file-buffer
@@ -88,7 +88,6 @@
           save-excursion
           search-backward
           search-forward
-          set-global-property
           set-mark
           status
           switch-to-buffer
@@ -101,18 +100,7 @@
           with-other-editor
           with-single-undo))
 
-(autoload 'emacs)
-
-(defun set-global-property (&rest args)
-  (let ((count (length args)) key value)
-    (cond ((oddp count)
-           (error "odd number of arguments to SET-GLOBAL-PROPERTY"))
-          ((= count 2)
-           (%set-global-property (string (first args)) (second args)))
-          (t
-           (do ((args args (cddr args)))
-               ((null args) (values))
-             (%set-global-property (string (first args)) (second args)))))))
+(autoload 'emacs-mode "emacs")
 
 (defun reset-display ()
   (jstatic "resetDisplay" "org.armedbear.j.Editor"))
