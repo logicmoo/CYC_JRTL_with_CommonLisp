@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.30 2003-03-30 02:05:20 piso Exp $
+;;; $Id: sequences.lisp,v 1.31 2003-04-06 19:59:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -176,15 +176,7 @@
 
 ;;; SUBSEQ (from CMUCL)
 
-(defun vector-subseq* (sequence start &optional end)
-  (when (null end) (setf end (length sequence)))
-  (do ((old-index start (1+ old-index))
-       (new-index 0 (1+ new-index))
-       (copy (make-sequence-like sequence (- end start))))
-    ((= old-index end) copy)
-    (setf (aref copy new-index) (aref sequence old-index))))
-
-(defun list-subseq* (sequence start &optional end)
+(defun list-subseq (sequence start &optional end)
   (if (and end (>= start end))
       ()
       (let* ((groveled (nthcdr start sequence))
@@ -199,8 +191,8 @@
 
 (defun subseq (sequence start &optional end)
   (seq-dispatch sequence
-		(list-subseq* sequence start end)
-		(vector-subseq* sequence start end)))
+		(list-subseq sequence start end)
+		(vector-subseq sequence start end)))
 
 
 ;; COPY-SEQ (from CMUCL)
