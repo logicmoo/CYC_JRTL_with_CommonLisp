@@ -2,7 +2,7 @@
  * IncrementalFindTextFieldHandler.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: IncrementalFindTextFieldHandler.java,v 1.6 2005-01-24 16:18:29 piso Exp $
+ * $Id: IncrementalFindTextFieldHandler.java,v 1.7 2005-03-04 17:34:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -235,7 +235,7 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
                 return;
             }
         } else {
-            editor.handleKeyEvent(e.getKeyChar(), keyCode, e.getModifiers());
+            editor.handleJEvent(new JEvent(e));
             // We may need to do a horizontal reframe (home, end).
             editor.updateDisplay();
         }

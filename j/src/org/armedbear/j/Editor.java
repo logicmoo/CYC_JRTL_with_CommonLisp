@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.140 2005-03-03 19:28:17 piso Exp $
+ * $Id: Editor.java,v 1.141 2005-03-04 17:33:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2436,8 +2436,12 @@ public final class Editor extends JPanel implements Constants,
 
     private String prefixKeyStatusText;
 
-    public boolean handleKeyEvent(char keyChar, int keyCode, int modifiers)
+    public boolean handleJEvent(JEvent event)
     {
+        char keyChar = event.getKeyChar();
+        int keyCode = event.getKeyCode();
+        int modifiers = event.getModifiers();
+
         if (insertingKeyText) {
             insertKeyTextInternal(keyChar, keyCode, modifiers);
             return true;

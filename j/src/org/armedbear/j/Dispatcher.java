@@ -1,8 +1,8 @@
 /*
  * Dispatcher.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: Dispatcher.java,v 1.13 2004-09-13 13:48:31 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Dispatcher.java,v 1.14 2005-03-04 17:34:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -243,7 +243,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         if (DEBUG_KEY_PRESSED)
             Log.debug("modifiers = 0x" + Integer.toString(modifiers, 16));
 
-        boolean handled = editor.handleKeyEvent(c, keycode, modifiers);
+        boolean handled = editor.handleJEvent(new JEvent(JEvent.KEY_PRESSED,
+                                                         keycode, c, modifiers));
 
         if (handled) {
             ignoreKeyTyped = true;
@@ -277,7 +278,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
 
         char c = e.getKeyChar();
 
-        boolean handled = editor.handleKeyEvent(c, 0, 0);
+        boolean handled = editor.handleJEvent(new JEvent(JEvent.KEY_TYPED,
+                                                         0, c, 0));
 
         Buffer buffer = editor.getBuffer();
 
@@ -537,7 +539,8 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         }
         if (keycode == 0)
             return false;
-        return editor.handleKeyEvent('\0', keycode, modifiers);
+        return editor.handleJEvent(new JEvent(JEvent.MOUSE_PRESSED,
+                                              keycode, (char) 0, modifiers));
     }
 
     public void mouseDragged(MouseEvent e)
