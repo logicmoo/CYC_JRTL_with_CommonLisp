@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.5 2003-02-15 16:48:17 piso Exp $
+ * $Id: Vector.java,v 1.6 2003-02-25 16:46:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class Vector extends AbstractVector implements SequenceType,
-    VectorType
+public class Vector extends AbstractVector implements SequenceType, VectorType
 {
     private final LispObject[] elements;
     private final int length;
