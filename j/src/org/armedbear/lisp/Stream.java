@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.66 2004-05-05 18:04:11 piso Exp $
+ * $Id: Stream.java,v 1.67 2004-05-11 14:30:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1075,6 +1075,10 @@ public class Stream extends LispObject
         try {
             int n = reader.read();
             ++offset;
+            if (n == '\r') {
+                if (interactive && Utilities.isPlatformWindows())
+                    return _readChar();
+            }
             if (n == '\n')
                 ++lineNumber;
             return n;
