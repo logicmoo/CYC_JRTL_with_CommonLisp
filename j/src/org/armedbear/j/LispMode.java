@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.40 2003-04-14 15:43:43 piso Exp $
+ * $Id: LispMode.java,v 1.41 2003-04-21 01:11:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,6 +208,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
                     if (p2 != null) {
                         // Skip past end test form.
                         p2 = forwardSexp(p2);
+                        // Make sure line numbers are right for isBefore().
+                        if (buffer.needsRenumbering())
+                            buffer.renumber();
                         if (p2 != null && here.isBefore(p2)) {
                             // This is the end test form. Indent it under the
                             // opening '(' of the variable list
