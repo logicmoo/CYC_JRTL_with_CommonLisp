@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.109 2003-08-06 13:08:37 piso Exp $
+ * $Id: Editor.java,v 1.110 2003-08-07 17:55:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,7 @@ public final class Editor extends JPanel implements Constants,
         lastCommand = command;
     }
 
-    private static Marker[] bookmarks = new Marker[10];
+    private static Marker[] bookmarks = new Marker[11];
 
     private static TagFileManager tagFileManager;
 
@@ -1082,6 +1082,21 @@ public final class Editor extends JPanel implements Constants,
                     m.gotoMarker(this);
             }
         }
+    }
+
+    // Drop a temporary bookmark, overwriting the existing temporary bookmark
+    // if one exists.
+    public void dropTemporaryMarker()
+    {
+        bookmarks[10] = new Marker(buffer, dot);
+        status("Temporary marker dropped");
+    }
+
+    public void gotoTemporaryMarker()
+    {
+        Marker m = bookmarks[10];
+        if (m != null)
+            m.gotoMarker(this);
     }
 
     public void deleteLineSeparator()
