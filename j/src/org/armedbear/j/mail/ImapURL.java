@@ -2,7 +2,7 @@
  * ImapURL.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapURL.java,v 1.1.1.1 2002-09-24 16:10:11 piso Exp $
+ * $Id: ImapURL.java,v 1.2 2002-12-30 16:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,23 +39,55 @@ public final class ImapURL extends MailboxURL
         int index = s.indexOf('}');
         if (index < 0)
             throw new MalformedURLException();
-        host = s.substring(1, index);
         folderName = s.substring(index + 1);
+        s = s.substring(1, index);
         port = DEFAULT_PORT;
-        index = host.indexOf(':');
-        if (index >= 0) {
-            try {
-                port = Integer.parseInt(host.substring(index + 1));
-            }
-            catch (Exception e) {
+        // The user name may be enclosed in quotes.
+        if (s.length() > 0 && s.charAt(0) == '"') {
+            index = s.indexOf('"', 1);
+            if (index >= 0) {
+                user = s.substring(1, index);
+                s = s.substring(index + 1);
+            } else
                 throw new MalformedURLException();
+            // We've got the user name.
+            if (s.length() == 0) {
+                // No host specified.
+                host = "127.0.0.1";
+                return;
             }
-            host = host.substring(0, index);
-        }
-        index = host.indexOf('@');
-        if (index >= 0) {
-            user = host.substring(0, index);
-            host = host.substring(index + 1);
+            if (s.charAt(0) != '@')
+                throw new MalformedURLException();
+            s = s.substring(1); // Skip '@'.
+            index = s.indexOf(':');
+            if (index >= 0) {
+                try {
+                    port = Integer.parseInt(s.substring(index + 1));
+                }
+                catch (Exception e) {
+                    throw new MalformedURLException();
+                }
+                s = s.substring(0, index);
+            }
+            // What's left is the host name.
+            host = s;
+        } else {
+            index = s.indexOf(':');
+            if (index >= 0) {
+                try {
+                    port = Integer.parseInt(s.substring(index + 1));
+                }
+                catch (Exception e) {
+                    throw new MalformedURLException();
+                }
+                s = s.substring(0, index);
+            }
+            index = s.indexOf('@');
+            if (index >= 0) {
+                user = s.substring(0, index);
+                host = s.substring(index + 1);
+            } else
+                host = s;
         }
         if (folderName.equalsIgnoreCase("inbox"))
             folderName = "inbox";
