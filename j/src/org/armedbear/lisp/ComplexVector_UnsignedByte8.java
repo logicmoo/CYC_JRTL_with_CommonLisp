@@ -2,7 +2,7 @@
  * ComplexVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector_UnsignedByte8.java,v 1.3 2005-03-25 03:19:20 piso Exp $
+ * $Id: ComplexVector_UnsignedByte8.java,v 1.4 2005-03-25 16:09:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,6 +165,19 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         return AREF(Fixnum.getValue(index));
+    }
+
+    public void aset(int index, int n) throws ConditionThrowable
+    {
+        if (elements != null) {
+            try {
+                elements[index] = (byte) n;
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                badIndex(index, elements.length);
+            }
+        } else
+            array.aset(index + displacement, n);
     }
 
     public void aset(int index, LispObject newValue) throws ConditionThrowable

@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.123 2005-03-25 03:19:21 piso Exp $
+ * $Id: LispObject.java,v 1.124 2005-03-25 16:09:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -425,6 +425,12 @@ public class LispObject extends Lisp
         catch (ClassCastException e) {
             return signal(new TypeError(index, Symbol.FIXNUM));
         }
+    }
+
+    public void aset(int index, int n)
+        throws ConditionThrowable
+    {
+        signal(new TypeError(this, Symbol.ARRAY));
     }
 
     public void aset(int index, LispObject newValue)
