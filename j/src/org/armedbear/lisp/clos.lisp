@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.105 2004-06-17 10:53:16 piso Exp $
+;;; $Id: clos.lisp,v 1.106 2004-06-17 11:50:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -971,8 +971,7 @@
                         :specializers ,specializers-form
                         :documentation ,documentation
                         :declarations ',declarations
-                        :body ',body
-                        :environment ,env)))))
+                        :body ',body)))))
 
 (defun canonicalize-specializers (specializers)
   (mapcar #'canonicalize-specializer specializers))
