@@ -2,7 +2,7 @@
  * DirectoryCache.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: DirectoryCache.java,v 1.2 2002-11-30 15:19:30 piso Exp $
+ * $Id: DirectoryCache.java,v 1.3 2002-11-30 18:37:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 public final class DirectoryCache
@@ -31,10 +32,14 @@ public final class DirectoryCache
 
     private Vector entries = new Vector();
 
-    public static DirectoryCache getDirectoryCache()
+    public static synchronized DirectoryCache getDirectoryCache()
     {
-        if (cache == null)
+        if (cache == null) {
             cache = new DirectoryCache();
+            IdleThread idleThread = IdleThread.getInstance();
+            if (idleThread != null)
+                idleThread.maybeAddTask(PruneDirectoryCacheTask.getInstance());
+        }
         return cache;
     }
 
@@ -57,7 +62,16 @@ public final class DirectoryCache
 
     public synchronized void put(File file, String listing)
     {
-        entries.add(new DirectoryCacheEntry(file, listing, System.currentTimeMillis()));
+        String netPath = file.netPath();
+        for (int i = entries.size(); i-- > 0;) {
+            DirectoryCacheEntry entry = (DirectoryCacheEntry) entries.get(i);
+            if (entry.getFile().netPath().equals(netPath)) {
+                entries.remove(i);
+                break;
+            }
+        }
+        entries.add(new DirectoryCacheEntry(file, listing,
+            System.currentTimeMillis()));
     }
 
     public synchronized void purge(String hostname)
@@ -81,5 +95,46 @@ public final class DirectoryCache
                 entries.remove(i);
             }
         }
+    }
+    
+    private static class PruneDirectoryCacheTask extends IdleThreadTask
+    {
+        private static PruneDirectoryCacheTask instance;
+
+        private long lastRun;
+
+        private PruneDirectoryCacheTask()
+        {
+            lastRun = System.currentTimeMillis();
+            setIdle(300000); // User must be idle for 5 minutes.
+            setRunnable(runnable);
+        }
+
+        private static synchronized PruneDirectoryCacheTask getInstance()
+        {
+            if (instance == null)
+                instance = new PruneDirectoryCacheTask();
+            return instance;
+        }
+
+        private final Runnable runnable = new Runnable() {
+            public void run()
+            {
+                // Only check every 5 minutes.
+                if (System.currentTimeMillis() - lastRun > 300000) {
+                    long now = System.currentTimeMillis();
+                    synchronized (cache) {
+                        Iterator it = cache.entries.iterator();
+                        while (it.hasNext()) {
+                            DirectoryCacheEntry entry =
+                                (DirectoryCacheEntry) it.next();
+                            if (entry.getWhen() + timeout < now)
+                                it.remove();
+                        }
+                    }
+                    lastRun = now;
+                }
+            }
+        };
     }
 }
