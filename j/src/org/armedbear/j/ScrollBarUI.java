@@ -2,7 +2,7 @@
  * ScrollBarUI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ScrollBarUI.java,v 1.1 2003-07-25 18:40:29 piso Exp $
+ * $Id: ScrollBarUI.java,v 1.2 2003-07-26 23:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,6 @@ import javax.swing.plaf.basic.BasicScrollBarUI;
 
 public final class ScrollBarUI extends BasicScrollBarUI
 {
-    private static final boolean EXTRA_SHADOW = false;
-
     public static ComponentUI createUI(JComponent c)
     {
         return new ScrollBarUI();
