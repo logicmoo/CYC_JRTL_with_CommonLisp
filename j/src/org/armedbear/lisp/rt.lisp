@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.125 2003-09-11 16:04:41 piso Exp $
+;;; $Id: rt.lisp,v 1.126 2003-09-11 16:33:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -180,6 +180,7 @@
                               "complexp"
                               "concatenate"
                               "cond"
+                              "conjugate"
                               "cons"
                               "cons-test-01"
                               "cons-test-03"
