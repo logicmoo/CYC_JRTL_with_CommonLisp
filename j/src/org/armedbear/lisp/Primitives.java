@@ -1,8 +1,8 @@
 /*
  * Primitives.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.549 2004-01-02 01:24:07 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Primitives.java,v 1.550 2004-01-07 19:52:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -1211,7 +1212,9 @@ public final class Primitives extends Lisp
                     initArgs = new Cons(args[i], initArgs);
                 initArgs = initArgs.nreverse();
                 Condition condition;
-                if (datum == Symbol.PACKAGE_ERROR)
+                if (datum == Symbol.FILE_ERROR)
+                    condition = new FileError(initArgs);
+                else if (datum == Symbol.PACKAGE_ERROR)
                     condition = new PackageError(initArgs);
                 else if (datum == Symbol.PARSE_ERROR)
                     condition = new ParseError(initArgs);
@@ -4443,6 +4446,19 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new LispString(Integer.toHexString(System.identityHashCode(arg)));
+        }
+    };
+
+    // ### mkdir
+    private static final Primitive1 MKDIR =
+        new Primitive1("mkdir", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispString)
+                return new File(((LispString)arg).getValue()).mkdir() ? T : NIL;
+            else
+                return signal(new TypeError(arg, Symbol.STRING));
         }
     };
 
