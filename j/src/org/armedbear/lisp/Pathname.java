@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.35 2004-01-06 16:34:18 piso Exp $
+ * $Id: Pathname.java,v 1.36 2004-01-07 02:59:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,14 +62,30 @@ public final class Pathname extends LispObject
                 directory = list2(Keyword.RELATIVE, Keyword.BACK);
                 return;
             }
+            if (Utilities.isPlatformWindows()) {
+                if (s.length() >= 2 && s.charAt(1) == ':') {
+                    device = new LispString(s.charAt(0));
+                    s = s.substring(2);
+                }
+            }
             String d = null;
             // Find last file separator char.
-            for (int i = s.length(); i-- > 0;) {
-                char c = s.charAt(i);
-                if (c == '/' || c == '\\') {
-                    d = s.substring(0, i + 1);
-                    s = s.substring(i + 1);
-                    break;
+            if (Utilities.isPlatformWindows()) {
+                for (int i = s.length(); i-- > 0;) {
+                    char c = s.charAt(i);
+                    if (c == '/' || c == '\\') {
+                        d = s.substring(0, i + 1);
+                        s = s.substring(i + 1);
+                        break;
+                    }
+                }
+            } else {
+                for (int i = s.length(); i-- > 0;) {
+                    if (s.charAt(i) == '/') {
+                        d = s.substring(0, i + 1);
+                        s = s.substring(i + 1);
+                        break;
+                    }
                 }
             }
             if (d != null) {
@@ -109,10 +125,10 @@ public final class Pathname extends LispObject
     private static final LispObject parseDirectory(String d)
         throws ConditionThrowable
     {
-        if (d.equals("/"))
+        if (d.equals("/") || (Utilities.isPlatformWindows() && d.equals("\\")))
             return new Cons(Keyword.ABSOLUTE);
         LispObject result;
-        if (d.startsWith("/"))
+        if (d.startsWith("/") || (Utilities.isPlatformWindows() && d.startsWith("\\")))
             result = new Cons(Keyword.ABSOLUTE);
         else
             result = new Cons(Keyword.RELATIVE);
@@ -160,7 +176,18 @@ public final class Pathname extends LispObject
     {
         if (namestring != null)
             return namestring;
+        if (name == NIL && type != NIL) {
+            Debug.assertTrue(namestring == null);
+            return null;
+        }
         StringBuffer sb = new StringBuffer();
+        if (Utilities.isPlatformWindows() && device != NIL) {
+            if (device instanceof LispString)
+                sb.append(((LispString)device).getValue());
+            else
+                Debug.assertTrue(false);
+            sb.append(':');
+        }
         if (directory instanceof LispString)
             Debug.assertTrue(false);
         if (directory != NIL) {
@@ -185,15 +212,18 @@ public final class Pathname extends LispObject
                 temp = temp.cdr();
             }
         }
-        if (sb.length() > 0 && sb.charAt(sb.length() - 1) != File.separatorChar)
-            sb.append(File.separatorChar);
         if (name instanceof LispString)
             sb.append(((LispString)name).getValue());
         else if (name == Keyword.WILD)
             sb.append('*');
-        if (type instanceof LispString) {
+        if (type != NIL) {
             sb.append('.');
-            sb.append(((LispString)type).getValue());
+            if (type instanceof LispString)
+                sb.append(((LispString)type).getValue());
+            else if (type == Keyword.WILD)
+                sb.append('*');
+            else
+                Debug.assertTrue(false);
         }
         return namestring = sb.toString();
     }
@@ -245,14 +275,23 @@ public final class Pathname extends LispObject
     {
         try {
             StringBuffer sb = new StringBuffer("#P");
-            if (name != NIL) {
-                sb.append('"');
-                sb.append(getNamestring());
-                sb.append('"');
-            } else if (directory != NIL && type == NIL) {
-                sb.append('"');
-                sb.append(getNamestring());
-                sb.append('"');
+            boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
+            boolean useNamestring = false;
+            String s = getNamestring();
+            if (s != null) {
+                // We have a namestring. Check for non-NIL values of pathname
+                // components that can't be read from the namestring.
+                if (Utilities.isPlatformWindows()) {
+                    if (host == NIL && version == NIL)
+                        useNamestring = true;
+                } else {
+                    // Unix.
+                    if (host == NIL && device == NIL && version == NIL)
+                        useNamestring = true;
+                }
+            }
+            if (useNamestring) {
+                sb.append(quoteEscape(s));
             } else {
                 sb.append('(');
                 if (host != NIL) {
@@ -289,6 +328,21 @@ public final class Pathname extends LispObject
         catch (ConditionThrowable t) {
             return unreadableString("PATHNAME");
         }
+    }
+
+    private static final String quoteEscape(String s) throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append('"');
+        final int limit = s.length();
+        for (int i = 0; i < limit; i++) {
+            char c = s.charAt(i);
+            if (c == '\"' || c == '\\')
+                sb.append('\\');
+            sb.append(c);
+        }
+        sb.append('"');
+        return sb.toString();
     }
 
     public static Pathname parseNamestring(String namestring)
