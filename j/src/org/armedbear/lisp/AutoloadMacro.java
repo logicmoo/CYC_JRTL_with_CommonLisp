@@ -2,7 +2,7 @@
  * AutoloadMacro.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AutoloadMacro.java,v 1.10 2004-03-24 15:22:59 piso Exp $
+ * $Id: AutoloadMacro.java,v 1.11 2004-03-31 00:57:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,11 @@ public final class AutoloadMacro extends Autoload
         super(symbol, fileName, null);
     }
 
+    private static void installAutoloadMacro(Symbol symbol, String fileName)
+    {
+        symbol.setSymbolFunction(new AutoloadMacro(symbol, fileName));
+    }
+
     public void load() throws ConditionThrowable
     {
         Load.loadSystemFile(getFileName(), true);
@@ -48,6 +53,7 @@ public final class AutoloadMacro extends Autoload
         return unreadableString(sb.toString());
     }
 
+    // ### autoload-macro
     private static final Primitive AUTOLOAD_MACRO =
         new Primitive("autoload-macro", PACKAGE_EXT, true)
     {
@@ -55,13 +61,13 @@ public final class AutoloadMacro extends Autoload
         {
             if (first instanceof Symbol) {
                 Symbol symbol = (Symbol) first;
-                symbol.setSymbolFunction(new AutoloadMacro(symbol));
+                installAutoloadMacro(symbol, null);
                 return T;
             }
             if (first instanceof Cons) {
                 for (LispObject list = first; list != NIL; list = list.cdr()) {
                     Symbol symbol = checkSymbol(list.car());
-                    symbol.setSymbolFunction(new AutoloadMacro(symbol));
+                    installAutoloadMacro(symbol, null);
                 }
                 return T;
             }
@@ -73,13 +79,13 @@ public final class AutoloadMacro extends Autoload
             final String fileName = second.getStringValue();
             if (first instanceof Symbol) {
                 Symbol symbol = (Symbol) first;
-                symbol.setSymbolFunction(new AutoloadMacro(symbol, fileName));
+                installAutoloadMacro(symbol, fileName);
                 return T;
             }
             if (first instanceof Cons) {
                 for (LispObject list = first; list != NIL; list = list.cdr()) {
                     Symbol symbol = checkSymbol(list.car());
-                    symbol.setSymbolFunction(new AutoloadMacro(symbol, fileName));
+                    installAutoloadMacro(symbol, fileName);
                 }
                 return T;
             }
