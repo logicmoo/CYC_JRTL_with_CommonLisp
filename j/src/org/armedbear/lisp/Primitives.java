@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.109 2003-03-11 14:12:43 piso Exp $
+ * $Id: Primitives.java,v 1.110 2003-03-12 18:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2946,6 +2946,7 @@ public final class Primitives extends Module
                     closure = new Closure(parameters, body, ext);
                 else
                     closure = new Closure(parameters, body, env);
+                closure.setLambdaName(list(Symbol.FLET, symbol));
                 ext.bindFunctional(symbol, closure);
                 defs = defs.cdr();
             }
@@ -4001,6 +4002,20 @@ public final class Primitives extends Module
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
             return stream.read(eofError, eofValue, recursive);
+        }
+    };
+
+    private static final Primitive2 _SET_LAMBDA_NAME =
+        new Primitive2("%set-lambda-name") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            if (first instanceof Function) {
+                Function f = (Function) first;
+                f.setLambdaName(second);
+                return second;
+            } else
+                throw new TypeError(first, "function");
         }
     };
 
