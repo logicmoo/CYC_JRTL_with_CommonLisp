@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: coerce.lisp,v 1.2 2004-02-10 16:19:02 piso Exp $
+;;; $Id: coerce.lisp,v 1.3 2004-02-12 13:02:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,6 +38,12 @@
                 (return-from coerce (complex object 0.0)))
                ((numberp object)
                 (return-from coerce object))))
+        ((and (consp result-type)
+              (eq (car result-type) 'complex))
+         (if (memq (cadr result-type)
+                   '(float single-float double-float short-float long-float))
+             (return-from coerce (complex object 0.0))
+             (return-from coerce object)))
         ((eq result-type 'function)
          (return-from coerce (coerce-to-function object)))
         ((and (%typep object 'sequence)
