@@ -175,6 +175,7 @@ fourth
 fresh-line
 funcall
 function
+functionp
 gensym
 get
 get-output-stream-string
