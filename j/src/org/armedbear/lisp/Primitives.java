@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.91 2003-03-07 17:44:12 piso Exp $
+ * $Id: Primitives.java,v 1.92 2003-03-07 18:31:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2410,23 +2410,6 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws LispError
         {
             return string(arg);
-        }
-    };
-
-    // ### concatenate
-    private static final Primitive CONCATENATE = new Primitive("concatenate") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            if (args.length == 0)
-                throw new WrongNumberOfArgumentsException(this);
-            LispObject type = args[0];
-            if (type == Symbol.STRING) {
-                LispString result = new LispString();
-                for (int i = 1; i < args.length; i++)
-                    result.append(args[i]);
-                return result;
-            }
-            throw new LispError("not supported");
         }
     };
 
