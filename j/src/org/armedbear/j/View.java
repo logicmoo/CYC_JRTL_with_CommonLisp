@@ -1,8 +1,8 @@
 /*
  * View.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: View.java,v 1.1.1.1 2002-09-24 16:07:41 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: View.java,v 1.2 2003-06-12 16:38:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,16 +154,13 @@ public final class View implements Cloneable
 
     public void invalidate()
     {
-        if (dot != null) {
-            lineNumber = dot.lineNumber();
-            offs = dot.getOffset();
-        }
+        lineNumber = 0;
+        offs = 0;
         dot = null;
         mark = null;
         selection = null;
         isColumnSelection = false;
-        if (topLine != null)
-            topLineNumber = topLine.lineNumber();
+        topLineNumber = 0;
         topLine = null;
         pixelsAboveTopLine = 0;
         if (!(sidebarComponent instanceof DirectoryTree))
