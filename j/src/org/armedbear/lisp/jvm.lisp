@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.264 2004-08-02 15:13:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.265 2004-08-03 16:48:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3569,6 +3569,10 @@
   (unless (= (length form) 3)
     (return-from compile-setq (compile-form (precompiler::precompile-setq form)
                                             :target target)))
+  (let ((expansion (macroexpand (second form))))
+    (unless (eq expansion (second form))
+      (compile-form (list 'SETF expansion (third form)))
+      (return-from compile-setq)))
   (let* ((name (second form))
          (value-form (third form))
          (variable (find-visible-variable name)))
@@ -3804,15 +3808,15 @@
                  +lisp-symbol+)
            (emit-move-from-stack target))
           (t
-           (compile-variable-reference form target))))
+           ;; Maybe it's a symbol macro...
+           (let ((expansion (macroexpand form)))
+             (if (eq expansion form)
+                 (compile-variable-reference form target)
+                 (compile-form expansion :target target))))))
         ((block-node-p form)
-;;          (%format t "COMPILE-FORM block-node case~S~%")
          (if (equal (block-name form) '(TAGBODY))
              (compile-tagbody-node form target)
              (compile-block-node form target)))
-;;         ((tagbody-node-p form)
-;; ;;          (%format t "COMPILE-FORM tagbody-node case~S~%")
-;;          (compile-tagbody-node form target))
         ((constantp form)
          (compile-constant form :target target))
         (t
