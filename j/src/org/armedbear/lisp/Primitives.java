@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.200 2003-05-28 00:21:54 piso Exp $
+ * $Id: Primitives.java,v 1.201 2003-05-28 00:57:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -817,16 +817,6 @@ public final class Primitives extends Module
                     return result;
                 }
             }
-        }
-    };
-
-    // ### vector-nreverse
-    private static final Primitive1 VECTOR_NREVERSE_ =
-        new Primitive1("vector-nreverse") {
-        public LispObject execute (LispObject arg) throws LispError {
-            AbstractVector v = checkVector(arg);
-            v.nreverse();
-            return v;
         }
     };
 
@@ -4410,11 +4400,15 @@ public final class Primitives extends Module
         }
     };
 
-    // From CLISP.
-    private static final Primitive1 LIST_NREVERSE =
-        new Primitive1("list-nreverse") {
-        public LispObject execute(LispObject list) throws LispError
-        {
+    // ### nreverse
+    private static final Primitive1 NREVERSE = new Primitive1("nreverse") {
+        public LispObject execute (LispObject arg) throws LispError {
+            if (arg instanceof AbstractVector) {
+                ((AbstractVector)arg).nreverse();
+                return arg;
+            }
+            LispObject list = checkList(arg);
+            // Following code is from CLISP.
             if (list instanceof Cons) {
                 LispObject list3 = list.cdr();
                 if (list3 instanceof Cons) {
@@ -4439,6 +4433,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### nreconc
     // From CLISP.
     private static final Primitive2 NRECONC = new Primitive2("nreconc") {
         public LispObject execute(LispObject list, LispObject obj)
