@@ -2,7 +2,7 @@
  * Primitive2.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive2.java,v 1.2 2003-04-14 17:49:13 piso Exp $
+ * $Id: Primitive2.java,v 1.3 2003-04-16 16:58:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,5 +40,29 @@ public class Primitive2 extends Function
     public final int getType()
     {
         return TYPE_PRIMITIVE2;
+    }
+
+    public LispObject execute() throws Condition
+    {
+        throw new WrongNumberOfArgumentsException(this);
+    }
+
+    public LispObject execute(LispObject first)
+        throws Condition
+    {
+        throw new WrongNumberOfArgumentsException(this);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+        LispObject third) throws Condition
+    {
+        throw new WrongNumberOfArgumentsException(this);
+    }
+
+    public LispObject execute(LispObject[] args) throws Condition
+    {
+        if (args.length != 2)
+            throw new WrongNumberOfArgumentsException(this);
+        return execute(args[0], args[1]);
     }
 }
