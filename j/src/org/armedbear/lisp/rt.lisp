@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.113 2003-09-08 01:45:07 piso Exp $
+;;; $Id: rt.lisp,v 1.114 2003-09-08 01:46:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -242,6 +242,7 @@
                               "hash-table"
                               "identity"
                               "if"
+                              "integer-length"
                               "intersection"
                               "iteration"
                               "keywordp"
