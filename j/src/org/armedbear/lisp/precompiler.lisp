@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.4 2003-11-15 01:07:35 piso Exp $
+;;; $Id: precompiler.lisp,v 1.5 2003-11-15 13:48:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -169,8 +169,8 @@
          (clauses (cddr form))
          (result (list (precompile1 keyform))))
     (dolist (clause clauses)
-      (setq result (nconc result (list (precompile-case-clause clause)))))
-    (cons (car form) result)))
+      (push (precompile-case-clause clause) result))
+    (cons (car form) (nreverse result))))
 
 (defun precompile-case-clause (clause)
   (let ((keys (car clause))
@@ -181,8 +181,8 @@
   (let ((clauses (cdr form))
         (result nil))
     (dolist (clause clauses)
-      (setq result (nconc result (list (precompile-cond-clause clause)))))
-    (cons 'COND result)))
+      (push (precompile-cond-clause clause) result))
+    (cons 'COND (nreverse result))))
 
 (defun precompile-cond-clause (clause)
   (let ((test (car clause))
