@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.48 2003-10-17 23:57:33 piso Exp $
+;;; $Id: compiler.lisp,v 1.49 2003-10-18 00:28:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -137,8 +137,8 @@
        (unless (<= 2 (length (cdr form)) 3)
          (error "wrong number of arguments for IF"))
        (cons 'if (mapcar #'compile-sexp (cdr form))))
-      ('CASE
-       (cons 'case (compile-case (cadr form) (cddr form))))
+      ((CASE ECASE)
+       (cons first (compile-case (cadr form) (cddr form))))
       (DOLIST
        (let ((args (cadr form))
              (body (cddr form)))
