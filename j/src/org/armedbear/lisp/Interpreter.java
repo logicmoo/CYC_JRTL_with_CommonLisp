@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.68 2004-08-18 18:39:21 piso Exp $
+ * $Id: Interpreter.java,v 1.69 2004-08-31 23:30:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,12 @@ public final class Interpreter extends Lisp
         this.outputStream = outputStream;
         resetIO(new Stream(inputStream, Symbol.CHARACTER),
                 new Stream(outputStream, Symbol.CHARACTER));
+        try {
+            _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(new Pathname(initialDirectory));
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
     }
 
     public static synchronized void initializeLisp(boolean jlisp)
@@ -332,38 +338,6 @@ public final class Interpreter extends Lisp
         finally {
             thread.setDynamicEnvironment(oldDynEnv);
         }
-    }
-
-    // Used only by the JUnit test suite (Tests.java).
-    public static final String ERROR = "Error";
-
-    // Used only by the JUnit test suite (Tests.java).
-    public static String evalString(String s)
-    {
-        StringInputStream stream = new StringInputStream(s);
-        StringBuffer sb = new StringBuffer();
-        while (true) {
-            try {
-                LispObject obj = stream.read(false, EOF, false);
-                if (obj == EOF)
-                    break;
-                final LispThread thread = LispThread.currentThread();
-                LispObject result = eval(obj, new Environment(), thread);
-                LispObject[] values = thread.getValues();
-                if (values != null) {
-                    for (int i = 0; i < values.length; i++) {
-                        if (i > 0)
-                            sb.append(", ");
-                        sb.append(values[i].writeToString());
-                    }
-                } else
-                    sb.append(result.writeToString());
-            }
-            catch (Throwable t) {
-                return ERROR;
-            }
-        }
-        return sb.toString();
     }
 
     private static final String build;
