@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.209 2003-05-30 18:49:13 piso Exp $
+ * $Id: Primitives.java,v 1.210 2003-05-31 18:15:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -366,15 +366,15 @@ public final class Primitives extends Module
             case ODDP:                          // ### oddp
                 return (Fixnum.getValue(arg) % 2) == 0 ? NIL : T;
             case NUMBERP:                       // ### numberp
-                return arg instanceof Fixnum ? T : NIL;
+                return (arg.getType() & TYPE_NUMBER) != 0 ? T : NIL;
             case SYMBOLP:                       // ### symbolp
-                return arg.typep(Symbol.SYMBOL);
+                return (arg.getType() & TYPE_SYMBOL) != 0 ? T : NIL;
             case LENGTH:                        // ### length
                 return new Fixnum(arg.length());
             case CONSP:                         // ### consp
                 return arg instanceof Cons ? T : NIL;
             case LISTP:                         // ### listp
-                return (arg instanceof Cons || arg == NIL) ? T : NIL;
+                return (arg.getType() & TYPE_LIST) != 0 ? T : NIL;
             case MAKE_SYMBOL:                   // ### make-symbol
                 return new Symbol(LispString.getValue(arg));
             case FBOUNDP:                       // ### fboundp
