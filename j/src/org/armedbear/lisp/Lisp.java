@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.238 2004-05-12 17:17:53 piso Exp $
+ * $Id: Lisp.java,v 1.239 2004-05-22 19:30:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1911,6 +1911,14 @@ public abstract class Lisp
     // ### *saved-backtrace*
     public static final Symbol _SAVED_BACKTRACE_ =
         exportSpecial("*SAVED-BACKTRACE*", PACKAGE_EXT, NIL);
+
+    public static final LispObject UNBOUND = new LispObject()
+    {
+        public LispObject getDescription()
+        {
+            return new SimpleString("..unbound..");
+        }
+    };
 
     private static final void loadClass(String className)
     {
