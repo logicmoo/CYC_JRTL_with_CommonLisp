@@ -1,8 +1,8 @@
 /*
  * IdleThread.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: IdleThread.java,v 1.3 2003-01-09 16:17:01 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: IdleThread.java,v 1.4 2003-06-19 17:38:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -243,12 +243,12 @@ public class IdleThread extends Thread
             {
                 int minutes = Editor.preferences().getIntegerProperty(
                     Property.LIST_THREADS);
-                if (minutes == 0)
-                    return; // Not enabled.
-                long millis = minutes * 60000;
-                if (System.currentTimeMillis() - lastRun > millis) {
-                    Debug.listThreads();
-                    lastRun = System.currentTimeMillis();
+                if (minutes > 0) {
+                    long millis = minutes * 60000;
+                    if (System.currentTimeMillis() - lastRun > millis) {
+                        Debug.listThreads();
+                        lastRun = System.currentTimeMillis();
+                    }
                 }
             }
         };
