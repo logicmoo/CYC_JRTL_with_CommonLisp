@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.316 2004-12-26 18:45:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.317 2004-12-27 00:27:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2131,20 +2131,10 @@
 
 (defun compile-function-call-1 (fun args target representation)
   (let ((arg (first args)))
-    (when (and (eq fun '1+) (symbolp arg))
-      (dformat t "compile-function-call-1 1+ case~%")
-      (let ((variable (unboxed-fixnum-variable arg)))
-        (when variable
-          (aver (variable-register variable))
-          (emit 'iload (variable-register variable))
-          (emit 'i2l)
-          (emit 'iconst_1)
-          (emit 'i2l)
-          (emit 'ladd)
-          (if (eq representation :unboxed-fixnum)
-              (emit 'l2i)
-              (emit-box-long))
-          (return-from compile-function-call-1 t))))
+    (when (eq fun '1+)
+      (return-from compile-function-call-1 (compile-plus (list '+ 1 arg)
+                                                         :target target
+                                                         :representation representation)))
     (let ((s (gethash fun unary-operators)))
       (cond (s
              (compile-form arg :target :stack)
