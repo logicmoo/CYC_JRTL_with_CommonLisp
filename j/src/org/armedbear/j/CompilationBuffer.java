@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.11 2003-02-27 12:55:11 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.12 2003-03-20 15:38:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -606,6 +606,8 @@ public final class CompilationBuffer extends Buffer implements Runnable
         // expanded command in the location bar when the compilation buffer is
         // activated.
         cb.initialize();
+        // Don't keep a reference to the parent buffer indefinitely!
+        cb.setParentBuffer(null);
         new Thread(cb).start();
         if (!visible) {
             Editor otherEditor = editor.getOtherEditor();
