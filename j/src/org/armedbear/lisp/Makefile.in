@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.14 2003-04-09 18:09:24 piso Exp $
+# $Id: Makefile.in,v 1.15 2003-04-14 16:32:03 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ CLASSFILES =	AbstractArray.class \
 		HashTable.class \
 		Interpreter.class \
 		Java.class \
+		JavaClassLoader.class \
 		JavaObject.class \
 		Keyword.class \
 		Lisp.class \
