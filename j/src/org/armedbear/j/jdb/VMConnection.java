@@ -2,7 +2,7 @@
  * VMConnection.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: VMConnection.java,v 1.2 2003-05-15 15:49:29 piso Exp $
+ * $Id: VMConnection.java,v 1.3 2003-05-17 19:30:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public final class VMConnection
         return null;
     }
 
-    public VirtualMachine launchTarget(Jdb jdb)
+    private VirtualMachine launchTarget(Jdb jdb)
     {
         VirtualMachine vm = null;
         try {
@@ -113,6 +113,7 @@ public final class VMConnection
         jdb.displayRemoteOutput(process.getErrorStream());
         jdb.displayRemoteOutput(process.getInputStream());
         vm.suspend();
+        jdb.setSuspended(true);
         jdb.setVM(vm);
         new EventHandler(jdb);
         return vm;
