@@ -1,7 +1,7 @@
 ;;; ed.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: ed.lisp,v 1.3 2004-10-17 14:00:26 piso Exp $
+;;; $Id: ed.lisp,v 1.4 2004-10-17 18:47:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,7 +36,9 @@ the file system."
   (values))
 
 (defun default-ed-function (what)
-  (let ((portfile (merge-pathnames ".j/port" (user-homedir-pathname)))
+  (let ((portfile (merge-pathnames ".j/port" (if (featurep :windows)
+                                                 "C:\\"
+                                                 (user-homedir-pathname))))
         stream)
     (when (probe-file portfile)
       (let* ((port (with-open-file (s portfile) (read s nil nil)))
