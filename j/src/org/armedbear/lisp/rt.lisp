@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.94 2003-08-06 18:10:08 piso Exp $
+;;; $Id: rt.lisp,v 1.95 2003-08-06 19:20:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -406,4 +406,7 @@
 
 (when (and (find-package "JVM")
            (fboundp 'jvm:jvm-compile))
-  (jvm:jvm-compile 'rt::equalp-with-case))
+  (mapcar #'jvm:jvm-compile '(rt::equalp-with-case
+                              cl-test::make-scaffold-copy
+                              cl-test::check-scaffold-copy
+                              cl-test::is-intersection)))
