@@ -1,7 +1,7 @@
 ;;; transform.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: transform.lisp,v 1.3 2003-10-27 17:28:16 piso Exp $
+;;; $Id: transform.lisp,v 1.4 2003-11-04 19:13:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -130,6 +130,8 @@
              (push 'PROGN result)
              result))
           ((eq fun 'QUOTE)
+           form)
+          ((eq fun 'FUNCTION)
            form)
           ((and (symbolp fun) (fboundp fun))
            (cons fun (mapcar #'transform1 args)))
