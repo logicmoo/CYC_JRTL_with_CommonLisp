@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.255 2004-06-14 18:57:14 asimon Exp $
+ * $Id: Lisp.java,v 1.256 2004-06-15 01:03:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1681,10 +1681,6 @@ public abstract class Lisp
     public static final Symbol _COMPILE_FILE_TYPE_ =
         internConstant("*COMPILE-FILE-TYPE*", PACKAGE_SYS,
                        new SimpleString(COMPILE_FILE_TYPE));
-
-    // ### *record-source-file-info*
-    public static final Symbol _RECORD_SOURCE_FILE_INFO_ =
-        exportSpecial("*RECORD-SOURCE-FILE-INFO*", PACKAGE_EXT, T);
 
     // ### *macroexpand-hook*
     public static final Symbol _MACROEXPAND_HOOK_ =

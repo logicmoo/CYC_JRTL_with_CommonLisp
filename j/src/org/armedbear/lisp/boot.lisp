@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.177 2004-06-14 19:09:07 asimon Exp $
+;;; $Id: boot.lisp,v 1.178 2004-06-15 01:03:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -120,8 +120,8 @@
   `(progn
      (sys::%defvar ',var)
      ,@(when valp
-         `((unless (boundp ',var)
-             (setq ,var ,val))))
+	 `((unless (boundp ',var)
+	     (setq ,var ,val))))
      ,@(when docp
          `((sys::%set-documentation ',var 'variable ',doc)))
      ',var))
@@ -216,7 +216,7 @@
       (set-difference *modules* saved-modules))))
 
 (defun read-from-string (string &optional eof-error-p eof-value
-                                &key (start 0) end preserve-whitespace)
+				&key (start 0) end preserve-whitespace)
   (sys::%read-from-string string eof-error-p eof-value start end preserve-whitespace))
 
 (defconstant lambda-list-keywords
@@ -234,8 +234,6 @@
 (sys::load-system-file "late-setf")
 (sys::load-system-file "debug")
 (sys::load-system-file "print")
-
-(sys::load-system-file "source-location.lisp")
 
 (unless (sys::featurep :j)
   (format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
