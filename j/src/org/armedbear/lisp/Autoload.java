@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.197 2004-09-26 08:35:03 asimon Exp $
+ * $Id: Autoload.java,v 1.198 2004-09-26 18:47:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -349,10 +349,10 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "mailbox-peek", "Mailbox", true);
         autoload(PACKAGE_EXT, "mailbox-read", "Mailbox", true);
         autoload(PACKAGE_EXT, "mailbox-send", "Mailbox", true);
-        autoload(PACKAGE_EXT, "make-slime-input-stream", "SlimeInputStream", true);
-        autoload(PACKAGE_EXT, "make-slime-output-stream", "SlimeOutputStream", true);
         autoload(PACKAGE_EXT, "make-mailbox", "Mailbox", true);
         autoload(PACKAGE_EXT, "make-mutex", "Mutex", true);
+        autoload(PACKAGE_EXT, "make-slime-input-stream", "SlimeInputStream", true);
+        autoload(PACKAGE_EXT, "make-slime-output-stream", "SlimeOutputStream", true);
         autoload(PACKAGE_EXT, "make-thread-lock", "ThreadLock", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
         autoload(PACKAGE_EXT, "release-mutex", "Mutex", true);
