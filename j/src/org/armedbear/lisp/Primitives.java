@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.267 2003-06-24 20:20:22 piso Exp $
+ * $Id: Primitives.java,v 1.268 2003-06-24 20:31:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2359,10 +2359,8 @@ public final class Primitives extends Module
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
             LispObject splice = null;
-            final LispObject[] funArgs = new LispObject[1];
             while (list != NIL) {
-                funArgs[0] = list.car();
-                LispObject obj = funcall(fun, funArgs, thread);
+                LispObject obj = funcall1(fun, list.car(), thread);
                 if (splice == null) {
                     result = new Cons(obj, result);
                     splice = result;
