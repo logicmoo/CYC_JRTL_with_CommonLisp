@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardClass.java,v 1.3 2003-09-21 15:07:13 piso Exp $
+ * $Id: StandardClass.java,v 1.4 2003-09-21 16:58:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,25 @@ public class StandardClass extends LispClass
     public StandardClass(Symbol symbol, LispObject directSuperclasses)
     {
         super(symbol, directSuperclasses);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.STANDARD_CLASS;
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.STANDARD_CLASS;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.STANDARD_CLASS)
+            return T;
+        if (type == BuiltInClass.STANDARD_CLASS)
+            return T;
+        return super.typep(type);
     }
 
     public String toString()
