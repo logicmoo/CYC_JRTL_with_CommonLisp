@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.306 2004-11-28 15:43:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.307 2004-12-12 15:47:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -741,6 +741,10 @@
          (single-valued-p (third form)))
         (t
          (values (gethash (car form) single-valued-operators)))))
+
+(defun emit-clear-values ()
+  (ensure-thread-var-initialized)
+  (emit 'clear-values))
 
 (defun maybe-emit-clear-values (form)
   (unless (single-valued-p form)
@@ -1769,6 +1773,7 @@
                     (translations '(( 0 . "ZERO")
                                     ( 1 . "ONE")
                                     ( 2 . "TWO")
+                                    ( 3 . "THREE")
                                     (-1 . "MINUS_ONE")))
                     (translation (cdr (assoc n translations))))
                (if translation
@@ -1841,9 +1846,10 @@
 
 (defun compile-binary-operation (op args &key (target *val*))
   (compile-form (first args) :target :stack)
-  (maybe-emit-clear-values (first args))
   (compile-form (second args) :target :stack)
-  (maybe-emit-clear-values (second args))
+  (unless (and (single-valued-p (first args))
+               (single-valued-p (second args)))
+    (emit-clear-values))
   (emit-invokevirtual +lisp-object-class+
                       op
                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1896,11 +1902,10 @@
 (defun compile-function-call-1 (fun args &key (target *val*))
   (let ((s (gethash fun unary-operators)))
     (cond (s
-           (progn
-             (compile-form (first args) :target :stack)
-             (maybe-emit-clear-values (first args))
-             (emit-invoke-method s :target target)
-             t))
+           (compile-form (first args) :target :stack)
+           (maybe-emit-clear-values (first args))
+           (emit-invoke-method s :target target)
+           t)
           ((eq fun 'LIST)
            (emit 'new +lisp-cons-class+)
            (emit 'dup)
@@ -1947,9 +1952,10 @@
         (case fun
           (EQ
            (compile-form (first args) :target :stack)
-           (maybe-emit-clear-values (first args))
            (compile-form (second args) :target :stack)
-           (maybe-emit-clear-values (second args))
+           (unless (and (single-valued-p (first args))
+                        (single-valued-p (second args)))
+             (emit-clear-values))
            (let ((label1 (gensym))
                  (label2 (gensym)))
              (emit 'if_acmpeq `,label1)
@@ -1962,9 +1968,10 @@
            t)
           (LIST
            (compile-form (first args) :target :stack)
-           (maybe-emit-clear-values (first args))
            (compile-form (second args) :target :stack)
-           (maybe-emit-clear-values (second args))
+           (unless (and (single-valued-p (first args))
+                        (single-valued-p (second args)))
+             (emit-clear-values))
            (emit-invokestatic +lisp-class+
                               "list2"
                               "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
@@ -1989,11 +1996,10 @@
   (case fun
     (LIST
      (compile-form (first args) :target :stack)
-     (maybe-emit-clear-values (first args))
      (compile-form (second args) :target :stack)
-     (maybe-emit-clear-values (second args))
      (compile-form (third args) :target :stack)
-     (maybe-emit-clear-values (third args))
+     (unless (every 'single-valued-p args)
+       (emit-clear-values))
      (emit-invokestatic +lisp-class+
                         "list3"
                         "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
@@ -2065,9 +2071,14 @@
         form)))
 
 (defun process-args (args)
-  (dolist (arg args)
-    (compile-form arg :target :stack)
-    (maybe-emit-clear-values arg)))
+  (let ((must-clear-values nil))
+    (dolist (arg args)
+      (compile-form arg :target :stack)
+      (unless must-clear-values
+        (unless (single-valued-p arg)
+          (setf must-clear-values t))))
+    (when must-clear-values
+      (emit-clear-values))))
 
 (defun compile-call (args)
   (let ((numargs (length args)))
@@ -2105,14 +2116,19 @@
              (t
               (emit 'sipush (length args))
               (emit 'anewarray "org/armedbear/lisp/LispObject")
-              (let ((i 0))
+              (let ((i 0)
+                    (must-clear-values nil))
                 (dolist (arg args)
                   (emit 'dup)
                   (emit 'sipush i)
                   (compile-form arg :target :stack)
                   (emit 'aastore) ; store value in array
-                  (maybe-emit-clear-values arg)
-                  (incf i))) ; array left on stack here
+                  (unless must-clear-values
+                    (unless (single-valued-p arg)
+                      (setf must-clear-values t)))
+                  (incf i))
+                (when must-clear-values
+                  (emit-clear-values))) ; array left on stack here
               ;; Stack: function array
               (emit-invokevirtual +lisp-object-class+
                                   "execute"
@@ -2154,14 +2170,20 @@
              (t
               (emit 'sipush (length args))
               (emit 'anewarray +lisp-object-class+)
-              (let ((i 0))
+              (let ((i 0)
+                    (must-clear-values nil))
                 (dolist (arg args)
                   (emit 'dup)
                   (emit 'sipush i)
                   (compile-form arg :target :stack)
                   (emit 'aastore) ; store value in array
-                  (maybe-emit-clear-values arg)
-                  (incf i))) ; array left on stack here
+                  (unless must-clear-values
+                    (unless (single-valued-p arg)
+                      (setf must-clear-values t)))
+                  (incf i))
+                ;; Added Dec 9 2004
+                (when must-clear-values
+                  (emit-clear-values))) ; array left on stack here
               ;; Stack: function array
               (emit-invokevirtual +lisp-thread-class+
                                   "execute"
@@ -2205,8 +2227,6 @@
               +lisp-symbol+)))
       ;; Stack: function
       (compile-call args)
-      (unless target
-        (maybe-emit-clear-values form))
       (emit-move-from-stack target))))
 
 (define-source-transform funcall (&whole form fun &rest args)
@@ -2238,8 +2258,6 @@
   (compile-form (cadr form) :target :stack)
   (maybe-emit-clear-values (cadr form))
   (compile-call (cddr form))
-  (unless target
-    (maybe-emit-clear-values form))
   (emit-move-from-stack target))
 
 (defun compile-local-function-call (form target)
@@ -2260,14 +2278,19 @@
                    +lisp-object+)))) ; Stack: template-function
     (emit 'sipush (length args))
     (emit 'anewarray "org/armedbear/lisp/LispObject")
-    (let ((i 0))
+    (let ((i 0)
+          (must-clear-values nil))
       (dolist (arg args)
         (emit 'dup)
         (emit 'sipush i)
         (compile-form arg :target :stack)
         (emit 'aastore) ; store value in array
-        (maybe-emit-clear-values arg)
-        (incf i))) ; array left on stack here
+        (unless must-clear-values
+          (unless (single-valued-p arg)
+            (setf must-clear-values t)))
+        (incf i))
+      (when must-clear-values
+        (emit-clear-values))) ; array left on stack here
     ;; Stack: template-function args
     (cond ((zerop *nesting-level*)
            ;; Make a vector of size 1.
@@ -2332,135 +2355,65 @@
 (define-java-predicate 'VECTORP    "vectorp")
 (define-java-predicate 'ZEROP      "zerop")
 
-(defun compile-test-not (form)
-  (let* ((form (second form)))
-    (when (consp form)
-      (when (memq (car form) '(NOT NULL))
-        (compile-form (second form) :target :stack)
-        (maybe-emit-clear-values (second form))
-        (emit-push-nil)
-        (return-from compile-test-not 'if_acmpeq))
-      (case (length form)
-        (2
-         (let ((op (car form))
-               (arg (cadr form)))
-           (when (eq op 'SYMBOLP)
-             (compile-form arg :target :stack)
-             (maybe-emit-clear-values arg)
-             (emit 'instanceof +lisp-symbol-class+)
-             (return-from compile-test-not 'ifne))
-           (when (eq op 'FIXNUMP)
-             (compile-form arg :target :stack)
-             (maybe-emit-clear-values arg)
-             (emit 'instanceof +lisp-fixnum-class+)
-             (return-from compile-test-not 'ifne))
-           (when (eq op 'CONSP)
-             (compile-form arg :target :stack)
-             (maybe-emit-clear-values arg)
-             (emit 'instanceof +lisp-cons-class+)
-             (return-from compile-test-not 'ifne))
-           (when (eq op 'ATOM)
-             (compile-form arg :target :stack)
-             (maybe-emit-clear-values arg)
-             (emit 'instanceof +lisp-cons-class+)
-             (return-from compile-test-not 'ifeq))
-           (let ((s (gethash op java-predicates)))
-             (when s
-               (compile-form arg :target :stack)
-               (maybe-emit-clear-values arg)
-               (emit-invokevirtual +lisp-object-class+
-                                   s
-                                   "()Z"
-                                   0)
-               (return-from compile-test-not 'ifne)))))
-        (3
-         (let ((op (car form))
-               (arg1 (second form))
-               (arg2 (third form)))
-           (when (eq op 'EQ)
-             (compile-form arg1 :target :stack)
-             (maybe-emit-clear-values arg1)
-             (compile-form arg2 :target :stack)
-             (maybe-emit-clear-values arg2)
-             (return-from compile-test-not 'if_acmpeq))
-           (let ((s (cdr (assq op
-                               '((=      . "isEqualTo")
-                                 (/=     . "isNotEqualTo")
-                                 (<      . "isLessThan")
-                                 (<=     . "isLessThanOrEqualTo")
-                                 (>      . "isGreaterThan")
-                                 (>=     . "isGreaterThanOrEqualTo")
-                                 (EQL    . "eql")
-                                 (EQUAL  . "equal")
-                                 (EQUALP . "equalp"))))))
-             (when s
-               (compile-form arg1 :target :stack)
-               (maybe-emit-clear-values arg1)
-               (compile-form arg2 :target :stack)
-               (maybe-emit-clear-values arg2)
-               (emit-invokevirtual +lisp-object-class+
-                                   s
-                                   "(Lorg/armedbear/lisp/LispObject;)Z"
-                                   -1)
-               (return-from compile-test-not 'ifne)))))))
-    ;; Otherwise...
-    (compile-form form :target :stack)
-    (maybe-emit-clear-values form)
-    (emit-push-nil)
-    'if_acmpne))
-
-(defun compile-test (form)
+(defun compile-test (form negatep)
   ;; Use a Java boolean if possible.
   (when (and (consp form)
              (not (special-operator-p (car form))))
     (let ((new-form (rewrite-function-call form)))
       (when (neq new-form form)
-        (return-from compile-test (compile-test new-form))))
+        (return-from compile-test (compile-test new-form negatep))))
     (case (length form)
       (2
        (let ((op (car form))
-             (arg (cadr form)))
+             (args (cdr form)))
          (when (memq op '(NOT NULL))
-           (return-from compile-test (compile-test-not form)))
+           (return-from compile-test (compile-test (car args) (not negatep))))
          (when (eq op 'SYMBOLP)
-           (compile-form arg :target :stack)
-           (maybe-emit-clear-values arg)
+           (process-args args)
            (emit 'instanceof +lisp-symbol-class+)
-           (return-from compile-test 'ifeq))
+           (return-from compile-test (if negatep 'ifne 'ifeq)))
          (when (eq op 'FIXNUMP)
-           (compile-form arg :target :stack)
-           (maybe-emit-clear-values arg)
+           (process-args args)
            (emit 'instanceof +lisp-fixnum-class+)
-           (return-from compile-test 'ifeq))
+           (return-from compile-test (if negatep 'ifne 'ifeq)))
          (when (eq op 'CONSP)
-           (compile-form arg :target :stack)
-           (maybe-emit-clear-values arg)
+           (process-args args)
            (emit 'instanceof +lisp-cons-class+)
-           (return-from compile-test 'ifeq))
+           (return-from compile-test (if negatep 'ifne 'ifeq)))
          (when (eq op 'ATOM)
-           (compile-form arg :target :stack)
-           (maybe-emit-clear-values arg)
+           (process-args args)
            (emit 'instanceof +lisp-cons-class+)
-           (return-from compile-test 'ifne))
+           (return-from compile-test (if negatep 'ifeq 'ifne)))
          (let ((s (gethash op java-predicates)))
            (when s
-             (compile-form arg :target :stack)
-             (maybe-emit-clear-values arg)
+             (process-args args)
              (emit-invokevirtual +lisp-object-class+
                                  s
                                  "()Z"
                                  0)
-             (return-from compile-test 'ifeq)))))
+             (return-from compile-test (if negatep 'ifne 'ifeq))))))
       (3
        (let ((op (car form))
-             (arg1 (second form))
-             (arg2 (third form)))
+             (args (cdr form)))
          (when (eq op 'EQ)
-           (compile-form arg1 :target :stack)
-           (maybe-emit-clear-values arg1)
-           (compile-form arg2 :target :stack)
-           (maybe-emit-clear-values arg2)
-           (return-from compile-test 'if_acmpne))
+           (process-args args)
+           (return-from compile-test (if negatep 'if_acmpeq 'if_acmpne)))
+
+         ;; An experiment...
+         (when (and (eq op '<)
+                    (fixnump (second args)))
+           (compile-form (car args) :target :stack)
+           (unless (single-valued-p (car args))
+             (emit-clear-values))
+           (if (<= -32768 (second args) 32767)
+               (emit 'sipush (second args))
+               (emit 'ldc (pool-int (second args))))
+           (emit-invokevirtual +lisp-object-class+
+                               "isLessThan"
+                               "(I)Z"
+                               -1)
+           (return-from compile-test (if negatep 'ifne 'ifeq)))
+
          (let ((s (cdr (assq op
                              '((=      . "isEqualTo")
                                (/=     . "isNotEqualTo")
@@ -2472,20 +2425,17 @@
                                (EQUAL  . "equal")
                                (EQUALP . "equalp"))))))
            (when s
-             (compile-form arg1 :target :stack)
-             (maybe-emit-clear-values arg1)
-             (compile-form arg2 :target :stack)
-             (maybe-emit-clear-values arg2)
+             (process-args args)
              (emit-invokevirtual +lisp-object-class+
                                  s
                                  "(Lorg/armedbear/lisp/LispObject;)Z"
                                  -1)
-             (return-from compile-test 'ifeq)))))))
+             (return-from compile-test (if negatep 'ifne 'ifeq))))))))
   ;; Otherwise...
   (compile-form form :target :stack)
   (maybe-emit-clear-values form)
   (emit-push-nil)
-  'if_acmpeq)
+  (if negatep 'if_acmpne 'if_acmpeq))
 
 (defun compile-if (form &key (target *val*))
   (let* ((test (second form))
@@ -2496,7 +2446,7 @@
     (cond ((eq test t)
            (compile-form consequent :target target))
           (t
-           (emit (compile-test test) LABEL1)
+           (emit (compile-test test nil) LABEL1)
            (compile-form consequent :target :stack)
            (emit-move-from-stack target)
            (emit 'goto LABEL2)
@@ -2506,6 +2456,9 @@
            (label LABEL2)))))
 
 (defun compile-multiple-value-list (form &key (target *val*))
+  ;; Added Dec 9 2004 7:52 PM
+  (emit-clear-values)
+
   (compile-form (second form) :target :stack)
   (emit-invokestatic +lisp-class+
                      "multipleValueList"
@@ -2518,15 +2471,18 @@
         (subforms (cddr form))
         (result-register (allocate-register))
         (values-register (allocate-register)))
+
+    ;; Added Dec 9 2004 3:46 AM
+    ;; Make sure there are no leftover values from previous calls.
+    (emit-clear-values)
+
     (compile-form first-subform :target result-register)
     ;; Save multiple values returned by first subform.
     (emit-push-current-thread)
     (emit 'getfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
     (emit 'astore values-register)
-    (maybe-emit-clear-values first-subform)
     (dolist (subform subforms)
-      (compile-form subform :target nil)
-      (maybe-emit-clear-values subform))
+      (compile-form subform :target nil))
     ;; Restore multiple values returned by first subform.
     (emit-push-current-thread)
     (emit 'aload values-register)
@@ -2656,6 +2612,11 @@
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
       (emit 'astore (block-environment-register block)))
+
+    ;; Added Dec 9 2004 3:46 AM
+    ;; Make sure there are no leftover values from previous calls.
+    (emit-clear-values)
+
     ;; Bind the variables.
     (aver (= (length vars) (length variables)))
     (cond ((= (length vars) 1)
@@ -2712,11 +2673,7 @@
       (push variable *visible-variables*)
       (push variable *all-variables*))
     ;; Body.
-    (do ((body (cdddr form) (cdr body)))
-        ((null (cdr body))
-         (compile-form (car body) :target target))
-      (compile-form (car body) :target nil)
-      (maybe-emit-clear-values (car body)))
+    (compile-progn-body (cdddr form) target)
     (when bind-special-p
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
@@ -2758,10 +2715,7 @@
       (LET*
        (compile-let*-bindings varlist specials)))
     ;; Body of LET/LET*.
-    (do ((body (cddr form) (cdr body)))
-        ((null (cdr body)) (compile-form (car body) :target target))
-      (compile-form (car body) :target nil)
-      (maybe-emit-clear-values (car body)))
+    (compile-progn-body (cddr form) target)
     (when specialp
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
@@ -2783,7 +2737,8 @@
         (unless special-p
           (add-variable-to-context variable))
         (push variable variables)))
-    (let ((*register* *register*))
+    (let ((*register* *register*)
+          (must-clear-values nil))
       ;; Evaluate each initform. If the variable being bound is special,
       ;; allocate a temporary register for the result; LET bindings must be
       ;; done in parallel, so we don't want to modify any specials until all
@@ -2794,12 +2749,16 @@
         (let ((initform (variable-initform variable)))
           (cond (initform
                  (compile-form initform :target :stack)
-                 (maybe-emit-clear-values initform))
+                 (unless must-clear-values
+                   (unless (single-valued-p initform)
+                     (setf must-clear-values t))))
                 (t
                  (emit-push-nil)))
           (if (variable-special-p variable)
               (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register)))
               (compile-binding variable))))
+      (when must-clear-values
+        (emit-clear-values))
       ;; Now that all the initforms have been evaluated, move the results from
       ;; the temporary registers (if any) to their proper destinations.
       (dolist (variable variables)
@@ -2813,21 +2772,26 @@
       (push variable *all-variables*))))
 
 (defun compile-let*-bindings (varlist specials)
-  ;; Generate code to evaluate initforms and bind variables.
-  (dolist (varspec varlist)
-    (let* ((var (if (consp varspec) (car varspec) varspec))
-           (initform (if (consp varspec) (cadr varspec) nil))
-           (special-p (if (or (memq var specials) (special-variable-p var)) t nil))
-           variable)
-      (cond (initform
-             (compile-form initform :target :stack)
-             (maybe-emit-clear-values initform))
-            (t
-             (emit-push-nil)))
-      (setf variable (push-variable var special-p))
-      (unless (or special-p *use-locals-vector*)
-        (setf (variable-register variable) (allocate-register)))
-      (compile-binding variable))))
+  (let ((must-clear-values nil))
+    ;; Generate code to evaluate initforms and bind variables.
+    (dolist (varspec varlist)
+      (let* ((var (if (consp varspec) (car varspec) varspec))
+             (initform (if (consp varspec) (cadr varspec) nil))
+             (special-p (if (or (memq var specials) (special-variable-p var)) t nil))
+             variable)
+        (cond (initform
+               (compile-form initform :target :stack)
+               (unless must-clear-values
+                 (unless (single-valued-p initform)
+                   (setf must-clear-values t))))
+              (t
+               (emit-push-nil)))
+        (setf variable (push-variable var special-p))
+        (unless (or special-p *use-locals-vector*)
+          (setf (variable-register variable) (allocate-register)))
+        (compile-binding variable)))
+    (when must-clear-values
+      (emit-clear-values))))
 
 ;; Returns list of declared specials.
 (defun process-special-declarations (forms)
@@ -2870,7 +2834,8 @@
          (BEGIN-BLOCK (gensym))
          (END-BLOCK (gensym))
          (EXIT (gensym))
-         environment-register)
+         environment-register
+         (must-clear-values nil))
     ;; Scan for tags.
     (dolist (subform body)
       (when (or (symbolp subform) (integerp subform))
@@ -2901,7 +2866,9 @@
                         (eq (car subform) 'GO))
                (generate-interrupt-check))
              (compile-form subform :target nil)
-             (maybe-emit-clear-values subform))))
+             (unless must-clear-values
+               (unless (single-valued-p subform)
+                 (setf must-clear-values t))))))
     (label END-BLOCK)
     (emit 'goto EXIT)
     (when (block-non-local-go-p block)
@@ -2948,6 +2915,8 @@
                             :catch-type (pool-class +lisp-go-class+))
               *handlers*)))
     (label EXIT)
+    (when must-clear-values
+      (emit-clear-values))
     ;; TAGBODY returns NIL.
     (when target
       (emit-push-nil)
@@ -3001,6 +2970,7 @@
   (unless (= (length form) 2)
     (error "Wrong number of arguments for ATOM."))
   (compile-form (cadr form) :target :stack)
+  (maybe-emit-clear-values (cadr form))
   (emit 'instanceof +lisp-cons-class+)
   (let ((LABEL1 (gensym))
         (LABEL2 (gensym)))
@@ -3059,11 +3029,7 @@
            (BLOCK-EXIT (block-exit block)))
       (label BEGIN-BLOCK) ; Start of protected range.
       ;; Implicit PROGN.
-      (do ((forms (cddr (block-form block)) (cdr forms)))
-          ((null forms))
-        (compile-form (car forms) :target (if (cdr forms) nil target))
-        (when (cdr forms)
-          (maybe-emit-clear-values (car forms))))
+      (compile-progn-body (cddr (block-form block)) target)
       (label END-BLOCK) ; End of protected range.
       (emit 'goto BLOCK-EXIT) ; Jump over handler (if any).
       (when (block-non-local-return-p block)
@@ -3113,6 +3079,10 @@
                       (return t)))))
              (when protected
                (error "COMPILE-RETURN-FROM: enclosing UNWIND-PROTECT")))
+
+           ;; Added Dec 9 2004 7:28 AM
+           (emit-clear-values)
+
            (compile-form result-form :target (block-target block))
            (emit 'goto (block-exit block)))
           (t
@@ -3121,6 +3091,10 @@
            (emit 'new +lisp-return-class+)
            (emit 'dup)
            (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+
+           ;; Added Dec 9 2004 7:28 AM
+           (emit-clear-values)
+
            (compile-form (third form) :target :stack) ; Result.
            (emit-invokespecial +lisp-return-class+
                                "<init>"
@@ -3141,27 +3115,35 @@
       (return-from compile-cons (compile-form new-form :target target))))
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
-  (compile-form (second form) :target :stack)
-  (maybe-emit-clear-values (second form))
-  (compile-form (third form) :target :stack)
-  (maybe-emit-clear-values (third form))
+  (process-args (cdr form))
   (emit-invokespecial "org/armedbear/lisp/Cons"
                       "<init>"
                       "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
                       -3)
   (emit-move-from-stack target))
 
-(defun compile-progn (form &key (target *val*))
-  (cond ((null (cdr form))
+(defun compile-progn-body (body target)
+  (cond ((null body)
          (when target
            (emit-push-nil)
            (emit-move-from-stack target)))
         (t
-         (do ((forms (cdr form) (cdr forms)))
-             ((null forms))
-           (compile-form (car forms) :target (if (cdr forms) nil target))
-           (when (cdr forms)
-             (maybe-emit-clear-values (car forms)))))))
+         (let ((must-clear-values nil))
+           (do* ((forms body (cdr forms))
+                 (form (car forms) (car forms)))
+                ((null forms))
+             (when (null (cdr forms))
+               ;; Last form.
+               (when must-clear-values
+                 (emit-clear-values)))
+             (compile-form form :target (if (cdr forms) nil target))
+             (unless (null (cdr forms))
+               (unless must-clear-values
+                 (unless (single-valued-p form)
+                   (setf must-clear-values t)))))))))
+
+(defun compile-progn (form &key (target *val*))
+  (compile-progn-body (cdr form) target))
 
 (defun compile-quote (form &key (target *val*))
    (let ((obj (second form)))
@@ -3563,7 +3545,8 @@
     (case (length args)
       (1
        (compile-form (car args) :target target)
-       (maybe-emit-clear-values (car args)))
+       (unless (single-valued-p (car args))
+         (emit-clear-values)))
       (2
        (emit-push-current-thread)
        (cond ((and (eq (car args) t)
@@ -3576,13 +3559,20 @@
               (emit 'dup))
              (t
               (compile-form (car args) :target :stack)
-              (maybe-emit-clear-values (car args))
-              (compile-form (cadr args) :target :stack)
-              (maybe-emit-clear-values (cadr args))))
+              (compile-form (cadr args) :target :stack)))
        (emit-invokevirtual +lisp-thread-class+
                            "setValues"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                            -2)
+       (emit-move-from-stack target))
+      (3
+       (emit-push-current-thread)
+       (dolist (arg args)
+         (compile-form arg :target :stack))
+       (emit-invokevirtual +lisp-thread-class+
+                           "setValues"
+                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -3)
        (emit-move-from-stack target))
       (t
        (compile-function-call form :target target)))))
@@ -3693,11 +3683,7 @@
                         -2) ; Stack depth is 0.
     (emit 'label label1) ; Start of protected range.
     ;; Implicit PROGN.
-    (do ((forms (cddr form) (cdr forms)))
-        ((null forms))
-      (compile-form (car forms) :target (if (cdr forms) nil target))
-      (when (cdr forms)
-        (maybe-emit-clear-values (car forms))))
+    (compile-progn-body (cddr form) target)
     (emit 'label label2) ; End of protected range.
     (emit 'goto label5) ; Jump over handlers.
     (emit 'label label3) ; Start of handler for THROW.
@@ -3805,6 +3791,11 @@
 ;;       (error "COMPILE-UNWIND-PROTECT: unhandled case (RETURN)"))
 ;;     (when (contains-go protected-form)
 ;;       (error "COMPILE-UNWIND-PROTECT: unhandled case (GO)"))
+
+    ;; Added Dec 9 2004 3:46 AM
+    ;; Make sure there are no leftover values from previous calls.
+    (emit-clear-values)
+
     (let* ((block (make-block-node :name '(UNWIND-PROTECT)))
            (*blocks* (cons block *blocks*)))
       (label BEGIN-PROTECTED-RANGE)
@@ -3819,14 +3810,14 @@
     ;; The Throw object is on the runtime stack. Stack depth is 1.
     (emit 'astore exception-register)
     (emit 'jsr CLEANUP) ; Call cleanup forms.
+    (emit-clear-values)
     (emit 'aload exception-register)
     (emit 'athrow) ; Re-throw exception.
     (label CLEANUP) ; Cleanup forms.
     ;; Return address is on stack here.
     (emit 'astore return-address-register)
     (dolist (subform cleanup-forms)
-      (compile-form subform :target nil)
-      (maybe-emit-clear-values subform))
+      (compile-form subform :target nil))
     (emit 'ret return-address-register)
     (label EXIT)
     ;; Restore multiple values returned by protected form.
@@ -3848,8 +3839,7 @@
                handler)
            (cond ((symbolp op)
                   (cond ((setf handler (get op 'p2-handler))
-                         (funcall handler form :target target)
-                         )
+                         (funcall handler form :target target))
                         ((macro-function op)
                          (compile-form (macroexpand form) :target target))
                         ((special-operator-p op)
@@ -4125,11 +4115,7 @@
 
       (process-optimization-declarations body)
 
-      (do ((forms body (cdr forms)))
-          ((null forms))
-        (compile-form (car forms) :target (if (cdr forms) nil :stack))
-        (when (cdr forms)
-          (maybe-emit-clear-values (car forms))))
+      (compile-progn-body body :stack)
 
       (unless *code*
         (emit-push-nil))
@@ -4149,9 +4135,6 @@
           (let ((extra (if *use-locals-vector*
                            (length (context-vars *context*))
                            0)))
-            ;;             (emit 'sipush (- (length *all-locals*) (length *args*)))
-            ;;               (emit 'sipush (length (context-vars *context*))) ;; FIXME subtract length of args
-            ;;               (emit 'iconst_0))
             (emit 'sipush extra))
           (emit-invokevirtual *this-class*
                               "processArgs"
