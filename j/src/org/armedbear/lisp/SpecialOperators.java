@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.6 2003-10-15 21:27:24 piso Exp $
+ * $Id: SpecialOperators.java,v 1.7 2003-10-25 21:53:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,6 +114,52 @@ public final class SpecialOperators extends Lisp
         return result;
     }
 
+    // ### symbol-macrolet
+    private static final SpecialOperator SYMBOL_MACROLET =
+        new SpecialOperator("symbol-macrolet")
+    {
+        public LispObject execute(LispObject args, Environment env)
+            throws ConditionThrowable
+        {
+            boolean sequential = true; // FIXME Is this right?
+            LispObject varList = checkList(args.car());
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            if (varList != NIL) {
+                Environment oldDynEnv = thread.getDynamicEnvironment();
+                try {
+                    Environment ext = new Environment(env);
+                    Environment evalEnv = sequential ? ext : env;
+                    for (int i = varList.length(); i-- > 0;) {
+                        LispObject obj = varList.car();
+                        varList = varList.cdr();
+                        if (obj instanceof Cons && obj.length() == 2) {
+                            bind(checkSymbol(obj.car()),
+                                 new SymbolMacro(eval(obj.cadr(), evalEnv, thread)),
+                                 ext);
+                        } else
+                            throw new ConditionThrowable(new ProgramError("SYMBOL-MACROLET: bad symbol-expansion pair: " + obj));
+                    }
+                    LispObject body = args.cdr();
+                    while (body != NIL) {
+                        result = eval(body.car(), ext, thread);
+                        body = body.cdr();
+                    }
+                }
+                finally {
+                    thread.setDynamicEnvironment(oldDynEnv);
+                }
+            } else {
+                LispObject body = args.cdr();
+                while (body != NIL) {
+                    result = eval(body.car(), env, thread);
+                    body = body.cdr();
+                }
+            }
+            return result;
+        }
+    };
+
     // ### load-time-value
     private static final SpecialOperator LOAD_TIME_VALUE =
         new SpecialOperator("load-time-value")
@@ -219,17 +265,6 @@ public final class SpecialOperators extends Lisp
             result = progn(args.cdr(), env, thread);
         return result;
     }
-
-    // ### symbol-macrolet
-    private static final SpecialOperator SYMBOL_MACROLET =
-        new SpecialOperator("symbol-macrolet")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            throw new ConditionThrowable(new LispError("SYMBOL-MACROLET is not implemented"));
-        }
-    };
 
     // ### the
     // the value-type form => result*
