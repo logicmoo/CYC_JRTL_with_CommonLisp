@@ -2,7 +2,7 @@
  * Return.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Return.java,v 1.2 2003-02-15 16:48:17 piso Exp $
+ * $Id: Return.java,v 1.3 2003-06-21 18:54:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,32 @@ package org.armedbear.lisp;
 
 public final class Return extends LispError
 {
-    private final LispObject name;
+    private final LispObject tag;
+    private final Block block;
     private final LispObject result;
 
-    public Return(LispObject name, LispObject result)
+    public Return(LispObject tag, LispObject result)
     {
-        this.name = name;
+        this.tag = tag;
+        this.block = null;
         this.result = result;
     }
 
-    public LispObject getName()
+    public Return(LispObject tag, Block block, LispObject result)
     {
-        return name;
+        this.tag = tag;
+        this.block = block;
+        this.result = result;
+    }
+
+    public LispObject getTag()
+    {
+        return tag;
+    }
+
+    public Block getBlock()
+    {
+        return block;
     }
 
     public LispObject getResult()
@@ -45,7 +59,7 @@ public final class Return extends LispError
     public String getMessage()
     {
         StringBuffer sb = new StringBuffer("no block named ");
-        sb.append(name);
+        sb.append(tag.getName());
         sb.append(" is currently visible");
         return sb.toString();
     }
