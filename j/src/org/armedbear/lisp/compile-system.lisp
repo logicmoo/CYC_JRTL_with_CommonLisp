@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.6 2004-04-27 18:15:06 piso Exp $
+;;; $Id: compile-system.lisp,v 1.7 2004-05-06 18:47:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -128,6 +128,7 @@
                             "nsubstitute.lisp"
                             "nth-value.lisp"
                             "numbers.lisp"
+                            "opcodes.lisp"
                             "open.lisp"
                             "or.lisp"
                             "parse-integer.lisp"
