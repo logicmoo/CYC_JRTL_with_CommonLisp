@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.473 2003-10-13 13:10:03 piso Exp $
+ * $Id: Primitives.java,v 1.474 2003-10-14 16:04:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1027,8 +1027,9 @@ public final class Primitives extends Module
     // ### assoc
     // assoc item alist &key key test test-not => entry
     // This is the bootstrap version (needed for %set-documentation).
-    // Redefined properly in list.lisp.
-    private static final Primitive ASSOC = new Primitive("assoc") {
+    // Redefined properly in assoc.lisp.
+    private static final Primitive ASSOC = new Primitive("assoc")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 2)
@@ -1050,7 +1051,8 @@ public final class Primitives extends Module
 
     // ### nth
     // nth n list => object
-    private static final Primitive2 NTH = new Primitive2("nth") {
+    private static final Primitive2 NTH = new Primitive2("nth")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
