@@ -2,7 +2,7 @@
  * ToolBar.java
  *
  * Copyright (C) 2000-2004 Peter Graves
- * $Id: ToolBar.java,v 1.6 2004-05-25 00:24:53 piso Exp $
+ * $Id: ToolBar.java,v 1.7 2004-05-25 01:19:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,17 +86,6 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
             case STYLE_TEXT_ONLY:
                 button.setText(text);
                 break;
-        }
-        // Setting the minimum button size doesn't work with Java 1.4.0-beta.
-        if (!System.getProperty("java.version").startsWith("1.4")) {
-            if (button.getText() != null && button.getText().length() != 0) {
-                Dimension dim = button.getPreferredSize();
-                if (dim.width < 40) {
-                    dim.width = 40;
-                    button.setMaximumSize(dim);
-                    button.setMinimumSize(dim);
-                }
-            }
         }
         button.setRolloverEnabled(isRolloverEnabled());
         button.setEnabled(enabled);
