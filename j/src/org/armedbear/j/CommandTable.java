@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.23 2003-05-15 01:22:58 piso Exp $
+ * $Id: CommandTable.java,v 1.24 2003-05-17 17:37:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -424,16 +424,16 @@ public class CommandTable
 
             // jdb commands.
             addCommand("jdb", "jdb.Jdb");
+            addCommand("jdbContinue", "jdb.JdbCommands");
             addCommand("jdbDeleteBreakpoint", "jdb.Jdb");
+            addCommand("jdbFinish", "jdb.JdbCommands");
             addCommand("jdbLocals", "jdb.JdbCommands");
             addCommand("jdbNext", "jdb.JdbCommands");
             addCommand("jdbQuit", "jdb.JdbCommands");
             addCommand("jdbRestart", "jdb.JdbCommands");
-            addCommand("jdbResume", "jdb.JdbCommands");
             addCommand("jdbRunToCurrentLine", "jdb.Jdb");
             addCommand("jdbSetBreakpoint", "jdb.Jdb");
             addCommand("jdbStep", "jdb.JdbCommands");
-            addCommand("jdbStepOut", "jdb.JdbCommands");
             addCommand("jdbSuspend", "jdb.JdbCommands");
             addCommand("jdbToggleBreakpoint", "jdb.Jdb");
 
