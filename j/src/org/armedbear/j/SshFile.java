@@ -2,7 +2,7 @@
  * SshFile.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshFile.java,v 1.4 2002-11-30 02:15:31 piso Exp $
+ * $Id: SshFile.java,v 1.5 2002-11-30 15:49:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,10 @@
  */
 
 package org.armedbear.j;
+
+import gnu.regexp.RE;
+import gnu.regexp.REException;
+import gnu.regexp.REMatch;
 
 public final class SshFile extends File
 {
@@ -112,6 +116,8 @@ public final class SshFile extends File
     public boolean isDirectory()
     {
         if (type == TYPE_LINK) {
+            if (DirectoryCache.getDirectoryCache().getListing(this) != null)
+                return true;
             SshSession session = SshSession.getSession(this);
             if (session != null) {
                 Debug.assertTrue(session.isLocked());
@@ -122,6 +128,34 @@ public final class SshFile extends File
                 return false;
         }
         if (type == TYPE_UNKNOWN) {
+            if (DirectoryCache.getDirectoryCache().getListing(this) != null)
+                return true;
+            SshFile parent = (SshFile) getParentFile();
+            if (parent != null) {
+                String listing = parent.getDirectoryListing();
+                if (listing != null) {
+                    try {
+                        String pattern =
+                            "\\n[d\\-][^\\n]+ " + getName() + "\\n";
+                        RE re = new RE(pattern);
+                        REMatch match = re.getMatch(listing);
+                        if (match != null) {
+                            String s = match.toString();
+                            if (s.length() > 1) {
+                                char c = s.charAt(1);
+                                if (c == 'd')
+                                    return true;
+                                if (c == '-')
+                                    return false;
+                                // Otherwise fall through...
+                            }
+                        }
+                    }
+                    catch (REException e) {
+                        Log.error(e);
+                    }
+                }
+            }
             SshSession session = SshSession.getSession(this);
             if (session != null) {
                 Debug.assertTrue(session.isLocked());
