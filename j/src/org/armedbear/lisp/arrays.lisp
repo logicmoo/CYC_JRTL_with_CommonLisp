@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: arrays.lisp,v 1.17 2004-03-18 19:09:46 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: arrays.lisp,v 1.18 2005-03-23 18:27:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
                               (initial-element nil initial-element-p)
                               initial-contents adjustable fill-pointer
                               displaced-to displaced-index-offset)
+  (setf element-type (normalize-type element-type))
   (%make-array dimensions element-type initial-element initial-element-p
                initial-contents adjustable fill-pointer displaced-to
                displaced-index-offset))
