@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.4 2002-11-28 16:07:13 piso Exp $
+ * $Id: SshSession.java,v 1.5 2002-11-28 22:37:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -347,9 +347,9 @@ public final class SshSession implements Constants
         }
         String listing = DirectoryCache.getDirectoryCache().getListing(file);
         if (listing == null) {
-            SshSession session = SshSession.getSession((SshFile) file);
+            SshSession session = getSession((SshFile)file);
             if (session != null) {
-                listing = session.getDirectoryListing(file.canonicalPath());
+                listing = session.retrieveDirectoryListing(file);
                 session.unlock();
                 if (listing != null) {
                     Log.debug("adding " + file + " to cache");
@@ -360,22 +360,28 @@ public final class SshSession implements Constants
         return listing;
     }
 
-    public String getDirectoryListing(String canonicalPath)
+    public String retrieveDirectoryListing(File file)
     {
-        Debug.assertTrue(isLocked());
-        if (!connect())
-            return null;
-        try {
-            // Do it this way to support symlinks.
-            if (!changeDirectory(canonicalPath))
-                return null;
-            // Change directory succeeded. Do ls -la here.
-            return lsla();
-        }
-        catch (Exception e) {
-            Log.error(e);
+        if (!(file instanceof SshFile)) {
+            Debug.bug();
             return null;
         }
+        if (!isLocked()) {
+            Debug.bug();
+            return null;
+        }
+        if (connect()) {
+            try {
+                // Do it this way to support symlinks.
+                if (changeDirectory(file.canonicalPath()))
+                    // Change directory succeeded. Do ls -la here.
+                    return lsla();
+            }
+            catch (Exception e) {
+                Log.error(e);
+            }
+        }
+        return null;
     }
 
     public synchronized boolean chmod(SshFile file, int permissions)
