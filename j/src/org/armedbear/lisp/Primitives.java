@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.695 2004-10-22 17:44:05 piso Exp $
+ * $Id: Primitives.java,v 1.696 2004-10-23 19:27:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,8 @@ public final class Primitives extends Lisp
     };
 
     // ### /
-    public static final Primitive DIVIDE = new Primitive("/","numerator &rest denominators")
+    public static final Primitive DIVIDE =
+        new Primitive("/", "numerator &rest denominators")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -82,7 +83,7 @@ public final class Primitives extends Lisp
     };
 
     // ### min
-    public static final Primitive MIN = new Primitive("min","&rest reals")
+    public static final Primitive MIN = new Primitive("min", "&rest reals")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -93,14 +94,18 @@ public final class Primitives extends Lisp
         {
             if (arg.realp())
                 return arg;
-            signal(new TypeError(arg, "real number"));
-            return NIL;
+            return signal(new TypeError(arg, Symbol.REAL));
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return first.isLessThan(second) ? first : second;
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             LispObject result = args[0];
             if (!result.realp())
-                signal(new TypeError(result, "real number"));
+                signal(new TypeError(result, Symbol.REAL));
             for (int i = 1; i < args.length; i++) {
                 if (args[i].isLessThan(result))
                     result = args[i];
@@ -109,9 +114,8 @@ public final class Primitives extends Lisp
         }
     };
 
-
     // ### max
-    public static final Primitive MAX = new Primitive("max","&rest reals")
+    public static final Primitive MAX = new Primitive("max", "&rest reals")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -122,14 +126,18 @@ public final class Primitives extends Lisp
         {
             if (arg.realp())
                 return arg;
-            signal(new TypeError(arg, "real number"));
-            return NIL;
+            return signal(new TypeError(arg, Symbol.REAL));
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return first.isGreaterThan(second) ? first : second;
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             LispObject result = args[0];
             if (!result.realp())
-                signal(new TypeError(result, "real number"));
+                signal(new TypeError(result, Symbol.REAL));
             for (int i = 1; i < args.length; i++) {
                 if (args[i].isGreaterThan(result))
                     result = args[i];
@@ -139,7 +147,7 @@ public final class Primitives extends Lisp
     };
 
     // ### identity
-    private static final Primitive1 IDENTITY = new Primitive1("identity","object")
+    private static final Primitive1 IDENTITY = new Primitive1("identity", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -3382,25 +3390,30 @@ public final class Primitives extends Lisp
     private static final Primitive CLOSE =
         new Primitive("close", "stream &key abort")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            final int length = args.length;
-            if (length == 0)
-                signal(new WrongNumberOfArgumentsException(this));
-            LispObject abort = NIL; // Default.
-            Stream stream = checkStream(args[0]);
-            if (length > 1) {
-                if ((length - 1) % 2 != 0)
-                    signal(new ProgramError("Odd number of keyword arguments."));
-                if (length > 3)
-                    signal(new WrongNumberOfArgumentsException(this));
-                if (args[1] == Keyword.ABORT)
-                    abort = args[2];
-                else
-                    signal(new ProgramError("Unrecognized keyword argument " +
-                                            args[1].writeToString() + "."));
+            try {
+                return ((Stream)arg).close(NIL);
             }
-            return stream.close(abort);
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.STREAM));
+            }
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            final Stream stream;
+            try {
+                stream = (Stream) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STREAM));
+            }
+            if (second == Keyword.ABORT)
+                return stream.close(third);
+            return signal(new ProgramError("Unrecognized keyword argument " +
+                                           second.writeToString() + "."));
         }
     };
 
