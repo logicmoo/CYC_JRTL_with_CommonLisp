@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: late-setf.lisp,v 1.5 2004-08-21 03:19:40 piso Exp $
+;;; $Id: late-setf.lisp,v 1.6 2004-10-14 16:51:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; From CMUCL/SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defmacro define-setf-expander (access-fn lambda-list &body body)
   (require-type access-fn 'symbol)
@@ -43,9 +43,10 @@
     (dolist (place places)
       (multiple-value-bind (dummies vals newval setter getter)
         (get-setf-expansion place env)
-        (setq all-dummies (append all-dummies dummies)
-              all-vals (append all-vals vals)
-              newvals (append newvals newval))
+        (setf all-dummies (append all-dummies dummies (cdr newval))
+              all-vals (append all-vals vals
+                               (mapcar (constantly nil) (cdr newval)))
+              newvals (append newvals (list (car newval))))
         (push setter setters)
         (push getter getters)))
     (values all-dummies all-vals newvals
