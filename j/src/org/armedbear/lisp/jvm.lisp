@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.247 2004-07-27 04:51:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.248 2004-07-27 16:18:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2569,7 +2569,8 @@
     (emit-move-from-stack target)))
 
 (defun compile-tagbody-node (block target)
-  (let* ((*visible-tags* *visible-tags*)
+  (let* ((*blocks* (cons block *blocks*))
+         (*visible-tags* *visible-tags*)
          (form (block-form block))
          (body (cdr form)))
 ;;     (format t "COMPILE-TAGBODY-NODE non-local-go-p = ~S~%"
@@ -2607,6 +2608,26 @@
       (error "COMPILE-GO: tag not found: ~S" name))
     (unless (eq (tag-compiland tag) *current-compiland*)
       (error "COMPILE-GO: tag not local: ~S" name))
+    (progn
+;;       (%format t "COMPILE-GO tag-block = ~S~%" (block-name (tag-block tag)))
+      (let ((tag-block (tag-block tag))
+            (register nil))
+        (dolist (block *blocks*)
+;;           (%format t "block = ~S reg = ~S~%"
+;;                    (block-name block)
+;;                    (block-environment-register block))
+          (if (eq block tag-block)
+              (return)
+              (setf register (or (block-environment-register block) register)))
+          )
+;;         (%format t "register = ~S~%" register)
+        (when register
+          ;; Restore dynamic environment.
+          (emit 'aload *thread*)
+          (emit 'aload register)
+          (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+          )
+        ))
     (emit 'goto (tag-label tag))))
 
 (defun compile-atom (form &key (target *val*))
