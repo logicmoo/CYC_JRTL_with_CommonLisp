@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.387 2005-02-03 17:13:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.388 2005-02-03 20:36:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1658,9 +1658,9 @@
 (defun finalize-code ()
   (setf *code* (nreverse (coerce *code* 'vector))))
 
-(defun print-code()
+(defun print-code ()
   (dotimes (i (length *code*))
-    (let ((instruction (aref *code* i)))
+    (let ((instruction (elt *code* i)))
       (%format t "~D ~A ~S ~S ~S~%"
                i
                (opcode-name (instruction-opcode instruction))
@@ -1668,14 +1668,17 @@
                (instruction-stack instruction)
                (instruction-depth instruction)))))
 
-(defun validate-labels (code)
-  (let ((code (coerce code 'list))
-        (i 0))
-    (dolist (instruction code)
-      (when (eql (instruction-opcode instruction) 202) ; LABEL
-        (let ((label (car (instruction-args instruction))))
-          (set label i)))
-      (incf i))))
+(defun print-code2 (code)
+  (dotimes (i (length code))
+    (let ((instruction (elt code i)))
+      (case (instruction-opcode instruction)
+        (202 ; LABEL
+         (format t "~A:~%" (car (instruction-args instruction))))
+        (t
+         (format t "~8D:   ~A ~S~%"
+                 i
+                 (opcode-name (instruction-opcode instruction))
+                 (instruction-args instruction)))))))
 
 (defun label-p (instruction)
 ;;   (declare (optimize safety))
@@ -1810,31 +1813,30 @@
 
 (defun delete-unreachable-code ()
   (when *delete-unreachable-code-flag*
-    ;; Look for unreachable code after GOTO.
-    (unless (listp *code*)
-      (setf *code* (coerce *code* 'list)))
-    (validate-labels *code*)
-    (let* ((code *code*)
-           (tail code)
-           (locally-changed-p nil)
-           (after-goto nil))
-      (loop
-        (when (null tail)
-          (return))
-        (let ((instruction (car tail)))
-          (cond (after-goto
-                 (if (= (instruction-opcode instruction) 202) ; LABEL
-                     (setf after-goto nil)
-                     ;; Unreachable.
-                     (progn
-                       (setf (car tail) nil)
-                       (setf locally-changed-p t))))
-                ((= (instruction-opcode instruction) 167) ; GOTO
-                 (setf after-goto t))))
-        (setf tail (cdr tail)))
-      (when locally-changed-p
-        (setf *code* (delete nil code))
-        t))))
+      ;; Look for unreachable code after GOTO.
+      (unless (listp *code*)
+        (setf *code* (coerce *code* 'list)))
+      (let* ((code *code*)
+             (tail code)
+             (locally-changed-p nil)
+             (after-goto nil))
+        (loop
+          (when (null tail)
+            (return))
+          (let ((instruction (car tail)))
+            (cond (after-goto
+                   (if (= (instruction-opcode instruction) 202) ; LABEL
+                       (setf after-goto nil)
+                       ;; Unreachable.
+                       (progn
+                         (setf (car tail) nil)
+                         (setf locally-changed-p t))))
+                  ((= (instruction-opcode instruction) 167) ; GOTO
+                   (setf after-goto t))))
+          (setf tail (cdr tail)))
+        (when locally-changed-p
+          (setf *code* (delete nil code))
+          t))))
 
 (defvar *enable-optimization* t)
 
