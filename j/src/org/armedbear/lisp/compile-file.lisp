@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.52 2005-01-31 05:54:14 piso Exp $
+;;; $Id: compile-file.lisp,v 1.53 2005-02-01 14:21:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -245,35 +245,34 @@
              (start (get-internal-real-time))
              elapsed)
         (%format t "; Compiling ~A ...~%" namestring)
-        (jvm::with-compilation-unit
-         (with-open-file (out temp-file :direction :output :if-exists :supersede)
-           (let ((*readtable* *readtable*)
-                 (*package* *package*)
-                 (jvm:*speed* jvm:*speed*)
-                 (jvm:*safety* jvm:*safety*)
-                 (jvm:*debug* jvm:*debug*)
-                 (jvm::*toplevel-defuns* ())
-                 (*fbound-names* ()))
-             (write "; -*- Mode: Lisp -*-" :escape nil :stream out)
-             (terpri out)
-             (let ((*package* (find-package '#:cl)))
-               (write (list 'init-fasl :version *fasl-version*) :stream out)
-               (terpri out)
-               (write (list 'setq '*fasl-source* *compile-file-truename*) :stream out)
-               (terpri out))
-             (loop
-               (let* ((*source-position* (file-position in))
-                      (form (read in nil in)))
-                 (when (eq form in)
-                   (return))
-                 (process-toplevel-form form out nil)))
-             (dolist (name *fbound-names*)
-               (fmakunbound name))))
-         (cond
-          ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
-           (setf warnings-p nil failure-p nil))
-          ((zerop (+ jvm::*errors* jvm::*warnings*))
-           (setf failure-p nil))))
+        (with-compilation-unit ()
+          (with-open-file (out temp-file :direction :output :if-exists :supersede)
+            (let ((*readtable* *readtable*)
+                  (*package* *package*)
+                  (jvm:*speed* jvm:*speed*)
+                  (jvm:*safety* jvm:*safety*)
+                  (jvm:*debug* jvm:*debug*)
+                  (jvm::*toplevel-defuns* ())
+                  (*fbound-names* ()))
+              (write "; -*- Mode: Lisp -*-" :escape nil :stream out)
+              (terpri out)
+              (let ((*package* (find-package '#:cl)))
+                (write (list 'init-fasl :version *fasl-version*) :stream out)
+                (terpri out)
+                (write (list 'setq '*fasl-source* *compile-file-truename*) :stream out)
+                (terpri out))
+              (loop
+                (let* ((*source-position* (file-position in))
+                       (form (read in nil in)))
+                  (when (eq form in)
+                    (return))
+                  (process-toplevel-form form out nil)))
+              (dolist (name *fbound-names*)
+                (fmakunbound name))))
+          (cond ((zerop (+ jvm::*errors* jvm::*warnings* jvm::*style-warnings*))
+                 (setf warnings-p nil failure-p nil))
+                ((zerop (+ jvm::*errors* jvm::*warnings*))
+                 (setf failure-p nil))))
         (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
         (rename-file temp-file output-file)
         (%format t "; Compiled ~A (~A seconds)~%" namestring elapsed)))

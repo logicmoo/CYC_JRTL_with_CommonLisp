@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.174 2005-01-31 17:20:31 piso Exp $
+;;; $Id: autoloads.lisp,v 1.175 2005-02-01 14:21:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -275,3 +275,4 @@
 ;; JVM compiler.
 (in-package "JVM")
 (export '(jvm-compile jvm-compile-package))
+(autoload '%with-compilation-unit "jvm")

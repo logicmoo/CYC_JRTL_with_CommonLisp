@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.381 2005-02-01 05:20:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.382 2005-02-01 14:20:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5424,21 +5424,28 @@
 
 (defvar *catch-errors* t)
 
-(defmacro with-compilation-unit (&body body)
-  `(let ((*style-warnings* 0)
-         (*warnings* 0)
-         (*errors* 0))
-     (unwind-protect
-      (progn ,@body)
-      (unless (and (zerop *warnings*) (zerop *style-warnings*))
-        (format t "~%; Compilation unit finished~%")
-        (unless (zerop *warnings*)
-          (format t ";   Caught ~D WARNING condition~P~%"
-                  *warnings* *warnings*))
-        (unless (zerop *style-warnings*)
-          (format t ";   Caught ~D STYLE-WARNING condition~P~%"
-                  *style-warnings* *style-warnings*))
-        (terpri)))))
+(defvar *in-compilation-unit* nil)
+
+(defmacro with-compilation-unit (options &body body)
+  `(%with-compilation-unit (lambda () ,@body) ,@options))
+
+(defun %with-compilation-unit (fn &key override)
+  (if (and *in-compilation-unit* (not override))
+      (funcall fn)
+      (let ((*style-warnings* 0)
+            (*warnings* 0)
+            (*errors* 0))
+        (unwind-protect
+            (funcall fn)
+          (unless (and (zerop *warnings*) (zerop *style-warnings*))
+            (format t "~%; Compilation unit finished~%")
+            (unless (zerop *warnings*)
+              (format t ";   Caught ~D WARNING condition~P~%"
+                      *warnings* *warnings*))
+            (unless (zerop *style-warnings*)
+              (format t ";   Caught ~D STYLE-WARNING condition~P~%"
+                      *style-warnings* *style-warnings*))
+            (terpri))))))
 
 (defun %jvm-compile (name definition)
   (let ((prefix (load-verbose-prefix)))
@@ -5469,7 +5476,7 @@
              compiled-definition
              (warnings-p t)
              (failure-p t))
-        (with-compilation-unit
+        (with-compilation-unit ()
           (let ((filespec (compile-defun name expr env)))
             (setf compiled-definition (sys:load-compiled-function filespec))
             (when (and name (functionp compiled-definition))

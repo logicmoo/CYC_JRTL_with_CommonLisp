@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.38 2005-01-31 17:28:17 piso Exp $
+;;; $Id: compile-system.lisp,v 1.39 2005-02-01 14:20:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,10 +74,8 @@
             (compile-file source-file)
             target-file))))
 
-(defun compile-system ()
-  (check-lisp-home)
-  (time
-   (let ((*default-pathname-defaults* (pathname *lisp-home*))
+(defun %compile-system ()
+  (let ((*default-pathname-defaults* (pathname *lisp-home*))
          (*warn-on-redefinition* nil))
      (load (maybe-compile-file "precompiler.lisp"))
      (load (maybe-compile-file "source-transform.lisp"))
@@ -254,4 +252,10 @@
                                   "slime.lisp"
                                   "swank-abcl.lisp"
                                   "swank.lisp"))
-     t)))
+     t))
+
+(defun compile-system ()
+  (check-lisp-home)
+  (time
+   (with-compilation-unit ()
+     (%compile-system))))
