@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Condition.java,v 1.11 2003-09-22 00:02:41 piso Exp $
+ * $Id: Condition.java,v 1.12 2003-10-25 20:59:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,11 +69,6 @@ public class Condition extends StandardObject
         String s = getMessage();
         if (s != null)
             return s;
-        StringBuffer sb = new StringBuffer("#<");
-        sb.append(typeOf());
-        sb.append(" @ ");
-        sb.append(Integer.toHexString(hashCode()));
-        sb.append(">");
-        return sb.toString();
+        return unreadableString(String.valueOf(typeOf()));
     }
 }
