@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.144 2003-12-14 17:06:21 piso Exp $
+;;; $Id: rt.lisp,v 1.145 2003-12-15 19:08:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@
 	 (properties
 	  (loop while (keywordp (first p))
             unless (cadr p)
-            do (error "Poorly formed deftest: ~A~%"
+            do (error "Poorly formed deftest: ~S~%"
                       (list* 'deftest name body))
             append (list (pop p) (pop p))))
 	 (form (pop p))
@@ -93,11 +93,11 @@
                             (error (c) (setf aborted t) (list c))))
            (passed (and (not aborted) (equalp-with-case r `,values))))
       (unless passed
-        (format t "  Expected value: ~A~%"
+        (format t "  Expected value: ~S~%"
                 (if (= (length `,values) 1)
                     (car `,values)
                     `,values))
-        (format t "    Actual value: ~A~%"
+        (format t "    Actual value: ~S~%"
                 (if (= (length r) 1)
                     (car r)
                     r))
