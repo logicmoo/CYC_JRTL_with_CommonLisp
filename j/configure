@@ -1588,7 +1588,7 @@ else
 fi
 
 
-                                                                                                    ac_config_files="$ac_config_files Makefile src/Makefile src/jpty/Makefile src/gnu/regexp/Makefile src/org/armedbear/j/Makefile src/org/armedbear/j/version src/org/armedbear/j/mail/Makefile src/org/armedbear/j/jdb/Makefile src/org/armedbear/lisp/Makefile j"
+                                                                                                              ac_config_files="$ac_config_files Makefile src/Makefile src/jpty/Makefile src/gnu/regexp/Makefile src/org/armedbear/j/Makefile src/org/armedbear/j/version src/org/armedbear/j/mail/Makefile src/org/armedbear/j/jdb/Makefile src/org/armedbear/lisp/Makefile j lisp"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -2149,6 +2149,7 @@ do
   "src/org/armedbear/j/jdb/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/org/armedbear/j/jdb/Makefile" ;;
   "src/org/armedbear/lisp/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/org/armedbear/lisp/Makefile" ;;
   "j" ) CONFIG_FILES="$CONFIG_FILES j" ;;
+  "lisp" ) CONFIG_FILES="$CONFIG_FILES lisp" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
    { (exit 1); exit 1; }; };;
