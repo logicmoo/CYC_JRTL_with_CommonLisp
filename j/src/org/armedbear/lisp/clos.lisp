@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.56 2004-01-02 00:41:04 piso Exp $
+;;; $Id: clos.lisp,v 1.57 2004-01-02 01:25:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -436,7 +436,7 @@
                       (t
                        (slot-missing (class-of instance) instance slot-name 'slot-value)))))
     (if (eq +slot-unbound+ value)
-        (error "The slot ~S is unbound in the object ~S." slot-name instance)
+        (slot-unbound (class-of instance) instance slot-name)
         value)))
 
 (defun slot-value (object slot-name)
@@ -1414,6 +1414,11 @@
 
 (defmethod slot-missing ((class t) instance slot-name operation &optional new-value)
   (error "The slot ~S is missing from the class ~S." slot-name class))
+
+(defgeneric slot-unbound (class instance slot-name))
+
+(defmethod slot-unbound ((class t) instance slot-name)
+  (error 'unbound-slot :instance instance :name slot-name))
 
 ;;; Instance creation and initialization
 
