@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.8 2003-09-29 17:59:52 piso Exp $
+ * $Id: Time.java,v 1.9 2003-09-30 10:58:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,6 +91,7 @@ public final class Time extends Lisp
         }
     };
 
+    // ### default-time-zone
     private static final Primitive0 DEFAULT_TIME_ZONE =
         new Primitive0("default-time-zone", PACKAGE_SYS, false)
     {
