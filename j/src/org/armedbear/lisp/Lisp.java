@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.19 2003-02-19 17:40:02 piso Exp $
+ * $Id: Lisp.java,v 1.20 2003-02-21 01:20:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,11 @@ public abstract class Lisp
 {
     // ### t
     public static final LispObject T = new LispObject() {
+        public LispObject typeOf()
+        {
+            return Symbol.SYMBOL;
+        }
+
         public String toString()
         {
             return "T";
