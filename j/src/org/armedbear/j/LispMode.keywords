@@ -401,6 +401,8 @@ push
 pushnew
 quote
 random
+rational
+rationalize
 rationalp
 read
 read-byte
