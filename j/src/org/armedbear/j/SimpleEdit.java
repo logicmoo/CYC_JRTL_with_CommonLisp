@@ -2,7 +2,7 @@
  * SimpleEdit.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: SimpleEdit.java,v 1.2 2003-05-13 16:38:15 piso Exp $
+ * $Id: SimpleEdit.java,v 1.3 2003-07-19 17:13:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class SimpleEdit
     public static final int INSERT_STRING   =  5;
     public static final int FOLD            =  6;
 
-    public static boolean addUndo(Editor editor, int type, String text)
+    public static boolean addUndo(Editor editor, int type)
     {
         final Buffer buffer = editor.getBuffer();
         if (!buffer.supportsUndo())
