@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.2 2003-01-26 16:40:31 piso Exp $
+ * $Id: Closure.java,v 1.3 2003-02-01 00:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,6 +266,10 @@ public class Closure extends Function
                         LispObject value =
                             initForm != null? eval(initForm, ext) : NIL;
                         bind(symbol, value, ext);
+                    }
+                    if (parameter.svar != NIL) {
+                        Symbol svar = checkSymbol(parameter.svar);
+                        bind(svar, bound ? T : NIL, ext);
                     }
                     ++i;
                 }
