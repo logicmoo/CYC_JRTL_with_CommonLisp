@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CTagger.java,v 1.5 2002-11-09 18:17:45 piso Exp $
+ * $Id: CTagger.java,v 1.6 2002-11-25 16:21:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,6 +131,10 @@ public final class CTagger extends JavaTagger
                     token = gatherDefunName(pos);
                     tags.add(new CTag(token, tokenStart));
                     while ((c = pos.getChar()) != '{') {
+                        if (c == '"' || c == '\'') {
+                            pos.skipQuote();
+                            continue;
+                        }
                         if (!pos.next())
                             break;
                     }
@@ -166,20 +170,30 @@ public final class CTagger extends JavaTagger
     {
         if (s.length() < 5)
             return false;
-        if (s.charAt(0) != 'D')
-            return false;
-        if (s.equals("DEFUN")) // Emacs, rep
-            return true;
-        if (s.equals("DEFUN_INT")) // rep
-            return true;
+        char c = s.charAt(0);
+        if (c == 'D') {
+            if (s.equals("DEFUN")) // Emacs, rep
+                return true;
+            if (s.equals("DEFUN_INT")) // rep
+                return true;
+        } else if (c == 'S') {
+            if (s.equals("SCM_DEFINE")) // guile
+                return true;
+        }
         return false;
     }
 
     private static String gatherDefunName(Position pos)
     {
         FastStringBuffer sb = new FastStringBuffer();
-        char c;
-        while ((c = pos.getChar()) != '"' && c != EOL) {
+        while (true) {
+            char c = pos.getChar();
+            if (c == '"') {
+                pos.next(); // Skip past final quote char.
+                break;
+            }
+            if (c == EOL)
+                break;
             sb.append(c);
             if (!pos.next())
                 break;
