@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.134 2004-01-16 16:52:04 piso Exp $
+ * $Id: Autoload.java,v 1.135 2004-01-16 17:10:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,6 +263,7 @@ public class Autoload extends Function
         autoload("logxor", "logxor");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
+        autoload("open-stream-p", "open_stream_p");
         autoload("output-stream-p", "output_stream_p");
         autoload("package-name", "PackageFunctions");
         autoload("package-nicknames", "PackageFunctions");
