@@ -2,7 +2,7 @@
  * JdbConstants.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JdbConstants.java,v 1.2 2003-05-18 19:22:19 piso Exp $
+ * $Id: JdbConstants.java,v 1.3 2003-05-19 02:03:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,17 +23,22 @@ package org.armedbear.j.jdb;
 
 public interface JdbConstants
 {
-    int JDB_BREAK    =  1;
-    int JDB_CLEAR    =  2;
-    int JDB_CONTINUE =  3;
-    int JDB_FINISH   =  4;
-    int JDB_LOCALS   =  5;
-    int JDB_NEXT     =  6;
-    int JDB_PRINT    =  7;
-    int JDB_QUIT     =  8;
-    int JDB_RESTART  =  9;
-    int JDB_STDIN    = 10;
-    int JDB_STEP     = 11;
-    int JDB_SUSPEND  = 12;
-    int JDB_TBREAK   = 13;
+    int JDB_BREAK       =  1;
+    int JDB_CATCH       =  2;
+    int JDB_CLEAR       =  3;
+    int JDB_CONTINUE    =  4;
+    int JDB_FINISH      =  5;
+    int JDB_LOCALS      =  6;
+    int JDB_NEXT        =  7;
+    int JDB_PRINT       =  8;
+    int JDB_QUIT        =  9;
+    int JDB_RESTART     = 10;
+    int JDB_STDIN       = 11;
+    int JDB_STEP        = 12;
+    int JDB_SUSPEND     = 13;
+    int JDB_TBREAK      = 14;
+
+    int CATCH_NONE      =  0;
+    int CATCH_UNCAUGHT  =  1;
+    int CATCH_ALL       =  2;
 }
