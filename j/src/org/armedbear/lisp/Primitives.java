@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.486 2003-10-27 04:44:18 dmcnaught Exp $
+ * $Id: Primitives.java,v 1.487 2003-10-27 19:19:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3239,25 +3239,31 @@ public final class Primitives extends Module
                 Symbol symbol = checkSymbol(vars.car());
                 LispObject value = i < limit ? values[i] : NIL;
                 ++i;
+                Binding binding = null;
                 if (symbol.isSpecialVariable()) {
-                    if (dynEnv != null) {
-                        Binding binding = dynEnv.getBinding(symbol);
-                        if (binding != null) {
-                            binding.value = value;
-                            vars = vars.cdr();
-                            continue;
-                        }
-                    }
-                    symbol.setSymbolValue(value);
-                    vars = vars.cdr();
-                    continue;
+                    if (dynEnv != null)
+                        binding = dynEnv.getBinding(symbol);
+                } else {
+                    // Not special.
+                    binding = env.getBinding(symbol);
                 }
-                // Not special.
-                Binding binding = env.getBinding(symbol);
-                if (binding != null)
-                    binding.value = value;
-                else
-                    symbol.setSymbolValue(value);
+                if (binding != null) {
+                    if (binding.value instanceof SymbolMacro) {
+                        LispObject expansion =
+                            ((SymbolMacro)binding.value).getExpansion();
+                        LispObject obj = list3(Symbol.SETF, expansion, value);
+                        eval(obj, env, thread);
+                    } else
+                        binding.value = value;
+                } else {
+                    if (symbol.getSymbolValue() instanceof SymbolMacro) {
+                        LispObject expansion =
+                            ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
+                        LispObject obj = list3(Symbol.SETF, expansion, value);
+                        eval(obj, env, thread);
+                    } else
+                        symbol.setSymbolValue(value);
+                }
                 vars = vars.cdr();
             }
             thread.clearValues();
@@ -4468,14 +4474,14 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive1 COS = 
+    private static final Primitive1 COS =
         new Primitive1("cos") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return cos(arg);
         }
     };
-    
+
     private static LispObject cos(LispObject arg) throws ConditionThrowable
     {
         if (arg.realp()) {
@@ -4489,10 +4495,10 @@ public final class Primitives extends Module
             c = (Complex)c.divideBy(new Fixnum(2));
             return c;
         }
-        
+
         throw new ConditionThrowable(new TypeError(arg, "number"));
     }
-    
+
     private static final Primitive1 SIN =
         new Primitive1("sin") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -4500,7 +4506,7 @@ public final class Primitives extends Module
             return sin(arg);
         }
     };
-    
+
     private static LispObject sin(LispObject arg) throws ConditionThrowable
     {
         if (arg.realp()) {  // return real
@@ -4517,7 +4523,7 @@ public final class Primitives extends Module
 
         throw new ConditionThrowable(new TypeError(arg, "number"));
     }
-    
+
     private static final Primitive1 TAN =
         new Primitive1("tan") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -4525,12 +4531,12 @@ public final class Primitives extends Module
             return tan(arg);
         }
     };
-    
+
     private static LispObject tan(LispObject arg) throws ConditionThrowable
     {
         return sin(arg).divideBy(cos(arg));
     }
-    
+
     private static final Primitive1 EXP =
         new Primitive1("exp") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -4538,7 +4544,7 @@ public final class Primitives extends Module
             return exp(arg);
         }
     };
-    
+
     private static LispObject exp(LispObject arg) throws ConditionThrowable
     {
         if (arg.realp()) {  // return real
@@ -4552,10 +4558,10 @@ public final class Primitives extends Module
             LispFloat resY = new LispFloat(Math.exp(re) * Math.sin(im));
             return Complex.getInstance(resX, resY);
         }
-        
+
         throw new ConditionThrowable(new TypeError(arg, "number"));
     }
-    
+
     // ### sqrt
     private static final Primitive1 SQRT =
         new Primitive1("sqrt") {
@@ -4578,7 +4584,7 @@ public final class Primitives extends Module
                 return exp(log(obj).divideBy(Fixnum.TWO));
             }
         }
-            
+
         throw new ConditionThrowable(new TypeError(obj, "number"));
     }
 
