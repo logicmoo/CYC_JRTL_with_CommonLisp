@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.174 2003-11-07 20:19:49 piso Exp $
+ * $Id: Lisp.java,v 1.175 2003-11-12 21:26:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,8 @@ public abstract class Lisp
         Packages.createPackage("TOP-LEVEL");
     public static final Package PACKAGE_EXT =
         Packages.createPackage("EXTENSIONS");
+    public static final Package PACKAGE_PROF =
+        Packages.createPackage("PROFILER");
     public static final Package PACKAGE_JAVA =
         Packages.createPackage("JAVA");
     static {
@@ -55,6 +57,9 @@ public abstract class Lisp
             PACKAGE_TPL.usePackage(PACKAGE_EXT);
             PACKAGE_EXT.addNickname("EXT");
             PACKAGE_EXT.usePackage(PACKAGE_CL);
+            PACKAGE_PROF.addNickname("PROF");
+            PACKAGE_PROF.usePackage(PACKAGE_CL);
+            PACKAGE_PROF.usePackage(PACKAGE_EXT);
         }
         catch (Throwable t) {
             t.printStackTrace();
@@ -65,6 +70,8 @@ public abstract class Lisp
 
     static {
         PACKAGE_CL.addInitialExports(Exports.COMMON_LISP_SYMBOL_NAMES);
+        PACKAGE_PROF.addExternalSymbol("SHOW-CALL-COUNTS");
+        PACKAGE_PROF.addExternalSymbol("PROFILE");
     }
 
     // ### nil
@@ -77,6 +84,14 @@ public abstract class Lisp
     static final int FTYPE_SPECIAL_OPERATOR = 1;
     static final int FTYPE_MACRO            = 2;
     static final int FTYPE_AUTOLOAD         = 3;
+
+    public static boolean debug = true;
+
+    public static boolean profiling;
+
+    public static boolean sampling;
+
+    public static volatile boolean sampleNow;
 
     // argv must not be null!
     public static final LispObject funcall(LispObject fun, LispObject[] argv,
@@ -93,7 +108,8 @@ public abstract class Lisp
         thread.clearValues();
         LispObject result;
         if (profiling)
-            fun.incrementCallCount();
+            if (!sampling)
+                fun.incrementCallCount();
         switch (argv.length) {
             case 0:
                 result = fun.execute();
@@ -131,7 +147,8 @@ public abstract class Lisp
         thread.clearValues();
         LispObject result;
         if (profiling)
-            fun.incrementCallCount();
+            if (!sampling)
+                fun.incrementCallCount();
         result = fun.execute();
         if (debug)
             thread.popStackFrame();
@@ -155,7 +172,8 @@ public abstract class Lisp
         thread.clearValues();
         LispObject result;
         if (profiling)
-            fun.incrementCallCount();
+            if (!sampling)
+                fun.incrementCallCount();
         result = fun.execute(arg);
         if (debug)
             thread.popStackFrame();
@@ -180,7 +198,8 @@ public abstract class Lisp
         thread.clearValues();
         LispObject result;
         if (profiling)
-            fun.incrementCallCount();
+            if (!sampling)
+                fun.incrementCallCount();
         result = fun.execute(first, second);
         if (debug)
             thread.popStackFrame();
@@ -207,7 +226,8 @@ public abstract class Lisp
         thread.clearValues();
         LispObject result;
         if (profiling)
-            fun.incrementCallCount();
+            if (!sampling)
+                fun.incrementCallCount();
         result = fun.execute(first, second, third);
         if (debug)
             thread.popStackFrame();
@@ -252,7 +272,8 @@ public abstract class Lisp
                 if (obj instanceof MacroObject) {
                     LispObject expander = ((MacroObject)obj).getExpander();
                     if (profiling)
-                        expander.incrementCallCount();
+                        if (!sampling)
+                            expander.incrementCallCount();
                     results[0] = expander.execute(form, env);
                     results[1] = T;
                     thread.setValues(results);
@@ -281,8 +302,6 @@ public abstract class Lisp
         thread.setValues(results);
         return results[0];
     }
-
-    public static boolean debug = true;
 
     private static final Primitive1 INTERACTIVE_EVAL =
         new Primitive1("interactive-eval", PACKAGE_SYS, false)
@@ -337,6 +356,13 @@ public abstract class Lisp
                                         final LispThread thread)
         throws ConditionThrowable
     {
+        if (profiling && sampling) {
+            // FIXME
+            // This is not exactly the right place to do this. We should
+            // include the current call as well.
+            if (sampleNow)
+                Profiler.sample(thread);
+        }
         thread.clearValues();
         if (thread.isDestroyed())
             throw new ThreadDestroyed();
@@ -363,7 +389,8 @@ public abstract class Lisp
                 switch (fun.getFunctionalType()) {
                     case FTYPE_SPECIAL_OPERATOR: {
                         if (profiling)
-                            fun.incrementCallCount();
+                            if (!sampling)
+                                fun.incrementCallCount();
                         // Don't eval args!
                         return fun.execute(obj.cdr(), env);
                     }
@@ -380,7 +407,8 @@ public abstract class Lisp
                                            evalList(obj.cdr(), env, thread),
                                            thread);
                         if (profiling)
-                            fun.incrementCallCount();
+                            if (!sampling)
+                                fun.incrementCallCount();
                         LispObject args = obj.cdr();
                         if (args == NIL)
                             return fun.execute();
@@ -1261,8 +1289,12 @@ public abstract class Lisp
         new Primitive0("%debug", PACKAGE_SYS, false) {
         public LispObject execute() throws ConditionThrowable
         {
-            debug = true;
-            return LispThread.currentThread().nothing();
+            final LispThread thread = LispThread.currentThread();
+            if (!debug) {
+                debug = true;
+                thread.resetStack();
+            }
+            return thread.nothing();
         }
     };
 
@@ -1276,57 +1308,6 @@ public abstract class Lisp
                 thread.resetStack();
             }
             return thread.nothing();
-        }
-    };
-
-    private static boolean profiling;
-
-    // ### start-profiler
-    public static final Primitive0 START_PROFILER =
-        new Primitive0("start-profiler", PACKAGE_EXT, true)
-    {
-        public LispObject execute() throws ConditionThrowable
-        {
-            CharacterOutputStream out = getStandardOutput();
-            out.freshLine();
-            if (!profiling) {
-                Package[] packages = Packages.getAllPackages();
-                for (int i = 0; i < packages.length; i++) {
-                    Package pkg = packages[i];
-                    Symbol[] symbols = pkg.symbols();
-                    for (int j = 0; j < symbols.length; j++) {
-                        Symbol symbol = symbols[j];
-                        LispObject f = symbol.getSymbolFunction();
-                        if (f != null)
-                            f.setCallCount(0);
-                    }
-                }
-                out.writeLine("; Profiling started.");
-                out.flushOutput();
-                profiling = true;
-            } else {
-                out.writeLine("; Profiling already enabled.");
-                out.flushOutput();
-            }
-            return LispThread.currentThread().nothing();
-        }
-    };
-
-    // ### stop-profiler
-    public static final Primitive0 STOP_PROFILER =
-        new Primitive0("stop-profiler", PACKAGE_EXT, true)
-    {
-        public LispObject execute() throws ConditionThrowable
-        {
-            CharacterOutputStream out = getStandardOutput();
-            out.freshLine();
-            if (profiling) {
-                profiling = false;
-                out.writeLine("; Profiling stopped.");
-            } else
-                out.writeLine("; Profiling not enabled.");
-            out.flushOutput();
-            return LispThread.currentThread().nothing();
         }
     };
 
@@ -1564,6 +1545,10 @@ public abstract class Lisp
     public static final Symbol LEAST_NEGATIVE_NORMALIZED_LONG_FLOAT =
         exportConstant("LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
                        new LispFloat(- Double.MIN_VALUE));
+
+    // Profiler.
+    public static final Symbol _GRANULARITY_ =
+        exportSpecial("*GRANULARITY*", PACKAGE_PROF, new Fixnum(1));
 
     private static final void loadClass(String className)
     {

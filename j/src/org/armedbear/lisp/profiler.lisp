@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.6 2003-07-17 17:20:18 piso Exp $
+;;; $Id: profiler.lisp,v 1.7 2003-11-12 21:26:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,13 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(defun show-call-counts ()
-  (let ((syms (list-calls)))
-    (setf syms (sort syms #'<
-                     :key #'(lambda (x) (sys::%call-count (fdefinition x)))))
-    (dolist (sym syms)
-      (show-call-count-for-symbol sym)))
-  (values))
+(in-package "PROFILER")
+
+;; SHOW-CALL-COUNTS and PROFILE are exported in Lisp.java.
 
 ;; Returns list of all symbols with non-zero call counts.
 (defun list-calls ()
@@ -37,8 +33,26 @@
               (setq result (cons sym result)))))))
     result))
 
-(defun show-call-count-for-symbol (sym)
-  (format t "~A ~A~%" sym (sys::%call-count (fdefinition sym))))
+(defun show-call-count-for-symbol (sym max-count)
+  (let ((count (sys::%call-count (fdefinition sym))))
+    (if max-count
+        (format t "~A ~A (~A%)~%" sym count
+                (/ (round (/ (* count 10000.0) max-count)) 100.0))
+        (format t "~A ~A~%" sym count))))
+
+(defun show-call-counts ()
+  (let ((syms (list-calls)))
+    (setf syms (sort syms #'<
+                     :key #'(lambda (x) (sys::%call-count (fdefinition x)))))
+    (let* ((last-sym (car (last syms)))
+           (max-count (if last-sym
+                          (sys::%call-count (fdefinition last-sym))
+                          nil)))
+      (when (zerop max-count)
+        (setf max-count nil))
+      (dolist (sym syms)
+        (show-call-count-for-symbol sym max-count))))
+  (values))
 
 (defmacro profile (&rest forms)
   `(progn (start-profiler) ,@forms (stop-profiler)))
