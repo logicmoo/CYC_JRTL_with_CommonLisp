@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.440 2003-09-26 01:10:00 piso Exp $
+ * $Id: Primitives.java,v 1.441 2003-09-26 14:21:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2813,31 +2813,36 @@ public final class Primitives extends Module
     };
 
     private static final LispObject _let(LispObject args, Environment env,
-        boolean sequential) throws ConditionThrowable
+                                         boolean sequential)
+        throws ConditionThrowable
     {
         LispObject varList = checkList(args.car());
         final LispThread thread = LispThread.currentThread();
         LispObject result = NIL;
         if (varList != NIL) {
             Environment oldDynEnv = thread.getDynamicEnvironment();
-            Environment ext = new Environment(env);
-            Environment evalEnv = sequential ? ext : env;
-            for (int i = varList.length(); i-- > 0;) {
-                LispObject obj = varList.car();
-                varList = varList.cdr();
-                if (obj instanceof Cons) {
-                    bind(checkSymbol(obj.car()),
-                         eval(obj.cadr(), evalEnv, thread),
-                         ext);
-                } else
-                    bind(checkSymbol(obj), NIL, ext);
+            try {
+                Environment ext = new Environment(env);
+                Environment evalEnv = sequential ? ext : env;
+                for (int i = varList.length(); i-- > 0;) {
+                    LispObject obj = varList.car();
+                    varList = varList.cdr();
+                    if (obj instanceof Cons) {
+                        bind(checkSymbol(obj.car()),
+                             eval(obj.cadr(), evalEnv, thread),
+                             ext);
+                    } else
+                        bind(checkSymbol(obj), NIL, ext);
+                }
+                LispObject body = args.cdr();
+                while (body != NIL) {
+                    result = eval(body.car(), ext, thread);
+                    body = body.cdr();
+                }
             }
-            LispObject body = args.cdr();
-            while (body != NIL) {
-                result = eval(body.car(), ext, thread);
-                body = body.cdr();
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
             }
-            thread.setDynamicEnvironment(oldDynEnv);
         } else {
             LispObject body = args.cdr();
             while (body != NIL) {
