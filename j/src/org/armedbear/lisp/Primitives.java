@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.42 2003-02-21 00:20:43 piso Exp $
+ * $Id: Primitives.java,v 1.43 2003-02-21 00:45:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.lisp;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 public final class Primitives extends Module
@@ -3287,7 +3288,15 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws LispError
         {
             String pathname = LispString.getValue(arg);
-            return new File(pathname).exists() ? T : NIL;
+            File file = new File(pathname);
+            if (!file.exists())
+                return NIL;
+            try {
+                return new LispString(file.getCanonicalPath());
+            }
+            catch (IOException e) {
+                throw new LispError(e.getMessage());
+            }
         }
     };
 
