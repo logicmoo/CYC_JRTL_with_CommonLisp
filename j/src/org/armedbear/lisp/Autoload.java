@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.173 2004-03-13 17:50:13 piso Exp $
+ * $Id: Autoload.java,v 1.174 2004-03-13 19:28:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -300,6 +300,7 @@ public class Autoload extends Function
         autoload("peek-char", "peek_char");
         autoload("probe-file", "probe_file");
         autoload("read-char-no-hang", "read_char_no_hang");
+        autoload("rem", "rem");
         autoload("remhash", "HashTable");
         autoload("rename-package", "PackageFunctions");
         autoload("room", "room");
