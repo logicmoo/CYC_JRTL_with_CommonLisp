@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndefinedFunction.java,v 1.4 2003-09-21 01:57:31 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.5 2003-10-28 17:16:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public final class UndefinedFunction extends CellError
     // obj is either the undefined function itself or an initArgs list.
     public UndefinedFunction(LispObject obj) throws ConditionThrowable
     {
-        super(obj instanceof Cons ? obj : list2(Keyword.NAME, obj));
+        super(list2(Keyword.NAME, obj));
     }
 
     public LispObject typeOf()
