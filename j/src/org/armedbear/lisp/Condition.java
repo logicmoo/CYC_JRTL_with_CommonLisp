@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.22 2004-03-10 02:00:20 piso Exp $
+ * $Id: Condition.java,v 1.23 2004-04-22 14:51:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,6 +112,20 @@ public class Condition extends StandardObject
         if (type == BuiltInClass.CONDITION)
             return T;
         return super.typep(type);
+    }
+
+    public String getConditionReport()
+    {
+        String s = getMessage();
+        if (s != null)
+            return s;
+        if (formatControl != NIL) {
+            try {
+                return format(formatControl, formatArguments);
+            }
+            catch (Throwable t) {}
+        }
+        return unreadableString(String.valueOf(typeOf()));
     }
 
     public String toString()
