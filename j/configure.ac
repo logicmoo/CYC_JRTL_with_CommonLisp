@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2004 Peter Graves
-dnl  $Id: configure.ac,v 1.66 2004-10-09 00:02:02 piso Exp $
+dnl  $Id: configure.ac,v 1.67 2004-12-26 16:09:52 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.66 $)
+AC_REVISION($Revision: 1.67 $)
 
 BOOTFILE=./configure-options
 
@@ -94,23 +94,14 @@ AC_MSG_CHECKING(Java version)
 JAVA_VERSION=`$JAVA -version 2>&1`
 
 case "$JAVA_VERSION" in
-    java*1.1*)
-        AC_MSG_ERROR(Java 1.4 or later is required)
-        ;;
-    java*1.2.*)
-        AC_MSG_ERROR(Java 1.4 or later is required)
-        ;;
-    java*1.3*)
-        AC_MSG_ERROR(Java 1.4 or later is required)
+    java*1.5*)
+        AC_MSG_RESULT($JAVA_VERSION)
         ;;
     java*1.4*)
         AC_MSG_RESULT($JAVA_VERSION)
         ;;
-    java*1.5*)
-        AC_MSG_RESULT($JAVA_VERSION)
-        ;;
     *)
-        AC_MSG_ERROR(unknown Java version)
+        AC_MSG_ERROR(Java 1.4 or later is required)
         ;;
 esac
 
