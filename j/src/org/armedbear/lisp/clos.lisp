@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.108 2004-08-25 16:43:41 piso Exp $
+;;; $Id: clos.lisp,v 1.109 2004-09-26 18:19:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1707,6 +1707,8 @@
   (apply #'shared-initialize instance () initargs))
 
 (defun std-shared-initialize (instance slot-names all-keys)
+  (when (oddp (length all-keys))
+    (error 'program-error :format-control "Odd number of keyword arguments."))
   (dolist (slot (class-slots (class-of instance)))
     (let ((slot-name (slot-definition-name slot)))
       (multiple-value-bind (init-key init-value foundp)
