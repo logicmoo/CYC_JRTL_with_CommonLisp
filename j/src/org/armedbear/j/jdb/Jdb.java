@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.5 2003-05-11 13:54:41 piso Exp $
+ * $Id: Jdb.java,v 1.6 2003-05-11 14:14:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,13 +377,18 @@ public final class Jdb extends Buffer
         log(sb.toString());
     }
 
-    public void log(final String s)
+    public void log(String s)
+    {
+        log(s, true);
+    }
+
+    public void log(final String s, final boolean forceNewLine)
     {
         Runnable r = new Runnable() {
             public void run()
             {
                 Log.debug(s);
-                appendString(s.concat("\n"));
+                appendString(s.concat("\n"), forceNewLine);
             }
         };
         if (SwingUtilities.isEventDispatchThread())
@@ -392,8 +397,10 @@ public final class Jdb extends Buffer
             SwingUtilities.invokeLater(r);
     }
 
-    private void appendString(String s)
+    private void appendString(String s, boolean forceNewLine)
     {
+        if (forceNewLine && posEndOfBuffer.getOffset() > 0)
+            s = "\n".concat(s);
         insertString(posEndOfBuffer, s);
         if (needsRenumbering())
             renumber();
@@ -445,7 +452,7 @@ public final class Jdb extends Buffer
                 Runnable runnable = new Runnable() {
                     public void run()
                     {
-                        appendString(s);
+                        appendString(s, false);
                     }
                 };
                 SwingUtilities.invokeLater(runnable);
@@ -1080,7 +1087,7 @@ public final class Jdb extends Buffer
             try {
                 if (s != null) {
                     out.write(s.getBytes());
-                    log(s);
+                    log(s, false);
                 }
                 out.write('\n');
                 out.flush();
