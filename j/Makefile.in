@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.2 2002-11-05 02:59:08 piso Exp $
+# $Id: Makefile.in,v 1.3 2003-03-01 02:02:11 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -47,7 +47,8 @@ classes:
 	set -e; \
 	for i in src/bsh src/bsh/classpath src/bsh/commands src/bsh/reflect src/gnu/regexp \
 	  src/org/xml/sax src/org/xml/sax/helpers src/org/xml/sax/ext \
-	  src/org/armedbear/j/aelfred src/org/armedbear/j/mail src/org/armedbear/j src; \
+	  src/org/armedbear/j/aelfred src/org/armedbear/j/mail src/org/armedbear/j \
+	  src/org/armedbear/lisp src; \
 	do \
 	  ( cd $$i && $(MAKE) ); \
 	done
@@ -68,7 +69,8 @@ j.jar: classes.stamp
 	  gnu/regexp/*.class gnu/regexp/MessagesBundle.properties org/xml/sax/*.class \
 	  org/xml/sax/helpers/*.class org/xml/sax/ext/*.class org/armedbear/j/aelfred/*.class \
 	  org/armedbear/j/mail/*.class \
-	  org/armedbear/j/*.keywords org/armedbear/j/mail/*.keywords
+	  org/armedbear/j/*.keywords org/armedbear/j/mail/*.keywords \
+	  org/armedbear/lisp/*.class org/armedbear/lisp/*.lisp org/armedbear/lisp/build
 
 classes.stamp: classes
 	test -f classes.stamp || touch classes.stamp
