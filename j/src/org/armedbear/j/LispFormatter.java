@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.9 2002-12-26 15:40:13 piso Exp $
+ * $Id: LispFormatter.java,v 1.10 2002-12-26 17:46:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,6 +177,12 @@ public final class LispFormatter extends Formatter
                     i += 2;
                     continue;
                 }
+                if (c == '\'') {
+                    i += 2;
+                    continue;
+                }
+                ++i;
+                continue;
             }
             if (c == '\'') {
                 i = skipQuotedObject(text, ++i);
@@ -348,7 +354,9 @@ public final class LispFormatter extends Formatter
                 if (pos.lookingAt("#|")) {
                     pos.skip(2);
                     changed = skipMultilineComment(pos) || changed;
-                } else
+                } else if (pos.lookingAt("#'"))
+                    pos.skip(2);
+                else
                     pos.skip();
                 continue;
             }
