@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.698 2004-11-03 15:06:03 piso Exp $
+ * $Id: Primitives.java,v 1.699 2004-11-03 15:16:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3279,9 +3279,9 @@ public final class Primitives extends Lisp
 
     // ### %write-string
     // write-string string output-stream start end => string
-    private static final Primitive4 _WRITE_STRING =
-        new Primitive4("%write-string", PACKAGE_SYS, false,
-                       "string output-stream start end")
+    private static final Primitive _WRITE_STRING =
+        new Primitive("%write-string", PACKAGE_SYS, false,
+                      "string output-stream start end")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)

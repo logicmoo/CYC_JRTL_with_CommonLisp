@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureClass.java,v 1.11 2004-10-13 00:22:20 piso Exp $
+ * $Id: StructureClass.java,v 1.12 2004-11-03 15:16:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,8 +66,8 @@ public class StructureClass extends SlotClass
     }
 
     // ### make-structure-class name direct-slots slots include => class
-    private static final Primitive4 MAKE_STRUCTURE_CLASS =
-        new Primitive4("make-structure-class", PACKAGE_SYS, false)
+    private static final Primitive MAKE_STRUCTURE_CLASS =
+        new Primitive("make-structure-class", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
