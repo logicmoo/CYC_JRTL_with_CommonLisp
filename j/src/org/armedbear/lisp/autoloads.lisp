@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.177 2005-02-20 19:13:55 piso Exp $
+;;; $Id: autoloads.lisp,v 1.178 2005-02-24 18:51:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,7 +94,7 @@
 (autoload '(ensure-class ensure-generic-function subclassp make-condition
             define-method-combination)
           "clos")
-(autoload 'inspect)
+(autoload '(inspect istep) "inspect")
 (autoload 'enough-namestring)
 (autoload 'upgraded-complex-part-type)
 
