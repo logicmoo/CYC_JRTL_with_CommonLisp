@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.14 2003-07-07 14:19:04 piso Exp $
+ * $Id: PackageFunctions.java,v 1.15 2003-07-07 19:39:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -245,21 +245,15 @@ public final class PackageFunctions extends Lisp
             LispObject interns = checkList(args[7]);
             LispObject exports = checkList(args[8]);
             LispObject docString = args[9];
-//             Debug.trace("packageName = " + packageName);
-//             Debug.trace("nicknames = " + nicknames);
-//             Debug.trace("size = " + size);
-//             Debug.trace("shadows = " + shadows);
-//             Debug.trace("shadowingImports = " + shadowingImports);
-//             Debug.trace("use = " + use);
-//             Debug.trace("imports = " + imports);
-//             Debug.trace("interns = " + interns);
-//             Debug.trace("exports = " + exports);
-//             Debug.trace("docString = " + docString);
+
             Package pkg = Packages.findPackage(packageName);
             if (pkg != null) {
                 Debug.trace("package " + packageName + " already exists");
                 return pkg;
             }
+
+            // FIXME Don't create the package until we're sure there won't be
+            // an error!
             pkg = Packages.createPackage(packageName);
 
             while (nicknames != NIL) {
