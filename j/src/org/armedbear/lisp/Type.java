@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.6 2003-04-28 00:28:16 piso Exp $
+ * $Id: Type.java,v 1.7 2003-06-06 18:11:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,6 +165,7 @@ public class Type extends Lisp
     public static final Type RATIO    = new Type(Symbol.RATIO, RATIONAL);
     public static final Type BIT      = new Type(Symbol.BIT, INTEGER);
     public static final Type FIXNUM   = new Type(Symbol.FIXNUM, INTEGER);
+    public static final Type BIGNUM   = new Type(Symbol.BIGNUM, INTEGER);
 
     // Subtypes of STREAM
     public static final Type TWO_WAY_STREAM = new Type(Symbol.TWO_WAY_STREAM);
