@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.6 2003-01-29 17:34:33 piso Exp $
+ * $Id: Interpreter.java,v 1.7 2003-02-15 16:14:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -328,7 +328,7 @@ public final class Interpreter extends Lisp
                 } else
                     sb.append(String.valueOf(result));
             }
-            catch (Exception e) {
+            catch (Throwable t) {
                 return ERROR;
             }
         }
