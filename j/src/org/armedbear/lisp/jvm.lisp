@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.346 2005-01-13 10:01:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.347 2005-01-13 10:09:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -221,8 +221,7 @@
   compiland
   function
   classfile
-  variable
-  (nesting-level (1+ *nesting-level*)))
+  variable)
 
 (defvar *local-functions* ())
 
