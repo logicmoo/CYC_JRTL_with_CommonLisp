@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.561 2004-02-06 12:35:35 piso Exp $
+ * $Id: Primitives.java,v 1.562 2004-02-08 16:53:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1126,14 +1126,14 @@ public final class Primitives extends Lisp
 
     // ### nth
     // nth n list => object
-    private static final Primitive2 NTH = new Primitive2("nth","n list")
+    private static final Primitive2 NTH = new Primitive2("nth", "n list")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             int index = Fixnum.getValue(first);
             if (index < 0)
-                signal(new LispError("bad index to NTH: " + index));
+                signal(new TypeError("NTH: invalid index " + index + "."));
             int i = 0;
             while (true) {
                 if (i == index)
@@ -1157,7 +1157,7 @@ public final class Primitives extends Lisp
         {
             int index = Fixnum.getValue(first);
             if (index < 0)
-                signal(new LispError("bad index to NTH: " + index));
+                signal(new TypeError("(SETF NTH): invalid index " + index + "."));
             int i = 0;
             while (true) {
                 if (i == index) {
@@ -1166,9 +1166,8 @@ public final class Primitives extends Lisp
                 }
                 second = second.cdr();
                 if (second == NIL) {
-                    signal(new LispError(String.valueOf(index) +
-                                         "is too large an index for SETF of NTH"));
-                    return NIL;
+                    return signal(new LispError("(SETF NTH): the index " +
+                                                index + "is too large."));
                 }
                 ++i;
             }
@@ -1176,13 +1175,14 @@ public final class Primitives extends Lisp
     };
 
     // ### nthcdr
-    private static final Primitive2 NTHCDR = new Primitive2("nthcdr","n list") {
+    private static final Primitive2 NTHCDR = new Primitive2("nthcdr", "n list")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             final int index = Fixnum.getValue(first);
             if (index < 0)
-                signal(new TypeError("bad index to NTHCDR: " + index));
+                signal(new TypeError("NTHCDR: invalid index " + index + "."));
             for (int i = 0; i < index; i++) {
                 second = second.cdr();
                 if (second == NIL)
