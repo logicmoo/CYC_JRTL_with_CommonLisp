@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Environment.java,v 1.1 2003-01-17 19:43:12 piso Exp $
+ * $Id: Environment.java,v 1.2 2003-01-30 17:39:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,20 +23,22 @@ package org.armedbear.lisp;
 
 public final class Environment extends LispObject
 {
-    private Binding head;
+    private Binding lastBinding;
+    private Binding lastFunctionalBinding;
 
     public Environment() {}
 
     public Environment(Environment parent)
     {
-        if (parent != null)
-            this.head = parent.head;
+        if (parent != null) {
+            this.lastBinding = parent.lastBinding;
+            this.lastFunctionalBinding = parent.lastFunctionalBinding;
+        }
     }
 
-    // Bindings.
     public void bind(Symbol symbol, LispObject value)
     {
-        head = new Binding(symbol, value, head);
+        lastBinding = new Binding(symbol, value, lastBinding);
     }
 
     public void rebind(Symbol symbol, LispObject value)
@@ -47,7 +49,7 @@ public final class Environment extends LispObject
 
     public LispObject lookup(LispObject symbol)
     {
-        Binding binding = head;
+        Binding binding = lastBinding;
         while (binding != null) {
             if (binding.symbol == symbol)
                 return binding.value;
@@ -58,10 +60,28 @@ public final class Environment extends LispObject
 
     public Binding getBinding(LispObject symbol)
     {
-        Binding binding = head;
+        Binding binding = lastBinding;
         while (binding != null) {
             if (binding.symbol == symbol)
                 return binding;
+            binding = binding.next;
+        }
+        return null;
+    }
+
+    // Functional bindings.
+    public void bindFunctional(Symbol symbol, LispObject value)
+    {
+        lastFunctionalBinding =
+            new Binding(symbol, value, lastFunctionalBinding);
+    }
+
+    public LispObject lookupFunctional(LispObject symbol)
+    {
+        Binding binding = lastFunctionalBinding;
+        while (binding != null) {
+            if (binding.symbol == symbol)
+                return binding.value;
             binding = binding.next;
         }
         return null;
