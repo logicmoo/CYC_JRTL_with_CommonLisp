@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.606 2004-03-14 01:10:38 piso Exp $
+ * $Id: Primitives.java,v 1.607 2004-03-14 03:42:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3876,12 +3876,12 @@ public final class Primitives extends Lisp
                 }
             }
             if (power instanceof Fixnum) {
-                LispObject result = null;
+                LispObject result;
                 if (n instanceof LispFloat)
                     result = LispFloat.ONE;
                 else
                     result = Fixnum.ONE;
-                int count = ((Fixnum)power).getValue();
+                int count = ((Fixnum)power).value;
                 if (count > 0) {
                     for (int i = count; i-- > 0;)
                         result = result.multiplyBy(n);
