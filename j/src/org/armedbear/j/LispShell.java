@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.72 2004-09-16 18:33:49 piso Exp $
+ * $Id: LispShell.java,v 1.73 2004-09-17 19:19:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,9 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
 import gnu.regexp.REMatch;
 import java.io.IOException;
-import java.util.Iterator;
+import java.io.OutputStreamWriter;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import org.armedbear.lisp.Site;
@@ -145,6 +144,62 @@ public class LispShell extends Shell
         if (Editor.isLispInitialized())
             LispAPI.invokeLispShellStartupHook(lisp, shellCommand);
         return lisp;
+    }
+
+    protected void startProcess()
+    {
+        if (shellCommand == null) {
+            Debug.bug();
+            return;
+        }
+            File initialDir = Editor.currentEditor().getCurrentDirectory();
+            if (initialDir == null || initialDir.isRemote())
+                initialDir = Directories.getUserHomeDirectory();
+        List tokens = Utilities.tokenize(shellCommand);
+        final int tokenCount = tokens.size();
+        String[] cmdArray;
+        int i = 0;
+        if (Utilities.haveJpty()) {
+            cmdArray = new String[tokenCount + 1];
+            cmdArray[i++] = "jpty";
+        } else
+            cmdArray = new String[tokenCount];
+        for (int j = 0; j < tokenCount; j++)
+            cmdArray[i++] = (String) tokens.get(j);
+        Process p = null;
+        try {
+            p = Runtime.getRuntime().exec(cmdArray, null,
+                                          new java.io.File(initialDir.canonicalPath()));
+            setProcess(p);
+        }
+        catch (Throwable t) {
+            setProcess(null);
+            return;
+        }
+        startWatcherThread();
+        // See if the process exits right away (meaning jpty couldn't launch
+        // the shell command).
+        try {
+            Thread.sleep(100);
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+        }
+        // When the process exits, the watcher thread calls setProcess(null),
+        // so check the value of getProcess() here.
+        if (getProcess() == null)
+            return; // Process exited.
+        try {
+            stdin  = new OutputStreamWriter(p.getOutputStream());
+            stdoutThread = new StdoutThread(p.getInputStream());
+            stderrThread = new StderrThread(p.getErrorStream());
+            stdoutThread.start();
+            stderrThread.start();
+            readOnly = false;
+        }
+        catch (Throwable t) {
+            Log.error(t);
+        }
     }
 
     protected void initializeHistory()
@@ -546,7 +601,8 @@ public class LispShell extends Shell
             if (Platform.isPlatformWindows())
                 path = path.toLowerCase();
             if (path.equals("j.jar") || path.endsWith("/j.jar") ||
-                path.endsWith("\\j.jar")) {
+                path.endsWith("\\j.jar"))
+            {
                 File dir = File.getInstance(System.getProperty("user.dir"));
                 File file = File.getInstance(dir, path);
                 if (file != null && file.isFile())
@@ -555,18 +611,24 @@ public class LispShell extends Shell
         }
         FastStringBuffer sb = new FastStringBuffer();
         if (java != null) {
+            sb.append('"');
             sb.append(java.canonicalPath());
+            sb.append('"');
             String vendor = System.getProperty("java.vendor");
             if (vendor != null) {
                 if (vendor.indexOf("Sun") >= 0 ||
                     vendor.indexOf("Blackdown") >= 0) {
-                    sb.append(" -server");
+                    String vm = System.getProperty("java.vm.name");
+                    if (vm != null && vm.toLowerCase().indexOf("server") >= 0)
+                        sb.append(" -server");
                     sb.append(" -Xmx128M");
-                    String lispHome = org.armedbear.lisp.Site.getLispHome();
-                    if (lispHome != null) {
-                        sb.append(" -Xrs -Djava.library.path=");
-                        sb.append(lispHome);
-                        sb.append(":/usr/local/lib/abcl");
+                    if (Platform.isPlatformUnix()) {
+                        String lispHome = org.armedbear.lisp.Site.getLispHome();
+                        if (lispHome != null) {
+                            sb.append(" -Xrs -Djava.library.path=");
+                            sb.append(lispHome);
+                            sb.append(":/usr/local/lib/abcl");
+                        }
                     }
                 } else if (vendor.indexOf("IBM") >= 0) {
                     sb.append(" -Xss512K");
@@ -576,7 +638,9 @@ public class LispShell extends Shell
         } else
             sb.append("java");
         sb.append(" -cp ");
+        sb.append('"');
         sb.append(classPath);
+        sb.append('"');
         sb.append(" org.armedbear.lisp.Main");
         return sb.toString();
     }
