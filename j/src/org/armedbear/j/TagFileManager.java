@@ -2,7 +2,7 @@
  * TagFileManager.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: TagFileManager.java,v 1.1.1.1 2002-09-24 16:08:38 piso Exp $
+ * $Id: TagFileManager.java,v 1.2 2002-10-11 15:54:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,7 +150,7 @@ public final class TagFileManager extends Thread
                             Tagger tagger = mode.getTagger(buf);
                             tagger.run();
                             tagger.writeTags(writer);
-                            buf.empty();
+                            buf._empty();
                         }
                     }
                     writer.flush();
