@@ -1,8 +1,8 @@
 /*
  * logand.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: logand.java,v 1.7 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: logand.java,v 1.8 2004-01-31 13:42:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,7 @@ public final class logand extends Primitive
             return number(n1.and(n2));
         }
     }
+
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         BigInteger result = BigInteger.valueOf(-1);
@@ -76,5 +77,5 @@ public final class logand extends Primitive
         return number(result);
     }
 
-    private static final logand LOGAND = new logand();
+    private static final Primitive LOGAND = new logand();
 }
