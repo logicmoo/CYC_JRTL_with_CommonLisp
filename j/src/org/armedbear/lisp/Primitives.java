@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.274 2003-07-02 17:13:14 piso Exp $
+ * $Id: Primitives.java,v 1.275 2003-07-02 18:11:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4043,7 +4043,7 @@ public final class Primitives extends Module
     // must be less than or equal to its current length.
     // shrink-vector vector new-size => vector
     private static final Primitive2 SHRINK_VECTOR =
-        new Primitive2("shrink-vector") {
+        new Primitive2("shrink-vector", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
@@ -4053,7 +4053,7 @@ public final class Primitives extends Module
     };
 
     private static final Primitive3 VECTOR_SUBSEQ =
-        new Primitive3("vector-subseq") {
+        new Primitive3("vector-subseq", PACKAGE_SYS, true) {
         public LispObject execute(LispObject vector, LispObject start,
             LispObject end) throws LispError
         {
