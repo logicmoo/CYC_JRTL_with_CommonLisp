@@ -905,6 +905,9 @@ file associated with the current buffer. For example:
 <pre>
         diff -ub % ~/backup
 </pre>
+If you don't explicitly specify any command line switches (e.g. "-ub", "-c",
+"--normal"), j will run "diff -u".
+<p>
 Because it uses diff, this command will not work unless diff is installed and
 in your path, which is more likely to be the case on Unix than on Windows.
 <p>
