@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.66 2003-05-23 17:35:17 piso Exp $
+ * $Id: Lisp.java,v 1.67 2003-05-25 02:59:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,13 +82,13 @@ public abstract class Lisp
         return result;
     }
 
-    public static final LispObject macroexpand(LispObject form, Environment env)
-        throws Condition
+    public static final LispObject macroexpand(LispObject form,
+        Environment env, LispThread thread) throws Condition
     {
         LispObject expanded = NIL;
         while (true) {
-            form = macroexpand_1(form, env);
-            LispObject[] values = LispThread.currentThread().getValues();
+            form = macroexpand_1(form, env, thread);
+            LispObject[] values = thread.getValues();
             if (values[1] == NIL) {
                 values[1] = expanded;
                 return form;
@@ -97,10 +97,9 @@ public abstract class Lisp
         }
     }
 
-    public static final LispObject macroexpand_1(LispObject form, Environment env)
-        throws Condition
+    public static final LispObject macroexpand_1(LispObject form,
+        Environment env, LispThread thread) throws Condition
     {
-        final LispThread thread = LispThread.currentThread();
         LispObject[] results = new LispObject[2];
         if (!(form instanceof Cons)) {
             results[0] = form;
@@ -178,7 +177,7 @@ public abstract class Lisp
                     }
                     case TYPE_MACRO_OBJECT:
                     case TYPE_MACRO:
-                        return eval(macroexpand(obj, env), env, thread);
+                        return eval(macroexpand(obj, env, thread), env, thread);
                     default: {
                         if (debug)
                             return funcall(fun, evalList(obj.cdr(), env, thread));
