@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.13 2003-12-19 18:29:03 piso Exp $
+ * $Id: StandardObject.java,v 1.14 2003-12-19 18:43:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,14 @@ package org.armedbear.lisp;
 public class StandardObject extends LispObject
 {
     private Layout layout;
-    private LispObject slots; // A simple vector.
+    private Vector slots;
 
     protected StandardObject()
     {
         layout = new Layout(BuiltInClass.STANDARD_OBJECT, Fixnum.ZERO);
     }
 
-    protected StandardObject(LispClass cls, LispObject slots)
+    protected StandardObject(LispClass cls, Vector slots)
     {
         layout = cls.getLayout();
         Debug.assertTrue(layout != null);
@@ -121,7 +121,7 @@ public class StandardObject extends LispObject
             }
             catch (ClassCastException e) {
                 if (!(first instanceof StandardObject))
-                    return signal(new TypeError(first, "standard object"));
+                    return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
                 if (!(second instanceof Layout))
                     return signal(new TypeError(second, "layout"));
                 // Not reached.
@@ -138,7 +138,7 @@ public class StandardObject extends LispObject
         {
             if (arg instanceof StandardObject)
                 return ((StandardObject)arg).layout.getLispClass();
-            return signal(new TypeError(arg, "standard object"));
+            return signal(new TypeError(arg, Symbol.STANDARD_OBJECT));
         }
     };
 
@@ -150,7 +150,7 @@ public class StandardObject extends LispObject
         {
             if (arg instanceof StandardObject)
                 return ((StandardObject)arg).slots;
-            return signal(new TypeError(arg, "standard object"));
+            return signal(new TypeError(arg, Symbol.STANDARD_OBJECT));
         }
     };
 
@@ -162,10 +162,13 @@ public class StandardObject extends LispObject
             throws ConditionThrowable
         {
             if (first instanceof StandardObject) {
-                ((StandardObject)first).slots = second;
-                return second;
+                if (second instanceof Vector) {
+                    ((StandardObject)first).slots = (Vector) second;
+                    return second;
+                }
+                return signal(new TypeError(second, Symbol.VECTOR));
             }
-            return signal(new TypeError(first, "standard object"));
+            return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
         }
     };
 
@@ -194,19 +197,23 @@ public class StandardObject extends LispObject
             if (first == BuiltInClass.STANDARD_CLASS)
                 return new StandardClass();
             if (first instanceof LispClass) {
-                Symbol symbol = ((LispClass)first).getSymbol();
-                if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
-                    return new GenericFunction((LispClass)first, second);
-                LispObject cpl = ((LispClass)first).getCPL();
-                while (cpl != NIL) {
-                    LispObject obj = cpl.car();
-                    if (obj == BuiltInClass.CONDITION)
-                        return new Condition((LispClass)first, second);
-                    cpl = cpl.cdr();
+                if (second instanceof Vector) {
+                    Symbol symbol = ((LispClass)first).getSymbol();
+                    Vector slots = (Vector) second;
+                    if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
+                        return new GenericFunction((LispClass)first, slots);
+                    LispObject cpl = ((LispClass)first).getCPL();
+                    while (cpl != NIL) {
+                        LispObject obj = cpl.car();
+                        if (obj == BuiltInClass.CONDITION)
+                            return new Condition((LispClass)first, slots);
+                        cpl = cpl.cdr();
+                    }
+                    return new StandardObject((LispClass)first, slots);
                 }
-                return new StandardObject((LispClass)first, second);
+                return signal(new TypeError(second, Symbol.VECTOR));
             }
-            return signal(new TypeError(first, "class"));
+            return signal(new TypeError(first, Symbol.CLASS));
         }
     };
 }
