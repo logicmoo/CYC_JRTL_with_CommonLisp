@@ -2,7 +2,7 @@
  * NewsGroupSummaryEntry.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummaryEntry.java,v 1.1.1.1 2002-09-24 16:09:58 piso Exp $
+ * $Id: NewsGroupSummaryEntry.java,v 1.2 2002-12-27 01:52:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,12 +83,14 @@ public final class NewsGroupSummaryEntry extends MailboxEntry
             end = s.indexOf('\t', begin);
             if (end < 0)
                 break;
-            token = s.substring(begin, end); // Byte count.
-            try {
-                entry.size = Integer.parseInt(token);
-            }
-            catch (NumberFormatException e) {
-                Log.error(e);
+            if (end > begin) {
+                token = s.substring(begin, end); // Byte count.
+                try {
+                    entry.size = Integer.parseInt(token);
+                }
+                catch (NumberFormatException e) {
+                    Log.error(e);
+                }
             }
             begin = end + 1;
             end = s.indexOf('\t', begin);
