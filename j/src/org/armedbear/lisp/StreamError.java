@@ -2,7 +2,7 @@
  * StreamError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StreamError.java,v 1.2 2003-02-15 16:48:17 piso Exp $
+ * $Id: StreamError.java,v 1.3 2003-04-09 23:54:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,18 @@
 
 package org.armedbear.lisp;
 
-public final class StreamError extends LispError
+public class StreamError extends LispError
 {
     private Throwable cause;
 
     public StreamError()
     {
         super();
+    }
+
+    public StreamError(String message)
+    {
+        super(message);
     }
 
     public StreamError(Throwable cause)
