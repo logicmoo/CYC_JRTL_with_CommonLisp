@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.38 2004-09-20 17:43:58 piso Exp $
+ * $Id: HashTable.java,v 1.39 2004-10-03 17:12:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public abstract class HashTable extends LispObject
     // of elements exceeds the threshold, the implementation calls rehash().
     protected int threshold;
 
-    private final float loadFactor = 0.75f;
+    private static final float loadFactor = 0.75f;
 
     // Array containing the actual key-value mappings.
     protected HashEntry[] buckets;
