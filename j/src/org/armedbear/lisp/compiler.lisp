@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.15 2003-05-31 14:04:06 piso Exp $
+;;; $Id: compiler.lisp,v 1.16 2003-06-02 02:04:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
 (defun compile-cond (clauses)
   (let ((result nil))
     (dolist (clause clauses)
-      (setq result (append result (list (compile-cond-clause clause)))))
+      (setq result (nconc result (list (compile-cond-clause clause)))))
     result))
 
 (defun compile-cond-clause (clause)
@@ -53,7 +53,7 @@
 (defun compile-case (keyform clauses)
   (let ((result (list (compile-sexp keyform))))
     (dolist (clause clauses)
-      (setq result (append result (list (compile-case-clause clause)))))
+      (setq result (nconc result (list (compile-case-clause clause)))))
     result))
 
 (defun compile-case-clause (clause)
@@ -66,7 +66,7 @@
         (result ()))
     (while rest
       (if (atom (car rest))
-          (setq result (append result (list (car rest))))
+          (setq result (nconc result (list (car rest))))
           (setq result (append result (list (compile-sexp (car rest))))))
       (setq rest (cdr rest)))
     result))
@@ -105,7 +105,7 @@
          (error "wrong number of arguments for BLOCK"))
        (unless (symbolp (cadr form))
          (error 'type-error))
-       (append (list 'block (second form))
+       (nconc (list 'block (cadr form))
                (mapcar #'compile-sexp (cddr form))))
       (PROGN
        (append '(progn) (mapcar #'compile-sexp (cdr form))))
@@ -154,6 +154,10 @@
        (if (cdr form)
            (append '(return) (list (compile-sexp (cadr form))))
            (append '(return))))
+      (UNLESS
+       (append '(unless) (mapcar #'compile-sexp (cdr form))))
+      (WHEN
+       (append '(when) (mapcar #'compile-sexp (cdr form))))
       (t
 ;;        (format t "    skipping ~S~%" first)
        form))))
