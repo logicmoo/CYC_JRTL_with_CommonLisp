@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2003 Peter Graves
-dnl  $Id: configure.ac,v 1.12 2003-11-27 14:46:58 piso Exp $
+dnl  $Id: configure.ac,v 1.13 2003-11-30 17:19:27 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.12 $)
+AC_REVISION($Revision: 1.13 $)
 
 BOOTFILE=./configure-options
 
@@ -172,6 +172,10 @@ dnl  Construct command line for shell script.
 dnl  Places to look for j.
 JPATH=$srcdir/src:$datadir/j/j.jar
 
+dnl  Location of Lisp source files.
+LISP_HOME=$srcdir/src/org/armedbear/lisp
+AC_SUBST(LISP_HOME)
+
 CP="-cp"
 CLASSPATH="$JPATH:$JDK/lib/tools.jar"
 ABL_CLASSPATH=$JPATH
@@ -248,6 +252,7 @@ src/org/armedbear/j/mail/Makefile
 src/org/armedbear/j/jdb/Makefile
 src/org/armedbear/lisp/Makefile
 src/org/armedbear/lisp/java/awt/Makefile
+src/org/armedbear/lisp/Site.java
 j
 abl
 ])
