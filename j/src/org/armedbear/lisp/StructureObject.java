@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.13 2003-09-20 17:02:05 piso Exp $
+ * $Id: StructureObject.java,v 1.14 2003-09-20 18:18:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,18 @@ package org.armedbear.lisp;
 
 public final class StructureObject extends LispObject
 {
-    private final Symbol name;
+    private final Symbol symbol;
     private final LispObject[] slots;
 
-    public StructureObject(Symbol name, LispObject list) throws ConditionThrowable
+    public StructureObject(Symbol symbol, LispObject list) throws ConditionThrowable
     {
-        this.name = name;
+        this.symbol = symbol;
         slots = list.copyToArray();
     }
 
     public StructureObject(StructureObject obj)
     {
-        this.name = obj.name;
+        this.symbol = obj.symbol;
         slots = new LispObject[obj.slots.length];
         for (int i = slots.length; i-- > 0;)
             slots[i] = obj.slots[i];
@@ -42,13 +42,20 @@ public final class StructureObject extends LispObject
 
     public LispObject typeOf()
     {
-        return name;
+        return symbol;
+    }
+
+    public LispClass classOf()
+    {
+        return LispClass.findClass(symbol);
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type == name)
+        if (type == symbol)
             return T;
+        if (type instanceof StructureClass)
+            return type == LispClass.findClass(symbol) ? T : NIL;
         if (type == Symbol.STRUCTURE_OBJECT)
             return T;
         if (type == BuiltInClass.STRUCTURE_OBJECT)
@@ -59,7 +66,7 @@ public final class StructureObject extends LispObject
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#S(");
-        sb.append(name);
+        sb.append(symbol);
         // FIXME Use *PRINT-LENGTH*.
         final int limit = Math.min(slots.length, 10);
         for (int i = 0; i < limit; i++) {
@@ -86,7 +93,7 @@ public final class StructureObject extends LispObject
                 throw new ConditionThrowable(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                getStandardOutput().printStackTrace(e);
+                // Shouldn't happen.
                 throw new ConditionThrowable(new LispError("internal error"));
             }
         }
@@ -103,7 +110,7 @@ public final class StructureObject extends LispObject
                 throw new ConditionThrowable(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                getStandardOutput().printStackTrace(e);
+                // Shouldn't happen.
                 throw new ConditionThrowable(new LispError("internal error"));
             }
         }
@@ -120,7 +127,7 @@ public final class StructureObject extends LispObject
                 throw new ConditionThrowable(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                getStandardOutput().printStackTrace(e);
+                // Shouldn't happen.
                 throw new ConditionThrowable(new LispError("internal error"));
             }
         }
@@ -137,7 +144,7 @@ public final class StructureObject extends LispObject
                 throw new ConditionThrowable(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                getStandardOutput().printStackTrace(e);
+                // Shouldn't happen.
                 throw new ConditionThrowable(new LispError("internal error"));
             }
         }
@@ -159,7 +166,7 @@ public final class StructureObject extends LispObject
                 throw new ConditionThrowable(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                getStandardOutput().printStackTrace(e);
+                // Shouldn't happen.
                 throw new ConditionThrowable(new LispError("internal error"));
             }
         }
@@ -178,7 +185,7 @@ public final class StructureObject extends LispObject
                 throw new ConditionThrowable(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                getStandardOutput().printStackTrace(e);
+                // Shouldn't happen.
                 throw new ConditionThrowable(new LispError("internal error"));
             }
         }
@@ -197,7 +204,7 @@ public final class StructureObject extends LispObject
                 throw new ConditionThrowable(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                getStandardOutput().printStackTrace(e);
+                // Shouldn't happen.
                 throw new ConditionThrowable(new LispError("internal error"));
             }
         }
@@ -216,7 +223,7 @@ public final class StructureObject extends LispObject
                 throw new ConditionThrowable(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                getStandardOutput().printStackTrace(e);
+                // Shouldn't happen.
                 throw new ConditionThrowable(new LispError("internal error"));
             }
         }

@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.19 2003-09-20 17:00:09 piso Exp $
+ * $Id: LispClass.java,v 1.20 2003-09-20 18:20:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@ package org.armedbear.lisp;
 
 import java.util.HashMap;
 
-public class LispClass extends LispObject
+public class LispClass extends StandardObject
 {
     protected static final HashMap map = new HashMap();
 
-    private final Symbol symbol;
+    protected final Symbol symbol;
 
     protected LispClass(Symbol symbol)
     {
@@ -46,15 +46,21 @@ public class LispClass extends LispObject
 
     public LispObject typeOf()
     {
-        return Symbol.BUILT_IN_CLASS;
+        return Symbol.CLASS;
     }
 
-    public String toString()
+    public LispClass classOf()
     {
-        StringBuffer sb = new StringBuffer("#<BUILT-IN-CLASS ");
-        sb.append(symbol.getName());
-        sb.append('>');
-        return sb.toString();
+        return BuiltInClass.CLASS;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.CLASS)
+            return T;
+        if (type == BuiltInClass.CLASS)
+            return T;
+        return super.typep(type);
     }
 
     public static LispClass findClass(Symbol symbol)
