@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandTable.java,v 1.44 2004-04-02 03:26:07 piso Exp $
+ * $Id: CommandTable.java,v 1.45 2004-05-02 14:55:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -468,6 +468,7 @@ public class CommandTable
             addCommand("ir", "Registers", "insertRegister");
             addCommand("lr", "Registers", "listRegisters");
             addCommand("hs", "LispMode", "hyperspec");
+            addCommand("abcl", "LispShell", "lisp");
 
             if (Editor.isDebugEnabled() && map.size() > INITIAL_CAPACITY * 0.75) {
                 Log.error("CommandTable.init need to increase initial capacity!");
