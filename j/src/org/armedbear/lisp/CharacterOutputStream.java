@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.10 2003-12-04 03:18:49 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.11 2003-12-12 19:41:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,7 +70,7 @@ public class CharacterOutputStream extends LispOutputStream
             charPos = 0;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
         return NIL;
     }
@@ -85,7 +85,7 @@ public class CharacterOutputStream extends LispOutputStream
             charPos = 0;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
         return T;
     }
@@ -96,7 +96,7 @@ public class CharacterOutputStream extends LispOutputStream
             writer.write(String.valueOf(obj));
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -111,7 +111,7 @@ public class CharacterOutputStream extends LispOutputStream
                 ++charPos;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -136,7 +136,7 @@ public class CharacterOutputStream extends LispOutputStream
                 charPos = s.length() - (index + 1);
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -158,7 +158,7 @@ public class CharacterOutputStream extends LispOutputStream
                 charPos = s.length() - (index + 1);
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -173,7 +173,7 @@ public class CharacterOutputStream extends LispOutputStream
                 ++charPos;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -195,7 +195,7 @@ public class CharacterOutputStream extends LispOutputStream
             }
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -208,7 +208,7 @@ public class CharacterOutputStream extends LispOutputStream
             charPos = 0;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -224,7 +224,7 @@ public class CharacterOutputStream extends LispOutputStream
             charPos = 0;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -234,7 +234,7 @@ public class CharacterOutputStream extends LispOutputStream
             writer.flush();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -246,7 +246,7 @@ public class CharacterOutputStream extends LispOutputStream
             return T;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.189 2003-12-12 19:12:51 piso Exp $
+ * $Id: Lisp.java,v 1.190 2003-12-12 19:40:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,7 +307,9 @@ public abstract class Lisp
             catch (StackOverflowError e) {
                 if (debug)
                     thread.saveBacktrace();
-                throw new ConditionThrowable(new LispError("stack overflow"));
+                signal(new LispError("stack overflow"));
+                // Not reached.
+                return NIL;
             }
             catch (ConditionThrowable t) {
                 if (debug)
@@ -366,7 +368,7 @@ public abstract class Lisp
             if (result == null) {
                 result = obj.getSymbolValue();
                 if (result == null)
-                    throw new ConditionThrowable(new UnboundVariable(obj));
+                    return signal(new UnboundVariable(obj));
             }
             if (result instanceof SymbolMacro)
                 return eval(((SymbolMacro)result).getExpansion(), env, thread);
@@ -376,7 +378,7 @@ public abstract class Lisp
             if (first instanceof Symbol) {
                 LispObject fun = env.lookupFunctional(first);
                 if (fun == null)
-                    throw new ConditionThrowable(new UndefinedFunction(first));
+                    return signal(new UndefinedFunction(first));
                 switch (fun.getFunctionalType()) {
                     case FTYPE_SPECIAL_OPERATOR: {
                         if (profiling)
@@ -435,7 +437,7 @@ public abstract class Lisp
             } else {
                 LispObject args = obj.cdr();
                 if (!args.listp())
-                    throw new ConditionThrowable(new TypeError(args, "list"));
+                    return signal(new TypeError(args, "list"));
                 LispObject funcar = first.car();
                 LispObject rest = first.cdr();
                 Symbol symbol = checkSymbol(funcar);
@@ -443,7 +445,7 @@ public abstract class Lisp
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
                     return closure.execute(evalList(args, env, thread));
                 } else
-                    throw new ConditionThrowable(new ProgramError("illegal function object: " + first));
+                    return signal(new ProgramError("illegal function object: " + first));
             }
         } else
             return obj;
@@ -620,7 +622,9 @@ public abstract class Lisp
             return (Symbol) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "symbol"));
+            signal(new TypeError(obj, "symbol"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -632,7 +636,9 @@ public abstract class Lisp
             return (Cons) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "cons"));
+            signal(new TypeError(obj, "cons"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -643,7 +649,7 @@ public abstract class Lisp
             throw new NullPointerException();
         if (obj.listp())
             return obj;
-        throw new ConditionThrowable(new TypeError(obj, "list"));
+        return signal(new TypeError(obj, "list"));
     }
 
     public static final AbstractArray checkArray(LispObject obj)
@@ -655,7 +661,9 @@ public abstract class Lisp
             return (AbstractArray) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "array"));
+            signal(new TypeError(obj, "array"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -668,7 +676,9 @@ public abstract class Lisp
             return (AbstractVector) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "vector"));
+            signal(new TypeError(obj, "vector"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -681,7 +691,9 @@ public abstract class Lisp
             return (LispString) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "string"));
+            signal(new TypeError(obj, "string"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -693,8 +705,9 @@ public abstract class Lisp
             return new LispString(arg.getName());
         if (arg instanceof LispCharacter)
             return new LispString(((LispCharacter)arg).getValue());
-        throw new ConditionThrowable(new TypeError(String.valueOf(arg) +
-                                                   " cannot be coerced to a string"));
+        signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string"));
+        // Not reached.
+        return null;
     }
 
     public static final String javaString(LispObject arg) throws ConditionThrowable
@@ -705,15 +718,17 @@ public abstract class Lisp
             return arg.getName();
         if (arg instanceof LispCharacter)
             return String.valueOf(new char[] {((LispCharacter)arg).getValue()});
-        throw new ConditionThrowable(new TypeError(String.valueOf(arg) +
-                                                   " cannot be coerced to a string"));
+        signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string"));
+        // Not reached.
+        return null;
     }
 
     public static final LispObject number(long n)
     {
         if (n >= Integer.MIN_VALUE && n <= Integer.MAX_VALUE)
             return new Fixnum((int)n);
-        return new Bignum(n);
+        else
+            return new Bignum(n);
     }
 
     private static final BigInteger INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
@@ -724,7 +739,7 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         if (denominator.signum() == 0)
-            throw new ConditionThrowable(new DivisionByZero());
+            signal(new DivisionByZero());
         if (denominator.signum() < 0) {
             numerator = numerator.negate();
             denominator = denominator.negate();
@@ -736,14 +751,16 @@ public abstract class Lisp
         }
         if (denominator.equals(BigInteger.ONE))
             return number(numerator);
-        return new Ratio(numerator, denominator);
+        else
+            return new Ratio(numerator, denominator);
     }
 
     public static final LispObject number(BigInteger n)
     {
         if (n.compareTo(INT_MIN) >= 0 && n.compareTo(INT_MAX) <= 0)
             return new Fixnum(n.intValue());
-        return new Bignum(n);
+        else
+            return new Bignum(n);
     }
 
     public static final LispObject readObjectFromString(String s)
@@ -799,7 +816,9 @@ public abstract class Lisp
             return (LispCharacter) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "character"));
+            signal(new TypeError(obj, "character"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -812,7 +831,9 @@ public abstract class Lisp
             return (Package) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "package"));
+            signal(new TypeError(obj, "package"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -825,7 +846,9 @@ public abstract class Lisp
             return (Function) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "function"));
+            signal(new TypeError(obj, "function"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -838,7 +861,9 @@ public abstract class Lisp
             return (LispStream) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "stream"));
+            signal(new TypeError(obj, "stream"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -854,7 +879,9 @@ public abstract class Lisp
             if (in instanceof CharacterInputStream)
                 return (CharacterInputStream) in;
         }
-        throw new ConditionThrowable(new TypeError(obj, "character input stream"));
+        signal(new TypeError(obj, "character input stream"));
+        // Not reached.
+        return null;
     }
 
     public static final CharacterOutputStream checkCharacterOutputStream(LispObject obj)
@@ -869,7 +896,9 @@ public abstract class Lisp
             if (out instanceof CharacterOutputStream)
                 return (CharacterOutputStream) out;
         }
-        throw new ConditionThrowable(new TypeError(obj, "character output stream"));
+        signal(new TypeError(obj, "character output stream"));
+        // Not reached.
+        return null;
     }
 
     public static final BinaryInputStream checkBinaryInputStream(LispObject obj)
@@ -884,7 +913,9 @@ public abstract class Lisp
             if (in instanceof BinaryInputStream)
                 return (BinaryInputStream) in;
         }
-        throw new ConditionThrowable(new TypeError(obj, "binary input stream"));
+        signal(new TypeError(obj, "binary input stream"));
+        // Not reached.
+        return null;
     }
 
     public static final BinaryOutputStream checkBinaryOutputStream(LispObject obj)
@@ -899,7 +930,9 @@ public abstract class Lisp
             if (out instanceof BinaryOutputStream)
                 return (BinaryOutputStream) out;
         }
-        throw new ConditionThrowable(new TypeError(obj, "binary output stream"));
+        signal(new TypeError(obj, "binary output stream"));
+        // Not reached.
+        return null;
     }
 
     public static final CharacterInputStream inSynonymOf(LispObject obj)
@@ -916,7 +949,9 @@ public abstract class Lisp
             if (in instanceof CharacterInputStream)
                 return (CharacterInputStream) in;
         }
-        throw new ConditionThrowable(new TypeError(obj, "character input stream"));
+        signal(new TypeError(obj, "character input stream"));
+        // Not reached.
+        return null;
     }
 
     public static final CharacterOutputStream outSynonymOf(LispObject obj)
@@ -933,7 +968,9 @@ public abstract class Lisp
             if (out instanceof CharacterOutputStream)
                 return (CharacterOutputStream) out;
         }
-        throw new ConditionThrowable(new TypeError(obj, "character output stream"));
+        signal(new TypeError(obj, "character output stream"));
+        // Not reached.
+        return null;
     }
 
     public static final Readtable checkReadtable(LispObject obj)
@@ -945,7 +982,9 @@ public abstract class Lisp
             return (Readtable) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "readtable"));
+            signal(new TypeError(obj, "readtable"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -958,7 +997,9 @@ public abstract class Lisp
             return (Environment) obj;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "environment"));
+            signal(new TypeError(obj, "environment"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -973,7 +1014,9 @@ public abstract class Lisp
                 return (Function) fun;
         } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
             return new Closure(obj.cadr(), obj.cddr(), new Environment());
-        throw new ConditionThrowable(new UndefinedFunction(obj));
+        signal(new UndefinedFunction(obj));
+        // Not reached.
+        return null;
     }
 
     public static final Functional coerceToFunctional(LispObject obj)
@@ -987,7 +1030,9 @@ public abstract class Lisp
                 return (Functional) fun;
         } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
             return new Closure(obj.cadr(), obj.cddr(), new Environment());
-        throw new ConditionThrowable(new UndefinedFunction(obj));
+        signal(new UndefinedFunction(obj));
+        // Not reached.
+        return null;
     }
 
     // Returns package or throws exception.
@@ -999,7 +1044,9 @@ public abstract class Lisp
         Package pkg = Packages.findPackage(javaString(obj));
         if (pkg != null)
             return pkg;
-        throw new ConditionThrowable(new PackageError(obj + " is not the name of a package"));
+        signal(new PackageError(obj + " is not the name of a package"));
+        // Not reached.
+        return null;
     }
 
     public static final boolean memq(LispObject item, LispObject list)
@@ -1025,7 +1072,7 @@ public abstract class Lisp
             if (list.cdr() instanceof Cons)
                 list = list.cddr();
             else
-                throw new ConditionThrowable(new TypeError("malformed property list: " + plist));
+                signal(new TypeError("malformed property list: " + plist));
         }
         return defaultValue;
     }
@@ -1084,7 +1131,7 @@ public abstract class Lisp
         LispObject prev = null;
         while (list != NIL) {
             if (!(list.cdr() instanceof Cons))
-                throw new ConditionThrowable(new ProgramError(String.valueOf(symbol) +
+                signal(new ProgramError(String.valueOf(symbol) +
                                                               " has an odd number of items in its property list"));
             if (list.car() == indicator) {
                 // Found it!
@@ -1180,7 +1227,7 @@ public abstract class Lisp
     {
         Package pkg = Packages.findPackage(packageName);
         if (pkg == null)
-            throw new ConditionThrowable(new LispError(packageName +
+            signal(new LispError(packageName +
                                                        " is not the name of a package"));
         return pkg.intern(name);
     }
