@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.118 2003-11-14 13:32:57 piso Exp $
+ * $Id: Editor.java,v 1.119 2003-11-30 00:19:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3921,8 +3921,8 @@ public final class Editor extends JPanel implements Constants,
     {
         if (!checkReadOnly())
             return;
-        if (getDotLine().isBlank()) {
-            CompoundEdit compoundEdit = beginCompoundEdit();
+        CompoundEdit compoundEdit = beginCompoundEdit();
+        if (getDotLine().isBlank() && mark == null) {
             addUndo(SimpleEdit.LINE_EDIT);
             getDotLine().setText("");
             dot.setOffset(0);
@@ -3931,9 +3931,11 @@ public final class Editor extends JPanel implements Constants,
             eol();
             if (buffer.getBooleanProperty(Property.AUTO_NEWLINE))
                 newlineAndIndent();
-            endCompoundEdit(compoundEdit);
-        } else
+        } else {
             insertNormalChar(c);
+            indentLine();
+        }
+        endCompoundEdit(compoundEdit);
     }
 
     public void electricCloseAngleBracket()
