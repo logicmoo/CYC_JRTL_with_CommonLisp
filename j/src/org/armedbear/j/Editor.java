@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.141 2005-03-04 17:33:45 piso Exp $
+ * $Id: Editor.java,v 1.142 2005-03-04 19:15:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2434,7 +2434,7 @@ public final class Editor extends JPanel implements Constants,
 
     private KeyMap requestedKeyMap;
 
-    private String prefixKeyStatusText;
+    private EventSequence currentEventSequence;
 
     public boolean handleJEvent(JEvent event)
     {
@@ -2450,21 +2450,39 @@ public final class Editor extends JPanel implements Constants,
             if (keyChar == 7 && keyCode == 0x47 && modifiers == 2) {
                 // Control G
                 requestedKeyMap = null;
-                prefixKeyStatusText = null;
+                currentEventSequence = null;
                 status("");
                 return false;
             }
         }
         KeyMapping mapping = getKeyMapping(keyChar, keyCode, modifiers);
+        if (mapping == null) {
+            if (event.getID() == JEvent.KEY_TYPED) {
+                // Reset.
+                requestedKeyMap = null;
+                currentEventSequence = null;
+            }
+            return false;
+        }
         if (mapping != null) {
             Object command = mapping.getCommand();
+            if (command instanceof KeyMap) {
+                // Emacs-style key sequence.
+                if (currentEventSequence == null)
+                    currentEventSequence = new EventSequence();
+                currentEventSequence.addEvent(event);
+                Log.debug(String.valueOf(currentEventSequence));
+                requestedKeyMap = (KeyMap) command;
+                status(currentEventSequence.getStatusText() + "-");
+                return true;
+            }
             if (isRecordingMacro()) {
                 if (command != "recordMacro" && command != "playbackMacro")
                     Macro.record(this, command);
             }
             if (command instanceof String) {
-                prefixKeyStatusText = null;
                 requestedKeyMap = null;
+                currentEventSequence = null;
                 String commandString = (String) command;
                 if (commandString.length() > 0 && commandString.charAt(0) == '(') {
                     // A Lisp form.
@@ -2481,24 +2499,14 @@ public final class Editor extends JPanel implements Constants,
                     catch (NoSuchMethodException e) {}
                 }
             } else if (command instanceof LispObject) {
-                prefixKeyStatusText = null;
                 requestedKeyMap = null;
+                currentEventSequence = null;
                 try {
                     LispThread.currentThread().execute(Lisp.coerceToFunction((LispObject)command));
                 }
                 catch (Throwable t) {
                     Log.error(t);
                 }
-                return true;
-            } else if (command instanceof KeyMap) {
-                requestedKeyMap = (KeyMap) command;
-                if (prefixKeyStatusText == null) {
-                    prefixKeyStatusText = mapping.getKeyText();
-                } else {
-                    prefixKeyStatusText =
-                        prefixKeyStatusText + " " + mapping.getKeyText();
-                }
-                status(prefixKeyStatusText + "-");
                 return true;
             }
         }
