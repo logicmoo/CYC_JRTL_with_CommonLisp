@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.612 2004-03-16 20:23:29 piso Exp $
+ * $Id: Primitives.java,v 1.613 2004-03-16 20:27:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2971,10 +2971,12 @@ public final class Primitives extends Lisp
             if (args == NIL)
                 signal(new WrongNumberOfArgumentsException(this));
             LispObject tag;
-            if (args.car() == NIL)
-                tag = NIL;
-            else
-                tag = checkSymbol(args.car());
+            try {
+                tag = (Symbol) args.car();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(args.car(), Symbol.SYMBOL));
+            }
             LispObject body = args.cdr();
             Environment ext = new Environment(env);
             final Block block = new Block();
