@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.31 2003-11-18 01:29:23 piso Exp $
+;;; $Id: defstruct.lisp,v 1.32 2003-11-18 01:55:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,16 +34,22 @@
          (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
          (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
          (keys (cons '&key slot-descriptions)))
-    (case *ds-type*
-      (LIST
-       (if *ds-named*
+    (cond ((eq *ds-type* 'list)
+           (if *ds-named*
+               `((defun ,constructor-name ,keys
+                   (list ',*ds-name* ,@slot-names)))
+               `((defun ,constructor-name ,keys
+                   (list ,@slot-names)))))
+          ((or (eq *ds-type* 'vector)
+               (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
+           (if *ds-named*
+               `((defun ,constructor-name ,keys
+                   (vector ',*ds-name* ,@slot-names)))
+               `((defun ,constructor-name ,keys
+                   (vector ,@slot-names)))))
+          (t
            `((defun ,constructor-name ,keys
-               (list ',*ds-name* ,@slot-names)))
-           `((defun ,constructor-name ,keys
-               (list ,@slot-names)))))
-      (t
-       `((defun ,constructor-name ,keys
-           (%make-structure ',*ds-name* (list ,@slot-names))))))))
+               (%make-structure ',*ds-name* (list ,@slot-names))))))))
 
 (defun default-constructor-name ()
   (concatenate 'string "MAKE-" (symbol-name *ds-name*)))
@@ -61,41 +67,50 @@
   (when (and *ds-predicate*
              (or *ds-named* (null *ds-type*)))
     (let ((pred (intern *ds-predicate*)))
-      (case *ds-type*
-        (LIST
-         `((defun ,pred (object)
-             (and (consp object) (eq (car object) ',*ds-name*)))))
-        (t
-         `((defun ,pred (object)
-             (typep object ',*ds-name*))))))))
+      (cond ((eq *ds-type* 'list)
+             `((defun ,pred (object)
+                 (and (consp object) (eq (car object) ',*ds-name*)))))
+            ((or (eq *ds-type* 'vector)
+                 (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
+             `((defun ,pred (object)
+                 (and (vectorp object)
+                      (> (length object) 0)
+                      (eq (aref object 0) ',*ds-name*)))))
+            (t
+             `((defun ,pred (object)
+                 (typep object ',*ds-name*))))))))
 
 (defun get-slot-accessor (slot)
-  (case *ds-type*
-    (LIST
-     (when *ds-named*
-       (incf slot))
-     `(lambda (instance) (elt instance ,slot)))
-    (t
-     (case slot
-       (0 #'%structure-ref-0)
-       (1 #'%structure-ref-1)
-       (2 #'%structure-ref-2)
-       (t
-        `(lambda (instance) (%structure-ref instance ,slot)))))))
+  (cond ((eq *ds-type* 'list)
+         (when *ds-named*
+           (incf slot))
+         `(lambda (instance) (elt instance ,slot)))
+        ((or (eq *ds-type* 'vector)
+             (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
+         `(lambda (instance) (aref instance ,slot)))
+        (t
+         (case slot
+           (0 #'%structure-ref-0)
+           (1 #'%structure-ref-1)
+           (2 #'%structure-ref-2)
+           (t
+            `(lambda (instance) (%structure-ref instance ,slot)))))))
 
 (defun get-slot-mutator (slot)
-  (case *ds-type*
-    (LIST
-     (when *ds-named*
-       (incf slot))
-     `(lambda (instance value) (%set-elt instance ,slot value)))
-    (t
-     (case slot
-       (0 #'%structure-set-0)
-       (1 #'%structure-set-1)
-       (2 #'%structure-set-2)
-       (t
-        `(lambda (instance value) (%structure-set instance ,slot value)))))))
+  (cond ((eq *ds-type* 'list)
+         (when *ds-named*
+           (incf slot))
+         `(lambda (instance value) (%set-elt instance ,slot value)))
+        ((or (eq *ds-type* 'vector)
+             (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
+         `(lambda (instance value) (%aset instance ,slot value)))
+        (t
+         (case slot
+           (0 #'%structure-set-0)
+           (1 #'%structure-set-1)
+           (2 #'%structure-set-2)
+           (t
+            `(lambda (instance value) (%structure-set instance ,slot value)))))))
 
 (defun define-access-function (slot-name index)
   (let ((accessor
@@ -116,11 +131,13 @@
 
 (defun define-copier ()
   (when *ds-copier*
-    (case *ds-type*
-      (LIST
-       `((setf (fdefinition ',*ds-copier*) #'copy-list)))
-      (t
-       `((setf (fdefinition ',*ds-copier*) #'copy-structure))))))
+    (cond ((eq *ds-type* 'list)
+           `((setf (fdefinition ',*ds-copier*) #'copy-list)))
+          ((or (eq *ds-type* 'vector)
+               (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
+           `((setf (fdefinition ',*ds-copier*) #'copy-seq)))
+          (t
+           `((setf (fdefinition ',*ds-copier*) #'copy-structure))))))
 
 (defun parse-1-option (option)
   (case (car option)
