@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.169 2004-05-29 15:31:01 piso Exp $
+;;; $Id: jvm.lisp,v 1.170 2004-05-29 18:11:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -280,6 +280,16 @@
   (emit 'aload *thread*)
   (emit 'aconst_null)
   (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;"))
+
+(defun generate-interrupt-check ()
+  (let ((label1 (gensym)))
+    (emit 'getstatic +lisp-class+ "interrupted" "Z")
+    (emit 'ifeq `,label1)
+    (emit-invokestatic +lisp-class+
+                       "handleInterrupt"
+                       "()V"
+                       0)
+    (emit 'label `,label1)))
 
 (defparameter single-valued-operators (make-hash-table :test 'eq))
 
@@ -2588,6 +2598,7 @@
                           "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;"
                           -1)
       (emit 'astore_1))
+    (generate-interrupt-check)
     (dolist (f body)
       (compile-form f))
     (unless (remove-store-value)
