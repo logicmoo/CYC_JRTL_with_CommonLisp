@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.26 2003-11-02 20:54:36 piso Exp $
+ * $Id: BitVector.java,v 1.27 2003-11-30 06:12:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -286,6 +286,16 @@ public final class BitVector extends AbstractVector
         if (obj instanceof AbstractVector)
             return ((AbstractVector)obj).equalp(this);
         return false;
+    }
+
+    public int hashCode()
+    {
+        int hashCode = 1;
+        // Consider first 64 bits only.
+        final int limit = Math.min(length(), 64);
+        for (int i = 0; i < limit; i++)
+            hashCode = 31 * hashCode + _get(i);
+        return hashCode;
     }
 
     public String toString()
