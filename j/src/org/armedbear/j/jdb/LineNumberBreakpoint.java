@@ -2,7 +2,7 @@
  * LineNumberBreakpoint.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LineNumberBreakpoint.java,v 1.2 2003-05-12 17:08:40 piso Exp $
+ * $Id: LineNumberBreakpoint.java,v 1.3 2003-05-18 01:31:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,17 +107,7 @@ public final class LineNumberBreakpoint extends ResolvableBreakpoint
     public void resolved()
     {
         if (line != null) {
-            Annotation annotation = line.getAnnotation();
-            if (annotation instanceof BreakpointAnnotation) {
-                if (((BreakpointAnnotation)annotation).getBreakpoint() == this)
-                    ; // OK.
-                else
-                    Debug.bug();
-            } else if (annotation == null) {
-                line.setAnnotation(new BreakpointAnnotation(this));
-            } else {
-                Debug.bug();
-            }
+            line.setAnnotation(new BreakpointAnnotation(this));
         } else {
             // This only finds existing buffers. We might want to create one
             // if one doesn't already exist for the file in question.
@@ -134,8 +124,6 @@ public final class LineNumberBreakpoint extends ResolvableBreakpoint
                 }
             }
         }
-        if (line != null)
-            line.setAnnotation(new BreakpointAnnotation(this));
         if (buffer != null)
             buffer.repaint();
         jdb.log("Breakpoint resolved: " + getLocationString());
