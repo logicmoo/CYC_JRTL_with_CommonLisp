@@ -1,7 +1,7 @@
 ;;; subst.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subst.lisp,v 1.3 2003-07-02 18:35:33 piso Exp $
+;;; $Id: subst.lisp,v 1.4 2003-10-14 16:00:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,41 +28,44 @@
              (notp (not (funcall test-not ,item ,key-tmp)))
              (t (funcall test ,item ,key-tmp))))))
 
+(defun %subst (new old tree key test testp test-not notp)
+  (cond ((satisfies-the-test old tree) new)
+        ((atom tree) tree)
+        (t (let ((car (%subst new old (car tree) key test testp test-not notp))
+                 (cdr (%subst new old (cdr tree) key test testp test-not notp)))
+             (if (and (eq car (car tree))
+                      (eq cdr (cdr tree)))
+                 tree
+                 (cons car cdr))))))
+
 (defun subst (new old tree &key key (test #'eql testp) (test-not nil notp))
-  (labels ((s (subtree)
-	      (cond ((satisfies-the-test old subtree) new)
-		    ((atom subtree) subtree)
-		    (t (let ((car (s (car subtree)))
-			     (cdr (s (cdr subtree))))
-			 (if (and (eq car (car subtree))
-				  (eq cdr (cdr subtree)))
-			     subtree
-			     (cons car cdr)))))))
-          (s tree)))
+  (%subst new old tree key test testp test-not notp))
+
+(defun %subst-if (new test tree key)
+  (cond ((funcall test (apply-key key tree)) new)
+        ((atom tree) tree)
+        (t (let ((car (%subst-if new test (car tree) key))
+                 (cdr (%subst-if new test (cdr tree) key)))
+             (if (and (eq car (car tree))
+                      (eq cdr (cdr tree)))
+                 tree
+                 (cons car cdr))))))
 
 (defun subst-if (new test tree &key key)
-  (labels ((s (subtree)
-	      (cond ((funcall test (apply-key key subtree)) new)
-		    ((atom subtree) subtree)
-		    (t (let ((car (s (car subtree)))
-			     (cdr (s (cdr subtree))))
-			 (if (and (eq car (car subtree))
-				  (eq cdr (cdr subtree)))
-			     subtree
-			     (cons car cdr)))))))
-          (s tree)))
+  (%subst-if new test tree key))
+
+(defun %subst-if-not (new test tree key)
+  (cond ((not (funcall test (apply-key key tree))) new)
+        ((atom tree) tree)
+        (t (let ((car (%subst-if-not new test (car tree) key))
+                 (cdr (%subst-if-not new test (cdr tree) key)))
+             (if (and (eq car (car tree))
+                      (eq cdr (cdr tree)))
+                 tree
+                 (cons car cdr))))))
 
 (defun subst-if-not (new test tree &key key)
-  (labels ((s (subtree)
-	      (cond ((not (funcall test (apply-key key subtree))) new)
-		    ((atom subtree) subtree)
-		    (t (let ((car (s (car subtree)))
-			     (cdr (s (cdr subtree))))
-			 (if (and (eq car (car subtree))
-				  (eq cdr (cdr subtree)))
-			     subtree
-			     (cons car cdr)))))))
-          (s tree)))
+  (%subst-if-not new test tree key))
 
 (defun nsubst (new old tree &key key (test #'eql testp) (test-not nil notp))
   (labels ((s (subtree)
