@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.3 2003-02-15 17:47:28 piso Exp $
+ * $Id: LispObject.java,v 1.4 2003-02-16 02:50:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public class LispObject extends Lisp
 
     public void setCar(LispObject obj) throws LispError
     {
-        throw new TypeError(this, "list");
+        throw new TypeError(this, "cons");
     }
 
     public LispObject cdr() throws LispError
@@ -55,7 +55,7 @@ public class LispObject extends Lisp
 
     public void setCdr(LispObject obj) throws LispError
     {
-        throw new TypeError(this, "list");
+        throw new TypeError(this, "cons");
     }
 
     public LispObject cadr() throws LispError
