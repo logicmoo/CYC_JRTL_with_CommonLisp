@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.19 2003-08-13 01:14:00 piso Exp $
+ * $Id: LispFloat.java,v 1.20 2003-08-15 13:44:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -310,6 +310,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "real number");
     }
 
+    // ### float
     // float number &optional prototype => float
     private static final Primitive FLOAT = new Primitive("float") {
         public LispObject execute(LispObject[] args) throws LispError
