@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.96 2004-03-17 17:58:02 piso Exp $
+;;; $Id: clos.lisp,v 1.97 2004-03-18 00:12:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -629,7 +629,7 @@
        ',name)))
 
 (defun expand-long-defcombin (whole)
-  (error "The long form of DEFINE-METHOD-COMBINATION is not yet supported."))
+  (error "The long form of DEFINE-METHOD-COMBINATION is not implemented."))
 
 (define-method-combination +      :identity-with-one-argument t)
 (define-method-combination and    :identity-with-one-argument t)
@@ -1886,5 +1886,13 @@
              :format-control "Can't use anonymous or undefined class as a constant: ~S."
              :format-arguments (list class)))
     `(find-class ',name)))
+
+(defun invalid-method-error (method format-control &rest args)
+  (let ((message (apply #'format nil format-control args)))
+    (error "Invalid method error for ~S:~%    ~A" method message)))
+
+(defun method-combination-error (format-control &rest args)
+  (let ((message (apply #'format nil format-control args)))
+    (error "Method combination error in CLOS dispatch:~%    ~A" message)))
 
 (provide 'clos)
