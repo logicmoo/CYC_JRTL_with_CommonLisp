@@ -2,7 +2,7 @@
  * DiffMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffMode.java,v 1.10 2003-06-16 15:36:42 piso Exp $
+ * $Id: DiffMode.java,v 1.11 2003-06-21 01:01:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +101,7 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         for (int i = 0; i < argList.size(); i++) {
             String arg = (String) argList.get(i);
             if (arg.equals("%")) {
-                File file = editor.getBuffer().getFile();
+                File file = parentBuffer.getFile();
                 if (file == null) {
                     MessageDialog.showMessageDialog(
                         "There is no file associated with the current buffer.",
@@ -148,11 +148,15 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         ShellCommand shellCommand = new ShellCommand(cmdline);
         shellCommand.run();
         String output = shellCommand.getOutput();
-        DiffOutputBuffer buf = new DiffOutputBuffer(parentBuffer, output, 0);
-        buf.setTitle(cmdline);
-        editor.makeNext(buf);
-        editor.activateInOtherWindow(buf);
-        editor.setDefaultCursor();
+        if (output.length() == 0)
+            MessageDialog.showMessageDialog(editor, "No changes", "diff");
+        else {
+            DiffOutputBuffer buf = new DiffOutputBuffer(parentBuffer, output, 0);
+            buf.setTitle(cmdline);
+            editor.makeNext(buf);
+            editor.activateInOtherWindow(buf);
+            editor.setDefaultCursor();
+        }
     }
 
     public static void gotoFile()
