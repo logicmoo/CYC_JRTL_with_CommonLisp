@@ -2,7 +2,7 @@
  * WebBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: WebBuffer.java,v 1.6 2003-06-04 02:32:43 piso Exp $
+ * $Id: WebBuffer.java,v 1.7 2003-06-19 15:03:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -285,24 +285,10 @@ public final class WebBuffer extends Buffer implements WebConstants
         if (link == null) {
             if (exact)
                 return;
-            LineSegmentList segmentList = ((WebLine)dotLine).getSegmentList();
-            if (segmentList == null)
+            segment = findLink(dotLine, dotOffset);
+            if (segment == null)
                 return;
-            int offset = 0;
-            final int size = segmentList.size();
-            for (int i = 0; i < size; i++) {
-                HtmlLineSegment seg =
-                    (HtmlLineSegment) segmentList.getSegment(i);
-                if (seg.getLink() != null) {
-                    if (link == null || offset < dotOffset) {
-                        segment = seg;
-                        link = segment.getLink();
-                    }
-                }
-                offset += seg.length();
-                if (offset > dotOffset && link != null)
-                    break;
-            }
+            link = segment.getLink();
         }
         if (link == null)
             return;
@@ -457,6 +443,30 @@ public final class WebBuffer extends Buffer implements WebConstants
                 wb.update(pos);
             }
         }
+    }
+
+    public static HtmlLineSegment findLink(Line line, int offset)
+    {
+        HtmlLineSegment segment = null;
+        if (line instanceof WebLine) {
+            LineSegmentList segmentList = ((WebLine)line).getSegmentList();
+            if (segmentList != null) {
+                int where = 0;
+                final int size = segmentList.size();
+                for (int i = 0; i < size; i++) {
+                    HtmlLineSegment seg =
+                        (HtmlLineSegment) segmentList.getSegment(i);
+                    if (seg.getLink() != null) {
+                        if (segment == null || where < offset)
+                            segment = seg;
+                    }
+                    where += seg.length();
+                    if (where > offset && segment != null)
+                        break;
+                }
+            }
+        }
+        return segment;
     }
 
     private static File resolve(File base, String fileName)
