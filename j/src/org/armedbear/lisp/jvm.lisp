@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.355 2005-01-17 16:34:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.356 2005-01-19 13:02:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -405,16 +405,35 @@
     (setf (block-form block) (list* 'BLOCK (cadr form) (mapcar #'p1 (cddr form))))
     block))
 
+(defun p1-unwind-protect (form)
+  (let* ((block (make-block-node :name '(UNWIND-PROTECT)))
+         (*blocks* (cons block *blocks*)))
+    (setf (block-form block) (list* 'UNWIND-PROTECT (mapcar #'p1 (cdr form))))
+    block))
+
 (defun p1-return-from (form)
   (let* ((name (second form))
-         (result-form (third form))
          (block (find-block name)))
-    (cond ((null block)
-           (error "P1-RETURN-FROM: no block named ~S is currently visible." name))
-          ((eq (block-compiland block) *current-compiland*)
-           (setf (block-return-p block) t))
+    (when (null block)
+      (error "P1-RETURN-FROM: no block named ~S is currently visible." name))
+    (dformat t "p1-return-from block = ~S~%" (block-name block))
+    (setf (block-return-p block) t)
+    (cond ((eq (block-compiland block) *current-compiland*)
+           ;; Local case. If the RETURN is nested inside an UNWIND-PROTECT
+           ;; which is inside the block we're returning from, we'll do a non-
+           ;; local return anyway so that UNWIND-PROTECT can catch it and run
+           ;; its cleanup forms.
+           (dformat t "*blocks* = ~S~%" (mapcar #'block-name *blocks*))
+           (let ((protected
+                  (dolist (enclosing-block *blocks*)
+                    (when (eq enclosing-block block)
+                      (return nil))
+                    (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
+                      (return t)))))
+             (dformat t "p1-return-from protected = ~S~%" protected)
+             (when protected
+               (setf (block-non-local-return-p block) t))))
           (t
-           (setf (block-return-p block) t)
            (setf (block-non-local-return-p block) t))))
   (list* 'RETURN-FROM (cadr form) (mapcar #'p1 (cddr form))))
 
@@ -714,7 +733,7 @@
 (install-p1-handler 'tagbody              'p1-tagbody)
 (install-p1-handler 'the                  'p1-the)
 (install-p1-handler 'throw                'p1-throw)
-(install-p1-handler 'unwind-protect       'p1-default)
+(install-p1-handler 'unwind-protect       'p1-unwind-protect)
 
 (defun dump-pool ()
   (let ((pool (reverse *pool*))
@@ -1453,24 +1472,24 @@
                 (target (second instruction-args))
                 (representation (third instruction-args)))
            (aver (variable-p variable))
+           (dformat t "var-ref variable = ~S " (variable-name variable))
            (cond
             ((variable-register variable)
-             (dformat t "variable = ~S register = ~S~%"
-                      (variable-name variable)
-                      (variable-register variable))
+             (dformat t "register = ~S~%" (variable-register variable))
              (emit 'aload (variable-register variable))
              (emit-move-from-stack target))
             ((variable-special-p variable)
+             (dformat t "soecial~%")
              (compile-special-reference (variable-name variable) target nil))
             ((variable-closure-index variable)
-             (dformat t "variable = ~S closure-index = ~S~%"
-                      (variable-name variable) (variable-closure-index variable))
+             (dformat t "closure-index = ~S~%" (variable-closure-index variable))
              (aver (not (null (compiland-closure-register *current-compiland*))))
              (emit 'aload (compiland-closure-register *current-compiland*))
-             (emit 'bipush (variable-closure-index variable))
+             (emit-push-constant-int (variable-closure-index variable))
              (emit 'aaload)
              (emit-move-from-stack target))
             ((variable-index variable)
+             (dformat t "index = ~S~%" (variable-index variable))
              (aver (not (null (compiland-argument-register *current-compiland*))))
              (emit 'aload (compiland-argument-register *current-compiland*))
              (emit-push-constant-int (variable-index variable))
@@ -1484,18 +1503,14 @@
              (emit-unbox-fixnum))))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
-           (dformat t "var-set var = ~S reg = ~S closure index = ~S~%"
-                    (variable-name variable)
-                    (variable-register variable)
-                    (variable-closure-index variable)
-                    )
+           (dformat t "var-set variable = ~S " (variable-name variable))
            (aver (variable-p variable))
            (aver (not (variable-special-p variable)))
            (cond ((variable-register variable)
+                  (dformat t "register = ~S~%" (variable-register variable))
                   (emit 'astore (variable-register variable)))
                  ((variable-closure-index variable)
-                  (dformat t "variable = ~S closure-index = ~S~%"
-                           (variable-name variable) (variable-closure-index variable))
+                  (dformat t "closure-index = ~S~%" (variable-closure-index variable))
                   (aver (not (null (compiland-closure-register *current-compiland*))))
                   (emit 'aload (compiland-closure-register *current-compiland*))
                   (emit 'swap) ; array value
@@ -2774,19 +2789,51 @@
   (compile-call (cddr form))
   (emit-move-from-stack target))
 
+(defun save-variables (variables)
+  (let ((saved-vars '()))
+    (dolist (variable variables)
+      (when (variable-closure-index variable)
+        (let ((register (allocate-register)))
+          (emit 'aload (compiland-closure-register *current-compiland*))
+          (emit-push-constant-int (variable-closure-index variable))
+          (emit 'aaload)
+          (emit 'astore register)
+          (push (cons variable register) saved-vars))))
+    saved-vars))
+
+(defun restore-variables (saved-vars)
+  (dolist (saved-var saved-vars)
+    (let ((variable (car saved-var))
+          (register (cdr saved-var)))
+      (emit 'aload (compiland-closure-register *current-compiland*))
+      (emit-push-constant-int (variable-closure-index variable))
+      (emit 'aload register)
+      (emit 'aastore))))
+
 (defun compile-local-function-call (form target)
-  (dformat t "compile-local-function-call~%")
   (let* ((op (car form))
          (args (cdr form))
-         (local-function (find-local-function op)))
+         (local-function (find-local-function op))
+         (*register* *register*)
+         (saved-vars '()))
     (cond
      ((eq (local-function-compiland local-function) *current-compiland*)
+      ;; Recursive call.
+      (dformat t "compile-local-function-call recursive case~%")
+      (setf saved-vars
+            (save-variables (compiland-arg-vars (local-function-compiland local-function))))
       (emit 'aload_0))
      ((local-function-variable local-function)
       ;; LABELS
       (dformat t "compile-local-function-call LABELS case~%")
+      (dformat t "save args here: ~S~%"
+               (mapcar #'variable-name
+                       (compiland-arg-vars (local-function-compiland local-function))))
+      (setf saved-vars
+            (save-variables (compiland-arg-vars (local-function-compiland local-function))))
       (emit 'var-ref (local-function-variable local-function) :stack))
      (t
+      (dformat t "compile-local-function-call default case~%")
       (let* ((g (if *compile-file-truename*
                     (declare-local-function local-function)
                     (declare-object (local-function-function local-function)))))
@@ -2901,7 +2948,9 @@
            (emit 'astore target))
           (t
            (%format t "line 1876~%")
-           (aver nil)))))
+           (aver nil)))
+    (when saved-vars
+      (restore-variables saved-vars))))
 
 (defparameter java-predicates (make-hash-table :test 'eq))
 
@@ -3763,12 +3812,10 @@
   (let ((block (make-block-node :form form
                                 :name (cadr form)
                                 :target target)))
-    (compile-block-node block target)
+    (p2-block-node block target)
   ))
 
-(defun compile-block-node (block target)
-;;   (dformat t "COMPILE-BLOCK-NODE ~S block-return-p = ~S~%"
-;;            (block-name block) (block-return-p block))
+(defun p2-block-node (block target)
   (unless (block-node-p block)
     (%format t "type-of block = ~S~%" (type-of block))
     (aver (block-node-p block)))
@@ -3825,10 +3872,13 @@
   (let* ((name (second form))
          (result-form (third form))
          (block (find-block name)))
-    (cond
-     ((null block)
+    (when (null block)
       (error "No block named ~S is currently visible." name))
-     ((eq (block-compiland block) *current-compiland*)
+
+    (dformat t "p2-return-from block = ~S~%" (block-name block))
+
+    (when (eq (block-compiland block) *current-compiland*)
+      (dformat t "p2-return-from *blocks* = ~S~%" (mapcar #'block-name *blocks*))
       ;; Local case. Is the RETURN nested inside an UNWIND-PROTECT which
       ;; is inside the block we're returning from?
       (let ((protected
@@ -3837,39 +3887,40 @@
                  (return nil))
                (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
                  (return t)))))
-        (when protected
-          (error "COMPILE-RETURN-FROM: enclosing UNWIND-PROTECT")))
-      (emit-clear-values)
-      (compile-form result-form :target (block-target block))
-      (emit 'goto (block-exit block)))
-     (t
-      ;; Non-local RETURN.
-      (setf (block-non-local-return-p block) t)
-      (cond ((node-constant-p result-form)
+        (dformat t "p2-return-from protected = ~S~%" protected)
+        (unless protected
+          (emit-clear-values)
+          (compile-form result-form :target (block-target block))
+          (emit 'goto (block-exit block))
+          (return-from p2-return-from))))
+
+    ;; Non-local RETURN.
+    (aver (block-non-local-return-p block))
+    (cond ((node-constant-p result-form)
+           (emit 'new +lisp-return-class+)
+           (emit 'dup)
+           (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+           (emit-clear-values)
+           (compile-form result-form :target :stack)) ; Result.
+          (t
+           (let* ((*register* *register*)
+                  (temp-register (allocate-register)))
+             (emit-clear-values)
+             (compile-form result-form :target temp-register) ; Result.
              (emit 'new +lisp-return-class+)
              (emit 'dup)
              (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
-             (emit-clear-values)
-             (compile-form result-form :target :stack)) ; Result.
-            (t
-             (let* ((*register* *register*)
-                    (temp-register (allocate-register)))
-               (emit-clear-values)
-               (compile-form result-form :target temp-register) ; Result.
-               (emit 'new +lisp-return-class+)
-               (emit 'dup)
-               (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
-               (emit 'aload temp-register))))
-      (emit-invokespecial +lisp-return-class+
-                          "<init>"
-                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
-                          -3)
-      (emit 'athrow)
-      ;; Following code will not be reached, but is needed for JVM stack
-      ;; consistency.
-      (when target
-        (emit-push-nil)
-        (emit-move-from-stack target))))))
+             (emit 'aload temp-register))))
+    (emit-invokespecial +lisp-return-class+
+                        "<init>"
+                        "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                        -3)
+    (emit 'athrow)
+    ;; Following code will not be reached, but is needed for JVM stack
+    ;; consistency.
+    (when target
+      (emit-push-nil)
+      (emit-move-from-stack target))))
 
 (defun compile-cons (form &key (target *val*) representation)
   (unless (check-args form 2)
@@ -4972,67 +5023,61 @@
     (emit-push-nil)
     (emit-move-from-stack target)))
 
-(defun compile-unwind-protect (form &key (target *val*) representation)
-  (when (= (length form) 2) ; (unwind-protect 42)
-    (compile-form (second form) :target target)
-    (return-from compile-unwind-protect))
-  (let* ((protected-form (cadr form))
-         (cleanup-forms (cddr form))
-         (*register* *register*)
-         (exception-register (allocate-register))
-         (result-register (allocate-register))
-         (values-register (allocate-register))
-         (return-address-register (allocate-register))
-         (BEGIN-PROTECTED-RANGE (gensym))
-         (END-PROTECTED-RANGE (gensym))
-         (HANDLER (gensym))
-         (EXIT (gensym))
-         (CLEANUP (gensym)))
-;;     (when (contains-return protected-form)
-;;       (error "COMPILE-UNWIND-PROTECT: unhandled case (RETURN)"))
-;;     (when (contains-go protected-form)
-;;       (error "COMPILE-UNWIND-PROTECT: unhandled case (GO)"))
+(defun p2-unwind-protect-node (block target)
+  (let ((form (block-form block)))
+    (when (= (length form) 2) ; No cleanup form.
+      (compile-form (second form) :target target)
+      (return-from p2-unwind-protect-node))
+    (let* ((protected-form (cadr form))
+           (cleanup-forms (cddr form))
+           (*register* *register*)
+           (exception-register (allocate-register))
+           (result-register (allocate-register))
+           (values-register (allocate-register))
+           (return-address-register (allocate-register))
+           (BEGIN-PROTECTED-RANGE (gensym))
+           (END-PROTECTED-RANGE (gensym))
+           (HANDLER (gensym))
+           (EXIT (gensym))
+           (CLEANUP (gensym)))
+      ;; Make sure there are no leftover multiple return values from previous calls.
+      (emit-clear-values)
 
-    ;; Added Dec 9 2004 3:46 AM
-    ;; Make sure there are no leftover values from previous calls.
-    (emit-clear-values)
-
-    (let* ((block (make-block-node :name '(UNWIND-PROTECT)))
-           (*blocks* (cons block *blocks*)))
-      (label BEGIN-PROTECTED-RANGE)
-      (compile-form protected-form :target result-register)
+      (let* ((*blocks* (cons block *blocks*)))
+        (label BEGIN-PROTECTED-RANGE)
+        (compile-form protected-form :target result-register)
+        (emit-push-current-thread)
+        (emit 'getfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+        (emit 'astore values-register)
+        (label END-PROTECTED-RANGE))
+      (emit 'jsr CLEANUP)
+      (emit 'goto EXIT) ; Jump over handler.
+      (label HANDLER) ; Start of exception handler.
+      ;; The Throwable object is on the runtime stack. Stack depth is 1.
+      (emit 'astore exception-register)
+      (emit 'jsr CLEANUP) ; Call cleanup forms.
+      (emit-clear-values)
+      (emit 'aload exception-register)
+      (emit 'athrow) ; Re-throw exception.
+      (label CLEANUP) ; Cleanup forms.
+      ;; Return address is on stack here.
+      (emit 'astore return-address-register)
+      (dolist (subform cleanup-forms)
+        (compile-form subform :target nil))
+      (emit 'ret return-address-register)
+      (label EXIT)
+      ;; Restore multiple values returned by protected form.
       (emit-push-current-thread)
-      (emit 'getfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
-      (emit 'astore values-register)
-      (label END-PROTECTED-RANGE))
-    (emit 'jsr CLEANUP)
-    (emit 'goto EXIT) ; Jump over handler.
-    (label HANDLER) ; Start of exception handler.
-    ;; The Throw object is on the runtime stack. Stack depth is 1.
-    (emit 'astore exception-register)
-    (emit 'jsr CLEANUP) ; Call cleanup forms.
-    (emit-clear-values)
-    (emit 'aload exception-register)
-    (emit 'athrow) ; Re-throw exception.
-    (label CLEANUP) ; Cleanup forms.
-    ;; Return address is on stack here.
-    (emit 'astore return-address-register)
-    (dolist (subform cleanup-forms)
-      (compile-form subform :target nil))
-    (emit 'ret return-address-register)
-    (label EXIT)
-    ;; Restore multiple values returned by protected form.
-    (emit-push-current-thread)
-    (emit 'aload values-register)
-    (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
-    ;; Result.
-    (emit 'aload result-register)
-    (emit-move-from-stack target)
-    (let ((handler (make-handler :from BEGIN-PROTECTED-RANGE
-                                 :to END-PROTECTED-RANGE
-                                 :code HANDLER
-                                 :catch-type 0)))
-      (push handler *handlers*))))
+      (emit 'aload values-register)
+      (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+      ;; Result.
+      (emit 'aload result-register)
+      (emit-move-from-stack target)
+      (let ((handler (make-handler :from BEGIN-PROTECTED-RANGE
+                                   :to END-PROTECTED-RANGE
+                                   :code HANDLER
+                                   :catch-type 0)))
+        (push handler *handlers*)))))
 
 (defun compile-form (form &key (target *val*) representation)
   (cond ((consp form)
@@ -5088,8 +5133,10 @@
                 (p2-let/let*-node form target))
                ((equal (block-name form) '(MULTIPLE-VALUE-BIND))
                 (p2-m-v-b-node form target))
+               ((equal (block-name form) '(UNWIND-PROTECT))
+                (p2-unwind-protect-node form target))
                (t
-                (compile-block-node form target))))
+                (p2-block-node form target))))
         ((constantp form)
 ;;          (dformat t "compile-form constantp case~%")
          (compile-constant form :target target :representation representation))
@@ -5276,9 +5323,6 @@
          (*register* 0)
          (*registers-allocated* 0)
          (*handlers* ())
-
-;;          (*context* *context*)
-
          (*visible-variables* *visible-variables*)
          (*undefined-variables* *undefined-variables*)
 
@@ -5320,7 +5364,6 @@
                  (aver (null (variable-index variable)))
                  (setf (variable-index variable) index)
                  (push variable parameters)
-;;                  (add-variable-to-context variable)
                  (incf index)))))
           (t
            (dformat t "*hairy-arglist-p* = nil~%")
@@ -5401,7 +5444,8 @@
     (when (and *closure-variables*
                #+nil (some #'variable-closure-index parameters)
                )
-      (dformat t "moving arguments to closure array (if applicable)~%")
+      (dformat t "~S moving arguments to closure array (if applicable)~%"
+               (compiland-name compiland))
       (cond (*child-p*
              (aver (eql (compiland-closure-register compiland) 1))
              (when (some #'variable-closure-index parameters)
@@ -5445,7 +5489,10 @@
              (when (some #'variable-closure-index parameters)
                (emit 'pop)))
             (t
-             (emit 'astore (compiland-closure-register compiland)))))
+             (emit 'astore (compiland-closure-register compiland))))
+      (dformat t "~S done moving arguments to closure array~%"
+               (compiland-name compiland))
+      )
 
     ;; Establish dynamic bindings for any variables declared special.
     (dolist (variable parameters)
@@ -5755,27 +5802,27 @@
                              schar
                              setq
                              throw
-                             unwind-protect
                              values))
 
-(install-p2-handler '<           'p2-numeric-comparison)
-(install-p2-handler '<=          'p2-numeric-comparison)
-(install-p2-handler '>           'p2-numeric-comparison)
-(install-p2-handler '>=          'p2-numeric-comparison)
-(install-p2-handler '=           'p2-numeric-comparison)
-(install-p2-handler '/=          'p2-numeric-comparison)
-(install-p2-handler '+           'compile-plus)
-(install-p2-handler '-           'compile-minus)
-(install-p2-handler 'ash         'p2-ash)
-(install-p2-handler 'eql         'p2-eql)
-(install-p2-handler 'flet        'p2-flet)
-(install-p2-handler 'function    'p2-function)
-(install-p2-handler 'labels      'p2-labels)
-(install-p2-handler 'logand      'p2-logand)
-(install-p2-handler 'not         'compile-not/null)
-(install-p2-handler 'null        'compile-not/null)
-(install-p2-handler 'return-from 'p2-return-from)
-(install-p2-handler 'the         'p2-the)
+(install-p2-handler '<              'p2-numeric-comparison)
+(install-p2-handler '<=             'p2-numeric-comparison)
+(install-p2-handler '>              'p2-numeric-comparison)
+(install-p2-handler '>=             'p2-numeric-comparison)
+(install-p2-handler '=              'p2-numeric-comparison)
+(install-p2-handler '/=             'p2-numeric-comparison)
+(install-p2-handler '+              'compile-plus)
+(install-p2-handler '-              'compile-minus)
+(install-p2-handler 'ash            'p2-ash)
+(install-p2-handler 'eql            'p2-eql)
+(install-p2-handler 'flet           'p2-flet)
+(install-p2-handler 'function       'p2-function)
+(install-p2-handler 'labels         'p2-labels)
+(install-p2-handler 'logand         'p2-logand)
+(install-p2-handler 'not            'compile-not/null)
+(install-p2-handler 'null           'compile-not/null)
+(install-p2-handler 'return-from    'p2-return-from)
+(install-p2-handler 'the            'p2-the)
+;; (install-p2-handler 'unwind-protect 'p2-unwind-protect)
 
 (defun process-optimization-declarations (forms)
   (let (alist ())
