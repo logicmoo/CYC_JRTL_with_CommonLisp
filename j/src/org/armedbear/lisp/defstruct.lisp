@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.21 2003-09-22 22:56:12 piso Exp $
+;;; $Id: defstruct.lisp,v 1.22 2003-09-30 09:57:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -126,6 +126,8 @@
     (parse-name-and-options (if (atom name-and-options)
                                 (list name-and-options)
                                 name-and-options))
+    (when (stringp (car slots))
+      (setf (documentation *ds-name* 'structure) (pop slots)))
     `(progn
        (make-structure-class ',*ds-name*)
        ,@(define-constructor slots)
