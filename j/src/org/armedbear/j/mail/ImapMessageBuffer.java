@@ -2,7 +2,7 @@
  * ImapMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapMessageBuffer.java,v 1.1.1.1 2002-09-24 16:09:46 piso Exp $
+ * $Id: ImapMessageBuffer.java,v 1.2 2002-10-10 17:46:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,10 @@ public final class ImapMessageBuffer extends MessageBuffer
         if (isLoaded)
             return LOAD_COMPLETED;
         isLoaded = true;
+        if (!mailbox.isLocked()) {
+            Debug.bug();
+            return LOAD_FAILED;
+        }
         setBusy(true);
         new Thread(loadProcess).start();
         return LOAD_PENDING;
@@ -96,15 +100,16 @@ public final class ImapMessageBuffer extends MessageBuffer
         {
             // Mailbox is locked in ImapMailbox.readMessage() before calling
             // ImapMessageBuffer constructor.
-            Debug.assertTrue(mailbox.isLocked());
+            if (!mailbox.isLocked()) {
+                Debug.bug();
+                return;
+            }
             try {
                 setBackgroundProcess(this);
                 progressNotifier =
                     new StatusBarProgressNotifier(ImapMessageBuffer.this);
                 progressNotifier.progressStart();
-                Log.debug("loadProcess.run calling loadMessage");
                 loadMessage(progressNotifier);
-                Log.debug("loadProcess.run back from loadMessage");
                 progressNotifier.setText("");
                 progressNotifier.progressStop();
                 setBackgroundProcess(null);
