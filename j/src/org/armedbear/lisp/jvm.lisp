@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.7 2003-11-05 17:20:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.8 2003-11-05 18:45:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -303,11 +303,11 @@
 (defvar *locals* ())
 (defvar *max-locals* 0)
 
-(defun allocate-local ()
-  (let ((index (fill-pointer *locals*)))
-    (incf (fill-pointer *locals*))
-    (setf *max-locals* (fill-pointer *locals*))
-    index))
+;; (defun allocate-local ()
+;;   (let ((index (fill-pointer *locals*)))
+;;     (incf (fill-pointer *locals*))
+;;     (setf *max-locals* (fill-pointer *locals*))
+;;     index))
 
 (defvar *args* nil)
 (defvar *using-arg-array* nil)
@@ -485,11 +485,10 @@
 
 ;; Index of local variable used to hold the current thread.
 (defvar *thread* nil)
+(defvar *thread-var-initialized* nil)
 
 (defun emit-clear-values ()
-  (unless *thread*
-    ;; Allocate a local variable to hold the current thread.
-    (setf *thread* (allocate-local))
+  (unless *thread-var-initialized*
     ;; Put the code to initialize the local at the very beginning of the
     ;; function, to guarantee that the local gets initialized even if the code
     ;; at our current location is never executed, since the local may be
@@ -501,7 +500,8 @@
             "currentThread"
             "()Lorg/armedbear/lisp/LispThread;")
       (emit 'astore *thread*)
-      (setf *code* (append code *code*))))
+      (setf *code* (append code *code*)))
+    (setf *thread-var-initialized* t))
   (emit 'aload *thread*)
   (emit 'invokevirtual
         +lisp-thread-class+
@@ -1838,7 +1838,8 @@
          (*pool* ())
          (*pool-count* 1)
          (*val* nil)
-         (*thread* nil))
+         (*thread* nil)
+         (*thread-var-initialized* nil))
     (setf (method-name-index execute-method)
           (pool-name (method-name execute-method)))
     (setf (method-descriptor-index execute-method)
@@ -1858,7 +1859,13 @@
         ;; for args.
         (setf (fill-pointer *locals*) (1+ (length args))))
     ;; Reserve the next available slot for the value register.
-    (setf *val* (allocate-local))
+    (setq *val* (fill-pointer *locals*))
+    (incf (fill-pointer *locals*))
+    (setf *max-locals* (fill-pointer *locals*))
+    ;; Reserve the next available slot for the thread register.
+    (setq *thread* (fill-pointer *locals*))
+    (incf (fill-pointer *locals*))
+    (setf *max-locals* (fill-pointer *locals*))
     (when *hairy-arglist-p*
       (emit 'aload_0)
       (emit 'aload_1)
