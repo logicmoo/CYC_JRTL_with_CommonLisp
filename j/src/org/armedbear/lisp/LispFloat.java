@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.64 2004-06-05 02:07:05 piso Exp $
+ * $Id: LispFloat.java,v 1.65 2004-06-05 02:18:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -429,8 +429,26 @@ public final class LispFloat extends LispObject
             return (hashCode() & 0x7fffffff);
     }
 
-    public String toString()
+    public static final Symbol DOUBLE_FLOAT_POSITIVE_INFINITY =
+        exportConstant("DOUBLE-FLOAT-POSITIVE-INFINITY", PACKAGE_EXT,
+                       new LispFloat(Double.POSITIVE_INFINITY));
+
+    public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY =
+        exportConstant("DOUBLE-FLOAT-NEGATIVE-INFINITY", PACKAGE_EXT,
+                       new LispFloat(Double.NEGATIVE_INFINITY));
+
+    public String writeToString() throws ConditionThrowable
     {
+        if (value == Double.POSITIVE_INFINITY) {
+            StringBuffer sb = new StringBuffer("#.");
+            sb.append(DOUBLE_FLOAT_POSITIVE_INFINITY.writeToString());
+            return sb.toString();
+        }
+        if (value == Double.NEGATIVE_INFINITY) {
+            StringBuffer sb = new StringBuffer("#.");
+            sb.append(DOUBLE_FLOAT_NEGATIVE_INFINITY.writeToString());
+            return sb.toString();
+        }
         return String.valueOf(value);
     }
 
