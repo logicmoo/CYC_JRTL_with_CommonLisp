@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.150 2004-02-24 01:13:10 piso Exp $
+# $Id: Makefile.in,v 1.151 2004-02-24 11:21:44 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ CLASSFILES =	AbstractArray.class \
 		CompiledFunction.class \
 		Complex.class \
 		ComplexString.class \
+		ComplexVector.class \
 		ConcatenatedStream.class \
 		Condition.class \
 		ConditionThrowable.class \
@@ -145,7 +146,6 @@ CLASSFILES =	AbstractArray.class \
 		UnboundVariable.class \
 		UndefinedFunction.class \
 		Utilities.class \
-		Vector.class \
 		Version.class \
 		Warning.class \
 		WrongNumberOfArgumentsException.class \

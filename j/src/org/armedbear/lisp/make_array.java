@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.14 2004-02-24 01:54:40 piso Exp $
+ * $Id: make_array.java,v 1.15 2004-02-24 11:23:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ public final class make_array extends Primitive
                 v = new NilVector(size);
             else {
                 if (fillPointer != NIL || adjustable != NIL)
-                    v = new Vector(size);
+                    v = new ComplexVector(size);
                 else
                     v = new SimpleVector(size);
             }
