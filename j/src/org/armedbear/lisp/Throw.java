@@ -2,7 +2,7 @@
  * Throw.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Throw.java,v 1.5 2003-09-19 13:02:44 piso Exp $
+ * $Id: Throw.java,v 1.6 2003-09-19 14:11:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class Throw extends LispError
+public final class Throw extends ConditionThrowable
 {
     private final LispObject tag;
     private final LispObject result;
@@ -45,8 +45,8 @@ public final class Throw extends LispError
         return result;
     }
 
-    public String getMessage()
+    public Condition getCondition()
     {
-        return "attempt to throw to the non-existent tag " + tag;
+        return new ControlError("attempt to throw to the non-existent tag " + tag);
     }
 }
