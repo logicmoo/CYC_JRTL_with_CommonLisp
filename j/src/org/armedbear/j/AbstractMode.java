@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.15 2003-06-19 14:08:33 piso Exp $
+ * $Id: AbstractMode.java,v 1.16 2003-07-26 18:51:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,8 +60,6 @@ public abstract class AbstractMode implements Constants, Mode
 
     private final int id;
     private final String displayName;
-
-    private KeyMap overrides;
 
     protected AbstractMode(int id, String displayName)
     {

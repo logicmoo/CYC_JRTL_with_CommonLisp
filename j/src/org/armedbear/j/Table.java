@@ -1,8 +1,8 @@
 /*
  * Table.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Table.java,v 1.1.1.1 2002-09-24 16:08:06 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Table.java,v 1.2 2003-07-26 18:54:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,6 @@ package org.armedbear.j;
 // An HTML table.
 public final class Table
 {
-    private int columnCount;
-    private int rowCount;
     private int columnIndex;
     private int[] widths = new int[10];
 

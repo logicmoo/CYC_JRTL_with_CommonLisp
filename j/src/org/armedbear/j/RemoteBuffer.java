@@ -2,7 +2,7 @@
  * RemoteBuffer.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: RemoteBuffer.java,v 1.6 2003-06-29 00:19:34 piso Exp $
+ * $Id: RemoteBuffer.java,v 1.7 2003-07-26 18:52:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@ public final class RemoteBuffer extends Buffer implements Constants
 {
     private FtpSession session;
     private Buffer buffer;
-    private String errorText;
     private final ProgressNotifier progressNotifier;
     private String ref;
     private boolean render;

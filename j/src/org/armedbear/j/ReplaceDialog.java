@@ -2,7 +2,7 @@
  * ReplaceDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ReplaceDialog.java,v 1.3 2003-07-26 17:50:03 piso Exp $
+ * $Id: ReplaceDialog.java,v 1.4 2003-07-26 18:53:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,11 +49,9 @@ public final class ReplaceDialog extends AbstractDialog implements Constants,
 
     private HistoryTextField patternControl;
     private HistoryTextField replacementControl;
-    private HistoryTextField filesControl;
 
     private History patternHistory;
     private History replacementHistory;
-    private History filesHistory;
 
     // Options.
     private CheckBox ignoreCaseCheckBox;
