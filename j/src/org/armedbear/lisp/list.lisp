@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.16 2003-03-08 18:42:15 piso Exp $
+;;; $Id: list.lisp,v 1.17 2003-03-09 06:33:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,7 +22,9 @@
 (export '(caadr caaar cdaar cddar cdddr cadar cdadr
           caaaar caaadr caaddr cadddr cddddr cdaaar cddaar cdddar
           caadar cadaar cadadr caddar cdaadr cdadar cdaddr cddadr
-          list-length make-list
+          list-length
+          fifth sixth seventh eighth ninth tenth
+          make-list
           copy-list copy-alist copy-tree
           revappend nconc nreconc
           butlast nbutlast
@@ -68,6 +70,25 @@
     (when (endp y) (return n))
     (when (endp (cdr y)) (return (+ n 1)))
     (when (and (eq y z) (> n 0)) (return nil))))
+
+(defun fifth (list)
+  "Returns the 5th object in a list or NIL if there is no 5th object."
+  (car (cddddr list)))
+(defun sixth (list)
+  "Returns the 6th object in a list or NIL if there is no 6th object."
+  (cadr (cddddr list)))
+(defun seventh (list)
+  "Returns the 7th object in a list or NIL if there is no 7th object."
+  (caddr (cddddr list)))
+(defun eighth (list)
+  "Returns the 8th object in a list or NIL if there is no 8th object."
+  (cadddr (cddddr list)))
+(defun ninth (list)
+  "Returns the 9th object in a list or NIL if there is no 9th object."
+  (car (cddddr (cddddr list))))
+(defun tenth (list)
+  "Returns the 10th object in a list or NIL if there is no 10th object."
+  (cadr (cddddr (cddddr list))))
 
 (defun make-list (size &key initial-element)
   (when (minusp size)
