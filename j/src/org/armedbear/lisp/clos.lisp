@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.6 2003-11-04 19:38:30 piso Exp $
+;;; $Id: clos.lisp,v 1.7 2003-11-05 01:48:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,8 +73,10 @@
 (defsetf class-direct-subclasses %set-class-direct-subclasses)
 (defsetf class-direct-methods %set-class-direct-methods)
 (defsetf class-direct-slots %set-class-direct-slots)
-(defsetf class-precedence-list %set-class-precedence-list)
 (defsetf class-slots %set-class-slots)
+(defsetf class-direct-default-initargs %set-class-direct-default-initargs)
+(defsetf class-default-initargs %set-class-default-initargs)
+(defsetf class-precedence-list %set-class-precedence-list)
 (defsetf std-instance-class %set-std-instance-class)
 (defsetf std-instance-slots %set-std-instance-slots)
 
@@ -232,7 +234,13 @@
                      #'std-compute-slots
                      #'compute-slots)
                  class))
+  (setf (class-default-initargs class)
+        (compute-class-default-initargs class))
   (values))
+
+(defun compute-class-default-initargs (class)
+  (mapappend #'class-direct-default-initargs
+             (class-precedence-list class)))
 
 ;;; Class precedence lists
 
@@ -463,32 +471,33 @@
 (defun allocate-instance (class)
   (std-allocate-instance class))
 
-(defun make-instance-standard-class (metaclass &key name direct-superclasses direct-slots
-                                               &allow-other-keys)
+(defun make-instance-standard-class (metaclass
+                                     &key name direct-superclasses direct-slots
+                                     direct-default-initargs
+                                     &allow-other-keys)
   (declare (ignore metaclass))
   (let ((class (std-allocate-instance (find-class 'standard-class))))
     (setf (class-name class) name)
     (setf (class-direct-subclasses class) ())
     (setf (class-direct-methods class) ())
     (std-after-initialization-for-classes class
+                                          :direct-superclasses direct-superclasses
                                           :direct-slots direct-slots
-                                          :direct-superclasses direct-superclasses)
+                                          :direct-default-initargs direct-default-initargs)
     class))
 
 (defun std-after-initialization-for-classes (class
                                              &key direct-superclasses direct-slots
+                                             direct-default-initargs
                                              &allow-other-keys)
-  (let ((supers
-         (or direct-superclasses
-             (list (find-class 'standard-object)))))
+  (let ((supers (or direct-superclasses
+                    (list (find-class 'standard-object)))))
     (setf (class-direct-superclasses class) supers)
     (dolist (superclass supers)
       (push class (class-direct-subclasses superclass))))
-  (let ((slots
-         (mapcar #'(lambda (slot-properties)
-                    (apply #'make-direct-slot-definition
-                           slot-properties))
-                 direct-slots)))
+  (let ((slots (mapcar #'(lambda (slot-properties)
+                          (apply #'make-direct-slot-definition slot-properties))
+                       direct-slots)))
     (setf (class-direct-slots class) slots)
     (dolist (direct-slot slots)
       (dolist (reader (slot-definition-readers direct-slot))
@@ -497,6 +506,7 @@
       (dolist (writer (slot-definition-writers direct-slot))
         (add-writer-method
          class writer (slot-definition-name direct-slot)))))
+  (setf (class-direct-default-initargs class) direct-default-initargs)
   (funcall (if (eq (class-of class) (find-class 'standard-class))
                #'std-finalize-inheritance
                #'finalize-inheritance)
@@ -516,8 +526,8 @@
             (error 'program-error "duplicate slot ~S" name1))))))
   (let ((class (find-class name nil)))
     (unless class
-      (setf class (apply #'make-instance-standard-class
-                         (find-class 'standard-class) :name name all-keys))
+      (setf class (apply #'make-instance-standard-class (find-class 'standard-class)
+                         :name name all-keys))
       (%set-find-class name class))
     class))
 
@@ -1338,7 +1348,8 @@
 (defgeneric make-instance (class &key))
 (defmethod make-instance ((class standard-class) &rest initargs)
   (let ((instance (allocate-instance class)))
-    (apply #'initialize-instance instance initargs)
+    (apply #'initialize-instance instance
+           (append initargs (class-default-initargs class)))
     instance))
 (defmethod make-instance ((class symbol) &rest initargs)
   (apply #'make-instance (find-class class) initargs))
