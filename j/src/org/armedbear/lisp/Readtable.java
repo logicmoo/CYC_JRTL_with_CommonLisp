@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.31 2004-05-27 20:47:16 piso Exp $
+ * $Id: Readtable.java,v 1.32 2004-08-10 03:28:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class Readtable extends LispObject
     public static final byte ATTR_INVALID               = 6;
 
     private final byte[]          attributes           = new byte[CHAR_MAX];
-    private final Function[]      readerMacroFunctions = new Function[CHAR_MAX];
+    private final LispObject[]    readerMacroFunctions = new LispObject[CHAR_MAX];
     private final DispatchTable[] dispatchTables       = new DispatchTable[CHAR_MAX];
 
     private LispObject readtableCase;
