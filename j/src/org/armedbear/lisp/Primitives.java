@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.205 2003-05-29 19:44:36 piso Exp $
+ * $Id: Primitives.java,v 1.206 2003-05-30 05:44:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,97 +39,91 @@ public final class Primitives extends Module
     private static final int DO_                        = 2;
     private static final int FLET                       = 3;
     private static final int LABELS                     = 4;
-    private static final int LET                        = 5;
-    private static final int LET_                       = 6;
-    private static final int PROGN                      = 7;
-    private static final int QUOTE                      = 8;
+    private static final int PROGN                      = 5;
+    private static final int QUOTE                      = 6;
 
     // Primitive
-    private static final int ADD                        = 9;
-    private static final int DIVIDE                     = 10;
-    private static final int EXIT                       = 11;
-    private static final int LAST                       = 12;
-    private static final int LISTX                      = 13;
-    private static final int LIST_ALL_PACKAGES          = 14;
-    private static final int MAX                        = 15;
-    private static final int MIN                        = 16;
-    private static final int MULTIPLY                   = 17;
-    private static final int ROOM                       = 18;
-    private static final int SUBTRACT                   = 19;
-    private static final int VALUES                     = 20;
+    private static final int ADD                        = 7;
+    private static final int DIVIDE                     = 8;
+    private static final int EXIT                       = 9;
+    private static final int LAST                       = 10;
+    private static final int LISTX                      = 11;
+    private static final int LIST_ALL_PACKAGES          = 12;
+    private static final int MAX                        = 13;
+    private static final int MIN                        = 14;
+    private static final int MULTIPLY                   = 15;
+    private static final int ROOM                       = 16;
+    private static final int SUBTRACT                   = 17;
+    private static final int VALUES                     = 18;
 
     // Primitive1
-    private static final int ABS                        = 21;
-    private static final int ARRAYP                     = 22;
-    private static final int ARRAY_HAS_FILL_POINTER_P   = 23;
-    private static final int BIT_VECTOR_P               = 24;
-    private static final int BOTH_CASE_P                = 25;
-    private static final int CAAR                       = 26;
-    private static final int CADDR                      = 27;
-    private static final int CADR                       = 28;
-    private static final int CDAR                       = 29;
-    private static final int CDDR                       = 30;
-    private static final int CDR                        = 31;
-    private static final int CHARACTERP                 = 32;
-    private static final int CHAR_CODE                  = 33;
-    private static final int CHAR_DOWNCASE              = 34;
-    private static final int CHAR_INT                   = 35;
-    private static final int CHAR_UPCASE                = 36;
-    private static final int CODE_CHAR                  = 37;
-    private static final int COMPILED_FUNCTION_P        = 38;
-    private static final int CONSP                      = 39;
-    private static final int CONSTANTP                  = 40;
-    private static final int ENDP                       = 41;
-    private static final int EVAL                       = 42;
-    private static final int EVENP                      = 43;
-    private static final int FBOUNDP                    = 44;
-    private static final int FIRST                      = 45;
-    private static final int FMAKUNBOUND                = 46;
-    private static final int FOURTH                     = 47;
-    private static final int FUNCTIONP                  = 48;
-    private static final int IDENTITY                   = 49;
-    private static final int KEYWORDP                   = 50;
-    private static final int LENGTH                     = 51;
-    private static final int LISTP                      = 52;
-    private static final int LOWER_CASE_P               = 53;
-    private static final int MAKE_SYMBOL                = 54;
-    private static final int MAKUNBOUND                 = 55;
-    private static final int NOT                        = 56;
-    private static final int NULL                       = 57;
-    private static final int NUMBERP                    = 58;
-    private static final int ODDP                       = 59;
-    private static final int PREDECESSOR                = 60;
-    private static final int REST                       = 61;
-    private static final int SECOND                     = 62;
-    private static final int SIMPLE_BIT_VECTOR_P        = 63;
-    private static final int SIMPLE_STRING_P            = 64;
-    private static final int SIMPLE_VECTOR_P            = 65;
-    private static final int SPECIAL_OPERATOR_P         = 66;
-    private static final int STRINGP                    = 67;
-    private static final int SUCCESSOR                  = 68;
-    private static final int SYMBOLP                    = 69;
-    private static final int SYMBOL_FUNCTION            = 70;
-    private static final int SYMBOL_NAME                = 71;
-    private static final int SYMBOL_PACKAGE             = 72;
-    private static final int SYMBOL_PLIST               = 73;
-    private static final int SYMBOL_VALUE               = 74;
-    private static final int THIRD                      = 75;
-    private static final int UPPER_CASE_P               = 76;
-    private static final int VALUES_LIST                = 77;
-    private static final int VECTORP                    = 78;
-    private static final int ZEROP                      = 79;
+    private static final int ABS                        = 19;
+    private static final int ARRAYP                     = 20;
+    private static final int ARRAY_HAS_FILL_POINTER_P   = 21;
+    private static final int BIT_VECTOR_P               = 22;
+    private static final int BOTH_CASE_P                = 23;
+    private static final int CAAR                       = 24;
+    private static final int CADDR                      = 25;
+    private static final int CDAR                       = 26;
+    private static final int CDDR                       = 27;
+    private static final int CHARACTERP                 = 28;
+    private static final int CHAR_CODE                  = 29;
+    private static final int CHAR_DOWNCASE              = 30;
+    private static final int CHAR_INT                   = 31;
+    private static final int CHAR_UPCASE                = 32;
+    private static final int CODE_CHAR                  = 33;
+    private static final int COMPILED_FUNCTION_P        = 34;
+    private static final int CONSP                      = 35;
+    private static final int CONSTANTP                  = 36;
+    private static final int ENDP                       = 37;
+    private static final int EVAL                       = 38;
+    private static final int EVENP                      = 39;
+    private static final int FBOUNDP                    = 40;
+    private static final int FIRST                      = 41;
+    private static final int FMAKUNBOUND                = 42;
+    private static final int FOURTH                     = 43;
+    private static final int FUNCTIONP                  = 44;
+    private static final int IDENTITY                   = 45;
+    private static final int KEYWORDP                   = 46;
+    private static final int LENGTH                     = 47;
+    private static final int LISTP                      = 48;
+    private static final int LOWER_CASE_P               = 49;
+    private static final int MAKE_SYMBOL                = 50;
+    private static final int MAKUNBOUND                 = 51;
+    private static final int NUMBERP                    = 52;
+    private static final int ODDP                       = 53;
+    private static final int PREDECESSOR                = 54;
+    private static final int REST                       = 55;
+    private static final int SECOND                     = 56;
+    private static final int SIMPLE_BIT_VECTOR_P        = 57;
+    private static final int SIMPLE_STRING_P            = 58;
+    private static final int SIMPLE_VECTOR_P            = 59;
+    private static final int SPECIAL_OPERATOR_P         = 60;
+    private static final int STRINGP                    = 61;
+    private static final int SUCCESSOR                  = 62;
+    private static final int SYMBOLP                    = 63;
+    private static final int SYMBOL_FUNCTION            = 64;
+    private static final int SYMBOL_NAME                = 65;
+    private static final int SYMBOL_PACKAGE             = 66;
+    private static final int SYMBOL_PLIST               = 67;
+    private static final int SYMBOL_VALUE               = 68;
+    private static final int THIRD                      = 69;
+    private static final int UPPER_CASE_P               = 70;
+    private static final int VALUES_LIST                = 71;
+    private static final int VECTORP                    = 72;
+    private static final int ZEROP                      = 73;
 
     // Primitive2
-    private static final int CONS                       = 80;
-    private static final int ELT                        = 81;
-    private static final int EQL                        = 82;
-    private static final int EQUAL                      = 83;
-    private static final int EQUALP                     = 84;
-    private static final int MEMBER                     = 85;
-    private static final int MOD                        = 86;
-    private static final int RPLACA                     = 87;
-    private static final int RPLACD                     = 88;
-    private static final int SET                        = 89;
+    private static final int CONS                       = 74;
+    private static final int ELT                        = 75;
+    private static final int EQL                        = 76;
+    private static final int EQUAL                      = 77;
+    private static final int EQUALP                     = 78;
+    private static final int MEMBER                     = 79;
+    private static final int MOD                        = 80;
+    private static final int RPLACA                     = 81;
+    private static final int RPLACD                     = 82;
+    private static final int SET                        = 83;
 
     private Primitives()
     {
@@ -137,8 +131,6 @@ public final class Primitives extends Module
         defineSpecialOperator("do*", DO_);
         defineSpecialOperator("flet", FLET);
         defineSpecialOperator("labels", LABELS);
-        defineSpecialOperator("let", LET);
-        defineSpecialOperator("let*", LET_);
         defineSpecialOperator("progn", PROGN);
         defineSpecialOperator("quote", QUOTE);
 
@@ -164,10 +156,8 @@ public final class Primitives extends Module
         definePrimitive1("both-case-p", BOTH_CASE_P);
         definePrimitive1("caar", CAAR);
         definePrimitive1("caddr", CADDR);
-        definePrimitive1("cadr", CADR);
         definePrimitive1("cdar", CDAR);
         definePrimitive1("cddr", CDDR);
-        definePrimitive1("cdr", CDR);
         definePrimitive1("char-code", CHAR_CODE);
         definePrimitive1("char-downcase", CHAR_DOWNCASE);
         definePrimitive1("char-int", CHAR_INT);
@@ -192,8 +182,6 @@ public final class Primitives extends Module
         definePrimitive1("lower-case-p", LOWER_CASE_P);
         definePrimitive1("make-symbol", MAKE_SYMBOL);
         definePrimitive1("makunbound", MAKUNBOUND);
-        definePrimitive1("not", NOT);
-        definePrimitive1("null", NULL);
         definePrimitive1("numberp", NUMBERP);
         definePrimitive1("oddp", ODDP);
         definePrimitive1("rest", REST);
@@ -240,10 +228,6 @@ public final class Primitives extends Module
                 return _flet(args, env, false);
             case LABELS:                        // ### labels
                 return _flet(args, env, true);
-            case LET:                           // ### let
-                return _let(args, env, false);
-            case LET_:                          // ### let*
-                return _let(args, env, true);
             case PROGN:                         // ### progn
                 return progn(args, env, LispThread.currentThread());
             case QUOTE:                         // ### quote
@@ -379,7 +363,6 @@ public final class Primitives extends Module
                 return arg.car().car();
             case CDAR:                          // ### cdar
                 return arg.car().cdr();
-            case CADR:                          // ### cadr
             case SECOND:                        // ### second
                 return arg.cadr();
             case CADDR:
@@ -387,7 +370,6 @@ public final class Primitives extends Module
                 return arg.cdr().cdr().car();
             case FOURTH:                        // ### fourth
                 return arg.cdr().cdr().cdr().car();
-            case CDR:                           // ### cdr
             case REST:                          // ### rest
                 return arg.cdr();
             case CDDR:                          // ### cddr
@@ -415,9 +397,6 @@ public final class Primitives extends Module
                 return (Fixnum.getValue(arg) % 2) == 0 ? T : NIL;
             case ODDP:                          // ### oddp
                 return (Fixnum.getValue(arg) % 2) == 0 ? NIL : T;
-            case NOT:                           // ### not
-            case NULL:                          // ### null
-                return arg == NIL ? T : NIL;
             case NUMBERP:                       // ### numberp
                 return arg instanceof Fixnum ? T : NIL;
             case SYMBOLP:                       // ### symbolp
@@ -591,11 +570,43 @@ public final class Primitives extends Module
         }
     };
 
+    // ### cdr
+    private static final Primitive1 CDR = new Primitive1("cdr") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg.cdr();
+        }
+    };
+
+    // ### cadr
+    private static final Primitive1 CADR = new Primitive1("cadr") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg.cadr();
+        }
+    };
+
     // ### atom
     private static final Primitive1 ATOM = new Primitive1("atom") {
         public LispObject execute(LispObject arg) throws LispError
         {
             return arg instanceof Cons ? NIL : T;
+        }
+    };
+
+    // ### null
+    private static final Primitive1 NULL = new Primitive1("null") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg == NIL ? T : NIL;
+        }
+    };
+
+    // ### not
+    private static final Primitive1 NOT = new Primitive1("not") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg == NIL ? T : NIL;
         }
     };
 
@@ -838,13 +849,17 @@ public final class Primitives extends Module
         }
     };
 
+    // ### =
     // Numeric equality.
     private static final Primitive EQUALS = new Primitive("=") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.isEqualTo(second) ? T : NIL;
+        }
         public LispObject execute(LispObject[] array) throws LispError
         {
             final int length = array.length;
-            if (length == 2)
-                return array[0].isEqualTo(array[1]) ? T : NIL;
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
             final LispObject obj = array[0];
@@ -879,11 +894,14 @@ public final class Primitives extends Module
     // ### <
     // Numeric comparison.
     private static final Primitive LESS_THAN = new Primitive("<") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.isLessThan(second) ? T : NIL;
+        }
         public LispObject execute(LispObject[] array) throws LispError
         {
             final int length = array.length;
-            if (length == 2)
-                return array[0].isLessThan(array[1]) ? T : NIL;
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
             for (int i = 1; i < length; i++) {
@@ -896,6 +914,11 @@ public final class Primitives extends Module
 
     // ### <=
     private static final Primitive LE = new Primitive("<=") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.isLessThanOrEqualTo(second) ? T : NIL;
+        }
         public LispObject execute(LispObject[] array) throws LispError
         {
             switch (array.length) {
@@ -904,6 +927,7 @@ public final class Primitives extends Module
                 case 1:
                     return T;
                 case 2:
+                    Debug.assertTrue(false);
                     return array[0].isLessThanOrEqualTo(array[1]) ? T : NIL;
                 default: {
                     final int length = array.length;
@@ -919,11 +943,14 @@ public final class Primitives extends Module
 
     // ### >
     private static final Primitive GREATER_THAN = new Primitive(">") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.isGreaterThan(second) ? T : NIL;
+        }
         public LispObject execute(LispObject[] array) throws LispError
         {
             final int length = array.length;
-            if (length == 2)
-                return array[0].isGreaterThan(array[1]) ? T : NIL;
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
             for (int i = 1; i < length; i++) {
@@ -936,6 +963,11 @@ public final class Primitives extends Module
 
     // ### >=
     private static final Primitive GE = new Primitive(">=") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.isGreaterThanOrEqualTo(second) ? T : NIL;
+        }
         public LispObject execute(LispObject[] array) throws LispError
         {
             final int length = array.length;
@@ -945,6 +977,7 @@ public final class Primitives extends Module
                 case 1:
                     return T;
                 case 2:
+                    Debug.assertTrue(false);
                     return array[0].isGreaterThanOrEqualTo(array[1]) ? T : NIL;
                 default:
                     for (int i = 1; i < length; i++) {
@@ -2965,12 +2998,28 @@ public final class Primitives extends Module
         }
     };
 
+    private static final SpecialOperator LET = new SpecialOperator("let") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            return _let(args, env, false);
+        }
+    };
+
+    private static final SpecialOperator LETX = new SpecialOperator("let*") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            return _let(args, env, true);
+        }
+    };
+
     private static final LispObject _let(LispObject args, Environment env,
         boolean sequential) throws Condition
     {
         LispObject varList = checkList(args.car());
         final LispThread thread = LispThread.currentThread();
-        LispObject result;
+        LispObject result = NIL;
         if (varList != NIL) {
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(env);
@@ -2985,10 +3034,19 @@ public final class Primitives extends Module
                 } else
                     bind(checkSymbol(obj), NIL, ext);
             }
-            result = progn(args.cdr(), ext, thread);
+            LispObject body = args.cdr();
+            while (body != NIL) {
+                result = eval(body.car(), ext, thread);
+                body = body.cdr();
+            }
             thread.setDynamicEnvironment(oldDynEnv);
-        } else
-            result = progn(args.cdr(), env, thread);
+        } else {
+            LispObject body = args.cdr();
+            while (body != NIL) {
+                result = eval(body.car(), env, thread);
+                body = body.cdr();
+            }
+        }
         return result;
     }
 
