@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: GenericFunction.java,v 1.15 2004-10-24 00:21:05 piso Exp $
+ * $Id: GenericFunction.java,v 1.16 2004-11-04 10:50:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,44 +86,42 @@ public final class GenericFunction extends StandardObject
 
     public LispObject execute() throws ConditionThrowable
     {
-        return funcall0(getDiscriminatingFunction(), LispThread.currentThread());
+        return LispThread.currentThread().execute(getDiscriminatingFunction());
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        return funcall1(getDiscriminatingFunction(), arg, LispThread.currentThread());
+        return LispThread.currentThread().execute(getDiscriminatingFunction(),
+                                                  arg);
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        return funcall2(getDiscriminatingFunction(), first, second,
-                        LispThread.currentThread());
+        return LispThread.currentThread().execute(getDiscriminatingFunction(),
+                                                  first, second);
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
     {
-        return funcall3(getDiscriminatingFunction(), first, second, third,
-                        LispThread.currentThread());
+        return LispThread.currentThread().execute(getDiscriminatingFunction(),
+                                                  first, second, third);
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[4];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        return funcall(getDiscriminatingFunction(), args, LispThread.currentThread());
+        return LispThread.currentThread().execute(getDiscriminatingFunction(),
+                                                  first, second, third, fourth);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return funcall(getDiscriminatingFunction(), args, LispThread.currentThread());
+        return LispThread.currentThread().execute(getDiscriminatingFunction(),
+                                                  args);
     }
 
     public String writeToString() throws ConditionThrowable
