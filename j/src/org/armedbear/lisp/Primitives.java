@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.53 2003-02-27 18:39:18 piso Exp $
+ * $Id: Primitives.java,v 1.54 2003-02-27 23:29:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2988,20 +2988,14 @@ public final class Primitives extends Module
         }
     };
 
-    // ### time
-    // Should be a macro.
-    private static final SpecialOperator TIME = new SpecialOperator("time")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws LispError
+    // ### %time
+    private static final Primitive1 _TIME = new Primitive1("%time") {
+        public LispObject execute(LispObject arg) throws LispError
         {
-            if (args.length() != 1)
-                throw new WrongNumberOfArgumentsException(this);
-            LispObject arg = args.car();
             Cons.setCount(0);
-            long start = java.lang.System.currentTimeMillis();
-            LispObject result = eval(arg, env);
-            long elapsed = java.lang.System.currentTimeMillis() - start;
+            long start = System.currentTimeMillis();
+            LispObject result = arg.execute(new LispObject[0]);
+            long elapsed = System.currentTimeMillis() - start;
             long count = Cons.getCount();
             CharacterOutputStream out = getTraceOutput();
             out.freshLine();
