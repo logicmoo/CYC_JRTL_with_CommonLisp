@@ -2,7 +2,7 @@
  * JVar.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JVar.java,v 1.1 2003-06-30 19:09:20 piso Exp $
+ * $Id: JVar.java,v 1.2 2003-09-19 17:42:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.util.ArrayList;
+import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Symbol;
@@ -54,12 +55,12 @@ public final class JVar extends LispObject
         return property;
     }
 
-    public static JVar getJVar(Symbol symbol) throws LispError
+    public static JVar getJVar(Symbol symbol) throws ConditionThrowable
     {
         LispObject obj = get(symbol, J_VARIABLE_VALUE, null);
         if (!(obj instanceof JVar))
-            throw new LispError(String.valueOf(symbol) +
-                                " is not defined as an editor variable");
+            throw new ConditionThrowable(new LispError(String.valueOf(symbol) +
+                                                       " is not defined as an editor variable"));
         return (JVar) obj;
     }
 

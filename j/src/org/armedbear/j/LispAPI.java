@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.25 2003-09-15 16:18:13 piso Exp $
+ * $Id: LispAPI.java,v 1.26 2003-09-19 17:42:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.util.Iterator;
 import javax.swing.undo.CompoundEdit;
+import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Keyword;
@@ -59,7 +60,7 @@ public final class LispAPI extends Lisp
     }
 
     public static final Editor checkEditor(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -67,12 +68,12 @@ public final class LispAPI extends Lisp
             return (Editor) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "editor");
+            throw new ConditionThrowable(new TypeError(obj, "editor"));
         }
     }
 
     public static final Buffer checkBuffer(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -80,12 +81,12 @@ public final class LispAPI extends Lisp
             return (Buffer) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "buffer");
+            throw new ConditionThrowable(new TypeError(obj, "buffer"));
         }
     }
 
     public static final Position checkMarker(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -93,12 +94,12 @@ public final class LispAPI extends Lisp
             return (Position) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "marker");
+            throw new ConditionThrowable(new TypeError(obj, "marker"));
         }
     }
 
     public static final Line checkLine(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -106,7 +107,7 @@ public final class LispAPI extends Lisp
             return (Line) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "line");
+            throw new ConditionThrowable(new TypeError(obj, "line"));
         }
     }
 
@@ -128,7 +129,7 @@ public final class LispAPI extends Lisp
                        "(EDITOR)",
                        "Makes EDITOR the current editor.")
     {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Editor.setCurrentEditor(checkEditor(arg));
             return arg;
@@ -157,7 +158,7 @@ public final class LispAPI extends Lisp
     // ### buffer
     private static final Primitive1 BUFFER =
         new Primitive1("buffer", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new JavaObject(checkEditor(arg).getBuffer());
         }
@@ -166,7 +167,7 @@ public final class LispAPI extends Lisp
     // ### buffer-pathname
     private static final Primitive1 BUFFER_PATHNAME =
         new Primitive1("buffer-pathname", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             File file = checkBuffer(arg).getFile();
             if (file != null) {
@@ -181,11 +182,11 @@ public final class LispAPI extends Lisp
     // ### buffer-string
     private static final Primitive BUFFER_STRING =
         new Primitive("buffer-string", PACKAGE_J, true) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             return new LispString(Editor.currentBuffer().getText());
         }
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new LispString(checkBuffer(arg).getText());
         }
@@ -194,13 +195,13 @@ public final class LispAPI extends Lisp
     // ### copy-marker
     private static final Primitive1 COPY_MARK =
         new Primitive1("copy-marker", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 return new JavaObject(new Position(checkMarker(arg)));
             }
             catch (Exception e) {
-                throw new TypeError(arg, "marker");
+                throw new ConditionThrowable(new TypeError(arg, "marker"));
             }
         }
     };
@@ -209,7 +210,7 @@ public final class LispAPI extends Lisp
     // goto-char position &optional marker
     private static final Primitive GOTO_CHAR =
         new Primitive("goto-char", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             // Move dot to position.
             final Editor editor = Editor.currentEditor();
@@ -217,7 +218,7 @@ public final class LispAPI extends Lisp
             return new JavaObject(editor.getDot());
         }
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             Log.debug("goto-char two argument case");
             Position pos1 = checkMarker(first);
@@ -267,7 +268,7 @@ public final class LispAPI extends Lisp
     private static final Primitive1 MAKE_MARKER =
         new Primitive1("make-marker", PACKAGE_J, true) {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             Line line = checkLine(first);
             int offset = Fixnum.getValue(second);
@@ -278,7 +279,7 @@ public final class LispAPI extends Lisp
     // ### marker-line
     private static final Primitive1 MARKER_LINE =
         new Primitive1("marker-line", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new JavaObject(checkMarker(arg).getLine());
         }
@@ -287,7 +288,7 @@ public final class LispAPI extends Lisp
     // ### marker-charpos
     private static final Primitive1 MARKER_CHARPOS =
         new Primitive1("marker-charpos", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return number(checkMarker(arg).getOffset());
         }
@@ -309,7 +310,7 @@ public final class LispAPI extends Lisp
     // ### line-next
     private static final Primitive1 LINE_NEXT =
         new Primitive1("line-next", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Line next = checkLine(arg).next();
             return next != null ? new JavaObject(next) : NIL;
@@ -319,7 +320,7 @@ public final class LispAPI extends Lisp
     // ### line-previous
     private static final Primitive1 LINE_PREVIOUS =
         new Primitive1("line-previous", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Line prev = checkLine(arg).previous();
             return prev != null ? new JavaObject(prev) : NIL;
@@ -329,7 +330,7 @@ public final class LispAPI extends Lisp
     // ### line-chars
     private static final Primitive1 LINE_CHARS =
         new Primitive1("line-chars", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String s = checkLine(arg).getText();
             return s != null ? new LispString(s) : NIL;
@@ -339,7 +340,7 @@ public final class LispAPI extends Lisp
     // ### line-flags
     private static final Primitive1 LINE_FLAGS =
         new Primitive1("line-flags", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return number(checkLine(arg).flags());
         }
@@ -349,7 +350,7 @@ public final class LispAPI extends Lisp
     // Returns character immediately after marker.
     private static final Primitive1 CHAR_AFTER =
         new Primitive1("char-after", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return LispCharacter.getInstance(checkMarker(arg).getChar());
         }
@@ -359,7 +360,7 @@ public final class LispAPI extends Lisp
     // Returns character immediately before marker.
     private static final Primitive1 CHAR_BEFORE =
         new Primitive1("char-before", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Position pos = checkMarker(arg).copy();
             return pos.prev() ? LispCharacter.getInstance(pos.getChar()) : NIL;
@@ -370,11 +371,11 @@ public final class LispAPI extends Lisp
     // Move point right N characters (left if N is negative).
     private static final Primitive FORWARD_CHAR =
         new Primitive("forward-char", PACKAGE_J, true) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             return forwardChar(1);
         }
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return forwardChar(Fixnum.getValue(arg));
         }
@@ -384,17 +385,17 @@ public final class LispAPI extends Lisp
     // Move point left N characters (right if N is negative).
     private static final Primitive BACKWARD_CHAR =
         new Primitive("backward-char", PACKAGE_J, true) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             return forwardChar(-1);
         }
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return forwardChar(-Fixnum.getValue(arg));
         }
     };
 
-    private static final LispObject forwardChar(int n) throws LispError
+    private static final LispObject forwardChar(int n) throws ConditionThrowable
     {
         if (n != 0) {
             final Editor editor = Editor.currentEditor();
@@ -404,13 +405,13 @@ public final class LispAPI extends Lisp
                 if (n > 0) {
                     while (n-- > 0) {
                         if (!pos.next())
-                            throw new LispError("reached end of buffer");
+                            throw new ConditionThrowable(new LispError("reached end of buffer"));
                     }
                 } else {
                     Debug.assertTrue(n < 0);
                     while (n++ < 0) {
                         if (!pos.prev())
-                            throw new LispError("reached beginning of buffer");
+                            throw new ConditionThrowable(new LispError("reached beginning of buffer"));
                     }
                 }
                 editor.moveCaretToDotCol();
@@ -422,12 +423,12 @@ public final class LispAPI extends Lisp
     // ### beginning-of-line
     private static final Primitive BEGINNING_OF_LINE =
         new Primitive("beginning-of-line", PACKAGE_J, true) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             Editor.currentEditor().bol();
             return NIL;
         }
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             int n = (arg != NIL) ? Fixnum.getValue(arg) : 1;
             final Editor editor = Editor.currentEditor();
@@ -451,12 +452,12 @@ public final class LispAPI extends Lisp
     // ### end-of-line
     private static final Primitive END_OF_LINE =
         new Primitive("end-of-line", PACKAGE_J, true) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             Editor.currentEditor().eol();
             return NIL;
         }
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             int n = (arg != NIL) ? Fixnum.getValue(arg) : 1;
             final Editor editor = Editor.currentEditor();
@@ -491,7 +492,7 @@ public final class LispAPI extends Lisp
     private static final Primitive3 _VARIABLE_VALUE =
         new Primitive3("%variable-value", PACKAGE_J, false) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(first);
             JVar jvar = JVar.getJVar(symbol);
@@ -501,7 +502,7 @@ public final class LispAPI extends Lisp
             final Editor editor = Editor.currentEditor();
             if (kind == KEYWORD_CURRENT) {
                 if (where != NIL)
-                    throw new LispError("bad argument " + where);
+                    throw new ConditionThrowable(new LispError("bad argument " + where));
                 final Buffer buffer = editor.getBuffer();
                 if (property.isBooleanProperty())
                     return buffer.getBooleanProperty(property) ? T : NIL;
@@ -540,7 +541,7 @@ public final class LispAPI extends Lisp
                     return number(buffer.getIntegerProperty(property));
                 return new LispString(buffer.getStringProperty(property));
             }
-            throw new LispError("bad keyword argument: " + kind);
+            throw new ConditionThrowable(new LispError("bad keyword argument: " + kind));
         }
     };
 
@@ -548,10 +549,10 @@ public final class LispAPI extends Lisp
     // %set-variable-value symbol kind where new-value => new-value
     private static final Primitive _SET_VARIABLE_VALUE =
         new Primitive("%set-variable-value", PACKAGE_J, false) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 4)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             Symbol symbol = checkSymbol(args[0]);
             JVar jvar = JVar.getJVar(symbol);
             Property property = jvar.getProperty();
@@ -609,7 +610,7 @@ public final class LispAPI extends Lisp
                 buffer.setProperty(property, String.valueOf(newValue));
                 return newValue;
             }
-            throw new LispError("bad keyword argument: " + kind);
+            throw new ConditionThrowable(new LispError("bad keyword argument: " + kind));
         }
     };
 
@@ -637,7 +638,7 @@ public final class LispAPI extends Lisp
     private static final Primitive2 GLOBAL_MAP_KEY =
         new Primitive2("global-map-key", PACKAGE_J, true) {
         public LispObject execute(LispObject first, LispObject second)
-	    throws LispError
+	    throws ConditionThrowable
         {
             String keyText = LispString.getValue(first);
             Object command;
@@ -656,7 +657,7 @@ public final class LispAPI extends Lisp
     private static final Primitive1 GLOBAL_UNMAP_KEY =
         new Primitive1("global-unmap-key", PACKAGE_J, true) {
         public LispObject execute(LispObject arg)
-	    throws LispError
+	    throws ConditionThrowable
         {
             String keyText = LispString.getValue(arg);
             return KeyMap.getGlobalKeyMap().unmapKey(keyText) ? T : NIL;
@@ -668,7 +669,7 @@ public final class LispAPI extends Lisp
         new Primitive3("map-key-for-mode", PACKAGE_J, true) {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
-	    throws LispError
+	    throws ConditionThrowable
         {
             String keyText = LispString.getValue(first);
             Object command;
@@ -682,7 +683,7 @@ public final class LispAPI extends Lisp
             String modeName = LispString.getValue(third);
             Mode mode = Editor.getModeList().getModeFromModeName(modeName);
             if (mode == null)
-                throw new LispError("unknown mode \"".concat(modeName).concat("\""));
+                throw new ConditionThrowable(new LispError("unknown mode \"".concat(modeName).concat("\"")));
             return mode.getKeyMap().mapKey(keyText, command) ? T : NIL;
         }
     };
@@ -691,13 +692,13 @@ public final class LispAPI extends Lisp
     private static final Primitive2 UNMAP_KEY_FOR_MODE =
         new Primitive2("unmap-key-for-mode", PACKAGE_J, true) {
         public LispObject execute(LispObject first, LispObject second)
-	    throws LispError
+	    throws ConditionThrowable
         {
             String keyText = LispString.getValue(first);
             String modeName = LispString.getValue(second);
             Mode mode = Editor.getModeList().getModeFromModeName(modeName);
             if (mode == null)
-                throw new LispError("unknown mode \"".concat(modeName).concat("\""));
+                throw new ConditionThrowable(new LispError("unknown mode \"".concat(modeName).concat("\"")));
             return mode.getKeyMap().unmapKey(keyText) ? T : NIL;
         }
     };
@@ -706,7 +707,7 @@ public final class LispAPI extends Lisp
     private static final Primitive2 _SET_GLOBAL_PROPERTY =
         new Primitive2("%set-global-property", PACKAGE_J, false) {
         public LispObject execute(LispObject first, LispObject second)
-	    throws LispError
+	    throws ConditionThrowable
         {
             String key = LispString.getValue(first);
             final String value;
@@ -722,7 +723,7 @@ public final class LispAPI extends Lisp
     // ### insert
     private static final Primitive INSERT =
         new Primitive("insert", PACKAGE_J, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0)
                 return NIL;
@@ -738,7 +739,7 @@ public final class LispAPI extends Lisp
                     } else if (obj instanceof LispString) {
                         editor.insertString(((LispString)obj).getValue());
                     } else
-                        throw new TypeError(obj, "character or string");
+                        throw new ConditionThrowable(new TypeError(obj, "character or string"));
                 }
                 return NIL;
             }
@@ -758,7 +759,7 @@ public final class LispAPI extends Lisp
 
     private static final Primitive1 END_COMPOUND_EDIT =
         new Primitive1("end-compound-edit", PACKAGE_J, false) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 CompoundEdit compoundEdit =
@@ -767,7 +768,7 @@ public final class LispAPI extends Lisp
                 return NIL;
             }
             catch (ClassCastException e) {
-                throw new TypeError(arg, "compound edit");
+                throw new ConditionThrowable(new TypeError(arg, "compound edit"));
             }
         }
     };
