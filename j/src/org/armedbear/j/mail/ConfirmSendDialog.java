@@ -1,8 +1,8 @@
 /*
  * ConfirmSendDialog.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: ConfirmSendDialog.java,v 1.1.1.1 2002-09-24 16:09:46 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: ConfirmSendDialog.java,v 1.2 2003-07-18 15:22:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -200,17 +200,14 @@ public final class ConfirmSendDialog extends AbstractDialog
     public void keyPressed(KeyEvent e)
     {
         // Treat the user's mapping(s) for the send command like Enter.
-        KeyMapping mapping = editor.getKeyMapping(e.getKeyChar(),
-            e.getKeyCode(), e.getModifiers());
-        if (mapping != null) {
-            String command = mapping.getCommand();
-            if (command == "send") {
-                e.consume();
-                enter();
-                return;
-            }
-        }
-        super.keyPressed(e);
+        KeyMapping mapping =
+            editor.getKeyMapping(e.getKeyChar(), e.getKeyCode(),
+                                 e.getModifiers());
+        if (mapping != null && mapping.getCommand() == "send") {
+            e.consume();
+            enter();
+        } else
+            super.keyPressed(e);
     }
 
     public void actionPerformed(ActionEvent e)
