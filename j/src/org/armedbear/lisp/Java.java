@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.35 2004-01-09 19:00:58 asimon Exp $
+ * $Id: Java.java,v 1.36 2004-01-09 20:50:13 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -469,6 +469,12 @@ public final class Java extends Lisp
                         else
                             return new JavaObject(Boolean.TRUE);
                     }
+                    if (type == Keyword.REF) {
+                        if (object == NIL)
+                            return new JavaObject(null);
+                        else 
+                            throw new Error();
+                    }
                     // other special cases come here
                 }
                 return new JavaObject(object.javaInstance());
@@ -486,7 +492,7 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-                return (arg instanceof JavaObject) ? T : NIL;
+            return (arg instanceof JavaObject) ? T : NIL;
         }
     };
 
@@ -550,8 +556,6 @@ public final class Java extends Lisp
 
     private static final LispObject makeLispObject(Object obj) throws ConditionThrowable
     {
-        if (obj == null)
-            return NIL;
         if (obj instanceof Boolean)
             return ((Boolean)obj).booleanValue() ? T : NIL;
         if (obj instanceof Integer)
