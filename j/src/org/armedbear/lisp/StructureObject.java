@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.39 2004-11-04 11:25:51 piso Exp $
+ * $Id: StructureObject.java,v 1.40 2004-11-21 18:15:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,8 @@ public final class StructureObject extends LispObject
     private final LispClass structureClass;
     private final LispObject[] slots;
 
-    public StructureObject(Symbol symbol, LispObject list) throws ConditionThrowable
+    public StructureObject(Symbol symbol, LispObject list)
+        throws ConditionThrowable
     {
         structureClass = LispClass.findClass(symbol); // Might return null.
         Debug.assertTrue(structureClass instanceof StructureClass);
@@ -218,7 +219,7 @@ public final class StructureObject extends LispObject
             throws ConditionThrowable
         {
             try {
-                return ((StructureObject)first).slots[((Fixnum)second).getValue()];
+                return ((StructureObject)first).slots[((Fixnum)second).value];
             }
             catch (ClassCastException e) {
                 if (first instanceof StructureObject)
@@ -243,7 +244,7 @@ public final class StructureObject extends LispObject
             throws ConditionThrowable
         {
             try {
-                ((StructureObject)first).slots[((Fixnum)second).getValue()] = third;
+                ((StructureObject)first).slots[((Fixnum)second).value] = third;
                 return third;
             }
             catch (ClassCastException e) {
@@ -264,7 +265,12 @@ public final class StructureObject extends LispObject
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return new StructureObject(checkSymbol(first), checkList(second));
+            try {
+                return new StructureObject(((Symbol)first), second);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.SYMBOL));
+            }
         }
     };
 
