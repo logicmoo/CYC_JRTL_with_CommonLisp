@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.605 2004-03-13 14:48:22 piso Exp $
+ * $Id: Primitives.java,v 1.606 2004-03-14 01:10:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2046,8 +2046,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### vector-push
-    // vector-push new-element vector => index-of-new-element
+    // ### vector-push new-element vector => index-of-new-element
     private static final Primitive2 VECTOR_PUSH =
         new Primitive2("vector-push","new-element vector")
     {
@@ -2066,8 +2065,8 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### vector-push-extend
-    // vector-push new-element vector &optional extension => index-of-new-element
+    // ### vector-push-extend new-element vector &optional extension
+    // => index-of-new-element
     private static final Primitive VECTOR_PUSH_EXTEND =
         new Primitive("vector-push-extend",
                       "new-element vector &optional extension")
@@ -2082,6 +2081,7 @@ public final class Primitives extends Lisp
                 return signal(new TypeError(second, Symbol.VECTOR));
             }
         }
+
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -2095,9 +2095,9 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### vector-pop
-    // vector-pop vector => element
-    private static final Primitive1 VECTOR_POP = new Primitive1("vector-pop", "vector")
+    // ### vector-pop vector => element
+    private static final Primitive1 VECTOR_POP =
+        new Primitive1("vector-pop", "vector")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
