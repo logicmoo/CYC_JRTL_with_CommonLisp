@@ -1,7 +1,7 @@
 ;;; deftype.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: deftype.lisp,v 1.2 2004-05-19 20:05:39 piso Exp $
+;;; Copyright (C) 2004 Peter Graves
+;;; $Id: deftype.lisp,v 1.3 2004-05-19 20:06:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
