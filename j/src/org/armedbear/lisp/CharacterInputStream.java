@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.56 2003-11-03 16:07:54 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.57 2003-11-16 18:28:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -879,19 +879,13 @@ public class CharacterInputStream extends LispInputStream
                             throw new ConditionThrowable(new EndOfFile());
                         return eofValue;
                     }
-                    LispObject[] values = new LispObject[2];
-                    values[0] = new LispString(sb.toString());
-                    values[1] = T; // Missing newline.
-                    LispThread.currentThread().setValues(values);
-                    return values[0];
+                    return LispThread.currentThread().setValues(new LispString(sb.toString()),
+                                                                T);
                 }
                 switch (n) {
                     case '\n': {
-                        LispObject[] values = new LispObject[2];
-                        values[0] = new LispString(sb.toString());
-                        values[1] = NIL;
-                        LispThread.currentThread().setValues(values);
-                        return values[0];
+                        return LispThread.currentThread().setValues(new LispString(sb.toString()),
+                                                                    NIL);
                     }
                     default:
                         sb.append((char)n);

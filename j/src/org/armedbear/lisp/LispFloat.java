@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.50 2003-10-30 08:17:14 asimon Exp $
+ * $Id: LispFloat.java,v 1.51 2003-11-16 18:30:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -314,27 +314,21 @@ public final class LispFloat extends LispObject
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        LispObject[] values = new LispObject[2];
         if (obj instanceof Fixnum) {
             long divisor = ((Fixnum)obj).getValue();
             double quotient = value / divisor;
             double remainder = value % divisor;
-            if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
-                values[0] = new Fixnum((int)quotient);
-                values[1] = new LispFloat(remainder);
-                thread.setValues(values);
-                return values[0];
-            }
+            if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE)
+                return thread.setValues(new Fixnum((int)quotient),
+                                        new LispFloat(remainder));
         }
         if (obj instanceof LispFloat) {
             double divisor = ((LispFloat)obj).getValue();
             double quotient = value / divisor;
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
                 int q = (int) quotient;
-                values[0] = new Fixnum(q);
-                values[1] = new LispFloat(value - q * divisor);
-                thread.setValues(values);
-                return values[0];
+                return thread.setValues(new Fixnum(q),
+                                        new LispFloat(value - q * divisor));
             }
             // We need to convert the quotient to a bignum.
             long bits = Double.doubleToRawLongBits((double)quotient);
@@ -355,10 +349,7 @@ public final class LispFloat extends LispObject
             // Calculate remainder.
             LispObject product = result.multiplyBy(obj);
             LispObject remainder = subtract(product);
-            values[0] = result;
-            values[1] = remainder;
-            thread.setValues(values);
-            return values[0];
+            return thread.setValues(result, remainder);
         }
         throw new ConditionThrowable(new LispError("LispFloat.truncate(): not implemented: " + obj.typeOf()));
     }
@@ -377,7 +368,8 @@ public final class LispFloat extends LispObject
     // ### integer-decode-float
     // integer-decode-float float => significand, exponent, integer-sign
     private static final Primitive1 INTEGER_DECODE_FLOAT =
-        new Primitive1("integer-decode-float") {
+        new Primitive1("integer-decode-float")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat) {
@@ -394,11 +386,9 @@ public final class LispFloat extends LispObject
                 LispObject significand = number(m);
                 Fixnum exponent = new Fixnum(e - 1075);
                 Fixnum sign = new Fixnum(s);
-                values[0] = significand;
-                values[1] = exponent;
-                values[2] = sign;
-                LispThread.currentThread().setValues(values);
-                return values[0];
+                return LispThread.currentThread().setValues(significand,
+                                                            exponent,
+                                                            sign);
             }
             throw new ConditionThrowable(new TypeError(arg, "float"));
         }

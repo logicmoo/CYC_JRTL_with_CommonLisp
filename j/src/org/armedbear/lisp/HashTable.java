@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.23 2003-10-02 17:14:06 piso Exp $
+ * $Id: HashTable.java,v 1.24 2003-11-16 18:33:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,16 +97,14 @@ public final class HashTable extends LispObject
                                            LispObject defaultValue)
         throws ConditionThrowable
     {
-        LispObject[] values = new LispObject[2];
         LispObject value = (LispObject) get(key);
+        final LispObject presentp;
         if (value == null) {
             value = defaultValue;
-            values[1] = NIL;
+            presentp = NIL;
         } else
-            values[1] = T;
-        values[0] = value;
-        LispThread.currentThread().setValues(values);
-        return value;
+            presentp = T;
+        return LispThread.currentThread().setValues(value, presentp);
     }
 
     public synchronized LispObject puthash(LispObject key, LispObject newValue)

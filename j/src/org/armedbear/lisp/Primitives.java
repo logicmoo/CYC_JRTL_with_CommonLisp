@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.499 2003-11-16 15:32:58 piso Exp $
+ * $Id: Primitives.java,v 1.500 2003-11-16 18:36:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2129,25 +2129,24 @@ public final class Primitives extends Module
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispObject[] values = new LispObject[3];
+            final LispObject value1, value2;
             Function function = checkFunction(arg);
             String name = function.getName();
-            values[2] = name != null ? new LispString(name) : NIL;
+            final LispObject value3 = name != null ? new LispString(name) : NIL;
             if (function instanceof Closure) {
                 Closure closure = (Closure) function;
                 LispObject expr = closure.getBody();
                 expr = new Cons(closure.getParameterList(), expr);
                 expr = new Cons(Symbol.LAMBDA, expr);
-                values[0] = expr;
+                value1 = expr;
                 Environment env = closure.getEnvironment();
                 if (env == null || env.isEmpty())
-                    values[1] = NIL;
+                    value2 = NIL;
                 else
-                    values[1] = T;
+                    value2 = T;
             } else
-                values[0] = values[1] = NIL;
-            LispThread.currentThread().setValues(values);
-            return values[0];
+                value1 = value2 = NIL;
+            return LispThread.currentThread().setValues(value1, value2, value3);
         }
     };
 
@@ -3635,11 +3634,8 @@ public final class Primitives extends Module
                 result = in.readPreservingWhitespace(eofError, eofValue, false);
             else
                 result = in.read(eofError, eofValue, false);
-            LispObject[] values = new LispObject[2];
-            values[0] = result;
-            values[1] = new Fixnum(in.getOffset());
-            LispThread.currentThread().setValues(values);
-            return result;
+            return LispThread.currentThread().setValues(result,
+                                                        new Fixnum(in.getOffset()));
         }
     };
 
@@ -4299,16 +4295,15 @@ public final class Primitives extends Module
         {
             Function function = coerceToFunction(arg);
             LispObject arglist = function.getArglist();
-            LispObject[] values = new LispObject[2];
+            final LispObject value1, value2;
             if (arglist != null) {
-                values[0] = arglist;
-                values[1] = T;
+                value1 = arglist;
+                value2 = T;
             } else {
-                values[0] = NIL;
-                values[1] = NIL;
+                value1 = NIL;
+                value2 = NIL;
             }
-            LispThread.currentThread().setValues(values);
-            return values[0];
+            return LispThread.currentThread().setValues(value1, value2);
         }
     };
 

@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.47 2003-09-20 17:02:05 piso Exp $
+ * $Id: Package.java,v 1.48 2003-11-16 18:35:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,38 +143,22 @@ public final class Package extends LispObject
     public synchronized LispObject findSymbol(String name)
     {
         final LispThread thread = LispThread.currentThread();
-        LispObject[] values = new LispObject[2];
         // Look in external and internal symbols of this package.
         Symbol symbol = (Symbol) externalSymbols.get(name);
-        if (symbol != null) {
-            values[0] = symbol;
-            values[1] = Keyword.EXTERNAL;
-            thread.setValues(values);
-            return symbol;
-        }
+        if (symbol != null)
+            return thread.setValues(symbol, Keyword.EXTERNAL);
         symbol = (Symbol) internalSymbols.get(name);
-        if (symbol != null) {
-            values[0] = symbol;
-            values[1] = Keyword.INTERNAL;
-            thread.setValues(values);
-            return symbol;
-        }
+        if (symbol != null)
+            return thread.setValues(symbol, Keyword.INTERNAL);
         // Look in external symbols of used packages.
         for (Iterator it = useList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
             symbol = pkg.findExternalSymbol(name);
-            if (symbol != null) {
-                values[0] = symbol;
-                values[1] = Keyword.INHERITED;
-                thread.setValues(values);
-                return symbol;
-            }
+            if (symbol != null)
+                return thread.setValues(symbol, Keyword.INHERITED);
         }
         // Not found.
-        values[0] = NIL;
-        values[1] = NIL;
-        thread.setValues(values);
-        return NIL;
+        return thread.setValues(NIL, NIL);
     }
 
     // Helper function to add NIL to PACKAGE_CL.
@@ -249,39 +233,22 @@ public final class Package extends LispObject
 
     public synchronized Symbol intern(String name, LispThread thread)
     {
-        LispObject[] values = new LispObject[2];
         // Look in external and internal symbols of this package.
         Symbol symbol = (Symbol) externalSymbols.get(name);
-        if (symbol != null) {
-            values[0] = symbol;
-            values[1] = Keyword.EXTERNAL;
-            thread.setValues(values);
-            return symbol;
-        }
+        if (symbol != null)
+            return (Symbol) thread.setValues(symbol, Keyword.EXTERNAL);
         symbol = (Symbol) internalSymbols.get(name);
-        if (symbol != null) {
-            values[0] = symbol;
-            values[1] = Keyword.INTERNAL;
-            thread.setValues(values);
-            return symbol;
-        }
+        if (symbol != null)
+            return (Symbol) thread.setValues(symbol, Keyword.INTERNAL);
         // Look in external symbols of used packages.
         for (Iterator it = useList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
             symbol = pkg.findExternalSymbol(name);
-            if (symbol != null) {
-                values[0] = symbol;
-                values[1] = Keyword.INHERITED;
-                thread.setValues(values);
-                return symbol;
-            }
+            if (symbol != null)
+                return (Symbol) thread.setValues(symbol, Keyword.INHERITED);
         }
         // Not found.
-        symbol = addSymbol(name);
-        values[0] = symbol;
-        values[1] = NIL;
-        thread.setValues(values);
-        return symbol;
+        return (Symbol) thread.setValues(addSymbol(name), NIL);
     }
 
     public synchronized LispObject unintern(Symbol symbol) throws ConditionThrowable
