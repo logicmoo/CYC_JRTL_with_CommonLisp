@@ -87,6 +87,23 @@ public abstract class AbstractVector extends AbstractArray
         return 1;
     }
 
+    public final LispObject getDimensions()
+    {
+        return new Cons(new Fixnum(capacity()));
+    }
+
+    public final int getDimension(int n) throws LispError
+    {
+        if (n != 0)
+            throw new TypeError("bad dimension for vector");
+        return capacity();
+    }
+
+    public final int getTotalSize()
+    {
+        return capacity();
+    }
+
     public abstract int capacity();
 
     public abstract LispObject get(int index) throws LispError;
@@ -112,7 +129,7 @@ public abstract class AbstractVector extends AbstractArray
         return i;
     }
 
-    protected void badIndex(long index, long limit) throws LispError
+    protected void badIndex(int index, int limit) throws LispError
     {
         StringBuffer sb = new StringBuffer("invalid array index ");
         sb.append(index);
