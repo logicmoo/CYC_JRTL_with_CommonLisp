@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.25 2003-02-20 18:58:14 piso Exp $
+ * $Id: LispMode.java,v 1.26 2003-03-03 20:22:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -504,10 +504,11 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 lisp.insertString(bufEnd,
                     ";;; Evaluating defun " + defunName + "\n");
                 lisp.renumber();
+                ed.eob();
+                ed.getDotLine().setFlags(0);
                 lisp.send(r.toString().trim());
             }
         }
-        ed.eob();
     }
 
     public static void evalRegionLisp()
@@ -535,8 +536,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
         bufEnd.getLine().setFlags(STATE_INPUT);
         lisp.insertString(bufEnd, ";;; Evaluating region\n");
         lisp.renumber();
-        lisp.send(new Region(editor).toString().trim());
         ed.eob();
+        ed.getDotLine().setFlags(0);
+        lisp.send(new Region(editor).toString().trim());
     }
 
     private static Editor findEditor(Buffer buf)
