@@ -1,8 +1,8 @@
 /*
  * Ssh.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Ssh.java,v 1.4 2003-04-10 23:25:36 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Ssh.java,v 1.5 2004-09-13 00:47:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,6 +231,8 @@ public final class Ssh
     {
         String trim = s.trim().toLowerCase();
         if (trim.endsWith("password:"))
+            return true;
+        if (trim.endsWith("response:"))
             return true;
         if (trim.startsWith("enter passphrase ") && trim.endsWith(":"))
             return true;
