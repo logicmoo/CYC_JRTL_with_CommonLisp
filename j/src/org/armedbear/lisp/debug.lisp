@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.21 2004-05-05 18:02:43 piso Exp $
+;;; $Id: debug.lisp,v 1.22 2004-05-14 17:20:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,19 +53,17 @@
           (incf count))))))
 
 (defun internal-debug ()
-  (loop
-    (tpl::repl)))
+  (if (fboundp 'tpl::repl)
+      (loop
+        (tpl::repl))
+      (quit)))
 
 (defun debug-loop ()
   (let ((*debug-level* (1+ *debug-level*)))
     (show-restarts (compute-restarts) *debug-io*)
     (internal-debug)))
 
-(defun invoke-debugger (condition)
-  (when *debugger-hook*
-    (let ((hook-function *debugger-hook*)
-          (*debugger-hook* nil))
-      (funcall hook-function condition hook-function)))
+(defun invoke-debugger-report-condition (condition)
   (when condition
     (fresh-line *debug-io*)
     (when (and *load-truename* (streamp *load-stream*))
@@ -74,7 +72,11 @@
                *load-truename*
                (stream-line-number *load-stream*)
                (stream-offset *load-stream*)))
-    (%format *debug-io* "Debugger invoked on condition of type ~A:~%" (type-of condition))
+    (%format *debug-io*
+             (if (fboundp 'tpl::repl)
+                 "Debugger invoked on condition of type ~A:~%"
+                 "Unhandled condition of type ~A:~%")
+             (type-of condition))
     (if (and (fboundp 'print-object)
              (not (autoloadp 'print-object)))
         (progn
@@ -82,7 +84,16 @@
           (let ((*print-escape* nil))
             (print-object condition *debug-io*))
           (terpri *debug-io*))
-        (%format *debug-io* "  ~A~%" condition)))
+        (%format *debug-io* "  ~A~%" condition))))
+
+(defun invoke-debugger (condition)
+  (when *debugger-hook*
+    (let ((hook-function *debugger-hook*)
+          (*debugger-hook* nil))
+      (funcall hook-function condition hook-function)))
+  (invoke-debugger-report-condition condition)
+  (unless (fboundp 'tpl::repl)
+    (quit))
   (let ((original-package *package*))
     (with-standard-io-syntax
       (let ((*package* original-package)
