@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.150 2004-07-28 16:13:16 piso Exp $
+;;; $Id: autoloads.lisp,v 1.151 2004-07-28 17:54:41 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -194,6 +194,8 @@
 (autoload 'jclass-constructors "java")
 (export 'jconstructor-params "JAVA")
 (autoload 'jconstructor-params "java")
+(export 'jclass-field "JAVA")
+(autoload 'jclass-field "java")
 (export 'jclass-fields "JAVA")
 (autoload 'jclass-fields "java")
 (export 'jfield-type "JAVA")

@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: java.lisp,v 1.15 2004-07-09 17:36:55 piso Exp $
+;;; $Id: java.lisp,v 1.16 2004-07-28 17:54:25 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -140,6 +140,11 @@
   (let* ((getter (if declared "getDeclaredFields" "getFields"))
          (fields (jcall (jmethod "java.lang.Class" getter) (ensure-jclass class))))
     (if public (delete-if-not #'jmember-public-p fields) fields)))
+
+(defun jclass-field (class field-name)
+  "Returns the field named FIELD-NAME of CLASS"
+  (jcall (jmethod "java.lang.Class" "getField" "java.lang.String") 
+         (ensure-jclass class) field-name))
 
 (defun jfield-type (field)
   "Returns the type (Java class) of FIELD"
