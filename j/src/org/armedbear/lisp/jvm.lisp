@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.338 2005-01-02 01:55:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.339 2005-01-02 02:30:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3872,7 +3872,8 @@
                  (when (and (consp arg)
                             (not (constantp (second arg))))
                    (error "COMPILE-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
-    (multiple-value-bind (body decls) (sys::parse-body (cddr definition))
+    (multiple-value-bind (body decls)
+        (sys::parse-body (cddr definition))
       (setf body (list (list* 'BLOCK name body)))
       (dolist (decl decls)
         (push decl body))
@@ -3880,12 +3881,41 @@
     (let ((*nesting-level* (1+ *nesting-level*)))
       (cond (*compile-file-truename*
              (setf classfile (sys::next-classfile-name))
-             (compile-defun name form nil classfile))
+;;              (compile-defun name form nil classfile)
+
+;;              (aver (eq (car form) 'LAMBDA))
+;;              (handler-bind ((warning #'handle-warning))
+;;                (let ((precompiled-form (if *current-compiland*
+;;                                            form
+;;                                            (precompile-form form t))))
+                 (compile-1 (make-compiland :name name
+;;                                             :lambda-expression precompiled-form
+                                            :lambda-expression form
+                                            :classfile classfile
+                                            :parent *current-compiland*))
+;;              )
+;;                )
+
+             )
             (t
              (setf classfile (prog1
                               (%format nil "local-~D.class" *child-count*)
                               (incf *child-count*)))
-             (compile-defun name form nil classfile)
+;;              (compile-defun name form nil classfile)
+
+;;              (aver (eq (car form) 'LAMBDA))
+;;              (handler-bind ((warning #'handle-warning))
+;;                (let ((precompiled-form (if *current-compiland*
+;;                                            form
+;;                                            (precompile-form form t))))
+                 (compile-1 (make-compiland :name name
+;;                                             :lambda-expression precompiled-form
+                                            :lambda-expression form
+                                            :classfile classfile
+                                            :parent *current-compiland*))
+;;                  )
+;;                )
+
              (setf function (sys:load-compiled-function classfile)))))
     (cond (local-function
            (setf (local-function-classfile local-function) classfile)
@@ -3903,7 +3933,7 @@
                                       :classfile classfile)
                  *local-functions*)))))
 
-(defun compile-flet (form &key (target *val*) representation)
+(defun p2-flet (form &key (target *val*) representation)
   (if *use-locals-vector*
       (let ((*local-functions* *local-functions*)
             (definitions (cadr form))
@@ -5351,19 +5381,18 @@
 (defun compile-defun (name form environment &optional (classfile "out.class"))
   ;;   (dformat t "COMPILE-DEFUN ~S ~S~%" name classfile)
   ;;   (dformat t "compile-defun form = ~S~%" form)
-  (unless (eq (car form) 'LAMBDA)
-    (return-from compile-defun nil))
+  (aver (eq (car form) 'LAMBDA))
   (unless (or (null environment) (sys::empty-environment-p environment))
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (handler-bind ((warning #'handle-warning))
-;;     (let ((precompiled-form (precompile-form form t)))
     (let ((precompiled-form (if *current-compiland*
                                form
                                (precompile-form form t))))
       (compile-1 (make-compiland :name name
                                  :lambda-expression precompiled-form
                                  :classfile classfile
-                                 :parent *current-compiland*)))))
+                                 :parent *current-compiland*))))
+        )
 
 (defun handle-warning (condition)
   (fresh-line)
@@ -5435,8 +5464,6 @@
              compiled-definition
              (warnings-p t)
              (failure-p t))
-;;              (classfile (compile-defun name expr env))
-;;              (compiled-definition (sys:load-compiled-function classfile)))
         (with-compilation-unit
           (setf classfile (compile-defun name expr env))
           (setf compiled-definition (sys:load-compiled-function classfile))
@@ -5499,7 +5526,6 @@
                              catch
                              cons
                              declare
-                             flet
                              funcall
                              function
                              go
@@ -5532,6 +5558,7 @@
 (install-p2-handler '-      'compile-minus)
 (install-p2-handler 'ash    'p2-ash)
 (install-p2-handler 'eql    'p2-eql)
+(install-p2-handler 'flet   'p2-flet)
 (install-p2-handler 'logand 'p2-logand)
 (install-p2-handler 'not    'compile-not/null)
 (install-p2-handler 'null   'compile-not/null)
