@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.15 2003-09-27 17:31:58 piso Exp $
+;;; $Id: subtypep.lisp,v 1.16 2003-09-29 01:29:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -249,9 +249,27 @@
                        (values t t)
                        (values nil t)))
                   (t (values nil (known-type-p t1)))))
+           ((eq t2 'vector)
+            (if (eq t1 'base-string)
+                (if (eq (car i2) 'base-char)
+                    (values t t)
+                    (values nil t))
+                (values nil (known-type-p t2))))
            ((eq t2 'simple-string)
             (if (memq t1 '(simple-string simple-base-string))
                 (if (or (null i2) (eq (car i2) '*))
+                    (values t t)
+                    (values nil t))
+                (values nil (known-type-p t2))))
+           ((eq t2 'base-string)
+            (if (eq t1 'vector)
+                (if (eq (car i1) 'base-char)
+                    (values t t)
+                    (values nil t))
+                (values nil (known-type-p t2))))
+           ((eq t2 'string)
+            (if (eq t1 'vector)
+                (if (eq (car i1) 'character)
                     (values t t)
                     (values nil t))
                 (values nil (known-type-p t2))))
