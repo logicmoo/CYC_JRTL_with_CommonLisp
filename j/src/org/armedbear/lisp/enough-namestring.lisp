@@ -1,7 +1,7 @@
 ;;; enough-namestring.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: enough-namestring.lisp,v 1.1 2004-03-05 18:24:29 piso Exp $
+;;; $Id: enough-namestring.lisp,v 1.2 2004-09-27 00:09:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun equal-components-p (this that)
   #+win32 (equalp this that)
@@ -28,21 +28,23 @@
 (defun enough-namestring (pathname
                           &optional
                           (defaults *default-pathname-defaults*))
-  (let* ((pathname-directory (pathname-directory pathname))
-         (defaults-directory (pathname-directory defaults))
-         (prefix-len (length defaults-directory))
-         (result-directory
-          (cond ((and (> prefix-len 1)
-                      (>= (length pathname-directory) prefix-len)
-                      (equal-components-p (subseq pathname-directory 0 prefix-len)
-                                          defaults-directory))
-                 (cons :relative (nthcdr prefix-len pathname-directory)))
-                ((eq (car pathname-directory) :absolute)
-                 pathname-directory)
-                (t
-                 (error "~S cannot be represented relative to ~S."
-                        pathname
-                        defaults)))))
-    (concatenate 'simple-string
-                 (directory-namestring (make-pathname :directory result-directory))
-                 (file-namestring pathname))))
+  (let ((pathname-directory (pathname-directory pathname)))
+    (if pathname-directory
+        (let* ((defaults-directory (pathname-directory defaults))
+               (prefix-len (length defaults-directory))
+               (result-directory
+                (cond ((and (> prefix-len 1)
+                            (>= (length pathname-directory) prefix-len)
+                            (equal-components-p (subseq pathname-directory 0 prefix-len)
+                                                defaults-directory))
+                       (cons :relative (nthcdr prefix-len pathname-directory)))
+                      ((eq (car pathname-directory) :absolute)
+                       pathname-directory)
+                      (t
+                       (error "~S cannot be represented relative to ~S."
+                              pathname
+                              defaults)))))
+          (concatenate 'simple-string
+                       (directory-namestring (make-pathname :directory result-directory))
+                       (file-namestring pathname)))
+        (file-namestring pathname))))
