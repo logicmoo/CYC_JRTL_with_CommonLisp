@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.26 2003-04-06 18:36:17 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.27 2003-04-06 18:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -547,7 +547,7 @@ public class CharacterInputStream extends LispStream
         if (token.equals("NIL"))
             return NIL;
         if (c == ':')
-            return intern(token.substring(1), PACKAGE_KEYWORD);
+            return PACKAGE_KEYWORD.intern(token.substring(1));
         int index = token.indexOf("::");
         if (index > 0) {
             String packageName = token.substring(0, index);
