@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.56 2003-05-21 17:23:41 piso Exp $
+ * $Id: Editor.java,v 1.57 2003-05-21 17:44:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7327,26 +7327,50 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     private boolean foldExplicit()
     {
-        if (getDotLine().getText().indexOf(EXPLICIT_FOLD_START) < 0)
-            return false;
-        int count = 1;
-        Line begin = getDotLine().next();
+        final Line dotLine = getDotLine();
+        String text = dotLine.getText();
+        Line begin = null;
+        Line end = null;
+        if (text.indexOf(EXPLICIT_FOLD_END) >= 0) {
+            // Current line contains an end marker.
+            int count = 1;
+            end = dotLine.next();
+            begin = dotLine.previous();
+            while (begin != null) {
+                text = begin.getText();
+                if (text.indexOf(EXPLICIT_FOLD_START) >= 0) {
+                    --count;
+                    if (count == 0) {
+                        begin = begin.next();
+                        break;
+                    }
+                } else if (text.indexOf(EXPLICIT_FOLD_END) >= 0) {
+                    ++count;
+                }
+                begin = begin.previous();
+            }
+        } else if (text.indexOf(EXPLICIT_FOLD_START) >= 0) {
+            int count = 1;
+            begin = dotLine.next();
+            if (begin == null)
+                return false;
+            end = begin.next();
+            while (end != null) {
+                text = end.getText();
+                if (text.indexOf(EXPLICIT_FOLD_START) >= 0) {
+                    ++count;
+                } else if (text.indexOf(EXPLICIT_FOLD_END) >= 0) {
+                    --count;
+                    if (count == 0) {
+                        end = end.next();
+                        break;
+                    }
+                }
+                end = end.next();
+            }
+        }
         if (begin == null)
             return false;
-        Line end = begin.next();
-        while (end != null) {
-            String text = end.getText();
-            if (text.indexOf(EXPLICIT_FOLD_START) >= 0) {
-                ++count;
-            } else if (text.indexOf(EXPLICIT_FOLD_END) >= 0) {
-                --count;
-                if (count == 0) {
-                    end = end.next();
-                    break;
-                }
-            }
-            end = end.next();
-        }
         addUndo(SimpleEdit.FOLD);
         for (Line line = begin; line != end; line = line.next())
             line.hide();
