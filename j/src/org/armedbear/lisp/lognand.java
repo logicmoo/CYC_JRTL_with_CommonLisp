@@ -2,7 +2,7 @@
  * lognand.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: lognand.java,v 1.1 2003-09-10 16:19:21 piso Exp $
+ * $Id: lognand.java,v 1.2 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ public final class lognand extends Primitive2
     }
 
     public LispObject execute(LispObject first, LispObject second)
-        throws LispError
+        throws ConditionThrowable
     {
         if (first instanceof Fixnum) {
             if (second instanceof Fixnum)

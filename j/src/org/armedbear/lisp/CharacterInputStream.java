@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.46 2003-09-19 00:05:09 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.47 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,7 +136,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispString readString() throws LispError
+    private LispString readString() throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -232,12 +232,12 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readRightParen() throws LispError
+    private LispObject readRightParen() throws ConditionThrowable
     {
         throw new LispError("unmatched right parenthesis");
     }
 
-    private LispObject readComment() throws LispError
+    private LispObject readComment() throws ConditionThrowable
     {
         try {
             while (true) {
@@ -413,7 +413,7 @@ public class CharacterInputStream extends LispStream
         return null;
     }
 
-    private Symbol readUninternedSymbol() throws LispError
+    private Symbol readUninternedSymbol() throws ConditionThrowable
     {
         try {
             int n = read();
@@ -481,7 +481,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readBitVector() throws LispError
+    private LispObject readBitVector() throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -568,7 +568,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readToken(char firstChar) throws LispError
+    private LispObject readToken(char firstChar) throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -595,7 +595,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject makeObject(String token) throws LispError
+    private LispObject makeObject(String token) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         if (_READ_SUPPRESS_.symbolValueNoThrow(thread) != NIL)
@@ -646,7 +646,7 @@ public class CharacterInputStream extends LispStream
         return ((Package)_PACKAGE_.symbolValueNoThrow(thread)).intern(token);
     }
 
-    private LispObject makeNumber(String token) throws LispError
+    private LispObject makeNumber(String token) throws ConditionThrowable
     {
         if (token.indexOf('/') >= 0)
             return makeRatio(token);
@@ -674,7 +674,7 @@ public class CharacterInputStream extends LispStream
         return null;
     }
 
-    private LispObject makeRatio(String token) throws LispError
+    private LispObject makeRatio(String token) throws ConditionThrowable
     {
         final int index = token.indexOf('/');
         if (index < 0)
@@ -688,7 +688,7 @@ public class CharacterInputStream extends LispStream
         return null;
     }
 
-    private LispObject makeFloat(String token) throws LispError
+    private LispObject makeFloat(String token) throws ConditionThrowable
     {
         final int length = token.length();
         if (length == 0)
@@ -731,7 +731,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readBinary() throws LispError
+    private LispObject readBinary() throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -765,7 +765,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readHex() throws LispError
+    private LispObject readHex() throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -803,7 +803,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private char flushWhitespace() throws LispError
+    private char flushWhitespace() throws ConditionThrowable
     {
         try {
             while (true) {
@@ -824,7 +824,7 @@ public class CharacterInputStream extends LispStream
     // => line, missing-newline-p
     // recursive-p is ignored
     public LispObject readLine(boolean eofError, LispObject eofValue)
-        throws LispError
+        throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         while (true) {
@@ -863,7 +863,7 @@ public class CharacterInputStream extends LispStream
     // read-char &optional stream eof-error-p eof-value recursive-p => char
     // recursive-p is ignored
     public LispObject readChar(boolean eofError, LispObject eofValue)
-        throws LispError
+        throws ConditionThrowable
     {
         int n;
         try {
@@ -882,7 +882,7 @@ public class CharacterInputStream extends LispStream
     }
 
     // unread-char character &optional input-stream => nil
-    public LispObject unreadChar(LispCharacter c) throws LispError
+    public LispObject unreadChar(LispCharacter c) throws ConditionThrowable
     {
         try {
             unread(c.getValue());
@@ -894,7 +894,7 @@ public class CharacterInputStream extends LispStream
     }
 
     // clear-input &optional input-stream => nil
-    public LispObject clearInput() throws LispError
+    public LispObject clearInput() throws ConditionThrowable
     {
         try {
             while (reader.ready())

@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.24 2003-09-17 18:07:34 piso Exp $
+ * $Id: LispCharacter.java,v 1.25 2003-09-19 01:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public final class LispCharacter extends LispObject
         return LispClass.CHARACTER;
     }
 
-    public LispObject typep(LispObject type) throws LispError
+    public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.CHARACTER)
             return T;
@@ -113,7 +113,7 @@ public final class LispCharacter extends LispObject
         return false;
     }
 
-    public static char getValue(LispObject obj) throws LispError
+    public static char getValue(LispObject obj) throws ConditionThrowable
     {
         try {
             return ((LispCharacter)obj).getValue();
@@ -168,7 +168,7 @@ public final class LispCharacter extends LispObject
     }
 
     private static final Primitive1 CHARACTER = new Primitive1("character") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return arg;
@@ -187,7 +187,7 @@ public final class LispCharacter extends LispObject
     // ### whitespacep
     private static final Primitive1 WHITESPACEP =
         new Primitive1("whitespacep", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispCharacter character = checkCharacter(arg);
             return Character.isWhitespace(character.c) ? T : NIL;

@@ -2,7 +2,7 @@
  * BinaryInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryInputStream.java,v 1.1 2003-04-09 18:08:29 piso Exp $
+ * $Id: BinaryInputStream.java,v 1.2 2003-09-19 01:46:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public final class BinaryInputStream extends LispStream
 
     // read-byte stream &optional eof-error-p eof-value => byte
     public LispObject readByte(boolean eofError, LispObject eofValue)
-        throws LispError
+        throws ConditionThrowable
     {
         int n;
         try {

@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.10 2003-09-19 00:05:09 piso Exp $
+ * $Id: CompiledFunction.java,v 1.11 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,12 @@ public class CompiledFunction extends Closure
 {
     public CompiledFunction(String name, LispObject lambdaList,
                             LispObject body, Environment env)
-        throws LispError
+        throws ConditionThrowable
     {
         super(name, lambdaList, body, env);
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.COMPILED_FUNCTION)
             return T;
@@ -83,7 +83,7 @@ public class CompiledFunction extends Closure
         new Primitive3("make-compiled-function", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
-            throws LispError
+            throws ConditionThrowable
         {
             String name;
             if (first == NIL)
@@ -100,7 +100,7 @@ public class CompiledFunction extends Closure
     // ### load-compiled-function
     private static final Primitive1 LOAD_COMPILED_FUNCTION =
         new Primitive1("load-compiled-function", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String className = ((LispString)arg).getValue();
             if (className.endsWith(".class")) {
@@ -131,7 +131,7 @@ public class CompiledFunction extends Closure
 
     private static final Primitive1 VARLIST =
         new Primitive1("varlist", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws LispError {
+        public LispObject execute(LispObject arg) throws ConditionThrowable {
             if (arg instanceof CompiledFunction)
                 return ((CompiledFunction)arg).getVariableList();
             throw new TypeError(arg, "compiled function");

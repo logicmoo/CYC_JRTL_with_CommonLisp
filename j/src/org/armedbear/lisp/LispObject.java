@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.56 2003-09-19 00:05:10 piso Exp $
+ * $Id: LispObject.java,v 1.57 2003-09-19 01:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public class LispObject extends Lisp
         return LispClass.CLASS_T;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == T)
             return T;
@@ -69,32 +69,32 @@ public class LispObject extends Lisp
         return null;
     }
 
-    public LispObject car() throws LispError
+    public LispObject car() throws ConditionThrowable
     {
         throw new TypeError(this, "list");
     }
 
-    public void setCar(LispObject obj) throws LispError
+    public void setCar(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "cons");
     }
 
-    public LispObject cdr() throws LispError
+    public LispObject cdr() throws ConditionThrowable
     {
         throw new TypeError(this, "list");
     }
 
-    public void setCdr(LispObject obj) throws LispError
+    public void setCdr(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "cons");
     }
 
-    public LispObject cadr() throws LispError
+    public LispObject cadr() throws ConditionThrowable
     {
         throw new TypeError(this, "list");
     }
 
-    public LispObject cddr() throws LispError
+    public LispObject cddr() throws ConditionThrowable
     {
         throw new TypeError(this, "list");
     }
@@ -114,12 +114,12 @@ public class LispObject extends Lisp
         return eql(obj) ? T : NIL;
     }
 
-    public boolean equal(LispObject obj) throws LispError
+    public boolean equal(LispObject obj) throws ConditionThrowable
     {
         return this == obj;
     }
 
-    public boolean equalp(LispObject obj) throws LispError
+    public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         return this == obj;
     }
@@ -269,27 +269,27 @@ public class LispObject extends Lisp
         return false;
     }
 
-    public int length() throws LispError
+    public int length() throws ConditionThrowable
     {
         throw new TypeError(this, "sequence");
     }
 
-    public final LispObject LENGTH() throws LispError
+    public final LispObject LENGTH() throws ConditionThrowable
     {
         return new Fixnum(length());
     }
 
-    public LispObject elt(int index) throws LispError
+    public LispObject elt(int index) throws ConditionThrowable
     {
         throw new TypeError(this, "sequence");
     }
 
-    public LispObject AREF(LispObject index) throws LispError
+    public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         throw new TypeError(this, "array");
     }
 
-    public LispObject[] copyToArray() throws LispError
+    public LispObject[] copyToArray() throws ConditionThrowable
     {
         throw new TypeError(this, "list");
     }
@@ -324,17 +324,17 @@ public class LispObject extends Lisp
         return false;
     }
 
-    public LispObject getSymbolValue() throws LispError
+    public LispObject getSymbolValue() throws ConditionThrowable
     {
         throw new TypeError(this, "symbol");
     }
 
-    public LispObject getSymbolFunction() throws LispError
+    public LispObject getSymbolFunction() throws ConditionThrowable
     {
         throw new TypeError(this, "symbol");
     }
 
-    public LispObject getSymbolFunctionOrDie() throws LispError
+    public LispObject getSymbolFunctionOrDie() throws ConditionThrowable
     {
         throw new TypeError(this, "symbol");
     }
@@ -383,92 +383,92 @@ public class LispObject extends Lisp
         throw new LispError();
     }
 
-    public LispObject incr() throws LispError
+    public LispObject incr() throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject decr() throws LispError
+    public LispObject decr() throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject add(LispObject obj) throws LispError
+    public LispObject add(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject subtract(LispObject obj) throws LispError
+    public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject multiplyBy(LispObject obj) throws LispError
+    public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject divideBy(LispObject obj) throws LispError
+    public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public boolean isEqualTo(LispObject obj) throws LispError
+    public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject IS_E(LispObject obj) throws LispError
+    public LispObject IS_E(LispObject obj) throws ConditionThrowable
     {
         return isEqualTo(obj) ? T : NIL;
     }
 
-    public boolean isNotEqualTo(LispObject obj) throws LispError
+    public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject IS_NE(LispObject obj) throws LispError
+    public LispObject IS_NE(LispObject obj) throws ConditionThrowable
     {
         return isNotEqualTo(obj) ? T : NIL;
     }
 
-    public boolean isLessThan(LispObject obj) throws LispError
+    public boolean isLessThan(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject IS_LT(LispObject obj) throws LispError
+    public LispObject IS_LT(LispObject obj) throws ConditionThrowable
     {
         return isLessThan(obj) ? T : NIL;
     }
 
-    public boolean isGreaterThan(LispObject obj) throws LispError
+    public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject IS_GT(LispObject obj) throws LispError
+    public LispObject IS_GT(LispObject obj) throws ConditionThrowable
     {
         return isGreaterThan(obj) ? T : NIL;
     }
 
-    public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject IS_LE(LispObject obj) throws LispError
+    public LispObject IS_LE(LispObject obj) throws ConditionThrowable
     {
         return isLessThanOrEqualTo(obj) ? T : NIL;
     }
 
-    public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "number");
     }
 
-    public LispObject IS_GE(LispObject obj) throws LispError
+    public LispObject IS_GE(LispObject obj) throws ConditionThrowable
     {
         return isGreaterThanOrEqualTo(obj) ? T : NIL;
     }

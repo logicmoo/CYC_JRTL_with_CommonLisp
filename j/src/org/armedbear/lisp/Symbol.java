@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.76 2003-09-17 14:51:51 piso Exp $
+ * $Id: Symbol.java,v 1.77 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,8 +148,8 @@ public class Symbol extends LispObject
         try {
             PACKAGE_CL.export(symbol); // FIXME Inefficient!
         }
-        catch (LispError e) {
-            Debug.trace(e);
+        catch (ConditionThrowable t) {
+            Debug.trace(t);
         }
         symbol.function = obj;
         return symbol;
@@ -184,7 +184,7 @@ public class Symbol extends LispObject
         return LispClass.SYMBOL;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.SYMBOL)
             return T;
@@ -276,7 +276,7 @@ public class Symbol extends LispObject
     }
 
     // symbol-value
-    public final LispObject symbolValue() throws LispError
+    public final LispObject symbolValue() throws ConditionThrowable
     {
         if ((flags & SPECIAL) != 0) {
             LispObject val = LispThread.currentThread().lookupSpecial(this);
@@ -313,7 +313,7 @@ public class Symbol extends LispObject
         return function;
     }
 
-    public final LispObject getSymbolFunctionOrDie() throws LispError
+    public final LispObject getSymbolFunctionOrDie() throws ConditionThrowable
     {
         if (function == null)
             throw new UndefinedFunctionError(this);
@@ -344,25 +344,25 @@ public class Symbol extends LispObject
         PACKAGE_SYS.intern("%VARIABLE-DOCUMENTATION");
 
     // Returns null if there is no function documentation.
-    public final LispObject getFunctionDocumentation() throws LispError
+    public final LispObject getFunctionDocumentation() throws ConditionThrowable
     {
         return get(this, _FUNCTION_DOCUMENTATION);
     }
 
     public final void setFunctionDocumentation(String docstring)
-        throws LispError
+        throws ConditionThrowable
     {
         put(this, _FUNCTION_DOCUMENTATION, new LispString(docstring));
     }
 
     public final void setFunctionDocumentation(LispObject documentation)
-        throws LispError
+        throws ConditionThrowable
     {
         put(this, _FUNCTION_DOCUMENTATION, documentation);
     }
 
     public final void setVariableDocumentation(LispObject documentation)
-        throws LispError
+        throws ConditionThrowable
     {
         put(this, _VARIABLE_DOCUMENTATION, documentation);
     }

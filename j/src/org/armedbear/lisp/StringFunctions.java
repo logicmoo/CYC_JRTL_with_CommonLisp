@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.3 2003-07-20 18:17:01 piso Exp $
+ * $Id: StringFunctions.java,v 1.4 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,10 +27,10 @@ public final class StringFunctions extends Lisp
     // Case sensitive.
     private static final Primitive _STRING_EQUAL =
         new Primitive("%string=", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -56,10 +56,10 @@ public final class StringFunctions extends Lisp
     // Case sensitive.
     private static final Primitive _STRING_NOT_EQUAL =
         new Primitive("%string/=", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -79,10 +79,10 @@ public final class StringFunctions extends Lisp
     // Case insensitive.
     private static final Primitive _STRING_EQUAL_IGNORE_CASE =
         new Primitive("%string-equal", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -111,10 +111,10 @@ public final class StringFunctions extends Lisp
     // Case sensitive.
     private static final Primitive _STRING_NOT_EQUAL_IGNORE_CASE =
         new Primitive("%string-not-equal", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -141,10 +141,10 @@ public final class StringFunctions extends Lisp
     // Case sensitive.
     private static final Primitive _STRING_LESS_THAN =
         new Primitive("%string<", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -171,10 +171,10 @@ public final class StringFunctions extends Lisp
     // Case sensitive.
     private static final Primitive _STRING_GREATER_THAN =
         new Primitive("%string>", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -201,10 +201,10 @@ public final class StringFunctions extends Lisp
     // Case sensitive.
     private static final Primitive _STRING_LE =
         new Primitive("%string<=", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -230,10 +230,10 @@ public final class StringFunctions extends Lisp
     // Case sensitive.
     private static final Primitive _STRING_GE =
         new Primitive("%string>=", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -261,10 +261,10 @@ public final class StringFunctions extends Lisp
     // Case insensitive.
     private static final Primitive _STRING_LESSP =
         new Primitive("%string-lessp", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -291,10 +291,10 @@ public final class StringFunctions extends Lisp
     // Case insensitive.
     private static final Primitive _STRING_GREATERP =
         new Primitive("%string-greaterp", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -321,10 +321,10 @@ public final class StringFunctions extends Lisp
     // Case insensitive.
     private static final Primitive _STRING_NOT_LESSP =
         new Primitive("%string-not-lessp", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -351,10 +351,10 @@ public final class StringFunctions extends Lisp
     // Case insensitive.
     private static final Primitive _STRING_NOT_GREATERP =
         new Primitive("%string-not-greaterp", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -381,7 +381,7 @@ public final class StringFunctions extends Lisp
     private static final Primitive3 _STRING_UPCASE =
         new Primitive3("%string-upcase", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             LispString s = string(first);
             final int length = s.length();
@@ -414,7 +414,7 @@ public final class StringFunctions extends Lisp
     private static final Primitive3 _STRING_DOWNCASE =
         new Primitive3("%string-downcase", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             LispString s = string(first);
             final int length = s.length();
@@ -447,7 +447,7 @@ public final class StringFunctions extends Lisp
     private static final Primitive3 _STRING_CAPITALIZE=
         new Primitive3("%string-capitalize", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             LispString s = string(first);
             final int length = s.length();
@@ -492,7 +492,7 @@ public final class StringFunctions extends Lisp
     private static final Primitive3 _NSTRING_UPCASE =
         new Primitive3("%nstring-upcase", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             LispString s = checkString(first);
             final int length = s.length();
@@ -519,7 +519,7 @@ public final class StringFunctions extends Lisp
     private static final Primitive3 _NSTRING_DOWNCASE =
         new Primitive3("%nstring-downcase", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             LispString s = checkString(first);
             final int length = s.length();
@@ -546,7 +546,7 @@ public final class StringFunctions extends Lisp
     private static final Primitive3 _NSTRING_CAPITALIZE =
         new Primitive3("%nstring-capitalize", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             LispString s = checkString(first);
             final int length = s.length();

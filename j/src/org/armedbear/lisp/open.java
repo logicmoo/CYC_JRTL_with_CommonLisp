@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.2 2003-08-11 18:40:40 piso Exp $
+ * $Id: open.java,v 1.3 2003-09-19 01:46:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class open extends Lisp
         new Primitive3("%open-output-file", PACKAGE_SYS, false) {
         public LispObject execute (LispObject first, LispObject second,
                                    LispObject third)
-            throws LispError
+            throws ConditionThrowable
         {
             String namestring;
             if (first instanceof LispString)
@@ -82,7 +82,7 @@ public final class open extends Lisp
     private static final Primitive2 _OPEN_INPUT_FILE =
         new Primitive2("%open-input-file", PACKAGE_SYS, false) {
         public LispObject execute (LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             String namestring;
             if (first instanceof LispString)

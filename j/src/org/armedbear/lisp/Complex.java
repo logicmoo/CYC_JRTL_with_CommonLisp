@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.21 2003-09-17 15:01:59 piso Exp $
+ * $Id: Complex.java,v 1.22 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public final class Complex extends LispObject
         return LispClass.COMPLEX;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.COMPLEX)
             return T;
@@ -110,22 +110,22 @@ public final class Complex extends LispObject
         return eql(obj);
     }
 
-    public boolean equalp(LispObject obj) throws LispError
+    public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         return isEqualTo(obj);
     }
 
-    public final LispObject incr() throws LispError
+    public final LispObject incr() throws ConditionThrowable
     {
         return new Complex(realpart.add(Fixnum.ONE), imagpart);
     }
 
-    public final LispObject decr() throws LispError
+    public final LispObject decr() throws ConditionThrowable
     {
         return new Complex(realpart.subtract(Fixnum.ONE), imagpart);
     }
 
-    public LispObject add(LispObject obj) throws LispError
+    public LispObject add(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
@@ -134,7 +134,7 @@ public final class Complex extends LispObject
         return getInstance(realpart.add(obj), imagpart);
     }
 
-    public LispObject subtract(LispObject obj) throws LispError
+    public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
@@ -143,7 +143,7 @@ public final class Complex extends LispObject
         return getInstance(realpart.subtract(obj), imagpart);
     }
 
-    public LispObject multiplyBy(LispObject obj) throws LispError
+    public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Complex) {
             LispObject a = realpart;
@@ -162,7 +162,7 @@ public final class Complex extends LispObject
                                    imagpart.multiplyBy(obj));
     }
 
-    public LispObject divideBy(LispObject obj) throws LispError
+    public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Complex) {
             LispObject a = realpart;
@@ -181,7 +181,7 @@ public final class Complex extends LispObject
                                    imagpart.divideBy(obj));
     }
 
-    public boolean isEqualTo(LispObject obj) throws LispError
+    public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Complex) {
             Complex c = (Complex) obj;
@@ -203,7 +203,7 @@ public final class Complex extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isNotEqualTo(LispObject obj) throws LispError
+    public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
     {
         return !isEqualTo(obj);
     }

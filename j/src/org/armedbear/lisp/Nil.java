@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.22 2003-09-15 04:16:07 piso Exp $
+ * $Id: Nil.java,v 1.23 2003-09-19 01:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class Nil extends Symbol
         return Symbol.NULL;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.NULL)
             return T;
@@ -84,7 +84,7 @@ public final class Nil extends Symbol
         return 0;
     }
 
-    public LispObject elt(int index) throws LispError
+    public LispObject elt(int index) throws ConditionThrowable
     {
         throw new TypeError("ELT: invalid index " + index + " for " + this);
     }
@@ -119,7 +119,7 @@ public final class Nil extends Symbol
         return null;
     }
 
-    public LispObject remove(LispObject item) throws LispError
+    public LispObject remove(LispObject item) throws ConditionThrowable
     {
         return NIL;
     }

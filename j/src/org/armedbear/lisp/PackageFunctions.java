@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.16 2003-07-08 01:52:06 piso Exp $
+ * $Id: PackageFunctions.java,v 1.17 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public final class PackageFunctions extends Lisp
     // ### packagep
     // packagep object => generalized-boolean
     private static final Primitive1 PACKAGEP = new Primitive1("packagep") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof Package ? T : NIL;
         }
@@ -36,7 +36,7 @@ public final class PackageFunctions extends Lisp
     // package-name package => nicknames
     private static final Primitive1 PACKAGE_NAME =
         new Primitive1("package-name") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String name = coerceToPackage(arg).getName();
             return name != null ? new LispString(name) : NIL;
@@ -47,7 +47,7 @@ public final class PackageFunctions extends Lisp
     // package-nicknames package => nicknames
     private static final Primitive1 PACKAGE_NICKNAMES =
         new Primitive1("package-nicknames") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).packageNicknames();
         }
@@ -57,7 +57,7 @@ public final class PackageFunctions extends Lisp
     // package-use-list package => use-list
     private static final Primitive1 PACKAGE_USE_LIST =
         new Primitive1("package-use-list") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).getUseList();
         }
@@ -67,7 +67,7 @@ public final class PackageFunctions extends Lisp
     // package-used-by-list package => used-by-list
     private static final Primitive1 PACKAGE_USED_BY_LIST =
         new Primitive1("package-used-by-list") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).getUsedByList();
         }
@@ -76,10 +76,10 @@ public final class PackageFunctions extends Lisp
     // ### import
     // import symbols &optional package => t
     private static final Primitive IMPORT = new Primitive("import") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
@@ -97,10 +97,10 @@ public final class PackageFunctions extends Lisp
     // ### unexport
     // unexport symbols &optional package => t
     private static final Primitive UNEXPORT = new Primitive("unexport") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
@@ -118,10 +118,10 @@ public final class PackageFunctions extends Lisp
     // ### shadow
     // shadow symbol-names &optional package => t
     private static final Primitive SHADOW = new Primitive("shadow") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
@@ -140,10 +140,10 @@ public final class PackageFunctions extends Lisp
     // shadowing-import symbols &optional package => t
     private static final Primitive SHADOWING_IMPORT =
         new Primitive("shadowing-import") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
@@ -162,7 +162,7 @@ public final class PackageFunctions extends Lisp
     // package-shadowing-symbols package => used-by-list
     private static final Primitive1 PACKAGE_SHADOWING_SYMBOLS =
         new Primitive1("package-shadowing-symbols") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).getShadowingSymbols();
         }
@@ -171,7 +171,7 @@ public final class PackageFunctions extends Lisp
     // ### delete-package
     private static final Primitive1 DELETE_PACKAGE =
         new Primitive1("delete-package") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).delete() ? T : NIL;
         }
@@ -181,10 +181,10 @@ public final class PackageFunctions extends Lisp
     // unuse-package packages-to-unuse &optional package => t
     private static final Primitive USE_PACKAGE =
         new Primitive("unuse-package") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             Package pkg;
             if (args.length == 2)
                 pkg = coerceToPackage(args[1]);
@@ -206,10 +206,10 @@ public final class PackageFunctions extends Lisp
     // rename-package package new-name &optional new-nicknames => package-object
     private static final Primitive RENAME_PACKAGE =
         new Primitive("rename-package") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2 || args.length > 3)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             Package pkg = coerceToPackage(args[0]);
             String newName = javaString(args[1]);
             LispObject nicknames = args.length == 3 ? checkList(args[2]) : NIL;
@@ -231,10 +231,10 @@ public final class PackageFunctions extends Lisp
     // interns exports doc-string => package
     private static final Primitive _DEFPACKAGE =
         new Primitive("%defpackage", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 10)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             final String packageName = LispString.getValue(args[0]);
             LispObject nicknames = checkList(args[1]);
             LispObject size = args[2];

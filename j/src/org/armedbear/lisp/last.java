@@ -2,7 +2,7 @@
  * last.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: last.java,v 1.1 2003-09-16 17:38:58 piso Exp $
+ * $Id: last.java,v 1.2 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class last extends Primitive {
         super(name);
     }
 
-    public LispObject execute(LispObject arg) throws LispError
+    public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         LispObject list = checkList(arg);
         if (list == NIL)
@@ -45,7 +45,7 @@ public final class last extends Primitive {
     }
 
     public LispObject execute(LispObject first, LispObject second)
-        throws LispError
+        throws ConditionThrowable
     {
         LispObject list = checkList(first);
         if (second instanceof Fixnum) {

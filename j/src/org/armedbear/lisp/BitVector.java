@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.22 2003-09-14 17:36:11 piso Exp $
+ * $Id: BitVector.java,v 1.23 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public final class BitVector extends AbstractVector
     private int capacity;
     private long[] bits;
 
-    public BitVector(int length) throws LispError
+    public BitVector(int length) throws ConditionThrowable
     {
         if (length < 0)
             throw new NegativeArraySizeException();
@@ -39,7 +39,7 @@ public final class BitVector extends AbstractVector
         bits = new long[size];
     }
 
-    public BitVector(String s) throws LispError
+    public BitVector(String s) throws ConditionThrowable
     {
         this(s.length());
         for (int i = s.length(); i-- > 0;) {
@@ -60,7 +60,7 @@ public final class BitVector extends AbstractVector
         return list2(Symbol.BIT_VECTOR, new Fixnum(length()));
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.BIT_VECTOR)
             return T;
@@ -118,7 +118,7 @@ public final class BitVector extends AbstractVector
         return fillPointer >= 0 ? fillPointer : capacity;
     }
 
-    public LispObject elt(int index) throws LispError
+    public LispObject elt(int index) throws ConditionThrowable
     {
         if (index < 0 || index >= length())
             badIndex(index, length());
@@ -127,12 +127,12 @@ public final class BitVector extends AbstractVector
     }
 
     // Ignores fill pointer.
-    public LispObject AREF(LispObject index) throws LispError
+    public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         return get(Fixnum.getValue(index));
     }
 
-    public LispObject reverse() throws LispError
+    public LispObject reverse() throws ConditionThrowable
     {
         int length = length();
         BitVector result = new BitVector(length);
@@ -146,17 +146,17 @@ public final class BitVector extends AbstractVector
         return result;
     }
 
-    public LispObject getRowMajor(int index) throws LispError
+    public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         return get(index);
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws LispError
+    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         set(index, newValue);
     }
 
-    public LispObject get(int index) throws LispError
+    public LispObject get(int index) throws ConditionThrowable
     {
         if (index >= capacity)
             badIndex(index, capacity);
@@ -170,7 +170,7 @@ public final class BitVector extends AbstractVector
         return (bits[offset] & (1L << index)) != 0 ? 1 : 0;
     }
 
-    public void set(int index, LispObject newValue) throws LispError
+    public void set(int index, LispObject newValue) throws ConditionThrowable
     {
         if (index >= capacity)
             badIndex(index, capacity);
@@ -202,7 +202,7 @@ public final class BitVector extends AbstractVector
         bits[offset] &= ~(1L << index);
     }
 
-    public LispObject subseq(int start, int end) throws LispError
+    public LispObject subseq(int start, int end) throws ConditionThrowable
     {
         BitVector v = new BitVector(end - start);
         int i = start, j = 0;
@@ -215,7 +215,7 @@ public final class BitVector extends AbstractVector
         return v;
     }
 
-    public void fill(LispObject obj) throws LispError
+    public void fill(LispObject obj) throws ConditionThrowable
     {
         try {
             int n = Fixnum.getValue(obj);
@@ -235,7 +235,7 @@ public final class BitVector extends AbstractVector
         throw new TypeError(obj, "bit");
     }
 
-    public void shrink(int n) throws LispError
+    public void shrink(int n) throws ConditionThrowable
     {
         if (n < capacity) {
             int size = n >>> 6;
@@ -259,7 +259,7 @@ public final class BitVector extends AbstractVector
         return fillPointer < 0;
     }
 
-    public boolean equal(LispObject obj) throws LispError
+    public boolean equal(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;
@@ -276,7 +276,7 @@ public final class BitVector extends AbstractVector
         return false;
     }
 
-    public boolean equalp(LispObject obj) throws LispError
+    public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;

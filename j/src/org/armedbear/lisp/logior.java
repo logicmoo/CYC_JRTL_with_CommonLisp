@@ -2,7 +2,7 @@
  * logior.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logior.java,v 1.1 2003-09-10 17:26:14 piso Exp $
+ * $Id: logior.java,v 1.2 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public final class logior extends Primitive
     }
 
     public LispObject execute(LispObject first, LispObject second)
-        throws LispError
+        throws ConditionThrowable
     {
         if (first instanceof Fixnum && second instanceof Fixnum) {
             return new Fixnum(((Fixnum)first).getValue() |
@@ -60,7 +60,7 @@ public final class logior extends Primitive
             return number(n1.or(n2));
         }
     }
-    public LispObject execute(LispObject[] args) throws LispError
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         BigInteger result = BigInteger.ZERO;
         for (int i = 0; i < args.length; i++) {

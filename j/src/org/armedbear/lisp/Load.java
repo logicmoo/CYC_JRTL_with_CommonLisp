@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.17 2003-09-19 00:05:10 piso Exp $
+ * $Id: Load.java,v 1.18 2003-09-19 01:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -278,7 +278,7 @@ public final class Load extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             // For now we require a string, but we should also support streams
             // and pathnames.
             String filename = LispString.getValue(args[0]);

@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.69 2003-09-19 00:05:09 piso Exp $
+ * $Id: Fixnum.java,v 1.70 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ public final class Fixnum extends LispObject
         return LispClass.FIXNUM;
     }
 
-    public LispObject typep(LispObject type) throws LispError
+    public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.FIXNUM)
             return T;
@@ -178,7 +178,7 @@ public final class Fixnum extends LispObject
         return value == 0;
     }
 
-    public static int getValue(LispObject obj) throws LispError
+    public static int getValue(LispObject obj) throws ConditionThrowable
     {
         try {
             return ((Fixnum)obj).value;
@@ -188,7 +188,7 @@ public final class Fixnum extends LispObject
         }
     }
 
-    public static int getInt(LispObject obj) throws LispError
+    public static int getInt(LispObject obj) throws ConditionThrowable
     {
         try {
             return (int) ((Fixnum)obj).value;
@@ -198,7 +198,7 @@ public final class Fixnum extends LispObject
         }
     }
 
-    public static BigInteger getBigInteger(LispObject obj) throws LispError
+    public static BigInteger getBigInteger(LispObject obj) throws ConditionThrowable
     {
         try {
             return BigInteger.valueOf(((Fixnum)obj).value);
@@ -208,7 +208,7 @@ public final class Fixnum extends LispObject
         }
     }
 
-    public static float getFloat(LispObject obj) throws LispError
+    public static float getFloat(LispObject obj) throws ConditionThrowable
     {
         try {
             return (float) ((Fixnum)obj).value;
@@ -242,7 +242,7 @@ public final class Fixnum extends LispObject
         return new Bignum((long) value - 1);
     }
 
-    public LispObject add(LispObject obj) throws LispError
+    public LispObject add(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return number((long) value + ((Fixnum)obj).value);
@@ -264,7 +264,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject subtract(LispObject obj) throws LispError
+    public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return number((long) value - ((Fixnum)obj).value);
@@ -287,7 +287,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject multiplyBy(LispObject obj) throws LispError
+    public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return number((long) value * ((Fixnum)obj).value);
@@ -310,7 +310,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject divideBy(LispObject obj) throws LispError
+    public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
         try {
             if (obj instanceof Fixnum) {
@@ -348,7 +348,7 @@ public final class Fixnum extends LispObject
         }
     }
 
-    public boolean isEqualTo(LispObject obj) throws LispError
+    public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value == ((Fixnum)obj).value;
@@ -361,7 +361,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isNotEqualTo(LispObject obj) throws LispError
+    public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value != ((Fixnum)obj).value;
@@ -375,7 +375,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isLessThan(LispObject obj) throws LispError
+    public boolean isLessThan(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value < ((Fixnum)obj).value;
@@ -391,7 +391,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isGreaterThan(LispObject obj) throws LispError
+    public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value > ((Fixnum)obj).value;
@@ -407,7 +407,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value <= ((Fixnum)obj).value;
@@ -423,7 +423,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value >= ((Fixnum)obj).value;

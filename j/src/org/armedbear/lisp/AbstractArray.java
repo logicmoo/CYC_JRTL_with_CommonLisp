@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AbstractArray.java,v 1.8 2003-09-17 17:59:45 piso Exp $
+ * $Id: AbstractArray.java,v 1.9 2003-09-19 01:46:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 public abstract class AbstractArray extends LispObject
 {
-    public LispObject typep(LispObject type) throws LispError
+    public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.ARRAY)
             return T;
@@ -32,7 +32,7 @@ public abstract class AbstractArray extends LispObject
         return super.typep(type);
     }
 
-    public boolean equalp(LispObject obj) throws LispError
+    public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof AbstractArray) {
             AbstractArray a = (AbstractArray) obj;
@@ -51,25 +51,25 @@ public abstract class AbstractArray extends LispObject
         return false;
     }
 
-    public LispObject AREF(LispObject index) throws LispError
+    public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("AREF: ");
         sb.append("wrong number of subscripts (1) for array of rank ");
         sb.append(getRank());
-        throw new ProgramError(sb.toString());
+        throw new ConditionThrowable(new ProgramError(sb.toString()));
     }
 
     public abstract int getRank();
 
     public abstract LispObject getDimensions();
 
-    public abstract int getDimension(int n) throws LispError;
+    public abstract int getDimension(int n) throws ConditionThrowable;
 
     public abstract LispObject getElementType();
 
     public abstract int getTotalSize();
 
-    public abstract LispObject getRowMajor(int index) throws LispError;
+    public abstract LispObject getRowMajor(int index) throws ConditionThrowable;
 
-    public abstract void setRowMajor(int index, LispObject newValue) throws LispError;
+    public abstract void setRowMajor(int index, LispObject newValue) throws ConditionThrowable;
 }

@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.11 2003-09-17 18:00:54 piso Exp $
+ * $Id: Array.java,v 1.12 2003-09-19 01:46:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class Array extends AbstractArray
             data[i] = NIL;
     }
 
-    public Array(int[] dimv, LispObject initialContents) throws LispError
+    public Array(int[] dimv, LispObject initialContents) throws ConditionThrowable
     {
         this.dimv = dimv;
         final int rank = dimv.length;
@@ -49,7 +49,7 @@ public final class Array extends AbstractArray
         setInitialContents(0, dimv, initialContents, 0);
     }
 
-    public Array(int rank, LispObject initialContents) throws LispError
+    public Array(int rank, LispObject initialContents) throws ConditionThrowable
     {
         if (rank == 0) {
             dimv = new int[0];
@@ -72,7 +72,7 @@ public final class Array extends AbstractArray
 
     private int setInitialContents(int axis, int[] dims, LispObject contents,
                                    int index)
-        throws LispError
+        throws ConditionThrowable
     {
         if (dims.length == 0) {
             try {
@@ -128,7 +128,7 @@ public final class Array extends AbstractArray
         return LispClass.ARRAY;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.SIMPLE_ARRAY)
             return T;
@@ -148,7 +148,7 @@ public final class Array extends AbstractArray
         return result;
     }
 
-    public int getDimension(int n) throws LispError
+    public int getDimension(int n) throws ConditionThrowable
     {
         try {
             return dimv[n];
@@ -168,7 +168,7 @@ public final class Array extends AbstractArray
         return data.length;
     }
 
-    public LispObject getRowMajor(int index) throws LispError
+    public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         try {
             return data[index];
@@ -178,7 +178,7 @@ public final class Array extends AbstractArray
         }
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws LispError
+    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             data[index] = newValue;

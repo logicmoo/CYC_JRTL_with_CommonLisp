@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Environment.java,v 1.5 2003-06-21 18:49:13 piso Exp $
+ * $Id: Environment.java,v 1.6 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ public final class Environment extends LispObject
             new Binding(symbol, value, lastFunctionalBinding);
     }
 
-    public LispObject lookupFunctional(LispObject symbol) throws LispError
+    public LispObject lookupFunctional(LispObject symbol) throws ConditionThrowable
     {
         Binding binding = lastFunctionalBinding;
         while (binding != null) {

@@ -24,7 +24,7 @@ public abstract class AbstractVector extends AbstractArray
 {
     protected int fillPointer = -1; // -1 indicates no fill pointer.
 
-    public LispObject typep(LispObject type) throws LispError
+    public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.VECTOR)
             return T;
@@ -46,7 +46,7 @@ public abstract class AbstractVector extends AbstractArray
         return true;
     }
 
-    public boolean equalp(LispObject obj) throws LispError
+    public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof AbstractVector) {
             if (length() != obj.length())
@@ -70,7 +70,7 @@ public abstract class AbstractVector extends AbstractArray
         return new Cons(new Fixnum(capacity()));
     }
 
-    public final int getDimension(int n) throws LispError
+    public final int getDimension(int n) throws ConditionThrowable
     {
         if (n != 0)
             throw new TypeError("bad dimension for vector");
@@ -86,24 +86,24 @@ public abstract class AbstractVector extends AbstractArray
 
     public abstract void ensureCapacity(int minCapacity);
 
-    public abstract LispObject get(int index) throws LispError;
+    public abstract LispObject get(int index) throws ConditionThrowable;
 
-    public abstract void set(int index, LispObject newValue) throws LispError;
+    public abstract void set(int index, LispObject newValue) throws ConditionThrowable;
 
-    public abstract LispObject subseq(int start, int end) throws LispError;
+    public abstract LispObject subseq(int start, int end) throws ConditionThrowable;
 
-    public abstract void fill(LispObject obj) throws LispError;
+    public abstract void fill(LispObject obj) throws ConditionThrowable;
 
-    public abstract void shrink(int n) throws LispError;
+    public abstract void shrink(int n) throws ConditionThrowable;
 
-    public int checkIndex(int index) throws LispError
+    public int checkIndex(int index) throws ConditionThrowable
     {
         if (index < 0 || index >= capacity())
             badIndex(index, capacity());
         return index;
     }
 
-    public int checkIndex(LispObject index) throws LispError
+    public int checkIndex(LispObject index) throws ConditionThrowable
     {
         int i = Fixnum.getValue(index);
         if (i < 0 || i >= capacity())
@@ -111,7 +111,7 @@ public abstract class AbstractVector extends AbstractArray
         return i;
     }
 
-    protected void badIndex(int index, int limit) throws LispError
+    protected void badIndex(int index, int limit) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("invalid array index ");
         sb.append(index);
@@ -135,7 +135,7 @@ public abstract class AbstractVector extends AbstractArray
         fillPointer = n;
     }
 
-    public void setFillPointer(LispObject obj) throws LispError
+    public void setFillPointer(LispObject obj) throws ConditionThrowable
     {
         if (obj == T)
             fillPointer = capacity();
@@ -164,9 +164,9 @@ public abstract class AbstractVector extends AbstractArray
         return false;
     }
 
-    public abstract LispObject reverse() throws LispError;
+    public abstract LispObject reverse() throws ConditionThrowable;
 
-    public void nreverse() throws LispError
+    public void nreverse() throws ConditionThrowable
     {
         int i = 0;
         int j = length() - 1;

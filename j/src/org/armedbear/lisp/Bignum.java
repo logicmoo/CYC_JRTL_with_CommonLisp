@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.42 2003-09-19 00:05:09 piso Exp $
+ * $Id: Bignum.java,v 1.43 2003-09-19 01:46:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class Bignum extends LispObject
         return LispClass.BIGNUM;
     }
 
-    public LispObject typep(LispObject type) throws LispError
+    public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.BIGNUM)
             return T;
@@ -121,7 +121,7 @@ public final class Bignum extends LispObject
         return false;
     }
 
-    public boolean equalp(LispObject obj) throws LispError
+    public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Bignum)
             return value.equals(((Bignum)obj).value);
@@ -181,7 +181,7 @@ public final class Bignum extends LispObject
         return d;
     }
 
-    public static BigInteger getValue(LispObject obj) throws LispError
+    public static BigInteger getValue(LispObject obj) throws ConditionThrowable
     {
         try {
             return ((Bignum)obj).value;
@@ -206,7 +206,7 @@ public final class Bignum extends LispObject
         return number(value.subtract(BigInteger.ONE));
     }
 
-    public LispObject add(LispObject obj) throws LispError
+    public LispObject add(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return number(value.add(Fixnum.getBigInteger(obj)));
@@ -227,7 +227,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject subtract(LispObject obj) throws LispError
+    public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return number(value.subtract(Fixnum.getBigInteger(obj)));
@@ -249,7 +249,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject multiplyBy(LispObject obj) throws LispError
+    public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             int n = ((Fixnum)obj).getValue();
@@ -270,7 +270,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject divideBy(LispObject obj) throws LispError
+    public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return number(value, Fixnum.getBigInteger(obj));
@@ -285,7 +285,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isEqualTo(LispObject obj) throws LispError
+    public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Bignum)
             return value.equals(((Bignum)obj).value);
@@ -296,7 +296,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isNotEqualTo(LispObject obj) throws LispError
+    public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Bignum)
             return !value.equals(((Bignum)obj).value);
@@ -307,7 +307,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isLessThan(LispObject obj) throws LispError
+    public boolean isLessThan(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value.compareTo(Fixnum.getBigInteger(obj)) < 0;
@@ -322,7 +322,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isGreaterThan(LispObject obj) throws LispError
+    public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value.compareTo(Fixnum.getBigInteger(obj)) > 0;
@@ -337,7 +337,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value.compareTo(Fixnum.getBigInteger(obj)) <= 0;
@@ -352,7 +352,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
             return value.compareTo(Fixnum.getBigInteger(obj)) >= 0;

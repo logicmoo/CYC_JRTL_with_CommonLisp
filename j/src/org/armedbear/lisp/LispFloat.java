@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.44 2003-09-19 00:05:10 piso Exp $
+ * $Id: LispFloat.java,v 1.45 2003-09-19 01:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public final class LispFloat extends LispObject
         return LispClass.FLOAT;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.FLOAT)
             return T;
@@ -101,7 +101,7 @@ public final class LispFloat extends LispObject
         return false;
     }
 
-    public boolean equalp(LispObject obj) throws LispError
+    public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return value == ((LispFloat)obj).value;
@@ -146,7 +146,7 @@ public final class LispFloat extends LispObject
         return true;
     }
 
-    public static double getValue(LispObject obj) throws LispError
+    public static double getValue(LispObject obj) throws ConditionThrowable
     {
         try {
             return ((LispFloat)obj).value;
@@ -171,7 +171,7 @@ public final class LispFloat extends LispObject
         return new LispFloat(value - 1);
     }
 
-    public LispObject add(LispObject obj) throws LispError
+    public LispObject add(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return new LispFloat(value + ((LispFloat)obj).value);
@@ -188,7 +188,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject subtract(LispObject obj) throws LispError
+    public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return new LispFloat(value - ((LispFloat)obj).value);
@@ -206,7 +206,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject multiplyBy(LispObject obj) throws LispError
+    public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return new LispFloat(value * ((LispFloat)obj).value);
@@ -219,7 +219,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject divideBy(LispObject obj) throws LispError
+    public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
         if (obj.zerop())
             throw new DivisionByZero();
@@ -234,7 +234,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isEqualTo(LispObject obj) throws LispError
+    public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return value == ((LispFloat)obj).value;
@@ -249,12 +249,12 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isNotEqualTo(LispObject obj) throws LispError
+    public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
     {
         return !isEqualTo(obj);
     }
 
-    public boolean isLessThan(LispObject obj) throws LispError
+    public boolean isLessThan(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return value < ((LispFloat)obj).value;
@@ -267,7 +267,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isGreaterThan(LispObject obj) throws LispError
+    public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return value > ((LispFloat)obj).value;
@@ -280,7 +280,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return value <= ((LispFloat)obj).value;
@@ -293,7 +293,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof LispFloat)
             return value >= ((LispFloat)obj).value;
@@ -373,7 +373,7 @@ public final class LispFloat extends LispObject
     // integer-decode-float float => significand, exponent, integer-sign
     private static final Primitive1 INTEGER_DECODE_FLOAT =
         new Primitive1("integer-decode-float") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat) {
                 LispObject[] values = new LispObject[3];
@@ -403,7 +403,7 @@ public final class LispFloat extends LispObject
     // float-radix float => float-radix
     private static final Primitive1 FLOAT_RADIX =
         new Primitive1("float-radix") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat)
                 return Fixnum.TWO;
@@ -415,7 +415,7 @@ public final class LispFloat extends LispObject
     // float-digits float => float-digits
     private static final Primitive1 FLOAT_DIGITS =
         new Primitive1("float-digits") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat)
                 return new Fixnum(52);
@@ -439,11 +439,11 @@ public final class LispFloat extends LispObject
     // ### float
     // float number &optional prototype => float
     private static final Primitive FLOAT = new Primitive("float") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
             if (length < 1 || length > 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             // FIXME Ignore prototype (args[1] if present).
             return coerceToFloat(args[0]);
         }
@@ -452,7 +452,7 @@ public final class LispFloat extends LispObject
     // ### floatp
     // floatp object => generalized-boolean
     private static final Primitive1 FLOATP = new Primitive1("floatp") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.FLOATP();
         }

@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.8 2003-09-19 00:05:09 piso Exp $
+ * $Id: Extensions.java,v 1.9 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public final class Extensions extends Lisp
     private static final Primitive2 MAKE_SOCKET =
         new Primitive2("make-socket", PACKAGE_EXT, true) {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             String host = LispString.getValue(first);
             int port = Fixnum.getValue(second);

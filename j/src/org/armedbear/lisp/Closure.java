@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.54 2003-09-19 00:05:09 piso Exp $
+ * $Id: Closure.java,v 1.55 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,14 +56,14 @@ public class Closure extends Function
     private final Symbol[] variables;
 
     public Closure(LispObject lambdaList, LispObject body, Environment env)
-        throws LispError
+        throws ConditionThrowable
     {
         this(null, lambdaList, body, env);
     }
 
     public Closure(String name, LispObject lambdaList, LispObject body,
                    Environment env)
-        throws LispError
+        throws ConditionThrowable
     {
         super(name, getCurrentPackage());
         this.lambdaList = lambdaList;
@@ -259,13 +259,13 @@ public class Closure extends Function
     }
 
     private static final void invalidParameter(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         throw new LispError(String.valueOf(obj) +
             " may not be used as a variable in a lambda list");
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.COMPILED_FUNCTION)
             return NIL;
@@ -454,12 +454,12 @@ public class Closure extends Function
         if (arity >= 0) {
             // Fixed arity.
             if (args.length != arity)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             return args;
         }
         // Not fixed arity.
         if (args.length < minArgs)
-            throw new WrongNumberOfArgumentsException(this);
+            throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
         Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(environment);
         LispObject[] array = new LispObject[variables.length];
@@ -528,7 +528,7 @@ public class Closure extends Function
                 }
             } else {
                 if ((argsLeft % 2) != 0)
-                    throw new ProgramError("odd number of keyword arguments");
+                    throw new ConditionThrowable(new ProgramError("odd number of keyword arguments"));
                 LispObject[] valueArray = new LispObject[keywordParameters.length];
                 boolean[] boundpArray = new boolean[keywordParameters.length];
                 LispObject allowOtherKeysValue = null;
@@ -566,8 +566,8 @@ public class Closure extends Function
                 if (unrecognizedKeyword != null) {
                     if (!allowOtherKeys &&
                         (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
-                        throw new ProgramError("unrecognized keyword argument " +
-                                               unrecognizedKeyword);
+                        throw new ConditionThrowable(new ProgramError("unrecognized keyword argument " +
+                                                                      unrecognizedKeyword));
                 }
                 for (int n = 0; n < keywordParameters.length; n++) {
                     Parameter parameter = keywordParameters[n];
@@ -598,7 +598,7 @@ public class Closure extends Function
             // No keyword parameters.
             if (argsUsed < args.length) {
                 if (restVar == null) {
-                    throw new WrongNumberOfArgumentsException(this);
+                    throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
                 }
             }
         }
@@ -662,8 +662,8 @@ public class Closure extends Function
                 code = code.cdr();
             }
         }
-        catch (LispError e) {
-            Debug.trace(e);
+        catch (ConditionThrowable t) {
+            Debug.trace(t);
         }
         sb.append('>');
         return sb.toString();
@@ -698,7 +698,7 @@ public class Closure extends Function
 
         public Parameter(Symbol var, LispObject initForm, LispObject svar,
                          int type)
-            throws LispError
+            throws ConditionThrowable
         {
             this.var = var;
             this.initForm = initForm;
@@ -710,7 +710,7 @@ public class Closure extends Function
 
         public Parameter(Symbol keyword, Symbol var, LispObject initForm,
                          LispObject svar)
-            throws LispError
+            throws ConditionThrowable
         {
             this.var = var;
             this.initForm = initForm;

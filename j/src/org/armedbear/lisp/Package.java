@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.43 2003-09-17 14:56:53 piso Exp $
+ * $Id: Package.java,v 1.44 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public final class Package extends LispObject
         return LispClass.PACKAGE;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.PACKAGE)
             return T;
@@ -88,7 +88,7 @@ public final class Package extends LispObject
     }
 
     public final synchronized void rename(String newName, LispObject newNicks)
-        throws LispError
+        throws ConditionThrowable
     {
         ArrayList arrayList = null;
         while (newNicks != NIL) {
@@ -333,7 +333,7 @@ public final class Package extends LispObject
         return T;
     }
 
-    public synchronized void importSymbol(Symbol symbol) throws LispError
+    public synchronized void importSymbol(Symbol symbol) throws ConditionThrowable
     {
         if (symbol.getPackage() == this)
             return; // Nothing to do.
@@ -348,7 +348,7 @@ public final class Package extends LispObject
         internalSymbols.put(symbol.getName(), symbol);
     }
 
-    public synchronized void export(Symbol symbol) throws LispError
+    public synchronized void export(Symbol symbol) throws ConditionThrowable
     {
         final String symbolName = symbol.getName();
         if (symbol.getPackage() != this) {
@@ -406,7 +406,7 @@ public final class Package extends LispObject
         throw new PackageError(sb.toString());
     }
 
-    public synchronized void unexport(Symbol symbol) throws LispError
+    public synchronized void unexport(Symbol symbol) throws ConditionThrowable
     {
         final String symbolName = symbol.getName();
         if (symbol.getPackage() == this) {
@@ -429,7 +429,7 @@ public final class Package extends LispObject
         }
     }
 
-    public synchronized void shadow(String symbolName) throws LispError
+    public synchronized void shadow(String symbolName) throws ConditionThrowable
     {
         Symbol symbol = (Symbol) externalSymbols.get(symbolName);
         if (symbol != null)
@@ -448,7 +448,7 @@ public final class Package extends LispObject
         shadowingSymbols.put(symbolName, symbol);
     }
 
-    public synchronized void shadowingImport(Symbol symbol) throws LispError
+    public synchronized void shadowingImport(Symbol symbol) throws ConditionThrowable
     {
         LispObject where = NIL;
         final String symbolName = symbol.getName();
@@ -511,7 +511,7 @@ public final class Package extends LispObject
         }
     }
 
-    public final void addNickname(String s) throws LispError
+    public final void addNickname(String s) throws ConditionThrowable
     {
         // This call will throw an error if there's a naming conflict.
         Packages.addNickname(this, s);

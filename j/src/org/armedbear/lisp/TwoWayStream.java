@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: TwoWayStream.java,v 1.2 2003-05-10 14:57:25 piso Exp $
+ * $Id: TwoWayStream.java,v 1.3 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class TwoWayStream extends LispStream
         return Symbol.TWO_WAY_STREAM;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.TWO_WAY_STREAM)
             return T;
@@ -66,7 +66,7 @@ public final class TwoWayStream extends LispStream
     private static final Primitive2 MAKE_TWO_WAY_STREAM =
         new Primitive2("make-two-way-stream") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             if (!(first instanceof CharacterInputStream))
                 throw new TypeError(first, "input stream");
@@ -81,7 +81,7 @@ public final class TwoWayStream extends LispStream
     // two-way-stream => input-stream
     private static final Primitive1 TWO_WAY_STREAM_INPUT_STREAM =
         new Primitive1("two-way-stream-input-stream") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof TwoWayStream)
                 return ((TwoWayStream)arg).getInputStream();
@@ -93,7 +93,7 @@ public final class TwoWayStream extends LispStream
     // two-way-stream => output-stream
     private static final Primitive1 TWO_WAY_STREAM_OUTPUT_STREAM =
         new Primitive1("two-way-stream-output-stream") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof TwoWayStream)
                 return ((TwoWayStream)arg).getOutputStream();

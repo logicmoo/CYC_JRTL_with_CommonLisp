@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_array.java,v 1.3 2003-09-14 17:04:25 piso Exp $
+ * $Id: make_array.java,v 1.4 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,10 +29,10 @@ public final class make_array extends Primitive {
         super(name, pkg, exported);
     }
 
-    public LispObject execute(LispObject[] args) throws LispError
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         if (args.length != 9)
-            throw new WrongNumberOfArgumentsException(this);
+            throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
         LispObject dimensions = args[0];
         LispObject elementType = args[1];
         LispObject initialElement = args[2];

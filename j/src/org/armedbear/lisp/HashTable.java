@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.17 2003-09-17 15:12:41 piso Exp $
+ * $Id: HashTable.java,v 1.18 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class HashTable extends LispObject
 
     private HashTable(LispObject test, int size, LispObject rehashSize,
                       LispObject rehashThreshold)
-        throws LispError
+        throws ConditionThrowable
     {
         if (test == NIL || test == Symbol.EQ.getSymbolFunction())
             this.test = TEST_EQ;
@@ -71,7 +71,7 @@ public final class HashTable extends LispObject
         return LispClass.HASH_TABLE;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.HASH_TABLE)
             return T;
@@ -83,7 +83,7 @@ public final class HashTable extends LispObject
     // gethash key hash-table &optional default => value, present-p
     public synchronized LispObject gethash(LispObject key,
                                            LispObject defaultValue)
-        throws LispError
+        throws ConditionThrowable
     {
         LispObject[] values = new LispObject[2];
         LispObject value = (LispObject) get(key);
@@ -98,14 +98,14 @@ public final class HashTable extends LispObject
     }
 
     public synchronized LispObject puthash(LispObject key, LispObject newValue)
-        throws LispError
+        throws ConditionThrowable
     {
         put(key, newValue);
         return newValue;
     }
 
     // remhash key hash-table => generalized-boolean
-    public synchronized LispObject remhash(LispObject key) throws LispError
+    public synchronized LispObject remhash(LispObject key) throws ConditionThrowable
     {
         // A value in a Lisp hash table can never be null, so...
         return remove(key) != null ? T : NIL;
@@ -139,7 +139,7 @@ public final class HashTable extends LispObject
         return sb.toString();
     }
 
-    public LispObject get(LispObject key) throws LispError
+    public LispObject get(LispObject key) throws ConditionThrowable
     {
         int idx = hash(key);
         HashEntry e = buckets[idx];
@@ -151,7 +151,7 @@ public final class HashTable extends LispObject
         return null;
     }
 
-    public LispObject put(LispObject key, LispObject value) throws LispError
+    public LispObject put(LispObject key, LispObject value) throws ConditionThrowable
     {
         int idx = hash(key);
         HashEntry e = buckets[idx];
@@ -175,7 +175,7 @@ public final class HashTable extends LispObject
         return null;
     }
 
-    public LispObject remove(LispObject key) throws LispError
+    public LispObject remove(LispObject key) throws ConditionThrowable
     {
         int idx = hash(key);
         HashEntry e = buckets[idx];
@@ -200,7 +200,7 @@ public final class HashTable extends LispObject
         return key == null ? 0 : Math.abs(key.hashCode() % buckets.length);
     }
 
-    private final boolean equals(LispObject o1, LispObject o2) throws LispError
+    private final boolean equals(LispObject o1, LispObject o2) throws ConditionThrowable
     {
         switch (test) {
             case TEST_EQ:
@@ -276,10 +276,10 @@ public final class HashTable extends LispObject
     // ### %make-hash-table
     private static final Primitive _MAKE_HASH_TABLE =
         new Primitive("%make-hash-table", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 4)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject test = args[0];
             int size = Fixnum.getValue(args[1]);
             LispObject rehashSize = args[2];
@@ -291,11 +291,11 @@ public final class HashTable extends LispObject
     // ### gethash
     // gethash key hash-table &optional default => value, present-p
     private static final Primitive GETHASH = new Primitive("gethash") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
             if (length < 2 || length > 3)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (args[1] instanceof HashTable) {
                 LispObject key = args[0];
                 HashTable ht = (HashTable) args[1];
@@ -311,11 +311,11 @@ public final class HashTable extends LispObject
     // puthash key hash-table default &optional (value default) => value
     private static final Primitive PUTHASH =
         new Primitive("puthash", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
             if (length < 3 || length > 4)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (args[1] instanceof HashTable) {
                 LispObject key = args[0];
                 HashTable ht = (HashTable) args[1];
@@ -335,7 +335,7 @@ public final class HashTable extends LispObject
     // remhash key hash-table => generalized-boolean
     private static final Primitive2 REMHASH = new Primitive2("remhash") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             if (second instanceof HashTable) {
                 LispObject key = first;
@@ -349,7 +349,7 @@ public final class HashTable extends LispObject
     // ### sxhash
     // sxhash object => hash-code
     private static final Primitive1 SXHASH = new Primitive1("sxhash") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new Fixnum(arg.hashCode());
         }
@@ -358,7 +358,7 @@ public final class HashTable extends LispObject
     // ### hash-table-p
     private static final Primitive1 HASH_TABLE_P =
         new Primitive1("hash-table-p") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof HashTable ? T : NIL;
         }
@@ -367,7 +367,7 @@ public final class HashTable extends LispObject
     // ### hash-table-entries
     private static final Primitive1 HASH_TABLE_ENTRIES =
         new Primitive1("hash-table-entries", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof HashTable)
                 return ((HashTable)arg).ENTRIES();

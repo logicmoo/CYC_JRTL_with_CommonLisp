@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.10 2003-09-17 18:01:17 piso Exp $
+ * $Id: DisplacedArray.java,v 1.11 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class DisplacedArray extends AbstractArray
         return list3(Symbol.ARRAY, T, getDimensions());
     }
 
-    public LispObject typep(LispObject type) throws LispError
+    public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.VECTOR || type == LispClass.VECTOR)
             return VECTORP();
@@ -86,28 +86,28 @@ public final class DisplacedArray extends AbstractArray
         return dimv.length == 1;
     }
 
-    public int length() throws LispError
+    public int length() throws ConditionThrowable
     {
         if (dimv.length == 1)
             return size;
         throw new TypeError(this, "sequence");
     }
 
-    public LispObject elt(int index) throws LispError
+    public LispObject elt(int index) throws ConditionThrowable
     {
         if (dimv.length == 1)
             return getRowMajor(index);
         throw new TypeError(this, "sequence");
     }
 
-    public LispObject AREF(LispObject index) throws LispError
+    public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         if (dimv.length == 1)
             return getRowMajor(Fixnum.getValue(index));
         StringBuffer sb = new StringBuffer("AREF: ");
         sb.append("wrong number of subscripts (1) for array of rank ");
         sb.append(getRank());
-        throw new ProgramError(sb.toString());
+        throw new ConditionThrowable(new ProgramError(sb.toString()));
     }
 
     public int getRank()
@@ -123,7 +123,7 @@ public final class DisplacedArray extends AbstractArray
         return result;
     }
 
-    public int getDimension(int n) throws LispError
+    public int getDimension(int n) throws ConditionThrowable
     {
         try {
             return dimv[n];
@@ -143,14 +143,14 @@ public final class DisplacedArray extends AbstractArray
         return size;
     }
 
-    public LispObject getRowMajor(int index) throws LispError
+    public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         if (index >= 0 && index < size)
             return array.getRowMajor(index + offset);
         throw new TypeError("bad row major index " + index);
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws LispError
+    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         if (index >= 0 && index < size)
             array.setRowMajor(index + offset, newValue);
@@ -161,7 +161,7 @@ public final class DisplacedArray extends AbstractArray
     // array-displacement array => displaced-to, displaced-index-offset
     private static final Primitive1 ARRAY_DISPLACEMENT =
         new Primitive1("array-displacement") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             AbstractArray array = checkArray(arg);
             LispObject[] values = new LispObject[2];

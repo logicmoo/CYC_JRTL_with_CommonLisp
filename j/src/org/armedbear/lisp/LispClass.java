@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.13 2003-09-19 00:18:19 piso Exp $
+ * $Id: LispClass.java,v 1.14 2003-09-19 01:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,10 +109,10 @@ public final class LispClass extends LispObject
 
     // ### find-class
     private static final Primitive FIND_CLASS = new Primitive("find-class") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject obj = (LispObject) map.get(checkSymbol(args[0]));
             return obj != null ? obj : NIL;
         }
@@ -120,7 +120,7 @@ public final class LispClass extends LispObject
 
     // ### class-name
     private static final Primitive1 CLASS_NAME = new Primitive1("class-name") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 return ((LispClass)arg).symbol;

@@ -2,7 +2,7 @@
  * FillPointerOutputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.1 2003-08-10 17:46:39 piso Exp $
+ * $Id: FillPointerOutputStream.java,v 1.2 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class FillPointerOutputStream extends CharacterOutputStream
     // make-fill-pointer-output-stream string => string-stream
     private static final Primitive1 MAKE_FILL_POINTER_OUTPUT_STREAM =
         new Primitive1("make-fill-pointer-output-stream", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispString string = checkString(arg);
             if (string.getFillPointer() < 0)

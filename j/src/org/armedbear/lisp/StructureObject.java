@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.9 2003-09-17 15:05:23 piso Exp $
+ * $Id: StructureObject.java,v 1.10 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public final class StructureObject extends LispObject
     private final Symbol name;
     private final LispObject[] slots;
 
-    public StructureObject(Symbol name, LispObject list) throws LispError
+    public StructureObject(Symbol name, LispObject list) throws ConditionThrowable
     {
         this.name = name;
         slots = list.copyToArray();
@@ -45,7 +45,7 @@ public final class StructureObject extends LispObject
         return name;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == name)
             return T;
@@ -77,7 +77,7 @@ public final class StructureObject extends LispObject
     private static final Primitive2 _STRUCTURE_REF =
         new Primitive2("%structure-ref", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             try {
                 return ((StructureObject)first).slots[((Fixnum)second).getValue()];
@@ -94,7 +94,7 @@ public final class StructureObject extends LispObject
 
     private static final Primitive1 _STRUCTURE_REF_0 =
         new Primitive1("%structure-ref-0", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 return ((StructureObject)arg).slots[0];
@@ -111,7 +111,7 @@ public final class StructureObject extends LispObject
 
     private static final Primitive1 _STRUCTURE_REF_1 =
         new Primitive1("%structure-ref-1", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 return ((StructureObject)arg).slots[1];
@@ -128,7 +128,7 @@ public final class StructureObject extends LispObject
 
     private static final Primitive1 _STRUCTURE_REF_2 =
         new Primitive1("%structure-ref-2", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 return ((StructureObject)arg).slots[2];
@@ -149,7 +149,7 @@ public final class StructureObject extends LispObject
         new Primitive3("%structure-set", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
-            throws LispError
+            throws ConditionThrowable
         {
             try {
                 ((StructureObject)first).slots[((Fixnum)second).getValue()] = third;
@@ -168,7 +168,7 @@ public final class StructureObject extends LispObject
     private static final Primitive1 _STRUCTURE_SET_0 =
         new Primitive1("%structure-set-0", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             try {
                 ((StructureObject)first).slots[0] = second;
@@ -187,7 +187,7 @@ public final class StructureObject extends LispObject
     private static final Primitive1 _STRUCTURE_SET_1 =
         new Primitive1("%structure-set-1", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             try {
                 ((StructureObject)first).slots[1] = second;
@@ -206,7 +206,7 @@ public final class StructureObject extends LispObject
     private static final Primitive1 _STRUCTURE_SET_2 =
         new Primitive1("%structure-set-2", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             try {
                 ((StructureObject)first).slots[2] = second;
@@ -227,7 +227,7 @@ public final class StructureObject extends LispObject
     private static final Primitive2 _MAKE_STRUCTURE =
         new Primitive2("%make-structure", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             return new StructureObject(checkSymbol(first), checkList(second));
         }
@@ -237,7 +237,7 @@ public final class StructureObject extends LispObject
     // copy-structure structure => copy
     private static final Primitive1 COPY_STRUCTURE =
         new Primitive1("copy-structure") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 return new StructureObject((StructureObject)arg);

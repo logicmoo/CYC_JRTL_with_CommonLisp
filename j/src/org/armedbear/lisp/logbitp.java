@@ -2,7 +2,7 @@
  * logbitp.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logbitp.java,v 1.1 2003-09-10 17:25:39 piso Exp $
+ * $Id: logbitp.java,v 1.2 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class logbitp extends Primitive2
     }
 
     public LispObject execute(LispObject first, LispObject second)
-        throws LispError
+        throws ConditionThrowable
     {
         int index = -1;
         if (first instanceof Fixnum) {

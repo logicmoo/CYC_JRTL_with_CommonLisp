@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: probe_file.java,v 1.2 2003-08-10 01:25:24 piso Exp $
+ * $Id: probe_file.java,v 1.3 2003-09-19 01:46:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public final class probe_file extends Lisp
 {
     // ### probe-file
     private static final Primitive1 PROBE_FILE = new Primitive1("probe-file") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String namestring;
             if (arg instanceof LispString)

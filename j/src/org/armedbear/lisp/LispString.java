@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.57 2003-09-16 19:01:08 piso Exp $
+ * $Id: LispString.java,v 1.58 2003-09-19 01:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ public final class LispString extends AbstractVector
         return Symbol.STRING;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier instanceof Symbol) {
             if (typeSpecifier == Symbol.STRING)
@@ -113,7 +113,7 @@ public final class LispString extends AbstractVector
         return false;
     }
 
-    public boolean equalp(LispObject obj) throws LispError
+    public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;
@@ -134,7 +134,7 @@ public final class LispString extends AbstractVector
         return false;
     }
 
-    public LispObject subseq(int start, int end) throws LispError
+    public LispObject subseq(int start, int end) throws ConditionThrowable
     {
         LispString s = new LispString(end - start);
         int i = start, j = 0;
@@ -143,7 +143,7 @@ public final class LispString extends AbstractVector
         return s;
     }
 
-    public void fill(LispObject obj) throws LispError
+    public void fill(LispObject obj) throws ConditionThrowable
     {
         fill(LispCharacter.getValue(obj));
     }
@@ -154,7 +154,7 @@ public final class LispString extends AbstractVector
             array[i] = c;
     }
 
-    public void shrink(int n) throws LispError
+    public void shrink(int n) throws ConditionThrowable
     {
         if (n < array.length) {
             char[] newArray = new char[n];
@@ -167,7 +167,7 @@ public final class LispString extends AbstractVector
         throw new LispError();
     }
 
-    public LispObject reverse() throws LispError
+    public LispObject reverse() throws ConditionThrowable
     {
         int length = length();
         LispString result = new LispString(length);
@@ -177,7 +177,7 @@ public final class LispString extends AbstractVector
         return result;
     }
 
-    public void nreverse() throws LispError
+    public void nreverse() throws ConditionThrowable
     {
         int i = 0;
         int j = length() - 1;
@@ -190,7 +190,7 @@ public final class LispString extends AbstractVector
         }
     }
 
-    public LispObject getRowMajor(int index) throws LispError
+    public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         try {
             return LispCharacter.getInstance(array[index]);
@@ -201,7 +201,7 @@ public final class LispString extends AbstractVector
         }
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws LispError
+    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             array[index] = LispCharacter.getValue(newValue);
@@ -211,7 +211,7 @@ public final class LispString extends AbstractVector
         }
     }
 
-    public LispObject get(int index) throws LispError
+    public LispObject get(int index) throws ConditionThrowable
     {
         try {
             return LispCharacter.getInstance(array[index]);
@@ -222,7 +222,7 @@ public final class LispString extends AbstractVector
         }
     }
 
-    public void set(int index, LispObject newValue) throws LispError
+    public void set(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             array[index] = LispCharacter.getValue(newValue);
@@ -237,7 +237,7 @@ public final class LispString extends AbstractVector
         array[index] = c;
     }
 
-    public static String getValue(LispObject obj) throws LispError
+    public static String getValue(LispObject obj) throws ConditionThrowable
     {
         try {
             return ((LispString)obj).getValue();
@@ -271,7 +271,7 @@ public final class LispString extends AbstractVector
         return fillPointer >= 0 ? fillPointer : array.length;
     }
 
-    public LispObject elt(int index) throws LispError
+    public LispObject elt(int index) throws ConditionThrowable
     {
         int limit = fillPointer >= 0 ? fillPointer : array.length;
         if (index < 0 || index >= limit)
@@ -280,7 +280,7 @@ public final class LispString extends AbstractVector
     }
 
     // Ignores fill pointer.
-    public LispObject AREF(LispObject index) throws LispError
+    public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         try {
             return LispCharacter.getInstance(array[Fixnum.getValue(index)]);
@@ -291,7 +291,7 @@ public final class LispString extends AbstractVector
         }
     }
 
-    public LispObject remove(LispObject item) throws LispError
+    public LispObject remove(LispObject item) throws ConditionThrowable
     {
         throw new LispError("not implemented");
     }
@@ -333,7 +333,7 @@ public final class LispString extends AbstractVector
     private static final Primitive3 _MAKE_STRING =
         new Primitive3("%make-string", PACKAGE_SYS, false) {
         public LispObject execute(LispObject size, LispObject initialElement,
-                                  LispObject elementType) throws LispError
+                                  LispObject elementType) throws ConditionThrowable
         {
             final int n = Fixnum.getValue(size);
             final int limit =
@@ -364,7 +364,7 @@ public final class LispString extends AbstractVector
 
     private static final Primitive2 CHAR = new Primitive2("char") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             return checkString(first).get(Fixnum.getInt(second));
         }
@@ -373,7 +373,7 @@ public final class LispString extends AbstractVector
     private static final Primitive3 _SET_CHAR =
         new Primitive3("%set-char", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
             return third;
@@ -382,7 +382,7 @@ public final class LispString extends AbstractVector
 
     private static final Primitive2 SCHAR = new Primitive2("schar") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             return checkString(first).get(Fixnum.getInt(second));
         }
@@ -391,7 +391,7 @@ public final class LispString extends AbstractVector
     private static final Primitive3 _SET_SCHAR =
         new Primitive3("%set-schar", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
+            LispObject third) throws ConditionThrowable
         {
             checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
             return third;
@@ -402,7 +402,7 @@ public final class LispString extends AbstractVector
         new Primitive3("string-position", PACKAGE_EXT, true) {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
-            throws LispError
+            throws ConditionThrowable
         {
             char c = LispCharacter.getValue(first);
             LispString string = checkString(second);

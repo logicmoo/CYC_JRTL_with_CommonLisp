@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.32 2003-09-14 17:36:12 piso Exp $
+ * $Id: Ratio.java,v 1.33 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ public final class Ratio extends LispObject
         return Symbol.RATIO;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.RATIO)
             return T;
@@ -149,17 +149,17 @@ public final class Ratio extends LispObject
         return numerator.doubleValue() / denominator.doubleValue();
     }
 
-    public final LispObject incr() throws LispError
+    public final LispObject incr() throws ConditionThrowable
     {
         return new Ratio(numerator.add(denominator), denominator);
     }
 
-    public final LispObject decr() throws LispError
+    public final LispObject decr() throws ConditionThrowable
     {
         return new Ratio(numerator.subtract(denominator), denominator);
     }
 
-    public LispObject add(LispObject obj) throws LispError
+    public LispObject add(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             BigInteger n =
@@ -190,7 +190,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject subtract(LispObject obj) throws LispError
+    public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             BigInteger n =
@@ -222,7 +222,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject multiplyBy(LispObject obj) throws LispError
+    public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             BigInteger n = ((Fixnum)obj).getBigInteger();
@@ -243,7 +243,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject divideBy(LispObject obj) throws LispError
+    public LispObject divideBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             BigInteger n = ((Fixnum)obj).getBigInteger();
@@ -266,7 +266,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isEqualTo(LispObject obj) throws LispError
+    public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Ratio)
             return (numerator.equals(((Ratio)obj).numerator) &&
@@ -278,12 +278,12 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public boolean isNotEqualTo(LispObject obj) throws LispError
+    public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
     {
         return !isEqualTo(obj);
     }
 
-    public boolean isLessThan(LispObject obj) throws LispError
+    public boolean isLessThan(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             BigInteger n2 = ((Fixnum)obj).getBigInteger().multiply(denominator);
@@ -304,7 +304,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isGreaterThan(LispObject obj) throws LispError
+    public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             BigInteger n2 = ((Fixnum)obj).getBigInteger().multiply(denominator);
@@ -325,7 +325,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             BigInteger n2 = ((Fixnum)obj).getBigInteger().multiply(denominator);
@@ -346,7 +346,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
             BigInteger n2 = ((Fixnum)obj).getBigInteger().multiply(denominator);
@@ -367,7 +367,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public LispObject truncate(LispObject obj) throws LispError
+    public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         BigInteger n, d;
         if (obj instanceof Fixnum) {

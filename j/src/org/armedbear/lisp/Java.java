@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.7 2003-04-03 18:36:08 piso Exp $
+ * $Id: Java.java,v 1.8 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ public final class Java extends Module
     // ### jclass
     private static final Primitive1 JCLASS =
         new Primitive1("jclass", PACKAGE_JAVA) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 return new JavaObject(Class.forName(LispString.getValue(arg)));
@@ -49,10 +49,10 @@ public final class Java extends Module
     // jconstructor class-name &rest parameter-class-names
     private static final Primitive JCONSTRUCTOR =
         new Primitive("jconstructor", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             String className = LispString.getValue(args[0]);
             try {
                 final Class c = Class.forName(className);
@@ -79,10 +79,10 @@ public final class Java extends Module
     // jmethod class-ref name &rest parameter-class-names
     private static final Primitive JMETHOD =
         new Primitive("jmethod", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             String className = LispString.getValue(args[0]);
             String methodName = LispString.getValue(args[1]);
             try {
@@ -130,10 +130,10 @@ public final class Java extends Module
     // jstatic method class &rest args
     private static final Primitive JSTATIC =
         new Primitive("jstatic", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             try {
                 Method m = null;
                 LispObject methodRef = args[0];
@@ -190,10 +190,10 @@ public final class Java extends Module
     // ### jnew
     // jnew constructor &rest args
     private static final Primitive JNEW = new Primitive("jnew", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject classRef = args[0];
             try {
                 Constructor constructor = (Constructor) JavaObject.getObject(classRef);
@@ -216,10 +216,10 @@ public final class Java extends Module
     // ### jcall
     // jcall method instance &rest args
     private static final Primitive JCALL = new Primitive("jcall", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             try {
                 Method method = (Method) JavaObject.getObject(args[0]);
                 Object instance;
@@ -269,7 +269,7 @@ public final class Java extends Module
         return Class.forName(className);
     }
 
-    private static final LispObject makeLispObject(Object obj) throws LispError
+    private static final LispObject makeLispObject(Object obj) throws ConditionThrowable
     {
         if (obj == null)
             return NIL;

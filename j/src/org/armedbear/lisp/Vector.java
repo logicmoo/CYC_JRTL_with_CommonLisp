@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.23 2003-09-17 15:18:06 piso Exp $
+ * $Id: Vector.java,v 1.24 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public class Vector extends AbstractVector
         this.capacity = capacity;
     }
 
-    public Vector(LispObject list) throws LispError
+    public Vector(LispObject list) throws ConditionThrowable
     {
         elements = list.copyToArray();
         capacity = elements.length;
@@ -86,7 +86,7 @@ public class Vector extends AbstractVector
         return fillPointer >= 0 ? fillPointer : capacity;
     }
 
-    public LispObject elt(int index) throws LispError
+    public LispObject elt(int index) throws ConditionThrowable
     {
         final int limit = length();
         if (index < 0 || index >= limit)
@@ -95,7 +95,7 @@ public class Vector extends AbstractVector
     }
 
     // Ignores fill pointer.
-    public LispObject AREF(LispObject index) throws LispError
+    public LispObject AREF(LispObject index) throws ConditionThrowable
     {
         try {
             return elements[Fixnum.getValue(index)];
@@ -106,7 +106,7 @@ public class Vector extends AbstractVector
         }
     }
 
-    public LispObject getRowMajor(int index) throws LispError
+    public LispObject getRowMajor(int index) throws ConditionThrowable
     {
         try {
             return elements[index];
@@ -117,7 +117,7 @@ public class Vector extends AbstractVector
         }
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws LispError
+    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             elements[index] = newValue;
@@ -127,7 +127,7 @@ public class Vector extends AbstractVector
         }
     }
 
-    public LispObject get(int index) throws LispError
+    public LispObject get(int index) throws ConditionThrowable
     {
         try {
             return elements[index];
@@ -138,7 +138,7 @@ public class Vector extends AbstractVector
         }
     }
 
-    public void set(int index, LispObject newValue) throws LispError
+    public void set(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             elements[index] = newValue;
@@ -148,7 +148,7 @@ public class Vector extends AbstractVector
         }
     }
 
-    public LispObject subseq(int start, int end) throws LispError
+    public LispObject subseq(int start, int end) throws ConditionThrowable
     {
         Vector v = new Vector(end - start);
         int i = start, j = 0;
@@ -157,13 +157,13 @@ public class Vector extends AbstractVector
         return v;
     }
 
-    public void fill(LispObject obj) throws LispError
+    public void fill(LispObject obj) throws ConditionThrowable
     {
         for (int i = capacity; i-- > 0;)
             elements[i] = obj;
     }
 
-    public void shrink(int n) throws LispError
+    public void shrink(int n) throws ConditionThrowable
     {
         if (n < elements.length) {
             LispObject[] newArray = new LispObject[n];
@@ -177,7 +177,7 @@ public class Vector extends AbstractVector
         throw new LispError();
     }
 
-    public LispObject reverse() throws LispError
+    public LispObject reverse() throws ConditionThrowable
     {
         int length = length();
         Vector result = new Vector(length);
@@ -187,7 +187,7 @@ public class Vector extends AbstractVector
         return result;
     }
 
-    public void nreverse() throws LispError
+    public void nreverse() throws ConditionThrowable
     {
         int i = 0;
         int j = length() - 1;

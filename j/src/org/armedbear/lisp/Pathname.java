@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.11 2003-09-19 00:05:11 piso Exp $
+ * $Id: Pathname.java,v 1.12 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ public final class Pathname extends LispObject
         return Symbol.PATHNAME;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.PATHNAME)
             return T;
@@ -148,7 +148,7 @@ public final class Pathname extends LispObject
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 8)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             LispObject host = args[0];
             LispObject device = args[1];
             LispObject directory = args[2];

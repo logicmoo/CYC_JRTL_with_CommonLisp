@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StringOutputStream.java,v 1.2 2003-06-20 19:49:59 piso Exp $
+ * $Id: StringOutputStream.java,v 1.3 2003-09-19 01:46:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,10 +52,10 @@ public final class StringOutputStream extends CharacterOutputStream
     // make-string-output-stream &key element-type => string-stream
     private static final Primitive MAKE_STRING_OUTPUT_STREAM =
         new Primitive("make-string-output-stream") {
-        public LispObject execute(LispObject[] args) throws LispError
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             // FIXME Ignore arg for now.
             return new StringOutputStream();
         }
@@ -65,7 +65,7 @@ public final class StringOutputStream extends CharacterOutputStream
     // get-output-stream-string string-output-stream => string
     private static final Primitive1 GET_OUTPUT_STREAM_STRING =
         new Primitive1("get-output-stream-string") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof StringOutputStream)
                 return ((StringOutputStream)arg).getString();

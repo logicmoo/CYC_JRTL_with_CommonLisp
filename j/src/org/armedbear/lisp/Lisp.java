@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.133 2003-09-19 00:05:10 piso Exp $
+ * $Id: Lisp.java,v 1.134 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,8 +49,8 @@ public abstract class Lisp
             PACKAGE_EXT.addNickname("EXT");
             PACKAGE_EXT.usePackage(PACKAGE_CL);
         }
-        catch (LispError e) {
-            e.printStackTrace();
+        catch (Throwable t) {
+            t.printStackTrace();
         }
     }
     public static final Package PACKAGE_KEYWORD =
@@ -347,7 +347,7 @@ public abstract class Lisp
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
                     return closure.execute(evalList(args, env, thread));
                 } else
-                    throw new ProgramError("illegal function object: " + first);
+                    throw new ConditionThrowable(new ProgramError("illegal function object: " + first));
             }
         } else
             return obj;
@@ -451,7 +451,7 @@ public abstract class Lisp
         return list;
     }
 
-    public static Symbol checkSymbol(LispObject obj) throws LispError
+    public static Symbol checkSymbol(LispObject obj) throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -463,7 +463,7 @@ public abstract class Lisp
         }
     }
 
-    public static final Cons checkCons(LispObject obj) throws LispError
+    public static final Cons checkCons(LispObject obj) throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -476,7 +476,7 @@ public abstract class Lisp
     }
 
     public static final LispObject checkList(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -486,7 +486,7 @@ public abstract class Lisp
     }
 
     public static final AbstractArray checkArray(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -499,7 +499,7 @@ public abstract class Lisp
     }
 
     public static final AbstractVector checkVector(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -512,7 +512,7 @@ public abstract class Lisp
     }
 
     public static final LispString checkString(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -524,7 +524,7 @@ public abstract class Lisp
         }
     }
 
-    public static final LispString string(LispObject arg) throws LispError
+    public static final LispString string(LispObject arg) throws ConditionThrowable
     {
         if (arg instanceof LispString)
             return (LispString) arg;
@@ -536,7 +536,7 @@ public abstract class Lisp
             " cannot be coerced to a string");
     }
 
-    public static final String javaString(LispObject arg) throws LispError
+    public static final String javaString(LispObject arg) throws ConditionThrowable
     {
         if (arg instanceof LispString)
             return ((LispString)arg).getValue();
@@ -560,7 +560,7 @@ public abstract class Lisp
 
     public static final LispObject number(BigInteger numerator,
                                           BigInteger denominator)
-        throws LispError
+        throws ConditionThrowable
     {
         if (denominator.signum() == 0)
             throw new DivisionByZero();
@@ -646,7 +646,7 @@ public abstract class Lisp
     }
 
     public static final LispCharacter checkCharacter(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -659,7 +659,7 @@ public abstract class Lisp
     }
 
     public static final Package checkPackage(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -672,7 +672,7 @@ public abstract class Lisp
     }
 
     public static final Function checkFunction(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -685,7 +685,7 @@ public abstract class Lisp
     }
 
     public static final LispStream checkStream(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -698,7 +698,7 @@ public abstract class Lisp
     }
 
     public static final CharacterInputStream checkInputStream(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -710,7 +710,7 @@ public abstract class Lisp
     }
 
     public static final CharacterOutputStream checkOutputStream(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -722,7 +722,7 @@ public abstract class Lisp
     }
 
     public static final Readtable checkReadtable(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -735,7 +735,7 @@ public abstract class Lisp
     }
 
     public static final Environment checkEnvironment(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
@@ -748,7 +748,7 @@ public abstract class Lisp
     }
 
     public static final Function coerceToFunction(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj instanceof Function)
             return (Function) obj;
@@ -763,7 +763,7 @@ public abstract class Lisp
 
     // Returns package or throws exception.
     public static final Package coerceToPackage(LispObject obj)
-        throws LispError
+        throws ConditionThrowable
     {
         if (obj instanceof Package)
             return (Package) obj;
@@ -776,7 +776,7 @@ public abstract class Lisp
     // Property lists.
     public static final LispObject get(Symbol symbol, LispObject indicator,
                                        LispObject defaultValue)
-        throws LispError
+        throws ConditionThrowable
     {
         LispObject result = get(symbol, indicator);
         return result != null ? result : defaultValue;
@@ -784,7 +784,7 @@ public abstract class Lisp
 
     // Returns null if there is no property with the specified indicator.
     public static final LispObject get(Symbol symbol, LispObject indicator)
-        throws LispError
+        throws ConditionThrowable
     {
         LispObject list = checkList(symbol.getPropertyList());
         while (list != NIL) {
@@ -798,7 +798,7 @@ public abstract class Lisp
 
     public static final LispObject put(Symbol symbol, LispObject indicator,
                                        LispObject value)
-        throws LispError
+        throws ConditionThrowable
     {
         LispObject list = checkList(symbol.getPropertyList());
         while (list != NIL) {
@@ -824,7 +824,7 @@ public abstract class Lisp
 
     // Used by jvm compiler.
     public static final Symbol internInPackage(String name, String packageName)
-        throws LispError
+        throws ConditionThrowable
     {
         Package pkg = Packages.findPackage(packageName);
         if (pkg == null)
@@ -838,8 +838,8 @@ public abstract class Lisp
         try {
             pkg.export(symbol); // FIXME Inefficient!
         }
-        catch (LispError e) {
-            Debug.trace(e);
+        catch (ConditionThrowable t) {
+            Debug.trace(t);
         }
         return symbol;
     }
@@ -860,8 +860,8 @@ public abstract class Lisp
         try {
             pkg.export(symbol); // FIXME Inefficient!
         }
-        catch (LispError e) {
-            Debug.trace(e);
+        catch (ConditionThrowable t) {
+            Debug.trace(t);
         }
         symbol.setSpecial(true);
         symbol.setSymbolValue(value);
@@ -875,8 +875,8 @@ public abstract class Lisp
         try {
             pkg.export(symbol); // FIXME Inefficient!
         }
-        catch (LispError e) {
-            Debug.trace(e);
+        catch (ConditionThrowable t) {
+            Debug.trace(t);
         }
         symbol.setConstant(true);
         symbol.setSymbolValue(value);
@@ -936,7 +936,7 @@ public abstract class Lisp
         return (CharacterInputStream) _STANDARD_INPUT_.symbolValueNoThrow();
     }
 
-    public static final CharacterOutputStream getStandardOutput() throws LispError
+    public static final CharacterOutputStream getStandardOutput() throws ConditionThrowable
     {
         return checkOutputStream(_STANDARD_OUTPUT_.symbolValueNoThrow());
     }
@@ -974,7 +974,7 @@ public abstract class Lisp
 
     public static final Primitive0 DEBUG =
         new Primitive0("%debug", PACKAGE_SYS, false) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             debug = true;
             return LispThread.currentThread().nothing();
@@ -983,7 +983,7 @@ public abstract class Lisp
 
     public static final Primitive0 NODEBUG =
         new Primitive0("%nodebug", PACKAGE_SYS, false) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             if (debug) {
@@ -999,7 +999,7 @@ public abstract class Lisp
     // ### start-profiler
     public static final Primitive0 START_PROFILER =
         new Primitive0("start-profiler", PACKAGE_EXT, true) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             CharacterOutputStream out = getStandardOutput();
             out.freshLine();
@@ -1029,7 +1029,7 @@ public abstract class Lisp
     // ### stop-profiler
     public static final Primitive0 STOP_PROFILER =
         new Primitive0("stop-profiler", PACKAGE_EXT, true) {
-        public LispObject execute() throws LispError
+        public LispObject execute() throws ConditionThrowable
         {
             CharacterOutputStream out = getStandardOutput();
             out.freshLine();

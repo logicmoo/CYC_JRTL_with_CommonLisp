@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.10 2003-09-19 00:05:10 piso Exp $
+ * $Id: LispThread.java,v 1.11 2003-09-19 01:46:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,7 +215,7 @@ public final class LispThread extends LispObject
         stack.clear();
     }
 
-    public void checkStack() throws LispError
+    public void checkStack() throws ConditionThrowable
     {
         if (stack.size() > 0) {
             getStandardOutput().writeLine("stack depth = " + stack.size());
@@ -300,8 +300,8 @@ public final class LispThread extends LispObject
                 }
                 stream.print(')');
             }
-            catch (LispError e) {
-                Debug.trace(e);
+            catch (ConditionThrowable t) {
+                Debug.trace(t);
             }
         } else {
             stream.terpri();
@@ -325,7 +325,7 @@ public final class LispThread extends LispObject
     // ### make-thread
     private static final Primitive1 MAKE_THREAD =
         new Primitive1("make-thread", PACKAGE_EXT, true) {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Function fun = checkFunction(arg);
             return new LispThread(fun);
@@ -334,7 +334,7 @@ public final class LispThread extends LispObject
 
     // ### sleep
     private static final Primitive1 SLEEP = new Primitive1("sleep") {
-        public LispObject execute(LispObject arg) throws LispError
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             double d =
                 ((LispFloat)arg.multiplyBy(new LispFloat(1000))).getValue();

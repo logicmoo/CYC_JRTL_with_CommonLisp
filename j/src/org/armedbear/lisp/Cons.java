@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.26 2003-09-17 14:59:50 piso Exp $
+ * $Id: Cons.java,v 1.27 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public final class Cons extends LispObject
         return LispClass.CONS;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.LIST)
             return T;
@@ -109,17 +109,17 @@ public final class Cons extends LispObject
         this.cdr = cdr;
     }
 
-    public final LispObject cadr() throws LispError
+    public final LispObject cadr() throws ConditionThrowable
     {
         return cdr.car();
     }
 
-    public final LispObject cddr() throws LispError
+    public final LispObject cddr() throws ConditionThrowable
     {
         return cdr.cdr();
     }
 
-    public final boolean equal(LispObject obj) throws LispError
+    public final boolean equal(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;
@@ -130,7 +130,7 @@ public final class Cons extends LispObject
         return false;
     }
 
-    public final boolean equalp(LispObject obj) throws LispError
+    public final boolean equalp(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;
@@ -141,7 +141,7 @@ public final class Cons extends LispObject
         return false;
     }
 
-    public final int length() throws LispError
+    public final int length() throws ConditionThrowable
     {
         int length = 0;
         LispObject obj = this;
@@ -157,7 +157,7 @@ public final class Cons extends LispObject
         return length;
     }
 
-    public LispObject elt(int index) throws LispError
+    public LispObject elt(int index) throws ConditionThrowable
     {
         if (index < 0) {
             throw new TypeError("ELT: invalid index " + index + " for " +
@@ -197,7 +197,7 @@ public final class Cons extends LispObject
         return NIL;
     }
 
-    public LispObject remove(LispObject item) throws LispError
+    public LispObject remove(LispObject item) throws ConditionThrowable
     {
         LispObject result = NIL;
         LispObject splice = null;
@@ -217,7 +217,7 @@ public final class Cons extends LispObject
         return result;
     }
 
-    public final LispObject[] copyToArray() throws LispError
+    public final LispObject[] copyToArray() throws ConditionThrowable
     {
         final int length = length();
         LispObject[] array = new LispObject[length];

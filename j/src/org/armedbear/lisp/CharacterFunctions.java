@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterFunctions.java,v 1.2 2003-06-26 02:36:14 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.3 2003-09-19 01:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,15 +26,15 @@ public final class CharacterFunctions extends Lisp
     // ### char=
     private static final Primitive CHAR_EQUALS = new Primitive("char=") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             return LispCharacter.getValue(first) == LispCharacter.getValue(second) ? T : NIL;
         }
-        public LispObject execute(LispObject[] array) throws LispError
+        public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
             if (length == 0)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 final char c0 = LispCharacter.getValue(array[0]);
                 for (int i = 0; i < length; i++) {
@@ -49,7 +49,7 @@ public final class CharacterFunctions extends Lisp
     // ### char-equal
     private static final Primitive CHAR_EQUAL = new Primitive("char-equal") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             char c1 = LispCharacter.getValue(first);
             char c2 = LispCharacter.getValue(second);
@@ -61,11 +61,11 @@ public final class CharacterFunctions extends Lisp
                 return T;
             return NIL;
         }
-        public LispObject execute(LispObject[] array) throws LispError
+        public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
             if (length == 0)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 final char c0 = LispCharacter.getValue(array[0]);
                 for (int i = 1; i < length; i++) {
@@ -87,17 +87,17 @@ public final class CharacterFunctions extends Lisp
     private static final Primitive CHAR_GREATERP =
         new Primitive("char-greaterp") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             char c1 = Character.toUpperCase(LispCharacter.getValue(first));
             char c2 = Character.toUpperCase(LispCharacter.getValue(second));
             return c1 > c2 ? T : NIL;
         }
-        public LispObject execute(LispObject[] array) throws LispError
+        public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
             if (length == 0)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
@@ -115,17 +115,17 @@ public final class CharacterFunctions extends Lisp
     private static final Primitive CHAR_NOT_GREATERP =
         new Primitive("char-not-greaterp") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             char c1 = Character.toUpperCase(LispCharacter.getValue(first));
             char c2 = Character.toUpperCase(LispCharacter.getValue(second));
             return c1 <= c2 ? T : NIL;
         }
-        public LispObject execute(LispObject[] array) throws LispError
+        public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
             if (length == 0)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
@@ -143,17 +143,17 @@ public final class CharacterFunctions extends Lisp
     private static final Primitive CHAR_LESSP =
         new Primitive("char-lessp") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             char c1 = Character.toUpperCase(LispCharacter.getValue(first));
             char c2 = Character.toUpperCase(LispCharacter.getValue(second));
             return c1 < c2 ? T : NIL;
         }
-        public LispObject execute(LispObject[] array) throws LispError
+        public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
             if (length == 0)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
@@ -171,17 +171,17 @@ public final class CharacterFunctions extends Lisp
     private static final Primitive CHAR_NOT_LESSP =
         new Primitive("char-not-lessp") {
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError
+            throws ConditionThrowable
         {
             char c1 = Character.toUpperCase(LispCharacter.getValue(first));
             char c2 = Character.toUpperCase(LispCharacter.getValue(second));
             return c1 >= c2 ? T : NIL;
         }
-        public LispObject execute(LispObject[] array) throws LispError
+        public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
             if (length == 0)
-                throw new WrongNumberOfArgumentsException(this);
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
