@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.144 2005-03-06 16:26:15 piso Exp $
+ * $Id: Editor.java,v 1.145 2005-03-06 19:35:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2460,8 +2460,8 @@ public final class Editor extends JPanel implements Constants,
     }
 
     private KeyMap requestedKeyMap;
-
     private EventSequence currentEventSequence;
+    private boolean local;
 
     public boolean handleJEvent(JEvent event)
     {
@@ -2473,20 +2473,49 @@ public final class Editor extends JPanel implements Constants,
             insertKeyTextInternal(keyChar, keyCode, modifiers);
             return true;
         }
+
+        KeyMapping mapping = null;
         if (requestedKeyMap != null) {
             if (checkKeyboardQuit(event)) {
                 requestedKeyMap = null;
                 currentEventSequence = null;
+                local = false;
                 status("");
                 return false;
             }
+            mapping = requestedKeyMap.lookup(keyChar, keyCode, modifiers);
+            // "When both the global and local definitions of a key are other
+            // keymaps, the next character is looked up in both keymaps, with
+            // the local definition overriding the global one. The character
+            // after the `C-x' is looked up in both the major mode's own keymap
+            // for redefined `C-x' commands and in `ctl-x-map'. If the major
+            // mode's own keymap for `C-x' commands contains `nil', the
+            // definition from the global keymap for `C-x' commands is used."
+            // (from the documentation for xemacs 21.4.17)
+            if (mapping == null && local) {
+                // Not found in local keymap.
+                EventSequence copy = currentEventSequence.copy();
+                copy.addEvent(event);
+                mapping = KeyMap.getGlobalKeyMap().lookupEventSequence(copy);
+            }
+        } else {
+            // Look in mode-specific key map.
+            mapping =
+                buffer.getMode().getKeyMap().lookup(keyChar, keyCode, modifiers);
+            if (mapping != null)
+                local = true;
+            else
+                // Look in global key map.
+                mapping = KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode,
+                                                          modifiers);
         }
-        KeyMapping mapping = getKeyMapping(keyChar, keyCode, modifiers);
+
         if (mapping == null) {
             if (event.getID() == JEvent.KEY_TYPED) {
                 // Reset.
                 requestedKeyMap = null;
                 currentEventSequence = null;
+                local = false;
             }
             return false;
         }
@@ -2497,7 +2526,6 @@ public final class Editor extends JPanel implements Constants,
                 if (currentEventSequence == null)
                     currentEventSequence = new EventSequence();
                 currentEventSequence.addEvent(event);
-                Log.debug(String.valueOf(currentEventSequence));
                 requestedKeyMap = (KeyMap) command;
                 status(currentEventSequence.getStatusText() + "-");
                 return true;
@@ -2509,6 +2537,7 @@ public final class Editor extends JPanel implements Constants,
             if (command instanceof String) {
                 requestedKeyMap = null;
                 currentEventSequence = null;
+                local = false;
                 String commandString = (String) command;
                 if (commandString.length() > 0 && commandString.charAt(0) == '(') {
                     // A Lisp form.
@@ -2527,6 +2556,7 @@ public final class Editor extends JPanel implements Constants,
             } else if (command instanceof LispObject) {
                 requestedKeyMap = null;
                 currentEventSequence = null;
+                local = false;
                 try {
                     LispThread.currentThread().execute(Lisp.coerceToFunction((LispObject)command));
                 }
@@ -2541,19 +2571,8 @@ public final class Editor extends JPanel implements Constants,
 
     public KeyMapping getKeyMapping(char keyChar, int keyCode, int modifiers)
     {
-        if (requestedKeyMap != null) {
-            KeyMapping mapping =
-                requestedKeyMap.lookup(keyChar, keyCode, modifiers);
-            // FIXME From the xemacs 21.4.17 documentation:
-            // "When both the global and local definitions of a key are other
-            // keymaps, the next character is looked up in both keymaps, with
-            // the local definition overriding the global one. The character
-            // after the `C-x' is looked up in both the major mode's own keymap
-            // for redefined `C-x' commands and in `ctl-x-map'. If the major
-            // mode's own keymap for `C-x' commands contains `nil', the
-            // definition from the global keymap for `C-x' commands is used."
-            return mapping;
-        }
+        if (requestedKeyMap != null)
+            return requestedKeyMap.lookup(keyChar, keyCode, modifiers);
         // Look in mode-specific key map.
         KeyMapping mapping =
             buffer.getMode().getKeyMap().lookup(keyChar, keyCode, modifiers);
