@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.68 2003-06-13 16:38:31 piso Exp $
+ * $Id: Editor.java,v 1.69 2003-06-13 17:04:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7169,6 +7169,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public static synchronized void setLispInitialized(boolean b)
     {
         isLispInitialized = b;
+    }
+
+    public static void invokeHook(String hook)
+    {
+        invokeHook(hook, null);
     }
 
     public static void invokeHook(String hook, String args)
