@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.44 2004-04-30 16:14:46 piso Exp $
+ * $Id: LispClass.java,v 1.45 2004-05-03 14:21:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -202,13 +202,15 @@ public class LispClass extends StandardObject
 
     // ### find-class
     // find-class symbol &optional errorp environment => class
-    private static final Primitive FIND_CLASS = new Primitive("find-class","symbol &optional errorp environment") {
+    private static final Primitive FIND_CLASS =
+        new Primitive("find-class", "symbol &optional errorp environment")
+    {
         public LispObject execute(LispObject symbol) throws ConditionThrowable
         {
             LispObject c = findClass(checkSymbol(symbol));
             if (c == null) {
                 StringBuffer sb = new StringBuffer("There is no class named ");
-                sb.append(symbol);
+                sb.append(symbol.writeToString());
                 sb.append('.');
                 return signal(new LispError(sb.toString()));
             }
@@ -221,7 +223,7 @@ public class LispClass extends StandardObject
             if (c == null) {
                 if (errorp != NIL) {
                     StringBuffer sb = new StringBuffer("There is no class named ");
-                    sb.append(symbol);
+                    sb.append(symbol.writeToString());
                     sb.append('.');
                     return signal(new LispError(sb.toString()));
                 }
