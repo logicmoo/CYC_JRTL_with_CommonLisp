@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.4 2002-11-15 17:20:16 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.5 2002-11-15 20:27:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,6 +92,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         NewsGroupSummaryEntry nextEntry =
             (NewsGroupSummaryEntry) summary.getNextUndeleted(entry);
         if (nextEntry != null) {
+            summary.setDotEntry(nextEntry);
             empty();
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                 Editor ed = it.nextEditor();
