@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.75 2004-02-08 18:24:05 piso Exp $
+;;; $Id: clos.lisp,v 1.76 2004-02-08 20:52:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -854,6 +854,7 @@
 (defun ensure-generic-function (function-name
                                 &rest all-keys
                                 &key
+                                lambda-list
                                 (generic-function-class the-class-standard-gf)
                                 (method-class the-class-standard-method)
                                 (method-combination 'standard)
@@ -862,7 +863,14 @@
     (resolve function-name))
   (let ((gf (find-generic-function function-name nil)))
     (if gf
-        gf
+        (progn
+          (unless (or (null (generic-function-methods gf))
+                      (lambda-lists-congruent-p lambda-list (generic-function-lambda-list gf)))
+            (error 'simple-error
+                   :format-control "The lambda list ~S is incompatible with the existing methods of ~S."
+                   :format-arguments (list lambda-list gf)))
+          (setf (generic-function-lambda-list gf) lambda-list)
+          gf)
         (progn
           (when (fboundp function-name)
             (error 'program-error
@@ -938,16 +946,17 @@
     (function-name qualifiers lambda-list specializers documentation body)
     (parse-defmethod args)
     `(progn
-      (ensure-generic-function
-       ',function-name
-       :lambda-list ',lambda-list)
-      (ensure-method (find-generic-function ',function-name)
-                     :lambda-list ',lambda-list
-                     :qualifiers ',qualifiers
-                     :specializers ',specializers
-                     :documentation ,documentation
-                     :body ',body
-                     :environment (top-level-environment)))))
+       (unless (find-generic-function ',function-name nil)
+         (ensure-generic-function
+          ',function-name
+          :lambda-list ',lambda-list))
+       (ensure-method (find-generic-function ',function-name)
+                      :lambda-list ',lambda-list
+                      :qualifiers ',qualifiers
+                      :specializers ',specializers
+                      :documentation ,documentation
+                      :body ',body
+                      :environment (top-level-environment)))))
 
 (defun canonicalize-specializers (specializers)
   (mapcar #'canonicalize-specializer specializers))
