@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.42 2003-08-10 00:56:17 piso Exp $
+ * $Id: Autoload.java,v 1.43 2003-08-10 01:25:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,6 +175,7 @@ public final class Autoload extends Function
         autoload("import", "PackageFunctions");
         autoload("list-all-packages", "PackageFunctions");
         autoload("make-string-output-stream", "StringOutputStream");
+        autoload("namestring", "Pathname");
         autoload("package-name", "PackageFunctions");
         autoload("package-nicknames", "PackageFunctions");
         autoload("package-shadowing-symbols", "PackageFunctions");
