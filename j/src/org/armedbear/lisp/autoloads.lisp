@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.179 2005-02-26 17:36:52 piso Exp $
+;;; $Id: autoloads.lisp,v 1.180 2005-03-19 19:58:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -145,6 +145,7 @@
 (autoload-macro 'with-output-to-string)
 (autoload 'ensure-directories-exist)
 (autoload 'coerce)
+(autoload 'read-from-string)
 (autoload 'read-sequence)
 (autoload 'write-sequence)
 (autoload 'make-load-form-saving-slots)
