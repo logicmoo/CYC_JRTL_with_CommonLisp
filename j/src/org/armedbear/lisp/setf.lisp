@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.19 2003-08-15 14:30:02 piso Exp $
+;;; $Id: setf.lisp,v 1.20 2003-08-24 16:43:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,51 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
-(export '(setf incf decf fdefinition defsetf))
+(defconstant *setf-expander* (make-symbol "SETF-EXPANDER"))
+
+(defun get-setf-expansion (form &optional environment)
+  (cond ((symbolp form)
+         (let ((new-var (gensym)))
+           (values nil nil (list new-var)
+                   `(setq ,form ,new-var) form)))
+	((get (car form) *setf-expander*)
+	 (let ((vars (mapcar #'(lambda (x) (gensym)) (cdr form)))
+	       (store (gensym)))
+	   (values vars
+                   (cdr form)
+                   (list store)
+                   `(,(get (car form) *setf-expander*)
+                      ,@vars ,store)
+		   (cons (car form) vars))))
+        (t
+         (error "no SETF expansion for ~S" form))))
+
+
+;;; ROTATEF (from GCL)
+(defmacro rotatef (&rest rest )
+  (do ((r rest (cdr r))
+       (pairs nil)
+       (stores nil)
+       (store-forms nil)
+       (access-forms nil))
+      ((endp r)
+       (setq stores (nreverse stores))
+       (setq store-forms (nreverse store-forms))
+       (setq access-forms (nreverse access-forms))
+       `(let* ,(nconc pairs
+		      (mapcar #'list stores (cdr access-forms))
+		      (list (list (car (last stores)) (car access-forms))))
+          ,@store-forms
+          nil))
+    (multiple-value-bind (vars vals stores1 store-form access-form)
+      (get-setf-expansion (car r))
+      (setq pairs (nconc pairs (mapcar #'list vars vals)))
+      (setq stores (cons (car stores1) stores))
+      (setq store-forms (cons store-form store-forms))
+      (setq access-forms (cons access-form access-forms)))))
+
 
 (defmacro setf (&rest args)
   (let ((n-args (length args)))
@@ -82,8 +124,6 @@
     (progn
       (replace sequence v :start1 start :end1 end)
       v)))
-
-(defconstant *setf-expander* (make-symbol "SETF-EXPANDER"))
 
 (defmacro defsetf (access-function update-function)
   `(%put ',access-function *setf-expander* ',update-function))
