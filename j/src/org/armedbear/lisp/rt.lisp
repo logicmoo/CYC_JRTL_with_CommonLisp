@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.145 2003-12-15 19:08:51 piso Exp $
+;;; $Id: rt.lisp,v 1.146 2003-12-20 15:22:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -97,10 +97,11 @@
                 (if (= (length `,values) 1)
                     (car `,values)
                     `,values))
-        (format t "    Actual value: ~S~%"
-                (if (= (length r) 1)
-                    (car r)
-                    r))
+        (let ((r (if (= (length r) 1) (car r) r)))
+          (format t "   Actual value: ~S" r)
+          (when (typep r 'condition)
+            (format t " [\"~A\"]" r))
+          (terpri))
         (finish-output))
       (if passed (incf *passed*) (incf *failed*)))))
 
