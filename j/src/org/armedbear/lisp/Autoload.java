@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.206 2004-11-06 20:33:02 piso Exp $
+ * $Id: Autoload.java,v 1.207 2004-11-06 20:57:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -483,6 +483,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "puthash", "HashTable");
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "std-instance-slots", "StandardObject");
+        autoload(PACKAGE_SYS, "std-slot-boundp", "StandardObject");
         autoload(PACKAGE_SYS, "std-slot-value", "StandardObject");
     }
 }

@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.32 2004-11-06 20:34:02 piso Exp $
+ * $Id: StandardObject.java,v 1.33 2004-11-06 20:55:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,6 +225,41 @@ public class StandardObject extends LispObject
             catch (ClassCastException e) {
                 return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
             }
+        }
+    };
+
+    private static final Primitive STD_SLOT_BOUNDP =
+        new Primitive("std-slot-boundp", PACKAGE_SYS, false,
+                      "instance slot-name")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            StandardObject instance;
+            try {
+                instance = (StandardObject) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+            Layout layout = instance.getInstanceLayout();
+            int index = layout.getSlotIndex(second);
+            if (index >= 0) {
+                // Found instance slot.
+                LispObject value = instance.slots.getRowMajor(index);
+                return value != UNBOUND_SLOT_VALUE ? T : NIL;
+            }
+            // Check for class slot.
+            LispObject location = layout.getClassSlotLocation(second);
+            if (location != null) {
+                LispObject value = location.cdr();
+                return value != UNBOUND_SLOT_VALUE ? T : NIL;
+            }
+            LispObject value =
+                Symbol.SLOT_MISSING.execute(instance.getLispClass(),
+                                            instance, second,
+                                            Symbol.SLOT_BOUNDP);
+            return value != NIL ? T : NIL;
         }
     };
 
