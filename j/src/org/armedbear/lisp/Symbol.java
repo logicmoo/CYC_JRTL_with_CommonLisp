@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.141 2004-06-15 18:57:17 piso Exp $
+ * $Id: Symbol.java,v 1.142 2004-07-20 04:33:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -514,70 +514,7 @@ public class Symbol extends LispObject
                 return invert(name);
         }
         // Printer escaping is enabled.
-        boolean escape = false;
-        final int length = name.length();
-        if (length == 0)
-            escape = true;
-        else if (name.charAt(0) == '#')
-            escape = true;
-        else {
-            int radix;
-            try {
-                radix = ((Fixnum)_PRINT_BASE_.symbolValue(thread)).value;
-            }
-            catch (ClassCastException e) {
-                signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
-                // Not reached.
-                return null;
-            }
-            if (radix < 2 || radix > 36) {
-                signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
-                // Not reached.
-                return null;
-            }
-            boolean seenNonDigit = false;
-            for (int i = length; i-- > 0;) {
-                char c = name.charAt(i);
-                if ("(),|\\`'\";".indexOf(c) >= 0) {
-                    escape = true;
-                    break;
-                }
-                if (Character.isWhitespace(c)) {
-                    escape = true;
-                    break;
-                }
-                if (readtableCase == Keyword.UPCASE) {
-                    if (Character.isLowerCase(c)) {
-                        escape = true;
-                        break;
-                    }
-                } else if (readtableCase == Keyword.DOWNCASE) {
-                    if (Character.isUpperCase(c)) {
-                        escape = true;
-                        break;
-                    }
-                }
-                if (!escape && !seenNonDigit) {
-                    if (Character.digit(c, radix) < 0)
-                        seenNonDigit = true;
-                }
-            }
-            if (!escape) {
-                if (!seenNonDigit) {
-                    escape = true;
-                } else if (name.length() > 0 && name.charAt(0) == '.') {
-                    boolean allDots = true;
-                    for (int i = name.length(); i-- > 1;) {
-                        if (name.charAt(i) != '.') {
-                            allDots = false;
-                            break;
-                        }
-                    }
-                    if (allDots)
-                        escape = true;
-                }
-            }
-        }
+        final boolean escape = needsEscape(name, readtableCase, thread);
         String s = escape ? multipleEscape(name) : name;
         if (!escape) {
             if (readtableCase == Keyword.PRESERVE)
@@ -617,7 +554,9 @@ public class Symbol extends LispObject
             return s;
         // Package prefix is necessary.
         String packageName = pkg.getName();
-        if (printCase == Keyword.DOWNCASE)
+        if (needsEscape(packageName, readtableCase, thread))
+            packageName = multipleEscape(packageName);
+        else if (printCase == Keyword.DOWNCASE)
             packageName = packageName.toLowerCase();
         StringBuffer sb = new StringBuffer(packageName);
         if (((Package)pkg).findExternalSymbol(name) != null)
@@ -626,6 +565,66 @@ public class Symbol extends LispObject
             sb.append("::");
         sb.append(s);
         return sb.toString();
+    }
+
+    private static final boolean needsEscape(String s,
+                                             LispObject readtableCase,
+                                             LispThread thread)
+        throws ConditionThrowable
+    {
+        boolean escape = false;
+        final int length = s.length();
+        if (length == 0)
+            return true;
+        if (s.charAt(0) == '#')
+            return true;
+        int radix;
+        try {
+            radix = ((Fixnum)_PRINT_BASE_.symbolValue(thread)).value;
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
+            // Not reached.
+            return false;
+        }
+        if (radix < 2 || radix > 36) {
+            signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
+            // Not reached.
+            return false;
+        }
+        boolean seenNonDigit = false;
+        for (int i = length; i-- > 0;) {
+            char c = s.charAt(i);
+            if ("(),|\\`'\";".indexOf(c) >= 0)
+                return true;
+            if (Character.isWhitespace(c))
+                return true;
+            if (readtableCase == Keyword.UPCASE) {
+                if (Character.isLowerCase(c))
+                    return true;
+            } else if (readtableCase == Keyword.DOWNCASE) {
+                if (Character.isUpperCase(c))
+                    return true;
+            }
+            if (!escape && !seenNonDigit) {
+                if (Character.digit(c, radix) < 0)
+                    seenNonDigit = true;
+            }
+        }
+        if (!seenNonDigit)
+                return true;
+        if (s.length() > 0 && s.charAt(0) == '.') {
+            boolean allDots = true;
+            for (int i = s.length(); i-- > 1;) {
+                if (s.charAt(i) != '.') {
+                    allDots = false;
+                    break;
+                }
+            }
+            if (allDots)
+                return true;
+        }
+        return false;
     }
 
     private static final String multipleEscape(String s)
