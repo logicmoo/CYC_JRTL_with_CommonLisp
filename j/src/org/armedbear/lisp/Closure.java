@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.31 2003-06-08 15:57:17 piso Exp $
+ * $Id: Closure.java,v 1.32 2003-06-08 16:21:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,7 +70,6 @@ public class Closure extends Function
         super(name, getCurrentPackage());
         this.lambdaList = lambdaList;
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
-
         boolean allowOtherKeys = false;
         boolean restp = false;
         if (lambdaList instanceof Cons) {
@@ -78,10 +77,8 @@ public class Closure extends Function
             ArrayList arrayList = new ArrayList();
             ArrayList keywordParameters = new ArrayList();
             ArrayList auxVars = null;
-
             ArrayList requiredParameters = new ArrayList();
             ArrayList optionalParameters = new ArrayList();
-
             boolean optional = false;
             boolean key = false;
             boolean aux = false;
@@ -162,6 +159,7 @@ public class Closure extends Function
                         LispObject initForm = obj.cadr();
                         LispObject svar = obj.cdr().cdr().car();
                         arrayList.add(new Parameter(symbol, initForm, svar, OPTIONAL));
+                        optionalParameters.add(new Parameter(symbol, initForm, svar, OPTIONAL));
                         if (maxArgs >= 0)
                             ++maxArgs;
                     } else if (key) {
@@ -445,30 +443,34 @@ public class Closure extends Function
         i = required;
         int argsUsed = required;
         // Optional parameters.
-        while (i < parameterArray.length) {
-            Parameter parameter = parameterArray[i];
-            if (parameter.type != OPTIONAL)
-                break;
-            Symbol symbol = parameter.var;
-            if (i < args.length) {
-                bind(symbol, args[i], ext);
-                ++argsUsed;
-                if (parameter.svar != NIL) {
-                    Symbol svar = checkSymbol(parameter.svar);
-                    bind(svar, T, ext);
+        if (optionalParameters != null) {
+            for (int j = 0; j < optionalParameters.length; j++) {
+                Parameter parameter = optionalParameters[j];
+                if (parameter.type != OPTIONAL) {
+                    Debug.assertTrue(false);
+                    break;
                 }
-            } else {
-                // We've run out of arguments.
-                LispObject initForm = parameter.initForm;
-                bind(symbol,
-                    initForm != null? eval(initForm, ext, thread) : NIL,
-                    ext);
-                if (parameter.svar != NIL) {
-                    Symbol svar = checkSymbol(parameter.svar);
-                    bind(svar, NIL, ext);
+                Symbol symbol = parameter.var;
+                if (i < args.length) {
+                    bind(symbol, args[i], ext);
+                    ++argsUsed;
+                    if (parameter.svar != NIL) {
+                        Symbol svar = checkSymbol(parameter.svar);
+                        bind(svar, T, ext);
+                    }
+                } else {
+                    // We've run out of arguments.
+                    LispObject initForm = parameter.initForm;
+                    bind(symbol,
+                        initForm != null? eval(initForm, ext, thread) : NIL,
+                        ext);
+                    if (parameter.svar != NIL) {
+                        Symbol svar = checkSymbol(parameter.svar);
+                        bind(svar, NIL, ext);
+                    }
                 }
+                ++i;
             }
-            ++i;
         }
         // &rest parameter.
         if (restp) {
