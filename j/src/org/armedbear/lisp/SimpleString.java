@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.1 2004-02-23 14:22:40 piso Exp $
+ * $Id: SimpleString.java,v 1.2 2004-02-23 15:04:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,8 +104,8 @@ public final class SimpleString extends AbstractString
                     return false;
             return true;
         }
-        if (obj instanceof LispString) {
-            LispString string = (LispString) obj;
+        if (obj instanceof AbstractString) {
+            AbstractString string = (AbstractString) obj;
             if (string.length() != length())
                 return false;
             for (int i = length(); i-- > 0;)
@@ -134,8 +134,8 @@ public final class SimpleString extends AbstractString
             }
             return true;
         }
-        if (obj instanceof LispString) {
-            LispString string = (LispString) obj;
+        if (obj instanceof AbstractString) {
+            AbstractString string = (AbstractString) obj;
             if (string.length() != length())
                 return false;
             for (int i = length(); i-- > 0;) {
