@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.562 2004-02-08 16:53:13 piso Exp $
+ * $Id: Primitives.java,v 1.563 2004-02-10 14:08:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4281,7 +4281,7 @@ public final class Primitives extends Lisp
     };
 
     // ### imagpart
-    private static final Primitive1 IMAGPART = new Primitive1("imagpart","number")
+    private static final Primitive1 IMAGPART = new Primitive1("imagpart", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4292,7 +4292,8 @@ public final class Primitives extends Lisp
     };
 
     // ### integer-length
-    private static final Primitive1 INTEGER_LENGTH = new Primitive1("integer-length","integer")
+    private static final Primitive1 INTEGER_LENGTH =
+        new Primitive1("integer-length", "integer")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4309,7 +4310,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    private static final Primitive1 COS = new Primitive1("cos","radians")
+    private static final Primitive1 COS = new Primitive1("cos", "radians")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4319,22 +4320,19 @@ public final class Primitives extends Lisp
 
     private static LispObject cos(LispObject arg) throws ConditionThrowable
     {
-        if (arg.realp()) {
-            LispFloat argf = LispFloat.coerceToFloat(arg);
-            return new LispFloat(Math.cos(argf.getValue()));
-        } else if (arg instanceof Complex) {
-            Complex argc = (Complex)arg;
-            Complex iargc = (Complex)argc.multiplyBy(Complex.getInstance(new Fixnum(0), new Fixnum(1)));
-            Complex c = (Complex)exp(iargc);
-            c = (Complex)c.add(exp(iargc.multiplyBy(new Fixnum(-1))));
-            c = (Complex)c.divideBy(new Fixnum(2));
-            return c;
+        if (arg.realp())
+            return new LispFloat(Math.cos(LispFloat.coerceToFloat(arg).getValue()));
+        if (arg instanceof Complex) {
+            LispObject n = arg.multiplyBy(Complex.getInstance(Fixnum.ZERO,
+                                                              Fixnum.ONE));
+            LispObject result = exp(n);
+            result = result.add(exp(n.multiplyBy(Fixnum.MINUS_ONE)));
+            return result.divideBy(Fixnum.TWO);
         }
-        signal(new TypeError(arg, "number"));
-        return NIL;
+        return signal(new TypeError(arg, "number"));
     }
 
-    private static final Primitive1 SIN = new Primitive1("sin","radians")
+    private static final Primitive1 SIN = new Primitive1("sin", "radians")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4344,22 +4342,20 @@ public final class Primitives extends Lisp
 
     private static LispObject sin(LispObject arg) throws ConditionThrowable
     {
-        if (arg.realp()) {  // return real
-            LispFloat argf = LispFloat.coerceToFloat(arg);
-            return new LispFloat(Math.sin(argf.getValue()));
-        } else if (arg instanceof Complex) {
-            Complex argc = (Complex)arg;
-            Complex iargc = (Complex)argc.multiplyBy(Complex.getInstance(new Fixnum(0), new Fixnum(1)));
-            Complex c = (Complex)exp(iargc);
-            c = (Complex)c.subtract(exp(iargc.multiplyBy(new Fixnum(-1))));
-            c = (Complex)c.divideBy((new Fixnum(2)).multiplyBy(Complex.getInstance(new Fixnum(0), new Fixnum(1))));
-            return c;
+        if (arg.realp())
+            return new LispFloat(Math.sin(LispFloat.coerceToFloat(arg).getValue()));
+        if (arg instanceof Complex) {
+            LispObject n = arg.multiplyBy(Complex.getInstance(Fixnum.ZERO,
+                                                              Fixnum.ONE));
+            LispObject result = exp(n);
+            result = result.subtract(exp(n.multiplyBy(Fixnum.MINUS_ONE)));
+            return result.divideBy(Fixnum.TWO.multiplyBy(Complex.getInstance(Fixnum.ZERO,
+                                                                             Fixnum.ONE)));
         }
-        signal(new TypeError(arg, "number"));
-        return NIL;
+        return signal(new TypeError(arg, Symbol.NUMBER));
     }
 
-    private static final Primitive1 TAN = new Primitive1("tan","radians")
+    private static final Primitive1 TAN = new Primitive1("tan", "radians")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4372,7 +4368,7 @@ public final class Primitives extends Lisp
         return sin(arg).divideBy(cos(arg));
     }
 
-    private static final Primitive1 EXP = new Primitive1("exp","number")
+    private static final Primitive1 EXP = new Primitive1("exp", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4393,8 +4389,7 @@ public final class Primitives extends Lisp
             LispFloat resY = new LispFloat(Math.exp(re) * Math.sin(im));
             return Complex.getInstance(resX, resY);
         }
-        signal(new TypeError(arg, "number"));
-        return NIL;
+        return signal(new TypeError(arg, "number"));
     }
 
     // ### sqrt
