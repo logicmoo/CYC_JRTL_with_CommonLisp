@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageError.java,v 1.8 2003-12-12 13:04:11 piso Exp $
+ * $Id: PackageError.java,v 1.9 2003-12-12 13:18:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ public class PackageError extends LispError
         {
             if (arg instanceof PackageError)
                 return ((PackageError)arg).pkg;
-            throw new ConditionThrowable(new TypeError(arg, Symbol.CONDITION));
+            throw new ConditionThrowable(new TypeError(arg, Symbol.PACKAGE_ERROR));
         }
     };
 }
