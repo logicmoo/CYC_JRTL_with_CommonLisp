@@ -32,12 +32,6 @@
       (push (list sym (cadr l)) bindings)
       (push (list 'setq (car l) sym) forms))))
 
-(defmacro loop (&rest exps)
-  (if (and exps (symbolp (car exps)))
-      (error "loop keywords are not supported"))
-  (let ((tag (gensym)))
-    `(block nil (tagbody ,tag ,@exps (go ,tag)))))
-
 (defmacro the (type form) form)
 
 ;; FIXME
