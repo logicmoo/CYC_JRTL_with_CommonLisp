@@ -1,8 +1,8 @@
 /*
  * DisplacedArray.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.19 2003-12-27 17:02:21 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: DisplacedArray.java,v 1.20 2004-02-04 15:20:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,6 +81,13 @@ public final class DisplacedArray extends AbstractArray
         if (dimv.length == 1)
             return array.STRINGP();
         return NIL;
+    }
+
+    public boolean stringp()
+    {
+        if (dimv.length == 1)
+            return array.stringp();
+        return false;
     }
 
     public boolean vectorp()
@@ -199,6 +206,10 @@ public final class DisplacedArray extends AbstractArray
 
     public String toString()
     {
+        if (array instanceof LispString) {
+            LispString s = (LispString) array;
+            return s.toString(offset, offset + size);
+        }
         StringBuffer sb = new StringBuffer();
         sb.append('#');
         sb.append(dimv.length);
