@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: arglist.java,v 1.10 2004-07-10 15:59:36 piso Exp $
+ * $Id: arglist.java,v 1.11 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,8 +91,8 @@ public final class arglist extends Lisp
     };
 
     // ### %set-arglist
-    private static final Primitive2 _SET_ARGLIST =
-        new Primitive2("%set-arglist", PACKAGE_SYS, false)
+    private static final Primitive _SET_ARGLIST =
+        new Primitive("%set-arglist", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

@@ -2,7 +2,7 @@
  * make_socket.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: make_socket.java,v 1.2 2004-05-25 18:36:27 piso Exp $
+ * $Id: make_socket.java,v 1.3 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 import java.net.Socket;
 
 // ### %make-socket
-public final class make_socket extends Primitive2
+public final class make_socket extends Primitive
 {
     private make_socket()
     {
@@ -45,5 +45,5 @@ public final class make_socket extends Primitive2
         }
     }
 
-    private static final Primitive2 MAKE_SOCKET = new make_socket();
+    private static final Primitive MAKE_SOCKET = new make_socket();
 }

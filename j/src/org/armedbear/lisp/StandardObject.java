@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.26 2004-10-21 18:17:13 piso Exp $
+ * $Id: StandardObject.java,v 1.27 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,8 +129,8 @@ public class StandardObject extends LispObject
     };
 
     // ### %set-std-instance-layout
-    private static final Primitive2 _SET_STD_INSTANCE_LAYOUT =
-        new Primitive2("%set-std-instance-layout", PACKAGE_SYS, false)
+    private static final Primitive _SET_STD_INSTANCE_LAYOUT =
+        new Primitive("%set-std-instance-layout", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -175,8 +175,8 @@ public class StandardObject extends LispObject
     };
 
     // ### %set-std-instance-slots
-    private static final Primitive2 _SET_STD_INSTANCE_SLOTS =
-        new Primitive2("%set-std-instance-slots", PACKAGE_SYS, false)
+    private static final Primitive _SET_STD_INSTANCE_SLOTS =
+        new Primitive("%set-std-instance-slots", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -230,8 +230,8 @@ public class StandardObject extends LispObject
 
     // ### allocate-slot-storage
     // allocate-slot-storage size initial-value
-    private static final Primitive2 ALLOCATE_SLOT_STORAGE =
-        new Primitive2("allocate-slot-storage", PACKAGE_SYS, false)
+    private static final Primitive ALLOCATE_SLOT_STORAGE =
+        new Primitive("allocate-slot-storage", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -249,8 +249,8 @@ public class StandardObject extends LispObject
 
     // ### allocate-std-instance
     // allocate-std-instance class slots => instance
-    private static final Primitive2 ALLOCATE_STD_INSTANCE =
-        new Primitive2("allocate-std-instance", PACKAGE_SYS, false)
+    private static final Primitive ALLOCATE_STD_INSTANCE =
+        new Primitive("allocate-std-instance", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

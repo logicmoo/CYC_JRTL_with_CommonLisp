@@ -2,7 +2,7 @@
  * function_info.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: function_info.java,v 1.2 2004-08-21 16:21:37 piso Exp $
+ * $Id: function_info.java,v 1.3 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,8 @@ public final class function_info extends Lisp
     };
 
     // ### %set-function-info name value
-    private static final Primitive2 _SET_FUNCTION_INFO =
-        new Primitive2("%set-function-info", PACKAGE_SYS, false)
+    private static final Primitive _SET_FUNCTION_INFO =
+        new Primitive("%set-function-info", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

@@ -2,7 +2,7 @@
  * file_string_length.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: file_string_length.java,v 1.2 2004-01-31 19:25:36 piso Exp $
+ * $Id: file_string_length.java,v 1.3 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### file-string-length
-public final class file_string_length extends Primitive2
+public final class file_string_length extends Primitive
 {
     private file_string_length()
     {
@@ -40,6 +40,6 @@ public final class file_string_length extends Primitive2
         }
     }
 
-    private static final Primitive2 FILE_STRING_LENGTH =
+    private static final Primitive FILE_STRING_LENGTH =
         new file_string_length();
 }

@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.42 2004-11-03 15:16:27 piso Exp $
+ * $Id: HashTable.java,v 1.43 2004-11-03 15:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,8 +381,8 @@ public abstract class HashTable extends LispObject
     };
 
     // remhash key hash-table => generalized-boolean
-    private static final Primitive2 REMHASH =
-        new Primitive2("remhash", "key hash-table")
+    private static final Primitive REMHASH =
+        new Primitive("remhash", "key hash-table")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -445,8 +445,8 @@ public abstract class HashTable extends LispObject
         }
     };
 
-    private static final Primitive2 MIX =
-        new Primitive2("mix", PACKAGE_SYS, false, "x y")
+    private static final Primitive MIX =
+        new Primitive("mix", PACKAGE_SYS, false, "x y")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

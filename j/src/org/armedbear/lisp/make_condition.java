@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_condition.java,v 1.15 2004-02-02 19:23:13 piso Exp $
+ * $Id: make_condition.java,v 1.16 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class make_condition extends Primitive2
+public final class make_condition extends Primitive
 {
     private make_condition()
     {
@@ -97,5 +97,5 @@ public final class make_condition extends Primitive2
         return NIL;
     }
 
-    private static final Primitive2 MAKE_CONDITION = new make_condition();
+    private static final Primitive MAKE_CONDITION = new make_condition();
 }

@@ -2,7 +2,7 @@
  * logandc1.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: logandc1.java,v 1.6 2004-02-28 17:01:20 piso Exp $
+ * $Id: logandc1.java,v 1.7 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 import java.math.BigInteger;
 
-public final class logandc1 extends Primitive2
+public final class logandc1 extends Primitive
 {
     private logandc1()
     {
@@ -59,5 +59,5 @@ public final class logandc1 extends Primitive2
         return signal(new TypeError(first, Symbol.INTEGER));
     }
 
-    private static final Primitive2 LOGANDC1 = new logandc1();
+    private static final Primitive LOGANDC1 = new logandc1();
 }

@@ -2,7 +2,7 @@
  * ash.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ash.java,v 1.6 2004-02-25 23:52:28 piso Exp $
+ * $Id: ash.java,v 1.7 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 // ### ash
 // ash integer count => shifted-integer
-public final class ash extends Primitive2
+public final class ash extends Primitive
 {
     private ash()
     {
@@ -36,5 +36,5 @@ public final class ash extends Primitive2
         return first.ash(second);
     }
 
-    private static final Primitive2 ASH = new ash();
+    private static final Primitive ASH = new ash();
 }

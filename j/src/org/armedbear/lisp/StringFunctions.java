@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.29 2004-11-03 14:47:13 piso Exp $
+ * $Id: StringFunctions.java,v 1.30 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,8 +86,8 @@ public final class StringFunctions extends Lisp
 
     // ### %%string=
     // Case sensitive.
-    private static final Primitive2 __STRING_EQUAL =
-        new Primitive2("%%string=", PACKAGE_SYS, false)
+    private static final Primitive __STRING_EQUAL =
+        new Primitive("%%string=", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -838,7 +838,7 @@ public final class StringFunctions extends Lisp
     };
 
     // ### char
-    private static final Primitive2 CHAR = new Primitive2("char", "string index")
+    private static final Primitive CHAR = new Primitive("char", "string index")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -904,8 +904,8 @@ public final class StringFunctions extends Lisp
 
     // ### simple-string-search pattern string => position
     // Searches string for a substring that matches pattern.
-    private static final Primitive2 SIMPLE_STRING_SEARCH =
-        new Primitive2("simple-string-search", PACKAGE_EXT, true)
+    private static final Primitive SIMPLE_STRING_SEARCH =
+        new Primitive("simple-string-search", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -917,8 +917,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### simple-string-fill string character => string
-    private static final Primitive2 STRING_FILL =
-        new Primitive2("simple-string-fill", PACKAGE_EXT, true)
+    private static final Primitive STRING_FILL =
+        new Primitive("simple-string-fill", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

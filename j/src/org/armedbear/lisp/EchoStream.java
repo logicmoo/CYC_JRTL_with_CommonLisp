@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.11 2004-10-13 00:22:18 piso Exp $
+ * $Id: EchoStream.java,v 1.12 2004-11-03 15:27:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -206,8 +206,8 @@ public final class EchoStream extends Stream
 
     // ### make-echo-stream
     // input-stream output-stream => echo-stream
-    private static final Primitive2 MAKE_ECHO_STREAM =
-        new Primitive2("make-echo-stream","input-stream output-stream") {
+    private static final Primitive MAKE_ECHO_STREAM =
+        new Primitive("make-echo-stream","input-stream output-stream") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {

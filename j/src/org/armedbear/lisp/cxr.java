@@ -2,7 +2,7 @@
  * cxr.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: cxr.java,v 1.6 2004-09-03 19:04:29 piso Exp $
+ * $Id: cxr.java,v 1.7 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,8 @@ package org.armedbear.lisp;
 public final class cxr extends Lisp
 {
     // ### %rplaca
-    private static final Primitive2 _RPLACA =
-        new Primitive2("%rplaca", PACKAGE_SYS, false)
+    private static final Primitive _RPLACA =
+        new Primitive("%rplaca", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -36,8 +36,8 @@ public final class cxr extends Lisp
     };
 
     // ### %rplacd
-    private static final Primitive2 _RPLACD =
-        new Primitive2("%rplacd", PACKAGE_SYS, false)
+    private static final Primitive _RPLACD =
+        new Primitive("%rplacd", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

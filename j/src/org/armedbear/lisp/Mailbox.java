@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Mailbox.java,v 1.4 2004-10-09 13:25:09 piso Exp $
+ * $Id: Mailbox.java,v 1.5 2004-11-03 15:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,8 +82,8 @@ public final class Mailbox extends LispObject
     };
 
     // ### mailbox-send mailbox object
-    private static final Primitive2 MAILBOX_SEND =
-        new Primitive2("mailbox-send", PACKAGE_EXT, true, "mailbox object")
+    private static final Primitive MAILBOX_SEND =
+        new Primitive("mailbox-send", PACKAGE_EXT, true, "mailbox object")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

@@ -2,7 +2,7 @@
  * assq.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: assq.java,v 1.2 2003-12-13 00:58:51 piso Exp $
+ * $Id: assq.java,v 1.3 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### assq item alist => entry
-public final class assq extends Primitive2
+public final class assq extends Primitive
 {
     private assq()
     {

@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: RuntimeClass.java,v 1.8 2004-11-03 15:06:05 piso Exp $
+ * $Id: RuntimeClass.java,v 1.9 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,8 +80,8 @@ public class RuntimeClass extends Lisp
     };
 
     // ### %load-java-class-from-byte-array
-    private static final Primitive2 _LOAD_JAVA_CLASS_FROM_BYTE_ARRAY =
-        new Primitive2("%load-java-class-from-byte-array", PACKAGE_JAVA, false,
+    private static final Primitive _LOAD_JAVA_CLASS_FROM_BYTE_ARRAY =
+        new Primitive("%load-java-class-from-byte-array", PACKAGE_JAVA, false,
                        "classname bytearray")
     {
         public LispObject execute(LispObject className, LispObject classBytes)

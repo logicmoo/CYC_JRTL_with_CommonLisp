@@ -2,7 +2,7 @@
  * logbitp.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: logbitp.java,v 1.6 2004-04-24 15:49:22 piso Exp $
+ * $Id: logbitp.java,v 1.7 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import java.math.BigInteger;
 
 // ### logbitp
 // logbitp index integer => generalized-boolean
-public final class logbitp extends Primitive2
+public final class logbitp extends Primitive
 {
     private logbitp()
     {
@@ -59,5 +59,5 @@ public final class logbitp extends Primitive2
         return n.testBit(index) ? T : NIL;
     }
 
-    private static final Primitive2 LOGBITP = new logbitp();
+    private static final Primitive LOGBITP = new logbitp();
 }

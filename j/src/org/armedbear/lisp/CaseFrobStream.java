@@ -2,7 +2,7 @@
  * CaseFrobStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CaseFrobStream.java,v 1.5 2004-10-13 00:22:17 piso Exp $
+ * $Id: CaseFrobStream.java,v 1.6 2004-11-03 15:27:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,8 +180,8 @@ public abstract class CaseFrobStream extends Stream
     }
 
     // ### make-case-frob-stream target => case-frob-stream
-    private static final Primitive2 MAKE_CASE_FROB_STREAM =
-        new Primitive2("make-case-frob-stream", PACKAGE_SYS, false, "target kind")
+    private static final Primitive MAKE_CASE_FROB_STREAM =
+        new Primitive("make-case-frob-stream", PACKAGE_SYS, false, "target kind")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

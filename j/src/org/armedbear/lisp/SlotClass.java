@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SlotClass.java,v 1.6 2004-05-23 15:23:37 piso Exp $
+ * $Id: SlotClass.java,v 1.7 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,8 +83,8 @@ public class SlotClass extends LispClass
     };
 
     // ### %set-class-direct-slots
-    private static final Primitive2 _SET_CLASS_DIRECT_SLOTS =
-        new Primitive2("%set-class-direct-slots", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_DIRECT_SLOTS =
+        new Primitive("%set-class-direct-slots", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -113,8 +113,8 @@ public class SlotClass extends LispClass
     };
 
     // ### %set-class-slots
-    private static final Primitive2 _SET_CLASS_SLOTS =
-        new Primitive2("%set-class-slots", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_SLOTS =
+        new Primitive("%set-class-slots", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -143,8 +143,8 @@ public class SlotClass extends LispClass
     };
 
     // ### %set-class-direct-default-initargs
-    private static final Primitive2 _SET_CLASS_DIRECT_DEFAULT_INITARGS =
-        new Primitive2("%set-class-direct-default-initargs", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_DIRECT_DEFAULT_INITARGS =
+        new Primitive("%set-class-direct-default-initargs", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -173,8 +173,8 @@ public class SlotClass extends LispClass
     };
 
     // ### %set-class-default-initargs
-    private static final Primitive2 _SET_CLASS_DEFAULT_INITARGS =
-        new Primitive2("%set-class-default-initargs", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_DEFAULT_INITARGS =
+        new Primitive("%set-class-default-initargs", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

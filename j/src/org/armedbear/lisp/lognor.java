@@ -2,7 +2,7 @@
  * lognor.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: lognor.java,v 1.5 2003-12-13 00:58:51 piso Exp $
+ * $Id: lognor.java,v 1.6 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 import java.math.BigInteger;
 
-public final class lognor extends Primitive2
+public final class lognor extends Primitive
 {
     private lognor(String name, String arglist)
     {

@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.80 2004-11-03 15:16:27 piso Exp $
+ * $Id: Load.java,v 1.81 2004-11-03 15:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -245,8 +245,8 @@ public final class Load extends Lisp
         internSpecial("*FASL-ANONYMOUS-PACKAGE*", PACKAGE_SYS, NIL);
 
     // ### init-fasl
-    private static final Primitive2 INIT_FASL =
-        new Primitive2("init-fasl", PACKAGE_SYS, true, "&key version")
+    private static final Primitive INIT_FASL =
+        new Primitive("init-fasl", PACKAGE_SYS, true, "&key version")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

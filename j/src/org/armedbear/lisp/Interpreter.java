@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.74 2004-10-18 19:19:09 piso Exp $
+ * $Id: Interpreter.java,v 1.75 2004-11-03 15:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -358,8 +358,8 @@ public final class Interpreter extends Lisp
         System.err.println("Interpreter.finalize");
     }
 
-    private static final Primitive2 _DEBUGGER_HOOK_FUNCTION =
-        new Primitive2("%debugger-hook-function", PACKAGE_SYS, false)
+    private static final Primitive _DEBUGGER_HOOK_FUNCTION =
+        new Primitive("%debugger-hook-function", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

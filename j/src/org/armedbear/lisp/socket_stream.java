@@ -2,7 +2,7 @@
  * socket_stream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: socket_stream.java,v 1.2 2004-06-22 23:07:47 piso Exp $
+ * $Id: socket_stream.java,v 1.3 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 import java.net.Socket;
 
 // ### %socket-stream
-public final class socket_stream extends Primitive2
+public final class socket_stream extends Primitive
 {
     private socket_stream()
     {
@@ -48,5 +48,5 @@ public final class socket_stream extends Primitive2
 	}
     }
 
-    private static final Primitive2 SOCKET_STREAM = new socket_stream();
+    private static final Primitive SOCKET_STREAM = new socket_stream();
 }

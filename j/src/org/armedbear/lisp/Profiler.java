@@ -2,7 +2,7 @@
  * Profiler.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Profiler.java,v 1.7 2004-10-10 17:14:03 piso Exp $
+ * $Id: Profiler.java,v 1.8 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,8 +49,8 @@ public class Profiler extends Lisp
 
     // ### %start-profiler
     // %start-profiler type granularity
-    public static final Primitive2 _START_PROFILER =
-        new Primitive2("%start-profiler", PACKAGE_PROF, false)
+    public static final Primitive _START_PROFILER =
+        new Primitive("%start-profiler", PACKAGE_PROF, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

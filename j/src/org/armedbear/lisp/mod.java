@@ -2,7 +2,7 @@
  * mod.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: mod.java,v 1.3 2004-03-14 01:30:42 piso Exp $
+ * $Id: mod.java,v 1.4 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### mod number divisor
-public final class mod extends Primitive2
+public final class mod extends Primitive
 {
     private mod()
     {
@@ -35,5 +35,5 @@ public final class mod extends Primitive2
         return number.MOD(divisor);
     }
 
-    private static final Primitive2 MOD = new mod();
+    private static final Primitive MOD = new mod();
 }

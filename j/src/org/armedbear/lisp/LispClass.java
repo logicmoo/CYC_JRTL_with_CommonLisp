@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.50 2004-10-20 01:15:15 piso Exp $
+ * $Id: LispClass.java,v 1.51 2004-11-03 15:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,8 +263,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %set-find-class
-    private static final Primitive2 _SET_FIND_CLASS =
-        new Primitive2("%set-find-class", PACKAGE_SYS, false)
+    private static final Primitive _SET_FIND_CLASS =
+        new Primitive("%set-find-class", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -298,8 +298,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %set-class-name
-    private static final Primitive2 _SET_CLASS_NAME =
-        new Primitive2("%set-class-name", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_NAME =
+        new Primitive("%set-class-name", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -331,8 +331,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %set-class-layout
-    private static final Primitive2 _SET_CLASS_LAYOUT =
-        new Primitive2("%set-class-layout", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_LAYOUT =
+        new Primitive("%set-class-layout", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -365,8 +365,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %set-class-direct-superclasses
-    private static final Primitive2 _SET_CLASS_DIRECT_SUPERCLASSES =
-        new Primitive2("%set-class-direct-superclasses", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_DIRECT_SUPERCLASSES =
+        new Primitive("%set-class-direct-superclasses", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -392,8 +392,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %set-class-direct-subclasses
-    private static final Primitive2 _SET_CLASS_DIRECT_SUBCLASSES =
-        new Primitive2("%set-class-direct-subclasses", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_DIRECT_SUBCLASSES =
+        new Primitive("%set-class-direct-subclasses", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -447,8 +447,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %set-class-direct-methods
-    private static final Primitive2 _SET_CLASS_DIRECT_METHODS =
-        new Primitive2("%set-class-direct-methods", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_DIRECT_METHODS =
+        new Primitive("%set-class-direct-methods", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -475,8 +475,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %set-class-documentation
-    private static final Primitive2 _SET_CLASS_DOCUMENTATION =
-        new Primitive2("%set-class-documentation", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_DOCUMENTATION =
+        new Primitive("%set-class-documentation", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.69 2004-10-13 00:22:19 piso Exp $
+ * $Id: Pathname.java,v 1.70 2004-11-03 15:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -511,8 +511,8 @@ public class Pathname extends LispObject
                                             Keyword.LOCAL)));
     }
 
-    private static final Primitive2 _PATHNAME_HOST =
-        new Primitive2("%pathname-host", PACKAGE_SYS, false)
+    private static final Primitive _PATHNAME_HOST =
+        new Primitive("%pathname-host", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -522,8 +522,8 @@ public class Pathname extends LispObject
         }
     };
 
-    private static final Primitive2 _PATHNAME_DEVICE =
-        new Primitive2("%pathname-device", PACKAGE_SYS, false)
+    private static final Primitive _PATHNAME_DEVICE =
+        new Primitive("%pathname-device", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -533,8 +533,8 @@ public class Pathname extends LispObject
         }
     };
 
-    private static final Primitive2 _PATHNAME_DIRECTORY =
-        new Primitive2("%pathname-directory", PACKAGE_SYS, false)
+    private static final Primitive _PATHNAME_DIRECTORY =
+        new Primitive("%pathname-directory", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -544,8 +544,8 @@ public class Pathname extends LispObject
         }
     };
 
-    private static final Primitive2 _PATHNAME_NAME =
-        new Primitive2("%pathname-name", PACKAGE_SYS, false)
+    private static final Primitive _PATHNAME_NAME =
+        new Primitive("%pathname-name", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -555,8 +555,8 @@ public class Pathname extends LispObject
         }
     };
 
-    private static final Primitive2 _PATHNAME_TYPE =
-        new Primitive2("%pathname-type", PACKAGE_SYS, false)
+    private static final Primitive _PATHNAME_TYPE =
+        new Primitive("%pathname-type", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -741,8 +741,8 @@ public class Pathname extends LispObject
     };
 
     // ### pathname-match-p pathname wildcard => generalized-boolean
-    private static final Primitive2 PATHNAME_MATCH_P =
-        new Primitive2("pathname-match-p", "pathname wildcard")
+    private static final Primitive PATHNAME_MATCH_P =
+        new Primitive("pathname-match-p", "pathname wildcard")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -808,8 +808,8 @@ public class Pathname extends LispObject
         return false;
     }
 
-    private static final Primitive2 _WILD_PATHNAME_P =
-        new Primitive2("%wild-pathname-p", PACKAGE_SYS, false)
+    private static final Primitive _WILD_PATHNAME_P =
+        new Primitive("%wild-pathname-p", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -1003,8 +1003,8 @@ public class Pathname extends LispObject
     };
 
     // ### rename-file filespec new-name => defaulted-new-name, old-truename, new-truename
-    public static final Primitive2 RENAME_FILE =
-        new Primitive2("rename-file", "filespec new-name")
+    public static final Primitive RENAME_FILE =
+        new Primitive("rename-file", "filespec new-name")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

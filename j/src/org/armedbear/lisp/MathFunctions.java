@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.14 2004-10-12 18:32:08 piso Exp $
+ * $Id: MathFunctions.java,v 1.15 2004-11-03 15:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -534,8 +534,8 @@ public final class MathFunctions extends Lisp
 
     // ### expt
     // expt base-number power-number => result
-    public static final Primitive2 EXPT =
-        new Primitive2("expt", "base-number power-number")
+    public static final Primitive EXPT =
+        new Primitive("expt", "base-number power-number")
     {
         public LispObject execute(LispObject base, LispObject power)
             throws ConditionThrowable

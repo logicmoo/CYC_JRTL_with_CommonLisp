@@ -2,7 +2,7 @@
  * lognand.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: lognand.java,v 1.6 2004-03-04 01:14:34 piso Exp $
+ * $Id: lognand.java,v 1.7 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 import java.math.BigInteger;
 
-public final class lognand extends Primitive2
+public final class lognand extends Primitive
 {
     private lognand()
     {
@@ -59,5 +59,5 @@ public final class lognand extends Primitive2
         return signal(new TypeError(first, Symbol.INTEGER));
     }
 
-    private static final Primitive2 LOGNAND = new lognand();
+    private static final Primitive LOGNAND = new lognand();
 }

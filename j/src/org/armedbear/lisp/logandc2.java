@@ -2,7 +2,7 @@
  * logandc2.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: logandc2.java,v 1.7 2004-02-28 17:25:45 piso Exp $
+ * $Id: logandc2.java,v 1.8 2004-11-03 15:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ import java.math.BigInteger;
 // ### logandc2
 // logandc2 integer-1 integer-2 => result-integer
 // and integer-1 with complement of integer-2
-public final class logandc2 extends Primitive2
+public final class logandc2 extends Primitive
 {
     private logandc2()
     {
@@ -62,5 +62,5 @@ public final class logandc2 extends Primitive2
         return signal(new TypeError(first, Symbol.INTEGER));
     }
 
-    private static final Primitive2 LOGANDC2 = new logandc2();
+    private static final Primitive LOGANDC2 = new logandc2();
 }

@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.16 2004-11-03 15:06:05 piso Exp $
+ * $Id: SimpleVector.java,v 1.17 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,8 +255,8 @@ public final class SimpleVector extends AbstractVector
 
     // ### svref
     // svref simple-vector index => element
-    private static final Primitive2 SVREF =
-        new Primitive2("svref", "simple-vector index")
+    private static final Primitive SVREF =
+        new Primitive("svref", "simple-vector index")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

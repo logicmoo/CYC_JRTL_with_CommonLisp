@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.36 2004-11-03 15:06:05 piso Exp $
+ * $Id: StructureObject.java,v 1.37 2004-11-03 15:27:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,8 +211,8 @@ public final class StructureObject extends LispObject
 
     // ### %structure-ref
     // %structure-ref instance index => value
-    private static final Primitive2 _STRUCTURE_REF =
-        new Primitive2("%structure-ref", PACKAGE_SYS, false)
+    private static final Primitive _STRUCTURE_REF =
+        new Primitive("%structure-ref", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -258,8 +258,8 @@ public final class StructureObject extends LispObject
 
     // ### %make-structure
     // %make-structure name slot-values => object
-    private static final Primitive2 _MAKE_STRUCTURE =
-        new Primitive2("%make-structure", PACKAGE_SYS, false)
+    private static final Primitive _MAKE_STRUCTURE =
+        new Primitive("%make-structure", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
