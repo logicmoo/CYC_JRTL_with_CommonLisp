@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.708 2004-11-28 15:43:50 piso Exp $
+ * $Id: Primitives.java,v 1.709 2004-11-29 18:08:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2319,45 +2319,56 @@ public final class Primitives extends Lisp
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String prefix = "G";
             if (arg instanceof Fixnum) {
-                int n = ((Fixnum)arg).getValue();
-                if (n < 0)
-                    signal(new TypeError(arg, "non-negative integer"));
-                StringBuffer sb = new StringBuffer(prefix);
-                sb.append(n);
-                return new Symbol(new SimpleString(sb));
+                int n = ((Fixnum)arg).value;
+                if (n >= 0) {
+                    StringBuffer sb = new StringBuffer("G");
+                    sb.append(n); // Decimal representation.
+                    return new Symbol(new SimpleString(sb));
+                }
+            } else if (arg instanceof Bignum) {
+                BigInteger n = ((Bignum)arg).value;
+                if (n.signum() >= 0) {
+                    StringBuffer sb = new StringBuffer("G");
+                    sb.append(n.toString()); // Decimal representation.
+                    return new Symbol(new SimpleString(sb));
+                }
+            } else if (arg instanceof AbstractString) {
+                return gensym(arg.getStringValue());
             }
-            if (arg instanceof Bignum) {
-                BigInteger n = ((Bignum)arg).getValue();
-                if (n.signum() < 0)
-                    signal(new TypeError(arg, "non-negative integer"));
-                StringBuffer sb = new StringBuffer(prefix);
-                sb.append(n.toString());
-                return new Symbol(new SimpleString(sb));
-            }
-            if (arg instanceof AbstractString)
-                prefix = arg.getStringValue();
-            else
-                signal(new TypeError(arg, "string or non-negative integer"));
-            return gensym(prefix);
+            return signal(new TypeError("The value " + arg.writeToString() +
+                                        " is not a string or non-negative integer."));
         }
     };
 
     private static final Symbol gensym(String prefix) throws ConditionThrowable
     {
-        LispThread thread = LispThread.currentThread();
-        Binding binding = thread.getSpecialBinding(_GENSYM_COUNTER_);
-        LispObject oldValue;
-        if (binding != null) {
-            oldValue = binding.value;
-            binding.value = oldValue.incr();
-        } else {
-            oldValue = _GENSYM_COUNTER_.getSymbolValue();
-            _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
-        }
         StringBuffer sb = new StringBuffer(prefix);
-        sb.append(oldValue.writeToString());
+        Binding binding =
+            LispThread.currentThread().getSpecialBinding(_GENSYM_COUNTER_);
+        final LispObject oldValue;
+        if (binding != null)
+            oldValue = binding.value;
+        else
+            oldValue = _GENSYM_COUNTER_.getSymbolValue();
+        // Decimal representation.
+        if (oldValue instanceof Fixnum)
+            sb.append(((Fixnum)oldValue).value);
+        else if (oldValue instanceof Bignum)
+            sb.append(((Bignum)oldValue).value.toString());
+        else {
+            // Restore sanity.
+            if (binding != null)
+                binding.value = Fixnum.ZERO;
+            else
+                _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);            
+            signal(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
+                                 oldValue.writeToString() + " New value: 0"));
+        }
+        if (binding != null)
+            binding.value = oldValue.incr();
+        else
+            _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
         return new Symbol(new SimpleString(sb));
     }
 
