@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleBitVector.java,v 1.3 2004-02-25 13:50:54 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.4 2004-02-25 16:01:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,22 +109,23 @@ public final class SimpleBitVector extends AbstractBitVector
 
     public void set(int index, LispObject newValue) throws ConditionThrowable
     {
-        if (index >= capacity)
+        if (index < 0 || index >= capacity)
             badIndex(index, capacity);
+        final int offset = index >> 6;
         try {
-            int n = Fixnum.getValue(newValue);
-            if (n == 1) {
-                setBit(index);
-                return;
+            switch (((Fixnum)newValue).value) {
+                case 0:
+                    bits[offset] &= ~(1L << index);
+                    return;
+                case 1:
+                    bits[offset] |= 1L << index;
+                    return;
             }
-            if (n == 0) {
-                clearBit(index);
-                return;
-            }
-            // None of the above...
         }
-        catch (ConditionThrowable t) {}
-        signal(new TypeError(newValue, "bit"));
+        catch (ClassCastException e) {
+            // Fall through.
+        }
+        signal(new TypeError(newValue, Symbol.BIT));
     }
 
     protected int getBit(int index)
@@ -184,48 +185,48 @@ public final class SimpleBitVector extends AbstractBitVector
         signal(new LispError());
     }
 
-    public AbstractVector adjustVector(int size, LispObject initialElement,
+    public AbstractVector adjustVector(int newCapacity, LispObject initialElement,
                                        LispObject initialContents)
         throws ConditionThrowable
     {
-        SimpleBitVector v = new SimpleBitVector(size);
+        SimpleBitVector v = new SimpleBitVector(newCapacity);
         if (initialContents != NIL) {
             if (initialContents.listp()) {
                 LispObject list = initialContents;
-                for (int i = 0; i < size; i++) {
+                for (int i = 0; i < newCapacity; i++) {
                     v.set(i, list.car());
                     list = list.cdr();
                 }
             } else if (initialContents.vectorp()) {
-                for (int i = 0; i < size; i++)
+                for (int i = 0; i < newCapacity; i++)
                     v.set(i, initialContents.elt(i));
             } else
                 signal(new TypeError(initialContents, Symbol.SEQUENCE));
         } else {
-            final int limit = Math.min(capacity, size);
+            final int limit = Math.min(capacity, newCapacity);
             for (int i = limit; i-- > 0;) {
                 if (getBit(i) == 1)
                     v.setBit(i);
                 else
                     v.clearBit(i);
             }
-            if (size > capacity) {
+            if (newCapacity > capacity) {
                 int n = Fixnum.getValue(initialElement);
                 if (n == 1)
-                    for (int i = capacity; i < size; i++)
+                    for (int i = capacity; i < newCapacity; i++)
                         v.setBit(i);
                 else
-                    for (int i = capacity; i < size; i++)
+                    for (int i = capacity; i < newCapacity; i++)
                         v.clearBit(i);
             }
         }
         return v;
     }
 
-    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
+    public AbstractVector adjustVector(int newCapacity, AbstractArray displacedTo,
                                        int displacement)
         throws ConditionThrowable
     {
-        return new ComplexBitVector(size, displacedTo, displacement);
+        return new ComplexBitVector(newCapacity, displacedTo, displacement);
     }
 }
