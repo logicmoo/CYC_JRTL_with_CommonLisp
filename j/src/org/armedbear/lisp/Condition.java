@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Condition.java,v 1.16 2003-12-12 17:30:52 piso Exp $
+ * $Id: Condition.java,v 1.17 2003-12-19 18:44:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public class Condition extends StandardObject
         message = null;
     }
 
-    public Condition(LispClass cls, LispObject slots)
+    public Condition(LispClass cls, Vector slots)
     {
         super(cls, slots);
         message = null;
