@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Keyword.java,v 1.28 2004-03-05 16:07:11 piso Exp $
+ * $Id: Keyword.java,v 1.29 2004-03-05 18:56:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,6 +62,7 @@ public final class Keyword extends Lisp
         INPUT               = internKeyword("INPUT"),
         INSTANCE            = internKeyword("INSTANCE"),
         INTERNAL            = internKeyword("INTERNAL"),
+        INVERT              = internKeyword("INVERT"),
         IO                  = internKeyword("IO"),
         LOCAL               = internKeyword("LOCAL"),
         NAME                = internKeyword("NAME"),
@@ -73,6 +74,7 @@ public final class Keyword extends Lisp
         PACKAGE             = internKeyword("PACKAGE"),
         PATHNAME            = internKeyword("PATHNAME"),
         PUBLIC              = internKeyword("PUBLIC"),
+        PRESERVE            = internKeyword("PRESERVE"),
         REF                 = internKeyword("REF"),
         RELATIVE            = internKeyword("RELATIVE"),
         START               = internKeyword("START"),
