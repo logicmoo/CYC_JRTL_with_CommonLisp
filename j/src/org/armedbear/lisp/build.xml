@@ -31,14 +31,13 @@
     <copy file="${LISP_HOME}/Site.java.in" tofile="${LISP_HOME}/Site.java" filtering="yes" overwrite="yes"/>
     <replace file="${LISP_HOME}/Site.java" token="&#92;" value="&#92;&#92;" summary="yes"/>
     <javac
-      compiler="jikes"
       srcdir="."
       destdir="${basedir}"
       classpath="${basedir}:${jdk}/jre/lib/rt.jar:${junit}"
       includeAntRuntime="no"
       includes="org/armedbear/lisp/**/*"
-      debug="no"
-      optimize="yes"
+      debug="yes"
+      optimize="no"
     />
 <!--    <junit printsummary="yes" haltonfailure="yes">-->
 <!--      <formatter type="plain" />-->
