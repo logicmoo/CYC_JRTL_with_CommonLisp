@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.68 2004-02-21 13:58:48 piso Exp $
+ * $Id: Closure.java,v 1.69 2004-04-03 23:02:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -506,11 +506,15 @@ public class Closure extends Function
             bindAuxVars(ext, thread);
         LispObject result = NIL;
         LispObject prog = body;
-        while (prog != NIL) {
-            result = eval(prog.car(), ext, thread);
-            prog = prog.cdr();
+        try {
+            while (prog != NIL) {
+                result = eval(prog.car(), ext, thread);
+                prog = prog.cdr();
+            }
         }
-        thread.setDynamicEnvironment(oldDynEnv);
+        finally {
+            thread.setDynamicEnvironment(oldDynEnv);
+        }
         return result;
     }
 
