@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.284 2004-08-21 16:25:23 piso Exp $
+;;; $Id: jvm.lisp,v 1.285 2004-08-21 18:10:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1299,7 +1299,7 @@
               (incf index)))))
       bytes)))
 
-(defun write-u1 (n)
+(defsubst write-u1 (n)
   (declare (optimize speed))
   (sys::write-8-bits n *stream*))
 
@@ -1941,6 +1941,10 @@
 (define-binary-operator 'ash                 "ash")
 (define-binary-operator 'aref                "AREF")
 (define-binary-operator 'sys::simple-typep   "typep")
+(define-binary-operator 'rplaca              "RPLACA")
+(define-binary-operator 'rplacd              "RPLACD")
+(define-binary-operator 'sys::%rplaca        "_RPLACA")
+(define-binary-operator 'sys::%rplacd        "_RPLACD")
 
 (defun compile-function-call-2 (fun args :target target)
   (let ((translation (gethash fun binary-operators)))
