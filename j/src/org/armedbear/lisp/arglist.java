@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: arglist.java,v 1.4 2003-12-10 21:36:12 asimon Exp $
+ * $Id: arglist.java,v 1.5 2003-12-15 01:40:53 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,18 +24,35 @@ package org.armedbear.lisp;
 public final class arglist extends Lisp
 {
 
+  private static final Functional getFunctional(LispObject obj)
+        throws ConditionThrowable
+    {
+        if (obj instanceof Functional)
+            return (Functional) obj;
+        if (obj instanceof Symbol) {
+            LispObject fun = obj.getSymbolFunction();
+	    if (fun instanceof Autoload) {
+                Autoload autoload = (Autoload) fun;
+                autoload.load();
+                fun = (Functional)autoload.getSymbol().getSymbolFunction();
+	    }
+            if (fun instanceof Functional) {
+	      Functional func = (Functional) fun;
+	      if (func.getArglist() != null) return  func;
+	      return getFunctional(get(checkSymbol(obj), Symbol.MACROEXPAND_MACRO, NIL));
+	    }
+        } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
+            return new Closure(obj.cadr(), obj.cddr(), new Environment());
+        throw new ConditionThrowable(new UndefinedFunction(obj));
+    }
+
     static final Primitive1 ARGLIST =
         new Primitive1("arglist", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispThread thread = LispThread.currentThread();
-            Functional functional = coerceToFunctional(arg);
-            if (functional instanceof Autoload) {
-                Autoload autoload = (Autoload) functional;
-                autoload.load();
-                functional = (Functional)autoload.getSymbol().getSymbolFunction();
-            }
+            Functional functional = getFunctional(arg);
             LispObject arglist = functional.getArglist();
             final LispObject value1, value2;
             if (arglist instanceof LispString) {
@@ -61,8 +78,6 @@ public final class arglist extends Lisp
                 value1 = NIL;
                 value2 = NIL;
             }
-	
-
             return thread.setValues(value1, value2);
         }
     };
