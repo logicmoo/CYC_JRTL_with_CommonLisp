@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.58 2003-09-10 16:30:28 piso Exp $
+ * $Id: Autoload.java,v 1.59 2003-09-10 16:42:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,8 @@ public final class Autoload extends Function
         autoload("lognand", "lognand");
         autoload("lognor", "lognor");
         autoload("lognot", "LogicalOperations");
+        autoload("logorc1", "logorc1");
+        autoload("logorc2", "logorc2");
         autoload("make-string-output-stream", "StringOutputStream");
         autoload("namestring", "Pathname");
         autoload("package-name", "PackageFunctions");
