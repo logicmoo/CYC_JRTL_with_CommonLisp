@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Keyword.java,v 1.9 2003-09-22 17:01:32 piso Exp $
+ * $Id: Keyword.java,v 1.10 2003-09-28 18:42:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,27 +29,28 @@ public final class Keyword extends Lisp
     }
 
     public static final Symbol
-        ABORT            = internKeyword("ABORT"),
-        ALLOW_OTHER_KEYS = internKeyword("ALLOW-OTHER-KEYS"),
-        CAPITALIZE       = internKeyword("CAPITALIZE"),
-        DATUM            = internKeyword("DATUM"),
-        DOWNCASE         = internKeyword("DOWNCASE"),
-        ELEMENT_TYPE     = internKeyword("ELEMENT-TYPE"),
-        ERROR            = internKeyword("ERROR"),
-        EXPECTED_TYPE    = internKeyword("EXPECTED-TYPE"),
-        EXTERNAL         = internKeyword("EXTERNAL"),
-        FILL_POINTER     = internKeyword("FILL-POINTER"),
-        FORMAT_ARGUMENTS = internKeyword("FORMAT-ARGUMENTS"),
-        FORMAT_CONTROL   = internKeyword("FORMAT-CONTROL"),
-        INHERITED        = internKeyword("INHERITED"),
-        INITIAL_CONTENTS = internKeyword("INITIAL-CONTENTS"),
-        INITIAL_ELEMENT  = internKeyword("INITIAL-ELEMENT"),
-        INTERNAL         = internKeyword("INTERNAL"),
-        NAME             = internKeyword("NAME"),
-        NICKNAMES        = internKeyword("NICKNAMES"),
-        NO_ERROR         = internKeyword("NO-ERROR"),
-        SUPERSEDE        = internKeyword("SUPERSEDE"),
-        UPCASE           = internKeyword("UPCASE"),
-        USE              = internKeyword("USE"),
-        WILD             = internKeyword("WILD");
+        ABORT               = internKeyword("ABORT"),
+        ALLOW_OTHER_KEYS    = internKeyword("ALLOW-OTHER-KEYS"),
+        CAPITALIZE          = internKeyword("CAPITALIZE"),
+        DATUM               = internKeyword("DATUM"),
+        DIRECT_SUPERCLASSES = internKeyword("DIRECT-SUPERCLASSES"),
+        DOWNCASE            = internKeyword("DOWNCASE"),
+        ELEMENT_TYPE        = internKeyword("ELEMENT-TYPE"),
+        ERROR               = internKeyword("ERROR"),
+        EXPECTED_TYPE       = internKeyword("EXPECTED-TYPE"),
+        EXTERNAL            = internKeyword("EXTERNAL"),
+        FILL_POINTER        = internKeyword("FILL-POINTER"),
+        FORMAT_ARGUMENTS    = internKeyword("FORMAT-ARGUMENTS"),
+        FORMAT_CONTROL      = internKeyword("FORMAT-CONTROL"),
+        INHERITED           = internKeyword("INHERITED"),
+        INITIAL_CONTENTS    = internKeyword("INITIAL-CONTENTS"),
+        INITIAL_ELEMENT     = internKeyword("INITIAL-ELEMENT"),
+        INTERNAL            = internKeyword("INTERNAL"),
+        NAME                = internKeyword("NAME"),
+        NICKNAMES           = internKeyword("NICKNAMES"),
+        NO_ERROR            = internKeyword("NO-ERROR"),
+        SUPERSEDE           = internKeyword("SUPERSEDE"),
+        UPCASE              = internKeyword("UPCASE"),
+        USE                 = internKeyword("USE"),
+        WILD                = internKeyword("WILD");
 }
