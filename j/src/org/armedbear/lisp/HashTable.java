@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.37 2004-08-19 18:09:36 piso Exp $
+ * $Id: HashTable.java,v 1.38 2004-09-20 17:43:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,30 @@ public abstract class HashTable extends LispObject
         if (type == BuiltInClass.HASH_TABLE)
             return T;
         return super.typep(type);
+    }
+
+    public boolean equalp(LispObject obj) throws ConditionThrowable
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof HashTable) {
+            HashTable ht = (HashTable) obj;
+            if (count != ht.count)
+                return false;
+            if (test != ht.test)
+                return false;
+            LispObject entries = ENTRIES();
+            while (entries != NIL) {
+                LispObject entry = entries.car();
+                LispObject key = entry.car();
+                LispObject value = entry.cdr();
+                if (!value.equalp(ht.get(key)))
+                    return false;
+                entries = entries.cdr();
+            }
+            return true;
+        }
+        return false;
     }
 
     public synchronized void clear()
