@@ -1,8 +1,8 @@
 /*
  * SpecialOperators.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.24 2004-03-06 04:08:53 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: SpecialOperators.java,v 1.25 2004-04-27 23:54:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,7 +166,7 @@ public final class SpecialOperators extends Lisp
                                  new SymbolMacro(obj.cadr()),
                                  ext);
                         } else
-                            return signal(new ProgramError("SYMBOL-MACROLET: bad symbol-expansion pair: " + obj));
+                            return signal(new ProgramError("SYMBOL-MACROLET: bad symbol-expansion pair: " + obj.writeToString()));
                     }
                     LispObject body = args.cdr();
                     while (body != NIL) {
