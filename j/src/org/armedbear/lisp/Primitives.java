@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.464 2003-10-08 14:56:36 piso Exp $
+ * $Id: Primitives.java,v 1.465 2003-10-08 17:26:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1857,7 +1857,8 @@ public final class Primitives extends Module
         new Primitive3("%set-row-major-aref", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             try {
                 ((AbstractArray)first).setRowMajor(Fixnum.getValue(second), third);
@@ -1874,6 +1875,25 @@ public final class Primitives extends Module
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             return new Vector(args);
+        }
+    };
+
+    // ### %vset
+    // %vset vector index new-value => new-value
+    private static final Primitive3 _VSET =
+        new Primitive3("%vset", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                ((AbstractVector)first).set(Fixnum.getValue(second), third);
+                return third;
+            }
+            catch (ClassCastException e) {
+                throw new ConditionThrowable(new TypeError(first, "vector"));
+            }
         }
     };
 
