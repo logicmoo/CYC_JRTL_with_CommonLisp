@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.36 2003-06-08 17:00:41 piso Exp $
+ * $Id: Closure.java,v 1.37 2003-06-08 17:12:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,11 +48,9 @@ public class Closure extends Function
     private final Environment environment;
     private final LispObject function;
     private final boolean allowOtherKeys;
-    private final boolean restp;
     private Symbol restVar;
     private int arity;
     private int required;
-    private int keywordParameterCount;
 
     private int minArgs;
     private int maxArgs;
@@ -70,12 +68,11 @@ public class Closure extends Function
         this.lambdaList = lambdaList;
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
         boolean allowOtherKeys = false;
-        boolean restp = false;
         if (lambdaList instanceof Cons) {
             final int length = lambdaList.length();
             ArrayList requiredParameters = null;
             ArrayList optionalParameters = null;
-            ArrayList keywordParameters = new ArrayList();
+            ArrayList keywordParameters = null;
             ArrayList auxVars = null;
             int state = STATE_REQUIRED;
             LispObject remaining = lambdaList;
@@ -91,7 +88,6 @@ public class Closure extends Function
                         arity = -1;
                     } else if (obj == Symbol.AND_REST || obj == Symbol.AND_BODY) {
                         state = STATE_REST;
-                        restp = true;
                         arity = -1;
                         maxArgs = -1;
                         remaining = remaining.cdr();
@@ -119,8 +115,9 @@ public class Closure extends Function
                             if (maxArgs >= 0)
                                 ++maxArgs;
                         } else if (state == STATE_KEYWORD) {
+                            if (keywordParameters == null)
+                                keywordParameters = new ArrayList();
                             keywordParameters.add(new Parameter((Symbol)obj, NIL, KEYWORD));
-                            ++keywordParameterCount;
                             if (maxArgs >= 0)
                                 maxArgs += 2;
                         } else {
@@ -171,9 +168,10 @@ public class Closure extends Function
                             if (obj != NIL)
                                 svar = obj.car();
                         }
+                        if (keywordParameters == null)
+                            keywordParameters = new ArrayList();
                         keywordParameters.add(new Parameter(keyword, var,
                             initForm, svar));
-                        ++keywordParameterCount;
                         if (maxArgs >= 0)
                             maxArgs += 2;
                     } else
@@ -194,9 +192,11 @@ public class Closure extends Function
                 optionalParameters.toArray(this.optionalParameters);
             } else
                 this.optionalParameters = null;
-            Debug.assertTrue(keywordParameterCount == keywordParameters.size());
-            this.keywordParameters = new Parameter[keywordParameters.size()];
-            keywordParameters.toArray(this.keywordParameters);
+            if (keywordParameters != null) {
+                this.keywordParameters = new Parameter[keywordParameters.size()];
+                keywordParameters.toArray(this.keywordParameters);
+            } else
+                this.keywordParameters = null;
             if (auxVars != null && auxVars.size() > 0) {
                 auxVarArray = new Parameter[auxVars.size()];
                 auxVars.toArray(auxVarArray);
@@ -218,7 +218,6 @@ public class Closure extends Function
         if (arity >= 0)
             Debug.assertTrue(arity == required);
         this.allowOtherKeys = allowOtherKeys;
-        this.restp = restp;
 
         minArgs = required;
     }
@@ -453,25 +452,25 @@ public class Closure extends Function
             }
         }
         // &rest parameter.
-        if (restp) {
+        if (restVar != null) {
             LispObject rest = NIL;
             for (int j = args.length; j-- > i;)
                 rest = new Cons(args[j], rest);
             bind(restVar, rest, ext);
         }
         // Keyword parameters.
-        if (keywordParameterCount > 0) {
+        if (keywordParameters != null) {
             int argsLeft = args.length - argsUsed;
             if ((argsLeft % 2) != 0)
                 throw new ProgramError("odd number of keyword arguments");
-            boolean[] boundpArray = new boolean[keywordParameterCount];
+            boolean[] boundpArray = new boolean[keywordParameters.length];
             LispObject allowOtherKeysValue = null;
             LispObject unrecognizedKeyword = null;
             for (int j = argsUsed; j < args.length; j += 2) {
                 LispObject keyword = args[j];
                 // Find it.
                 int k;
-                for (k = keywordParameterCount; k-- > 0;) {
+                for (k = keywordParameters.length; k-- > 0;) {
                     if (keywordParameters[k].keyword == keyword) {
                         // Found it!
                         if (!boundpArray[k]) {
@@ -505,7 +504,7 @@ public class Closure extends Function
                         unrecognizedKeyword);
             }
             // Now bind any unbound keyword arguments to their defaults.
-            for (int n = 0; n < keywordParameterCount; n++) {
+            for (int n = 0; n < keywordParameters.length; n++) {
                 if (!boundpArray[n]) {
                     Parameter parameter = keywordParameters[n];
                     LispObject initForm = parameter.initForm;
@@ -522,7 +521,7 @@ public class Closure extends Function
         } else {
             // No keyword parameters.
             if (argsUsed < args.length) {
-                if (!restp) {
+                if (restVar == null) {
                     throw new WrongNumberOfArgumentsException(this);
                 }
             }
