@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.19 2003-03-13 16:25:46 piso Exp $
+;;; $Id: list.lisp,v 1.20 2003-03-13 20:06:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,22 +73,16 @@
     (when (and (eq y z) (> n 0)) (return nil))))
 
 (defun fifth (list)
-  "Returns the 5th object in a list or NIL if there is no 5th object."
   (car (cddddr list)))
 (defun sixth (list)
-  "Returns the 6th object in a list or NIL if there is no 6th object."
   (cadr (cddddr list)))
 (defun seventh (list)
-  "Returns the 7th object in a list or NIL if there is no 7th object."
   (caddr (cddddr list)))
 (defun eighth (list)
-  "Returns the 8th object in a list or NIL if there is no 8th object."
   (cadddr (cddddr list)))
 (defun ninth (list)
-  "Returns the 9th object in a list or NIL if there is no 9th object."
   (car (cddddr (cddddr list))))
 (defun tenth (list)
-  "Returns the 10th object in a list or NIL if there is no 10th object."
   (cadr (cddddr (cddddr list))))
 
 (defun make-list (size &key initial-element)
@@ -370,7 +364,7 @@
 	  (return list)))))
 
 (defun member-if (test list &key key)
-  (do ((list list (Cdr list)))
+  (do ((list list (cdr list)))
     ((endp list) nil)
     (if (funcall test (apply-key key (car list)))
 	(return list))))
@@ -446,7 +440,7 @@
     (do () ((endp list1))
       (if (with-set-keys (member (apply-key key (car list1)) list2))
 	  (steve-splice list1 res)
-	  (setq list1 (Cdr list1))))
+	  (setq list1 (cdr list1))))
     res))
 
 (defun set-difference (list1 list2 &key key
