@@ -1,8 +1,8 @@
 /*
  * HistoryTextField.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: HistoryTextField.java,v 1.1.1.1 2002-09-24 16:08:17 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: HistoryTextField.java,v 1.2 2003-07-23 00:24:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
@@ -181,6 +182,12 @@ public class HistoryTextField extends JTextField implements FocusListener,
             String s = history.getPrevious();
             setText(s != null ? s : "");
         }
+    }
+
+    public void paintComponent(Graphics g)
+    {
+        Display.setRenderingHints(g);
+        super.paintComponent(g);
     }
 
     public void focusGained(FocusEvent e)
