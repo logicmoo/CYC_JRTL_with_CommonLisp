@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.9 2004-09-06 12:39:12 piso Exp $
+;;; $Id: slime.lisp,v 1.10 2004-09-06 18:42:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,8 +38,14 @@
 
 (defvar *stream* nil)
 
+(defun slime-local-p ()
+  (let ((name (buffer-name)))
+    (and name
+         (search name "jlisp"))))
+
 (defun slime-connected-p ()
-  (not (null *stream*)))
+  (or (not (null *stream*))
+      (slime-local-p)))
 
 (defun connect (host port)
   (when *stream*
@@ -58,11 +64,13 @@
     (setf *stream* nil)))
 
 (defun slime-eval (form)
-  (handler-case
-      (progn
-        (swank-protocol:encode-message form *stream*)
-        (swank-protocol:decode-message *stream*))
-    (stream-error () (disconnect))))
+  (if (slime-local-p)
+      (eval form)
+      (handler-case
+          (progn
+            (swank-protocol:encode-message form *stream*)
+            (swank-protocol:decode-message *stream*))
+        (stream-error () (disconnect)))))
 
 (defun read-port-and-connect (retries)
   (status "Slime polling for connection...")
@@ -79,7 +87,8 @@
 (defun slime ()
   (when *stream*
     (disconnect))
-  (make-thread #'(lambda () (read-port-and-connect 60))))
+  (unless (slime-local-p)
+    (make-thread #'(lambda () (read-port-and-connect 60)))))
 
 (defvar *prefix* nil)
 (defvar *completions* ())

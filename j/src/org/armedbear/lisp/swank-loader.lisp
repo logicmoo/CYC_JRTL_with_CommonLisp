@@ -1,7 +1,7 @@
 ;;; swank-loader.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-loader.lisp,v 1.2 2004-09-02 21:30:37 piso Exp $
+;;; $Id: swank-loader.lisp,v 1.3 2004-09-06 18:41:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,4 +34,5 @@
         (load binary-file)
         (load (compile-file source-file)))))
 
+#-j
 (funcall (intern (string '#:start-server) '#:swank))
