@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.44 2004-01-24 19:30:56 piso Exp $
+ * $Id: Pathname.java,v 1.45 2004-01-26 14:34:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,6 +190,26 @@ public final class Pathname extends LispObject
         }
         if (directory instanceof LispString)
             Debug.assertTrue(false);
+        sb.append(getDirectoryNamestring());
+        if (name instanceof LispString)
+            sb.append(((LispString)name).getValue());
+        else if (name == Keyword.WILD)
+            sb.append('*');
+        if (type != NIL) {
+            sb.append('.');
+            if (type instanceof LispString)
+                sb.append(((LispString)type).getValue());
+            else if (type == Keyword.WILD)
+                sb.append('*');
+            else
+                Debug.assertTrue(false);
+        }
+        return namestring = sb.toString();
+    }
+
+    public String getDirectoryNamestring() throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer();
         if (directory != NIL) {
             LispObject temp = directory;
             LispObject part = temp.car();
@@ -212,20 +232,7 @@ public final class Pathname extends LispObject
                 temp = temp.cdr();
             }
         }
-        if (name instanceof LispString)
-            sb.append(((LispString)name).getValue());
-        else if (name == Keyword.WILD)
-            sb.append('*');
-        if (type != NIL) {
-            sb.append('.');
-            if (type instanceof LispString)
-                sb.append(((LispString)type).getValue());
-            else if (type == Keyword.WILD)
-                sb.append('*');
-            else
-                Debug.assertTrue(false);
-        }
-        return namestring = sb.toString();
+        return sb.toString();
     }
 
     public boolean equal(LispObject obj) throws ConditionThrowable
@@ -363,11 +370,8 @@ public final class Pathname extends LispObject
             return (Pathname) arg;
         if (arg instanceof LispString)
             return new Pathname(((LispString)arg).getValue());
-        if (arg instanceof Stream) {
-            LispObject pathname = ((Stream)arg).getPathname();
-            if (pathname instanceof Pathname)
-                return (Pathname) pathname;
-        }
+        if (arg instanceof FileStream)
+            return ((FileStream)arg).getPathname();
         signal(new TypeError(arg, "pathname designator"));
         // Not reached.
         return null;
@@ -452,11 +456,12 @@ public final class Pathname extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof LispString)
-                return arg;
-            if (arg instanceof Pathname)
-                return new LispString(((Pathname)arg).getNamestring());
-            return signal(new TypeError(arg, "pathname designator"));
+            Pathname pathname = coerceToPathname(arg);
+            String namestring = pathname.getNamestring();
+            if (namestring == null)
+                signal(new SimpleError("Pathname has no namestring: " +
+                                       pathname + "."));
+            return new LispString(namestring);
         }
     };
 
@@ -468,21 +473,7 @@ public final class Pathname extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String namestring;
-            if (arg instanceof LispString)
-                namestring = ((LispString)arg).getValue();
-            else if (arg instanceof Pathname)
-                namestring = ((Pathname)arg).getNamestring();
-            else
-                return signal(new TypeError(arg, "pathname designator"));
-            if (namestring != null) {
-                for (int i = namestring.length(); i-- > 0;) {
-                    char c = namestring.charAt(i);
-                    if (c == '/' || c == '\\')
-                        return new LispString(namestring.substring(0, i + 1));
-                }
-            }
-            return NIL;
+            return new LispString(coerceToPathname(arg).getDirectoryNamestring());
         }
     };
 
@@ -620,26 +611,34 @@ public final class Pathname extends LispObject
         }
     };
 
-    private static final Primitive1 _DIRECTORY =
-        new Primitive1("%directory", PACKAGE_SYS, false)
+    // ### list-directory
+    private static final Primitive1 LIST_DIRECTORY =
+        new Primitive1("list-directory", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(arg);
             LispObject result = NIL;
             String s = pathname.getNamestring();
-            File f = new File(s);
-            if (f.isDirectory()) {
-                File[] files = f.listFiles();
-                try {
-                    for (int i = files.length; i-- > 0;) {
-                        Pathname p = new Pathname(files[i].getCanonicalPath());
-                        result = new Cons(p, result);
+            if (s != null) {
+                File f = new File(s);
+                if (f.isDirectory()) {
+                    File[] files = f.listFiles();
+                    try {
+                        for (int i = files.length; i-- > 0;) {
+                            File file = files[i];
+                            Pathname p;
+                            if (file.isDirectory())
+                                p = Utilities.getDirectoryPathname(file);
+                            else
+                                p = new Pathname(file.getCanonicalPath());
+                            result = new Cons(p, result);
+                        }
                     }
-                }
-                catch (IOException e) {
-                    return signal(new FileError("Unable to list directory " +
-                                                pathname + "."));
+                    catch (IOException e) {
+                        return signal(new FileError("Unable to list directory " +
+                                                    pathname + "."));
+                    }
                 }
             }
             return result;
