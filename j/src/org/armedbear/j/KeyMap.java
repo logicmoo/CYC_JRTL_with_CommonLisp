@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.8 2003-06-13 15:17:32 piso Exp $
+ * $Id: KeyMap.java,v 1.9 2003-06-18 15:41:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.KeyStroke;
 
@@ -67,7 +68,7 @@ public final class KeyMap implements Constants
         return globalKeyMapFile;
     }
 
-    public static synchronized final void resetGlobalKeyMap()
+    public static synchronized final void deleteGlobalKeyMap()
     {
         globalKeyMap = null;
     }
@@ -587,6 +588,34 @@ public final class KeyMap implements Constants
         }
         catch (IOException e) {
             Log.error(e);
+        }
+    }
+
+    private static synchronized void useGlobalDefaults()
+    {
+        globalKeyMap = new KeyMap();
+        globalKeyMap.setGlobalDefaults();
+    }
+
+    public static void defaultKeyMaps()
+    {
+        useGlobalDefaults();
+        for (Iterator it = Editor.getModeList().iterator(); it.hasNext();) {
+            ModeListEntry entry = (ModeListEntry) it.next();
+            Mode mode = entry.getMode(false);
+            if (mode != null)
+                mode.useDefaultKeyMap();
+        }
+    }
+
+    public static void reloadKeyMaps()
+    {
+        deleteGlobalKeyMap();
+        for (Iterator it = Editor.getModeList().iterator(); it.hasNext();) {
+            ModeListEntry entry = (ModeListEntry) it.next();
+            Mode mode = entry.getMode(false);
+            if (mode != null)
+                mode.deleteKeyMap();
         }
     }
 }
