@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.27 2004-02-25 01:23:12 piso Exp $
+ * $Id: Stream.java,v 1.28 2004-02-25 01:28:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1020,10 +1020,10 @@ public class Stream extends LispObject
                         return signal(new EndOfFile());
                     return thread.setValues(eofValue, T);
                 }
-                return thread.setValues(new SimpleString(sb.toString()), T);
+                return thread.setValues(new SimpleString(sb), T);
             }
             if (n == '\n')
-                return thread.setValues(new SimpleString(sb.toString()), NIL);
+                return thread.setValues(new SimpleString(sb), NIL);
             else
                 sb.append((char)n);
         }
