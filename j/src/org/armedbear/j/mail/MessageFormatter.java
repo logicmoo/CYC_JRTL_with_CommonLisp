@@ -2,7 +2,7 @@
  * MessageFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: MessageFormatter.java,v 1.1.1.1 2002-09-24 16:10:13 piso Exp $
+ * $Id: MessageFormatter.java,v 1.2 2002-10-01 19:12:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,11 +56,7 @@ public final class MessageFormatter extends Formatter
 
     public synchronized LineSegmentList formatLine(Line line)
     {
-        String text;
-        if (Editor.tabsAreVisible())
-            text = Utilities.makeTabsVisible(line.getText(), buffer.getTabWidth());
-        else
-            text = Utilities.detab(line.getText(), buffer.getTabWidth());
+        final String text = getDetabbedText(line);
         clearSegmentList();
         String trim = text.trim();
         if (trim.length() == 0) {
