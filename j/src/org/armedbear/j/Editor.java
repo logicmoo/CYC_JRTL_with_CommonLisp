@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.27 2003-01-02 18:59:14 piso Exp $
+ * $Id: Editor.java,v 1.28 2003-01-02 19:22:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4153,14 +4153,15 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             return new Directory(file);
         if (file.isFile()) {
             if (!file.canRead()) {
-                currentEditor.status("File not readable");
+                MessageDialog.showMessageDialog("File is not readable",
+                    "Error");
                 return null;
             }
             return Buffer.createBuffer(file);
         }
         if (file.exists()) {
-            // The file exists, but it's neither a directory nor a "normal" file.
-            // This can occur on Linux if an SMB mount goes south.
+            // The file exists, but it's neither a directory nor a "normal"
+            // file. This can occur on Linux if an SMB mount goes south.
 
             // Not a very informative error message, but this is what bash says
             // in the SMB mount case.
