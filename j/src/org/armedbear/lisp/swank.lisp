@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.10 2004-09-07 20:25:26 piso Exp $
+;;; $Id: swank.lisp,v 1.11 2004-09-08 19:44:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -187,8 +187,9 @@
 (defun format-values-for-echo-area (values)
   (let ((*print-readably* nil))
     (cond ((typep values 'error)
-           (with-output-to-string (s)
-             (swank-format s "; Error [\"~A\"]" values)))
+           (or (ignore-errors (with-output-to-string (s)
+                                (swank-format s "; Error [\"~A\"]" values)))
+               "; Error"))
           (values
            (with-output-to-string (s)
              (do* ((values values (cdr values))
@@ -211,10 +212,19 @@
               (setf values (multiple-value-list (eval form))))))
       (error (e) (return-from eval-string e)))))
 
+(defun shorten-string-for-transcript (string)
+  (let ((s (subseq string 0 (min 60 (length string)))))
+    (substitute #\space #\newline s)))
+
 (defun interactive-eval-string (string package-name)
-  (finish-output)
+  (write-string ";;;; ")
+  (write-string (shorten-string-for-transcript string))
+  (terpri)
+  (force-output)
   (let ((package (if package-name (find-package package-name) *package*)))
-    (let ((*package* (or package *package*)))
-      (format-values-for-echo-area (eval-string string)))))
+    (let* ((*package* (or package *package*))
+           (values (eval-string string)))
+      (force-output)
+      (format-values-for-echo-area values))))
 
 (provide '#:swank)
