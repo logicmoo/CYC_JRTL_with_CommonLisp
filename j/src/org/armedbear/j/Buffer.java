@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.45 2003-07-05 16:59:14 piso Exp $
+ * $Id: Buffer.java,v 1.46 2003-07-05 17:43:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1463,12 +1463,34 @@ public class Buffer extends SystemBuffer
             MessageDialog.showMessageDialog(sb.toString(), dialogTitle);
             return false;
         }
+        if (!compress(cache, file))
+            return false;
+        saved();
+        lastModified = file.lastModified();
+        return true;
+    }
+
+    private boolean compress(File source, File destination)
+    {
+        if (source == null) {
+            Debug.bug();
+            return false;
+        }
+        if (destination == null) {
+            Debug.bug();
+            return false;
+        }
+        if (!source.isFile()) {
+            Debug.bug();
+            return false;
+        }
+        final File tempFile = Utilities.getTempFile(destination.getParentFile());
         try {
-            final int bufSize = 32768;
+            final int bufSize = 4096;
             BufferedInputStream in =
-                new BufferedInputStream(cache.getInputStream());
+                new BufferedInputStream(source.getInputStream());
             GZIPOutputStream out =
-                new GZIPOutputStream(new BufferedOutputStream(file.getOutputStream()),
+                new GZIPOutputStream(new BufferedOutputStream(tempFile.getOutputStream()),
                                      bufSize);
             byte[] buffer = new byte[bufSize];
             while (true) {
@@ -1481,14 +1503,12 @@ public class Buffer extends SystemBuffer
             in.close();
             out.flush();
             out.close();
+            return Utilities.deleteRename(tempFile, destination);
         }
         catch (IOException e) {
             Log.error(e);
             return false;
         }
-        saved();
-        lastModified = file.lastModified();
-        return true;
     }
 
     private boolean saveFtp()
@@ -1529,8 +1549,18 @@ public class Buffer extends SystemBuffer
             MessageDialog.showMessageDialog(message, "Save");
             return false;
         }
-        final FtpSaveProcess saveProcess =
-            new FtpSaveProcess(this, file, session);
+        final FtpSaveProcess saveProcess;
+        if (compression != null && compression.getType() == COMPRESSION_GZIP) {
+            final File tempFile = Utilities.getTempFile();
+            if (!compress(cache, tempFile)) {
+                String message = "Unable to compress temporary file for " +
+                    file.getName();
+                MessageDialog.showMessageDialog(message, "Save");
+                return false;
+            }
+            saveProcess = new FtpSaveProcess(this, tempFile, file, session);
+        } else
+            saveProcess = new FtpSaveProcess(this, cache, file, session);
         saveProcess.setConfirmIfDestinationChanged(true);
         saveProcess.setTitle("Save");
         final Runnable successRunnable = new Runnable() {
@@ -1568,13 +1598,25 @@ public class Buffer extends SystemBuffer
         }
 
         if (!saveToCache()) {
-            message = "Unable to write temporary file for " + file.netPath();
+            message = "Unable to write temporary file for " + file.getName();
             MessageDialog.showMessageDialog(message, title);
             return false;
         }
 
         Ssh ssh = new Ssh();
-        succeeded = ssh.copy(cache, file);
+
+        if (compression != null && compression.getType() == COMPRESSION_GZIP) {
+            final File tempFile = Utilities.getTempFile();
+            if (!compress(cache, tempFile)) {
+                message = "Unable to compress temporary file for " +
+                    file.getName();
+                MessageDialog.showMessageDialog(message, "Save");
+                return false;
+            }
+            succeeded = ssh.copy(tempFile, file);
+        } else
+            succeeded = ssh.copy(cache, file);
+
         if (!succeeded)
             message = ssh.getErrorText();
 
@@ -1700,7 +1742,7 @@ public class Buffer extends SystemBuffer
             return;
         }
         final FtpSaveProcess saveProcess =
-            new FtpSaveProcess(this, destination, session);
+            new FtpSaveProcess(this, cache, destination, session);
         saveProcess.setConfirmOverwrite(true);
         saveProcess.setTitle("Save As");
         final Runnable successRunnable = new Runnable() {
@@ -1812,7 +1854,8 @@ public class Buffer extends SystemBuffer
                 Sidebar.repaintBufferListInAllFrames();
             }
         };
-        final FtpSaveProcess saveProcess = new FtpSaveProcess(this, destination, session);
+        final FtpSaveProcess saveProcess =
+            new FtpSaveProcess(this, cache, destination, session);
         saveProcess.setConfirmOverwrite(true);
         saveProcess.setTitle("Save Copy");
         saveProcess.setSuccessRunnable(successRunnable);
