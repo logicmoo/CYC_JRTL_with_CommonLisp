@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.10 2003-07-18 17:23:49 piso Exp $
+ * $Id: LispAPI.java,v 1.11 2003-07-19 00:14:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,6 +82,19 @@ public final class LispAPI extends Lisp
         }
     }
 
+    public static final Position checkMarker(LispObject obj)
+        throws LispError
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        try {
+            return (Position) ((JavaObject)obj).getObject();
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "marker");
+        }
+    }
+
     public static final Line checkLine(LispObject obj)
         throws LispError
     {
@@ -153,6 +166,46 @@ public final class LispAPI extends Lisp
                     return new LispString(file.netPath());
                 return new LispString(file.canonicalPath());
             }
+            return NIL;
+        }
+    };
+
+    // ### copy-marker
+    private static final Primitive1 COPY_MARK =
+        new Primitive1("copy-marker", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            try {
+                return new JavaObject(new Position(checkMarker(arg)));
+            }
+            catch (Exception e) {
+                throw new TypeError(arg, "marker");
+            }
+        }
+    };
+
+    // ### move-marker
+    private static final Primitive2 MOVE_MARKER =
+        new Primitive2("move-marker", PACKAGE_J, true) {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            Position pos1 = checkMarker(first);
+            Position pos2 = checkMarker(second);
+            pos1.moveTo(pos2);
+            return first;
+        }
+    };
+
+    // ### current-point
+    private static final Primitive0 CURRENT_POINT =
+        new Primitive0("current-point", PACKAGE_J, true) {
+        public LispObject execute()
+        {
+            Editor editor = Editor.currentEditor();
+            Position dot = Editor.currentEditor().getDot();
+            if (dot != null)
+                return new JavaObject(dot);
             return NIL;
         }
     };
