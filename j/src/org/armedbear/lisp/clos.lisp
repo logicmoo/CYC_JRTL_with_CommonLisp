@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.118 2004-10-23 19:24:22 piso Exp $
+;;; $Id: clos.lisp,v 1.119 2004-10-24 02:45:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1491,15 +1491,17 @@
         (*next-method-p-p* nil))
     (walk-form body)
     (if (or *call-next-method-p* *next-method-p-p*)
-        `(lambda (args next-emfun)
-           (flet ((call-next-method (&rest cnm-args)
-                                    (if (null next-emfun)
-                                        (error "No next method for generic function ~S."
-                                               (method-generic-function ',method))
-                                        (funcall next-emfun (or cnm-args args))))
-                  (next-method-p ()
-                                 (not (null next-emfun))))
-             (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
+        (make-closure
+         `(lambda (args next-emfun)
+            (flet ((call-next-method (&rest cnm-args)
+                     (if (null next-emfun)
+                         (error "No next method for generic function ~S."
+                                (method-generic-function ',method))
+                         (funcall next-emfun (or cnm-args args))))
+                   (next-method-p ()
+                     (not (null next-emfun))))
+              (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
+         (method-environment method))
         (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
                                   (method-environment method))))
 
@@ -1519,7 +1521,7 @@
                   (t
                    (sys:simple-format t "environment is not empty~%"))))
 
-          `(lambda (args next-emfun) (apply ,code args))))))
+          (make-closure `(lambda (args next-emfun) (apply ,code args)) nil)))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
