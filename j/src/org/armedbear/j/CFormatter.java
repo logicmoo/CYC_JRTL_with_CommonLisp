@@ -2,7 +2,7 @@
  * CFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CFormatter.java,v 1.1.1.1 2002-09-24 16:09:27 piso Exp $
+ * $Id: CFormatter.java,v 1.2 2002-10-08 18:04:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -340,15 +340,14 @@ public final class CFormatter extends Formatter implements Constants
     public boolean parseBuffer()
     {
         int state = STATE_NEUTRAL;
+        boolean continued = false;
         Line line = buffer.getFirstLine();
         boolean changed = false;
         while (line != null) {
             int oldflags = line.flags();
-
             // Quoted strings can't span lines in C.
-            if (state == STATE_QUOTE)
+            if (state == STATE_QUOTE && !continued)
                 state = STATE_NEUTRAL;
-
             if (state != oldflags) {
                 line.setFlags(state);
                 changed = true;
@@ -378,8 +377,10 @@ public final class CFormatter extends Formatter implements Constants
             }
             char quoteChar = '\0';
             final int limit = line.length();
+            char c = '\0';
+            continued = false;
             for (int i = 0; i < limit; i++) {
-                char c = line.charAt(i);
+                c = line.charAt(i);
                 if (c == '\\' && i < limit-1) {
                     // Escape.
                     ++i;
@@ -402,7 +403,6 @@ public final class CFormatter extends Formatter implements Constants
                     }
                     continue;
                 }
-
                 // Not in comment or quoted string.
                 if (c == '/' && i < limit-1) {
                     c = line.charAt(++i);
@@ -417,6 +417,8 @@ public final class CFormatter extends Formatter implements Constants
                     quoteChar = c;
                 }
             }
+            if (c == '\\')
+                continued = true;
             line = line.next();
         }
         buffer.setNeedsParsing(false);
