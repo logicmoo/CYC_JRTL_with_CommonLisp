@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.6 2004-02-13 17:08:30 piso Exp $
+ * $Id: EchoStream.java,v 1.7 2004-02-13 17:16:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,6 +171,11 @@ public final class EchoStream extends Stream
         // composite streams."
         setOpen(false);
         return T;
+    }
+
+    public LispObject listen() throws ConditionThrowable
+    {
+        return in.listen();
     }
 
     public String toString()
