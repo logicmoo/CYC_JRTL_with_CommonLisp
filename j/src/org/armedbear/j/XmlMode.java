@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: XmlMode.java,v 1.1.1.1 2002-09-24 16:07:48 piso Exp $
+ * $Id: XmlMode.java,v 1.2 2003-02-25 16:53:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,7 +127,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                 new BufferedReader(new InputStreamReader(file.getInputStream()));
             String s = reader.readLine();
             reader.close();
-            if (s.toLowerCase().startsWith("<?xml")) {
+            if (s != null && s.toLowerCase().startsWith("<?xml")) {
                 int end = s.indexOf("?>");
                 if (end >= 0) {
                     s = s.substring(5, end);
