@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.52 2004-11-03 15:39:00 piso Exp $
+ * $Id: LispClass.java,v 1.53 2004-11-06 20:06:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,12 +83,12 @@ public class LispClass extends StandardObject
         return symbol;
     }
 
-    public final Layout getLayout()
+    public final Layout getClassLayout()
     {
         return layout;
     }
 
-    public final void setLayout(Layout layout)
+    public final void setClassLayout(Layout layout)
     {
         this.layout = layout;
     }
@@ -321,7 +321,7 @@ public class LispClass extends StandardObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                Layout layout = ((LispClass)arg).getLayout();
+                Layout layout = ((LispClass)arg).getClassLayout();
                 return layout != null ? layout : NIL;
             }
             catch (ClassCastException e) {
@@ -338,7 +338,7 @@ public class LispClass extends StandardObject
             throws ConditionThrowable
         {
             try {
-                ((LispClass)first).setLayout((Layout)second);
+                ((LispClass)first).setClassLayout((Layout)second);
                 return second;
             }
             catch (ClassCastException e) {
