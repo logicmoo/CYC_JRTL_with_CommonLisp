@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.29 2003-12-04 16:56:02 piso Exp $
+ * $Id: LispAPI.java,v 1.30 2003-12-04 19:39:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -576,7 +576,7 @@ public final class LispAPI extends Lisp
                         return T;
                     }
                 } else {
-                    preferences.setProperty(property, String.valueOf(newValue));
+                    preferences.setProperty(property, LispString.getValue(newValue));
                     return newValue;
                 }
             }
@@ -596,7 +596,7 @@ public final class LispAPI extends Lisp
                         return T;
                     }
                 } else {
-                    mode.setProperty(property, String.valueOf(newValue));
+                    mode.setProperty(property, LispString.getValue(newValue));
                     return newValue;
                 }
             }
@@ -614,7 +614,7 @@ public final class LispAPI extends Lisp
                     buffer.setProperty(property, Fixnum.getValue(newValue));
                     return newValue;
                 }
-                buffer.setProperty(property, String.valueOf(newValue));
+                buffer.setProperty(property, LispString.getValue(newValue));
                 return newValue;
             }
             throw new ConditionThrowable(new LispError("bad keyword argument: " + kind));
@@ -812,6 +812,20 @@ public final class LispAPI extends Lisp
         }
         catch (Throwable t) {
             Log.debug(t);
+        }
+    }
+
+    public static void invokeBufferActivatedHook(Buffer buffer)
+    {
+        if (buffer != null) {
+            try {
+                Primitives.FUNCALL.execute(PACKAGE_J.intern("INVOKE-HOOK"),
+                                           PACKAGE_J.intern("BUFFER-ACTIVATED-HOOK"),
+                                           new JavaObject(buffer));
+            }
+            catch (Throwable t) {
+                Log.debug(t);
+            }
         }
     }
 
