@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.112 2003-12-27 07:46:16 piso Exp $
+# $Id: Makefile.in,v 1.113 2004-01-02 01:21:40 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -168,6 +168,7 @@ CLASSFILES =	AbstractArray.class \
 		open.class \
 		probe_file.class \
 		room.class \
+		unbound_slot_instance.class \
 		java/awt/ActionListener.class \
 		java/awt/ComponentAdapter.class \
 		java/awt/ItemListener.class \
