@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.673 2004-08-21 16:22:36 piso Exp $
+ * $Id: Primitives.java,v 1.674 2004-08-22 23:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2590,13 +2590,15 @@ public final class Primitives extends Lisp
 
     // ### %in-package
     private static final Primitive1 _IN_PACKAGE =
-        new Primitive1("%in-package", PACKAGE_SYS, false) {
+        new Primitive1("%in-package", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String packageName = javaString(arg);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                signal(new PackageError("package " + arg + " does not exist"));
+                signal(new PackageError("The name " + packageName +
+                                        " does not designate any package."));
             LispThread thread = LispThread.currentThread();
             Environment dynEnv = thread.getDynamicEnvironment();
             if (dynEnv != null) {
@@ -2614,7 +2616,9 @@ public final class Primitives extends Lisp
 
     // ### use-package
     // use-package packages-to-use &optional package => t
-    private static final Primitive USE_PACKAGE = new Primitive("use-package","packages-to-use &optional package") {
+    private static final Primitive USE_PACKAGE =
+        new Primitive("use-package","packages-to-use &optional package")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1 || args.length > 2)
