@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.12 2004-05-12 17:01:17 piso Exp $
+ * $Id: FileStream.java,v 1.13 2004-05-12 17:54:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@ import java.io.RandomAccessFile;
 
 public final class FileStream extends Stream
 {
-    private static final String lineSeparator = System.getProperty("line.separator");
-
     private final RandomAccessFile raf;
     private final Pathname pathname;
     private final int bytesPerUnit;
@@ -204,7 +202,7 @@ public final class FileStream extends Stream
     {
         try {
             raf.writeBytes(s);
-            raf.writeBytes(lineSeparator);
+            raf.write((byte)'\n');
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
