@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.90 2003-07-04 17:27:53 piso Exp $
+ * $Id: Editor.java,v 1.91 2003-07-17 13:11:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1073,7 +1073,7 @@ public final class Editor extends JPanel implements Constants,
             if (index >= 0 && index < bookmarks.length) {
                 Marker m = bookmarks[index];
                 if (m != null)
-                    gotoBookmark(m);
+                    m.gotoMarker(this);
             }
         }
     }
@@ -6378,11 +6378,6 @@ public final class Editor extends JPanel implements Constants,
         frame.setFocus(locationBar.getTextField());
     }
 
-    private void gotoBookmark(Marker m)
-    {
-        m.gotoMarker(this);
-    }
-
     public void wrapRegion()
     {
         if (!checkReadOnly())
@@ -7588,7 +7583,7 @@ public final class Editor extends JPanel implements Constants,
         } else {
             Marker m = (Marker) positionStack.pop();
             if (m != null)
-                gotoBookmark(m);
+                m.gotoMarker(this);
         }
     }
 
