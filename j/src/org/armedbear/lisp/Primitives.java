@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.37 2003-02-19 03:47:50 piso Exp $
+ * $Id: Primitives.java,v 1.38 2003-02-19 17:41:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3060,6 +3060,32 @@ public final class Primitives extends Module
             }
             out.writeString(string);
             return string;
+        }
+    };
+
+    // ### finish-output
+    // finish-output &optional output-stream => nil
+    private static final Primitive FINISH_OUTPUT =
+        new Primitive("finish-output") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length > 1)
+                throw new WrongNumberOfArgumentsException(this);
+            CharacterOutputStream out = null;
+            if (args.length == 0)
+                out = getStandardOutput();
+            else {
+                LispObject streamArg = args[0];
+                if (streamArg instanceof CharacterOutputStream)
+                    out = (CharacterOutputStream) streamArg;
+                else if (streamArg == T || streamArg == NIL)
+                    out = getStandardOutput();
+                else
+                    throw new TypeError(args[1],
+                        "character output stream");
+            }
+            out.finishOutput();
+            return NIL;
         }
     };
 
