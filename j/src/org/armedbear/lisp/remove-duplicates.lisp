@@ -1,7 +1,7 @@
 ;;; remove-duplicates.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: remove-duplicates.lisp,v 1.5 2004-03-04 11:35:34 piso Exp $
+;;; $Id: remove-duplicates.lisp,v 1.6 2004-03-04 12:57:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,20 @@
 
 (in-package "SYSTEM")
 
-;;; From CMUCL.
+;;; Adapted from CMUCL.
+
+(defun simple-list-remove-duplicates (list)
+  (let* ((result (list ()))
+	 (splice result))
+    (do ((current list (cdr current)))
+        ((atom current))
+      (unless (do ((it (car current))
+                   (l (cdr current) (cdr l)))
+                  ((atom l) nil)
+                (if (eql it (car l))
+                    (return t)))
+        (setq splice (cdr (rplacd splice (list (car current)))))))
+    (cdr result)))
 
 (defun list-remove-duplicates (list test test-not start end key from-end)
   (let* ((result (list ()))
@@ -56,7 +69,6 @@
       (setq current (cdr current)))
     (cdr result)))
 
-
 (defun vector-remove-duplicates (vector test test-not start end key from-end
                                         &optional (length (length vector)))
   (when (null end) (setf end (length vector)))
@@ -84,14 +96,18 @@
       (setf (aref result jndex) (aref vector index))
       (setq index (1+ index))
       (setq jndex (1+ jndex)))
-    (sys::shrink-vector result jndex)))
-
+    (shrink-vector result jndex)))
 
 (defun remove-duplicates (sequence &key (test #'eql) test-not (start 0) from-end
 				   end key)
   (if (listp sequence)
-      (if sequence
-          (list-remove-duplicates sequence test test-not
-                                  start end key from-end))
-      (vector-remove-duplicates sequence test test-not
-                                start end key from-end)))
+      (when sequence
+        (if (and (eq test #'eql)
+                 (null test-not)
+                 (eql start 0)
+                 (null from-end)
+                 (null end)
+                 (null key))
+            (simple-list-remove-duplicates sequence)
+            (list-remove-duplicates sequence test test-not start end key from-end)))
+      (vector-remove-duplicates sequence test test-not start end key from-end)))
