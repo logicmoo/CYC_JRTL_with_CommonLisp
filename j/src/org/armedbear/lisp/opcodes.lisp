@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: opcodes.lisp,v 1.19 2005-02-03 02:29:08 piso Exp $
+;;; $Id: opcodes.lisp,v 1.20 2005-03-31 02:15:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -164,10 +164,10 @@
 (define-opcode lushr 125 1 nil)
 (define-opcode iand 126 1 -1)
 (define-opcode land 127 1 -2)
-(define-opcode ior 128 1 nil)
-(define-opcode lor 129 1 nil)
-(define-opcode ixor 130 1 nil)
-(define-opcode lxor 131 1 nil)
+(define-opcode ior 128 1 -1)
+(define-opcode lor 129 1 -2)
+(define-opcode ixor 130 1 -1)
+(define-opcode lxor 131 1 -2)
 (define-opcode iinc 132 3 0)
 (define-opcode i2l 133 1 1)
 (define-opcode i2f 134 1 nil)
