@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.15 2003-09-18 18:24:45 piso Exp $
+;;; $Id: numbers.lisp,v 1.16 2003-10-27 04:44:18 dmcnaught Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -178,6 +178,8 @@
   "Returns the root of the nearest integer less than n which is a perfect
    square."
   (declare (type unsigned-byte n) (values unsigned-byte))
+  (unless (and (numberp n) (not (minusp n)))
+    (error 'type-error "wrong type: ~A is not a non-negative real number" n))
   ;; theoretically (> n 7) ,i.e., n-len-quarter > 0
   (if (and (fixnump n) (<= n 24))
       (cond ((> n 15) 4)

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.485 2003-10-26 00:37:26 dmcnaught Exp $
+ * $Id: Primitives.java,v 1.486 2003-10-27 04:44:18 dmcnaught Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4561,29 +4561,23 @@ public final class Primitives extends Module
         new Primitive1("sqrt") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof Complex)
-                throw new ConditionThrowable(new LispError("SQRT not implemented for complex numbers"));
-            if (arg.minusp())
-                return Complex.getInstance(new LispFloat(0),
-                                           sqrt(Fixnum.ZERO.subtract(arg)));
             return sqrt(arg);
         }
     };
 
-    private static final LispFloat sqrt(LispObject obj) throws ConditionThrowable
+    private static final LispObject sqrt(LispObject obj) throws ConditionThrowable
     {
-        if (obj.realp() && !obj.minusp()) {  // returning real           
-            if (obj instanceof Fixnum)
-                return new LispFloat(Math.sqrt(((Fixnum)obj).getValue()));
-            if (obj instanceof Bignum)
-                return new LispFloat(Math.sqrt(((Bignum)obj).floatValue()));
-            if (obj instanceof Ratio)
-                return new LispFloat(Math.sqrt(((Ratio)obj).floatValue()));
-            if (obj instanceof LispFloat)
-                return new LispFloat(Math.sqrt(((LispFloat)obj).getValue()));
-        }// else {  // returning Complex
-          //  if (obj.realp()) {
-                
+        if (obj.realp() && !obj.minusp()) {  // returning real
+            LispFloat f = LispFloat.coerceToFloat(obj);
+            return new LispFloat(Math.sqrt(f.getValue()));
+        } else {  // returning Complex
+            if (obj.realp()) {
+                return Complex.getInstance(new LispFloat(0),
+                                           sqrt(Fixnum.ZERO.subtract(obj)));
+            } else if (obj instanceof Complex) {
+                return exp(log(obj).divideBy(Fixnum.TWO));
+            }
+        }
             
         throw new ConditionThrowable(new TypeError(obj, "number"));
     }
