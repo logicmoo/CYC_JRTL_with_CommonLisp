@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.16 2003-02-02 17:55:13 piso Exp $
+ * $Id: Utilities.java,v 1.17 2003-02-04 15:32:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -704,9 +704,11 @@ public final class Utilities implements Constants
         return sb.toString();
     }
 
-    // Returns FILETYPE_UNKNOWN if file does not exist.
+    // Returns FILETYPE_UNKNOWN if file is null or does not exist.
     public static int getFileType(File file)
     {
+        if (file == null)
+            return FILETYPE_UNKNOWN;
         long start = System.currentTimeMillis();
         int fileType = FILETYPE_UNKNOWN;
         try {
@@ -761,7 +763,8 @@ public final class Utilities implements Constants
                 fileType = FILETYPE_TEXT;
                 String s;
                 if (isUnicode)
-                    s = getStringFromUnicodeBytes(bytes, 2, bytesRead, isLittleEndian);
+                    s = getStringFromUnicodeBytes(bytes, 2, bytesRead,
+                                                  isLittleEndian);
                 else
                     s = new String(bytes, 0, bytesRead);
                 if (s.length() >= 3) {
@@ -773,9 +776,9 @@ public final class Utilities implements Constants
                         index = s.indexOf('\r');
                         if (index >= 0)
                             s = s.substring(0, index);
-                        if (s.indexOf("/bin/sh") >=0 || s.indexOf("/bin/tcsh") >= 0)
-                            fileType = FILETYPE_SHELLSCRIPT;
-                        else if (s.indexOf("/bin/bash") >= 0)
+                        if (s.indexOf("/bin/sh") >=0 ||
+                            s.indexOf("/bin/bash") >= 0 ||
+                            s.indexOf("/bin/tcsh") >= 0)
                             fileType = FILETYPE_SHELLSCRIPT;
                         else if (s.indexOf("/bin/perl") >= 0)
                             fileType = FILETYPE_PERL;
