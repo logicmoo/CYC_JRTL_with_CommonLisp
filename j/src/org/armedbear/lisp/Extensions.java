@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.30 2004-10-17 13:59:56 piso Exp $
+ * $Id: Extensions.java,v 1.31 2004-10-24 03:22:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,16 +43,15 @@ public final class Extensions extends Lisp
 
     // ### memq item list => tail
     private static final Primitive2 MEMQ =
-        new Primitive2("memq", PACKAGE_EXT, true)
+        new Primitive2("memq", PACKAGE_EXT, true, "item list")
     {
         public LispObject execute(LispObject item, LispObject list)
             throws ConditionThrowable
         {
-            LispObject tail = checkList(list);
-            while (tail != NIL) {
-                if (item == tail.car())
-                    return tail;
-                tail = tail.cdr();
+            while (list != NIL) {
+                if (item == list.car())
+                    return list;
+                list = list.cdr();
             }
             return NIL;
         }
@@ -60,16 +59,15 @@ public final class Extensions extends Lisp
 
     // ### memql item list => tail
     private static final Primitive2 MEMQL =
-        new Primitive2("memql", PACKAGE_EXT, true)
+        new Primitive2("memql", PACKAGE_EXT, true, "item list")
     {
         public LispObject execute(LispObject item, LispObject list)
             throws ConditionThrowable
         {
-            LispObject tail = checkList(list);
-            while (tail != NIL) {
-                if (item.eql(tail.car()))
-                    return tail;
-                tail = tail.cdr();
+            while (list != NIL) {
+                if (item.eql(list.car()))
+                    return list;
+                list = list.cdr();
             }
             return NIL;
         }
