@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Shell.java,v 1.31 2004-09-13 00:42:25 piso Exp $
+ * $Id: Shell.java,v 1.32 2004-09-17 18:28:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,6 +272,7 @@ public class Shell extends CommandInterpreter implements Constants
                     public void run()
                     {
                         appendString("\nProcess exited\n");
+                        setBusy(false);
                         updateDisplayInAllFrames();
                     }
                 };
