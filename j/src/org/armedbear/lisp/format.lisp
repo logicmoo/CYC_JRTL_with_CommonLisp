@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: format.lisp,v 1.3 2003-11-03 03:04:20 piso Exp $
+;;; $Id: format.lisp,v 1.4 2003-11-14 17:53:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 ;;;
 
 #+armedbear
-(sys::resolve 'write-string)
+(ext:resolve 'write-string)
 
 #+armedbear
 (defpackage "FORMAT" (:use "CL" "EXT"))

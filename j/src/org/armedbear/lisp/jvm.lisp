@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.27 2003-11-14 01:42:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.28 2003-11-14 17:54:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1369,7 +1369,7 @@
 
     ;; FIXME This shouldn't go here! Do this in the constructor of the
     ;; compiled function!
-    (sys::resolve fun)
+    (resolve fun)
 
     (cond
      ((eq fun *defun-name*)
@@ -2119,7 +2119,7 @@
         (format t "~A Unable to compile ~S~%" prefix name)
         (return-from jvm-compile (values name nil t))))
     (unless definition
-      (sys::resolve name)
+      (resolve name)
       (setf definition (fdefinition name))
       (when (compiled-function-p definition)
         (when name
@@ -2154,7 +2154,7 @@
         (when (fboundp sym)
           (unless (or (special-operator-p sym) (macro-function sym))
             ;; Force autoload to be resolved.
-            (sys::resolve sym)
+            (resolve sym)
             (let ((f (fdefinition sym)))
               (unless (compiled-function-p f)
                 (jvm-compile sym)))))))
