@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.25 2004-10-13 00:22:19 piso Exp $
+ * $Id: StandardObject.java,v 1.26 2004-10-21 18:17:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,10 +192,10 @@ public class StandardObject extends LispObject
         }
     };
 
-    // ### instance-ref
-    // instance-ref object index => value
-    private static final Primitive2 INSTANCE_REF =
-        new Primitive2("instance-ref", PACKAGE_SYS, false)
+    // ### standard-instance-access instance location => value
+    private static final Primitive STANDARD_INSTANCE_ACCESS =
+        new Primitive("standard-instance-access", PACKAGE_SYS, true,
+                      "instance location")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -209,10 +209,9 @@ public class StandardObject extends LispObject
         }
     };
 
-    // ### %set-instance-ref
-    // %set-instance-ref object index new-value => new-value
-    private static final Primitive3 _SET_INSTANCE_REF =
-        new Primitive3("%set-instance-ref", PACKAGE_SYS, false)
+    // ### %set-standard-instance-access instance location new-value => new-value
+    private static final Primitive _SET_STANDARD_INSTANCE_ACCESS =
+        new Primitive("%set-standard-instance-access", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
