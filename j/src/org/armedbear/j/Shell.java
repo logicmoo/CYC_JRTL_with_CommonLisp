@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.1.1.1 2002-09-24 16:09:24 piso Exp $
+ * $Id: Shell.java,v 1.2 2002-10-08 15:46:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,9 +377,10 @@ public class Shell extends Buffer implements Constants
             if (command.equals("cd")) {
                 if (arg == null)
                     changeDirectory(Utilities.getUserHome());
-                else if (arg.equals("-"))
-                    changeDirectory(oldDir.canonicalPath());
-                else
+                else if (arg.equals("-")) {
+                    if (oldDir != null)
+                        changeDirectory(oldDir.canonicalPath());
+                } else
                     changeDirectory(arg);
             } else if (command.equals("pushd"))
                 changeDirectory(arg);
