@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFiles.java,v 1.9 2003-07-05 15:51:59 piso Exp $
+ * $Id: FindInFiles.java,v 1.10 2003-07-26 16:01:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,8 @@ public class FindInFiles extends Replacement implements Constants,
     private ListOccurrencesInFiles outputBuffer;
     private boolean listEachOccurrence;
 
+    private Mode mode;
+
     private Vector results = new Vector();
 
     private boolean cancelled;
@@ -91,6 +93,16 @@ public class FindInFiles extends Replacement implements Constants,
     public final void setSearchFilesInMemory(boolean b)
     {
         searchFilesInMemory = b;
+    }
+
+    public final Mode getMode()
+    {
+        return mode;
+    }
+
+    public final void setMode(Mode mode)
+    {
+        this.mode = mode;
     }
 
     public final ListOccurrencesInFiles getOutputBuffer()
