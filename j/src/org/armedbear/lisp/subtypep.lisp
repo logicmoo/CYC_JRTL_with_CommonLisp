@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.2 2003-09-13 18:00:50 piso Exp $
+;;; $Id: subtypep.lisp,v 1.3 2003-09-13 18:34:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -177,7 +177,7 @@
                       (values (sub-interval-p i1 i2) t)
                       (values nil (known-type-p t2))))
                  ((eq t1 'integer)
-                  (if (member t2 '(integer rational real))
+                  (if (member t2 '(integer rational real number))
                       (values (sub-interval-p i1 i2) t)
                       (values nil (known-type-p t2))))
                  ((eq t1 'rational)
