@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.92 2004-07-20 18:39:32 piso Exp $
+ * $Id: Fixnum.java,v 1.93 2004-08-02 00:35:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,7 +214,7 @@ public final class Fixnum extends LispObject
             return ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "fixnum"));
+            signal(new TypeError(obj, Symbol.FIXNUM));
             // Not reached.
             return 0;
         }
@@ -226,7 +226,7 @@ public final class Fixnum extends LispObject
             return (int) ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "fixnum"));
+            signal(new TypeError(obj, Symbol.FIXNUM));
             // Not reached.
             return 0;
         }
@@ -238,7 +238,7 @@ public final class Fixnum extends LispObject
             return BigInteger.valueOf(((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "fixnum"));
+            signal(new TypeError(obj, Symbol.FIXNUM));
             // Not reached.
             return null;
         }
@@ -250,7 +250,7 @@ public final class Fixnum extends LispObject
             return (float) ((Fixnum)obj).value;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "fixnum"));
+            signal(new TypeError(obj, Symbol.FIXNUM));
             return 0;
         }
     }
