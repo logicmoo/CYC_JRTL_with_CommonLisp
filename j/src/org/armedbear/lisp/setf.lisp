@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.25 2003-09-24 22:55:00 piso Exp $
+;;; $Id: setf.lisp,v 1.26 2003-09-26 00:44:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,6 +73,8 @@
          ((symbolp place)
           `(setq ,place ,value))
          ((consp place)
+          (when (macro-function (car place))
+            (setq place (macroexpand place)))
           (let ((expander (get (car place) *setf-expander*)))
             (cond ((null expander)
                    (error "no SETF expansion for ~A" place))
