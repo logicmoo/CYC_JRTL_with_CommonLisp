@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: coerce.lisp,v 1.4 2004-03-15 17:12:51 piso Exp $
+;;; $Id: coerce.lisp,v 1.5 2004-03-16 00:57:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,41 +26,48 @@
       (setf (aref result i) (pop list)))
     result))
 
+(defun coerce-error (object result-type)
+  (error 'simple-type-error
+         :datum object
+         :format-control "~S cannot be converted to type ~S."
+         :format-arguments (list object result-type)))
+
 (defun coerce (object result-type)
   (cond ((eq result-type t)
-         (return-from coerce object))
+         object)
         ((typep object result-type)
-         (return-from coerce object))
+         object)
         ((eq result-type 'character)
          (cond ((and (stringp object)
                      (= (length object) 1))
-                (return-from coerce (char object 0)))
+                (char object 0))
                ((and (symbolp object)
                      (= (length (symbol-name object)) 1))
-                (return-from coerce (char (symbol-name object) 0)))))
+                (char (symbol-name object) 0))
+               (t
+                (coerce-error object result-type))))
         ((memq result-type '(float single-float double-float short-float long-float))
-         (return-from coerce (coerce-to-float object)))
+         (coerce-to-float object))
         ((eq result-type 'complex)
          (cond ((floatp object)
-                (return-from coerce (complex object 0.0)))
+                (complex object 0.0))
                ((numberp object)
-                (return-from coerce object))))
+                object)
+               (t
+                (coerce-error object result-type))))
         ((and (consp result-type)
               (eq (car result-type) 'complex))
          (if (memq (cadr result-type)
                    '(float single-float double-float short-float long-float))
-             (return-from coerce (complex object 0.0))
-             (return-from coerce object)))
+             (complex object 0.0)
+             object))
         ((eq result-type 'function)
-         (return-from coerce (coerce-to-function object)))
-        ((and (simple-typep object 'list)
+         (coerce-to-function object))
+        ((and (listp object)
               (eq result-type 'vector))
-         (return-from coerce (coerce-list-to-vector object result-type)))
-        ((and (%typep object 'sequence)
+         (coerce-list-to-vector object result-type))
+        ((and (simple-typep object 'sequence)
               (%subtypep result-type 'sequence))
-         (return-from coerce (concatenate result-type object)))
+         (concatenate result-type object))
         (t
-         (error 'simple-type-error
-                :datum object
-                :format-control "~S cannot be converted to type ~S."
-                :format-arguments (list object result-type)))))
+         (coerce-error object result-type))))
