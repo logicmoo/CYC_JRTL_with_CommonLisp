@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.4 2004-09-06 01:31:07 piso Exp $
+;;; $Id: swank-abcl.lisp,v 1.5 2004-09-18 18:31:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,10 +38,12 @@
   (ext:make-thread function))
 
 (defun arglist (function-name)
-  (multiple-value-bind (arglist known-p) (ext:arglist function-name)
-    (if known-p
-        arglist
-        :not-available)))
+  (if (ext:autoloadp function-name)
+      :not-available
+      (multiple-value-bind (arglist known-p) (ext:arglist function-name)
+        (if known-p
+            arglist
+            :not-available))))
 
 (defun find-definitions (name)
   (when (ext:autoloadp name)
