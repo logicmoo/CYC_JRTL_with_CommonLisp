@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.32 2003-10-20 17:23:11 piso Exp $
+;;; $Id: defclass.lisp,v 1.33 2003-10-20 17:36:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1155,10 +1155,10 @@
                 result)))
           (+
            #'(lambda (args)
-              (let ((result 0)
+              (let ((result 0))
                 (dolist (primary primaries)
                   (incf result (funcall (method-function primary) args nil)))
-                result))))
+                result)))
           (MAX
            #'(lambda (args)
               (let ((result ()))
