@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.8 2003-03-14 18:49:50 piso Exp $
+ * $Id: Load.java,v 1.9 2003-03-16 14:35:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,7 +231,7 @@ public final class Load extends Lisp
         int index = filename.lastIndexOf('.');
         if (index < 0)
             return null;
-        if (index < filename.lastIndexOf(java.io.File.separatorChar))
+        if (index < filename.lastIndexOf(File.separatorChar))
             return null; // Last dot was in path part of filename.
         return filename.substring(index);
     }
