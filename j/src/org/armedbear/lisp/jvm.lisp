@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.313 2004-12-18 02:39:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.314 2004-12-21 20:25:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,6 +35,8 @@
 (require '#:opcodes)
 
 (shadow '(method variable))
+
+(defparameter *trust-user-type-declarations* t)
 
 (defmacro show (form)
   (let ((format-control (concatenate 'string (write-to-string form) " = ~S~%")))
@@ -115,13 +117,14 @@
 (defvar *dump-variables* nil)
 
 (defun dump-1-variable (variable)
-  (%format t "  ~S ~A special-p = ~S register = ~S level = ~S index = ~S~%"
+  (%format t "  ~S special-p = ~S register = ~S level = ~S index = ~S declared-type = ~S~%"
            (variable-name variable)
 ;;            (variable-kind variable)
            (variable-special-p variable)
            (variable-register variable)
            (variable-level variable)
-           (variable-index variable)))
+           (variable-index variable)
+           (variable-declared-type variable)))
 
 (defun dump-variables (list caption &optional (force nil))
   (when (or force *dump-variables*)
@@ -137,9 +140,9 @@
   name
   initform
   temp-register
-;;   (kind 'LOCAL) ; ARG, LOCAL, SPECIAL
   special-p
-  declared-type
+  (declared-type t)
+  representation ; NIL (i.e. a LispObject reference) or :UNBOXED-FIXNUM
   register ; register number or NIL
   (level *nesting-level*)
   index)
@@ -173,6 +176,12 @@
     (when (eq name (variable-name variable))
       (return variable))))
 
+(defun unboxed-fixnum-variable-p (obj)
+  (let ((variable (and (symbolp obj)
+                       (find-visible-variable obj))))
+    (and variable
+         (eq (variable-representation variable) :unboxed-fixnum))))
+
 (defun allocate-register ()
   (prog1
    *register*
@@ -199,14 +208,14 @@
 (defvar *val* nil) ; index of value register
 
 (defstruct node
-  (compiland *current-compiland*)
-  form)
+  name
+  form
+  (compiland *current-compiland*))
 
 ;; Used to wrap TAGBODYs, UNWIND-PROTECTs and LET/LET*/M-V-B forms as well as
 ;; BLOCKs per se.
 (defstruct (block-node (:conc-name block-) (:include node))
   ;; Block name, or (TAGBODY), or (LET).
-  name
   (exit (gensym))
   target
   catch-tag
@@ -585,6 +594,11 @@
 (defsubst emit-push-t ()
   (emit 'getstatic +lisp-class+ "T" +lisp-symbol+))
 
+(defun emit-push-constant-int (n)
+  (if (<= -32768 n 32767)
+      (emit 'sipush n)
+      (emit 'ldc (pool-int n))))
+
 (defun make-descriptor (arg-types return-type)
   (with-output-to-string (s)
     (princ #\( s)
@@ -670,7 +684,7 @@
 
 (defun single-valued-p-init ()
   (dolist (op '(+ - * /
-                1+ 1- + - < > <= >= = /=
+                1+ 1- < > <= >= = /=
                 car cdr caar cadr cdar cddr cadar caddr cdddr cddddr
                 first second third
                 eq eql equal equalp
@@ -803,6 +817,7 @@
          (sys:single-valued-p (car form)))))
 
 (defun emit-clear-values ()
+;;   (break "EMIT-CLEAR-VALUES called~%")
   (ensure-thread-var-initialized)
   (emit 'clear-values))
 
@@ -813,13 +828,31 @@
     (ensure-thread-var-initialized)
     (emit 'clear-values)))
 
+(defun emit-unbox-fixnum ()
+  (cond ((= *safety* 3)
+         (emit-invokestatic +lisp-fixnum-class+
+                            "getValue"
+                            "(Lorg/armedbear/lisp/LispObject;)I"
+                            0))
+        (t
+         (emit 'checkcast +lisp-fixnum-class+)
+         (emit 'getfield +lisp-fixnum-class+ "value" "I"))))
+
+(defun emit-box-long ()
+  (emit-invokestatic +lisp-class+
+                     "number"
+                     "(J)Lorg/armedbear/lisp/LispObject;"
+                     -1))
+
 ;; Expects value on stack.
-(defun emit-invoke-method (method-name &key (target *val*))
+(defun emit-invoke-method (method-name target representation)
   (emit-invokevirtual +lisp-object-class+
                       method-name
                       "()Lorg/armedbear/lisp/LispObject;"
                       0)
-  (emit-move-from-stack target))
+  (when (eq representation :unboxed-fixnum)
+    (emit-unbox-fixnum))
+  (emit-move-from-stack target representation))
 
 (defparameter *resolvers* (make-hash-table :test #'eql))
 
@@ -855,6 +888,11 @@
              90 ; DUP_X1
              91 ; DUP_X2
              95 ; SWAP
+             96 ; IADD
+             97 ; LADD
+             101 ; LSUB
+             132 ; IINC
+             133 ; I2L
              153 ; IFEQ
              154 ; IFNE
              159 ; IF_ICMPEQ
@@ -901,6 +939,17 @@
          (t
           (error "ALOAD unsupported case")))))
 
+;; ILOAD
+(define-resolver 21 (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (car args)))
+    (cond ((<= 0 index 3)
+           (inst (+ index 26)))
+          ((<= 0 index 255)
+           (inst 21 index))
+          (t
+           (error "ILOAD unsupported case")))))
+
 ;; ASTORE
 (define-resolver 58 (instruction)
   (let* ((args (instruction-args instruction))
@@ -909,6 +958,17 @@
            (inst (+ index 75)))
           ((<= 0 index 255)
            (inst 58 index))
+          (t
+           (error "ASTORE unsupported case")))))
+
+;; ISTORE
+(define-resolver 54 (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (car args)))
+    (cond ((<= 0 index 3)
+           (inst (+ index 59)))
+          ((<= 0 index 255)
+           (inst 54 index))
           (t
            (error "ASTORE unsupported case")))))
 
@@ -1006,6 +1066,7 @@
   (do* ((i start-index (1+ i))
         (limit (length code)))
        ((>= i limit))
+    (declare (type fixnum i limit))
     (let ((instruction (aref code i)))
       (when (instruction-depth instruction)
         (unless (eql (instruction-depth instruction) (+ depth (instruction-stack instruction)))
@@ -1047,7 +1108,11 @@
                          (opcode-stack-effect opcode))
                 (%format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
             (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
-        (aver (not (null (instruction-stack instruction))))))
+;;         (aver (not (null (instruction-stack instruction))))
+        (unless (instruction-stack instruction)
+          (%format t "no stack information for instruction ~D~%" (instruction-opcode instruction))
+          (aver nil))
+        ))
     (walk-code code 0 0)
     (dolist (handler *handlers*)
       ;; Stack depth is always 1 when handler is called.
@@ -1065,13 +1130,13 @@
         (print-code))
       max-stack)))
 
-(defun emit-move-from-stack (target)
+(defun emit-move-from-stack (target &optional representation)
   (declare (optimize speed))
   (cond ((null target)
          (emit 'pop))
         ((eq target :stack))
         ((fixnump target)
-         (emit 'astore target))
+         (emit (if (eq representation :unboxed-fixnum) 'istore 'astore) target))
         (t
          (aver nil))))
 
@@ -1083,39 +1148,57 @@
     (dolist (instruction code)
       (case (instruction-opcode instruction)
         (206 ; VAR-REF
-         (let ((variable (first (instruction-args instruction)))
-               (target (second (instruction-args instruction))))
+         (let* ((instruction-args (instruction-args instruction))
+                (variable (first instruction-args))
+                (target (second instruction-args))
+                (representation (third instruction-args)))
+;;            (%format t "resolve-variables name = ~S representation = ~S~%"
+;;                     (variable-name variable) representation)
+;;            (%format t "variable-representation = ~S~%"
+;;                     (variable-representation variable))
            (aver (variable-p variable))
-           (cond ((variable-register variable)
-                  (emit 'aload (variable-register variable))
-                  (emit-move-from-stack target))
-                 ((variable-special-p variable)
-                  (compile-special-reference (variable-name variable) target))
-                 ((= (variable-level variable) *nesting-level* 0)
-                  (emit 'aload 1)
-                  (emit 'bipush (variable-index variable))
-                  (emit 'aaload)
-                  (emit-move-from-stack target))
-                 ((and (variable-index variable) ; A local at the current nesting level.
-                       (= (variable-level variable) *nesting-level*))
-                  (emit 'aload 1)
-                  (emit 'bipush (variable-index variable))
-                  (emit 'aaload)
-                  (emit-move-from-stack target))
-                 (*child-p*
-                  ;; The general case.
-                  (emit 'aload *context-register*) ; Array of arrays.
-                  (aver (fixnump (variable-level variable)))
-                  (emit 'bipush (variable-level variable))
-                  (emit 'aaload) ; Locals array for level in question.
-                  (emit 'bipush (variable-index variable))
-                  (emit 'aaload)
-                  (emit-move-from-stack target))
-                 (t
-                  (emit 'aload 1)
-                  (emit 'bipush (variable-index variable))
-                  (emit 'aaload)
-                  (emit-move-from-stack target)))))
+           (cond
+;;             ((eq (variable-representation variable) :unboxed-fixnum)
+;;              (%format t "resolve-variables constructing boxed fixnum for ~S~%"
+;;                       (variable-name variable))
+;;              (emit 'new +lisp-fixnum-class+)
+;;              (emit 'dup)
+;;              (emit 'iload (variable-register variable))
+;;              (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2)
+;;              (emit-move-from-stack target))
+            ((variable-register variable)
+             (emit 'aload (variable-register variable))
+             (emit-move-from-stack target))
+            ((variable-special-p variable)
+             (compile-special-reference (variable-name variable) target nil))
+            ((= (variable-level variable) *nesting-level* 0)
+             (emit 'aload 1)
+             (emit 'bipush (variable-index variable))
+             (emit 'aaload)
+             (emit-move-from-stack target))
+            ((and (variable-index variable) ; A local at the current nesting level.
+                  (= (variable-level variable) *nesting-level*))
+             (emit 'aload 1)
+             (emit 'bipush (variable-index variable))
+             (emit 'aaload)
+             (emit-move-from-stack target))
+            (*child-p*
+             ;; The general case.
+             (emit 'aload *context-register*) ; Array of arrays.
+             (aver (fixnump (variable-level variable)))
+             (emit 'bipush (variable-level variable))
+             (emit 'aaload) ; Locals array for level in question.
+             (emit 'bipush (variable-index variable))
+             (emit 'aaload)
+             (emit-move-from-stack target))
+            (t
+             (emit 'aload 1)
+             (emit 'bipush (variable-index variable))
+             (emit 'aaload)
+             (emit-move-from-stack target)))
+           (when (eq representation :unboxed-fixnum)
+             (%format t "resolve-variables calling emit-unbox-fixnum~%")
+             (emit-unbox-fixnum))))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
            (aver (variable-p variable))
@@ -1316,8 +1399,10 @@
 
 (defun code-bytes (code)
   (let ((length 0))
+;;     (declare (type fixnum length))
     ;; Pass 1: calculate label offsets and overall length.
     (dotimes (i (length code))
+      (declare (type fixnum i))
       (let* ((instruction (aref code i))
              (opcode (instruction-opcode instruction)))
         (if (= opcode 202) ; LABEL
@@ -1326,7 +1411,9 @@
             (incf length (opcode-size opcode)))))
     ;; Pass 2: replace labels with calculated offsets.
     (let ((index 0))
+;;       (declare (type fixnum index))
       (dotimes (i (length code))
+        (declare (type fixnum i))
         (let ((instruction (aref code i)))
           (when (branch-opcode-p (instruction-opcode instruction))
             (let* ((label (car (instruction-args instruction)))
@@ -1337,7 +1424,9 @@
     ;; Expand instructions into bytes, skipping LABEL pseudo-instructions.
     (let ((bytes (make-array length))
           (index 0))
+;;       (declare (type fixnum index))
       (dotimes (i (length code))
+        (declare (type fixnum i))
         (let ((instruction (aref code i)))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
             (setf (svref bytes index) (instruction-opcode instruction))
@@ -1373,6 +1462,7 @@
   (declare (optimize speed))
   (let ((stream *stream*))
     (dotimes (i (length string))
+      (declare (type fixnum i))
       (let ((c (schar string i)))
         (if (eql c #\null)
             (progn
@@ -1383,7 +1473,9 @@
 (defun utf8-length (string)
   (declare (optimize speed))
   (let ((length (length string)))
+    (declare (type fixnum length))
     (dotimes (i length)
+      (declare (type fixnum i))
       (when (eql (schar string i) #\null)
         (incf length)))
     length))
@@ -1826,9 +1918,17 @@
         (setf (gethash string *declared-strings*) g)))
     g))
 
-(defun compile-constant (form &key (target *val*))
+(defun compile-constant (form &key (target *val*) representation)
   (unless target
     (return-from compile-constant))
+  (when (eq representation :unboxed-fixnum)
+    (cond
+     ((fixnump form)
+      (emit-push-constant-int form)
+      (emit-move-from-stack target)
+      (return-from compile-constant))
+     (t
+      (assert nil))))
   (cond ((numberp form)
          (if (fixnump form)
              (let* ((n form)
@@ -1906,7 +2006,7 @@
                    +lisp-object+))))
   (emit-move-from-stack target))
 
-(defun compile-binary-operation (op args &key (target *val*))
+(defun compile-binary-operation (op args &key (target *val*) representation)
   (compile-form (first args) :target :stack)
   (compile-form (second args) :target :stack)
   (unless (and (single-valued-p (first args))
@@ -1916,6 +2016,8 @@
                       op
                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                       -1)
+  (when (eq representation :unboxed-fixnum)
+    (emit-unbox-fixnum))
   (emit-move-from-stack target))
 
 (defparameter unary-operators (make-hash-table :test 'eq))
@@ -1961,25 +2063,38 @@
 (define-unary-operator 'VECTORP         "VECTORP")
 (define-unary-operator 'ZEROP           "ZEROP")
 
-(defun compile-function-call-1 (fun args target)
-  (let ((s (gethash fun unary-operators)))
-    (cond (s
-           (compile-form (first args) :target :stack)
-           (maybe-emit-clear-values (first args))
-           (emit-invoke-method s :target target)
-           t)
-          ((eq fun 'LIST)
-           (emit 'new +lisp-cons-class+)
-           (emit 'dup)
-           (compile-form (first args) :target :stack)
-           (maybe-emit-clear-values (first args))
-           (emit-invokespecial +lisp-cons-class+
-                               "<init>"
-                               "(Lorg/armedbear/lisp/LispObject;)V"
-                               -2)
-           t)
-          (t
-           nil))))
+(defun compile-function-call-1 (fun args target representation)
+  (let ((arg (first args)))
+    (when (and (eq fun '1+) (symbolp arg))
+      (let ((variable (find-visible-variable arg)))
+        (when (and variable
+                   (eq (variable-representation variable) :unboxed-fixnum))
+          (aver (variable-register variable))
+          (emit 'iload (variable-register variable))
+          (emit 'i2l)
+          (emit 'iconst_1)
+          (emit 'i2l)
+          (emit 'ladd)
+          (emit-box-long)
+          (return-from compile-function-call-1 t))))
+    (let ((s (gethash fun unary-operators)))
+      (cond (s
+             (compile-form arg :target :stack)
+             (maybe-emit-clear-values arg)
+             (emit-invoke-method s target representation)
+             t)
+            ((eq fun 'LIST)
+             (emit 'new +lisp-cons-class+)
+             (emit 'dup)
+             (compile-form arg :target :stack)
+             (maybe-emit-clear-values arg)
+             (emit-invokespecial +lisp-cons-class+
+                                 "<init>"
+                                 "(Lorg/armedbear/lisp/LispObject;)V"
+                                 -2)
+             t)
+            (t
+             nil)))))
 
 (defparameter binary-operators (make-hash-table :test 'eq))
 
@@ -2008,7 +2123,7 @@
 (define-binary-operator 'sys::%rplaca        "_RPLACA")
 (define-binary-operator 'sys::%rplacd        "_RPLACD")
 
-(defun compile-function-call-2 (fun args target)
+(defun compile-function-call-2 (fun args target representation)
   (let ((translation (gethash fun binary-operators)))
     (if translation
         (compile-binary-operation translation args :target target)
@@ -2050,7 +2165,9 @@
                                  "getSlotValue"
                                  "(I)Lorg/armedbear/lisp/LispObject;"
                                  -1)
-             (emit-move-from-stack target)
+             (when (eq representation :unboxed-fixnum)
+               (emit-unbox-fixnum))
+             (emit-move-from-stack target representation)
              t))
           (t
            nil)))))
@@ -2187,7 +2304,7 @@
                           -2)))
     (emit-invokevirtual +lisp-thread-class+ "execute" descriptor stack-effect)))
 
-(defun compile-function-call (form &key (target *val*))
+(defun compile-function-call (form &key (target *val*) representation)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
       (return-from compile-function-call (compile-form new-form :target target))))
@@ -2200,10 +2317,10 @@
     (let ((numargs (length args)))
       (case (length args)
         (1
-         (when (compile-function-call-1 fun args target)
+         (when (compile-function-call-1 fun args target representation)
            (return-from compile-function-call)))
         (2
-         (when (compile-function-call-2 fun args target)
+         (when (compile-function-call-2 fun args target representation)
            (return-from compile-function-call)))
         (3
          (when (compile-function-call-3 fun args target)
@@ -2258,7 +2375,7 @@
         (t
          form)))
 
-(defun compile-funcall (form &key (target *val*))
+(defun compile-funcall (form &key (target *val*) representation)
   (unless (> (length form) 1)
     (error "Wrong number of arguments for FUNCALL."))
   (when (> *debug* *speed*)
@@ -2367,6 +2484,126 @@
 (define-java-predicate 'VECTORP            "vectorp")
 (define-java-predicate 'ZEROP              "zerop")
 
+(defun compile-test-2 (form negatep)
+  (let ((op (car form))
+        (args (cdr form)))
+    (when (memq op '(NOT NULL))
+      (return-from compile-test-2 (compile-test (car args) (not negatep))))
+    (when (eq op 'SYMBOLP)
+      (process-args args)
+      (emit 'instanceof +lisp-symbol-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (when (eq op 'FIXNUMP)
+      (process-args args)
+      (emit 'instanceof +lisp-fixnum-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (when (eq op 'CONSP)
+      (process-args args)
+      (emit 'instanceof +lisp-cons-class+)
+      (return-from compile-test-2 (if negatep 'ifne 'ifeq)))
+    (when (eq op 'ATOM)
+      (process-args args)
+      (emit 'instanceof +lisp-cons-class+)
+      (return-from compile-test-2 (if negatep 'ifeq 'ifne)))
+    (let ((s (gethash op java-predicates)))
+      (when s
+        (process-args args)
+        (emit-invokevirtual +lisp-object-class+
+                            s
+                            "()Z"
+                            0)
+        (return-from compile-test-2 (if negatep 'ifne 'ifeq)))))
+  ;; Otherwise...
+  (compile-form form :target :stack)
+  (maybe-emit-clear-values form)
+  (emit-push-nil)
+  (if negatep 'if_acmpne 'if_acmpeq))
+
+(defun compile-test-3 (form negatep)
+  (let ((op (car form))
+        (args (cdr form)))
+    (when (eq op 'EQ)
+      (process-args args)
+      (return-from compile-test-3 (if negatep 'if_acmpeq 'if_acmpne)))
+    (let ((first (first args))
+          (second (second args)))
+      ;; An experiment...
+      (when (and (memq op '(< <= > >= = /=)) (fixnump second))
+        (when (symbolp (first args))
+          (let ((variable (find-visible-variable (first args))))
+            (when (and variable
+                       (eq (variable-representation variable) :unboxed-fixnum))
+              (%format t "compile-test-3 unboxed fixnum constant comparison case~%")
+              (aver (variable-register variable))
+              (emit 'iload (variable-register variable))
+              (emit-push-constant-int (second args))
+              (case op
+                (<
+                 (return-from compile-test-3 (if negatep 'if_icmplt 'if_icmpge)))
+                (<=
+                 (return-from compile-test-3 (if negatep 'if_icmple 'if_icmpgt)))
+                (>
+                 (return-from compile-test-3 (if negatep 'if_icmpgt 'if_icmple)))
+                (>=
+                 (return-from compile-test-3 (if negatep 'if_icmpge 'if_icmplt)))
+                (=
+                 (return-from compile-test-3 (if negatep 'if_icmpeq 'if_icmpne)))
+                (/=
+                 (return-from compile-test-3 (if negatep 'if_icmpne 'if_icmpeq)))
+                ))))
+        ;; Otherwise...
+        (compile-form (car args) :target :stack)
+        (unless (single-valued-p first)
+          (emit-clear-values))
+        (emit-push-constant-int second)
+        (emit-invokevirtual +lisp-object-class+
+                            (case op
+                              (<  "isLessThan")
+                              (<= "isLessThanOrEqualTo")
+                              (>  "isGreaterThan")
+                              (>= "isGreaterThanOrEqualTo")
+                              (=  "isEqualTo")
+                              (/= "isNotEqualTo"))
+                            "(I)Z"
+                            -1)
+        (return-from compile-test-3 (if negatep 'ifne 'ifeq)))
+
+      (when (and (eq op '<) (unboxed-fixnum-variable-p first))
+        (%format t "compile-test-3 unboxed fixnum variable comparison case~%")
+        (aver (variable-register (find-visible-variable first)))
+        (emit 'iload (variable-register (find-visible-variable first)))
+        (compile-form second :target :stack)
+        (emit 'swap)
+        (emit-invokevirtual +lisp-object-class+
+                            "isGreaterThan"
+                            "(I)Z"
+                            -1)
+        (return-from compile-test-3 (if negatep 'ifne 'ifeq))))
+
+    (let ((s (cdr (assq op
+                        '((=      . "isEqualTo")
+                          (/=     . "isNotEqualTo")
+                          (<      . "isLessThan")
+                          (<=     . "isLessThanOrEqualTo")
+                          (>      . "isGreaterThan")
+                          (>=     . "isGreaterThanOrEqualTo")
+                          (EQL    . "eql")
+                          (EQUAL  . "equal")
+                          (EQUALP . "equalp"))))))
+      (when s
+        (process-args args)
+        (emit-invokevirtual +lisp-object-class+
+                            s
+                            "(Lorg/armedbear/lisp/LispObject;)Z"
+                            -1)
+        (return-from compile-test-3 (if negatep 'ifne 'ifeq)))))
+
+  ;; Otherwise...
+  (compile-form form :target :stack)
+  (maybe-emit-clear-values form)
+  (emit-push-nil)
+  (if negatep 'if_acmpne 'if_acmpeq))
+
 (defun compile-test (form negatep)
   ;; Use a Java boolean if possible.
   (when (and (consp form)
@@ -2376,94 +2613,16 @@
         (return-from compile-test (compile-test new-form negatep))))
     (case (length form)
       (2
-       (let ((op (car form))
-             (args (cdr form)))
-         (when (memq op '(NOT NULL))
-           (return-from compile-test (compile-test (car args) (not negatep))))
-         (when (eq op 'SYMBOLP)
-           (process-args args)
-           (emit 'instanceof +lisp-symbol-class+)
-           (return-from compile-test (if negatep 'ifne 'ifeq)))
-         (when (eq op 'FIXNUMP)
-           (process-args args)
-           (emit 'instanceof +lisp-fixnum-class+)
-           (return-from compile-test (if negatep 'ifne 'ifeq)))
-         (when (eq op 'CONSP)
-           (process-args args)
-           (emit 'instanceof +lisp-cons-class+)
-           (return-from compile-test (if negatep 'ifne 'ifeq)))
-         (when (eq op 'ATOM)
-           (process-args args)
-           (emit 'instanceof +lisp-cons-class+)
-           (return-from compile-test (if negatep 'ifeq 'ifne)))
-         (let ((s (gethash op java-predicates)))
-           (when s
-             (process-args args)
-             (emit-invokevirtual +lisp-object-class+
-                                 s
-                                 "()Z"
-                                 0)
-             (return-from compile-test (if negatep 'ifne 'ifeq))))))
+       (return-from compile-test (compile-test-2 form negatep)))
       (3
-       (let ((op (car form))
-             (args (cdr form)))
-         (when (eq op 'EQ)
-           (process-args args)
-           (return-from compile-test (if negatep 'if_acmpeq 'if_acmpne)))
-
-         ;; An experiment...
-         (when (and (eq op '<)
-                    (fixnump (second args)))
-           (compile-form (car args) :target :stack)
-           (unless (single-valued-p (car args))
-             (emit-clear-values))
-           (if (<= -32768 (second args) 32767)
-               (emit 'sipush (second args))
-               (emit 'ldc (pool-int (second args))))
-           (emit-invokevirtual +lisp-object-class+
-                               "isLessThan"
-                               "(I)Z"
-                               -1)
-           (return-from compile-test (if negatep 'ifne 'ifeq)))
-
-         (when (and (eq op '<=)
-                    (fixnump (second args)))
-           (compile-form (car args) :target :stack)
-           (unless (single-valued-p (car args))
-             (emit-clear-values))
-           (if (<= -32768 (second args) 32767)
-               (emit 'sipush (second args))
-               (emit 'ldc (pool-int (second args))))
-           (emit-invokevirtual +lisp-object-class+
-                               "isLessThanOrEqualTo"
-                               "(I)Z"
-                               -1)
-           (return-from compile-test (if negatep 'ifne 'ifeq)))
-
-         (let ((s (cdr (assq op
-                             '((=      . "isEqualTo")
-                               (/=     . "isNotEqualTo")
-                               (<      . "isLessThan")
-                               (<=     . "isLessThanOrEqualTo")
-                               (>      . "isGreaterThan")
-                               (>=     . "isGreaterThanOrEqualTo")
-                               (EQL    . "eql")
-                               (EQUAL  . "equal")
-                               (EQUALP . "equalp"))))))
-           (when s
-             (process-args args)
-             (emit-invokevirtual +lisp-object-class+
-                                 s
-                                 "(Lorg/armedbear/lisp/LispObject;)Z"
-                                 -1)
-             (return-from compile-test (if negatep 'ifne 'ifeq))))))))
+       (return-from compile-test (compile-test-3 form negatep)))))
   ;; Otherwise...
   (compile-form form :target :stack)
   (maybe-emit-clear-values form)
   (emit-push-nil)
   (if negatep 'if_acmpne 'if_acmpeq))
 
-(defun compile-if (form &key (target *val*))
+(defun compile-if (form &key (target *val*) representation)
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
@@ -2473,15 +2632,13 @@
            (compile-form consequent :target target))
           (t
            (emit (compile-test test nil) LABEL1)
-           (compile-form consequent :target :stack)
-           (emit-move-from-stack target)
+           (compile-form consequent :target target)
            (emit 'goto LABEL2)
            (label LABEL1)
-           (compile-form alternate :target :stack)
-           (emit-move-from-stack target)
+           (compile-form alternate :target target)
            (label LABEL2)))))
 
-(defun compile-multiple-value-list (form &key (target *val*))
+(defun compile-multiple-value-list (form &key (target *val*) representation)
   ;; Added Dec 9 2004 7:52 PM
   (emit-clear-values)
 
@@ -2492,7 +2649,7 @@
                      0)
   (emit-move-from-stack target))
 
-(defun compile-multiple-value-prog1 (form &key (target *val*))
+(defun compile-multiple-value-prog1 (form &key (target *val*) representation)
   (let ((first-subform (cadr form))
         (subforms (cddr form))
         (result-register (allocate-register))
@@ -2517,7 +2674,7 @@
     (emit 'aload result-register)
     (emit-move-from-stack target)))
 
-(defun compile-multiple-value-call (form &key (target *val*))
+(defun compile-multiple-value-call (form &key (target *val*) representation)
   (case (length form)
     (1
      (error "Wrong number of arguments for MULTIPLE-VALUE-CALL."))
@@ -2601,7 +2758,7 @@
         (t
          (aver nil))))
 
-(defun compile-multiple-value-bind (form &key (target *val*))
+(defun compile-multiple-value-bind (form &key (target *val*) representation)
   (let* ((block (make-block-node :name '(MULTIPLE-VALUE-BIND)))
          (*blocks* (cons block *blocks*))
          (*register* *register*)
@@ -2757,15 +2914,28 @@
     (dolist (variable (block-vars block))
       (let ((initform (variable-initform variable)))
         (cond (initform
-               (compile-form initform :target :stack)
+               (cond
+                ((and *trust-user-type-declarations*
+                      (variable-register variable)
+                      (variable-declared-type variable)
+                      (subtypep (variable-declared-type variable) 'FIXNUM))
+                 (%format t "compile-let-bindings unboxed-fixnum case~%")
+                 (setf (variable-representation variable) :unboxed-fixnum)
+                 (compile-form initform :target :stack :representation :unboxed-fixnum))
+                (t
+                 (compile-form initform :target :stack)))
                (unless must-clear-values
                  (unless (single-valued-p initform)
                    (setf must-clear-values t))))
               (t
                (emit-push-nil)))
-        (if (variable-special-p variable)
-            (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register)))
-            (compile-binding variable))))
+        (cond
+         ((variable-special-p variable)
+          (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register))))
+         ((eq (variable-representation variable) :unboxed-fixnum)
+          (emit 'istore (variable-register variable)))
+         (t
+          (compile-binding variable)))))
     (when must-clear-values
       (emit-clear-values))
     ;; Now that all the initforms have been evaluated, move the results from
@@ -2799,7 +2969,20 @@
                                    -2)
                (setf boundp t))
               (initform
-               (compile-form initform :target :stack)
+               (cond
+                ((and *trust-user-type-declarations*
+                      (not *use-locals-vector*)
+                      (not (variable-special-p variable))
+                      (variable-declared-type variable)
+                      (subtypep (variable-declared-type variable) 'FIXNUM))
+                 (%format t "compile-let*-bindings unboxed-fixnum case~%")
+                 (setf (variable-representation variable) :unboxed-fixnum)
+                 (compile-form initform :target :stack :representation :unboxed-fixnum)
+                 (setf (variable-register variable) (allocate-register))
+                 (emit 'istore (variable-register variable))
+                 (setf boundp t))
+                (t
+                 (compile-form initform :target :stack)))
                (unless must-clear-values
                  (unless (single-valued-p initform)
                    (setf must-clear-values t))))
@@ -2807,7 +2990,7 @@
                (emit-push-nil)))
         (unless (variable-special-p variable)
           (setf (variable-index variable) (length (context-vars *context*)))
-          (unless *use-locals-vector*
+          (unless (or *use-locals-vector* (variable-register variable))
             (setf (variable-register variable) (allocate-register)))
           (add-variable-to-context variable))
         (push variable *visible-variables*)
@@ -2829,7 +3012,7 @@
             (setf specials (append (cdr decl) specials))))))
     specials))
 
-(defun compile-locally (form &key (target *val*))
+(defun compile-locally (form &key (target *val*) representation)
   (let ((*visible-variables* *visible-variables*)
         (specials (process-special-declarations (cdr form))))
     (dolist (var specials)
@@ -2940,13 +3123,14 @@
               *handlers*)))
     (label EXIT)
     (when must-clear-values
+;;       (%format t "compile-tagbody-node calling emit-clear-values~%")
       (emit-clear-values))
     ;; TAGBODY returns NIL.
     (when target
       (emit-push-nil)
       (emit-move-from-stack target))))
 
-(defun compile-go (form &key target)
+(defun compile-go (form &key target representation)
   (let* ((name (cadr form))
          (tag (find-tag name)))
     (unless tag
@@ -2990,7 +3174,7 @@
              (emit-push-nil)
              (emit-move-from-stack target))))))
 
-(defun compile-atom (form &key (target *val*))
+(defun compile-atom (form &key (target *val*) representation)
   (unless (= (length form) 2)
     (error "Wrong number of arguments for ATOM."))
   (compile-form (cadr form) :target :stack)
@@ -3021,7 +3205,7 @@
            (when (contains-return subform)
              (return t)))))))
 
-(defun compile-block (form &key (target *val*))
+(defun compile-block (form &key (target *val*) representation)
 ;;   (format t "compile-block ~S~%" (cadr form))
   ;; This shouldn't be called, now that we have pass 1.
 ;;   (assert nil)
@@ -3086,52 +3270,54 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
-(defun compile-return-from (form &key (target *val*))
+(defun compile-return-from (form &key (target *val*) representation)
   (let* ((name (second form))
          (result-form (third form))
          (block (find-block name)))
-    (cond ((null block)
-           (error "No block named ~S is currently visible." name))
-          ((eq (block-compiland block) *current-compiland*)
-           ;; Local case. Is the RETURN nested inside an UNWIND-PROTECT which
-           ;; is inside the block we're returning from?
-           (let ((protected
-                  (dolist (enclosing-block *blocks*)
-                    (when (eq enclosing-block block)
-                      (return nil))
-                    (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
-                      (return t)))))
-             (when protected
-               (error "COMPILE-RETURN-FROM: enclosing UNWIND-PROTECT")))
+    (cond
+     ((null block)
+      (error "No block named ~S is currently visible." name))
+     ((eq (block-compiland block) *current-compiland*)
+      ;; Local case. Is the RETURN nested inside an UNWIND-PROTECT which
+      ;; is inside the block we're returning from?
+      (let ((protected
+             (dolist (enclosing-block *blocks*)
+               (when (eq enclosing-block block)
+                 (return nil))
+               (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
+                 (return t)))))
+        (when protected
+          (error "COMPILE-RETURN-FROM: enclosing UNWIND-PROTECT")))
 
-           ;; Added Dec 9 2004 7:28 AM
-           (emit-clear-values)
+      ;; Added Dec 9 2004 7:28 AM
+;;       (%format t "compile-return-from calling emit-clear-values~%")
+      (emit-clear-values)
 
-           (compile-form result-form :target (block-target block))
-           (emit 'goto (block-exit block)))
-          (t
-           ;; Non-local RETURN.
-           (setf (block-non-local-return-p block) t)
-           (emit 'new +lisp-return-class+)
-           (emit 'dup)
-           (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+      (compile-form result-form :target (block-target block))
+      (emit 'goto (block-exit block)))
+     (t
+      ;; Non-local RETURN.
+      (setf (block-non-local-return-p block) t)
+      (emit 'new +lisp-return-class+)
+      (emit 'dup)
+      (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
 
-           ;; Added Dec 9 2004 7:28 AM
-           (emit-clear-values)
+      ;; Added Dec 9 2004 7:28 AM
+      (emit-clear-values)
 
-           (compile-form (third form) :target :stack) ; Result.
-           (emit-invokespecial +lisp-return-class+
-                               "<init>"
-                               "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
-                               -3)
-           (emit 'athrow)
-           ;; Following code will not be reached, but is needed for JVM stack
-           ;; consistency.
-           (when target
-             (emit-push-nil)
-             (emit-move-from-stack target))))))
+      (compile-form (third form) :target :stack) ; Result.
+      (emit-invokespecial +lisp-return-class+
+                          "<init>"
+                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                          -3)
+      (emit 'athrow)
+      ;; Following code will not be reached, but is needed for JVM stack
+      ;; consistency.
+      (when target
+        (emit-push-nil)
+        (emit-move-from-stack target))))))
 
-(defun compile-cons (form &key (target *val*))
+(defun compile-cons (form &key (target *val*) representation)
   (unless (= (length form) 3)
     (error "Wrong number of arguments for CONS."))
   (let ((new-form (rewrite-function-call form)))
@@ -3164,12 +3350,15 @@
              (unless (null (cdr forms))
                (unless must-clear-values
                  (unless (single-valued-p form)
+;;                    (%format t "compile-progn-body not single-valued: ~S~%" form)
                    (setf must-clear-values t)))))))))
 
-(defun compile-progn (form &key (target *val*))
-  (compile-progn-body (cdr form) target))
+(defun compile-progn (form &key (target *val*) representation)
+  (compile-progn-body (cdr form) target)
+  (when (eq representation :unboxed-fixnum)
+    (emit-unbox-fixnum)))
 
-(defun compile-quote (form &key (target *val*))
+(defun compile-quote (form &key (target *val*) representation)
    (let ((obj (second form)))
      (cond ((null obj)
             (when target
@@ -3205,7 +3394,7 @@
            (t
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
-(defun compile-rplacd (form &key (target *val*))
+(defun compile-rplacd (form &key (target *val*) representation)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
       (return-from compile-rplacd (compile-form new-form :target target))))
@@ -3223,7 +3412,7 @@
     (when target
       (emit-move-from-stack target))))
 
-(defun compile-declare (form &key target)
+(defun compile-declare (form &key target representation)
   (when target
     (emit-push-nil)
     (emit-move-from-stack target)))
@@ -3275,7 +3464,7 @@
                                       :classfile classfile)
                  *local-functions*)))))
 
-(defun compile-flet (form &key (target *val*))
+(defun compile-flet (form &key (target *val*) representation)
   (if *use-locals-vector*
       (let ((*local-functions* *local-functions*)
             (definitions (cadr form))
@@ -3287,7 +3476,7 @@
           (compile-form (car forms) :target (if (cdr forms) nil target))))
       (error "COMPILE-FLET: unsupported case.")))
 
-(defun compile-labels (form &key target)
+(defun compile-labels (form &key target representation)
   (if *use-locals-vector*
       (let ((*local-functions* *local-functions*)
             (definitions (cadr form))
@@ -3389,7 +3578,7 @@
                        -1) ; Stack: compiled-closure
     (emit-move-from-stack target)))
 
-(defun compile-function (form &key (target *val*))
+(defun compile-function (form &key (target *val*) representation)
   (let ((name (second form))
         (local-function))
     (cond ((symbolp name)
@@ -3483,7 +3672,7 @@
           (t
            (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
-(defun compile-ash (form &key (target *val*))
+(defun compile-ash (form &key (target *val*) representation)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
       (return-from compile-ash (compile-form new-form :target target))))
@@ -3495,9 +3684,7 @@
         (when (fixnump second)
           (compile-form first :target :stack)
           (maybe-emit-clear-values first)
-          (if (<= -32768 second 32767)
-              (emit 'sipush second)
-              (emit 'ldc (pool-int second)))
+          (emit-push-constant-int second)
           (emit-invokevirtual +lisp-object-class+
                               "ash"
                               "(I)Lorg/armedbear/lisp/LispObject;"
@@ -3506,7 +3693,7 @@
           (return-from compile-ash t)))))
   (compile-function-call form :target target))
 
-(defun compile-logand (form &key (target *val*))
+(defun compile-logand (form &key (target *val*) representation)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
       (return-from compile-logand (compile-form new-form :target target))))
@@ -3518,9 +3705,7 @@
         (when (fixnump second)
           (compile-form first :target :stack)
           (maybe-emit-clear-values first)
-          (if (<= -32768 second 32767)
-              (emit 'sipush second)
-              (emit 'ldc (pool-int second)))
+          (emit-push-constant-int second)
           (emit-invokevirtual +lisp-object-class+
                               "logand"
                               "(I)Lorg/armedbear/lisp/LispObject;"
@@ -3529,29 +3714,94 @@
           (return-from compile-logand t)))))
   (compile-function-call form :target target))
 
-(defun compile-plus (form &key (target *val*))
+(defun compile-length (form &key (target *val*) representation)
+  (unless (= (length form) 2)
+    (error 'simple-program-error
+           :format-control "Wrong number of arguments for LENGTH."))
+  (let ((arg (cadr form)))
+    (compile-form arg :target :stack)
+    (maybe-emit-clear-values arg)
+    (cond
+     ((eq representation :unboxed-fixnum)
+      (emit-invokevirtual +lisp-object-class+
+                          "length"
+                          "()I"
+                          0))
+     (t
+      (emit-invokevirtual +lisp-object-class+
+                          "LENGTH"
+                          "()Lorg/armedbear/lisp/LispObject;"
+                          0)))
+    (emit-move-from-stack target representation)))
+
+(defun compile-nth (form &key (target *val*) representation)
+  (unless (= (length form) 3)
+    (error 'program-error
+           :format-control "Wrong number of arguments for NTH."))
+  (let ((index-form (second form))
+        (list-form (third form)))
+    (compile-form index-form :target :stack :representation :unboxed-fixnum)
+    (compile-form list-form :target :stack)
+    (unless (and (single-valued-p index-form)
+                 (single-valued-p list-form))
+      (emit-clear-values))
+    (emit 'swap)
+    (emit-invokevirtual +lisp-object-class+
+                        "NTH"
+                        "(I)Lorg/armedbear/lisp/LispObject;"
+                        -1)
+    (when (eq representation :unboxed-fixnum)
+      (emit-unbox-fixnum))
+    (emit-move-from-stack target representation)))
+
+(defun compile-plus (form &key (target *val*) representation)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
       (return-from compile-plus (compile-form new-form :target target))))
-  (let* ((args (cdr form))
-         (len (length args)))
-    (case len
+  (let* ((args (cdr form)))
+    (case (length args)
       (2
        (let ((first (first args))
              (second (second args)))
          (cond
+          ((and (numberp first) (numberp second))
+           (compile-constant (+ first second) :target target))
           ((eql first 1)
            (compile-form second :target :stack)
-           (emit-invoke-method "incr" :target target))
+           (emit-invoke-method "incr" target representation))
           ((eql second 1)
            (compile-form first :target :stack)
-           (emit-invoke-method "incr" :target target))
+           (emit-invoke-method "incr" target representation))
+          ((fixnump second)
+           (compile-form first :target :stack)
+           (maybe-emit-clear-values first)
+           (emit-push-constant-int second)
+           (emit-invokevirtual +lisp-object-class+
+                               "add"
+                               "(I)Lorg/armedbear/lisp/LispObject;"
+                               -1)
+           (when (eq representation :unboxed-fixnum)
+             (emit-unbox-fixnum))
+           (emit-move-from-stack target))
+          ((and (unboxed-fixnum-variable-p first)
+                (unboxed-fixnum-variable-p second))
+           (aver (variable-register (find-visible-variable first)))
+           (emit 'iload (variable-register (find-visible-variable first)))
+           (emit 'i2l)
+           (aver (variable-register (find-visible-variable second)))
+           (emit 'iload (variable-register (find-visible-variable second)))
+           (emit 'i2l)
+           (emit 'ladd)
+           (emit-box-long)
+           (emit-move-from-stack target))
           (t
-           (compile-binary-operation "add" args :target target)))))
+           (compile-binary-operation "add" args
+                                     :target target
+                                     :representation representation)))))
       (t
        (compile-function-call form :target target)))))
 
-(defun compile-minus (form &key (target *val*))
+(defun compile-minus (form &key (target *val*) representation)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
       (return-from compile-minus (compile-form new-form :target target))))
@@ -3562,28 +3812,87 @@
        (let ((first (first args))
              (second (second args)))
          (cond
+          ((and (numberp first) (numberp second))
+           (compile-constant (- first second) :target target))
           ((eql second 1)
-           (compile-form first :target :stack)
-           (emit-invoke-method "decr" :target target))
-          ((fixnump (second args))
-           (compile-form (car args) :target :stack)
-           (maybe-emit-clear-values (car args))
-           (if (<= -32768 (second args) 32767)
-               (emit 'sipush (second args))
-               (emit 'ldc (pool-int (second args))))
-           (emit-invokevirtual +lisp-object-class+
-                               "subtract"
-                               "(I)Lorg/armedbear/lisp/LispObject;"
-                               -1)
-           (emit-move-from-stack target))
+           (cond
+            ((unboxed-fixnum-variable-p first)
+             (aver (variable-register (find-visible-variable first)))
+             (emit 'iload (variable-register (find-visible-variable first)))
+             (emit 'i2l)
+             (emit 'iconst_1)
+             (emit 'i2l)
+             (emit 'lsub)
+             (emit-box-long)
+             (emit-move-from-stack target))
+            (t
+             (compile-form first :target :stack)
+             (emit-invoke-method "decr" target representation))))
+          ((fixnump second)
+           (%format t "compile-minus fixnump second case~%")
+           (cond
+            ((unboxed-fixnum-variable-p first)
+             (%format t "unboxed-fixnum-variable-p first case~%")
+             (aver (variable-register (find-visible-variable first)))
+             (emit 'iload (variable-register (find-visible-variable first)))
+             (emit 'i2l)
+             (emit-push-constant-int second)
+             (emit 'i2l)
+             (emit 'lsub)
+             (emit-box-long)
+             (emit-move-from-stack target))
+            (t
+             (compile-form first :target :stack)
+             (maybe-emit-clear-values first)
+             (emit-push-constant-int second)
+             (emit-invokevirtual +lisp-object-class+
+                                 "subtract"
+                                 "(I)Lorg/armedbear/lisp/LispObject;"
+                                 -1)
+             (when (eq representation :unboxed-fixnum)
+               (emit-unbox-fixnum))
+             (emit-move-from-stack target representation))))
           (t
-           (compile-binary-operation "subtract" args :target target)))))
+           (compile-binary-operation "subtract" args
+                                     :target target
+                                     :representation representation)))))
       (t
        (compile-function-call form :target target)))))
 
-(defun compile-not/null (form &key (target *val*))
+(defun compile-schar (form &key (target *val*) representation)
+  (unless (= (length form) 3)
+    (error 'program-error
+           :format-control "Wrong number of arguments for ~S."
+           :format-arguments (list (car form))))
+  (compile-form (second form) :target :stack)
+  (compile-form (third form) :target :stack :representation :unboxed-fixnum)
+  (unless (and (single-valued-p (second form))
+               (single-valued-p (third form)))
+    (emit-clear-values))
+  (emit-invokevirtual +lisp-object-class+
+                      "SCHAR"
+                      "(I)Lorg/armedbear/lisp/LispObject;"
+                      -1)
+  (emit-move-from-stack target))
+
+(defun compile-aref (form &key (target *val*) representation)
+;;   (%format t "compile-aref form = ~S~%" form)
+  (unless (= (length form) 3)
+    (return-from compile-aref (compile-function-call form :target target)))
+  (compile-form (second form) :target :stack)
+  (compile-form (third form) :target :stack :representation :unboxed-fixnum)
+  (unless (and (single-valued-p (second form))
+               (single-valued-p (third form)))
+    (emit-clear-values))
+  (emit-invokevirtual +lisp-object-class+
+                      "AREF"
+                      "(I)Lorg/armedbear/lisp/LispObject;"
+                      -1)
+  (emit-move-from-stack target))
+
+(defun compile-not/null (form &key (target *val*) representation)
   (unless (= (length form) 2)
-    (error 'simple-program-error
+    (error 'program-error
            :format-control "Wrong number of arguments for ~S."
            :format-arguments (list (car form))))
   (let ((arg (second form)))
@@ -3620,7 +3929,7 @@
              (emit 'label `,label2)))))
   (emit-move-from-stack target))
 
-(defun compile-values (form &key (target *val*))
+(defun compile-values (form &key (target *val*) representation)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
       (return-from compile-values (compile-form new-form :target target))))
@@ -3660,7 +3969,7 @@
       (t
        (compile-function-call form :target target)))))
 
-(defun compile-special-reference (name target)
+(defun compile-special-reference (name target representation)
   (emit 'getstatic
         *this-class*
         (declare-symbol name)
@@ -3670,35 +3979,48 @@
                       "symbolValue"
                       "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
                       -1)
-  (cond ((null target)
-         (emit 'pop))
-        ((eq target :stack))
-        ((fixnump target)
-         (emit 'astore target))
-        (t
-         (%format t "line 2721~%")
-         (aver nil))))
+  (when (eq representation :unboxed-fixnum)
+    (emit-unbox-fixnum))
+  (emit-move-from-stack target representation))
 
-(defun compile-variable-reference (name target)
+(defun compile-variable-reference (name target representation)
   (let ((variable (find-visible-variable name)))
-    (cond ((null variable)
-           (when (and (special-variable-p name)
-                      (constantp name))
-             (let ((value (symbol-value name)))
-               (when (or (null *compile-file-truename*)
-                         ;; FIXME File compilation doesn't support all constant
-                         ;; types yet.
-                         (stringp value)
-                         (numberp value)
-                         (packagep value))
-                 (compile-constant value :target target)
-                 (return-from compile-variable-reference))))
-           (unless (special-variable-p name)
-             ;; FIXME This should be a warning!
-             (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) name))
-           (compile-special-reference name target))
-          (t
-           (emit 'var-ref variable target)))))
+    (cond
+     ((null variable)
+      (when (and (special-variable-p name)
+                 (constantp name))
+        (let ((value (symbol-value name)))
+          (when (or (null *compile-file-truename*)
+                    ;; FIXME File compilation doesn't support all constant
+                    ;; types yet.
+                    (stringp value)
+                    (numberp value)
+                    (packagep value))
+            (compile-constant value :target target :representation representation)
+            (return-from compile-variable-reference))))
+      (unless (special-variable-p name)
+        ;; FIXME This should be a warning!
+        (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) name))
+      (compile-special-reference name target representation))
+     ((eq (variable-representation variable) :unboxed-fixnum)
+      (%format t "compile-variable-reference unboxed-fixnum case~%")
+      (cond
+       ((eq representation :unboxed-fixnum)
+        (aver (variable-register variable))
+        (emit 'iload (variable-register variable)))
+       (t
+        (%format t "compile-variable-reference constructing boxed fixnum for ~S~%"
+                 name)
+        (emit 'new +lisp-fixnum-class+)
+        (emit 'dup)
+        (aver (variable-register variable))
+        (emit 'iload (variable-register variable))
+        (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2)))
+      (emit-move-from-stack target representation))
+     (t
+;;       (%format t "compile-variable-reference name = ~S representation = ~S~%"
+;;                name representation)
+      (emit 'var-ref variable target representation)))))
 
 (defun rewrite-setq (form)
   (let ((expr (third form)))
@@ -3707,7 +4029,9 @@
           (list 'LET (list (list sym expr)) (list 'SETQ (second form) sym)))
         form)))
 
-(defun compile-setq (form &key (target *val*))
+(defun compile-setq (form &key (target *val*) representation)
+;;   (%format t "compile-setq form = ~S target = ~S representation = ~S~%"
+;;            form target representation)
   (unless (= (length form) 3)
     (return-from compile-setq (compile-form (precompiler::precompile-setq form)
                                             :target target)))
@@ -3735,6 +4059,32 @@
                               "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                               -2)
            (emit-move-from-stack target))
+          ((and (eq (variable-representation variable) :unboxed-fixnum)
+                (or (equal value-form (list '1+ (variable-name variable)))
+                    (equal value-form (list '+ (variable-name variable) 1))
+                    (equal value-form (list '+ 1 (variable-name variable)))))
+           (%format t "compile-setq incf unboxed-fixnum case~%")
+           (emit 'iinc (variable-register variable) 1)
+           (when target
+             (%format t "compile-setq constructing boxed fixnum for ~S~%"
+                      (variable-name variable))
+             (emit 'new +lisp-fixnum-class+)
+             (emit 'dup)
+             (aver (variable-register variable))
+             (emit 'iload (variable-register variable))
+             (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2)
+             (emit-move-from-stack target)))
+          ((eq (variable-representation variable) :unboxed-fixnum)
+           (%format t "compile-setq unboxed-fixnum case value-form = ~S~%" value-form)
+           (compile-form value-form :target :stack)
+           (maybe-emit-clear-values value-form)
+           (when target
+             (emit 'dup))
+           (emit-unbox-fixnum)
+           (emit 'istore (variable-register variable))
+           (when target
+             (emit-move-from-stack target))
+           )
           (t
            (compile-form value-form :target :stack)
            (maybe-emit-clear-values value-form)
@@ -3742,9 +4092,11 @@
              (emit 'dup))
            (emit 'var-set variable)
            (when target
+             (when (eq representation :unboxed-fixnum)
+               (emit-unbox-fixnum))
              (emit-move-from-stack target))))))
 
-(defun compile-catch (form &key (target *val*))
+(defun compile-catch (form &key (target *val*) representation)
   (when (= (length form) 2) ; (catch 'foo)
     (when target
       (emit-push-nil)
@@ -3838,7 +4190,7 @@
           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
         form)))
 
-(defun compile-throw (form &key (target *val*))
+(defun compile-throw (form &key (target *val*) representation)
 ;;   (let ((new-form (rewrite-throw form)))
 ;;     (when (neq new-form form)
 ;;       (return-from compile-throw (compile-form new-form :target target))))
@@ -3854,7 +4206,7 @@
     (emit-push-nil)
     (emit-move-from-stack target)))
 
-(defun compile-unwind-protect (form &key (target *val*))
+(defun compile-unwind-protect (form &key (target *val*) representation)
   (when (= (length form) 2) ; (unwind-protect 42)
     (compile-form (second form) :target target)
     (return-from compile-unwind-protect))
@@ -3916,25 +4268,34 @@
                                  :catch-type 0)))
       (push handler *handlers*))))
 
-(defun compile-form (form &key (target *val*))
+(defun compile-form (form &key (target *val*) representation)
   (cond ((consp form)
          (let ((op (car form))
                handler)
            (cond ((symbolp op)
                   (cond ((setf handler (get op 'p2-handler))
-                         (funcall handler form :target target))
+                         (funcall handler form
+                                  :target target
+                                  :representation representation))
                         ((macro-function op)
-                         (compile-form (macroexpand form) :target target))
+                         (compile-form (macroexpand form)
+                                       :target target
+                                       :representation representation))
                         ((special-operator-p op)
                          (error "COMPILE-FORM: unsupported special operator ~S" op))
                         (t
-                         (compile-function-call form :target target))))
+                         (compile-function-call form
+                                                :target target
+                                                :representation representation))))
                  ((and (consp op) (eq (car op) 'LAMBDA))
                   (let ((new-form (list* 'FUNCALL form)))
-                    (compile-form new-form :target target)))
+                    (compile-form new-form
+                                  :target target
+                                  :representation representation)))
                  (t
                   (error "COMPILE-FORM unhandled case ~S" form)))))
         ((symbolp form)
+;;          (%format t "compile-form symbolp case form = ~S~%" form)
          (cond
           ((null form)
            (emit-push-nil)
@@ -3952,7 +4313,7 @@
            ;; Maybe it's a symbol macro...
            (let ((expansion (macroexpand form)))
              (if (eq expansion form)
-                 (compile-variable-reference form target)
+                 (compile-variable-reference form target representation)
                  (compile-form expansion :target target))))))
         ((block-node-p form)
          (cond ((equal (block-name form) '(TAGBODY))
@@ -3962,7 +4323,8 @@
                (t
                 (compile-block-node form target))))
         ((constantp form)
-         (compile-constant form :target target))
+;;          (%format t "compile-form constantp case~%")
+         (compile-constant form :target target :representation representation))
         (t
          (error "COMPILE-FORM unhandled case ~S" form))))
 
@@ -4123,7 +4485,6 @@
                (dolist (arg args)
                  (aver (= index (length (context-vars *context*))))
                  (let ((variable (make-variable :name arg
-;;                                                 :kind 'ARG
                                                 :special-p nil ;; FIXME
                                                 :register (if *using-arg-array* nil register)
                                                 :index index)))
@@ -4139,15 +4500,34 @@
           (let ((variable (find-visible-variable name)))
             (cond ((null variable)
                    (setf variable (make-variable :name name
-;;                                                  :kind 'SPECIAL
                                                  :special-p t))
                    (push variable *all-variables*)
                    (push variable *visible-variables*))
                   (t
                    (setf (variable-special-p variable) t))))))
 
+      ;; Process type declarations.
+      (when *trust-user-type-declarations*
+        (unless (or *child-p*
+                    (plusp (compiland-children *current-compiland*)))
+          (dolist (subform body)
+            (unless (and (consp subform) (eq (car subform) 'DECLARE))
+              (return))
+            (let ((decls (cdr subform)))
+              (dolist (decl decls)
+                (case (car decl)
+                  (TYPE
+                   (dolist (name (cddr decl))
+                     (let ((variable (find-visible-variable name)))
+                       (when variable
+                         (setf (variable-declared-type variable) (cadr decl))
+                         (when (and (subtypep (variable-declared-type variable) 'FIXNUM)
+                                    (not (variable-special-p variable)))
+                           (setf (variable-representation variable) :unboxed-fixnum))))))))))))
+
       (dump-variables (reverse parameters)
-                      (%format nil "Arguments to ~A:~%" (compiland-name *current-compiland*)))
+                      (%format nil "Arguments to ~A:~%" (compiland-name *current-compiland*))
+                      )
 
       (allocate-register) ;; "this" pointer
       (if *using-arg-array*
@@ -4213,21 +4593,28 @@
         (setf *code* ())
         (maybe-generate-arg-count-check)
         (maybe-generate-interrupt-check)
-        (cond ((or *hairy-arglist-p* *use-locals-vector*)
-               (emit 'aload_0) ; this
-               (emit 'aload_1) ; arg vector
-               ; Reserve extra slots for locals if applicable.
-               (let ((extra (if *use-locals-vector*
-                                (length (context-vars *context*))
-                                0)))
-                 (emit 'sipush extra))
-               (emit-invokevirtual *this-class*
-                                   (if (or (memq '&optional args) (memq '&key args))
-                                       "processArgs"
-                                       "fastProcessArgs")
-                                   "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                                   -2)
-               (emit 'astore_1)))
+        (cond
+         ((or *hairy-arglist-p* *use-locals-vector*)
+          (emit 'aload_0) ; this
+          (emit 'aload_1) ; arg vector
+          ; Reserve extra slots for locals if applicable.
+          (let ((extra (if *use-locals-vector*
+                           (length (context-vars *context*))
+                           0)))
+            (emit 'sipush extra))
+          (emit-invokevirtual *this-class*
+                              (if (or (memq '&optional args) (memq '&key args))
+                                  "processArgs"
+                                  "fastProcessArgs")
+                              "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
+                              -2)
+          (emit 'astore_1))
+         ((not *using-arg-array*)
+          (dolist (variable (reverse *visible-variables*))
+            (when (eq (variable-representation variable) :unboxed-fixnum)
+              (emit 'aload (variable-register variable))
+              (emit-unbox-fixnum)
+              (emit 'istore (variable-register variable))))))
 
         (maybe-initialize-thread-var)
         (setf *code* (append code *code*)))
@@ -4357,7 +4744,8 @@
       (error "Handler not found: ~S" handler))
     (setf (get symbol 'p2-handler) handler)))
 
-(mapc #'install-p2-handler '(ash
+(mapc #'install-p2-handler '(aref
+                             ash
                              atom
                              block
                              catch
@@ -4369,16 +4757,19 @@
                              go
                              if
                              labels
+                             length
                              locally
                              logand
                              multiple-value-bind
                              multiple-value-call
                              multiple-value-list
                              multiple-value-prog1
+                             nth
                              progn
                              quote
                              return-from
                              rplacd
+                             schar
                              setq
                              throw
                              unwind-protect
