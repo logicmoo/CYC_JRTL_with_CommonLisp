@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.9 2002-12-03 18:36:08 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.10 2002-12-06 00:43:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,18 @@
 
 package org.armedbear.j;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Component;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JMenuItem;
+import javax.swing.JList;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.MenuElement;
 import javax.swing.MenuSelectionManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import javax.swing.SwingUtilities;
 
 public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     implements Constants
@@ -52,6 +52,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     private String encoding;
 
     private JPopupMenu popup;
+    private JList listbox;
 
     public OpenFileTextFieldHandler(Editor editor, HistoryTextField textField)
     {
@@ -106,17 +107,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             error(sb.toString());
             return;
         }
-        File currentDir = null;
-        File file = buffer.getFile();
-        if (file != null) {
-            if (file.canonicalPath().equals("/"))
-                currentDir = file;
-            else
-                currentDir = file.getParentFile();
-        }
-        if (currentDir == null)
-            currentDir = Directories.getUserHomeDirectory();
-        Debug.assertTrue(currentDir != null);
+        File currentDir = buffer.getCompletionDirectory();
         if (entry.length() == 0) {
             returned = currentDir;
             done();
@@ -369,6 +360,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     public void escape()
     {
         if (popup != null) {
+            Debug.bug();
             popup.setVisible(false);
             popup = null;
         }
@@ -380,7 +372,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             // Using location bar.
             editor.updateLocation();
             editor.ensureActive();
-            editor.setFocusToDisplay();
+            Editor.restoreFocus();
         }
     }
 
@@ -389,21 +381,26 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         return true;
     }
 
+    private String originalText;
+
     public void tab()
     {
         final String entry = textField.getText();
         if (entry.startsWith("http:") || entry.startsWith("https:") ||
             entry.startsWith("ftp:"))
             return;
-        File dir = editor.getCurrentDirectory();
+        final File dir = editor.getCompletionDirectory();
         if (dir == null)
             return;
         String prefix = null;
         if (dir.isLocal() &&
             (Utilities.isFilenameAbsolute(entry) || entry.startsWith(".."))) {
             File file = File.getInstance(dir, entry);
-            if (file != null)
+            if (file != null) {
                 prefix = file.canonicalPath();
+                if (entry.endsWith(LocalFile.getSeparator()))
+                    prefix = prefix.concat(LocalFile.getSeparator());
+            }
         } else
             prefix = entry;
         if (prefix == null)
@@ -417,10 +414,14 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     String completion = (String) completions.get(0);
                     textField.setText(completion);
                     textField.setCaretPosition(completion.length());
-                } else if (completions.size() > 1)
+                } else if (completions.size() > 1) {
+                    originalText = textField.getText();
+                    String completion = (String) completions.get(0);
+                    textField.setText(completion);
                     showCompletionsPopup();
+                }
             } else
-                tabPopup();
+                tabPopup(+1, true);
         } else {
             // No completion list.
             while (true) {
@@ -431,7 +432,11 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     // Only one possible completion. Accept it and continue.
                     prefix = entry;
                     reset();
-                    continue;
+                    File file = File.getInstance(dir, entry);
+                    if (file != null && file.isDirectory())
+                        continue;
+                    else
+                        break;
                 }
                 // More than one possible completion. Present the current one
                 // and let the user decide what to do next.
@@ -571,47 +576,62 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
 
     private void showCompletionsPopup()
     {
-        for (int i = 0; i < completions.size(); i++) {
-            String s = (String) completions.get(i);
-            if (popup == null) {
-                popup = new JPopupMenu();
-                MenuSelectionManager.defaultManager().addChangeListener(
-                    popupChangeListener);
-            }
-            PopupMenuItem menuItem = new PopupMenuItem();
-            menuItem.setText(s);
-            menuItem.setActionCommand(s);
-            menuItem.addActionListener(popupActionListener);
-            popup.add(menuItem);
-        }
-        if (popup != null)
-            popup.show(textField, 0, textField.getHeight());
+        String[] array = new String[completions.size()];
+        completions.toArray(array);
+        popup = new JPopupMenu();
+        popup.add(new CompletionsList(array));
+        popup.show(textField, 0, textField.getHeight());
     }
 
-    private void tabPopup()
+    private void tabPopup(int n, boolean wrap)
     {
-        int count = popup.getComponentCount();
+        int count = listbox.getModel().getSize();
         if (count == 0) {
             Debug.bug();
             return;
         }
-        int i = popup.getSelectionModel().getSelectedIndex();
-        if (++i >= count)
-            i = 0;
-        if (popup.getSubElements().length == count) {
-            MenuElement me[] = new MenuElement[2];
-            me[0] = popup;
-            me[1] = popup.getSubElements()[i];
-            MenuSelectionManager.defaultManager().setSelectedPath(me);
-            popup.getSelectionModel().setSelectedIndex(i);
+        int index = listbox.getSelectedIndex();
+        int i = index + n;
+        if (wrap) {
+            if (i >= count)
+                i = 0;
+            else if (i < 0)
+                i = count - 1;
         } else {
-            Debug.bug();
-            return;
+            if (i >= count || i < 0)
+                i = index;
         }
-        PopupMenuItem menuItem =
-            (PopupMenuItem) popup.getComponent(i);
-        String s = menuItem.getText();
-        textField.setText(s);
+        if (i != index) {
+            listbox.setSelectedIndex(i);
+            listbox.ensureIndexIsVisible(i);
+            String s = (String) listbox.getSelectedValue();
+            textField.setText(s);
+        }
+    }
+
+    private void enterPopup()
+    {
+        popup.setVisible(false);
+        popup = null;
+        File file = File.getInstance(editor.getCompletionDirectory(),
+            textField.getText());
+        if (file != null && file.isFile())
+            enter();
+        else {
+            textField.requestFocus();
+            end();
+        }
+    }
+
+    private void end()
+    {
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                textField.setCaretPosition(textField.getText().length());
+            }
+        };
+        SwingUtilities.invokeLater(r);
     }
 
     protected void reset()
@@ -623,64 +643,130 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         super.reset();
     }
 
-    private void updateTextField()
+    private class CompletionsList extends JScrollPane implements MenuElement
     {
-        MenuElement[] path =
-            MenuSelectionManager.defaultManager().getSelectedPath();
-        if (path != null && path.length > 0) {
-            MenuElement me = path[path.length-1];
-            if (me instanceof PopupMenuItem) {
-                String s = ((PopupMenuItem)me).getText();
-                textField.setText(s);
-            }
-        }
-    }
-
-    private ActionListener popupActionListener = new ActionListener() {
-        public void actionPerformed(ActionEvent e)
+        public CompletionsList(String[] completions)
         {
-            textField.setText(e.getActionCommand());
-            enter();
+            super(listbox = new JList(completions));
+            listbox.setFont(textField.getFont());
+            if (completions.length < 8)
+                listbox.setVisibleRowCount(completions.length);
+            if (Platform.isJava14())
+                Utilities.setFocusTraversalKeysEnabled(listbox, false);
+            listbox.setSelectedIndex(0);
         }
-    };
 
-    private ChangeListener popupChangeListener = new ChangeListener() {
-        public void stateChanged(ChangeEvent e)
+        public void processMouseEvent(MouseEvent e, MenuElement[] path,
+            MenuSelectionManager manager)
         {
-            updateTextField();
         }
-    };
 
-    private class PopupMenuItem extends JMenuItem
-    {
         public void processKeyEvent(KeyEvent e, MenuElement[] path,
             MenuSelectionManager manager)
         {
+            final int modifiers = e.getModifiers();
             if (e.getID() == KeyEvent.KEY_PRESSED) {
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_TAB:
-                        tabPopup();
+                        if (modifiers == 0)
+                            tabPopup(+1, true);
+                        else if (modifiers == SHIFT_MASK)
+                            tabPopup(-1, true);
                         e.consume();
                         return;
-                    case KeyEvent.VK_ESCAPE:
-                        escape();
+                    case KeyEvent.VK_ENTER: {
+                        enterPopup();
                         e.consume();
                         return;
-                    case KeyEvent.VK_UP:
-                    case KeyEvent.VK_DOWN:
-                        break;
-                    case KeyEvent.VK_RIGHT:
-                        reset();
-                        textField.setCaretPosition(textField.getText().length());
+                    }
+                    case KeyEvent.VK_ESCAPE: {
+                        popup.setVisible(false);
+                        popup = null;
+                        textField.setText(originalText);
                         textField.requestFocus();
+                        end();
                         e.consume();
                         return;
-                    default:
+                    }
+                    case KeyEvent.VK_UP:
+                    case KeyEvent.VK_KP_UP:
+                        tabPopup(-1, false);
+                        e.consume();
+                        break;
+                    case KeyEvent.VK_DOWN:
+                    case KeyEvent.VK_KP_DOWN:
+                        tabPopup(+1, false);
+                        e.consume();
+                        break;
+                    case KeyEvent.VK_END:
+                    case KeyEvent.VK_RIGHT:
+                    case KeyEvent.VK_KP_RIGHT: {
                         reset();
+                        textField.requestFocus();
+                        end();
+                        e.consume();
                         return;
+                    }
+                    case KeyEvent.VK_SHIFT:
+                        break;
+                    default:
+                        break;
                 }
             }
-            super.processKeyEvent(e, path, manager);
+            super.processKeyEvent(e);
         }
+
+        public void menuSelectionChanged(boolean isIncluded)
+        {
+        }
+
+        public MenuElement[] getSubElements()
+        {
+            return new MenuElement[0];
+        }
+
+        public Component getComponent()
+        {
+            return this;
+        }
+    }
+
+    public void keyPressed(KeyEvent e)
+    {
+        if (popup != null) {
+            int modifiers = e.getModifiers();
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_ENTER:
+                    enterPopup();
+                    e.consume();
+                    return;
+                case KeyEvent.VK_ESCAPE:
+                    popup.setVisible(false);
+                    popup = null;
+                    textField.setText(originalText);
+                    textField.requestFocus();
+                    e.consume();
+                    return;
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_KP_UP:
+                    if (modifiers == 0) {
+                        tabPopup(-1, false);
+                        e.consume();
+                        return;
+                    }
+                    break;
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_KP_DOWN:
+                    if (modifiers == 0) {
+                        tabPopup(+1, false);
+                        e.consume();
+                        return;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        super.keyPressed(e);
     }
 }
