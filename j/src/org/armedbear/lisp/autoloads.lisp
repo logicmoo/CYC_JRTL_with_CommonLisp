@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.45 2003-10-07 17:21:33 piso Exp $
+;;; $Id: autoloads.lisp,v 1.46 2003-10-09 16:42:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -89,6 +89,9 @@
           "time.lisp")
 (autoload '(break invoke-debugger) "debug.lisp")
 (autoload 'gentemp)
+(autoload '(bit-and bit-ior bit-xor bit-eqv bit-nand bit-nor bit-andc1
+            bit-andc2 bit-orc1 bit-orc2 bit-not)
+          "bit-array-ops.lisp")
 
 (autoload '(tpl::top-level-loop) "top-level.lisp")
 

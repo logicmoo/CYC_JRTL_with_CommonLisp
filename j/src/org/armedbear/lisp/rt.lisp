@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.139 2003-10-06 00:36:34 piso Exp $
+;;; $Id: rt.lisp,v 1.140 2003-10-09 16:42:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -160,8 +160,19 @@
                               "assoc-if-not"
                               "atom"
                               "bit"
+                              "bit-and"
+                              "bit-andc1"
+                              "bit-andc2"
+                              "bit-eqv"
+                              "bit-ior"
+                              "bit-nand"
+                              "bit-nor"
+                              "bit-not"
+                              "bit-orc1"
+                              "bit-orc2"
                               "bit-vector"
                               "bit-vector-p"
+                              "bit-xor"
                               "block"
                               "boole"
                               "boundp"
