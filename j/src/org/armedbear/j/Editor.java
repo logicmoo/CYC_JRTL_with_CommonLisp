@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.114 2003-09-15 16:20:04 piso Exp $
+ * $Id: Editor.java,v 1.115 2003-09-16 01:38:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2937,26 +2937,28 @@ public final class Editor extends JPanel implements Constants,
         // Don't scroll the caret if a region is selected!
         if (mark != null)
             return;
-        final int dotLineNumber = dot.lineNumber();
-        final Line topLine = display.getTopLine();
-        if (dotLineNumber < topLine.lineNumber()) {
-            // Caret is above window.
-            addUndo(SimpleEdit.SCROLL_CARET);
-            dot.moveTo(topLine, 0);
-            updateDotLine();
-            moveCaretToDotCol();
-            goalColumn = 0;
-            return;
-        }
-        final Line bottomLine = display.getBottomLine();
-        if (dotLineNumber > bottomLine.lineNumber()) {
-            // Caret is below window.
-            addUndo(SimpleEdit.SCROLL_CARET);
-            updateDotLine();
-            dot.moveTo(bottomLine, 0);
-            updateDotLine();
-            moveCaretToDotCol();
-            goalColumn = 0;
+        if (buffer.getBooleanProperty(Property.SCROLL_CARET)) {
+            final int dotLineNumber = dot.lineNumber();
+            final Line topLine = display.getTopLine();
+            if (dotLineNumber < topLine.lineNumber()) {
+                // Caret is above window.
+                addUndo(SimpleEdit.SCROLL_CARET);
+                dot.moveTo(topLine, 0);
+                updateDotLine();
+                moveCaretToDotCol();
+                goalColumn = 0;
+                return;
+            }
+            final Line bottomLine = display.getBottomLine();
+            if (dotLineNumber > bottomLine.lineNumber()) {
+                // Caret is below window.
+                addUndo(SimpleEdit.SCROLL_CARET);
+                updateDotLine();
+                dot.moveTo(bottomLine, 0);
+                updateDotLine();
+                moveCaretToDotCol();
+                goalColumn = 0;
+            }
         }
     }
 
