@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: trace.lisp,v 1.10 2005-02-08 16:43:30 piso Exp $
+;;; $Id: trace.lisp,v 1.11 2005-02-12 03:30:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,10 +49,10 @@
 
 (defun trace-1 (name breakp)
   (unless (fboundp name)
-    (error "~S is not the name of a function" name))
+    (error "~S is not the name of a function." name))
   (if (member name *traced-functions*)
       (%format t "~S is already being traced." name)
-      (let* ((untraced-function (symbol-function name))
+      (let* ((untraced-function (fdefinition name))
              (trace-function
               (lambda (&rest args)
                 (with-standard-io-syntax

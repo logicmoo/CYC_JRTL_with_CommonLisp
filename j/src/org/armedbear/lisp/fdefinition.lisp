@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.1 2005-02-11 19:34:01 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.2 2005-02-12 03:29:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,7 +53,9 @@
          ;; FIXME arglist
          (setf (get (cadr name) '%SETF-FUNCTION) function))
         (t
-         (error 'type-error "~S is not a valid function name." name))))
+         (error 'type-error "~S is not a valid function name." name)))
+  (when (functionp function) ; FIXME Is this test needed?
+    (%set-lambda-name function name)))
 
 (defun fdefinition (name)
   (cond ((symbolp name)
