@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.23 2003-03-03 03:04:50 piso Exp $
+ * $Id: Lisp.java,v 1.24 2003-03-05 19:41:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,6 +273,9 @@ public abstract class Lisp
                     fun = first.getSymbolFunction();
                     if (fun == null)
                         throw new UndefinedFunctionError(first);
+                }
+                if (profiling) {
+                    fun.incrementCallCount();
                 }
                 switch (fun.getType()) {
                     case TYPE_SPECIAL_OPERATOR: {
@@ -756,6 +759,53 @@ public abstract class Lisp
                 debug = false;
                 resetStack();
             }
+            return nothing();
+        }
+    };
+
+    private static boolean profiling;
+
+    // ### start-profiler
+    public static final Primitive0 START_PROFILER =
+        new Primitive0("start-profiler") {
+        public LispObject execute() throws LispError
+        {
+            CharacterOutputStream out = getStandardOutput();
+            if (!profiling) {
+                Package[] packages = Packages.getAllPackages();
+                for (int i = 0; i < packages.length; i++) {
+                    Package pkg = packages[i];
+                    Symbol[] symbols = pkg.symbols();
+                    for (int j = 0; j < symbols.length; j++) {
+                        Symbol symbol = symbols[j];
+                        LispObject f = symbol.getSymbolFunction();
+                        if (f != null)
+                            f.clearCallCount();
+                    }
+                }
+                out.writeLine("Profiling started.");
+                out.finishOutput();
+                profiling = true;
+            } else {
+                out.writeLine("Profiling already enabled.");
+                out.finishOutput();
+            }
+            return nothing();
+        }
+    };
+
+    // ### stop-profiler
+    public static final Primitive0 STOP_PROFILER =
+        new Primitive0("stop-profiler") {
+        public LispObject execute() throws LispError
+        {
+            CharacterOutputStream out = getStandardOutput();
+            if (profiling) {
+                profiling = false;
+                out.writeLine("Profiling stopped.");
+            } else
+                out.writeLine("Profiling not enabled.");
+            out.finishOutput();
             return nothing();
         }
     };
