@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.17 2003-10-04 01:17:51 piso Exp $
+ * $Id: LispThread.java,v 1.18 2003-10-04 01:47:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,8 +182,8 @@ public final class LispThread extends LispObject
 
     public boolean isValidCatchTag(LispObject tag)
     {
-        for (int i = stack.size(); i-- > 0;) {
-            if (stack.get(i) == tag)
+        for (int i = catchTags.size(); i-- > 0;) {
+            if (catchTags.get(i) == tag)
                 return true;
         }
         return false;
