@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.27 2003-03-28 21:17:08 piso Exp $
+ * $Id: LispFormatter.java,v 1.28 2003-03-29 01:59:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,10 +52,18 @@ public final class LispFormatter extends Formatter
     private static final int LISP_FORMAT_SUBSTITUTION      = 8;
     private static final int LISP_FORMAT_SECONDARY_KEYWORD = 9;
 
-    private static final RE condRE = new UncheckedRE("cond[ \t]*\\(\\(");
-    private static final RE dolistRE = new UncheckedRE("dolist[ \t]*\\(");
+    private static final RE condRE =
+        new UncheckedRE("\\([ \t]*cond[ \t]*\\(\\(");
 
-    private static final LispMode lispMode = (LispMode) LispMode.getMode();
+    private static final RE dolistRE =
+        new UncheckedRE("\\([ \t]*dolist[ \t]*\\(");
+
+    // Matches e.g. "(do () ((endp list1))".
+    private static final RE doRE =
+        new UncheckedRE("\\([ \t]*do\\*?[ \t]*\\(.*\\)[ \t]\\(\\(");
+
+    private static final RE letOrDoRE =
+        new UncheckedRE("\\([ \t]*(let|do)\\*?[ \t]*\\(\\(");
 
     private final Mode mode;
 
@@ -132,82 +140,78 @@ public final class LispFormatter extends Formatter
     // Returns true if token at specified offset in detabbed text from line is
     // in functional position, based on context.
     private static final boolean isPositionFunctional(
-        String text,    // Detabbed text.
-        int offset,     // Offset of token in detabbed text.
-        Line line)      // Line (which may contain tab characters).
+        final String text,      // Detabbed text.
+        final int offset,       // Offset of token in detabbed text.
+        final Line line)        // Line (which may contain tab characters).
     {
-        if (offset >= 2) {
-            String preceding =
-                text.substring(offset - 2, offset);
-            if (preceding.equals("((")) {
+        if (offset >= 1 && text.charAt(offset-1) == '(') {
+            if (offset >= 2 && text.charAt(offset-2) == '(') {
+                // Token is preceded by "((".
+                if (countLeadingSpaces(text) == offset-2) {
+                    // First non-whitespace text on line.
+                    Position pos =
+                        LispMode.findContainingSexp(new Position(line, 0));
+                    if (pos != null) {
+                        // Skip '('.
+                        pos.skip();
+                        String s = parseToken(pos).toLowerCase();
+                        if (s.equals("cond"))
+                            return true;
+                        // Check for end-test form after DO/DO*.
+                        if (s.equals("do") || s.equals("do*"))
+                            return true;
+                    }
+                }
                 REMatch m = condRE.getMatch(text);
                 if (m != null && m.getEndIndex() == offset) {
                     return true;
                 }
-                if (countLeadingSpaces(text) == offset - 2) {
-                    Position pos = new Position(line, 0);
-                    pos = lispMode.findContainingSexp(pos);
-                    if (pos != null) {
-                        String s = parseToken(pos);
-                        if (s.equalsIgnoreCase("(cond")) {
-                            return true;
-                        }
-                    }
-                }
+                m = doRE.getMatch(text);
+                if (m != null && m.getEndIndex() == offset)
+                    return true;
                 return false;
             }
-        }
-        // Reaching here, preceding text is not "((".
-        if (offset >= 1) {
-            char c = text.charAt(offset - 1);
-            if (c == '(') {
-                if (countLeadingSpaces(text) == offset - 1) {
-                    Position pos = new Position(line, 0);
-                    pos = lispMode.findContainingSexp(pos);
-                    if (pos != null) {
-                        if (pos.lookingAt("((")) {
-                            pos = lispMode.findContainingSexp(pos);
-                            if (pos != null && pos.getChar() == '(') {
-                                pos.skip(1);
-                                String s = parseToken(pos).toLowerCase();
-                                if (s.equals("let"))
-                                    return false;
-                                if (s.equals("let*"))
-                                    return false;
-                                if (s.equals("do"))
-                                    return false;
-                                if (s.equals("do*"))
-                                    return false;
-                            }
-                        } else if (pos.getChar() == '(') {
-                            pos.skip(1);
-                            String s = parseToken(pos).toLowerCase();
-                            if (s.equals("case"))
-                                return false;
-                            if (s.equals("ccase"))
-                                return false;
-                            if (s.equals("ecase"))
-                                return false;
-                            if (s.equals("typecase"))
-                                return false;
-                            if (s.equals("ctypecase"))
-                                return false;
-                            if (s.equals("etypecase"))
-                                return false;
-                        }
+            // Text is preceded by single '('.
+            if (countLeadingSpaces(text) == offset-1) {
+                // First non-whitespace on line.
+                Position pos =
+                    LispMode.findContainingSexp(new Position(line, 0));
+                if (pos != null) {
+                    if (pos.lookingAt("((")) {
+                        REMatch m =
+                            letOrDoRE.getMatch(pos.getLine().getText());
+                        if (m != null && m.getEndIndex() == pos.getOffset() + 2)
+                            return false;
+                    } else {
+                        // Skip '('.
+                        pos.skip();
+                        String s = parseToken(pos).toLowerCase();
+                        if (s.equals("case"))
+                            return false;
+                        if (s.equals("ccase"))
+                            return false;
+                        if (s.equals("ecase"))
+                            return false;
+                        if (s.equals("typecase"))
+                            return false;
+                        if (s.equals("ctypecase"))
+                            return false;
+                        if (s.equals("etypecase"))
+                            return false;
                     }
-                } else {
-                    REMatch m = dolistRE.getMatch(text);
-                    if (m != null && m.getEndIndex() == offset)
-                        return false;
                 }
+            } else {
+                // Not first whitespace on line.
+                REMatch m = dolistRE.getMatch(text);
+                if (m != null && m.getEndIndex() == offset)
+                    return false;
             }
         }
         return true;
     }
 
     // Returns next whitespace-delimited token starting at (or after) pos.
-    // Same line only.
+    // Same line only. Never returns null.
     private static final String parseToken(Position pos)
     {
         final Line line = pos.getLine();
