@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.182 2004-06-14 14:30:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.183 2004-06-14 16:04:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2657,22 +2657,53 @@
       (push handler1 *handlers*)
       (push handler2 *handlers*))))
 
+(defun rewrite-throw (form)
+  (let ((args (cdr form)))
+    (if (unsafe-p args)
+        (let ((syms ())
+              (lets ())
+              (wrap-result-form nil))
+          ;; Tag.
+          (let ((arg (first args)))
+            (if (constantp arg)
+                (push arg syms)
+                (let ((sym (gensym)))
+                  (push sym syms)
+                  (push (list sym arg) lets))))
+          ;; Result. "If the result-form produces multiple values, then all the
+          ;; values are saved."
+          (let ((arg (second args)))
+            (if (constantp arg)
+                (push arg syms)
+                (let ((sym (gensym)))
+                  (cond ((single-valued-p arg)
+                         (push sym syms)
+                         (push (list sym arg) lets))
+                        (t
+                         (push (list 'VALUES-LIST sym) syms)
+                         (push (list sym (list 'MULTIPLE-VALUE-LIST arg)) lets))))))
+          (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
+        form)))
+
 (defun compile-throw (form &optional for-effect)
-    (ensure-thread-var-initialized)
-    (emit 'aload *thread*)
-    (compile-form (second form)) ; Tag.
-    (unless (remove-store-value)
-      (emit-push-value))
-    (compile-form (third form)) ; Result.
-    (unless (remove-store-value)
-      (emit-push-value))
-    (emit-invokevirtual +lisp-thread-class+
-                        "throwToTag"
-                        "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
-                        -2)
-    ;; Following code will not be reached.
-    (emit-push-nil)
-    (emit-store-value))
+  (let ((new-form (rewrite-throw form)))
+    (when (neq new-form form)
+      (return-from compile-throw (compile-form new-form))))
+  (ensure-thread-var-initialized)
+  (emit 'aload *thread*)
+  (compile-form (second form)) ; Tag.
+  (unless (remove-store-value)
+    (emit-push-value))
+  (compile-form (third form)) ; Result.
+  (unless (remove-store-value)
+    (emit-push-value))
+  (emit-invokevirtual +lisp-thread-class+
+                      "throwToTag"
+                      "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                      -2)
+  ;; Following code will not be reached.
+  (emit-push-nil)
+  (emit-store-value))
 
 (defun compile-form (form &optional for-effect)
   (cond ((consp form)
