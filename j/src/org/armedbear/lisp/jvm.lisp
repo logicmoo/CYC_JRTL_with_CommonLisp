@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.184 2004-06-19 14:23:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.185 2004-06-19 14:32:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -280,6 +280,8 @@
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
   (emit 'clear-values))
+
+(defvar *generate-interrupt-checks* t)
 
 (defun generate-interrupt-check ()
   (let ((label1 (gensym)))
@@ -2026,7 +2028,8 @@
                  (error "COMPILE-TAGBODY: tag not found: ~S" subform))
                (emit 'label label)))
             (t
-             (when (and (null (cdr rest)) ;; Last subform.
+             (when (and *generate-interrupt-checks*
+                        (null (cdr rest)) ;; Last subform.
                         (consp subform)
                         (eq (car subform) 'GO))
                (generate-interrupt-check))
@@ -2835,7 +2838,8 @@
                           "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;"
                           -1)
       (emit 'astore_1))
-    (generate-interrupt-check)
+    (when *generate-interrupt-checks*
+      (generate-interrupt-check))
     (dolist (f body)
       (compile-form f))
     (unless (remove-store-value)
