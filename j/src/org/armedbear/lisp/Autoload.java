@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.193 2004-08-15 11:29:19 piso Exp $
+ * $Id: Autoload.java,v 1.194 2004-08-17 20:08:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -233,7 +233,6 @@ public class Autoload extends Function
         autoload("char=", "CharacterFunctions");
         autoload("clrhash", "HashTable");
         autoload("concatenated-stream-streams", "ConcatenatedStream");
-        autoload("copy-structure", "StructureObject");
         autoload("cos", "MathFunctions");
         autoload("cosh", "MathFunctions");
         autoload("delete-file", "delete_file");
@@ -375,7 +374,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%make-socket", "make_socket");
         autoload(PACKAGE_SYS, "%make-string", "StringFunctions");
         autoload(PACKAGE_SYS, "%make-string-output-stream", "StringOutputStream");
-        autoload(PACKAGE_SYS, "%make-structure", "StructureObject");
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
@@ -406,14 +404,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%string=", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
-        autoload(PACKAGE_SYS, "%structure-ref", "StructureObject");
-        autoload(PACKAGE_SYS, "%structure-ref-0", "StructureObject");
-        autoload(PACKAGE_SYS, "%structure-ref-1", "StructureObject");
-        autoload(PACKAGE_SYS, "%structure-ref-2", "StructureObject");
-        autoload(PACKAGE_SYS, "%structure-set", "StructureObject");
-        autoload(PACKAGE_SYS, "%structure-set-0", "StructureObject");
-        autoload(PACKAGE_SYS, "%structure-set-1", "StructureObject");
-        autoload(PACKAGE_SYS, "%structure-set-2", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "allocate-slot-storage", "StandardObject");
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObject");
