@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ModeList.java,v 1.10 2003-06-06 15:33:19 piso Exp $
+ * $Id: ModeList.java,v 1.11 2003-06-09 17:55:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,14 +132,20 @@ public final class ModeList implements Constants
 
     public synchronized Mode getModeForFileName(String fileName)
     {
+        int id = getModeIdForFileName(fileName);
+        return id > 0 ? getMode(id) : null;
+    }
+
+    public synchronized int getModeIdForFileName(String fileName)
+    {
         if (fileName != null) {
             for (int i = list.size(); i-- > 0;) {
                 ModeListEntry entry = (ModeListEntry) list.get(i);
                 if (entry.accepts(fileName))
-                    return entry.getMode(true);
+                    return entry.getId();
             }
         }
-        return null;
+        return -1;
     }
 
     // Hard-coded for now.
