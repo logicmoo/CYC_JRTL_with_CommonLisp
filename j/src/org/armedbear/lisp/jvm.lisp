@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.60 2003-12-23 13:42:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.61 2003-12-23 15:24:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -327,6 +327,7 @@
 
 (defstruct local-function
   name
+  args-to-add
   function)
 
 (defvar *args* nil)
@@ -336,7 +337,7 @@
 (defvar *val* nil) ; index of value register
 
 (defun clear ()
-  (setq *pool* nil
+  (setf *pool* nil
         *pool-count* 1
         *code* nil)
   t)
@@ -1483,8 +1484,14 @@
     (resolve fun)
 
     (cond
-     ((setf local-function (find fun *local-functions* :key #'local-function-name))
+     ((setf local-function
+            (find fun *local-functions* :key #'local-function-name))
       (format t "compiling call to local function ~S~%" local-function)
+      (when (local-function-args-to-add local-function)
+        (format t "args-to-add = ~S~%" (local-function-args-to-add local-function))
+        (setf args (append (local-function-args-to-add local-function) args))
+        (setf numargs (length args))
+        (format t "args = ~S~%" args))
       (let* ((g (declare-object (local-function-function local-function))))
         (emit 'getstatic
               *this-class*
@@ -2073,26 +2080,36 @@
          (arglist (cadr def))
          (body (cddr def))
          (form (list* 'lambda arglist body))
-         compiled-function)
+         (args-to-add (remove-duplicates (union (remove nil (coerce *locals* 'list))
+                                                (remove nil (coerce *args* 'list))))))
+    (format t "form = ~S~%" form)
+    (format t "args-to-add = ~S~%" args-to-add)
+    (format t "new arglist = ~S~%" (append args-to-add arglist))
+    (when args-to-add
+      (setf arglist (append args-to-add arglist))
+      (setf form (list* 'lambda arglist body)))
     (format t "form = ~S~%" form)
     (setf function (compile-defun name form "flet.out"))
     (format t "function = ~S~%" function)
-    (push (make-local-function :name name :function function) *local-functions*)))
+    (push (make-local-function :name name
+                               :args-to-add args-to-add
+                               :function function)
+          *local-functions*)))
 
 (defun compile-local-functions (defs)
   (dolist (def defs)
     (compile-local-function-def def)))
 
 (defun compile-flet (form for-effect)
-  #+nil
-  (let ((*local-functions* *local-functions*)
-        (locals (cadr form))
-        (body (cddr form)))
-    (compile-local-functions locals)
-    (do ((forms body (cdr forms)))
-        ((null forms))
-      (compile-form (car forms) (cdr forms))))
-  (error "COMPILE-FLET: unsupported case"))
+  (if nil
+      (let ((*local-functions* *local-functions*)
+            (locals (cadr form))
+            (body (cddr form)))
+        (compile-local-functions locals)
+        (do ((forms body (cdr forms)))
+            ((null forms))
+          (compile-form (car forms) (cdr forms))))
+      (error "COMPILE-FLET: unsupported case")))
 
 (defun compile-function (form for-effect)
    (let ((obj (second form)))
