@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.101 2004-05-24 18:22:01 piso Exp $
+;;; $Id: clos.lisp,v 1.102 2004-05-25 15:52:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -583,7 +583,7 @@
                :format-control "Duplicate initialization argument name ~S in :DEFAULT-INITARGS."
                :format-arguments (list name)))))
   (let ((class (find-class name nil)))
-    (unless class
+    (unless (and class (eq name (class-name class)))
       (setf class (apply #'make-instance-standard-class (find-class 'standard-class)
                          :name name all-keys))
       (%set-find-class name class))
