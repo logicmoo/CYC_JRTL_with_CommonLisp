@@ -21,7 +21,7 @@
 package org.armedbear.j;
 
 import java.util.Stack;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public final class CppTagger extends JavaTagger implements Constants
 {
@@ -42,7 +42,7 @@ public final class CppTagger extends JavaTagger implements Constants
 
     public void run()
     {
-        Vector tags = new Vector();
+        ArrayList tags = new ArrayList();
         String className = null;
         Stack classNames = new Stack();
         pos = new Position(buffer.getFirstLine(), 0);
@@ -63,11 +63,15 @@ public final class CppTagger extends JavaTagger implements Constants
                 skipComment();
                 continue;
             }
-            if (pos.lookingAt("//") || (c == '#' && pos.getOffset() == 0)) {
+            if (pos.lookingAt("//")) {
                 Line nextLine = pos.getNextLine();
                 if (nextLine == null)
                     break;
                 pos.moveTo(nextLine, 0);
+                continue;
+            }
+            if (c == '#' && pos.getOffset() == 0) {
+                CTagger.skipPreprocessor(pos);
                 continue;
             }
             if (state == METHOD_NAME) {
@@ -191,8 +195,8 @@ public final class CppTagger extends JavaTagger implements Constants
                 break;
         }
         // Token can't end with ':'.
-        while (sb.length() > 0 && sb.charAt(sb.length() - 1) == ':')
-            sb.setLength(sb.length() - 1);
+        while (sb.length() > 0 && sb.charAt(sb.length()-1) == ':')
+            sb.setLength(sb.length()-1);
         token = sb.toString();
     }
 
