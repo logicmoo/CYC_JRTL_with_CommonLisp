@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.337 2005-01-01 19:26:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.338 2005-01-02 01:55:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -455,15 +455,24 @@
       (list 'FUNCTION (p1 (cadr form)))
       form))
 
-(defun p1-lambda (form)
-  (when (eq (car form) 'LAMBDA)
-    (when *current-compiland*
-      (unless (or (compiland-contains-lambda *current-compiland*)
-                  (eq form (compiland-lambda-expression *current-compiland*)))
-        (do ((compiland *current-compiland* (compiland-parent compiland)))
-            ((null compiland))
-          (setf (compiland-contains-lambda compiland) t)))))
+(defun p1-eval-when (form)
   (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
+
+(defun p1-lambda (form)
+  (aver (eq (car form) 'LAMBDA))
+  (when *current-compiland*
+    (unless (or (compiland-contains-lambda *current-compiland*)
+                (eq form (compiland-lambda-expression *current-compiland*)))
+      (do ((compiland *current-compiland* (compiland-parent compiland)))
+          ((null compiland))
+        (setf (compiland-contains-lambda compiland) t))))
+  (let* ((lambda-list (cadr form))
+         (body (cddr form))
+         (auxvars (memq '&AUX lambda-list)))
+    (when auxvars
+      (setf lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
+      (setf body (list (append (list 'LET* (cdr auxvars)) body))))
+    (list* 'LAMBDA lambda-list (mapcar #'p1 body))))
 
 (defun p1-quote (form)
   (if (numberp (second form))
@@ -599,7 +608,7 @@
 (install-p1-handler 'block                'p1-block)
 (install-p1-handler 'catch                'p1-default)
 (install-p1-handler 'declare              'identity)
-(install-p1-handler 'eval-when            'p1-lambda)
+(install-p1-handler 'eval-when            'p1-eval-when)
 (install-p1-handler 'flet                 'p1-flet/labels)
 (install-p1-handler 'function             'p1-function)
 (install-p1-handler 'go                   'p1-go)
