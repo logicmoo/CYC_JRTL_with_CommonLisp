@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.7 2003-07-13 14:39:39 piso Exp $
+ * $Id: LispClass.java,v 1.8 2003-07-15 17:33:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,11 @@ public final class LispClass extends LispObject
         this.symbol = symbol;
     }
 
+    public Symbol getSymbol()
+    {
+        return symbol;
+    }
+
     public String getName()
     {
         return symbol.getName();
@@ -57,6 +62,11 @@ public final class LispClass extends LispObject
         addClass(Symbol.BIT_VECTOR);
         addClass(Symbol.SYMBOL);
         addClass(Symbol.VECTOR);
+    }
+
+    public static LispClass findClass(Symbol symbol)
+    {
+        return (LispClass) map.get(symbol);
     }
 
     // ### find-class
