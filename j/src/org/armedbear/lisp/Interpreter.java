@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.1 2003-01-17 19:43:14 piso Exp $
+ * $Id: Interpreter.java,v 1.2 2003-01-25 16:54:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@ public final class Interpreter extends Lisp
 {
     // There can only be one interpreter.
     public static Interpreter interpreter;
+
+    public static boolean initialized;
 
     public static synchronized Interpreter getInstance()
     {
@@ -76,6 +78,19 @@ public final class Interpreter extends Lisp
             new LispString(initialDirectory));
     }
 
+    public static synchronized void initialize()
+    {
+        if (!initialized) {
+            try {
+                Load._load("boot", true, false);
+            }
+            catch (Throwable t) {
+                t.printStackTrace();
+            }
+            initialized = true;
+        }
+    }
+
     private boolean done = false;
 
     public void run()
@@ -86,14 +101,7 @@ public final class Interpreter extends Lisp
         try {
             CharacterOutputStream out = getStandardOutput();
             out.writeString(banner());
-
-            try {
-                Load._load("boot", true, false);
-            }
-            catch (Throwable t) {
-                t.printStackTrace();
-            }
-
+            initialize();
             while (true) {
                 try {
                     out.writeString(prompt());
