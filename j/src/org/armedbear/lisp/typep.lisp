@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.10 2003-11-17 15:45:10 piso Exp $
+;;; $Id: typep.lisp,v 1.11 2003-11-17 16:04:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -117,5 +117,7 @@
                     (eql (array-rank object) (cadr i))))))
       (EQL
        (eql object (car i)))
+      (SATISFIES
+       (funcall (car i) object))
       (t
        nil))))
