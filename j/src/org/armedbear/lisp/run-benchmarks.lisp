@@ -155,8 +155,8 @@
       (run-benchmark 'cl-bench.gabriel:run-traverse)
       (run-benchmark 'cl-bench.gabriel:run-triangle)
       (run-benchmark 'cl-bench.richards:richards)
-      (run-benchmark 'cl-bench.math:run-factorial)
-      (run-benchmark 'cl-bench.math:run-fib)
+      (run-benchmark 'cl-bench.math:run-factorial nil 1000)
+      (run-benchmark 'cl-bench.math:run-fib nil 50)
       (run-benchmark 'cl-bench.math:run-fib-ratio)
       #+nil
       (run-benchmark 'cl-bench.math:run-ackermann)
