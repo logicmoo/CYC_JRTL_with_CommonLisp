@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.157 2003-09-29 14:23:52 piso Exp $
+ * $Id: Lisp.java,v 1.158 2003-09-29 16:15:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -695,6 +695,8 @@ public abstract class Lisp
             return '\r';
         if (lower.equals("page"))
             return '\f';
+        if (lower.equals("backspace"))
+            return '\b';
         // Unknown.
         return -1;
     }
