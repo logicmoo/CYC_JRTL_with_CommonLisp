@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.131 2004-03-25 02:57:17 piso Exp $
+;;; $Id: autoloads.lisp,v 1.132 2004-03-28 17:46:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 (in-package "SYSTEM")
 
 (autoload '(digit-char-p alphanumericp char/= char< char> char>= char-not-equal)
-          "chars.lisp")
+          "chars")
 (autoload '(string-upcase string-downcase string-capitalize
             nstring-upcase nstring-downcase nstring-capitalize
             string= string/= string-equal string-not-equal
@@ -29,7 +29,7 @@
             string-lessp string-greaterp
             string-not-lessp string-not-greaterp
             string-left-trim string-right-trim string-trim)
-          "strings.lisp")
+          "strings")
 (autoload 'copy-symbol)
 (autoload '(open parse-integer))
 (autoload '(sort stable-sort merge) "sort.lisp")
@@ -38,7 +38,7 @@
 (autoload 'list-length)
 (autoload 'copy-list)
 (autoload 'revappend)
-(autoload '(butlast nbutlast) "butlast.lisp")
+(autoload '(butlast nbutlast) "butlast")
 (autoload 'ldiff)
 (autoload '(subst subst-if subst-if-not nsubst nsubst-if nsubst-if-not)
           "subst.lisp")
@@ -51,7 +51,7 @@
             set-difference nset-difference
             set-exclusive-or nset-exclusive-or
             subsetp)
-          "sets.lisp")
+          "sets")
 (autoload '(assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not
             acons pairlis copy-alist)
           "assoc")
@@ -60,8 +60,8 @@
 (autoload '(copy-seq fill replace))
 (autoload '(map map-into))
 (autoload 'reduce)
-(autoload '(delete delete-if delete-if-not) "delete.lisp")
-(autoload '(remove remove-if remove-if-not) "remove.lisp")
+(autoload '(delete delete-if delete-if-not) "delete")
+(autoload '(remove remove-if remove-if-not) "remove")
 (autoload '(remove-duplicates delete-duplicates))
 (autoload '(substitute substitute-if substitute-if-not) "substitute.lisp")
 (autoload '(nsubstitute nsubstitute-if nsubstitute-if-not) "nsubstitute.lisp")
