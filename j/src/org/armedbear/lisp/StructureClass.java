@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureClass.java,v 1.5 2003-11-21 01:19:51 piso Exp $
+ * $Id: StructureClass.java,v 1.6 2003-12-12 13:40:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,11 @@ public class StructureClass extends SlotClass
     private StructureClass(Symbol symbol)
     {
         super(symbol, new Cons(BuiltInClass.STRUCTURE_OBJECT));
+    }
+
+    public StructureClass(Symbol symbol, LispObject directSuperclasses)
+    {
+        super(symbol, directSuperclasses);
     }
 
     public LispObject typeOf()
