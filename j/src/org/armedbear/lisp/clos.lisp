@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.63 2004-02-05 01:14:39 piso Exp $
+;;; $Id: clos.lisp,v 1.64 2004-02-06 00:32:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -596,6 +596,48 @@
                  :direct-slots
                  ,(canonicalize-direct-slots direct-slots)
                  ,@(canonicalize-defclass-options options)))
+
+(defstruct method-combination
+  name
+  operator
+  identity-with-one-argument
+  documentation)
+
+(defmacro define-method-combination (&whole form &rest args)
+  (declare (ignore args))
+  (if (and (cddr form)
+           (listp (caddr form)))
+      (expand-long-defcombin form)
+      (expand-short-defcombin form)))
+
+(defun expand-short-defcombin (whole)
+  (let* ((name (cadr whole))
+	 (documentation
+          (getf (cddr whole) :documentation ""))
+	 (identity-with-one-arg
+          (getf (cddr whole) :identity-with-one-argument nil))
+	 (operator
+          (getf (cddr whole) :operator name)))
+    `(progn
+       (setf (get ',name 'method-combination-object)
+             (make-method-combination :name ',name
+                                      :operator ',operator
+                                      :identity-with-one-argument ',identity-with-one-arg
+                                      :documentation ',documentation))
+       ',name)))
+
+(defun expand-long-defcombin (whole)
+  (error "The long form of DEFINE-METHOD-COMBINATION is not yet supported."))
+
+(define-method-combination +      :identity-with-one-argument t)
+(define-method-combination and    :identity-with-one-argument t)
+(define-method-combination append :identity-with-one-argument nil)
+(define-method-combination list   :identity-with-one-argument nil)
+(define-method-combination max    :identity-with-one-argument t)
+(define-method-combination min    :identity-with-one-argument t)
+(define-method-combination nconc  :identity-with-one-argument t)
+(define-method-combination or     :identity-with-one-argument t)
+(define-method-combination progn  :identity-with-one-argument t)
 
 (defclass standard-generic-function (generic-function)
   ((name :initarg :name)      ; :accessor generic-function-name
@@ -1209,22 +1251,21 @@
               (t
                (error "Invalid method qualifiers.")))))
     (unless (eq order :most-specific-last)
-      (setq primaries (nreverse primaries)))
-    (setq arounds (nreverse arounds))
-    (setq around (car arounds))
+      (setf primaries (nreverse primaries)))
+    (setf arounds (nreverse arounds))
+    (setf around (car arounds))
     (when (null primaries)
       (error "No primary methods for the generic function ~S." gf))
-    (if around
-        (let ((next-emfun
-               (funcall
-                (if (eq (class-of gf) the-class-standard-gf)
-                    #'std-compute-effective-method-function
-                    #'compute-effective-method-function)
-                gf (remove around methods))))
-          #'(lambda (args)
-             (funcall (method-function around) args next-emfun)))
-        (case mc-name
-          (STANDARD
+    (cond (around
+           (let ((next-emfun
+                  (funcall
+                   (if (eq (class-of gf) the-class-standard-gf)
+                       #'std-compute-effective-method-function
+                       #'compute-effective-method-function)
+                   gf (remove around methods))))
+             #'(lambda (args)
+                (funcall (method-function around) args next-emfun))))
+          ((eq mc-name 'standard)
            (let ((next-emfun (compute-primary-emfun (cdr primaries)))
                  (befores (remove-if-not #'before-method-p methods))
                  (reverse-afters
@@ -1236,68 +1277,18 @@
                  (funcall (method-function (car primaries)) args next-emfun)
                  (dolist (after reverse-afters)
                    (funcall (method-function after) args nil))))))
-          (LIST
-           #'(lambda (args)
-              (let ((result ()))
-                (dolist (primary primaries)
-                  (push (funcall (method-function primary) args nil) result))
-                (nreverse result))))
-          (APPEND
-           #'(lambda (args)
-              (let ((result ()))
-                (dolist (primary primaries)
-                  (setf result (append result (funcall (method-function primary) args nil))))
-                result)))
-          (NCONC
-           #'(lambda (args)
-              (let ((result ()))
-                (dolist (primary primaries)
-                  (setf result (nconc result (funcall (method-function primary) args nil))))
-                result)))
-          (PROGN
-           #'(lambda (args)
-              (let ((result nil))
-                (dolist (primary primaries)
-                  (setf result (funcall (method-function primary) args nil)))
-                result)))
-          (AND
-           #'(lambda (args)
-              (let ((result t))
-                (dolist (primary primaries)
-                  (setf result
-                        (and result
-                             (funcall (method-function primary) args nil)))
-                  (unless result (return)))
-                result)))
-          (OR
-           #'(lambda (args)
-              (let ((result nil))
-                (dolist (primary primaries)
-                  (setf result
-                        (or result
-                            (funcall (method-function primary) args nil)))
-                  (when result (return)))
-                result)))
-          (+
-           #'(lambda (args)
-              (let ((result 0))
-                (dolist (primary primaries)
-                  (incf result (funcall (method-function primary) args nil)))
-                result)))
-          (MAX
-           #'(lambda (args)
-              (let ((result ()))
-                (dolist (primary primaries)
-                  (push (funcall (method-function primary) args nil) result))
-                (apply #'max result))))
-          (MIN
-           #'(lambda (args)
-              (let ((result ()))
-                (dolist (primary primaries)
-                  (push (funcall (method-function primary) args nil) result))
-                (apply #'min result))))
           (t
-           (error "Unsupported method combination type ~S." mc-name))))))
+           (let ((method-combination-object (get mc-name 'method-combination-object)))
+             (unless method-combination-object
+               (error "Unsupported method combination type ~A." mc-name))
+             (let* ((operator (method-combination-operator method-combination-object))
+                    (form
+                     `(lambda (args)
+                        (,operator ,@(mapcar
+                                      (lambda (primary)
+                                        `(funcall ,(method-function primary) args nil))
+                                      primaries)))))
+               (coerce-to-function form)))))))
 
 ;;; compute an effective method function from a list of primary methods:
 
