@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: P4.java,v 1.2 2002-10-14 16:29:33 piso Exp $
+ * $Id: P4.java,v 1.3 2002-11-05 15:22:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.j;
 import gnu.regexp.RE;
 import gnu.regexp.REMatch;
 import gnu.regexp.UncheckedRE;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.SwingUtilities;
@@ -463,10 +464,11 @@ public class P4 implements Constants
         }
         final String title = sb.toString();
         boolean save = false;
-        if (parentBuffer.isModified()) {
+        List list = getModifiedBuffers();
+        if (list != null && list.size() > 0) {
             int response =
                 ConfirmDialog.showConfirmDialogWithCancelButton(editor,
-                    VC_CHECK_SAVE_PROMPT, title);
+                    "Save modified buffers first?", title);
             switch (response) {
                 case RESPONSE_YES:
                     save = true;
@@ -478,7 +480,7 @@ public class P4 implements Constants
             }
             editor.repaintNow();
         }
-        if (!save || parentBuffer.save()) {
+        if (!save || saveModifiedBuffers(editor, list)) {
             // Look for existing checkin buffer before making a new one.
             CheckinBuffer checkinBuffer = null;
             for (BufferIterator it = new BufferIterator(); it.hasNext();) {
@@ -518,7 +520,54 @@ public class P4 implements Constants
             editor.activateInOtherWindow(checkinBuffer);
         }
     }
+    
+    private static List getModifiedBuffers()
+    {
+        ArrayList list = null;
+        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+            Buffer buf = it.nextBuffer();
+            if (!buf.isModified())
+                continue;
+            if (buf.isUntitled())
+                continue;
+            final int modeId = buf.getModeId();
+            if (modeId == SEND_MAIL_MODE)
+                continue;
+            if (modeId == CHECKIN_MODE)
+                continue;
+            if (buf.getFile() != null && buf.getFile().isLocal()) {
+                if (list == null)
+                    list = new ArrayList();
+                list.add(buf);
+            }
+        }
+        return list;
+    }
 
+    private static boolean saveModifiedBuffers(Editor editor, List list)
+    {
+        editor.setWaitCursor();
+        int numErrors = 0;
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Buffer buf = (Buffer) it.next();
+            if (buf.getFile() != null && buf.getFile().isLocal()) {
+                editor.status("Saving modified buffers...");
+                if (buf.getBooleanProperty(Property.REMOVE_TRAILING_WHITESPACE))
+                    buf.removeTrailingWhitespace();
+                if (!buf.save())
+                    ++numErrors;
+            }
+        }
+        editor.setDefaultCursor();
+        if (numErrors == 0) {
+            editor.status("Saving modified buffers...done");
+            return true;
+        }
+        // User will already have seen detailed error information from Buffer.save().
+        editor.status("");
+        return false;
+    }
+    
     public static void replaceComment(final Editor editor, final String comment)
     {
         if (!(editor.getBuffer() instanceof CheckinBuffer)) {
