@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.60 2003-03-01 02:32:11 piso Exp $
+ * $Id: Primitives.java,v 1.61 2003-03-01 02:55:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1659,12 +1659,15 @@ public final class Primitives extends Module
                     ":initial-element and :initial-contents");
             }
             AbstractVector v;
-            if (elementType == Symbol.CHARACTER)
+            if (elementType == Symbol.CHARACTER ||
+                elementType == Symbol.BASE_CHAR) {
                 v = new LispString(size);
-            else if (elementType == Symbol.BIT)
+            } else if (elementType == Symbol.BIT) {
                 v = new BitVector(size);
-            else
+            } else {
+                // FIXME If elementType != null it should be a known type.
                 v = new Vector(size);
+            }
             if (initialElement != null) {
                 // Initial element was specified.
                 v.fill(initialElement);
