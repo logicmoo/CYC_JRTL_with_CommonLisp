@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.257 2004-07-31 21:31:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.258 2004-08-01 00:21:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1140,47 +1140,9 @@
       (setf *code* (delete 0 *code* :key #'instruction-opcode))
       t)))
 
-;; Look for the sequence STORE-VALUE LOAD-VALUE ARETURN.
-(defun optimize-4 ()
-  (let ((locally-changed-p nil))
-    (dotimes (i (- (length *code*) 2))
-      (let ((instr1 (svref *code* i))
-            (instr2 (svref *code* (+ i 1)))
-            (instr3 (svref *code* (+ i 2))))
-        (when (and (eql (instruction-opcode instr1) 204)
-                   (eql (instruction-opcode instr2) 203)
-                   (eql (instruction-opcode instr3) 176))
-          (setf (instruction-opcode instr1) 176)
-          (clear instr2)
-          (clear instr3)
-          (setf locally-changed-p t))))
-    (when locally-changed-p
-      (format t "OPTIMIZE-4 found something to do~%")
-      (assert nil)
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
-      t)))
-
 ;; CLEAR-VALUES CLEAR-VALUES => CLEAR-VALUES
-;; TODO: GETSTATIC POP => nothing
-#+nil
-(defun optimize-5 ()
-  (let ((code *code*)
-        (changed nil)
-        (previous-opcode nil))
-    (dotimes (i (length code))
-      (let ((instruction (svref code i)))
-        (when (eql (instruction-opcode instruction) 205) ; CLEAR-VALUES
-          (when (eql previous-opcode 205)
-            (setf (svref code i) nil)
-            (setf changed t)))
-        (setf previous-opcode (instruction-opcode instruction))))
-    (when changed
-;;       (format t "OPTIMIZE-5 found something to do~%")
-      (setf *code* (delete nil code))
-      t)))
-
-(defun optimize-5 ()
-;;   (format t "optimize-5~%")
+;; GETSTATIC POP => nothing
+(defun optimize-4 ()
   (let* ((code (coerce *code* 'list))
          (tail code)
          (changed nil))
@@ -1196,9 +1158,7 @@
                    (cdr tail) (cddr tail)
                    changed t)))
           (178 ; GETSTATIC
-;;            (format t "GETSTATIC~%")
            (when (eql next-opcode 87) ; POP
-;;              (format t "GETSTATIC POP~%")
              (setf (car tail) (caddr tail)
                    (cdr tail) (cdddr tail)
                    changed t)))))
@@ -1245,7 +1205,6 @@
         (setf changed-p (or (optimize-2) changed-p))
         (setf changed-p (or (optimize-3) changed-p))
         (setf changed-p (or (optimize-4) changed-p))
-        (setf changed-p (or (optimize-5) changed-p))
         (setf changed-p (or (delete-unreachable-code) changed-p))
         (unless changed-p
           (return))))
@@ -2510,24 +2469,27 @@
           (add-variable-to-context variable))
         (push variable variables)))
     (let ((*register* *register*))
-      ;; Generate code to evaluate each initform and leave the result in a
-      ;; register. We use the variable's register, if it has one; otherwise we
-      ;; allocate a temporary register for the variable. (We can't just leave
-      ;; the values on the stack because we'll lose JVM stack consistency if
-      ;; there is a non-local GO or RETURN from one of the initforms.)
+      ;; Evaluate each initform. If the variable being bound is special,
+      ;; allocate a temporary register for the result; LET bindings must be
+      ;; done in parallel, so we don't want to modify any specials until all
+      ;; the initforms have been evaluated. Note that we can't just leave the
+      ;; values on the stack because we'll lose JVM stack consistency if there
+      ;; is a non-local GO or RETURN from one of the initforms.
       (dolist (variable (reverse variables))
-        (let ((initform (variable-initform variable))
-              (register (or (variable-register variable)
-                            (setf (variable-temp-register variable) (allocate-register)))))
+        (let ((initform (variable-initform variable)))
           (cond (initform
                  (compile-form initform :target :stack)
                  (maybe-emit-clear-values initform))
                 (t
                  (emit-push-nil)))
-          (emit-move-from-stack register)))
-      ;; Move results from temp registers (if any) to their proper destinations.
+          (if (variable-special-p variable)
+              (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register)))
+              (compile-binding variable))))
+      ;; Now that all the initforms have been evaluated, move the results from
+      ;; the temporary registers (if any) to their proper destinations.
       (dolist (variable variables)
         (when (variable-temp-register variable)
+          (aver (variable-special-p variable))
           (emit 'aload (variable-temp-register variable))
           (compile-binding variable))))
     ;; Now make the variables visible.
