@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.11 2004-02-09 11:24:13 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.12 2004-02-12 11:52:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -143,7 +143,10 @@
            (return-from normalize-type (list 'simple-array 'base-char (list (car i))))
            (return-from normalize-type '(simple-array base-char (*)))))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
-       (setf tp 'float)))
+       (setf tp 'float))
+      ((COMPLEX
+        (when (memq i '(short-float single-float double-float long-float))
+          (setf i 'float)))))
     (if i (cons tp i) tp)))
 
 (defun caaaar (list) (car (car (car (car list)))))
