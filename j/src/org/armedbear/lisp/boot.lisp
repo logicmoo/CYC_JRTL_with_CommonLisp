@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.153 2004-03-16 02:39:46 piso Exp $
+;;; $Id: boot.lisp,v 1.154 2004-03-24 02:31:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,11 +54,11 @@
 (defun class-name (class)
   (sys::%class-name class))
 
-(sys::%load "autoloads.lisp")
-(sys::%load "early-defuns.lisp")
-(sys::%load "backquote.lisp")
-(sys::%load "setf.lisp")
-(sys::%load "documentation.lisp")
+(sys::%load "autoloads")
+(sys::%load "early-defuns")
+(sys::%load "backquote")
+(sys::%load "setf")
+(sys::%load "documentation")
 
 (defmacro defvar (var &optional (val nil valp) (doc nil docp))
   `(progn
@@ -117,26 +117,26 @@
 (defun compile (name &optional definition)
   (values (if name name definition) nil nil))
 
-(sys::%load "macros.lisp")
-(sys::%load "fixme.lisp")
-(sys::%load "destructuring-bind.lisp")
-(sys::%load "arrays.lisp")
-(sys::%load "compiler-macro.lisp")
-(sys::%load "subtypep.lisp")
-(sys::%load "typep.lisp")
-(sys::%load "precompiler.lisp")
+(sys::%load "macros")
+(sys::%load "fixme")
+(sys::%load "destructuring-bind")
+(sys::%load "arrays")
+(sys::%load "compiler-macro")
+(sys::%load "subtypep")
+(sys::%load "typep")
+(sys::%load "precompiler")
 
 (sys::precompile-package "PRECOMPILER")
 (sys::precompile-package "EXTENSIONS")
 (sys::precompile-package "SYSTEM")
 (sys::precompile-package "COMMON-LISP")
 
-(sys::%load "signal.lisp")
-(sys::%load "list.lisp")
-(sys::%load "sequences.lisp")
-(sys::%load "error.lisp")
-(sys::%load "defpackage.lisp")
-(sys::%load "define-modify-macro.lisp")
+(sys::%load "signal")
+(sys::%load "list")
+(sys::%load "sequences")
+(sys::%load "error")
+(sys::%load "defpackage")
+(sys::%load "define-modify-macro")
 
 ;;; PROVIDE, REQUIRE (from SBCL)
 (defun provide (module-name)
@@ -208,7 +208,7 @@
 		  ,n-result
 		  (or ,@(rest forms))))))))
 
-(sys::%load "case.lisp")
+(sys::%load "case")
 
 (defmacro cond (&rest clauses)
   (if (endp clauses)
@@ -296,7 +296,7 @@
     `(let* ((,g (multiple-value-list ,form)) ,@(nreverse poplist))
        ,@body)))
 
-(sys::%load "late-setf.lisp")
+(sys::%load "late-setf")
 
 ;; MULTIPLE-VALUE-SETQ (from CMUCL)
 (defmacro multiple-value-setq (varlist value-form)
@@ -310,5 +310,7 @@
 (defmacro multiple-value-list (form)
   `(multiple-value-call #'list ,form))
 
-(sys::%load "restart.lisp")
-(sys::%load "debug.lisp")
+(sys::%load "restart")
+(sys::%load "debug")
+
+(format t "Startup completed in ~A seconds." (float (/ (ext:uptime) 1000)))
