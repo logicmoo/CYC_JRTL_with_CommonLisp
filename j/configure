@@ -1353,6 +1353,8 @@ if test -x $JDK/bin/java; then
     JAVA=$JDK/bin/java;
 elif test -x $JDK/jre/bin/java; then
     JAVA=$JDK/jre/bin/java;
+elif test -x $JDK/Home/bin/java; then
+    JAVA=$JDK/Home/bin/java;
 else
     { { echo "$as_me:$LINENO: error: Java not found" >&5
 echo "$as_me: error: Java not found" >&2;}
@@ -1435,6 +1437,7 @@ fi
   test -n "$JAVAC" && break
 done
 
+test -z "$JAVAC" && test -x $JDK/Home/bin/javac && JAVAC=$JDK/Home/bin/javac
 test -z "$JAVAC" && JAVAC=$JDK/bin/javac
 if test "$JAVAC" = jikes; then
     JAVACFLAGS="+D +F"
@@ -1483,6 +1486,7 @@ fi
   test -n "$JAR" && break
 done
 
+test -z "$JAR" && test -x $JDK/Home/bin/jar && JAR=$JDK/Home/bin/jar
 test -z "$JAR" && JAR=$JDK/bin/jar
 
 
@@ -1492,6 +1496,9 @@ if test -f $JDK/jre/lib/rt.jar ; then
 elif test -f $JDK/jre/lib/core.jar ; then
     JAVA_RUNTIME=""
     for i in $JDK/jre/lib/*.jar ; do JAVA_RUNTIME=$JAVA_RUNTIME:$i ; done
+elif test -d $JDK/Classes ; then
+    JAVA_RUNTIME=""
+    for i in $JDK/Classes/*.jar ; do JAVA_RUNTIME=$JAVA_RUNTIME:$i ; done
 else
     { { echo "$as_me:$LINENO: error: unable to find Java runtime" >&5
 echo "$as_me: error: unable to find Java runtime" >&2;}

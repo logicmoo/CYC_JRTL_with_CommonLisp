@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2003 Peter Graves
-dnl  $Id: configure.in,v 1.152 2003-09-16 23:59:12 piso Exp $
+dnl  $Id: configure.in,v 1.153 2003-09-30 17:15:37 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.152 $)
+AC_REVISION($Revision: 1.153 $)
 
 BOOTFILE=./configure-options
 
@@ -79,6 +79,8 @@ if test -x $JDK/bin/java; then
     JAVA=$JDK/bin/java;
 elif test -x $JDK/jre/bin/java; then
     JAVA=$JDK/jre/bin/java;
+elif test -x $JDK/Home/bin/java; then
+    JAVA=$JDK/Home/bin/java;
 else
     AC_MSG_ERROR(Java not found)
 fi
@@ -112,6 +114,7 @@ esac
 dnl  jikes/javac
 
 test -z "$JAVAC" && AC_CHECK_PROGS(JAVAC, jikes)
+test -z "$JAVAC" && test -x $JDK/Home/bin/javac && JAVAC=$JDK/Home/bin/javac
 test -z "$JAVAC" && JAVAC=$JDK/bin/javac
 if test "$JAVAC" = jikes; then
     JAVACFLAGS="+D +F"
@@ -122,6 +125,7 @@ AC_SUBST(JAVACFLAGS)
 dnl  fastjar/jar
 
 test -z "$JAR" && AC_CHECK_PROGS(JAR, fastjar)
+test -z "$JAR" && test -x $JDK/Home/bin/jar && JAR=$JDK/Home/bin/jar
 test -z "$JAR" && JAR=$JDK/bin/jar
 AC_SUBST(JAR)
 
@@ -132,6 +136,9 @@ if test -f $JDK/jre/lib/rt.jar ; then
 elif test -f $JDK/jre/lib/core.jar ; then
     JAVA_RUNTIME=""
     for i in $JDK/jre/lib/*.jar ; do JAVA_RUNTIME=$JAVA_RUNTIME:$i ; done
+elif test -d $JDK/Classes ; then
+    JAVA_RUNTIME=""
+    for i in $JDK/Classes/*.jar ; do JAVA_RUNTIME=$JAVA_RUNTIME:$i ; done
 else
     AC_MSG_ERROR(unable to find Java runtime)
 fi
