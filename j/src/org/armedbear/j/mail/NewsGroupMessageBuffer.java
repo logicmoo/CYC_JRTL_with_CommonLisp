@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.9 2003-02-12 14:59:10 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.10 2003-05-26 17:09:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,6 +215,27 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
             }
         };
         SwingUtilities.invokeLater(completionRunnable);
+    }
+
+    private static boolean containsBinary(String text)
+    {
+        BufferedReader reader = new BufferedReader(new StringReader(text));
+        try {
+            String s;
+            while ((s = reader.readLine()) != null) {
+                final int length = s.length();
+                if (length >= 9 && s.startsWith("begin "))
+                    return true;
+                if (length > 7 && s.startsWith("=ybegin"))
+                    return true;
+                if (length > 0 && s.charAt(0) == 0)
+                    return true;
+            }
+        }
+        catch (IOException e) {
+            Log.error(e);
+        }
+        return false;
     }
 
     private void appendBody(String rawBody)
@@ -453,29 +474,32 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                 super.setText();
             } else {
                 // Not MIME multipart.
-                String headers;
-                if (showFullHeaders)
-                    headers = allHeaders;
-                else if (Editor.preferences().getBooleanProperty(Property.BEAUTIFY_HEADERS))
-                    headers = getBeautifiedHeaders();
-                else
-                    headers = defaultHeaders;
-                try {
-                    lockWrite();
-                }
-                catch (InterruptedException e) {
-                    Log.error(e);
-                    return;
-                }
-                try {
-                    appendHeaderLines(headers);
-                    headerLineCount = Utilities.countLines(headers);
-                    appendHeaderLine("");
-                    appendBody(message.getRawBody());
-                }
-                finally {
-                    unlockWrite();
-                }
+                if (containsBinary(rawBody)) {
+                    String headers;
+                    if (showFullHeaders)
+                        headers = allHeaders;
+                    else if (Editor.preferences().getBooleanProperty(Property.BEAUTIFY_HEADERS))
+                        headers = getBeautifiedHeaders();
+                    else
+                        headers = defaultHeaders;
+                    try {
+                        lockWrite();
+                    }
+                    catch (InterruptedException e) {
+                        Log.error(e);
+                        return;
+                    }
+                    try {
+                        appendHeaderLines(headers);
+                        headerLineCount = Utilities.countLines(headers);
+                        appendHeaderLine("");
+                        appendBody(rawBody);
+                    }
+                    finally {
+                        unlockWrite();
+                    }
+                } else
+                    super.setText();
             }
         }
     }
