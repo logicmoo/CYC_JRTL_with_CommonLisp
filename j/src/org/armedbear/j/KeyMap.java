@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.4 2003-06-12 14:01:38 piso Exp $
+ * $Id: KeyMap.java,v 1.5 2003-06-12 18:34:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -410,14 +410,13 @@ public final class KeyMap implements Constants
             keyStroke.getModifiers());
     }
 
-    public synchronized final KeyStroke getKeyStroke(String command)
+    public synchronized final KeyMapping getKeyMapping(String command)
     {
         command = command.intern();
-        for (int i = mappings.size() - 1; i >= 0; i--) {
+        for (int i = mappings.size(); i-- > 0;) {
             KeyMapping mapping = (KeyMapping) mappings.get(i);
             if (command == mapping.getCommand())
-                return KeyStroke.getKeyStroke(mapping.getKeyCode(),
-                    mapping.getModifiers());
+                return mapping;
         }
         return null;
     }
@@ -426,7 +425,7 @@ public final class KeyMap implements Constants
     {
         command = command.intern();
         ArrayList list = new ArrayList();
-        for (int i = mappings.size() - 1; i >= 0; i--) {
+        for (int i = mappings.size(); i-- > 0;) {
             KeyMapping mapping = (KeyMapping) mappings.get(i);
             if (command == mapping.getCommand())
                 list.add(mapping.getKeyText());
