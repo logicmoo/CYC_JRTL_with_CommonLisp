@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Ratio.java,v 1.44 2004-06-21 16:57:37 piso Exp $
+ * $Id: Ratio.java,v 1.45 2004-06-23 14:03:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,11 +162,13 @@ public final class Ratio extends LispObject
         final int numLen = num.bitLength();
         final int denLen = den.bitLength();
         final int minLength = Math.min(numLen, denLen);
+        if (minLength <= 1)
+            return result;
         for (int i = 1; i < minLength; i++) {
             final BigInteger n = num.shiftRight(i);
             final BigInteger d = den.shiftRight(i);
             result = n.doubleValue() / d.doubleValue();
-            if (result != 0)
+            if (result != 0 && !Double.isNaN(result))
                 break;
         }
         return negative ? -result : result;
