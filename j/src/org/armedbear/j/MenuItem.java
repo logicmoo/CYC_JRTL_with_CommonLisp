@@ -1,7 +1,7 @@
 /*
  * MenuItem.java
  *
- * Copyright (C) 1998-2002 Peter Graves
+ * Copyright (C) 1998-2003 Peter Graves
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,10 +76,13 @@ public final class MenuItem extends JMenuItem
         }
     }
 
+    private static final boolean consumeKeyEvent =
+        Platform.isJava13() || Platform.isJava140();
+
     public void processKeyEvent(KeyEvent e, MenuElement path[], MenuSelectionManager manager)
     {
         super.processKeyEvent(e, path, manager);
-        if (!Platform.isJava141())
+        if (consumeKeyEvent)
             if (Character.toUpperCase(e.getKeyChar()) == getMnemonic())
                 e.consume();
     }
