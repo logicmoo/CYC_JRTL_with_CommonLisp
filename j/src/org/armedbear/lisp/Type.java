@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.15 2003-08-12 15:22:57 piso Exp $
+ * $Id: Type.java,v 1.16 2003-09-08 15:19:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public class Type extends Lisp
 {
     private static final HashMap map = new HashMap();
 
-    private final ArrayList superTypes = new ArrayList();
+    private final ArrayList supertypes = new ArrayList();
 
     private final Symbol symbol;
 
@@ -40,26 +40,33 @@ public class Type extends Lisp
         }
     }
 
-    private Type(Symbol symbol, Type superType)
+    private Type(Symbol symbol, Type supertype)
     {
         this.symbol = symbol;
         synchronized (map) {
             map.put(symbol, this);
         }
-        synchronized (superTypes) {
-            superTypes.add(superType);
+        synchronized (supertypes) {
+            supertypes.add(supertype);
         }
     }
 
-    private Type(Symbol symbol, Type superType1, Type superType2)
+    private Type(Symbol symbol, Type supertype1, Type supertype2)
     {
         this.symbol = symbol;
         synchronized (map) {
             map.put(symbol, this);
         }
-        synchronized (superTypes) {
-            superTypes.add(superType1);
-            superTypes.add(superType2);
+        synchronized (supertypes) {
+            supertypes.add(supertype1);
+            supertypes.add(supertype2);
+        }
+    }
+
+    private void addSupertype(Type supertype)
+    {
+        synchronized (supertypes) {
+            supertypes.add(supertype);
         }
     }
 
@@ -106,13 +113,13 @@ public class Type extends Lisp
     {
         if (otherType == this)
             return true;
-        for (int i = 0; i < superTypes.size(); i++) {
-            if (superTypes.get(i) == otherType)
+        for (int i = 0; i < supertypes.size(); i++) {
+            if (supertypes.get(i) == otherType)
                 return true;
         }
-        for (int i = 0; i < superTypes.size(); i++) {
-            Type superType = (Type) superTypes.get(i);
-            if (superType._isSubtypeOf(otherType))
+        for (int i = 0; i < supertypes.size(); i++) {
+            Type supertype = (Type) supertypes.get(i);
+            if (supertype._isSubtypeOf(otherType))
                 return true;
         }
         return false;
@@ -171,6 +178,10 @@ public class Type extends Lisp
         new Type(Symbol.EXTENDED_CHAR, CHARACTER);
     public static final Type STANDARD_CHAR =
         new Type(Symbol.STANDARD_CHAR, BASE_CHAR);
+
+    static {
+        CHARACTER.addSupertype(BASE_CHAR);
+    }
 
     // Subtypes of NUMBER
     public static final Type COMPLEX  = new Type(Symbol.COMPLEX, NUMBER);
