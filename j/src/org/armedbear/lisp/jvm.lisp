@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.390 2005-02-04 04:26:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.391 2005-02-05 16:38:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -335,6 +335,38 @@
 
 ;;; Pass 1.
 
+;; Returns a list of declared free specials, if any are found.
+(defun process-declarations-for-vars (body vars)
+  (let ((free-specials '()))
+    (dolist (subform body)
+      (unless (and (consp subform) (eq (car subform) 'DECLARE))
+        (return))
+      (let ((decls (cdr subform)))
+        (dolist (decl decls)
+          (case (car decl)
+            ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE)
+             ;; Nothing to do here.
+             )
+            (SPECIAL
+             (dolist (sym (cdr decl))
+               (let ((variable (find sym vars :key #'variable-name)))
+                 (cond (variable
+                        (setf (variable-special-p variable) t))
+                       (t
+                        (dformat t "adding free special ~S~%" sym)
+                        (push (make-variable :name sym :special-p t) free-specials))))))
+            (TYPE
+             (dolist (sym (cddr decl))
+               (dolist (variable vars)
+                 (when (eq sym (variable-name variable))
+                   (setf (variable-declared-type variable) (cadr decl))))))
+            (t
+             (dolist (sym (cdr decl))
+               (dolist (variable vars)
+                 (when (eq sym (variable-name variable))
+                   (setf (variable-declared-type variable) (car decl))))))))))
+    free-specials))
+
 (defun p1-let-vars (varlist)
   (let ((vars ()))
     (dolist (varspec varlist)
@@ -382,38 +414,14 @@
             (constantp (cadr varspec))
             (eq (car varspec) (cadr varspec))
             (return nil))))
-    (let ((vars (if (eq op 'LET) (p1-let-vars varlist) (p1-let*-vars varlist)))
-          (free-specials '()))
+    (let ((vars (if (eq op 'LET) (p1-let-vars varlist) (p1-let*-vars varlist))))
       (dformat t "p1-let/let* vars = ~S~%" (mapcar #'variable-name vars))
       ;; Check for globally declared specials.
       (dolist (variable vars)
         (when (special-variable-p (variable-name variable))
           (setf (variable-special-p variable) t)))
-      ;; Process declarations.
-      (dolist (subform body)
-        (unless (and (consp subform) (eq (car subform) 'DECLARE))
-          (return))
-        (let ((decls (cdr subform)))
-          (dolist (decl decls)
-            (case (car decl)
-              (SPECIAL
-               (dolist (sym (cdr decl))
-;;                  (dolist (variable vars)
-;;                    (when (eq sym (variable-name variable))
-;;                      (setf (variable-special-p variable) t)))
-                 (let ((variable (find sym vars :key #'variable-name)))
-                   (cond (variable
-                          (setf (variable-special-p variable) t))
-                         (t
-                          (dformat t "adding free special ~S~%" sym)
-                          (push (make-variable :name sym :special-p t) free-specials))))))
-              (TYPE
-               (dolist (sym (cddr decl))
-                 (dolist (variable vars)
-                   (when (eq sym (variable-name variable))
-                     (setf (variable-declared-type variable) (cadr decl))))))))))
-      (setf (block-vars block) vars)
-      (setf (block-free-specials block) free-specials))
+      (setf (block-free-specials block) (process-declarations-for-vars body vars))
+      (setf (block-vars block) vars))
     (setf body (mapcar #'p1 body))
     (setf (block-form block) (list* op varlist body))
     block))
@@ -444,23 +452,7 @@
       (dolist (variable vars)
         (when (special-variable-p (variable-name variable))
           (setf (variable-special-p variable) t)))
-      ;; Process declarations.
-      (dolist (subform body)
-        (unless (and (consp subform) (eq (car subform) 'DECLARE))
-          (return))
-        (let ((decls (cdr subform)))
-          (dolist (decl decls)
-            (case (car decl)
-              (SPECIAL
-               (dolist (sym (cdr decl))
-                 (dolist (variable vars)
-                   (when (eq sym (variable-name variable))
-                     (setf (variable-special-p variable) t)))))
-              (TYPE
-               (dolist (sym (cddr decl))
-                 (dolist (variable vars)
-                   (when (eq sym (variable-name variable))
-                     (setf (variable-declared-type variable) (cadr decl))))))))))
+      (setf (block-free-specials block) (process-declarations-for-vars body vars))
       (setf (block-vars block) (nreverse vars)))
     (setf body (mapcar #'p1 body))
     (setf (block-form block) (list* 'MULTIPLE-VALUE-BIND varlist values-form body))
@@ -5353,6 +5345,19 @@
                    (let ((variable (find-visible-variable name)))
                      (when variable
                        (setf (variable-declared-type variable) (cadr decl))
+                       (when (and (variable-register variable)
+                                  (not (variable-special-p variable))
+                                  (not (variable-used-non-locally-p variable))
+                                  (subtypep (variable-declared-type variable) 'FIXNUM))
+                         (setf (variable-representation variable) :unboxed-fixnum))))))
+                ((DYNAMIC-EXTENT FTYPE IGNORE IGNORABLE INLINE NOTINLINE OPTIMIZE SPECIAL)
+                 ;; Nothing to do here.
+                 )
+                (t
+                 (dolist (name (cdr decl))
+                   (let ((variable (find-visible-variable name)))
+                     (when variable
+                       (setf (variable-declared-type variable) (car decl))
                        (when (and (variable-register variable)
                                   (not (variable-special-p variable))
                                   (not (variable-used-non-locally-p variable))
