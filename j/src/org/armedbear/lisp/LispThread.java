@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.73 2005-02-08 16:41:20 piso Exp $
+ * $Id: LispThread.java,v 1.74 2005-02-20 14:38:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -433,7 +433,9 @@ public final class LispThread extends LispObject
             first = null;
             second = null;
             third = null;
-            this.args = args;
+            this.args = new LispObject[args.length];
+            for (int i = args.length; i-- > 0;)
+                this.args[i] = args[i];
         }
 
         public LispObject getOperator()
@@ -445,8 +447,8 @@ public final class LispThread extends LispObject
         {
             LispObject list = NIL;
             if (args != null) {
-                for (int j = args.length; j-- > 0;)
-                    list = new Cons(args[j], list);
+                for (int i = 0; i < args.length; i++)
+                    list = list.push(args[i]);
             } else {
                 do {
                     if (first != null)
@@ -462,8 +464,8 @@ public final class LispThread extends LispObject
                     else
                         break;
                 } while (false);
-                list = list.nreverse();
             }
+            list = list.nreverse();
             if (operator instanceof Functional && ((Functional)operator).getLambdaName() != null)
                 list = list.push(((Functional)operator).getLambdaName());
             else
