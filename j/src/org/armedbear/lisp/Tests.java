@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.19 2003-03-24 15:52:22 piso Exp $
+ * $Id: Tests.java,v 1.20 2003-04-24 14:05:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ public class Tests extends TestCase
         verify("(*)", "1");
         verify("(* 2 4 6)", "48");
         verify("(/)", ERROR);
-        verify("(/ 1234)", ERROR);
+        verify("(/ 1234)", "1/1234");
         verify("(/ 81 3)", "27");
         verify("(/ 48 2 4 6)", "1");
 
