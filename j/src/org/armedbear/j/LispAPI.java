@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.9 2003-07-18 16:50:54 piso Exp $
+ * $Id: LispAPI.java,v 1.10 2003-07-18 17:23:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -343,10 +343,13 @@ public final class LispAPI extends Lisp
         {
             String keyText = LispString.getValue(first);
             Object command;
-            if (second instanceof LispString)
+            if (second instanceof LispString) {
                 command = ((LispString)second).getValue();
-            else
-                command = coerceToFunction(second);
+            } else {
+                // Verify that the command can be coerced to a function.
+                coerceToFunction(second);
+                command = second;
+            }
             return KeyMap.getGlobalKeyMap().mapKey(keyText, command) ? T : NIL;
         }
     };
@@ -371,10 +374,13 @@ public final class LispAPI extends Lisp
         {
             String keyText = LispString.getValue(first);
             Object command;
-            if (second instanceof LispString)
+            if (second instanceof LispString) {
                 command = ((LispString)second).getValue();
-            else
-                command = coerceToFunction(second);
+            } else {
+                // Verify that the command can be coerced to a function.
+                coerceToFunction(second);
+                command = second;
+            }
             String modeName = LispString.getValue(third);
             Mode mode = Editor.getModeList().getModeFromModeName(modeName);
             if (mode == null)
