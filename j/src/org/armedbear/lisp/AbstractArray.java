@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.24 2004-03-06 20:47:51 piso Exp $
+ * $Id: AbstractArray.java,v 1.25 2004-05-27 17:02:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public abstract class AbstractArray extends LispObject
         return false;
     }
 
-    public LispObject arrayDisplacement()
+    public LispObject arrayDisplacement() throws ConditionThrowable
     {
         return LispThread.currentThread().setValues(NIL, Fixnum.ZERO);
     }
