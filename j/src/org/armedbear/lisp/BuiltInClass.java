@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.22 2004-01-17 00:37:54 piso Exp $
+ * $Id: BuiltInClass.java,v 1.23 2004-01-17 01:06:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,12 +290,13 @@ public class BuiltInClass extends LispClass
                              STANDARD_OBJECT, CLASS_T);
         DIVISION_BY_ZERO.setDirectSuperclass(ARITHMETIC_ERROR);
         DIVISION_BY_ZERO.setCPL(DIVISION_BY_ZERO, ARITHMETIC_ERROR, ERROR,
-                                SERIOUS_CONDITION, CONDITION, CLASS_T);
+                                SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                                CLASS_T);
         ECHO_STREAM.setDirectSuperclass(STREAM);
         ECHO_STREAM.setCPL(ECHO_STREAM, STREAM, CLASS_T);
         END_OF_FILE.setDirectSuperclass(STREAM_ERROR);
         END_OF_FILE.setCPL(END_OF_FILE, STREAM_ERROR, ERROR, SERIOUS_CONDITION,
-                           CONDITION, CLASS_T);
+                           CONDITION, STANDARD_OBJECT, CLASS_T);
         ERROR.setCPL(ERROR, SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                      CLASS_T);
         FIXNUM.setDirectSuperclass(INTEGER);
@@ -309,20 +310,20 @@ public class BuiltInClass extends LispClass
         FLOATING_POINT_INEXACT.setDirectSuperclass(ARITHMETIC_ERROR);
         FLOATING_POINT_INEXACT.setCPL(FLOATING_POINT_INEXACT, ARITHMETIC_ERROR,
                                       ERROR, SERIOUS_CONDITION, CONDITION,
-                                      CLASS_T);
+                                      STANDARD_OBJECT, CLASS_T);
         FLOATING_POINT_INVALID_OPERATION.setDirectSuperclass(ARITHMETIC_ERROR);
         FLOATING_POINT_INVALID_OPERATION.setCPL(FLOATING_POINT_INVALID_OPERATION,
                                                 ARITHMETIC_ERROR, ERROR,
                                                 SERIOUS_CONDITION, CONDITION,
-                                                CLASS_T);
+                                                STANDARD_OBJECT, CLASS_T);
         FLOATING_POINT_OVERFLOW.setDirectSuperclass(ARITHMETIC_ERROR);
         FLOATING_POINT_OVERFLOW.setCPL(FLOATING_POINT_OVERFLOW, ARITHMETIC_ERROR,
                                        ERROR, SERIOUS_CONDITION, CONDITION,
-                                       CLASS_T);
+                                       STANDARD_OBJECT, CLASS_T);
         FLOATING_POINT_UNDERFLOW.setDirectSuperclass(ARITHMETIC_ERROR);
         FLOATING_POINT_UNDERFLOW.setCPL(FLOATING_POINT_UNDERFLOW, ARITHMETIC_ERROR,
                                         ERROR, SERIOUS_CONDITION, CONDITION,
-                                        CLASS_T);
+                                        STANDARD_OBJECT, CLASS_T);
         FUNCTION.setDirectSuperclass(CLASS_T);
         FUNCTION.setCPL(FUNCTION, CLASS_T);
         GENERIC_FUNCTION.setDirectSuperclass(FUNCTION);
@@ -353,7 +354,7 @@ public class BuiltInClass extends LispClass
         PATHNAME.setCPL(PATHNAME, CLASS_T);
         PRINT_NOT_READABLE.setDirectSuperclass(ERROR);
         PRINT_NOT_READABLE.setCPL(PRINT_NOT_READABLE, ERROR, SERIOUS_CONDITION,
-                                  CONDITION, CLASS_T);
+                                  CONDITION, STANDARD_OBJECT, CLASS_T);
         PROGRAM_ERROR.setCPL(PROGRAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, CLASS_T);
         RANDOM_STATE.setDirectSuperclass(CLASS_T);
@@ -380,11 +381,12 @@ public class BuiltInClass extends LispClass
                                 CLASS_T);
         SIMPLE_ERROR.setDirectSuperclass(ERROR);
         SIMPLE_ERROR.setCPL(SIMPLE_ERROR, SIMPLE_CONDITION, ERROR,
-                            SERIOUS_CONDITION, CONDITION, CLASS_T);
+                            SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                            CLASS_T);
         SIMPLE_TYPE_ERROR.setDirectSuperclasses(list2(SIMPLE_CONDITION, TYPE_ERROR));
         SIMPLE_TYPE_ERROR.setCPL(SIMPLE_TYPE_ERROR, SIMPLE_CONDITION,
                                  TYPE_ERROR, ERROR, SERIOUS_CONDITION,
-                                 CONDITION, CLASS_T);
+                                 CONDITION, STANDARD_OBJECT, CLASS_T);
         SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
                               CONDITION, STANDARD_OBJECT, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
@@ -392,7 +394,7 @@ public class BuiltInClass extends LispClass
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
         STORAGE_CONDITION.setDirectSuperclass(SERIOUS_CONDITION);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
-                                 CLASS_T);
+                                 STANDARD_OBJECT, CLASS_T);
         STREAM.setDirectSuperclass(CLASS_T);
         STREAM.setCPL(STREAM, CLASS_T);
         STREAM_ERROR.setCPL(STREAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
@@ -406,7 +408,8 @@ public class BuiltInClass extends LispClass
                                CLASS_T);
         STRUCTURE_OBJECT.setCPL(STRUCTURE_OBJECT, CLASS_T);
         STYLE_WARNING.setDirectSuperclass(WARNING);
-        STYLE_WARNING.setCPL(STYLE_WARNING, WARNING, CONDITION, CLASS_T);
+        STYLE_WARNING.setCPL(STYLE_WARNING, WARNING, CONDITION, STANDARD_OBJECT,
+                             CLASS_T);
         SYMBOL.setDirectSuperclass(CLASS_T);
         SYMBOL.setCPL(SYMBOL, CLASS_T);
         SYNONYM_STREAM.setDirectSuperclass(STREAM);
