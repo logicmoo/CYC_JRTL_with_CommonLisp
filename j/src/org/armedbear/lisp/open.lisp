@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.4 2004-01-18 15:21:27 piso Exp $
+;;; $Id: open.lisp,v 1.5 2004-01-26 00:31:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,20 +17,44 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+;;; Adapted from SBCL.
+
 (in-package "SYSTEM")
 
 (defun open (filename
 	     &key
 	     (direction :input)
-	     (element-type 'base-char)
+	     (element-type 'character)
 	     (if-exists nil if-exists-given)
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
-  (cond ((eq direction :input)
-         (%open-input-file (pathname filename) element-type))
-        ((eq direction :output)
-         (%open-output-file (pathname filename) element-type if-exists))
-        (t
-         (error 'simple-error
-                :format-control ":DIRECTION ~S not supported."
-                :format-arguments (list direction)))))
+  (let ((pathname (merge-pathnames filename)))
+    (case direction
+      (:input
+       (make-file-input-stream pathname element-type))
+      (:output
+       (unless if-exists-given
+         (setf if-exists
+               (if (eq (pathname-version pathname) :newest)
+                   :new-version
+                   :error)))
+       (case if-exists
+         ((:error :new-version)
+          (when (probe-file pathname)
+            (error 'file-error
+                   :format-control "The file ~S already exists."
+                   :format-arguments (list (namestring pathname)))))
+         (nil
+          (when (probe-file pathname)
+            (format t "file exists, returning NIL~%")
+            (return-from open nil)))
+         (:supersede) ; OK to proceed.
+         (t
+          (error 'simple-error
+                 :format-control "Option not supported: ~S."
+                 :format-arguments (list if-exists))))
+       (make-file-output-stream pathname element-type))
+      (t
+       (error 'simple-error
+              :format-control ":DIRECTION ~S not supported."
+              :format-arguments (list direction))))))
