@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.17 2004-02-12 19:52:39 piso Exp $
+ * $Id: TwoWayStream.java,v 1.18 2004-02-13 17:05:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,8 +80,9 @@ public final class TwoWayStream extends Stream
 
     public LispObject close(LispObject abort) throws ConditionThrowable
     {
-        in.close(abort);
-        out.close(abort);
+        // "The effect of CLOSE on a constructed stream is to close the
+        // argument stream only. There is no effect on the constituents of
+        // composite streams."
         setOpen(false);
         return T;
     }

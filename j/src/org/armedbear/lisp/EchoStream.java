@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.5 2004-02-12 19:53:32 piso Exp $
+ * $Id: EchoStream.java,v 1.6 2004-02-13 17:08:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,8 +166,9 @@ public final class EchoStream extends Stream
 
     public LispObject close(LispObject abort) throws ConditionThrowable
     {
-        in.close(abort);
-        out.close(abort);
+        // "The effect of CLOSE on a constructed stream is to close the
+        // argument stream only. There is no effect on the constituents of
+        // composite streams."
         setOpen(false);
         return T;
     }
