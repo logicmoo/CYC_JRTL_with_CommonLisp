@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.54 2004-09-08 18:10:58 piso Exp $
+ * $Id: LispCharacter.java,v 1.55 2004-09-27 13:56:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -486,6 +486,24 @@ public final class LispCharacter extends LispObject
         {
             try {
                 return Character.isLetter(((LispCharacter)arg).value) ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CHARACTER));
+            }
+        }
+    };
+
+    // ### alphanumericp
+    private static final Primitive1 ALPHANUMERICP =
+        new Primitive1("alphanumericp", "character")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                char c = ((LispCharacter)arg).value;
+                if (Character.isDigit(c))
+                    return T;
+                return Character.isLetter(c) ? T : NIL;
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.CHARACTER));
