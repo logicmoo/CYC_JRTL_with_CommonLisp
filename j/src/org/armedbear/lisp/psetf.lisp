@@ -1,7 +1,7 @@
 ;;; psetf.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: psetf.lisp,v 1.1 2003-10-06 00:51:31 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: psetf.lisp,v 1.2 2005-02-02 16:53:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; From CMUCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (require '#:collect)
 
@@ -31,8 +31,9 @@
   (collect ((let*-bindings) (mv-bindings) (setters))
            (do ((a args (cddr a)))
                ((endp a))
-             (if (endp (cdr a))
-                 (simple-program-error "Odd number of args to PSETF."))
+             (when (endp (cdr a))
+               (error 'simple-program-error
+                      :format-control "Odd number of args to PSETF."))
              (multiple-value-bind
                (dummies vals newval setter getter)
                (get-setf-expansion (car a) env)
