@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.201 2004-10-13 00:03:57 piso Exp $
+ * $Id: Autoload.java,v 1.202 2004-10-17 09:54:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -339,6 +339,8 @@ public class Autoload extends Function
         autoload("tanh", "MathFunctions");
         autoload("truename", "probe_file");
         autoload("truncate", "truncate");
+        autoload("type-error-datum", "TypeError");
+        autoload("type-error-expected-type", "TypeError");
         autoload("unbound-slot-instance", "unbound_slot_instance");
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
