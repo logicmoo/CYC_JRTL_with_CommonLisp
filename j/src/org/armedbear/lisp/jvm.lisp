@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.1 2003-10-23 13:12:24 piso Exp $
+;;; $Id: jvm.lisp,v 1.2 2003-10-24 16:35:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1909,7 +1909,9 @@
           (format t "~A Already compiled ~S~%" prefix name))
         (return-from jvm-compile (values name nil nil))))
     (handler-case
-        (let* ((*package* (if name (symbol-package name) *package*))
+        (let* ((*package* (if (and name (symbol-package name))
+                              (symbol-package name)
+                              *package*))
                (expr (get-lambda-to-compile definition))
                (compiled-definition (compile-defun name expr)))
           (when (and name (functionp compiled-definition))
