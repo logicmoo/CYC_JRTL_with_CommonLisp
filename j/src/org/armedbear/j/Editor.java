@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.97 2003-07-18 17:24:49 piso Exp $
+ * $Id: Editor.java,v 1.98 2003-07-19 17:14:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5917,14 +5917,9 @@ public final class Editor extends JPanel implements Constants,
         frame.frameToggleToolbar();
     }
 
-    public final boolean addUndo(int type, String text)
-    {
-        return SimpleEdit.addUndo(this, type, text);
-    }
-
     public final boolean addUndo(int type)
     {
-        return SimpleEdit.addUndo(this, type, null);
+        return SimpleEdit.addUndo(this, type);
     }
 
     public final boolean addUndoDeleteRegion(Region r)
