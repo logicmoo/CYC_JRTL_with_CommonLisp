@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.80 2003-06-06 18:41:30 piso Exp $
+;;; $Id: rt.lisp,v 1.81 2003-06-20 01:23:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -95,6 +95,21 @@
 
 (in-package :cl-test)
 (use-package :rt)
+
+(defvar *compiled-and-loaded-files* nil)
+
+(defun compile-and-load (filename &key force)
+  (let* ((pathname (concatenate 'string rt::*prefix* filename))
+         (former-data (assoc pathname *compiled-and-loaded-files*
+			     :test #'equal))
+	 (source-write-time (file-write-date pathname)))
+    (unless (and (not force)
+		 former-data
+		 (>= (cadr former-data) source-write-time))
+      (if former-data
+	  (setf (cadr former-data) source-write-time)
+          (push (list pathname source-write-time) *compiled-and-loaded-files*))
+      (load pathname))))
 
 (in-package :cl-user)
 
@@ -348,7 +363,6 @@
 (load (concatenate 'string rt::*prefix* "cl-symbol-names.lsp"))
 (load (concatenate 'string rt::*prefix* "universe.lsp"))
 (load (concatenate 'string rt::*prefix* "ansi-aux.lsp"))
-(load (concatenate 'string rt::*prefix* "search-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "array-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "subseq-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cons-aux.lsp"))
