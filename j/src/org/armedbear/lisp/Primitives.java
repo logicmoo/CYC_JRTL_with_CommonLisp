@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.528 2003-12-13 15:21:10 piso Exp $
+ * $Id: Primitives.java,v 1.529 2003-12-13 20:23:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2735,86 +2735,10 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### do-external-symbols
-    // do-external-symbols (var [package [result-form]]) declaration* {tag | statement}*
-    // => result*
-    // Should be a macro.
-    private static final SpecialOperator DO_EXTERNAL_SYMBOLS =
-        new SpecialOperator("do-external-symbols") {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            return doSymbols(args, env, true);
-        }
-    };
-
-    // ### do-symbols
-    // do-symbols (var [package [result-form]]) declaration* {tag | statement}*
-    // => result*
-    // Should be a macro.
-    private static final SpecialOperator DO_SYMBOLS =
-        new SpecialOperator("do-symbols") {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            return doSymbols(args, env, false);
-        }
-    };
-
-    private static final LispObject doSymbols(LispObject args, Environment env,
-                                              boolean externalOnly)
-        throws ConditionThrowable
-    {
-        LispObject bodyForm = args.cdr();
-        args = args.car();
-        Symbol var = checkSymbol(args.car());
-        args = args.cdr();
-        final LispThread thread = LispThread.currentThread();
-        // Defaults.
-        Package pkg = getCurrentPackage();
-        LispObject resultForm = NIL;
-        if (args != NIL) {
-            pkg = coerceToPackage(eval(args.car(), env, thread));
-            args = args.cdr();
-            if (args != NIL)
-                resultForm = args.car();
-        }
-        Environment oldDynEnv = thread.getDynamicEnvironment();
-        final List list;
-        if (externalOnly)
-            list = pkg.getExternalSymbols();
-        else
-            list = pkg.getAccessibleSymbols();
-        for (Iterator it = list.iterator(); it.hasNext();) {
-            Symbol symbol = (Symbol) it.next();
-            Environment ext = new Environment(env);
-            bind(var, symbol, ext);
-            LispObject body = bodyForm;
-            int depth = thread.getStackDepth();
-            try {
-                while (body != NIL) {
-                    eval(body.car(), ext, thread);
-                    body = body.cdr();
-                }
-            }
-            catch (Return ret) {
-                if (ret.getTag() == NIL) {
-                    thread.setStackDepth(depth);
-                    return ret.getResult();
-                }
-                throw ret;
-            }
-        }
-        Environment ext = new Environment(env);
-        bind(var, NIL, ext);
-        LispObject result = eval(resultForm, ext, thread);
-        thread.setDynamicEnvironment(oldDynEnv);
-        return result;
-    }
-
     // ### package-symbols
     private static final Primitive1 PACKAGE_SYMBOLS =
-        new Primitive1("package-symbols", PACKAGE_SYS, false) {
+        new Primitive1("package-symbols", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).getSymbols();
@@ -2823,7 +2747,8 @@ public final class Primitives extends Lisp
 
     // ### package-internal-symbols
     private static final Primitive1 PACKAGE_INTERNAL_SYMBOLS =
-        new Primitive1("package-internal-symbols", PACKAGE_SYS, false) {
+        new Primitive1("package-internal-symbols", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).PACKAGE_INTERNAL_SYMBOLS();
@@ -2832,7 +2757,8 @@ public final class Primitives extends Lisp
 
     // ### package-external-symbols
     private static final Primitive1 PACKAGE_EXTERNAL_SYMBOLS =
-        new Primitive1("package-external-symbols", PACKAGE_SYS, false) {
+        new Primitive1("package-external-symbols", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).PACKAGE_EXTERNAL_SYMBOLS();
@@ -2841,7 +2767,8 @@ public final class Primitives extends Lisp
 
     // ### package-inherited-symbols
     private static final Primitive1 PACKAGE_INHERITED_SYMBOLS =
-        new Primitive1("package-inherited-symbols", PACKAGE_SYS, false) {
+        new Primitive1("package-inherited-symbols", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).PACKAGE_INHERITED_SYMBOLS();
