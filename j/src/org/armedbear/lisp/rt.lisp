@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.36 2003-03-06 21:03:59 piso Exp $
+;;; $Id: rt.lisp,v 1.37 2003-03-06 23:50:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -388,6 +388,7 @@
                               "call-arguments-limit"
                               "case"
                               "catch"
+                              "concatenate"
                               "cond"
                               "cons-test-01"
                               "cons-test-02"

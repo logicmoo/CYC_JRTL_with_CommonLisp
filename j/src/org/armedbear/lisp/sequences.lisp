@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.19 2003-03-06 20:51:18 piso Exp $
+;;; $Id: sequences.lisp,v 1.20 2003-03-06 23:50:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -264,6 +264,23 @@
   (seq-dispatch sequence
 		(list-nreverse* sequence)
 		(vector-nreverse* sequence)))
+
+
+;;; CONCATENATE (from GCL)
+
+(defun concatenate (result-type &rest sequences)
+  (do ((x (make-sequence result-type
+			 (apply #'+ (mapcar #'length sequences))))
+       (s sequences (cdr s))
+       (i 0))
+    ((null s) x)
+    (declare (fixnum i))
+    (do ((j 0 (1+ j))
+         (n (length (car s))))
+      ((>= j n))
+      (declare (fixnum j n))
+      (setf (elt x i) (elt (car s) j))
+      (incf i))))
 
 
 ;;; REDUCE (from OpenMCL)
