@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.10 2002-10-21 17:01:28 piso Exp $
+ * $Id: LispMode.java,v 1.11 2002-10-30 20:36:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
+import org.armedbear.lisp.*;
 
 public class LispMode extends AbstractMode implements Constants, Mode
 {
@@ -118,19 +119,32 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return true;
     }
 
+    private final String[] specials = new String[] {
+        "case", "ecase", "do", "do*", "flet", "lambda", "let", "let*", "loop",
+        "progn", "typecase", "unless", "when"
+    };
+    
+    private final String[] hemlockSpecials = new String[] {
+        "frob", "with-mark"
+    };
+    
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
-        if (line.flags() == STATE_QUOTE)
-            return 0;
-        Line model = findModel(line);
+        final Line model = findModel(line);
         if (model == null)
             return 0;
+        final int modelIndent = buffer.getIndentation(model);
         final String modelTrim = model.trim();
+        if (line.flags() == STATE_QUOTE) {
+            if (modelTrim.length() > 0 && modelTrim.charAt(0) == '"')
+                return modelIndent + 1;
+            else
+                return modelIndent;
+        }
         if (modelTrim.length() == 0)
             return 0;
         if (modelTrim.charAt(0) == ';')
-            return buffer.getIndentation(model);
-
+            return modelIndent;
         final int indentSize = buffer.getIndentSize();
         Position pos = findContainingSexp(new Position(line, 0));
         if (pos != null) {
@@ -146,42 +160,18 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 }
                 // Otherwise...
                 String token = gatherToken(it.getPosition());
-                if (token.equals("if")) {
-                    int depth = depth(line, buffer);
-                    int modelDepth = depth(model, buffer);
-                    if (pos.getLine() == model || modelDepth > depth)
-                        return buffer.getCol(pos) + indentSize * 2;
-                    else
-                        return buffer.getCol(pos) + indentSize;
-                }
-                if (token.equals("prog1")) {
-                    if (pos.getLine() == model)
-                        return buffer.getCol(pos) + indentSize * 2;
-                    else
-                        return buffer.getCol(pos) + indentSize;
-                }
-                if (token.equals("let"))
-                    return buffer.getCol(pos) + indentSize;
-                if (token.equals("while"))
-                    return buffer.getCol(pos) + indentSize;
-                if (token.equals("when"))
-                    return buffer.getCol(pos) + indentSize;
-                if (token.equals("unless"))
-                    return buffer.getCol(pos) + indentSize;
-                if (token.equals("unwind-protect"))
-                    return buffer.getCol(pos) + indentSize;
                 if (token.startsWith("def"))
                     return buffer.getCol(pos) + indentSize;
-                pos = forwardSexp(pos);
-                if (pos != null)
-                    return buffer.getCol(pos);
-                break; // Fall through.
+                if (Utilities.isOneOf(token, specials))
+                    return buffer.getCol(pos) + indentSize;
+                if (Utilities.isOneOf(token, hemlockSpecials))
+                    return buffer.getCol(pos) + indentSize;
+                Position next = forwardSexp(pos);
+                if (next != null && next.getLine() == pos.getLine())
+                    return buffer.getCol(next);
+                return buffer.getCol(pos) + 1;
             }
         }
-
-        int depth = depth(line, buffer);
-        if (depth > 0)
-            return indentSize * depth;
         return 0;
     }
 
