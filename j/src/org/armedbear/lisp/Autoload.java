@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.9 2003-06-20 17:44:22 piso Exp $
+ * $Id: Autoload.java,v 1.10 2003-06-20 17:47:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,8 @@ public final class Autoload extends Function
     public static void autoload(String symbolName, String className)
     {
         Symbol symbol = intern(symbolName.toUpperCase(), PACKAGE_CL);
-        symbol.setSymbolFunction(new Autoload(symbol, null, className));
+        symbol.setSymbolFunction(new Autoload(symbol, null,
+            "org.armedbear.lisp.".concat(className)));
     }
 
     public void load() throws Condition
@@ -138,12 +139,12 @@ public final class Autoload extends Function
     };
 
     static {
-        autoload("%make-hash-table", "org.armedbear.lisp.HashTable");
-        autoload("coerce", "org.armedbear.lisp.coerce");
-        autoload("gethash", "org.armedbear.lisp.HashTable");
-        autoload("puthash", "org.armedbear.lisp.HashTable");
-        autoload("remhash", "org.armedbear.lisp.HashTable");
-        autoload("room", "org.armedbear.lisp.room");
-        autoload("sxhash", "org.armedbear.lisp.HashTable");
+        autoload("%make-hash-table", "HashTable");
+        autoload("coerce", "coerce");
+        autoload("gethash", "HashTable");
+        autoload("puthash", "HashTable");
+        autoload("remhash", "HashTable");
+        autoload("room", "room");
+        autoload("sxhash", "HashTable");
     }
 }
