@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.43 2004-05-23 15:19:45 piso Exp $
+ * $Id: Cons.java,v 1.44 2004-06-04 17:47:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,25 +131,27 @@ public final class Cons extends LispObject
         return new Cons(obj, this);
     }
 
-    public final int hashCode()
+    public final int sxhash() throws ConditionThrowable
     {
-        return computeHashCode(this, 4);
+        return computeHash(this, 4);
     }
 
-    private static final int computeHashCode(LispObject obj, int depth)
+    private static final int computeHash(LispObject obj, int depth)
+        throws ConditionThrowable
     {
         if (obj instanceof Cons) {
             if (depth > 0) {
-                int n1 = computeHashCode(((Cons)obj).car(), depth - 1);
-                int n2 = computeHashCode(((Cons)obj).cdr(), depth - 1);
+                int n1 = computeHash(((Cons)obj).car(), depth - 1);
+                int n2 = computeHash(((Cons)obj).cdr(), depth - 1);
                 return n1 ^ n2;
             } else {
                 // This number comes from SBCL, but since we're not really
                 // using SBCL's SXHASH algorithm, it's probably not optimal.
+                // But who knows?
                 return 261835505;
             }
         } else
-            return obj.hashCode();
+            return obj.sxhash();
     }
 
     public final boolean equal(LispObject obj) throws ConditionThrowable
