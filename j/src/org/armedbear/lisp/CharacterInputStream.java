@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.14 2003-03-13 20:35:14 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.15 2003-03-14 02:57:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -536,11 +536,17 @@ public class CharacterInputStream extends LispStream
 
         char c = token.charAt(0);
         if (c == '-' || Character.isDigit(token.charAt(0))) {
-            try {
-                return new Fixnum(Integer.parseInt(token));
-            }
-            catch (NumberFormatException e) {
-                // It's not really a number. Fall through...
+            if (token.indexOf('.') >= 0) {
+                try {
+                    float f = Float.parseFloat(token);
+                    return new LispFloat(f);
+                }
+                catch (NumberFormatException e) {}
+            } else {
+                try {
+                    return new Fixnum(Integer.parseInt(token));
+                }
+                catch (NumberFormatException e) {}
             }
         }
         token = token.toUpperCase();
