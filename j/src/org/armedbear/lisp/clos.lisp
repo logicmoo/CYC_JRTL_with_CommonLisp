@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.111 2004-10-10 17:17:53 piso Exp $
+;;; $Id: clos.lisp,v 1.112 2004-10-13 00:01:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -653,8 +653,7 @@
 	    (make-eql-specializer :object object))))
 
 (defclass standard-generic-function (generic-function)
-  ((name :initarg :name)      ; :accessor generic-function-name
-   (lambda-list               ; :accessor generic-function-lambda-list
+  ((lambda-list               ; :accessor generic-function-lambda-list
     :initarg :lambda-list)
    (documentation
     :initarg :documentation)  ; :accessor generic-function-documentation
@@ -677,9 +676,8 @@
   (slot-location the-class-standard-gf 'classes-to-emf-table))
 
 (defun generic-function-name (gf)
-  (slot-value gf 'name))
-(defun (setf generic-function-name) (new-value gf)
-  (setf (slot-value gf 'name) new-value))
+  (%generic-function-name gf))
+(defsetf generic-function-name %set-generic-function-name)
 
 (defun generic-function-lambda-list (gf)
   (slot-value gf 'lambda-list))
@@ -728,18 +726,12 @@
 (defclass standard-method (method)
   ((lambda-list :initarg :lambda-list)     ; :accessor method-lambda-list
    (qualifiers :initarg :qualifiers)       ; :accessor method-qualifiers
-   (specializers :initarg :specializers)   ; :accessor method-specializers
    (declarations :initarg :declarations)   ; :accessir method-declarations
    (body :initarg :body)                   ; :accessor method-body
    (environment :initarg :environment)     ; :accessor method-environment
-   (generic-function :initform nil)        ; :accessor method-generic-function
-;;    (function)                              ; :accessor method-function
    (documentation)))                       ; :accessor method-documentation
 
 (defvar the-class-standard-method (find-class 'standard-method))
-
-;; (defvar *sm-function-index*
-;;   (slot-location the-class-standard-method 'function))
 
 (defun method-lambda-list (method) (slot-value method 'lambda-list))
 (defun (setf method-lambda-list) (new-value method)
@@ -749,9 +741,9 @@
 (defun (setf method-qualifiers) (new-value method)
   (setf (slot-value method 'qualifiers) new-value))
 
-(defun method-specializers (method) (slot-value method 'specializers))
-(defun (setf method-specializers) (new-value method)
-  (setf (slot-value method 'specializers) new-value))
+(defun method-specializers (method)
+  (%method-specializers method))
+(defsetf method-specializers %set-method-specializers)
 
 (defun method-declarations (method) (slot-value method 'declarations))
 (defun (setf method-declarations) (new-value method)
@@ -766,15 +758,9 @@
   (setf (slot-value method 'environment) new-value))
 
 (defun method-generic-function (method)
-  (slot-value method 'generic-function))
-(defun (setf method-generic-function) (new-value method)
-  (setf (slot-value method 'generic-function) new-value))
+  (%method-generic-function method))
+(defsetf method-generic-function %set-method-generic-function)
 
-;; (defun method-function (method)
-;;   (instance-ref method *sm-function-index*))
-
-;; (defun (setf method-function) (new-value method)
-;;   (setf (slot-value method 'function) new-value))
 (defsetf method-function %set-method-function)
 
 (defun method-documentation (method)
@@ -1172,21 +1158,17 @@
         (gf-lambda-list (generic-function-lambda-list gf)))
     (check-method-lambda-list method-lambda-list gf-lambda-list))
   (let ((method
-         (apply
-          (if (eq (generic-function-method-class gf) the-class-standard-method)
-              #'make-instance-standard-method
-              #'make-instance)
-          (generic-function-method-class gf)
-          all-keys)))
+         (if (eq (generic-function-method-class gf) the-class-standard-method)
+             (apply #'make-instance-standard-method gf all-keys)
+             (apply #'make-instance (generic-function-method-class gf) all-keys))))
     (%add-method gf method)
     method))
 
-(defun make-instance-standard-method (method-class
+(defun make-instance-standard-method (gf
                                       &key
                                       lambda-list qualifiers specializers
                                       documentation declarations body
                                       environment)
-  (declare (ignore method-class))
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
     (setf (method-qualifiers method) qualifiers)
@@ -1196,7 +1178,7 @@
     (setf (method-body method) (precompile-form body nil))
     (setf (method-environment method) environment)
     (setf (method-generic-function method) nil)
-    (setf (method-function method) (std-compute-method-function method))
+    (setf (method-function method) (std-compute-method-function method gf))
     method))
 
 (defun add-method (gf method)
@@ -1500,7 +1482,7 @@
          (walk-form (car form))
          (walk-form (cdr form)))))
 
-(defun std-compute-method-function (method)
+(defun std-compute-method-function (method gf)
   (let ((body (method-body method))
         (declarations (method-declarations method))
         (lambda-list (kludge-arglist (method-lambda-list method)))
@@ -1521,9 +1503,22 @@
               (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
          (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
                                    (method-environment method))))
-;;            (when (and (fboundp 'jvm:jvm-compile)
-;;                       (not (autoloadp 'jvm:jvm-compile)))
-;;              (setf code (jvm:jvm-compile nil code)))
+
+;;            (progn
+;;              (sys:simple-format t "STD-COMPUTE-METHOD-FUNCTION ~S ~S "
+;;                                 (if gf (generic-function-name gf) nil)
+;;                                 (method-specializers method))
+;;              (cond ((or (not (fboundp 'compile))
+;;                         (autoloadp 'compile))
+;;                     (sys:simple-format t "compiler not available~%"))
+;;                    ((or (null (method-environment method))
+;;                         (sys::empty-environment-p (method-environment method)))
+;;                     (setf code (or (compile nil code) code))
+;;                     (sys:simple-format t "compiled-function-p is ~S~%"
+;;                                        (compiled-function-p code)))
+;;                    (t
+;;                     (sys:simple-format t "environment is not empty~%"))))
+
            `(lambda (args next-emfun) (apply ,code args)))))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
