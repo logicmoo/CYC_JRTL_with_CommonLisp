@@ -1,7 +1,7 @@
 ;;; documentation.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: documentation.lisp,v 1.4 2003-07-27 18:59:23 piso Exp $
+;;; $Id: documentation.lisp,v 1.5 2003-08-24 18:29:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,11 +20,17 @@
 (in-package "SYSTEM")
 
 (defun documentation (symbol type)
-  (if (eq type 'function)
-      (get symbol '%function-documentation)))
+  (case type
+    (FUNCTION
+     (get symbol '%function-documentation))
+    (VARIABLE
+     (get symbol '%variable-documentation))))
 
 (defun %set-documentation (symbol type docstring)
-  (if (eq type 'function)
-      (setf (get symbol '%function-documentation) docstring)))
+  (case type
+    (FUNCTION
+     (setf (get symbol '%function-documentation) docstring))
+    (VARIABLE
+     (setf (get symbol '%variable-documentation) docstring))))
 
 (defsetf documentation %set-documentation)
