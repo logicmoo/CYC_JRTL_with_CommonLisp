@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.77 2004-09-20 18:46:45 piso Exp $
+ * $Id: LispShell.java,v 1.78 2004-09-21 16:10:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -370,15 +370,16 @@ public class LispShell extends Shell
                     posEndOfInput = new Position(getFirstLine(), 0);
                 final Position pos;
                 if (posBeforeLastPrompt != null && posEndOfInput != null) {
-                    if (posEndOfInput.isAfter(posBeforeLastPrompt)) {
+                    Position posLastPrompt =
+                        new Position(posBeforeLastPrompt.getNextLine(), 0);
+                    if (posEndOfInput.isAfter(posLastPrompt)) {
                         // There has been user input since the last prompt.
                         pos = getEnd();
                     } else {
                         pos = posBeforeLastPrompt;
                     }
-                } else {
+                } else
                     pos = getEnd();
-                }
                 if (pos != null) {
                     if (pos == posBeforeLastPrompt) {
                         if (s.length() > 0) {
