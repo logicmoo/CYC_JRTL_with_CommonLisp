@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.21 2003-10-14 02:31:20 piso Exp $
+;;; $Id: subtypep.lisp,v 1.22 2003-11-11 17:08:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -214,7 +214,9 @@
   nil)
 
 (defun subtypep (type1 type2)
-  (when (or (null type1) (eq type2 t))
+  (when (or (eq type1 type2)
+            (null type1)
+            (eq type2 t))
     (return-from subtypep (values t t)))
   (let* ((c1 (classp type1)) (c2 (classp type2))
          (t1 (if c1
