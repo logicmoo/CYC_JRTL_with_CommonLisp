@@ -2,7 +2,7 @@
  * Macro.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Macro.java,v 1.4 2003-06-28 16:00:04 piso Exp $
+ * $Id: Macro.java,v 1.5 2003-07-18 16:32:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,9 @@ package org.armedbear.j;
 
 import java.util.ArrayList;
 import javax.swing.undo.CompoundEdit;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.LispThread;
 
 public final class Macro implements Constants
 {
@@ -78,7 +81,7 @@ public final class Macro implements Constants
         return list.isEmpty();
     }
 
-    public static synchronized void record(Editor editor, String command)
+    public static synchronized void record(Editor editor, Object command)
     {
         if (macro != null && macro.getEditor() == editor)
             macro.record(command);
@@ -90,7 +93,7 @@ public final class Macro implements Constants
             macro.record(c);
     }
 
-    private synchronized void record(String command)
+    private synchronized void record(Object command)
     {
         list.add(command);
     }
@@ -117,10 +120,19 @@ public final class Macro implements Constants
             for (int i = 0; i < size; i++) {
                 editor.setCurrentCommand(COMMAND_NOTHING);
                 Object object = list.get(i);
-                if (object instanceof String)
+                if (object instanceof String) {
                     editor.executeCommand((String)object);
-                else if (object instanceof Character)
+                } else if (object instanceof LispObject) {
+                    try {
+                        Lisp.funcall0((LispObject)object,
+                                      LispThread.currentThread());
+                    }
+                    catch (Throwable t) {
+                        Log.error(t);
+                    }
+                } else if (object instanceof Character) {
                     editor.insertNormalChar(((Character)object).charValue());
+                }
                 editor.setLastCommand(editor.getCurrentCommand());
             }
             buffer.endCompoundEdit(compoundEdit);
