@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.60 2005-02-24 00:37:46 piso Exp $
+;;; $Id: compile-file.lisp,v 1.61 2005-02-26 02:51:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -59,26 +59,65 @@
          (report-error
           (load-compiled-function classfile)))))
 
+(defun dump-list (object stream)
+  (write-char #\( stream)
+  (loop
+    (dump-object (car object) stream)
+    (setf object (cdr object))
+    (when (null object)
+      (return))
+    (when (> (charpos stream) 80)
+      (terpri stream))
+    (write-char #\space stream)
+    (when (atom object)
+      (write-char #\. stream)
+      (write-char #\space stream)
+      (dump-object object stream)
+      (return)))
+  (write-char #\) stream))
+
+(defun dump-vector (object stream)
+  (write-string "#(" stream)
+  (let ((length (length object)))
+    (when (> length 0)
+      (dotimes (i (1- length))
+        (dump-object (aref object i) stream)
+        (when (> (charpos stream) 80)
+          (terpri stream))
+        (write-char #\space stream))
+      (dump-object (aref object (1- length)) stream))
+    (write-char #\) stream)))
+
+(defun dump-structure (object stream)
+  (multiple-value-bind (creation-form initialization-form)
+      (make-load-form object)
+    (write-string "#." stream)
+    (if initialization-form
+        (let* ((instance (gensym))
+               load-form)
+          (setf initialization-form
+                (subst instance object initialization-form))
+          (setf initialization-form
+                (subst instance (list 'quote instance) initialization-form
+                       :test #'equal))
+          (setf load-form `(progn
+                             (let ((,instance ,creation-form))
+                               ,initialization-form
+                               ,instance)))
+          (dump-object load-form stream))
+        (dump-object creation-form stream))))
+
 (defun dump-object (object stream)
   (cond ((consp object)
-         (write-char #\( stream)
-         (loop
-           (dump-object (car object) stream)
-           (setf object (cdr object))
-           (when (null object)
-             (return))
-           (write-char #\space stream)
-           (when (atom object)
-             (write-char #\. stream)
-             (write-char #\space stream)
-             (dump-object object stream)
-             (return)))
-         (write-char #\) stream))
+         (dump-list object stream))
+        ((stringp object)
+         (write object :stream stream))
+        ((bit-vector-p object)
+         (write object :stream stream))
+        ((vectorp object)
+         (dump-vector object stream))
         ((structure-object-p object)
-         (multiple-value-bind (creation-form initialization-form)
-             (make-load-form object)
-           (write-string "#." stream)
-           (write `(prog1 ,creation-form ,initialization-form) :stream stream)))
+         (dump-structure object stream))
         (t
          (write object :stream stream))))
 
@@ -105,7 +144,6 @@
   ;; it always evaluates to the same value."
   (eval form)
   (cond ((structure-object-p (third form))
-         (format t "PROCESS-DEFCONSTANT calling MAKE-LOAD-FORM ...~%")
          (multiple-value-bind (creation-form initialization-form)
              (make-load-form (third form))
            (dump-form (list 'DEFCONSTANT (second form) creation-form) stream)))
