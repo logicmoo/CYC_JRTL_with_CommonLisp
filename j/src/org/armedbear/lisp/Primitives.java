@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.559 2004-02-04 17:18:45 piso Exp $
+ * $Id: Primitives.java,v 1.560 2004-02-06 12:08:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2067,45 +2067,25 @@ public final class Primitives extends Lisp
 
     // ### funcall
     // This needs to be public for LispAPI.java.
-    public static final Primitive FUNCALL = new Primitive("funcall","function &rest args") {
+    public static final Primitive FUNCALL =
+        new Primitive("funcall", "function &rest args")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispObject fun;
-            if (arg instanceof Symbol)
-                fun = arg.getSymbolFunction();
-            else
-                fun = arg;
-            if (fun instanceof Function || fun instanceof GenericFunction)
-                return funcall0(fun, LispThread.currentThread());
-            signal(new UndefinedFunction(arg));
-            return NIL;
+            return funcall0(requireFunction(arg), LispThread.currentThread());
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            LispObject fun;
-            if (first instanceof Symbol)
-                fun = first.getSymbolFunction();
-            else
-                fun = first;
-            if (fun instanceof Function || fun instanceof GenericFunction)
-                return funcall1(fun, second, LispThread.currentThread());
-            signal(new UndefinedFunction(first));
-            return NIL;
+            return funcall1(requireFunction(first), second,
+                            LispThread.currentThread());
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            LispObject fun;
-            if (first instanceof Symbol)
-                fun = first.getSymbolFunction();
-            else
-                fun = first;
-            if (fun instanceof Function || fun instanceof GenericFunction)
-                return funcall2(fun, second, third, LispThread.currentThread());
-            signal(new UndefinedFunction(first));
-            return NIL;
+            return funcall2(requireFunction(first), second, third,
+                            LispThread.currentThread());
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -2113,29 +2093,34 @@ public final class Primitives extends Lisp
                 signal(new WrongNumberOfArgumentsException(this));
                 return NIL;
             }
-            LispObject fun;
-            if (args[0] instanceof Symbol)
-                fun = args[0].getSymbolFunction();
-            else
-                fun = args[0];
-            if (fun instanceof Function || fun instanceof GenericFunction) {
-                final int length = args.length - 1; // Number of arguments.
-                if (length == 3) {
-                    return funcall3(fun, args[1], args[2], args[3],
-                                    LispThread.currentThread());
-                } else {
-                    LispObject[] funArgs = new LispObject[length];
-                    System.arraycopy(args, 1, funArgs, 0, length);
-                    return funcall(fun, funArgs, LispThread.currentThread());
-                }
+            LispObject fun = requireFunction(args[0]);
+            final int length = args.length - 1; // Number of arguments.
+            if (length == 3) {
+                return funcall3(fun, args[1], args[2], args[3],
+                                LispThread.currentThread());
+            } else {
+                LispObject[] funArgs = new LispObject[length];
+                System.arraycopy(args, 1, funArgs, 0, length);
+                return funcall(fun, funArgs, LispThread.currentThread());
             }
-            signal(new UndefinedFunction(args[0]));
-            return NIL;
+        }
+        private LispObject requireFunction(LispObject arg) throws ConditionThrowable
+        {
+            LispObject function;
+            if (arg instanceof Symbol)
+                function = arg.getSymbolFunction();
+            else
+                function = arg;
+            if (function instanceof Function || function instanceof GenericFunction)
+                return function;
+            return signal(new UndefinedFunction(arg));
         }
     };
 
     // ### apply
-    public static final Primitive APPLY = new Primitive("apply","function &rest args") {
+    public static final Primitive APPLY =
+        new Primitive("apply", "function &rest args")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
