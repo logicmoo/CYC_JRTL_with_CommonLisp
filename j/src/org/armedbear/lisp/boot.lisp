@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.173 2004-06-11 18:14:32 piso Exp $
+;;; $Id: boot.lisp,v 1.174 2004-06-12 16:07:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -91,6 +91,15 @@
         (*print-readably* nil))
     (output-object object stream))
   object)
+
+(defun finish-output (&optional output-stream)
+  (%finish-output output-stream))
+
+(defun force-output (&optional output-stream)
+  (%force-output output-stream))
+
+(defun clear-output (&optional output-stream)
+  (%clear-output output-stream))
 
 ;; INVOKE-DEBUGGER is redefined in debug.lisp.
 (defun invoke-debugger (condition)

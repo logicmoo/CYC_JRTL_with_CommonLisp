@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.19 2004-06-11 18:12:38 piso Exp $
+;;; $Id: pprint.lisp,v 1.20 2004-06-12 16:08:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -87,25 +87,6 @@
 
 #-armedbear
 (provide "XP")
-
-(shadow '(#-armedbear write
-          #-armedbear print
-          #-armedbear prin1
-          #-armedbear princ
-          #-armedbear pprint
-          #-armedbear format
-          #-armedbear write-to-string
-          #-armedbear princ-to-string
-	  #-armedbear prin1-to-string
-          #-armedbear write-line
-          #-armedbear write-string
-          #-armedbear write-char
-          #-armedbear terpri
-          #-armedbear fresh-line
-	  #-armedbear defstruct
-          finish-output
-          force-output
-          clear-output))
 
 ;must do the following in common lisps not supporting *print-shared*
 
@@ -1382,28 +1363,28 @@
 ;output continues to the stream later.
 
 (defun finish-output (&optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (when (xp-structure-p stream)
     (attempt-to-output stream T T)
-    (setq stream (base-stream stream)))
-  (cl:finish-output stream)
+    (setf stream (base-stream stream)))
+  (sys::%finish-output stream)
   nil)
 
 (defun force-output (&optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (when (xp-structure-p stream)
     (attempt-to-output stream T T)
-    (setq stream (base-stream stream)))
-  (cl:force-output stream)
+    (setf stream (base-stream stream)))
+  (sys::%force-output stream)
   nil)
 
 (defun clear-output (&optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (when (xp-structure-p stream)
     (let ((*locating-circularities* 0)) ;hack to prevent visible output
       (attempt-to-output stream T T)
-      (setq stream (base-stream stream))))
-  (cl:clear-output stream)
+      (setf stream (base-stream stream))))
+  (sys::%clear-output stream)
   nil)
 
 ;           ---- FUNCTIONAL INTERFACE TO DYNAMIC FORMATTING ----
