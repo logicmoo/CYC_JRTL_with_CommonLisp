@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.195 2004-10-05 13:18:19 piso Exp $
+;;; $Id: boot.lisp,v 1.196 2004-10-05 17:11:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -68,24 +68,6 @@
 ;; OUTPUT-OBJECT is redefined in print.lisp.
 (defun output-object (object stream)
   (sys::%output-object object stream))
-
-(defun print (object &optional stream)
-  (terpri stream)
-  (let ((*print-escape* t))
-    (output-object object stream))
-  (write-char #\space stream)
-  object)
-
-(defun prin1 (object &optional (stream *standard-output*))
-  (let ((*print-escape* t))
-    (output-object object stream))
-  object)
-
-(defun princ (object &optional (stream *standard-output*))
-  (let ((*print-escape* nil)
-        (*print-readably* nil))
-    (output-object object stream))
-  object)
 
 (defun finish-output (&optional output-stream)
   (%finish-output output-stream))
