@@ -1,8 +1,8 @@
 /*
  * Closure.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.89 2004-12-17 20:43:48 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Closure.java,v 1.90 2005-01-19 15:58:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -591,7 +591,8 @@ public class Closure extends Function
         throws ConditionThrowable
     {
         if (optionalParameters == null && keywordParameters == null) {
-            return fastProcessArgs(args, extra);
+            Debug.assertTrue(extra == 0);
+            return fastProcessArgs(args);
         }
         final int argsLength = args.length;
         if (arity >= 0) {
@@ -797,8 +798,8 @@ public class Closure extends Function
                 } else if (andKey) {
                     LispObject keyword = args[argsUsed];
                     if (keyword == Keyword.ALLOW_OTHER_KEYS) {
-                        // Section 3.4.1.4: "Note that if &key is present, a
-                        // keyword argument of :allow-other-keys is always
+                        // Section 3.4.1.4: "Note that if &KEY is present, a
+                        // keyword argument of :ALLOW-OTHER-KEYS is always
                         // permitted---regardless of whether the associated
                         // value is true or false."
                         argsUsed += 2;
@@ -815,7 +816,7 @@ public class Closure extends Function
     }
 
     // No optional or keyword parameters.
-    protected final LispObject[] fastProcessArgs(LispObject[] args, int extra)
+    protected final LispObject[] fastProcessArgs(LispObject[] args)
         throws ConditionThrowable
     {
         final int argsLength = args.length;
@@ -823,13 +824,12 @@ public class Closure extends Function
             // Fixed arity.
             if (argsLength != arity)
                 signal(new WrongNumberOfArgumentsException(this));
-            if (extra == 0)
-                return args;
+            return args;
         }
-        // Not fixed arity, or extra != 0.
+        // Not fixed arity.
         if (argsLength < minArgs)
             signal(new WrongNumberOfArgumentsException(this));
-        final LispObject[] array = new LispObject[variables.length + extra];
+        final LispObject[] array = new LispObject[variables.length];
         int index = 0;
         // Required parameters.
         if (requiredParameters != null) {
