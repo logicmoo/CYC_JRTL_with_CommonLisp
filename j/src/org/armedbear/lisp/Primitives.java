@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.170 2003-04-14 16:08:24 piso Exp $
+ * $Id: Primitives.java,v 1.171 2003-04-15 14:37:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3758,6 +3758,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### write-byte
     // write-byte byte stream => byte
     private static final Primitive2 WRITE_BYTE =
         new Primitive2("write-byte") {
@@ -3766,15 +3767,16 @@ public final class Primitives extends Module
         {
             int n = Fixnum.getValue(first);
             if (n < 0 || n > 255)
-                throw new TypeError(second, "unsigned byte");
+                throw new TypeError(first, "unsigned byte");
             if (second instanceof BinaryOutputStream) {
                 ((BinaryOutputStream)second).writeByte(n);
                 return first;
             }
-            throw new TypeError(first, "binary output stream");
+            throw new TypeError(second, "binary output stream");
         }
     };
 
+    // ### read-byte
     // read-byte stream &optional eof-error-p eof-value => byte
     private static final Primitive READ_BYTE =
         new Primitive("read-byte") {
