@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.11 2002-11-25 20:04:06 piso Exp $
+ * $Id: LispShell.java,v 1.12 2002-12-11 02:10:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,7 +198,11 @@ public final class LispShell extends Shell
         if (buf != null) {
             final Editor editor = Editor.currentEditor();
             editor.makeNext(buf);
-            editor.activateInOtherWindow(buf);
+            Buffer b = editor.getBuffer();
+            if (b != null && b.isPaired())
+                editor.switchToBuffer(buf);
+            else
+                editor.activateInOtherWindow(buf);
         }
     }
 
