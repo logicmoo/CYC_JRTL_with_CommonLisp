@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardClass.java,v 1.7 2003-10-10 14:18:24 piso Exp $
+ * $Id: StandardClass.java,v 1.8 2003-10-10 17:01:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@ public class StandardClass extends LispClass
 {
     private LispObject directSlots;
     private LispObject effectiveSlots;
-    private LispObject directSubclasses;
     private LispObject directMethods;
 
     public StandardClass()
@@ -64,6 +63,36 @@ public class StandardClass extends LispClass
         return sb.toString();
     }
 
+    // ### class-direct-slots
+    private static final Primitive1 CLASS_DIRECT_SLOTS =
+        new Primitive1("class-direct-slots", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof StandardClass)
+                return ((StandardClass)arg).directSlots;
+            if (arg instanceof BuiltInClass)
+                return NIL;
+            throw new ConditionThrowable(new TypeError(arg, "standard class"));
+        }
+    };
+
+    // ### %set-class-direct-slots
+    private static final Primitive2 _SET_CLASS_DIRECT_SLOTS =
+        new Primitive2("%set-class-direct-slots", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof StandardClass) {
+                ((StandardClass)first).directSlots = second;
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "standard class"));
+        }
+    };
+
     // ### class-slots
     private static final Primitive1 CLASS_SLOTS =
         new Primitive1("class-slots", PACKAGE_SYS, false)
@@ -88,6 +117,34 @@ public class StandardClass extends LispClass
         {
             if (first instanceof StandardClass) {
                 ((StandardClass)first).effectiveSlots = second;
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "standard class"));
+        }
+    };
+
+    // ### class-direct-methods
+    private static final Primitive1 CLASS_DIRECT_METHODS =
+        new Primitive1("class-direct-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof StandardClass)
+                return ((StandardClass)arg).directMethods;
+            throw new ConditionThrowable(new TypeError(arg, "standard class"));
+        }
+    };
+
+    // ### %set-class-direct-methods
+    private static final Primitive2 _SET_CLASS_DIRECT_METHODS =
+        new Primitive2("%set-class-direct-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof StandardClass) {
+                ((StandardClass)first).directMethods = second;
                 return second;
             }
             throw new ConditionThrowable(new TypeError(first, "standard class"));
