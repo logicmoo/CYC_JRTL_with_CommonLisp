@@ -2,7 +2,7 @@
  * TagCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: TagCommands.java,v 1.4 2002-10-13 16:16:49 piso Exp $
+ * $Id: TagCommands.java,v 1.5 2002-11-05 17:38:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -481,11 +481,12 @@ public final class TagCommands implements Constants
             boolean succeeded = findTag(editor, expr, useOtherWindow);
             if (!succeeded && editor.getModeId() == C_MODE) {
                 // Special case for Emacs source.
-                // If name is "Feval", look for "eval".
+                // If name is "Frun_hooks", look for "run-hooks".
                 String name = expr.getName();
                 if (name != null && name.length() > 0 && name.charAt(0) == 'F')
-                    succeeded = findTag(editor,
-                        new Expression(name.substring(1)), useOtherWindow);
+                    name = name.substring(1).replace('_', '-');
+                    succeeded = findTag(editor, new Expression(name),
+                        useOtherWindow);
             }
             if (!succeeded)
                 editor.status("Tag \"" + expr.getName() + "\" not found");
