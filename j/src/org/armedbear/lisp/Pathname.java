@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.24 2004-01-01 01:32:18 piso Exp $
+ * $Id: Pathname.java,v 1.25 2004-01-01 18:55:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,26 +42,25 @@ public final class Pathname extends LispObject
     {
     }
 
-    private Pathname(String namestring)
+    private Pathname(String s)
     {
-        this.namestring = namestring;
-        if (namestring != null) {
-            for (int i = namestring.length(); i-- > 0;) {
-                char c = namestring.charAt(i);
+        if (s != null) {
+            this.namestring = s;
+            // Find last file separator char.
+            for (int i = s.length(); i-- > 0;) {
+                char c = s.charAt(i);
                 if (c == '/' || c == '\\') {
-                    directory = new LispString(namestring.substring(0, i + 1));
-                    String s = namestring.substring(i + 1);
-                    int index = s.lastIndexOf('.');
-                    if (index >= 0) {
-                        name = new LispString(s.substring(0, index));
-                        type = new LispString(s.substring(index + 1));
-                    } else
-                        name = new LispString(s);
+                    directory = new LispString(s.substring(0, i + 1));
+                    s = s.substring(i + 1);
                     break;
                 }
             }
-            if (name == NIL)
-                name = new LispString(namestring);
+            int index = s.lastIndexOf('.');
+            if (index > 0) {
+                name = new LispString(s.substring(0, index));
+                type = new LispString(s.substring(index + 1));
+            } else
+                name = new LispString(s);
         }
     }
 
@@ -239,7 +238,7 @@ public final class Pathname extends LispObject
             throws ConditionThrowable
         {
             checkCaseArgument(second);
-            return coerceToPathname(first).host;
+            return coerceToPathname(first).type;
         }
     };
 
