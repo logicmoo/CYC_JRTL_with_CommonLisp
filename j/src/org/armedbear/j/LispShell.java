@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShell.java,v 1.40 2003-09-16 00:44:49 piso Exp $
+ * $Id: LispShell.java,v 1.41 2003-09-25 18:22:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public class LispShell extends Shell
         "^(\\[[0-9+][i]?\\] )?[-a-zA-z]+\\([0-9]+\\): ";
 
     private static final String ARMEDBEAR_PROMPT_PATTERN =
-        "^[^>\\*\\]]+\\([0-9]+\\)> ";
+        "^[^>\\*\\]]+\\([0-9]+\\)[>:] ";
 
     private static final String CLISP_PROMPT_PATTERN =
         "^[^>\\*\\]]*\\[[0-9]+\\]> ";
