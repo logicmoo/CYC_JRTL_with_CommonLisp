@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.47 2004-04-21 13:55:22 piso Exp $
+ * $Id: Load.java,v 1.48 2004-04-30 16:27:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,7 +325,7 @@ public final class Load extends Lisp
                 LispObject result = eval(obj, env, thread);
                 if (print) {
                     Stream out = getStandardOutput();
-                    out._writeLine(String.valueOf(result));
+                    out._writeLine(result.writeToString());
                     out._finishOutput();
                 }
             }
