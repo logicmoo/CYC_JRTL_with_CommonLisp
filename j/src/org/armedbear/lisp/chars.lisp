@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: chars.lisp,v 1.2 2003-03-14 02:11:21 piso Exp $
+;;; $Id: chars.lisp,v 1.3 2003-03-17 14:50:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@
        ((atom list) T)
     (unless (do* ((l list (cdr l)))                  ;inner loop returns T
 		 ((atom l) T)			     ; iff head /= rest.
-	      (if (eq head (car l)) (return nil)))
+	      (if (eql head (car l)) (return nil)))
       (return nil))))
 
 
