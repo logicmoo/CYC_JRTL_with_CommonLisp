@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.7 2002-10-11 16:12:43 piso Exp $
+ * $Id: Editor.java,v 1.8 2002-10-11 18:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4950,7 +4950,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         if (mark == null)
             return;
-        if (getMarkLine() != getDotLine() || getMarkOffset() != getDotOffset()){
+        if (getMarkLine() != getDotLine() || getMarkOffset() != getDotOffset()) {
             try {
                 buffer.lockWrite();
             }
@@ -5739,6 +5739,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                     break;
                 case LOAD_FAILED:
                     setDefaultCursor();
+                    buffer = buf;
+                    bufferActivated(true);
                     if (message == null)
                         message = "Unable to load buffer";
                     MessageDialog.showMessageDialog(this, message, "Error");
