@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.72 2004-02-19 15:38:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.73 2004-02-19 17:39:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2158,16 +2158,23 @@
 (defun compile-function (form for-effect)
    (let ((obj (second form)))
      (cond ((symbolp obj)
-            (let ((g (declare-symbol obj)))
-              (emit 'getstatic
-                    *this-class*
-                    g
-                    "Lorg/armedbear/lisp/Symbol;")
-              (emit-invokevirtual +lisp-object-class+
-                                  "getSymbolFunctionOrDie"
-                                  "()Lorg/armedbear/lisp/LispObject;"
-                                  0)
-              (emit-store-value)))
+            (if (memq (symbol-package obj) +known-packages+)
+                (let ((g (declare-function obj)))
+                  (emit 'getstatic
+                        *this-class*
+                        g
+                        "Lorg/armedbear/lisp/LispObject;")
+                  (emit-store-value))
+                (let ((g (declare-symbol obj)))
+                  (emit 'getstatic
+                        *this-class*
+                        g
+                        "Lorg/armedbear/lisp/Symbol;")
+                  (emit-invokevirtual +lisp-object-class+
+                                      "getSymbolFunctionOrDie"
+                                      "()Lorg/armedbear/lisp/LispObject;"
+                                      0)
+                  (emit-store-value))))
            #+nil
            ((and (consp obj) (eq (car obj) 'LAMBDA))
             ;; FIXME We need to construct a proper lexical environment here
