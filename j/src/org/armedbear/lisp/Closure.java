@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.5 2003-02-19 03:40:10 piso Exp $
+ * $Id: Closure.java,v 1.6 2003-02-25 16:37:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,7 @@ public class Closure extends Function
                         }
                         arrayList.add(new Parameter(keyword, var, initForm,
                                                     svar));
+                        ++keywords;
                     } else
                         invalidParameter(obj);
                 } else if (obj != NIL)
