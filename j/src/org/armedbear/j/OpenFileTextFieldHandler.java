@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.52 2004-02-27 16:47:12 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.53 2004-09-08 00:47:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -411,7 +411,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 completions = getCompletions(prefix);
                 long elapsed = System.currentTimeMillis() - start;
                 Log.debug("getCompletions " + elapsed + " ms " +
-                    completions.size() + " completions");
+                          completions.size() + " completions");
                 index = 0;
                 originalText = textField.getText();
                 originalPrefix = prefix;
@@ -951,6 +951,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_KP_RIGHT:
                     textField.getCaret().setVisible(true);
+                    originalText = null;
+                    originalPrefix = null;
                     break;
             }
         }
