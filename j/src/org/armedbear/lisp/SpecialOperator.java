@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SpecialOperator.java,v 1.11 2003-12-08 05:06:10 piso Exp $
+ * $Id: SpecialOperator.java,v 1.12 2004-09-19 16:19:19 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,12 @@ public class SpecialOperator extends Functional
         setLambdaName(Symbol.addFunction(this.name, this));
     }
 
+    public SpecialOperator(String name, String arglist)
+    {
+        this(name);
+        setArglist(new SimpleString(arglist));
+    }
+      
     public final int getFunctionalType()
     {
         return FTYPE_SPECIAL_OPERATOR;
