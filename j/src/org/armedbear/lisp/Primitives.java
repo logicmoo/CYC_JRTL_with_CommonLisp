@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.572 2004-02-17 01:39:24 piso Exp $
+ * $Id: Primitives.java,v 1.573 2004-02-19 00:45:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1968,26 +1968,39 @@ public final class Primitives extends Lisp
     // ### vector-push-extend
     // vector-push new-element vector &optional extension => index-of-new-element
     private static final Primitive VECTOR_PUSH_EXTEND =
-        new Primitive("vector-push-extend","new-element vector &optional extension") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        new Primitive("vector-push-extend",
+                      "new-element vector &optional extension")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            if (args.length < 2 || args.length > 3)
-                signal(new WrongNumberOfArgumentsException(this));
-            AbstractVector v = checkVector(args[1]);
-            int extension = 0;
-            if (args.length == 3) {
-                // Extension was supplied.
-                extension = Fixnum.getValue(args[2]);
-            }
-            int fillPointer = v.getFillPointer();
+            AbstractVector v = checkVector(second);
+            final int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                signal(new TypeError("array does not have a fill pointer"));
+                signal(new TypeError("Array does not have a fill pointer."));
+            if (fillPointer >= v.capacity()) {
+                // Need to extend vector.
+                v.ensureCapacity(v.capacity() * 2 + 1);
+            }
+            v.set(fillPointer, first);
+            v.setFillPointer(fillPointer + 1);
+            return new Fixnum(fillPointer);
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            AbstractVector v = checkVector(second);
+            int extension = Fixnum.getValue(third);
+            final int fillPointer = v.getFillPointer();
+            if (fillPointer < 0)
+                signal(new TypeError("Array does not have a fill pointer."));
             if (fillPointer >= v.capacity()) {
                 // Need to extend vector.
                 extension = Math.max(extension, v.capacity() + 1);
                 v.ensureCapacity(v.capacity() + extension);
             }
-            v.set(fillPointer, args[0]);
+            v.set(fillPointer, first);
             v.setFillPointer(fillPointer + 1);
             return new Fixnum(fillPointer);
         }
