@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.52 2004-03-17 13:23:32 piso Exp $
+ * $Id: Package.java,v 1.53 2004-04-18 04:51:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,11 @@ public final class Package extends LispObject
     private ArrayList nicknames;
     private final ArrayList useList = new ArrayList();
     private ArrayList usedByList = null;
+
+    // Anonymous package.
+    public Package()
+    {
+    }
 
     public Package(String name)
     {
@@ -662,9 +667,12 @@ public final class Package extends LispObject
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer("#<The ");
-        sb.append(name);
-        sb.append(" package>");
-        return sb.toString();
+        if (name != null) {
+            StringBuffer sb = new StringBuffer("#<The ");
+            sb.append(name);
+            sb.append(" package>");
+            return sb.toString();
+        } else
+            return unreadableString("PACKAGE");
     }
 }
