@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.37 2003-11-16 21:00:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.38 2003-11-16 21:17:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1608,7 +1608,8 @@
   (compile-form form)
   (unless (remove-store-value)
     (emit-push-value))
-  (emit-clear-values)
+  (unless (atom form) ; FIXME There are other safe cases too!
+    (emit-clear-values))
   (emit-push-nil)
   'if_acmpeq)
 
