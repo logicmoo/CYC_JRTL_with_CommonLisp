@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.36 2003-04-09 23:23:02 piso Exp $
+ * $Id: Symbol.java,v 1.37 2003-04-27 16:08:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -264,12 +264,10 @@ public class Symbol extends LispObject
     // symbol-value
     public final LispObject symbolValue() throws LispError
     {
-        if (dynEnv != null) {
-            if ((flags & SPECIAL) != 0) {
-                LispObject val = dynEnv.lookup(this);
-                if (val != null)
-                    return val;
-            }
+        if ((flags & SPECIAL) != 0) {
+            LispObject val = LispThread.currentThread().lookupSpecial(this);
+            if (val != null)
+                return val;
         }
         if (value != null)
             return value;
@@ -278,12 +276,10 @@ public class Symbol extends LispObject
 
     public final LispObject symbolValueNoThrow()
     {
-        if (dynEnv != null) {
-            if ((flags & SPECIAL) != 0) {
-                LispObject val = dynEnv.lookup(this);
-                if (val != null)
-                    return val;
-            }
+        if ((flags & SPECIAL) != 0) {
+            LispObject val = LispThread.currentThread().lookupSpecial(this);
+            if (val != null)
+                return val;
         }
         return value;
     }

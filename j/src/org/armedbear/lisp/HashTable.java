@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.5 2003-04-06 15:24:05 piso Exp $
+ * $Id: HashTable.java,v 1.6 2003-04-27 16:08:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,7 @@ public final class HashTable extends LispObject
         } else
             values[1] = T;
         values[0] = value;
-        setValues(values);
+        LispThread.currentThread().setValues(values);
         return value;
     }
 

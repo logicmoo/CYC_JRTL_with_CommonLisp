@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.180 2003-04-26 21:14:00 piso Exp $
+ * $Id: Primitives.java,v 1.181 2003-04-27 16:08:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -574,10 +574,10 @@ public final class Primitives extends Module
     private static final LispObject values(LispObject[] args)
     {
         if (args.length == 1) {
-            clearValues();
+            LispThread.currentThread().clearValues();
             return args[0];
         }
-        setValues(args);
+        LispThread.currentThread().setValues(args);
         return args.length > 0 ? args[0] : NIL;
     }
 
@@ -732,7 +732,7 @@ public final class Primitives extends Module
             if (obj == NIL)
                 return T;
             Symbol symbol = checkSymbol(obj);
-            if (dynEnv != null && dynEnv.lookup(symbol) != null)
+            if (LispThread.currentThread().lookupSpecial(symbol) != null)
                 return T;
             return symbol.getSymbolValue() != null ? T : NIL;
         }
@@ -1237,6 +1237,7 @@ public final class Primitives extends Module
 
     private static final String _format(LispObject[] args) throws LispError
     {
+        final LispThread thread = LispThread.currentThread();
         String control = checkString(args[0]).getValue();
         StringBuffer sb = new StringBuffer();
         final int limit = control.length();
@@ -1255,38 +1256,38 @@ public final class Primitives extends Module
                 if (c == 'A' || c == 'a') {
                     if (j < args.length) {
                         LispObject obj = args[j++];
-                        Environment oldDynEnv = dynEnv;
-                        bindSpecial(_PRINT_ESCAPE_, NIL);
+                        Environment oldDynEnv = thread.getDynamicEnvironment();
+                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                         sb.append(String.valueOf(obj));
-                        dynEnv = oldDynEnv;
+                        thread.setDynamicEnvironment(oldDynEnv);
                     }
                 } else if (c == 'S' || c == 's') {
                     if (j < args.length) {
                         LispObject obj = args[j++];
-                        Environment oldDynEnv = dynEnv;
-                        bindSpecial(_PRINT_ESCAPE_, T);
+                        Environment oldDynEnv = thread.getDynamicEnvironment();
+                        thread.bindSpecial(_PRINT_ESCAPE_, T);
                         sb.append(String.valueOf(obj));
-                        dynEnv = oldDynEnv;
+                        thread.setDynamicEnvironment(oldDynEnv);
                     }
                 } else if (c == 'D' || c == 'd') {
                     if (j < args.length) {
                         LispObject obj = args[j++];
-                        Environment oldDynEnv = dynEnv;
-                        bindSpecial(_PRINT_ESCAPE_, NIL);
-                        bindSpecial(_PRINT_RADIX_, NIL);
-                        bindSpecial(_PRINT_BASE_, new Fixnum(10));
+                        Environment oldDynEnv = thread.getDynamicEnvironment();
+                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                        thread.bindSpecial(_PRINT_RADIX_, NIL);
+                        thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
                         sb.append(String.valueOf(obj));
-                        dynEnv = oldDynEnv;
+                        thread.setDynamicEnvironment(oldDynEnv);
                     }
                 } else if (c == 'X' || c == 'x') {
                     if (j < args.length) {
                         LispObject obj = args[j++];
-                        Environment oldDynEnv = dynEnv;
-                        bindSpecial(_PRINT_ESCAPE_, NIL);
-                        bindSpecial(_PRINT_RADIX_, NIL);
-                        bindSpecial(_PRINT_BASE_, new Fixnum(16));
+                        Environment oldDynEnv = thread.getDynamicEnvironment();
+                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                        thread.bindSpecial(_PRINT_RADIX_, NIL);
+                        thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
                         sb.append(String.valueOf(obj));
-                        dynEnv = oldDynEnv;
+                        thread.setDynamicEnvironment(oldDynEnv);
                     }
                 } else if (c == '%') {
                     sb.append(System.getProperty("line.separator"));
@@ -1327,7 +1328,7 @@ public final class Primitives extends Module
         symbol.setSymbolFunction(new Closure(symbol.getName(), parameters,
             body, env));
         // INTERN returns multiple values, but DEFUN does not.
-        clearValues();
+        LispThread.currentThread().clearValues();
         return symbol;
     }
 
@@ -1368,7 +1369,7 @@ public final class Primitives extends Module
         body = new Cons(Symbol.BLOCK, body);
         body = new Cons(body, NIL);
         symbol.setSymbolFunction(new Macro(parameters, body, env));
-        clearValues();
+        LispThread.currentThread().clearValues();
         return symbol;
     }
 
@@ -1386,7 +1387,7 @@ public final class Primitives extends Module
             LispObject initialValue = eval(args.cadr(), env);
             symbol.setSymbolValue(initialValue);
             symbol.setSpecial(true);
-            clearValues();
+            LispThread.currentThread().clearValues();
             return symbol;
         }
     };
@@ -1407,7 +1408,7 @@ public final class Primitives extends Module
                     symbol.setSymbolValue(initialValue);
             }
             symbol.setSpecial(true);
-            clearValues();
+            LispThread.currentThread().clearValues();
             return symbol;
         }
     };
@@ -1424,7 +1425,7 @@ public final class Primitives extends Module
             Symbol symbol = checkSymbol(args.car());
             symbol.setSymbolValue(eval(args.cadr(), env));
             symbol.setConstant(true);
-            clearValues();
+            LispThread.currentThread().clearValues();
             return symbol;
         }
     };
@@ -1438,7 +1439,7 @@ public final class Primitives extends Module
             while (args != NIL) {
                 LispObject clause = args.car();
                 result = eval(clause.car(), env);
-                clearValues();
+                LispThread.currentThread().clearValues();
                 if (result != NIL) {
                     LispObject body = clause.cdr();
                     while (body != NIL) {
@@ -1547,8 +1548,8 @@ public final class Primitives extends Module
             }
             first = first.cdr();
         }
-        Environment oldDynEnv = dynEnv;
-        dynEnv = new Environment(dynEnv);
+        LispThread thread = LispThread.currentThread();
+        Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(env);
         for (int i = 0; i < length; i++) {
             Symbol symbol = variables[i];
@@ -1605,7 +1606,7 @@ public final class Primitives extends Module
             throw ret;
         }
         finally {
-            dynEnv = oldDynEnv;
+            thread.setDynamicEnvironment(oldDynEnv);
         }
     }
 
@@ -1620,7 +1621,8 @@ public final class Primitives extends Module
             LispObject listForm = args.cadr();
             LispObject list = checkList(eval(listForm, env));
             LispObject resultForm = args.cdr().cdr().car();
-            Environment oldDynEnv = dynEnv;
+            LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
             while (list != NIL) {
                 Environment ext = new Environment(env);
                 bind(var, list.car(), ext);
@@ -1644,7 +1646,7 @@ public final class Primitives extends Module
             Environment ext = new Environment(env);
             bind(var, NIL, ext);
             LispObject result = eval(resultForm, ext);
-            dynEnv = oldDynEnv;
+            thread.setDynamicEnvironment(oldDynEnv);
             return result;
         }
     };
@@ -1661,7 +1663,8 @@ public final class Primitives extends Module
             LispObject countForm = args.cadr();
             int count = Fixnum.getInt(eval(countForm, env));
             LispObject resultForm = args.cdr().cdr().car();
-            Environment oldDynEnv = dynEnv;
+            LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
             int i;
             for (i = 0; i < count; i++) {
                 Environment ext = new Environment(env);
@@ -1685,7 +1688,7 @@ public final class Primitives extends Module
             Environment ext = new Environment(env);
             bind(var, new Fixnum(i), ext);
             LispObject result = eval(resultForm, ext);
-            dynEnv = oldDynEnv;
+            thread.setDynamicEnvironment(oldDynEnv);
             return result;
         }
     };
@@ -1712,7 +1715,8 @@ public final class Primitives extends Module
                 if (args != NIL)
                     resultForm = args.car();
             }
-            Environment oldDynEnv = dynEnv;
+            LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
             for (Iterator it = pkg.iterator(); it.hasNext();) {
                 Symbol symbol = (Symbol) it.next();
                 if (!symbol.isExternal())
@@ -1738,7 +1742,7 @@ public final class Primitives extends Module
             Environment ext = new Environment(env);
             bind(var, NIL, ext);
             LispObject result = eval(resultForm, ext);
-            dynEnv = oldDynEnv;
+            thread.setDynamicEnvironment(oldDynEnv);
             return result;
         }
     };
@@ -2127,7 +2131,7 @@ public final class Primitives extends Module
             if (args.length != 1)
                 throw new WrongNumberOfArgumentsException(this);
             describe(args[0]);
-            return nothing();
+            return LispThread.currentThread().nothing();
         }
     };
 
@@ -2258,7 +2262,7 @@ public final class Primitives extends Module
                     values[1] = T;
             } else
                 values[0] = values[1] = NIL;
-            setValues(values);
+            LispThread.currentThread().setValues(values);
             return values[0];
         }
     };
@@ -2472,6 +2476,8 @@ public final class Primitives extends Module
                     throw new TypeError(arg, "string or non-negative integer");
             }
             LispObject oldValue;
+            LispThread thread = LispThread.currentThread();
+            Environment dynEnv = thread.getDynamicEnvironment();
             Binding binding =
                 (dynEnv == null) ? null : dynEnv.getBinding(_GENSYM_COUNTER_);
             if (binding != null) {
@@ -2703,6 +2709,8 @@ public final class Primitives extends Module
             Package pkg = Packages.findPackage(string.getValue());
             if (pkg == null)
                 throw new LispError("package " + arg + " does not exist");
+            LispThread thread = LispThread.currentThread();
+            Environment dynEnv = thread.getDynamicEnvironment();
             if (dynEnv != null) {
                 Binding binding = dynEnv.getBinding(_PACKAGE_);
                 if (binding != null) {
@@ -2943,7 +2951,8 @@ public final class Primitives extends Module
         LispObject varList = checkList(args.car());
         LispObject result;
         if (varList != NIL) {
-            Environment oldDynEnv = dynEnv;
+            LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(env);
             Environment evalEnv = sequential ? ext : env;
             for (int i = varList.length(); i-- > 0;) {
@@ -2957,7 +2966,7 @@ public final class Primitives extends Module
                     bind(checkSymbol(obj), NIL, ext);
             }
             result = progn(args.cdr(), ext);
-            dynEnv = oldDynEnv;
+            thread.setDynamicEnvironment(oldDynEnv);
         } else
             result = progn(args.cdr(), env);
         return result;
@@ -2970,7 +2979,8 @@ public final class Primitives extends Module
         LispObject defs = checkList(args.car());
         LispObject result;
         if (defs != NIL) {
-            Environment oldDynEnv = dynEnv;
+            LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(env);
             while (defs != NIL) {
                 LispObject def = checkList(defs.car());
@@ -2991,7 +3001,7 @@ public final class Primitives extends Module
                 defs = defs.cdr();
             }
             result = progn(args.cdr(), ext);
-            dynEnv = oldDynEnv;
+            thread.setDynamicEnvironment(oldDynEnv);
         } else
             result = progn(args.cdr(), env);
         return result;
@@ -3032,7 +3042,7 @@ public final class Primitives extends Module
                 }
                 remaining = remaining.cdr();
             }
-            clearValues();
+            LispThread.currentThread().clearValues();
             return NIL;
         }
     };
@@ -3127,16 +3137,17 @@ public final class Primitives extends Module
         public LispObject execute(LispObject args, Environment env)
             throws Condition
         {
+            final LispThread thread = LispThread.currentThread();
             LispObject result;
             LispObject[] values;
             try {
                 result = eval(args.car(), env);
-                values = getValues();
+                values = thread.getValues();
             }
             finally {
                 eval(args.cadr(), env);
             }
-            setValues(values);
+            thread.setValues(values);
             return result;
         }
     };
@@ -3195,6 +3206,8 @@ public final class Primitives extends Module
                 args = args.cdr();
                 value = eval(args.car(), env);
                 if (symbol.isSpecialVariable()) {
+                    LispThread thread = LispThread.currentThread();
+                    Environment dynEnv = thread.getDynamicEnvironment();
                     if (dynEnv != null) {
                         Binding binding = dynEnv.getBinding(symbol);
                         if (binding != null) {
@@ -3229,22 +3242,17 @@ public final class Primitives extends Module
         {
             LispObject[] vars = args.car().copyToArray();
             args = args.cdr();
-
             LispObject valuesForm = args.car();
-
             LispObject value = eval(valuesForm, env);
-
-            LispObject[] values = getValues();
+            LispThread thread = LispThread.currentThread();
+            LispObject[] values = thread.getValues();
             if (values == null) {
                 // eval(valuesForm, env) did not return multiple values.
                 values = new LispObject[1];
                 values[0] = value;
             }
-
-            Environment oldDynEnv = dynEnv;
-            dynEnv = new Environment(dynEnv);
+            Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(env);
-
             for (int i = 0; i < vars.length; i++) {
                 Symbol symbol = checkSymbol(vars[i]);
                 if (i < values.length)
@@ -3252,9 +3260,8 @@ public final class Primitives extends Module
                 else
                     bind(symbol, NIL, ext);
             }
-
             LispObject result = progn(args.cdr(), ext);
-            dynEnv = oldDynEnv;
+            thread.setDynamicEnvironment(oldDynEnv);
             return result;
         }
     };
@@ -3268,10 +3275,11 @@ public final class Primitives extends Module
             if (args.length() == 0)
                 throw new WrongNumberOfArgumentsException(this);
             LispObject result = eval(args.car(), env);
-            LispObject[] values = getValues();
+            LispThread thread = LispThread.currentThread();
+            LispObject[] values = thread.getValues();
             while ((args = args.cdr()) != NIL)
                 eval(args.car(), env);
-            setValues(values);
+            thread.setValues(values);
             return result;
         }
     };
@@ -3302,7 +3310,7 @@ public final class Primitives extends Module
             while (args != NIL) {
                 LispObject form = args.car();
                 LispObject result = eval(form, env);
-                LispObject[] values = getValues();
+                LispObject[] values = LispThread.currentThread().getValues();
                 if (values != null) {
                     for (int i = 0; i < values.length; i++)
                         arrayList.add(values[i]);
@@ -3333,7 +3341,7 @@ public final class Primitives extends Module
                         if (result == NIL) {
                             if (args.cdr() != NIL) {
                                 // Not the last form.
-                                clearValues();
+                                LispThread.currentThread().clearValues();
                             }
                             return NIL;
                         }
@@ -3362,7 +3370,7 @@ public final class Primitives extends Module
                         if (result != NIL) {
                             if (args.cdr() != NIL) {
                                 // Not the last form.
-                                clearValues();
+                                LispThread.currentThread().clearValues();
                             }
                             return result;
                         }
@@ -3551,8 +3559,8 @@ public final class Primitives extends Module
             if (args.length() != 1)
                 throw new WrongNumberOfArgumentsException(this);
             LispObject result = eval(args.car(), env);
-            LispObject[] values = getValues();
-            clearValues();
+            LispObject[] values = LispThread.currentThread().getValues();
+            LispThread.currentThread().clearValues();
             if (values == null)
                 return new Cons(result, NIL);
             LispObject list = NIL;
@@ -3578,8 +3586,9 @@ public final class Primitives extends Module
             if (n < 0)
                 n = 0;
             LispObject result = eval(args.cadr(), env);
-            LispObject[] values = getValues();
-            clearValues();
+            final LispThread thread = LispThread.currentThread();
+            LispObject[] values = thread.getValues();
+            thread.clearValues();
             if (values == null) {
                 // A single value was returned.
                 return n == 0 ? result : NIL;
@@ -3848,7 +3857,7 @@ public final class Primitives extends Module
             LispObject[] values = new LispObject[2];
             values[0] = result;
             values[1] = new Fixnum(startIndex + in.getOffset());
-            setValues(values);
+            LispThread.currentThread().setValues(values);
             return result;
         }
     };

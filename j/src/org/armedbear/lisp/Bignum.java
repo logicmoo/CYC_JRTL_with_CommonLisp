@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.11 2003-04-09 18:03:25 piso Exp $
+ * $Id: Bignum.java,v 1.12 2003-04-27 16:08:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,11 +272,12 @@ public final class Bignum extends LispObject
         BigInteger[] results = value.divideAndRemainder(divisor);
         BigInteger quotient = results[0];
         BigInteger remainder = results[1];
+        final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
         if (remainder.signum() == 0) {
             values[0] = number(quotient);
             values[1] = Fixnum.ZERO;
-            setValues(values);
+            thread.setValues(values);
             return values[0];
         }
 
@@ -287,7 +288,7 @@ public final class Bignum extends LispObject
         values[0] = q;
         values[1] = subtract(q.multiplyBy(obj));
 
-        setValues(values);
+        thread.setValues(values);
         return values[0];
     }
 

@@ -2,7 +2,7 @@
  * Throw.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Throw.java,v 1.2 2003-02-15 16:48:17 piso Exp $
+ * $Id: Throw.java,v 1.3 2003-04-27 16:08:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,13 @@ public final class Throw extends LispError
 {
     private final LispObject tag;
     private final LispObject result;
-    private final LispObject[] values = Lisp.getValues();
+    private final LispObject[] values;
 
     public Throw(LispObject tag, LispObject result)
     {
         this.tag = tag;
         this.result = result;
+        values = LispThread.currentThread().getValues();
     }
 
     public LispObject getTag()
@@ -40,7 +41,7 @@ public final class Throw extends LispError
 
     public LispObject getResult()
     {
-        Lisp.setValues(values);
+        LispThread.currentThread().setValues(values);
         return result;
     }
 }

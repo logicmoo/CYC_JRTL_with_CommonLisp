@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.20 2003-04-26 21:13:30 piso Exp $
+ * $Id: Interpreter.java,v 1.21 2003-04-27 16:08:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,6 +118,7 @@ public final class Interpreter extends Lisp
 
     public void run()
     {
+        final LispThread thread = LispThread.currentThread();
         history = new ArrayList();
         commandNumber = 0;
         done = false;
@@ -128,7 +129,7 @@ public final class Interpreter extends Lisp
             while (true) {
                 try {
                     resetStack();
-                    dynEnv = null;
+                    thread.setDynamicEnvironment(null);
                     ++commandNumber;
                     out.writeString(prompt());
                     out.finishOutput();
@@ -142,7 +143,8 @@ public final class Interpreter extends Lisp
                     LispObject object = null;
                     if (c == ':') {
                         LispObject input = getStandardInput().readLine(false, EOF);
-                        clearValues(); // Ignore multiple values.
+                        // Ignore multiple values.
+                        thread.clearValues();
                         if (input == EOF)
                             break;
                         String s = LispString.getValue(input);
@@ -184,7 +186,7 @@ public final class Interpreter extends Lisp
                     out = getStandardOutput();
                     out.freshLine();
                     checkStack();
-                    LispObject[] values = getValues();
+                    LispObject[] values = thread.getValues();
                     Symbol.SLASH_SLASH_SLASH.setSymbolValue(Symbol.SLASH_SLASH.getSymbolValue());
                     Symbol.SLASH_SLASH.setSymbolValue(Symbol.SLASH.getSymbolValue());
                     if (values != null) {
@@ -361,6 +363,8 @@ public final class Interpreter extends Lisp
                 args = args.toUpperCase();
                 Package pkg = Packages.findPackage(args);
                 if (pkg != null) {
+                    Environment dynEnv =
+                        LispThread.currentThread().getDynamicEnvironment();
                     if (dynEnv != null) {
                         Binding binding = dynEnv.getBinding(_PACKAGE_);
                         if (binding != null) {
@@ -497,7 +501,7 @@ public final class Interpreter extends Lisp
                 if (obj == EOF)
                     break;
                 LispObject result = eval(obj, new Environment());
-                LispObject[] values = getValues();
+                LispObject[] values = LispThread.currentThread().getValues();
                 if (values != null) {
                     for (int i = 0; i < values.length; i++) {
                         if (i > 0)

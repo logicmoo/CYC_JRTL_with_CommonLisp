@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.58 2003-04-26 21:13:11 piso Exp $
+ * $Id: Lisp.java,v 1.59 2003-04-27 16:08:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,71 +46,36 @@ public abstract class Lisp
     /*package*/ static final int TYPE_MACRO             = 10;
     /*package*/ static final int TYPE_CONS              = 11;
 
-    public static Environment dynEnv = null;
-
-    private static LispObject[] _values;
-
-    public static final LispObject[] getValues()
-    {
-        return _values;
-    }
-
-    public static final void setValues(LispObject[] array)
-    {
-        if (array == null)
-            _values = null;
-        else {
-            _values = new LispObject[array.length];
-            for (int i = array.length; i-- > 0;)
-                _values[i] = array[i];
-        }
-    }
-
-    public static final void clearValues()
-    {
-        _values = null;
-    }
-
-    public static final LispObject nothing()
-    {
-        _values = new LispObject[0];
-        return NIL;
-    }
-
-    // Forces a single value, for situations where multiple values should be
-    // ignored.
-    private static final LispObject value(LispObject obj)
-    {
-        clearValues();
-        return obj;
-    }
-
     public static final LispObject funcall(LispObject fun, LispObject[] argv)
         throws Condition
     {
         if (debug) {
             stack.push(new StackFrame(fun, argv));
         }
-        clearValues();
+        LispThread.currentThread().clearValues();
         LispObject result;
         if (profiling)
             fun.incrementCallCount();
-        switch (argv.length) {
-            case 0:
-                result = fun.execute();
-                break;
-            case 1:
-                result = fun.execute(argv[0]);
-                break;
-            case 2:
-                result = fun.execute(argv[0], argv[1]);
-                break;
-            case 3:
-                result = fun.execute(argv[0], argv[1], argv[2]);
-                break;
-            default:
-                result = fun.execute(argv);
-                break;
+        if (argv == null)
+            result = fun.execute();
+        else {
+            switch (argv.length) {
+                case 0:
+                    result = fun.execute();
+                    break;
+                case 1:
+                    result = fun.execute(argv[0]);
+                    break;
+                case 2:
+                    result = fun.execute(argv[0], argv[1]);
+                    break;
+                case 3:
+                    result = fun.execute(argv[0], argv[1], argv[2]);
+                    break;
+                default:
+                    result = fun.execute(argv);
+                    break;
+            }
         }
         if (debug) {
             if (!stack.empty())
@@ -125,7 +90,7 @@ public abstract class Lisp
         LispObject expanded = NIL;
         while (true) {
             form = macroexpand_1(form, env);
-            LispObject[] values = getValues();
+            LispObject[] values = LispThread.currentThread().getValues();
             if (values[1] == NIL) {
                 values[1] = expanded;
                 return form;
@@ -137,11 +102,12 @@ public abstract class Lisp
     public static final LispObject macroexpand_1(LispObject form, Environment env)
         throws Condition
     {
+        final LispThread thread = LispThread.currentThread();
         LispObject[] results = new LispObject[2];
         if (!(form instanceof Cons)) {
             results[0] = form;
             results[1] = NIL;
-            setValues(results);
+            thread.setValues(results);
             return results[0];
         }
         Symbol symbol = checkSymbol(form.car());
@@ -151,13 +117,13 @@ public abstract class Lisp
                 macro.incrementCallCount();
             results[0] = macro.execute(form, env);
             results[1] = T;
-            setValues(results);
+            thread.setValues(results);
             return results[0];
         }
         // Not a macro.
         results[0] = form;
         results[1] = NIL;
-        setValues(results);
+        thread.setValues(results);
         return results[0];
     }
 
@@ -294,12 +260,17 @@ public abstract class Lisp
     public static final LispObject eval(LispObject obj, Environment env)
         throws Condition
     {
-        clearValues();
+        return eval(obj, env, LispThread.currentThread());
+    }
+
+    public static final LispObject eval(LispObject obj, Environment env,
+        LispThread thread) throws Condition
+    {
+        thread.clearValues();
         if (obj instanceof Symbol) {
             LispObject result = null;
             if (obj.isSpecialVariable()) {
-                if (dynEnv != null)
-                    result = dynEnv.lookup(obj);
+                result = thread.lookupSpecial(obj);
             } else
                 result = env.lookup(obj);
             if (result == null) {
@@ -325,30 +296,30 @@ public abstract class Lisp
                         return fun.execute(obj.cdr(), env);
                     }
                     case TYPE_MACRO:
-                        return eval(macroexpand(obj, env), env);
+                        return eval(macroexpand(obj, env), env, thread);
                     default: {
                         if (debug)
-                            return funcall(fun, evalList(obj.cdr(), env));
+                            return funcall(fun, evalList(obj.cdr(), env, thread));
                         if (profiling)
                             fun.incrementCallCount();
                         switch (obj.cdr().length()) {
                             case 0:
                                 return fun.execute();
                             case 1:
-                                return fun.execute(value(eval(obj.cadr(), env)));
+                                return fun.execute(thread.value(eval(obj.cadr(), env, thread)));
                             case 2: {
                                 LispObject args = obj.cdr();
-                                return fun.execute(eval(args.car(), env),
-                                    value(eval(args.cadr(), env)));
+                                return fun.execute(eval(args.car(), env, thread),
+                                    thread.value(eval(args.cadr(), env, thread)));
                             }
                             case 3: {
                                 LispObject args = obj.cdr();
-                                return fun.execute(eval(args.car(), env),
-                                    eval(args.cadr(), env),
-                                    value(eval(args.cdr().cdr().car(), env)));
+                                return fun.execute(eval(args.car(), env, thread),
+                                    eval(args.cadr(), env, thread),
+                                    thread.value(eval(args.cdr().cdr().car(), env, thread)));
                             }
                             default:
-                                return fun.execute(evalList(obj.cdr(), env));
+                                return fun.execute(evalList(obj.cdr(), env, thread));
                         }
                     }
                 }
@@ -361,7 +332,7 @@ public abstract class Lisp
                 Symbol symbol = checkSymbol(funcar);
                 if (symbol == Symbol.LAMBDA) {
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
-                    return closure.execute(evalList(args, env));
+                    return closure.execute(evalList(args, env, thread));
                 } else
                     throw new ProgramError("illegal function object: " + first);
             }
@@ -369,26 +340,27 @@ public abstract class Lisp
             return obj;
     }
 
-    private static final LispObject[] evalList(LispObject exps, Environment env)
-        throws Condition
+    private static final LispObject[] evalList(LispObject exps,
+        Environment env, LispThread thread) throws Condition
     {
         final int length = exps.length();
         LispObject[] results = new LispObject[length];
         for (int i = 0; i < length; i++) {
-            results[i] = eval(exps.car(), env);
+            results[i] = eval(exps.car(), env, thread);
             exps = exps.cdr();
         }
         // Ignore multiple values!
-        clearValues();
+        thread.clearValues();
         return results;
     }
 
     public static final LispObject progn(LispObject body, Environment env)
         throws Condition
     {
+        final LispThread thread = LispThread.currentThread();
         LispObject result = NIL;
         while (body != NIL) {
-            result = eval(body.car(), env);
+            result = eval(body.car(), env, thread);
             body = body.cdr();
         }
         return result;
@@ -397,29 +369,21 @@ public abstract class Lisp
     // Environment wrappers.
     public static final void bind(Symbol symbol, LispObject value, Environment env)
     {
-        if (symbol.isSpecialVariable()) {
-            dynEnv = new Environment(dynEnv);
-            dynEnv.bind(symbol, value);
-        } else
+        if (symbol.isSpecialVariable())
+            LispThread.currentThread().bindSpecial(symbol, value);
+        else
             env.bind(symbol, value);
     }
 
     public static final void rebind(Symbol symbol, LispObject value, Environment env)
     {
         if (symbol.isSpecialVariable()) {
+            Environment dynEnv =
+                LispThread.currentThread().getDynamicEnvironment();
             Debug.assertTrue(dynEnv != null);
             dynEnv.rebind(symbol, value);
         } else
             env.rebind(symbol, value);
-    }
-
-    public static final void bindSpecial(Symbol symbol, LispObject value)
-    {
-        if (symbol.isSpecialVariable()) {
-            dynEnv = new Environment(dynEnv);
-            dynEnv.bind(symbol, value);
-        } else
-            Debug.assertTrue(false);
     }
 
     public static final boolean equalp(LispObject first, LispObject second)
@@ -902,7 +866,7 @@ public abstract class Lisp
         public LispObject execute() throws LispError
         {
             debug = true;
-            return nothing();
+            return LispThread.currentThread().nothing();
         }
     };
 
@@ -913,7 +877,7 @@ public abstract class Lisp
                 debug = false;
                 resetStack();
             }
-            return nothing();
+            return LispThread.currentThread().nothing();
         }
     };
 
@@ -945,7 +909,7 @@ public abstract class Lisp
                 out.writeLine("; Profiling already enabled.");
                 out.finishOutput();
             }
-            return nothing();
+            return LispThread.currentThread().nothing();
         }
     };
 
@@ -962,7 +926,7 @@ public abstract class Lisp
             } else
                 out.writeLine("; Profiling not enabled.");
             out.finishOutput();
-            return nothing();
+            return LispThread.currentThread().nothing();
         }
     };
 

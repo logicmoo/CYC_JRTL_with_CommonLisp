@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.9 2003-03-16 14:35:35 piso Exp $
+ * $Id: Load.java,v 1.10 2003-04-27 16:08:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,17 +146,17 @@ public final class Load extends Lisp
         InputStream in, boolean verbose, boolean print) throws Condition
     {
         long start = System.currentTimeMillis();
-        Environment oldDynEnv = dynEnv;
-        dynEnv = new Environment(dynEnv);
-        dynEnv.bind(_PACKAGE_, _PACKAGE_.symbolValue());
+        LispThread thread = LispThread.currentThread();
+        Environment oldDynEnv = thread.getDynamicEnvironment();
+        thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue());
         int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
-        dynEnv.bind(_LOAD_DEPTH_, new Fixnum(++loadDepth));
+        thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
         StringBuffer sb = new StringBuffer();
         for (long i = 0; i < loadDepth; i++)
             sb.append(';');
         String semicolons = sb.toString();
         try {
-            dynEnv.bind(_LOAD_TRUENAME_, new LispString(truename));
+            thread.bindSpecial(_LOAD_TRUENAME_, new LispString(truename));
             if (verbose) {
                 CharacterOutputStream out = getStandardOutput();
                 out.writeString(semicolons);
@@ -178,7 +178,7 @@ public final class Load extends Lisp
             return result;
         }
         finally {
-            dynEnv = oldDynEnv;
+            thread.setDynamicEnvironment(oldDynEnv);
         }
     }
 

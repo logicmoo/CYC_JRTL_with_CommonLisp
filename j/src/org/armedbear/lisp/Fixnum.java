@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.34 2003-04-17 01:41:25 piso Exp $
+ * $Id: Fixnum.java,v 1.35 2003-04-27 16:08:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -360,6 +360,7 @@ public final class Fixnum extends LispObject
 
     public LispObject floor(LispObject obj) throws LispError
     {
+        final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
         if (obj instanceof Fixnum) {
             long divisor = ((Fixnum)obj).value;
@@ -368,7 +369,7 @@ public final class Fixnum extends LispObject
             if (remainder == 0) {
                 values[0] = number(quotient);
                 values[1] = Fixnum.ZERO;
-                setValues(values);
+                thread.setValues(values);
                 return values[0];
             }
             // Remainder is non-zero.
@@ -382,7 +383,7 @@ public final class Fixnum extends LispObject
             }
             values[0] = number(quotient);
             values[1] = number(remainder);
-            setValues(values);
+            thread.setValues(values);
             return values[0];
         }
         Thread.dumpStack();

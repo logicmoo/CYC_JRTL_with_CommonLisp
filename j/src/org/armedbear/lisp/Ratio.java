@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.7 2003-04-09 18:03:36 piso Exp $
+ * $Id: Ratio.java,v 1.8 2003-04-27 16:08:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -311,11 +311,12 @@ public final class Ratio extends LispObject
         BigInteger[] results = num.divideAndRemainder(den);
         BigInteger quotient = results[0];
         BigInteger remainder = results[1];
+        final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
         if (remainder.signum() == 0) {
             values[0] = number(quotient);
             values[1] = Fixnum.ZERO;
-            setValues(values);
+            thread.setValues(values);
             return values[0];
         }
 
@@ -327,7 +328,7 @@ public final class Ratio extends LispObject
         values[0] = q;
         values[1] = subtract(q.multiplyBy(obj));
 
-        setValues(values);
+        thread.setValues(values);
         return values[0];
     }
 

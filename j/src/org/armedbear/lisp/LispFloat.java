@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.9 2003-03-30 19:20:26 piso Exp $
+ * $Id: LispFloat.java,v 1.10 2003-04-27 16:08:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -247,7 +247,7 @@ public final class LispFloat extends LispObject
                 values[0] = significand;
                 values[1] = exponent;
                 values[2] = sign;
-                setValues(values);
+                LispThread.currentThread().setValues(values);
                 return values[0];
             }
             throw new TypeError(arg, "float");

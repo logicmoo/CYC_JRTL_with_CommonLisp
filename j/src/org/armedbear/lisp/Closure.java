@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.15 2003-04-24 18:51:46 piso Exp $
+ * $Id: Closure.java,v 1.16 2003-04-27 16:08:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -317,7 +317,8 @@ public class Closure extends Function
                 throw new WrongNumberOfArgumentsException(this);
         } else if (args.length < required)
             throw new WrongNumberOfArgumentsException(this);
-        Environment oldDynEnv = dynEnv;
+        final LispThread thread = LispThread.currentThread();
+        Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(env);
         if (arity >= 0) {
             // Fixed arity.
@@ -462,7 +463,7 @@ public class Closure extends Function
             result = eval(prog.car(), ext);
             prog = prog.cdr();
         }
-        dynEnv = oldDynEnv;
+        thread.setDynamicEnvironment(oldDynEnv);
         return result;
     }
 

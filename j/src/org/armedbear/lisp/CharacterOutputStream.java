@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.1 2003-01-17 19:43:09 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.2 2003-04-27 16:08:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,11 +119,11 @@ public class CharacterOutputStream extends LispStream
     // READ.
     public void princ(LispObject obj) throws StreamError
     {
-        Environment oldDynEnv = dynEnv;
-        dynEnv = new Environment(dynEnv);
-        dynEnv.bind(_PRINT_ESCAPE_, NIL);
+        LispThread thread = LispThread.currentThread();
+        Environment oldDynEnv = thread.getDynamicEnvironment();
+        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
         String s = String.valueOf(obj);
-        dynEnv = oldDynEnv;
+        thread.setDynamicEnvironment(oldDynEnv);
         try {
             writer.write(s);
         }

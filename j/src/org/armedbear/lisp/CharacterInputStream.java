@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.29 2003-04-14 15:38:00 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.30 2003-04-27 16:08:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,7 +292,7 @@ public class CharacterInputStream extends LispStream
                 args[1] = new LispCharacter(c);
                 args[2] = new Fixnum(numArg);
                 LispObject result = funcall(fun, args);
-                LispObject[] values = getValues();
+                LispObject[] values = LispThread.currentThread().getValues();
                 if (values != null && values.length == 0)
                     return null; // Function returned no values.
                 return result;
@@ -740,7 +740,7 @@ public class CharacterInputStream extends LispStream
                     LispObject[] values = new LispObject[2];
                     values[0] = new LispString(sb.toString());
                     values[1] = T; // Missing newline.
-                    setValues(values);
+                    LispThread.currentThread().setValues(values);
                     return values[0];
                 }
                 switch (n) {
@@ -749,7 +749,7 @@ public class CharacterInputStream extends LispStream
                         LispObject[] values = new LispObject[2];
                         values[0] = new LispString(sb.toString());
                         values[1] = NIL;
-                        setValues(values);
+                        LispThread.currentThread().setValues(values);
                         return values[0];
                     }
                     default:

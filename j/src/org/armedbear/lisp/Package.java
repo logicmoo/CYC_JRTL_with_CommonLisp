@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.10 2003-04-06 18:37:40 piso Exp $
+ * $Id: Package.java,v 1.11 2003-04-27 16:08:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,6 +85,7 @@ public final class Package extends LispObject
 
     public synchronized LispObject findSymbol(String name)
     {
+        final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
         // Look in external and internal symbols of this package.
         Symbol symbol = (Symbol) map.get(name);
@@ -92,7 +93,7 @@ public final class Package extends LispObject
             values[0] = symbol;
             values[1] =
                 symbol.isExternal() ? Keyword.EXTERNAL : Keyword.INTERNAL;
-            setValues(values);
+            thread.setValues(values);
             return symbol;
         }
         // Look in external symbols of used packages.
@@ -102,14 +103,14 @@ public final class Package extends LispObject
             if (symbol != null && symbol.isExternal()) {
                 values[0] = symbol;
                 values[1] = Keyword.INHERITED;
-                setValues(values);
+                thread.setValues(values);
                 return symbol;
             }
         }
         // Not found.
         values[0] = NIL;
         values[1] = NIL;
-        setValues(values);
+        thread.setValues(values);
         return NIL;
     }
 
@@ -127,6 +128,7 @@ public final class Package extends LispObject
 
     public synchronized Symbol intern(String name)
     {
+        final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
         // Look in external and internal symbols of this package.
         Symbol symbol = (Symbol) map.get(name);
@@ -134,7 +136,7 @@ public final class Package extends LispObject
             values[0] = symbol;
             values[1] =
                 symbol.isExternal() ? Keyword.EXTERNAL : Keyword.INTERNAL;
-            setValues(values);
+            thread.setValues(values);
             return symbol;
         }
         // Look in external symbols of used packages.
@@ -144,7 +146,7 @@ public final class Package extends LispObject
             if (symbol != null && symbol.isExternal()) {
                 values[0] = symbol;
                 values[1] = Keyword.INHERITED;
-                setValues(values);
+                thread.setValues(values);
                 return symbol;
             }
         }
@@ -152,7 +154,7 @@ public final class Package extends LispObject
         symbol = addSymbol(name);
         values[0] = symbol;
         values[1] = NIL;
-        setValues(values);
+        thread.setValues(values);
         return symbol;
     }
 

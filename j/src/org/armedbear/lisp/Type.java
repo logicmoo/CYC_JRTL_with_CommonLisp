@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.4 2003-03-27 17:45:59 piso Exp $
+ * $Id: Type.java,v 1.5 2003-04-27 16:08:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ public class Type extends Lisp
         LispObject[] values = new LispObject[2];
         values[0] = subtypep;
         values[1] = validp;
-        setValues(values);
+        LispThread.currentThread().setValues(values);
         return subtypep;
     }
 
