@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.3 2003-03-19 02:57:30 piso Exp $
+ * $Id: Array.java,v 1.4 2003-03-19 03:14:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,6 +130,11 @@ public final class Array extends AbstractArray
             return T;
         if (typeSpecifier == Symbol.SIMPLE_ARRAY)
             return T;
+        if (typeSpecifier instanceof LispClass) {
+            final String name = typeSpecifier.getName();
+            if (name.equals("ARRAY"))
+                return T;
+        }
         if (typeSpecifier instanceof Cons) {
             final int length = typeSpecifier.length();
             if (length > 3)
