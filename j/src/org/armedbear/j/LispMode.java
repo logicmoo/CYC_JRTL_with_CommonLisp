@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.65 2004-04-11 18:33:52 piso Exp $
+ * $Id: LispMode.java,v 1.66 2004-05-21 14:27:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,9 +214,10 @@ public class LispMode extends AbstractMode implements Constants, Mode
         if (posFirst != null) {
             if (posFirst.equals(here))
                 return buffer.getCol(pos) + 1;
-            if (posFirst.getChar() == '(') {
-                // First element of containing sexp is a list. Indent
-                // under that list.
+            char firstChar = posFirst.getChar();
+            if (firstChar == '(' || firstChar == ',') {
+                // First element of containing sexp is a list or backquote
+                // expansion.
                 return buffer.getCol(posFirst);
             }
             // Otherwise...
