@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.20 2003-02-20 18:59:14 piso Exp $
+ * $Id: LispFormatter.java,v 1.21 2003-03-01 16:01:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,15 +121,6 @@ public final class LispFormatter extends Formatter
         clearSegmentList();
         final int limit = text.length();
         int i = 0;
-        // Skip whitespace at start of line.
-        while (i < limit) {
-            if (Character.isWhitespace(text.charAt(i))) {
-                ++i;
-            } else {
-                endToken(text, i, state);
-                break;
-            }
-        }
         while (i < limit) {
             char c = text.charAt(i);
             if (c == '\\' && i < limit-1) {
@@ -185,6 +176,8 @@ public final class LispFormatter extends Formatter
                 continue;
             }
             if (c == '\'') {
+                endToken(text, i, state);
+                state = STATE_NEUTRAL;
                 i = skipQuotedObject(text, ++i, state);
                 continue;
             }
@@ -468,12 +461,14 @@ public final class LispFormatter extends Formatter
     {
         int count = 0;
         final int limit = text.length();
+        // Skip whitespace after quote character.
+        while (i < limit && Character.isWhitespace(text.charAt(i)))
+            ++i;
         while (i < limit) {
             switch (text.charAt(i)) {
                 case ' ':
                 case '\t':
-                    ++i;
-                    break;
+                    return i;
                 case '(':
                     endToken(text, i, state);
                     ++count;
@@ -484,11 +479,8 @@ public final class LispFormatter extends Formatter
                     endToken(text, i, state);
                     ++i;
                     endToken(text, i, STATE_CLOSE_PAREN);
-                    if (count > 0) {
-                        --count;
-                        if (count == 0)
-                            return i;
-                    }
+                    if (--count <= 0)
+                        return i;
                     break;
                 case ';':
                 case ':':
@@ -496,11 +488,7 @@ public final class LispFormatter extends Formatter
                 case '"':
                     return i;
                 default:
-                    while (++i < limit) {
-                        char c = text.charAt(i);
-                        if (Character.isWhitespace(c))
-                            return i;
-                    }
+                    ++i;
                     break;
             }
         }
