@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.560 2004-02-06 12:08:36 piso Exp $
+ * $Id: Primitives.java,v 1.561 2004-02-06 12:35:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2106,14 +2106,16 @@ public final class Primitives extends Lisp
         }
         private LispObject requireFunction(LispObject arg) throws ConditionThrowable
         {
-            LispObject function;
-            if (arg instanceof Symbol)
-                function = arg.getSymbolFunction();
-            else
-                function = arg;
-            if (function instanceof Function || function instanceof GenericFunction)
-                return function;
-            return signal(new UndefinedFunction(arg));
+            if (arg instanceof Function || arg instanceof GenericFunction)
+                return arg;
+            if (arg instanceof Symbol) {
+                LispObject function = arg.getSymbolFunction();
+                if (function instanceof Function || function instanceof GenericFunction)
+                    return function;
+                return signal(new UndefinedFunction(arg));
+            }
+            return signal(new TypeError(arg, list3(Symbol.OR, Symbol.FUNCTION,
+                                                   Symbol.SYMBOL)));
         }
     };
 
