@@ -2,7 +2,7 @@
  * WebConstants.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: WebConstants.java,v 1.1.1.1 2002-09-24 16:07:56 piso Exp $
+ * $Id: WebConstants.java,v 1.2 2002-10-04 23:41:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,10 +24,12 @@ package org.armedbear.j;
 public interface WebConstants
 {
     // Bit flags.
-    int FORMAT_TEXT       = 0;
-    int FORMAT_LINK       = 1;
-    int FORMAT_WHITESPACE = 2;
-    int FORMAT_DISABLED   = 3;
-    int FORMAT_ITALIC     = 0x40;
-    int FORMAT_BOLD       = 0x80;
+    int FORMAT_TEXT         = 0x00;
+    int FORMAT_LINK         = 0x01;
+    int FORMAT_WHITESPACE   = 0x02;
+    int FORMAT_DISABLED     = 0x04;
+    int FORMAT_HEADER_NAME  = 0x08;
+    int FORMAT_HEADER_VALUE = 0x10;
+    int FORMAT_ITALIC       = 0x40;
+    int FORMAT_BOLD         = 0x80;
 }
