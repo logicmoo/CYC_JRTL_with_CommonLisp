@@ -2,7 +2,7 @@
  * ParseError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ParseError.java,v 1.1 2003-09-08 13:32:50 piso Exp $
+ * $Id: ParseError.java,v 1.2 2003-09-19 01:07:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,15 +21,12 @@
 
 package org.armedbear.lisp;
 
-public class ParseError extends LispError
+public class ParseError extends Condition
 {
-    public ParseError()
-    {
-        super();
-    }
+    private String message;
 
     public ParseError(String message)
     {
-        super(message);
+        this.message = message;
     }
 }
