@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.8 2004-09-06 00:54:35 piso Exp $
+;;; $Id: slime.lisp,v 1.9 2004-09-06 12:39:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -235,27 +235,28 @@
           (:file
            (setf file (cadr item)))
           (:position
-           (setf position (cadr item)))
-          (:function-name
-           (setf function-name (cadr item)))))
+           (setf position (cadr item)))))
       (when file
         (let ((buffer (find-file-buffer file)))
           (when buffer
-            (switch-to-buffer buffer)
-            (with-single-undo
-              (when position
-                (goto-char position))
-              (let* ((pattern (format nil "^\\s*\\(def\\S*\\s+~A"
-                                      (or function-name (string name))))
-                     (pos (re-search-forward pattern
-                                             :ignore-case t
-                                             :whole-words-only t)))
-                (when pos
-                  (goto-char pos))
-                (setf pos (search-forward (string name) :ignore-case t))
-                (when pos
-                  (goto-char pos))))
-            (update-display)))))))
+            (let* ((index (position #\: name :from-end t))
+                   (short-name (if index
+                                   (subseq name (1+ index))
+                                   name)))
+              (switch-to-buffer buffer)
+              (with-single-undo
+                (when position
+                  (goto-char position))
+                (let* ((pattern (format nil "^\\s*\\(def\\S*\\s+~A" short-name))
+                       (pos (re-search-forward pattern
+                                               :ignore-case t
+                                               :whole-words-only t)))
+                  (when pos
+                    (goto-char pos))
+                  (setf pos (search-forward (string name) :ignore-case t))
+                  (when pos
+                    (goto-char pos))))
+              (update-display))))))))
 
 ;; FIXME
 (defun find-tag-at-point ()
