@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.323 2004-12-27 18:14:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.324 2004-12-28 02:10:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -154,18 +154,19 @@
 ;; obj can be a symbol or variable
 ;; returns variable or nil
 (defun unboxed-fixnum-variable (obj)
-  (cond ((symbolp obj)
-         (let ((variable (find-visible-variable obj)))
-           (if (and variable
-                    (eq (variable-representation variable) :unboxed-fixnum))
-               variable
-               nil)))
-        ((variable-p obj)
-         (if (eq (variable-representation obj) :unboxed-fixnum)
-             obj
-             nil))
-        (t
-         nil)))
+  (cond
+   ((symbolp obj)
+    (let ((variable (find-visible-variable obj)))
+      (if (and variable
+               (eq (variable-representation variable) :unboxed-fixnum))
+          variable
+          nil)))
+   ((variable-p obj)
+    (if (eq (variable-representation obj) :unboxed-fixnum)
+        obj
+        nil))
+   (t
+    nil)))
 
 (defun arg-is-fixnum-p (arg)
   (or (fixnump arg)
@@ -404,13 +405,6 @@
     (error "Too many arguments for SETQ."))
   (list 'SETQ (second form) (p1 (third form))))
 
-;; (defun p1-the (form)
-;; ;;   (dformat t "p1-the form = ~S~%" form)
-;; ;;   (if (= *safety* 3)
-;;       (list 'THE (second form) (p1 (third form)))
-;; ;;       (p1 (third form))
-;; ;;       )
-;; )
 (defun p1-the (form)
   (dformat t "p1-the form = ~S~%" form)
   (let ((type (second form))
@@ -456,11 +450,6 @@
 
 (defun p1 (form)
   (cond
-;;    ((and (symbolp form) (constantp form)) ; a DEFCONSTANT
-;;     (let ((value (symbol-value form)))
-;;       (if (numberp value)
-;;           value
-;;           form)))
    ((symbolp form)
     (cond
      ((constantp form) ; a DEFCONSTANT
@@ -527,7 +516,6 @@
 (install-p1-handler 'multiple-value-call  'p1-default)
 (install-p1-handler 'multiple-value-list  'p1-default)
 (install-p1-handler 'multiple-value-prog1 'p1-default)
-(install-p1-handler 'multiple-value-setq  'p1-lambda)
 (install-p1-handler 'progn                'p1-default)
 (install-p1-handler 'progv                'identity)
 (install-p1-handler 'quote                'p1-quote)
@@ -935,6 +923,13 @@
     (emit-unbox-fixnum))
   (emit-move-from-stack target representation))
 
+(defun require-args (form n)
+  (declare (type fixnum n))
+  (unless (= (length form) (1+ n))
+    (error 'program-error
+           :format-control "Wrong number of arguments for ~A."
+           :format-arguments (list (car form)))))
+
 (defparameter *resolvers* (make-hash-table :test #'eql))
 
 (defun unsupported-opcode (instruction)
@@ -972,6 +967,9 @@
              96 ; IADD
              97 ; LADD
              101 ; LSUB
+             116 ; INEG
+             121 ; LSHL
+             123 ; LSHR
              132 ; IINC
              133 ; I2L
              136 ; L2I
@@ -2913,7 +2911,7 @@
   (if negatep 'if_acmpne 'if_acmpeq))
 
 (defun compile-if (form &key (target *val*) representation)
-  (dformat t "compile-if form = ~S~%" form)
+;;   (dformat t "compile-if form = ~S~%" form)
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
@@ -3966,31 +3964,53 @@
           (t
            (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
-(defun compile-ash (form &key (target *val*) representation)
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-ash (compile-form new-form :target target))))
+(defun p2-ash (form &key (target *val*) representation)
+  (dformat t "p2-ash form = ~S~%" form)
+;;   (let ((new-form (rewrite-function-call form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-ash (compile-form new-form :target target))))
+  (require-args form 2)
   (let* ((args (cdr form))
-         (len (length args)))
-    (when (= len 2)
-      (let ((first (first args))
-            (second (second args)))
-        (when (fixnump second)
-          (compile-form first :target :stack)
-          (maybe-emit-clear-values first)
-          (emit-push-constant-int second)
-          (emit-invokevirtual +lisp-object-class+
-                              "ash"
-                              "(I)Lorg/armedbear/lisp/LispObject;"
-                              -1)
-          (emit-move-from-stack target)
-          (return-from compile-ash t)))))
-  (compile-function-call form target representation))
+         (len (length args))
+         (first (first args))
+         (var (unboxed-fixnum-variable first))
+         (second (second args)))
+    (cond
+     ((and var (fixnump second) (< 0 second 32))
+      (dformat t "p2-ash case 1~%")
+      (emit-push-int var)
+      (emit 'i2l)
+      (emit-push-constant-int second)
+      (emit 'lshl)
+      (emit-box-long)
+      (emit-move-from-stack target))
+     ((and var (fixnump second) (< -32 second 0))
+      (dformat t "p2-ash case 2~%")
+      (emit-push-int var)
+      (emit 'i2l)
+      (emit-push-constant-int second)
+      (emit 'ineg)
+      (emit 'lshr)
+      (emit-box-long)
+      (emit-move-from-stack target))
+     ((fixnump second)
+      (dformat t "p2-ash case 3~%")
+      (compile-form first :target :stack)
+      (maybe-emit-clear-values first)
+      (emit-push-constant-int second)
+      (emit-invokevirtual +lisp-object-class+
+                          "ash"
+                          "(I)Lorg/armedbear/lisp/LispObject;"
+                          -1)
+      (emit-move-from-stack target))
+     (t
+      (dformat t "p2-ash case 4~%")
+      (compile-function-call form target representation)))))
 
 (defun compile-logand (form &key (target *val*) representation)
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-logand (compile-form new-form :target target))))
+;;   (let ((new-form (rewrite-function-call form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-logand (compile-form new-form :target target))))
   (let* ((args (cdr form))
          (len (length args)))
     (when (= len 2)
@@ -4705,6 +4725,7 @@
                                        :target target
                                        :representation representation))
                         ((special-operator-p op)
+                         (dformat t "form = ~S~%" form)
                          (error "COMPILE-FORM: unsupported special operator ~S" op))
                         (t
                          (compile-function-call form target representation))))
@@ -5174,7 +5195,6 @@
     (setf (get symbol 'p2-handler) handler)))
 
 (mapc #'install-p2-handler '(aref
-                             ash
                              atom
                              block
                              catch
@@ -5212,6 +5232,7 @@
 (install-p2-handler '/=     'p2-numeric-comparison)
 (install-p2-handler '+      'compile-plus)
 (install-p2-handler '-      'compile-minus)
+(install-p2-handler 'ash    'p2-ash)
 (install-p2-handler 'eql    'p2-eql)
 (install-p2-handler 'not    'compile-not/null)
 (install-p2-handler 'null   'compile-not/null)
