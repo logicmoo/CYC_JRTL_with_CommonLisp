@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.40 2003-08-15 17:18:02 piso Exp $
+ * $Id: Package.java,v 1.41 2003-09-09 12:51:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,8 +30,8 @@ public final class Package extends LispObject
 {
     private String name;
 
-    private final HashMap internalSymbols;
-    private final HashMap externalSymbols;
+    private final HashMap internalSymbols = new HashMap();
+    private final HashMap externalSymbols = new HashMap();
     private HashMap shadowingSymbols;
     private ArrayList nicknames;
     private final ArrayList useList = new ArrayList();
@@ -40,15 +40,11 @@ public final class Package extends LispObject
     public Package(String name)
     {
         this.name = name;
-        internalSymbols = new HashMap();
-        externalSymbols = new HashMap();
     }
 
     public Package(String name, int size)
     {
         this.name = name;
-        internalSymbols = new HashMap();
-        externalSymbols = new HashMap();
     }
 
     public LispObject typeOf()
@@ -602,6 +598,43 @@ public final class Package extends LispObject
                 Symbol symbol = (Symbol) it.next();
                 if (shadowingSymbols == null || shadowingSymbols.get(symbol.getName()) == null)
                     list.add(symbol);
+            }
+        }
+        return list;
+    }
+
+    public synchronized LispObject PACKAGE_INTERNAL_SYMBOLS()
+    {
+        LispObject list = NIL;
+        for (Iterator it = internalSymbols.values().iterator(); it.hasNext();) {
+            Symbol symbol = (Symbol) it.next();
+            list = new Cons(symbol, list);
+        }
+        return list;
+    }
+
+    public synchronized LispObject PACKAGE_EXTERNAL_SYMBOLS()
+    {
+        LispObject list = NIL;
+        for (Iterator it = externalSymbols.values().iterator(); it.hasNext();) {
+            Symbol symbol = (Symbol) it.next();
+            list = new Cons(symbol, list);
+        }
+        return list;
+    }
+
+    public synchronized LispObject PACKAGE_INHERITED_SYMBOLS()
+    {
+        LispObject list = NIL;
+        for (Iterator packageIter = useList.iterator(); packageIter.hasNext();) {
+            Package pkg = (Package) packageIter.next();
+            for (Iterator it = pkg.externalSymbols.values().iterator(); it.hasNext();) {
+                Symbol symbol = (Symbol) it.next();
+                if (shadowingSymbols != null && shadowingSymbols.get(symbol.getName()) != null)
+                    continue;
+                if (externalSymbols.get(symbol.getName()) == symbol)
+                    continue;
+                list = new Cons(symbol, list);
             }
         }
         return list;
