@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.14 2003-03-06 20:52:37 piso Exp $
+;;; $Id: list.lisp,v 1.15 2003-03-07 20:04:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,6 +70,8 @@
     (when (and (eq y z) (> n 0)) (return nil))))
 
 (defun make-list (size &key initial-element)
+  (when (minusp size)
+    (error 'type-error "~A is not a valid list length" size))
   (do ((count size (1- count))
        (result '() (cons initial-element result)))
     ((zerop count) result)))
