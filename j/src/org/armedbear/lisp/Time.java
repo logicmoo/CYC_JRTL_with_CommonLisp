@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Time.java,v 1.17 2004-01-05 00:42:18 piso Exp $
+ * $Id: Time.java,v 1.18 2004-01-07 18:56:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
 
 package org.armedbear.lisp;
 
-import java.io.File;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -81,21 +80,6 @@ public final class Time extends Lisp
         public LispObject execute()
         {
             return number(System.currentTimeMillis() / 1000 + 2208988800L);
-        }
-    };
-
-    // ### file-write-date
-    private static final Primitive1 FILE_WRITE_DATE =
-        new Primitive1("file-write-date","pathspec")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            Pathname pathname = Pathname.coerceToPathname(arg);
-            File file = Utilities.getFile(pathname);
-            long lastModified = file.lastModified();
-            if (lastModified == 0)
-                return NIL;
-            return number(lastModified / 1000 + 2208988800L);
         }
     };
 
