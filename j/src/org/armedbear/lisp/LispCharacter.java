@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.7 2003-03-03 17:57:20 piso Exp $
+ * $Id: LispCharacter.java,v 1.8 2003-03-11 14:15:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,6 +67,11 @@ public final class LispCharacter extends LispObject
     public final boolean isWhitespace()
     {
         return Character.isWhitespace(c);
+    }
+
+    public int hashCode()
+    {
+        return c;
     }
 
     public final String toString()

@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.8 2003-03-08 02:12:13 piso Exp $
+ * $Id: Fixnum.java,v 1.9 2003-03-11 14:14:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,6 +86,11 @@ public final class Fixnum extends LispObject
         catch (ClassCastException e) {
             throw new TypeError("DIFFERENCE");
         }
+    }
+
+    public int hashCode()
+    {
+        return (int) (value ^ (value >>> 32));
     }
 
     public String toString()

@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.15 2003-03-07 18:33:10 piso Exp $
+ * $Id: LispString.java,v 1.16 2003-03-11 14:14:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,6 +161,19 @@ public final class LispString extends AbstractVector implements SequenceType,
     public LispObject remove(LispObject item) throws LispError
     {
         throw new LispError("not implemented");
+    }
+
+    private int cachedHashCode;
+
+    public int hashCode()
+    {
+        if (cachedHashCode != 0)
+            return cachedHashCode;
+        int hashCode = 0;
+        final int limit = array.length;
+        for (int i = 0; i < limit; i++)
+            hashCode = hashCode * 31 + array[i];
+        return cachedHashCode = hashCode;
     }
 
     public final String toString()
