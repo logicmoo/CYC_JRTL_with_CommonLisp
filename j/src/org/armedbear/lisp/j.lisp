@@ -15,7 +15,8 @@
           status
           defcommand
           key-pressed-hook
-          variable-value))
+          variable-value
+          with-editor))
 
 (defun global-map-key (key command)
   (jstatic "globalMapKey" "org.armedbear.j.API" key command))
@@ -125,6 +126,17 @@
     (%set-variable-value name kind where new-value)))
 
 (defsetf variable-value set-variable-value)
+
+(defsetf current-editor %set-current-editor)
+
+(defmacro with-editor (editor &rest forms)
+  (let ((old-editor (gensym)))
+  `(let ((,old-editor (current-editor)))
+     (unwind-protect
+      (progn
+        (setf (current-editor) ,editor)
+        ,@forms)
+      (setf (current-editor) ,old-editor)))))
 
 (in-package "COMMON-LISP-USER")
 (use-package "J")
