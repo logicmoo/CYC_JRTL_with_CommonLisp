@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.177 2003-04-25 00:34:19 piso Exp $
+ * $Id: Primitives.java,v 1.178 2003-04-25 02:21:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4049,50 +4049,6 @@ public final class Primitives extends Module
             if (weight < 10)
                 return new LispCharacter((char)('0' + weight));
             return new LispCharacter((char)('A' + weight - 10));
-        }
-    };
-
-    private static final Primitive3 _STRING_UPCASE =
-        new Primitive3("%string-upcase") {
-        public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
-        {
-            String s = LispString.getValue(string(first));
-            int length = s.length();
-            int start = (int) Fixnum.getValue(second);
-            int end;
-            if (third == NIL)
-                end = length;
-            else
-                end = (int) Fixnum.getValue(third);
-            if (start == 0 && end == length)
-                return new LispString(s.toUpperCase());
-            StringBuffer sb = new StringBuffer(s.substring(0, start));
-            sb.append(s.substring(start, end).toUpperCase());
-            sb.append(s.substring(end));
-            return new LispString(sb.toString());
-        }
-    };
-
-    private static final Primitive3 _STRING_DOWNCASE =
-        new Primitive3("%string-downcase") {
-        public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws LispError
-        {
-            String s = LispString.getValue(string(first));
-            int length = s.length();
-            int start = (int) Fixnum.getValue(second);
-            int end;
-            if (third == NIL)
-                end = length;
-            else
-                end = (int) Fixnum.getValue(third);
-            if (start == 0 && end == length)
-                return new LispString(s.toLowerCase());
-            StringBuffer sb = new StringBuffer(s.substring(0, start));
-            sb.append(s.substring(start, end).toLowerCase());
-            sb.append(s.substring(end));
-            return new LispString(sb.toString());
         }
     };
 
