@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.412 2005-03-29 19:25:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.413 2005-03-30 14:57:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4281,13 +4281,17 @@
       (let* ((arg1 (first args))
              (arg2 (second args))
              (var1 (unboxed-fixnum-variable arg1)))
+        (when (and (fixnump arg1) (not (fixnump arg2)))
+          (setf arg1 (second args)
+                arg2 (first args)
+                var1 (unboxed-fixnum-variable arg1)))
         (dformat t "p2-logand var1 = ~S~%" var1)
         (dformat t "p2-logand type-of arg2 is ~S~%" (type-of arg2))
         (cond ((and (integerp arg1) (integerp arg2))
                (dformat t "p2-logand case 1~%")
                (compile-constant (logand arg1 arg2) :target target :representation representation)
                (return-from p2-logand t))
-              ((and (fixnump arg2) (zerop arg2))
+              ((and var1 (fixnump arg2) (zerop arg2))
                (dformat t "p2-logand case 2~%")
                (compile-constant 0 :target target :representation representation)
                (return-from p2-logand t))
