@@ -2,7 +2,7 @@
  * ThreadLock.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ThreadLock.java,v 1.2 2004-09-09 10:51:15 piso Exp $
+ * $Id: ThreadLock.java,v 1.3 2004-10-09 13:25:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,12 +52,9 @@ public final class ThreadLock extends LispObject
         }
     }
 
-    public String toString()
+    public String writeToString()
     {
-        StringBuffer sb = new StringBuffer("#<THREAD-LOCK @ #x");
-        sb.append(Integer.toHexString(hashCode()));
-        sb.append(">");
-        return sb.toString();
+        return unreadableString("THREAD-LOCK");
     }
 
     // ### make-thread-lock

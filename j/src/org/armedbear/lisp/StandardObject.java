@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.21 2004-09-30 11:25:04 piso Exp $
+ * $Id: StandardObject.java,v 1.22 2004-10-09 13:27:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,16 +109,8 @@ public class StandardObject extends LispObject
         int currentLevel = Fixnum.getValue(currentPrintLevel);
         if (currentLevel >= maxLevel)
             return "#";
-        StringBuffer sb = new StringBuffer("#<");
         LispClass cls = layout.getLispClass();
-        if (cls != null)
-            sb.append(cls.getSymbol().getName());
-        else
-            sb.append("STANDARD-OBJECT");
-        sb.append(" @ #x");
-        sb.append(Integer.toHexString(hashCode()));
-        sb.append(">");
-        return sb.toString();
+        return unreadableString(cls != null ? cls.getSymbol().getName() : "STANDARD-OBJECT");
     }
 
     // ### std-instance-layout

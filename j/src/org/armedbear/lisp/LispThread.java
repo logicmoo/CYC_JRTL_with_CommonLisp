@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.59 2004-10-03 17:17:30 piso Exp $
+ * $Id: LispThread.java,v 1.60 2004-10-09 13:28:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -637,16 +637,13 @@ public final class LispThread extends LispObject
 
     public String writeToString() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("#<THREAD ");
+        StringBuffer sb = new StringBuffer("THREAD");
         if (name != NIL) {
-            sb.append('"');
+            sb.append(" \"");
             sb.append(name.getStringValue());
-            sb.append("\" ");
+            sb.append("\"");
         }
-        sb.append("@ #x");
-        sb.append(Integer.toHexString(System.identityHashCode(this)));
-        sb.append(">");
-        return sb.toString();
+        return unreadableString(sb.toString());
     }
 
     // ### make-thread

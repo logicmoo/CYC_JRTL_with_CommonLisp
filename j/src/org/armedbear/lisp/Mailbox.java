@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Mailbox.java,v 1.3 2004-09-13 18:10:30 asimon Exp $
+ * $Id: Mailbox.java,v 1.4 2004-10-09 13:25:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,15 +20,15 @@
  */
 
 package org.armedbear.lisp;
+
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 public final class Mailbox extends LispObject
 {
+    private LinkedList box = new LinkedList();
 
-    private LinkedList box = new LinkedList();  
-
-    private void send (LispObject o) 
+    private void send (LispObject o)
     {
         synchronized(this) {
             box.add(o);
@@ -38,7 +38,7 @@ public final class Mailbox extends LispObject
 
     private LispObject read ()
     {
-        while (box.isEmpty()) 
+        while (box.isEmpty())
             synchronized(this) {
                 try {
                     wait();
@@ -65,12 +65,9 @@ public final class Mailbox extends LispObject
         return box.isEmpty() ? T : NIL;
     }
 
-    public String toString()
+    public String writeToString()
     {
-        StringBuffer sb = new StringBuffer("#<MAILBOX @ #x");
-        sb.append(Integer.toHexString(hashCode()));
-        sb.append(">");
-        return sb.toString();
+        return unreadableString("MAILBOX");
     }
 
 
@@ -88,14 +85,15 @@ public final class Mailbox extends LispObject
     private static final Primitive2 MAILBOX_SEND =
         new Primitive2("mailbox-send", PACKAGE_EXT, true, "mailbox object")
     {
-        public LispObject execute(LispObject first, LispObject second) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
             if (first instanceof Mailbox) {
                 Mailbox mbox = (Mailbox) first;
                 mbox.send(second);
                 return T;
-            } else 
-                return signal(new TypeError(first, "Mailbox"));
+            } else
+                return signal(new TypeError(first, "MAILBOX"));
         }
     };
 
@@ -108,8 +106,8 @@ public final class Mailbox extends LispObject
             if (arg instanceof Mailbox) {
                 Mailbox mbox = (Mailbox) arg;
                 return mbox.read();
-            } else 
-                return signal(new TypeError(arg, "Mailbox"));
+            } else
+                return signal(new TypeError(arg, "MAILBOX"));
         }
     };
 
@@ -122,8 +120,8 @@ public final class Mailbox extends LispObject
             if (arg instanceof Mailbox) {
                 Mailbox mbox = (Mailbox) arg;
                 return mbox.peek();
-            } else 
-                return signal(new TypeError(arg, "Mailbox"));
+            } else
+                return signal(new TypeError(arg, "MAILBOX"));
         }
     };
 
@@ -136,9 +134,8 @@ public final class Mailbox extends LispObject
             if (arg instanceof Mailbox) {
                 Mailbox mbox = (Mailbox) arg;
                 return mbox.empty();
-            } else 
-                return signal(new TypeError(arg, "Mailbox"));
+            } else
+                return signal(new TypeError(arg, "MAILBOX"));
         }
     };
 }
-
