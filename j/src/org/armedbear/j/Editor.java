@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.125 2004-05-21 16:49:31 piso Exp $
+ * $Id: Editor.java,v 1.126 2004-05-22 17:27:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4608,21 +4608,9 @@ public final class Editor extends JPanel implements Constants,
         Editor ed = getOtherEditor();
         if (ed != null) {
             Buffer buf = ed.getBuffer();
-            if (buf instanceof CompilationBuffer) {
+            if (buf instanceof CompilationBuffer || buf.isTransient()) {
                 if (buf.unsplitOnClose())
                     unsplitWindow();
-                maybeKillBuffer(buf);
-                if (!buf.unsplitOnClose())
-                    ed.updateDisplay();
-                Sidebar.refreshSidebarInAllFrames();
-                return true;
-            }
-            if (buf.isTransient()) {
-                Log.debug("transient in other editor");
-                if (buf.unsplitOnClose()) {
-                    Log.debug("unsplit on close");
-                    unsplitWindow();
-                }
                 maybeKillBuffer(buf);
                 if (!buf.unsplitOnClose())
                     ed.updateDisplay();
