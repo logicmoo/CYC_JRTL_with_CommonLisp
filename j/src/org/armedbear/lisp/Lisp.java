@@ -1,8 +1,8 @@
 /*
  * Lisp.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.194 2003-12-27 16:24:16 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Lisp.java,v 1.195 2004-01-05 02:08:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.util.Hashtable;
 import java.util.Random;
@@ -1310,9 +1311,18 @@ public abstract class Lisp
         return symbol;
     }
 
-    public static Symbol _DEFAULT_PATHNAME_DEFAULTS_ =
-        exportSpecial("*DEFAULT-PATHNAME-DEFAULTS*", PACKAGE_CL,
-            new LispString(System.getProperty("user.dir")));
+    public static final Symbol _DEFAULT_PATHNAME_DEFAULTS_ =
+        PACKAGE_CL.addExternalSymbol("*DEFAULT-PATHNAME-DEFAULTS*");
+    static {
+        String userDir = System.getProperty("user.dir");
+        if (userDir != null && userDir.length() > 0) {
+            if (userDir.charAt(userDir.length() - 1) != File.separatorChar)
+                userDir = userDir.concat(File.separator);
+        }
+        // This string will be converted to a pathname when Pathname.java is loaded.
+        _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(new LispString(userDir));
+        _DEFAULT_PATHNAME_DEFAULTS_.setSpecial(true);
+    }
 
     public static final Symbol _PACKAGE_ =
         exportSpecial("*PACKAGE*", PACKAGE_CL, PACKAGE_CL_USER);
@@ -1700,5 +1710,6 @@ public abstract class Lisp
         loadClass("org.armedbear.lisp.Do");
         loadClass("org.armedbear.lisp.dolist");
         loadClass("org.armedbear.lisp.dotimes");
+        loadClass("org.armedbear.lisp.Pathname");
     }
 }

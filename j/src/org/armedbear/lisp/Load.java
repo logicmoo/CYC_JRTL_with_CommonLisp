@@ -1,8 +1,8 @@
 /*
  * Load.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.28 2003-12-13 00:28:08 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Load.java,v 1.29 2004-01-05 02:12:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public final class Load extends Lisp
         } else {
             // Filename is not absolute.
             String dir =
-                LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+                Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()).getNamestring();
             file = new File(dir, filename);
             if (file != null) {
                 isFile = file.isFile();
@@ -291,7 +291,9 @@ public final class Load extends Lisp
     // ### load
     // Need to support keyword args.
     // load filespec &key verbose print if-does-not-exist external-format
-    public static final Primitive LOAD = new Primitive("load","filespec &key verbose print if-does-not-exist external-format") {
+    public static final Primitive LOAD =
+        new Primitive("load", "filespec &key verbose print if-does-not-exist external-format")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0)

@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: probe_file.java,v 1.10 2004-01-02 19:02:22 piso Exp $
+ * $Id: probe_file.java,v 1.11 2004-01-05 02:13:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,15 +33,19 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            File file = Utilities.getFile(arg);
-            if (!file.exists())
-                return NIL;
-            try {
-                return new LispString(file.getCanonicalPath());
+            Pathname pathname = Pathname.coerceToPathname(arg);
+            File file = Utilities.getFile(pathname);
+            if (file.isDirectory())
+                return Utilities.getDirectoryPathname(file);
+            if (file.exists()) {
+                try {
+                    return new Pathname(file.getCanonicalPath());
+                }
+                catch (IOException e) {
+                    return signal(new LispError(e.getMessage()));
+                }
             }
-            catch (IOException e) {
-                return signal(new LispError(e.getMessage()));
-            }
+            return NIL;
         }
     };
 
@@ -52,21 +56,22 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispObject pathname = Pathname.coerceToPathname(arg);
+            Pathname pathname = Pathname.coerceToPathname(arg);
             File file = Utilities.getFile(pathname);
+            if (file.isDirectory())
+                return Utilities.getDirectoryPathname(file);
             if (file.exists()) {
                 try {
-                    return new LispString(file.getCanonicalPath());
+                    return new Pathname(file.getCanonicalPath());
                 }
                 catch (IOException e) {
                     return signal(new LispError(e.getMessage()));
                 }
-            } else {
-                StringBuffer sb = new StringBuffer("The file ");
-                sb.append(pathname);
-                sb.append(" does not exist.");
-                return signal(new FileError(sb.toString()));
             }
+            StringBuffer sb = new StringBuffer("The file ");
+            sb.append(pathname);
+            sb.append(" does not exist.");
+            return signal(new FileError(sb.toString()));
         }
     };
 
@@ -77,15 +82,9 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            File file = Utilities.getFile(arg);
-            if (!file.isDirectory())
-                return NIL;
-            try {
-                return new LispString(file.getCanonicalPath());
-            }
-            catch (IOException e) {
-                return signal(new LispError(e.getMessage()));
-            }
+            Pathname pathname = Pathname.coerceToPathname(arg);
+            File file = Utilities.getFile(pathname);
+            return file.isDirectory() ? Utilities.getDirectoryPathname(file) : NIL;
         }
     };
 
@@ -96,7 +95,8 @@ public final class probe_file extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            File file = Utilities.getFile(arg);
+            Pathname pathname = Pathname.coerceToPathname(arg);
+            File file = Utilities.getFile(pathname);
             return file.isDirectory() ? T : NIL;
         }
     };
