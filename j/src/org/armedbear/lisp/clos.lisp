@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.59 2004-01-23 01:16:03 piso Exp $
+;;; $Id: clos.lisp,v 1.60 2004-02-02 18:34:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1156,8 +1156,8 @@
                 gf applicable-methods)))
           (setf (gethash classes (classes-to-emf-table gf)) emfun)
           (funcall emfun args))
-        (error "No applicable methods for generic function ~S with arguments ~S of classes ~S."
-               gf args classes))))
+        (error "No applicable methods for generic function ~A with arguments ~S of classes ~S."
+               (generic-function-name gf) args classes))))
 
 (defun sub-specializer-p (c1 c2 c-arg)
   (find c2 (cdr (memq c1 (class-precedence-list c-arg)))))
