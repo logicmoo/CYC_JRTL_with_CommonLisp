@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.39 2004-03-10 20:13:39 piso Exp $
+ * $Id: Stream.java,v 1.40 2004-03-11 00:48:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,8 +269,9 @@ public class Stream extends LispObject
             case '#':
                 return readSharp();
             case '|':
+                // Let readToken() process the multiple escape.
                 _unreadChar(c);
-                return makeObject(readToken());
+                return makeSymbol(readToken());
             case ':':
                 return PACKAGE_KEYWORD.intern(readToken());
             default:
@@ -805,52 +806,62 @@ public class Stream extends LispObject
         final LispThread thread = LispThread.currentThread();
         if (_READ_SUPPRESS_.symbolValueNoThrow(thread) != NIL)
             return NIL;
-        final char firstChar = token.charAt(0);
-        if ("-+0123456789".indexOf(firstChar) >= 0) {
-            LispObject number = makeNumber(token, getReadBase());
-            if (number != null)
-                return number;
+        if (token.length() > 0) {
+            final char firstChar = token.charAt(0);
+            if ("-+0123456789".indexOf(firstChar) >= 0) {
+                LispObject number = makeNumber(token, getReadBase());
+                if (number != null)
+                    return number;
+            }
+            final int radix = getReadBase();
+            if (Character.digit(firstChar, radix) >= 0) {
+                LispObject number = makeNumber(token, radix);
+                if (number != null)
+                    return number;
+            }
         }
-        final int radix = getReadBase();
-        if (Character.digit(firstChar, radix) >= 0) {
-            LispObject number = makeNumber(token, radix);
-            if (number != null)
-                return number;
-        }
-        if (firstChar == ':')
-            return PACKAGE_KEYWORD.intern(token.substring(1));
-        int index = token.indexOf("::");
-        if (index > 0) {
-            String packageName = token.substring(0, index);
-            String symbolName = token.substring(index + 2);
-            Package pkg = Packages.findPackage(packageName);
-            if (pkg == null)
-                return signal(new LispError("Package \"" + packageName +
-                                            "\" not found."));
-            return pkg.intern(symbolName);
-        }
-        index = token.indexOf(':');
-        if (index > 0) {
-            String packageName = token.substring(0, index);
-            String symbolName = token.substring(index + 1);
-            Package pkg = Packages.findPackage(packageName);
-            if (pkg == null)
-                return signal(new PackageError("Package \"" + packageName +
-                                               "\" not found."));
-            Symbol symbol = pkg.findExternalSymbol(symbolName);
-            if (symbol != null)
-                return symbol;
-            // Error!
-            if (pkg.findInternalSymbol(symbolName) != null)
-                return signal(new LispError("The symbol \"" + symbolName +
-                                            "\" is not external in package " +
-                                            packageName + '.'));
-            else
-                return signal(new LispError("The symbol \"" + symbolName +
-                                            "\" was not found in package " +
-                                            packageName + '.'));
+        return makeSymbol(token);
+    }
+
+    private static LispObject makeSymbol(String token) throws ConditionThrowable
+    {
+        if (token.length() > 0) {
+            if (token.charAt(0) == ':')
+                return PACKAGE_KEYWORD.intern(token.substring(1));
+            int index = token.indexOf("::");
+            if (index > 0) {
+                String packageName = token.substring(0, index);
+                String symbolName = token.substring(index + 2);
+                Package pkg = Packages.findPackage(packageName);
+                if (pkg == null)
+                    return signal(new LispError("Package \"" + packageName +
+                                                "\" not found."));
+                return pkg.intern(symbolName);
+            }
+            index = token.indexOf(':');
+            if (index > 0) {
+                String packageName = token.substring(0, index);
+                String symbolName = token.substring(index + 1);
+                Package pkg = Packages.findPackage(packageName);
+                if (pkg == null)
+                    return signal(new PackageError("Package \"" + packageName +
+                                                   "\" not found."));
+                Symbol symbol = pkg.findExternalSymbol(symbolName);
+                if (symbol != null)
+                    return symbol;
+                // Error!
+                if (pkg.findInternalSymbol(symbolName) != null)
+                    return signal(new LispError("The symbol \"" + symbolName +
+                                                "\" is not external in package " +
+                                                packageName + '.'));
+                else
+                    return signal(new LispError("The symbol \"" + symbolName +
+                                                "\" was not found in package " +
+                                                packageName + '.'));
+            }
         }
         // Intern token in current package.
+        final LispThread thread = LispThread.currentThread();
         return ((Package)_PACKAGE_.symbolValueNoThrow(thread)).intern(token);
     }
 
