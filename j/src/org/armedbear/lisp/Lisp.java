@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.97 2003-06-25 00:20:45 piso Exp $
+ * $Id: Lisp.java,v 1.98 2003-06-25 00:43:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,8 +313,18 @@ public abstract class Lisp
                             return fun.execute(eval(arg1, env, thread),
                                 eval(arg2, env, thread),
                                 thread.value(eval(arg3, env, thread)));
-                        // Otherwise...
-                        return fun.execute(evalList(obj.cdr(), env, thread));
+                        // More than 3 arguments.
+                        final int length = args.length() + 3;
+                        LispObject[] results = new LispObject[length];
+                        results[0] = eval(arg1, env, thread);
+                        results[1] = eval(arg2, env, thread);
+                        results[2] = eval(arg3, env, thread);
+                        for (int i = 3; i < length; i++) {
+                            results[i] = eval(args.car(), env, thread);
+                            args = args.cdr();
+                        }
+                        thread.clearValues();
+                        return fun.execute(results);
                     }
                 }
             } else {
