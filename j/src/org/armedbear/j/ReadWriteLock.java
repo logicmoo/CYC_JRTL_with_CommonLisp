@@ -2,7 +2,7 @@
  * ReadWriteLock.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: ReadWriteLock.java,v 1.1.1.1 2002-09-24 16:07:58 piso Exp $
+ * $Id: ReadWriteLock.java,v 1.2 2002-10-01 14:49:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,12 @@ public final class ReadWriteLock
             ++activeReaders;
             return;
         }
+        // Write in progress.
+        if (writerThread == null)
+            Debug.bug();
+        // If the current thread holds the write lock, we'll deadlock here.
+        if (Thread.currentThread() == writerThread)
+            Debug.bug();
         ++waitingReaders;
         while (!allowRead()) {
             try {
