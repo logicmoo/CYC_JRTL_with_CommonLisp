@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.496 2003-11-15 00:26:12 piso Exp $
+ * $Id: Primitives.java,v 1.497 2003-11-15 00:50:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2387,53 +2387,48 @@ public final class Primitives extends Module
     }
 
     // ### gensym
-    private static final Primitive GENSYM = new Primitive("gensym") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+    private static final Primitive GENSYM = new Primitive("gensym")
+    {
+        public LispObject execute() throws ConditionThrowable
         {
-            if (args.length > 1)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            return gensym("G");
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
             String prefix = "G";
-            if (args.length == 1) {
-                LispObject arg = args[0];
-                if (arg instanceof Fixnum) {
-                    int n = ((Fixnum)arg).getValue();
-                    if (n < 0)
-                        throw new ConditionThrowable(new TypeError(arg,
-                                                                   "non-negative integer"));
-                    StringBuffer sb = new StringBuffer(prefix);
-                    sb.append(n);
-                    return new Symbol(sb.toString());
-                }
-                if (arg instanceof Bignum) {
-                    BigInteger n = ((Bignum)arg).getValue();
-                    if (n.signum() < 0)
-                        throw new ConditionThrowable(new TypeError(arg,
-                                                                   "non-negative integer"));
-                    StringBuffer sb = new StringBuffer(prefix);
-                    sb.append(n.toString());
-                    return new Symbol(sb.toString());
-                }
-                if (arg instanceof LispString)
-                    prefix = ((LispString)arg).getValue();
-                else
-                    throw new ConditionThrowable(new TypeError(arg, "string or non-negative integer"));
+            if (arg instanceof Fixnum) {
+                int n = ((Fixnum)arg).getValue();
+                if (n < 0)
+                    throw new ConditionThrowable(new TypeError(arg,
+                                                               "non-negative integer"));
+                StringBuffer sb = new StringBuffer(prefix);
+                sb.append(n);
+                return new Symbol(sb.toString());
             }
+            if (arg instanceof Bignum) {
+                BigInteger n = ((Bignum)arg).getValue();
+                if (n.signum() < 0)
+                    throw new ConditionThrowable(new TypeError(arg,
+                                                               "non-negative integer"));
+                StringBuffer sb = new StringBuffer(prefix);
+                sb.append(n.toString());
+                return new Symbol(sb.toString());
+            }
+            if (arg instanceof LispString)
+                prefix = ((LispString)arg).getValue();
+            else
+                throw new ConditionThrowable(new TypeError(arg, "string or non-negative integer"));
             return gensym(prefix);
         }
     };
 
-    private static final Symbol gensym() throws ConditionThrowable
-    {
-        return gensym("G");
-    }
-
     private static final Symbol gensym(String prefix) throws ConditionThrowable
     {
-        LispObject oldValue;
         LispThread thread = LispThread.currentThread();
         Environment dynEnv = thread.getDynamicEnvironment();
         Binding binding =
             (dynEnv == null) ? null : dynEnv.getBinding(_GENSYM_COUNTER_);
+        LispObject oldValue;
         if (binding != null) {
             oldValue = binding.value;
             binding.value = oldValue.incr();
