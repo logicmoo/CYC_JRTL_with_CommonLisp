@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ModeList.java,v 1.13 2003-07-01 12:16:18 piso Exp $
+ * $Id: ModeList.java,v 1.14 2003-10-21 18:30:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class ModeList implements Constants
     {
         list = new ArrayList();
         addEntry(ARCHIVE_MODE, ARCHIVE_MODE_NAME, "ArchiveMode", false, null);
-        addEntry(AUTOCONF_MODE, AUTOCONF_MODE_NAME, "AutoconfMode", true, "configure.in|aclocal.m4");
+        addEntry(AUTOCONF_MODE, AUTOCONF_MODE_NAME, "AutoconfMode", true, "configure.ac|configure.in|aclocal.m4");
         addEntry(BINARY_MODE, BINARY_MODE_NAME, "BinaryMode", true, null);
         addEntry(CHECKIN_MODE, CHECKIN_MODE_NAME, "CheckinMode", false, null);
         addEntry(COMPILATION_MODE, COMPILATION_MODE_NAME, "CompilationMode", false, null);
