@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.188 2003-05-24 00:37:45 piso Exp $
+ * $Id: Primitives.java,v 1.189 2003-05-24 17:05:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2690,6 +2690,15 @@ public final class Primitives extends Module
                 pkg.usePackage(PACKAGE_CL); // Default.
 
             return pkg;
+        }
+    };
+
+    // ### delete-package
+    private static final Primitive1 DELETE_PACKAGE =
+        new Primitive1("delete-package") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return coerceToPackage(arg).delete() ? T : NIL;
         }
     };
 
