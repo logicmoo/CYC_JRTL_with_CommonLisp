@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.106 2003-08-04 14:23:07 piso Exp $
+ * $Id: Editor.java,v 1.107 2003-08-04 15:40:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1385,6 +1385,32 @@ public final class Editor extends JPanel implements Constants,
                     pos.next();
                 else if ("})]".indexOf(match.getChar()) >= 0)
                     match.next();
+                if (pos.getLine() != match.getLine()) {
+                    // Extend selection to full lines if possible.
+                    Region r = new Region(buffer, pos, match);
+                    Position begin = r.getBegin();
+                    String trim =
+                        begin.getLine().substring(0, begin.getOffset()).trim();
+                    if (trim.length() == 0) {
+                        Position end = r.getEnd();
+                        trim = end.getLine().substring(end.getOffset()).trim();
+                        if (trim.length() == 0) {
+                            // Extend selection to complete lines.
+                            begin.setOffset(0);
+                            if (end.getNextLine() != null)
+                                end.moveTo(end.getNextLine(), 0);
+                            else
+                                end.setOffset(end.getLineLength());
+                            if (pos.isBefore(match)) {
+                                pos = begin;
+                                match = end;
+                            } else {
+                                match = begin;
+                                pos = end;
+                            }
+                        }
+                    }
+                }
                 addUndo(SimpleEdit.MOVE);
                 unmark();
                 dot.moveTo(pos);
@@ -1405,58 +1431,44 @@ public final class Editor extends JPanel implements Constants,
     {
         Position saved = dot.copy();
         Position pos = dot.copy();
-        final String leftDelimiters = "{([";
-        final String rightDelimiters = "})]";
         char charToMatch = 0;
         char c = pos.getChar();
-        if (leftDelimiters.indexOf(c) >= 0) {
+        if ("{([".indexOf(c) >= 0) {
             // The character to the right of the caret is a left delimiter.
-            charToMatch = c;
-        } else if (pos.getOffset() > 0) {
+            return pos;
+        }
+        if (pos.getOffset() > 0) {
             pos.prev();
             c = pos.getChar();
-            if (rightDelimiters.indexOf(c) >= 0) {
+            if ("})]".indexOf(c) >= 0) {
                 // The character to the left of the caret is a right delimiter.
-                charToMatch = c;
+                return pos;
             }
         }
-        if (charToMatch == 0) {
-            // The caret is not right before or right after a delimiter.
-            final String delimiters = "{([})]";
-            pos = saved;
-            while (pos.getOffset() > 0) {
-                // Look at previous char.
-                pos.prev();
-                c = pos.getChar();
-                if (delimiters.indexOf(c) >= 0) {
-                    charToMatch = c;
-                    break;
-                }
-                if (!Character.isWhitespace(c) && c != ';')
-                    break;
-            }
-            if (charToMatch == 0) {
-                // Still no char to match.
-                pos.moveTo(saved);
-                final int limit = pos.getLineLength() - 1;
-                while (pos.getOffset() < limit) {
-                    // Look at next char.
-                    pos.next();
-                    c = pos.getChar();
-                    if (delimiters.indexOf(c) >= 0) {
-                        charToMatch = c;
-                        break;
-                    }
-                    if (!Character.isWhitespace(c))
-                        break;
-                }
-                if (charToMatch == 0) {
-                    // Give up.
-                    return null;
-                }
-            }
+        // There's no delimiter at the exact location of the caret.
+        final String delimiters = "{([})]";
+        pos.moveTo(saved);
+        while (pos.getOffset() > 0) {
+            // Look at previous char.
+            pos.prev();
+            c = pos.getChar();
+            if (delimiters.indexOf(c) >= 0)
+                return pos;
+            if (!Character.isWhitespace(c) && c != ';')
+                break;
         }
-        return pos;
+        pos.moveTo(saved);
+        final int limit = pos.getLineLength();// - 1;
+        while (pos.getOffset() < limit) {
+            c = pos.getChar();
+            if (delimiters.indexOf(c) >= 0)
+                return pos;
+            if (!Character.isWhitespace(c))
+                return null;
+            // Look at next char.
+            pos.next();
+        }
+        return null;
     }
 
     public void closeParen()
