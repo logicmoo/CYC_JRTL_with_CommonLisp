@@ -2,7 +2,7 @@
  * AutoloadMacro.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AutoloadMacro.java,v 1.11 2004-03-31 00:57:33 piso Exp $
+ * $Id: AutoloadMacro.java,v 1.12 2004-03-31 03:06:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,13 @@ public final class AutoloadMacro extends Autoload
     }
 
     private static void installAutoloadMacro(Symbol symbol, String fileName)
+        throws ConditionThrowable
     {
-        symbol.setSymbolFunction(new AutoloadMacro(symbol, fileName));
+        AutoloadMacro am = new AutoloadMacro(symbol, fileName);
+        if (symbol.getSymbolFunction() instanceof SpecialOperator)
+            put(symbol, Symbol.MACROEXPAND_MACRO, am);
+        else
+            symbol.setSymbolFunction(am);
     }
 
     public void load() throws ConditionThrowable
