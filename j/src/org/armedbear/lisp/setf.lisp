@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: setf.lisp,v 1.46 2004-09-04 13:56:05 piso Exp $
+;;; $Id: setf.lisp,v 1.47 2004-12-16 15:08:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -239,3 +239,4 @@
       (return place))))
 
 (defsetf function-info %set-function-info)
+(defsetf single-valued-p %set-single-valued-p)
