@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.110 2004-03-07 18:08:25 piso Exp $
+ * $Id: Symbol.java,v 1.111 2004-03-08 02:50:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -405,6 +405,13 @@ public class Symbol extends LispObject
 
     public String toString()
     {
+        boolean printReadably = (_PRINT_READABLY_.symbolValueNoThrow() != NIL);
+        // "Specifically, if *PRINT-READABLY* is true, printing proceeds as if
+        // *PRINT-ESCAPE*, *PRINT-ARRAY*, and *PRINT-GENSYM* were also true,
+        // and as if *PRINT-LENGTH*, *PRINT-LEVEL*, and *PRINT-LINES* were
+        // false."
+        boolean printEscape =
+            printReadably || (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValueNoThrow();
         LispObject readtableCase = getCurrentReadtable().getReadtableCase();
         if (pkg == PACKAGE_KEYWORD) {
@@ -415,7 +422,7 @@ public class Symbol extends LispObject
             else
                 return ":".concat(name);
         }
-        if (_PRINT_ESCAPE_.symbolValueNoThrow() == NIL) {
+        if (!printEscape) {
             if (readtableCase == Keyword.UPCASE) {
                 if (printCase == Keyword.DOWNCASE)
                     return name.toLowerCase();
@@ -442,7 +449,10 @@ public class Symbol extends LispObject
         final int length = name.length();
         if (length == 0)
             escape = true;
+        else if (name.charAt(0) == '#')
+            escape = true;
         else {
+
             for (int i = length; i-- > 0;) {
                 char c = name.charAt(i);
                 if (c == '(' || c == ')' || c == ',') {
@@ -516,41 +526,6 @@ public class Symbol extends LispObject
                 sb.append(c);
                 lastCharWasAlphanumeric = Character.isDigit(c);
             }
-        }
-        return sb.toString();
-    }
-
-    public static final String invert(String s)
-    {
-        // "When the readtable case is :INVERT, the case of all alphabetic
-        // characters in single case symbol names is inverted. Mixed-case
-        // symbol names are printed as is." (22.1.3.3.2)
-        final int limit = s.length();
-        final int LOWER = 1;
-        final int UPPER = 2;
-        int state = 0;
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            if (Character.isUpperCase(c)) {
-                if (state == LOWER)
-                    return s; // Mixed case.
-                state = UPPER;
-            }
-            if (Character.isLowerCase(c)) {
-                if (state == UPPER)
-                    return s; // Mixed case.
-                state = LOWER;
-            }
-        }
-        StringBuffer sb = new StringBuffer(limit);
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            if (Character.isUpperCase(c))
-                sb.append(Character.toLowerCase(c));
-            else if (Character.isLowerCase(c))
-                sb.append(Character.toUpperCase(c));
-            else
-                sb.append(c);
         }
         return sb.toString();
     }
