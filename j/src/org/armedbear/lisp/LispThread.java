@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.63 2004-10-22 19:00:31 piso Exp $
+ * $Id: LispThread.java,v 1.64 2004-10-25 13:24:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -396,6 +396,7 @@ public final class LispThread extends LispObject
                     else
                         break;
                 } while (false);
+                list = list.nreverse();
             }
             if (operator instanceof Functional && ((Functional)operator).getLambdaName() != null)
                 list = list.push(((Functional)operator).getLambdaName());
