@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.137 2004-06-05 19:16:06 piso Exp $
+ * $Id: Symbol.java,v 1.138 2004-06-07 16:31:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -457,22 +457,28 @@ public class Symbol extends LispObject
     public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        if (_PRINT_READABLY_.symbolValue(thread) != NIL) {
-            StringBuffer sb = new StringBuffer();
-            if (pkg == PACKAGE_KEYWORD) {
-                sb.append(':');
-            } else if (pkg != NIL) {
-                sb.append(multipleEscape(pkg.getName()));
-                sb.append("::");
-            } else {
-                sb.append("#:");
-            }
-            sb.append(multipleEscape(name));
-            return sb.toString();
-        }
         boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValue(thread);
         LispObject readtableCase = currentReadtable().getReadtableCase();
+        boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
+        if (printReadably) {
+            if (readtableCase != Keyword.UPCASE ||
+                printCase != Keyword.UPCASE)
+            {
+                StringBuffer sb = new StringBuffer();
+                if (pkg == PACKAGE_KEYWORD) {
+                    sb.append(':');
+                } else if (pkg != NIL) {
+                    sb.append(multipleEscape(pkg.getName()));
+                    sb.append("::");
+                } else {
+                    sb.append("#:");
+                }
+                sb.append(multipleEscape(name));
+                return sb.toString();
+            } else
+                printEscape = true;
+        }
         if (!printEscape) {
             if (pkg == PACKAGE_KEYWORD) {
                 if (printCase == Keyword.DOWNCASE)
@@ -505,13 +511,6 @@ public class Symbol extends LispObject
                 return invert(name);
         }
         // Printer escaping is enabled.
-        if (pkg == PACKAGE_KEYWORD) {
-            if (printCase == Keyword.DOWNCASE)
-                return ":".concat(name.toLowerCase());
-            if (printCase == Keyword.CAPITALIZE)
-                return ":".concat(capitalize(name, readtableCase));
-            return ":".concat(name);
-        }
         boolean escape = false;
         final int length = name.length();
         if (length == 0)
@@ -536,7 +535,7 @@ public class Symbol extends LispObject
             boolean seenNonDigit = false;
             for (int i = length; i-- > 0;) {
                 char c = name.charAt(i);
-                if (c == '(' || c == ')' || c == ',' || c == '|' || c == '\\') {
+                if ("(),|\\`'\";".indexOf(c) >= 0) {
                     escape = true;
                     break;
                 }
@@ -590,11 +589,13 @@ public class Symbol extends LispObject
                 s = capitalize(s, readtableCase);
         }
         if (pkg == NIL) {
-            if (_PRINT_GENSYM_.symbolValue(thread) != NIL)
+            if (printReadably || _PRINT_GENSYM_.symbolValue(thread) != NIL)
                 return "#:".concat(s);
             else
                 return s;
         }
+        if (pkg == PACKAGE_KEYWORD)
+            return ":".concat(s);
         // "Package prefixes are printed if necessary." (22.1.3.3.1)
         final Package currentPackage = (Package) _PACKAGE_.symbolValue(thread);
         if (pkg == currentPackage)
