@@ -1,8 +1,8 @@
 /*
  * ArithmeticError.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: ArithmeticError.java,v 1.8 2003-11-02 04:36:30 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: ArithmeticError.java,v 1.9 2004-02-02 18:34:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,9 @@ public class ArithmeticError extends LispError
     {
     }
 
-    public ArithmeticError(LispObject initArgs)
+    public ArithmeticError(LispObject initArgs) throws ConditionThrowable
     {
+        super(initArgs);
     }
 
     public ArithmeticError(String message)
