@@ -1,8 +1,8 @@
 /*
  * room.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: room.java,v 1.5 2003-12-10 08:12:43 asimon Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: room.java,v 1.6 2004-01-24 19:56:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public final class room extends Primitive
 {
     private room()
     {
-        super("room","&optional x");
+        super("room", "&optional x");
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -53,7 +53,7 @@ public final class room extends Primitive
                 break;
         }
         long used = total - free;
-        CharacterOutputStream out = getStandardOutput();
+        Stream out = getStandardOutput();
         StringBuffer sb = new StringBuffer("Total memory ");
         sb.append(total);
         sb.append(" bytes");

@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Time.java,v 1.18 2004-01-07 18:56:52 piso Exp $
+ * $Id: Time.java,v 1.19 2004-01-24 19:46:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public final class Time extends Lisp
             LispObject result = arg.execute(new LispObject[0]);
             long elapsed = System.currentTimeMillis() - start;
             long count = Cons.getCount();
-            CharacterOutputStream out = getTraceOutput();
+            Stream out = getTraceOutput();
             out.freshLine();
             StringBuffer sb =
                 new StringBuffer(String.valueOf((float)elapsed/1000));

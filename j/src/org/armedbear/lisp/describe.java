@@ -1,8 +1,8 @@
 /*
  * describe.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: describe.java,v 1.11 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: describe.java,v 1.12 2004-01-24 19:48:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,9 @@ public final class describe extends Lisp
 {
     // ### describe
     // Need to support optional second argument specifying output stream.
-    private static final Primitive DESCRIBE = new Primitive("describe","object &optional stream") {
+    private static final Primitive DESCRIBE =
+        new Primitive("describe", "object &optional stream")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 1)
@@ -106,7 +108,7 @@ public final class describe extends Lisp
                     }
                 }
             }
-            CharacterOutputStream out = getStandardOutput();
+            Stream out = getStandardOutput();
             out.freshLine();
             out.writeString(sb.toString());
             out.freshLine();

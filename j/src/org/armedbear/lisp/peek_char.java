@@ -2,7 +2,7 @@
  * peek_char.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: peek_char.java,v 1.1 2004-01-05 19:01:36 piso Exp $
+ * $Id: peek_char.java,v 1.2 2004-01-24 19:55:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public final class peek_char extends Primitive
         if (length > 5)
             signal(new WrongNumberOfArgumentsException(this));
         LispObject peekType = length > 0 ? args[0] : NIL;
-        CharacterInputStream stream =
+        Stream stream =
             length > 1 ? checkCharacterInputStream(args[1]) : getStandardInput();
         boolean eofError = length > 2 ? (args[2] != NIL) : true;
         LispObject eofValue = length > 3 ? args[3] : NIL;

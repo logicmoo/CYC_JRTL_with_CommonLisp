@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.8 2004-01-16 17:11:58 piso Exp $
+ * $Id: StringInputStream.java,v 1.9 2004-01-24 19:46:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class StringInputStream extends CharacterInputStream
+public final class StringInputStream extends Stream
 {
     final String s;
     final int start;
@@ -39,6 +39,9 @@ public final class StringInputStream extends CharacterInputStream
 
     public StringInputStream(String s, int start, int end)
     {
+        elementType = Symbol.CHARACTER;
+        isInputStream = true;
+        isOutputStream = false;
         this.s = s;
         this.start = start;
         this.end = end;

@@ -1,8 +1,8 @@
 /*
  * Profiler.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Profiler.java,v 1.3 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Profiler.java,v 1.4 2004-01-24 19:46:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public class Profiler extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            CharacterOutputStream out = getStandardOutput();
+            Stream out = getStandardOutput();
             out.freshLine();
             if (profiling) {
                 out.writeLine("; Profiler already started.");
@@ -103,7 +103,7 @@ public class Profiler extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            CharacterOutputStream out = getStandardOutput();
+            Stream out = getStandardOutput();
             out.freshLine();
             if (profiling) {
                 profiling = false;

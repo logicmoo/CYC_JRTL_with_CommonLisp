@@ -2,7 +2,7 @@
  * stream_element_type.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: stream_element_type.java,v 1.1 2004-01-20 00:16:11 piso Exp $
+ * $Id: stream_element_type.java,v 1.2 2004-01-24 19:56:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ public final class stream_element_type extends Primitive1
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         try {
-            return ((LispStream)arg).getElementType();
+            return ((Stream)arg).getElementType();
         }
         catch (ClassCastException e) {
             return signal(new TypeError(arg, Symbol.STREAM));

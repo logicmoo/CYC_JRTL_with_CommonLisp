@@ -2,7 +2,7 @@
  * open_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: open_stream_p.java,v 1.1 2004-01-16 17:09:03 piso Exp $
+ * $Id: open_stream_p.java,v 1.2 2004-01-24 19:53:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +31,8 @@ public final class open_stream_p extends Primitive1
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof LispStream)
-            return ((LispStream)arg).isOpen() ? T : NIL;
+        if (arg instanceof Stream)
+            return ((Stream)arg).isOpen() ? T : NIL;
         return signal(new TypeError(arg, Symbol.STREAM));
     }
 

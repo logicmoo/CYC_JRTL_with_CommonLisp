@@ -1,8 +1,8 @@
 /*
  * StringOutputStream.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: StringOutputStream.java,v 1.7 2003-12-13 00:28:08 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: StringOutputStream.java,v 1.8 2004-01-24 19:46:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,15 @@ package org.armedbear.lisp;
 
 import java.io.StringWriter;
 
-public final class StringOutputStream extends CharacterOutputStream
+public final class StringOutputStream extends Stream
 {
     private final StringWriter stringWriter;
 
     public StringOutputStream()
     {
-        super();
+        elementType = Symbol.CHARACTER;
+        isInputStream = false;
+        isOutputStream = true;
         setWriter(stringWriter = new StringWriter());
     }
 
