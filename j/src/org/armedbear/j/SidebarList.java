@@ -1,8 +1,8 @@
 /*
  * SidebarList.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarList.java,v 1.1.1.1 2002-09-24 16:09:28 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: SidebarList.java,v 1.2 2003-06-16 15:25:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,62 +79,63 @@ public abstract class SidebarList extends JList implements NavigationComponent
             last = getModel().getSize()-1;
         ensureIndexIsVisible(last);
     }
-}
 
-class SidebarListCellRenderer extends JLabel implements ListCellRenderer
-{
-    private Sidebar sidebar;
-
-    private static Border noFocusBorder;
-
-    private static Color noFocusSelectionBackground = new Color(208, 208, 208);
-
-    SidebarListCellRenderer(Sidebar sidebar)
+    private static final class SidebarListCellRenderer extends JLabel
+        implements ListCellRenderer
     {
-        super();
-        this.sidebar = sidebar;
-        noFocusBorder = new EmptyBorder(1, 1, 1, 1);
-        setOpaque(true);
-    }
+        private Sidebar sidebar;
 
-    public Component getListCellRendererComponent(
-        JList list,
-        Object value,
-        int index,
-        boolean isSelected,
-        boolean cellHasFocus)
-    {
-        Frame frame = sidebar.getFrame();
-        if (isSelected) {
-            if (frame.isActive() && frame.getFocusedComponent() == list)
-                setBackground(list.getSelectionBackground());
+        private static Border noFocusBorder;
+
+        private static Color noFocusSelectionBackground = new Color(208, 208, 208);
+
+        public SidebarListCellRenderer(Sidebar sidebar)
+        {
+            super();
+            this.sidebar = sidebar;
+            noFocusBorder = new EmptyBorder(1, 1, 1, 1);
+            setOpaque(true);
+        }
+
+        public Component getListCellRendererComponent(
+            JList list,
+            Object value,
+            int index,
+            boolean isSelected,
+            boolean cellHasFocus)
+        {
+            Frame frame = sidebar.getFrame();
+            if (isSelected) {
+                if (frame.isActive() && frame.getFocusedComponent() == list)
+                    setBackground(list.getSelectionBackground());
+                else
+                    setBackground(noFocusSelectionBackground);
+                setForeground(list.getSelectionForeground());
+            } else {
+                setBackground(list.getBackground());
+                setForeground(list.getForeground());
+            }
+            Border innerBorder = null;
+            if (value instanceof Buffer) {
+                setText(value.toString());
+                Buffer buffer = (Buffer) value;
+                setIcon(buffer.getIcon());
+                if (buffer.isSecondary())
+                    innerBorder = new EmptyBorder(0, 10, 0, 0);
+            } else if (value instanceof LocalTag) {
+                LocalTag tag = (LocalTag) value;
+                setText(tag.getSidebarText());
+                setIcon(tag.getIcon());
+            }
+            setEnabled(list.isEnabled());
+            setFont(list.getFont());
+            final Border outerBorder;
+            if (cellHasFocus)
+                outerBorder = UIManager.getBorder("List.focusCellHighlightBorder");
             else
-                setBackground(noFocusSelectionBackground);
-            setForeground(list.getSelectionForeground());
-        } else {
-            setBackground(list.getBackground());
-            setForeground(list.getForeground());
+                outerBorder = noFocusBorder;
+            setBorder(new CompoundBorder(outerBorder, innerBorder));
+            return this;
         }
-        Border innerBorder = null;
-        if (value instanceof Buffer) {
-            setText(value.toString());
-            Buffer buffer = (Buffer) value;
-            setIcon(buffer.getIcon());
-            if (buffer.isSecondary())
-                innerBorder = new EmptyBorder(0, 10, 0, 0);
-        } else if (value instanceof LocalTag) {
-            LocalTag tag = (LocalTag) value;
-            setText(tag.getSidebarText());
-            setIcon(tag.getIcon());
-        }
-        setEnabled(list.isEnabled());
-        setFont(list.getFont());
-        final Border outerBorder;
-        if (cellHasFocus)
-            outerBorder = UIManager.getBorder("List.focusCellHighlightBorder");
-        else
-            outerBorder = noFocusBorder;
-        setBorder(new CompoundBorder(outerBorder, innerBorder));
-        return this;
     }
 }
