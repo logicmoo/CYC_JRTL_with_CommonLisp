@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.172 2004-03-09 11:52:19 piso Exp $
+ * $Id: Autoload.java,v 1.173 2004-03-13 17:50:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -405,6 +405,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
         autoload(PACKAGE_SYS, "puthash", "HashTable");
+        autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "std-instance-slots", "StandardObject");
     }
 }
