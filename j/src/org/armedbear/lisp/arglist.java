@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: arglist.java,v 1.6 2003-12-15 09:28:37 asimon Exp $
+ * $Id: arglist.java,v 1.7 2003-12-15 14:22:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,34 +31,36 @@ public final class arglist extends Lisp
             return (Functional) obj;
         if (obj instanceof Symbol) {
             LispObject fun = obj.getSymbolFunction();
-	    if (fun instanceof Autoload) {
+            if (fun instanceof Autoload) {
                 Autoload autoload = (Autoload) fun;
                 autoload.load();
                 fun = (Functional)autoload.getSymbol().getSymbolFunction();
-	    }
+            }
             if (fun instanceof Functional) {
                 Functional func = (Functional) fun;
-                if (func.getArglist() != null) return  func;
-                LispObject other = get(checkSymbol(obj), Symbol.MACROEXPAND_MACRO, NIL);
-                if (other != null) 
+                if (func.getArglist() != null)
+                    return func;
+                LispObject other =
+                    get(checkSymbol(obj), Symbol.MACROEXPAND_MACRO, NIL);
+                if (other != null)
                     return getFunctional(other);
                 else
                     return null;
-	    }
+            }
         } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
             return new Closure(obj.cadr(), obj.cddr(), new Environment());
-	return null;
+        return null;
     }
 
-    static final Primitive1 ARGLIST =
+    private static final Primitive1 ARGLIST =
         new Primitive1("arglist", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispThread thread = LispThread.currentThread();
             Functional functional = getFunctional(arg);
-	    LispObject arglist = null;
-	    if (functional != null)
+            LispObject arglist = null;
+            if (functional != null)
                 arglist = functional.getArglist();
             final LispObject value1, value2;
             if (arglist instanceof LispString) {
