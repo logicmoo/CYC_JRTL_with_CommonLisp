@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.115 2004-10-14 16:50:43 piso Exp $
+;;; $Id: clos.lisp,v 1.116 2004-10-21 18:19:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@
 (defsetf class-precedence-list %set-class-precedence-list)
 (defsetf std-instance-layout %set-std-instance-layout)
 (defsetf std-instance-slots %set-std-instance-slots)
-(defsetf instance-ref %set-instance-ref)
+(defsetf standard-instance-access %set-standard-instance-access)
 
 (defun (setf find-class) (new-value symbol &optional errorp environment)
   (%set-find-class symbol new-value))
@@ -421,7 +421,7 @@
 
 (defun instance-slot-location (instance slot-name)
   (let* ((layout (std-instance-layout instance))
-         (location (and layout (instance-slot-index layout slot-name))))
+         (location (and layout (layout-slot-index layout slot-name))))
     (if location
         location
         (slot-location (class-of instance) slot-name))))
@@ -429,7 +429,7 @@
 (defun std-slot-value (instance slot-name)
   (let* ((location (instance-slot-location instance slot-name))
          (value (cond ((fixnump location)
-                       (instance-ref instance location))
+                       (standard-instance-access instance location))
                       ((consp location)
                        (cdr location))
                       (t
@@ -446,7 +446,7 @@
 (defun %set-std-slot-value (instance slot-name new-value)
   (let ((location (instance-slot-location instance slot-name)))
     (cond ((fixnump location)
-           (setf (instance-ref instance location) new-value))
+           (setf (standard-instance-access instance location) new-value))
           ((consp location)
            (setf (cdr location) new-value))
           (t
@@ -464,7 +464,7 @@
 (defun std-slot-boundp (instance slot-name)
   (let ((location (instance-slot-location instance slot-name)))
     (cond ((fixnump location)
-           (neq +slot-unbound+ (instance-ref instance location)))
+           (neq +slot-unbound+ (standard-instance-access instance location)))
           ((consp location)
            (neq +slot-unbound+ (cdr location)))
           (t
@@ -478,7 +478,7 @@
 (defun std-slot-makunbound (instance slot-name)
   (let ((location (instance-slot-location instance slot-name)))
     (cond ((fixnump location)
-           (setf (instance-ref instance location) +slot-unbound+))
+           (setf (standard-instance-access instance location) +slot-unbound+))
           ((consp location)
            (setf (cdr location) +slot-unbound+))
           (t
@@ -716,7 +716,7 @@
 ;;; Internal accessor for effective method function table
 
 (defun classes-to-emf-table (gf)
-  (instance-ref gf *sgf-classes-to-emf-table-index*))
+  (standard-instance-access gf *sgf-classes-to-emf-table-index*))
 
 (defun (setf classes-to-emf-table) (new-value gf)
   (setf (slot-value gf 'classes-to-emf-table) new-value))
