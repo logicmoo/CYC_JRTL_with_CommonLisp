@@ -1,7 +1,7 @@
 ;;; delete-duplicates.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: delete-duplicates.lisp,v 1.3 2003-07-02 18:20:58 piso Exp $
+;;; $Id: delete-duplicates.lisp,v 1.4 2003-07-02 18:32:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
 ;;; From CMUCL.
 
