@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: Constants.java,v 1.3 2002-10-15 00:59:52 piso Exp $
+ * $Id: Constants.java,v 1.4 2002-10-17 19:07:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -200,5 +200,5 @@ public interface Constants
 
     int STATE_LAST            = 18;
 
-    String DEFAULT_SHELL_PROMPT_PATTERN = "^[^#$%>]*[#$%>] *|^: *";
+    String DEFAULT_SHELL_PROMPT_PATTERN = "^[^#$%>\\*]*[#$%>\\*] *|^: *";
 }
