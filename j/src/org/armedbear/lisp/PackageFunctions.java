@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.4 2003-07-06 14:09:26 piso Exp $
+ * $Id: PackageFunctions.java,v 1.5 2003-07-06 16:20:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,6 +121,118 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject arg) throws LispError
         {
             return coerceToPackage(arg).delete() ? T : NIL;
+        }
+    };
+
+    // %defpackage name nicknames size shadows shadowing-imports use imports
+    // interns exports doc-string => package
+    private static final Primitive _DEFPACKAGE =
+        new Primitive("%defpackage", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 10)
+                throw new WrongNumberOfArgumentsException(this);
+            final String packageName = LispString.getValue(args[0]);
+            LispObject nicknames = checkList(args[1]);
+            LispObject size = args[2];
+            LispObject shadows = checkList(args[3]);
+            LispObject shadowingImports = checkList(args[4]);
+            LispObject use = checkList(args[5]);
+            LispObject imports = checkList(args[6]);
+            LispObject interns = checkList(args[7]);
+            LispObject exports = checkList(args[8]);
+            LispObject docString = args[9];
+            Debug.trace("packageName = " + packageName);
+            Debug.trace("nicknames = " + nicknames);
+            Debug.trace("size = " + size);
+            Debug.trace("shadows = " + shadows);
+            Debug.trace("shadowingImports = " + shadowingImports);
+            Debug.trace("use = " + use);
+            Debug.trace("imports = " + imports);
+            Debug.trace("interns = " + interns);
+            Debug.trace("exports = " + exports);
+            Debug.trace("docString = " + docString);
+            Package pkg = Packages.findPackage(packageName);
+            if (pkg != null) {
+                Debug.trace("package " + packageName + " already exists");
+                return pkg;
+            }
+            pkg = Packages.createPackage(packageName);
+
+            if (nicknames != NIL) {
+                LispObject list = checkCons(nicknames);
+                while (list != NIL) {
+                    LispString string = string(list.car());
+                    pkg.addNickname(string.getValue());
+                    list = list.cdr();
+                }
+            }
+
+            if (use != NIL) {
+                LispObject list = checkCons(use);
+                while (list != NIL) {
+                    LispObject obj = list.car();
+                    if (obj instanceof Package)
+                        pkg.usePackage((Package)obj);
+                    else {
+                        LispString string = string(obj);
+                        Package p = Packages.findPackage(string.getValue());
+                        if (p == null)
+                            throw new LispError(String.valueOf(obj) +
+                                                " is not the name of a package");
+                        pkg.usePackage(p);
+                    }
+                    list = list.cdr();
+                }
+            }
+
+            if (shadows != NIL) {
+                LispObject list = checkCons(shadows);
+                while (list != NIL) {
+                    String symbolName = LispString.getValue(list.car());
+                    pkg.shadow(symbolName);
+                    list = list.cdr();
+                }
+            }
+
+            while (shadowingImports != NIL) {
+                LispObject si = shadowingImports.car();
+                Package otherPkg = coerceToPackage(si.car());
+                LispObject symbolNames = si.cdr();
+                while (symbolNames != NIL) {
+                    String symbolName = LispString.getValue(symbolNames.car());
+                    Symbol sym = otherPkg.findAccessibleSymbol(symbolName);
+                    if (sym != null)
+                        pkg.shadowingImport(sym);
+                    else
+                        throw new LispError(symbolName +
+                                            " not found in package " +
+                                            otherPkg.getName());
+                    symbolNames = symbolNames.cdr();
+                }
+                shadowingImports = shadowingImports.cdr();
+            }
+
+            if (interns != NIL) {
+                LispObject list = checkCons(interns);
+                while (list != NIL) {
+                    String symbolName = LispString.getValue(list.car());
+                    pkg.intern(symbolName);
+                    list = list.cdr();
+                }
+            }
+
+            if (exports != NIL) {
+                LispObject list = checkCons(exports);
+                while (list != NIL) {
+                    LispObject obj = list.car();
+                    String symbolName = LispString.getValue(list.car());
+                    pkg.export(pkg.intern(symbolName));
+                    list = list.cdr();
+                }
+            }
+
+            return NIL;
         }
     };
 }
