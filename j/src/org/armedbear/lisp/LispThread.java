@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.45 2004-06-27 13:44:33 asimon Exp $
+ * $Id: LispThread.java,v 1.46 2004-07-03 16:34:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,6 +279,64 @@ public final class LispThread extends LispObject
         }
         signal(new ControlError("Attempt to throw to the nonexistent tag " +
                                 tag.writeToString() + "."));
+    }
+
+    private static final class Context
+    {
+        public final LispObject[] data;
+        public final Context parent;
+
+        public Context(LispObject[] data, Context parent)
+        {
+            this.data = data;
+            this.parent = parent;
+        }
+    }
+
+    private Context _context;
+
+    public void pushContext(LispObject[] data)
+    {
+        _context = new Context(data, _context);
+    }
+
+    public void popContext()
+    {
+        if (_context != null)
+            _context = _context.parent;
+        else
+            Debug.assertTrue(false);
+    }
+
+    public LispObject getVariableValue(int depth, int index)
+    {
+        Context context = _context;
+        while (depth > 0) {
+            context = context.parent;
+            --depth;
+        }
+        return context.data[index];
+    }
+
+    public void setVariableValue(LispObject value, int depth, int index)
+    {
+        Context context = _context;
+        while (depth > 0) {
+            context = context.parent;
+            --depth;
+        }
+        context.data[index] = value;
+    }
+
+    public LispObject callLocalFunction(LispObject function, LispObject[] args)
+        throws ConditionThrowable
+    {
+        try {
+            return function.execute(args);
+        }
+        finally {
+            popContext();
+        }
     }
 
     private static class StackFrame
