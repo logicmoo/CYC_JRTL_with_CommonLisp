@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.109 2005-02-14 04:04:57 piso Exp $
+ * $Id: Fixnum.java,v 1.110 2005-02-23 16:28:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -328,7 +328,7 @@ public final class Fixnum extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        return signal(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject subtract(int n)
@@ -360,7 +360,7 @@ public final class Fixnum extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        ZERO.subtract(c.getImaginaryPart()));
         }
-        return signal(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject multiplyBy(int n)
@@ -397,7 +397,7 @@ public final class Fixnum extends LispObject
             return Complex.getInstance(multiplyBy(c.getRealPart()),
                                        multiplyBy(c.getImaginaryPart()));
         }
-        return signal(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -429,7 +429,7 @@ public final class Fixnum extends LispObject
                 return Complex.getInstance(multiplyBy(realPart).divideBy(denominator),
                                            Fixnum.ZERO.subtract(multiplyBy(imagPart).divideBy(denominator)));
             }
-            return signal(new TypeError(obj, "number"));
+            return signal(new TypeError(obj, Symbol.NUMBER));
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
@@ -453,7 +453,7 @@ public final class Fixnum extends LispObject
             return obj.isEqualTo(this);
         if (obj.numberp())
             return false;
-        signal(new TypeError(obj, "number"));
+        signal(new TypeError(obj, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -474,7 +474,7 @@ public final class Fixnum extends LispObject
             return obj.isNotEqualTo(this);
         if (obj.numberp())
             return true;
-        signal(new TypeError(obj, "number"));
+        signal(new TypeError(obj, Symbol.NUMBER));
         // Not reached.
         return false;
     }
