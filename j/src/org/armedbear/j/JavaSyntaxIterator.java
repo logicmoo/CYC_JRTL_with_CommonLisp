@@ -2,7 +2,7 @@
  * JavaSyntaxIterator.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaSyntaxIterator.java,v 1.2 2003-10-15 15:32:55 piso Exp $
+ * $Id: JavaSyntaxIterator.java,v 1.3 2003-10-17 00:50:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,8 +47,8 @@ public final class JavaSyntaxIterator extends DefaultSyntaxIterator
         return hideSyntacticWhitespace(s, STATE_NEUTRAL);
     }
 
-    // Returns char array with syntactic whitespace (quotes and comments)
-    // replaced with actual space characters.
+    // Replaces comments with space characters and double-quoted strings with
+    // 'X' characters.
     private char[] hideSyntacticWhitespace(String s, int initialState)
     {
         final char[] chars = s.toCharArray();
@@ -63,7 +63,7 @@ public final class JavaSyntaxIterator extends DefaultSyntaxIterator
                 continue;
             }
             if (state == STATE_QUOTE) {
-                chars[i] = ' ';
+                chars[i] = 'X';
                 if (c == '"')
                     state = STATE_NEUTRAL;
                 continue;
