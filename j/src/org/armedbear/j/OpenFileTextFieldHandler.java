@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.35 2003-01-03 19:19:44 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.36 2003-01-06 02:27:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     private JList listbox;
 
     private String originalText;
+    private String originalPrefix;
 
     public OpenFileTextFieldHandler(Editor editor, HistoryTextField textField)
     {
@@ -418,6 +419,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     completions.size() + " completions");
                 index = 0;
                 originalText = textField.getText();
+                originalPrefix = prefix;
                 if (completions.size() == 1) {
                     String s = (String) completions.get(0);
                     textField.setText(s);
@@ -671,10 +673,10 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     Editor.preferences().getBooleanProperty(
                         Property.FILENAME_COMPLETIONS_IGNORE_CASE);
                 boolean select =
-                    completion.regionMatches(ignoreCase, 0, originalText, 0,
-                                             originalText.length());
+                    completion.regionMatches(ignoreCase, 0, originalPrefix, 0,
+                                             originalPrefix.length());
                 if (select) {
-                    textField.setCaretPosition(originalText.length());
+                    textField.setCaretPosition(originalPrefix.length());
                     textField.moveCaretPosition(completion.length());
                     textField.getCaret().setVisible(false);
                 } else {
@@ -693,7 +695,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                             textField.getCaret().setVisible(false);
                         }
                     } else {
-                        RE re = new UncheckedRE("[\\/]" + originalText,
+                        RE re = new UncheckedRE("[\\/]".concat(originalText),
                                                 ignoreCase ? RE.REG_ICASE : 0);
                         REMatch lastMatch = null;
                         int index = 0;
@@ -816,6 +818,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                         popup = null;
                         textField.setText(originalText);
                         originalText = null;
+                        originalPrefix = null;
                         textField.requestFocus();
                         end();
                         e.consume();
@@ -905,6 +908,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     popup = null;
                     textField.setText(originalText);
                     originalText = null;
+                    originalPrefix = null;
                     textField.requestFocus();
                     e.consume();
                     return;
@@ -973,6 +977,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 if (originalText != null) {
                     text = originalText;
                     originalText = null;
+                    originalPrefix = null;
                 } else
                     text = text.substring(0, textField.getSelectionStart());
             }
