@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.502 2003-11-19 02:34:32 piso Exp $
+ * $Id: Primitives.java,v 1.503 2003-11-19 13:43:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -775,14 +775,22 @@ public final class Primitives extends Module
     };
 
     // ### boundp
-    private static final Primitive1 BOUNDP = new Primitive1("boundp") {
+    // Determines only whether a symbol has a value in the global environment;
+    // any lexical bindings are ignored.
+    private static final Primitive1 BOUNDP = new Primitive1("boundp")
+    {
         public LispObject execute(LispObject obj) throws ConditionThrowable
         {
-            if (obj == NIL)
-                return T;
             Symbol symbol = checkSymbol(obj);
-            if (LispThread.currentThread().lookupSpecial(symbol) != null)
-                return T;
+            Environment dynEnv =
+                LispThread.currentThread().getDynamicEnvironment();
+            // PROGV: "If too few values are supplied, the remaining symbols
+            // are bound and then made to have no value." So BOUNDP must
+            // explicitly check for a binding with no value.
+            Binding binding = dynEnv.getBinding(symbol);
+            if (binding != null)
+                return binding.value != null ? T : NIL;
+            // No binding.
             return symbol.getSymbolValue() != null ? T : NIL;
         }
     };
