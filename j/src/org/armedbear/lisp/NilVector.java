@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.14 2004-10-20 00:12:43 piso Exp $
+ * $Id: NilVector.java,v 1.15 2004-10-20 03:01:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,13 +67,11 @@ public final class NilVector extends AbstractString
             return T;
         if (type == Symbol.SIMPLE_STRING)
             return T;
-        if (type == Symbol.STRING)
-            return T;
         if (type == Symbol.SIMPLE_ARRAY)
             return T;
         if (type == BuiltInClass.NIL_VECTOR)
             return T;
-        if (type == BuiltInClass.STRING)
+        if (type == BuiltInClass.SIMPLE_STRING)
             return T;
         if (type == BuiltInClass.SIMPLE_ARRAY)
             return T;
