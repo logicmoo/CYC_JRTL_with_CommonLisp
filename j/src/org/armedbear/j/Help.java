@@ -1,8 +1,8 @@
 /*
  * Help.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.14 2003-07-18 17:15:05 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Help.java,v 1.15 2005-03-01 21:18:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,12 +229,12 @@ public final class Help
             KeyMapping mapping = mappings[i];
             FastStringBuffer sb = new FastStringBuffer(64);
             sb.append(mapping.getKeyText());
+            int spaces = 32 - sb.length();
+            for (int j = spaces; j-- > 0;)
+                sb.append("&nbsp;");
             Object command = mapping.getCommand();
             if (command instanceof String) {
                 String commandString = (String) command;
-                int spaces = 32 - sb.length();
-                for (int j = spaces; j-- > 0;)
-                    sb.append("&nbsp;");
                 if (docDir != null) {
                     sb.append("<a href=\"");
                     sb.append(docDir.canonicalPath());
@@ -246,22 +246,23 @@ public final class Help
                     sb.append("</a>");
                 } else
                     sb.append(commandString);
-                sb.append("<br>\n");
             } else if (command instanceof LispObject) {
-                int spaces = 32 - sb.length();
-                for (int j = spaces; j-- > 0;)
-                    sb.append("&nbsp;");
-                String name = ((LispObject)command).getName();
-                if (name != null) {
-                    sb.append(name);
-                } else if (command instanceof Closure) {
-                    sb.append("#&lt;CLOSURE ");
-                    sb.append("@ ");
-                    sb.append(Integer.toHexString(command.hashCode()));
-                    sb.append("&gt;");
+                try {
+                    String s = ((LispObject)command).writeToString();
+                    if (s.startsWith("#<"))
+                        s = "#&lt;".concat(s.substring(2));
+                    if (s.endsWith(">"))
+                        s = s.substring(0, s.length() - 1).concat("&gt;");
+                    sb.append(s);
                 }
-                sb.append("<br>\n");
+                catch (Throwable t) {
+                    Log.debug(t);
+                }
+            } else if (command instanceof KeyMap) {
+                sb.append(mapping.getKeyText());
+                sb.append(" prefix command");
             }
+            sb.append("<br>\n");
             writer.write(sb.toString());
         }
     }
