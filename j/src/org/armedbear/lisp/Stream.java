@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.51 2004-03-16 14:23:54 piso Exp $
+ * $Id: Stream.java,v 1.52 2004-03-16 14:48:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -379,7 +379,7 @@ public class Stream extends LispObject
         }
     }
 
-    public LispObject readSharp() throws ConditionThrowable
+    public LispObject readDispatchChar(char ignored) throws ConditionThrowable
     {
         int numArg = -1;
         char c;
@@ -397,7 +397,6 @@ public class Stream extends LispObject
         LispObject fun =
             currentReadtable().getDispatchMacroCharacter('#', c);
         if (fun != NIL) {
-            LispObject[] args = new LispObject[3];
             final LispThread thread = LispThread.currentThread();
             LispObject result = funcall3(fun,
                                          this,
