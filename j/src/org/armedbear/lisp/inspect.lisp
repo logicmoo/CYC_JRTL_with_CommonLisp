@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: inspect.lisp,v 1.2 2003-11-27 14:56:54 piso Exp $
+;;; $Id: inspect.lisp,v 1.3 2003-12-11 14:41:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,5 +29,6 @@
         ((null slots))
       (let* ((slot (car slots))
              (name (slot-definition-name slot)))
-        (format t "   ~D ~A -> ~S~%" i name (slot-value obj name)))))
+        (format t "   ~D ~A -> ~S~%" i name
+                (if (slot-boundp obj name) (slot-value obj name) +slot-unbound+)))))
   (values))
