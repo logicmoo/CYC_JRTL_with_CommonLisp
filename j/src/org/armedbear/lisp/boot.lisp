@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.92 2003-08-24 17:13:27 piso Exp $
+;;; $Id: boot.lisp,v 1.93 2003-08-24 18:28:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,6 +36,9 @@
 
 (defmacro defun (name lambda-list &rest body)
   (list 'sys::%defun (list 'QUOTE name) (list 'QUOTE lambda-list) (list 'QUOTE body)))
+
+(defmacro defconstant (name initial-value &optional docstring)
+  (list 'sys::%defconstant (list 'QUOTE name) initial-value docstring))
 
 (defvar *features*
   '(:armedbear))
