@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.10 2003-11-05 19:41:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.11 2003-11-05 21:00:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1190,6 +1190,8 @@
 (defconstant +cl-package+ (find-package "COMMON-LISP"))
 (defconstant +sys-package+ (find-package "SYSTEM"))
 
+(defconstant +known-packages+ (list +cl-package+ +sys-package+))
+
 (defun compile-function-call (fun args &optional for-effect)
 ;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
   (unless (symbolp fun)
@@ -1212,7 +1214,7 @@
     (cond
      ((eq fun *defun-name*)
       (emit 'aload 0)) ; this
-     ((memq (symbol-package fun) '(+cl-package+ +sys-package+))
+     ((memq (symbol-package fun) +known-packages+)
       (let ((f (declare-function fun)))
         (emit 'getstatic
               *this-class*
