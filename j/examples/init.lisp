@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.28 2005-01-11 04:20:41 piso Exp $
+;;; $Id: init.lisp,v 1.29 2005-02-01 01:43:48 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -28,7 +28,7 @@
 (defun adjust-appearance ()
   (unless (sys:featurep :windows)
     (when (member (subseq (java-version) 0 5)
-                  '("1.4.0" "1.4.1" "1.4.2" "1.5.0")
+                  '("1.4.0" "1.4.1" "1.4.2" "1.5.0" "1.6.0")
                   :test #'string=)
       (set-global-property "adjustAscent" -2)
       (set-global-property "adjustLeading" -2)
