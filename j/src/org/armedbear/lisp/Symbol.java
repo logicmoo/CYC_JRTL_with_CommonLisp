@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.121 2004-04-05 01:06:02 piso Exp $
+ * $Id: Symbol.java,v 1.122 2004-04-18 19:31:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -200,6 +200,7 @@ public class Symbol extends LispObject
     public Symbol(String name)
     {
         this.name = name;
+        pkg = NIL;
     }
 
     public Symbol(String name, Package pkg)
@@ -244,12 +245,12 @@ public class Symbol extends LispObject
         return (flags & FLAG_CONSTANT) != 0 ? T : NIL;
     }
 
-    public LispObject getPackage()
+    public final LispObject getPackage()
     {
-        return pkg != null ? pkg : NIL;
+        return pkg;
     }
 
-    public void setPackage(LispObject obj)
+    public final void setPackage(LispObject obj)
     {
         pkg = obj;
     }
