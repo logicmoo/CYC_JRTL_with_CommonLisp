@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.119 2005-02-27 20:10:25 piso Exp $
+ * $Id: LispObject.java,v 1.120 2005-02-28 00:55:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -485,6 +485,16 @@ public class LispObject extends Lisp
     {
         StringBuffer sb = new StringBuffer("#<");
         sb.append(s);
+        sb.append(" {");
+        sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
+        sb.append("}>");
+        return sb.toString();
+    }
+
+    public String unreadableString(Symbol symbol) throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer("#<");
+        sb.append(symbol.writeToString());
         sb.append(" {");
         sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
         sb.append("}>");
