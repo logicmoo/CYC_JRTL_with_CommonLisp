@@ -2,7 +2,7 @@
  * SimpleWarning.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleWarning.java,v 1.1 2003-12-12 15:51:19 piso Exp $
+ * $Id: SimpleWarning.java,v 1.2 2003-12-12 17:30:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,12 @@ public class SimpleWarning extends Warning
     public SimpleWarning(LispObject initArgs) throws ConditionThrowable
     {
         super(initArgs);
+    }
+
+    public SimpleWarning(LispObject formatControl, LispObject formatArguments)
+    {
+        setFormatControl(formatControl);
+        setFormatArguments(formatArguments);
     }
 
     public LispObject typeOf()
