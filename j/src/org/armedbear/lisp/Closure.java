@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.9 2003-03-05 15:52:57 piso Exp $
+ * $Id: Closure.java,v 1.10 2003-03-08 16:08:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,12 +33,14 @@ public class Closure extends Function
 
     private final LispObject parameterList;
     private final Parameter[] parameterArray;
+    private final Parameter[] keywordParameterArray;
     private final LispObject body;
     private final Environment env;
     private final LispObject function;
+    private final boolean allowOtherKeys;
     private int arity;
     private int required;
-    private int keywords;
+    private int keywordParameterCount;
 
     public Closure(LispObject parameterList, LispObject body, Environment env)
         throws LispError
@@ -52,9 +54,11 @@ public class Closure extends Function
         super(name, getCurrentPackage());
         this.parameterList = parameterList;
         Debug.assertTrue(parameterList == NIL || parameterList instanceof Cons);
+        boolean allowOtherKeys = false;
         if (parameterList instanceof Cons) {
             final int length = parameterList.length();
             ArrayList arrayList = new ArrayList();
+            ArrayList keywordParameters = new ArrayList();
             LispObject remaining = parameterList;
             boolean optional = false;
             boolean rest = false;
@@ -81,13 +85,16 @@ public class Closure extends Function
                         optional = false;
                         rest = false;
                         arity = -1;
+                    } else if (obj == Symbol.AND_ALLOW_OTHER_KEYS) {
+                        allowOtherKeys = true;
                     } else {
                         if (optional) {
                             arrayList.add(new Parameter((Symbol)obj, NIL,
                                 OPTIONAL));
                         } else if (key) {
                             arrayList.add(new Parameter((Symbol)obj, NIL, KEYWORD));
-                            ++keywords;
+                            keywordParameters.add(new Parameter((Symbol)obj, NIL, KEYWORD));
+                            ++keywordParameterCount;
                         } else {
                             arrayList.add(new Parameter((Symbol)obj));
                             ++required;
@@ -122,7 +129,9 @@ public class Closure extends Function
                         }
                         arrayList.add(new Parameter(keyword, var, initForm,
                                                     svar));
-                        ++keywords;
+                        keywordParameters.add(new Parameter(keyword, var,
+                            initForm, svar));
+                        ++keywordParameterCount;
                     } else
                         invalidParameter(obj);
                 } else if (obj != NIL)
@@ -133,9 +142,16 @@ public class Closure extends Function
                 arity = length;
             parameterArray = new Parameter[arrayList.size()];
             arrayList.toArray(parameterArray);
+            Debug.assertTrue(keywordParameterCount == keywordParameters.size());
+            if (keywordParameterCount > 0) {
+                keywordParameterArray = new Parameter[keywordParameterCount];
+                keywordParameters.toArray(keywordParameterArray);
+            } else
+                keywordParameterArray = null;
         } else {
             Debug.assertTrue(parameterList == NIL);
             parameterArray = new Parameter[0];
+            keywordParameterArray = null;
             arity = 0;
         }
         this.body = body;
@@ -143,6 +159,7 @@ public class Closure extends Function
         this.function = new Cons(Symbol.LAMBDA, new Cons(parameterList, body));
         if (arity >= 0)
             Debug.assertTrue(arity == required);
+        this.allowOtherKeys = allowOtherKeys;
     }
 
     private static final void invalidParameter(LispObject obj)
@@ -247,39 +264,64 @@ public class Closure extends Function
                 }
             }
             // Keyword parameters.
-            if (keywords > 0) {
+            if (keywordParameterCount > 0) {
                 int argsLeft = args.length - argsUsed;
                 if ((argsLeft % 2) != 0)
                     throw new ProgramError("odd number of keyword arguments");
-                while (i < parameterArray.length) {
-                    Parameter parameter = parameterArray[i];
-                    if (parameter.type != KEYWORD)
-                        break;
-                    Symbol symbol = parameter.var;
-                    // This is a keyword parameter. Look through the remaining
-                    // arguments for one that matches.
-                    boolean bound = false;
-                    for (int j = argsUsed; j < args.length; j += 2) {
-                        LispObject keyword = args[j];
-                        if (keyword == parameter.keyword) {
+                boolean[] boundpArray = new boolean[keywordParameterCount];
+                LispObject allowOtherKeysValue = null;
+                LispObject unrecognizedKeyword = null;
+                for (int j = argsUsed; j < args.length; j += 2) {
+                    LispObject keyword = args[j];
+                    // Find it.
+                    int k;
+                    for (k = keywordParameterCount; k-- > 0;) {
+                        if (keywordParameterArray[k].keyword == keyword) {
                             // Found it!
-                            bind(symbol, args[j+1], ext);
-                            bound = true;
+                            if (!boundpArray[k]) {
+                                Parameter parameter = keywordParameterArray[k];
+                                Symbol symbol = parameter.var;
+                                bind(symbol, args[j+1], ext);
+                                if (parameter.svar != NIL) {
+                                    Symbol svar = checkSymbol(parameter.svar);
+                                    bind(svar, T, ext);
+                                }
+                                boundpArray[k] = true;
+                            }
                             break;
                         }
                     }
-                    if (!bound) {
-                        // We didn't find a matching argument.
+                    if (k < 0) {
+                        // Not found.
+                        if (keyword == Keyword.ALLOW_OTHER_KEYS) {
+                            if (allowOtherKeysValue == null)
+                                allowOtherKeysValue = args[j+1];
+                            continue;
+                        }
+                        if (unrecognizedKeyword == null)
+                            unrecognizedKeyword = keyword;
+                    }
+                }
+                if (unrecognizedKeyword != null) {
+                    if (!allowOtherKeys &&
+                        (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
+                        throw new ProgramError("unrecognized keyword argument " +
+                            unrecognizedKeyword);
+                }
+                // Now bind any unbound keyword arguments to their defaults.
+                for (int n = 0; n < keywordParameterCount; n++) {
+                    if (!boundpArray[n]) {
+                        Parameter parameter = keywordParameterArray[n];
                         LispObject initForm = parameter.initForm;
                         LispObject value =
-                            initForm != null? eval(initForm, ext) : NIL;
-                        bind(symbol, value, ext);
+                            initForm != null ? eval(initForm, ext) : NIL;
+                        bind(parameter.var, value, ext);
+                        if (parameter.svar != NIL) {
+                            Symbol svar = checkSymbol(parameter.svar);
+                            bind(svar, NIL, ext);
+                        }
+                        boundpArray[n] = true;
                     }
-                    if (parameter.svar != NIL) {
-                        Symbol svar = checkSymbol(parameter.svar);
-                        bind(svar, bound ? T : NIL, ext);
-                    }
-                    ++i;
                 }
             }
         }
