@@ -152,7 +152,17 @@ public abstract class AbstractVector extends AbstractArray
 
     public String writeToString() throws ConditionThrowable
     {
-        if (_PRINT_ARRAY_.symbolValue() != NIL) {
+        if (_PRINT_READABLY_.symbolValue() != NIL) {
+            StringBuffer sb = new StringBuffer("#(");
+            final int limit = length();
+            for (int i = 0; i < limit; i++) {
+                if (i > 0)
+                    sb.append(' ');
+                sb.append(getRowMajor(i).writeToString());
+            }
+            sb.append(')');
+            return sb.toString();
+        } else if (_PRINT_ARRAY_.symbolValue() != NIL) {
             StringBuffer sb = new StringBuffer("#(");
             final LispObject printLength = _PRINT_LENGTH_.symbolValue();
             final int limit;
@@ -166,7 +176,7 @@ public abstract class AbstractVector extends AbstractArray
                 sb.append(getRowMajor(i).writeToString());
             }
             if (limit < length())
-                sb.append(" ...");
+                sb.append(limit > 0 ? " ..." : "...");
             sb.append(')');
             return sb.toString();
         } else {
