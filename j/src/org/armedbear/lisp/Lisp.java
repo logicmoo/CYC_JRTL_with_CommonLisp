@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.322 2005-02-26 17:31:28 piso Exp $
+ * $Id: Lisp.java,v 1.323 2005-02-27 20:00:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,7 +177,7 @@ public abstract class Lisp
         if (form instanceof Cons) {
             LispObject car = form.car();
             if (car instanceof Symbol) {
-                LispObject obj = env.lookupFunctional(car);
+                LispObject obj = env.lookupFunction(car);
                 if (obj instanceof Autoload) {
                     Autoload autoload = (Autoload) obj;
                     autoload.load();
@@ -339,27 +339,24 @@ public abstract class Lisp
         } else if (obj instanceof Cons) {
             LispObject first = obj.car();
             if (first instanceof Symbol) {
-                LispObject fun = env.lookupFunctional(first);
+                LispObject fun = env.lookupFunction(first);
+                if (fun instanceof SpecialOperator) {
+                    if (profiling)
+                        if (!sampling)
+                            fun.incrementCallCount();
+                    // Don't eval args!
+                    return fun.execute(obj.cdr(), env);
+                }
+                if (fun instanceof MacroObject)
+                    return eval(macroexpand(obj, env, thread), env, thread);
+                if (fun instanceof Autoload) {
+                    Autoload autoload = (Autoload) fun;
+                    autoload.load();
+                    return eval(obj, env, thread);
+                }
                 if (fun == null)
                     return signal(new UndefinedFunction(first));
-                switch (fun.getFunctionalType()) {
-                    case FTYPE_SPECIAL_OPERATOR: {
-                        if (profiling)
-                            if (!sampling)
-                                fun.incrementCallCount();
-                        // Don't eval args!
-                        return fun.execute(obj.cdr(), env);
-                    }
-                    case FTYPE_MACRO:
-                        return eval(macroexpand(obj, env, thread), env, thread);
-                    case FTYPE_AUTOLOAD: {
-                        Autoload autoload = (Autoload) fun;
-                        autoload.load();
-                        return eval(obj, env, thread);
-                    }
-                    default:
-                        return evalCall(fun, obj.cdr(), env, thread);
-                }
+                return evalCall(fun, obj.cdr(), env, thread);
             } else {
                 if (first.car() == Symbol.LAMBDA) {
                     LispObject rest = first.cdr();
