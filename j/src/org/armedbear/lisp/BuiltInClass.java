@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.31 2004-06-08 10:54:18 piso Exp $
+ * $Id: BuiltInClass.java,v 1.32 2004-09-26 08:37:18 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,6 +115,8 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SIMPLE_STRING                    = addClass(Symbol.SIMPLE_STRING);
     public static final BuiltInClass SIMPLE_VECTOR                    = addClass(Symbol.SIMPLE_VECTOR);
     public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
+    public static final BuiltInClass SLIME_INPUT_STREAM              = addClass(Symbol.SLIME_INPUT_STREAM);
+    public static final BuiltInClass SLIME_OUTPUT_STREAM             = addClass(Symbol.SLIME_OUTPUT_STREAM);
     public static final BuiltInClass SOCKET_STREAM                    = addClass(Symbol.SOCKET_STREAM);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
@@ -418,6 +420,12 @@ public class BuiltInClass extends LispClass
                              CLASS_T);
         SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
                               CONDITION, STANDARD_OBJECT, CLASS_T);
+        SLIME_INPUT_STREAM.setDirectSuperclass(STRING_STREAM);
+        SLIME_INPUT_STREAM.setCPL(SLIME_INPUT_STREAM, STRING_STREAM, STREAM,
+                                   CLASS_T);
+        SLIME_OUTPUT_STREAM.setDirectSuperclass(STRING_STREAM);
+        SLIME_OUTPUT_STREAM.setCPL(SLIME_OUTPUT_STREAM, STRING_STREAM, STREAM,
+                                    CLASS_T);
         SOCKET_STREAM.setDirectSuperclass(TWO_WAY_STREAM);
         SOCKET_STREAM.setCPL(SOCKET_STREAM, TWO_WAY_STREAM, STREAM, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
