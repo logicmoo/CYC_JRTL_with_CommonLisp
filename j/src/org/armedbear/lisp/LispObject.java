@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.2 2003-02-15 16:48:16 piso Exp $
+ * $Id: LispObject.java,v 1.3 2003-02-15 17:47:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,47 +40,47 @@ public class LispObject extends Lisp
 
     public LispObject car() throws LispError
     {
-        throw new WrongTypeException(this, "list");
+        throw new TypeError(this, "list");
     }
 
     public void setCar(LispObject obj) throws LispError
     {
-        throw new WrongTypeException(this, "list");
+        throw new TypeError(this, "list");
     }
 
     public LispObject cdr() throws LispError
     {
-        throw new WrongTypeException(this, "list");
+        throw new TypeError(this, "list");
     }
 
     public void setCdr(LispObject obj) throws LispError
     {
-        throw new WrongTypeException(this, "list");
+        throw new TypeError(this, "list");
     }
 
     public LispObject cadr() throws LispError
     {
-        throw new WrongTypeException(this, "list");
+        throw new TypeError(this, "list");
     }
 
     public LispObject cddr() throws LispError
     {
-        throw new WrongTypeException(this, "list");
+        throw new TypeError(this, "list");
     }
 
     public int length() throws LispError
     {
-        throw new WrongTypeException(this, "sequence");
+        throw new TypeError(this, "sequence");
     }
 
     public LispObject elt(long index) throws LispError
     {
-        throw new WrongTypeException(this, "sequence");
+        throw new TypeError(this, "sequence");
     }
 
     public LispObject[] copyToArray() throws LispError
     {
-        throw new WrongTypeException(this, "list");
+        throw new TypeError(this, "list");
     }
 
     public boolean listp()
@@ -95,12 +95,12 @@ public class LispObject extends Lisp
 
     public LispObject getSymbolValue() throws LispError
     {
-        throw new WrongTypeException(this, "symbol");
+        throw new TypeError(this, "symbol");
     }
 
     public LispObject getSymbolFunction() throws LispError
     {
-        throw new WrongTypeException(this, "symbol");
+        throw new TypeError(this, "symbol");
     }
 
     public String toString()

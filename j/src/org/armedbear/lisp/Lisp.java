@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.15 2003-02-15 17:17:46 piso Exp $
+ * $Id: Lisp.java,v 1.16 2003-02-15 17:47:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -445,7 +445,7 @@ public abstract class Lisp
             return (Symbol) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "symbol");
+            throw new TypeError(obj, "symbol");
         }
     }
 
@@ -457,7 +457,7 @@ public abstract class Lisp
             return (Fixnum) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "number");
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -469,7 +469,7 @@ public abstract class Lisp
             return (Cons) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "cons");
+            throw new TypeError(obj, "cons");
         }
     }
 
@@ -478,7 +478,7 @@ public abstract class Lisp
     {
         if (obj.listp())
             return obj;
-        throw new WrongTypeException(obj, "list");
+        throw new TypeError(obj, "list");
     }
 
     public static final SequenceType checkSequence(LispObject obj)
@@ -490,7 +490,7 @@ public abstract class Lisp
             return (SequenceType) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "sequence");
+            throw new TypeError(obj, "sequence");
         }
     }
 
@@ -503,7 +503,7 @@ public abstract class Lisp
             return (AbstractVector) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "vector");
+            throw new TypeError(obj, "vector");
         }
     }
 
@@ -516,7 +516,7 @@ public abstract class Lisp
             return (LispString) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "string");
+            throw new TypeError(obj, "string");
         }
     }
 
@@ -541,7 +541,7 @@ public abstract class Lisp
             return (LispCharacter) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "character");
+            throw new TypeError(obj, "character");
         }
     }
 
@@ -554,7 +554,7 @@ public abstract class Lisp
             return (Package) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "package");
+            throw new TypeError(obj, "package");
         }
     }
 
@@ -567,7 +567,7 @@ public abstract class Lisp
             return (Function) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "function");
+            throw new TypeError(obj, "function");
         }
     }
 
@@ -580,7 +580,7 @@ public abstract class Lisp
             return (LispStream) obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "stream");
+            throw new TypeError(obj, "stream");
         }
     }
 

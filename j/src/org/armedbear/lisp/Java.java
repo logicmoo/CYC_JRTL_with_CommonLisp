@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.4 2003-02-15 16:48:16 piso Exp $
+ * $Id: Java.java,v 1.5 2003-02-15 17:47:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,7 +159,7 @@ public final class Java extends Module
                             throw new LispError("no such method");
                     }
                 } else
-                    throw new WrongTypeException(methodRef);
+                    throw new TypeError(methodRef);
                 Object[] methodArgs = new Object[args.length-2];
                 for (int i = 2; i < args.length; i++) {
                     LispObject arg = args[i];

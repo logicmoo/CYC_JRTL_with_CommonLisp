@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaObject.java,v 1.1 2003-01-17 19:43:17 piso Exp $
+ * $Id: JavaObject.java,v 1.2 2003-02-15 17:47:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,13 +35,13 @@ public class JavaObject extends LispObject
         return obj;
     }
 
-    public static final Object getObject(LispObject o) throws WrongTypeException
+    public static final Object getObject(LispObject o) throws TypeError
     {
         try {
             return ((JavaObject)o).obj;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(o, "Java object");
+            throw new TypeError(o, "Java object");
         }
     }
 

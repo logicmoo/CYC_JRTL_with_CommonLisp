@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.23 2003-02-15 17:35:33 piso Exp $
+ * $Id: Primitives.java,v 1.24 2003-02-15 17:47:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -355,7 +355,7 @@ public final class Primitives extends Module
                     return T;
                 if (arg instanceof Cons)
                     return NIL;
-                throw new WrongTypeException(arg, "list");
+                throw new TypeError(arg, "list");
             case EVENP:                         // ### evenp
                 return (Fixnum.getValue(arg) % 2) == 0 ? T : NIL;
             case ODDP:                          // ### oddp
@@ -551,7 +551,7 @@ public final class Primitives extends Module
                 if (args[0] instanceof CharacterOutputStream)
                     out = (CharacterOutputStream) args[0];
                 else
-                    throw new WrongTypeException(args[0], "output stream");
+                    throw new TypeError(args[0], "output stream");
             }
             if (out == null)
                 out = getStandardOutput();
@@ -870,7 +870,7 @@ public final class Primitives extends Module
                     if (eql(cons.car(), item))
                         return cons;
                 } else if (cons != NIL)
-                    throw new WrongTypeException(cons, "list");
+                    throw new TypeError(cons, "list");
                 alist = alist.cdr();
             }
             return NIL;
@@ -1629,7 +1629,7 @@ public final class Primitives extends Module
         {
             AbstractVector v = checkVector(first);
             if (!v.isSimpleVector())
-                throw new WrongTypeException(first, "simple vector");
+                throw new TypeError(first, "simple vector");
             int index = v.checkIndex(second);
             return v.get(index);
         }
@@ -1643,7 +1643,7 @@ public final class Primitives extends Module
         {
             AbstractVector v = checkVector(first);
             if (!v.isSimpleVector())
-                throw new WrongTypeException(first, "simple vector");
+                throw new TypeError(first, "simple vector");
             int i = v.checkIndex(second);
             v.set(i, third);
             return third;
@@ -1668,7 +1668,7 @@ public final class Primitives extends Module
                 int i = v.checkIndex(args[1]);
                 return v.get(i);
             }
-            throw new WrongTypeException(args[0], "array");
+            throw new TypeError(args[0], "array");
         }
     };
 
@@ -1690,7 +1690,7 @@ public final class Primitives extends Module
                 v.set(i, third);
                 return third;
             }
-            throw new WrongTypeException(first, "array");
+            throw new TypeError(first, "array");
         }
     };
 
@@ -2000,7 +2000,7 @@ public final class Primitives extends Module
             int length = -1;
             for (int i = 1; i < args.length; i++) {
                 if (!args[i].listp())
-                    throw new WrongTypeException(args[i], "list");
+                    throw new TypeError(args[i], "list");
                 int len = args[i].length();
                 if (length < 0)
                     length = len;
@@ -2079,12 +2079,12 @@ public final class Primitives extends Module
                 if (arg instanceof Fixnum) {
                     n = ((Fixnum)arg).getValue();
                     if (n < 0)
-                        throw new WrongTypeException(arg,
+                        throw new TypeError(arg,
                             "non-negative integer");
                 } else if (arg instanceof LispString) {
                     prefix = ((LispString)arg).getValue();
                 } else {
-                    throw new WrongTypeException(arg,
+                    throw new TypeError(arg,
                         "string or non-negative integer");
                 }
             }
@@ -2244,7 +2244,7 @@ public final class Primitives extends Module
             } else if (arg instanceof Symbol) {
                 packageName = arg.getName();
             } else
-                throw new WrongTypeException(arg, "string");
+                throw new TypeError(arg, "string");
             Package pkg =
                 Packages.findPackage(packageName);
             if (pkg != null)
@@ -2372,7 +2372,7 @@ public final class Primitives extends Module
                 else if (arg instanceof Symbol)
                     pkg = Packages.findPackage(arg.getName());
                 else
-                    throw new WrongTypeException(arg, "package");
+                    throw new TypeError(arg, "package");
                 if (pkg == null)
                     throw new LispError(String.valueOf(arg) +
                         " is not a package");
@@ -2956,7 +2956,7 @@ public final class Primitives extends Module
         {
             if (arg instanceof StringOutputStream)
                 return ((StringOutputStream)arg).getString();
-            throw new WrongTypeException(this, "string output stream");
+            throw new TypeError(this, "string output stream");
         }
     };
 
@@ -2979,7 +2979,7 @@ public final class Primitives extends Module
                 else if (streamArg == T || streamArg == NIL)
                     out = getStandardOutput();
                 else
-                    throw new WrongTypeException(args[1],
+                    throw new TypeError(args[1],
                         "character output stream");
             }
             out.writeString(string);
@@ -3062,7 +3062,7 @@ public final class Primitives extends Module
                     length == 3 ? args[2] : NIL;
                 return ht.gethash(key, defaultValue);
             }
-            throw new WrongTypeException(args[1], "hash table");
+            throw new TypeError(args[1], "hash table");
         }
     };
 
@@ -3085,7 +3085,7 @@ public final class Primitives extends Module
                 }
                 return ht.puthash(key, value);
             }
-            throw new WrongTypeException(args[1], "hash table");
+            throw new TypeError(args[1], "hash table");
         }
     };
 
@@ -3099,7 +3099,7 @@ public final class Primitives extends Module
                 HashTable ht = (HashTable) second;
                 return ht.remhash(key);
             }
-            throw new WrongTypeException(second, "hash table");
+            throw new TypeError(second, "hash table");
         }
     };
 

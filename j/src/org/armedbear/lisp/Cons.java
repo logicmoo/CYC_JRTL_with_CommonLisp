@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.3 2003-02-15 16:48:16 piso Exp $
+ * $Id: Cons.java,v 1.4 2003-02-15 17:47:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ public final class Cons extends LispObject implements SequenceType
             }
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "list");
+            throw new TypeError(obj, "list");
         }
         return length;
     }

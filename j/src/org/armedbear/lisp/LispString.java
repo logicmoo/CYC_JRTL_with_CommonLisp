@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.4 2003-02-15 16:48:16 piso Exp $
+ * $Id: LispString.java,v 1.5 2003-02-15 17:47:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,7 +93,7 @@ public final class LispString extends AbstractVector implements SequenceType,
             }
             array = newArray;
         } else if (obj != NIL)
-            throw new WrongTypeException(obj, "sequence");
+            throw new TypeError(obj, "sequence");
     }
 
     public LispObject get(int index) throws LispError
@@ -115,7 +115,7 @@ public final class LispString extends AbstractVector implements SequenceType,
             return ((LispString)obj).getValue();
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(obj, "string");
+            throw new TypeError(obj, "string");
         }
     }
 
@@ -166,13 +166,13 @@ public final class LispString extends AbstractVector implements SequenceType,
             array1 = ((LispString)first).array;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(first, "string");
+            throw new TypeError(first, "string");
         }
         try {
             array2 = ((LispString)second).array;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(second, "string");
+            throw new TypeError(second, "string");
         }
         if (array1.length != array2.length)
             return NIL;
@@ -191,13 +191,13 @@ public final class LispString extends AbstractVector implements SequenceType,
             array1 = ((LispString)first).array;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(first, "string");
+            throw new TypeError(first, "string");
         }
         try {
             array2 = ((LispString)second).array;
         }
         catch (ClassCastException e) {
-            throw new WrongTypeException(second, "string");
+            throw new TypeError(second, "string");
         }
         if (array1.length != array2.length)
             return NIL;
