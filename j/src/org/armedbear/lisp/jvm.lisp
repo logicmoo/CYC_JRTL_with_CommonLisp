@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.361 2005-01-21 03:27:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.362 2005-01-22 12:26:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,7 +79,6 @@
   classfile
   parent
   (children 0) ; Number of local functions defined with FLET or LABELS.
-  contains-lambda
   argument-register
   closure-register
   )
@@ -873,6 +872,8 @@
 (defconstant +lisp-return-class+ "org/armedbear/lisp/Return")
 (defconstant +lisp-go-class+ "org/armedbear/lisp/Go")
 (defconstant +lisp-ctf-class+ "org/armedbear/lisp/ClosureTemplateFunction")
+(defconstant +lisp-compiled-function-class+ "org/armedbear/lisp/CompiledFunction")
+(defconstant +lisp-primitive-class+ "org/armedbear/lisp/Primitive")
 
 (defsubst emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
@@ -3956,10 +3957,10 @@
       (p2-compiland compiland))
     (cond (*compile-file-truename*
            ;; Verify that the class file is loadable.
-           (unless (ignore-errors (sys:load-compiled-function classfile))
-             (error "P2-LOCAL-FUNCTION: unable to load ~S." classfile)))
-          (t
-           (setf function (sys:load-compiled-function classfile))))
+           (let ((*default-pathname-defaults* classfile))
+             (unless (ignore-errors (sys:load-compiled-function classfile))
+               (error "P2-LOCAL-FUNCTION: unable to load ~S." classfile))))
+          (t (setf function (sys:load-compiled-function classfile))))
     (cond (local-function
            (setf (local-function-classfile local-function) classfile)
            (let ((g (if *compile-file-truename*
@@ -3970,11 +3971,10 @@
                    g
                    +lisp-object+)
              (emit 'var-set (local-function-variable local-function))))
-          (t
-           (push (make-local-function :name name
-                                      :function function
-                                      :classfile classfile)
-                 *local-functions*)))))
+          (t (push (make-local-function :name name
+                                        :function function
+                                        :classfile classfile)
+                   *local-functions*)))))
 
 (defun p2-flet (form &key (target *val*) representation)
   (let ((*local-functions* *local-functions*)
@@ -5020,8 +5020,10 @@
         (setf *hairy-arglist-p* t)
         (return-from analyze-args
                      (if *closure-variables*
-                         #.(%format nil "([~A[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
-                         #.(%format nil "([~A)~A" +lisp-object+ +lisp-object+))))
+                         (make-descriptor (list +lisp-object-array+ +lisp-object-array+)
+                                          +lisp-object+)
+                         (make-descriptor (list +lisp-object-array+)
+                                          +lisp-object+))))
       (cond
        (*closure-variables*
         (return-from analyze-args
@@ -5029,25 +5031,19 @@
                             (make-descriptor (list* +lisp-object-array+
                                                     (make-list arg-count :initial-element +lisp-object+))
                                              +lisp-object+))
-                           (t
-;;                             (error "analyze-args unsupported case")
-                            (setf *using-arg-array* t)
-                            (setf *arity* arg-count)
-                            (make-descriptor (list +lisp-object-array+ +lisp-object-array+)
-                                             +lisp-object+)
-                            ))))
+                           (t (setf *using-arg-array* t)
+                              (setf *arity* arg-count)
+                              (make-descriptor (list +lisp-object-array+ +lisp-object-array+)
+                                               +lisp-object+)))))
        (t
         (return-from analyze-args
                      (cond ((<= arg-count 4)
                             (make-descriptor (make-list arg-count :initial-element +lisp-object+)
                                              +lisp-object+))
-                           (t
-                            (setf *using-arg-array* t)
-                            (setf *arity* arg-count)
-                            (make-descriptor (list +lisp-object-array+) +lisp-object+)))
-                     ))))
-
-
+                           (t (setf *using-arg-array* t)
+                              (setf *arity* arg-count)
+                              (make-descriptor (list +lisp-object-array+)
+                                               +lisp-object+)))))))
     (when (or (memq '&KEY args)
               (memq '&OPTIONAL args)
               (memq '&REST args))
@@ -5055,34 +5051,24 @@
       (setf *hairy-arglist-p* t)
       (return-from analyze-args
                    (make-descriptor (list +lisp-object-array+) +lisp-object+)))
-
     (cond ((<= arg-count 4)
            (make-descriptor (make-list (length args) :initial-element +lisp-object+)
                             +lisp-object+))
           (t
            (setf *using-arg-array* t)
            (setf *arity* arg-count)
-           (make-descriptor (list +lisp-object-array+) +lisp-object+)))
-
-    ))
+           (make-descriptor (list +lisp-object-array+) +lisp-object+)))))
 
 (defun write-class-file (args body execute-method classfile)
   (dformat t "write-class-file ~S~%" classfile)
-  (let* ((super
-          (cond (*child-p*
-                 (dformat t "write-class-file *child-p* case~%")
-                 (dformat t "*closure-variables* = ~S~%" (mapcar #'variable-name *closure-variables*))
-                 (dformat t "args = ~S~%" args)
-                 (dformat t "*hairy-arglist-p* = ~S~%" *hairy-arglist-p*)
-                 (if *closure-variables*
-                     "org/armedbear/lisp/ClosureTemplateFunction"
-                     (if *hairy-arglist-p*
-                         "org/armedbear/lisp/CompiledFunction"
-                         "org/armedbear/lisp/Primitive")))
-                (*hairy-arglist-p*
-                 "org/armedbear/lisp/CompiledFunction")
-                (t
-                 "org/armedbear/lisp/Primitive")))
+  (let* ((super (cond (*child-p*
+                       (if *closure-variables*
+                           "org/armedbear/lisp/ClosureTemplateFunction"
+                           (if *hairy-arglist-p*
+                               +lisp-compiled-function-class+
+                               +lisp-primitive-class+)))
+                      (*hairy-arglist-p* +lisp-compiled-function-class+)
+                      (t +lisp-primitive-class+)))
          (this-index (pool-class *this-class*))
          (super-index (pool-class super))
          (constructor (make-constructor super
@@ -5133,6 +5119,28 @@
         (setf body (list (append (list 'LET* (cdr auxvars)) body))))
 
 
+      #+nil
+      (unless (or (memq '&KEY lambda-list) (memq '&REST lambda-list))
+        (let ((optionals (memq '&OPTIONAL lambda-list)))
+          (dformat t "optionals = ~S~%" optionals)
+          (when (= (length optionals) 2)
+            (let* ((optional-arg (second optionals))
+                   (name (if (consp optional-arg) (car optional-arg) optional-arg))
+                   (initform (if (consp optional-arg) (cadr optional-arg) nil))
+                   (wrapper-args (subseq lambda-list 0 (position '&OPTIONAL lambda-list)))
+                   (converted-args (append wrapper-args (list name))))
+              (dformat t "optional-arg = ~S~%" optional-arg)
+              (dformat t "wrapper-args = ~S~%" wrapper-args)
+              (dformat t "converted-args = ~S~%" converted-args)
+              (let ((wrapper-form
+                     `(lambda ,wrapper-args
+                        (let ((,name ,initform))
+                          (,(compiland-name compiland) ,@converted-args)))))
+                (dformat t "wrapper-form = ~S~%" wrapper-form)
+                )
+              ))))
+
+
       (let* ((closure (sys::make-closure `(lambda ,lambda-list nil) nil))
              (syms (sys::varlist closure))
              vars)
@@ -5150,10 +5158,7 @@
           (dformat t "p1-compiland *visible-variables* ==> ~S~%"
                    (mapcar #'variable-name *visible-variables*))
           (setf (compiland-p1-result compiland)
-                ;;               (list* 'LAMBDA lambda-list (mapcar #'p1 (cddr form)))
-                (list* 'LAMBDA lambda-list (mapcar #'p1 body))
-                ;;             (p1 form)
-                ))))))
+                (list* 'LAMBDA lambda-list (mapcar #'p1 body))))))))
 
 (defun p2-compiland (compiland)
   (dformat t "p2-compiland ~S~%" (compiland-name compiland))
@@ -5212,6 +5217,8 @@
 
     (dformat t "pass2 *using-arg-array* = ~S~%" *using-arg-array*)
     (dformat t "pass2 *child-p* = ~S~%" *child-p*)
+    (dformat t "pass2 *closure-variables* = ~S~%"
+             (mapcar #'variable-name *closure-variables*))
     (setf (method-name-index execute-method)
           (pool-name (method-name execute-method)))
     (setf (method-descriptor-index execute-method)
@@ -5455,6 +5462,7 @@
 (defun compile-1 (compiland)
   (dformat t "compile-1 ~S~%" (compiland-name compiland))
   (let ((*all-variables* ())
+        (*closure-variables* ())
         (*current-compiland* compiland)
         (*speed* *speed*)
         (*safety* *safety*)
