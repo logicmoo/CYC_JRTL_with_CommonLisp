@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.80 2004-03-14 02:17:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.81 2004-03-18 02:13:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2523,7 +2523,7 @@
     (setf (char s 0) #\;)
     s))
 
-(defvar *compile-print* t)
+(setq *compile-print* t)
 
 (defun jvm-compile (name &optional definition)
   (let ((prefix (load-verbose-prefix)))
