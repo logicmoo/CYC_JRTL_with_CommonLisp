@@ -1,8 +1,8 @@
 /*
  * Server.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Server.java,v 1.2 2003-06-29 00:19:34 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Server.java,v 1.3 2004-10-17 12:07:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,6 +121,7 @@ public class Server implements Runnable
             }
             editor.getFrame().toFront();
             editor.requestFocus();
+            Editor.restoreFocus();
         }
     }
 }
