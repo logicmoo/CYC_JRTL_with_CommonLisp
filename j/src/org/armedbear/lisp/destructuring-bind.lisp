@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.6 2003-10-06 00:03:15 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.7 2003-11-28 05:58:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,8 +20,6 @@
 ;;;; From CMUCL, via GCL.
 
 (in-package "SYSTEM")
-
-(export '(destructuring-bind))
 
 (defvar *arg-tests* ())
 
@@ -92,10 +90,10 @@
 	  ((null (cdr remaining))
 	   (return (values :odd-length key-list)))
 	  #+nil ;; Not ANSI compliant to disallow duplicate keywords.
-	  ((member (car remaining) already-processed)
+	  ((memql (car remaining) already-processed)
 	   (return (values :duplicate (car remaining))))
 	  ((or (eq (car remaining) :allow-other-keys)
-	       (member (car remaining) valid-keys))
+	       (memql (car remaining) valid-keys))
 	   (push (car remaining) already-processed))
 	  (t
 	   (setf unknown-keyword (car remaining))))))
