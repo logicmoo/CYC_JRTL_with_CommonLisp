@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.19 2003-10-06 13:51:40 piso Exp $
+ * $Id: LispThread.java,v 1.20 2003-10-12 18:21:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -191,16 +191,16 @@ public final class LispThread extends LispObject
 
     private static class StackFrame
     {
-        private final Functional functional;
+        private final LispObject functional;
         private final LispObject[] argv;
 
-        public StackFrame(LispObject obj, LispObject[] argv)
+        public StackFrame(LispObject functional, LispObject[] argv)
         {
-            functional = (Functional) obj;
+            this.functional = functional;
             this.argv = argv;
         }
 
-        public Functional getFunctional()
+        public LispObject getFunctional()
         {
             return functional;
         }
@@ -269,9 +269,10 @@ public final class LispThread extends LispObject
                     LispObject[] argv = frame.getArgumentVector();
                     for (int j = argv.length; j-- > 0;)
                         obj = new Cons(argv[j], obj);
-                    Functional functional = frame.getFunctional();
-                    if (functional.getLambdaName() != null)
-                        obj = new Cons(functional.getLambdaName(), obj);
+                    LispObject functional = frame.getFunctional();
+                    if (functional instanceof Functional &&
+                        ((Functional)functional).getLambdaName() != null)
+                        obj = new Cons(((Functional)functional).getLambdaName(), obj);
                     else
                         obj = new Cons(functional, obj);
                     pprint(obj, out.getCharPos(), out);
@@ -299,9 +300,10 @@ public final class LispThread extends LispObject
                     LispObject[] argv = frame.getArgumentVector();
                     for (int j = argv.length; j-- > 0;)
                         obj = new Cons(argv[j], obj);
-                    Functional functional = frame.getFunctional();
-                    if (functional.getLambdaName() != null)
-                        obj = new Cons(functional.getLambdaName(), obj);
+                    LispObject functional = frame.getFunctional();
+                    if (functional instanceof Functional &&
+                        ((Functional)functional).getLambdaName() != null)
+                        obj = new Cons(((Functional)functional).getLambdaName(), obj);
                     else
                         obj = new Cons(functional, obj);
                     result = new Cons(obj, result);
