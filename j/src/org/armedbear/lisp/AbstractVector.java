@@ -63,7 +63,7 @@ public abstract class AbstractVector extends LispObject
             sb.append(length());
             sb.append(')');
         }
-        throw new LispError(sb.toString());
+        throw new TypeError(sb.toString());
     }
 
     public int getFillPointer()
