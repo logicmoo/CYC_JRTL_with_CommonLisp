@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.163 2004-05-10 02:06:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.164 2004-05-10 12:57:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1479,6 +1479,28 @@
            (emit-push-nil)
            'if_acmpne))))
 
+(defparameter java-predicates (make-hash-table :test 'eq))
+
+(defun define-java-predicate (predicate translation)
+  (setf (gethash predicate java-predicates) translation))
+
+(define-java-predicate 'CHARACTERP "characterp")
+(define-java-predicate 'CONSTANTP  "constantp")
+(define-java-predicate 'ENDP       "endp")
+(define-java-predicate 'EVENP      "evenp")
+(define-java-predicate 'FLOATP     "floatp")
+(define-java-predicate 'INTEGERP   "integerp")
+(define-java-predicate 'LISTP      "listp")
+(define-java-predicate 'MINUSP     "minusp")
+(define-java-predicate 'NUMBERP    "numberp")
+(define-java-predicate 'ODDP       "oddp")
+(define-java-predicate 'PLUSP      "plusp")
+(define-java-predicate 'RATIONALP  "rationalp")
+(define-java-predicate 'REALP      "realp")
+(define-java-predicate 'STRINGP    "stringp")
+(define-java-predicate 'VECTORP    "vectorp")
+(define-java-predicate 'ZEROP      "zerop")
+
 (defun compile-test (form)
   ;; Use a Java boolean if possible.
   (when (and (consp form)
@@ -1513,22 +1535,7 @@
            (maybe-emit-clear-values arg)
            (emit 'instanceof +lisp-cons-class+)
            (return-from compile-test 'ifne))
-         (let ((s (cdr (assq op
-                             '((CHARACTERP . "characterp")
-                               (ENDP       . "endp")
-                               (EVENP      . "evenp")
-                               (FLOATP     . "floatp")
-                               (INTEGERP   . "integerp")
-                               (LISTP      . "listp")
-                               (MINUSP     . "minusp")
-                               (NUMBERP    . "numberp")
-                               (ODDP       . "oddp")
-                               (PLUSP      . "plusp")
-                               (RATIONALP  . "rationalp")
-                               (REALP      . "realp")
-                               (STRINGP    . "stringp")
-                               (VECTORP    . "vectorp")
-                               (ZEROP      . "zerop"))))))
+         (let ((s (gethash op java-predicates)))
            (when s
              (compile-form arg)
              (unless (remove-store-value)
