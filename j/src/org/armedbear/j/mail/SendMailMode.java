@@ -1,8 +1,8 @@
 /*
  * SendMailMode.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: SendMailMode.java,v 1.2 2002-10-03 17:40:26 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: SendMailMode.java,v 1.3 2004-09-20 00:14:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,6 +92,7 @@ public final class SendMailMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_ENTER, CTRL_MASK, "send");
         km.mapKey(KeyEvent.VK_TAB, 0, "sendMailTab");
         km.mapKey(KeyEvent.VK_TAB, SHIFT_MASK, "sendMailBackTab");
+        km.mapKey(KeyEvent.VK_F12, ALT_MASK, "wrapParagraphsInRegion");
     }
 
     protected ToolBar getDefaultToolBar(Frame frame)
