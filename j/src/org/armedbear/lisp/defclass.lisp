@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.24 2003-10-13 19:21:27 piso Exp $
+;;; $Id: defclass.lisp,v 1.25 2003-10-17 02:33:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -622,6 +622,7 @@
     (dolist (item options-and-method-descriptions)
       (case (car item)
         (declare) ; FIXME
+        (:documentation) ; FIXME
         (:method
          (push `(defmethod ,function-name ,@(cdr item)) methods))
         (t
