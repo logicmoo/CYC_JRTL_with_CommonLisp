@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.194 2004-08-17 20:08:20 piso Exp $
+ * $Id: Autoload.java,v 1.195 2004-08-21 03:16:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -383,6 +383,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-char", "StringFunctions");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
+        autoload(PACKAGE_SYS, "%set-function-info", "function_info");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
@@ -411,6 +412,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "condition-report", "Condition");
         autoload(PACKAGE_SYS, "create-new-file", "create_new_file");
+        autoload(PACKAGE_SYS, "function-info", "function_info");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
         autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTable");
