@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: macros.lisp,v 1.23 2003-10-17 14:05:55 piso Exp $
+;;; $Id: macros.lisp,v 1.24 2004-02-02 02:16:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -51,20 +51,6 @@
 
 (defmacro time (form)
   `(sys::%time #'(lambda () ,form)))
-
-(defmacro with-open-file (&rest args)
-  (let ((var (caar args))
-        (open-args (cdar args))
-        (forms (cdr args))
-        (abortp (gensym)))
-    `(let ((,var (open ,@open-args))
-	   (,abortp t))
-       (unwind-protect
-        (multiple-value-prog1
-          (progn ,@forms)
-          (setq ,abortp nil))
-        (when ,var
-          (close ,var :abort ,abortp))))))
 
 (defmacro with-open-stream (&rest args)
   (let ((var (caar args))
