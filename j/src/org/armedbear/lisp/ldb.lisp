@@ -1,7 +1,7 @@
 ;;; ldb.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: ldb.lisp,v 1.1 2003-09-11 01:16:00 piso Exp $
+;;; $Id: ldb.lisp,v 1.2 2003-09-12 14:16:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,9 +26,16 @@
 (defun byte-position (bytespec)
   (cdr bytespec))
 
-(defun ldb (bytespec n)
-  (logand (ash n (- (byte-position bytespec)))
+(defun ldb (bytespec integer)
+  (logand (ash integer (- (byte-position bytespec)))
           (1- (ash 1 (byte-size bytespec)))))
 
-(defun ldb-test (bytespec n)
-  (not (zerop (ldb bytespec n))))
+(defun ldb-test (bytespec integer)
+  (not (zerop (ldb bytespec integer))))
+
+(defun dpb (newbyte bytespec integer)
+  (let* ((size (byte-size bytespec))
+         (position (byte-position bytespec))
+         (mask (1- (ash 1 size))))
+    (logior (logand integer (lognot (ash mask position)))
+	    (ash (logand newbyte mask) position))))
