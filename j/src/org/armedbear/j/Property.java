@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.6 2002-11-17 15:26:20 piso Exp $
+ * $Id: Property.java,v 1.7 2002-11-22 02:04:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -210,6 +210,8 @@ public final class Property implements Comparable, Constants
         createProperty("wrap", false);
 
     // String properties with default values.
+    public static final Property CLHS_ROOT =
+        createProperty("clhsRoot", "/usr/share/doc/hyperspec");
     public static final Property DEFAULT_ENCODING =
         createProperty("defaultEncoding", "ISO-8859-1");
     public static final Property DIALOG_FONT_NAME =
