@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: arglist.java,v 1.14 2005-02-28 02:50:05 piso Exp $
+ * $Id: arglist.java,v 1.15 2005-04-04 19:32:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,20 +23,20 @@ package org.armedbear.lisp;
 
 public final class arglist extends Lisp
 {
-    private static final Functional getFunctional(LispObject obj)
+    private static final Operator getFunctional(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj instanceof Functional)
-            return (Functional) obj;
+        if (obj instanceof Operator)
+            return (Operator) obj;
         if (obj instanceof Symbol) {
             LispObject fun = obj.getSymbolFunction();
             if (fun instanceof Autoload) {
                 Autoload autoload = (Autoload) fun;
                 autoload.load();
-                fun = (Functional)autoload.getSymbol().getSymbolFunction();
+                fun = (Operator)autoload.getSymbol().getSymbolFunction();
             }
-            if (fun instanceof Functional) {
-                Functional func = (Functional) fun;
+            if (fun instanceof Operator) {
+                Operator func = (Operator) fun;
                 if (func.getArglist() != null)
                     return func;
                 LispObject other =
@@ -58,7 +58,7 @@ public final class arglist extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispThread thread = LispThread.currentThread();
-            Functional functional = getFunctional(arg);
+            Operator functional = getFunctional(arg);
             LispObject arglist = null;
             if (functional != null)
                 arglist = functional.getArglist();

@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.44 2005-03-19 20:00:24 piso Exp $
+ * $Id: Function.java,v 1.45 2005-04-04 19:31:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public abstract class Function extends Functional
+public abstract class Function extends Operator
 {
     private Symbol symbol;
 

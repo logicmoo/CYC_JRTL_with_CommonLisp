@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialOperator.java,v 1.15 2005-03-19 20:00:31 piso Exp $
+ * $Id: SpecialOperator.java,v 1.16 2005-04-04 19:32:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class SpecialOperator extends Functional
+public class SpecialOperator extends Operator
 {
     private final String name;
     private final int index;
