@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.46 2004-09-05 20:04:37 piso Exp $
+ * $Id: LispAPI.java,v 1.47 2004-09-06 13:21:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,10 +204,38 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### buffer-pathname
-    private static final Primitive1 BUFFER_PATHNAME =
-        new Primitive1("buffer-pathname", PACKAGE_J, true)
+    // ### buffer-name
+    private static final Primitive BUFFER_NAME =
+        new Primitive("buffer-name", PACKAGE_J, true)
     {
+        public LispObject execute()
+        {
+            String name = Editor.currentEditor().getBuffer().getTitle();
+            return name != null ? new SimpleString(name) : NIL;
+        }
+
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            String name = checkBuffer(arg).getTitle();
+            return name != null ? new SimpleString(name) : NIL;
+        }
+    };
+
+    // ### buffer-pathname
+    private static final Primitive BUFFER_PATHNAME =
+        new Primitive("buffer-pathname", PACKAGE_J, true)
+    {
+        public LispObject execute()
+        {
+            File file = Editor.currentEditor().getBuffer().getFile();
+            if (file != null) {
+                if (file.isRemote())
+                    return new SimpleString(file.netPath());
+                return new SimpleString(file.canonicalPath());
+            }
+            return NIL;
+        }
+
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             File file = checkBuffer(arg).getFile();
