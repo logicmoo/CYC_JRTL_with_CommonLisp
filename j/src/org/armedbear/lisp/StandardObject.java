@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.31 2004-11-06 20:02:27 piso Exp $
+ * $Id: StandardObject.java,v 1.32 2004-11-06 20:34:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,13 +229,20 @@ public class StandardObject extends LispObject
     };
 
     private static final Primitive STD_SLOT_VALUE =
-        new Primitive("std-slot-value", PACKAGE_SYS, false, "instance slot-name")
+        new Primitive("std-slot-value", PACKAGE_SYS, false,
+                      "instance slot-name")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             LispObject value = null;
-            StandardObject instance = (StandardObject) first;
+            StandardObject instance;
+            try {
+                instance = (StandardObject) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
             Layout layout = instance.getInstanceLayout();
             int index = layout.getSlotIndex(second);
             if (index >= 0) {
@@ -254,6 +261,45 @@ public class StandardObject extends LispObject
                 return Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
                                                    instance, second);
             return value;
+        }
+    };
+
+    private static final Primitive _SET_STD_SLOT_VALUE =
+        new Primitive("%set-std-slot-value", PACKAGE_SYS, false,
+                      "instance slot-name new-value")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            StandardObject instance;
+            try {
+                instance = (StandardObject) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+            Layout layout = instance.getInstanceLayout();
+            int index = layout.getSlotIndex(second);
+            if (index >= 0) {
+                // Found instance slot.
+                instance.slots.setRowMajor(index, third);
+                return third;
+            }
+            // Check for class slot.
+            LispObject location = layout.getClassSlotLocation(second);
+            if (location != null) {
+                location.setCdr(third);
+                return third;
+            }
+            LispObject[] args = new LispObject[5];
+            args[0] = instance.getLispClass();
+            args[1] = instance;
+            args[2] = second;
+            args[3] = Symbol.SETF;
+            args[4] = third;
+            Symbol.SLOT_MISSING.execute(args);
+            return third;
         }
     };
 

@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.205 2004-11-06 20:04:09 piso Exp $
+ * $Id: Autoload.java,v 1.206 2004-11-06 20:33:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -438,6 +438,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
+        autoload(PACKAGE_SYS, "%set-std-slot-value", "StandardObject");
         autoload(PACKAGE_SYS, "%socket-accept", "socket_accept");
         autoload(PACKAGE_SYS, "%socket-close", "socket_close");
         autoload(PACKAGE_SYS, "%socket-stream", "socket_stream");
