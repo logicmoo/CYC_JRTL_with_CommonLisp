@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.5 2004-03-05 18:56:02 piso Exp $
+ * $Id: Readtable.java,v 1.6 2004-03-07 16:03:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,8 @@ public final class Readtable extends LispObject
     }
 
     // ### readtablep
-    private static final Primitive1 READTABLEP = new Primitive1("readtablep", "object")
+    private static final Primitive1 READTABLEP =
+        new Primitive1("readtablep", "object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -121,33 +122,27 @@ public final class Readtable extends LispObject
     private static final Primitive COPY_READTABLE =
         new Primitive("copy-readtable", "&optional from-readtable to-readtable")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute()
         {
-            final Readtable from, to;
-            switch (args.length) {
-                case 0:
-                    from = getCurrentReadtable();
-                    to = null;
-                    break;
-                case 1:
-                    from = checkReadtable(args[0]);
-                    to = null;
-                    break;
-                case 2:
-                    from = checkReadtable(args[0]);
-                    if (args[1] == NIL)
-                        to = null;
-                    else
-                        to = checkReadtable(args[1]);
-                    break;
-                default:
-                    return signal(new WrongNumberOfArgumentsException(this));
-            }
-            if (to == null)
+            return new Readtable(getCurrentReadtable());
+        }
+
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg == NIL)
+                return new Readtable();
+            else
+                return new Readtable(checkReadtable(arg));
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Readtable from = checkReadtable(first);
+            if (second == NIL)
                 return new Readtable(from);
-            synchronized (Readtable.class) {
-                to.table = new ArrayList(from.table);
-            }
+            Readtable to = checkReadtable(second);
+            to.table = new ArrayList(from.table);
             return to;
         }
     };
