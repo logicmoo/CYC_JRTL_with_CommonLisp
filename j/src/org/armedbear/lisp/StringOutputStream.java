@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StringOutputStream.java,v 1.9 2004-01-26 00:35:49 piso Exp $
+ * $Id: StringOutputStream.java,v 1.10 2004-01-31 01:16:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,27 @@ public final class StringOutputStream extends Stream
         setWriter(stringWriter = new StringWriter());
     }
 
+    public LispObject typeOf()
+    {
+        return Symbol.STRING_OUTPUT_STREAM;
+    }
+
     public LispClass classOf()
     {
-        return BuiltInClass.STRING_STREAM;
+        return BuiltInClass.STRING_OUTPUT_STREAM;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.STRING_OUTPUT_STREAM)
+            return T;
+        if (type == Symbol.STRING_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_OUTPUT_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_STREAM)
+            return T;
+        return super.typep(type);
     }
 
     public LispString getString()
@@ -51,16 +69,14 @@ public final class StringOutputStream extends Stream
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer("#<STRING-OUTPUT-STREAM ");
-        sb.append(super.toString());
-        sb.append('>');
-        return sb.toString();
+        return unreadableString("STRING-OUTPUT-STREAM");
     }
 
     // ### make-string-output-stream
     // make-string-output-stream &key element-type => string-stream
     private static final Primitive MAKE_STRING_OUTPUT_STREAM =
-        new Primitive("make-string-output-stream","&key element-type") {
+        new Primitive("make-string-output-stream", "&key element-type")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
@@ -73,12 +89,13 @@ public final class StringOutputStream extends Stream
     // ### get-output-stream-string
     // get-output-stream-string string-output-stream => string
     private static final Primitive1 GET_OUTPUT_STREAM_STRING =
-        new Primitive1("get-output-stream-string","string-output-stream") {
+        new Primitive1("get-output-stream-string", "string-output-stream")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof StringOutputStream)
                 return ((StringOutputStream)arg).getString();
-            return signal(new TypeError(this, "string output stream"));
+            return signal(new TypeError(this, Symbol.STRING_OUTPUT_STREAM));
         }
     };
 }
