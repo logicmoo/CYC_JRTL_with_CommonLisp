@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.325 2005-02-28 02:50:03 piso Exp $
+ * $Id: Lisp.java,v 1.326 2005-03-14 20:23:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -632,7 +632,8 @@ public abstract class Lisp
             return arg.getName();
         if (arg instanceof LispCharacter)
             return String.valueOf(new char[] {((LispCharacter)arg).value});
-        signal(new TypeError(arg.writeToString() + " cannot be coerced to a string."));
+        signal(new TypeError("The value " + arg.writeToString() +
+                             " cannot be coerced to a string."));
         // Not reached.
         return null;
     }
@@ -902,7 +903,7 @@ public abstract class Lisp
             return (Function) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "function"));
+            signal(new TypeError(obj, Symbol.FUNCTION));
             // Not reached.
             return null;
         }
@@ -931,7 +932,8 @@ public abstract class Lisp
                 return (Stream) obj;
         if (obj == null)
             throw new NullPointerException();
-        signal(new TypeError(obj, "character input stream"));
+        signal(new TypeError("The value " + obj.writeToString() +
+                             " is not a character input stream."));
         // Not reached.
         return null;
     }
@@ -944,7 +946,8 @@ public abstract class Lisp
                 return (Stream) obj;
         if (obj == null)
             throw new NullPointerException();
-        signal(new TypeError(obj, "character output stream"));
+        signal(new TypeError("The value " + obj.writeToString() +
+                             " is not a character output stream."));
         // Not reached.
         return null;
     }
@@ -957,7 +960,8 @@ public abstract class Lisp
                 return (Stream) obj;
         if (obj == null)
             throw new NullPointerException();
-        signal(new TypeError(obj, "binary input stream"));
+        signal(new TypeError("The value " + obj.writeToString() +
+                             " is not a binary input stream."));
         // Not reached.
         return null;
     }
@@ -978,7 +982,8 @@ public abstract class Lisp
             if (stream.isCharacterInputStream())
                 return stream;
         }
-        signal(new TypeError(obj, "character input stream"));
+        signal(new TypeError("The value " + obj.writeToString() +
+                             " is not a character input stream."));
         // Not reached.
         return null;
     }
@@ -999,7 +1004,8 @@ public abstract class Lisp
             if (stream.isCharacterOutputStream())
                 return stream;
         }
-        signal(new TypeError(obj, "character output stream"));
+        signal(new TypeError("The value " + obj.writeToString() +
+                             " is not a character output stream."));
         // Not reached.
         return null;
     }
@@ -1028,7 +1034,7 @@ public abstract class Lisp
             return (Environment) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "environment"));
+            signal(new TypeError(obj, Symbol.ENVIRONMENT));
             // Not reached.
             return null;
         }
@@ -1107,7 +1113,8 @@ public abstract class Lisp
             list = list.cdr();
         }
         if (list != NIL)
-            signal(new TypeError(String.valueOf(listArg) + " is not a proper list."));
+            signal(new TypeError("The value " + listArg.writeToString() +
+                                 " is not a proper list."));
         return false;
     }
 
@@ -1121,7 +1128,7 @@ public abstract class Lisp
             list = list.cdr();
         }
         if (list != NIL)
-            signal(new TypeError(listArg.writeToString() +
+            signal(new TypeError("The value " + listArg.writeToString() +
                                  " is not a proper list."));
         return false;
     }
