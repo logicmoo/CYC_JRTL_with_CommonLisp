@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.26 2003-06-29 00:19:34 piso Exp $
+ * $Id: Utilities.java,v 1.27 2003-07-04 16:57:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1443,7 +1443,6 @@ public final class Utilities implements Constants
                 return null;
             return KeyStroke.getKeyStroke(keyText.charAt(1));
         }
-        int keyCode = 0;
         int modifiers = 0;
         while (true) {
             if (keyText.startsWith("Ctrl ") || keyText.startsWith("Ctrl\t")) {
@@ -1467,9 +1466,13 @@ public final class Utilities implements Constants
                 continue;
             }
             // No more modifiers.  What's left is the key name.
-            keyCode = getKeyCode(keyText);
             break;
         }
+        if (modifiers == SHIFT_MASK && keyText.length() == 1) {
+            char c = Character.toUpperCase(keyText.charAt(0));
+            return KeyStroke.getKeyStroke(c);
+        }
+        int keyCode = getKeyCode(keyText);
         if (keyCode == 0)
             return null;
         return KeyStroke.getKeyStroke(keyCode, modifiers);
