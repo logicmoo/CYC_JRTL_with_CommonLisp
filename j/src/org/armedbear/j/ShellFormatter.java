@@ -2,7 +2,7 @@
  * ShellFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: ShellFormatter.java,v 1.3 2002-10-19 15:26:59 piso Exp $
+ * $Id: ShellFormatter.java,v 1.4 2003-01-04 17:47:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,10 @@ public final class ShellFormatter extends Formatter
             return segmentList;
         }
         if (line.flags() == STATE_PASSWORD_PROMPT) {
+            addSegment(text, SHELL_FORMAT_TEXT);
+            return segmentList;
+        }
+        if (line.flags() == STATE_OUTPUT) {
             addSegment(text, SHELL_FORMAT_TEXT);
             return segmentList;
         }
