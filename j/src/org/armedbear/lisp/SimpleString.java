@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.15 2004-05-22 19:32:25 piso Exp $
+ * $Id: SimpleString.java,v 1.16 2004-06-04 16:16:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -340,12 +340,21 @@ public final class SimpleString extends AbstractString
         }
     }
 
-    public int hashCode()
+    public int sxhash()
     {
         int hashCode = 0;
         for (int i = 0; i < capacity; i++)
             hashCode = hashCode * 31 + chars[i];
-        return hashCode;
+        return (hashCode & 0x7fffffff);
+    }
+
+    // For EQUALP hash tables.
+    public int psxhash()
+    {
+        int hashCode = 0;
+        for (int i = 0; i < capacity; i++)
+            hashCode = hashCode * 31 + Character.toUpperCase(chars[i]);
+        return (hashCode & 0x7fffffff);
     }
 
     public AbstractVector adjustVector(int newCapacity,

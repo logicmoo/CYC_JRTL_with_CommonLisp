@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.88 2004-05-23 15:22:42 piso Exp $
+ * $Id: LispObject.java,v 1.89 2004-06-04 16:12:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -610,9 +610,15 @@ public class LispObject extends Lisp
         return signal(new TypeError(obj, Symbol.INTEGER));
     }
 
-    public Fixnum sxhash() throws ConditionThrowable
+    public int sxhash() throws ConditionThrowable
     {
-        return new Fixnum(hashCode() & 0x7ffffff);
+        return hashCode() & 0x7fffffff;
+    }
+
+    // For EQUALP hash tables.
+    public int psxhash() throws ConditionThrowable
+    {
+        return hashCode() & 0x7fffffff;
     }
 
     public char[] chars() throws ConditionThrowable

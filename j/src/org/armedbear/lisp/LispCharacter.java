@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.49 2004-05-22 17:25:27 piso Exp $
+ * $Id: LispCharacter.java,v 1.50 2004-06-04 16:13:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,20 +159,25 @@ public final class LispCharacter extends LispObject
         return javaInstance();
     }
 
-    public int hashCode()
+    public int sxhash()
     {
         return value;
     }
 
-    public final String toString()
+    public int psxhash()
     {
-        boolean printReadably = (_PRINT_READABLY_.symbolValueNoThrow() != NIL);
+        return Character.toUpperCase(value);
+    }
+
+    public final String writeToString() throws ConditionThrowable
+    {
+        boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
         // "Specifically, if *PRINT-READABLY* is true, printing proceeds as if
         // *PRINT-ESCAPE*, *PRINT-ARRAY*, and *PRINT-GENSYM* were also true,
         // and as if *PRINT-LENGTH*, *PRINT-LEVEL*, and *PRINT-LINES* were
         // false."
         boolean printEscape =
-            printReadably || (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL);
+            printReadably || (_PRINT_ESCAPE_.symbolValue() != NIL);
         StringBuffer sb = new StringBuffer();
         if (printEscape) {
             sb.append("#\\");
