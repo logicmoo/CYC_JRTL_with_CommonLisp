@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Shell.java,v 1.29 2004-04-13 15:11:01 piso Exp $
+ * $Id: Shell.java,v 1.30 2004-09-13 00:09:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -547,6 +547,8 @@ public class Shell extends CommandInterpreter implements Constants
         if (text.startsWith("Enter passphrase") && text.endsWith(":"))
             return true;
         if (text.toLowerCase().endsWith("password:"))
+            return true;
+        if (text.equals("Response:"))
             return true;
         return false;
     }
