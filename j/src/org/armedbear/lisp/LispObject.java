@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.45 2003-09-10 18:45:02 piso Exp $
+ * $Id: LispObject.java,v 1.46 2003-09-14 12:25:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,6 +186,11 @@ public class LispObject extends Lisp
     public boolean zerop() throws TypeError
     {
         throw new TypeError(this, "number");
+    }
+
+    public LispObject BIT_VECTOR_P()
+    {
+        return NIL;
     }
 
     public LispObject COMPLEXP()
