@@ -104,7 +104,7 @@
       <classpath>
         <pathelement path="${basedir}:${jdk}/jre/lib/rt.jar:${junit}" />
       </classpath>
-      <test name="org.armedbear.lisp.LispTest" />
+      <test name="org.armedbear.lisp.Tests"/>
     </junit>
     <echo message="${build}&#10;" file="${basedir}/org/armedbear/lisp/build"/>
   </target>
