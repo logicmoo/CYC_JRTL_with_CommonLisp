@@ -245,6 +245,8 @@
     <li><a href="commands.html#quit">quit</a></li>
     <li><a href="commands.html#recompile">recompile</a></li>
     <li><a href="commands.html#recordMacro">recordMacro</a></li>
+    <li><a href="commands.html#redo">redo</a></li>
+    <li><a href="commands.html#renumberRegion">renumberRegion</a></li>
     <li><a href="commands.html#replace">replace</a></li>
     <li><a href="commands.html#replaceInFiles">replaceInFiles</a></li>
     <li><a href="commands.html#resetDisplay">resetDisplay</a></li>
@@ -3275,6 +3277,55 @@ Undoes the last undo.
 <br><br>
 </dl><!--<hr>-->
 
+<a name="renumberRegion">renumberRegion</a><dl><dd>
+<p>
+Changes the first number in each line of the selected region so that the it is
+one more than the first number in the preceding line. By default, the smallest
+value in the entire region is used as the value for the first line. The order
+of the lines is not changed. Only the first number in each line is considered,
+and lines that don't contain a number at all are ignored.
+<p>
+For example, suppose you start with a region that looks like this:
+<pre>
+        private static final int DEFUN       = 52;
+        private static final int DEFVAR      = 6;
+        private static final int DO          = 17;
+        private static final int DOLIST      = 81; // Not 82!
+        private static final int IF          = 9;
+        private static final int LAMBDA      = 1;
+        private static final int LET         = 3;</pre>
+When invoked with no arguments, renumberRegions starts by looking at the first
+number in each line of the region to find the smallest value (which in this
+case is 1). The first number in the first line of the region (52) is replaced
+with this value (1), and the first number in each subsequent line is changed so
+that it is one more than the first number on the preceding line. So the region
+ends up looking like this:
+<pre>
+        private static final int DEFUN       = 1;
+        private static final int DEFVAR      = 2;
+        private static final int DO          = 3;
+        private static final int DOLIST      = 4; // Not 82!
+        private static final int IF          = 5;
+        private static final int LAMBDA      = 6;
+        private static final int LET         = 7;</pre>
+You can also explicitly specify what number to start with by providing a
+numeric argument with the command. For example, if you do Alt X,
+"renumberRegion 100", the region ends up looking like this:
+<pre>
+        private static final int DEFUN       = 100;
+        private static final int DEFVAR      = 101;
+        private static final int DO          = 102;
+        private static final int DOLIST      = 103; // Not 82!
+        private static final int IF          = 104;
+        private static final int LAMBDA      = 105;
+        private static final int LET         = 106;</pre>
+<p>
+<b>Default key mapping:</b> None
+<p>
+<b>See also:</b> <a href="#sortLines">sortLines</a>
+<br><br>
+</dl><!--<hr>-->
+
 <a name="replace">replace</a><dl><dd>
 <p>
 Replaces one or more occurrences of one pattern with another.
@@ -3681,7 +3732,7 @@ The specified shell command is executed in the editor's current directory,
 which is normally the parent directory of the file associated with the current
 buffer, or the user's home directory if the current file is remote or if there
 is no file associated with the current buffer.
-<p> 
+<p>
 <b>Default key mapping:</b> None
 <br><br>
 </dl><!--<hr>-->
