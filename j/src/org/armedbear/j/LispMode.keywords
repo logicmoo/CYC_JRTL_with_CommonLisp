@@ -79,11 +79,13 @@ char<=
 char=
 char>
 char>=
+characterp
 check-type
 clear-output
 close
 code-char
 coerce
+compile-file
 compiler-macro-function
 concatenate
 cond
@@ -126,6 +128,7 @@ delete-package
 deposit-field
 describe
 destructuring-bind
+directory-namestring
 do
 do*
 do-all-symbols
@@ -138,6 +141,8 @@ ecase
 eighth
 elt
 endp
+enough-namestring
+ensure-directories-exist
 eq
 eql
 equal
@@ -151,8 +156,10 @@ export
 fboundp
 fdefinition
 fifth
+file-namestring
 fill
 fill-pointer
+find
 find-all-symbols
 find-if
 find-if-not
@@ -176,6 +183,7 @@ gethash
 go
 handler-bind
 handler-case
+host-namestring
 identity
 if
 ignore-errors
@@ -238,12 +246,14 @@ maplist
 mask-field
 max
 member
+merge-pathnames
 min
 multiple-value-bind
 multiple-value-call
 multiple-value-list
 multiple-value-prog1
 multiple-value-setq
+namestring
 nbutlast
 nconc
 ninth
@@ -390,6 +400,7 @@ terpri
 the
 third
 time
+truename
 type-of
 typecase
 typep
