@@ -5,7 +5,13 @@
 #+armedbear
 (require 'pprint)
 
-(defvar *old-d-p-d* *default-pathname-defaults*)
+#+allegro
+(progn
+  (setq excl:*record-source-file-info* nil)
+  (setq excl:*load-source-file-info* nil)
+  (setq excl:*record-xref-info* nil)
+  (setq excl:*load-xref-info* nil))
+
 (setf *default-pathname-defaults* #p"/home/peter/cl-bench/")
 
 (load #p"defpackage.lisp")
@@ -51,6 +57,21 @@
 (defun bench-gc ()
   (sb-ext:gc #+gencgc :full #+gencgc t))
 
+#+allegro
+(defun bench-gc ()
+  (excl:gc))
+
+(defun report-filename ()
+  (let ((impl ""))
+    #+allegro   (setf impl "-allegro")
+    #+armedbear (setf impl "-armedbear")
+    #+sbcl      (setf impl "-sbcl")
+    (multiple-value-bind (sec min hour day month year)
+      (get-decoded-time)
+      (format nil "~abenchmark-~d~2,'0d~2,'0dT~2,'0d~2,'0d~a"
+              #+win32 "" #-win32 "/var/tmp/"
+              year month day hour min impl))))
+
 (defun run-benchmark (function &optional args (times 1))
   (let ((name (symbol-name function)))
     (format t "Running benchmark ~A" (symbol-name function))
@@ -75,7 +96,7 @@
   (values))
 
 (defun run-benchmarks ()
-  (with-open-file (f (benchmark-report-file)
+  (with-open-file (f (report-filename)
                      :direction :output
                      :if-exists :supersede)
     (let ((*benchmark-output* f))
@@ -92,6 +113,7 @@
       (run-benchmark 'cl-bench.misc:run-compiler)
       #+nil
       (run-benchmark 'cl-bench.misc:run-fasload)
+      #-allegro
       (run-benchmark 'cl-bench.misc:run-permutations)
       #+nil
       (progn
@@ -143,22 +165,32 @@
       (run-benchmark 'cl-bench.bignum:run-pari-100-10)
       (run-benchmark 'cl-bench.bignum:run-pari-200-5)
       (run-benchmark 'cl-bench.bignum:run-pi-decimal/small)
+      #-allegro
       (run-benchmark 'cl-bench.bignum:run-pi-decimal/big)
       (run-benchmark 'cl-bench.bignum:run-pi-atan)
       (run-benchmark 'cl-bench.ratios:run-pi-ratios)
       #-clisp
       (run-benchmark 'cl-bench.hash:run-slurp-lines)
+      #-allegro
       (run-benchmark 'cl-bench.hash:hash-strings)
       (run-benchmark 'cl-bench.hash:hash-integers)
+      #-allegro
       (run-benchmark 'cl-bench.boehm-gc:gc-benchmark)
       (run-benchmark 'cl-bench.deflate:run-deflate-file)
+      #-allegro
       (run-benchmark 'cl-bench.arrays:bench-1d-arrays)
+      #-allegro
       (run-benchmark 'cl-bench.arrays:bench-2d-arrays '(1000 1))
+      #-allegro
       (run-benchmark 'cl-bench.arrays:bench-3d-arrays '(100 1))
       (run-benchmark 'cl-bench.arrays:bench-bitvectors '(1000000 1))
+      #-allegro
       (run-benchmark 'cl-bench.arrays:bench-strings '(1000000 1))
+      #-allegro
       (run-benchmark 'cl-bench.arrays:bench-strings/adjustable '(1000000 1))
+      #-allegro
       (run-benchmark 'cl-bench.arrays:bench-string-concat '(1000000 1))
+      #-allegro
       (run-benchmark 'cl-bench.arrays:bench-search-sequence '(1000000 1))
       (run-benchmark 'cl-bench.clos:run-defclass)
       (run-benchmark 'cl-bench.clos:run-defmethod)
@@ -172,5 +204,3 @@
 (in-package "CL-USER")
 (import '(cl-bench:run-benchmark cl-bench:run-benchmarks))
 (export '(run-benchmark run-benchmarks))
-
-(setf *default-pathname-defaults* *old-d-p-d*)
