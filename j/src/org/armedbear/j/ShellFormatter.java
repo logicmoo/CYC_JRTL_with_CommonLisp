@@ -2,7 +2,7 @@
  * ShellFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: ShellFormatter.java,v 1.2 2002-10-15 01:01:16 piso Exp $
+ * $Id: ShellFormatter.java,v 1.3 2002-10-19 15:26:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +36,7 @@ public final class ShellFormatter extends Formatter
     public ShellFormatter(Buffer buffer)
     {
         this.buffer = buffer;
-        if (buffer instanceof Shell)
-            promptRE = ((Shell)buffer).getPromptRE();
-        else
-            promptRE = null;
+        promptRE = ((Shell)buffer).getPromptRE();
     }
 
     public LineSegmentList formatLine(Line line)
