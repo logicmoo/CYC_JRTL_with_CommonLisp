@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.6 2003-10-16 23:13:43 piso Exp $
+ * $Id: open.java,v 1.7 2003-10-17 15:36:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class open extends Lisp
             } else {
                 // FIXME
                 throw new ConditionThrowable(new LispError(String.valueOf(ifExists)) +
-                                    " is not a recognized value for :IF-EXISTS");
+                                             " is not a recognized value for :IF-EXISTS");
             }
             try {
                 if (binary)
@@ -91,7 +91,7 @@ public final class open extends Lisp
                     return new CharacterInputStream(new FileInputStream(namestring));
             }
             catch (FileNotFoundException e) {
-                throw new ConditionThrowable(new LispError(" file not found: " + first));
+                throw new ConditionThrowable(new LispError("file not found: " + first));
             }
         }
     };
