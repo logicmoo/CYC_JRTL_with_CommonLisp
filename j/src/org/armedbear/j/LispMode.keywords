@@ -223,6 +223,7 @@ input-stream-p
 inspect
 integerp
 intern
+intersection
 keywordp
 labels
 lambda
@@ -298,6 +299,7 @@ multiple-value-setq
 namestring
 nbutlast
 nconc
+nintersection
 ninth
 not
 notany
