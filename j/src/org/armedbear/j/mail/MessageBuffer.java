@@ -1,8 +1,8 @@
 /*
  * MessageBuffer.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.14 2003-04-18 17:28:39 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: MessageBuffer.java,v 1.15 2003-04-19 18:31:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -973,8 +973,7 @@ public class MessageBuffer extends Buffer
                 setFormatter(new WebFormatter(this));
         } else {
             if (wrap)
-                body = Utilities.wrap(body,
-                    Editor.currentEditor().getDisplay().getColumns(), 8);
+                body = wrapBody(body);
             appendLine("");
             append(body);
             if (!(formatter instanceof MessageFormatter))
@@ -1024,6 +1023,62 @@ public class MessageBuffer extends Buffer
             }
         }
         renumber();
+    }
+
+    private static String wrapBody(String body)
+    {
+        final int wrapCol = Editor.currentEditor().getDisplay().getColumns();
+        final int tabWidth = 8;
+        final int IN_DIFF = 1;
+        org.armedbear.j.SystemBuffer buf = new org.armedbear.j.SystemBuffer();
+        FastStringReader reader = new FastStringReader(body);
+        String s;
+        while ((s = reader.readLine()) != null)
+            buf.appendLine(s);
+        boolean containsDiff = false;
+        boolean inDiff = false;
+        for (Line line = buf.getFirstLine(); line != null; line = line.next()) {
+            if (inDiff) {
+                if (MessageFormatter.isDiffContinuation(line))
+                    line.setFlags(IN_DIFF);
+                else {
+                    inDiff = false;
+                    line.setFlags(0);
+                }
+                continue;
+            }
+            // Not in diff.
+            if (MessageFormatter.isDiffStart(line)) {
+                inDiff = true;
+                line.setFlags(IN_DIFF);
+                containsDiff = true;
+                continue;
+            }
+            // Not start of diff.
+            line.setFlags(0);
+        }
+        if (!containsDiff)
+            return Utilities.wrap(body, wrapCol, tabWidth);
+        // Buffer contains diff.
+        FastStringBuffer out = new FastStringBuffer();
+        FastStringBuffer in = new FastStringBuffer();
+        for (Line line = buf.getFirstLine(); line != null; line = line.next()) {
+            if (line.flags() == IN_DIFF) {
+                if (in.length() > 0) {
+                    out.append(Utilities.wrap(in.toString(), wrapCol, tabWidth));
+                    in.setLength(0);
+                }
+                out.append(line.getText());
+                out.append('\n');
+            } else {
+                // Not in diff.
+                in.append(line.getText());
+                in.append('\n');
+            }
+        }
+        if (in.length() > 0)
+            out.append(Utilities.wrap(in.toString(), wrapCol, tabWidth));
+        return out.toString();
     }
 
     protected void appendHeaderLines(String headers)
