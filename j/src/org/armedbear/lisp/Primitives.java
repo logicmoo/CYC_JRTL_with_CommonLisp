@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.291 2003-07-07 19:22:08 piso Exp $
+ * $Id: Primitives.java,v 1.292 2003-07-08 01:49:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2650,19 +2650,19 @@ public final class Primitives extends Module
                     " already exists");
             LispObject nicknames = checkList(second);
             if (nicknames != NIL) {
-                LispObject list = checkList(nicknames);
+                LispObject list = nicknames;
                 while (list != NIL) {
                     String nick = javaString(list.car());
                     if (Packages.findPackage(nick) != null) {
-                        throw new LispError("a package named " + nick +
-                                            " already exists");
+                        throw new PackageError("a package named " + nick +
+                                               " already exists");
                     }
                     list = list.cdr();
                 }
             }
             LispObject use = checkList(third);
             if (use != NIL) {
-                LispObject list = checkList(use);
+                LispObject list = use;
                 while (list != NIL) {
                     LispObject obj = list.car();
                     if (obj instanceof Package)
