@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.51 2004-05-01 23:40:56 piso Exp $
+;;; $Id: precompiler.lisp,v 1.52 2004-05-03 02:03:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -658,6 +658,7 @@
 (install-handler 'load-time-value      'precompile-load-time-value)
 
 (install-handler 'declare              'precompile-identity)
+(install-handler 'defun                'precompile-identity)
 (install-handler 'go                   'precompile-identity)
 (install-handler 'quote                'precompile-identity)
 (install-handler 'throw                'precompile-identity)
@@ -719,8 +720,11 @@
 (defun compile (name &optional definition)
   (%compile name definition))
 
-;; Redefine DEFMACRO to precompile the expansion function on the fly.
+;; Redefine EVAL to precompile its argument.
+(defun eval (form)
+  (%eval (precompile-form form nil)))
 
+;; Redefine DEFMACRO to precompile the expansion function on the fly.
 (defmacro defmacro (name lambda-list &rest body)
   (let* ((form (gensym))
          (env (gensym))
