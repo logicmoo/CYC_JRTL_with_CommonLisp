@@ -126,6 +126,7 @@ do*
 do-all-symbols
 do-external-symbols
 do-symbols
+documentation
 dolist
 dotimes
 ecase
@@ -145,6 +146,7 @@ export
 fboundp
 fdefinition
 fifth
+fill
 fill-pointer
 find-all-symbols
 find-if
@@ -168,7 +170,9 @@ get-setf-expansion
 gethash
 go
 handler-bind
+handler-case
 if
+ignore-errors
 import
 in-package
 incf
@@ -263,6 +267,8 @@ package-name
 package-nicknames
 package-shadowing-symbols
 package-use-list
+package-used-by-list
+packagep
 parse-integer
 pop
 pprint
@@ -325,8 +331,10 @@ shiftf
 simple-string-p
 sixth
 some
+sort
 special
 special-operator-p
+stable-sort
 store-value
 string-capitalize
 string-downcase
