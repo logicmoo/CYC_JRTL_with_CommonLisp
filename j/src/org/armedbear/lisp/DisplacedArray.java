@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.28 2004-02-24 12:51:42 piso Exp $
+ * $Id: DisplacedArray.java,v 1.29 2004-02-25 01:43:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ public final class DisplacedArray extends AbstractArray
         if (dimv.length == 1) {
             if (array instanceof AbstractString)
                 return Symbol.STRING;
-            if (array instanceof BitVector)
+            if (array instanceof AbstractBitVector)
                 return Symbol.BIT_VECTOR;
             return list3(Symbol.VECTOR, T, new Fixnum(size));
         }
