@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.13 2003-07-07 14:15:51 piso Exp $
+ * $Id: PackageFunctions.java,v 1.14 2003-07-07 14:19:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,8 +32,8 @@ public final class PackageFunctions extends Lisp
         }
     };
 
-    // ### package-nicknames
-    // package-nicknames package => nicknames
+    // ### package-name
+    // package-name package => nicknames
     private static final Primitive1 PACKAGE_NAME =
         new Primitive1("package-name") {
         public LispObject execute(LispObject arg) throws LispError
@@ -158,8 +158,8 @@ public final class PackageFunctions extends Lisp
         }
     };
 
-    // ### package-used-by-list
-    // package-used-by-list package => used-by-list
+    // ### package-shadowing-symbols
+    // package-shadowing-symbols package => used-by-list
     private static final Primitive1 PACKAGE_SHADOWING_SYMBOLS =
         new Primitive1("package-shadowing-symbols") {
         public LispObject execute(LispObject arg) throws LispError
