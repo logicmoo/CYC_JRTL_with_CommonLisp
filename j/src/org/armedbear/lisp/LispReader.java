@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.17 2004-03-16 14:48:59 piso Exp $
+ * $Id: LispReader.java,v 1.18 2004-03-16 16:10:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,6 +142,17 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             return stream.readComma();
+        }
+    };
+
+    public static final DispatchMacroFunction SHARP_R =
+        new DispatchMacroFunction("sharp-R", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readRadix(n);
         }
     };
 }
