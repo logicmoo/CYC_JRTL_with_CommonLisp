@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.190 2004-06-28 01:05:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.191 2004-06-28 14:29:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -48,10 +48,28 @@
 (defvar *blocks* ())
 (defvar *locals* ())
 (defvar *max-locals* 0)
+(defvar *all-locals* ())
 
 (defvar *handlers* ())
 
 (defstruct handler from to code catch-type)
+
+(defvar *variables* ())
+
+(defstruct variable
+  name
+  special-p
+  index)
+
+(defun push-variable (var special-p)
+  (let ((index (if special-p nil (length *all-locals*))))
+    (push (make-variable :name var :special-p special-p :index index)
+          *variables*)
+    (unless special-p
+      (push var *all-locals*))))
+
+(defun find-variable (var)
+  (find var *variables* :key 'variable-name))
 
 ;; Returns index of allocated slot.
 (defun allocate-local (symbol)
@@ -63,20 +81,11 @@
 
 ;; Returns index of allocated slot.
 (defun local-index (symbol)
-  (let ((tail (memq symbol *locals*)))
-    (and tail (1- (length tail)))))
-
-(defvar *variables* ())
-
-(defstruct variable
-  name
-  special-p)
-
-(defun push-variable (var special-p)
-  (push (make-variable :name var :special-p special-p) *variables*))
-
-(defun find-variable (var)
-  (find var *variables* :key 'variable-name))
+  (if *use-locals-vector*
+      (let ((var (find-variable symbol)))
+        (and var (variable-index var)))
+      (let ((tail (memq symbol *locals*)))
+        (and tail (1- (length tail))))))
 
 (defvar *local-functions* ())
 
@@ -1858,6 +1867,15 @@
                                      "bindSpecial"
                                      "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
                                      -2)))
+              (*use-locals-vector*
+               (let ((index (local-index var)))
+                 (unless index
+                   (error "COMPILE-MULTIPLE-VALUE-BIND: can't find local variable ~S." var))
+                 (emit 'aload 1) ; Stack: value array
+                 (emit 'swap) ; array value
+                 (emit 'bipush index) ; array value index
+                 (emit 'swap) ; array index value
+                 (emit 'aastore)))
               (t
                (emit 'astore (allocate-local var))))))
     (emit-clear-values)
@@ -1970,6 +1988,15 @@
                                    "bindSpecial"
                                    "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
                                    -2)))
+            (*use-locals-vector*
+             (let ((index (local-index var)))
+               (unless index
+                 (error "COMPILE-LET-VARS: can't find local variable ~S." var))
+               (emit 'aload 1) ; Stack: value array
+               (emit 'swap) ; array value
+               (emit 'bipush index) ; array value index
+               (emit 'swap) ; array index value
+               (emit 'aastore)))
             (t
              (let ((index (local-index var)))
                (unless index
@@ -2010,6 +2037,15 @@
                                    "bindSpecial"
                                    "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
                                    -2)))
+            (*use-locals-vector*
+             (let ((index (local-index var)))
+               (unless index
+                 (error "COMPILE-LET-VARS: can't find local variable ~S." var))
+               (emit 'aload 1) ; Stack: value array
+               (emit 'swap) ; array value
+               (emit 'bipush index) ; array value index
+               (emit 'swap) ; array index value
+               (emit 'aastore)))
             (t
              (emit 'astore (allocate-local var)))))))
 
@@ -2207,12 +2243,18 @@
       (unless (remove-store-value)
         (emit-push-value))
       (maybe-emit-clear-values (cadr rest))
-      (cond (for-effect
-             (emit 'astore index))
+      (unless for-effect
+        (emit 'dup))
+      (cond (*use-locals-vector*
+             (emit 'aload 1) ; Stack: value array
+             (emit 'swap) ; array value
+             (emit 'bipush index) ; array value index
+             (emit 'swap) ; array index value
+             (emit 'aastore))
             (t
-             (emit 'dup)
-             (emit 'astore index)
-             (emit-store-value)))
+             (emit 'astore index)))
+      (unless for-effect
+        (emit-store-value))
       (return-from compile-setq))
     ;; index is NIL, look in *args* ...
     (setq index (position sym *args*))
@@ -2591,9 +2633,16 @@
     (unless (and v (variable-special-p v))
       (let ((index (local-index var)))
         (when index
-          (emit 'aload index)
-          (emit-store-value)
-          (return-from compile-variable-ref)))
+          (cond (*use-locals-vector*
+                 (emit 'aload 1)
+                 (emit 'bipush index)
+                 (emit 'aaload)
+                 (emit-store-value)
+                 (return-from compile-variable-ref))
+                (t
+                 (emit 'aload index)
+                 (emit-store-value)
+                 (return-from compile-variable-ref)))))
       ;; Not found in locals; look in args.
       (let ((index (position var *args*)))
         (when index
@@ -2810,7 +2859,8 @@
 ;; Returns descriptor.
 (defun analyze-args (args)
   (assert (not (memq '&AUX args)))
-  (when (or (memq '&KEY args)
+  (when (or *use-locals-vector*
+            (memq '&KEY args)
             (memq '&OPTIONAL args)
             (memq '&REST args))
     (setq *using-arg-array* t)
@@ -2859,6 +2909,7 @@
          (*args* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
          (*locals* ())
          (*max-locals* 0)
+         (*all-locals* ())
          (*handlers* ())
          (*env* environment)
          (*closure-vars* (if environment (sys::environment-vars environment) nil))
@@ -2877,8 +2928,10 @@
         (let* ((fun (sys::make-compiled-function nil args body))
                (vars (sys::varlist fun)))
           (dolist (var vars)
+            (push var *all-locals*)
             (vector-push var *args*)))
         (dolist (arg args)
+          (push arg *all-locals*)
           (vector-push arg *args*)))
     (allocate-local nil) ;; "this" pointer
     (if *using-arg-array*
@@ -2897,6 +2950,8 @@
       (emit-push-value)) ; leave result on stack
     (emit 'areturn)
 
+;;     (%format t "*all-locals* = ~S~%" *all-locals*)
+
     ;; Go back and fill in prologue.
     (let ((code *code*))
       (setf *code* ())
@@ -2904,7 +2959,10 @@
       (when (or *hairy-arglist-p* *use-locals-vector*)
         (emit 'aload_0)
         (emit 'aload_1)
-        (emit 'iconst_0) ; Number of slots for locals.
+        ; Reserve slots for locals (if applicable).
+        (if *use-locals-vector*
+            (emit 'sipush (- (length *all-locals*) (length *args*)))
+            (emit 'iconst_0))
         (emit-invokevirtual *this-class*
                             "processArgs"
                             "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
