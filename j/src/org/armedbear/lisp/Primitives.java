@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.256 2003-06-23 03:24:27 piso Exp $
+ * $Id: Primitives.java,v 1.257 2003-06-23 11:18:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -450,7 +450,7 @@ public final class Primitives extends Module
             case EQUAL:                         // ### equal
                 return first.equal(second) ? T : NIL;
             case EQUALP:                        // ### equalp
-                return equalp(first, second) ? T : NIL;
+                return first.equalp(second) ? T : NIL;
             case MEMBER: {                      // ### member
                 // member item list &key key test test-not => tail
                 // FIXME Support keyword arguments!
