@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.226 2004-07-20 16:30:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.227 2004-07-20 21:58:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1475,84 +1475,70 @@
 (defun compile-constant (form &key (target *val*))
   (unless target
     (return-from compile-constant))
-  (cond
-   ((fixnump form)
-    (let* ((n form)
-           (translations '((0 . "ZERO") (1 . "ONE") (2 . "TWO") (-1 . "MINUS_ONE")))
-           (translation (cdr (assoc n translations))))
-      (if translation
-          (emit 'getstatic
-                +lisp-fixnum-class+
-                translation
-                +lisp-fixnum+)
-          (emit 'getstatic
-                *this-class*
-                (declare-fixnum n)
-                +lisp-fixnum+))))
-   ((numberp form)
-    (let ((g (declare-object-as-string form)))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-object+)))
-   ((stringp form)
-    (if *compile-file-truename*
-        (let ((g (declare-string form)))
-          (emit 'getstatic
-                *this-class*
-                g
-                +lisp-simple-string+))
-        (let ((g (declare-object form)))
-          (emit 'getstatic
-                *this-class*
-                g
-                +lisp-object+))))
-   ((vectorp form)
-    (let ((g (declare-object-as-string form)))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-object+)))
-   ((characterp form)
-    (let ((g (declare-object-as-string form)))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-object+)))
-   ((symbolp form)
-    (when (null (symbol-package form))
-      ;; An uninterned symbol.
-      (let ((g (if *compile-file-truename*
+  (cond ((numberp form)
+         (if (fixnump form)
+             (let* ((n form)
+                    (translations '(( 0 . "ZERO")
+                                    ( 1 . "ONE")
+                                    ( 2 . "TWO")
+                                    (-1 . "MINUS_ONE")))
+                    (translation (cdr (assoc n translations))))
+               (if translation
+                   (emit 'getstatic
+                         +lisp-fixnum-class+
+                         translation
+                         +lisp-fixnum+)
+                   (emit 'getstatic
+                         *this-class*
+                         (declare-fixnum n)
+                         +lisp-fixnum+)))
+             (emit 'getstatic
+                   *this-class*
                    (declare-object-as-string form)
-                   (declare-object form))))
-        (emit 'getstatic
-              *this-class*
-              g
-              +lisp-object+))))
-   ((or (classp form) (hash-table-p form) (typep form 'generic-function))
-    (let ((g (declare-object form)))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-object+)))
-   ((pathnamep form)
-    (let ((g (if *compile-file-truename*
-                 (declare-object-as-string form)
-                 (declare-object form))))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-object+)))
-   ((packagep form)
-    (let ((g (if *compile-file-truename*
-                 (declare-package form)
-                 (declare-object form))))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-object+)))
-   (t
-    (error "COMPILE-CONSTANT unhandled case ~S" form)))
+                   +lisp-object+)))
+        ((stringp form)
+         (if *compile-file-truename*
+             (emit 'getstatic
+                   *this-class*
+                   (declare-string form)
+                   +lisp-simple-string+)
+             (emit 'getstatic
+                   *this-class*
+                   (declare-object form)
+                   +lisp-object+)))
+        ((vectorp form)
+         (emit 'getstatic
+               *this-class*
+               (declare-object-as-string form)
+               +lisp-object+))
+        ((characterp form)
+         (emit 'getstatic
+               *this-class*
+               (declare-object-as-string form)
+               +lisp-object+))
+        ((or (classp form) (hash-table-p form) (typep form 'generic-function))
+         (emit 'getstatic
+               *this-class*
+               (declare-object form)
+               +lisp-object+))
+        ((pathnamep form)
+         (let ((g (if *compile-file-truename*
+                      (declare-object-as-string form)
+                      (declare-object form))))
+           (emit 'getstatic
+                 *this-class*
+                 g
+                 +lisp-object+)))
+        ((packagep form)
+         (let ((g (if *compile-file-truename*
+                      (declare-package form)
+                      (declare-object form))))
+           (emit 'getstatic
+                 *this-class*
+                 g
+                 +lisp-object+)))
+        (t
+         (error "COMPILE-CONSTANT unhandled case ~S" form)))
   (emit-move-from-stack target))
 
 (defun compile-binary-operation (op args &key (target *val*))
@@ -2062,12 +2048,6 @@
                              "bindSpecial"
                              "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
                              -3))
-;;         (*child-p*
-;;          (emit 'aload *context-register*) ; Stack: value context
-;;          (emit 'swap) ; context value
-;;          (emit 'bipush (variable-index variable)) ; context value index
-;;          (emit 'swap) ; context index value
-;;          (emit 'aastore))
         (*use-locals-vector*
          (emit 'aload 1) ; Stack: value array
          (emit 'swap) ; array value
@@ -2425,9 +2405,16 @@
                   (emit 'getstatic
                         *this-class*
                         g
-                        +lisp-symbol+)
-                  (emit-move-from-stack target))
-                (compile-constant obj :target target)))
+                        +lisp-symbol+))
+                ;; An uninterned symbol.
+                (let ((g (if *compile-file-truename*
+                             (declare-object-as-string obj)
+                             (declare-object obj))))
+                  (emit 'getstatic
+                        *this-class*
+                        g
+                        +lisp-object+)))
+            (emit-move-from-stack target))
            ((listp obj)
             (let ((g (if *compile-file-truename*
                          (declare-object-as-string obj)
@@ -2599,25 +2586,25 @@
                   (emit-move-from-stack target))
                 (progn
                   (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
-           ((and (consp name) (eq (car name) 'LAMBDA))
-            (let ((closure-vars *visible-variables*)
-                  (lambda-body (cddr name)))
-              (when closure-vars
-                (dolist (variable closure-vars)
-                  (when (contains-symbol (variable-name variable) lambda-body)
-                    (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))))
-              (when (contains-return lambda-body)
-                (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
-              (fresh-line)
-              (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
-              (let ((g (if *compile-file-truename*
-                           (declare-lambda name)
-                           (declare-object (sys::coerce-to-function name)))))
-                (emit 'getstatic
-                      *this-class*
-                      g
-                      +lisp-object+)
-                (emit-move-from-stack target))))
+;;            ((and (consp name) (eq (car name) 'LAMBDA))
+;;             (let ((closure-vars *visible-variables*)
+;;                   (lambda-body (cddr name)))
+;;               (when closure-vars
+;;                 (dolist (variable closure-vars)
+;;                   (when (contains-symbol (variable-name variable) lambda-body)
+;;                     (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))))
+;;               (when (contains-return lambda-body)
+;;                 (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
+;;               (fresh-line)
+;;               (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
+;;               (let ((g (if *compile-file-truename*
+;;                            (declare-lambda name)
+;;                            (declare-object (sys::coerce-to-function name)))))
+;;                 (emit 'getstatic
+;;                       *this-class*
+;;                       g
+;;                       +lisp-object+)
+;;                 (emit-move-from-stack target))))
            (t
             (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
@@ -2923,31 +2910,32 @@
                          (funcall handler form :target target)
                          )
                         ((macro-function op)
-                         (compile-form (macroexpand form)))
+                         (compile-form (macroexpand form) :target target))
                         ((special-operator-p op)
                          (error "COMPILE-FORM: unsupported special operator ~S." op))
                         (t
                          (compile-function-call form :target target))))
                  ((and (consp op) (eq (car op) 'LAMBDA))
                   (let ((new-form (list* 'FUNCALL form)))
-                    (compile-form new-form)))
+                    (compile-form new-form :target target)))
                  (t
                   (error "COMPILE-FORM unhandled case ~S" form)))))
-        ((null form)
-         (emit-push-nil)
-         (emit-move-from-stack target))
-        ((eq form t)
-         (emit-push-t)
-         (emit-move-from-stack target))
-        ((keywordp form)
-         (let ((g (declare-keyword form)))
+        ((symbolp form)
+         (cond
+          ((null form)
+           (emit-push-nil)
+           (emit-move-from-stack target))
+          ((eq form t)
+           (emit-push-t)
+           (emit-move-from-stack target))
+          ((keywordp form)
            (emit 'getstatic
                  *this-class*
-                 g
+                 (declare-keyword form)
                  +lisp-symbol+)
-           (emit-move-from-stack target)))
-        ((symbolp form)
-         (compile-variable-reference form target))
+           (emit-move-from-stack target))
+          (t
+           (compile-variable-reference form target))))
         ((constantp form)
          (compile-constant form :target target))
         (t
