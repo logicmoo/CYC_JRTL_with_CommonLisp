@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.9 2004-05-29 23:23:53 asimon Exp $
+;;; $Id: runtime-class.lisp,v 1.10 2004-08-11 11:06:30 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -389,7 +389,7 @@
 
 
 (defun write-method
-  (class-writer class-name method-name unique-method-name modifiers result-type arg-types &optional super-invocation)
+  (class-writer class-name class-type-name method-name unique-method-name modifiers result-type arg-types &optional super-invocation)
 
   (let* ((arg-count (length arg-types))
          (args-size (reduce #'+ arg-types :key #'size))
@@ -421,9 +421,9 @@
                          "getRuntimeClass"
                          "(Ljava/lang/String;)Lorg/armedbear/lisp/RuntimeClass;")
     (visit-field-insn-4 cv constants.putstatic
-                        class-name "rc" "Lorg/armedbear/lisp/RuntimeClass;")
+                        class-type-name "rc" "Lorg/armedbear/lisp/RuntimeClass;")
     (visit-field-insn-4 cv constants.getstatic
-                        class-name "rc" "Lorg/armedbear/lisp/RuntimeClass;")
+                        class-type-name "rc" "Lorg/armedbear/lisp/RuntimeClass;")
     (visit-ldc-insn-1 cv (make-java-string unique-method-name))
     (visit-method-insn-4 cv constants.invokevirtual
                          "org/armedbear/lisp/RuntimeClass"
@@ -558,7 +558,7 @@
           collect unique-method-name into args
           collect constr-def into args
           do
-          (write-method cw class-type-name "<init>" unique-method-name '("public") "void" arg-types
+          (write-method cw class-name class-type-name "<init>" unique-method-name '("public") "void" arg-types
                         (cons super-type-name super-invocation-args))
           finally
           (setf args-for-%jnew (append args-for-%jnew args)))
@@ -574,7 +574,7 @@
       collect unique-method-name into args
       collect method-def into args
       do
-      (write-method cw class-type-name method-name unique-method-name modifiers ret-type arg-types)
+      (write-method cw class-name class-type-name method-name unique-method-name modifiers ret-type arg-types)
       finally
       (apply #'java::%jnew-runtime-class class-name (append args-for-%jnew args)))
 
