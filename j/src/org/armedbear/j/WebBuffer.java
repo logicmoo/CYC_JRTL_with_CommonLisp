@@ -2,7 +2,7 @@
  * WebBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: WebBuffer.java,v 1.7 2003-06-19 15:03:07 piso Exp $
+ * $Id: WebBuffer.java,v 1.8 2003-08-09 23:46:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -876,6 +876,7 @@ public final class WebBuffer extends Buffer implements WebConstants
                 ed.updateLocation();
             }
         }
+        Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
         Sidebar.repaintBufferListInAllFrames();
         Editor.currentEditor().status("Loading complete");
     }
