@@ -1,8 +1,8 @@
 /*
  * logbitp.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: logbitp.java,v 1.5 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: logbitp.java,v 1.6 2004-04-24 15:49:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,9 +27,9 @@ import java.math.BigInteger;
 // logbitp index integer => generalized-boolean
 public final class logbitp extends Primitive2
 {
-    private logbitp(String name, String arglist)
+    private logbitp()
     {
-        super(name,arglist);
+        super("logbitp", "index integer");
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -52,12 +52,12 @@ public final class logbitp extends Primitive2
         else if (second instanceof Bignum)
             n = ((Bignum)second).getValue();
         else
-            return signal(new TypeError(second, "integer"));
+            return signal(new TypeError(second, Symbol.INTEGER));
         // FIXME See above.
         if (index == Integer.MAX_VALUE)
             return n.signum() < 0 ? T : NIL;
         return n.testBit(index) ? T : NIL;
     }
 
-    private static final logbitp LOGBITP = new logbitp("logbitp","index integer");
+    private static final Primitive2 LOGBITP = new logbitp();
 }
