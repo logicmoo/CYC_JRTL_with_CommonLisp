@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.14 2003-11-14 00:56:06 piso Exp $
+;;; $Id: top-level.lisp,v 1.15 2003-11-14 01:41:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,11 +29,10 @@
   "Number of the next command")
 
 (defun prompt-package-name ()
-  (let ((names (package-nicknames *package*))
-        (result (package-name *package*)))
-    (dolist (name names)
-      (when (< (length name) (length result))
-        (setf result name)))
+  (let ((result (package-name *package*)))
+    (dolist (nickname (package-nicknames *package*))
+      (when (< (length nickname) (length result))
+        (setf result nickname)))
     result))
 
 (defun repl-prompt-fun (stream)
