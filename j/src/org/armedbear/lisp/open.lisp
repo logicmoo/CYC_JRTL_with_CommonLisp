@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.17 2004-09-01 17:25:16 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: open.lisp,v 1.18 2005-03-18 18:39:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun upgraded-element-type-bits (bits)
   (if (zerop (mod bits 8))
@@ -27,6 +27,7 @@
       (+ bits (- 8 (mod bits 8)))))
 
 (defun upgraded-element-type (element-type)
+  (setf element-type (normalize-type element-type))
   (let ((ok nil))
     (if (atom element-type)
         (case element-type
@@ -39,7 +40,8 @@
            (setf element-type (list 'unsigned-byte (upgraded-element-type-bits 1))
                  ok t))
           (integer
-           (setf element-type '(signed-byte 8))))
+           (setf element-type '(signed-byte 8)
+                 ok t)))
         (cond ((eq (car element-type) 'or)
                (let ((types (mapcar #'upgraded-element-type (cdr element-type)))
                      (result '(unsigned-byte 8)))
@@ -69,12 +71,15 @@
                     (when (consp high)
                       (setf high (1- (car high))))
                     (setf element-type
-                          (if (minusp low)
-                              (list 'signed-byte
-                                    (upgraded-element-type-bits (max (1+ (integer-length low))
-                                                                     (integer-length high))))
-                              (list 'unsigned-byte
-                                    (upgraded-element-type-bits (integer-length high))))
+                          (cond ((eq high '*)
+                                 (if (minusp low) '(signed-byte 8) '(unsigned-byte 8)))
+                                ((minusp low)
+                                 (list 'signed-byte
+                                       (upgraded-element-type-bits (max (1+ (integer-length low))
+                                                                        (integer-length high)))))
+                                (t
+                                 (list 'unsigned-byte
+                                       (upgraded-element-type-bits (integer-length high)))))
                           ok t)))))))
     (if ok
         element-type
