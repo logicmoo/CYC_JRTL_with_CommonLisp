@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.290 2003-07-07 18:59:25 piso Exp $
+ * $Id: Primitives.java,v 1.291 2003-07-07 19:22:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2810,7 +2810,7 @@ public final class Primitives extends Module
             int depth = thread.getStackDepth();
             try {
                 while (body != NIL) {
-                    LispObject result = eval(body.car(), ext, thread);
+                    eval(body.car(), ext, thread);
                     body = body.cdr();
                 }
             }
