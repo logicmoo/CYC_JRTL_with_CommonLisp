@@ -1,8 +1,8 @@
 /*
  * Primitive1.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive1.java,v 1.12 2003-12-20 09:01:10 asimon Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Primitive1.java,v 1.13 2004-01-05 18:20:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public class Primitive1 extends Function
     }
 
     public Primitive1(String name, Package pkg, boolean exported,
-                     String arglist)
+                      String arglist)
     {
         super(name, pkg, exported, arglist);
     }
