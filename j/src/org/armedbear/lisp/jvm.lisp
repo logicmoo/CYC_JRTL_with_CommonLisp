@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.102 2004-04-08 12:06:49 piso Exp $
+;;; $Id: jvm.lisp,v 1.103 2004-04-08 14:49:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2223,9 +2223,11 @@
       (unless (remove-store-value)
         (emit-push-value))
       (maybe-emit-clear-values (cadr rest))
+      (ensure-thread-var-initialized)
+      (emit 'aload *thread*)
       (emit-invokestatic +lisp-class+
                          "setSpecialVariable"
-                         "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                         "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
                          -1)
       (emit-store-value))))
 
