@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.23 2003-06-17 16:39:38 piso Exp $
+ * $Id: Directory.java,v 1.24 2003-07-04 02:10:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,9 +46,9 @@ public final class Directory extends Buffer
     // This is the flag for this particular directory buffer.
     private boolean usingNativeFormat;
 
-    private static final int SORT_BY_NAME = 0;
-    private static final int SORT_BY_DATE = 1;
-    private static final int SORT_BY_SIZE = 2;
+    public static final int SORT_BY_NAME = 0;
+    public static final int SORT_BY_DATE = 1;
+    public static final int SORT_BY_SIZE = 2;
 
     private int sortBy = SORT_BY_NAME;
 
@@ -146,6 +146,11 @@ public final class Directory extends Buffer
     public File getCurrentDirectory()
     {
         return getFile();
+    }
+
+    public int getSortBy()
+    {
+        return sortBy;
     }
 
     public Position getInitialDotPos()
@@ -512,6 +517,19 @@ public final class Directory extends Buffer
             sortBy = SORT_BY_SIZE;
         else
             sortBy = SORT_BY_NAME;
+        resort();
+    }
+
+    public void resort(int sortBy)
+    {
+        if (this.sortBy != sortBy) {
+            this.sortBy = sortBy;
+            resort();
+        }
+    }
+
+    private void resort()
+    {
         if (usingNativeFormat) {
             reload();
         } else {

@@ -2,7 +2,7 @@
  * DirectoryMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DirectoryMode.java,v 1.5 2003-06-12 18:35:35 piso Exp $
+ * $Id: DirectoryMode.java,v 1.6 2003-07-04 02:10:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
+import javax.swing.ButtonGroup;
+import javax.swing.JRadioButtonMenuItem;
 
 public final class DirectoryMode extends AbstractMode implements Constants, Mode
 {
@@ -139,7 +141,66 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         menu.add(editor, "Move File...", 'M', "dirMoveFile");
         menu.add(editor, "Delete File", 'D', "dirDeleteFiles");
         menu.addSeparator();
+        menu.add(editor, "Limit...", 'L', "dirLimit");
+        menu.addSeparator();
+        JRadioButtonMenuItem sortByName = new JRadioButtonMenuItem("Sort by Name");
+        sortByName.setMnemonic('N');
+        sortByName.setActionCommand("DirectoryMode.dirSortByName");
+        sortByName.addActionListener(editor.getDispatcher());
+        JRadioButtonMenuItem sortByDate = new JRadioButtonMenuItem("Sort by Date");
+        sortByDate.setMnemonic('T');
+        sortByDate.setActionCommand("DirectoryMode.dirSortByDate");
+        sortByDate.addActionListener(editor.getDispatcher());
+        JRadioButtonMenuItem sortBySize = new JRadioButtonMenuItem("Sort by Size");
+        sortBySize.setMnemonic('S');
+        sortBySize.setActionCommand("DirectoryMode.dirSortBySize");
+        sortBySize.addActionListener(editor.getDispatcher());
+        ButtonGroup group = new ButtonGroup();
+        group.add(sortByName);
+        group.add(sortByDate);
+        group.add(sortBySize);
+        menu.add(sortByName);
+        menu.add(sortByDate);
+        menu.add(sortBySize);
+        Buffer buffer = editor.getBuffer();
+        Directory dir = buffer instanceof Directory ? (Directory) buffer : null;
+        if (dir != null) {
+            int sortBy = dir.getSortBy();
+            if (sortBy == Directory.SORT_BY_NAME)
+                sortByName.setSelected(true);
+            else if (sortBy == Directory.SORT_BY_DATE)
+                sortByDate.setSelected(true);
+            else if (sortBy == Directory.SORT_BY_SIZE)
+                sortBySize.setSelected(true);
+        }
+        menu.addSeparator();
         menu.add(editor, "Rescan Directory", 'R', "dirRescan");
+    }
+
+    public static void dirSortByName()
+    {
+        resort(Directory.SORT_BY_NAME);
+    }
+
+    public static void dirSortByDate()
+    {
+        resort(Directory.SORT_BY_DATE);
+    }
+
+    public static void dirSortBySize()
+    {
+        resort(Directory.SORT_BY_SIZE);
+    }
+
+    private static void resort(int sortBy)
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer instanceof Directory) {
+            editor.setWaitCursor();
+            ((Directory)buffer).resort(sortBy);
+            editor.setDefaultCursor();
+        }
     }
 
     protected ToolBar getDefaultToolBar(Frame frame)
