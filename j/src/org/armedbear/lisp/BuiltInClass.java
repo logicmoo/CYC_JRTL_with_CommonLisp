@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.25 2004-02-10 15:51:34 piso Exp $
+ * $Id: BuiltInClass.java,v 1.26 2004-02-11 19:58:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public class BuiltInClass extends LispClass
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#<BUILT-IN-CLASS ");
-        sb.append(symbol.getName());
+        sb.append(symbol);
         sb.append('>');
         return sb.toString();
     }
@@ -90,6 +90,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass LIST                             = addClass(Symbol.LIST);
     public static final BuiltInClass LOGICAL_PATHNAME                 = addClass(Symbol.LOGICAL_PATHNAME);
     public static final BuiltInClass METHOD_COMBINATION               = addClass(Symbol.METHOD_COMBINATION);
+    public static final BuiltInClass NIL_VECTOR                       = addClass(Symbol.NIL_VECTOR);
     public static final BuiltInClass NULL                             = addClass(Symbol.NULL);
     public static final BuiltInClass NUMBER                           = addClass(Symbol.NUMBER);
     public static final BuiltInClass PACKAGE                          = addClass(Symbol.PACKAGE);
@@ -342,6 +343,8 @@ public class BuiltInClass extends LispClass
         METHOD.setCPL(METHOD, STANDARD_OBJECT, CLASS_T);
         METHOD_COMBINATION.setDirectSuperclass(CLASS_T);
         METHOD_COMBINATION.setCPL(METHOD_COMBINATION, CLASS_T);
+        NIL_VECTOR.setDirectSuperclass(STRING);
+        NIL_VECTOR.setCPL(NIL_VECTOR, STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
         NULL.setDirectSuperclass(LIST);
         NULL.setCPL(NULL, SYMBOL, LIST, SEQUENCE, CLASS_T);
         NUMBER.setDirectSuperclass(CLASS_T);

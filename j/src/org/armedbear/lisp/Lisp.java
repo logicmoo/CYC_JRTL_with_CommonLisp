@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.202 2004-02-10 15:49:15 piso Exp $
+ * $Id: Lisp.java,v 1.203 2004-02-11 19:59:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -709,7 +709,9 @@ public abstract class Lisp
             return new LispString(arg.getName());
         if (arg instanceof LispCharacter)
             return new LispString(((LispCharacter)arg).getValue());
-        signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string"));
+        if (arg instanceof NilVector)
+            return new LispString(((NilVector)arg).getValue());
+        signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string."));
         // Not reached.
         return null;
     }
@@ -722,7 +724,9 @@ public abstract class Lisp
             return arg.getName();
         if (arg instanceof LispCharacter)
             return String.valueOf(new char[] {((LispCharacter)arg).getValue()});
-        signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string"));
+        if (arg instanceof NilVector)
+            return ((NilVector)arg).getValue();
+        signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string."));
         // Not reached.
         return null;
     }
@@ -804,10 +808,12 @@ public abstract class Lisp
     {
         if (type == Symbol.CHARACTER || type == Symbol.BASE_CHAR || type == Symbol.STANDARD_CHAR)
             return Symbol.CHARACTER;
+        if (type == BuiltInClass.CHARACTER)
+            return Symbol.CHARACTER;
         if (type == Symbol.BIT)
             return Symbol.BIT;
         if (type == NIL)
-            return Symbol.CHARACTER;
+            return NIL;
         return T;
     }
 
