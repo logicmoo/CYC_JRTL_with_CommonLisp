@@ -2,7 +2,7 @@
  * Tagbody.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Tagbody.java,v 1.1 2003-02-19 17:48:53 piso Exp $
+ * $Id: Tagbody.java,v 1.2 2003-03-02 02:07:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +25,11 @@ import java.util.ArrayList;
 
 public final class Tagbody extends Lisp
 {
-    private final ArrayList tags = new ArrayList();
+    private final Pair[] tagArray;
 
     public Tagbody(LispObject body) throws LispError
     {
+        ArrayList tags = new ArrayList();
         LispObject remaining = body;
         while (remaining != NIL) {
             LispObject current = remaining.car();
@@ -36,12 +37,14 @@ public final class Tagbody extends Lisp
             if (!(current instanceof Cons))
                 tags.add(new Pair(current, remaining));
         }
+        tagArray = new Pair[tags.size()];
+        tags.toArray(tagArray);
     }
 
     public LispObject getCode(LispObject tag)
     {
-        for (int i = tags.size(); i-- > 0;) {
-            Pair pair = (Pair) tags.get(i);
+        for (int i = tagArray.length; i-- > 0;) {
+            Pair pair = tagArray[i];
             if (eql(pair.first, tag))
                 return pair.second;
         }
