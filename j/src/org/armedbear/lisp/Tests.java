@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.20 2003-04-24 14:05:12 piso Exp $
+ * $Id: Tests.java,v 1.21 2003-07-06 01:17:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -496,8 +496,8 @@ public class Tests extends TestCase
 //         verify("(string-equal \"foo\" \"bar\")", "NIL");
 
         // make-string
-        verify("(make-string 10 :initial-element #\\5)", "\"5555555555\"");
-        verify("(length (make-string 10))", "10");
+//         verify("(make-string 10 :initial-element #\\5)", "\"5555555555\"");
+//         verify("(length (make-string 10))", "10");
 
         // char
         verify("(char \"test\" 0)", "#\\t");
