@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: loop.lisp,v 1.2 2003-07-06 16:29:10 piso Exp $
+;;; $Id: loop.lisp,v 1.3 2003-07-16 18:17:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Based on code from PAIP.
+
+(require 'defstruct)
 
 (in-package "COMMON-LISP")
 
@@ -404,5 +406,4 @@
       (let ((tag (gensym)))
 	`(block nil (tagbody ,tag ,@exps (go ,tag))))))
 
-(unless (member :loop *features*)
-  (push :loop *features*))
+(provide 'loop)
