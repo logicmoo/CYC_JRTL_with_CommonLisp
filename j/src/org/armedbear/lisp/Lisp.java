@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.175 2003-11-12 21:26:20 piso Exp $
+ * $Id: Lisp.java,v 1.176 2003-11-13 17:49:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -316,17 +316,13 @@ public abstract class Lisp
                 result = eval(object, environment, thread);
             }
             catch (StackOverflowError e) {
-                if (debug) {
-                    Symbol savedBacktrace = intern("*SAVED-BACKTRACE*", PACKAGE_EXT);
-                    savedBacktrace.setSymbolValue(thread.backtraceAsList(0));
-                }
+                if (debug)
+                    thread.saveBacktrace();
                 throw new ConditionThrowable(new LispError("stack overflow"));
             }
             catch (ConditionThrowable t) {
-                if (debug) {
-                    Symbol savedBacktrace = intern("*SAVED-BACKTRACE*", PACKAGE_EXT);
-                    savedBacktrace.setSymbolValue(thread.backtraceAsList(0));
-                }
+                if (debug)
+                    thread.saveBacktrace();
                 throw t;
             }
             Debug.assertTrue(result != null);
@@ -1546,7 +1542,12 @@ public abstract class Lisp
         exportConstant("LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
                        new LispFloat(- Double.MIN_VALUE));
 
+    // ### *saved-backtrace*
+    public static final Symbol _SAVED_BACKTRACE_ =
+        exportSpecial("*SAVED-BACKTRACE*", PACKAGE_EXT, NIL);
+
     // Profiler.
+    // ### *granularity*
     public static final Symbol _GRANULARITY_ =
         exportSpecial("*GRANULARITY*", PACKAGE_PROF, new Fixnum(1));
 
