@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.16 2003-12-08 21:06:56 piso Exp $
+;;; $Id: clos.lisp,v 1.17 2003-12-08 21:28:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -209,6 +209,11 @@
                      #'std-compute-slots
                      #'compute-slots)
                  class))
+  (let ((location 0))
+    (dolist (slot (class-slots class))
+      (when (instance-slot-p slot)
+        (setf (slot-definition-location slot) location)
+        (incf location))))
   (setf (class-default-initargs class)
         (compute-class-default-initargs class))
   (values))
@@ -361,11 +366,7 @@
 (defun slot-location (class slot-name)
   (let ((slot (find-slot-definition class slot-name)))
     (if slot
-        (let ((location (slot-definition-location slot)))
-          (if location
-              location
-              (setf (slot-definition-location slot)
-                    (position slot (remove-if-not #'instance-slot-p (class-slots class))))))
+        (slot-definition-location slot)
         nil)))
 
 (defmacro slot-contents (slots location)
