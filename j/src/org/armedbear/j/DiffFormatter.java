@@ -1,8 +1,8 @@
 /*
  * DiffFormatter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: DiffFormatter.java,v 1.1.1.1 2002-09-24 16:07:59 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: DiffFormatter.java,v 1.2 2003-04-19 14:24:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,12 +24,14 @@ package org.armedbear.j;
 public final class DiffFormatter extends Formatter
 {
     // Formats.
-    private static final byte DIFF_FORMAT_TEXT     = 0;
-    private static final byte DIFF_FORMAT_FILE     = 1;
-    private static final byte DIFF_FORMAT_HEADER   = 2;
-    private static final byte DIFF_FORMAT_CONTEXT  = 3;
-    private static final byte DIFF_FORMAT_INSERTED = 4;
-    private static final byte DIFF_FORMAT_DELETED  = 5;
+    private static final int DIFF_FORMAT_TEXT     = 0;
+    private static final int DIFF_FORMAT_FILE     = 1;
+    private static final int DIFF_FORMAT_HEADER   = 2;
+    private static final int DIFF_FORMAT_CONTEXT  = 3;
+    private static final int DIFF_FORMAT_INSERTED = 4;
+    private static final int DIFF_FORMAT_DELETED  = 5;
+
+    public static final int DIFF_FORMAT_LAST = 5;
 
     public DiffFormatter(Buffer buffer)
     {
