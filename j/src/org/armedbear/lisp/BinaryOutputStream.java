@@ -2,7 +2,7 @@
  * BinaryOutputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BinaryOutputStream.java,v 1.9 2004-01-16 17:11:58 piso Exp $
+ * $Id: BinaryOutputStream.java,v 1.10 2004-01-20 00:20:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,11 @@ public final class BinaryOutputStream extends LispOutputStream
     {
         this(outputStream);
         setPathname(pathname);
+    }
+
+    public LispObject getElementType()
+    {
+        return Symbol.INTEGER;
     }
 
     public void writeByte(int n) throws ConditionThrowable
