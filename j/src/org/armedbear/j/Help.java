@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.13 2003-07-18 15:26:05 piso Exp $
+ * $Id: Help.java,v 1.14 2003-07-18 17:15:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,8 @@ import java.io.Writer;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.List;
+import org.armedbear.lisp.Closure;
+import org.armedbear.lisp.LispObject;
 
 public final class Help
 {
@@ -244,6 +246,20 @@ public final class Help
                     sb.append("</a>");
                 } else
                     sb.append(commandString);
+                sb.append("<br>\n");
+            } else if (command instanceof LispObject) {
+                int spaces = 32 - sb.length();
+                for (int j = spaces; j-- > 0;)
+                    sb.append("&nbsp;");
+                String name = ((LispObject)command).getName();
+                if (name != null) {
+                    sb.append(name);
+                } else if (command instanceof Closure) {
+                    sb.append("#&lt;CLOSURE ");
+                    sb.append("@ ");
+                    sb.append(Integer.toHexString(command.hashCode()));
+                    sb.append("&gt;");
+                }
                 sb.append("<br>\n");
             }
             writer.write(sb.toString());
