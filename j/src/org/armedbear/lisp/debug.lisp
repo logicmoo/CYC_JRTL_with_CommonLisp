@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.10 2003-12-08 02:52:29 piso Exp $
+;;; $Id: debug.lisp,v 1.11 2003-12-14 17:16:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,6 +16,12 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+(in-package "EXTENSIONS")
+
+(export '*debug-condition*)
+
+(defvar *debug-condition* nil)
 
 (in-package "SYSTEM")
 
@@ -34,6 +40,11 @@
     (let ((hook-function *debugger-hook*)
           (*debugger-hook* nil))
       (funcall hook-function condition hook-function)))
+  (setf *debug-condition* condition)
+  (when condition
+    (fresh-line *debug-io*)
+    (%format *debug-io* "Debugger invoked on condition of type ~A:~%" (type-of condition))
+    (%format *debug-io* "  ~A~%" condition))
   (catch 'tpl::continue-catcher
     (clear-input)
     (debug-loop)))
