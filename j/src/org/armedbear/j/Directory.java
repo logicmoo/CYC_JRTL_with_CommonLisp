@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.16 2003-05-11 14:35:28 piso Exp $
+ * $Id: Directory.java,v 1.17 2003-05-11 17:29:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -621,7 +621,8 @@ public final class Directory extends Buffer
                 if (reader != null) {
                     String s;
                     while ((s = reader.readLine()) != null) {
-                        DirectoryEntry entry = DirectoryEntry.getDirectoryEntry(s, dff);
+                        DirectoryEntry entry =
+                            DirectoryEntry.getDirectoryEntry(s, dff);
                         if (entry != null) {
                             totalSize += entry.getSize();
                             entries.add(entry);
@@ -811,6 +812,35 @@ public final class Directory extends Buffer
             return file.netPath();
     }
 
+    public static void dir()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer instanceof Directory)
+            return;
+        File directory = editor.getCurrentDirectory();
+        if (directory == null)
+            return;
+        if (directory.getProtocol() == File.PROTOCOL_HTTP)
+            return;
+        // FTP, SSH or local.
+        Buffer buf = Editor.getBuffer(directory);
+        if (buf instanceof Directory) {
+            File file = buffer.getFile();
+            editor.makeNext(buf);
+            editor.activate(buf);
+            if (file != null && file.isFile()) {
+                Directory dir = (Directory) buf;
+                Line line = dir.findName(file.getName());
+                if (line != null) {
+                    editor.setDot(new Position(line, dir.getNameOffset(line)));
+                    editor.setUpdateFlag(REFRAME);
+                    editor.reframe();
+                }
+            }
+        }
+    }
+
     public static void dirOpenFile()
     {
         _dirOpenFile(false);
@@ -873,8 +903,8 @@ public final class Directory extends Buffer
             if (isDirectory) {
                 setBusy(true);
                 history.truncate();
-                history.append(dir,
-                    getName(editor.getDotLine()), editor.getDotOffset());
+                history.append(dir, getName(editor.getDotLine()),
+                    editor.getDotOffset());
                 history.reset();
                 empty();
                 entries.clear();
