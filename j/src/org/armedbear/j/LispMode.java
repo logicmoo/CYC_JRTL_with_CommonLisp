@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.45 2003-06-21 23:58:49 piso Exp $
+ * $Id: LispMode.java,v 1.46 2003-07-26 16:22:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -662,11 +662,25 @@ public class LispMode extends AbstractMode implements Constants, Mode
     public static void hyperspec(String s)
     {
         final Editor editor = Editor.currentEditor();
-        if (editor.getDot() == null)
-            return;
-        if (s == null)
-            s = mode.getIdentifier(editor.getDot());
-        if (s == null || s.length() == 0)
+        if (s == null) {
+            if (editor.getDot() == null)
+                return;
+            if (Character.isWhitespace(editor.getDotChar())) {
+                final Line dotLine = editor.getDotLine();
+                final String text = dotLine.getText();
+                for (int offset = editor.getDotOffset(); offset-- > 0;) {
+                    char c = text.charAt(offset);
+                    if (mode.isIdentifierPart(c)) {
+                        s = mode.getIdentifier(dotLine, offset);
+                        break;
+                    }
+                }
+            } else
+                s = mode.getIdentifier(editor.getDot());
+            if (s == null)
+                return;
+        }
+        if (s.length() == 0)
             return;
         final Buffer buffer = editor.getBuffer();
         String clhsRoot = buffer.getStringProperty(Property.CLHS_ROOT);
