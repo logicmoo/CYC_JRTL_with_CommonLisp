@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.173 2003-11-07 19:52:10 piso Exp $
+ * $Id: Lisp.java,v 1.174 2003-11-07 20:19:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -975,6 +975,22 @@ public abstract class Lisp
     }
 
     // Property lists.
+    public static final LispObject getf(LispObject plist, LispObject indicator,
+                                        LispObject defaultValue)
+        throws ConditionThrowable
+    {
+        LispObject list = plist;
+        while (list != NIL) {
+            if (list.car() == indicator)
+                return list.cadr();
+            if (list.cdr() instanceof Cons)
+                list = list.cddr();
+            else
+                throw new ConditionThrowable(new TypeError("malformed property list: " + plist));
+        }
+        return defaultValue;
+    }
+
     public static final LispObject get(Symbol symbol, LispObject indicator,
                                        LispObject defaultValue)
         throws ConditionThrowable
