@@ -1,8 +1,8 @@
 /*
  * Macro.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Macro.java,v 1.5 2003-07-18 16:32:12 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Macro.java,v 1.6 2004-11-07 15:37:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,8 +124,7 @@ public final class Macro implements Constants
                     editor.executeCommand((String)object);
                 } else if (object instanceof LispObject) {
                     try {
-                        Lisp.funcall0((LispObject)object,
-                                      LispThread.currentThread());
+                        LispThread.currentThread().execute((LispObject)object);
                     }
                     catch (Throwable t) {
                         Log.error(t);
