@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.86 2004-02-16 19:14:00 piso Exp $
+;;; $Id: clos.lisp,v 1.87 2004-02-17 16:53:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1467,11 +1467,10 @@
 (defun std-compute-method-function (method)
   (let ((body (method-body method))
         (declarations (method-declarations method))
-        (lambda-list (method-lambda-list method))
+        (lambda-list (kludge-arglist (method-lambda-list method)))
         (*call-next-method-p* nil)
         (*next-method-p-p* nil))
     (walk-form body)
-    (setf lambda-list (kludge-arglist lambda-list))
     (compile-in-lexical-environment
      (method-environment method)
      (if (or *call-next-method-p* *next-method-p-p*)
@@ -1484,8 +1483,12 @@
                    (next-method-p ()
                                   (not (null next-emfun))))
               (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
-         `(lambda (args next-emfun)
-            (apply #'(lambda ,lambda-list ,@declarations ,body) args))))))
+         (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
+                                   (method-environment method))))
+           (when (and (fboundp 'jvm:jvm-compile)
+                      (not (autoloadp 'jvm:jvm-compile)))
+             (setf code (jvm:jvm-compile nil code)))
+           `(lambda (args next-emfun) (apply ,code args)))))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
