@@ -2,7 +2,7 @@
  * ListRegistersBuffer.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: ListRegistersBuffer.java,v 1.1.1.1 2002-09-24 16:09:02 piso Exp $
+ * $Id: ListRegistersBuffer.java,v 1.2 2002-10-11 16:29:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,28 +96,40 @@ public final class ListRegistersBuffer extends Buffer
         File directory = Directories.getRegistersDirectory();
         if (directory != null)
             names = directory.list();
-        if (names != null && names.length > 0) {
-            Arrays.sort(names);
-            final int MAX_LINES = 100;
-            for (int i = 0; i < names.length; i++) {
-                final String name = names[i];
-                FastStringBuffer sb = new FastStringBuffer();
-                sb.append("Register ");
-                sb.append(name);
-                String text = Registers.getText(name, MAX_LINES);
-                if (text == null || text.length() == 0)
-                    continue;
-                int lineCount = Utilities.countLines(text);
-                appendLine(
-                    new ListRegistersLine(sb.toString(), name));
-                append(text);
-                if (lineCount == MAX_LINES)
-                    appendLine(new ListRegistersLine("[...]", name));
-            }
-        } else
-            appendLine(new ListRegistersLine("No registers in use", null));
-        renumber();
-        setLoaded(true);
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            if (names != null && names.length > 0) {
+                Arrays.sort(names);
+                final int MAX_LINES = 100;
+                for (int i = 0; i < names.length; i++) {
+                    final String name = names[i];
+                    FastStringBuffer sb = new FastStringBuffer();
+                    sb.append("Register ");
+                    sb.append(name);
+                    String text = Registers.getText(name, MAX_LINES);
+                    if (text == null || text.length() == 0)
+                        continue;
+                    int lineCount = Utilities.countLines(text);
+                    appendLine(
+                        new ListRegistersLine(sb.toString(), name));
+                    append(text);
+                    if (lineCount == MAX_LINES)
+                        appendLine(new ListRegistersLine("[...]", name));
+                }
+            } else
+                appendLine(new ListRegistersLine("No registers in use", null));
+            renumber();
+            setLoaded(true);
+        }
+        finally {
+            unlockWrite();
+        }
     }
 
     public String getFileNameForDisplay()
