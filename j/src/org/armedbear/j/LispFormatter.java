@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispFormatter.java,v 1.34 2004-04-11 18:36:51 piso Exp $
+ * $Id: LispFormatter.java,v 1.35 2004-04-11 19:10:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,15 +92,15 @@ public final class LispFormatter extends Formatter
                 case STATE_CLOSE_PAREN:
                     format = LISP_FORMAT_PARENTHESIS;
                     break;
-                case STATE_CAR: {
+                case STATE_CAR:
+                    break;
+                case STATE_DEFUN: {
                     String token = text.substring(tokenBegin, tokenEnd).trim();
                     if (isKeyword(token)) {
-                        if (isPositionFunctional(text, tokenBegin, currentLine)) {
-                            if (isDefiner(token))
-                                format = LISP_FORMAT_DEFUN;
-                            else
-                                format = LISP_FORMAT_KEYWORD;
-                        }
+                        if (isDefiner(token))
+                            format = LISP_FORMAT_DEFUN;
+                        else
+                            format = LISP_FORMAT_KEYWORD;
                     }
                     break;
                 }
@@ -368,7 +368,10 @@ public final class LispFormatter extends Formatter
                     state = STATE_SECONDARY_KEYWORD;
                 } else if (!Character.isWhitespace(c)) {
                     endToken(text, i, state);
-                    state = STATE_CAR;
+                    if (isPositionFunctional(text, i, currentLine))
+                        state = STATE_DEFUN;
+                    else
+                        state = STATE_CAR;
                 }
                 ++i;
                 continue;
@@ -384,11 +387,24 @@ public final class LispFormatter extends Formatter
             if (state == STATE_CAR) {
                 if (Character.isWhitespace(c)) {
                     endToken(text, i, state);
+                    state = STATE_NEUTRAL;
+                }
+                ++i;
+                continue;
+            }
+            if (state == STATE_DEFUN) {
+                if (Character.isWhitespace(c)) {
+                    endToken(text, i, state);
                     LineSegment s = segmentList.getLastSegment();
-                    if (s != null && s.getFormat() == LISP_FORMAT_DEFUN)
-                        state = STATE_DEFINITION;
-                    else
-                        state = STATE_NEUTRAL;
+                    if (s != null) {
+                        String translated = LispMode.translateDefiner(s.getText());
+                        if (translated != null && isDefiner(translated)) {
+                            state = STATE_DEFINITION;
+                            ++i;
+                            continue;
+                        }
+                    }
+                    state = STATE_NEUTRAL;
                 }
                 ++i;
                 continue;
