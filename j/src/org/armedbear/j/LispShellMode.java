@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShellMode.java,v 1.7 2002-12-29 16:29:39 piso Exp $
+ * $Id: LispShellMode.java,v 1.8 2003-03-17 18:26:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
         km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
         km.mapKey(')', "closeParen");
+        km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
     }
 
     public boolean isTaggable()
