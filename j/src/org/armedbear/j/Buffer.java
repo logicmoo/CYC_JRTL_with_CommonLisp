@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.3 2002-10-10 16:28:21 piso Exp $
+ * $Id: Buffer.java,v 1.4 2002-10-10 17:06:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -439,27 +439,27 @@ public class Buffer extends SystemBuffer
         release();
     }
 
-    public final synchronized void lockRead() throws InterruptedException
+    public final void lockRead() throws InterruptedException
     {
         rwlock.lockRead();
     }
 
-    public final synchronized void unlockRead()
+    public final void unlockRead()
     {
         rwlock.unlockRead();
     }
 
-    public final synchronized void lockWrite() throws InterruptedException
+    public final void lockWrite() throws InterruptedException
     {
         rwlock.lockWrite();
     }
 
-    public final synchronized void unlockWrite()
+    public final void unlockWrite()
     {
         rwlock.unlockWrite();
     }
 
-    public final synchronized boolean isWriteLocked()
+    public final boolean isWriteLocked()
     {
         return rwlock.isWriteLocked();
     }
