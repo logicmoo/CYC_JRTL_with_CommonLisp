@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.25 2003-09-21 19:48:51 piso Exp $
+ * $Id: LispClass.java,v 1.26 2003-09-22 12:24:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,6 +178,7 @@ public class LispClass extends StandardObject
         }
     };
 
+    // ### class-direct-superclasses
     private static final Primitive1 CLASS_DIRECT_SUPERCLASSES =
         new Primitive1("class-direct-superclasses", PACKAGE_SYS, false)
     {
@@ -189,6 +190,7 @@ public class LispClass extends StandardObject
         }
     };
 
+    // ### class-precedence-list
     private static final Primitive1 CLASS_PRECEDENCE_LIST =
         new Primitive1("class-precedence-list", PACKAGE_SYS, false)
     {
@@ -200,8 +202,9 @@ public class LispClass extends StandardObject
         }
     };
 
+    // ### classp
     private static final Primitive1 CLASSP =
-        new Primitive1("classp", PACKAGE_SYS, false)
+        new Primitive1("classp", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg)
         {
