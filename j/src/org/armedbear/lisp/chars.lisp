@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: chars.lisp,v 1.5 2003-06-26 02:37:22 piso Exp $
+;;; $Id: chars.lisp,v 1.6 2003-08-07 14:41:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 
 (defun digit-char-p (char &optional (radix 10))
   (let ((m (- (char-code char) 48)))
+    (format t "radix = ~S m = ~S~%" radix m)
     (cond ((<= radix 10)
 	   ;; Special-case decimal and smaller radices.
 	   (if (and (>= m 0) (< m radix))  m  nil))
@@ -103,3 +104,14 @@
 		     (equal-char-code (car l)))
 		  (return nil)))
       (return nil))))
+
+(when (and (find-package "JVM")
+           (fboundp 'jvm::jvm-compile))
+  (mapcar #'jvm::jvm-compile '(digit-char-p
+                               alphanumericp
+                               char/=
+                               char<
+                               char>
+                               char<=
+                               char>=
+                               char-not-equal)))
