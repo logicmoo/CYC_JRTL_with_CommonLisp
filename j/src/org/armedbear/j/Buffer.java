@@ -1,8 +1,8 @@
 /*
  * Buffer.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.52 2004-08-30 17:13:48 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Buffer.java,v 1.53 2005-03-01 20:20:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,6 +132,18 @@ public class Buffer extends SystemBuffer
     public final void setParentBuffer(Buffer b)
     {
         this.parentBuffer = b;
+    }
+
+    private Position mark;
+
+    public final Position getMark()
+    {
+        return mark;
+    }
+
+    public final void setMark(Position pos)
+    {
+        mark = pos;
     }
 
     public boolean isPrimary()
@@ -2100,6 +2112,7 @@ public class Buffer extends SystemBuffer
         needsParsing = true;
         maxColsValid = false;
         setTags(null);
+        setMark(null);
     }
 
     public final View getLastView()
