@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.31 2003-02-10 19:25:57 piso Exp $
+ * $Id: Buffer.java,v 1.32 2003-02-25 16:55:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -449,11 +449,14 @@ public class Buffer extends SystemBuffer
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(file.getInputStream()));
             String s = reader.readLine();
-            mode = grovelModeFromString(s);
-            if (mode == null && s.startsWith("#!")) {
-                // Consider second line too.
-                s = reader.readLine();
+            if (s != null) {
                 mode = grovelModeFromString(s);
+                if (mode == null && s.startsWith("#!")) {
+                    // Consider second line too.
+                    s = reader.readLine();
+                    if (s != null)
+                        mode = grovelModeFromString(s);
+                }
             }
             reader.close();
         }
