@@ -2,7 +2,7 @@
  * ListOccurrences.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ListOccurrences.java,v 1.1.1.1 2002-09-24 16:07:59 piso Exp $
+ * $Id: ListOccurrences.java,v 1.2 2002-10-10 17:50:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,16 +62,28 @@ public class ListOccurrences extends Buffer
         formatter = mode.getFormatter(this);
         readOnly = true;
         setTransient(true);
-        if (search.isRegularExpression())
-            appendLine("Regular expression: \"" + search.getPattern() + '"');
-        else
-            appendLine("Pattern: \"" + search.getPattern() + '"');
-        if (search instanceof Replacement) {
-            String replaceWith = ((Replacement)search).getReplaceWith();
-            if (replaceWith != null)
-                appendLine("Replace with: \"" + replaceWith + '"');
+        try {
+            lockWrite();
         }
-        appendLine("Options: " + getOptions());
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            if (search.isRegularExpression())
+                appendLine("Regular expression: \"" + search.getPattern() + '"');
+            else
+                appendLine("Pattern: \"" + search.getPattern() + '"');
+            if (search instanceof Replacement) {
+                String replaceWith = ((Replacement)search).getReplaceWith();
+                if (replaceWith != null)
+                    appendLine("Replace with: \"" + replaceWith + '"');
+            }
+            appendLine("Options: " + getOptions());
+        }
+        finally {
+            unlockWrite();
+        }
         setInitialized(true);
     }
 
