@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.85 2004-09-28 15:02:33 piso Exp $
+ * $Id: Stream.java,v 1.86 2004-10-01 16:08:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -235,19 +235,21 @@ public class Stream extends LispObject
                            boolean recursive)
         throws ConditionThrowable
     {
+        final LispThread thread = LispThread.currentThread();
         LispObject result = readPreservingWhitespace(eofError, eofValue,
-                                                     recursive);
+                                                     recursive, thread);
         if (result != eofValue && !recursive) {
             if (_charReady()) {
                 int n = _readChar();
                 if (n >= 0) {
                     char c = (char) n;
-                    if (!currentReadtable().isWhitespace(c))
+                    Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
+                    if (!rt.isWhitespace(c))
                         _unreadChar(c);
                 }
             }
         }
-        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         else
             return result;
@@ -260,11 +262,12 @@ public class Stream extends LispObject
 
     public LispObject readPreservingWhitespace(boolean eofError,
                                                LispObject eofValue,
-                                               boolean recursive)
+                                               boolean recursive,
+                                               LispThread thread)
         throws ConditionThrowable
     {
         if (recursive) {
-            final Readtable rt = currentReadtable();
+            final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
             while (true) {
                 int n = _readChar();
                 if (n < 0) {
@@ -281,8 +284,8 @@ public class Stream extends LispObject
                     return result;
             }
         } else {
-            LispThread.currentThread().bindSpecial(_SHARP_EQUAL_ALIST_, NIL);
-            return readPreservingWhitespace(eofError, eofValue, true);
+            thread.bindSpecial(_SHARP_EQUAL_ALIST_, NIL);
+            return readPreservingWhitespace(eofError, eofValue, true, thread);
         }
     }
 
@@ -996,6 +999,7 @@ public class Stream extends LispObject
     public LispObject readDelimitedList(char delimiter)
         throws ConditionThrowable
     {
+        final LispThread thread = LispThread.currentThread();
         LispObject result = NIL;
         while (true) {
             char c = flushWhitespace();
@@ -1005,7 +1009,10 @@ public class Stream extends LispObject
             if (obj != null)
                 result = new Cons(obj, result);
         }
-        return result.nreverse();
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
+            return NIL;
+        else
+            return result.nreverse();
     }
 
     // read-line &optional stream eof-error-p eof-value recursive-p
