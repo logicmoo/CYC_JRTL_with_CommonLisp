@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: setf.lisp,v 1.38 2004-02-03 02:15:25 piso Exp $
+;;; $Id: setf.lisp,v 1.39 2004-02-18 15:30:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -93,16 +93,20 @@
             (progn
               (when (symbolp (car place))
                 (resolve (car place)))
-              (multiple-value-bind (dummies vals newval setter getter)
+              (multiple-value-bind (dummies vals store-vars setter getter)
                 (get-setf-expansion place)
                 (let ((inverse (get (car place) 'setf-inverse)))
                   (if (and inverse (eq inverse (car setter)))
                       (if (functionp inverse)
                           `(funcall ,inverse ,@(cdr place) ,value-form)
                           `(,inverse ,@(cdr place) ,value-form))
-                      `(let* (,@(mapcar #'list dummies vals))
-                         (multiple-value-bind ,newval ,value-form
-                           ,setter)))))))))
+                      (if (cdr store-vars)
+                          `(let* (,@(mapcar #'list dummies vals))
+                             (multiple-value-bind ,store-vars ,value-form
+                               ,setter))
+                          `(let* (,@(mapcar #'list dummies vals)
+                                    ,(list (car store-vars) value-form))
+                               ,setter)))))))))
      ((oddp count)
       (error "odd number of args to SETF"))
      (t
