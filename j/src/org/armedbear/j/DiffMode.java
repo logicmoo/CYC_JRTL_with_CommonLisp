@@ -2,7 +2,7 @@
  * DiffMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffMode.java,v 1.6 2003-04-22 15:31:03 piso Exp $
+ * $Id: DiffMode.java,v 1.7 2003-05-10 15:52:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,6 +62,7 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
     {
         final Editor editor = Editor.currentEditor();
         final Buffer parentBuffer = editor.getBuffer();
+        String defaultOptions = "-u ";
         List argList = Utilities.tokenize(args);
         for (int i = 0; i < argList.size(); i++) {
             String arg = (String) argList.get(i);
@@ -87,7 +88,9 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
                 }
                 // OK.
                 argList.set(i, file.canonicalPath());
-            } else if (!arg.startsWith("-")) {
+            } else if (arg.startsWith("-")) {
+                defaultOptions = null;
+            } else {
                 File file = File.getInstance(editor.getCurrentDirectory(), arg);
                 if (file.exists())
                     argList.set(i, file.canonicalPath());
@@ -95,6 +98,8 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         }
         editor.setWaitCursor();
         FastStringBuffer sb = new FastStringBuffer("diff ");
+        if (defaultOptions != null)
+            sb.append(defaultOptions);
         for (int i = 0; i < argList.size(); i++) {
             String s = (String) argList.get(i);
             if (s.indexOf(' ') >= 0) {
