@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.271 2003-06-26 01:27:39 piso Exp $
+ * $Id: Primitives.java,v 1.272 2003-07-02 15:25:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1081,7 +1081,8 @@ public final class Primitives extends Module
 
     // ### %setnth
     // %setnth n list new-object => new-object
-    private static final Primitive3 _SETNTH = new Primitive3("%setnth") {
+    private static final Primitive3 _SETNTH =
+        new Primitive3("%setnth", PACKAGE_SYS, true) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
