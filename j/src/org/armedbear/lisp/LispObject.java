@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.41 2003-09-02 15:06:12 piso Exp $
+ * $Id: LispObject.java,v 1.42 2003-09-02 16:25:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,6 +126,16 @@ public class LispObject extends Lisp
     public LispObject ABS() throws TypeError
     {
         throw new TypeError(this, "number");
+    }
+
+    public LispObject NUMERATOR() throws TypeError
+    {
+        throw new TypeError(this, "rational number");
+    }
+
+    public LispObject DENOMINATOR() throws TypeError
+    {
+        throw new TypeError(this, "rational number");
     }
 
     public LispObject EVENP() throws TypeError
