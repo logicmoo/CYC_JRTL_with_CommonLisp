@@ -37,6 +37,8 @@ public abstract class AbstractVector extends LispObject
 
     public abstract void set(int index, LispObject newValue) throws LispError;
 
+    public abstract void fill(LispObject obj) throws LispError;
+
     public int checkIndex(int index) throws LispError
     {
         if (index < 0 || index >= length())
