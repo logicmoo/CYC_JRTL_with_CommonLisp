@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.79 2004-02-09 19:34:30 piso Exp $
+;;; $Id: clos.lisp,v 1.80 2004-02-09 20:05:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -851,6 +851,13 @@
 (defun (setf find-generic-function) (new-value symbol)
   (setf (gethash symbol generic-function-table) new-value))
 
+(defun lambda-lists-congruent-p (lambda-list1 lambda-list2)
+  (let* ((plist1 (analyze-lambda-list lambda-list1))
+         (args1 (getf plist1 :required-args))
+         (plist2 (analyze-lambda-list lambda-list2))
+         (args2 (getf plist2 :required-args)))
+    (= (length args1) (length args2))))
+
 (defun ensure-generic-function (function-name
                                 &rest all-keys
                                 &key
@@ -1157,9 +1164,6 @@
         (error "The method does not accept all of the keyword arguments defined for the generic function.")))))
 
 (defun ensure-method (gf &rest all-keys)
-  (let ((method-lambda-list (getf all-keys :lambda-list))
-        (gf-lambda-list (generic-function-lambda-list gf)))
-    (check-method-lambda-list method-lambda-list gf-lambda-list))
   (let ((new-method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
@@ -1186,21 +1190,14 @@
     (setf (method-function method) (std-compute-method-function method))
     method))
 
-(defun lambda-lists-congruent-p (lambda-list1 lambda-list2)
-  (let* ((plist1 (analyze-lambda-list lambda-list1))
-         (args1 (getf plist1 :required-args))
-         (plist2 (analyze-lambda-list lambda-list2))
-         (args2 (getf plist2 :required-args)))
-    (= (length args1) (length args2))))
-
 (defun add-method (gf method)
-  (unless (lambda-lists-congruent-p (generic-function-lambda-list gf)
-                                    (method-lambda-list method))
-    (error 'program-error "ADD-METHOD: lambda list of method does not match lambda list of generic function."))
   (when (method-generic-function method)
     (error 'simple-error
            :format-control "ADD-METHOD: ~S is a method of ~S."
            :format-arguments (list method (method-generic-function method))))
+  (let ((method-lambda-list (method-lambda-list method))
+        (gf-lambda-list (generic-function-lambda-list gf)))
+    (check-method-lambda-list method-lambda-list gf-lambda-list))
   ;; Remove existing method with same qualifiers and specializers (if any).
   (let ((old-method (find-method gf (method-qualifiers method)
                                  (method-specializers method) nil)))
