@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.12 2003-11-23 20:28:48 piso Exp $
+;;; $Id: precompiler.lisp,v 1.13 2003-11-24 17:15:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -165,13 +165,12 @@
 (defun precompile-lambda (form)
   (let* ((args (cdr form))
          (lambda-list (car args))
+         (body (cdr args))
          (auxvars (memq '&AUX lambda-list)))
-    (if auxvars
-        (append (list 'LAMBDA (subseq lambda-list 0 (position '&AUX lambda-list))
-                      (append (list 'LET*
-                                    (cdr auxvars))
-                              (mapcar #'precompile1 (cdr args)))))
-        (list* 'LAMBDA lambda-list (mapcar #'precompile1 (cdr args))))))
+    (when auxvars
+      (setf lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
+      (setf body (list (append (list 'LET* (cdr auxvars)) body))))
+    (list* 'LAMBDA lambda-list (mapcar #'precompile1 body))))
 
 (defun define-local-macro (name lambda-list body)
   (let* ((form (gensym))
