@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.25 2004-07-09 17:32:43 piso Exp $
+ * $Id: CompiledFunction.java,v 1.26 2004-07-11 12:43:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ public class CompiledFunction extends Closure
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return signal(new LispError("not implemented"));
+        return signal(new LispError("CompiledFunction.execute(): not implemented"));
     }
 
     // ### make-compiled-function
