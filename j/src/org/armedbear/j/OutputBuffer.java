@@ -2,7 +2,7 @@
  * OutputBuffer.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: OutputBuffer.java,v 1.3 2003-06-06 14:56:07 piso Exp $
+ * $Id: OutputBuffer.java,v 1.4 2003-06-06 14:58:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,9 @@
 
 package org.armedbear.j;
 
-public class OutputBuffer extends Buffer
+public final class OutputBuffer extends Buffer
 {
-    protected OutputBuffer()
+    private OutputBuffer()
     {
         supportsUndo  = false;
         type = TYPE_OUTPUT;
