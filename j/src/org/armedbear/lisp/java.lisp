@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.8 2003-12-02 22:29:59 dmcnaught Exp $
+;;; $Id: java.lisp,v 1.9 2003-12-03 11:13:20 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,10 +26,6 @@
   "Returns the name of CLASS as a Lisp string"
   (jcall (jmethod "java.lang.Class" "getName") class))
 
-(defun jclass-for-name (name)
-  "Returns the class of name NAME"
-  (jstatic "forName" "java.lang.Class" name))
-
 (defun jobject-class (obj)
   "Returns the Java class that OBJ belongs to"
   (jcall (jmethod "java.lang.Object" "getClass") obj))
@@ -51,6 +47,21 @@
 (defun jclass-interface-p (class)
   "Returns T if CLASS is an interface"
   (jcall (jmethod "java.lang.Class" "isInterface") (ensure-jclass class)))
+
+(defun jclass-superclass-p (class-1 class-2)
+  "Returns T if CLASS-1 is a superclass or interface of CLASS-2"
+  (jcall (jmethod "java.lang.Class" "isAssignableFrom" "java.lang.Class") 
+	 (ensure-jclass class-1)
+	 (ensure-jclass class-2)))
+
+(defun jclass-array-p (class)
+  "Returns T if CLASS is an array class"
+  (jcall (jmethod "java.lang.Class" "isArray") (ensure-jclass class)))
+
+(defun jarray-component-type (atype)
+  "Returns the component type of the array type ATYPE"
+  (assert (jclass-array-p atype))
+  (jcall (jmethod "java.lang.Class" "getComponentType") atype))
 
 (defun jclass-constructors (class)
   "Returns a vector of constructors for CLASS"
