@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.16 2004-11-20 21:45:39 piso Exp $
+;;; $Id: format.lisp,v 1.17 2004-11-20 23:51:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -641,20 +641,13 @@
 ;;; FIXME: only used in this file, could be SB!XC:DEFMACRO in EVAL-WHEN
 (defmacro def-complex-format-directive (char lambda-list &body body)
   (let ((defun-name
-;;           (intern (sys::%format nil
-;; ;; 				    "~:@(~:C~)-FORMAT-DIRECTIVE-EXPANDER"
-;; ;; 				    char)))
-;;                                           "FORMAT-DIRECTIVE-EXPANDER-~D"
-;;                                           (char-code char)))
           (intern (concatenate 'string
                                (let ((name (char-name char)))
                                  (cond (name
                                         (string-capitalize name))
                                        (t
                                         (string char))))
-                               "-FORMAT-DIRECTIVE-EXPANDER"))
-                               
-          )
+                               "-FORMAT-DIRECTIVE-EXPANDER")))
 	(directive (gensym))
 	(directives (if lambda-list (car (last lambda-list)) (gensym))))
     `(progn
@@ -1778,19 +1771,13 @@
 
   (defmacro def-complex-format-interpreter (char lambda-list &body body)
     (let ((defun-name
-;; 	    (intern (sys::%format nil
-;;                                   ;; 			    "~:@(~:C~)-FORMAT-DIRECTIVE-INTERPRETER"
-;;                                   ;; 			    char
-;;                                   "FORMAT-DIRECTIVE-INTERPRETER-~D"
-;;                                   (char-code char)))
             (intern (concatenate 'string
                                  (let ((name (char-name char)))
                                    (cond (name
                                           (string-capitalize name))
                                          (t
                                           (string char))))
-                                 "-FORMAT-DIRECTIVE-INTERPRETER"))
-            )
+                                 "-FORMAT-DIRECTIVE-INTERPRETER")))
           (directive (gensym))
           (directives (if lambda-list (car (last lambda-list)) (gensym))))
       `(progn
@@ -2659,16 +2646,13 @@
   (when (and colonp (not *up-up-and-out-allowed*))
     (error 'format-error
 	   :complaint "attempt to use ~~:^ outside a ~~:{...~~} construct"))
-  (when (case (length params)
-	  (0 (if colonp
-		 (null *outside-args*)
-		 (null args)))
-	  (1 (interpret-bind-defaults ((count 0)) params
-                                      (and (numberp count) (zerop count))))
-	  (2 (interpret-bind-defaults ((arg1 0) (arg2 0)) params
-                                      (equal arg1 arg2)))
-	  (t (interpret-bind-defaults ((arg1 0) (arg2 0) (arg3 0)) params
-                                      (<= arg1 arg2 arg3))))
+  (when (interpret-bind-defaults ((arg1 nil) (arg2 nil) (arg3 nil)) params
+          (cond (arg3 (<= arg1 arg2 arg3))
+                (arg2 (eql arg1 arg2))
+                (arg1 (eql arg1 0))
+                (t (if colonp
+                       (null *outside-args*)
+                       (null args)))))
     (throw (if colonp 'up-up-and-out 'up-and-out)
 	   args)))
 
