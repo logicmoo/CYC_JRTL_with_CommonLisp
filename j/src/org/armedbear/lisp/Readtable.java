@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.29 2004-05-26 00:25:49 piso Exp $
+ * $Id: Readtable.java,v 1.30 2004-05-26 01:20:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,8 +98,13 @@ public final class Readtable extends LispObject
         readtableCase = Keyword.UPCASE;
     }
 
-    private Readtable(Readtable rt)
+    public Readtable(LispObject obj) throws ConditionThrowable
     {
+        Readtable rt;
+        if (obj == NIL)
+            rt = checkReadtable(_STANDARD_READTABLE_.symbolValue());
+        else
+            rt = checkReadtable(obj);
         synchronized (rt) {
             System.arraycopy(rt.attributes, 0, attributes, 0,
                              CHAR_MAX);
@@ -263,21 +268,23 @@ public final class Readtable extends LispObject
         }
     };
 
+    // ### *standard-readtable*
+    // internal symbol
+    public static final Symbol _STANDARD_READTABLE_ =
+        internSpecial("*STANDARD-READTABLE*", PACKAGE_SYS, new Readtable());
+
     // ### copy-readtable
     private static final Primitive COPY_READTABLE =
         new Primitive("copy-readtable", "&optional from-readtable to-readtable")
     {
-        public LispObject execute()
+        public LispObject execute() throws ConditionThrowable
         {
             return new Readtable(currentReadtable());
         }
 
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg == NIL)
-                return new Readtable();
-            else
-                return new Readtable(checkReadtable(arg));
+            return new Readtable(arg);
         }
 
         public LispObject execute(LispObject first, LispObject second)
@@ -285,7 +292,7 @@ public final class Readtable extends LispObject
         {
             Readtable from;
             if (first == NIL)
-                from = new Readtable();
+                from = checkReadtable(_STANDARD_READTABLE_.symbolValue());
             else
                 from = checkReadtable(first);
             if (second == NIL)
@@ -314,7 +321,7 @@ public final class Readtable extends LispObject
             char c = LispCharacter.getValue(first);
             Readtable rt;
             if (second == NIL)
-                rt = new Readtable(); // Standard readtable.
+                rt = new Readtable(NIL);
             else
                 rt = checkReadtable(second);
             return rt.getMacroCharacter(c);
@@ -466,7 +473,7 @@ public final class Readtable extends LispObject
             if (args.length > 3)
                 fromReadtable = checkReadtable(args[3]);
             else
-                fromReadtable = new Readtable();
+                fromReadtable = new Readtable(NIL);
             // FIXME synchronization
             toReadtable.attributes[toChar] = fromReadtable.attributes[fromChar];
             toReadtable.readerMacroFunctions[toChar] =
