@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.117 2005-02-12 03:25:00 piso Exp $
+ * $Id: LispObject.java,v 1.118 2005-02-14 04:05:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -578,6 +578,11 @@ public class LispObject extends Lisp
     public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.NUMBER));
+    }
+
+    public LispObject multiplyBy(int n) throws ConditionThrowable
+    {
+        return multiplyBy(new Fixnum(n));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
