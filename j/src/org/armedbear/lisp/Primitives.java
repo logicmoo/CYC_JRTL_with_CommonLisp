@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.141 2003-03-18 04:03:14 piso Exp $
+ * $Id: Primitives.java,v 1.142 2003-03-19 01:46:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1916,13 +1916,15 @@ public final class Primitives extends Module
             LispObject fillPointer = args[6];
             LispObject displacedTo = args[7];
             LispObject displacedIndexOffset = args[8];
+            if (initialElementProvided != NIL && initialContents != NIL) {
+                throw new LispError("MAKE-ARRAY: cannot specify both " +
+                    ":initial-element and :initial-contents");
+            }
             final int rank;
             if (dimensions.listp()) {
                 rank = dimensions.length();
             } else
                 rank = 1;
-            if (rank == 0)
-                return new Array();
             if (rank == 1) {
                 final int size;
                 if (dimensions instanceof Cons)
@@ -1944,10 +1946,6 @@ public final class Primitives extends Module
                         sb.append(" is negative");
                     throw new LispError(sb.toString());
                 }
-                if (initialElementProvided != NIL && initialContents != NIL) {
-                    throw new LispError("MAKE-ARRAY: cannot specify both " +
-                        ":initial-element and :initial-contents");
-                }
                 AbstractVector v;
                 if (elementType == Symbol.CHARACTER ||
                     elementType == Symbol.BASE_CHAR ||
@@ -1963,9 +1961,6 @@ public final class Primitives extends Module
                     // Initial element was specified.
                     v.fill(initialElement);
                 } else if (initialContents != NIL) {
-                    // Since we only support one-dimensional arrays, this
-                    // must be a sequence (and not a nested structure of
-                    // sequences).
                     checkSequence(initialContents);
                     // FIXME Don't use ELT for lists!
                     for (int i = 0; i < size; i++)
@@ -1975,14 +1970,22 @@ public final class Primitives extends Module
                     v.setFillPointer(fillPointer);
                 return v;
             }
-            // rank > 1
+            // rank != 1
             int[] dimv = new int[rank];
             for (int i = 0; i < rank; i++) {
                 LispObject dim = dimensions.car();
                 dimv[i] = Fixnum.getValue(dim);
                 dimensions = dimensions.cdr();
             }
-            return new Array(dimv);
+            Array array;
+            if (initialContents != NIL) {
+                array = new Array(dimv, initialContents);
+            } else {
+                array = new Array(dimv);
+                if (initialElementProvided != NIL)
+                    array.fill(initialElement);
+            }
+            return array;
         }
     };
 
