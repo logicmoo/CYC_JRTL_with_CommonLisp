@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaMode.java,v 1.12 2003-07-26 19:00:04 piso Exp $
+ * $Id: JavaMode.java,v 1.13 2003-10-15 15:09:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,6 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_PERIOD, ALT_MASK, "findTagAtDot");
         km.mapKey(KeyEvent.VK_COMMA, ALT_MASK, "listMatchingTagsAtDot");
         km.mapKey(KeyEvent.VK_PERIOD, CTRL_MASK | ALT_MASK, "findTagAtDotOtherWindow");
-        km.mapKey(KeyEvent.VK_L, CTRL_MASK | SHIFT_MASK, "sidebarListTags");
         km.mapKey(')', "closeParen");
         km.mapKey(KeyEvent.VK_I, ALT_MASK, "cycleIndentSize");
 
