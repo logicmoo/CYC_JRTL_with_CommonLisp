@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.188 2004-06-24 17:49:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.189 2004-06-25 23:03:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -81,7 +81,8 @@
 (defstruct local-function
   name
   args-to-add
-  function)
+  function
+  classfile)
 
 (defvar *args* nil)
 (defvar *using-arg-array* nil)
@@ -1211,6 +1212,24 @@
     (setf *static-code* *code*)
     g))
 
+(defun declare-local-function (local-function)
+  (let* ((g (symbol-name (gensym)))
+         (classfile (local-function-classfile local-function))
+         (*code* *static-code*))
+    (declare-field g +lisp-object+)
+    (emit 'ldc
+          (pool-string classfile))
+    (emit-invokestatic +lisp-class+
+                       "loadCompiledFunction"
+                       "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
+                       0)
+    (emit 'putstatic
+          *this-class*
+          g
+          +lisp-object+)
+    (setf *static-code* *code*)
+    g))
+
 (defun declare-string (string)
   (let ((g (gethash string *declared-strings*)))
     (unless g
@@ -1543,7 +1562,9 @@
           (setf args (append (local-function-args-to-add local-function) args))
           (setf numargs (length args))
           (format t "args = ~S~%" args))
-        (let* ((g (declare-object (local-function-function local-function))))
+        (let* ((g (if *compile-file-truename*
+                      (declare-local-function local-function)
+                      (declare-object (local-function-function local-function)))))
           (emit 'getstatic
                 *this-class*
                 g
@@ -2328,23 +2349,30 @@
   (let* ((name (car def))
          (arglist (cadr def))
          (body (cddr def))
-         (form (list* 'lambda arglist body))
+;;          (form (list* 'lambda arglist body))
          (args-to-add (remove-duplicates (union (remove nil (coerce *locals* 'list))
                                                 (remove nil (coerce *args* 'list)))))
-         function)
+         form
+         function
+         classfile)
     (format t "form = ~S~%" form)
     (format t "args-to-add = ~S~%" args-to-add)
     (format t "new arglist = ~S~%" (append args-to-add arglist))
     (when args-to-add
-      (setf arglist (append args-to-add arglist))
-      (setf form (list* 'lambda arglist body)))
+      (error "COMPILE-LOCAL-FUNCTION-DEF: unsupported case")
+      ;; Not reached.
+      (setf arglist (append args-to-add arglist)))
+    (setf form (list 'LAMBDA arglist (list* 'BLOCK name body)))
     (format t "form = ~S~%" form)
-    (setf function
-          (sys::load-compiled-function (compile-defun name form nil "flet.out")))
+    (if *compile-file-truename*
+        (setf classfile (compile-defun name form nil (sys::next-classfile-name)))
+        (setf function
+              (sys::load-compiled-function (compile-defun name form nil "flet.out"))))
     (format t "function = ~S~%" function)
     (push (make-local-function :name name
                                :args-to-add args-to-add
-                               :function function)
+                               :function function
+                               :classfile classfile)
           *local-functions*)))
 
 (defun compile-local-functions (defs)
@@ -2367,25 +2395,37 @@
   (compile-function-call form for-effect))
 
 (defun compile-function (form for-effect)
-   (let ((name (second form)))
+   (let ((name (second form))
+         (local-function))
      (cond ((symbolp name)
-            (if (or (sys::built-in-function-p name) (memq name *toplevel-defuns*))
-                (let ((g (declare-function name)))
-                  (emit 'getstatic
-                        *this-class*
-                        g
-                        +lisp-object+)
-                  (emit-store-value))
-                (let ((g (declare-symbol name)))
-                  (emit 'getstatic
-                        *this-class*
-                        g
-                        +lisp-symbol+)
-                  (emit-invokevirtual +lisp-object-class+
-                                      "getSymbolFunctionOrDie"
-                                      "()Lorg/armedbear/lisp/LispObject;"
-                                      0)
-                  (emit-store-value))))
+            (cond ((setf local-function (find name *local-functions* :key #'local-function-name))
+                   (sys::%format t "compile-function local function case~%")
+                   (let ((g (if *compile-file-truename*
+                                (declare-local-function local-function)
+                                (declare-object (local-function-function local-function)))))
+                     (emit 'getstatic
+                           *this-class*
+                           g
+                           +lisp-object+)
+                     (emit-store-value)))
+                  ((or (sys::built-in-function-p name) (memq name *toplevel-defuns*))
+                   (let ((g (declare-function name)))
+                     (emit 'getstatic
+                           *this-class*
+                           g
+                           +lisp-object+)
+                     (emit-store-value)))
+                  (t
+                   (let ((g (declare-symbol name)))
+                     (emit 'getstatic
+                           *this-class*
+                           g
+                           +lisp-symbol+)
+                     (emit-invokevirtual +lisp-object-class+
+                                         "getSymbolFunctionOrDie"
+                                         "()Lorg/armedbear/lisp/LispObject;"
+                                         0)
+                     (emit-store-value)))))
            ((and (consp name) (eq (car name) 'SETF))
             (if (member name *toplevel-defuns* :test #'equal)
                 (let ((g (declare-setf-function name)))
@@ -2825,7 +2865,7 @@
          (*handlers* ())
          (*env* environment)
          (*closure-vars* (if environment (sys::environment-vars environment) nil))
-         (*variables* ())
+         (*variables* *variables*)
          (*pool* ())
          (*pool-count* 1)
          (*pool-entries* (make-hash-table :test #'equal))
