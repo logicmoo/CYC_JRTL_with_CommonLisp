@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.21 2004-02-23 00:03:56 piso Exp $
+ * $Id: Extensions.java,v 1.22 2004-03-09 02:06:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,52 +101,6 @@ public final class Extensions extends Lisp
             Stream stream = checkCharacterOutputStream(first);
             stream.setCharPos(Fixnum.getValue(second));
             return second;
-        }
-    };
-
-    // ### make-socket
-    // make-socket host port => stream
-    private static final Primitive2 MAKE_SOCKET =
-        new Primitive2("make-socket", PACKAGE_EXT, true) {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            String host = first.getStringValue();
-            int port = Fixnum.getValue(second);
-            try {
-                Socket socket = new Socket(host, port);
-                Stream in =
-                    new Stream(socket.getInputStream(), Symbol.CHARACTER);
-                Stream out =
-                    new Stream(socket.getOutputStream(), Symbol.CHARACTER);
-                return new TwoWayStream(in, out);
-            }
-            catch (Exception e) {
-                return signal(new LispError(e.getMessage()));
-            }
-        }
-    };
-
-    // ### make-binary-socket
-    // make-binary-socket host port => stream
-    private static final Primitive2 MAKE_BINARY_SOCKET =
-        new Primitive2("make-binary-socket", PACKAGE_EXT, true) {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            String host = first.getStringValue();
-            int port = Fixnum.getValue(second);
-            try {
-                Socket socket = new Socket(host, port);
-                Stream in =
-                    new Stream(socket.getInputStream(), Symbol.INTEGER);
-                Stream out =
-                    new Stream(socket.getOutputStream(), Symbol.INTEGER);
-                return new TwoWayStream(in, out);
-            }
-            catch (Exception e) {
-                return signal(new LispError(e.getMessage()));
-            }
         }
     };
 
