@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.663 2004-06-30 17:10:15 piso Exp $
+ * $Id: Primitives.java,v 1.664 2004-07-12 16:15:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2084,7 +2084,10 @@ public final class Primitives extends Lisp
             Function function = checkFunction(arg);
             String name = function.getName();
             final LispObject value3 = name != null ? new SimpleString(name) : NIL;
-            if (function instanceof Closure && !(function instanceof CompiledFunction)) {
+            if (function instanceof CompiledClosure) {
+                value1 = NIL;
+                value2 = T;
+            } else if (function instanceof Closure && !(function instanceof CompiledFunction)) {
                 Closure closure = (Closure) function;
                 LispObject expr = closure.getBody();
                 expr = new Cons(closure.getParameterList(), expr);
