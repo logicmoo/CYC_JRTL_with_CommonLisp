@@ -2,7 +2,7 @@
  * Exports.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Exports.java,v 1.1 2003-06-22 18:29:54 piso Exp $
+ * $Id: Exports.java,v 1.2 2003-09-09 01:21:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -631,7 +631,7 @@ public final class Exports
         "NBUTLAST",
         "NCONC",
         "NEXT-METHOD-P",
-        ";;           NIL",
+        "NIL",
         "NINTERSECTION",
         "NINTH",
         "NO-APPLICABLE-METHOD",
