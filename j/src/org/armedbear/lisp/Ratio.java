@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.6 2003-04-09 14:45:27 piso Exp $
+ * $Id: Ratio.java,v 1.7 2003-04-09 18:03:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,17 +338,46 @@ public final class Ratio extends LispObject
 
     public String toString()
     {
-        int radix;
+        int base;
         try {
-            radix = Fixnum.getValue(_PRINT_BASE_.symbolValueNoThrow());
+            base = Fixnum.getValue(_PRINT_BASE_.symbolValueNoThrow());
         }
         catch (Throwable t) {
             Debug.trace(t);
-            radix = 10;
+            base = 10;
         }
-        StringBuffer sb = new StringBuffer(numerator.toString(radix));
+        StringBuffer sb = new StringBuffer(numerator.toString(base));
         sb.append('/');
-        sb.append(denominator.toString(radix));
-        return sb.toString();
+        sb.append(denominator.toString(base));
+        String s = sb.toString().toUpperCase();
+        if (_PRINT_RADIX_.symbolValueNoThrow() != NIL) {
+            sb.setLength(0);
+            switch (base) {
+                case 2:
+                    sb.append("#b");
+                    sb.append(s);
+                    break;
+                case 8:
+                    sb.append("#o");
+                    sb.append(s);
+                    break;
+                case 10:
+                    sb.append("#10r");
+                    sb.append(s);
+                    break;
+                case 16:
+                    sb.append("#x");
+                    sb.append(s);
+                    break;
+                default:
+                    sb.append('#');
+                    sb.append(String.valueOf(base));
+                    sb.append('r');
+                    sb.append(s);
+                    break;
+            }
+            s = sb.toString();
+        }
+        return s;
     }
 }
