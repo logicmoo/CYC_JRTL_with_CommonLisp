@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.2 2003-10-10 14:16:54 piso Exp $
+ * $Id: StandardObject.java,v 1.3 2003-10-11 00:17:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,17 @@ public class StandardObject extends LispObject
             return T;
         return super.typep(type);
     }
+
+    private static final Primitive1 STD_INSTANCE_SLOTS =
+        new Primitive1("std-instance-slots", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof StandardObject)
+                return ((StandardObject)arg).slots;
+            throw new ConditionThrowable(new TypeError(arg, "standard object"));
+        }
+    };
 
     // ### allocate-std-instance
     // allocate-std-instance class slots => instance
