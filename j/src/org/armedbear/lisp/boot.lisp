@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.157 2004-03-31 03:05:38 piso Exp $
+;;; $Id: boot.lisp,v 1.158 2004-04-01 01:14:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,6 +52,11 @@
 
 (defmacro defparameter (name initial-value &optional docstring)
   (list 'sys::%defparameter (list 'QUOTE name) initial-value docstring))
+
+;; INVOKE-DEBUGGER is redefined in debug.lisp.
+(defun invoke-debugger (condition)
+  (format t "~A~%" condition)
+  (ext:quit))
 
 ;; CLASS-NAME is redefined as a generic function when CLOS is loaded.
 (defun class-name (class)
