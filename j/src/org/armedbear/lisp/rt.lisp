@@ -335,6 +335,7 @@
                               "find-if-not"
                               "flet"
                               "funcall"
+                              "identity"
                               "if"
                               "iteration"
                               "labels"
