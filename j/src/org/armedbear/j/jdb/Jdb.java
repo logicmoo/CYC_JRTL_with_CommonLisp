@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.8 2003-05-12 13:40:14 piso Exp $
+ * $Id: Jdb.java,v 1.9 2003-05-12 17:13:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -253,9 +253,8 @@ public final class Jdb extends Buffer
     public void fireContextChanged()
     {
         synchronized(contextListeners) {
-            Iterator iter = contextListeners.iterator();
-            while (iter.hasNext())
-                ((ContextListener)iter.next()).contextChanged();
+            for (Iterator it = contextListeners.iterator(); it.hasNext();)
+                ((ContextListener)it.next()).contextChanged();
         }
     }
 
@@ -380,13 +379,19 @@ public final class Jdb extends Buffer
         log(s, true);
     }
 
-    private void log(final String s, final boolean forceNewLine)
+    private void log(String s, boolean forceNewLine)
+    {
+        log(s, forceNewLine, JdbFormatter.JDB_FORMAT_LOG);
+    }
+
+    private void log(final String s, final boolean forceNewLine, final int flags)
     {
         Runnable r = new Runnable() {
             public void run()
             {
                 Log.debug(s);
-                appendString(s.concat("\n"), forceNewLine);
+                appendString(s.concat("\n"), forceNewLine,
+                    flags);
             }
         };
         if (SwingUtilities.isEventDispatchThread())
@@ -395,13 +400,35 @@ public final class Jdb extends Buffer
             SwingUtilities.invokeLater(r);
     }
 
-    private void appendString(String s, boolean forceNewLine)
+    private void appendString(String s, boolean forceNewLine, int flags)
     {
-        if (forceNewLine && posEndOfBuffer.getOffset() > 0)
-            s = "\n".concat(s);
-        insertString(posEndOfBuffer, s);
-        if (needsRenumbering())
-            renumber();
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+            return;
+        }
+        try {
+            Position posStart = posEndOfBuffer.copy();
+            if (forceNewLine && posEndOfBuffer.getOffset() > 0) {
+                insertLineSeparator(posEndOfBuffer);
+                posEndOfBuffer.getLine().setFlags(flags);
+            }
+            insertString(posEndOfBuffer, s);
+            if (needsRenumbering())
+                renumber();
+            Line line = posStart.getLine();
+            if (posStart.getOffset() > 0)
+                line = line.next();
+            while (line != null) {
+                line.setFlags(flags);
+                line = line.next();
+            }
+        }
+        finally {
+            unlockWrite();
+        }
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();
             if (ed.getBuffer() == this) {
@@ -450,7 +477,7 @@ public final class Jdb extends Buffer
                 Runnable runnable = new Runnable() {
                     public void run()
                     {
-                        appendString(s, false);
+                        appendString(s, false, JdbFormatter.JDB_FORMAT_OUTPUT);
                     }
                 };
                 SwingUtilities.invokeLater(runnable);
@@ -463,11 +490,14 @@ public final class Jdb extends Buffer
     private void addBreakpoint(ResolvableBreakpoint bp)
     {
         breakpoints.add(bp);
+        log("Breakpoint added: " + bp.getLocationString());
     }
 
     public void deleteBreakpoint(ResolvableBreakpoint bp)
     {
+        bp.clear();
         breakpoints.remove(bp);
+        log("Breakpoint deleted: " + bp.getLocationString());
     }
 
     public static void jdbToggleBreakpoint()
@@ -547,7 +577,6 @@ public final class Jdb extends Buffer
         if (annotation instanceof BreakpointAnnotation) {
             ResolvableBreakpoint bp =
                 ((BreakpointAnnotation)annotation).getBreakpoint();
-            bp.clear();
             jdb.deleteBreakpoint(bp);
             File file = bp.getFile();
             if (file != null) {
@@ -960,8 +989,7 @@ public final class Jdb extends Buffer
                     if (fileName.equals(file.getName())) {
                         if (lineNumber == bp.getLineNumber()) {
                             // Found it.
-                            bp.clear();
-                            iter.remove();
+                            deleteBreakpoint(bp);
                             fireBreakpointChanged();
                             break;
                         }
@@ -1085,7 +1113,9 @@ public final class Jdb extends Buffer
             try {
                 if (s != null) {
                     out.write(s.getBytes());
-                    log(s, false);
+                    // Format stdin like stdout. JDB_FORMAT_INPUT is for
+                    // debugger commands.
+                    log(s, false, JdbFormatter.JDB_FORMAT_OUTPUT);
                 }
                 out.write('\n');
                 out.flush();
