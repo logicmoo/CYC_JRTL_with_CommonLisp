@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.9 2003-12-13 21:25:06 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.10 2004-02-01 16:46:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,6 +21,26 @@
 
 (in-package "SYSTEM")
 
+(defun parse-body (body &optional (doc-string-allowed t))
+  (let ((decls ())
+	(doc nil))
+    (do ((tail body (cdr tail)))
+	((endp tail)
+	 (values tail (nreverse decls) doc))
+      (let ((form (car tail)))
+	(cond ((and (stringp form) (cdr tail))
+	       (if doc-string-allowed
+		   (setq doc form
+			 ;; Only one doc string is allowed.
+			 doc-string-allowed nil)
+		   (return (values tail (nreverse decls) doc))))
+	      ((not (and (consp form) (symbolp (car form))))
+	       (return (values tail (nreverse decls) doc)))
+	      ((eq (car form) 'declare)
+	       (push form decls))
+	      (t
+	       (return (values tail (nreverse decls) doc))))))))
+
 (defvar *arg-tests* ())
 
 (defvar *system-lets* nil)
@@ -30,7 +50,9 @@
 (defvar *ignorable-vars*)
 
 (defun do-arg-count-error (error-kind name arg lambda-list minimum maximum)
-  (error 'program-error "wrong number of arguments for ~S" name))
+  (error 'program-error
+         :format-control "Wrong number of arguments for ~S."
+         :format-arguments (list name)))
 
 (defun parse-defmacro (lambda-list arg-list-name code name error-kind
 				   &key (anonymousp nil)
@@ -38,7 +60,7 @@
 				   ((:environment env-arg-name))
 				   (error-fun 'error))
   (multiple-value-bind (body declarations documentation)
-		       (parse-body code nil doc-string-allowed)
+		       (parse-body code doc-string-allowed)
     (let* ((*arg-tests* ())
 	   (*user-lets* ())
 	   (*system-lets* ())
@@ -151,37 +173,6 @@
 		      (setf rest-of-args (cdr rest-of-args))
 		      (setf restp t)
 		      (push-let-binding (car rest-of-args) path nil))
-		     ;;
-		     ;; This branch implements an incompatible extension to
-		     ;; Common Lisp.  In place of a symbol following &body,
-		     ;; there may be a list of up to three elements which will
-		     ;; be bound to the body, declarations, and doc-string of
-		     ;; the body.
-		     ((and (cdr rest-of-args)
-			   (consp (cadr rest-of-args))
-			   (symbolp (caadr rest-of-args)))
-		      (setf rest-of-args (cdr rest-of-args))
-		      (setf restp t)
-		      (let ((body-name (caar rest-of-args))
-			    (declarations-name (cadar rest-of-args))
-			    (doc-string-name (caddar rest-of-args))
-			    (parse-body-values (gensym)))
-			(push-let-binding
-			 parse-body-values
-			 `(multiple-value-list
-			   (parse-body ,path ,env-arg-name
-				       ,(not (null doc-string-name))))
-			 t)
-			(setf env-arg-used t)
-			(when body-name
-			  (push-let-binding body-name
-					    `(car ,parse-body-values) nil))
-			(when declarations-name
-			  (push-let-binding declarations-name
-					    `(cadr ,parse-body-values) nil))
-			(when doc-string-name
-			  (push-let-binding doc-string-name
-					    `(caddr ,parse-body-values) nil))))
 		     (t
 		      (defmacro-error (symbol-name var) error-kind name))))
 	      ((eq var '&optional)
@@ -332,26 +323,6 @@
 	 (push-let-binding value-var path nil supplied-var init-form))
 	(t
 	 (error "Illegal optional variable name: ~S" value-var))))
-
-(defun parse-body (body environment &optional (doc-string-allowed t))
-  (let ((decls ())
-	(doc nil))
-    (do ((tail body (cdr tail)))
-	((endp tail)
-	 (values tail (nreverse decls) doc))
-      (let ((form (car tail)))
-	(cond ((and (stringp form) (cdr tail))
-	       (if doc-string-allowed
-		   (setq doc form
-			 ;; Only one doc string is allowed.
-			 doc-string-allowed nil)
-		   (return (values tail (nreverse decls) doc))))
-	      ((not (and (consp form) (symbolp (car form))))
-	       (return (values tail (nreverse decls) doc)))
-	      ((eq (car form) 'declare)
-	       (push form decls))
-	      (t
-	       (return (values tail (nreverse decls) doc))))))))
 
 (defmacro destructuring-bind (lambda-list arg-list &rest body)
   (let* ((arg-list-name (gensym "ARG-LIST-")))
