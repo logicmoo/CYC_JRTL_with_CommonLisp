@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.245 2004-07-26 18:30:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.246 2004-07-27 01:22:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,8 +54,6 @@
 (defvar *code* ())
 (defvar *static-code* ())
 (defvar *fields* ())
-
-(defvar *blocks* ())
 
 ;; All tags visible at the current point of compilation, some of which may not
 ;; be in the current compiland.
@@ -163,24 +161,33 @@
   (compiland *current-compiland*)
   form)
 
+;; Used to wrap TAGBODYs and LET/LET*/M-V-B forms as well as BLOCKs per se.
 (defstruct (block-node (:conc-name block-) (:include node))
-  name
+  name ; Block name, (TAGBODY) or (LET).
   (exit (gensym))
   target
   catch-tag
   return-p ; True if there is any RETURN from this block.
   non-local-return-p ; True if there is a non-local RETURN from this block.
+  non-local-go-p ; True if a tag in this tagbody is the target of a non-local GO.
   )
+
+(defvar *blocks* ())
+
+(defun find-block (name)
+  (dolist (block *blocks*)
+    (when (eq name (block-name block))
+      (return block))))
 
 (defstruct tag
   name
   label
-  tagbody
+  block
   (compiland *current-compiland*))
 
-(defstruct (tagbody-node (:conc-name tagbody-) (:include node))
-  non-local-go-p ; True if a tag in this tagbody is the target of a non-local GO.
-  )
+;; (defstruct (tagbody-node (:conc-name tagbody-) (:include node))
+;;   non-local-go-p ; True if a tag in this tagbody is the target of a non-local GO.
+;;   )
 
 ;;; Pass 1.
 
@@ -207,7 +214,7 @@
 (defun p1-return-from (form)
   (let* ((name (second form))
          (result-form (third form))
-         (block (find name *blocks* :key #'block-name)))
+         (block (find-block name)))
     (cond ((null block)
            (error "P1-RETURN-FROM: no block named ~S is currently visible." name))
           ((eq (block-compiland block) *current-compiland*)
@@ -219,15 +226,16 @@
 
 (defun p1-tagbody (form)
 ;;   (format t "P1-TAGBODY form = ~S~%" form)
-  (let ((*visible-tags* *visible-tags*)
-        (body (cdr form))
-        (tagbody (make-tagbody-node)))
+  (let* ((block (make-block-node :name '(TAGBODY)))
+         (*blocks* (cons block *blocks*))
+         (*visible-tags* *visible-tags*)
+         (body (cdr form)))
     (dolist (subform body)
       (when (or (symbolp subform) (integerp subform))
-        (let* ((tag (make-tag :name subform :label (gensym) :tagbody tagbody)))
+        (let* ((tag (make-tag :name subform :label (gensym) :block block)))
           (push tag *visible-tags*))))
-    (setf (tagbody-form tagbody) (list* 'TAGBODY (mapcar #'p1 (cdr form))))
-    tagbody))
+    (setf (block-form block) (list* 'TAGBODY (mapcar #'p1 (cdr form))))
+    block))
 
 (defun p1-go (form)
 ;;   (format t "P1-GO form = ~S~%" form)
@@ -238,7 +246,7 @@
       (error "COMPILE-GO: tag not found: ~S" name))
 ;;     (format t "tag-compiland = ~S~%" (tag-compiland tag))
     (unless (eq (tag-compiland tag) *current-compiland*)
-      (setf (tagbody-non-local-go-p (tag-tagbody tag)) t)))
+      (setf (block-non-local-go-p (tag-block tag)) t)))
   form)
 
 (defun p1-flet/labels (form)
@@ -2431,8 +2439,7 @@
        (compile-let*-vars varlist specials)))
     ;; Body of LET/LET*.
     (do ((body (cddr form) (cdr body)))
-        ((null (cdr body))
-         (compile-form (car body) :target target))
+        ((null (cdr body)) (compile-form (car body) :target target))
       (compile-form (car body) :target nil)
       (maybe-emit-clear-values (car body)))
     (when specialp
@@ -2553,16 +2560,16 @@
     (emit-push-nil)
     (emit-move-from-stack target)))
 
-(defun compile-tagbody-node (tagbody target)
+(defun compile-tagbody-node (block target)
   (let* ((*visible-tags* *visible-tags*)
-         (form (tagbody-form tagbody))
+         (form (block-form block))
          (body (cdr form)))
 ;;     (format t "COMPILE-TAGBODY-NODE non-local-go-p = ~S~%"
 ;;             (tagbody-non-local-go-p tagbody))
     ;; Scan for tags.
     (dolist (subform body)
       (when (or (symbolp subform) (integerp subform))
-        (let* ((tag (make-tag :name subform :label (gensym) :tagbody tagbody)))
+        (let* ((tag (make-tag :name subform :label (gensym) :block block)))
           (push tag *visible-tags*))))
     (do* ((rest body (cdr rest))
           (subform (car rest) (car rest)))
@@ -2640,11 +2647,11 @@
   (unless (block-node-p block)
     (format t "type-of block = ~S~%" (type-of block))
     (assert (block-node-p block)))
-  (let* ((*blocks* *blocks*)
+  (let* ((*blocks* (cons block *blocks*))
          (*register* *register*)
          env-register)
     (setf (block-target block) target)
-    (push block *blocks*)
+;;     (push block *blocks*)
     (when (block-return-p block)
       ;; Save current dynamic environment.
       (setf env-register (allocate-register))
@@ -2698,7 +2705,7 @@
 (defun compile-return-from (form &key (target *val*))
   (let* ((name (second form))
          (result-form (third form))
-         (block (find name *blocks* :key #'block-name)))
+         (block (find-block name)))
     (cond ((null block)
            (error "No block named ~S is currently visible." name))
           ((eq (block-compiland block) *current-compiland*)
@@ -3603,10 +3610,12 @@
            (compile-variable-reference form target))))
         ((block-node-p form)
 ;;          (%format t "COMPILE-FORM block-node case~S~%")
-         (compile-block-node form target))
-        ((tagbody-node-p form)
-;;          (%format t "COMPILE-FORM tagbody-node case~S~%")
-         (compile-tagbody-node form target))
+         (if (equal (block-name form) '(TAGBODY))
+             (compile-tagbody-node form target)
+             (compile-block-node form target)))
+;;         ((tagbody-node-p form)
+;; ;;          (%format t "COMPILE-FORM tagbody-node case~S~%")
+;;          (compile-tagbody-node form target))
         ((constantp form)
          (compile-constant form :target target))
         (t
