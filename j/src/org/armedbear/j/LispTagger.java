@@ -20,19 +20,16 @@
 
 package org.armedbear.j;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public final class LispTagger extends Tagger
 {
     // States.
-    private static final int NEUTRAL = 0;
-    private static final int DEFUN   = 1;
+    private static final int NEUTRAL    = 0;
+    private static final int OPEN_PAREN = 1;
+    private static final int DEFUN      = 2;
 
-    protected Position pos;
-    protected String token;
-    protected Position tokenStart;
-
-    private static final Mode lispMode = LispMode.getMode();
+    private static final Mode mode = LispMode.getMode();
 
     public LispTagger(SystemBuffer buffer)
     {
@@ -41,10 +38,8 @@ public final class LispTagger extends Tagger
 
     public void run()
     {
-        Vector tags = new Vector();
-        pos = new Position(buffer.getFirstLine(), 0);
-        token = null;
-        tokenStart = null;
+        ArrayList tags = new ArrayList();
+        Position pos = new Position(buffer.getFirstLine(), 0);
         int state = NEUTRAL;
         while (!pos.atEnd()) {
             char c = pos.getChar();
@@ -76,38 +71,76 @@ public final class LispTagger extends Tagger
                 pos.moveTo(nextLine, 0);
                 continue;
             }
-            if (lispMode.isIdentifierStart(c)) {
-                gatherToken();
+            if (c == '(') {
+                state = OPEN_PAREN;
+                pos.next();
+                continue;
+            }
+            if (mode.isIdentifierStart(c)) {
                 if (state == DEFUN) {
+                    Position tokenStart = pos.copy();
+                    String token = gatherToken(pos);
                     LocalTag tag = new LispTag(token, tokenStart);
                     tags.add(tag);
                     state = NEUTRAL;
-                } else if (token.startsWith("def")) {
-                    if (token.equals("defun") ||
-                        token.equals("defvar") ||
-                        token.equals("defmacro") ||
-                        token.equals("defcustom") ||
-                        token.equals("defgroup") ||
-                        token.equals("defsubst"))
+                    continue;
+                } 
+                if (state == OPEN_PAREN) {
+                    String preceding =
+                        pos.getLine().substring(0, pos.getOffset()).trim();
+                    if (!preceding.equals("(")) {
+                        state = NEUTRAL;
+                        continue;
+                    }
+                    String token = gatherToken(pos);
+                    if (isDefinitionStart(token, pos))
                         state = DEFUN;
+                    else
+                        state = NEUTRAL;
+                    continue;
                 }
+                skipToken(pos);
                 continue;
             }
+            state = NEUTRAL;
             pos.next();
         }
         buffer.setTags(tags);
     }
-
-    private void gatherToken()
+    
+    private static final String[] tokens = new String[] {
+        "defun", "defvar", "defmacro", "defcustom", "defgroup", "defsubst"
+    };
+    
+    // pos points to first char after token.
+    private boolean isDefinitionStart(String token, Position pos)
     {
-        tokenStart = new Position(pos);
+        if (token.startsWith("def"))
+            if (Utilities.isOneOf(token, tokens))
+                return true;
+        
+        return false;
+    }
+
+    // Advances pos past token.
+    private String gatherToken(Position pos)
+    {
         FastStringBuffer sb = new FastStringBuffer();
         char c;
-        while (lispMode.isIdentifierPart(c = pos.getChar())) {
+        while (mode.isIdentifierPart(c = pos.getChar())) {
             sb.append(c);
             if (!pos.next())
                 break;
         }
-        token = sb.toString();
+        return sb.toString();
+    }
+    
+    // Advances pos past token.
+    private void skipToken(Position pos)
+    {
+        while (mode.isIdentifierPart(pos.getChar())) {
+            if (!pos.next())
+                return;
+        }
     }
 }
