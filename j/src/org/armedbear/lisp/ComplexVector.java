@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.7 2004-02-25 13:50:54 piso Exp $
+ * $Id: ComplexVector.java,v 1.8 2004-02-25 14:41:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,59 +127,6 @@ public final class ComplexVector extends AbstractVector
         return capacity;
     }
 
-    public AbstractVector adjustVector(int size, LispObject initialElement,
-                                       LispObject initialContents)
-        throws ConditionThrowable
-    {
-        if (elements == null) {
-            // Copy array.
-            elements = new LispObject[capacity];
-            for (int i = 0; i < capacity; i++)
-                elements[i] = array.getRowMajor(displacement + i);
-            array = null;
-            displacement = 0;
-            isDisplaced = false;
-        }
-        if (elements.length != size) {
-            LispObject[] newArray = new LispObject[size];
-            if (initialContents != NIL) {
-                if (initialContents.listp()) {
-                    LispObject list = initialContents;
-                    for (int i = 0; i < size; i++) {
-                        newArray[i] = list.car();
-                        list = list.cdr();
-                    }
-                } else if (initialContents.vectorp()) {
-                    for (int i = 0; i < size; i++)
-                        newArray[i] = initialContents.elt(i);
-                } else
-                    signal(new TypeError(initialContents, Symbol.SEQUENCE));
-            } else {
-                System.arraycopy(elements, 0, newArray, 0,
-                                 Math.min(elements.length, size));
-                if (size > elements.length) {
-                    for (int i = elements.length; i < size; i++)
-                        newArray[i] = initialElement;
-                }
-            }
-            elements = newArray;
-            capacity = size;
-        }
-        return this;
-    }
-
-    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
-                                       int displacement)
-        throws ConditionThrowable
-    {
-        capacity = size;
-        array = displacedTo;
-        this.displacement = displacement;
-        elements = null;
-        isDisplaced = true;
-        return this;
-    }
-
     public int length()
     {
         return fillPointer >= 0 ? fillPointer : capacity;
@@ -299,6 +246,28 @@ public final class ComplexVector extends AbstractVector
         return this;
     }
 
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer("#(");
+        try {
+            // FIXME The limit should be based on the value of *PRINT-LENGTH*.
+            final int limit = Math.min(length(), 10);
+            for (int i = 0; i < limit; i++) {
+                if (i > 0)
+                    sb.append(' ');
+                sb.append(get(i));
+            }
+            if (limit < length())
+                sb.append(" ...");
+            sb.append(')');
+        }
+        catch (ConditionThrowable t) {
+            // Shouldn't happen.
+            Debug.trace(t);
+        }
+        return sb.toString();
+    }
+
     public LispObject vectorPushExtend(LispObject element)
         throws ConditionThrowable
     {
@@ -352,25 +321,65 @@ public final class ComplexVector extends AbstractVector
         }
     }
 
-    public String toString()
+    public AbstractVector adjustVector(int newCapacity,
+                                       LispObject initialElement,
+                                       LispObject initialContents)
+        throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("#(");
-        try {
-            // FIXME The limit should be based on the value of *PRINT-LENGTH*.
-            final int limit = Math.min(length(), 10);
-            for (int i = 0; i < limit; i++) {
-                if (i > 0)
-                    sb.append(' ');
-                sb.append(get(i));
+        if (initialContents != NIL) {
+            // "If INITIAL-CONTENTS is supplied, it is treated as for MAKE-
+            // ARRAY. In this case none of the original contents of array
+            // appears in the resulting array."
+            LispObject[] newArray = new LispObject[newCapacity];
+            if (initialContents.listp()) {
+                LispObject list = initialContents;
+                for (int i = 0; i < newCapacity; i++) {
+                    newArray[i] = list.car();
+                    list = list.cdr();
+                }
+            } else if (initialContents.vectorp()) {
+                for (int i = 0; i < newCapacity; i++)
+                    newArray[i] = initialContents.elt(i);
+            } else
+                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+            elements = newArray;
+        } else {
+            if (elements == null) {
+                // Displaced array. Copy existing elements.
+                elements = new LispObject[newCapacity];
+                final int limit = Math.min(capacity, newCapacity);
+                for (int i = 0; i < limit; i++)
+                    elements[i] = array.getRowMajor(displacement + i);
+                array = null;
+                displacement = 0;
+                isDisplaced = false;
+            } else if (capacity != newCapacity) {
+                LispObject[] newElements = new LispObject[newCapacity];
+                System.arraycopy(elements, 0, newElements, 0,
+                                 Math.min(capacity, newCapacity));
+                elements = newElements;
             }
-            if (limit < length())
-                sb.append(" ...");
-            sb.append(')');
+            // Initialize new elements (if any).
+            for (int i = capacity; i < newCapacity; i++)
+                elements[i] = initialElement;
         }
-        catch (ConditionThrowable t) {
-            // Shouldn't happen.
-            Debug.trace(t);
-        }
-        return sb.toString();
+        capacity = newCapacity;
+        array = null;
+        displacement = 0;
+        isDisplaced = false;
+        return this;
+    }
+
+    public AbstractVector adjustVector(int newCapacity,
+                                       AbstractArray displacedTo,
+                                       int displacement)
+        throws ConditionThrowable
+    {
+        capacity = newCapacity;
+        array = displacedTo;
+        this.displacement = displacement;
+        elements = null;
+        isDisplaced = true;
+        return this;
     }
 }
