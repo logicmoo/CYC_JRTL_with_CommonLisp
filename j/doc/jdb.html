@@ -19,11 +19,31 @@
 
 <p>
 
-J provides a very simple JPDA-based debugger.
+J includes a lightweight JPDA-based Java debugger whose main advantage is its
+integration with j. If you need a more powerful debugger, consider
+<a href="http://www.bluemarsh.com/java/jswat/index.html">JSwat</a>.
 <p>
-The command <a href="commands.html#jdb">jdb</a>
-(Alt X, "jdb") starts the debugger. Enter the appropriate information in the
-dialog box.
+<b>Installation</b>
+<p>
+For the debugger to work, j must be able to load classes from tools.jar, which
+is normally found in the lib directory of your JDK installation. The simplest
+way to make this possible is to use a startup script that looks like this:
+<pre>
+    java -Djava.ext.dirs=[path to dir containing tools.jar] -jar j.jar</pre>
+<p>
+There are several other ways to accomplish the same thing. I'll just mention
+one more:
+<pre>
+    java -classpath [path to tools.jar]:[path to j.jar] Main</pre>
+(On Windows, the ':' should be a ';', of course.)
+<p>
+Currently this second approach is used when you build j from source and do
+"make install" or "ant install".
+<p>
+<b>The startup dialog</b>
+<p>
+The command <a href="commands.html#jdb">jdb</a> (Alt X, "jdb") brings up the
+debugger's statup dialog.
 <p>
 "Main class" is the fully qualified name of the main class of your
 application. For example:
@@ -37,9 +57,7 @@ passed to the application. For example:
 <p>
 The value you enter for "Class path" will be passed to the debuggee Java VM as
 the "-classpath" option. Use the platform-specific path delimiter character
-(':' for Unix, ';' for Windows). For example:
-<pre>
-    /home/peter/j/src</pre>
+(':' for Unix, ';' for Windows).
 <p>
 "Java home" is the value of JAVA_HOME for the debuggee VM. The default is
 usually acceptable, unless you have some particular axe to grind.
@@ -51,7 +69,8 @@ passed to the debuggee VM (for example, "-server"). Usually no arguments are
 required.
 <p>
 If the "Start suspended" checkbox is checked, the Java VM will initially be
-suspended, and you will need to use the "run" command to start it.
+suspended, and you will need to use the "c" command (or the "Continue" button)
+to start it.
 <p>
 If the "Start suspended" checkbox is unchecked, the Java VM will start up
 normally. In this case, if you don't have any breakpoints set, a breakpoint
@@ -69,22 +88,25 @@ All of the textfields in this dialog remember their most recent contents, and,
 like most textfields in j, they have persistent history that can be navigated
 with the up and down arrows (or Ctrl P and Ctrl N).
 <p>
-When you finally click the "OK" button or press Enter, the debugger process
-will start. You'll get a transcript buffer in the lower half of the current
-editor frame, and a modeless control dialog will appear as a separate,
-always-on-top top-level window (if you put it somewhere convenient, it will try
-to remember where it belongs).
+<b>Debugging</b>
+<p>
+When you finally click the startup dialog's "OK" button (or press Enter), the
+debugger process will start. You'll get a transcript buffer in the lower half
+of the current editor frame, and a modeless control dialog will appear as a
+separate, always-on-top top-level window (if you resize it to taste and put it
+somewhere convenient, j will try to remember where it belongs).
 <p>
 The transcript buffer is read-only. It receives stdout and stderr output from
-the application, as well as debugger messages.
+the application, as well as debugger messages. If you print the value of a
+variable, for example, the results will appear in the transcript buffer.
 <p>
-The control dialog has panes with tabs labelled "Stack", "Threads", and
+The control dialog has three panes, with tabs labelled "Stack", "Threads", and
 "Breakpoints".
 <p>
-When the VM is suspended, clicking on one of the stack frames in the stack
-pane will navigate to the corresponding location in an editor window. (Clicking
-on the topmost stack frame is a good way to get back to the current location if
-you've ventured off into the weeds.)
+When the VM is suspended, clicking on one of the stack frames in the stack pane
+will navigate to the corresponding location in an editor source window.
+(Clicking on the topmost stack frame is a good way to get back to the current
+location if you've ventured off into the weeds.)
 <p>
 When the VM is suspended, clicking on one of the threads in the threads pane
 selects that thread and updates the stack pane with the selected thread's
@@ -99,9 +121,6 @@ that the breakpoint is entirely bogus.
 The buttons across the top of the control dialog do, for the most part, what
 their labels suggest.
 <p>
-"Set/Clear Breakpoint" toggles a line-number breakpoint at the location of the
-caret in the current editor, which must be looking at a Java source file.
-<p>
 "Next" executes the current line of code, stepping over method calls.
 <p>
 "Step" executes the current line of code, stepping into any method calls it may
@@ -109,12 +128,14 @@ contain.
 <p>
 "Step Out" continues execution until just after the current method returns.
 <p>
-"Go" resumes execution at the address where the program last stopped.
+"Suspend" suspends execution of the application.
 <p>
-Then there's the "Command" textfield. See <a href="jdbcommands.html">Debugger
-Commands</a>.
+"Continue" resumes execution at the address where the program last stopped.
 <p>
-
+The "Command" textfield is used to enter debugger
+<a href="jdbcommands.html">commands</a>. If you're debugging a console
+application, you can use the "stdin" command in the "Command" textfield to send
+input to stdin of your application.
 <p>
 </body>
 
