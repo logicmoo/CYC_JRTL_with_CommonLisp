@@ -99,6 +99,31 @@
 (defun vector-copy-seq* (sequence)
   (vector-copy-seq sequence (type-of sequence)))
 
+(defmacro vector-reverse (sequence type)
+  `(let ((length (length ,sequence)))
+     (do ((forward-index 0 (1+ forward-index))
+	  (backward-index (1- length) (1- backward-index))
+	  (new-sequence (make-sequence-of-type ,type length)))
+       ((= forward-index length) new-sequence)
+       (setf (aref new-sequence forward-index)
+	     (aref ,sequence backward-index)))))
+
+(defmacro list-reverse-macro (sequence)
+  `(do ((new-list ()))
+     ((atom ,sequence) new-list)
+     (push (pop ,sequence) new-list)))
+
+(defun reverse (sequence)
+  (seq-dispatch sequence
+		(list-reverse* sequence)
+		(vector-reverse* sequence)))
+
+(defun list-reverse* (sequence)
+  (list-reverse-macro sequence))
+
+(defun vector-reverse* (sequence)
+  (vector-reverse sequence (type-of sequence)))
+
 ;; FIXME
 (defun nreverse (sequence)
   (reverse sequence))
