@@ -1,8 +1,8 @@
 /*
- * ErrorCommands.java
+ * CompilationCommands.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationCommands.java,v 1.6 2003-06-28 00:56:35 piso Exp $
+ * $Id: CompilationCommands.java,v 1.7 2003-07-24 15:05:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class CompilationCommands implements Constants
 
     public static void compile()
     {
-        if (Platform.isPlatformWindows() && !Platform.isPlatformWindows5())
+        if (!checkPlatform("Compile"))
             return;
         final Editor editor = Editor.currentEditor();
         CompileDialog d = new CompileDialog(editor);
@@ -49,7 +49,7 @@ public final class CompilationCommands implements Constants
 
     public static void compile(String args)
     {
-        if (Platform.isPlatformWindows() && !Platform.isPlatformWindows5())
+        if (!checkPlatform("Compile"))
             return;
         if (args != null && args.length() > 0) {
             History history = new History("compile.command");
@@ -61,7 +61,7 @@ public final class CompilationCommands implements Constants
 
     public static void recompile()
     {
-        if (Platform.isPlatformWindows() && !Platform.isPlatformWindows5())
+        if (!checkPlatform("Recompile"))
             return;
         final History history = new History("compile.command");
         final String command = history.getPrevious();
@@ -69,6 +69,17 @@ public final class CompilationCommands implements Constants
             compile(command, Editor.currentEditor());
         else
             compile();
+    }
+
+    private static boolean checkPlatform(String command)
+    {
+        if (Platform.isPlatformWindows() && !Platform.isPlatformWindows5()) {
+            MessageDialog.showMessageDialog(
+                "This feature requires Windows 2000 or Windows XP.",
+                command);
+            return false;
+        }
+        return true;
     }
 
     private static void compile(final String command, final Editor editor)
