@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Frame.java,v 1.6 2002-11-15 15:05:57 piso Exp $
+ * $Id: Frame.java,v 1.7 2002-11-15 15:22:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -668,6 +668,7 @@ public final class Frame extends JFrame implements Constants, WindowListener,
             return;
         if (editor != editors[0] && editor != editors[1])
             return;
+        promoteSecondaryBuffers();
         Editor keep = editor == editors[0] ? editors[1] : editors[0];
         Editor kill = editor;
         unsplitInternal(keep, kill);
@@ -677,6 +678,7 @@ public final class Frame extends JFrame implements Constants, WindowListener,
     {
         if (editors[1] == null)
             return;
+        promoteSecondaryBuffers();
         Editor keep = currentEditor;
         Editor kill = getOtherEditor();
         unsplitInternal(keep, kill);
@@ -686,6 +688,7 @@ public final class Frame extends JFrame implements Constants, WindowListener,
     {
         if (editors[1] == null)
             return;
+        promoteSecondaryBuffers();
         Editor keep = getOtherEditor();
         Editor kill = currentEditor;
         unsplitInternal(keep, kill);
