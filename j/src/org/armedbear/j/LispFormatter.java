@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.11 2002-12-27 23:29:44 piso Exp $
+ * $Id: LispFormatter.java,v 1.12 2002-12-27 23:37:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -468,34 +468,34 @@ public final class LispFormatter extends Formatter
         int count = 0;
         final int limit = text.length();
         while (i < limit) {
-            char c = text.charAt(i);
-            if (Character.isWhitespace(c)) {
-                ++i;
-                continue;
-            }
-            if (c == '(') {
-                ++count;
-                ++i;
-                continue;
-            }
-            if (c == ')') {
-                ++i;
-                if (count > 0) {
-                    --count;
-                    if (count == 0)
-                        break;
-                }
-                continue;
-            }
-            if (c == ';')
-                return i;
-            // Not whitespace or paren.
-            while (++i < limit) {
-                c = text.charAt(i);
-                if (Character.isWhitespace(c))
+            switch (text.charAt(i)) {
+                case ' ':
+                case '\t':
+                    ++i;
+                    break;
+                case '(':
+                    ++count;
+                    ++i;
+                    break;
+                case ')':
+                    ++i;
+                    if (count > 0) {
+                        --count;
+                        if (count == 0)
+                            return i;
+                    }
+                    break;
+                case ';':
+                case ':':
+                    return i;
+                default:
+                    while (++i < limit) {
+                        char c = text.charAt(i);
+                        if (Character.isWhitespace(c))
+                            return i;
+                    }
                     break;
             }
-            break;
         }
         return i;
     }
