@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.7 2004-07-14 16:59:02 piso Exp $
+;;; $Id: opcodes.lisp,v 1.8 2004-07-22 02:44:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -201,8 +201,8 @@
 (define-opcode if_acmpeq 165 3 -2)
 (define-opcode if_acmpne 166 3 -2)
 (define-opcode goto 167 3 0)
-(define-opcode jsr 168 3 nil)
-(define-opcode ret 169 2 nil)
+(define-opcode jsr 168 3 1)
+(define-opcode ret 169 2 0)
 (define-opcode tableswitch 170 0 nil)
 (define-opcode lookupswitch 171 0 nil)
 (define-opcode ireturn 172 1 nil)
