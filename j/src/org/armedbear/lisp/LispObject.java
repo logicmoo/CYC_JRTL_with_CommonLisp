@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.104 2004-12-11 17:39:52 piso Exp $
+ * $Id: LispObject.java,v 1.105 2004-12-16 06:34:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -530,6 +530,11 @@ public class LispObject extends Lisp
         return signal(new TypeError(this, Symbol.NUMBER));
     }
 
+    public LispObject subtract(int n) throws ConditionThrowable
+    {
+        return subtract(new Fixnum(n));
+    }
+
     public LispObject subtract(LispObject obj) throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.NUMBER));
@@ -596,6 +601,11 @@ public class LispObject extends Lisp
     public LispObject IS_GT(LispObject obj) throws ConditionThrowable
     {
         return isGreaterThan(obj) ? T : NIL;
+    }
+
+    public boolean isLessThanOrEqualTo(int n) throws ConditionThrowable
+    {
+        return isLessThanOrEqualTo(new Fixnum(n));
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
