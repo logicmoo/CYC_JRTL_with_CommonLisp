@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.51 2004-08-09 18:45:35 piso Exp $
+ * $Id: LispThread.java,v 1.52 2004-08-16 03:30:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -357,7 +357,12 @@ public final class LispThread extends LispObject
     }
 
     public void pushStackFrame(LispObject fun, LispObject[] args)
+        throws ConditionThrowable
     {
+        if (profiling && sampling) {
+            if (sampleNow)
+                Profiler.sample(this);
+        }
         stack = new Cons((new StackFrame(fun, args)), stack);
     }
 
