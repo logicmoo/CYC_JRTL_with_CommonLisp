@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.23 2003-09-21 17:42:29 piso Exp $
+ * $Id: LispClass.java,v 1.24 2003-09-21 19:32:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,8 @@ public class LispClass extends StandardObject
     }
 
     protected final Symbol symbol;
-    private LispObject directSuperclasses; // A list.
+    private LispObject directSuperclasses;
+    private LispObject classPrecendenceList;
 
     protected LispClass(Symbol symbol)
     {
@@ -75,6 +76,58 @@ public class LispClass extends StandardObject
     public final void setDirectSuperclass(LispObject superclass)
     {
         directSuperclasses = new Cons(superclass);
+    }
+
+    public final LispObject getCPL()
+    {
+        return classPrecendenceList;
+    }
+
+    public final void setCPL(LispObject obj1)
+    {
+        Debug.assertTrue(obj1 == this);
+        classPrecendenceList = new Cons(obj1);
+    }
+
+    public final void setCPL(LispObject obj1, LispObject obj2)
+    {
+        Debug.assertTrue(obj1 == this);
+        classPrecendenceList = list2(obj1, obj2);
+    }
+
+    public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3)
+    {
+        Debug.assertTrue(obj1 == this);
+        classPrecendenceList = list3(obj1, obj2, obj3);
+    }
+
+    public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
+                             LispObject obj4)
+    {
+        Debug.assertTrue(obj1 == this);
+        classPrecendenceList = list4(obj1, obj2, obj3, obj4);
+    }
+
+    public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
+                             LispObject obj4, LispObject obj5)
+    {
+        Debug.assertTrue(obj1 == this);
+        classPrecendenceList = list5(obj1, obj2, obj3, obj4, obj5);
+    }
+
+    public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
+                             LispObject obj4, LispObject obj5, LispObject obj6)
+    {
+        Debug.assertTrue(obj1 == this);
+        classPrecendenceList = list6(obj1, obj2, obj3, obj4, obj5, obj6);
+    }
+
+    public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
+                             LispObject obj4, LispObject obj5, LispObject obj6,
+                             LispObject obj7)
+    {
+        Debug.assertTrue(obj1 == this);
+        classPrecendenceList = list7(obj1, obj2, obj3, obj4, obj5, obj6, obj7);
     }
 
     public String getName()
