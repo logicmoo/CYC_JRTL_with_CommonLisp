@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.29 2003-03-09 17:35:37 piso Exp $
+ * $Id: Lisp.java,v 1.30 2003-03-10 14:59:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,12 +115,12 @@ public abstract class Lisp
         }
     }
 
-    public static final LispObject macroexpand(LispObject form)
+    public static final LispObject macroexpand(LispObject form, Environment env)
         throws Condition
     {
         LispObject expanded = NIL;
         while (true) {
-            form = macroexpand_1(form);
+            form = macroexpand_1(form, env);
             LispObject[] values = getValues();
             if (values[1] == NIL) {
                 values[1] = expanded;
@@ -130,7 +130,7 @@ public abstract class Lisp
         }
     }
 
-    public static final LispObject macroexpand_1(LispObject form)
+    public static final LispObject macroexpand_1(LispObject form, Environment env)
         throws Condition
     {
         LispObject[] results = new LispObject[2];
@@ -291,7 +291,7 @@ public abstract class Lisp
                         break;
                     }
                     case TYPE_MACRO:
-                        result = eval(macroexpand(obj), env);
+                        result = eval(macroexpand(obj, env), env);
                         break;
                     case TYPE_PRIMITIVE0: {
                         if (obj.cdr() != NIL)
@@ -679,6 +679,19 @@ public abstract class Lisp
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "readtable");
+        }
+    }
+
+    public static final Environment checkEnvironment(LispObject obj)
+        throws LispError
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        try {
+            return (Environment) obj;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "environment");
         }
     }
 

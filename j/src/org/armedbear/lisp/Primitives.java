@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.104 2003-03-10 01:43:13 piso Exp $
+ * $Id: Primitives.java,v 1.105 2003-03-10 15:00:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2400,11 +2400,13 @@ public final class Primitives extends Module
     private static final Primitive MACROEXPAND = new Primitive("macroexpand") {
         public LispObject execute(LispObject[] args) throws Condition
         {
-            if (args.length < 1 || args.length > 2)
+            final int length = args.length;
+            if (length < 1 || length > 2)
                 throw new WrongNumberOfArgumentsException(this);
             LispObject form = args[0];
-            // Ignore args[1] (environment) for now.
-            return macroexpand(form);
+            Environment env =
+                length == 2 ? checkEnvironment(args[1]) : new Environment();
+            return macroexpand(form, env);
         }
     };
 
@@ -2413,11 +2415,13 @@ public final class Primitives extends Module
         new Primitive("macroexpand-1") {
         public LispObject execute(LispObject[] args) throws Condition
         {
-            if (args.length < 1 || args.length > 2)
+            final int length = args.length;
+            if (length < 1 || length > 2)
                 throw new WrongNumberOfArgumentsException(this);
             LispObject form = args[0];
-            // Ignore args[1] (environment) for now.
-            return macroexpand_1(form);
+            Environment env =
+                length == 2 ? checkEnvironment(args[1]) : new Environment();
+            return macroexpand_1(form, env);
         }
     };
 
