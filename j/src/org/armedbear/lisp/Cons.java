@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.11 2003-05-31 20:03:48 piso Exp $
+ * $Id: Cons.java,v 1.12 2003-06-01 19:56:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,16 +123,21 @@ public final class Cons extends LispObject
                 this);
         }
         int i = 0;
-        LispObject obj = this;
-        while (true) {
-            if (i == index)
-                return obj.car();
-            obj = obj.cdr();
-            if (obj == NIL) {
-                throw new TypeError("ELT: invalid index " + index +
-                    " for " + this);
+        Cons cons = this;
+        try {
+            while (true) {
+                if (i == index)
+                    return cons.car;
+                cons = (Cons) cons.cdr;
+                ++i;
             }
-            ++i;
+        }
+        catch (ClassCastException e) {
+            if (cons.cdr == NIL)
+                throw new TypeError("ELT: invalid index " + index + " for " +
+                    this);
+            else
+                throw new TypeError(this, "proper sequence");
         }
     }
 
