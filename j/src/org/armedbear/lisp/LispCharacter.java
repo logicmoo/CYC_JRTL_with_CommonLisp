@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.16 2003-07-14 13:21:22 piso Exp $
+ * $Id: LispCharacter.java,v 1.17 2003-08-02 19:59:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,20 @@ package org.armedbear.lisp;
 public final class LispCharacter extends LispObject
 {
     private final char c;
+
+    public static LispCharacter getInstance(char c)
+    {
+        try {
+            LispCharacter character = characters[c];
+            if (character == null) {
+                character = characters[c] = new LispCharacter(c);
+            }
+            return character;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return new LispCharacter(c);
+        }
+    }
 
     public LispCharacter(char c)
     {
@@ -150,6 +164,8 @@ public final class LispCharacter extends LispObject
         }
         return sb.toString();
     }
+
+    private static final LispCharacter[] characters = new LispCharacter[256];
 
     private static final Primitive1 CHARACTER = new Primitive1("character") {
         public LispObject execute(LispObject arg) throws LispError
