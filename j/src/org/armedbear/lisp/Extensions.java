@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.3 2003-03-03 03:04:50 piso Exp $
+ * $Id: Extensions.java,v 1.4 2003-05-27 00:01:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,8 +32,9 @@ public final class Extensions extends Module
             if (args.length() > 0) {
                 LispObject test = args.car();
                 LispObject body = args.cdr();
-                while (eval(test, env) != NIL)
-                    progn(body, env);
+                final LispThread thread = LispThread.currentThread();
+                while (eval(test, env, thread) != NIL)
+                    progn(body, env, thread);
                 return NIL;
             }
             throw new WrongNumberOfArgumentsException(this);
