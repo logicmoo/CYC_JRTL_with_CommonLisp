@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.2 2003-07-01 17:26:47 piso Exp $
+ * $Id: LispAPI.java,v 1.3 2003-07-03 00:32:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,6 +86,16 @@ public final class LispAPI extends Lisp
         public LispObject execute()
         {
             return new JavaObject(Editor.currentEditor());
+        }
+    };
+
+    // ### %set-current-editor
+    private static final Primitive1 _SET_CURRENT_EDITOR =
+        new Primitive1("%set-current-editor", PACKAGE_J, false) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            Editor.setCurrentEditor(checkEditor(arg));
+            return arg;
         }
     };
 
