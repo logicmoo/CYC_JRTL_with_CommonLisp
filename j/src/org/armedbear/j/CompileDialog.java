@@ -1,8 +1,8 @@
 /*
  * CompileDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompileDialog.java,v 1.1.1.1 2002-09-24 16:09:14 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: CompileDialog.java,v 1.2 2003-07-24 15:11:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,16 +26,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 public final class CompileDialog extends JDialog implements KeyListener
 {
     private final Editor editor;
-    private HistoryTextField textField;
-    private History compileHistory;
-    private String command = null;
+    private final HistoryTextField textField;
+    private final History compileHistory;
+    private String command;
 
     public CompileDialog(Editor editor)
     {
@@ -44,7 +43,7 @@ public final class CompileDialog extends JDialog implements KeyListener
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        JLabel label = new JLabel("Compile command:");
+        Label label = new Label("Compile command:");
         panel.add(label);
         textField = new HistoryTextField(20);
         compileHistory = new History("compile.command");

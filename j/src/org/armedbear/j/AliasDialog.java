@@ -1,8 +1,8 @@
 /*
  * AliasDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: AliasDialog.java,v 1.1.1.1 2002-09-24 16:08:07 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: AliasDialog.java,v 1.2 2003-07-24 15:08:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@ package org.armedbear.j;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import javax.swing.JLabel;
 
 public final class AliasDialog extends AbstractDialog implements FocusListener
 {
@@ -42,11 +41,11 @@ public final class AliasDialog extends AbstractDialog implements FocusListener
         this.editor = editor;
         keyTextField = new HistoryTextField(20);
         valueTextField = new HistoryTextField(20);
-        JLabel label = new JLabel("Key:");
+        Label label = new Label("Key:");
         label.setDisplayedMnemonic('K');
         addLabelAndTextField(label, keyTextField);
         addVerticalStrut();
-        label = new JLabel("Value:");
+        label = new Label("Value:");
         label.setDisplayedMnemonic('V');
         addLabelAndTextField(label, valueTextField);
         addVerticalStrut();
