@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SpecialOperators.java,v 1.32 2004-11-13 15:02:01 piso Exp $
+ * $Id: SpecialOperators.java,v 1.33 2005-02-27 20:03:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -347,7 +347,7 @@ public final class SpecialOperators extends Lisp
                 else
                     closure = new Closure(parameters, body, env);
                 closure.setLambdaName(list2(Symbol.FLET, name));
-                ext.bindFunctional(name, closure);
+                ext.addFunctionBinding(name, closure);
                 defs = defs.cdr();
             }
             try {
@@ -435,14 +435,15 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### function
-    private static final SpecialOperator FUNCTION = new SpecialOperator("function", "thing")
+    private static final SpecialOperator FUNCTION =
+        new SpecialOperator("function", "thing")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
             final LispObject arg = args.car();
             if (arg instanceof Symbol) {
-                LispObject functional = env.lookupFunctional(arg);
+                LispObject functional = env.lookupFunction(arg);
                 if (functional instanceof Autoload) {
                     Autoload autoload = (Autoload) functional;
                     autoload.load();
@@ -458,7 +459,7 @@ public final class SpecialOperators extends Lisp
                 if (arg.car() == Symbol.LAMBDA)
                     return new Closure(arg.cadr(), arg.cddr(), env);
                 if (arg.car() == Symbol.SETF) {
-                    LispObject f = env.lookupFunctional(arg);
+                    LispObject f = env.lookupFunction(arg);
                     if (f != null)
                         return f;
                     Symbol symbol = checkSymbol(arg.cadr());
