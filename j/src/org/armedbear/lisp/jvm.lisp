@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.327 2004-12-29 01:26:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.328 2004-12-29 05:34:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3962,7 +3962,7 @@
            (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
 (defun p2-ash (form &key (target *val*) representation)
-  (dformat t "p2-ash form = ~S~%" form)
+  (dformat t "p2-ash form = ~S representation = ~S~%" form representation)
   (require-args form 2)
   (let* ((args (cdr form))
          (len (length args))
@@ -3979,21 +3979,29 @@
                         :representation representation))
      ((and var1 (fixnump arg2) (< 0 arg2 32))
       (dformat t "p2-ash case 2~%")
-      (emit-push-int var1)
-      (emit 'i2l)
-      (emit-push-constant-int arg2)
-      (emit 'lshl)
-      (emit-box-long)
-      (emit-move-from-stack target))
+      (case representation
+        (:unboxed-fixnum
+         (emit-push-int var1)
+         (emit-push-constant-int arg2)
+         (emit 'ishl))
+        (t
+         (emit-push-int var1)
+         (emit 'i2l)
+         (emit-push-constant-int arg2)
+         (emit 'lshl)
+         (emit-box-long)))
+      (emit-move-from-stack target representation))
      ((and var1 (fixnump arg2) (< -32 arg2 0))
       (dformat t "p2-ash case 3~%")
-      (emit 'new +lisp-fixnum-class+)
-      (emit 'dup)
+      (unless (eq representation :unboxed-fixnum)
+        (emit 'new +lisp-fixnum-class+)
+        (emit 'dup))
       (emit-push-int var1)
       (emit-push-constant-int (- arg2))
       (emit 'ishr)
-      (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2)
-      (emit-move-from-stack target))
+      (unless (eq representation :unboxed-fixnum)
+        (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2))
+      (emit-move-from-stack target representation))
      (var2
       (dformat t "p2-ash case 4~%")
       (compile-form arg1 :target :stack)
@@ -4003,7 +4011,9 @@
                           "ash"
                           "(I)Lorg/armedbear/lisp/LispObject;"
                           -1)
-      (emit-move-from-stack target))
+      (when (eq representation :unboxed-fixnum)
+        (emit-unbox-fixnum))
+      (emit-move-from-stack target representation))
      ((fixnump arg2)
       (dformat t "p2-ash case 5~%")
       (compile-form arg1 :target :stack)
@@ -4013,7 +4023,9 @@
                           "ash"
                           "(I)Lorg/armedbear/lisp/LispObject;"
                           -1)
-      (emit-move-from-stack target))
+      (when (eq representation :unboxed-fixnum)
+        (emit-unbox-fixnum))
+      (emit-move-from-stack target representation))
      (t
       (dformat t "p2-ash case 6~%")
       (compile-function-call form target representation)))))
@@ -4025,8 +4037,19 @@
       (let* ((arg1 (first args))
              (arg2 (second args))
              (var1 (unboxed-fixnum-variable arg1)))
+        (dformat t "p2-logand var1 = ~S~%" var1)
+        (dformat t "p2-logand type-of arg2 is ~S~%" (type-of arg2))
         (cond
+         ((and (integerp arg1) (integerp arg2))
+          (dformat t "p2-logand case 1~%")
+          (compile-constant (logand arg1 arg2) :target target :representation representation)
+          (return-from p2-logand t))
+         ((and (fixnump arg2) (zerop arg2))
+          (dformat t "p2-logand case 2~%")
+          (compile-constant 0 :target target :representation representation)
+          (return-from p2-logand t))
          ((and var1 (fixnump arg2))
+          (dformat t "p2-logand case 3~%")
           (unless (eq representation :unboxed-fixnum)
             (emit 'new +lisp-fixnum-class+)
             (emit 'dup))
@@ -4038,16 +4061,51 @@
           (emit-move-from-stack target representation)
           (return-from p2-logand t))
          ((fixnump arg2)
-          (compile-form arg1 :target :stack)
-          (maybe-emit-clear-values arg1)
-          (emit-push-constant-int arg2)
-          (emit-invokevirtual +lisp-object-class+
-                              "logand"
-                              "(I)Lorg/armedbear/lisp/LispObject;"
-                              -1)
-          (emit-move-from-stack target)
+          (dformat t "p2-logand case 4~%")
+          (let ((type (derive-type arg1)))
+            (dformat t "p2-logand arg1 derived type = ~S~%" type)
+            (cond
+             ((subtypep type 'fixnum)
+              (dformat t "p2-logand case 4a~%")
+              (unless (eq representation :unboxed-fixnum)
+                (emit 'new +lisp-fixnum-class+)
+                (emit 'dup))
+              (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+              (maybe-emit-clear-values arg1)
+              (emit-push-constant-int arg2)
+              (emit 'iand)
+              (unless (eq representation :unboxed-fixnum)
+                (emit-invokespecial +lisp-fixnum-class+ "<init>" "(I)V" -2))
+              (emit-move-from-stack target representation))
+             (t
+              (dformat t "p2-logand case 4b~%")
+              (compile-form arg1 :target :stack)
+              (maybe-emit-clear-values arg1)
+              (emit-push-constant-int arg2)
+              (emit-invokevirtual +lisp-object-class+
+                                  "logand"
+                                  "(I)Lorg/armedbear/lisp/LispObject;"
+                                  -1)
+              (when (eq representation :unboxed-fixnum)
+                (emit-unbox-fixnum))
+              (emit-move-from-stack target representation))))
           (return-from p2-logand t))))))
+  (dformat t "p2-logand default case~%")
   (compile-function-call form target representation))
+
+(defun derive-type (form)
+  (when (consp form)
+    (let ((op (car form)))
+      (case op
+        (ASH
+         (dformat t "derive-type ASH case form = ~S~%" form)
+         (let* ((arg1 (second form))
+                (var1 (unboxed-fixnum-variable arg1))
+                (arg2 (third form)))
+           (dformat t "derive-type ASH case var1 = ~S~%" var1)
+           (when (and var1 (fixnump arg2) (minusp arg2))
+             (return-from derive-type 'fixnum)))))))
+  t)
 
 (defun compile-length (form &key (target *val*) representation)
   (require-args form 1)
@@ -5099,6 +5157,7 @@
 
 (defun compile-defun (name form environment &optional (classfile "out.class"))
   ;;   (dformat t "COMPILE-DEFUN ~S ~S~%" name classfile)
+  ;;   (dformat t "compile-defun form = ~S~%" form)
   (unless (eq (car form) 'LAMBDA)
     (return-from compile-defun nil))
   (unless (or (null environment) (sys::empty-environment-p environment))
