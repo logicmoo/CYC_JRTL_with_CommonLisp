@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: Property.java,v 1.30 2005-02-16 13:49:07 piso Exp $
+ * $Id: Property.java,v 1.31 2005-03-07 03:30:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,6 +263,8 @@ public final class Property implements Comparable, Constants
         createProperty("browserOpts");
     public static final Property DOC_PATH =
         createProperty("docPath");
+    public static final Property EMULATION =
+        createProperty("emulation");
     public static final Property EOM =
         createProperty("eom");
     public static final Property EXTENSION =
