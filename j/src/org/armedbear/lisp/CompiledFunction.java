@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.15 2003-11-24 01:09:21 piso Exp $
+ * $Id: CompiledFunction.java,v 1.16 2003-12-02 19:51:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
  */
 
 package org.armedbear.lisp;
+
+import java.io.File;
 
 public class CompiledFunction extends Closure
 {
@@ -101,11 +103,11 @@ public class CompiledFunction extends Closure
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String className = ((LispString)arg).getValue();
-            if (className.endsWith(".class")) {
+            File file = Utilities.getFile(arg);
+            if (file != null && file.isFile()) {
                 try {
                     JavaClassLoader loader = new JavaClassLoader();
-                    Class c = loader.loadClassFromFile(className);
+                    Class c = loader.loadClassFromFile(file);
                     if (c != null) {
                         Class[] parameterTypes = new Class[0];
                         java.lang.reflect.Constructor constructor =
@@ -124,7 +126,8 @@ public class CompiledFunction extends Closure
                     Debug.trace(t);
                 }
             }
-            throw new ConditionThrowable(new LispError("unable to load ".concat(className)));
+            throw new ConditionThrowable(
+                new LispError("unable to load ".concat(String.valueOf(arg))));
         }
     };
 
