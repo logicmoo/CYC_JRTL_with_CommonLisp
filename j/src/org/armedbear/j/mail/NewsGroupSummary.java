@@ -2,7 +2,7 @@
  * NewsGroupSummary.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummary.java,v 1.7 2002-12-05 19:15:56 piso Exp $
+ * $Id: NewsGroupSummary.java,v 1.8 2002-12-05 20:30:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,7 +304,6 @@ public final class NewsGroupSummary extends Mailbox
 
     public void dispose()
     {
-        Log.debug("NewsGroupSummary.dispose");
         if (session != null) {
             Runnable r = new Runnable(){
                 public void run()

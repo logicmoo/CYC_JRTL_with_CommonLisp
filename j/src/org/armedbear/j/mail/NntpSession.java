@@ -2,7 +2,7 @@
  * NntpSession.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NntpSession.java,v 1.5 2002-12-05 16:55:46 piso Exp $
+ * $Id: NntpSession.java,v 1.6 2002-12-05 20:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,18 +163,16 @@ public final class NntpSession
 
     public boolean connect()
     {
-        Log.debug("connecting on port " + port + "...");
         boolean succeeded = false;
         try {
             socket = new Socket(host, port);
-            Log.debug("connected!");
             reader = new MailReader(socket.getInputStream());
             writer =
                 new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-1");
             readLine();
             return true;
         }
-        catch (Exception e) {
+        catch (IOException e) {
             Log.error(e);
             return false;
         }
