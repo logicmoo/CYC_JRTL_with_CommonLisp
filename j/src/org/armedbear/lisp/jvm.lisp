@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.136 2004-04-28 13:38:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.137 2004-04-28 16:16:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1577,26 +1577,25 @@
     (t
      nil)))
 
-#+nil
-(defconstant +known-packages+ (list (find-package "COMMON-LISP")
-                                    (find-package "SYSTEM")
-                                    (find-package "EXTENSIONS")))
-
 (defvar *toplevel-defuns* nil)
 
-;;; MISC.330: RETURN-FROM
-;;; MISC.332: GO
-;;; MISC.337, MISC.343: BLOCK
-;;; MISC.338: IF
+(defun unsafe-p (args)
+  (if (atom args)
+      nil
+      (case (car args)
+        (QUOTE
+         nil)
+        ((RETURN-FROM GO)
+         t)
+        (t
+         (dolist (arg args)
+           (when (unsafe-p arg)
+             (return t)))))))
+
 (defun rewrite-function-call (form)
-  (let* ((args (cdr form))
-         (rewrite (dolist (arg args)
-                    (when (and (consp arg)
-                               (memq (car arg) '(RETURN-FROM GO BLOCK IF)))
-                      (return t)))))
-    (if rewrite
-        (let ((op (car form))
-              (syms ())
+  (let* ((args (cdr form)))
+    (if (unsafe-p args)
+        (let ((syms ())
               (lets ()))
           ;; Preserve the order of evaluation of the arguments!
           (dolist (arg args)
@@ -1605,7 +1604,7 @@
                 (let ((sym (gensym)))
                   (push sym syms)
                   (push (list sym arg) lets))))
-          (list 'LET* (nreverse lets) (list* op (nreverse syms))))
+          (list 'LET* (nreverse lets) (list* (car form) (nreverse syms))))
         form)))
 
 (defun process-args (args)
@@ -2103,6 +2102,16 @@
           (maybe-emit-clear-values subform))))
     (emit 'label `,block-exit)))
 
+(defun compile-return-from (form for-effect)
+  (let* ((rest (cdr form))
+         (block-label (car rest))
+         (block-exit (cdr (assoc block-label *blocks*)))
+         (result-form (cadr rest)))
+    (unless block-exit
+      (error "No block named ~S is currently visible." block-label))
+    (compile-form result-form)
+    (emit 'goto `,block-exit)))
+
 (defun compile-cons (form for-effect)
   (unless (= (length form) 3)
     (error "wrong number of arguments for CONS"))
@@ -2344,16 +2353,6 @@
               (emit-store-value)))
            (t
             (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
-
-(defun compile-return-from (form for-effect)
-   (let* ((rest (cdr form))
-          (block-label (car rest))
-          (block-exit (cdr (assoc block-label *blocks*)))
-          (result-form (cadr rest)))
-     (unless block-exit
-       (error "No block named ~S is currently visible." block-label))
-     (compile-form result-form)
-     (emit 'goto `,block-exit)))
 
 (defun compile-plus (form for-effect)
   (let* ((args (cdr form))
