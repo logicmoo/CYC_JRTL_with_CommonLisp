@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.22 2003-11-11 09:44:08 asimon Exp $
+ * $Id: Java.java,v 1.23 2003-11-11 11:11:38 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,7 +80,7 @@ public final class Java extends Module
         {
             if (args.length < 2 || args.length > 4)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            String fieldName, className = null;
+            String fieldName = null;
             Class c;
             Field f;
             Object instance = null;
@@ -88,20 +88,12 @@ public final class Java extends Module
                 if (args[1] instanceof LispString) {
                     // Cases 1-5.
                     fieldName = LispString.getValue(args[1]);
-                    if (args[0] instanceof LispString) {
-                      className = LispString.getValue(args[0]);
-                      c = Class.forName(className);
-                    }
-                    else {
-                      c = (Class)JavaObject.getObject(args[0]);
-                      className = c.getName();
-                    }
+		    c = forClassRef(args[0]);
                 } else {
                     // Cases 6 and 7.
                     fieldName = LispString.getValue(args[0]);
                     instance = JavaObject.getObject(args[1]);
                     c = instance.getClass();
-                    className = c.getName(); //needed only for the error message
                 }
                 f = c.getField(fieldName);
 
@@ -140,7 +132,7 @@ public final class Java extends Module
             }
             catch (ClassNotFoundException e) {
                 throw new ConditionThrowable(new LispError("class not found: " +
-                                                           className));
+                                                           e.getMessage()));
             }
             catch (NoSuchFieldException e) {
                 throw new ConditionThrowable(new LispError("no such field"));
@@ -268,15 +260,7 @@ public final class Java extends Module
                     if (obj instanceof Method)
                         m = (Method) obj;
                 } else if (methodRef instanceof LispString) {
-                    Class c = null;
-                    LispObject classRef = args[1];
-                    if (classRef instanceof JavaObject) {
-                        Object obj = ((JavaObject)classRef).getObject();
-                        if (obj instanceof Class)
-                            c = (Class) obj;
-                    } else if (classRef instanceof LispString) {
-                        c = Class.forName(LispString.getValue(classRef));
-                    }
+                    Class c = forClassRef(args[1]);
                     if (c != null) {
                         String methodName = LispString.getValue(methodRef);
                         Method[] methods = c.getMethods();
