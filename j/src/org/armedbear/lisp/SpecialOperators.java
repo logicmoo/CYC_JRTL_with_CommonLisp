@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.10 2003-10-28 16:01:02 piso Exp $
+ * $Id: SpecialOperators.java,v 1.11 2003-10-29 00:32:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -342,7 +342,6 @@ public final class SpecialOperators extends Lisp
             while (args != NIL) {
                 Symbol symbol = checkSymbol(args.car());
                 args = args.cdr();
-                value = eval(args.car(), env, thread);
                 Binding binding = null;
                 if (symbol.isSpecialVariable()) {
                     Environment dynEnv = thread.getDynamicEnvironment();
@@ -356,18 +355,22 @@ public final class SpecialOperators extends Lisp
                     if (binding.value instanceof SymbolMacro) {
                         LispObject expansion =
                             ((SymbolMacro)binding.value).getExpansion();
-                        LispObject form = list3(Symbol.SETF, expansion, value);
-                        eval(form, env, thread);
-                    } else
+                        LispObject form = list3(Symbol.SETF, expansion, args.car());
+                        value = eval(form, env, thread);
+                    } else {
+                        value = eval(args.car(), env, thread);
                         binding.value = value;
+                    }
                 } else {
                     if (symbol.getSymbolValue() instanceof SymbolMacro) {
                         LispObject expansion =
                             ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
-                        LispObject form = list3(Symbol.SETF, expansion, value);
-                        eval(form, env, thread);
-                    } else
+                        LispObject form = list3(Symbol.SETF, expansion, args.car());
+                        value = eval(form, env, thread);
+                    } else {
+                        value = eval(args.car(), env, thread);
                         symbol.setSymbolValue(value);
+                    }
                 }
                 args = args.cdr();
             }
