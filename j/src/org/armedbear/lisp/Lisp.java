@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.163 2003-10-12 18:20:42 piso Exp $
+ * $Id: Lisp.java,v 1.164 2003-10-16 14:22:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1272,6 +1272,27 @@ public abstract class Lisp
         T.setSymbolValue(T);
         T.setConstant(true);
     }
+
+    // ### *modules*
+    public static final Symbol _MODULES_ =
+        exportSpecial("*MODULES*", PACKAGE_CL, NIL);
+
+    // ### *load-verbose*
+    public static final Symbol _LOAD_VERBOSE_ =
+        exportSpecial("*LOAD-VERBOSE*", PACKAGE_CL, NIL);
+
+    // ### *load-print*
+    public static final Symbol _LOAD_PRINT_ =
+        exportSpecial("*LOAD-PRINT*", PACKAGE_CL, NIL);
+
+    // ### *load-truename*
+    public static final Symbol _LOAD_TRUENAME_ =
+        exportSpecial("*LOAD-TRUENAME*", PACKAGE_CL, NIL);
+
+    // ### *load-depth*
+    // internal symbol
+    public static final Symbol _LOAD_DEPTH_ =
+        internSpecial("*LOAD-DEPTH*", PACKAGE_SYS, new Fixnum(0));
 
     // Printer control variables.
     public static final Symbol _PRINT_ARRAY_ =
