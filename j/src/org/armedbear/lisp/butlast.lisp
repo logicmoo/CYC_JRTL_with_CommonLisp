@@ -1,7 +1,7 @@
 ;;; butlast.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: butlast.lisp,v 1.1 2003-06-11 00:43:20 piso Exp $
+;;; $Id: butlast.lisp,v 1.2 2003-09-16 18:00:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 (export '(butlast nbutlast))
 
 (defun butlast (list &optional (n 1))
-  (unless (listp list)
+  (unless (and (listp list) (typep n '(integer 0)))
     (error 'type-error))
   (unless (null list)
     (let ((length (do ((list list (cdr list))
@@ -37,7 +37,7 @@
 	  (setq splice (cdr (rplacd splice (list (car top))))))))))
 
 (defun nbutlast (list &optional (n 1))
-  (unless (listp list)
+  (unless (and (listp list) (typep n '(integer 0)))
     (error 'type-error))
   (unless (null list)
     (let ((length (do ((list list (cdr list))
