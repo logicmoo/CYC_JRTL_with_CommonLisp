@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.61 2005-02-20 18:23:08 piso Exp $
+;;; $Id: defstruct.lisp,v 1.62 2005-02-20 19:13:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -113,7 +113,7 @@
   (intern (symbol-name symbol) +keyword-package+))
 
 (defun define-keyword-constructor (constructor)
-  (let* ((constructor-name (intern (car constructor)))
+  (let* ((constructor-name (car constructor))
          (keys ())
          (values ()))
     (dolist (slot *dd-slots*)
@@ -241,7 +241,7 @@
                   (t
                    (push (dsd-initform dsd) values)))))
         (setf values (nreverse values))
-        (let* ((constructor-name (intern (car constructor))))
+        (let* ((constructor-name (car constructor)))
           (cond ((eq *dd-type* 'list)
                  `((defun ,constructor-name ,arglist
                      (list ,@values))))
@@ -257,7 +257,7 @@
                      (%make-structure ',*dd-name* (list ,@values)))))))))))
 
 (defun default-constructor-name ()
-  (concatenate 'string "MAKE-" (symbol-name *dd-name*)))
+  (intern (concatenate 'string "MAKE-" (symbol-name *dd-name*))))
 
 (defun define-constructors ()
   (if *dd-constructors*
@@ -383,24 +383,14 @@
                               (make-symbol (string (cadr option))))))
     (:constructor
      (let* ((args (cdr option))
-            (numargs (length args))
-            name arglist)
+            (numargs (length args)))
        (case numargs
          (0 ; Use default name.
-          (setf name (default-constructor-name)
-                arglist nil)
-          (push (list name arglist) *dd-constructors*)
-          )
+          (push (list (default-constructor-name) nil) *dd-constructors*))
          (1
-          (if (null (car args))
-              (setf name nil) ; No constructor.
-              (setf name (symbol-name (car args))))
-          (setf arglist nil)
-          (push (list name arglist) *dd-constructors*))
+          (push (list (car args) nil) *dd-constructors*))
          (2
-          (setf name (symbol-name (car args))
-                arglist (cadr args))
-          (push (list name arglist) *dd-constructors*)))))
+          (push args *dd-constructors*)))))
     (:copier
      (let* ((args (cdr option))
             (numargs (length args)))
@@ -457,6 +447,12 @@
     (parse-name-and-options (if (atom name-and-options)
                                 (list name-and-options)
                                 name-and-options))
+    (if *dd-constructors*
+        (dolist (constructor *dd-constructors*)
+          (unless (cadr constructor)
+            (setf *dd-default-constructor* (car constructor))
+            (return)))
+        (setf *dd-default-constructor* (default-constructor-name)))
     (when (stringp (car slots))
       (%set-documentation *dd-name* 'structure (pop slots)))
     (dolist (slot slots)
@@ -565,3 +561,14 @@
            ,@(define-copier)
            ,@(define-print-function)
            ',*dd-name*))))
+
+(defun defstruct-default-constructor (arg)
+  (let ((type (cond ((symbolp arg)
+                     arg)
+                    ((classp arg)
+                     (class-name arg))
+                    (t
+                     (type-of arg)))))
+    (when type
+      (let ((dd (get type 'structure-definition)))
+        (and dd (dd-default-constructor dd))))))
