@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.28 2004-11-03 15:39:01 piso Exp $
+ * $Id: StandardObject.java,v 1.29 2004-11-06 13:49:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,11 +49,6 @@ public class StandardObject extends LispObject
     public final LispClass getLispClass()
     {
         return layout.getLispClass();
-    }
-
-    public final LispObject getSlots()
-    {
-        return slots;
     }
 
     public LispObject typeOf()
