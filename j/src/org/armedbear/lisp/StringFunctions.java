@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.20 2004-02-23 19:56:58 piso Exp $
+ * $Id: StringFunctions.java,v 1.21 2004-02-24 14:05:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -806,44 +806,6 @@ public final class StringFunctions extends Lisp
                 return third;
             }
             return signal(new TypeError(first, Symbol.STRING));
-        }
-    };
-
-    // ### schar
-    private static final Primitive2 SCHAR = new Primitive2("schar", "string index")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                return ((SimpleString)first).get(((Fixnum)second).value);
-            }
-            catch (ClassCastException e) {
-                if (first instanceof SimpleString)
-                    return signal(new TypeError(second, Symbol.FIXNUM));
-                else
-                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
-            }
-        }
-    };
-
-    // ### %set-schar
-    private static final Primitive3 _SET_SCHAR =
-        new Primitive3("%set-schar", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third) throws ConditionThrowable
-        {
-            try {
-                ((SimpleString)first).set(((Fixnum)second).value, third);
-                return third;
-            }
-            catch (ClassCastException e) {
-                if (first instanceof SimpleString)
-                    return signal(new TypeError(second, Symbol.FIXNUM));
-                else
-                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
-            }
         }
     };
 
