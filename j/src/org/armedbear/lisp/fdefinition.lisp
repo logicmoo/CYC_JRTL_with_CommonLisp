@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.2 2005-02-12 03:29:33 piso Exp $
+;;; $Id: fdefinition.lisp,v 1.3 2005-02-13 04:17:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 (in-package #:system)
 
 (defun check-redefinition (name)
-  (when (and *warn-on-redefinition* (fboundp name))
+  (when (and *warn-on-redefinition* (fboundp name) (not (autoloadp name)))
     (cond ((symbolp name)
            (let ((old-definition (symbol-function name))
                  (old-source (source-pathname name))
