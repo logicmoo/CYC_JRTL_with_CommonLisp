@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.45 2004-02-18 15:31:37 piso Exp $
+;;; $Id: defstruct.lisp,v 1.46 2004-02-18 17:30:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -287,7 +287,7 @@
              `((defun ,pred (object)
                  (typep object ',*dd-name*))))))))
 
-(defun get-slot-accessor (index)
+(defun slot-reader (index)
   (cond ((eq *dd-type* 'list)
          `(lambda (instance) (elt instance ,index)))
         ((or (eq *dd-type* 'vector)
@@ -299,9 +299,16 @@
            (1 #'%structure-ref-1)
            (2 #'%structure-ref-2)
            (t
-            `(lambda (instance) (%structure-ref instance ,index)))))))
+            (let ((code (make-closure
+                         `(lambda (instance)
+                            (%structure-ref instance ,index))
+                         nil)))
+              (if (and (fboundp 'jvm:jvm-compile)
+                       (not (autoloadp 'jvm:jvm-compile)))
+                  (jvm:jvm-compile nil code)
+                  code)))))))
 
-(defun get-slot-mutator (index)
+(defun slot-writer (index)
   (cond ((eq *dd-type* 'list)
          `(lambda (instance value) (%set-elt instance ,index value)))
         ((or (eq *dd-type* 'vector)
@@ -313,15 +320,22 @@
            (1 #'%structure-set-1)
            (2 #'%structure-set-2)
            (t
-            `(lambda (instance value) (%structure-set instance ,index value)))))))
+            (let ((code (make-closure
+                         `(lambda (instance value)
+                            (%structure-set instance ,index value))
+                         nil)))
+              (if (and (fboundp 'jvm:jvm-compile)
+                       (not (autoloadp 'jvm:jvm-compile)))
+                  (jvm:jvm-compile nil code)
+                  code)))))))
 
 (defun define-access-function (slot-name index)
   (let ((accessor
          (if *dd-conc-name*
              (intern (concatenate 'string (symbol-name *dd-conc-name*) (symbol-name slot-name)))
              slot-name)))
-    `((setf (symbol-function ',accessor) ,(get-slot-accessor index))
-      (%put ',accessor 'setf-inverse ,(get-slot-mutator index )))))
+    `((setf (symbol-function ',accessor) ,(slot-reader index))
+      (%put ',accessor 'setf-inverse ,(slot-writer index )))))
 
 (defun define-access-functions ()
   (let ((index 0)
