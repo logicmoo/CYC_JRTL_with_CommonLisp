@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.49 2003-06-10 19:04:29 piso Exp $
+;;; $Id: sequences.lisp,v 1.50 2003-06-22 18:21:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,12 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "COMMON-LISP")
-
-(export '(subseq
-          concatenate
-          map map-into
-          position position-if position-if-not
-          find find-if find-if-not))
 
 (autoload 'make-sequence)
 
