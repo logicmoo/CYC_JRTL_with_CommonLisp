@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.18 2004-09-21 00:39:04 piso Exp $
+ * $Id: ComplexString.java,v 1.19 2004-09-27 11:19:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,12 +201,32 @@ public final class ComplexString extends AbstractString
                 System.arraycopy(chars, 0, newArray, 0, n);
                 chars = newArray;
                 capacity = n;
+                fillPointer = -1;
                 return;
             }
             if (n == capacity)
                 return;
         }
-        signal(new LispError());
+        Debug.assertTrue(chars == null);
+        // Displaced array. Copy existing characters.
+        chars = new char[n];
+        if (array instanceof AbstractString) {
+            AbstractString string = (AbstractString) array;
+            for (int i = 0; i < n; i++) {
+                chars[i] = string.getChar(displacement + i);
+            }
+        } else {
+            for (int i = 0; i < n; i++) {
+                LispCharacter character =
+                    (LispCharacter) array.getRowMajor(displacement + i);
+                chars[i] = character.value;
+            }
+        }
+        capacity = n;
+        array = null;
+        displacement = 0;
+        isDisplaced = false;
+        fillPointer = -1;
     }
 
     public LispObject reverse() throws ConditionThrowable
