@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.66 2004-06-05 19:17:48 piso Exp $
+ * $Id: LispFloat.java,v 1.67 2004-06-06 16:28:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,8 +130,10 @@ public final class LispFloat extends LispObject
 
     public LispObject ABS()
     {
-        if (value >= 0)
+        if (value > 0)
             return this;
+        if (value == 0) // 0.0 or -0.0
+            return LispFloat.ZERO;
         return new LispFloat(- value);
     }
 
