@@ -2,7 +2,7 @@
  * Marker.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Marker.java,v 1.4 2003-07-17 13:45:29 piso Exp $
+ * $Id: Marker.java,v 1.5 2003-08-07 17:56:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,6 +130,11 @@ public final class Marker implements Constants
         selectToMarker(InputDialog.showInputDialog(Editor.currentEditor(),
                                                    "Marker:",
                                                    "Select To Marker"));
+    }
+
+    public static void selectToTemporaryMarker()
+    {
+        selectToMarker("10");
     }
 
     public static void selectToMarker(String s)
