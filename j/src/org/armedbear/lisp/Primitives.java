@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.481 2003-10-23 12:54:55 piso Exp $
+ * $Id: Primitives.java,v 1.482 2003-10-24 20:30:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4536,10 +4536,11 @@ public final class Primitives extends Module
 
     // ### hashcode-to-string
     private static final Primitive1 HASHCODE_TO_STRING =
-        new Primitive1("hashcode-to-string", PACKAGE_SYS, false) {
+        new Primitive1("hashcode-to-string", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new LispString(Integer.toHexString(arg.hashCode()));
+            return new LispString(Integer.toHexString(System.identityHashCode(arg)));
         }
     };
 
