@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.600 2004-03-11 10:28:35 piso Exp $
+ * $Id: Primitives.java,v 1.601 2004-03-11 10:36:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3654,95 +3654,6 @@ public final class Primitives extends Lisp
                 result = in.read(eofError, eofValue, false);
             return LispThread.currentThread().setValues(result,
                                                         new Fixnum(in.getOffset()));
-        }
-    };
-
-    // ### standard-char-p
-    private static final Primitive1 STANDARD_CHAR_P =
-        new Primitive1("standard-char-p","character")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return checkCharacter(arg).isStandardChar();
-        }
-    };
-
-    // ### graphic-char-p
-    private static final Primitive1 GRAPHIC_CHAR_P =
-        new Primitive1("graphic-char-p","char")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                char c = ((LispCharacter)arg).value;
-                if (c >= ' ' && c < 127)
-                    return T;
-                return Character.isISOControl(c) ? NIL : T;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
-            }
-        }
-    };
-
-    // ### alpha-char-p
-    private static final Primitive1 ALPHA_CHAR_P =
-        new Primitive1("alpha-char-p","character")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return Character.isLetter(((LispCharacter)arg).value) ? T : NIL;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CHARACTER));
-            }
-        }
-    };
-
-    // ### name-char
-    private static final Primitive1 NAME_CHAR =
-        new Primitive1("name-char", "name")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            String s = string(arg).getStringValue();
-            int n = nameToChar(s);
-            return n >= 0 ? LispCharacter.getInstance((char)n) : NIL;
-        }
-    };
-
-    // ### char-name
-    private static final Primitive1 CHAR_NAME =
-        new Primitive1("char-name", "character")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            char c = LispCharacter.getValue(arg);
-            String name = null;
-            switch (c) {
-                case ' ':
-                    name = "Space";
-                    break;
-                case '\n':
-                    name = "Newline";
-                    break;
-                case '\t':
-                    name = "Tab";
-                    break;
-                case '\r':
-                    name = "Return";
-                    break;
-                case '\f':
-                    name = "Page";
-                    break;
-                case '\b':
-                    name = "Backspace";
-                    break;
-                default:
-                    break;
-            }
-            return name != null ? new SimpleString(name) : NIL;
         }
     };
 
