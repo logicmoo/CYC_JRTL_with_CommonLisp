@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.16 2004-06-07 23:16:17 asimon Exp $
+;;; $Id: pprint.lisp,v 1.17 2004-06-11 14:42:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,7 +88,8 @@
 #-armedbear
 (provide "XP")
 
-(shadow '(write print
+(shadow '(#-armedbear write
+          print
           #-armedbear prin1
           #-armedbear princ
           #-armedbear pprint
@@ -105,15 +106,6 @@
           finish-output
           force-output
           clear-output))
-
-(export '(formatter copy-pprint-dispatch pprint-dispatch
-	  set-pprint-dispatch pprint-fill pprint-linear pprint-tabular
-	  pprint-logical-block pprint-pop pprint-exit-if-list-exhausted
-	  pprint-newline pprint-indent pprint-tab
-	  *print-pprint-dispatch* *print-right-margin* *default-right-margin*
-	  *print-miser-width* *print-lines*
-	  *last-abbreviated-printing*
-	  #+symbolics pp))
 
 ;must do the following in common lisps not supporting *print-shared*
 
@@ -1045,39 +1037,6 @@
 ;use the '+' forms of these functions directly (which is faster) because,
 ;they do not need error checking of fancy stream coercion.  The '++' forms
 ;additionally assume the thing being output does not contain a newline.
-
-(defun write (object &rest pairs
-                     &key
-                     (stream *standard-output*)
-                     (escape *print-escape*)
-                     (radix *print-radix*)
-                     (base *print-base*)
-                     (circle *print-circle*)
-                     (pretty *print-pretty*)
-                     (level *print-level*)
-                     (length *print-length*)
-                     (case *print-case*)
-                     (gensym *print-gensym*)
-		     ((:readably *print-readably*) *print-readably*)
-                     (array *print-array*)
-                     (pprint-dispatch *print-pprint-dispatch*)
-                     (right-margin *print-right-margin*)
-                     (lines *print-lines*)
-                     (miser-width *print-miser-width*))
-  (setq stream (decode-stream-arg stream))
-  (let ((*print-pprint-dispatch* pprint-dispatch) (*print-right-margin* right-margin)
-	(*print-lines* lines) (*print-miser-width* miser-width))
-    (cond ((or (xp-structure-p stream) pretty)
-	   (let ((*print-escape* escape) (*print-radix* radix)
-		 (*print-base* base) (*print-circle* circle)
-		 (*print-pretty* pretty) (*print-level* level)
-		 (*print-length* length) (*print-case* case)
-		 (*print-gensym* gensym) (*print-array* array))
-	     (basic-write object stream)))
-	  (T (remf pairs :dispatch) (remf pairs :right-margin)
-	     (remf pairs :lines) (remf pairs :miser-width)
-	     (apply #'cl:write object pairs))))
-  object)
 
 (defun basic-write (object stream)
   (cond ((xp-structure-p stream) (write+ object stream))
