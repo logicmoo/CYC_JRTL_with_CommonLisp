@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.313 2005-01-22 17:18:20 asimon Exp $
+ * $Id: Lisp.java,v 1.314 2005-01-24 14:04:10 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,6 +271,12 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         return Symbol.SIGNAL.execute(condition);
+    }
+
+    public static final LispObject signal(LispObject condition, LispObject message)
+        throws ConditionThrowable
+    {
+        return Symbol.SIGNAL.execute(condition, Keyword.MESSAGE, message);
     }
 
     protected static volatile boolean interrupted;
