@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispFloat.java,v 1.84 2005-03-12 17:08:23 piso Exp $
+ * $Id: LispFloat.java,v 1.85 2005-03-12 17:53:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -371,14 +371,20 @@ public final class LispFloat extends LispObject
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
+        // "When rationals and floats are combined by a numerical function,
+        // the rational is first converted to a float of the same format."
+        // 12.1.4.1
         if (obj instanceof Fixnum) {
-            LispObject rational = rational();
-            LispObject quotient = rational.truncate(obj);
-            thread._values[1] = subtract(quotient); // Remainder.
-            return quotient;
+            return truncate(new LispFloat(((Fixnum)obj).value));
+        }
+        if (obj instanceof Bignum) {
+            return truncate(new LispFloat(((Bignum)obj).floatValue()));
+        }
+        if (obj instanceof Ratio) {
+            return truncate(new LispFloat(((Ratio)obj).floatValue()));
         }
         if (obj instanceof LispFloat) {
+            final LispThread thread = LispThread.currentThread();
             double divisor = ((LispFloat)obj).value;
             double quotient = value / divisor;
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
@@ -407,14 +413,7 @@ public final class LispFloat extends LispObject
             LispObject remainder = subtract(product);
             return thread.setValues(result, remainder);
         }
-        if (obj instanceof Ratio) {
-            // "When rationals and floats are combined by a numerical function,
-            // the rational is first converted to a float of the same format."
-            // 12.1.4.1
-            return truncate(new LispFloat(((Ratio)obj).floatValue()));
-        }
-        return signal(new LispError("LispFloat.truncate(): not implemented: " +
-                                    obj.typeOf().writeToString()));
+        return signal(new TypeError(obj, Symbol.REAL));
     }
 
     public int hashCode()

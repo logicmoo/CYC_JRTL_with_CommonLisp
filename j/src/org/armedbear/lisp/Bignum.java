@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Bignum.java,v 1.61 2005-02-14 04:02:12 piso Exp $
+ * $Id: Bignum.java,v 1.62 2005-03-12 17:53:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -427,8 +427,13 @@ public final class Bignum extends LispObject
                     subtract(quotient.multiplyBy(divisor));
                 value1 = quotient;
                 value2 = remainder;
+            } else if (obj instanceof LispFloat) {
+                // "When rationals and floats are combined by a numerical
+                // function, the rational is first converted to a float of the
+                // same format." 12.1.4.1
+                return new LispFloat(floatValue()).truncate(obj);
             } else
-                return signal(new LispError("Bignum.truncate(): not implemented: " + obj.typeOf()));
+                return signal(new TypeError(obj, Symbol.REAL));
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
