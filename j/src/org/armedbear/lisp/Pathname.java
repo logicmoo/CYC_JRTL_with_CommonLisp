@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.31 2004-01-04 15:59:00 piso Exp $
+ * $Id: Pathname.java,v 1.32 2004-01-04 21:08:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,6 +170,11 @@ public final class Pathname extends LispObject
             return true;
         }
         return false;
+    }
+
+    public boolean equalp(LispObject obj) throws ConditionThrowable
+    {
+        return equal(obj);
     }
 
     public String toString()
@@ -563,4 +568,73 @@ public final class Pathname extends LispObject
                 return NIL;
         }
     };
+
+    private static final Primitive MERGE_PATHNAMES =
+        new Primitive("merge-pathnames", "pathname &optional default-pathname default-version")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            Pathname pathname = coerceToPathname(arg);
+            Pathname defaultPathname =
+                coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+            LispObject defaultVersion = Keyword.NEWEST;
+            return mergePathnames(pathname, defaultPathname, defaultVersion);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Pathname pathname = coerceToPathname(first);
+            Pathname defaultPathname =
+                coerceToPathname(second);
+            LispObject defaultVersion = Keyword.NEWEST;
+            return mergePathnames(pathname, defaultPathname, defaultVersion);
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            Pathname pathname = coerceToPathname(first);
+            Pathname defaultPathname =
+                coerceToPathname(second);
+            LispObject defaultVersion = third;
+            return mergePathnames(pathname, defaultPathname, defaultVersion);
+        }
+    };
+
+    private static final LispObject mergePathnames(Pathname pathname,
+                                                   Pathname defaultPathname,
+                                                   LispObject defaultVersion)
+        throws ConditionThrowable
+    {
+        Pathname p = new Pathname();
+        if (pathname.host != NIL)
+            p.host = pathname.host;
+        else
+            p.host = defaultPathname.host;
+        if (pathname.device != NIL)
+            p.device = pathname.device;
+        else
+            p.device = defaultPathname.device;
+        if (pathname.directory != NIL)
+            p.directory = pathname.directory;
+        else
+            p.directory = defaultPathname.directory;
+        if (pathname.name != NIL)
+            p.name = pathname.name;
+        else
+            p.name = defaultPathname.name;
+        if (pathname.type != NIL)
+            p.type = pathname.type;
+        else
+            p.type = defaultPathname.type;
+        if (pathname.version != NIL)
+            p.version = pathname.version;
+        else if (pathname.name instanceof LispString)
+            p.version = defaultVersion;
+        else if (defaultPathname.version != NIL)
+            p.version = defaultPathname.version;
+        else
+            p.version = defaultVersion;
+        return p;
+    }
 }
