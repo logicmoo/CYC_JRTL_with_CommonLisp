@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.4 2003-02-15 16:48:17 piso Exp $
+ * $Id: Symbol.java,v 1.5 2003-02-15 17:18:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,25 +23,33 @@ package org.armedbear.lisp;
 
 public final class Symbol extends LispObject
 {
-    public static final Symbol AND_KEY       = export("&KEY", PACKAGE_CL);
-    public static final Symbol AND_OPTIONAL  = export("&OPTIONAL", PACKAGE_CL);
-    public static final Symbol AND_REST      = export("&REST", PACKAGE_CL);
-    public static final Symbol BLOCK         = export("BLOCK", PACKAGE_CL);
-    public static final Symbol LAMBDA        = export("LAMBDA", PACKAGE_CL);
-    public static final Symbol LET           = export("LET", PACKAGE_CL);
-    public static final Symbol OTHERWISE     = export("OTHERWISE", PACKAGE_CL);
-    public static final Symbol QUOTE         = export("QUOTE", PACKAGE_CL);
+    public static final Symbol AND_KEY       = export("&KEY");
+    public static final Symbol AND_OPTIONAL  = export("&OPTIONAL");
+    public static final Symbol AND_REST      = export("&REST");
+    public static final Symbol BLOCK         = export("BLOCK");
+    public static final Symbol LAMBDA        = export("LAMBDA");
+    public static final Symbol LET           = export("LET");
+    public static final Symbol OTHERWISE     = export("OTHERWISE");
+    public static final Symbol QUOTE         = export("QUOTE");
 
     // Type specifiers.
-    public static final Symbol CONS          = export("CONS", PACKAGE_CL);
-    public static final Symbol CHARACTER     = export("CHARACTER", PACKAGE_CL);
-    public static final Symbol ERROR         = export("ERROR", PACKAGE_CL);
-    public static final Symbol FIXNUM        = export("FIXNUM", PACKAGE_CL);
-    public static final Symbol FUNCTION      = export("FUNCTION", PACKAGE_CL);
-    public static final Symbol PACKAGE       = export("PACKAGE", PACKAGE_CL);
-    public static final Symbol STRING        = export("STRING", PACKAGE_CL);
-    public static final Symbol SYMBOL        = export("SYMBOL", PACKAGE_CL);
-    public static final Symbol VECTOR        = export("VECTOR", PACKAGE_CL);
+    public static final Symbol CONS          = export("CONS");
+    public static final Symbol CHARACTER     = export("CHARACTER");
+    public static final Symbol FIXNUM        = export("FIXNUM");
+    public static final Symbol FUNCTION      = export("FUNCTION");
+    public static final Symbol PACKAGE       = export("PACKAGE");
+    public static final Symbol STRING        = export("STRING");
+    public static final Symbol SYMBOL        = export("SYMBOL");
+    public static final Symbol VECTOR        = export("VECTOR");
+
+    // Condition types.
+    public static final Symbol ERROR         = export("ERROR");
+    public static final Symbol CONTROL_ERROR = export("CONTROL-ERROR");
+    public static final Symbol PACKAGE_ERROR = export("PACKAGE-ERROR");
+    public static final Symbol PROGRAM_ERROR = export("PROGRAM-ERROR");
+    public static final Symbol TYPE_ERROR    = export("TYPE-ERROR");
+    public static final Symbol UNDEFINED_FUNCTION =
+        export("UNDEFINED-FUNCTION");
 
     // Internal symbols.
     public static final Symbol BACKQUOTE     = intern("BACKQUOTE", PACKAGE_CL);
@@ -50,7 +58,7 @@ public final class Symbol extends LispObject
     public static final Symbol COMMA_DOT     = intern("COMMA-DOT", PACKAGE_CL);
 
     public static final Symbol ARRAY_DIMENSION_LIMIT =
-        export("ARRAY-DIMENSION-LIMIT", PACKAGE_CL);
+        export("ARRAY-DIMENSION-LIMIT");
 
     static {
         ARRAY_DIMENSION_LIMIT.setSymbolValue(new Fixnum(0x1000000L));
