@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.93 2003-08-06 16:51:32 piso Exp $
+;;; $Id: rt.lisp,v 1.94 2003-08-06 18:10:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -403,3 +403,7 @@
 (load (concatenate 'string rt::*prefix* "cons-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "numbers-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "string-aux.lsp"))
+
+(when (and (find-package "JVM")
+           (fboundp 'jvm:jvm-compile))
+  (jvm:jvm-compile 'rt::equalp-with-case))
