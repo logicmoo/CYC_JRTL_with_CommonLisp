@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.110 2003-09-25 18:19:29 piso Exp $
+;;; $Id: boot.lisp,v 1.111 2003-10-01 01:14:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -352,7 +352,7 @@
 ;;;
 (defmacro dolist ((var list &optional (result nil)) &body body)
   (multiple-value-bind (forms decls)
-    (parse-body body nil nil)
+    (sys::parse-body body nil nil)
     (let ((n-list (gensym)))
       `(do* ((,n-list ,list (cdr ,n-list)))
 	    ((endp ,n-list)
