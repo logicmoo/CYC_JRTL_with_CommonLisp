@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.619 2004-03-26 00:55:55 piso Exp $
+ * $Id: Primitives.java,v 1.620 2004-03-27 14:09:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -628,22 +628,24 @@ public final class Primitives extends Lisp
 
     // ### unless
     private static final SpecialOperator UNLESS =
-        new SpecialOperator("unless") {
+        new SpecialOperator("unless")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
             if (args == NIL)
                 signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
-            LispObject result = NIL;
             if (eval(args.car(), env, thread) == NIL) {
                 args = args.cdr();
+                LispObject result = NIL;
                 while (args != NIL) {
                     result = eval(args.car(), env, thread);
                     args = args.cdr();
                 }
-            }
-            return result;
+                return result;
+            } else
+                return thread.setValues(NIL);
         }
     };
 
