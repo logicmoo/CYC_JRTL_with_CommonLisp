@@ -1,8 +1,8 @@
 /*
  * News.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: News.java,v 1.3 2002-11-11 18:12:17 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: News.java,v 1.4 2003-05-26 15:24:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ import org.armedbear.j.EditorIterator;
 import org.armedbear.j.File;
 import org.armedbear.j.Line;
 import org.armedbear.j.Log;
+import org.armedbear.j.MessageDialog;
 import org.armedbear.j.ProgressNotifier;
 import org.armedbear.j.StatusBarProgressNotifier;
 
@@ -40,9 +41,8 @@ public final class News extends Buffer
     private static final File newsDir =
         File.getInstance(Editor.getEditorDirectory(), "news");
 
-    private NntpSession session;
-    private String errorText;
-    private ProgressNotifier progressNotifier;
+    private final NntpSession session;
+    private boolean error;
 
     public News(NntpSession session)
     {
@@ -52,7 +52,6 @@ public final class News extends Buffer
         formatter = mode.getFormatter(this);
         readOnly = true;
         title = session.getHost();
-        progressNotifier = new StatusBarProgressNotifier(this);
         setInitialized(true);
     }
 
@@ -85,7 +84,10 @@ public final class News extends Buffer
             finally {
                 unlockWrite();
             }
-            SwingUtilities.invokeLater(updateDisplayRunnable);
+            if (error)
+                SwingUtilities.invokeLater(errorRunnable);
+            else
+                SwingUtilities.invokeLater(updateDisplayRunnable);
         }
     };
 
@@ -114,6 +116,8 @@ public final class News extends Buffer
                     if (response.startsWith("215")) {
                         session.setEcho(false);
                         int count = 0;
+                        ProgressNotifier progressNotifier =
+                            new StatusBarProgressNotifier(this);
                         progressNotifier.progressStart();
                         while (true) {
                             String s = session.readLine();
@@ -151,8 +155,22 @@ public final class News extends Buffer
                 session.disconnect();
             }
         }
+        if (getFirstLine() == null) {
+            error = true;
+            appendLine("");
+        }
         renumber();
     }
+
+    private Runnable errorRunnable = new Runnable() {
+        public void run()
+        {
+            kill();
+            String errorText = session.getErrorText();
+            if (errorText != null)
+                MessageDialog.showMessageDialog(errorText, "Error");
+        }
+    };
 
     private Runnable updateDisplayRunnable = new Runnable() {
         public void run()
