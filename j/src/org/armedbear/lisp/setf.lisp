@@ -20,24 +20,24 @@
 (defmacro setf (place value)
   (cond
    ((symbolp place)
-    (list 'setq place value))
+    `(setq ,place ,value))
    ((consp place)
     (let ((expander (get (car place) *setf-expander*)))
       (cond ((null expander)
              (error "no SETF expansion for ~A" place))
             ((symbolp expander)
-             (append (list expander) (cdr place) (list value)))
+             `(,expander ,@(cdr place) ,value))
             ((functionp expander)
-             (append (list 'funcall) (list expander) (cdr place) (list value)))
+             `(funcall ,expander ,@(cdr place) value))
             (t
              (error "SETF: unhandled case")))))
    (t nil)))
 
 (defmacro incf (place &optional (delta 1))
-  (list 'setf place (list '+ place delta)))
+  `(setf ,place (+ ,place ,delta)))
 
 (defmacro decf (place &optional (delta 1))
-  (list 'setf place (list '- place delta)))
+  `(setf ,place (- ,place ,delta)))
 
 (defconstant *setf-expander* (make-symbol "SETF-EXPANDER"))
 
