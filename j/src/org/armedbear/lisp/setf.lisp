@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.33 2003-10-06 00:20:09 piso Exp $
+;;; $Id: setf.lisp,v 1.34 2003-10-06 00:26:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -224,8 +224,8 @@
 (defsetf tenth %set-tenth)
 
 (defsetf rest %rplacd)
-(defsetf elt %setelt)
-(defsetf nth %setnth)
+(defsetf elt %set-elt)
+(defsetf nth %set-nth)
 (defsetf svref %svset)
 (defsetf fill-pointer %set-fill-pointer)
 (defsetf fdefinition %set-fdefinition)

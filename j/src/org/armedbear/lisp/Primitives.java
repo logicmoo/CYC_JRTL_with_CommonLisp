@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.461 2003-10-04 01:26:28 piso Exp $
+ * $Id: Primitives.java,v 1.462 2003-10-06 00:25:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1069,12 +1069,14 @@ public final class Primitives extends Module
         }
     };
 
-    // ### %setnth
+    // ### %set-nth
     // %setnth n list new-object => new-object
-    private static final Primitive3 _SETNTH =
-        new Primitive3("%setnth", PACKAGE_SYS, false) {
+    private static final Primitive3 _SET_NTH =
+        new Primitive3("%set-nth", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             int index = Fixnum.getValue(first);
             if (index < 0)
@@ -4090,7 +4092,8 @@ public final class Primitives extends Module
     };
 
     // ### reverse
-    private static final Primitive1 REVERSE = new Primitive1("reverse") {
+    private static final Primitive1 REVERSE = new Primitive1("reverse")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof AbstractVector)
@@ -4109,9 +4112,10 @@ public final class Primitives extends Module
         }
     };
 
-    // ### %setelt
+    // ### %set-elt
     // %setelt sequence index newval => newval
-    private static final Primitive3 _SETELT = new Primitive3("%setelt") {
+    private static final Primitive3 _SET_ELT = new Primitive3("%set-elt")
+    {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
