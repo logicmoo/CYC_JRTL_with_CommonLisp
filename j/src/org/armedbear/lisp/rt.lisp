@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.155 2004-05-12 19:12:27 piso Exp $
+;;; $Id: rt.lisp,v 1.156 2004-08-15 11:41:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,9 +19,6 @@
 
 ;;; Adapted from rt.lsp and ansi-aux.lsp in the GCL ANSI test suite.
 
-;; (unless (find-package :regression-test)
-;;   (make-package :regression-test :nicknames '(:rt))
-;;   (use-package :cl :regression-test))
 (defpackage :regression-test (:use :cl) (:nicknames #-lispworks :rt))
 
 (in-package :regression-test)
@@ -117,15 +114,21 @@
 (defun compile-and-load (filename &key force)
   (let* ((pathname (concatenate 'string regression-test::*prefix* filename))
          (former-data (assoc pathname *compiled-and-loaded-files*
-			     :test #'equal))
-	 (source-write-time (file-write-date pathname)))
+			     :test #'equalp))
+	 (compile-pathname (compile-file-pathname pathname))
+	 (source-write-time (file-write-date pathname))
+         (target-write-time (and (probe-file compile-pathname)
+                                 (file-write-date compile-pathname))))
     (unless (and (not force)
 		 former-data
 		 (>= (cadr former-data) source-write-time))
+      (when (or (not target-write-time)
+		(<= target-write-time source-write-time))
+	(compile-file pathname))
       (if former-data
 	  (setf (cadr former-data) source-write-time)
           (push (list pathname source-write-time) *compiled-and-loaded-files*))
-      (load pathname))))
+      (load compile-pathname))))
 
 (defpackage :cl-test
   (:use :cl :regression-test)
