@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dolist.java,v 1.2 2003-11-19 16:49:21 piso Exp $
+ * $Id: dolist.java,v 1.3 2003-11-19 17:27:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,15 +74,19 @@ public final class dolist extends SpecialOperator
                 // It's a tag.
                 tags = new Binding(current, remaining, tags);
             }
+            // Establish a reusable binding.
+            final Environment ext = new Environment(env);
+            final Binding binding;
+            if (var.isSpecialVariable() || (specials != NIL && memq(var, specials))) {
+                thread.bindSpecial(var, null);
+                binding = thread.getDynamicEnvironment().getBinding(var);
+                ext.declareSpecial(var);
+            } else {
+                ext.bind(var, null);
+                binding = ext.getBinding(var);
+            }
             while (list != NIL) {
-                Environment ext = new Environment(env);
-                if (specials != NIL && memq(var, specials)) {
-                    thread.bindSpecial(var, list.car());
-                    ext.declareSpecial(var);
-                } else if (var.isSpecialVariable()) {
-                    thread.bindSpecial(var, list.car());
-                } else
-                    ext.bind(var, list.car());
+                binding.value = list.car();
                 LispObject body = bodyForm;
                 while (body != NIL) {
                     LispObject current = body.car();
@@ -92,9 +96,9 @@ public final class dolist extends SpecialOperator
                             if (current.car() == Symbol.GO) {
                                 LispObject code = null;
                                 LispObject tag = current.cadr();
-                                for (Binding binding = tags; binding != null; binding = binding.next) {
-                                    if (binding.symbol.eql(tag)) {
-                                        code = binding.value;
+                                for (Binding b = tags; b != null; b = b.next) {
+                                    if (b.symbol.eql(tag)) {
+                                        code = b.value;
                                         break;
                                     }
                                 }
@@ -109,9 +113,9 @@ public final class dolist extends SpecialOperator
                         catch (Go go) {
                             LispObject code = null;
                             LispObject tag = go.getTag();
-                            for (Binding binding = tags; binding != null; binding = binding.next) {
-                                if (binding.symbol.eql(tag)) {
-                                    code = binding.value;
+                            for (Binding b = tags; b != null; b = b.next) {
+                                if (b.symbol.eql(tag)) {
+                                    code = b.value;
                                     break;
                                 }
                             }
@@ -127,8 +131,7 @@ public final class dolist extends SpecialOperator
                 }
                 list = list.cdr();
             }
-            Environment ext = new Environment(env);
-            bind(var, NIL, ext);
+            binding.value = NIL;
             LispObject result = eval(resultForm, ext, thread);
             return result;
         }
