@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.40 2003-08-02 00:39:49 piso Exp $
+ * $Id: CommandTable.java,v 1.41 2003-08-04 15:47:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,6 +167,7 @@ public class CommandTable
             addCommand("selectPageDown");
             addCommand("selectPageUp");
             addCommand("selectRight");
+            addCommand("selectSyntax");
             addCommand("selectUp");
             addCommand("selectWord");
             addCommand("selectWordLeft");
@@ -285,6 +286,7 @@ public class CommandTable
             addCommand("listBindings", "Help");
             addCommand("listFiles", "FindInFiles");
             addCommand("lispFindMatchingChar", "LispMode");
+            addCommand("lispSelectSyntax", "LispMode");
             addCommand("listIncludes", "CheckPath");
             addCommand("listMatchingTags", "TagCommands");
             addCommand("listMatchingTagsAtDot", "TagCommands");
