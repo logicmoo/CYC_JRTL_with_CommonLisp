@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.72 2004-07-19 14:26:26 piso Exp $
+;;; $Id: precompiler.lisp,v 1.73 2004-07-19 15:20:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -549,30 +549,35 @@
          (or (find-use name (car expression))
              (find-use name (cdr expression))))))
 
-(defun precompile-flet (form)
+(defun precompile-flet/labels (form)
   (let ((*local-functions-and-macros* *local-functions-and-macros*)
+        (operator (car form))
         (locals (cadr form))
         (body (cddr form)))
     (dolist (local locals)
-      (let ((name (car local)))
-        (unless (find-use name body)
-          (format t "; Note: deleting unused local function FLET ~S~%" name)
+      (let* ((name (car local))
+             (used-p (find-use name body)))
+        (unless used-p
+          (when (eq operator 'LABELS)
+            (dolist (local locals)
+              (when (neq name (car local))
+                (when (find-use name (cddr local))
+                  (setf used-p t)
+                  (return))
+                ;; Scope of defined function names includes &AUX parameters (LABELS.7B).
+                (let ((aux-vars (cdr (memq '&aux (cadr local)))))
+                  (when (and aux-vars (find-use name aux-vars)
+                             (setf used-p t)
+                             (return))))))))
+        (unless used-p
+          (format t "; Note: deleting unused local function ~A ~S~%" operator name)
           (let* ((new-locals (remove local locals :test 'eq))
                  (new-form
                   (if new-locals
-                      (list* 'FLET new-locals body)
+                      (list* operator new-locals body)
                       (list* 'PROGN body))))
-            (return-from precompile-flet (precompile1 new-form))))))
-    (pushnew 'FLET *obstacles*)
-    (list* (car form)
-           (precompile-local-functions locals)
-           (mapcar #'precompile1 body))))
-
-(defun precompile-labels (form)
-  (let ((*local-functions-and-macros* *local-functions-and-macros*)
-        (locals (cadr form))
-        (body (cddr form)))
-    (pushnew 'LABELS *obstacles*)
+            (return-from precompile-flet/labels (precompile1 new-form))))))
+    (pushnew operator *obstacles*)
     (list* (car form)
            (precompile-local-functions locals)
            (mapcar #'precompile1 body))))
@@ -711,10 +716,8 @@
                             dolist
                             dotimes
                             eval-when
-                            flet
                             function
                             if
-                            labels
                             lambda
                             macrolet
                             multiple-value-bind
@@ -749,6 +752,9 @@
 
 (install-handler 'let                  'precompile-let)
 (install-handler 'let*                 'precompile-let*)
+
+(install-handler 'flet                 'precompile-flet/labels)
+(install-handler 'labels               'precompile-flet/labels)
 
 (install-handler 'load-time-value      'precompile-load-time-value)
 
