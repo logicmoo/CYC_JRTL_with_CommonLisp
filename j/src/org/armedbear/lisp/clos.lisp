@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.58 2004-01-20 15:38:32 piso Exp $
+;;; $Id: clos.lisp,v 1.59 2004-01-23 01:16:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1621,5 +1621,19 @@
 (defun make-condition (type &rest initargs)
   (or (%make-condition type initargs)
       (apply #'make-instance (find-class type) initargs)))
+
+(defgeneric make-load-form (object &optional environment))
+
+(defmethod make-load-form ((object t) &optional environment)
+  (error 'simple-error
+         :format-control "No applicable method for MAKE-LOAD-FORM."))
+
+(defmethod make-load-form ((class class) &optional environment)
+  (let ((name (class-name class)))
+    (unless (and name (eq (find-class name nil) class))
+      (error 'simple-type-error
+             :format-control "Can't use anonymous or undefined class as a constant: ~S."
+             :format-arguments (list class)))
+    `(find-class ',name)))
 
 (provide 'clos)
