@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.13 2004-05-12 17:54:49 piso Exp $
+ * $Id: FileStream.java,v 1.14 2004-08-17 13:38:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,14 @@ import java.io.RandomAccessFile;
 
 public final class FileStream extends Stream
 {
+    private static final int BUFSIZE = 4096;
+
     private final RandomAccessFile raf;
     private final Pathname pathname;
     private final int bytesPerUnit;
+    private final byte[] outputBuffer;
+
+    private int outputBufferOffset;
 
     public FileStream(Pathname pathname, String namestring,
                       LispObject elementType, LispObject direction,
@@ -77,6 +82,10 @@ public final class FileStream extends Stream
             }
             bytesPerUnit = width / 8;
         }
+        if (isBinaryStream && isOutputStream && !isInputStream && bytesPerUnit == 1)
+            outputBuffer = new byte[BUFSIZE];
+        else
+            outputBuffer = null;
     }
 
     public LispObject typeOf()
@@ -225,16 +234,22 @@ public final class FileStream extends Stream
     // Writes an 8-bit byte.
     public void _writeByte(int n) throws ConditionThrowable
     {
-        try {
-            raf.write((byte)n); // Writes an 8-bit byte.
-        }
-        catch (IOException e) {
-            signal(new StreamError(this, e));
+        if (outputBuffer != null) {
+            writeByteToBuffer((byte)n);
+        } else {
+            try {
+                raf.write((byte)n); // Writes an 8-bit byte.
+            }
+            catch (IOException e) {
+                signal(new StreamError(this, e));
+            }
         }
     }
 
     public void _finishOutput() throws ConditionThrowable
     {
+        if (outputBuffer != null)
+            flushOutputBuffer();
     }
 
     public void _clearInput() throws ConditionThrowable
@@ -249,6 +264,8 @@ public final class FileStream extends Stream
 
     protected long _getFilePosition() throws ConditionThrowable
     {
+        if (outputBuffer != null)
+            flushOutputBuffer();
         try {
             long pos = raf.getFilePointer();
             return pos / bytesPerUnit;
@@ -262,6 +279,8 @@ public final class FileStream extends Stream
 
     protected boolean _setFilePosition(LispObject arg) throws ConditionThrowable
     {
+        if (outputBuffer != null)
+            flushOutputBuffer();
         try {
             long pos;
             if (arg == Keyword.START)
@@ -282,12 +301,34 @@ public final class FileStream extends Stream
 
     public void _close() throws ConditionThrowable
     {
+        if (outputBuffer != null)
+            flushOutputBuffer();
         try {
             raf.close();
             setOpen(false);
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
+        }
+    }
+
+    private void writeByteToBuffer(byte b) throws ConditionThrowable
+    {
+        if (outputBufferOffset == BUFSIZE)
+            flushOutputBuffer();
+        outputBuffer[outputBufferOffset++] = b;
+    }
+
+    private void flushOutputBuffer() throws ConditionThrowable
+    {
+        if (outputBufferOffset > 0) {
+            try {
+                raf.write(outputBuffer, 0, outputBufferOffset);
+                outputBufferOffset = 0;
+            }
+            catch (IOException e) {
+                signal(new StreamError(this, e));
+            }
         }
     }
 
