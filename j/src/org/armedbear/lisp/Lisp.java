@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.8 2003-01-30 17:41:50 piso Exp $
+ * $Id: Lisp.java,v 1.9 2003-01-30 22:25:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,7 +276,7 @@ public abstract class Lisp
         } else if (obj instanceof Cons) {
             LispObject first = obj.car();
             if (first instanceof Symbol) {
-                LispObject fun = env.lookupFunctional(obj);
+                LispObject fun = env.lookupFunctional(first);
                 if (fun == null) {
                     fun = first.getSymbolFunction();
                     if (fun == null)
