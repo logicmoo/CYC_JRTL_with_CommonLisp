@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.102 2003-11-23 18:57:04 piso Exp $
+# $Id: Makefile.in,v 1.103 2003-11-25 15:03:08 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -160,7 +160,11 @@ CLASSFILES =	AbstractArray.class \
 		make_condition.class \
 		open.class \
 		probe_file.class \
-		room.class
+		room.class \
+		java/awt/ActionListener.class \
+		java/awt/MouseAdapter.class \
+		java/awt/MouseMotionAdapter.class \
+		java/awt/WindowAdapter.class
 
 SOURCEFILES = $(patsubst %.class,%.java,$(CLASSFILES))
 
@@ -168,11 +172,6 @@ SOURCEFILES = $(patsubst %.class,%.java,$(CLASSFILES))
 	$(JAVAC) -classpath "$(COMPILER_CLASSPATH)" $(JAVACFLAGS) $<
 	date > build
 	touch ../../../../classes.stamp
-
-all:
-	set -e; \
-	$(MAKE) classes; \
-	cd java/awt && $(MAKE) classes;
 
 classes: $(CLASSFILES)
 
