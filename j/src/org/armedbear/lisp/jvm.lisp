@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.40 2003-11-16 21:59:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.41 2003-11-17 01:45:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -470,7 +470,8 @@
 ;;     (format t "REMOVE-STORE-VALUE called opcode = ~S~%" opcode)
     (when (eql opcode 204) ; STORE-VALUE
 ;;       (format t "removing STORE-VALUE~%")
-      (setf *code* (cdr *code*)))))
+      (setf *code* (cdr *code*))
+      t)))
 
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
 (defconstant +lisp-object-class+ "org/armedbear/lisp/LispObject")
@@ -1694,7 +1695,8 @@
                   initform nil))
         (cond (initform
                (compile-form initform)
-               (emit-push-value)
+               (unless (remove-store-value)
+                 (emit-push-value))
                (setf last-push-was-nil nil))
               (t
                (if last-push-was-nil
