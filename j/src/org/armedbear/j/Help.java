@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.6 2003-06-19 00:16:03 piso Exp $
+ * $Id: Help.java,v 1.7 2003-06-19 01:52:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.List;
 
 public final class Help
 {
@@ -250,6 +251,130 @@ public final class Help
         if (!(buffer instanceof WebBuffer))
             return false;
         return buffer.getFile().equals(getBindingsFile());
+    }
+
+    public static void apropos()
+    {
+        String arg = InputDialog.showInputDialog(Editor.currentEditor(),
+            "Apropos:", "Apropos");
+        if (arg != null) {
+            arg = arg.trim();
+            if (arg.length() > 0)
+                apropos(arg);
+        }
+    }
+
+    public static void apropos(String arg)
+    {
+        final File dir = getDocumentationDirectory();
+        if (dir == null)
+            return;
+        final Editor editor = Editor.currentEditor();
+        final Frame frame = editor.getFrame();
+        frame.setWaitCursor();
+        try {
+            File file = getAproposFile();
+            BufferedWriter writer =
+                new BufferedWriter(new OutputStreamWriter(file.getOutputStream()));
+            writer.write("<html>\n<head>\n<title>");
+            writer.write("Apropos ");
+            writer.write('"');
+            writer.write(arg);
+            writer.write('"');
+            writer.write("</title>\n</head>\n<body>\n");
+            writer.write("<b>");
+            writer.write("Commands");
+            writer.write("</b><br><br>");
+            File helpFile = File.getInstance(dir, "commands.html");
+            if (helpFile != null && !helpFile.isFile())
+                helpFile = null;
+            List commands = CommandTable.apropos(arg);
+            addAproposEntries(commands, helpFile, writer);
+
+            writer.write("<br>");
+            writer.write("<b>");
+            writer.write("Preferences");
+            writer.write("</b><br><br>");
+            helpFile = File.getInstance(dir, "preferences.html");
+            if (helpFile != null && !helpFile.isFile())
+                helpFile = null;
+            List properties = Property.apropos(arg);
+            addAproposEntries(properties, helpFile, writer);
+
+            writer.write("</body>\n</html>\n");
+            writer.flush();
+            writer.close();
+            if (isAproposBuffer(editor.getBuffer())) {
+                ((WebBuffer)editor.getBuffer()).go(file, 0, "text/html");
+            } else {
+                Buffer buf = null;
+                for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                    Buffer b = it.nextBuffer();
+                    if (isAproposBuffer(b)) {
+                        buf = b;
+                        break;
+                    }
+                }
+                if (buf != null)
+                    ((WebBuffer)buf).go(file, 0, "text/html");
+                else {
+                    buf = WebBuffer.createWebBuffer(file, null, null);
+                    buf.setTransient(true);
+                }
+                Editor otherEditor = editor.getOtherEditor();
+                if (otherEditor != null) {
+                    buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
+                    otherEditor.makeNext(buf);
+                } else {
+                    buf.setUnsplitOnClose(true);
+                    editor.makeNext(buf);
+                }
+                editor.activateInOtherWindow(buf);
+            }
+        }
+        catch (IOException e) {
+            Log.error(e);
+        }
+        finally {
+            frame.setDefaultCursor();
+        }
+    }
+
+    private static void addAproposEntries(List list, File helpFile,
+        Writer writer) throws IOException
+    {
+        int size = 0;
+        if (list != null)
+            size = list.size();
+        if (size > 0) {
+            for (int i = 0; i < size; i++) {
+                String s = (String) list.get(i);
+                if (helpFile != null) {
+                    writer.write("&nbsp;&nbsp;<a href=\"");
+                    writer.write(helpFile.canonicalPath());
+                    writer.write('#');
+                    writer.write(s);
+                    writer.write("\">");
+                }
+                writer.write(s);
+                if (helpFile != null)
+                    writer.write("</a>");
+                writer.write("<br>\n");
+            }
+        } else
+            writer.write("&nbsp;&nbsp;<i>None</i><br>\n");
+    }
+
+    private static boolean isAproposBuffer(Buffer buffer)
+    {
+        if (!(buffer instanceof WebBuffer))
+            return false;
+        return buffer.getFile().equals(getAproposFile());
+    }
+
+    private static final File getAproposFile()
+    {
+        return File.getInstance(Editor.getTempDirectory(), "apropos.html");
     }
 
     public static File getDocumentationDirectory()

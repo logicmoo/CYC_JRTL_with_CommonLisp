@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.29 2003-06-18 15:42:43 piso Exp $
+ * $Id: CommandTable.java,v 1.30 2003-06-19 01:51:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,6 +211,7 @@ public class CommandTable
             addCommand("about", "AboutDialog");
             addCommand("alias", "AliasDialog");
             addCommand("alignStrings",  "AlignStrings");
+            addCommand("apropos", "Help");
             addCommand("archiveOpenFile", "ArchiveMode");
             addCommand("backwardSexp", "LispMode");
             addCommand("backwardUpList", "LispMode");
@@ -494,6 +495,19 @@ public class CommandTable
             Command command = (Command) it.next();
             if (command.getName().toLowerCase().startsWith(lower))
                 list.add(command.getName());
+        }
+        return list;
+    }
+
+    public static List apropos(String s)
+    {
+        String lower = s.toLowerCase();
+        Iterator it = map.values().iterator();
+        ArrayList list = new ArrayList();
+        while (it.hasNext()) {
+            String name = ((Command)it.next()).getName();
+            if (name.toLowerCase().indexOf(lower) >= 0)
+                list.add(name);
         }
         return list;
     }

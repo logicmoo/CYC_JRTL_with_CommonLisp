@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Property.java,v 1.23 2003-06-19 01:43:29 piso Exp $
+ * $Id: Property.java,v 1.24 2003-06-19 01:47:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -486,9 +486,9 @@ public final class Property implements Comparable, Constants
         String lower = s.toLowerCase();
         ArrayList list = new ArrayList();
         for (Iterator it = ht.values().iterator(); it.hasNext();) {
-            Property property = (Property) it.next();
-            if (property.getDisplayName().toLowerCase().indexOf(lower) >= 0)
-                list.add(property.getDisplayName());
+            String displayName = ((Property)it.next()).getDisplayName();
+            if (displayName.toLowerCase().indexOf(lower) >= 0)
+                list.add(displayName);
         }
         return list;
     }
