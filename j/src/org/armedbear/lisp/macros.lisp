@@ -2,7 +2,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(push prog1 pop the declare declaim locally))
+(export '(push prog1 pop the declare declaim locally time))
 
 (defmacro push (x place)
   `(setf ,place (cons ,x ,place)))
@@ -23,5 +23,8 @@
 
 (defmacro locally (&rest forms) ; FIXME
   `(progn ,@forms))
+
+(defmacro time (form)
+  `(%time #'(lambda () ,form)))
 
 (provide "macros")
