@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.137 2005-03-01 21:20:16 piso Exp $
+ * $Id: Editor.java,v 1.138 2005-03-02 01:53:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2442,6 +2442,15 @@ public final class Editor extends JPanel implements Constants,
             insertKeyTextInternal(keyChar, keyCode, modifiers);
             return true;
         }
+        if (requestedKeyMap != null) {
+            if (keyChar == 7 && keyCode == 0x47 && modifiers == 2) {
+                // Control G
+                requestedKeyMap = null;
+                prefixKeyStatusText = null;
+                status("");
+                return false;
+            }
+        }
         KeyMapping mapping = getKeyMapping(keyChar, keyCode, modifiers);
         if (mapping != null) {
             Object command = mapping.getCommand();
@@ -2450,9 +2459,11 @@ public final class Editor extends JPanel implements Constants,
                     Macro.record(this, command);
             }
             if (command instanceof String) {
+                prefixKeyStatusText = null;
+                requestedKeyMap = null;
                 String commandString = (String) command;
                 if (commandString.length() > 0 && commandString.charAt(0) == '(') {
-                    // Lisp form.
+                    // A Lisp form.
                     executeCommand(commandString);
                     return true;
                 }
@@ -2465,24 +2476,26 @@ public final class Editor extends JPanel implements Constants,
                     }
                     catch (NoSuchMethodException e) {}
                 }
-            } else if (command instanceof KeyMap) {
-                //Log.debug("setting requestedKeyMap to " + command);
-                requestedKeyMap = (KeyMap) command;
-                if (prefixKeyStatusText == null) {
-                    prefixKeyStatusText = mapping.getKeyText() + "-";
-                } else {
-                    prefixKeyStatusText =
-                        prefixKeyStatusText + mapping.getKeyText();
-                }
-                status(prefixKeyStatusText);
-                return true;
             } else if (command instanceof LispObject) {
+                prefixKeyStatusText = null;
+                requestedKeyMap = null;
                 try {
                     LispThread.currentThread().execute(Lisp.coerceToFunction((LispObject)command));
                 }
                 catch (Throwable t) {
                     Log.error(t);
                 }
+                return true;
+            } else if (command instanceof KeyMap) {
+                requestedKeyMap = (KeyMap) command;
+                if (prefixKeyStatusText == null) {
+                    //                     prefixKeyStatusText = mapping.getKeyText() + "-";
+                    prefixKeyStatusText = mapping.getKeyText();
+                } else {
+                    prefixKeyStatusText =
+                        prefixKeyStatusText + " " + mapping.getKeyText();
+                }
+                status(prefixKeyStatusText + "-");
                 return true;
             }
         }
@@ -2494,15 +2507,6 @@ public final class Editor extends JPanel implements Constants,
         if (requestedKeyMap != null) {
             KeyMapping mapping =
                 requestedKeyMap.lookup(keyChar, keyCode, modifiers);
-            if (mapping != null) {
-                requestedKeyMap = null;
-                prefixKeyStatusText = null;
-            } else if (keyChar == 7 && keyCode == 0x47 && modifiers == 2) {
-                // Control G
-                requestedKeyMap = null;
-                prefixKeyStatusText = null;
-                status("");
-            }
             return mapping;
         }
         // Look in mode-specific key map.
