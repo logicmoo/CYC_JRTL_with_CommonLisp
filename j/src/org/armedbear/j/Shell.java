@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.2 2002-10-08 15:46:04 piso Exp $
+ * $Id: Shell.java,v 1.3 2002-10-10 18:26:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public class Shell extends Buffer implements Constants
 {
     private RE promptRE = new UncheckedRE(DEFAULT_SHELL_PROMPT_PATTERN);
 
-    protected String shellFileName;
+    protected String shellCommand;
 
     protected OutputStreamWriter stdin;
 
@@ -73,6 +73,23 @@ public class Shell extends Buffer implements Constants
         setInitialized(true);
     }
 
+    private Shell(String shellCommand)
+    {
+        this();
+        this.shellCommand = shellCommand;
+        if (shellCommand.indexOf("tcsh") >= 0)
+            promptIsStderr = false;
+    }
+
+    private static final String getDefaultShellCommand()
+    {
+        String s =
+            Editor.preferences().getStringProperty(Property.SHELL_FILE_NAME);
+        if (s != null)
+            return s;
+        return "bash -i";
+    }
+
     public final RE getPromptRE()
     {
         return promptRE;
@@ -96,35 +113,26 @@ public class Shell extends Buffer implements Constants
         history = new History("shell.history");
     }
 
-    private static Shell createShell()
+    private static Shell createShell(String shellCommand)
     {
-        Shell shell = new Shell();
+        Shell shell = new Shell(shellCommand);
         shell.startProcess();
         if (shell.process == null) {
             Editor.getBufferList().remove(shell);
             String message;
             if (Utilities.haveJpty())
-                message = "Unable to start shell process \"" + shell.shellFileName + "\"";
+                message = "Unable to start shell process \"" + shell.shellCommand + "\"";
             else
                 message = "Unable to start shell process (jpty not found in PATH)";
-            MessageDialog.showMessageDialog(Editor.currentEditor(), message, "Error");
+            MessageDialog.showMessageDialog(message, "Error");
             return null;
         }
         shell.needsRenumbering = true;
         return shell;
     }
 
-    protected void startProcess()
+    private void startProcess()
     {
-        shellFileName =
-            Editor.preferences().getStringProperty(Property.SHELL_FILE_NAME);
-
-        if (shellFileName == null)
-            shellFileName = "bash -i";
-
-        if (shellFileName.indexOf("tcsh") >= 0)
-            promptIsStderr = false;
-
         // Only set initialDir the first time we run, so that if we restart
         // this shell, it will start up in the same directory each time.
         if (initialDir == null) {
@@ -133,8 +141,8 @@ public class Shell extends Buffer implements Constants
                 initialDir = Editor.getUserHomeDirectory();
         }
 
-        // shellFileName may contain a space (e.g. "bash -i").
-        StringTokenizer st = new StringTokenizer(shellFileName);
+        // Shell command may contain a space (e.g. "bash -i").
+        StringTokenizer st = new StringTokenizer(shellCommand);
         String[] cmdArray = new String[st.countTokens() + 3];
         int i = 0;
         cmdArray[i++] = "jpty";
@@ -169,8 +177,8 @@ public class Shell extends Buffer implements Constants
 
         try {
             stdin  = new OutputStreamWriter(process.getOutputStream());
-            stdoutThread = new StdoutThread(this);
-            stderrThread = new StderrThread(this);
+            stdoutThread = new StdoutThread();
+            stderrThread = new StderrThread();
             stdoutThread.start();
             stderrThread.start();
             readOnly = false;
@@ -182,17 +190,35 @@ public class Shell extends Buffer implements Constants
 
     public void dispose()
     {
-        if (!checkProcess())
+        Log.debug("Shell.dispose");
+        if (!checkProcess()) {
+            Log.debug("checkProcess returned false");
             return;
-        try {
-            stdin.write(3);
-            stdin.flush();
-            stdin.write("exit\n");
-            stdin.flush();
         }
-        catch (IOException e) {
-            Log.error(e);
-        }
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                try {
+                    Log.debug("stdin.write(3)");
+                    stdin.write(3);
+                    stdin.flush();
+                    Log.debug("stdin.write(\"exit\\n\")");
+                    stdin.write("exit\n");
+                    stdin.flush();
+                    stdin.close();
+                    process.destroy();
+                    process.waitFor();
+                }
+                catch (IOException e) {
+                    Log.error(e);
+                }
+                catch (InterruptedException e) {
+                    Log.error(e);
+                }
+                Log.debug("dispose thread exiting");
+            }
+        };
+        new Thread(r).start();
     }
 
     private void home()
@@ -426,13 +452,6 @@ public class Shell extends Buffer implements Constants
             return false;
         if (Utilities.isProcessAlive(process))
             return true;
-        try {
-            int exitValue = process.exitValue();
-        }
-        catch (IllegalThreadStateException e) {
-            // Process has not yet terminated.
-            return true;
-        }
         process = null;
         readOnly = true;
         resetUndo();
@@ -446,6 +465,7 @@ public class Shell extends Buffer implements Constants
             {
                 try {
                     process.waitFor();
+                    Log.debug("watcher thread process.waitFor() returned");
                     process = null;
                     if (stdoutThread != null)
                         stdoutThread.join();
@@ -465,6 +485,7 @@ public class Shell extends Buffer implements Constants
                 };
                 if (stderrThread != null)
                     SwingUtilities.invokeLater(processExitedRunnable);
+                Log.debug("watcher thread exiting");
             }
         };
         new Thread(r).start();
@@ -547,9 +568,21 @@ public class Shell extends Buffer implements Constants
 
     public int load()
     {
-        appendLine("");
-        isLoaded = true;
-        posEndOfBuffer = new Position(getFirstLine(), 0);
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return LOAD_FAILED; // Shouldn't happen.
+        }
+        try {
+            appendLine("");
+            isLoaded = true;
+            posEndOfBuffer = new Position(getFirstLine(), 0);
+        }
+        finally {
+            unlockWrite();
+        }
         return LOAD_COMPLETED;
     }
 
@@ -647,7 +680,7 @@ public class Shell extends Buffer implements Constants
     // For the buffer list.
     public String toString()
     {
-        return shellFileName;
+        return shellCommand;
     }
 
     public Icon getIcon()
@@ -663,7 +696,7 @@ public class Shell extends Buffer implements Constants
         if (Platform.isPlatformWindows() && dir.length() >= 2 && dir.charAt(1) == ':')
             dir = Character.toUpperCase(dir.charAt(0)) + dir.substring(1);
 
-        return shellFileName + "   " + dir;
+        return shellCommand + "   " + dir;
     }
 
     public File getCurrentDirectory()
@@ -848,6 +881,11 @@ public class Shell extends Buffer implements Constants
 
     public static void shell()
     {
+        shell(getDefaultShellCommand());
+    }
+
+    public static void shell(String shellCommand)
+    {
         if (!Editor.checkExperimental())
             return;
         // Look for existing shell buffer.
@@ -855,7 +893,7 @@ public class Shell extends Buffer implements Constants
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
             Buffer b = it.nextBuffer();
             if (b instanceof Shell) {
-                if (!(b instanceof RemoteShell)) {
+                if (((Shell)b).shellCommand.equals(shellCommand)) {
                     buf = b;
                     break;
                 }
@@ -866,7 +904,7 @@ public class Shell extends Buffer implements Constants
             if (shell.process == null)
                 shell.startProcess();
         } else
-            buf = createShell();
+            buf = createShell(shellCommand);
         if (buf != null) {
             final Editor editor = Editor.currentEditor();
             editor.makeNext(buf);
@@ -930,47 +968,41 @@ public class Shell extends Buffer implements Constants
             ((Shell)buffer).sendChar(3);
     }
 
-    class StdoutThread extends ReaderThread
+    protected class StdoutThread extends ReaderThread
     {
-        Shell shell;
-
         // If this constructor is private, we run into jikes 1.15 bug #2256.
-        StdoutThread(Shell shell)
+        StdoutThread()
         {
-            super(shell.process.getInputStream());
-            this.shell = shell;
+            super(process.getInputStream());
         }
 
         public String filter(String s)
         {
-            return shell.stdOutFilter(s);
+            return stdOutFilter(s);
         }
 
         public void update(String s)
         {
-            shell.stdOutUpdate(s);
+            stdOutUpdate(s);
         }
     }
 
-    class StderrThread extends ReaderThread
+    protected class StderrThread extends ReaderThread
     {
-        Shell shell;
-
         // If this constructor is private, we run into jikes 1.15 bug #2256.
-        StderrThread(Shell shell)
+        StderrThread()
         {
-            super(shell.process.getErrorStream());
-            this.shell = shell;
+            super(process.getErrorStream());
         }
 
         public String filter(String s)
         {
-            return shell.stdErrFilter(s);
+            return stdErrFilter(s);
         }
 
         public void update(String s)
         {
-            shell.stdErrUpdate(s);
+            stdErrUpdate(s);
         }
     }
 }
