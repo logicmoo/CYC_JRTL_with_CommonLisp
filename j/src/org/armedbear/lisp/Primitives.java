@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.666 2004-07-26 15:40:03 piso Exp $
+ * $Id: Primitives.java,v 1.667 2004-07-29 12:18:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3807,15 +3807,15 @@ public final class Primitives extends Lisp
     public static final Primitive2 EXPT =
         new Primitive2("expt", "base-number power-number")
     {
-        public LispObject execute(LispObject n, LispObject power)
+        public LispObject execute(LispObject base, LispObject power)
             throws ConditionThrowable
         {
             if (power.zerop()) {
                 if (power instanceof Fixnum) {
-                    if (n instanceof LispFloat)
+                    if (base instanceof LispFloat)
                         return LispFloat.ONE;
-                    if (n instanceof Complex) {
-                        if (((Complex)n).getRealPart() instanceof LispFloat)
+                    if (base instanceof Complex) {
+                        if (((Complex)base).getRealPart() instanceof LispFloat)
                             return Complex.getInstance(LispFloat.ONE,
                                                        LispFloat.ZERO);
                     }
@@ -3826,41 +3826,38 @@ public final class Primitives extends Lisp
                 }
             }
             if (power instanceof Fixnum) {
-                if (n instanceof Fixnum) {
-                    if (((Fixnum)n).value == 2)
-                        if (power.plusp())
-                            return Fixnum.ONE.ash(power);
-                }
+                if (base.rationalp())
+                    return intexp(base, power);
                 LispObject result;
-                if (n instanceof LispFloat)
+                if (base instanceof LispFloat)
                     result = LispFloat.ONE;
                 else
                     result = Fixnum.ONE;
-                int count = ((Fixnum)power).value;
-                if (count > 0) {
-                    for (int i = count; i-- > 0;)
-                        result = result.multiplyBy(n);
-                } else if (count < 0) {
-                    for (int i = -count; i-- > 0;)
-                        result = result.divideBy(n);
+                int pow = ((Fixnum)power).value;
+                if (pow > 0) {
+                    for (int i = pow; i-- > 0;)
+                        result = result.multiplyBy(base);
+                } else if (pow < 0) {
+                    for (int i = -pow; i-- > 0;)
+                        result = result.divideBy(base);
                 }
                 return result;
             }
             if (power instanceof LispFloat) {
-                if (n instanceof Fixnum) {
-                    double d = Math.pow(((Fixnum)n).value,
+                if (base instanceof Fixnum) {
+                    double d = Math.pow(((Fixnum)base).value,
                                         ((LispFloat)power).value);
                     return new LispFloat(d);
                 }
-                if (n instanceof LispFloat) {
-                    double d = Math.pow(((LispFloat)n).value,
+                if (base instanceof LispFloat) {
+                    double d = Math.pow(((LispFloat)base).value,
                                         ((LispFloat)power).value);
                     return new LispFloat(d);
                 }
             }
             if (power instanceof Ratio) {
-                if (n instanceof Fixnum) {
-                    double d = Math.pow(((Fixnum)n).getValue(),
+                if (base instanceof Fixnum) {
+                    double d = Math.pow(((Fixnum)base).getValue(),
                                         ((Ratio)power).floatValue());
                     return new LispFloat(d);
                 }
@@ -3869,6 +3866,33 @@ public final class Primitives extends Lisp
             return NIL;
         }
     };
+
+    // Adapted from SBCL.
+    private static final LispObject intexp(LispObject base, LispObject power)
+        throws ConditionThrowable
+    {
+        if (power.minusp()) {
+            power = Fixnum.ZERO.subtract(power);
+            return Fixnum.ONE.divideBy(intexp(base, power));
+        }
+        if (base.eql(Fixnum.TWO))
+            return Fixnum.ONE.ash(power);
+        LispObject nextn = power.ash(Fixnum.MINUS_ONE);
+        LispObject total;
+        if (power.oddp())
+            total = base;
+        else
+            total = Fixnum.ONE;
+        while (true) {
+            if (nextn.zerop())
+                return total;
+            base = base.multiplyBy(base);
+            power = nextn;
+            nextn = power.ash(Fixnum.MINUS_ONE);
+            if (power.oddp())
+                total = base.multiplyBy(total);
+        }
+    }
 
     // ### list
     private static final Primitive LIST = new Primitive("list", "&rest objects")
