@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.435 2003-09-24 22:50:56 piso Exp $
+ * $Id: Primitives.java,v 1.436 2003-09-25 00:40:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3894,14 +3894,21 @@ public final class Primitives extends Module
         }
     };
 
+    // ### vector-subseq
+    // vector-subseq vector start &optional end => subsequence
     private static final Primitive3 VECTOR_SUBSEQ =
-        new Primitive3("vector-subseq", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject vector, LispObject start,
-            LispObject end) throws ConditionThrowable
+        new Primitive3("vector-subseq", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
         {
-            AbstractVector v = checkVector(vector);
-            return v.subseq(Fixnum.getValue(start),
-                end == NIL ? v.length() : Fixnum.getValue(end));
+            AbstractVector v = checkVector(first);
+            int start = Fixnum.getValue(second);
+            int end = third != NIL ? Fixnum.getValue(third) : v.length();
+            if (start > end)
+                throw new ConditionThrowable(new TypeError("start is greater than end"));
+            return v.subseq(start, end);
         }
     };
 
