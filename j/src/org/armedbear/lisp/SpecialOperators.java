@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.22 2004-01-20 15:39:52 piso Exp $
+ * $Id: SpecialOperators.java,v 1.23 2004-01-27 18:06:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -425,7 +425,7 @@ public final class SpecialOperators extends Lisp
                         return f;
                 }
             }
-            return signal(new UndefinedFunction(arg));
+            return signal(new UndefinedFunction(list2(Keyword.NAME, arg)));
         }
     };
 
