@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.8 2003-07-18 15:53:59 piso Exp $
+ * $Id: LispAPI.java,v 1.9 2003-07-18 16:50:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispCharacter;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispString;
@@ -411,6 +412,38 @@ public final class LispAPI extends Lisp
                 value = LispString.getValue(second);
             Editor.setGlobalProperty(key, value);
             return second;
+        }
+    };
+
+    // ### insert-character
+    private static final Primitive1 INSERT_CHARACTER =
+        new Primitive1("insert-character", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg)
+	    throws LispError
+        {
+            char c = LispCharacter.getValue(arg);
+            final Editor editor = Editor.currentEditor();
+            if (editor.checkReadOnly()) {
+                editor.insertChar(c);
+                return T;
+            }
+            return NIL;
+        }
+    };
+
+    // ### insert-string
+    private static final Primitive1 INSERT_STRING =
+        new Primitive1("insert-string", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg)
+	    throws LispError
+        {
+            String s = LispString.getValue(arg);
+            final Editor editor = Editor.currentEditor();
+            if (editor.checkReadOnly()) {
+                editor.insertString(s);
+                return T;
+            }
+            return NIL;
         }
     };
 
