@@ -2,7 +2,7 @@
  * CompoundTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompoundTypeSpecifier.java,v 1.2 2003-07-15 13:26:51 piso Exp $
+ * $Id: CompoundTypeSpecifier.java,v 1.3 2003-07-15 15:36:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,9 +21,9 @@
 
 package org.armedbear.lisp;
 
-public abstract class CompoundTypeSpecifier extends Lisp
+public abstract class CompoundTypeSpecifier extends TypeSpecifier
 {
-    public static CompoundTypeSpecifier getInstance(LispObject args)
+    public static TypeSpecifier getInstance(LispObject args)
         throws LispError
     {
         Cons cons = checkCons(args);
@@ -36,6 +36,4 @@ public abstract class CompoundTypeSpecifier extends Lisp
             return new VectorTypeSpecifier(cons);
         throw new LispError("unsupported compound type specifier " + args);
     }
-
-    public abstract LispObject test(LispObject obj) throws LispError;
 }

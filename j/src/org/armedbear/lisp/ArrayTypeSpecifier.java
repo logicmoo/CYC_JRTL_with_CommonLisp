@@ -2,7 +2,7 @@
  * ArrayTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ArrayTypeSpecifier.java,v 1.1 2003-07-15 03:06:14 piso Exp $
+ * $Id: ArrayTypeSpecifier.java,v 1.2 2003-07-15 15:40:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,14 @@ package org.armedbear.lisp;
 
 public final class ArrayTypeSpecifier extends CompoundTypeSpecifier
 {
-    private final LispObject type;
+    private final Type type;
     private final LispObject elementType;
     private final LispObject dimensions;
 
     public ArrayTypeSpecifier(Cons args) throws LispError
     {
-        type = args.car();
-        Debug.assertTrue(type == Symbol.ARRAY || type == Symbol.SIMPLE_ARRAY);
+        type = Type.getInstance(args.car());
+        Debug.assertTrue(type == Type.ARRAY || type == Type.SIMPLE_ARRAY);
         switch (args.length()) {
             case 1:
                 elementType = Symbol.UNSPECIFIED;
@@ -83,5 +83,28 @@ public final class ArrayTypeSpecifier extends CompoundTypeSpecifier
             }
         }
         return NIL;
+    }
+
+    public LispObject isSubtypeOf(LispObject obj) throws LispError
+    {
+        final boolean b = _isSubtypeOf(obj);
+        LispObject subtypep = b ? Symbol.T : NIL;
+        LispObject validp = Symbol.T; // For now.
+        LispObject[] values = new LispObject[2];
+        values[0] = subtypep;
+        values[1] = validp;
+        LispThread.currentThread().setValues(values);
+        return subtypep;
+    }
+
+    private boolean _isSubtypeOf(LispObject obj) throws LispError
+    {
+        if (obj instanceof Cons) {
+            return false;
+        }
+        if (obj instanceof Symbol) {
+            return type._isSubtypeOf(Type.getInstance(obj));
+        }
+        throw new LispError("bad type specifier: " + obj);
     }
 }

@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.10 2003-07-08 15:29:54 piso Exp $
+ * $Id: Type.java,v 1.11 2003-07-15 15:36:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,9 +82,9 @@ public class Type extends Lisp
         throw new TypeError(typeSpecifier);
     }
 
-    public LispObject subtypep(Type otherType)
+    public LispObject isSubtypeOf(Type otherType)
     {
-        final boolean b = _subtypep(otherType);
+        final boolean b = _isSubtypeOf(otherType);
         LispObject subtypep = b ? Symbol.T : NIL;
         LispObject validp = Symbol.T; // For now.
         LispObject[] values = new LispObject[2];
@@ -94,7 +94,7 @@ public class Type extends Lisp
         return subtypep;
     }
 
-    private final boolean _subtypep(Type otherType)
+    public final boolean _isSubtypeOf(Type otherType)
     {
         if (otherType == this)
             return true;
@@ -104,7 +104,7 @@ public class Type extends Lisp
         }
         for (int i = 0; i < superTypes.size(); i++) {
             Type superType = (Type) superTypes.get(i);
-            if (superType._subtypep(otherType))
+            if (superType._isSubtypeOf(otherType))
                 return true;
         }
         return false;
