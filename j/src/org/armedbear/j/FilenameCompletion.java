@@ -2,7 +2,7 @@
  * FilenameCompletion.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: FilenameCompletion.java,v 1.6 2002-12-07 11:38:19 piso Exp $
+ * $Id: FilenameCompletion.java,v 1.7 2003-01-06 04:04:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,12 +54,16 @@ public final class FilenameCompletion
         list = new ArrayList();
         if (Utilities.isFilenameAbsolute(prefix)) {
             File file = File.getInstance(currentDirectory, prefix);
+            if (file == null)
+                return;
             if (file.isDirectory() && prefix.endsWith(LocalFile.getSeparator()))
                 addCompletionsFromDirectory(list, file, null);
             else {
                 File directory = file.getParentFile();
-                prefix = file.getName();
-                addCompletionsFromDirectory(list, directory, prefix);
+                if (directory != null) {
+                    prefix = file.getName();
+                    addCompletionsFromDirectory(list, directory, prefix);
+                }
             }
         } else if (prefix.indexOf(LocalFile.getSeparatorChar()) >= 0) {
             // Prefix specifies a directory.
@@ -74,7 +78,7 @@ public final class FilenameCompletion
             }
             // First try relative to current directory.
             File dir = File.getInstance(currentDirectory, dirName);
-            if (dir.isDirectory()) {
+            if (dir != null && dir.isDirectory()) {
                 addCompletionsFromDirectory(list, dir, prefix);
             } else {
                 // No such directory relative to current directory.
@@ -85,7 +89,7 @@ public final class FilenameCompletion
                         File sourcePathDirectory =
                             File.getInstance((String) sourcePathDirectories.get(i));
                         dir = File.getInstance(sourcePathDirectory, dirName);
-                        if (dir.isDirectory())
+                        if (dir != null && dir.isDirectory())
                             addCompletionsFromDirectory(list, dir, prefix);
                     }
                 }
@@ -100,7 +104,9 @@ public final class FilenameCompletion
                 for (int i = 0; i < sourcePathDirectories.size(); i++) {
                     File sourcePathDirectory =
                         File.getInstance((String) sourcePathDirectories.get(i));
-                    addCompletionsFromDirectory(list, sourcePathDirectory, prefix);
+                    if (sourcePathDirectory != null)
+                        addCompletionsFromDirectory(list, sourcePathDirectory,
+                            prefix);
                 }
             }
         }
