@@ -2,7 +2,7 @@
  * DefaultLookAndFeel.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DefaultLookAndFeel.java,v 1.6 2003-07-25 18:45:01 piso Exp $
+ * $Id: DefaultLookAndFeel.java,v 1.7 2003-07-27 00:03:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,6 +123,7 @@ public final class DefaultLookAndFeel extends DefaultMetalTheme
         table.put("ScrollBar.thumbShadow", new Color(0x808080));
         table.put("ScrollBar.width", new Integer(16));
         table.put("Button.textIconGap", new Integer(1));
+        table.put("ToolTipUI", "org.armedbear.j.ToolTipUI");
     }
 
     protected ColorUIResource getPrimary1()
