@@ -2,7 +2,7 @@
  * ListOccurrences.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: ListOccurrences.java,v 1.4 2003-06-29 00:19:34 piso Exp $
+ * $Id: ListOccurrences.java,v 1.5 2003-07-26 16:19:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@ public class ListOccurrences extends Buffer
 
     protected ListOccurrences(Search search)
     {
-        super();
         this.search = search;
         sourceBuffer = null;
         init();
@@ -39,7 +38,6 @@ public class ListOccurrences extends Buffer
 
     private ListOccurrences(Search search, Buffer sourceBuffer)
     {
-        super();
         this.search = search;
         this.sourceBuffer = sourceBuffer;
         init();
@@ -87,6 +85,15 @@ public class ListOccurrences extends Buffer
         setInitialized(true);
     }
 
+    public Mode getParentMode()
+    {
+        if (search instanceof FindInFiles)
+            return ((FindInFiles)search).getMode();
+        if (sourceBuffer != null)
+            return sourceBuffer.getMode();
+        return null;
+    }
+
     public static ListOccurrences findBuffer(Buffer sourceBuffer, Search search)
     {
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
@@ -100,7 +107,7 @@ public class ListOccurrences extends Buffer
         return null;
     }
 
-    public static ListOccurrences createBuffer(Buffer sourceBuffer, Search search)
+    private static ListOccurrences createBuffer(Buffer sourceBuffer, Search search)
     {
         ListOccurrences listOccurrences = null;
         Position pos = new Position(sourceBuffer.getFirstLine(), 0);
