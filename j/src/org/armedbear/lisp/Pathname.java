@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.55 2004-05-01 23:41:48 piso Exp $
+ * $Id: Pathname.java,v 1.56 2004-05-09 14:15:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -410,7 +410,7 @@ public class Pathname extends LispObject
             return new Pathname(arg.getStringValue());
         if (arg instanceof FileStream)
             return ((FileStream)arg).getPathname();
-        signal(new TypeError(String.valueOf(arg) + " cannot be converted to a pathname."));
+        signal(new TypeError(arg.writeToString() + " cannot be converted to a pathname."));
         // Not reached.
         return null;
     }
