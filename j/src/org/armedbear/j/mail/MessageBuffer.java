@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.4 2002-10-05 15:28:18 piso Exp $
+ * $Id: MessageBuffer.java,v 1.5 2002-10-05 18:06:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -868,7 +868,8 @@ public class MessageBuffer extends Buffer
                 if (cache != null && cache.isFile()) {
                     ImageLoader loader = new ImageLoader(cache);
                     Image image = loader.loadImage();
-                    setText(headers + "\r\n");
+                    appendHeaderLines(headers);
+                    appendHeaderLine("");
                     if (image != null) {
                         final int lineHeight = new TextLine("").getHeight();
                         final int imageHeight = image.getHeight(null);
@@ -882,15 +883,20 @@ public class MessageBuffer extends Buffer
                         }
                     }
                     renumber();
-                } else
-                    setText(headers + "\r\n" + body);
+                } else {
+                    appendHeaderLines(headers);
+                    appendHeaderLine("");
+                    append(body);
+                }
                 if (!(formatter instanceof MessageFormatter))
                     setFormatter(new MessageFormatter(this));
                 return;
             }
             if (contentType.equals("text/html")) {
-                setText(headers + "\r\n");
-                StringReader reader = new StringReader(message.getDecodedBody());
+                appendHeaderLines(headers);
+                appendHeaderLine("");
+                StringReader reader =
+                    new StringReader(message.getDecodedBody());
                 WebLoader loader = new WebLoader(reader);
                 LineSequence lines = loader.load();
                 Line lastLine = getLastLine();
