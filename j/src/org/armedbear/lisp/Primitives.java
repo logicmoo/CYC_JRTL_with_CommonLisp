@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.356 2003-08-26 16:19:28 piso Exp $
+ * $Id: Primitives.java,v 1.357 2003-08-26 17:18:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4731,7 +4731,7 @@ public final class Primitives extends Module
     private static final Primitive1 COMPLEXP = new Primitive1("complexp") {
         public LispObject execute(LispObject arg)
         {
-            return arg instanceof Complex ? T : NIL;
+            return arg.COMPLEXP();
         }
     };
 
