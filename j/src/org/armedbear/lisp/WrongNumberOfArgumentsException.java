@@ -2,7 +2,7 @@
  * WrongNumberOfArgumentsException.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: WrongNumberOfArgumentsException.java,v 1.2 2003-02-15 16:48:17 piso Exp $
+ * $Id: WrongNumberOfArgumentsException.java,v 1.3 2003-02-16 04:03:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class WrongNumberOfArgumentsException extends LispError
+public final class WrongNumberOfArgumentsException extends ProgramError
 {
     private final LispObject object;
     private final String name;
