@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Keyword.java,v 1.8 2003-09-21 02:05:20 piso Exp $
+ * $Id: Keyword.java,v 1.9 2003-09-22 17:01:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,11 +32,15 @@ public final class Keyword extends Lisp
         ABORT            = internKeyword("ABORT"),
         ALLOW_OTHER_KEYS = internKeyword("ALLOW-OTHER-KEYS"),
         CAPITALIZE       = internKeyword("CAPITALIZE"),
+        DATUM            = internKeyword("DATUM"),
         DOWNCASE         = internKeyword("DOWNCASE"),
         ELEMENT_TYPE     = internKeyword("ELEMENT-TYPE"),
         ERROR            = internKeyword("ERROR"),
+        EXPECTED_TYPE    = internKeyword("EXPECTED-TYPE"),
         EXTERNAL         = internKeyword("EXTERNAL"),
         FILL_POINTER     = internKeyword("FILL-POINTER"),
+        FORMAT_ARGUMENTS = internKeyword("FORMAT-ARGUMENTS"),
+        FORMAT_CONTROL   = internKeyword("FORMAT-CONTROL"),
         INHERITED        = internKeyword("INHERITED"),
         INITIAL_CONTENTS = internKeyword("INITIAL-CONTENTS"),
         INITIAL_ELEMENT  = internKeyword("INITIAL-ELEMENT"),
