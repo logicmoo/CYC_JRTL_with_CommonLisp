@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.9 2002-12-08 02:25:53 piso Exp $
+ * $Id: Utilities.java,v 1.10 2002-12-24 16:59:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1101,7 +1101,7 @@ public final class Utilities implements Constants
         try {
             final Process p = Runtime.getRuntime().exec(s);
             if (p != null) {
-                Thread t = new Thread() {
+                Thread t = new Thread("Utilities.have(\"" + s + "\") destroy") {
                     public void run()
                     {
                         p.destroy();
@@ -1113,6 +1113,7 @@ public final class Utilities implements Constants
                         }
                     }
                 };
+                t.setDaemon(true);
                 t.setPriority(Thread.MIN_PRIORITY);
                 t.start();
                 return true;
