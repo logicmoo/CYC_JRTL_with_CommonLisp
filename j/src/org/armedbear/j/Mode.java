@@ -2,7 +2,7 @@
  * Mode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Mode.java,v 1.8 2003-06-18 15:40:40 piso Exp $
+ * $Id: Mode.java,v 1.9 2003-06-30 17:00:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -341,6 +341,12 @@ public interface Mode
      *                  not found.
      */
     public Color getColorProperty(Property property);
+
+    public void setProperty(Property property, String value);
+
+    public void setProperty(Property property, boolean value);
+
+    public void setProperty(Property property, int value);
 
     /**
      * Returns whether or not this mode is willing to accept the given
