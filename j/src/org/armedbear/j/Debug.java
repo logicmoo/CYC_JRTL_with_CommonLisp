@@ -2,7 +2,7 @@
  * Debug.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Debug.java,v 1.2 2002-11-14 16:34:16 piso Exp $
+ * $Id: Debug.java,v 1.3 2002-12-08 18:35:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,12 @@ public final class Debug
     public static void bugIfNot(boolean b)
     {
         if (!b)
+            bug();
+    }
+
+    public static void bugIf(boolean b)
+    {
+        if (b)
             bug();
     }
 
