@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.27 2003-07-02 13:52:51 piso Exp $
+;;; $Id: compiler.lisp,v 1.28 2003-07-02 19:01:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -235,7 +235,7 @@
 ;; Redefine DEFUN to compile the definition on the fly.
 (defmacro defun (name lambda-list &rest body)
   `(prog1
-    (cl::%defun ',name ',lambda-list ',body)
+    (sys::%defun ',name ',lambda-list ',body)
     (compile ',name)))
 
 ;; Redefine DEFMACRO to compile the expansion function on the fly.
