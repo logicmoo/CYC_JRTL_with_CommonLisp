@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.17 2003-11-30 03:11:59 piso Exp $
+;;; $Id: precompiler.lisp,v 1.18 2003-12-03 02:28:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,9 +74,7 @@
                   (<= '>)
                   (>  '<=)
                   (t  nil))))
-        (if (and op
-                 ;; (< x) => t for real x
-                 (> (length arg) 2))
+        (if (and op (= (length arg) 3))
             (cons op (cdr arg))
             form))))
 
