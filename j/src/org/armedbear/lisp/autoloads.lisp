@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.71 2003-12-03 11:13:20 asimon Exp $
+;;; $Id: autoloads.lisp,v 1.72 2003-12-07 01:16:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -179,3 +179,8 @@
 (export '(*granularity* show-call-counts with-profiling))
 (autoload 'show-call-counts "profiler.lisp")
 (autoload-macro 'with-profiling "profiler.lisp")
+
+;; Extensions.
+(in-package "EXTENSIONS")
+(export 'simple-search)
+(autoload 'simple-search "search.lisp")
