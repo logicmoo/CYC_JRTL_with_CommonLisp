@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.15 2003-07-19 15:11:07 piso Exp $
+ * $Id: LispAPI.java,v 1.16 2003-07-19 15:20:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TypeError;
 import org.armedbear.lisp.WrongNumberOfArgumentsException;
 
-public final class LispAPI extends Lisp
+public final class LispAPI extends Lisp implements Constants
 {
     private static final Preferences preferences = Editor.preferences();
 
@@ -283,19 +283,27 @@ public final class LispAPI extends Lisp
 
     private static final LispObject forwardChar(int n) throws LispError
     {
-        Position pos = Editor.currentEditor().getDot();
-        if (n > 0) {
-            while (n-- > 0) {
-                if (!pos.next())
-                    throw new LispError("reached end of buffer");
+        if (n != 0) {
+            final Editor editor = Editor.currentEditor();
+            editor.addUndo(SimpleEdit.MOVE);
+            Position pos = editor.getDot();
+            final Line oldLine = pos.getLine();
+            if (n > 0) {
+                while (n-- > 0) {
+                    if (!pos.next())
+                        throw new LispError("reached end of buffer");
+                }
+            } else {
+                Debug.assertTrue(n < 0);
+                while (n++ < 0) {
+                    if (!pos.prev())
+                        throw new LispError("reached beginning of buffer");
+                }
             }
-        } else if ( n < 0) {
-            while (n++ < 0) {
-                if (!pos.prev())
-                    throw new LispError("reached beginning of buffer");
-            }
+            editor.moveCaretToDotCol();
+            if (pos.getLine() != oldLine)
+                editor.setUpdateFlag(REFRAME);
         }
-        Editor.currentEditor().moveCaretToDotCol();
         return NIL;
     }
 
