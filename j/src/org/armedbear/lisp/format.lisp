@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: format.lisp,v 1.6 2003-12-08 03:00:23 piso Exp $
+;;; $Id: format.lisp,v 1.7 2004-03-04 01:19:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1178,6 +1178,13 @@
             (position #\. string))))
 
 
+;; FIXME
+(defun float-infinity-p (number)
+  nil)
+
+;; FIXME
+(defun float-nan-p (number)
+  nil)
 
 ;;; We return true if we overflowed, so that ~G can output the overflow char
 ;;; instead of spaces.
