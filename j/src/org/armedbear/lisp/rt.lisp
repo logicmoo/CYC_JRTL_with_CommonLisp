@@ -329,6 +329,7 @@
                               "eql"
                               "eval"
                               "every"
+                              "fill-pointer"
                               "find"
                               "find-if"
                               "find-if-not"
