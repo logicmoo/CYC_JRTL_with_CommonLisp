@@ -2,7 +2,7 @@
  * PHPMode.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: PHPMode.java,v 1.1.1.1 2002-09-24 16:07:55 piso Exp $
+ * $Id: PHPMode.java,v 1.2 2002-10-03 17:37:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,11 +59,6 @@ public final class PHPMode extends JavaMode implements Constants, Mode
     public Formatter getFormatter(Buffer buffer)
     {
         return new PHPFormatter(buffer);
-    }
-
-    public ToolBar getToolBar(Frame frame)
-    {
-        return frame.getDefaultToolBar();
     }
 
     public Tagger getTagger(SystemBuffer buffer)

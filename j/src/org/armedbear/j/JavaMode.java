@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaMode.java,v 1.2 2002-10-02 18:28:56 piso Exp $
+ * $Id: JavaMode.java,v 1.3 2002-10-03 17:36:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,21 +143,6 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             km.mapKey(0x69, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
             km.mapKey(0xbb, CTRL_MASK | SHIFT_MASK, "insertBraces");
         }
-    }
-
-    public ToolBar getToolBar(Frame frame)
-    {
-        String fileName =
-            Editor.preferences().getStringProperty("JavaMode.toolBar");
-        if (fileName != null) {
-            File file = File.getInstance(fileName);
-            if (file != null && file.isFile()) {
-                ToolBar tb = ToolBar.createToolBar(frame, file);
-                if (tb != null)
-                    return tb;
-            }
-        }
-        return frame.getDefaultToolBar();
     }
 
     public NavigationComponent getSidebarComponent(Editor editor)
