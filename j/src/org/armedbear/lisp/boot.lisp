@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.133 2003-12-06 14:10:57 piso Exp $
+;;; $Id: boot.lisp,v 1.134 2003-12-06 15:47:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -201,108 +201,7 @@
 		  ,n-result
 		  (or ,@(rest forms))))))))
 
-
-;; CASE (from CLISP)
-
-(defun case-expand (form-name test keyform clauses)
-  (let ((var (gensym)))
-    `(let ((,var ,keyform))
-       (cond
-        ,@(maplist
-           #'(lambda (remaining-clauses)
-              (let ((clause (first remaining-clauses))
-                    (remaining-clauses (rest remaining-clauses)))
-                (unless (consp clause)
-                  (error 'program-error "~S: missing key list" form-name))
-                (let ((keys (first clause)))
-                  `(,(cond ((or (eq keys 'T) (eq keys 'OTHERWISE))
-                            (if remaining-clauses
-                                (error 'program-error
-                                       "~S: the ~S clause must be the last one"
-                                       form-name keys)
-                                't))
-                           ((listp keys)
-                            `(or ,@(mapcar #'(lambda (key)
-                                              `(,test ,var ',key))
-                                           keys)))
-                           (t `(,test ,var ',keys)))
-                     ,@(rest clause)))))
-           clauses)))))
-
-(defmacro case (keyform &rest clauses)
-  (case-expand 'case 'eql keyform clauses))
-
-
-;; CCASE (from CLISP)
-
-(defun parenthesize-keys (clauses)
-  ;; PARENTHESIZE-KEYS is necessary to avoid confusing
-  ;; the symbols OTHERWISE and T used as keys, with the same
-  ;; symbols used in the syntax of the non exhaustive CASE.
-  (mapcar #'(lambda (c)
-             (cond ((or (eq (car c) 't)
-                        (eq (car c) 'otherwise))
-                    (cons (list (car c)) (cdr c)))
-                   (t c)))
-          clauses))
-
-(defmacro ccase (keyplace &rest clauses)
-  (let ((g (gensym))
-        (h (gensym)))
-    `(block ,g
-            (tagbody
-             ,h
-             (return-from ,g
-                          (case ,keyplace
-                            ,@(parenthesize-keys clauses)
-                            (otherwise
-                             (error 'type-error "CCASE error") ;; FIXME
-                             (go ,h))))))))
-
-
-;;; TYPECASE (from CLISP)
-
-(defmacro typecase (keyform &rest typeclauselist)
-  (let* ((tempvar (gensym))
-         (condclauselist nil))
-    (do ((typeclauselistr typeclauselist (cdr typeclauselistr)))
-        ((atom typeclauselistr))
-      (cond ((atom (car typeclauselistr))
-             (error 'program-error
-                    "invalid clause in ~S: ~S"
-                    'typecase (car typeclauselistr)))
-            ((let ((type (caar typeclauselistr)))
-               (or (eq type T) (eq type 'OTHERWISE)))
-             (push `(T ,@(or (cdar typeclauselistr) '(NIL))) condclauselist)
-             (return))
-            (t (push `((TYPEP ,tempvar (QUOTE ,(caar typeclauselistr)))
-                       ,@(or (cdar typeclauselistr) '(NIL)))
-                     condclauselist))))
-    `(LET ((,tempvar ,keyform)) (COND ,@(nreverse condclauselist)))))
-
-
-(defmacro etypecase (keyform &rest clauses)
-  (let ((var (gensym)))
-    `(let ((,var ,keyform))
-       (typecase ,var
-         ,@clauses
-         (otherwise
-          (error 'type-error "~S fell through ETYPECASE expression" ,var))))))
-
-
-(defmacro ctypecase (keyplace &rest clauses)
-  (let ((g (gensym))
-        (h (gensym)))
-    `(block ,g
-            (tagbody
-             ,h
-             (return-from ,g
-                          (typecase ,keyplace
-                            ,@clauses
-                            (otherwise
-                             (error 'type-error "CTYPECASE error") ;; FIXME
-                             (go ,h))))))))
-
+(sys::%load "case.lisp")
 
 (defmacro cond (&rest clauses)
   (if (endp clauses)
