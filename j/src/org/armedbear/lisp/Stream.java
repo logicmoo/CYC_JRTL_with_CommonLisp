@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.36 2004-03-08 16:36:58 piso Exp $
+ * $Id: Stream.java,v 1.37 2004-03-08 19:51:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -715,6 +715,16 @@ public class Stream extends LispObject
             if (n < 0)
                 break;
             char c = (char) n;
+            if (c == '\\') {
+                n = _readChar();
+                if (n < 0) {
+                    signal(new EndOfFile(this));
+                    // Not reached.
+                    return null;
+                }
+                sb.append((char)n);
+                continue;
+            }
             if (c == '|')
                 break;
             sb.append(c);
@@ -760,27 +770,23 @@ public class Stream extends LispObject
     private final String readToken(StringBuffer sb) throws ConditionThrowable
     {
         LispObject readtableCase = getCurrentReadtable().getReadtableCase();
-        if (readtableCase == Keyword.INVERT) {
-          loop:
-            while (true) {
+        if (sb.length() > 0) {
+            Debug.assertTrue(sb.length() == 1);
+            char c = sb.charAt(0);
+            if (c == '\\') {
                 int n = _readChar();
-                if (n < 0)
-                    break;
-                char c = (char) n;
-                if (Character.isWhitespace(c))
-                    break;
-                switch (c) {
-                    case '(':
-                    case ')':
-                        _unreadChar(c);
-                        break loop;
-                    default:
-                        sb.append(c);
+                if (n < 0) {
+                    signal(new EndOfFile(this));
+                    // Not reached.
+                    return null;
                 }
+                sb.setCharAt(0, (char) n);
+            } else if (readtableCase == Keyword.UPCASE) {
+                sb.setCharAt(0, Utilities.toUpperCase(c));
+            } else if (readtableCase == Keyword.DOWNCASE) {
+                sb.setCharAt(0, Utilities.toLowerCase(c));
             }
-            return invert(sb.toString());
         }
-        // Not :INVERT.
       loop:
         while (true) {
             int n = _readChar();
@@ -794,15 +800,26 @@ public class Stream extends LispObject
                 case ')':
                     _unreadChar(c);
                     break loop;
+                case '\\':
+                    n = _readChar();
+                    if (n < 0)
+                        break loop;
+                    sb.append((char)n);
+                    break;
+                case '|':
+                    sb.append(readMultipleEscape());
+                    break;
                 default:
+                    if (readtableCase == Keyword.UPCASE)
+                        c = Utilities.toUpperCase(c);
+                    else if (readtableCase == Keyword.DOWNCASE)
+                        c = Utilities.toLowerCase(c);
                     sb.append(c);
             }
         }
-        if (readtableCase == Keyword.UPCASE)
-            return sb.toString().toUpperCase();
-        if (readtableCase == Keyword.DOWNCASE)
-            return sb.toString().toLowerCase();
-        // PRESERVE
+        if (readtableCase == Keyword.INVERT)
+            return invert(sb.toString());
+        // :PRESERVE
         return sb.toString();
     }
 
