@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.647 2004-06-02 21:21:16 piso Exp $
+ * $Id: Primitives.java,v 1.648 2004-06-03 18:53:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3127,14 +3127,10 @@ public final class Primitives extends Lisp
             final LispThread thread = LispThread.currentThread();
             LispObject tag = eval(args.car(), env, thread);
             LispObject result = eval(args.cadr(), env, thread);
-            if (thread.isValidCatchTag(tag)) {
+            if (thread.isValidCatchTag(tag))
                 throw new Throw(tag, result);
-            } else {
-                return signal(
-                    new ControlError(
-                        "Attempt to throw to the nonexistent tag " +
-                        tag.writeToString() + "."));
-            }
+            else
+                return Throw.signalInvalidTag(tag);
         }
     };
 
