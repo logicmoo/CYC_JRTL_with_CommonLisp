@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.173 2005-01-09 17:26:05 piso Exp $
+;;; $Id: autoloads.lisp,v 1.174 2005-01-31 17:20:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -162,6 +162,7 @@
 (autoload-macro 'step)
 (autoload 'load)
 (autoload 'compile "jvm")
+(autoload-macro 'with-compilation-unit "jvm")
 
 (autoload-macro '(case ccase ecase typecase ctypecase etypecase) "case")
 (autoload-macro '(and cond dolist dotimes
@@ -269,8 +270,8 @@
 (autoload-macro 'collect)
 (export 'with-mutex)
 (autoload-macro 'with-mutex)
+(autoload 'style-warn "restart")
 
 ;; JVM compiler.
 (in-package "JVM")
 (export '(jvm-compile jvm-compile-package))
-;; (autoload '(jvm-compile jvm-compile-package) "jvm")
