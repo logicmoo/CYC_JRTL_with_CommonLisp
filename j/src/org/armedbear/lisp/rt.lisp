@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.85 2003-07-07 00:33:00 piso Exp $
+;;; $Id: rt.lisp,v 1.86 2003-07-08 15:54:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -282,6 +282,7 @@
                               "number-comparison"
                               "nunion"
                               "or"
+                              "packages"
                               "pairlis"
                               "places"
                               "pop"
