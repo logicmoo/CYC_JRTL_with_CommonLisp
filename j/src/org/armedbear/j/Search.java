@@ -2,7 +2,7 @@
  * Search.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Search.java,v 1.3 2003-07-26 17:53:26 piso Exp $
+ * $Id: Search.java,v 1.4 2003-07-26 18:49:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,13 +196,6 @@ public class Search implements Cloneable
     public final boolean findDelimited(String s, Mode mode)
     {
         return regularExpression ? findRegExpDelimited(s, mode) : findStringDelimited(s, mode);
-    }
-
-    // Search is restricted to region if restrictToSelection is true and
-    // region is not null.
-    private final Position findString(Buffer buffer, Position start)
-    {
-        return findString(buffer.getMode(), start);
     }
 
     // Search is restricted to region if restrictToSelection is true and
