@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.4 2003-03-05 19:42:47 piso Exp $
+ * $Id: Package.java,v 1.5 2003-03-07 19:02:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class Package extends LispObject
     }
 
     // Returns null if symbol not found in package.
-    public Symbol findSymbol(String name)
+    public Symbol findSymbolInPackage(String name)
     {
         synchronized (map) {
             return (Symbol) map.get(name);
@@ -74,12 +74,43 @@ public final class Package extends LispObject
         // Look in external symbols of used packages.
         for (Iterator it = useList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
-            symbol = pkg.findSymbol(name);
+            symbol = pkg.findSymbolInPackage(name);
             if (symbol != null && symbol.isExternal())
                 return symbol;
         }
         // Not found.
         return null;
+    }
+
+    public synchronized LispObject findSymbol(String name)
+    {
+        name = name.intern();
+        LispObject[] values = new LispObject[2];
+        // Look in external and internal symbols of this package.
+        Symbol symbol = (Symbol) map.get(name);
+        if (symbol != null) {
+            values[0] = symbol;
+            values[1] =
+                symbol.isExternal() ? Keyword.EXTERNAL : Keyword.INTERNAL;
+            setValues(values);
+            return symbol;
+        }
+        // Look in external symbols of used packages.
+        for (Iterator it = useList.iterator(); it.hasNext();) {
+            Package pkg = (Package) it.next();
+            symbol = pkg.findSymbolInPackage(name);
+            if (symbol != null && symbol.isExternal()) {
+                values[0] = symbol;
+                values[1] = Keyword.INHERITED;
+                setValues(values);
+                return symbol;
+            }
+        }
+        // Not found.
+        values[0] = NIL;
+        values[1] = NIL;
+        setValues(values);
+        return symbol;
     }
 
     public synchronized Symbol intern(String name)
@@ -98,7 +129,7 @@ public final class Package extends LispObject
         // Look in external symbols of used packages.
         for (Iterator it = useList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
-            symbol = pkg.findSymbol(name);
+            symbol = pkg.findSymbolInPackage(name);
             if (symbol != null && symbol.isExternal()) {
                 values[0] = symbol;
                 values[1] = Keyword.INHERITED;
