@@ -1,8 +1,8 @@
 /*
  * TagCommands.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: TagCommands.java,v 1.7 2002-11-10 01:03:35 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: TagCommands.java,v 1.8 2005-03-05 01:44:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -471,11 +471,11 @@ public final class TagCommands implements Constants
     }
 
     private static void findTagAtDotInternal(Editor editor, boolean exact,
-        boolean useOtherWindow)
+                                             boolean useOtherWindow)
     {
-        editor.setWaitCursor();
         Expression expr = editor.getMode().getExpressionAtDot(editor, exact);
         if (expr != null) {
+            editor.setWaitCursor();
             boolean succeeded = findTag(editor, expr, useOtherWindow);
             if (!succeeded && editor.getModeId() == C_MODE) {
                 // Special case for Emacs source.
@@ -488,7 +488,8 @@ public final class TagCommands implements Constants
             }
             if (!succeeded)
                 editor.status("Tag \"" + expr.getName() + "\" not found");
-        }
-        editor.setDefaultCursor();
+            editor.setDefaultCursor();
+        } else
+            findTag();
     }
 }
