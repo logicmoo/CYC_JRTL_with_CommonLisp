@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.16 2004-03-03 01:46:23 piso Exp $
+;;; $Id: debug.lisp,v 1.17 2004-03-08 02:57:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,13 +83,14 @@
             (print-object condition *debug-io*))
           (terpri *debug-io*))
         (%format *debug-io* "  ~A~%" condition)))
-  (let ((*debug-condition* condition)
-        (level *debug-level*))
-    (clear-input)
-    (if (> level 0)
-        (with-simple-restart (abort "Return to debug level ~D." level)
-          (debug-loop))
-        (debug-loop))))
+  (with-standard-io-syntax
+    (let ((*debug-condition* condition)
+          (level *debug-level*))
+      (clear-input)
+      (if (> level 0)
+          (with-simple-restart (abort "Return to debug level ~D." level)
+            (debug-loop))
+          (debug-loop)))))
 
 (defun break (&optional (format-control "BREAK called") &rest format-arguments)
   (with-simple-restart (continue "Return from BREAK.")
