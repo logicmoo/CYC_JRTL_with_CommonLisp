@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.52 2003-07-02 17:23:06 piso Exp $
+;;; $Id: sequences.lisp,v 1.53 2003-11-10 00:13:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,18 +54,3 @@
   (if (listp sequence)
       (list-subseq sequence start end)
       (vector-subseq sequence start end)))
-
-
-;;; CONCATENATE (from GCL)
-
-(defun concatenate (result-type &rest sequences)
-  (do ((x (make-sequence result-type
-			 (apply #'+ (mapcar #'length sequences))))
-       (s sequences (cdr s))
-       (i 0))
-    ((null s) x)
-    (do ((j 0 (1+ j))
-         (n (length (car s))))
-      ((>= j n))
-      (setf (elt x i) (elt (car s) j))
-      (incf i))))
