@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.144 2004-05-04 01:25:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.145 2004-05-04 01:56:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1500,7 +1500,7 @@
           t)
         nil)))
 
-(defparameter binary-operators (make-hash-table))
+(defparameter binary-operators (make-hash-table :test 'eq))
 
 (defun define-binary-operator (operator translation)
   (setf (gethash operator binary-operators) translation))
@@ -1530,9 +1530,11 @@
            (compile-form (first args))
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values (first args))
            (compile-form (second args))
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values (second args))
            (let ((label1 (gensym))
                  (label2 (gensym)))
              (emit 'if_acmpeq `,label1)
@@ -1547,9 +1549,11 @@
            (compile-form (first args))
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values (first args))
            (compile-form (second args))
            (unless (remove-store-value)
              (emit-push-value))
+           (maybe-emit-clear-values (second args))
            (emit-invokestatic +lisp-class+
                               "list2"
                               "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
