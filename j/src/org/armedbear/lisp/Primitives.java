@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.517 2003-12-08 02:51:37 piso Exp $
+ * $Id: Primitives.java,v 1.518 2003-12-08 04:25:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,33 +29,22 @@ import java.util.Random;
 
 public final class Primitives extends Module
 {
-    // Primitive
-    private static final int DIVIDE                     = 1;
-    private static final int MAX                        = 2;
-    private static final int MIN                        = 3;
-    private static final int MULTIPLY                   = 4;
-
     // Primitive1
-    private static final int ABS                        = 5;
-    private static final int ARRAYP                     = 6;
-    private static final int ARRAY_HAS_FILL_POINTER_P   = 7;
-    private static final int BIT_VECTOR_P               = 8;
-    private static final int COMPILED_FUNCTION_P        = 9;
-    private static final int CONSP                      = 10;
-    private static final int EVAL                       = 11;
-    private static final int IDENTITY                   = 12;
-    private static final int LISTP                      = 13;
-    private static final int SIMPLE_BIT_VECTOR_P        = 14;
-    private static final int SIMPLE_VECTOR_P            = 15;
-    private static final int VECTORP                    = 16;
+    private static final int ABS                        = 1;
+    private static final int ARRAYP                     = 2;
+    private static final int ARRAY_HAS_FILL_POINTER_P   = 3;
+    private static final int BIT_VECTOR_P               = 4;
+    private static final int COMPILED_FUNCTION_P        = 5;
+    private static final int CONSP                      = 6;
+    private static final int EVAL                       = 7;
+    private static final int IDENTITY                   = 8;
+    private static final int LISTP                      = 9;
+    private static final int SIMPLE_BIT_VECTOR_P        = 10;
+    private static final int SIMPLE_VECTOR_P            = 11;
+    private static final int VECTORP                    = 12;
 
     private Primitives()
     {
-        definePrimitive("*", MULTIPLY);
-        definePrimitive("/", DIVIDE);
-        definePrimitive("max", MAX);
-        definePrimitive("min", MIN);
-
         definePrimitive1("abs", ABS);
         definePrimitive1("array-has-fill-pointer-p", ARRAY_HAS_FILL_POINTER_P);
         definePrimitive1("arrayp", ARRAYP);
@@ -68,57 +57,6 @@ public final class Primitives extends Module
         definePrimitive1("simple-bit-vector-p", SIMPLE_BIT_VECTOR_P);
         definePrimitive1("simple-vector-p", SIMPLE_VECTOR_P);
         definePrimitive1("vectorp", VECTORP);
-    }
-
-    // Primitive
-    public LispObject dispatch(LispObject[] args, int index)
-        throws ConditionThrowable
-    {
-        switch (index) {
-            case MULTIPLY: {                    // ### *
-                LispObject result = Fixnum.ONE;
-                for (int i = 0; i < args.length; i++)
-                    result = result.multiplyBy(args[i]);
-                return result;
-            }
-            case DIVIDE: {                      // ### /
-                if (args.length < 1)
-                    throw new ConditionThrowable(new WrongNumberOfArgumentsException("/"));
-                if (args.length == 1)
-                    return Fixnum.ONE.divideBy(args[0]);
-                LispObject result = args[0];
-                for (int i = 1; i < args.length; i++)
-                    result = result.divideBy(args[i]);
-                return result;
-            }
-            case MIN: {                         // ### min
-                if (args.length < 1)
-                    throw new ConditionThrowable(new WrongNumberOfArgumentsException("MIN"));
-                LispObject result = args[0];
-                if (!result.realp())
-                    throw new ConditionThrowable(new TypeError(result, "real"));
-                for (int i = 1; i < args.length; i++) {
-                    if (args[i].isLessThan(result))
-                        result = args[i];
-                }
-                return result;
-            }
-            case MAX: {                         // ### max
-                if (args.length < 1)
-                    throw new ConditionThrowable(new WrongNumberOfArgumentsException("MAX"));
-                LispObject result = args[0];
-                if (!result.realp())
-                    throw new ConditionThrowable(new TypeError(result, "real"));
-                for (int i = 1; i < args.length; i++) {
-                    if (args[i].isGreaterThan(result))
-                        result = args[i];
-                }
-                return result;
-            }
-            default:
-                Debug.trace("bad index " + index);
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException((String)null));
-        }
     }
 
     // Primitive1
@@ -159,6 +97,111 @@ public final class Primitives extends Module
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException((String)null));
         }
     }
+
+    // ### *
+    public static final Primitive MULTIPLY = new Primitive("*")
+    {
+        public LispObject execute()
+        {
+            return Fixnum.ONE;
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg.numberp())
+                return arg;
+            throw new ConditionThrowable(new TypeError(arg, "number"));
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return first.multiplyBy(second);
+        }
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            LispObject result = Fixnum.ONE;
+            for (int i = 0; i < args.length; i++)
+                result = result.multiplyBy(args[i]);
+            return result;
+        }
+    };
+
+    // ### /
+    public static final Primitive DIVIDE = new Primitive("/")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            throw new ConditionThrowable(new WrongNumberOfArgumentsException("/"));
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return Fixnum.ONE.divideBy(arg);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return first.divideBy(second);
+        }
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            LispObject result = args[0];
+            for (int i = 1; i < args.length; i++)
+                result = result.divideBy(args[i]);
+            return result;
+        }
+    };
+
+    // ### min
+    public static final Primitive MIN = new Primitive("min")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            throw new ConditionThrowable(new WrongNumberOfArgumentsException("min"));
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg.realp())
+                return arg;
+            throw new ConditionThrowable(new TypeError(arg, "real number"));
+        }
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            LispObject result = args[0];
+            if (!result.realp())
+                throw new ConditionThrowable(new TypeError(result, "real number"));
+            for (int i = 1; i < args.length; i++) {
+                if (args[i].isLessThan(result))
+                    result = args[i];
+            }
+            return result;
+        }
+    };
+
+
+    // ### max
+    public static final Primitive MAX = new Primitive("max")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            throw new ConditionThrowable(new WrongNumberOfArgumentsException("max"));
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg.realp())
+                return arg;
+            throw new ConditionThrowable(new TypeError(arg, "real number"));
+        }
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            LispObject result = args[0];
+            if (!result.realp())
+                throw new ConditionThrowable(new TypeError(result, "real number"));
+            for (int i = 1; i < args.length; i++) {
+                if (args[i].isGreaterThan(result))
+                    result = args[i];
+            }
+            return result;
+        }
+    };
 
     // ### eq
     private static final Primitive2 EQ = new Primitive2("eq")
@@ -452,7 +495,8 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive1 SUCCESSOR = new Primitive1("1+")
+    // ### 1+
+    private static final Primitive1 ONE_PLUS = new Primitive1("1+")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -488,7 +532,8 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive1 PREDECESSOR = new Primitive1("1-")
+    // ### 1-
+    private static final Primitive1 ONE_MINUS = new Primitive1("1-")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
