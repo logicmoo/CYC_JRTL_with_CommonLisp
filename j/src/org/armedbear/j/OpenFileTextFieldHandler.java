@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.32 2002-12-26 17:26:21 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.33 2002-12-28 19:27:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -965,14 +965,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 popup.setVisible(false);
                 popup = null;
             }
-            String text;
-            if (originalText != null) {
-                text = originalText;
-                originalText = null;
-            } else {
-                text = textField.getText();
-                // Delete selected text (if any).
-                if (textField.getSelectionStart() != textField.getSelectionEnd())
+            String text = textField.getText();
+            if (textField.getSelectionStart() != textField.getSelectionEnd()) {
+                if (originalText != null) {
+                    text = originalText;
+                    originalText = null;
+                } else
                     text = text.substring(0, textField.getSelectionStart());
             }
             // Insert (or append) typed char.
