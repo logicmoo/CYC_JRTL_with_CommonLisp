@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.66 2004-05-27 20:33:19 piso Exp $
+ * $Id: Interpreter.java,v 1.67 2004-08-09 16:21:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,7 +225,6 @@ public final class Interpreter extends Lisp
                         return;
                     out = getStandardOutput();
                     out.freshLine();
-                    thread.checkStack();
                     LispObject[] values = thread.getValues();
                     Symbol.SLASH_SLASH_SLASH.setSymbolValue(Symbol.SLASH_SLASH.getSymbolValue());
                     Symbol.SLASH_SLASH.setSymbolValue(Symbol.SLASH.getSymbolValue());
