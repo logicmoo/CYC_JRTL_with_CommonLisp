@@ -36,6 +36,7 @@ public
 return
 short
 static
+strictfp
 super
 switch
 synchronized
