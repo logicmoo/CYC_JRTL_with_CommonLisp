@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.78 2004-02-09 19:01:47 piso Exp $
+;;; $Id: clos.lisp,v 1.79 2004-02-09 19:34:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -939,8 +939,6 @@
       (compile nil lambda-expr)
       (eval `(function ,lambda-expr))))
 
-;;; defmethod
-
 (defmacro defmethod (&rest args)
   (multiple-value-bind
     (function-name qualifiers lambda-list specializers documentation body)
@@ -1007,8 +1005,6 @@
                          (cadr function-name)
                          function-name)
                      real-body)))))
-
-;;; Several tedious functions for analyzing lambda lists
 
 (defun required-portion (gf args)
   (let ((number-required (length (gf-required-args gf))))
@@ -1098,8 +1094,6 @@
                    :optional-args optionals
                    :allow-other-keys allow-other-keys))))
 
-;;; ensure method
-
 #+nil
 (defun check-method-arg-info (gf arg-info method)
   (multiple-value-bind (nreq nopt keysp restp allow-other-keys-p keywords)
@@ -1138,13 +1132,11 @@
             ~S."
 		  gf-keywords)))))))
 
-(defun ensure-method (gf &rest all-keys)
-  (let* ((gf-lambda-list (generic-function-lambda-list gf))
-         (gf-restp (not (null (memq '&rest gf-lambda-list))))
+(defun check-method-lambda-list (method-lambda-list gf-lambda-list)
+  (let* ((gf-restp (not (null (memq '&rest gf-lambda-list))))
          (gf-plist (analyze-lambda-list gf-lambda-list))
          (gf-keysp (getf gf-plist :keysp))
          (gf-keywords (getf gf-plist :keywords))
-         (method-lambda-list (getf all-keys :lambda-list))
          (method-plist (analyze-lambda-list method-lambda-list))
          (method-restp (not (null (memq '&rest method-lambda-list))))
          (method-keysp (getf method-plist :keysp))
@@ -1162,7 +1154,12 @@
       (unless (or (and method-restp (not method-keysp))
                   method-allow-other-keys-p
                   (every (lambda (k) (memq k method-keywords)) gf-keywords))
-        (error "The method does not accept all of the keyword arguments defined for the generic function."))))
+        (error "The method does not accept all of the keyword arguments defined for the generic function.")))))
+
+(defun ensure-method (gf &rest all-keys)
+  (let ((method-lambda-list (getf all-keys :lambda-list))
+        (gf-lambda-list (generic-function-lambda-list gf)))
+    (check-method-lambda-list method-lambda-list gf-lambda-list))
   (let ((new-method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
