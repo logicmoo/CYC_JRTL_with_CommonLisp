@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.20 2003-09-11 01:16:25 piso Exp $
+;;; $Id: autoloads.lisp,v 1.21 2003-09-11 01:44:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,3 +77,4 @@
           "numbers.lisp")
 (autoload 'boole)
 (autoload '(byte byte-size byte-position ldb ldb-test) "ldb.lisp")
+(autoload 'lcm)
