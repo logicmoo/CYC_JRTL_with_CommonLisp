@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.31 2003-07-17 17:19:50 piso Exp $
+;;; $Id: compiler.lisp,v 1.32 2003-07-27 19:13:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -221,6 +221,7 @@
     (when (and name (functionp result))
       (sys::%set-lambda-name result name)
       (sys::%set-call-count result (sys::%call-count definition))
+      (sys::%set-arglist result (sys::arglist definition))
 ;;       (setf (fdefinition name) result))
       (if (macro-function name)
           (setf (fdefinition name) (make-macro result))
