@@ -106,4 +106,17 @@ public abstract class AbstractVector extends LispObject
     {
         return false;
     }
+
+    public void nreverse() throws LispError
+    {
+        int i = 0;
+        int j = length() - 1;
+        while (i < j) {
+            LispObject temp = get(i);
+            set(i, get(j));
+            set(j, temp);
+            ++i;
+            --j;
+        }
+    }
 }
