@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.147 2005-03-07 19:49:16 piso Exp $
+ * $Id: Editor.java,v 1.148 2005-03-08 02:24:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5166,9 +5166,7 @@ public final class Editor extends JPanel implements Constants,
     {
         if (dot == null)
             return;
-
         String message = null;
-
         if (mark != null) {
             Region r = new Region(this);
             if (isColumnSelection()) {
@@ -5178,15 +5176,17 @@ public final class Editor extends JPanel implements Constants,
                 killRing.appendNew(r.toString());
                 message = "Region copied to clipboard";
             }
+        } else if (buffer.getMark() != null) {
+            Region r = new Region(buffer, dot, buffer.getMark());
+            killRing.appendNew(r.toString());
+            message = "Region copied to clipboard";
         } else if (!getDotLine().isBlank()) {
             killRing.appendNew(getDotLine().getText() + System.getProperty("line.separator"));
             message = "Line copied to clipboard";
         } else
             return; // Nothing to do.
-
         if (!isColumnSelection())
             killRing.copyLastKillToSystemClipboard();
-
         if (message != null)
             status(message);
     }
