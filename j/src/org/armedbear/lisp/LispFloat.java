@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.26 2003-08-23 00:55:56 piso Exp $
+ * $Id: LispFloat.java,v 1.27 2003-08-23 01:36:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -368,6 +368,15 @@ public final class LispFloat extends LispObject
                 throw new WrongNumberOfArgumentsException(this);
             // FIXME Ignore prototype (args[1] if present).
             return coerceToFloat(args[0]);
+        }
+    };
+
+    // ### floatp
+    // floatp object => generalized-boolean
+    private static final Primitive1 FLOATP = new Primitive1("floatp") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg instanceof LispFloat ? T : NIL;
         }
     };
 }
