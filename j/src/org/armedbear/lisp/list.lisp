@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.34 2003-06-10 18:40:12 piso Exp $
+;;; $Id: list.lisp,v 1.35 2003-06-11 00:05:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -209,55 +209,8 @@
             subsetp)
           "sets.lisp")
 
-(defun acons (key datum alist)
-  (cons (cons key datum) alist))
-
-(defun pairlis (keys data &optional (alist '()))
-  (do ((x keys (cdr x))
-       (y data (cdr y)))
-      ((and (endp x) (endp y)) alist)
-    (if (or (endp x) (endp y))
-	(error "the lists of keys and data are of unequal length"))
-    (setq alist (acons (car x) (car y) alist))))
-
-(autoload '(assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not)
+(autoload '(assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not
+            acons pairlis)
           "assoc.lisp")
 
-;;; Mapping functions (from CMUCL)
-
-(defun map1 (function original-arglists accumulate take-car)
-  (let* ((arglists (copy-list original-arglists))
-	 (ret-list (list nil))
-	 (temp ret-list))
-    (do ((res nil)
-	 (args '() '()))
-        ((dolist (x arglists nil) (if (null x) (return t)))
-         (if accumulate
-             (cdr ret-list)
-             (car original-arglists)))
-      (do ((l arglists (cdr l)))
-          ((null l))
-	(push (if take-car (caar l) (car l)) args)
-	(setf (car l) (cdar l)))
-      (setq res (apply function (nreverse args)))
-      (case accumulate
-	(:nconc (setq temp (last (nconc temp res))))
-	(:list (rplacd temp (list res))
-	       (setq temp (cdr temp)))))))
-
-
-(defun mapc (function list &rest more-lists)
-  (map1 function (cons list more-lists) nil t))
-
-(defun mapcan (function list &rest more-lists)
-  (map1 function (cons list more-lists) :nconc t))
-
-(defun mapl (function list &rest more-lists)
-  (map1 function (cons list more-lists) nil nil))
-
-(defun maplist (function list &rest more-lists)
-  (map1 function (cons list more-lists) :list nil))
-
-(defun mapcon (function list &rest more-lists)
-  (map1 function (cons list more-lists) :nconc nil))
-
+(autoload '(mapc mapcan mapl maplist mapcon) "map1.lisp")
