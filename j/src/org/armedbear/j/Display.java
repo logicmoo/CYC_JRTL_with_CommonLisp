@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Display.java,v 1.10 2003-06-13 17:44:22 piso Exp $
+ * $Id: Display.java,v 1.11 2003-06-13 19:05:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -356,6 +356,14 @@ public final class Display extends JComponent implements Constants,
                         paintLine(line, g2d, y);
                     y += line.getHeight();
                     line = line.nextVisible();
+                }
+                if (y < getHeight()) {
+                    g2d.setColor(editor.getFormatter().getBackgroundColor());
+                    final int height = getHeight() - y;
+                    g2d.fillRect(0, y, getWidth(), height);
+                    if (showLineNumbers)
+                        drawGutterBorder(g2d, y, height);
+                    drawVerticalRule(g2d, y, height);
                 }
                 drawCaret(g2d);
             }
