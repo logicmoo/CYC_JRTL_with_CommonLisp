@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.57 2004-02-10 14:04:53 piso Exp $
+ * $Id: LispFloat.java,v 1.58 2004-02-12 12:10:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -468,7 +468,7 @@ public final class LispFloat extends LispObject
         signal(new TypeError(String.valueOf(obj) +
                              " cannot be converted to type FLOAT."));
         // Not reached.
-        return LispFloat.ZERO;
+        return null;
     }
 
     // ### coerce-to-float
