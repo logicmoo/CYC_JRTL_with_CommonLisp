@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.13 2004-05-23 16:22:17 piso Exp $
+ * $Id: SimpleVector.java,v 1.14 2004-07-14 17:01:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,6 +291,13 @@ public final class SimpleVector extends AbstractVector
                     return signal(new TypeError(second, Symbol.FIXNUM));
                 else
                     return signal(new TypeError(first, Symbol.SIMPLE_VECTOR));
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                int index = ((Fixnum)second).value;
+                int capacity = ((SimpleVector)first).capacity;
+                ((SimpleVector)first).badIndex(index, capacity);
+                // Not reached.
+                return NIL;
             }
         }
     };
