@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.278 2003-07-06 01:17:22 piso Exp $
+ * $Id: Primitives.java,v 1.279 2003-07-06 16:21:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2689,8 +2689,7 @@ public final class Primitives extends Module
                     }
                     list = list.cdr();
                 }
-            } else
-                pkg.usePackage(PACKAGE_CL); // Default.
+            }
 
             return pkg;
         }
