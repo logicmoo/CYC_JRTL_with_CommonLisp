@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.6 2003-03-03 17:58:58 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.7 2003-03-06 02:10:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,7 +290,7 @@ public class CharacterInputStream extends LispStream
                 case '(':
                     return new Vector(readList());
                 case '\\':
-                    return readChar(true, NIL);
+                    return readCharacterLiteral();
                 case '+':
                 case '-':
                     return handleFeature(c);
@@ -312,6 +312,46 @@ public class CharacterInputStream extends LispStream
                     //    c + '\'');
                     return null;
             }
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
+        }
+    }
+
+    private LispObject readCharacterLiteral() throws Condition
+    {
+        try {
+            StringBuffer sb = new StringBuffer();
+            while (true) {
+                int n = read();
+                if (n < 0)
+                    break;
+                char c = (char) n;
+                if (Character.isWhitespace(c))
+                    break;
+                if (c == '(' || c == ')') {
+                    unread(c);
+                    break;
+                }
+                sb.append(c);
+            }
+            String token = sb.toString();
+            if (token.length() == 1)
+                return new LispCharacter(token.charAt(0));
+            String lower = token.toLowerCase();
+            if (lower.equals("tab"))
+                return new LispCharacter('\t');
+            if (lower.equals("linefeed"))
+                return new LispCharacter('\n');
+            if (lower.equals("newline"))
+                return new LispCharacter('\n');
+            if (lower.equals("page"))
+                return new LispCharacter('\f');
+            if (lower.equals("return"))
+                return new LispCharacter('\r');
+            if (lower.equals("space"))
+                return new LispCharacter(' ');
+            throw new LispError("unrecognized character name: " + token);
         }
         catch (IOException e) {
             throw new StreamError(e);
