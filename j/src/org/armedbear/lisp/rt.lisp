@@ -317,6 +317,7 @@
                               "cons-test-03"
                               "cons-test-07"
                               "cons-test-16"
+                              "constantp"
                               "copy-seq"
                               "defvar"
                               "equal"
