@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.119 2004-10-24 02:45:35 piso Exp $
+;;; $Id: clos.lisp,v 1.120 2004-11-06 13:49:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -690,11 +690,10 @@
 (defun (setf generic-function-documentation) (new-value gf)
   (setf (slot-value gf 'documentation) new-value))
 
-;; (defun generic-function-methods (gf)
-;;   (slot-value gf 'methods))
-;; (defun (setf generic-function-methods) (new-value gf)
-;;   (setf (slot-value gf 'methods) new-value))
-(defsetf generic-function-methods %set-generic-function-methods)
+(defun generic-function-methods (gf)
+  (slot-value gf 'methods))
+(defun (setf generic-function-methods) (new-value gf)
+  (setf (slot-value gf 'methods) new-value))
 
 (defsetf generic-function-discriminating-function
   %set-generic-function-discriminating-function)

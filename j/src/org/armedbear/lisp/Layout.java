@@ -1,8 +1,8 @@
 /*
  * Layout.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Layout.java,v 1.7 2004-11-03 15:38:52 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Layout.java,v 1.8 2004-11-06 13:45:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,26 @@ public final class Layout extends LispObject
 {
     private final LispClass cls;
     private final LispObject length;
-    private final LispObject instanceSlots; // A list of slot names.
+    private final LispObject[] slotNames;
 
     public Layout(LispClass cls, LispObject length, LispObject instanceSlots)
     {
         this.cls = cls;
         this.length = length;
-        this.instanceSlots = instanceSlots;
+        Debug.assertTrue(length instanceof Fixnum);
+        Debug.assertTrue(instanceSlots.listp());
+        slotNames = new LispObject[((Fixnum)length).value];
+        int i = 0;
+        try {
+            while (instanceSlots != NIL) {
+                slotNames[i++] = instanceSlots.car();
+                instanceSlots = instanceSlots.cdr();
+            }
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+        Debug.assertTrue(i == slotNames.length);
     }
 
     public LispClass getLispClass()
@@ -51,7 +64,7 @@ public final class Layout extends LispObject
                 return new Layout((LispClass)first, second, third);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, "class"));
+                return signal(new TypeError(first, Symbol.CLASS));
             }
         }
 
@@ -96,13 +109,11 @@ public final class Layout extends LispObject
             throws ConditionThrowable
         {
             try {
-                LispObject list = ((Layout)first).instanceSlots;
-                int index = 0;
-                while (list != NIL) {
-                    if (list.car() == second)
-                        return new Fixnum(index);
-                    list = list.cdr();
-                    ++index;
+                final LispObject slotNames[] = ((Layout)first).slotNames;
+                final int limit = slotNames.length;
+                for (int i = 0; i < limit; i++) {
+                    if (slotNames[i] == second)
+                        return new Fixnum(i);
                 }
                 return NIL;
             }
