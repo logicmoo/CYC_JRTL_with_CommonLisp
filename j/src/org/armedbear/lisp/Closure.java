@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.50 2003-07-30 15:53:20 piso Exp $
+ * $Id: Closure.java,v 1.51 2003-07-30 18:51:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,8 @@ public class Closure extends Function
 
     private int minArgs;
     private int maxArgs;
+
+    private final Symbol[] variables;
 
     public Closure(LispObject lambdaList, LispObject body, Environment env)
         throws LispError
@@ -224,6 +226,36 @@ public class Closure extends Function
         minArgs = requiredParameters != null ? requiredParameters.length : 0;
         if (arity >= 0)
             Debug.assertTrue(arity == minArgs);
+        variables = processVariables();
+    }
+
+    private final Symbol[] processVariables()
+    {
+        ArrayList vars = new ArrayList();
+        if (requiredParameters != null) {
+            for (int i = 0; i < requiredParameters.length; i++)
+                vars.add(requiredParameters[i].var);
+        }
+        if (optionalParameters != null) {
+            for (int i = 0; i < optionalParameters.length; i++) {
+                vars.add(optionalParameters[i].var);
+                if (optionalParameters[i].svar != NIL)
+                    vars.add(optionalParameters[i].svar);
+            }
+        }
+        if (restVar != null) {
+            vars.add(restVar);
+        }
+        if (keywordParameters != null) {
+            for (int i = 0; i < keywordParameters.length; i++) {
+                vars.add(keywordParameters[i].var);
+                if (keywordParameters[i].svar != NIL)
+                    vars.add(keywordParameters[i].svar);
+            }
+        }
+        Symbol[] array = new Symbol[vars.size()];
+        vars.toArray(array);
+        return array;
     }
 
     private static final void invalidParameter(LispObject obj)
@@ -393,136 +425,12 @@ public class Closure extends Function
     public LispObject execute(LispObject[] args) throws Condition
     {
         final LispThread thread = LispThread.currentThread();
-        if (arity >= 0) {
-            // Fixed arity.
-            if (args.length != arity)
-                throw new WrongNumberOfArgumentsException(this);
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            Environment ext = new Environment(environment);
-            if (requiredParameters != null) {
-                for (int i = 0; i < arity; i++)
-                    bind(requiredParameters[i].var, args[i], ext);
-            }
-            if (auxVars != null)
-                bindAuxVars(ext, thread);
-            LispObject result = NIL;
-            LispObject prog = body;
-            while (prog != NIL) {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-            }
-            thread.setDynamicEnvironment(oldDynEnv);
-            return result;
-        }
-        // Not fixed arity.
-        if (args.length < minArgs)
-            throw new WrongNumberOfArgumentsException(this);
         Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(environment);
-        // Required parameters.
-        if (requiredParameters != null) {
-            for (int i = 0; i < minArgs; i++)
-                bind(requiredParameters[i].var, args[i], ext);
-        }
-        int i = minArgs;
-        int argsUsed = minArgs;
-        // Optional parameters.
-        if (optionalParameters != null) {
-            for (int j = 0; j < optionalParameters.length; j++) {
-                Parameter parameter = optionalParameters[j];
-                if (i < args.length) {
-                    bind(parameter.var, args[i], ext);
-                    ++argsUsed;
-                    if (parameter.svar != NIL)
-                        bind((Symbol)parameter.svar, T, ext);
-                } else {
-                    // We've run out of arguments.
-                    LispObject initForm = parameter.initForm;
-                    bind(parameter.var,
-                         initForm != null ? eval(initForm, ext, thread) : NIL,
-                         ext);
-                    if (parameter.svar != NIL)
-                        bind((Symbol)parameter.svar, NIL, ext);
-                }
-                ++i;
-            }
-        }
-        // &rest parameter.
-        if (restVar != null) {
-            LispObject rest = NIL;
-            for (int j = args.length; j-- > argsUsed;)
-                rest = new Cons(args[j], rest);
-            bind(restVar, rest, ext);
-        }
-        // Keyword parameters.
-        if (keywordParameters != null) {
-            int argsLeft = args.length - argsUsed;
-            if (argsLeft == 0) {
-                // No keyword arguments were supplied.
-                // Bind all keyword parameters to their defaults.
-                bindKeywordParameterDefaults(ext, thread);
-            } else {
-                if ((argsLeft % 2) != 0)
-                    throw new ProgramError("odd number of keyword arguments");
-                boolean[] boundpArray = new boolean[keywordParameters.length];
-                LispObject allowOtherKeysValue = null;
-                LispObject unrecognizedKeyword = null;
-                for (int j = argsUsed; j < args.length; j += 2) {
-                    LispObject keyword = args[j];
-                    // Find it.
-                    int k;
-                    for (k = keywordParameters.length; k-- > 0;) {
-                        if (keywordParameters[k].keyword == keyword) {
-                            // Found it!
-                            if (!boundpArray[k]) {
-                                Parameter parameter = keywordParameters[k];
-                                Symbol symbol = parameter.var;
-                                bind(symbol, args[j+1], ext);
-                                if (parameter.svar != NIL)
-                                    bind((Symbol)parameter.svar, T, ext);
-                                boundpArray[k] = true;
-                            }
-                            break;
-                        }
-                    }
-                    if (k < 0) {
-                        // Not found.
-                        if (keyword == Keyword.ALLOW_OTHER_KEYS) {
-                            if (allowOtherKeysValue == null)
-                                allowOtherKeysValue = args[j+1];
-                            continue;
-                        }
-                        if (unrecognizedKeyword == null)
-                            unrecognizedKeyword = keyword;
-                    }
-                }
-                if (unrecognizedKeyword != null) {
-                    if (!allowOtherKeys &&
-                        (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
-                        throw new ProgramError("unrecognized keyword argument " +
-                            unrecognizedKeyword);
-                }
-                // Now bind any unbound keyword parameters to their defaults.
-                for (int n = 0; n < keywordParameters.length; n++) {
-                    if (!boundpArray[n]) {
-                        Parameter parameter = keywordParameters[n];
-                        LispObject initForm = parameter.initForm;
-                        LispObject value =
-                            initForm != null ? eval(initForm, ext, thread) : NIL;
-                        bind(parameter.var, value, ext);
-                        if (parameter.svar != NIL)
-                            bind((Symbol)parameter.svar, NIL, ext);
-                    }
-                }
-            }
-        } else {
-            // No keyword parameters.
-            if (argsUsed < args.length) {
-                if (restVar == null) {
-                    throw new WrongNumberOfArgumentsException(this);
-                }
-            }
-        }
+        args = processArgs(args);
+        Debug.assertTrue(args.length == variables.length);
+        for (int i = 0; i < variables.length; i++)
+            bind(variables[i], args[i], ext);
         if (auxVars != null)
             bindAuxVars(ext, thread);
         LispObject result = NIL;
@@ -535,29 +443,189 @@ public class Closure extends Function
         return result;
     }
 
+    public LispObject[] processArgs(LispObject[] args) throws Condition
+    {
+        final LispThread thread = LispThread.currentThread();
+        if (arity >= 0) {
+            // Fixed arity.
+            if (args.length != arity)
+                throw new WrongNumberOfArgumentsException(this);
+            return args;
+        }
+        // Not fixed arity.
+        if (args.length < minArgs)
+            throw new WrongNumberOfArgumentsException(this);
+        Environment oldDynEnv = thread.getDynamicEnvironment();
+        Environment ext = new Environment(environment);
+        LispObject[] array = new LispObject[variables.length];
+        int index = 0;
+        // Required parameters.
+        if (requiredParameters != null) {
+            for (int i = 0; i < minArgs; i++) {
+                bind(requiredParameters[i].var, args[i], ext);
+                array[index++] = args[i];
+            }
+        }
+        int i = minArgs;
+        int argsUsed = minArgs;
+        // Optional parameters.
+        if (optionalParameters != null) {
+            for (int j = 0; j < optionalParameters.length; j++) {
+                Parameter parameter = optionalParameters[j];
+                if (i < args.length) {
+                    bind(parameter.var, args[i], ext);
+                    array[index++] = args[i];
+                    ++argsUsed;
+                    if (parameter.svar != NIL) {
+                        bind((Symbol)parameter.svar, T, ext);
+                        array[index++] = T;
+                    }
+                } else {
+                    // We've run out of arguments.
+                    LispObject initForm = parameter.initForm;
+                    LispObject value =
+                        initForm != null ? eval(initForm, ext, thread) : NIL;
+                    bind(parameter.var, value, ext);
+                    array[index++] = value;
+                    if (parameter.svar != NIL) {
+                         bind((Symbol)parameter.svar, NIL, ext);
+                         array[index++] = NIL;
+                    }
+                }
+                ++i;
+            }
+        }
+        // &rest parameter.
+        if (restVar != null) {
+            LispObject rest = NIL;
+            for (int j = args.length; j-- > argsUsed;)
+                rest = new Cons(args[j], rest);
+            bind(restVar, rest, ext);
+            array[index++] = rest;
+        }
+        // Keyword parameters.
+        if (keywordParameters != null) {
+            int argsLeft = args.length - argsUsed;
+            if (argsLeft == 0) {
+                // No keyword arguments were supplied.
+                // Bind all keyword parameters to their defaults.
+                for (int k = 0; k < keywordParameters.length; k++) {
+                    Parameter parameter = keywordParameters[k];
+                    LispObject initForm = parameter.initForm;
+                    LispObject value =
+                        initForm != null ? eval(initForm, ext, thread) : NIL;
+                    bind(parameter.var, value, ext);
+                    array[index++] = value;
+                    if (parameter.svar != NIL) {
+                        bind((Symbol)parameter.svar, NIL, ext);
+                        array[index++] = NIL;
+                    }
+                }
+            } else {
+                if ((argsLeft % 2) != 0)
+                    throw new ProgramError("odd number of keyword arguments");
+                LispObject[] valueArray = new LispObject[keywordParameters.length];
+                boolean[] boundpArray = new boolean[keywordParameters.length];
+                LispObject allowOtherKeysValue = null;
+                LispObject unrecognizedKeyword = null;
+                for (int j = argsUsed; j < args.length; j += 2) {
+                    LispObject keyword = args[j];
+                    if (keyword == Keyword.ALLOW_OTHER_KEYS) {
+                        if (allowOtherKeysValue == null)
+                            allowOtherKeysValue = args[j+1];
+                    }
+                    // Find it.
+                    int k;
+                    for (k = keywordParameters.length; k-- > 0;) {
+                        if (keywordParameters[k].keyword == keyword) {
+                            // Found it!
+                            if (!boundpArray[k]) {
+                                Parameter parameter = keywordParameters[k];
+                                Symbol symbol = parameter.var;
+                                bind(symbol, args[j+1], ext);
+                                valueArray[k] = args[j+1];
+                                if (parameter.svar != NIL)
+                                    bind((Symbol)parameter.svar, T, ext);
+                                boundpArray[k] = true;
+                            }
+                            break;
+                        }
+                    }
+                    if (k < 0) {
+                        // Not found.
+                        if (keyword != Keyword.ALLOW_OTHER_KEYS)
+                            if (unrecognizedKeyword == null)
+                                unrecognizedKeyword = keyword;
+                    }
+                }
+                if (unrecognizedKeyword != null) {
+                    if (!allowOtherKeys &&
+                        (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
+                        throw new ProgramError("unrecognized keyword argument " +
+                                               unrecognizedKeyword);
+                }
+                for (int n = 0; n < keywordParameters.length; n++) {
+                    Parameter parameter = keywordParameters[n];
+                    if (boundpArray[n]) {
+                        // Parameter was bound above, so we don't have to bind
+                        // it again here.
+                        array[index++] = valueArray[n];
+                        if (parameter.svar != NIL) {
+                            // svar was bound above, so we don't have to bind
+                            // it again here.
+                            array[index++] = T;
+                        }
+                    } else {
+                        // Not supplied.
+                        LispObject initForm = parameter.initForm;
+                        LispObject value =
+                            initForm != null ? eval(initForm, ext, thread) : NIL;
+                        bind(parameter.var, value, ext);
+                        array[index++] = value;
+                        if (parameter.svar != NIL) {
+                            bind((Symbol)parameter.svar, NIL, ext);
+                            array[index++] = NIL;
+                        }
+                    }
+                }
+            }
+        } else {
+            // No keyword parameters.
+            if (argsUsed < args.length) {
+                if (restVar == null) {
+                    throw new WrongNumberOfArgumentsException(this);
+                }
+            }
+        }
+        thread.setDynamicEnvironment(oldDynEnv);
+        return array;
+    }
+
     private final void bindOptionalParameterDefaults(Environment env,
-        LispThread thread) throws Condition
+                                                     LispThread thread)
+        throws Condition
     {
         for (int i = 0; i < optionalParameters.length; i++) {
             Parameter parameter = optionalParameters[i];
             LispObject initForm = parameter.initForm;
             bind(parameter.var,
-                initForm != null ? eval(initForm, env, thread) : NIL,
-                env);
+                 initForm != null ? eval(initForm, env, thread) : NIL,
+                 env);
             if (parameter.svar != NIL)
                 bind((Symbol)parameter.svar, NIL, env);
         }
     }
 
     private final void bindKeywordParameterDefaults(Environment env,
-        LispThread thread) throws Condition
+                                                    LispThread thread)
+        throws Condition
     {
         for (int i = 0; i < keywordParameters.length; i++) {
             Parameter parameter = keywordParameters[i];
             LispObject initForm = parameter.initForm;
             bind(parameter.var,
-                initForm != null ? eval(initForm, env, thread) : NIL,
-                env);
+                 initForm != null ? eval(initForm, env, thread) : NIL,
+                 env);
             if (parameter.svar != NIL)
                 bind((Symbol)parameter.svar, NIL, env);
         }
