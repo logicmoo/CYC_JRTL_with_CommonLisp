@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.627 2004-04-08 17:56:01 piso Exp $
+ * $Id: Primitives.java,v 1.628 2004-04-14 14:32:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3553,9 +3553,9 @@ public final class Primitives extends Lisp
             final LispThread thread = LispThread.currentThread();
             LispObject result = eval(args.car(), env, thread);
             LispObject[] values = thread.getValues();
-            thread.clearValues();
             if (values == null)
                 return new Cons(result);
+            thread.clearValues();
             LispObject list = NIL;
             for (int i = values.length; i-- > 0;)
                 list = new Cons(values[i], list);
