@@ -1,0 +1,11 @@
+.cvsignore
+config.cache
+config.log
+config.status
+classes.stamp
+j
+j.bat
+j.jar
+*.zip
+*.tar.gz
+
