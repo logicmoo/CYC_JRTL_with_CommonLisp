@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.2 2003-03-17 18:28:19 piso Exp $
+ * $Id: Type.java,v 1.3 2003-03-21 15:31:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,7 @@ public class Type extends Lisp
 
     // Subtype of SYMBOL
     public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL);
+    public static final Type NULL      = new Type(Symbol.NULL, SYMBOL);
 
     // Subtypes of SEQUENCE
     public static final Type VECTOR    = new Type(Symbol.VECTOR, ARRAY);
@@ -156,7 +157,11 @@ public class Type extends Lisp
         new Type(Symbol.STANDARD_CHAR, BASE_CHAR);
 
     // Subtypes of NUMBER
-    public static final Type INTEGER   = new Type(Symbol.INTEGER, NUMBER);
+    public static final Type REAL      = new Type(Symbol.REAL, NUMBER);
+    public static final Type RATIONAL  = new Type(Symbol.RATIONAL, REAL);
+    public static final Type FLOAT     = new Type(Symbol.FLOAT, REAL);
+    public static final Type INTEGER   = new Type(Symbol.INTEGER, RATIONAL);
+    public static final Type RATIO     = new Type(Symbol.RATIO, RATIONAL);
     public static final Type BIT       = new Type(Symbol.BIT, INTEGER);
     public static final Type FIXNUM    = new Type(Symbol.FIXNUM, INTEGER);
 }
