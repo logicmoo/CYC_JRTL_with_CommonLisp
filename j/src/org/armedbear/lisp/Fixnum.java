@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.60 2003-09-04 04:28:01 piso Exp $
+ * $Id: Fixnum.java,v 1.61 2003-09-04 14:42:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,33 +280,40 @@ public final class Fixnum extends LispObject
 
     public LispObject divideBy(LispObject obj) throws LispError
     {
-        if (obj instanceof Fixnum) {
-            final int divisor = ((Fixnum)obj).value;
-            if (value % divisor == 0)
-                return new Fixnum(value / divisor);
-            return number(BigInteger.valueOf(value),
-                          BigInteger.valueOf(divisor));
+        try {
+            if (obj instanceof Fixnum) {
+                final int divisor = ((Fixnum)obj).value;
+                if (value % divisor == 0)
+                    return new Fixnum(value / divisor);
+                return number(BigInteger.valueOf(value),
+                              BigInteger.valueOf(divisor));
+            }
+            if (obj instanceof Bignum)
+                return number(getBigInteger(), ((Bignum)obj).getValue());
+            if (obj instanceof Ratio) {
+                BigInteger numerator = ((Ratio)obj).numerator();
+                BigInteger denominator = ((Ratio)obj).denominator();
+                return number(getBigInteger().multiply(denominator),
+                              numerator);
+            }
+            if (obj instanceof LispFloat)
+                return new LispFloat(value / LispFloat.getValue(obj));
+            if (obj instanceof Complex) {
+                Complex c = (Complex) obj;
+                LispObject realPart = c.getRealPart();
+                LispObject imagPart = c.getImaginaryPart();
+                LispObject denominator =
+                    realPart.multiplyBy(realPart).add(imagPart.multiplyBy(imagPart));
+                return Complex.getInstance(multiplyBy(realPart).divideBy(denominator),
+                                           Fixnum.ZERO.subtract(multiplyBy(imagPart).divideBy(denominator)));
+            }
+            throw new TypeError(obj, "number");
         }
-        if (obj instanceof Bignum)
-            return number(getBigInteger(), ((Bignum)obj).getValue());
-        if (obj instanceof Ratio) {
-            BigInteger numerator = ((Ratio)obj).numerator();
-            BigInteger denominator = ((Ratio)obj).denominator();
-            return number(getBigInteger().multiply(denominator),
-                          numerator);
+        catch (ArithmeticException e) {
+            if (obj.zerop())
+                throw new DivisionByZero();
+            throw new ArithmeticError(e.getMessage());
         }
-        if (obj instanceof LispFloat)
-            return new LispFloat(value / LispFloat.getValue(obj));
-        if (obj instanceof Complex) {
-            Complex c = (Complex) obj;
-            LispObject realPart = c.getRealPart();
-            LispObject imagPart = c.getImaginaryPart();
-            LispObject denominator =
-                realPart.multiplyBy(realPart).add(imagPart.multiplyBy(imagPart));
-            return Complex.getInstance(multiplyBy(realPart).divideBy(denominator),
-                                       Fixnum.ZERO.subtract(multiplyBy(imagPart).divideBy(denominator)));
-        }
-        throw new TypeError(obj, "number");
     }
 
     public boolean isEqualTo(LispObject obj) throws LispError
