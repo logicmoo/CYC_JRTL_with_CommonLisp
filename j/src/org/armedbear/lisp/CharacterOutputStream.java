@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.9 2003-11-05 19:35:55 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.10 2003-12-04 03:18:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,7 +144,11 @@ public class CharacterOutputStream extends LispOutputStream
     // Binds *PRINT-ESCAPE* to true.
     public void prin1(LispObject obj) throws ConditionThrowable
     {
+        LispThread thread = LispThread.currentThread();
+        Environment oldDynEnv = thread.getDynamicEnvironment();
+        thread.bindSpecial(_PRINT_ESCAPE_, T);
         String s = String.valueOf(obj);
+        thread.setDynamicEnvironment(oldDynEnv);
         try {
             writer.write(s);
             int index = s.lastIndexOf('\n');
