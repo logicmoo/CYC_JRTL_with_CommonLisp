@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.170 2004-06-07 18:06:43 piso Exp $
+;;; $Id: boot.lisp,v 1.171 2004-06-11 17:17:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,6 +73,24 @@
 ;; SYS::OUTPUT-OBJECT is redefined in print.lisp.
 (defun sys::output-object (object stream)
   (sys::%output-object object stream))
+
+;; (defun print (object &optional stream)
+;;   (terpri stream)
+;;   (let ((*print-escape* t))
+;;     (output-object object stream))
+;;   (write-char #\space stream)
+;;   object)
+
+;; (defun prin1 (object &optional (stream *standard-output*))
+;;   (let ((*print-escape* t))
+;;     (output-object object stream))
+;;   object)
+
+(defun princ (object &optional (stream *standard-output*))
+  (let ((*print-escape* nil)
+        (*print-readably* nil))
+    (output-object object stream))
+  object)
 
 ;; INVOKE-DEBUGGER is redefined in debug.lisp.
 (defun invoke-debugger (condition)
