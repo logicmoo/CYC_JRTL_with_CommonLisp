@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.665 2004-07-23 15:27:46 piso Exp $
+ * $Id: Primitives.java,v 1.666 2004-07-26 15:40:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3712,6 +3712,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### shrink-vector
     // Destructively alters the vector, changing its length to NEW-SIZE, which
     // must be less than or equal to its current length.
     // shrink-vector vector new-size => vector
