@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.2 2004-03-02 00:08:11 piso Exp $
+;;; $Id: pprint.lisp,v 1.3 2004-03-03 00:36:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,6 +19,9 @@
 
 #-armedbear
 (in-package "XP" :use '("LISP"))
+
+#+armedbear
+(require 'format)
 
 ;This is the November, 26 1991 version of
 ;Richard C. Waters' XP pretty printer.
@@ -84,8 +87,8 @@
 #-armedbear
 (provide "XP")
 
-(shadow '(write print #-armedbear prin1 #-armedbear princ #-armedbear pprint format write-to-string princ-to-string
-	  prin1-to-string write-line #-armedbear write-string write-char terpri fresh-line
+(shadow '(write print #-armedbear prin1 #-armedbear princ #-armedbear pprint #-armedbear format write-to-string #-armedbear princ-to-string
+	  #-armedbear prin1-to-string write-line #-armedbear write-string write-char terpri fresh-line
 	  defstruct finish-output force-output clear-output))
 
 (export '(formatter copy-pprint-dispatch pprint-dispatch
@@ -423,6 +426,8 @@
 				     ,(convert-body (caddr spec)))))))
 	((eq (car spec) 'satisfies)
 	 `(funcall (function ,(cadr spec)) x))
+        ((eq (car spec) 'eql)
+         `(eql x ',(cadr spec)))
 	(T `(typep x ',(copy-tree spec)))))
 
 ;               ---- XP STRUCTURES, AND THE INTERNAL ALGORITHM ----
@@ -1318,9 +1323,9 @@
 
 (defun format (stream string-or-fn &rest args)
   (cond ((stringp stream)
-	 (cl:format stream "~A"
-		      (with-output-to-string (stream)
-			(apply #'format stream string-or-fn args)))
+	 (format::%format stream "~A"
+                          (list (with-output-to-string (stream)
+                                  (apply #'format stream string-or-fn args))))
 	 nil)
 	((null stream)
 	 (with-output-to-string (stream)
@@ -1332,7 +1337,8 @@
 		  (apply string-or-fn stream args))
 		 ((xp-structure-p stream)
 		  (apply #'using-format stream string-or-fn args))
-		 (T (apply #'cl:format stream string-or-fn args)))
+		 (t
+                  (format::%format stream string-or-fn args)))
 	   nil)))
 
 (defvar *format-string-cache* T)
