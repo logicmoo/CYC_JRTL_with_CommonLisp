@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.64 2003-11-14 00:46:13 piso Exp $
+ * $Id: LispObject.java,v 1.65 2003-11-30 05:53:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -496,6 +496,11 @@ public class LispObject extends Lisp
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         throw new ConditionThrowable(new TypeError(this, "real number"));
+    }
+
+    public Fixnum sxhash()
+    {
+        return new Fixnum(hashCode() & 0x7ffffff);
     }
 
     // Profiling.
