@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.123 2004-11-06 20:07:57 piso Exp $
+;;; $Id: clos.lisp,v 1.124 2004-11-06 20:34:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -426,16 +426,6 @@
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (std-slot-value object slot-name)
       (slot-value-using-class (class-of object) object slot-name)))
-
-(defun %set-std-slot-value (instance slot-name new-value)
-  (let ((location (instance-slot-location instance slot-name)))
-    (cond ((fixnump location)
-           (setf (standard-instance-access instance location) new-value))
-          ((consp location)
-           (setf (cdr location) new-value))
-          (t
-           (slot-missing (class-of instance) instance slot-name 'setf new-value))))
-  new-value)
 
 (defsetf std-slot-value %set-std-slot-value)
 
