@@ -1,8 +1,8 @@
 /*
  * probe_file.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: probe_file.java,v 1.9 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: probe_file.java,v 1.10 2004-01-02 19:02:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,8 @@ public final class probe_file extends Lisp
 {
     // ### probe-file
     // probe-file pathspec => truename
-    private static final Primitive1 PROBE_FILE = new Primitive1("probe-file","pathspec")
+    private static final Primitive1 PROBE_FILE =
+        new Primitive1("probe-file", "pathspec")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -40,6 +41,31 @@ public final class probe_file extends Lisp
             }
             catch (IOException e) {
                 return signal(new LispError(e.getMessage()));
+            }
+        }
+    };
+
+    // ### truename
+    // truename filespec => truename
+    private static final Primitive1 TRUENAME =
+        new Primitive1("truename", "filespec")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            LispObject pathname = Pathname.coerceToPathname(arg);
+            File file = Utilities.getFile(pathname);
+            if (file.exists()) {
+                try {
+                    return new LispString(file.getCanonicalPath());
+                }
+                catch (IOException e) {
+                    return signal(new LispError(e.getMessage()));
+                }
+            } else {
+                StringBuffer sb = new StringBuffer("The file ");
+                sb.append(pathname);
+                sb.append(" does not exist.");
+                return signal(new FileError(sb.toString()));
             }
         }
     };
