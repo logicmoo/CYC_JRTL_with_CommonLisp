@@ -2,7 +2,7 @@
  * StackPanel.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StackPanel.java,v 1.2 2003-05-16 00:37:45 piso Exp $
+ * $Id: StackPanel.java,v 1.3 2003-05-25 00:51:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,13 +77,20 @@ public final class StackPanel implements ContextListener, MouseListener
             try {
                 frames = threadRef.frames();
                 final Vector v = new Vector();
+                int selectedIndex = -1;
                 if (frames.size() > 0) {
-                    jdb.setCurrentStackFrame((StackFrame)frames.get(0));
+                    StackFrame currentStackFrame = jdb.getCurrentStackFrame();
+                    if (currentStackFrame == null) {
+                        currentStackFrame = (StackFrame) frames.get(0);
+                        jdb.setCurrentStackFrame(currentStackFrame);
+                    }
                     int index = 1;
                     Iterator iter = frames.iterator();
                     while (iter.hasNext()) {
-                        StackFrame stackFrame = (StackFrame) iter.next();
-                        Location location = stackFrame.location();
+                        StackFrame frame = (StackFrame) iter.next();
+                        if (frame != null && frame.equals(currentStackFrame))
+                            selectedIndex = index - 1;
+                        Location location = frame.location();
                         Method method = location.method();
                         String sourceName = null;
                         try {
@@ -111,12 +118,13 @@ public final class StackPanel implements ContextListener, MouseListener
                         v.add(sb.toString());
                     }
                 }
+                final int finalSelectedIndex = selectedIndex;
                 // Update UI in event dispatch thread.
                 Runnable r = new Runnable() {
                     public void run()
                     {
                         list.setListData(v);
-                        list.setSelectedIndex(0);
+                        list.setSelectedIndex(finalSelectedIndex);
                     }
                 };
                 SwingUtilities.invokeLater(r);
