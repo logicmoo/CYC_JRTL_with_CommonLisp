@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.2 2002-10-10 16:26:59 piso Exp $
+ * $Id: Utilities.java,v 1.3 2002-11-04 15:32:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -963,7 +963,7 @@ public final class Utilities implements Constants
         boolean keepOriginal)
     {
         // No need to back it up if it doesn't exist.
-        if (!file.exists())
+        if (!file.isFile())
             return true;
         File backupDir = null;
         String backupDirectory =
@@ -972,11 +972,12 @@ public final class Utilities implements Constants
             backupDir = File.getInstance(backupDirectory);
         } else {
             // Use default location.
-            backupDir = File.getInstance(Editor.getUserHomeDirectory(), "backup");
+            backupDir = File.getInstance(Directories.getUserHomeDirectory(),
+                                         "backup");
         }
         if (backupDir == null)
             return false;
-        if (!backupDir.exists() && !backupDir.mkdirs()) {
+        if (!backupDir.isDirectory() && !backupDir.mkdirs()) {
             Log.error("can't create backup directory ".concat(backupDir.canonicalPath()));
             return false;
         }
@@ -987,8 +988,16 @@ public final class Utilities implements Constants
             if (file.renameTo(backupFile))
                 return true;
         }
-        if (copyFile(file, backupFile)) {
+        if (copyFile(file, backupFile))
             return true;
+        // If copyFile() failed because the existing backup file is not
+        // writable, delete that file and try again.
+        if (backupFile.isFile() && !backupFile.canWrite()) {
+            Log.debug("deleting old backup file " + backupFile);
+            backupFile.delete();
+            Log.debug("retrying copyFile...");
+            if (copyFile(file, backupFile))
+                return true;
         }
         Log.error("makeBackup copyFile failed, returning false");
         return false;
