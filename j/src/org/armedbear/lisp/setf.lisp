@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.23 2003-09-08 01:38:21 piso Exp $
+;;; $Id: setf.lisp,v 1.24 2003-09-15 03:53:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,9 +64,9 @@
 
 
 (defmacro setf (&rest args)
-  (let ((n-args (length args)))
+  (let ((count (length args)))
     (cond
-     ((= n-args 2)
+     ((= count 2)
       (let ((place (first args))
             (value (second args)))
         (cond
@@ -83,7 +83,7 @@
                   (t
                    (error "SETF: unhandled case")))))
          (t nil))))
-     ((oddp n-args)
+     ((oddp count)
       (error "odd number of args to SETF"))
      (t
       (do ((a args (cddr a)) (l nil))
