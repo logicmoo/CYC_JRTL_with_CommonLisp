@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.14 2003-10-12 01:21:56 piso Exp $
+;;; $Id: defclass.lisp,v 1.15 2003-10-12 13:46:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -508,8 +508,7 @@
    (methods :initform ())     ; :accessor generic-function-methods
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
-   (discriminating-function)  ; :accessor generic-function-
-   ;    -discriminating-function
+   (discriminating-function)  ; :accessor generic-function-discriminating-function
    (classes-to-emf-table      ; :accessor classes-to-emf-table
     :initform (make-hash-table :test #'equal))))
 
@@ -766,7 +765,7 @@
 (defun required-portion (gf args)
   (let ((number-required (length (gf-required-arglist gf))))
     (when (< (length args) number-required)
-      (error "Too few arguments to generic function ~S." gf))
+      (error "not enough arguments for generic function ~S" gf))
     (subseq args 0 number-required)))
 
 (defun gf-required-arglist (gf)
@@ -994,8 +993,7 @@
 
 ;;; compute-applicable-methods-using-classes
 
-(defun compute-applicable-methods-using-classes
-  (gf required-classes)
+(defun compute-applicable-methods-using-classes (gf required-classes)
   (sort
    (copy-list
     (remove-if-not #'(lambda (method)
@@ -1042,8 +1040,7 @@
   (let ((primaries (remove-if-not #'primary-method-p methods))
         (around (find-if #'around-method-p methods)))
     (when (null primaries)
-      (error "No primary methods for the~@
-      generic function ~S." gf))
+      (error "no primary methods for the generic function ~S" gf))
     (if around
         (let ((next-emfun
                (funcall
