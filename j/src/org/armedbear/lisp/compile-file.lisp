@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.12 2004-04-21 13:51:26 piso Exp $
+;;; $Id: compile-file.lisp,v 1.13 2004-04-24 12:22:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -132,7 +132,11 @@
   (when (and (consp form) (neq (car form) 'QUOTE))
     (let ((*print-level* nil)
           (*print-length* nil))
-      (write form :stream stream))
+      (if (eq (car form) 'IMPORT)
+          ;; Make sure package prefix is printed when symbols are imported.
+          (let ((*package* (find-package "COMMON-LISP")))
+            (write form :stream stream))
+          (write form :stream stream)))
     (terpri stream)))
 
 (defun process-toplevel-progn (forms stream compile-time-too)
