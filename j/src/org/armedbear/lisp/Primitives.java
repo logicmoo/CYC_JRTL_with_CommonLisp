@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.353 2003-08-25 18:20:21 piso Exp $
+ * $Id: Primitives.java,v 1.354 2003-08-25 19:16:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3000,7 +3000,7 @@ public final class Primitives extends Module
 
     // ### %set-symbol-plist
     private static final Primitive2 _SET_SYMBOL_PLIST =
-        new Primitive2("%set-symbol-plist") {
+        new Primitive2("%set-symbol-plist", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
@@ -4546,14 +4546,15 @@ public final class Primitives extends Module
     };
 
     // ### %make-list
-    private static final Primitive2 _MAKE_LIST = new Primitive2("%make-list") {
+    private static final Primitive2 _MAKE_LIST =
+        new Primitive2("%make-list", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws Condition
         {
             int size = Fixnum.getValue(first);
             if (size < 0)
                 throw new TypeError("MAKE-LIST: " + size +
-                    " is not a valid list length");
+                                    " is not a valid list length");
             LispObject result = NIL;
             for (int i = size; i-- > 0;)
                 result = new Cons(second, result);
@@ -4577,7 +4578,8 @@ public final class Primitives extends Module
     };
 
     // %member item list key test test-not => tail
-    private static final Primitive _MEMBER = new Primitive("%member") {
+    private static final Primitive _MEMBER =
+        new Primitive("%member", PACKAGE_SYS, false) {
         public LispObject execute(LispObject[] args) throws Condition
         {
             if (args.length != 5)
@@ -4635,7 +4637,8 @@ public final class Primitives extends Module
 
     // ### funcall-key
     // funcall-key function-or-nil element
-    private static final Primitive2 FUNCALL_KEY = new Primitive2("funcall-key") {
+    private static final Primitive2 FUNCALL_KEY =
+        new Primitive2("funcall-key", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws Condition
         {
@@ -4647,7 +4650,7 @@ public final class Primitives extends Module
 
     // ### coerce-to-function
     private static final Primitive1 COERCE_TO_FUNCTION =
-        new Primitive1("coerce-to-function") {
+        new Primitive1("coerce-to-function", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws Condition
         {
             return coerceToFunction(arg);
