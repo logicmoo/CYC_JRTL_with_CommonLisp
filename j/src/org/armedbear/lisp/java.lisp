@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.7 2003-12-02 14:27:20 dmcnaught Exp $
+;;; $Id: java.lisp,v 1.8 2003-12-02 22:29:59 dmcnaught Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,21 +34,27 @@
   "Returns the Java class that OBJ belongs to"
   (jcall (jmethod "java.lang.Object" "getClass") obj))
 
+(defun ensure-jclass (class-or-string)
+  "If handed a string, return a Class object."
+  (if (stringp class-or-string)
+      (jclass class-or-string)
+      class-or-string))
+
 (defun jclass-superclass (class)
   "Returns the superclass of CLASS, or NIL if it hasn't got one"
-  (jcall (jmethod "java.lang.Class" "getSuperclass") class))
+  (jcall (jmethod "java.lang.Class" "getSuperclass") (ensure-jclass class)))
 
 (defun jclass-interfaces (class)
   "Returns the vector of interfaces of CLASS"
-  (jcall (jmethod "java.lang.Class" "getInterfaces") class))
+  (jcall (jmethod "java.lang.Class" "getInterfaces") (ensure-jclass class)))
 
 (defun jclass-interface-p (class)
   "Returns T if CLASS is an interface"
-  (jcall (jmethod "java.lang.Class" "isInterface") class))
+  (jcall (jmethod "java.lang.Class" "isInterface") (ensure-jclass class)))
 
 (defun jclass-constructors (class)
   "Returns a vector of constructors for CLASS"
-  (jcall (jmethod "java.lang.Class" "getConstructors") class))
+  (jcall (jmethod "java.lang.Class" "getConstructors") (ensure-jclass class)))
 
 (defun jconstructor-params (constructor)
   "Returns a vector of parameter types (Java classes) for CONSTRUCTOR"
@@ -57,9 +63,8 @@
 (defun jclass-fields (class &key declared public)
   "Returns a vector of all (or just the declared/public, if DECLARED/PUBLIC is true) fields of CLASS"
   (let* ((getter (if declared "getDeclaredFields" "getFields"))
-         (fields (jcall (jmethod "java.lang.Class" getter) class)))
+         (fields (jcall (jmethod "java.lang.Class" getter) (ensure-jclass class))))
     (if public (delete-if-not #'jmember-public-p fields) fields)))
-
 
 (defun jfield-type (field)
   "Returns the type (Java class) of FIELD"
@@ -72,9 +77,8 @@
 (defun jclass-methods (class &key declared public)
   "Return a vector of all (or just the declared/public, if DECLARED/PUBLIC is true) methods of CLASS"
   (let* ((getter (if declared "getDeclaredMethods" "getMethods"))
-         (methods (jcall (jmethod "java.lang.Class" getter) class)))
+         (methods (jcall (jmethod "java.lang.Class" getter) (ensure-jclass class))))
     (if public (delete-if-not #'jmember-public-p methods) methods)))
-
 
 (defun jmethod-params (method)
   "Returns a vector of parameter types (Java classes) for METHOD"
@@ -91,7 +95,7 @@
 (defun jinstance-of-p (obj class)
   "OBJ is an instance of CLASS (or one of its subclasses)"
   (and (java-object-p obj)
-       (jcall (jmethod "java.lang.Class" "isInstance" "java.lang.Object") class obj)))
+       (jcall (jmethod "java.lang.Class" "isInstance" "java.lang.Object") (ensure-jclass class) obj)))
 
 (defun jmember-static-p (member)
   "MEMBER is a static member of its declaring class"
