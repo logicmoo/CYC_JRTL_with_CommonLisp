@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.5 2004-09-04 02:22:22 piso Exp $
+;;; $Id: slime.lisp,v 1.6 2004-09-05 00:16:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
   (:export #:complete-symbol
            #:slime-space))
 
-(in-package "SLIME")
+(in-package #:slime)
 
 (defvar *stream* nil)
 
@@ -94,7 +94,7 @@
 
 (defun completion-prefix ()
   (let* ((string (line-chars (current-line)))
-         (end (marker-charpos (point))))
+         (end (mark-charpos (current-point))))
     (do ((start (1- end) (1- start)))
         ((< start 0) (subseq string 0 end))
       (let ((c (schar string start)))
@@ -121,21 +121,21 @@
            (setf *completions* (completions *prefix*)))))
   (when *completions*
     (let* ((completion (string-downcase (nth *completion-index* *completions*)))
-           (point (point))
-           (flags (line-flags (marker-line point))))
+           (point (current-point))
+           (flags (line-flags (mark-line point))))
       (with-single-undo
-        (goto-char (make-marker (marker-line point)
-                                (- (marker-charpos point) (length *prefix*))))
+        (goto-char (make-mark (mark-line point)
+                              (- (mark-charpos point) (length *prefix*))))
         (set-mark point)
         (delete-region)
         (insert completion)
-        (setf (line-flags (marker-line point)) flags)))
+        (setf (line-flags (mark-line point)) flags)))
     (setf *current-command* 'complete))
   (values))
 
 (defun symbol-name-at-point ()
   (let ((string (line-chars (current-line)))
-        (point-charpos (marker-charpos (point)))
+        (point-charpos (mark-charpos (current-point)))
         (delimiters '(#\space #\( #\)))
         begin
         end)
@@ -157,10 +157,10 @@
   (let ((result ()))
      (save-excursion
       (loop
-        (let ((point1 (point))
-              (point2 (progn (backward-up-list) (point))))
-          (when (and (equal (marker-line point1) (marker-line point2))
-                     (eql (marker-charpos point1) (marker-charpos point2)))
+        (let ((point1 (current-point))
+              (point2 (progn (backward-up-list) (current-point))))
+          (when (and (equal (mark-line point1) (mark-line point2))
+                     (eql (mark-charpos point1) (mark-charpos point2)))
             (return)))
         (unless (looking-at "(")
           (return))
@@ -186,6 +186,40 @@
              (status message))))))
    (insert #\space)))
 
+(defun find-buffer-package ()
+;;   (save-excursion
+;;    (when (let ((case-fold-search t)
+;;                (regexp "^(\\(cl:\\|common-lisp:\\)?in-package\\>"))
+;;            (or (re-search-backward regexp nil t)
+;;                (re-search-forward regexp nil t)))
+;;      (goto-char (match-end 0))
+;;      (skip-chars-forward " \n\t\f\r#")
+;;      (let ((pkg (ignore-errors (read (current-buffer)))))
+;;        (if pkg (format "%s" pkg))))))
+  (let (mark (current-point))
+     (loop
+        (setf mark (search-backward "(in-package"
+                                      :start mark
+                                      :ignore-case t
+                                      :whole-words-only t))
+        (cond ((null mark)
+               (return))
+              ((eql (mark-charpos mark) 0)
+               (return))
+              (t
+               (move-to-position mark (1- (mark-charpos mark))))))
+    (when mark
+      (let* ((line-chars (line-chars (mark-line mark)))
+             (package-name
+              (ignore-errors
+               (read-from-string (subseq line-chars
+                                         (+ (mark-charpos mark)
+                                            (length "(in-package")))))))
+        (when package-name
+          (string package-name))))))
+
+
 (j::map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
 (j::map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
+(j::map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
 (j::map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
