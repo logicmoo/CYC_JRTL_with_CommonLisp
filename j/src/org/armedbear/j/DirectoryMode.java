@@ -2,7 +2,7 @@
  * DirectoryMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DirectoryMode.java,v 1.6 2003-07-04 02:10:20 piso Exp $
+ * $Id: DirectoryMode.java,v 1.7 2003-07-04 17:50:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,11 +137,16 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
 
     public void populateModeMenu(Editor editor, Menu menu)
     {
+        Buffer buffer = editor.getBuffer();
+        Directory dir = buffer instanceof Directory ? (Directory) buffer : null;
         menu.add(editor, "Copy File...", 'C', "dirCopyFile");
         menu.add(editor, "Move File...", 'M', "dirMoveFile");
         menu.add(editor, "Delete File", 'D', "dirDeleteFiles");
         menu.addSeparator();
         menu.add(editor, "Limit...", 'L', "dirLimit");
+        MenuItem unlimit = menu.add(editor, "Unlimit", 'U', "dirUnlimit");
+        boolean enabled = (dir != null && dir.getLimitPattern() != null);
+        unlimit.setEnabled(enabled);
         menu.addSeparator();
         JRadioButtonMenuItem sortByName = new JRadioButtonMenuItem("Sort by Name");
         sortByName.setMnemonic('N');
@@ -162,8 +167,6 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         menu.add(sortByName);
         menu.add(sortByDate);
         menu.add(sortBySize);
-        Buffer buffer = editor.getBuffer();
-        Directory dir = buffer instanceof Directory ? (Directory) buffer : null;
         if (dir != null) {
             int sortBy = dir.getSortBy();
             if (sortBy == Directory.SORT_BY_NAME)
