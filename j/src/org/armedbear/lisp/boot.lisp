@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.62 2003-06-20 17:14:54 piso Exp $
+;;; $Id: boot.lisp,v 1.63 2003-06-21 01:28:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -173,5 +173,37 @@
 	      (if ,n-result
 		  ,n-result
 		  (or ,@(rest forms))))))))
+
+
+;; CASE (from CLISP)
+
+(defun case-expand (form-name test keyform clauses)
+  (let ((var (gensym)))
+    `(let ((,var ,keyform))
+       (cond
+        ,@(maplist
+           #'(lambda (remaining-clauses)
+              (let ((clause (first remaining-clauses))
+                    (remaining-clauses (rest remaining-clauses)))
+                (unless (consp clause)
+                  (error 'program-error "~S: missing key list" form-name))
+                (let ((keys (first clause)))
+                  `(,(cond ((or (eq keys 'T) (eq keys 'OTHERWISE))
+                            (if remaining-clauses
+                                (error 'program-error
+                                       "~S: the ~S clause must be the last one"
+                                       form-name keys)
+                                't))
+                           ((listp keys)
+                            `(or ,@(mapcar #'(lambda (key)
+                                              `(,test ,var ',key))
+                                           keys)))
+                           (t `(,test ,var ',keys)))
+                     ,@(rest clause)))))
+           clauses)))))
+
+(defmacro case (keyform &body clauses)
+  (case-expand 'case 'eql keyform clauses))
+
 
 (debug)
