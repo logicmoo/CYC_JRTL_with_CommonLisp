@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.25 2003-08-02 19:37:25 piso Exp $
+ * $Id: LispObject.java,v 1.26 2003-08-06 17:45:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,9 +83,19 @@ public class LispObject extends Lisp
         throw new TypeError(this, "list");
     }
 
+    public LispObject EQ(LispObject obj)
+    {
+        return this == obj ? T : NIL;
+    }
+
     public boolean eql(LispObject obj)
     {
         return this == obj;
+    }
+
+    public LispObject EQL(LispObject obj)
+    {
+        return eql(obj) ? T : NIL;
     }
 
     public boolean equal(LispObject obj) throws LispError
