@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.13 2003-09-20 17:02:04 piso Exp $
+ * $Id: DisplacedArray.java,v 1.14 2003-10-09 15:06:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,7 +154,8 @@ public final class DisplacedArray extends AbstractArray
     {
         if (index >= 0 && index < size)
             array.setRowMajor(index + offset, newValue);
-        throw new ConditionThrowable(new TypeError("bad row major index " + index));
+        else
+            throw new ConditionThrowable(new TypeError("bad row major index " + index));
     }
 
     // ### array-displacement
