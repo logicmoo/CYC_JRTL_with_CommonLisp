@@ -2,7 +2,7 @@
  * UndoInsertString.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: UndoInsertString.java,v 1.1.1.1 2002-09-24 16:09:28 piso Exp $
+ * $Id: UndoInsertString.java,v 1.2 2002-10-11 14:07:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,7 @@ public class UndoInsertString extends AbstractUndoableEdit
             }
             absCaretCol = editor.getAbsoluteCaretCol();
             isColumnSelection = editor.isColumnSelection();
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
             line = editor.getDotLine().copy();
         }
@@ -131,7 +131,7 @@ public class UndoInsertString extends AbstractUndoableEdit
                 buffer.renumber();
                 buffer.repaint();
             }
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
             editor.setDot(dotLineNumber, dotOffset);
             editor.setMark(null);
             final Display display = editor.getDisplay();
@@ -164,7 +164,7 @@ public class UndoInsertString extends AbstractUndoableEdit
             }
             absCaretCol = editor.getAbsoluteCaretCol();
             isColumnSelection = editor.isColumnSelection();
-            modificationCount = editor.getBuffer().getModificationCount();
+            modificationCount = editor.getBuffer().getModCount();
             modified = editor.getBuffer().isModified();
         }
 
@@ -190,7 +190,7 @@ public class UndoInsertString extends AbstractUndoableEdit
                 buffer.renumber();
                 buffer.repaint();
             }
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
             editor.setDot(dotLineNumber, dotOffset);
             editor.setMark(null);
             final Display display = editor.getDisplay();

@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.6 2002-10-11 12:35:09 piso Exp $
+ * $Id: Buffer.java,v 1.7 2002-10-11 14:05:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,13 +62,13 @@ public class Buffer extends SystemBuffer
 
     protected boolean supportsUndo = true;
 
-    private int modificationCount;
-    private int modificationCountWhenLastSaved;
-    private int modificationCountWhenLastAutosaved;
+    private int modCount;
+    private int saveModCount; // Value of modCount when last saved.
 
     // Autosave.
     protected boolean autosaveEnabled;
-    File autosaveFile;
+    private File autosaveFile;
+    private int autosaveModCount; // Value of modCount when last autosaved.
 
     private File cache;
     private String listing;
@@ -591,28 +591,28 @@ public class Buffer extends SystemBuffer
         return lineCount;
     }
 
-    public final int getModificationCount()
+    public final int getModCount()
     {
-        return modificationCount;
+        return modCount;
     }
 
-    public final synchronized void setModificationCount(int count)
+    public final synchronized void setModCount(int count)
     {
-        if (count != modificationCount) {
-            modificationCount = count;
+        if (count != modCount) {
+            modCount = count;
             srText = null;
         }
     }
 
-    public final synchronized void incrementModificationCount()
+    public final synchronized void incrementModCount()
     {
-        ++modificationCount;
+        ++modCount;
         srText = null;
     }
 
-    public final void setModificationCountWhenLastSaved(int count)
+    public final void setModCountWhenLastSaved(int count)
     {
-        modificationCountWhenLastAutosaved = count;
+        autosaveModCount = count;
     }
 
     public final KeyMap getKeyMapForMode()
@@ -1748,7 +1748,7 @@ public class Buffer extends SystemBuffer
     {
         if (!Autosave.isAutosaveEnabled() || !autosaveEnabled)
             return false;
-        return modificationCount != modificationCountWhenLastAutosaved;
+        return modCount != autosaveModCount;
     }
 
     public void autosave(boolean wait)
@@ -1796,7 +1796,7 @@ public class Buffer extends SystemBuffer
         }
         autosaveFile.setEncoding(getFile().getEncoding());
         if (writeFile(autosaveFile))
-            modificationCountWhenLastAutosaved = modificationCount;
+            autosaveModCount = modCount;
         else
             Log.error("autosave writeFile failed");
     }
@@ -1822,12 +1822,12 @@ public class Buffer extends SystemBuffer
             Log.error("----- modified() called without write lock -----");
             Debug.dumpStack();
         }
-        if (modificationCount > modificationCountWhenLastSaved) {
+        if (modCount > saveModCount) {
             // Already modified.
-            incrementModificationCount();
+            incrementModCount();
         } else {
             // First change.
-            setModificationCount(modificationCountWhenLastSaved + 1);
+            setModCount(saveModCount + 1);
             Sidebar.setUpdateFlagInAllFrames(SIDEBAR_MODIFIED_BUFFER_COUNT);
             Sidebar.repaintBufferListInAllFrames();
         }
@@ -1836,17 +1836,17 @@ public class Buffer extends SystemBuffer
 
     public void unmodified()
     {
-        setModificationCount(0);
-        modificationCountWhenLastSaved = 0;
-        modificationCountWhenLastAutosaved = 0;
+        setModCount(0);
+        saveModCount = 0;
+        autosaveModCount = 0;
         Sidebar.setUpdateFlagInAllFrames(SIDEBAR_MODIFIED_BUFFER_COUNT);
         Sidebar.repaintBufferListInAllFrames();
     }
 
     public void saved()
     {
-        modificationCountWhenLastSaved = modificationCount;
-        modificationCountWhenLastAutosaved = modificationCount;
+        saveModCount = modCount;
+        autosaveModCount = modCount;
         if (isNewFile()) {
             for (Line line = getFirstLine(); line != null; line = line.next()) {
                 line.setOriginalText(null);
@@ -1886,7 +1886,7 @@ public class Buffer extends SystemBuffer
 
     public boolean isModified()
     {
-        return modificationCount != modificationCountWhenLastSaved;
+        return modCount != saveModCount;
     }
 
     public Line getLine(int lineNumber)
@@ -1980,9 +1980,8 @@ public class Buffer extends SystemBuffer
 
     public void resetUndo()
     {
-        if (supportsUndo) {
+        if (supportsUndo)
             undoManager.discardAllEdits();
-        }
     }
 
     public void resetRedo()

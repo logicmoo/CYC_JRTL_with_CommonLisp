@@ -2,7 +2,7 @@
  * UndoRemoveLine.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: UndoRemoveLine.java,v 1.1.1.1 2002-09-24 16:08:29 piso Exp $
+ * $Id: UndoRemoveLine.java,v 1.2 2002-10-11 14:07:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ public final class UndoRemoveLine extends AbstractUndoableEdit
             Debug.assertTrue(dotOffset == 0);
             absCaretCol = editor.getAbsoluteCaretCol();
             final Buffer buffer = editor.getBuffer();
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
 
             final Line toBeRemoved = insertBefore ? dotLine.previous() : dotLine.next();
@@ -130,7 +130,7 @@ public final class UndoRemoveLine extends AbstractUndoableEdit
                 after.setPrevious(line);
             // Markers!!
 
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
             buffer.needsRenumbering = true;
             buffer.renumber();
 
@@ -154,7 +154,7 @@ public final class UndoRemoveLine extends AbstractUndoableEdit
             dotOffset = editor.getDotOffset();
             absCaretCol = editor.getAbsoluteCaretCol();
             final Buffer buffer = editor.getBuffer();
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
         }
 
@@ -182,7 +182,7 @@ public final class UndoRemoveLine extends AbstractUndoableEdit
                 after.setPrevious(before);
             // Markers!!
 
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
             buffer.needsRenumbering = true;
             buffer.renumber();
 

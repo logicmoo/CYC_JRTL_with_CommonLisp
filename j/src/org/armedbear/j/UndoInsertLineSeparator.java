@@ -2,7 +2,7 @@
  * UndoInsertLineSeparator.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: UndoInsertLineSeparator.java,v 1.1.1.1 2002-09-24 16:08:48 piso Exp $
+ * $Id: UndoInsertLineSeparator.java,v 1.2 2002-10-11 14:07:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public final class UndoInsertLineSeparator extends AbstractUndoableEdit
             dotOffset = editor.getDotOffset();
             absCaretCol = editor.getAbsoluteCaretCol();
             final Buffer buffer = editor.getBuffer();
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
             line = editor.getDotLine().copy();
         }
@@ -120,7 +120,7 @@ public final class UndoInsertLineSeparator extends AbstractUndoableEdit
                 after.setPrevious(restored);
             // Markers!!
 
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
 
             buffer.needsRenumbering = true;
             buffer.renumber();
@@ -150,7 +150,7 @@ public final class UndoInsertLineSeparator extends AbstractUndoableEdit
             dotOffset = editor.getDotOffset();
             absCaretCol = editor.getAbsoluteCaretCol();
             final Buffer buffer = editor.getBuffer();
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
             second = dotLine.copy();
             first = dotLine.previous().copy();
@@ -175,7 +175,7 @@ public final class UndoInsertLineSeparator extends AbstractUndoableEdit
                 after.setPrevious(second);
             // Markers!!
 
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
 
             buffer.needsRenumbering = true;
             buffer.renumber();

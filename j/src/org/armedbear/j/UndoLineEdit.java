@@ -2,7 +2,7 @@
  * UndoLineEdit.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: UndoLineEdit.java,v 1.1.1.1 2002-09-24 16:09:17 piso Exp $
+ * $Id: UndoLineEdit.java,v 1.2 2002-10-11 14:07:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,7 +127,7 @@ public class UndoLineEdit extends AbstractUndoableEdit implements Constants,
             }
             isColumnSelection = editor.isColumnSelection();
             final Buffer buffer = editor.getBuffer();
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
             line = buffer.getLine(changeLineNumber).copy();
         }
@@ -140,7 +140,7 @@ public class UndoLineEdit extends AbstractUndoableEdit implements Constants,
             markLineNumber = -1;
             markOffset = -1;
             isColumnSelection = false;
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
             line = buffer.getLine(changeLineNumber).copy();
         }
@@ -156,7 +156,7 @@ public class UndoLineEdit extends AbstractUndoableEdit implements Constants,
             changeLine.copy(line);
             Editor.updateInAllEditors(changeLine);
 
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
 
             boolean wasMarked = editor.getMark() != null;
             editor.updateDotLine();

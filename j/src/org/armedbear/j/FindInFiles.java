@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: FindInFiles.java,v 1.1.1.1 2002-09-24 16:09:38 piso Exp $
+ * $Id: FindInFiles.java,v 1.2 2002-10-11 14:07:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -684,7 +684,7 @@ public class FindInFiles extends Replacement implements Constants, BackgroundPro
             while ((pos = find(buffer, pos)) != null) {
                 compoundEdit.addEdit(new UndoLineEdit(buffer, pos.getLine()));
                 replaceOccurrence(pos);
-                buffer.incrementModificationCount();
+                buffer.incrementModCount();
             }
             compoundEdit.end();
             buffer.addEdit(compoundEdit);

@@ -2,7 +2,7 @@
  * WrapText.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WrapText.java,v 1.2 2002-10-06 00:10:09 piso Exp $
+ * $Id: WrapText.java,v 1.3 2002-10-11 14:07:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,7 +182,7 @@ public final class WrapText implements Constants
 
         int offsetBefore = buffer.getAbsoluteOffset(dot);
 
-        int originalModificationCount = buffer.getModificationCount();
+        int originalModificationCount = buffer.getModCount();
 
         // Save undo information before detabbing region (which may also move
         // dot).
@@ -332,7 +332,7 @@ public final class WrapText implements Constants
             editor.getDisplay().setShift(0);
 
             // Buffer has not been modified.
-            buffer.setModificationCount(originalModificationCount);
+            buffer.setModCount(originalModificationCount);
             return;
         }
 

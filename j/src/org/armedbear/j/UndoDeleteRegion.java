@@ -2,7 +2,7 @@
  * UndoDeleteRegion.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: UndoDeleteRegion.java,v 1.1.1.1 2002-09-24 16:08:25 piso Exp $
+ * $Id: UndoDeleteRegion.java,v 1.2 2002-10-11 14:07:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,7 +107,7 @@ public class UndoDeleteRegion extends AbstractUndoableEdit
                 markOffset = -1;
             }
             final Buffer buffer = editor.getBuffer();
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
         }
 
@@ -133,7 +133,7 @@ public class UndoDeleteRegion extends AbstractUndoableEdit
             if (after != null)
                 after.setPrevious(last);
 
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
 
             buffer.needsRenumbering = true;
             buffer.renumber();
@@ -162,7 +162,7 @@ public class UndoDeleteRegion extends AbstractUndoableEdit
             dotOffset = editor.getDotOffset();
             absCaretCol = editor.getAbsoluteCaretCol();
             final Buffer buffer = editor.getBuffer();
-            modificationCount = buffer.getModificationCount();
+            modificationCount = buffer.getModCount();
             modified = buffer.isModified();
             line = dotLine.copy();
         }
@@ -191,7 +191,7 @@ public class UndoDeleteRegion extends AbstractUndoableEdit
                 after.setPrevious(restored);
             // Markers!!
 
-            buffer.setModificationCount(modificationCount);
+            buffer.setModCount(modificationCount);
 
             buffer.needsRenumbering = true;
             buffer.renumber();
