@@ -411,6 +411,8 @@
                               "position-if-not"
                               "prog1"
                               "progn"
+                              "simple-bit-vector"
+                              "simple-bit-vector-p"
                               "simple-vector-p"
                               "some"
                               "string"
