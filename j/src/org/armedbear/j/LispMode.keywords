@@ -102,6 +102,7 @@ compile-file-pathname
 compiled-function-p
 compiler-macro-function
 complement
+compute-restarts
 concatenate
 cond
 cons
@@ -404,6 +405,7 @@ require
 rest
 restart-bind
 restart-case
+restart-name
 return
 return-from
 reverse
