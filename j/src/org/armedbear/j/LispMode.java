@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.1.1.1 2002-09-24 16:08:17 piso Exp $
+ * $Id: LispMode.java,v 1.2 2002-10-13 16:51:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ public final class LispMode extends AbstractMode implements Constants, Mode
     {
         super(LISP_MODE, LISP_MODE_NAME);
         keywords = new Keywords(this);
+        setProperty(Property.INDENT_SIZE, 2);
     }
 
     public static final LispMode getMode()
@@ -55,6 +56,7 @@ public final class LispMode extends AbstractMode implements Constants, Mode
 
     protected void setKeyMapDefaults(KeyMap km)
     {
+        km.mapKey(KeyEvent.VK_TAB, 0, "tab");
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
         km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
         km.mapKey(KeyEvent.VK_PERIOD, ALT_MASK, "findTagAtDot");
@@ -104,5 +106,39 @@ public final class LispMode extends AbstractMode implements Constants, Mode
             }
         }
         return inQuote;
+    }
+
+    public boolean canIndent()
+    {
+        return true;
+    }
+
+    public int getCorrectIndentation(Line line, Buffer buffer)
+    {
+        Position here = new Position(line, 0);
+        Position start = findStartOfDefun(here);
+        LispSyntaxIterator it = new LispSyntaxIterator(start);
+        int depth = 0;
+        while (it.getPosition().isBefore(here)) {
+            char c = it.nextChar();
+            if (c == '(')
+                ++depth;
+            else if (c == ')')
+                --depth;
+        }
+        return buffer.getIndentSize() * depth;
+    }
+
+    private Position findStartOfDefun(Position pos)
+    {
+        Line line = pos.getLine();
+        while (true) {
+            if (line.getText().startsWith("(def"))
+                return new Position(line, 0);
+            Line prev = line.previous();
+            if (prev == null)
+                return new Position(line, 0);
+            line = prev;
+        }
     }
 }
