@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.6 2003-07-05 02:01:32 piso Exp $
+ * $Id: LispAPI.java,v 1.7 2003-07-17 23:54:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
 import org.armedbear.lisp.Primitive0;
 import org.armedbear.lisp.Primitive1;
+import org.armedbear.lisp.Primitive2;
 import org.armedbear.lisp.Primitive3;
 import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.Symbol;
@@ -323,11 +324,78 @@ public final class LispAPI extends Lisp
     };
 
     private static final Primitive0 RESTORE_FOCUS =
-        new Primitive0("RESTORE-FOCUS", PACKAGE_J, true) {
+        new Primitive0("restore-focus", PACKAGE_J, true) {
         public LispObject execute()
         {
             Editor.currentEditor().setFocusToDisplay();
             return T;
+        }
+    };
+
+    private static final Primitive2 GLOBAL_MAP_KEY =
+        new Primitive2("global-map-key", PACKAGE_J, true) {
+        public LispObject execute(LispObject first, LispObject second)
+	    throws LispError
+        {
+            String keyText = LispString.getValue(first);
+            String command = LispString.getValue(second);
+            return KeyMap.getGlobalKeyMap().mapKey(keyText, command) ? T : NIL;
+        }
+    };
+
+    private static final Primitive1 GLOBAL_UNMAP_KEY =
+        new Primitive1("global-unmap-key", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg)
+	    throws LispError
+        {
+            String keyText = LispString.getValue(arg);
+            return KeyMap.getGlobalKeyMap().unmapKey(keyText) ? T : NIL;
+        }
+    };
+
+    private static final Primitive3 MAP_KEY_FOR_MODE =
+        new Primitive3("map-key-for-mode", PACKAGE_J, true) {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+	    throws LispError
+        {
+            String keyText = LispString.getValue(first);
+            String command = LispString.getValue(second);
+            String modeName = LispString.getValue(third);
+            Mode mode = Editor.getModeList().getModeFromModeName(modeName);
+            if (mode == null)
+                throw new LispError("unknown mode \"".concat(modeName).concat("\""));
+            return mode.getKeyMap().mapKey(keyText, command) ? T : NIL;
+        }
+    };
+
+    private static final Primitive2 UNMAP_KEY_FOR_MODE =
+        new Primitive2("unmap-key-for-mode", PACKAGE_J, true) {
+        public LispObject execute(LispObject first, LispObject second)
+	    throws LispError
+        {
+            String keyText = LispString.getValue(first);
+            String modeName = LispString.getValue(second);
+            Mode mode = Editor.getModeList().getModeFromModeName(modeName);
+            if (mode == null)
+                throw new LispError("unknown mode \"".concat(modeName).concat("\""));
+            return mode.getKeyMap().unmapKey(keyText) ? T : NIL;
+        }
+    };
+
+    private static final Primitive2 _SET_GLOBAL_PROPERTY =
+        new Primitive2("%set-global-property", PACKAGE_J, false) {
+        public LispObject execute(LispObject first, LispObject second)
+	    throws LispError
+        {
+            String key = LispString.getValue(first);
+            final String value;
+            if (second instanceof Fixnum)
+                value = String.valueOf(Fixnum.getValue(second));
+            else
+                value = LispString.getValue(second);
+            Editor.setGlobalProperty(key, value);
+            return second;
         }
     };
 
