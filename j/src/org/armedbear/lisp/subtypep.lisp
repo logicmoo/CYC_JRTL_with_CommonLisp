@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.37 2004-01-17 00:46:29 piso Exp $
+;;; $Id: subtypep.lisp,v 1.38 2004-01-17 14:16:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -107,66 +107,6 @@
   (multiple-value-bind (value present-p) (gethash type *known-types*)
     present-p))
 
-(defun subtypep-normalize-type (type)
-  (when (symbolp type)
-    (case type
-      (BIT
-       (return-from subtypep-normalize-type '(integer 0 1)))
-      (CONS
-       (return-from subtypep-normalize-type '(cons t t)))
-      (FIXNUM
-       (return-from subtypep-normalize-type
-                    '(integer #.most-negative-fixnum #.most-positive-fixnum)))
-      (SIGNED-BYTE
-       (return-from subtypep-normalize-type 'integer))
-      (UNSIGNED-BYTE
-       (return-from subtypep-normalize-type '(integer 0 *)))
-      (BASE-CHAR
-       (return-from subtypep-normalize-type 'character))
-      ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
-       (return-from subtypep-normalize-type 'float))
-      (t
-       (unless (get type 'deftype-definition)
-         (return-from subtypep-normalize-type type)))))
-  ;; Fall through...
-  (let (tp i)
-    (loop
-      (if (consp type)
-          (setq tp (car type) i (cdr type))
-          (setq tp type i nil))
-      (if (and (symbolp tp) (get tp 'deftype-definition))
-          (setq type (apply (get tp 'deftype-definition) i))
-          (return)))
-    (case tp
-      (CONS
-       (let* ((len (length i))
-              (car-typespec (if (> len 0) (car i) t))
-              (cdr-typespec (if (> len 1) (cadr i) t)))
-         (unless (and car-typespec cdr-typespec)
-           (return-from subtypep-normalize-type nil))
-         (when (eq car-typespec '*)
-           (setf car-typespec t))
-         (when (eq cdr-typespec '*)
-           (setf cdr-typespec t))
-         (setf i (list car-typespec cdr-typespec))))
-      ((ARRAY SIMPLE-ARRAY)
-       (when (and i (eq (car i) nil)) ; Element type is NIL.
-         (if (eq tp 'simple-array)
-             (setq tp 'simple-string)
-             (setq tp 'string))
-         (when (cadr i) ; rank/dimensions
-           (cond ((and (consp (cadr i)) (= (length (cadr i)) 1))
-                  (if (eq (caadr i) '*)
-                      (setq i nil)
-                      (setq i (cadr i))))
-                 ((eql (cadr i) 1)
-                  (setq i nil))
-                 (t
-                  (error "invalid type specifier ~S" type))))))
-      ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
-       (setq tp 'float)))
-    (if i (cons tp i) tp)))
-
 (defun sub-interval-p (i1 i2)
   (let (low1 high1 low2 high2)
     (if (null i1)
@@ -251,8 +191,8 @@
                          (values nil t))))
       (when (or classp-1 classp-2)
         (return-from subtypep (values nil t)))))
-  (setq type1 (subtypep-normalize-type type1)
-        type2 (subtypep-normalize-type type2))
+  (setf type1 (normalize-type type1)
+        type2 (normalize-type type2))
   (when (eq type1 type2)
     (return-from subtypep (values t t)))
   (let (t1 t2 i1 i2)
@@ -389,7 +329,7 @@
            (values nil nil)))))
 
 (when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
-  (mapcar #'jvm::jvm-compile '(subtypep-normalize-type
+  (mapcar #'jvm::jvm-compile '(normalize-type
                                sub-interval-p
                                simple-subtypep
                                subtypep)))

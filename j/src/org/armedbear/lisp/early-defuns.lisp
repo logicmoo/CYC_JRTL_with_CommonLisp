@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.5 2004-01-01 01:38:00 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: early-defuns.lisp,v 1.6 2004-01-17 14:15:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,6 +24,66 @@
     (error 'simple-type-error
            :format-control "The value ~S is not of type ~A."
            :format-arguments (list arg type))))
+
+(defun normalize-type (type)
+  (when (symbolp type)
+    (case type
+      (BIT
+       (return-from normalize-type '(integer 0 1)))
+      (CONS
+       (return-from normalize-type '(cons t t)))
+      (FIXNUM
+       (return-from normalize-type
+                    '(integer #.most-negative-fixnum #.most-positive-fixnum)))
+      (SIGNED-BYTE
+       (return-from normalize-type 'integer))
+      (UNSIGNED-BYTE
+       (return-from normalize-type '(integer 0 *)))
+      (BASE-CHAR
+       (return-from normalize-type 'character))
+      ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
+       (return-from normalize-type 'float))
+      (t
+       (unless (get type 'deftype-definition)
+         (return-from normalize-type type)))))
+  ;; Fall through...
+  (let (tp i)
+    (loop
+      (if (consp type)
+          (setf tp (car type) i (cdr type))
+          (setf tp type i nil))
+      (if (and (symbolp tp) (get tp 'deftype-definition))
+          (setf type (apply (get tp 'deftype-definition) i))
+          (return)))
+    (case tp
+      (CONS
+       (let* ((len (length i))
+              (car-typespec (if (> len 0) (car i) t))
+              (cdr-typespec (if (> len 1) (cadr i) t)))
+         (unless (and car-typespec cdr-typespec)
+           (return-from normalize-type nil))
+         (when (eq car-typespec '*)
+           (setf car-typespec t))
+         (when (eq cdr-typespec '*)
+           (setf cdr-typespec t))
+         (setf i (list car-typespec cdr-typespec))))
+      ((ARRAY SIMPLE-ARRAY)
+       (when (and i (eq (car i) nil)) ; Element type is NIL.
+         (if (eq tp 'simple-array)
+             (setf tp 'simple-string)
+             (setf tp 'string))
+         (when (cadr i) ; rank/dimensions
+           (cond ((and (consp (cadr i)) (= (length (cadr i)) 1))
+                  (if (eq (caadr i) '*)
+                      (setf i nil)
+                      (setf i (cadr i))))
+                 ((eql (cadr i) 1)
+                  (setf i nil))
+                 (t
+                  (error "invalid type specifier ~S" type))))))
+      ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
+       (setf tp 'float)))
+    (if i (cons tp i) tp)))
 
 (defun caaaar (list) (car (car (car (car list)))))
 (defun caaadr (list) (car (car (car (cdr list)))))
