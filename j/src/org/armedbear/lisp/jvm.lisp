@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.81 2004-03-18 02:13:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.82 2004-03-23 00:04:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package "JVM")
 
-(export '(jvm-compile jvm-compile-package))
+(export '(compile-defun jvm-compile jvm-compile-package))
 
 (import 'sys::%format)
 
@@ -2139,7 +2139,8 @@
       (setf arglist (append args-to-add arglist))
       (setf form (list* 'lambda arglist body)))
     (format t "form = ~S~%" form)
-    (setf function (compile-defun name form nil "flet.out"))
+    (setf function
+          (sys::load-compiled-function (compile-defun name form nil "flet.out")))
     (format t "function = ~S~%" function)
     (push (make-local-function :name name
                                :args-to-add args-to-add
@@ -2503,7 +2504,7 @@
         (write-method constructor)
         ;; attributes count
         (write-u2 0))))
-  (sys::load-compiled-function classfile))
+  classfile)
 
 (defun get-lambda-to-compile (definition-designator)
   (if (and (consp definition-designator)
@@ -2551,7 +2552,8 @@
           (let* ((*package* (if (and name (symbol-package name))
                                 (symbol-package name)
                                 *package*))
-                 (compiled-definition (compile-defun name expr env)))
+                 (classfile (compile-defun name expr env))
+                 (compiled-definition (sys::load-compiled-function classfile)))
             (when (and name (functionp compiled-definition))
               (sys::%set-lambda-name compiled-definition name)
               (sys::%set-call-count compiled-definition (sys::%call-count definition))
