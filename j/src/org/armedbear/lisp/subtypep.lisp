@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.9 2003-09-19 15:14:56 piso Exp $
+;;; $Id: subtypep.lisp,v 1.10 2003-09-20 01:26:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -208,10 +208,36 @@
       (return-from subtypep (cond ((memq t1 '(cons list)) (values nil t))
                                   ((known-type-p t1) (values t t))
                                   (t (values nil nil)))))
-    (unless (or i1 i2)
-      (return-from subtypep (values (simple-subtypep t1 t2) t)))
-    (cond ((eq t2 'sequence)
-           (values (simple-subtypep t2 t2) t))
+    (cond  ((eq t1 'or)
+            (dolist (tt i1)
+              (multiple-value-bind (tv flag) (subtypep tt type2)
+                (unless tv (return-from subtypep (values tv flag)))))
+            (return-from subtypep (values t t)))
+           ((eq t1 'and)
+            (dolist (tt i1)
+              (let ((tv (subtypep tt type2)))
+                (when tv (return-from subtypep (values t t)))))
+            (return-from subtypep (values nil nil)))
+           ((eq t2 'or)
+            (dolist (tt i2)
+              (let ((tv (subtypep type1 tt)))
+                (when tv (return-from subtypep (values t t)))))
+            (return-from subtypep (values nil nil)))
+           ((eq t2 'and)
+            (dolist (tt i2)
+              (multiple-value-bind (tv flag) (subtypep type1 tt)
+                (unless tv (return-from subtypep (values tv flag)))))
+            (return-from subtypep (values t t)))
+           ((null (or i1 i2))
+            (return-from subtypep (values (simple-subtypep t1 t2) t)))
+           ((eq t2 'sequence)
+           (cond ((memq t1 '(null cons list))
+                  (values t t))
+                 ((memq t1 '(array simple-array))
+                  (if (and (cdr i1) (consp (cadr i1)) (null (cdadr i1)))
+                      (values t t)
+                      (values nil t)))
+                 (t (values nil (known-type-p t1)))))
           ((eq t2 'simple-string)
            (if (memq t1 '(simple-string simple-base-string))
                (if (or (null i2) (eq (car i2) '*))
