@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Environment.java,v 1.15 2004-07-30 16:02:17 piso Exp $
+ * $Id: Environment.java,v 1.16 2004-08-19 18:14:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,11 +33,24 @@ public final class Environment extends LispObject
     public Environment(Environment parent)
     {
         if (parent != null) {
-            this.vars = parent.vars;
-            this.functions = parent.functions;
-            this.blocks = parent.blocks;
-            this.tags = parent.tags;
+            vars = parent.vars;
+            functions = parent.functions;
+            blocks = parent.blocks;
+            tags = parent.tags;
         }
+    }
+
+    // Construct a new Environment extending parent with the specified symbol-
+    // value binding.
+    public Environment(Environment parent, Symbol symbol, LispObject value)
+    {
+        if (parent != null) {
+            vars = parent.vars;
+            functions = parent.functions;
+            blocks = parent.blocks;
+            tags = parent.tags;
+        }
+        vars = new Binding(symbol, value, vars);
     }
 
     public boolean isEmpty()
