@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.89 2003-08-15 15:31:28 piso Exp $
+;;; $Id: boot.lisp,v 1.90 2003-08-16 02:15:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -91,6 +91,7 @@
 (%load "sequences.lisp")
 (%load "error.lisp")
 (%load "defpackage.lisp")
+(%load "debug.lisp")
 
 
 (defpackage "JVM" (:use "COMMON-LISP" "EXTENSIONS"))
