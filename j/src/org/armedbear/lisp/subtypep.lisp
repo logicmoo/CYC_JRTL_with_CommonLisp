@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.61 2005-03-17 15:04:50 piso Exp $
+;;; $Id: subtypep.lisp,v 1.62 2005-03-22 20:00:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -729,7 +729,7 @@
                  ((eq t2 (find-class 'vector))
                   (cond ((memq t1 '(string simple-string))
                          (values t t))
-                        ((eq t1 'array)
+                        ((memq t1 '(array simple-array))
                          (let ((dim (cadr i1)))
                            (if (or (eql dim 1)
                                    (and (consp dim) (= (length dim) 1)))

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.330 2005-03-21 00:32:26 piso Exp $
+ * $Id: Lisp.java,v 1.331 2005-03-22 19:59:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -862,6 +862,9 @@ public abstract class Lisp
         }
     }
 
+    public static final LispObject UNSIGNED_BYTE_8 =
+        list2(Symbol.UNSIGNED_BYTE, new Fixnum(8));
+
     public static final LispObject getUpgradedArrayElementType(LispObject type)
         throws ConditionThrowable
     {
@@ -884,8 +887,21 @@ public abstract class Lisp
                         return Symbol.BIT;
                 }
             }
+            if (type.equal(UNSIGNED_BYTE_8))
+                return type;
         }
         return T;
+    }
+
+    public static final byte coerceToJavaByte(LispObject obj)
+        throws ConditionThrowable
+    {
+        return (byte) Fixnum.getValue(obj);
+    }
+
+    public static final LispObject coerceToLispObject(byte b)
+    {
+        return new Fixnum(((int)b) & 0xff);
     }
 
     public static final LispCharacter checkCharacter(LispObject obj)

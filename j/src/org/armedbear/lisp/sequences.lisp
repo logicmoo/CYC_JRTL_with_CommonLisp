@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: sequences.lisp,v 1.59 2004-10-20 02:58:31 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: sequences.lisp,v 1.60 2005-03-22 20:00:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defmacro type-specifier-atom (type)
   `(if (atom ,type) ,type (car ,type)))
@@ -31,11 +31,17 @@
     ((simple-base-string simple-string string)
      (make-string length))
     ((simple-vector vector)
-     (make-array length))
+     (if (cadr type)
+         (make-array length :element-type (cadr type))
+         (make-array length)))
     (nil-vector
      (make-array length :element-type nil))
+    (simple-array
+     (if (cadr type)
+         (make-array length :element-type (cadr type))
+         (make-array length)))
     (t
-     (error 'type-error))))
+     (error "MAKE-SEQUENCE-OF-TYPE: unsupported case ~S" type))))
 
 (defmacro make-sequence-like (sequence length)
   `(make-sequence-of-type (type-of ,sequence) ,length))

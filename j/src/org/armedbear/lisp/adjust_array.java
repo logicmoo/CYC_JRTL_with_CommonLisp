@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.12 2004-02-26 19:51:04 piso Exp $
+ * $Id: adjust_array.java,v 1.13 2005-03-22 20:00:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,8 +97,8 @@ public final class adjust_array extends Primitive
             }
         } else
             dimv[0] = Fixnum.getValue(dimensions);
-        if (array instanceof SimpleArray) {
-            SimpleArray a = (SimpleArray) array;
+        if (array instanceof SimpleArray_T) {
+            SimpleArray_T a = (SimpleArray_T) array;
             if (displacedTo != NIL) {
                 final int displacement;
                 if (displacedIndexOffset == NIL)

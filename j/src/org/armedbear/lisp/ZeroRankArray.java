@@ -2,7 +2,7 @@
  * ZeroRankArray.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ZeroRankArray.java,v 1.8 2004-11-04 11:24:05 piso Exp $
+ * $Id: ZeroRankArray.java,v 1.9 2005-03-22 20:00:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,9 +111,15 @@ public final class ZeroRankArray extends AbstractArray
     public String writeToString() throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        if (_PRINT_READABLY_.symbolValue(thread) != NIL ||
-            _PRINT_ARRAY_.symbolValue(thread) != NIL)
-        {
+        boolean printReadably = (_PRINT_READABLY_.symbolValue(thread) != NIL);
+        if (printReadably) {
+            if (elementType != T) {
+                signal(new PrintNotReadable(list2(Keyword.OBJECT, this)));
+                // Not reached.
+                return null;
+            }
+        }
+        if (printReadably || _PRINT_ARRAY_.symbolValue(thread) != NIL) {
             StringBuffer sb = new StringBuffer("#0A");
             if (data == this && _PRINT_CIRCLE_.symbolValue(thread) != NIL) {
                 StringOutputStream stream = new StringOutputStream();
@@ -123,14 +129,13 @@ public final class ZeroRankArray extends AbstractArray
             } else
                 sb.append(data.writeToString());
             return sb.toString();
-        } else {
-            StringBuffer sb = new StringBuffer();
-            if (!adjustable)
-                sb.append("SIMPLE-");
-            sb.append("ARRAY ");
-            sb.append(elementType.writeToString());
-            sb.append(" NIL");
-            return unreadableString(sb.toString());
         }
+        StringBuffer sb = new StringBuffer();
+        if (!adjustable)
+            sb.append("SIMPLE-");
+        sb.append("ARRAY ");
+        sb.append(elementType.writeToString());
+        sb.append(" NIL");
+        return unreadableString(sb.toString());
     }
 }

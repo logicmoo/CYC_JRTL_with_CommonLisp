@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.117 2005-03-17 14:57:48 piso Exp $
+ * $Id: Stream.java,v 1.118 2005-03-22 20:00:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -531,7 +531,7 @@ public class Stream extends LispObject
                 return signal(new ReaderError(obj.writeToString() + " is not a sequence."));
             }
             default:
-                return new SimpleArray(rank, obj);
+                return new SimpleArray_T(rank, obj);
         }
     }
 

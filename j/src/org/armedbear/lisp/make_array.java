@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.24 2004-03-09 11:10:26 piso Exp $
+ * $Id: make_array.java,v 1.25 2005-03-22 20:00:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,11 @@ public final class make_array extends Primitive
                     v = new ComplexBitVector(size);
                 else
                     v = new SimpleBitVector(size);
+            } else if (upgradedType.equal(UNSIGNED_BYTE_8)) {
+                if (fillPointer != NIL || adjustable != NIL)
+                    v = new ComplexVector_UnsignedByte8(size);
+                else
+                    v = new BasicVector_UnsignedByte8(size);
             } else if (upgradedType == NIL)
                 v = new NilVector(size);
             else {
@@ -153,20 +158,41 @@ public final class make_array extends Primitive
         // rank > 1
         AbstractArray array;
         if (adjustable == NIL) {
-            if (initialContents != NIL) {
-                array = new SimpleArray(dimv, upgradedType, initialContents);
+            if (upgradedType.equal(UNSIGNED_BYTE_8)) {
+                if (initialContents != NIL) {
+                    array = new SimpleArray_UnsignedByte8(dimv, initialContents);
+                } else {
+                    array = new SimpleArray_UnsignedByte8(dimv);
+                    if (initialElementProvided != NIL)
+                        array.fill(initialElement);
+                }
             } else {
-                array = new SimpleArray(dimv, upgradedType);
-                if (initialElementProvided != NIL)
-                    array.fill(initialElement);
+                if (initialContents != NIL) {
+                    array = new SimpleArray_T(dimv, upgradedType, initialContents);
+                } else {
+                    array = new SimpleArray_T(dimv, upgradedType);
+                    if (initialElementProvided != NIL)
+                        array.fill(initialElement);
+                }
             }
         } else {
-            if (initialContents != NIL) {
-                array = new ComplexArray(dimv, upgradedType, initialContents);
+            // Adjustable.
+            if (upgradedType.equal(UNSIGNED_BYTE_8)) {
+                if (initialContents != NIL) {
+                    array = new ComplexArray_UnsignedByte8(dimv, initialContents);
+                } else {
+                    array = new ComplexArray_UnsignedByte8(dimv);
+                    if (initialElementProvided != NIL)
+                        array.fill(initialElement);
+                }
             } else {
-                array = new ComplexArray(dimv, upgradedType);
-                if (initialElementProvided != NIL)
-                    array.fill(initialElement);
+                if (initialContents != NIL) {
+                    array = new ComplexArray(dimv, upgradedType, initialContents);
+                } else {
+                    array = new ComplexArray(dimv, upgradedType);
+                    if (initialElementProvided != NIL)
+                        array.fill(initialElement);
+                }
             }
         }
         return array;

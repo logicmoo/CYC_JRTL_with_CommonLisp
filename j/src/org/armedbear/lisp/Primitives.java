@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.745 2005-03-21 17:14:19 piso Exp $
+ * $Id: Primitives.java,v 1.746 2005-03-22 19:59:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1809,7 +1809,9 @@ public final class Primitives extends Lisp
     // upgraded-array-element-type typespec &optional environment
     // => upgraded-typespec
     private static final Primitive UPGRADED_ARRAY_ELEMENT_TYPE =
-        new Primitive("upgraded-array-element-type", "typespec &optional environment") {
+        new Primitive("upgraded-array-element-type",
+                      "typespec &optional environment")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return getUpgradedArrayElementType(arg);
