@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.204 2004-02-12 12:45:06 piso Exp $
+ * $Id: Lisp.java,v 1.205 2004-02-14 18:57:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -701,16 +701,14 @@ public abstract class Lisp
         }
     }
 
-    public static final LispString string(LispObject arg) throws ConditionThrowable
+    public static final LispObject string(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof LispString)
-            return (LispString) arg;
+        if (arg.stringp())
+            return arg;
         if (arg instanceof Symbol)
             return new LispString(arg.getName());
         if (arg instanceof LispCharacter)
             return new LispString(((LispCharacter)arg).getValue());
-        if (arg instanceof NilVector)
-            return new LispString(((NilVector)arg).getValue());
         signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string."));
         // Not reached.
         return null;
@@ -718,14 +716,12 @@ public abstract class Lisp
 
     public static final String javaString(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof LispString)
-            return ((LispString)arg).getValue();
+        if (arg.stringp())
+            return arg.getStringValue();
         if (arg instanceof Symbol)
             return arg.getName();
         if (arg instanceof LispCharacter)
             return String.valueOf(new char[] {((LispCharacter)arg).getValue()});
-        if (arg instanceof NilVector)
-            return ((NilVector)arg).getValue();
         signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string."));
         // Not reached.
         return null;
