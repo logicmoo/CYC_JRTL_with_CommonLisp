@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.718 2004-12-07 16:37:54 piso Exp $
+ * $Id: Primitives.java,v 1.719 2004-12-07 17:35:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2315,6 +2315,14 @@ public final class Primitives extends Lisp
     public static final Primitive APPLY =
         new Primitive("apply", "function &rest args")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
         public LispObject execute(LispObject fun, LispObject args)
             throws ConditionThrowable
         {
@@ -2339,22 +2347,40 @@ public final class Primitives extends Lisp
                 }
             }
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            if (third.listp()) {
+                final int numFunArgs = 1 + third.length();
+                final LispObject[] funArgs = new LispObject[numFunArgs];
+                funArgs[0] = second;
+                int j = 1;
+                while (third != NIL) {
+                    funArgs[j++] = third.car();
+                    third = third.cdr();
+                }
+                return funcall(first, funArgs, LispThread.currentThread());
+            }
+            return signal(new TypeError(third, Symbol.LIST));
+        }
         public LispObject execute(final LispObject[] args) throws ConditionThrowable
         {
             final int numArgs = args.length;
-            if (numArgs < 2)
-                signal(new WrongNumberOfArgumentsException(this));
-            LispObject spread = checkList(args[numArgs - 1]);
-            final int numFunArgs = numArgs - 2 + spread.length();
-            final LispObject[] funArgs = new LispObject[numFunArgs];
-            int j = 0;
-            for (int i = 1; i < numArgs - 1; i++)
-                funArgs[j++] = args[i];
-            while (spread != NIL) {
-                funArgs[j++] = spread.car();
-                spread = spread.cdr();
+            LispObject spread = args[numArgs - 1];
+            if (spread.listp()) {
+                final int numFunArgs = numArgs - 2 + spread.length();
+                final LispObject[] funArgs = new LispObject[numFunArgs];
+                int j = 0;
+                for (int i = 1; i < numArgs - 1; i++)
+                    funArgs[j++] = args[i];
+                while (spread != NIL) {
+                    funArgs[j++] = spread.car();
+                    spread = spread.cdr();
+                }
+                return funcall(args[0], funArgs, LispThread.currentThread());
             }
-            return funcall(args[0], funArgs, LispThread.currentThread());
+            return signal(new TypeError(spread, Symbol.LIST));
         }
     };
 
@@ -3814,6 +3840,16 @@ public final class Primitives extends Lisp
         new Primitive("read",
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            Stream stream = checkCharacterInputStream(first);
+            boolean eofError = (second != NIL);
+            LispObject eofValue = third;
+            boolean recursive = false;
+            return stream.read(eofError, eofValue, recursive);
+        }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
             throws ConditionThrowable
