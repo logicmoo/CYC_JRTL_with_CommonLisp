@@ -2,7 +2,7 @@
  * SshLoadProcess.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshLoadProcess.java,v 1.3 2002-11-30 15:28:05 piso Exp $
+ * $Id: SshLoadProcess.java,v 1.4 2002-11-30 16:36:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,7 @@ public final class SshLoadProcess extends LoadProcess implements BackgroundProce
                 DirectoryCache.getDirectoryCache().put(file, listing);
             session.unlock();
         } else {
+            // Not a directory.
             session.unlock();
             cache = Utilities.getTempFile();
             Ssh ssh = new Ssh();
@@ -98,6 +99,18 @@ public final class SshLoadProcess extends LoadProcess implements BackgroundProce
                     SwingUtilities.invokeLater(errorRunnable);
                 }
                 return;
+            }
+            // Start a thread to get a fresh directory listing of the parent
+            // directory in order to speed up completions later.
+            final File parent = file.getParentFile();
+            if (parent != null) {
+                Thread t = new Thread() {
+                    public void run()
+                    {
+                        ((SshFile)parent).getDirectoryListing(true);
+                    }
+                };
+                t.start();
             }
         }
         session.setOutputBuffer(null);
