@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.62 2003-04-28 00:54:45 piso Exp $
+ * $Id: Lisp.java,v 1.63 2003-05-04 04:48:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,6 +136,8 @@ public abstract class Lisp
         LispThread thread) throws Condition
     {
         thread.clearValues();
+        if (thread.isDestroyed())
+            throw new ThreadDestroyed();
         if (obj instanceof Symbol) {
             LispObject result = null;
             if (obj.isSpecialVariable()) {
