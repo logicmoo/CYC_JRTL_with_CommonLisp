@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.373 2005-01-27 02:17:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.374 2005-01-27 13:10:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@
              (class-file-fixnums ,var)      *declared-fixnums*
              ))))
 
-(defstruct compiland
+(defstruct (compiland (:print-function print-compiland))
   name
   (kind :external) ; :INTERNAL or :EXTERNAL
   lambda-expression
@@ -150,6 +150,9 @@
   closure-register
   class-file ; class-file object
   )
+
+(defun print-compiland (compiland stream depth)
+  (%format stream "#<~S ~S>" 'compiland (compiland-name compiland)))
 
 (defvar *current-compiland* nil)
 
@@ -4857,6 +4860,9 @@
         (*speed* 3)
         (*safety* 0)
         (*debug* 0))
+
+    (aver (not (null (compiland-class-file xep))))
+
     ;; Pass 1.
     (p1-compiland xep)
 ;;     (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
@@ -4891,7 +4897,7 @@
         (setf body (list (append (list 'LET* (cdr auxvars)) body))))
 
 
-      (when *magic*
+      (when (and *magic* (null (compiland-parent compiland)))
         (when (memq '&OPTIONAL lambda-list)
           (unless (or (memq '&KEY lambda-list) (memq '&REST lambda-list))
             (let ((required-args (subseq lambda-list 0 (position '&OPTIONAL lambda-list)))
