@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.13 2004-12-21 14:15:32 piso Exp $
+;;; $Id: opcodes.lisp,v 1.14 2004-12-22 20:19:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -191,10 +191,10 @@
 (define-opcode dcmpg 152 1 nil)
 (define-opcode ifeq 153 3 -1)
 (define-opcode ifne 154 3 -1)
-(define-opcode iflt 155 3 nil)
-(define-opcode ifge 156 3 nil)
-(define-opcode ifgt 157 3 nil)
-(define-opcode ifle 158 3 nil)
+(define-opcode iflt 155 3 -1)
+(define-opcode ifge 156 3 -1)
+(define-opcode ifgt 157 3 -1)
+(define-opcode ifle 158 3 -1)
 (define-opcode if_icmpeq 159 3 -2)
 (define-opcode if_icmpne 160 3 -2)
 (define-opcode if_icmplt 161 3 -2)
