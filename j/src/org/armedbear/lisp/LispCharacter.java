@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.14 2003-06-23 11:11:16 piso Exp $
+ * $Id: LispCharacter.java,v 1.15 2003-07-05 02:31:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,7 +165,9 @@ public final class LispCharacter extends LispObject
         }
     };
 
-    private static final Primitive1 WHITESPACEP = new Primitive1("whitespacep") {
+    // ### whitespacep
+    private static final Primitive1 WHITESPACEP =
+        new Primitive1("whitespacep", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws LispError
         {
             LispCharacter character = checkCharacter(arg);
