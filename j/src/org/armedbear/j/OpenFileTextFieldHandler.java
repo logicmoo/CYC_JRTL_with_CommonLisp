@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.33 2002-12-28 19:27:37 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.34 2002-12-30 16:33:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -393,7 +393,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         if (Utilities.isFilenameAbsolute(entry) || entry.startsWith("..")) {
             File file = File.getInstance(dir, entry);
             if (file != null) {
-                prefix = file.canonicalPath();
+                prefix = file.isRemote() ? file.netPath(): file.canonicalPath();
                 if (entry.endsWith(LocalFile.getSeparator()))
                     prefix = prefix.concat(LocalFile.getSeparator());
             }
@@ -521,23 +521,22 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         String name;
         if (currentDirectory != null) {
             if (currentDirectory.isLocal()) {
-                // There won't be any remote completions if we're
-                // looking at a local buffer.
-                Debug.bugIf(file.isRemote());
-                if (currentDirectory.equals(file.getParentFile()))
+                if (file.isRemote())
+                    name = file.netPath();
+                else if (currentDirectory.equals(file.getParentFile()))
                     name = file.getName();
                 else
                     name = file.canonicalPath();
             } else {
-                // Remote directory. There might be local as well as
+                // Current directory is remote. There might be local as well as
                 // remote completions, so we need to use the net path.
                 name = file.netPath();
             }
         } else {
-            // Current directory is not remote (it's null), so there
-            // won't be any remote completions.
-            Debug.bugIf(file.isRemote());
-            name = file.canonicalPath();
+            if (file.isRemote())
+                name = file.netPath();
+            else
+                name = file.canonicalPath();
         }
         return name;
     }
