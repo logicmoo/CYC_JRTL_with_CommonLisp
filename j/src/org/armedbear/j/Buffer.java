@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.11 2002-10-15 01:22:04 piso Exp $
+ * $Id: Buffer.java,v 1.12 2002-11-05 17:11:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,13 +180,25 @@ public class Buffer extends SystemBuffer
             directory = Editor.getUserHomeDirectory();
         setFile(File.getInstance(directory, name));
         autosaveEnabled = true;
-        appendLine("");
         lineSeparator = System.getProperty("line.separator");
-        renumber();
-        setLoaded(true);
         mode = PlainTextMode.getMode();
         formatter = mode.getFormatter(this);
         setNewFile(true);
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return; // Shouldn't happen.
+        }
+        try {
+            appendLine("");
+            renumber();
+            setLoaded(true);
+        }
+        finally {
+            unlockWrite();
+        }
     }
 
     public Buffer(File file)
