@@ -2,7 +2,7 @@
  * ErrorCommands.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationCommands.java,v 1.3 2003-06-06 15:38:09 piso Exp $
+ * $Id: CompilationCommands.java,v 1.4 2003-06-09 17:11:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,13 +126,11 @@ public final class CompilationCommands implements Constants
     public static void thisError()
     {
         final Editor editor = Editor.currentEditor();
-
         // If this method is invoked via a mouse event mapping, move dot to
         // location of mouse click first.
         AWTEvent e = editor.getDispatcher().getLastEvent();
         if (e instanceof MouseEvent)
             editor.mouseMoveDotToPoint((MouseEvent)e);
-
         CompilationError error =
             CompilationError.parseLineAsErrorMessage(editor.getDotLine());
         if (error != null) {
@@ -165,6 +163,16 @@ public final class CompilationCommands implements Constants
 
     public static void nextError()
     {
+        nextOrPreviousError(true);
+    }
+
+    public static void previousError()
+    {
+        nextOrPreviousError(false);
+    }
+
+    private static void nextOrPreviousError(boolean next)
+    {
         final Editor editor = Editor.currentEditor();
         CompilationErrorBuffer errorBuffer;
         if (editor.getModeId() == XML_MODE)
@@ -177,7 +185,8 @@ public final class CompilationCommands implements Constants
             errorBuffer.relink();
             Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
         }
-        CompilationError error = errorBuffer.nextError();
+        CompilationError error =
+            next ? errorBuffer.nextError() : errorBuffer.previousError();
         if (error == null) {
             editor.status("No more errors");
             return;

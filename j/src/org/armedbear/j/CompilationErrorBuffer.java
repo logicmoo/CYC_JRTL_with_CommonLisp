@@ -2,7 +2,7 @@
  * CompilationErrorBuffer.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationErrorBuffer.java,v 1.1 2003-06-06 15:06:09 piso Exp $
+ * $Id: CompilationErrorBuffer.java,v 1.2 2003-06-09 17:10:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,6 +91,27 @@ public abstract class CompilationErrorBuffer extends Buffer
                 return ce;
             }
             line = line.next();
+        }
+        return null;
+    }
+
+    protected CompilationError previousError()
+    {
+        Line line;
+        if (currentError != null) {
+            line = currentError.getErrorLine();
+            if (line != null)
+                line = line.previous();
+        } else
+            line = getLastLine();
+        while (line != null) {
+            CompilationError ce =
+                CompilationError.parseLineAsErrorMessage(line);
+            if (ce != null) {
+                currentError = ce;
+                return ce;
+            }
+            line = line.previous();
         }
         return null;
     }
