@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.34 2003-10-20 18:06:15 piso Exp $
+;;; $Id: defclass.lisp,v 1.35 2003-10-21 01:00:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -891,6 +891,14 @@
 ;;; ensure method
 
 (defun ensure-method (gf &rest all-keys)
+  (let* ((plist-gf (analyze-lambda-list (generic-function-lambda-list gf)))
+         (plist-method (analyze-lambda-list (getf all-keys :lambda-list))))
+    (unless (= (length (getf plist-gf :required-args))
+               (length (getf plist-method :required-args)))
+      (error "method has wrong number of required arguments for generic function"))
+    (unless (= (length (getf plist-gf :optional-args))
+               (length (getf plist-method :optional-args)))
+      (error "method has wrong number of optional arguments for generic function")))
   (let ((new-method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
