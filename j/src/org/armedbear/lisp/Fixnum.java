@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.105 2004-12-20 13:19:43 piso Exp $
+ * $Id: Fixnum.java,v 1.106 2004-12-21 20:25:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -405,6 +405,11 @@ public final class Fixnum extends LispObject
         }
     }
 
+    public boolean isEqualTo(int n)
+    {
+        return value == n;
+    }
+
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
@@ -418,6 +423,11 @@ public final class Fixnum extends LispObject
         signal(new TypeError(obj, "number"));
         // Not reached.
         return false;
+    }
+
+    public boolean isNotEqualTo(int n)
+    {
+        return value != n;
     }
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
