@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.130 2003-03-15 18:29:57 piso Exp $
+ * $Id: Primitives.java,v 1.131 2003-03-15 19:06:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3526,6 +3526,34 @@ public final class Primitives extends Module
             for (int i = values.length; i-- > 0;)
                 list = new Cons(values[i], list);
             return list;
+        }
+    };
+
+    // ### nth-value
+    // nth-value n form => object
+    // Evaluates n and then form and returns the nth value returned by form, or
+    // NIL if n >= number of values returned.
+    // Should be a macro.
+    private static final SpecialOperator NTH_VALUE =
+        new SpecialOperator("nth-value") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            if (args.length() != 2)
+                throw new WrongNumberOfArgumentsException(this);
+            int n = Fixnum.getInt(eval(args.car(), env));
+            if (n < 0)
+                n = 0;
+            LispObject result = eval(args.cadr(), env);
+            LispObject[] values = getValues();
+            setValues(null);
+            if (values == null) {
+                // A single value was returned.
+                return n == 0 ? result : NIL;
+            }
+            if (n < values.length)
+                return values[n];
+            return NIL;
         }
     };
 
