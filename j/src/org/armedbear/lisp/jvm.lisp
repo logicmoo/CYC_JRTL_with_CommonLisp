@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.61 2003-12-23 15:24:04 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: jvm.lisp,v 1.62 2004-01-20 00:14:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 (import 'sys::%format)
 
-(shadow 'method)
+(shadow '(method variable))
 
 (defvar *debug* nil)
 
