@@ -1,8 +1,8 @@
 /*
  * HtmlMode.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: HtmlMode.java,v 1.2 2004-04-22 14:58:09 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: HtmlMode.java,v 1.3 2005-03-28 19:32:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,12 +130,17 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
                 int count = 1;
                 int limit = trim.length();
                 for (int i = startTag.length(); i < limit; i++) {
-                    if (trim.charAt(i) == '<') {
-                        if (lookingAtIgnoreCase(trim, i, endTag))
-                            --count;
-                        else if (lookingAtIgnoreCase(trim, i, startTag))
-                            ++count;
-                    }
+		    // Handle empty tags (e.g., <div />).
+		    if (trim.charAt(i) == '/' &&
+			i + 1 < limit && trim.charAt(i+1) == '>') {
+			--count;
+		    } else if (trim.charAt(i) == '<') {
+			if (lookingAtIgnoreCase(trim, i, endTag))
+			    --count;
+			else if (lookingAtIgnoreCase(trim, i, startTag))
+			    ++count;
+		    }
+
                 }
                 if (count > 0)
                     indent += buffer.getIndentSize();
@@ -167,6 +172,8 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
         Position pos = new Position(line, 0);
         final String commentStart = "<!--";
         final String commentEnd = "-->";
+        final String emptyTagStart = "<";
+        final String emptyTagEnd = "/>";
         // Search backward.
         while (!pos.atStart()) {
             pos.prev();
@@ -174,6 +181,10 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
                 do {
                     pos.prev();
                 } while (!pos.atStart() && !pos.lookingAt(commentStart));
+	    } else if (pos.lookingAt(emptyTagEnd)) {
+		do {
+		    pos.prev();
+		} while (!pos.atStart() && !pos.lookingAt(emptyTagStart));
             } else if (pos.lookingAtIgnoreCase(toBeMatched)) {
                 ++count;
             } else if (pos.lookingAtIgnoreCase(match)) {
@@ -543,6 +554,8 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
         final String special = "{([})]";
         final String commentStart = "<!--";
         final String commentEnd = "-->";
+        final String emptyTagStart = "<";
+        final String emptyTagEnd = "/>";
         Position dot = editor.getDot();
         char c = dot.getChar();
         if (special.indexOf(c) >= 0) {
@@ -570,6 +583,16 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
         }
         if (c == '>')
             sb.append(c);
+	else {
+	    Position probe = dot.copy();
+	    while (probe.next() && probe.getChar() != '>') {
+		if (probe.lookingAt(emptyTagEnd)) {
+		    editor.status("Nothing to match");
+		    dot.moveTo(saved);
+		    return;
+		}
+	    }
+	}
         String toBeMatched = sb.toString();
         String match = null;
         boolean searchForward = true;
@@ -583,7 +606,7 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
             if (match.endsWith(">"))
                 match = match.substring(0, match.length()-1);
             searchForward = false;
-        } else if (toBeMatched.startsWith("<")) {
+        } else if (toBeMatched.startsWith("<") && !toBeMatched.endsWith(emptyTagEnd)) {
             if (toBeMatched.endsWith(">"))
                 toBeMatched = toBeMatched.substring(0, toBeMatched.length()-1);
             match = "</" + toBeMatched.substring(1);
@@ -622,9 +645,19 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
                         }
                     } else if (dot.lookingAtIgnoreCase(toBeMatched)) {
                         dot.skip(toBeMatched.length());
-                        c = dot.getChar();
-                        if (c <= ' ' || c == '>') {
-                            ++count;
+                        while (!dot.atEnd()) {
+                            if (dot.lookingAt(emptyTagEnd)) {
+                                dot.skip(emptyTagEnd.length());
+                                break;
+                            }
+
+			    c = dot.getChar();
+			    if (c == '>') {
+				++count;
+				dot.next();
+				break;
+			    }
+
                             dot.next();
                         }
                     } else if (dot.lookingAtIgnoreCase(match)) {
@@ -647,6 +680,10 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
                         dot.prev();
                     }
                     while (!dot.atStart() && !dot.lookingAt(commentStart));
+		} else if (dot.lookingAt(emptyTagEnd)) {
+		    do {
+			dot.prev();
+		    } while (!dot.atStart() && !dot.lookingAt(emptyTagStart));
                 } else if (dot.lookingAtIgnoreCase(toBeMatched)) {
                     ++count;
                 } else if (dot.lookingAtIgnoreCase(match)) {
