@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.6 2003-08-07 16:30:46 piso Exp $
+ * $Id: CompiledFunction.java,v 1.7 2003-08-09 17:16:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,6 +120,10 @@ public class CompiledFunction extends Closure
                             (LispObject) constructor.newInstance(initargs);
                         return obj;
                     }
+                }
+                catch (VerifyError e) {
+                    throw new LispError("class verification failed: " +
+                                        e.getMessage());
                 }
                 catch (Throwable t) {
                     Debug.trace(t);
