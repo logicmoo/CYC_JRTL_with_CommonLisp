@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.128 2004-09-04 02:21:11 piso Exp $
+ * $Id: Editor.java,v 1.129 2004-09-13 02:01:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2529,6 +2529,15 @@ public final class Editor extends JPanel implements Constants,
         setCurrentCommand(COMMAND_PAGE_DOWN);
     }
 
+    public void pageDownOtherWindow()
+    {
+        final Editor ed = frame.getOtherEditor();
+        if (ed != null) {
+            ed.pageDown();
+            ed.updateDisplay();
+        }
+    }
+
     public void selectPageDown()
     {
         if (dot == null)
@@ -2560,6 +2569,15 @@ public final class Editor extends JPanel implements Constants,
         } else
             pageUpInternal();
         setCurrentCommand(COMMAND_PAGE_UP);
+    }
+
+    public void pageUpOtherWindow()
+    {
+        final Editor ed = frame.getOtherEditor();
+        if (ed != null) {
+            ed.pageUp();
+            ed.updateDisplay();
+        }
     }
 
     public void selectPageUp()
