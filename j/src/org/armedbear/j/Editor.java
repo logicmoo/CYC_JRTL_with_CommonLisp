@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.39 2003-03-15 16:19:09 piso Exp $
+ * $Id: Editor.java,v 1.40 2003-03-20 15:56:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,7 +172,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         lastCommand = command;
     }
 
-    static Marker[] bookmarks = new Marker[10];
+    private static Marker[] bookmarks = new Marker[10];
 
     private static TagFileManager tagFileManager;
 
@@ -786,11 +786,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         return currentEditor.getFrame();
     }
 
-    static Editor getPrimaryEditor()
-    {
-        return getEditor(0);
-    }
-
     public static Editor createNewFrame()
     {
         Editor ed = new Editor(null);
@@ -1062,8 +1057,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 }
             }
         }
-        for (int i = 0; i < Editor.bookmarks.length; i++) {
-            Marker m = Editor.bookmarks[i];
+        for (int i = 0; i < bookmarks.length; i++) {
+            Marker m = bookmarks[i];
             if (m != null && m.getLine() == line)
                 m.setPosition(pos);
         }
@@ -2175,12 +2170,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 return;
         }
 
-        // Make sure line numbers are right for bookmarks.
-        for (int i = 0; i < bookmarks.length; i++) {
-            Marker m = bookmarks[i];
-            if (m != null)
-                m.invalidate();
-        }
+        Marker.invalidateAllMarkers();
 
         Buffer toBeActivated = null;
 
@@ -2215,7 +2205,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             }
         }
 
-        Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
+        Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_ALL);
         Sidebar.refreshSidebarInAllFrames();
         setDefaultCursor();
     }
@@ -2232,9 +2222,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 return;
         }
 
-        // Make sure line numbers are right for bookmarks.
-        for (int i = 0; i < bookmarks.length; i++) {
-            Marker m = bookmarks[i];
+        List markers = Marker.getAllMarkers();
+        for (int i = 0; i < markers.size(); i++) {
+            Marker m = (Marker) markers.get(i);
             if (m != null && m.getBuffer() != buffer)
                 m.invalidate();
         }
@@ -2257,7 +2247,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             }
         }
 
-        Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
+        Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_ALL);
         Sidebar.refreshSidebarInAllFrames();
         setDefaultCursor();
     }
@@ -6561,7 +6551,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         if (buffer instanceof Directory) {
             Directory d = (Directory) buffer;
-            String pattern = InputDialog.showInputDialog(this, "Pattern:", "Limit", d.getLimitPattern());
+            String pattern = InputDialog.showInputDialog(this, "Pattern:",
+                "Limit", d.getLimitPattern());
             // A null pattern means the user cancelled the input dialog.
             if (pattern != null)
                 d.limit(pattern);
@@ -7707,28 +7698,36 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     }
 
     // Position stack.
-    private static Stack markers = new Stack();
+    private static Stack positionStack = new Stack();
+
+    public static List getPositionStack()
+    {
+        return positionStack;
+    }
 
     public void pushPosition()
     {
         if (buffer.getFile() != null) {
-            markers.push(new Marker(buffer, dot));
+            pushMarker(new Marker(buffer, dot));
             status("Position saved");
         }
     }
 
     public void popPosition()
     {
-        if (!markers.empty()) {
-            Marker m = (Marker) markers.pop();
+        if (positionStack.empty()) {
+            status("Position stack is empty");
+        } else {
+            Marker m = (Marker) positionStack.pop();
             if (m != null)
                 gotoBookmark(m);
-        } else
-            status("Position stack is empty");
+        }
     }
 
-    public void pushMarker(Marker m)
+    public static void pushMarker(Marker m)
     {
-        markers.push(m);
+        while (positionStack.size() >= 30)
+            positionStack.removeElementAt(0);
+        positionStack.push(m);
     }
 }
