@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.100 2003-07-05 02:04:46 piso Exp $
+ * $Id: Lisp.java,v 1.101 2003-07-06 18:00:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -487,7 +487,7 @@ public abstract class Lisp
     {
         if (arg instanceof LispString)
             return (LispString) arg;
-        if (arg.typep(Symbol.SYMBOL) != NIL)
+        if (arg instanceof Symbol)
             return new LispString(arg.getName());
         if (arg instanceof LispCharacter)
             return new LispString(((LispCharacter)arg).getValue());
@@ -499,7 +499,7 @@ public abstract class Lisp
     {
         if (arg instanceof LispString)
             return ((LispString)arg).getValue();
-        if (arg.typep(Symbol.SYMBOL) != NIL)
+        if (arg instanceof Symbol)
             return arg.getName();
         if (arg instanceof LispCharacter)
             return String.valueOf(new char[] {((LispCharacter)arg).getValue()});
