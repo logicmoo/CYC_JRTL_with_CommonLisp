@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.8 2004-07-22 02:44:31 piso Exp $
+;;; $Id: opcodes.lisp,v 1.9 2004-08-02 00:33:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -192,12 +192,12 @@
 (define-opcode ifge 156 3 nil)
 (define-opcode ifgt 157 3 nil)
 (define-opcode ifle 158 3 nil)
-(define-opcode if_icmpeq 159 3 nil)
-(define-opcode if_icmpne 160 3 nil)
-(define-opcode if_icmplt 161 3 nil)
-(define-opcode if_icmpge 162 3 nil)
-(define-opcode if_icmpgt 163 3 nil)
-(define-opcode if_icmple 164 3 nil)
+(define-opcode if_icmpeq 159 3 -2)
+(define-opcode if_icmpne 160 3 -2)
+(define-opcode if_icmplt 161 3 -2)
+(define-opcode if_icmpge 162 3 -2)
+(define-opcode if_icmpgt 163 3 -2)
+(define-opcode if_icmple 164 3 -2)
 (define-opcode if_acmpeq 165 3 -2)
 (define-opcode if_acmpne 166 3 -2)
 (define-opcode goto 167 3 0)
@@ -223,7 +223,7 @@
 (define-opcode new 187 3 1)
 (define-opcode newarray 188 2 nil)
 (define-opcode anewarray 189 3 0)
-(define-opcode arraylength 190 1 nil)
+(define-opcode arraylength 190 1 0)
 (define-opcode athrow 191 1 0)
 (define-opcode checkcast 192 3 0)
 (define-opcode instanceof 193 3 0)
@@ -231,7 +231,7 @@
 (define-opcode monitorexit 195 1 nil)
 (define-opcode wide 196 0 nil)
 (define-opcode multianewarray 197 4 nil)
-(define-opcode ifnull 198 3 nil)
+(define-opcode ifnull 198 3 -1)
 (define-opcode ifnonnull 199 3 nil)
 (define-opcode goto_w 200 5 nil)
 (define-opcode jsr_w 201 5 nil)
