@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.203 2005-02-05 17:49:37 piso Exp $
+;;; $Id: boot.lisp,v 1.204 2005-02-10 12:54:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -323,6 +323,4 @@
 
 (unless (sys::featurep :j)
   (load-system-file "top-level")
-  (setf *warn-on-redefinition* t)
   (%format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
-
