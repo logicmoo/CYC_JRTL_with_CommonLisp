@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.22 2003-07-02 15:28:02 piso Exp $
+ * $Id: Autoload.java,v 1.23 2003-07-02 15:46:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,14 @@ public final class Autoload extends Function
     public static void autoload(Package pkg, String symbolName, String className)
     {
         Symbol symbol = intern(symbolName.toUpperCase(), pkg);
+        if (pkg != PACKAGE_CL) {
+            try {
+                pkg.export(symbol);
+            }
+            catch (LispError e) {
+                Debug.assertTrue(false);
+            }
+        }
         symbol.setSymbolFunction(new Autoload(symbol, null,
             "org.armedbear.lisp.".concat(className)));
     }
@@ -144,7 +152,7 @@ public final class Autoload extends Function
     };
 
     static {
-        autoload("%make-hash-table", "HashTable");
+        autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
@@ -163,7 +171,7 @@ public final class Autoload extends Function
         autoload(PACKAGE_SYS, "%string=", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
-        autoload("%time", "Time");
+        autoload(PACKAGE_SYS, "%time", "Time");
         autoload("char-equal", "CharacterFunctions");
         autoload("char-greaterp", "CharacterFunctions");
         autoload("char-lessp", "CharacterFunctions");
