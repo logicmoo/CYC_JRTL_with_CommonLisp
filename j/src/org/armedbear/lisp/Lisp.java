@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.317 2005-02-09 18:34:06 piso Exp $
+ * $Id: Lisp.java,v 1.318 2005-02-10 12:55:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1866,7 +1866,7 @@ public abstract class Lisp
 
     // ### *warn-on-redefinition*
     public static final Symbol _WARN_ON_REDEFINITION_ =
-        exportSpecial("*WARN-ON-REDEFINITION*", PACKAGE_EXT, NIL);
+        exportSpecial("*WARN-ON-REDEFINITION*", PACKAGE_EXT, T);
 
     // ### *saved-backtrace*
     public static final Symbol _SAVED_BACKTRACE_ =
