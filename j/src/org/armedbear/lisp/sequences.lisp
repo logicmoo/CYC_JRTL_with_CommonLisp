@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.48 2003-06-10 18:56:01 piso Exp $
+;;; $Id: sequences.lisp,v 1.49 2003-06-10 19:04:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,6 @@
 (in-package "COMMON-LISP")
 
 (export '(subseq
-          replace
           concatenate
           map map-into
           position position-if position-if-not
@@ -83,48 +82,7 @@
       (incf i))))
 
 
-;;; MAP (from ECL)
-
-(defun map (result-type function sequence &rest more-sequences)
-  (setq more-sequences (cons sequence more-sequences))
-  (let ((l (apply #'min (mapcar #'length more-sequences))))
-    (if (null result-type)
-        (do ((i 0 (1+ i))
-             (l l))
-          ((>= i l) nil)
-          (apply function (mapcar #'(lambda (z) (elt z i))
-                                  more-sequences)))
-        (let ((x (make-sequence result-type l)))
-          (do ((i 0 (1+ i))
-               (l l))
-            ((>= i l) x)
-            (setf (elt x i)
-                  (apply function (mapcar #'(lambda (z) (elt z i))
-                                          more-sequences))))))))
-
-
-;;; MAP-INTO (from CMUCL)
-
-(defun map-into (result-sequence function &rest sequences)
-  (let* ((fp-result
-	  (and (arrayp result-sequence)
-	       (array-has-fill-pointer-p result-sequence)))
-	 (len (apply #'min
-		     (if fp-result
-			 (array-dimension result-sequence 0)
-			 (length result-sequence))
-		     (mapcar #'length sequences))))
-
-    (when fp-result
-      (setf (fill-pointer result-sequence) len))
-
-    (dotimes (index len)
-      (setf (elt result-sequence index)
-	    (apply function
-		   (mapcar #'(lambda (seq) (elt seq index))
-			   sequences)))))
-  result-sequence)
-
+(autoload '(map map-into))
 (autoload 'reduce)
 (autoload '(delete delete-if delete-if-not) "delete.lisp")
 (autoload '(remove remove-if remove-if-not) "remove.lisp")
