@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.106 2003-07-18 15:50:00 piso Exp $
+ * $Id: Lisp.java,v 1.107 2003-07-27 15:58:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -725,20 +725,22 @@ public abstract class Lisp
 
     // Property lists.
     public static final LispObject get(Symbol symbol, LispObject indicator,
-        LispObject defaultValue) throws LispError
+                                       LispObject defaultValue)
+        throws LispError
     {
         LispObject list = checkList(symbol.getPropertyList());
         while (list != NIL) {
             LispObject obj = list.car();
             if (obj.eql(indicator))
                 return list.cadr();
-            list = list.cdr().cdr();
+            list = list.cddr();
         }
         return defaultValue;
     }
 
     public static final LispObject put(Symbol symbol, LispObject indicator,
-        LispObject value) throws LispError
+                                       LispObject value)
+        throws LispError
     {
         LispObject list = checkList(symbol.getPropertyList());
         while (list != NIL) {
@@ -748,11 +750,12 @@ public abstract class Lisp
                 rest.setCar(value);
                 return value;
             }
-            list = list.cdr().cdr();
+            list = list.cddr();
         }
         // Not found.
-        symbol.setPropertyList(new Cons(indicator, new Cons(value,
-            symbol.getPropertyList())));
+        symbol.setPropertyList(new Cons(indicator,
+                                        new Cons(value,
+                                                 symbol.getPropertyList())));
         return value;
     }
 
