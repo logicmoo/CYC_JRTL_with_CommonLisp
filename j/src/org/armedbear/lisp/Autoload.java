@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.132 2004-01-07 19:06:21 piso Exp $
+ * $Id: Autoload.java,v 1.133 2004-01-09 18:09:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,6 +192,7 @@ public class Autoload extends Function
         }
     };
 
+    // ### autoloadp
     private static final Primitive1 AUTOLOADP =
         new Primitive1("autoloadp", PACKAGE_EXT, true)
     {
