@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.555 2004-01-30 20:09:59 piso Exp $
+ * $Id: Primitives.java,v 1.556 2004-02-02 13:00:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3061,6 +3061,7 @@ public final class Primitives extends Lisp
             LispObject vars = args.car();
             args = args.cdr();
             LispObject valuesForm = args.car();
+            LispObject body = args.cdr();
             final LispThread thread = LispThread.currentThread();
             LispObject value = eval(valuesForm, env, thread);
             LispObject[] values = thread.getValues();
@@ -3069,27 +3070,55 @@ public final class Primitives extends Lisp
                 values = new LispObject[1];
                 values[0] = value;
             }
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            Environment ext = new Environment(env);
+            // Process declarations.
+            LispObject specials = NIL;
+            while (body != NIL) {
+                LispObject obj = body.car();
+                if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
+                    LispObject decls = obj.cdr();
+                    while (decls != NIL) {
+                        LispObject decl = decls.car();
+                        if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
+                            LispObject declvars = decl.cdr();
+                            while (declvars != NIL) {
+                                specials = new Cons(declvars.car(), specials);
+                                declvars = declvars.cdr();
+                            }
+                        }
+                        decls = decls.cdr();
+                    }
+                    body = body.cdr();
+                } else
+                    break;
+            }
+            final Environment oldDynEnv = thread.getDynamicEnvironment();
+            final Environment ext = new Environment(env);
             int i = 0;
             LispObject var = vars.car();
             while (var != NIL) {
-                Symbol symbol = checkSymbol(var);
-                if (i < values.length)
-                    bind(symbol, values[i], ext);
-                else
-                    bind(symbol, NIL, ext);
+                Symbol sym = checkSymbol(var);
+                LispObject val = i < values.length ? values[i] : NIL;
+                if (specials != NIL && memq(sym, specials)) {
+                    thread.bindSpecial(sym, val);
+                    ext.declareSpecial(sym);
+                } else if (sym.isSpecialVariable()) {
+                    thread.bindSpecial(sym, val);
+                } else
+                    ext.bind(sym, val);
                 vars = vars.cdr();
                 var = vars.car();
                 ++i;
             }
             LispObject result = NIL;
-            LispObject body = args.cdr();
-            while (body != NIL) {
-                result = eval(body.car(), ext, thread);
-                body = body.cdr();
+            try {
+                while (body != NIL) {
+                    result = eval(body.car(), ext, thread);
+                    body = body.cdr();
+                }
             }
-            thread.setDynamicEnvironment(oldDynEnv);
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
             return result;
         }
     };
