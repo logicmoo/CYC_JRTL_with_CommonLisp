@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.25 2003-07-04 17:28:44 piso Exp $
+ * $Id: Directory.java,v 1.26 2003-07-04 17:49:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,8 +211,11 @@ public final class Directory extends Buffer
     {
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();
-        if (buffer instanceof Directory)
-            ((Directory)buffer).limit(null);
+        if (buffer instanceof Directory) {
+            Directory directory = (Directory) buffer;
+            if (directory.getLimitPattern() != null)
+                directory.limit(null);
+        }
     }
 
     private void limit(String pattern)
@@ -228,21 +231,31 @@ public final class Directory extends Buffer
         else if (pattern != null && !pattern.equals(limitPattern))
             reload = true;
         if (reload) {
-            Editor editor = Editor.currentEditor();
+            final Editor editor = Editor.currentEditor();
             editor.setWaitCursor();
+            String name = null;
+            Line dotLine = editor.getDotLine();
+            if (dotLine instanceof DirectoryLine)
+                name = getName(dotLine);
             setLimitPattern(pattern);
             if (getListing() != null)
                 reloadFromListing();
             else
                 reload();
+            Line line = findName(name);
+            Position pos;
+            if (line != null)
+                pos = new Position(line, getNameOffset(line));
+            else
+                pos = getInitialDotPos();
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                 Editor ed = it.nextEditor();
                 if (ed.getBuffer() == this) {
                     ed.setTopLine(getFirstLine());
-                    ed.setDot(getInitialDotPos());
+                    ed.setDot(pos);
                     ed.setMark(null);
                     ed.moveCaretToDotCol();
-                    ed.setUpdateFlag(REPAINT);
+                    ed.setUpdateFlag(REFRAME | REPAINT);
                 }
             }
             editor.setDefaultCursor();
