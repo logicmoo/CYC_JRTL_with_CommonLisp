@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.8 2002-11-25 02:07:25 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.9 2002-12-15 02:15:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ public class CommandInterpreter extends Buffer
     protected Position posEndOfOutput;
     protected String input;
     protected boolean stripEcho;
+    protected String shellCommand;
 
     protected CommandInterpreter()
     {

@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.17 2002-12-05 21:22:22 piso Exp $
+ * $Id: Shell.java,v 1.18 2002-12-15 02:14:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,6 @@ public class Shell extends CommandInterpreter implements Constants
     protected static final String JPTY_NOT_FOUND =
         "Unable to start shell process (jpty not found in PATH)";
 
-    protected String shellCommand;
     private Process process;
     private String command; // First token on command line.
     private boolean promptIsStderr = true;
