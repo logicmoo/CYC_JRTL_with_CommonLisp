@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.13 2003-02-11 17:32:12 piso Exp $
+ * $Id: Directory.java,v 1.14 2003-02-13 00:29:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,32 +70,29 @@ public final class Directory extends Buffer
         final String letter = "[[:alpha:]]";
 
         // Month is 2 or more letters, possibly padded on the right with spaces.
-        final String month = letter + letter + "+ *";
-
-        // Space character.
-        final String s = " ";
+        final String month = letter + letter + "+";
 
         // Year.
         final String yyyy = "[0-9][0-9][0-9][0-9]";
 
         // Day of month.
-        final String dd = "[ 0-3][0-9]";
+        final String dd = "[ 0-3][0-9][.]?";
 
-        // Month and day.
+        // Month and day (includes following space character).
         final String monthAndDay =
-            "(" + month + s + dd + "|" + dd + s + month + ")";
+            "(" + month + " *" + dd + " " + "|" + dd + " " + month + " *" + ")";
 
         // Time of day.
         final String HHMM = "[ 0-2][0-9]:[0-5][0-9]";
 
         // Time or year.
         final String timeOrYear =
-            "(" + HHMM + "|" + s + yyyy + "|" + yyyy + s + ")";
+            "(" + HHMM + "|" + " " + yyyy + "|" + yyyy + " " + ")";
 
         RESyntax syntax = new RESyntax(RESyntax.RE_SYNTAX_PERL5);
         syntax.set(RESyntax.RE_CHAR_CLASSES);
 
-        String traditional = "[0-9]+" + s + monthAndDay + s + timeOrYear + s;
+        String traditional = "[0-9]+" + " " + monthAndDay + timeOrYear + " ";
 
         // --time-style=long-iso
         // -rw-r--r--    1 peter    peter         147 2002-11-13 13:10 notes
@@ -105,12 +102,12 @@ public final class Directory extends Buffer
         final String isoMaybeYear = "(" + yyyy + "-)?";
         final String isoMonthAndDay = "[01][0-9]-[0-3][0-9]";
         final String isoMaybeTime = "(" + HHMM + ")?";
-        String iso = "[0-9]+" + s + isoMaybeYear + isoMonthAndDay + s +
+        String iso = "[0-9]+" + " " + isoMaybeYear + isoMonthAndDay + " " +
             isoMaybeTime + " *";
 
         nativeMoveToFilenameRegExp =
             new UncheckedRE("(" + traditional + ")|(" + iso + ")", 0, syntax);
-        internalMoveToFilenameRegExp = new UncheckedRE(":[0-5][0-9]" + s);
+        internalMoveToFilenameRegExp = new UncheckedRE(":[0-5][0-9]" + " ");
     }
 
     public static final RE getNativeMoveToFilenameRegExp()
