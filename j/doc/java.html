@@ -1,22 +1,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-
 <html>
-
 <head>
 <title>J User's Guide - Calling Java From Lisp</title>
 <LINK REL="stylesheet" HREF="j.css" TYPE="text/css">
 </head>
-
 <body>
-
 <a href="contents.html">Top</a>
-
 <hr>
-
 <h1>Calling Java From Lisp</h1>
-
 <hr>
-
 <p>
 Programs in j's built-in Lisp can use the following functions to instantiate
 Java classes and call Java methods:
@@ -29,7 +21,6 @@ Returns a reference to the specified Java class.
         <pre>
         (jclass "java.lang.String") =&gt;
             #&lt;JAVAOBJECT ... class java.lang.String&gt;</pre>
-<p>
 </dl>
 <a name="jconstructor">&#8226; jconstructor</a><dl><dd>
 <p>
@@ -46,10 +37,10 @@ Returns a reference to the specified constructor.
         <pre>
         (jconstructor "java.lang.StringBuffer" "int") =&gt;
             #&lt;JAVAOBJECT ... public java.lang.StringBuffer(int)&gt;</pre>
-<p></dl>
+</dl>
 <a name="jmethod">&#8226; jmethod</a><dl><dd>
 <p>
-jmethod <i>class-name method-name &rest parameter-class-names</i> =&gt; <i>method-ref</i>
+jmethod <i>class-name method-name &amp;rest parameter-class-names</i> =&gt; <i>method-ref</i>
 <p>
 Returns a reference to the specified method.
         <pre>
@@ -62,10 +53,10 @@ The parameter class names may be omitted if there is no ambiguity:
         <pre>
         (jmethod "java.lang.StringBuffer" "setLength") =&gt;
            #&lt;JAVAOBJECT ... public synchronized void java.lang.StringBuffer.setLength(int)&gt;</pre>
-<p></dl>
+</dl>
 <a name="jstatic">&#8226; jstatic</a><dl><dd>
 <p>
-jstatic <i>method-ref class-ref &rest args</i> =&gt; <i>result</i>
+jstatic <i>method-ref class-ref &amp;rest args</i> =&gt; <i>result</i>
 <p>
 Invokes a static method.
 <p>
@@ -80,19 +71,19 @@ the <i>class-ref</i> argument is ignored.
         <pre>
         (jstatic (jmethod "java.lang.System" "currentTimeMillis") nil) =&gt;
             1043330944932</pre>
-<p></dl>
+</dl>
 <a name="jnew">&#8226; jnew</a><dl><dd>
 <p>
-jnew <i>constructor &rest args</i> =&gt; <i>object-ref</i>
+jnew <i>constructor &amp;rest args</i> =&gt; <i>object-ref</i>
 <p>
 Invokes a constructor.
 <pre>
         (jnew (jconstructor "java.lang.String" "java.lang.String") "this is a test") =&gt;
             #&lt;JAVAOBJECT [java.lang.String] this is a test&gt;</pre>
-<p></dl>
+</dl>
 <a name="jcall">&#8226; jcall</a><dl><dd>
 <p>
-jcall <i>method-ref instance-ref &rest args</i> =&gt; <i>result</i>
+jcall <i>method-ref instance-ref &amp;rest args</i> =&gt; <i>result</i>
 <p>
 Invokes a method on a Java object.
 <pre>
@@ -104,7 +95,6 @@ Invokes a method on a Java object.
 
         (jcall length-method x) =&gt;
             14</pre>
-<p></dl>
+</dl>
 </body>
-
 </html>
