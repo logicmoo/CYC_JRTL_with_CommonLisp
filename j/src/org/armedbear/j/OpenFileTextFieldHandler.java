@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.42 2003-03-03 20:42:50 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.43 2003-06-09 17:54:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -303,29 +303,33 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     if (buf == null)
                         buf = new RemoteBuffer(file);
                 } else if (Editor.preferences().getBooleanProperty(Property.ENABLE_WEB)) {
-                    if (editor.getMode() instanceof WebMode) {
-                        // Current buffer is already a web buffer.
-                        buf = editor.getBuffer();
-                        Debug.assertTrue(buf instanceof WebBuffer);
-                        ((WebBuffer)buf).saveHistory(buf.getFile(),
-                            buf.getAbsoluteOffset(editor.getDot()),
-                            ((WebBuffer)buf).getContentType());
-                        // If we don't call setCache(null), go() will use the
-                        // existing cache.
-                        buf.setCache(null);
-                        ((WebBuffer)buf).go(file, 0, null);
-                    } else {
-                        // Look for existing buffer.
-                        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                            Buffer b = it.nextBuffer();
-                            if (b instanceof WebBuffer && b.getFile().equals(file)) {
-                                buf = b;
-                                break;
+                    int modeId =
+                        Editor.getModeList().getModeIdForFileName(file.getName());
+                    if (modeId < 0 || modeId == HTML_MODE) {
+                        if (editor.getMode() instanceof WebMode) {
+                            // Current buffer is already a web buffer.
+                            buf = editor.getBuffer();
+                            Debug.assertTrue(buf instanceof WebBuffer);
+                            ((WebBuffer)buf).saveHistory(buf.getFile(),
+                                                         buf.getAbsoluteOffset(editor.getDot()),
+                                                         ((WebBuffer)buf).getContentType());
+                            // If we don't call setCache(null), go() will use the
+                            // existing cache.
+                            buf.setCache(null);
+                            ((WebBuffer)buf).go(file, 0, null);
+                        } else {
+                            // Look for existing buffer.
+                            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                                Buffer b = it.nextBuffer();
+                                if (b instanceof WebBuffer && b.getFile().equals(file)) {
+                                    buf = b;
+                                    break;
+                                }
                             }
-                        }
-                        if (buf == null) {
-                            // Existing buffer not found.
-                            buf = WebBuffer.createWebBuffer(file, null, null);
+                            if (buf == null) {
+                                // Existing buffer not found.
+                                buf = WebBuffer.createWebBuffer(file, null, null);
+                            }
                         }
                     }
                 }
