@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.84 2004-05-10 13:14:21 piso Exp $
+ * $Id: LispObject.java,v 1.85 2004-05-22 17:19:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,18 @@ public class LispObject extends Lisp
     public LispClass classOf()
     {
         return BuiltInClass.CLASS_T;
+    }
+
+    public LispObject getDescription()
+    {
+        StringBuffer sb = new StringBuffer("Lisp object at #x");
+        sb.append(Integer.toHexString(System.identityHashCode(this)));
+        return new SimpleString(sb);
+    }
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        return NIL;
     }
 
     public boolean getBooleanValue()
@@ -115,6 +127,11 @@ public class LispObject extends Lisp
     }
 
     public LispObject cddr() throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.LIST));
+    }
+
+    public LispObject push(LispObject obj) throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.LIST));
     }
