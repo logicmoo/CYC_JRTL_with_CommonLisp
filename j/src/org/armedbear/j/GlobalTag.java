@@ -1,8 +1,8 @@
 /*
  * GlobalTag.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: GlobalTag.java,v 1.1.1.1 2002-09-24 16:08:47 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: GlobalTag.java,v 1.2 2004-05-21 16:50:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,24 +123,38 @@ public final class GlobalTag extends Tag
             s = s.substring(1).trim();
             // First word should be "defun" or "defvar" or some such...
             int end = 0;
-            for (int i = 0; i < s.length(); i++) {
+            final int limit = s.length();
+            for (int i = 0; i < limit; i++) {
                 char c = s.charAt(i);
                 if (c == ' ' || c == '\t') {
                     end = i;
                     break;
                 }
             }
-            String d = s.substring(0, end);
+            String definer = s.substring(0, end);
             s = s.substring(end).trim();
-            end = s.length();
-            for (int i = 0; i < end; i++) {
-                char c = s.charAt(i);
-                if (c == ' ' || c == '\t')
-                    return "(" + d + " " + s.substring(0, i) + " ...";
-                if (c == ')')
-                    return "(" + d + " " + s.substring(0, i + 1);
+            FastStringBuffer sb = new FastStringBuffer('(');
+            sb.append(definer);
+            sb.append(' ');
+            if (definer.equals("defgeneric") || definer.equals("defmethod")) {
+                sb.append(s);
+                return sb.toString();
             }
-            return "(" + d + " " + s.substring(0, end) + " ...";
+            for (int i = 0; i < limit; i++) {
+                char c = s.charAt(i);
+                if (c == ' ' || c == '\t') {
+                    sb.append(s.substring(0, i));
+                    sb.append(" ...");
+                    return sb.toString();
+                }
+                if (c == ')') {
+                    sb.append(s.substring(0, i + 1));
+                    return sb.toString();
+                }
+            }
+            sb.append(s);
+            sb.append("  ...");
+            return sb.toString();
         }
         if (name.startsWith("class "))
             return name;
