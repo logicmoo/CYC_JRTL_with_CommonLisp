@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.14 2004-07-09 07:32:21 asimon Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: java.lisp,v 1.15 2004-07-09 17:36:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,28 +32,28 @@
    (strings) and method definitions (closures).
 
    For missing methods, a dummy implementation is provided that
-   returns nothing or null depending on whether the return type is 
+   returns nothing or null depending on whether the return type is
    void or not. This is for convenience only, and a warning is issued
    for each undefined method."
   (let ((interface (ensure-jclass interface))
-	(implemented-methods
-	 (loop for m in method-names-and-defs
+        (implemented-methods
+         (loop for m in method-names-and-defs
            for i from 0
            when (evenp i)
            collect m)))
-    (loop for method across 
-      (jclass-methods interface :declared nil :public t) 
+    (loop for method across
+      (jclass-methods interface :declared nil :public t)
       for method-name = (jmethod-name method)
       with null = (make-immediate-object nil :ref)
       when (not (member method-name implemented-methods :test #'string=))
       do
       (let* ((void-p (string= (jclass-name (jmethod-return-type method)) "void"))
              (arglist (when (plusp (length (jmethod-params method))) '(&rest ignore)))
-             (def `(lambda 
+             (def `(lambda
                      ,arglist
                      ,(when arglist '(declare (ignore ignore)))
                      ,(if void-p '(values) null))))
-        (warn "Implementing dummy method ~a for interface ~a" 
+        (warn "Implementing dummy method ~a for interface ~a"
               method-name (jclass-name interface))
         (push (coerce def 'function) method-names-and-defs)
         (push method-name method-names-and-defs)))
@@ -87,9 +87,9 @@
 
 (defun jclass-superclass-p (class-1 class-2)
   "Returns T if CLASS-1 is a superclass or interface of CLASS-2"
-  (jcall (jmethod "java.lang.Class" "isAssignableFrom" "java.lang.Class") 
-	 (ensure-jclass class-1)
-	 (ensure-jclass class-2)))
+  (jcall (jmethod "java.lang.Class" "isAssignableFrom" "java.lang.Class")
+         (ensure-jclass class-1)
+         (ensure-jclass class-2)))
 
 (defun jclass-array-p (class)
   "Returns T if CLASS is an array class"
@@ -102,14 +102,14 @@
 
 (defun jarray-length (java-array)
   (jstatic "getLength" "java.lang.reflect.Array" java-array)  )
-  
+
 (defun (setf jarray-ref) (new-value java-array &rest indices)
   (apply #'jarray-set java-array new-value indices))
 
 (defun jnew-array-from-array (element-type array)
   "Returns a new Java array with base type ELEMENT-TYPE (a string or a class-ref)
    initialized from ARRAY"
-  (flet 
+  (flet
     ((row-major-to-index (dimensions n)
                          (loop for dims on dimensions
                            for dim = (car dims)
@@ -120,12 +120,12 @@
                              (setq n r))
                            finally (return (nreverse indices)))))
     (let* ((fill-pointer (when (array-has-fill-pointer-p array) (fill-pointer array)))
-	   (dimensions (if fill-pointer (list fill-pointer) (array-dimensions array)))
+           (dimensions (if fill-pointer (list fill-pointer) (array-dimensions array)))
            (jarray (apply #'jnew-array element-type dimensions)))
       (dotimes (i (if fill-pointer fill-pointer (array-total-size array)) jarray)
-	#+maybe_one_day
-	(setf (apply #'jarray-ref jarray (row-major-to-index dimensions i)) (row-major-aref array i))
-	(apply #'(setf jarray-ref) (row-major-aref array i) jarray (row-major-to-index dimensions i))))))
+        #+maybe_one_day
+        (setf (apply #'jarray-ref jarray (row-major-to-index dimensions i)) (row-major-aref array i))
+        (apply #'(setf jarray-ref) (row-major-aref array i) jarray (row-major-to-index dimensions i))))))
 
 (defun jclass-constructors (class)
   "Returns a vector of constructors for CLASS"
