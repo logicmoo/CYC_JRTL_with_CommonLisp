@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SshSession.java,v 1.13 2003-05-25 13:43:30 piso Exp $
+ * $Id: SshSession.java,v 1.14 2004-09-13 00:49:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -634,7 +634,7 @@ public final class SshSession implements Constants
 
     private int checkInitialResponse()
     {
-        String s = output.toString().trim();
+        final String s = output.toString().trim();
         String check;
         int index = s.lastIndexOf("\r\n");
         if (index >= 0) {
@@ -651,6 +651,11 @@ public final class SshSession implements Constants
         if (lower.indexOf("connection refused") >= 0)
             return NO;
         if (lower.endsWith("password:")) {
+            passwordTitle = "Password";
+            passwordPrompt = check;
+            return PASSWORD;
+        }
+        if (s.startsWith("Password:") && lower.endsWith("response:")) {
             passwordTitle = "Password";
             passwordPrompt = check;
             return PASSWORD;
