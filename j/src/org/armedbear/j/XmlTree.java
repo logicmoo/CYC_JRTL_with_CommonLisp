@@ -2,7 +2,7 @@
  * XmlTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlTree.java,v 1.5 2003-06-04 18:13:45 piso Exp $
+ * $Id: XmlTree.java,v 1.6 2003-06-06 14:55:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
-import org.xml.sax.SAXParseException;
 
 public final class XmlTree extends JTree implements Constants, NavigationComponent,
     TreeSelectionListener, MouseListener, MouseMotionListener, KeyListener
@@ -52,9 +51,6 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
     private boolean aelfred;
     private boolean xp;
     private int modificationCount = -1;
-
-    // Are we running the parser for the first time?
-    private boolean firstTime = true;
 
     public XmlTree(Editor editor, TreeModel model)
     {
@@ -108,29 +104,7 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
             {
                 parser.setReader(new StringReader(text));
                 parser.run();
-                Exception e = parser.getException();
-                if (e != null) {
-                    // An error occurred. Leave the tree as it was. Report
-                    // parser error first time only.
-                    if (firstTime) {
-                        // The exception might be a java.io.EOFException ("no
-                        // more input"), which we should ignore.
-                        if (e instanceof SAXParseException) {
-                            final SAXParseException ex = (SAXParseException) e;
-                            Runnable r = new Runnable() {
-                                public void run()
-                                {
-                                    if (editor.getBuffer() == buffer) {
-                                        XmlMode.xmlFindError(editor, ex);
-                                        editor.showMessage(ex);
-                                        editor.getDisplay().repaint();
-                                    }
-                                }
-                            };
-                            SwingUtilities.invokeLater(r);
-                        }
-                    }
-                } else {
+                if (parser.getException() == null) {
                     final TreeModel treeModel = parser.getTreeModel();
                     if (treeModel != null) {
                         setParserClassName(parser.getParserClassName());
@@ -139,14 +113,13 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
                             {
                                 setModel(treeModel);
                                 if (editor.getBuffer() == buffer)
-                                    XmlMode.xmlEnsureCurrentNodeIsVisible(editor,
+                                    XmlMode.ensureCurrentNodeIsVisible(editor,
                                         XmlTree.this);
                             }
                         };
                         SwingUtilities.invokeLater(r);
                     }
                 }
-                firstTime = false;
             }
         };
         new Thread(parseBufferRunnable).start();

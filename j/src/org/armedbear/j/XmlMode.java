@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.4 2003-06-06 00:09:05 piso Exp $
+ * $Id: XmlMode.java,v 1.5 2003-06-06 14:52:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,8 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
 
     private static final XmlMode mode = new XmlMode();
 
+    private static XmlErrorBuffer errorBuffer;
+
     private static RE tagNameRE;
     private static RE attributeNameRE;
     private static RE quotedValueRE;
@@ -58,6 +60,16 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
     public static final XmlMode getMode()
     {
         return mode;
+    }
+
+    public static final XmlErrorBuffer getErrorBuffer()
+    {
+        return errorBuffer;
+    }
+
+    public static final void setErrorBuffer(XmlErrorBuffer buf)
+    {
+        errorBuffer = buf;
     }
 
     public NavigationComponent getSidebarComponent(Editor editor)
@@ -620,7 +632,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
             if (sidebar != null) {
                 XmlTree tree = (XmlTree) sidebar.getBottomComponent();
                 if (tree != null)
-                    xmlEnsureCurrentNodeIsVisible(editor, tree);
+                    ensureCurrentNodeIsVisible(editor, tree);
             }
         }
     }
@@ -640,11 +652,10 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                     sidebar.refreshSidebar();
                     tree = (XmlTree) sidebar.getBottomComponent();
                     if (tree != null)
-                        xmlEnsureCurrentNodeIsVisible(editor, tree);
+                        ensureCurrentNodeIsVisible(editor, tree);
                     return;
                 }
             }
-
             final Buffer buffer = editor.getBuffer();
             XmlParserImpl parser = new XmlParserImpl(buffer);
             if (parser.initialize()) {
@@ -652,38 +663,22 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                 parser.setReader(new StringReader(buffer.getText()));
                 parser.run();
                 editor.setDefaultCursor();
-//                 Exception e = parser.getException();
-//                 if (e != null) {
-//                     if (e instanceof SAXParseException) {
-//                         xmlFindError(editor, (SAXParseException)e);
-//                         editor.showMessage((SAXParseException)e);
-//                     }
-//                 } else if (tree != null) {
-//                     TreeModel treeModel = parser.getTreeModel();
-//                     if (treeModel != null) {
-//                         tree.setParserClassName(parser.getParserClassName());
-//                         tree.setModel(treeModel);
-//                         Debug.assertTrue(tree.getModel() != null);
-//                         Debug.assertTrue(tree.getModel().getRoot() != null);
-//                         xmlEnsureCurrentNodeIsVisible(editor, tree);
-//                     }
-//                     editor.status("No errors");
-//                 }
                 String output = parser.getOutput();
                 // Note that with the current implementation, there will always
                 // be output...
                 if (output != null && output.length() > 0) {
-                    OutputBuffer outputBuffer =
-                        OutputBuffer.getOutputBuffer(output);
+                    errorBuffer =
+                        new XmlErrorBuffer(output);
                     Editor otherEditor = editor.getOtherEditor();
                     if (otherEditor != null) {
-                        outputBuffer.setUnsplitOnClose(
+                        errorBuffer.setUnsplitOnClose(
                             otherEditor.getBuffer().unsplitOnClose());
-                        otherEditor.makeNext(outputBuffer);
+                        otherEditor.makeNext(errorBuffer);
                     } else
-                        outputBuffer.setUnsplitOnClose(true);
-                    editor.displayInOtherWindow(outputBuffer);
-                } else {
+                        errorBuffer.setUnsplitOnClose(true);
+                    editor.displayInOtherWindow(errorBuffer);
+                }
+                if (parser.getException() == null) {
                     if (tree != null) {
                         TreeModel treeModel = parser.getTreeModel();
                         if (treeModel != null) {
@@ -691,7 +686,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                             tree.setModel(treeModel);
                             Debug.assertTrue(tree.getModel() != null);
                             Debug.assertTrue(tree.getModel().getRoot() != null);
-                            xmlEnsureCurrentNodeIsVisible(editor, tree);
+                            ensureCurrentNodeIsVisible(editor, tree);
                         }
                     }
                     editor.status("No errors");
@@ -718,16 +713,16 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                 }
                 String output = parser.getOutput();
                 if (output != null && output.length() > 0) {
-                    OutputBuffer outputBuffer =
-                        OutputBuffer.getOutputBuffer(output);
+                    errorBuffer =
+                        new XmlErrorBuffer(output);
                     Editor otherEditor = editor.getOtherEditor();
                     if (otherEditor != null) {
-                        outputBuffer.setUnsplitOnClose(
+                        errorBuffer.setUnsplitOnClose(
                             otherEditor.getBuffer().unsplitOnClose());
-                        otherEditor.makeNext(outputBuffer);
+                        otherEditor.makeNext(errorBuffer);
                     } else
-                        outputBuffer.setUnsplitOnClose(true);
-                    editor.displayInOtherWindow(outputBuffer);
+                        errorBuffer.setUnsplitOnClose(true);
+                    editor.displayInOtherWindow(errorBuffer);
                 } else
                     editor.status("No errors");
             }
@@ -754,7 +749,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    public static void xmlEnsureCurrentNodeIsVisible(Editor editor, XmlTree tree)
+    public static void ensureCurrentNodeIsVisible(Editor editor, XmlTree tree)
     {
         if (tree == null)
             return;
