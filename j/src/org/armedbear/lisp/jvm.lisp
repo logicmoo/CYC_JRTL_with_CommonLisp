@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.19 2003-11-08 18:08:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.20 2003-11-08 19:08:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -405,12 +405,12 @@
 (defun u2 (n)
   (list (ash n -8) (logand n #xff)))
 
-(defstruct instruction opcode args stack)
+(defstruct instruction opcode args stack depth)
 
 (defun inst (opcode &optional args)
   (unless (listp args)
     (setq args (list args)))
-  (make-instruction :opcode opcode :args args :stack nil))
+  (make-instruction :opcode opcode :args args :stack nil :depth nil))
 
 (defun emit (instr &rest args)
   (unless (numberp instr)
@@ -703,17 +703,45 @@
     (177 ; RETURN
      0)
     (t
-     (format t "ANALYZE-STACK unsupported opcode ~S~%"
+     (format t "STACK-EFFECT unsupported opcode ~S~%"
              (instruction-opcode instruction))
      0)))
+
+(defun walk-code (code start-index depth)
+  (do* ((i start-index (1+ i))
+        (limit (length code)))
+       ((>= i limit) depth)
+    (let ((instruction (svref code i)))
+      (when (instruction-depth instruction)
+        (return-from walk-code))
+      (setf (instruction-depth instruction) depth)
+      (setf depth (+ depth (instruction-stack instruction)))
+      (if (branch-opcode-p (instruction-opcode instruction))
+          (let ((label (car (instruction-args instruction))))
+;;             (format t "target = ~S~%" target)
+            (walk-code code (symbol-value label) depth)
+            )
+          ()))))
 
 (defun analyze-stack (code)
   (sys::require-type code 'vector)
   (dotimes (i (length code))
-    (let ((instruction (svref code i)))
+    (let* ((instruction (svref code i))
+           (opcode (instruction-opcode instruction)))
+      (when (eql opcode 202)
+        (let ((label (car (instruction-args instruction))))
+          (set label i)))
       (unless (instruction-stack instruction)
-        (setf (instruction-stack instruction)
-              (stack-effect (instruction-opcode instruction)))))))
+        (setf (instruction-stack instruction) (stack-effect opcode)))))
+  (walk-code code 0 0)
+  (let ((max-stack 0))
+    (dotimes (i (length code))
+      (let ((instruction (svref code i)))
+        (setf max-stack (max max-stack (instruction-depth instruction)))))
+;;     (format t "max-stack = ~D~%" max-stack)
+    max-stack))
+
+(defvar *max-stack*)
 
 ;; CODE is a list of INSTRUCTIONs.
 (defun code-bytes (code)
@@ -734,7 +762,7 @@
 ;;           (push branch-targets (car (instruction-args instruction))))))
 ;;     (format t "branch-targets = ~S~%" branch-targets)
 
-;;     ;; Remove labels that are never branched to.
+;;     ;; Remove labels that are not used as branch targets.
 ;;     (dotimes (i (length code))
 ;;       (let ((instruction (svref code i)))
 ;;         (when (= (instruction-opcode instruction) 202) ; LABEL
@@ -762,6 +790,9 @@
 
 ;;   (setf code (coerce code 'list))
 
+  ;; FIXME Do stack analysis here!
+  (setf *max-stack* (analyze-stack code))
+
   (let ((code (resolve-opcodes code))
         (length 0))
     ;; Pass 1: calculate label offsets and overall length.
@@ -782,9 +813,6 @@
               (setf (instruction-args instruction) (u2 offset))))
           (unless (= (instruction-opcode instruction) 202) ; LABEL
             (incf index (opcode-size (instruction-opcode instruction)))))))
-
-    ;; FIXME Do stack analysis here!
-    (analyze-stack code)
 
     ;; Expand instructions into bytes, skipping LABEL pseudo-instructions.
     (let ((bytes (make-array length))
@@ -1988,6 +2016,7 @@
       (emit-push-value)) ; leave result on stack
     (emit 'areturn)
     (setf (method-code execute-method) (code-bytes *code*))
+    (setf (method-max-stack execute-method) *max-stack*)
     (setf (method-max-locals execute-method) *max-locals*)
 
     (let* ((super
