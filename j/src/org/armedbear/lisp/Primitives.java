@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.582 2004-02-25 17:26:00 piso Exp $
+ * $Id: Primitives.java,v 1.583 2004-02-26 01:45:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1913,8 +1913,6 @@ public final class Primitives extends Lisp
             int fillPointer = -1;
             if (arg instanceof AbstractVector)
                 fillPointer = ((AbstractVector)arg).getFillPointer();
-            else if (arg instanceof DisplacedArray)
-                fillPointer = ((DisplacedArray)arg).getFillPointer();
             if (fillPointer >= 0)
                 return new Fixnum(fillPointer);
             if (arg instanceof AbstractArray)
@@ -1941,7 +1939,8 @@ public final class Primitives extends Lisp
     // ### vector-push
     // vector-push new-element vector => index-of-new-element
     private static final Primitive2 VECTOR_PUSH =
-        new Primitive2("vector-push","new-element vector") {
+        new Primitive2("vector-push","new-element vector")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
