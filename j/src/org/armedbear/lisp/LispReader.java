@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispReader.java,v 1.5 2003-02-15 16:48:16 piso Exp $
+ * $Id: LispReader.java,v 1.6 2003-02-16 20:05:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,6 +127,42 @@ public final class LispReader extends Lisp
         }
     }
 
+    public char peekCharNonWhitespace() throws LispError
+    {
+        try {
+            while (true) {
+                int ch = read();
+                if (ch < 0)
+                    throw new EndOfFileException();
+                char c = (char) ch;
+                if (c > ' ') {
+                    unread(c);
+                    return c;
+                }
+                if (c == '\n') {
+                    unread(c);
+                    return c;
+                }
+            }
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
+        }
+    }
+
+    public char readChar() throws LispError
+    {
+        try {
+            int ch = read();
+            if (ch < 0)
+                throw new EndOfFileException();
+            return (char) ch;
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
+        }
+    }
+
     private String readToken() throws LispError
     {
         while (true) {
@@ -198,7 +234,7 @@ public final class LispReader extends Lisp
             case '(':
                 return new Vector(readList());
             case '\\':
-                return readChar();
+                return _readChar();
             case '+':
             case '-':
                 return handleFeature(c);
@@ -439,7 +475,7 @@ public final class LispReader extends Lisp
     }
 
     // We've just read "#\".
-    private LispObject readChar() throws LispError
+    private LispObject _readChar() throws LispError
     {
         try {
             int ch = read();
