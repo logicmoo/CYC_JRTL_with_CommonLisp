@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.2 2004-02-12 12:11:26 piso Exp $
+ * $Id: MathFunctions.java,v 1.3 2004-02-12 12:43:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,6 +82,70 @@ public final class MathFunctions extends Lisp
     private static LispObject tan(LispObject arg) throws ConditionThrowable
     {
         return sin(arg).divideBy(cos(arg));
+    }
+
+    // ### asin
+    private static final Primitive1 ASIN = new Primitive1("asin", "number")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return asin(arg);
+        }
+    };
+
+    private static LispObject asin(LispObject arg) throws ConditionThrowable
+    {
+        if (arg instanceof Complex) {
+            LispObject im = ((Complex)arg).getImaginaryPart();
+            if (im.zerop())
+                return Complex.getInstance(asin(((Complex)arg).getRealPart()),
+                                           im);
+        }
+        LispObject result = arg.multiplyBy(arg);
+        result = Fixnum.ONE.subtract(result);
+        result = sqrt(result);
+        LispObject n = Complex.getInstance(Fixnum.ZERO, Fixnum.ONE);
+        n = n.multiplyBy(arg);
+        result = n.add(result);
+        result = log(result);
+        result = result.multiplyBy(Complex.getInstance(Fixnum.ZERO, Fixnum.MINUS_ONE));
+        if (result instanceof Complex) {
+            if (arg instanceof Complex)
+                return result;
+            LispObject im = ((Complex)result).getImaginaryPart();
+            if (im.zerop())
+                return ((Complex)result).getRealPart();
+        }
+        return result;
+    }
+
+    // ### acos
+    private static final Primitive1 ACOS = new Primitive1("acos", "number")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return acos(arg);
+        }
+    };
+
+    private static LispObject acos(LispObject arg) throws ConditionThrowable
+    {
+        if (arg instanceof Complex) {
+            LispObject im = ((Complex)arg).getImaginaryPart();
+            if (im.zerop())
+                return Complex.getInstance(acos(((Complex)arg).getRealPart()),
+                                           im);
+        }
+        LispObject result = LispFloat.PI.divideBy(Fixnum.TWO);
+        result = result.subtract(asin(arg));
+        if (result instanceof Complex) {
+            if (arg instanceof Complex)
+                return result;
+            LispObject im = ((Complex)result).getImaginaryPart();
+            if (im.zerop())
+                return ((Complex)result).getRealPart();
+        }
+        return result;
     }
 
     // ### atan
