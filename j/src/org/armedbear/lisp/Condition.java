@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.24 2004-04-24 12:33:11 piso Exp $
+ * $Id: Condition.java,v 1.25 2004-08-18 17:14:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,7 +114,7 @@ public class Condition extends StandardObject
         return super.typep(type);
     }
 
-    public String getConditionReport()
+    public String getConditionReport() throws ConditionThrowable
     {
         String s = getMessage();
         if (s != null)
@@ -125,7 +125,7 @@ public class Condition extends StandardObject
             }
             catch (Throwable t) {}
         }
-        return unreadableString(String.valueOf(typeOf()));
+        return unreadableString(typeOf().writeToString());
     }
 
     public String writeToString() throws ConditionThrowable
