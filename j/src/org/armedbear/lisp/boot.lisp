@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.33 2003-03-31 15:40:31 piso Exp $
+;;; $Id: boot.lisp,v 1.34 2003-04-01 14:40:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -139,9 +139,12 @@
 	     (if-exists nil if-exists-given)
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
-  (if (eq direction :output)
-      (%open-output-file filename)
-      (error "operation not supported")))
+  (cond ((eq direction :input)
+         (%open-input-file filename))
+        ((eq direction :output)
+         (%open-output-file filename))
+        (t
+         (error "operation not supported"))))
 
 (defun read-from-string (string &optional eof-error-p eof-value
 				&key (start 0) end preserve-whitespace)
