@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.47 2004-03-12 01:13:10 piso Exp $
+ * $Id: Stream.java,v 1.48 2004-03-12 01:37:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -265,10 +265,10 @@ public class Stream extends LispObject
 //                 return readRightParen();
 //             case ';':
 //                 return LispReader.READ_COMMENT.execute(this, c);
-            case ',':
-                return readComma();
-            case '`':
-                return readBackquote();
+//             case ',':
+//                 return readComma();
+//             case '`':
+//                 return readBackquote();
 //             case '#':
 //                 return readSharp();
             case '|':
@@ -379,7 +379,7 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject readComma() throws ConditionThrowable
+    public LispObject readComma() throws ConditionThrowable
     {
         int n = _readChar();
         if (n < 0)
@@ -397,11 +397,6 @@ public class Stream extends LispObject
                 return new Cons(Symbol.COMMA,
                                 new Cons(read(true, NIL, true), NIL));
         }
-    }
-
-    private LispObject readBackquote() throws ConditionThrowable
-    {
-        return new Cons(Symbol.BACKQUOTE, new Cons(read(true, NIL, true)));
     }
 
     public LispObject readSharp() throws ConditionThrowable
