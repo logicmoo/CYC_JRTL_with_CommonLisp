@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.592 2004-03-06 18:32:37 piso Exp $
+ * $Id: Primitives.java,v 1.593 2004-03-06 19:53:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1789,6 +1789,11 @@ public final class Primitives extends Lisp
     private static final Primitive AREF =
         new Primitive("aref", "array &rest subscripts")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             AbstractArray array = checkArray(arg);
@@ -1801,21 +1806,32 @@ public final class Primitives extends Lisp
             signal(new ProgramError(sb.toString()));
             return NIL;
         }
+
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             return first.AREF(second);
         }
+
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            if (args.length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
-            AbstractArray array = checkArray(args[0]);
-            LispObject[] subscripts = new LispObject[args.length - 1];
-            for (int i = subscripts.length; i-- > 0;)
-                subscripts[i] = args[i+1];
-            int rowMajorIndex = array.getRowMajorIndex(subscripts);
-            return array.getRowMajor(rowMajorIndex);
+            final AbstractArray array;
+            try {
+                array = checkArray(args[0]);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(args[0], Symbol.ARRAY));
+            }
+            final int[] subs = new int[args.length - 1];
+            for (int i = subs.length; i-- > 0;) {
+                try {
+                    subs[i] = ((Fixnum)args[i+1]).value;
+                }
+                catch (ClassCastException e) {
+                    return signal(new TypeError(args[i+i], Symbol.FIXNUM));
+                }
+            }
+            return array.getRowMajor(array.getRowMajorIndex(subs));
         }
     };
 
