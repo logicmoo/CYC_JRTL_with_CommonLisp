@@ -2,7 +2,7 @@
  * ExecuteCommandTextFieldHandler.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: ExecuteCommandTextFieldHandler.java,v 1.3 2003-06-13 00:37:08 piso Exp $
+ * $Id: ExecuteCommandTextFieldHandler.java,v 1.4 2003-07-03 01:24:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,9 +50,9 @@ public final class ExecuteCommandTextFieldHandler extends DefaultTextFieldHandle
             if (value != null)
                 input = value;
         }
-        editor.updateLocation();
         editor.ensureActive();
         editor.setFocusToDisplay();
+        editor.updateLocation();
         editor.executeCommand(input, true);
         editor.getDispatcher().eventHandled();
     }
