@@ -1,8 +1,8 @@
 /*
  * Debug.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Debug.java,v 1.6 2003-02-12 15:09:33 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Debug.java,v 1.7 2005-02-16 19:43:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,10 +114,17 @@ public final class Debug
             Log.debug(sb.toString());
         }
         int processCount = 0;
+        String output = null;
         if (Platform.isPlatformLinux()) {
             String[] cmdarray = {"bash", "-c",
                 "ps -o pid,pri,%cpu,rss,start,time,command"};
-            String output = Utilities.exec(cmdarray);
+            output = Utilities.exec(cmdarray);
+        } else if (Platform.isPlatformSunOS()) {
+            String[] cmdarray = {"sh", "-c",
+                "ps -efo pid,pri,pcpu,rss,time,args"};
+            output = Utilities.exec(cmdarray);
+        }
+        if (output != null) {
             FastStringReader reader = new FastStringReader(output);
             String s = reader.readLine();
             if (s != null)
