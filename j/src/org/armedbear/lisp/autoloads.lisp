@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.13 2003-09-02 16:15:56 piso Exp $
+;;; $Id: autoloads.lisp,v 1.14 2003-09-02 17:50:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,5 +73,5 @@
 (autoload 'make-string)
 (autoload 'make-pathname)
 (autoload '(floor ceiling round rem mod ftruncate ffloor fceiling fround
-            rational rationalize)
+            rational rationalize isqrt)
           "numbers.lisp")

@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.8 2003-09-02 16:15:20 piso Exp $
+;;; $Id: numbers.lisp,v 1.9 2003-09-02 17:49:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -162,3 +162,28 @@
                                fround
                                rational
                                rationalize)))
+
+
+
+;;; From discussion on comp.lang.lisp and Akira Kurihara.
+(defun isqrt (n)
+  "Returns the root of the nearest integer less than n which is a perfect
+   square."
+  (declare (type unsigned-byte n) (values unsigned-byte))
+  ;; theoretically (> n 7) ,i.e., n-len-quarter > 0
+  (if (and (fixnump n) (<= n 24))
+      (cond ((> n 15) 4)
+	    ((> n  8) 3)
+	    ((> n  3) 2)
+	    ((> n  0) 1)
+	    (t 0))
+      (let* ((n-len-quarter (ash (integer-length n) -2))
+	     (n-half (ash n (- (ash n-len-quarter 1))))
+	     (n-half-isqrt (isqrt n-half))
+	     (init-value (ash (1+ n-half-isqrt) n-len-quarter)))
+	(loop
+	  (let ((iterated-value
+		 (ash (+ init-value (truncate n init-value)) -1)))
+	    (unless (< iterated-value init-value)
+	      (return init-value))
+	    (setq init-value iterated-value))))))
