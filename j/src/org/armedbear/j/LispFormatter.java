@@ -1,8 +1,8 @@
 /*
  * LispFormatter.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispFormatter.java,v 1.33 2003-10-10 18:57:06 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: LispFormatter.java,v 1.34 2004-04-11 18:36:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,12 +79,11 @@ public final class LispFormatter extends Formatter
     private void endToken(String text, int tokenEnd, int state)
     {
         if (tokenEnd - tokenBegin > 0) {
-            int format = -1;
+            int format = LISP_FORMAT_TEXT;
             switch (state) {
                 case STATE_NEUTRAL:
                 case STATE_ARGLIST:
                 case STATE_QUOTED_LIST:
-                    format = LISP_FORMAT_TEXT;
                     break;
                 case STATE_QUOTE:
                     format = LISP_FORMAT_STRING;
@@ -95,18 +94,14 @@ public final class LispFormatter extends Formatter
                     break;
                 case STATE_CAR: {
                     String token = text.substring(tokenBegin, tokenEnd).trim();
-                    if (isDefiner(token)) {
-                        if (isPositionFunctional(text, tokenBegin, currentLine))
-                            format = LISP_FORMAT_DEFUN;
-                        else
-                            format = LISP_FORMAT_TEXT;
-                    } else if (isKeyword(token)) {
-                        if (isPositionFunctional(text, tokenBegin, currentLine))
-                            format = LISP_FORMAT_KEYWORD;
-                        else
-                            format = LISP_FORMAT_TEXT;
-                    } else
-                        format = LISP_FORMAT_TEXT;
+                    if (isKeyword(token)) {
+                        if (isPositionFunctional(text, tokenBegin, currentLine)) {
+                            if (isDefiner(token))
+                                format = LISP_FORMAT_DEFUN;
+                            else
+                                format = LISP_FORMAT_KEYWORD;
+                        }
+                    }
                     break;
                 }
                 case STATE_NAME:
@@ -114,7 +109,6 @@ public final class LispFormatter extends Formatter
                     break;
                 case STATE_DEFINITION:
                 case STATE_IDENTIFIER:
-                    format = LISP_FORMAT_TEXT;
                     break;
                 case STATE_SECONDARY_KEYWORD:
                     format = LISP_FORMAT_SECONDARY_KEYWORD;
@@ -128,27 +122,26 @@ public final class LispFormatter extends Formatter
                 case STATE_PUNCTUATION:
                     format = LISP_FORMAT_PUNCTUATION;
             }
-            if (format < 0) {
-                Log.debug("endToken unhandled case state = " + state);
-                format = LISP_FORMAT_TEXT;
-            }
             addSegment(text, tokenBegin, tokenEnd, format);
             tokenBegin = tokenEnd;
         }
     }
 
-    // Don't include DEFCONSTANT, DEFPARAMETER or DEFVAR!
-    private static final String[] definers = new String[] {
-        "defclass", "defgeneric", "define-condition", "defmacro", "defmethod",
-        "defstruct", "deftype", "defun"
-    };
-
     private static final boolean isDefiner(String s)
     {
-        if (s.length() >= 5 && s.startsWith("def"))
-            if (Utilities.isOneOf(s, definers))
+        if (s.length() >= 5 && s.startsWith("def")) {
+            String translated = LispMode.translateDefiner(s);
+            if (translated != null) {
+                // Exclude DEFCONSTANT, DEFPARAMETER, DEFVAR.
+                if (translated.equals("defconstant"))
+                    return false;
+                if (translated.equals("defparameter"))
+                    return false;
+                if (translated.equals("defvar"))
+                    return false;
                 return true;
-
+            }
+        }
         return false;
     }
 
