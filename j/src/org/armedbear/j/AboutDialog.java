@@ -1,8 +1,8 @@
 /*
  * AboutDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: AboutDialog.java,v 1.1.1.1 2002-09-24 16:07:49 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: AboutDialog.java,v 1.2 2003-01-08 16:58:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public class AboutDialog extends AbstractDialog
         if (snapshotInformation != null)
             addStaticText(panel, snapshotInformation);
         addStaticText(panel,
-            "Copyright (C) 1998-2002 Peter Graves (peter@armedbear.org)");
+            "Copyright (C) 1998-2003 Peter Graves (peter@armedbear.org)");
         addStaticText(panel,
             "J is free software; see the source for copying conditions.");
         addStaticText(panel, "There is ABSOLUTELY NO WARRANTY.");
