@@ -1,8 +1,8 @@
 /*
  * Primitives.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.727 2005-01-19 01:46:16 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: Primitives.java,v 1.728 2005-01-31 17:19:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -757,7 +757,7 @@ public final class Primitives extends Lisp
     };
 
     // ### fboundp
-    private static final Primitive FBOUNDP = new Primitive("fboundp","name")
+    private static final Primitive FBOUNDP = new Primitive("fboundp", "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -774,7 +774,8 @@ public final class Primitives extends Lisp
     };
 
     // ### fmakunbound
-    private static final Primitive FMAKUNBOUND = new Primitive("fmakunbound","name")
+    private static final Primitive FMAKUNBOUND =
+        new Primitive("fmakunbound", "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -789,7 +790,8 @@ public final class Primitives extends Lisp
     };
 
     // ### remprop
-    private static final Primitive REMPROP = new Primitive("remprop","symbol indicator")
+    private static final Primitive REMPROP =
+        new Primitive("remprop", "symbol indicator")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -1433,6 +1435,19 @@ public final class Primitives extends Lisp
     private static final Symbol _SIMPLE_FORMAT_FUNCTION_ =
         internSpecial("*SIMPLE-FORMAT-FUNCTION*", PACKAGE_SYS, _FORMAT);
 
+    private static void checkRedefinition(LispObject arg)
+        throws ConditionThrowable
+    {
+        if (_WARN_ON_REDEFINITION_.symbolValue() != NIL) {
+            if (arg instanceof Symbol) {
+                LispObject oldDefinition = arg.getSymbolFunction();
+                if (oldDefinition != null && !(oldDefinition instanceof Autoload))
+                    Symbol.STYLE_WARN.execute(new SimpleString("redefining ~S"),
+                                              arg);
+            }
+        }
+    }
+
     // ### %defun
     // %defun name arglist body &optional environment => name
     private static final Primitive _DEFUN =
@@ -1468,6 +1483,7 @@ public final class Primitives extends Lisp
             } else
                 return signal(new TypeError(first.writeToString() +
                                             " is not a valid function name."));
+            checkRedefinition(first);
             LispObject arglist = checkList(second);
             LispObject body = checkList(third);
             if (body.car() instanceof AbstractString && body.cdr() != NIL) {
@@ -2887,6 +2903,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (first instanceof Symbol) {
+                checkRedefinition(first);
                 Symbol symbol = (Symbol) first;
                 symbol.setSymbolFunction(second);
                 LispObject source = Load._FASL_SOURCE_.symbolValue();
@@ -2898,6 +2915,7 @@ public final class Primitives extends Lisp
                 }
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
                 // SETF function
+                checkRedefinition(first);
                 Symbol symbol = checkSymbol(first.cadr());
                 put(symbol, Symbol._SETF_FUNCTION, second);
             } else
