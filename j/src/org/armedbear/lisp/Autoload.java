@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.212 2005-02-10 12:52:43 piso Exp $
+ * $Id: Autoload.java,v 1.213 2005-02-12 03:26:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,7 +290,6 @@ public class Autoload extends Function
         autoload("cosh", "MathFunctions");
         autoload("delete-file", "delete_file");
         autoload("delete-package", "PackageFunctions");
-        autoload("describe", "describe");
         autoload("echo-stream-input-stream", "EchoStream");
         autoload("echo-stream-output-stream", "EchoStream");
         autoload("exp", "MathFunctions");
