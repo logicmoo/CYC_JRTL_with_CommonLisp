@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.112 2004-02-27 14:49:50 piso Exp $
+;;; $Id: autoloads.lisp,v 1.113 2004-02-28 18:40:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@
             decode-float conjugate phase cis)
           "numbers.lisp")
 (autoload 'boole)
-(autoload '(byte byte-size byte-position ldb ldb-test dpb) "ldb.lisp")
+(autoload '(byte byte-size byte-position %ldb ldb ldb-test dpb) "ldb.lisp")
 (autoload 'lcm)
 (autoload '(apropos apropos-list) "apropos.lisp")
 (autoload '(write-string write-line) "write-string.lisp")

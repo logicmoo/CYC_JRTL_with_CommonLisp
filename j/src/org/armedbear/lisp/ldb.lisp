@@ -1,7 +1,7 @@
 ;;; ldb.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: ldb.lisp,v 1.2 2003-09-12 14:16:44 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: ldb.lisp,v 1.3 2004-02-28 18:40:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,6 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+(in-package "SYSTEM")
+
 (defun byte (size position)
   (cons size position))
 
@@ -25,6 +27,11 @@
 
 (defun byte-position (bytespec)
   (cdr bytespec))
+
+;; For the LDB compiler macro.
+(defun %ldb (size position integer)
+  (logand (ash integer (- position))
+	  (1- (ash 1 size))))
 
 (defun ldb (bytespec integer)
   (logand (ash integer (- (byte-position bytespec)))
