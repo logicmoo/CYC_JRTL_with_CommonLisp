@@ -1,5 +1,5 @@
 # Kodiak 4/14/2000-11/1/2000
-# $Id: Kodiak,v 1.6 2002-12-29 16:46:14 piso Exp $
+# $Id: Kodiak,v 1.7 2002-12-29 16:50:26 piso Exp $
 
 color.text                              = 0 0 0
 color.background                        = 255 255 224
@@ -35,7 +35,7 @@ PerlMode.color.list                     = 0 51 51
 LispMode.color.substitution             = 153 0 153
 LispMode.color.punctuation              = 102 102 102
 LispMode.color.parenthesis              = 102 102 102
-LispMode.color.secondaryKeyword         = 0 103 153
+LispMode.color.secondaryKeyword         = 0 102 153
 
 TclMode.color.brace                     = 153 0 51
 TclMode.style.brace                     = 1
