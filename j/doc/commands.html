@@ -349,6 +349,7 @@
     <li><a href="commands.html#wordRight">wordRight</a></li>
     <li><a href="commands.html#wrapComment">wrapComment</a></li>
     <li><a href="commands.html#wrapParagraph">wrapParagraph</a></li>
+    <li><a href="commands.html#wrapParagraphsInRegion">wrapParagraphsInRegion</a></li>
     <li><a href="commands.html#wrapRegion">wrapRegion</a></li>
     <li><a href="commands.html#writeGlobalKeyMap">writeGlobalKeyMap</a></li>
     <li><a href="commands.html#writeLocalKeyMap">writeLocalKeyMap</a></li>
@@ -4605,7 +4606,7 @@ setting that may be inspected and modified in the Properties dialog (see
 <a href="#properties">properties</a>). You can set global and mode-specific
 defaults for <a href="preferences.html#wrapCol">wrapCol</a> in your
 <a href="preferences.html">preferences</a> file.
-<br><br>
+<p>
 A paragraph is basically defined as a block of contiguous lines with blank
 lines before and after it. To make the definition a bit more flexible,
 a line starting with &lt;p&gt;, &lt;br&gt; or &lt;pre&gt; is recognized as the
@@ -4613,14 +4614,27 @@ first line of a paragraph, even if the line before it is not blank. Similarly,
 a line ending with &lt;p&gt;, &lt;/p&gt;, &lt;br&gt; or
 &lt;/pre&gt; is recognized as the last line of a paragraph, even if the line after it is not
 blank.
-<br><br>
+<p>
 This function does not move the caret, so you can reformat the
 paragraph and immediately continue typing right where you left off.
-<br><br>
+<p>
 <b>Default key mapping:</b> F12
-<br><br>
+<p>
 <b>See also:</b> <a href="#unwrapParagraph">unwrapParagraph</a>,
 <a href="#wrapComment">wrapComment</a>, <a href="#wrapRegion">wrapRegion</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="wrapParagraphsInRegion">wrapParagraphsInRegion</a><dl><dd>
+<p>
+Calls <a href="#wrapParagraph">wrapParagraph</a> on all the paragraphs in the
+selected region (or on all the paragraphs in the buffer if no region is
+selected).
+<p>
+<b>Default key mapping:</b> None
+<br><br>
+<b>See also:</b> <a href="#wrapParagraph">wrapParagraph</a>,
+<a href="#wrapRegion">wrapRegion</a>
 <br><br>
 </dl><!--<hr>-->
 
