@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.74 2004-09-19 14:14:33 piso Exp $
+ * $Id: LispShell.java,v 1.75 2004-09-20 15:16:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -554,14 +554,15 @@ public class LispShell extends Shell
                 return;
         final Editor editor = Editor.currentEditor();
         // Look for an existing LispShell buffer with the same shell command.
-        Buffer buf = findLisp(shellCommand);
+        Buffer buf = findLisp(title);
         if (buf == null) {
             editor.setWaitCursor();
             buf = createLispShell(shellCommand, title, startSlime);
             if (buf != null)
                 buf.setBusy(true);
             editor.setDefaultCursor();
-        }
+        } else
+            startSlime = false; // Already started.
         if (buf != null) {
             editor.makeNext(buf);
             Buffer b = editor.getBuffer();
@@ -658,15 +659,14 @@ public class LispShell extends Shell
         return sb.toString();
     }
 
-    public static CommandInterpreter findLisp(String shellCommand)
+    public static CommandInterpreter findLisp(String title)
     {
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
             Buffer b = it.nextBuffer();
             if (b instanceof CommandInterpreter) {
                 CommandInterpreter comint = (CommandInterpreter) b;
                 if (comint.isLisp()) {
-                    if (shellCommand == null ||
-                        shellCommand.equals(comint.getShellCommand()))
+                    if (title == null || title.equals(comint.getTitle()))
                         return comint;
                 }
             }
