@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.465 2003-10-08 17:26:49 piso Exp $
+ * $Id: Primitives.java,v 1.466 2003-10-08 18:09:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4147,6 +4147,10 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
+            if (first instanceof AbstractVector) {
+                ((AbstractVector)first).set(Fixnum.getValue(second), third);
+                return third;
+            }
             if (first instanceof Cons) {
                 int index = Fixnum.getValue(second);
                 if (index < 0)
@@ -4163,11 +4167,8 @@ public final class Primitives extends Module
                         throw new ConditionThrowable(new TypeError());
                     ++i;
                 }
-            } else if (first instanceof AbstractVector) {
-                ((AbstractVector)first).set(Fixnum.getValue(second), third);
-                return third;
-            } else
-                throw new ConditionThrowable(new TypeError(first, "sequence"));
+            }
+            throw new ConditionThrowable(new TypeError(first, "sequence"));
         }
     };
 
