@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.283 2003-07-07 02:22:08 piso Exp $
+ * $Id: Primitives.java,v 1.284 2003-07-07 02:45:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2635,7 +2635,7 @@ public final class Primitives extends Module
     };
 
     // ### make-package
-    // make-package &key nicknames use => package
+    // make-package package-name &key nicknames use => package
     private static final Primitive MAKE_PACKAGE =
         new Primitive("make-package") {
         public LispObject execute(LispObject[] args) throws LispError
@@ -2646,13 +2646,7 @@ public final class Primitives extends Module
                 if ((args.length - 1) % 2 != 0)
                     throw new ProgramError("odd number of keyword arguments");
             LispObject arg = args[0];
-            String packageName = null;
-            if (arg instanceof LispString) {
-                packageName = ((LispString)arg).getValue();
-            } else if (arg instanceof Symbol) {
-                packageName = arg.getName();
-            } else
-                throw new TypeError(arg, "string");
+            String packageName = javaString(arg);
             Package pkg =
                 Packages.findPackage(packageName);
             if (pkg != null)
@@ -2672,6 +2666,9 @@ public final class Primitives extends Module
                     nicknames = value;
                 else if (keyword == Keyword.USE)
                     use = value;
+                else
+                    throw new ProgramError("unrecognized keyword argument " +
+                                           keyword);
             }
 
             if (nicknames != null) {
