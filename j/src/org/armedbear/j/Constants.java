@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: Constants.java,v 1.2 2002-10-14 23:41:57 piso Exp $
+ * $Id: Constants.java,v 1.3 2002-10-15 00:59:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,24 +178,27 @@ public interface Constants
     int RESPONSE_CANCEL     = 4;
 
     // States for Formatter.parseBuffer(). May be stored in the line flags.
-    int STATE_NEUTRAL      =  0;
-    int STATE_COMMENT      =  1;
-    int STATE_QUOTE        =  2;
-    int STATE_SINGLEQUOTE  =  3;
-    int STATE_IDENTIFIER   =  4;
-    int STATE_TAG          =  5;
-    int STATE_SCRIPT       =  6;
-    int STATE_SCRIPT_TAG   =  7;
-    int STATE_HTML_COMMENT =  8;
-    int STATE_OPERATOR     =  9;
-    int STATE_BRACE        = 10;
-    int STATE_NUMBER       = 11;
-    int STATE_HEXNUMBER    = 12;
-    int STATE_PREPROCESSOR = 13;
-    int STATE_DISABLED     = 14;
-    int STATE_FUNCTION     = 15;
+    int STATE_NEUTRAL         =  0;
+    int STATE_COMMENT         =  1;
+    int STATE_QUOTE           =  2;
+    int STATE_SINGLEQUOTE     =  3;
+    int STATE_IDENTIFIER      =  4;
+    int STATE_TAG             =  5;
+    int STATE_SCRIPT          =  6;
+    int STATE_SCRIPT_TAG      =  7;
+    int STATE_HTML_COMMENT    =  8;
+    int STATE_OPERATOR        =  9;
+    int STATE_BRACE           = 10;
+    int STATE_NUMBER          = 11;
+    int STATE_HEXNUMBER       = 12;
+    int STATE_PREPROCESSOR    = 13;
+    int STATE_DISABLED        = 14;
+    int STATE_FUNCTION        = 15;
+    int STATE_INPUT           = 16;
+    int STATE_PROMPT          = 17;
+    int STATE_PASSWORD_PROMPT = 18;
 
-    int STATE_LAST         = 15;
+    int STATE_LAST            = 18;
 
     String DEFAULT_SHELL_PROMPT_PATTERN = "^[^#$%>]*[#$%>] *|^: *";
 }
