@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.90 2003-10-14 16:02:57 piso Exp $
+ * $Id: Autoload.java,v 1.91 2003-10-16 02:00:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,6 +207,7 @@ public class Autoload extends Function
         autoload("logandc1", "logandc1");
         autoload("logandc2", "logandc2");
         autoload("logbitp", "logbitp");
+        autoload("logcount", "logcount");
         autoload("logeqv", "logeqv");
         autoload("logior", "logior");
         autoload("lognand", "lognand");
