@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.96 2004-04-01 00:38:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.97 2004-04-01 01:57:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -647,7 +647,7 @@
 
 (defun maybe-emit-clear-values (form)
   (unless (single-valued-p form)
-    (format t "Not single-valued: ~S~%" form)
+;;     (format t "Not single-valued: ~S~%" form)
     (emit-clear-values)))
 
 (defun emit-invoke-method (method-name)
@@ -2080,7 +2080,7 @@
     (setf (fill-pointer *tags*) saved-fp))
   (unless for-effect
     ;; TAGBODY returns NIL.
-    (format t "COMPILE-TAGBODY calling EMIT-CLEAR-VALUES~%")
+;;     (format t "COMPILE-TAGBODY calling EMIT-CLEAR-VALUES~%")
     (emit-clear-values)
     (emit-push-nil)
     (emit-store-value)))
