@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.102 2003-03-09 03:39:56 piso Exp $
+ * $Id: Primitives.java,v 1.103 2003-03-09 17:36:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3910,6 +3910,63 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws LispError
         {
             return new Fixnum(arg.getCallCount());
+        }
+    };
+
+    // ### get-dispatch-macro-character
+    // get-dispatch-macro-character disp-char sub-char &optional readtable
+    // => function
+    private static final Primitive GET_DISPATCH_MACRO_CHARACTER =
+        new Primitive("get-dispatch-macro-character") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 2 || args.length > 3)
+                throw new WrongNumberOfArgumentsException(this);
+            char dispChar = LispCharacter.getValue(args[0]);
+            char subChar = LispCharacter.getValue(args[1]);
+            Readtable readtable;
+            if (args.length == 3)
+                readtable = checkReadtable(args[2]);
+            else
+                readtable = getCurrentReadtable();
+            return readtable.getDispatchMacroCharacter(dispChar, subChar);
+        }
+    };
+
+    // ### set-dispatch-macro-character
+    // set-dispatch-macro-character disp-char sub-char new-function &optional readtable
+    // => t
+    private static final Primitive SET_DISPATCH_MACRO_CHARACTER =
+        new Primitive("set-dispatch-macro-character") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 3 || args.length > 4)
+                throw new WrongNumberOfArgumentsException(this);
+            char dispChar = LispCharacter.getValue(args[0]);
+            char subChar = LispCharacter.getValue(args[1]);
+            LispObject function = args[2];
+            Readtable readtable;
+            if (args.length == 4)
+                readtable = checkReadtable(args[3]);
+            else
+                readtable = getCurrentReadtable();
+            return readtable.setDispatchMacroCharacter(dispChar, subChar, function);
+        }
+    };
+
+    // read &optional input-stream eof-error-p eof-value recursive-p => object
+    private static final Primitive READ = new Primitive("read") {
+        public LispObject execute(LispObject[] args) throws Condition
+        {
+            int length = args.length;
+            if (length > 4)
+                throw new WrongNumberOfArgumentsException(this);
+            CharacterInputStream stream =
+                length > 0 ? checkInputStream(args[0]) : getStandardInput();
+            boolean eofError = length > 1 ? (args[1] != NIL) : true;
+            LispObject eofValue = length > 2 ? args[2] : NIL;
+            boolean recursive = length > 3 ? (args[3] != NIL) : false;
+            return stream.read(eofError, eofValue, recursive);
         }
     };
 
