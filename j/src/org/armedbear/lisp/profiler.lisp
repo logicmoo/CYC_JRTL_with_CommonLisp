@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.4 2003-05-27 19:08:26 piso Exp $
+;;; $Id: profiler.lisp,v 1.5 2003-06-02 14:45:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,3 +39,6 @@
 
 (defun show-call-count-for-symbol (sym)
   (format t "~A ~A~%" sym (%call-count (fdefinition sym))))
+
+(defmacro profile (&rest forms)
+  `(progn (start-profiler) ,@forms (stop-profiler)))
