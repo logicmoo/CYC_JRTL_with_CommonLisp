@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.328 2003-08-15 13:10:33 piso Exp $
+ * $Id: Primitives.java,v 1.329 2003-08-15 13:26:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -738,17 +738,14 @@ public final class Primitives extends Module
             throws LispError
         {
             CharacterOutputStream out;
-            try {
+            if (second instanceof CharacterOutputStream)
                 out = (CharacterOutputStream) second;
-            }
-            catch (ClassCastException e) {
-                if (second == T)
-                    out = getTerminalIO().getOutputStream();
-                else if (second == NIL)
-                    out = getStandardOutput();
-                else
-                    throw new TypeError(second, "output stream");
-            }
+            else if (second == T)
+                out = getTerminalIO().getOutputStream();
+            else if (second == NIL)
+                out = getStandardOutput();
+            else
+                throw new TypeError(second, "output stream");
             out.prin1(first);
             return first;
         }
