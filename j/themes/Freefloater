@@ -1,6 +1,6 @@
 # Freefloater
 # Mikol Graves
-# $Id: Freefloater,v 1.1.1.1 2002-09-24 16:10:25 piso Exp $
+# $Id: Freefloater,v 1.2 2002-10-05 00:09:12 piso Exp $
 
 color.background                        =  51  77 102
 color.disabled                          = 102 128 153
@@ -84,6 +84,7 @@ PHPMode.color.tag                       = 255 204   0
 PropertiesMode.color.section            = 255 204   0
 
 WebMode.color.link                      = 255 204   0
+WebMode.color.headerValue               = 255 204   0
 
 XmlMode.color.attribute                 = 179 204 204
 XmlMode.color.comment                   = 102 128 153
@@ -125,6 +126,7 @@ MessageMode.style.string                = 0
 
 PropertiesMode.style.section            = 0
 
+WebMode.style.headerValue               = 0
 WebMode.style.link                      = 0
 
 XmlMode.style.delimiter                 = 0
