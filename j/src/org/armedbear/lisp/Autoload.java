@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.166 2004-02-27 17:20:59 piso Exp $
+ * $Id: Autoload.java,v 1.167 2004-02-27 17:50:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,6 +277,8 @@ public class Autoload extends Function
         autoload("logorc2", "logorc2");
         autoload("logtest", "logtest");
         autoload("logxor", "logxor");
+        autoload("long-site-name", "SiteName");
+        autoload("machine-instance", "SiteName");
         autoload("machine-type", "machine_type");
         autoload("machine-version", "machine_version");
         autoload("make-broadcast-stream", "BroadcastStream");
@@ -300,6 +302,7 @@ public class Autoload extends Function
         autoload("room", "room");
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
+        autoload("short-site-name", "SiteName");
         autoload("simple-string-p", "StringFunctions");
         autoload("sin", "MathFunctions");
         autoload("sinh", "MathFunctions");
