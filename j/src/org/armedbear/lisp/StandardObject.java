@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.10 2003-11-02 00:27:09 piso Exp $
+ * $Id: StandardObject.java,v 1.11 2003-12-11 19:15:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,23 +23,24 @@ package org.armedbear.lisp;
 
 public class StandardObject extends LispObject
 {
-    // Slots.
-    private LispClass cls;
+    private Layout layout;
     private LispObject slots; // A simple vector.
 
     protected StandardObject()
     {
+        layout = new Layout(BuiltInClass.STANDARD_OBJECT, Fixnum.ZERO);
     }
 
     protected StandardObject(LispClass cls, LispObject slots)
     {
-        this.cls = cls;
+        layout = cls.getLayout();
+        Debug.assertTrue(layout != null);
         this.slots = slots;
     }
 
     public final LispClass getLispClass()
     {
-        return cls;
+        return layout.getLispClass();
     }
 
     public final LispObject getSlots()
@@ -49,12 +50,12 @@ public class StandardObject extends LispObject
 
     public LispObject typeOf()
     {
-        return cls != null ? cls.getSymbol() : Symbol.STANDARD_OBJECT;
+        return layout.getLispClass().getSymbol();
     }
 
     public LispClass classOf()
     {
-        return cls != null ? cls : BuiltInClass.STANDARD_OBJECT;
+        return layout.getLispClass();
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
@@ -63,6 +64,7 @@ public class StandardObject extends LispObject
             return T;
         if (type == BuiltInClass.STANDARD_OBJECT)
             return T;
+        LispClass cls = layout != null ? layout.getLispClass() : null;
         if (cls != null) {
             if (type == cls)
                 return T;
@@ -83,6 +85,7 @@ public class StandardObject extends LispObject
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#<");
+        LispClass cls = layout.getLispClass();
         if (cls != null)
             sb.append(cls.getSymbol().getName());
         else
@@ -93,6 +96,40 @@ public class StandardObject extends LispObject
         return sb.toString();
     }
 
+    // ### std-instance-layout
+    private static final Primitive1 STD_INSTANCE_LAYOUT =
+        new Primitive1("std-instance-layout", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof StandardObject)
+                return ((StandardObject)arg).layout;
+            throw new ConditionThrowable(new TypeError(arg, "standard object"));
+        }
+    };
+
+    // ### %set-std-instance-layout
+    private static final Primitive2 _SET_STD_INSTANCE_LAYOUT =
+        new Primitive2("%set-std-instance-layout", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((StandardObject)first).layout = (Layout) second;
+                return second;
+            }
+            catch (ClassCastException e) {
+                if (!(first instanceof StandardObject))
+                    throw new ConditionThrowable(new TypeError(first, "standard object"));
+                if (!(second instanceof Layout))
+                    throw new ConditionThrowable(new TypeError(second, "layout"));
+                // Not reached.
+                return NIL;
+            }
+        }
+    };
+
     // ### std-instance-class
     private static final Primitive1 STD_INSTANCE_CLASS =
         new Primitive1("std-instance-class", PACKAGE_SYS, false)
@@ -100,23 +137,8 @@ public class StandardObject extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof StandardObject)
-                return ((StandardObject)arg).cls;
+                return ((StandardObject)arg).layout.getLispClass();
             throw new ConditionThrowable(new TypeError(arg, "standard object"));
-        }
-    };
-
-    // ### %set-std-instance-class
-    private static final Primitive2 _SET_STD_INSTANCE_CLASS =
-        new Primitive2("%set-std-instance-class", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            if (first instanceof StandardObject) {
-                ((StandardObject)first).cls = (LispClass) second;
-                return second;
-            }
-            throw new ConditionThrowable(new TypeError(first, "standard object"));
         }
     };
 
