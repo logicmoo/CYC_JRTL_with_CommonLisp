@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.8 2003-11-14 17:55:35 piso Exp $
+;;; $Id: profiler.lisp,v 1.9 2003-11-14 18:02:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,7 +62,6 @@
   "Starts the profiler.
   :TYPE may be either :TIME (statistical sampling) or :COUNT-ONLY (exact call
   counts)."
-  (format t "start-profiler type = ~S~%" type)
   (unless type
     (setf type :time))
   (unless (memq type '(:time :count-only))
