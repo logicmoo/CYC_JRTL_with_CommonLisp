@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: signal.lisp,v 1.9 2004-05-26 11:41:31 piso Exp $
+;;; $Id: signal.lisp,v 1.10 2004-05-29 19:01:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,9 +35,9 @@
     (let ((old-bos *break-on-signals*)
 	  (*break-on-signals* nil))
       (when (typep condition old-bos)
-        (setf *saved-backtrace* (backtrace-as-list))
-	(break "~A~%BREAK called because of *BREAK-ON-SIGNALS* (now rebound to NIL)."
-	       condition)))
+        (let ((*saved-backtrace* (backtrace-as-list)))
+          (break "~A~%BREAK called because of *BREAK-ON-SIGNALS* (now rebound to NIL)."
+                 condition))))
     (loop
       (unless *handler-clusters*
 	(return))
@@ -54,8 +54,8 @@
                    (internal-debug)
                    (quit)))
               (t
-               (setf *saved-backtrace* (backtrace-as-list))
-               (invoke-debugger condition)))))
+               (let ((*saved-backtrace* (backtrace-as-list)))
+                 (invoke-debugger condition))))))
     nil))
 
 ;; COERCE-TO-CONDITION is going to be redefined in clos.lisp, so we define it
