@@ -1554,16 +1554,15 @@ the search will examine <code>.c</code> files in the current directory and
 <p>
 The search is case-insensitive if the "Ignore case" checkbox is checked.
 <p>
-If the "Whole words only" checkbox is checked, a match will only be returned if
-it is both preceded and followed by a non-word character (i.e. a character not
-legal in a Java identifier).
+When the "Whole words only" checkbox is checked, a match is returned only if it
+is both preceded and followed by a non-word character (i.e. a character not
+legal in an identifier in the specified mode).
 <p>
-If the "Regular expression" checkbox is checked, the pattern will be
-interpreted as a <a href="regexp.html">regular expression</a> rather than a
-simple string.
+If the "Regular expression" checkbox is checked, the pattern is interpreted as
+a <a href="regexp.html">regular expression</a> rather than as a simple string.
 <p>
-If the "Include subdirectories" checkbox is checked, the search will recurse
-into any subdirectories of directories in the file specification. For example,
+If the "Include subdirectories" checkbox is checked, the search examines files
+in any subdirectories of directories in the file specification. For example,
 if the file specification is <code>/usr/src/linux/*.c</code>, the search will
 examine <code>.c</code> files in <code>/usr/src/linux</code> and all of its
 subdirectories.
