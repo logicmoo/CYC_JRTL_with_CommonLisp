@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.64 2003-12-27 01:19:20 piso Exp $
+ * $Id: Closure.java,v 1.65 2004-01-01 01:33:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -676,8 +676,8 @@ public class Closure extends Function
                         if (unrecognizedKeyword != null) {
                             if (!allowOtherKeys &&
                                 (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
-                                signal(new ProgramError("unrecognized keyword argument " +
-                                                        unrecognizedKeyword));
+                                signal(new ProgramError("Unrecognized keyword argument " +
+                                                        unrecognizedKeyword + "."));
                         }
                     }
                 }
