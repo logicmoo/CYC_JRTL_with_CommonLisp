@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.50 2003-05-12 03:26:41 piso Exp $
+ * $Id: Editor.java,v 1.51 2003-05-13 17:03:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,8 +186,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     static boolean isMenuSelected = false;
 
     DirectoryTree localDirectoryTree;
-
-    private JPopupMenu popup;
 
     private static SystemSelection systemSelection;
 
@@ -3324,6 +3322,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
     }
 
+    private JPopupMenu popup;
+
     public void mouseShowContextMenu()
     {
         AWTEvent e = dispatcher.getLastEvent();
@@ -3349,6 +3349,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public final JPopupMenu getPopup()
     {
         return popup;
+    }
+
+    public final void setPopup(JPopupMenu popup)
+    {
+        this.popup = popup;
     }
 
     public void killPopup()
@@ -4439,8 +4444,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
 
         if (popup != null) {
-            killPopup();
-            return;
+            if (popup.isVisible()) {
+                killPopup();
+                return;
+            }
+            popup = null;
+            // We haven't really done anything yet. Fall through...
         }
 
         if (lastCommand == COMMAND_EXPAND) {
