@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.12 2003-05-30 18:59:13 piso Exp $
+;;; $Id: setf.lisp,v 1.13 2003-06-02 16:57:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,15 +24,6 @@
 (defun %rplaca (x val) (rplaca x val) val)
 
 (defun %rplacd (x val) (rplacd x val) val)
-
-(defun %setnth (n list newval)
-  (do ((count n (1- count))
-       (list list (cdr list)))
-    ((endp list)
-     (error "~A is too large an index for SETF of NTH" n))
-    (when (<= count 0)
-      (rplaca list newval)
-      (return newval))))
 
 (defmacro setf (&rest args)
   (let ((n-args (length args)))
