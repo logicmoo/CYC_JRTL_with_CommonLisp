@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.99 2004-04-05 14:02:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.100 2004-04-06 00:21:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1565,20 +1565,14 @@
      (compile-form (first args))
      (unless (remove-store-value)
        (emit-push-value))
-;;      (unless (single-valued-p (first args))
-;;        (emit-clear-values))
      (maybe-emit-clear-values (first args))
      (compile-form (second args))
      (unless (remove-store-value)
        (emit-push-value))
-;;      (unless (single-valued-p (second args))
-;;        (emit-clear-values))
      (maybe-emit-clear-values (second args))
      (compile-form (third args))
      (unless (remove-store-value)
        (emit-push-value))
-;;      (unless (single-valued-p (third args))
-;;        (emit-clear-values))
      (maybe-emit-clear-values (third args))
      (emit-invokestatic +lisp-class+
                         "list3"
@@ -1589,9 +1583,12 @@
     (t
      nil)))
 
+#+nil
 (defconstant +known-packages+ (list (find-package "COMMON-LISP")
                                     (find-package "SYSTEM")
                                     (find-package "EXTENSIONS")))
+
+(defvar *toplevel-defuns* nil)
 
 (defun compile-function-call (fun args &optional for-effect)
 ;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
@@ -1599,15 +1596,16 @@
     (error "COMPILE-FUNCTION-CALL ~S is not a symbol" fun))
   (let ((numargs (length args))
         local-function)
-    (cond ((= numargs 1)
-           (when (compile-function-call-1 fun args)
-             (return-from compile-function-call)))
-          ((= numargs 2)
-           (when (compile-function-call-2 fun args)
-             (return-from compile-function-call)))
-          ((= numargs 3)
-           (when (compile-function-call-3 fun args)
-             (return-from compile-function-call))))
+    (when (sys::built-in-function-p fun)
+      (cond ((= numargs 1)
+             (when (compile-function-call-1 fun args)
+               (return-from compile-function-call)))
+            ((= numargs 2)
+             (when (compile-function-call-2 fun args)
+               (return-from compile-function-call)))
+            ((= numargs 3)
+             (when (compile-function-call-3 fun args)
+               (return-from compile-function-call)))))
 
     ;; FIXME This shouldn't go here! Do this in the constructor of the
     ;; compiled function!
@@ -1629,12 +1627,19 @@
               "Lorg/armedbear/lisp/LispObject;")))
      ((eq fun *defun-name*)
       (emit 'aload 0)) ; this
-     ((sys::built-in-function-p fun)
+     ((or (sys::built-in-function-p fun) (memq fun *toplevel-defuns*))
       (let ((f (declare-function fun)))
         (emit 'getstatic
               *this-class*
               f
               "Lorg/armedbear/lisp/LispObject;")))
+;;      ((memq fun *toplevel-defuns*)
+;;       (format t "Recognized toplevel-defun ~S~%" fun)
+;;       (let ((f (declare-function fun)))
+;;         (emit 'getstatic
+;;               *this-class*
+;;               f
+;;               "Lorg/armedbear/lisp/LispObject;")))
      (t
       (let ((g (declare-symbol fun)))
         (emit 'getstatic
@@ -1655,8 +1660,6 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
-;;        (unless (single-valued-p (first args))
-;;          (emit-clear-values))
        (maybe-emit-clear-values (first args))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -1666,14 +1669,10 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
-;;        (unless (single-valued-p (first args))
-;;          (emit-clear-values))
        (maybe-emit-clear-values (first args))
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
-;;        (unless (single-valued-p (second args))
-;;          (emit-clear-values))
        (maybe-emit-clear-values (second args))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -1683,20 +1682,14 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
-;;        (unless (single-valued-p (first args))
-;;          (emit-clear-values))
        (maybe-emit-clear-values (first args))
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
-;;        (unless (single-valued-p (second args))
-;;          (emit-clear-values))
        (maybe-emit-clear-values (second args))
        (compile-form (third args))
        (unless (remove-store-value)
          (emit-push-value))
-;;        (unless (single-valued-p (third args))
-;;          (emit-clear-values))
        (maybe-emit-clear-values (third args))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -1713,8 +1706,6 @@
            (unless (remove-store-value)
              (emit-push-value)) ; leaves value on stack
            (emit 'aastore) ; store value in array
-;;            (unless (single-valued-p form)
-;;              (emit-clear-values))
            (maybe-emit-clear-values form)
            (incf i))) ; array left on stack here
        ;; Stack: function array-ref
