@@ -45,6 +45,8 @@
       property="jpda.present"
     />
     <available file="org/armedbear/lisp/Interpreter.java" property="lisp.present"/>
+    <filter token="LISP_HOME" value="${LISP_HOME}"/>
+    <copy file="${LISP_HOME}/Site.java.in" tofile="${LISP_HOME}/Site.java" filtering="yes" overwrite="yes"/>
   </target>
 
   <target
