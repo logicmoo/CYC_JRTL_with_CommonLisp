@@ -2,7 +2,7 @@
  * ComplexArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexArray.java,v 1.5 2004-03-15 17:03:31 piso Exp $
+ * $Id: ComplexArray.java,v 1.6 2004-03-15 17:37:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,13 +121,6 @@ public final class ComplexArray extends AbstractArray
     public LispClass classOf()
     {
         return BuiltInClass.ARRAY;
-    }
-
-    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
-    {
-        if (typeSpecifier == Symbol.SIMPLE_ARRAY)
-            return T;
-        return super.typep(typeSpecifier);
     }
 
     public int getRank()
