@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.396 2003-09-14 17:19:22 piso Exp $
+ * $Id: Primitives.java,v 1.397 2003-09-15 15:02:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2230,7 +2230,8 @@ public final class Primitives extends Module
     };
 
     // ### funcall
-    private static final Primitive FUNCALL = new Primitive("funcall") {
+    // This needs to be public for LispAPI.java.
+    public static final Primitive FUNCALL = new Primitive("funcall") {
         public LispObject execute(LispObject arg) throws Condition
         {
             LispObject fun;
