@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.8 2003-03-03 03:04:50 piso Exp $
+ * $Id: LispObject.java,v 1.9 2003-03-05 19:39:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,5 +155,19 @@ public class LispObject extends Lisp
         LispObject third) throws Condition
     {
         throw new LispError();
+    }
+
+    // Profiling.
+    public long getCallCount()
+    {
+        return 0;
+    }
+
+    public void clearCallCount()
+    {
+    }
+
+    public void incrementCallCount()
+    {
     }
 }

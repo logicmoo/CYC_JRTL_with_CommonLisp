@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.6 2003-03-05 15:51:13 piso Exp $
+ * $Id: Function.java,v 1.7 2003-03-05 19:40:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ public abstract class Function extends LispObject
     private final Module module;
     private final String name;
     protected final int index;
+
+    private long callCount;
 
     protected Function()
     {
@@ -106,5 +108,21 @@ public abstract class Function extends LispObject
         sb.append(name);
         sb.append(">");
         return sb.toString();
+    }
+
+    // Profiling.
+    public final long getCallCount()
+    {
+        return callCount;
+    }
+
+    public final void clearCallCount()
+    {
+        callCount = 0;
+    }
+
+    public final void incrementCallCount()
+    {
+        ++callCount;
     }
 }

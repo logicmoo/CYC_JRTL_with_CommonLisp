@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SpecialOperator.java,v 1.3 2003-03-03 03:04:50 piso Exp $
+ * $Id: SpecialOperator.java,v 1.4 2003-03-05 19:40:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ public class SpecialOperator extends LispObject
     private final Module module;
     private final String name;
     private final int index;
+
+    private long callCount;
 
     public SpecialOperator(String name)
     {
@@ -65,5 +67,21 @@ public class SpecialOperator extends LispObject
         sb.append(name);
         sb.append(">");
         return sb.toString();
+    }
+
+    // Profiling.
+    public final long getCallCount()
+    {
+        return callCount;
+    }
+
+    public final void clearCallCount()
+    {
+        callCount = 0;
+    }
+
+    public final void incrementCallCount()
+    {
+        ++callCount;
     }
 }
