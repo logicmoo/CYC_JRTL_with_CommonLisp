@@ -1,8 +1,8 @@
 /*
  * Macro.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: Macro.java,v 1.6 2004-11-07 15:37:51 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Macro.java,v 1.7 2005-03-07 19:47:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@ package org.armedbear.j;
 
 import java.util.ArrayList;
 import javax.swing.undo.CompoundEdit;
-import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 
@@ -44,6 +43,37 @@ public final class Macro implements Constants
             }
             macro = new Macro(editor);
             Editor.setRecordingMacro(true);
+        }
+    }
+
+    public static synchronized void startMacro()
+    {
+        if (Editor.isRecordingMacro()) {
+            MessageDialog.showMessageDialog(
+                Editor.currentEditor(),
+                "Command ignored (already recording a macro)",
+                "Start Macro");
+        } else {
+            final Editor editor = Editor.currentEditor();
+            if (macro != null && !macro.isEmpty()) {
+                if (!editor.confirm("Start Macro",
+                                    "Overwrite existing keyboard macro?"))
+                    return;
+            }
+            macro = new Macro(editor);
+            Editor.setRecordingMacro(true);
+        }
+    }
+
+    public static synchronized void endMacro()
+    {
+        if (Editor.isRecordingMacro()) {
+            Editor.setRecordingMacro(false);
+        } else {
+            MessageDialog.showMessageDialog(
+                Editor.currentEditor(),
+                "Command ignored (not recording a macro)",
+                "End Macro");
         }
     }
 
@@ -83,6 +113,9 @@ public final class Macro implements Constants
 
     public static synchronized void record(Editor editor, Object command)
     {
+        if (command == "recordMacro" || command == "playbackMacro" ||
+            command == "startMacro" || command == "endMacro")
+            return;
         if (macro != null && macro.getEditor() == editor)
             macro.record(command);
     }
