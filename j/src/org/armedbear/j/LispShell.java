@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.83 2005-02-01 03:32:42 piso Exp $
+ * $Id: LispShell.java,v 1.84 2005-02-04 19:34:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,7 +97,11 @@ public class LispShell extends Shell
             File portFile = File.getInstance(Directories.getEditorDirectory(),
                                              "swank");
             portFile.delete();
-            if (shellCommand.indexOf("sbcl") >= 0) {
+            if (shellCommand.indexOf("abcl") >= 0 ||
+                shellCommand.indexOf("org.armedbear.lisp") >= 0) {
+                shellCommand =
+                    shellCommand.concat(" --load-system-file swank-loader.lisp");
+            } else {
                 File lispHome = File.getInstance(Site.getLispHome());
                 if (lispHome == null)
                     return null; // FIXME Error message?
@@ -105,12 +109,13 @@ public class LispShell extends Shell
                                                     "swank-loader.lisp");
                 if (swankLoader == null)
                     return null; // FIXME Error message?
-                shellCommand =
-                    shellCommand + " --load " + swankLoader.canonicalPath();
-            } else if (shellCommand.indexOf("abcl") >= 0 ||
-                       shellCommand.indexOf("org.armedbear.lisp") >= 0) {
-                shellCommand =
-                    shellCommand.concat(" --load-system-file swank-loader.lisp");
+                if (shellCommand.indexOf("sbcl") >= 0) {
+                    shellCommand =
+                        shellCommand + " --load " + swankLoader.canonicalPath();
+                } else if (shellCommand.indexOf("alisp") >= 0) {
+                    shellCommand =
+                        shellCommand + " -L " + swankLoader.canonicalPath();
+                }
             }
         }
         LispShell lisp = new LispShell(shellCommand, title);
@@ -125,7 +130,7 @@ public class LispShell extends Shell
             MessageDialog.showMessageDialog(message, "Error");
             return null;
         }
-        if (shellCommand.equals("alisp") || shellCommand.equals("/usr/bin/alisp")) {
+        if (shellCommand.indexOf("alisp") >= 0) {
             lisp.setPromptRE(ALLEGRO_PROMPT_PATTERN);
             lisp.setResetCommand(":reset");
         } else if (shellCommand.indexOf("clisp") >= 0) {
