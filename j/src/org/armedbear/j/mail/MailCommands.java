@@ -2,7 +2,7 @@
  * MailCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: MailCommands.java,v 1.2 2002-10-02 16:19:32 piso Exp $
+ * $Id: MailCommands.java,v 1.3 2003-04-18 16:50:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -672,6 +672,13 @@ public final class MailCommands implements Constants
         final Buffer buffer = Editor.currentEditor().getBuffer();
         if (buffer instanceof MessageBuffer)
             ((MessageBuffer)buffer).toggleRaw();
+    }
+
+    public static void messageToggleWrap()
+    {
+        final Buffer buffer = Editor.currentEditor().getBuffer();
+        if (buffer instanceof MessageBuffer)
+            ((MessageBuffer)buffer).toggleWrap();
     }
 
     public static void messageViewAttachment()
