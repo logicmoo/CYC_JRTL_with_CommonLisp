@@ -3,5 +3,5 @@
 *.class
 build
 lisp
-ControlC.h
+native.h
 Makefile
