@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.20 2003-03-06 23:50:02 piso Exp $
+;;; $Id: sequences.lisp,v 1.21 2003-03-07 18:35:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 (export '(make-sequence
           some every notany notevery subseq copy-seq reverse nreverse
+          concatenate
           reduce
           remove-duplicates delete-duplicates
           substitute substitute-if substitute-if-not
