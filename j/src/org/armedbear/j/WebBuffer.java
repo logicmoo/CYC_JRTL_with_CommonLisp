@@ -2,7 +2,7 @@
  * WebBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebBuffer.java,v 1.1.1.1 2002-09-24 16:09:30 piso Exp $
+ * $Id: WebBuffer.java,v 1.2 2002-10-10 17:49:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,10 +204,22 @@ public final class WebBuffer extends Buffer implements WebConstants
         WebLoader loader = new WebLoader(localFile);
         LineSequence lines = loader.load();
         if (lines != null) {
-            setFirstLine(lines.getFirstLine());
-            setLastLine(lines.getLastLine());
-            renumberOriginal();
-            empty = false;
+            try {
+                lockWrite();
+            }
+            catch (InterruptedException e) {
+                Log.debug(e);
+                return;
+            }
+            try {
+                setFirstLine(lines.getFirstLine());
+                setLastLine(lines.getLastLine());
+                renumberOriginal();
+                empty = false;
+            }
+            finally {
+                unlockWrite();
+            }
         }
         refs = loader.getRefs();
         final File file = getFile();
@@ -574,7 +586,6 @@ public final class WebBuffer extends Buffer implements WebConstants
             errorText = "File not found";
             return false; // File not found.
         }
-        empty();
         boolean isHtml = false;
         if (contentType != null) {
             if (contentType.toLowerCase().startsWith("text/html"))
@@ -583,30 +594,43 @@ public final class WebBuffer extends Buffer implements WebConstants
             if (Editor.getModeList().modeAccepts(HTML_MODE, localFile.getName()))
                 isHtml = true;
         }
-        if (isHtml) {
-            loadFile(localFile);
-            setContentType(contentType);
-            setFormatter(new WebFormatter(this));
-        } else {
-            super.load(inputStream, encoding);
-            if (getFirstLine() == null) {
-                // New or 0-byte file.
-                appendLine("");
-                lineSeparator = System.getProperty("line.separator");
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return false;
+        }
+        try {
+            empty();
+            if (isHtml) {
+                loadFile(localFile);
+                setContentType(contentType);
+                setFormatter(new WebFormatter(this));
+            } else {
+                super.load(inputStream, encoding);
+                if (getFirstLine() == null) {
+                    // New or 0-byte file.
+                    appendLine("");
+                    lineSeparator = System.getProperty("line.separator");
+                }
+                renumberOriginal();
+                setContentType(contentType);
+                Mode mode = Editor.getModeList().getModeForContentType(contentType);
+                if (mode == null) {
+                    File file = getFile();
+                    if (file != null)
+                        mode = Editor.getModeList().getModeForFileName(file.getName());
+                }
+                if (mode != null) {
+                    setFormatter(mode.getFormatter(this));
+                    formatter.parseBuffer();
+                } else
+                    setFormatter(new PlainTextFormatter(this));
             }
-            renumberOriginal();
-            setContentType(contentType);
-            Mode mode = Editor.getModeList().getModeForContentType(contentType);
-            if (mode == null) {
-                File file = getFile();
-                if (file != null)
-                    mode = Editor.getModeList().getModeForFileName(file.getName());
-            }
-            if (mode != null) {
-                setFormatter(mode.getFormatter(this));
-                formatter.parseBuffer();
-            } else
-                setFormatter(new PlainTextFormatter(this));
+        }
+        finally {
+            unlockWrite();
         }
         return true;
     }
