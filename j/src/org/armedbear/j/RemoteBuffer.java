@@ -2,7 +2,7 @@
  * RemoteBuffer.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: RemoteBuffer.java,v 1.7 2003-07-26 18:52:33 piso Exp $
+ * $Id: RemoteBuffer.java,v 1.8 2003-12-01 00:01:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,8 +205,31 @@ public final class RemoteBuffer extends Buffer implements Constants
         public void run()
         {
             if (Editor.getBufferList().contains(RemoteBuffer.this)) {
-                buffer.setInitialDotPos(initialLineNumber, initialOffset);
-                Editor.getBufferList().replace(RemoteBuffer.this, buffer);
+                int result;
+                try {
+                    if (!buffer.initialized())
+                        buffer.initialize();
+                    result = buffer.load();
+                }
+                catch (OutOfMemoryError e) {
+                    buffer.kill();
+                    RemoteBuffer.this.kill();
+                    Runnable r = new Runnable() {
+                        public void run()
+                        {
+                            MessageDialog.showMessageDialog(
+                                Editor.currentEditor(),
+                                "Insufficient memory to load buffer",
+                                "Error");
+                        }
+                    };
+                    SwingUtilities.invokeLater(r);
+                    result = LOAD_FAILED;
+                }
+                if (result == LOAD_COMPLETED) {
+                    buffer.setInitialDotPos(initialLineNumber, initialOffset);
+                    Editor.getBufferList().replace(RemoteBuffer.this, buffer);
+                }
             } else
                 buffer.kill();
         }
