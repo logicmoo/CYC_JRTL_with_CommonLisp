@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.349 2003-08-24 19:26:52 piso Exp $
+ * $Id: Primitives.java,v 1.350 2003-08-25 14:56:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4741,8 +4741,7 @@ public final class Primitives extends Module
     };
 
     // ### streamp
-    private static final Primitive1 STREAMP = new Primitive1("streamp")
-    {
+    private static final Primitive1 STREAMP = new Primitive1("streamp") {
         public LispObject execute(LispObject arg)
         {
             return arg instanceof LispStream ? T : NIL;
@@ -4750,8 +4749,7 @@ public final class Primitives extends Module
     };
 
     // ### realp
-    private static final Primitive1 REALP = new Primitive1("realp")
-    {
+    private static final Primitive1 REALP = new Primitive1("realp") {
         public LispObject execute(LispObject arg)
         {
             return (arg.getType() & TYPE_REAL) != 0 ? T : NIL;
@@ -4759,8 +4757,7 @@ public final class Primitives extends Module
     };
 
     // ### rationalp
-    private static final Primitive1 RATIONALP = new Primitive1("rationalp")
-    {
+    private static final Primitive1 RATIONALP = new Primitive1("rationalp") {
         public LispObject execute(LispObject arg)
         {
             return (arg.getType() & TYPE_RATIONAL) != 0 ? T : NIL;
@@ -4768,8 +4765,7 @@ public final class Primitives extends Module
     };
 
     // ### complexp
-    private static final Primitive1 COMPLEXP = new Primitive1("complexp")
-    {
+    private static final Primitive1 COMPLEXP = new Primitive1("complexp") {
         public LispObject execute(LispObject arg)
         {
             return arg instanceof Complex ? T : NIL;
@@ -4777,8 +4773,7 @@ public final class Primitives extends Module
     };
 
     // ### realpart
-    private static final Primitive1 REALPART = new Primitive1("realpart")
-    {
+    private static final Primitive1 REALPART = new Primitive1("realpart") {
         public LispObject execute(LispObject arg) throws LispError
         {
             if (arg instanceof Complex)
@@ -4790,13 +4785,21 @@ public final class Primitives extends Module
     };
 
     // ### imagpart
-    private static final Primitive1 IMAGPART = new Primitive1("imagpart")
-    {
+    private static final Primitive1 IMAGPART = new Primitive1("imagpart") {
         public LispObject execute(LispObject arg) throws LispError
         {
             if (arg instanceof Complex)
                 return ((Complex)arg).getImaginaryPart();
             return arg.multiplyBy(Fixnum.ZERO);
+        }
+    };
+
+    // ### hashcode-to-string
+    private static final Primitive1 HASHCODE_TO_STRING =
+        new Primitive1("hashcode-to-string", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return new LispString(Integer.toHexString(arg.hashCode()));
         }
     };
 }
