@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.12 2003-10-11 19:49:14 piso Exp $
+;;; $Id: defclass.lisp,v 1.13 2003-10-11 20:41:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -465,6 +465,7 @@
                     (apply #'make-direct-slot-definition
                            slot-properties))
                  direct-slots)))
+;;     (format t "slots = ~S~%" slots)
     (setf (class-direct-slots class) slots)
     (dolist (direct-slot slots)
       (dolist (reader (slot-definition-readers direct-slot))
@@ -500,7 +501,7 @@
 ;;; Generic function metaobjects and standard-generic-function
 ;;;
 
-(defclass standard-generic-function ()
+(defclass standard-generic-function (generic-function)
   ((name :initarg :name)      ; :accessor generic-function-name
    (lambda-list               ; :accessor generic-function-lambda-list
     :initarg :lambda-list)
@@ -931,6 +932,7 @@
 ;;; Reader and write methods
 
 (defun add-reader-method (class fn-name slot-name)
+;;   (format t "add-reader-method ~S~%" fn-name)
   (ensure-method
    (ensure-generic-function fn-name :lambda-list '(object))
    :lambda-list '(object)
