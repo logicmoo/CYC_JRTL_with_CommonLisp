@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.44 2003-08-10 17:48:07 piso Exp $
+# $Id: Makefile.in,v 1.45 2003-08-12 01:34:11 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ CLASSFILES =	AbstractArray.class \
 		ClassTypeSpecifier.class \
 		Closure.class \
 		CompiledFunction.class \
+		Complex.class \
 		CompoundTypeSpecifier.class \
 		Condition.class \
 		Cons.class \
