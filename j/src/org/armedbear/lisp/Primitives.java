@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.443 2003-09-26 18:26:27 piso Exp $
+ * $Id: Primitives.java,v 1.444 2003-09-26 18:38:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3168,6 +3168,17 @@ public final class Primitives extends Module
             }
             thread.setValues(values);
             return result;
+        }
+    };
+
+    // ### eval-when
+    private static final SpecialOperator EVAL_WHEN =
+        new SpecialOperator("eval-when")
+    {
+        public LispObject execute(LispObject args, Environment env)
+            throws ConditionThrowable
+        {
+            return progn(args.cdr(), env, LispThread.currentThread());
         }
     };
 
