@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.327 2005-03-17 14:51:59 piso Exp $
+ * $Id: Lisp.java,v 1.328 2005-03-19 14:34:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1500,11 +1500,11 @@ public abstract class Lisp
         exportConstant("MOST-NEGATIVE-FIXNUM", PACKAGE_CL,
             new Fixnum(Integer.MIN_VALUE));
 
-    public static void exit()
+    public static void exit(int status)
     {
         Interpreter interpreter = Interpreter.getInstance();
         if (interpreter != null)
-            interpreter.kill();
+            interpreter.kill(status);
     }
 
     // ### t
@@ -1909,6 +1909,14 @@ public abstract class Lisp
     // ### *saved-backtrace*
     public static final Symbol _SAVED_BACKTRACE_ =
         exportSpecial("*SAVED-BACKTRACE*", PACKAGE_EXT, NIL);
+
+    // ### *batch-mode*
+    public static final Symbol _BATCH_MODE_ =
+        exportSpecial("*BATCH-MODE*", PACKAGE_EXT, NIL);
+
+    // ### *preload*
+    public static final Symbol _PRELOAD_ =
+        internSpecial("*PRELOAD*", PACKAGE_SYS, NIL);
 
     // ### *speed* compiler policy
     public static final Symbol _SPEED_ =
