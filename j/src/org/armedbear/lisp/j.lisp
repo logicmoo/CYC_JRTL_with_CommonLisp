@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: j.lisp,v 1.32 2004-08-31 23:31:15 piso Exp $
+;;; $Id: j.lisp,v 1.33 2004-09-02 00:49:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
           buffer-activated-hook
           after-save-hook
           key-pressed-hook
+          lisp-shell-startup-hook
           variable-value
           with-editor
           with-other-editor
@@ -117,6 +118,8 @@
 (defvar after-save-hook nil)
 
 (defvar key-pressed-hook nil)
+
+(defvar lisp-shell-startup-hook nil)
 
 (defun variable-value (name &optional (kind :current) where)
   (%variable-value name kind where))
