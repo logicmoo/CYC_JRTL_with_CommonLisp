@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Property.java,v 1.22 2003-06-18 15:13:03 piso Exp $
+ * $Id: Property.java,v 1.23 2003-06-19 01:43:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,10 @@
 
 package org.armedbear.j;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 
 public final class Property implements Comparable, Constants
 {
@@ -476,5 +479,17 @@ public final class Property implements Comparable, Constants
     {
         Property p = (Property) o;
         return displayName.compareToIgnoreCase(p.displayName);
+    }
+
+    public static List apropos(String s)
+    {
+        String lower = s.toLowerCase();
+        ArrayList list = new ArrayList();
+        for (Iterator it = ht.values().iterator(); it.hasNext();) {
+            Property property = (Property) it.next();
+            if (property.getDisplayName().toLowerCase().indexOf(lower) >= 0)
+                list.add(property.getDisplayName());
+        }
+        return list;
     }
 }
