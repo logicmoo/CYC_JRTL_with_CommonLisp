@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.46 2004-07-03 16:34:40 piso Exp $
+ * $Id: LispThread.java,v 1.47 2004-07-08 06:06:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -308,24 +308,14 @@ public final class LispThread extends LispObject
             Debug.assertTrue(false);
     }
 
-    public LispObject getVariableValue(int depth, int index)
+    public LispObject getVariableValue(int index)
     {
-        Context context = _context;
-        while (depth > 0) {
-            context = context.parent;
-            --depth;
-        }
-        return context.data[index];
+        return _context.data[index];
     }
 
-    public void setVariableValue(LispObject value, int depth, int index)
+    public void setVariableValue(LispObject value, int index)
     {
-        Context context = _context;
-        while (depth > 0) {
-            context = context.parent;
-            --depth;
-        }
-        context.data[index] = value;
+        _context.data[index] = value;
     }
 
     public LispObject callLocalFunction(LispObject function, LispObject[] args)
