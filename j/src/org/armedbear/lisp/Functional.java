@@ -2,7 +2,7 @@
  * Functional.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Functional.java,v 1.1 2003-03-12 20:01:56 piso Exp $
+ * $Id: Functional.java,v 1.2 2003-06-01 01:35:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // Common superclass of Function and SpecialOperator.
-public class Functional extends LispObject
+public abstract class Functional extends LispObject
 {
     private LispObject lambdaName;
 
