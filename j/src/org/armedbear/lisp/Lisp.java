@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.37 2003-03-14 01:02:18 piso Exp $
+ * $Id: Lisp.java,v 1.38 2003-03-14 18:35:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -672,6 +672,13 @@ public abstract class Lisp
                                 " cannot be coerced to a string");
     }
 
+    public static final LispObject number(long n)
+    {
+        if (n >= Integer.MIN_VALUE && n <= Integer.MAX_VALUE)
+            return new Fixnum((int)n);
+        return new Bignum(n);
+    }
+
     public static final int nameToChar(String s)
     {
         String lower = s.toLowerCase();
@@ -909,15 +916,13 @@ public abstract class Lisp
     public static final Symbol _READ_SUPPRESS_ =
         exportSpecial("*READ-SUPPRESS*", PACKAGE_CL, NIL);
 
-    // Adjust by 1 to fool ANSI test suite.
     public static final Symbol MOST_POSITIVE_FIXNUM =
         exportConstant("MOST-POSITIVE-FIXNUM", PACKAGE_CL,
-            new Fixnum(Long.MAX_VALUE - 1));
+            new Fixnum(Integer.MAX_VALUE));
 
-    // Adjust by 1 to fool ANSI test suite.
     public static final Symbol MOST_NEGATIVE_FIXNUM =
         exportConstant("MOST-NEGATIVE-FIXNUM", PACKAGE_CL,
-            new Fixnum(Long.MIN_VALUE + 1));
+            new Fixnum(Integer.MIN_VALUE));
 
     public static void exit()
     {
