@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.143 2004-06-03 21:41:57 asimon Exp $
+;;; $Id: autoloads.lisp,v 1.144 2004-06-06 19:32:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@
           "pathnames")
 (autoload 'directory "directory")
 (autoload '(signum ceiling round ffloor fceiling fround rational rationalize
-            gcd isqrt float-precision float-sign decode-float conjugate phase cis)
+            gcd isqrt float-precision decode-float conjugate phase cis)
           "numbers")
 (autoload 'boole)
 (autoload '(byte byte-size byte-position %ldb ldb ldb-test dpb) "ldb")

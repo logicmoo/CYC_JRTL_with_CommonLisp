@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.29 2004-04-08 12:29:21 piso Exp $
+;;; $Id: numbers.lisp,v 1.30 2004-06-06 19:32:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -157,15 +157,6 @@
       (error 'simple-type-error
              :format-control "~S is not of type FLOAT."
              :format-arguments (list float))))
-
-(defun float-sign (float-1 &optional (float-2 (float 1 float-1)))
-  "Returns a floating-point number that has the same sign as
-   float-1 and, if float-2 is given, has the same absolute value
-   as float-2."
-  (* (if (minusp float-1)
-	 (float -1 float-1)
-	 (float 1 float-1))
-     (abs float-2)))
 
 (defun decode-float (float)
   (multiple-value-bind (significand exponent sign) (integer-decode-float float)
