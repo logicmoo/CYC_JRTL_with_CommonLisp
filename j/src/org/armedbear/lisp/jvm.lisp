@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.347 2005-01-13 10:09:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.348 2005-01-13 11:19:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -143,8 +143,6 @@
         (dolist (variable list)
           (dump-1-variable variable))
         (%format t "  None.~%"))))
-
-(defvar *nesting-level* 0)
 
 (defstruct variable
   name
@@ -448,7 +446,6 @@
           (setf (compiland-lambda-expression compiland)
                 `(lambda ,lambda-list ,@decls (block ,name ,@body)))
           (let ((*visible-variables* *visible-variables*)
-                (*nesting-level* (1+ *nesting-level*))
                 (*current-compiland* compiland))
             (p1-compiland compiland)))
         (push compiland compilands)))
@@ -483,7 +480,6 @@
       (push (local-function-variable local-function) *visible-variables*))
     (dolist (local-function local-functions)
       (let ((*visible-variables* *visible-variables*)
-            (*nesting-level* (1+ *nesting-level*))
             (*current-compiland* (local-function-compiland local-function)))
         (p1-compiland (local-function-compiland local-function))))
     (list* (car form) local-functions (mapcar #'p1 (cddr form)))))
@@ -505,7 +501,6 @@
         (setf (compiland-lambda-expression compiland)
               `(lambda ,lambda-list ,@decls (block nil ,@body)))
         (let ((*visible-variables* *visible-variables*)
-              (*nesting-level* (1+ *nesting-level*))
               (*current-compiland* compiland))
           (p1-compiland compiland)))
       (list 'FUNCTION compiland)))
@@ -3955,20 +3950,19 @@
                             (not (constantp (second arg))))
                    (error "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
     (setf form (compiland-lambda-expression compiland))
-    (let ((*nesting-level* (1+ *nesting-level*)))
-      (setf classfile (if *compile-file-truename*
-                          (sys::next-classfile-name)
-                          (prog1
-                           (%format nil "local-~D.class" *child-count*)
-                           (incf *child-count*))))
-      (setf (compiland-classfile compiland) classfile)
-      (let ((*current-compiland* compiland)
-            (*speed* *speed*)
-            (*safety* *safety*)
-            (*debug* *debug*))
-        (p2-compiland compiland))
-      (when (null *compile-file-truename*)
-        (setf function (sys:load-compiled-function classfile))))
+    (setf classfile (if *compile-file-truename*
+                        (sys::next-classfile-name)
+                        (prog1
+                         (%format nil "local-~D.class" *child-count*)
+                         (incf *child-count*))))
+    (setf (compiland-classfile compiland) classfile)
+    (let ((*current-compiland* compiland)
+          (*speed* *speed*)
+          (*safety* *safety*)
+          (*debug* *debug*))
+      (p2-compiland compiland))
+    (when (null *compile-file-truename*)
+      (setf function (sys:load-compiled-function classfile)))
     (cond (local-function
            (setf (local-function-classfile local-function) classfile)
            (let ((g (if *compile-file-truename*
@@ -4112,6 +4106,10 @@
      ((symbolp name)
       (cond
        ((setf local-function (find-local-function name))
+        (when (eq (local-function-compiland local-function) *current-compiland*)
+          (emit 'aload 0) ; this
+          (emit-move-from-stack target)
+          (return-from p2-function))
         (if (local-function-variable local-function)
             (emit 'var-ref (local-function-variable local-function) :stack)
             (let ((g (if *compile-file-truename*
@@ -4121,8 +4119,6 @@
                     *this-class*
                     g
                     +lisp-object+))) ; Stack: template-function
-;;         (unless (zerop *nesting-level*)
-;;           (error "nesting level > 0, not supported"))
         (cond
          ((null *closure-variables*)) ; Nothing to do.
          ((compiland-closure-register *current-compiland*)
@@ -5269,10 +5265,6 @@
 
     (dformat t "pass2 *using-arg-array* = ~S~%" *using-arg-array*)
     (dformat t "pass2 *child-p* = ~S~%" *child-p*)
-    (dformat t "pass2 *nesting-level* = ~S~%" *nesting-level*)
-;;     (when (zerop *nesting-level*)
-;;       (setf *child-count* 0))
-;;     (setf *context* (make-context))
     (setf (method-name-index execute-method)
           (pool-name (method-name execute-method)))
     (setf (method-descriptor-index execute-method)
