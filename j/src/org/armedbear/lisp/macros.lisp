@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: macros.lisp,v 1.25 2004-02-02 13:44:51 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: macros.lisp,v 1.26 2004-03-16 02:40:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,9 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "COMMON-LISP")
-
-(defmacro return (&optional (value nil))
-  `(return-from nil ,value))
 
 (defmacro prog1 (first-form &rest forms)
   (let ((result (gensym)))
