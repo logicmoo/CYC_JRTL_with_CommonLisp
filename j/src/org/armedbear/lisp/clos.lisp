@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.13 2003-12-08 15:39:41 piso Exp $
+;;; $Id: clos.lisp,v 1.14 2003-12-08 20:06:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -353,8 +353,13 @@
 (defvar the-slots-of-standard-class) ;standard-class's class-slots
 (defvar the-class-standard-class (find-class 'standard-class))
 
+(defun find-slot-definition (class slot-name)
+  (dolist (slot (class-slots class) nil)
+    (when (eq slot-name (slot-definition-name slot))
+      (return slot))))
+
 (defun slot-location (class slot-name)
-  (let ((slot (find slot-name (class-slots class) :key #'slot-definition-name)))
+  (let ((slot (find-slot-definition class slot-name)))
     (if slot
         (let ((location (slot-definition-location slot)))
           (if location
@@ -363,8 +368,8 @@
                     (position slot (remove-if-not #'instance-slot-p (class-slots class))))))
         nil)))
 
-(defun slot-contents (slots location)
-  (svref slots location))
+(defmacro slot-contents (slots location)
+  `(aref ,slots ,location))
 
 (defun (setf slot-contents) (new-value slots location)
   (setf (svref slots location) new-value))
@@ -536,9 +541,16 @@
    (method-combination
     :initarg :method-combination)
    (classes-to-emf-table      ; :accessor classes-to-emf-table
-    :initform (make-hash-table :test #'equal))))
+    :initform (make-hash-table :test #'equal))
+   (required-args :initform ())))
 
 (defvar the-class-standard-gf (find-class 'standard-generic-function))
+
+(defvar *sgf-required-args-index*
+  (slot-location the-class-standard-gf 'required-args))
+
+(defvar *sgf-classes-to-emf-table-index*
+  (slot-location the-class-standard-gf 'classes-to-emf-table))
 
 (defun generic-function-name (gf)
   (slot-value gf 'name))
@@ -571,7 +583,8 @@
 ;;; Internal accessor for effective method function table
 
 (defun classes-to-emf-table (gf)
-  (slot-value gf 'classes-to-emf-table))
+;;   (slot-value gf 'classes-to-emf-table))
+  (slot-contents (std-instance-slots gf) *sgf-classes-to-emf-table-index*))
 (defun (setf classes-to-emf-table) (new-value gf)
   (setf (slot-value gf 'classes-to-emf-table) new-value))
 
@@ -587,6 +600,9 @@
    (function)))                            ; :accessor method-function
 
 (defvar the-class-standard-method (find-class 'standard-method))
+
+(defvar *sm-function-index*
+  (slot-location the-class-standard-method 'function))
 
 (defun method-lambda-list (method) (slot-value method 'lambda-list))
 (defun (setf method-lambda-list) (new-value method)
@@ -613,7 +629,9 @@
 (defun (setf method-generic-function) (new-value method)
   (setf (slot-value method 'generic-function) new-value))
 
-(defun method-function (method) (slot-value method 'function))
+(defun method-function (method)
+;;   (slot-value method 'function))
+  (slot-contents (std-instance-slots method) *sm-function-index*))
 (defun (setf method-function) (new-value method)
   (setf (slot-value method 'function) new-value))
 
@@ -706,6 +724,9 @@
   (clrhash (classes-to-emf-table gf))
   (values))
 
+(defun gf-required-args (gf)
+  (slot-contents (std-instance-slots gf) *sgf-required-args-index*))
+
 (defun make-instance-standard-generic-function (generic-function-class
                                                 &key name lambda-list
                                                 method-class
@@ -718,6 +739,9 @@
     (setf (generic-function-method-class gf) method-class)
     (setf (generic-function-method-combination gf) method-combination)
     (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
+    (setf (slot-value gf 'required-args)
+          (let ((plist (analyze-lambda-list (generic-function-lambda-list gf))))
+            (getf plist ':required-args)))
     (finalize-generic-function gf)
     gf))
 
@@ -784,14 +808,10 @@
 ;;; Several tedious functions for analyzing lambda lists
 
 (defun required-portion (gf args)
-  (let ((number-required (length (gf-required-arglist gf))))
+  (let ((number-required (length (gf-required-args gf))))
     (when (< (length args) number-required)
       (error 'program-error "not enough arguments for generic function ~S" gf))
     (subseq args 0 number-required)))
-
-(defun gf-required-arglist (gf)
-  (let ((plist (analyze-lambda-list (generic-function-lambda-list gf))))
-    (getf plist ':required-args)))
 
 (defun extract-lambda-list (specialized-lambda-list)
   (let* ((plist (analyze-lambda-list specialized-lambda-list))
@@ -1073,7 +1093,7 @@
                 gf applicable-methods)))
           (setf (gethash classes (classes-to-emf-table gf)) emfun)
           (funcall emfun args))
-      (error "no methods applicable for generic function ~S with arguments ~S of classes ~S" gf args classes))))
+        (error "no applicable methods for generic function ~S with arguments ~S of classes ~S" gf args classes))))
 
 ;;; compute-applicable-methods-using-classes
 
