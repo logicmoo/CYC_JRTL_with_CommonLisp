@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.210 2005-03-19 19:57:50 piso Exp $
+;;; $Id: boot.lisp,v 1.211 2005-03-24 01:15:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,6 +62,20 @@
 
 (defun write-char (character &optional output-stream)
   (%write-char character output-stream))
+
+(in-package #:extensions)
+
+;; Redefined in pprint.lisp.
+(defun charpos (stream)
+  (sys::stream-charpos stream))
+
+;; Redefined in pprint.lisp.
+(defun (setf charpos) (new-value stream)
+  (sys::stream-%set-charpos stream new-value))
+
+(export 'charpos '#:extensions)
+
+(in-package #:system)
 
 (defun simple-format (destination control-string &rest args)
   (apply *simple-format-function* destination control-string args))

@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.47 2004-11-21 16:01:53 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: pprint.lisp,v 1.48 2005-03-24 01:17:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@
 
 ;------------------------------------------------------------------------
 
-(in-package "XP")
+(in-package #:xp)
 
 ;must do the following in common lisps not supporting *print-shared*
 
@@ -153,6 +153,20 @@
   ;;open blocks.  For convenient in popping, the whole suffix
   ;;is stored in reverse order.
 )
+
+
+(defun ext:charpos (stream)
+  (cond ((xp-structure-p stream)
+         (charpos stream))
+        ((streamp stream)
+         (sys::stream-charpos stream))))
+
+(defun (setf ext:charpos) (new-value stream)
+  (cond ((xp-structure-p stream)
+         (setf (charpos stream) new-value))
+        ((streamp stream)
+         (sys::stream-%set-charpos stream new-value))))
+
 
 (defmacro LP<-BP (xp &optional (ptr nil))
   (if (null ptr) (setq ptr `(buffer-ptr ,xp)))
