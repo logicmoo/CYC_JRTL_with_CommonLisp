@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.288 2004-08-26 14:27:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.289 2004-08-27 00:49:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1725,7 +1725,7 @@
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc
-          (pool-string classfile))
+          (pool-string (file-namestring classfile)))
     (emit-invokestatic +lisp-class+
                        "loadCompiledFunction"
                        "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
