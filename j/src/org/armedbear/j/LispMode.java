@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.92 2005-03-02 01:14:09 piso Exp $
+ * $Id: LispMode.java,v 1.93 2005-03-05 20:48:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,6 +79,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
         km.mapKey(KeyEvent.VK_F, CTRL_MASK | ALT_MASK, "forwardSexp");
         km.mapKey(KeyEvent.VK_B, CTRL_MASK | ALT_MASK, "backwardSexp");
+        km.mapKey(KeyEvent.VK_SPACE, CTRL_MASK | ALT_MASK, "markSexp");
         km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "downList");
         km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "backwardUpList");
         km.mapKey(KeyEvent.VK_X, CTRL_MASK | ALT_MASK, "evalDefunLisp");
@@ -823,6 +824,20 @@ public class LispMode extends AbstractMode implements Constants, Mode
             Position pos = mode.backwardSexp(editor.getDot());
             if (pos != null)
                 editor.moveDotTo(pos);
+        }
+    }
+
+    public static void markSexp()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() instanceof LispMode) {
+            Position pos = mode.forwardSexp(editor.getDot());
+            if (pos != null) {
+                editor.addUndo(SimpleEdit.MOVE);
+                editor.setMarkAtDot();
+                editor.getDot().moveTo(pos);
+                editor.setUpdateFlag(REPAINT);
+            }
         }
     }
 

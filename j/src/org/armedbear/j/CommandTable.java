@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CommandTable.java,v 1.55 2005-03-03 19:27:31 piso Exp $
+ * $Id: CommandTable.java,v 1.56 2005-03-05 20:49:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -314,6 +314,7 @@ public class CommandTable
             addCommand("makeTagFile", "TagCommands");
             addCommand("man", "ManMode");
             addCommand("manFollowLink", "ManMode");
+            addCommand("markSexp", "LispMode");
             addCommand("mouseFindOccurrence", "ListOccurrences");
             addCommand("mouseFindTag", "TagCommands");
             addCommand("mouseJumpToTag", "ListTagsMode");
