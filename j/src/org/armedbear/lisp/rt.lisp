@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.123 2003-09-10 18:02:42 piso Exp $
+;;; $Id: rt.lisp,v 1.124 2003-09-11 01:45:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -257,6 +257,7 @@
                               "lambda-list-keywords"
                               "lambda-parameters-limit"
                               "last"
+                              "lcm"
                               "ldiff"
                               "length"
                               "let"
