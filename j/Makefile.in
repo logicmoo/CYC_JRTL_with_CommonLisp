@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.13 2003-11-30 17:18:22 piso Exp $
+# $Id: Makefile.in,v 1.14 2003-12-01 03:42:01 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -106,6 +106,7 @@ distdir:
 	-cp -p  src/org/armedbear/j/images/*.png $(distdir)/src/org/armedbear/j/images
 	mkdir $(distdir)/src/org/armedbear/lisp
 	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/Site.java.in src/org/armedbear/lisp/*.lisp $(distdir)/src/org/armedbear/lisp
+	rm -f $(distdir)/src/org/armedbear/lisp/Site.java
 	mkdir $(distdir)/src/org/armedbear/lisp/java
 	mkdir $(distdir)/src/org/armedbear/lisp/java/awt
 	-cp -p  src/org/armedbear/lisp/java/awt/Makefile.in src/org/armedbear/lisp/java/awt/*.java $(distdir)/src/org/armedbear/lisp/java/awt
@@ -247,7 +248,7 @@ j.zip:
 		doc/*.html doc/*.css \
 		themes/* \
 		examples/* \
-		-x themes/CVS/ examples/CVS/
+		-x themes/CVS/ examples/CVS/ src/org/armedbear/lisp/Site.java
 	unzip -t -qq j.zip
 
 j-jar.zip: j.jar
