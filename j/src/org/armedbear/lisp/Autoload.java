@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.185 2004-05-25 18:38:46 piso Exp $
+ * $Id: Autoload.java,v 1.186 2004-06-03 21:37:32 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -349,11 +349,14 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "assql", "assql", true);
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
+        autoload(PACKAGE_EXT, "make-thread-lock", "ThreadLock", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
         autoload(PACKAGE_EXT, "simple-string-fill", "StringFunctions");
         autoload(PACKAGE_EXT, "simple-string-search", "StringFunctions");
         autoload(PACKAGE_EXT, "string-input-stream-current", "StringInputStream", true);
         autoload(PACKAGE_EXT, "string-position", "StringFunctions");
+        autoload(PACKAGE_EXT, "thread-lock", "ThreadLock", true);
+        autoload(PACKAGE_EXT, "thread-unlock", "ThreadLock", true);
         autoload(PACKAGE_JAVA, "%jnew-proxy", "JProxy");
         autoload(PACKAGE_JAVA, "%jnew-runtime-class", "RuntimeClass");
         autoload(PACKAGE_JAVA, "%jredefine-method", "RuntimeClass");
