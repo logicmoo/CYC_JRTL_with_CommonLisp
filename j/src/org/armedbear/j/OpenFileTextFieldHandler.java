@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.29 2002-12-19 02:35:46 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.30 2002-12-26 16:54:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,9 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 import java.awt.Component;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -664,7 +667,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             return;
         textField.setText(completion);
         if (Editor.preferences().getBooleanProperty(Property.SELECT_COMPLETION)) {
-            if (originalText != null) {
+            if (originalText != null && originalText.length() > 0) {
                 boolean ignoreCase =
                     Editor.preferences().getBooleanProperty(
                         Property.FILENAME_COMPLETIONS_IGNORE_CASE);
@@ -675,6 +678,40 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     textField.setCaretPosition(originalText.length());
                     textField.moveCaretPosition(completion.length());
                     textField.getCaret().setVisible(false);
+                } else {
+                    char c = originalText.charAt(0);
+                    if (c == '/' || c == '\\') {
+                        int index;
+                        if (ignoreCase) {
+                            index = completion.toLowerCase().lastIndexOf(
+                                originalText.toLowerCase());
+                        } else {
+                            index = completion.lastIndexOf(originalText);
+                        }
+                        if (index >= 0) {
+                            textField.setCaretPosition(index + originalText.length());
+                            textField.moveCaretPosition(completion.length());
+                            textField.getCaret().setVisible(false);
+                        }
+                    } else {
+                        RE re = new UncheckedRE("[\\/]" + originalText,
+                                                ignoreCase ? RE.REG_ICASE : 0);
+                        REMatch lastMatch = null;
+                        int index = 0;
+                        while (true) {
+                            REMatch match = re.getMatch(completion, index);
+                            if (match != null) {
+                                lastMatch = match;
+                                index = match.getEndIndex();
+                            } else
+                                break;
+                        }
+                        if (lastMatch != null) {
+                            textField.setCaretPosition(index);
+                            textField.moveCaretPosition(completion.length());
+                            textField.getCaret().setVisible(false);
+                        }
+                    }
                 }
             }
         }
@@ -774,10 +811,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                         e.consume();
                         return;
                     }
+                    case KeyEvent.VK_DELETE:
                     case KeyEvent.VK_ESCAPE: {
                         popup.setVisible(false);
                         popup = null;
                         textField.setText(originalText);
+                        originalText = null;
                         textField.requestFocus();
                         end();
                         e.consume();
@@ -866,6 +905,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     popup.setVisible(false);
                     popup = null;
                     textField.setText(originalText);
+                    originalText = null;
                     textField.requestFocus();
                     e.consume();
                     return;
@@ -928,20 +968,15 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 popup.setVisible(false);
                 popup = null;
             }
-            String text = textField.getText();
-            // Delete selected text (if any).
-            if (textField.getSelectionStart() != textField.getSelectionEnd())
-                text = text.substring(0, textField.getSelectionStart());
-            // Restore original text if possible.
+            String text;
             if (originalText != null) {
-                int end = text.length();
-                int begin = end - originalText.length();
-                if (begin >= 0 && end > begin) {
-                    if (text.substring(begin, end).equalsIgnoreCase(originalText)) {
-                        text = text.substring(0, begin);
-                        text += originalText;
-                    }
-                }
+                text = originalText;
+                originalText = null;
+            } else {
+                text = textField.getText();
+                // Delete selected text (if any).
+                if (textField.getSelectionStart() != textField.getSelectionEnd())
+                    text = text.substring(0, textField.getSelectionStart());
             }
             // Insert (or append) typed char.
             final int pos = Math.min(textField.getCaretPosition(), text.length());
