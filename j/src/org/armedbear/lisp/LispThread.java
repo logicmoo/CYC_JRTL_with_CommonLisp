@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.48 2004-07-08 18:01:37 piso Exp $
+ * $Id: LispThread.java,v 1.49 2004-07-11 14:14:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,68 +279,6 @@ public final class LispThread extends LispObject
         }
         signal(new ControlError("Attempt to throw to the nonexistent tag " +
                                 tag.writeToString() + "."));
-    }
-
-    private static final class Context
-    {
-        public final LispObject[] data;
-        public final Context parent;
-
-        public Context(LispObject[] data, Context parent)
-        {
-            this.data = data;
-            this.parent = parent;
-        }
-    }
-
-    private Context _context;
-
-    public void pushContext(LispObject[] data)
-    {
-        _context = new Context(data, _context);
-    }
-
-    public void popContext()
-    {
-        if (_context != null)
-            _context = _context.parent;
-        else
-            Debug.assertTrue(false);
-    }
-
-    // FIXME Only writeToString() throws ConditionThrowable...
-    public LispObject getVariableValue(int index) throws ConditionThrowable
-    {
-        LispObject value = _context.data[index];
-        if (value == null) {
-            Debug.trace("getVariableValue(): value at index " + index + " is null");
-            for (int i = 0; i < _context.data.length; i++) {
-                LispObject obj = _context.data[i];
-                Debug.trace("data[" + i + "] = " + (obj == null ? "null" : obj.writeToString()));
-            }
-            Debug.assertTrue(false);
-        }
-        return value;
-    }
-
-    public void setVariableValue(LispObject value, int index)
-    {
-        Debug.assertTrue(value != null);
-        Debug.assertTrue(_context != null);
-        _context.data[index] = value;
-    }
-
-    public LispObject callLocalFunction(LispObject function, LispObject[] args)
-        throws ConditionThrowable
-    {
-        try {
-            Debug.assertTrue(function != null);
-            Debug.assertTrue(args != null);
-            return function.execute(args);
-        }
-        finally {
-            popContext();
-        }
     }
 
     private static class StackFrame
