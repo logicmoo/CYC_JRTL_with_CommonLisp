@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.27 2003-03-19 12:49:38 piso Exp $
+ * $Id: LispString.java,v 1.28 2003-03-19 12:51:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,42 +118,6 @@ public final class LispString extends AbstractVector implements SequenceType,
             ++i;
             --j;
         }
-    }
-
-    public void append(LispObject obj) throws LispError
-    {
-        if (obj instanceof LispString) {
-            LispString s = (LispString) obj;
-            final int slen = s.length();
-            final int newLength = array.length + slen;
-            char[] newArray = new char[newLength];
-            System.arraycopy(array, 0, newArray, 0, array.length);
-            int j = array.length;
-            for (int i = 0; i < slen; i++)
-                newArray[j++] = s.array[i];
-            array = newArray;
-        } else if (obj instanceof Vector) {
-            Vector v = (Vector) obj;
-            final int vlen = v.length();
-            final int newLength = array.length + vlen;
-            char[] newArray = new char[newLength];
-            System.arraycopy(array, 0, newArray, 0, array.length);
-            int j = array.length;
-            for (int i = 0; i < vlen; i++)
-                newArray[j++] = LispCharacter.getValue(v.get(i));
-            array = newArray;
-        } else if (obj instanceof Cons) {
-            final int newLength = array.length + obj.length();
-            char[] newArray = new char[newLength];
-            System.arraycopy(array, 0, newArray, 0, array.length);
-            int j = array.length;
-            while (obj != NIL) {
-                newArray[j++] = LispCharacter.getValue(obj.car());
-                obj = obj.cdr();
-            }
-            array = newArray;
-        } else if (obj != NIL)
-            throw new TypeError(obj, "sequence");
     }
 
     public LispObject getRowMajor(int index) throws LispError
