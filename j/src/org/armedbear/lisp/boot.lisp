@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.27 2003-03-14 20:06:20 piso Exp $
+;;; $Id: boot.lisp,v 1.28 2003-03-17 14:42:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
           plusp minusp integerp
           character
           open
+          make-array
           read-from-string
           call-arguments-limit
           lambda-parameters-limit
@@ -132,6 +133,15 @@
   (if (eq direction :output)
       (%open-output-file filename)
       (error "operation not supported")))
+
+(defun make-array (dimensions &key
+                              (element-type t)
+                              (initial-element nil initial-element-p)
+                              initial-contents adjustable fill-pointer
+                              displaced-to displaced-index-offset)
+  (%make-array dimensions element-type initial-element initial-element-p
+               initial-contents adjustable fill-pointer displaced-to
+               displaced-index-offset))
 
 (defun read-from-string (string &optional eof-error-p eof-value
 				&key (start 0) end preserve-whitespace)
