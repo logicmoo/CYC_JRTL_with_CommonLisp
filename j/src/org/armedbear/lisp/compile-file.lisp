@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.62 2005-03-13 15:07:27 piso Exp $
+;;; $Id: compile-file.lisp,v 1.63 2005-03-13 16:25:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -365,5 +365,5 @@
                  (setf failure-p nil))))
         (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
         (rename-file temp-file output-file)
-        (%format t "; Compiled ~A (~A seconds)~%" namestring elapsed)))
+        (format t "~&; Compiled ~A (~A seconds)~%" namestring elapsed)))
     (values (truename output-file) warnings-p failure-p)))
