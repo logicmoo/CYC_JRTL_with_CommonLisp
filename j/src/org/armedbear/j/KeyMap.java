@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.7 2003-06-13 00:33:51 piso Exp $
+ * $Id: KeyMap.java,v 1.8 2003-06-13 15:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,18 +60,6 @@ public final class KeyMap implements Constants
             globalKeyMap.setGlobalDefaults();
         }
         return globalKeyMap;
-    }
-
-    public static synchronized final KeyMap getGlobalOverrides()
-    {
-        return globalOverrides;
-    }
-
-    public static synchronized final KeyMap getGlobalOverrides(boolean create)
-    {
-        if (create && globalOverrides == null)
-            globalOverrides = new KeyMap();
-        return globalOverrides;
     }
 
     public static synchronized final File getGlobalKeyMapFile()
@@ -152,10 +140,10 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_F4, CTRL_MASK, "killBuffer");
         mapKey(KeyEvent.VK_W, CTRL_MASK, "killBuffer");
         mapKey(KeyEvent.VK_P, ALT_MASK, "properties");
-        mapKey(KeyEvent.VK_KP_RIGHT, ALT_MASK, "nextBuffer");
         mapKey(KeyEvent.VK_RIGHT, ALT_MASK, "nextBuffer");
-        mapKey(KeyEvent.VK_KP_LEFT, ALT_MASK, "prevBuffer");
+        mapKey(KeyEvent.VK_KP_RIGHT, ALT_MASK, "nextBuffer");
         mapKey(KeyEvent.VK_LEFT, ALT_MASK, "prevBuffer");
+        mapKey(KeyEvent.VK_KP_LEFT, ALT_MASK, "prevBuffer");
         mapKey(KeyEvent.VK_N, CTRL_MASK | SHIFT_MASK, "newFrame");
         mapKey(KeyEvent.VK_X, ALT_MASK, "executeCommand");
         mapKey(KeyEvent.VK_P, CTRL_MASK, "print");
@@ -179,12 +167,12 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_J, CTRL_MASK, "jumpToLine");
         mapKey(KeyEvent.VK_J, CTRL_MASK | SHIFT_MASK, "jumpToColumn");
         mapKey(KeyEvent.VK_M, CTRL_MASK, "findMatchingChar");
-        mapKey(KeyEvent.VK_KP_UP, CTRL_MASK | ALT_MASK, "findFirstOccurrence");
         mapKey(KeyEvent.VK_UP, CTRL_MASK | ALT_MASK, "findFirstOccurrence");
-        mapKey(KeyEvent.VK_KP_UP, ALT_MASK, "findPrevWord");
+        mapKey(KeyEvent.VK_KP_UP, CTRL_MASK | ALT_MASK, "findFirstOccurrence");
         mapKey(KeyEvent.VK_UP, ALT_MASK, "findPrevWord");
-        mapKey(KeyEvent.VK_KP_DOWN, ALT_MASK, "findNextWord");
+        mapKey(KeyEvent.VK_KP_UP, ALT_MASK, "findPrevWord");
         mapKey(KeyEvent.VK_DOWN, ALT_MASK, "findNextWord");
+        mapKey(KeyEvent.VK_KP_DOWN, ALT_MASK, "findNextWord");
         mapKey(KeyEvent.VK_N, CTRL_MASK | ALT_MASK, "nextChange");
         mapKey(KeyEvent.VK_P, CTRL_MASK | ALT_MASK, "previousChange");
         mapKey(KeyEvent.VK_F5, 0, "pushPosition");
@@ -386,13 +374,13 @@ public final class KeyMap implements Constants
         if (keyCode == 0 && modifiers == 0) {
             // This is the keyTyped() case. Ignore keyCode and modifiers;
             // keyChar must match the mapping.
-            for (int i = mappings.size()-1; i >= 0; i--) {
+            for (int i = mappings.size(); i-- > 0;) {
                 KeyMapping mapping = (KeyMapping) mappings.get(i);
                 if (keyChar == mapping.getKeyChar())
                     return mapping;
             }
         } else {
-            for (int i = mappings.size()-1; i >= 0; i--) {
+            for (int i = mappings.size(); i-- > 0;) {
                 // This is the keyPressed() case. keyCode and modifiers must
                 // match the mapping. mapping.getKeyChar() must be zero, but
                 // we ignore the keyChar argument.
@@ -448,8 +436,7 @@ public final class KeyMap implements Constants
         }
     }
 
-    // Only called from synchronized methods.
-    public void mapKey(int keyCode, int modifiers, String command)
+    public synchronized void mapKey(int keyCode, int modifiers, String command)
     {
         // See if we already have a mapping for this keystroke.
         for (int i = 0; i < mappings.size(); i++) {
@@ -463,8 +450,7 @@ public final class KeyMap implements Constants
         mappings.add(new KeyMapping(keyCode, modifiers, command));
     }
 
-    // Only called from synchronized methods.
-    public void mapKey(char keyChar, String command)
+    public synchronized void mapKey(char keyChar, String command)
     {
         // See if we already have a mapping for this keystroke.
         for (int i = 0; i < mappings.size(); i++) {
@@ -479,29 +465,60 @@ public final class KeyMap implements Constants
     }
 
     // Only called from synchronized methods.
-    public boolean mapKey(String s)
+    private boolean mapKey(String s)
     {
         KeyMapping mapping = KeyMapping.createKeyMapping(s);
         if (mapping != null)         {
             mappings.add(mapping);
             return true;
-        } else
-            return false;
+        }
+        return false;
     }
 
-    // Only called from synchronized methods.
-    public boolean mapKey(String keyText, String command)
+    // For API.java.
+    public synchronized boolean mapKey(String keyText, String command)
     {
-        KeyMapping mapping = KeyMapping.createKeyMapping(keyText, command);
-        if (mapping != null) {
-            mappings.add(mapping);
-            return true;
-        } else
+        KeyStroke keyStroke = Utilities.getKeyStroke(keyText);
+        if (keyStroke == null)
             return false;
+
+        char keyChar = keyStroke.getKeyChar();
+        int keyCode = keyStroke.getKeyCode();
+        // Mask off the bits we don't care about (Java 1.4).
+        int modifiers = keyStroke.getModifiers() & 0x0f;
+        if (keyCode == 0 && modifiers == 0) {
+            // This is the keyTyped() case. Ignore keyCode and modifiers;
+            // keyChar must match the mapping.
+            for (int i = mappings.size(); i-- > 0;) {
+                KeyMapping mapping = (KeyMapping) mappings.get(i);
+                if (keyChar == mapping.getKeyChar()) {
+                    mappings.set(i, new KeyMapping(keyChar, command));
+                    return true;
+                }
+            }
+            // Not found.
+            mappings.add(new KeyMapping(keyChar, command));
+        } else {
+            for (int i = mappings.size(); i-- > 0;) {
+                // This is the keyPressed() case. keyCode and modifiers must
+                // match the mapping. mapping.getKeyChar() must be zero, but
+                // we ignore the keyChar argument.
+                KeyMapping mapping = (KeyMapping) mappings.get(i);
+                if (mapping.getKeyChar() == 0 &&
+                    keyCode == mapping.getKeyCode() &&
+                    modifiers == mapping.getModifiers()) {
+                    mappings.set(i,
+                        new KeyMapping(keyCode, modifiers, command));
+                    return true;
+                }
+            }
+            // Not found.
+            mappings.add(new KeyMapping(keyCode, modifiers, command));
+        }
+        return true;
     }
 
-    // Only called from synchronized methods.
-    public void unmapKey(char keyChar)
+    public synchronized void unmapKey(char keyChar)
     {
         for (int i = 0; i < mappings.size(); i++) {
             KeyMapping mapping = (KeyMapping) mappings.get(i);
@@ -512,8 +529,7 @@ public final class KeyMap implements Constants
         }
     }
 
-    // Only called from synchronized methods.
-    public void unmapKey(int keyCode, int modifiers)
+    public synchronized void unmapKey(int keyCode, int modifiers)
     {
         for (int i = 0; i < mappings.size(); i++) {
             KeyMapping mapping = (KeyMapping) mappings.get(i);
@@ -522,6 +538,43 @@ public final class KeyMap implements Constants
                 return;
             }
         }
+    }
+
+    // For API.java.
+    public synchronized boolean unmapKey(String keyText)
+    {
+        KeyStroke keyStroke = Utilities.getKeyStroke(keyText);
+        if (keyStroke != null) {
+            char keyChar = keyStroke.getKeyChar();
+            int keyCode = keyStroke.getKeyCode();
+            // Mask off the bits we don't care about (Java 1.4).
+            int modifiers = keyStroke.getModifiers() & 0x0f;
+            if (keyCode == 0 && modifiers == 0) {
+                // This is the keyTyped() case. Ignore keyCode and modifiers;
+                // keyChar must match the mapping.
+                for (int i = mappings.size(); i-- > 0;) {
+                    KeyMapping mapping = (KeyMapping) mappings.get(i);
+                    if (keyChar == mapping.getKeyChar()) {
+                        mappings.remove(i);
+                        return true;
+                    }
+                }
+            } else {
+                for (int i = mappings.size(); i-- > 0;) {
+                    // This is the keyPressed() case. keyCode and modifiers must
+                    // match the mapping. mapping.getKeyChar() must be zero, but
+                    // we ignore the keyChar argument.
+                    KeyMapping mapping = (KeyMapping) mappings.get(i);
+                    if (mapping.getKeyChar() == 0 &&
+                        keyCode == mapping.getKeyCode() &&
+                        modifiers == mapping.getModifiers()) {
+                        mappings.remove(i);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public synchronized void writeKeyMap(File file)
