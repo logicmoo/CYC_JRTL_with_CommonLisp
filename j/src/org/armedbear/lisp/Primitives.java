@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.717 2004-12-07 16:05:21 piso Exp $
+ * $Id: Primitives.java,v 1.718 2004-12-07 16:37:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -952,17 +952,33 @@ public final class Primitives extends Lisp
 
     // ### =
     // Numeric equality.
-    private static final Primitive EQUALS = new Primitive("=","&rest numbers") {
+    private static final Primitive EQUALS = new Primitive("=", "&rest numbers")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+        public LispObject execute(LispObject arg)
+        {
+            return T;
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             return first.isEqualTo(second) ? T : NIL;
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            if (first.isEqualTo(second) && second.isEqualTo(third))
+                return T;
+            else
+                return NIL;
+        }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
-            if (length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
             final LispObject obj = array[0];
             for (int i = 1; i < length; i++) {
                 if (array[i].isNotEqualTo(obj))
@@ -972,22 +988,39 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### /=
     // Returns true if no two numbers are the same; otherwise returns false.
     private static final Primitive NOT_EQUALS =
         new Primitive("/=", "&rest numbers")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+        public LispObject execute(LispObject arg)
+        {
+            return T;
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             return first.isNotEqualTo(second) ? T : NIL;
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            if (first.isEqualTo(second))
+                return NIL;
+            if (first.isEqualTo(third))
+                return NIL;
+            if (second.isEqualTo(third))
+                return NIL;
+            return T;
+        }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
-            if (length == 2)
-                return array[0].isNotEqualTo(array[1]) ? T : NIL;
-            if (length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
             for (int i = 0; i < length; i++) {
                 final LispObject obj = array[i];
                 for (int j = i+1; j < length; j++) {
@@ -1001,17 +1034,34 @@ public final class Primitives extends Lisp
 
     // ### <
     // Numeric comparison.
-    private static final Primitive LESS_THAN = new Primitive("<","&rest numbers") {
+    private static final Primitive LESS_THAN =
+        new Primitive("<", "&rest numbers")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+        public LispObject execute(LispObject arg)
+        {
+            return T;
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             return first.isLessThan(second) ? T : NIL;
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            if (first.isLessThan(second) && second.isLessThan(third))
+                return T;
+            else
+                return NIL;
+        }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
-            if (length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
             for (int i = 1; i < length; i++) {
                 if (array[i].isLessThanOrEqualTo(array[i-1]))
                     return NIL;
@@ -1023,6 +1073,14 @@ public final class Primitives extends Lisp
     // ### <=
     private static final Primitive LE = new Primitive("<=", "&rest numbers")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+        public LispObject execute(LispObject arg)
+        {
+            return T;
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -1032,31 +1090,19 @@ public final class Primitives extends Lisp
                                   LispObject third)
             throws ConditionThrowable
         {
-            if (second.isLessThan(first))
+            if (first.isLessThanOrEqualTo(second) && second.isLessThanOrEqualTo(third))
+                return T;
+            else
                 return NIL;
-            if (third.isLessThan(second))
-                return NIL;
-            return T;
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
-            switch (array.length) {
-                case 0:
-                    signal(new WrongNumberOfArgumentsException(this));
-                case 1:
-                    return T;
-                case 2:
-                    Debug.assertTrue(false);
-                    return array[0].isLessThanOrEqualTo(array[1]) ? T : NIL;
-                default: {
-                    final int length = array.length;
-                    for (int i = 1; i < length; i++) {
-                        if (array[i].isLessThan(array[i-1]))
-                            return NIL;
-                    }
-                    return T;
-                }
+            final int length = array.length;
+            for (int i = 1; i < length; i++) {
+                if (array[i].isLessThan(array[i-1]))
+                    return NIL;
             }
+            return T;
         }
     };
 
@@ -1064,16 +1110,31 @@ public final class Primitives extends Lisp
     private static final Primitive GREATER_THAN =
         new Primitive(">", "&rest numbers")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+        public LispObject execute(LispObject arg)
+        {
+            return T;
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             return first.isGreaterThan(second) ? T : NIL;
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            if (first.isGreaterThan(second) && second.isGreaterThan(third))
+                return T;
+            else
+                return NIL;
+        }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
-            if (length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
             for (int i = 1; i < length; i++) {
                 if (array[i].isGreaterThanOrEqualTo(array[i-1]))
                     return NIL;
@@ -1085,29 +1146,36 @@ public final class Primitives extends Lisp
     // ### >=
     private static final Primitive GE = new Primitive(">=", "&rest numbers")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return signal(new WrongNumberOfArgumentsException(this));
+        }
+        public LispObject execute(LispObject arg)
+        {
+            return T;
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
             return first.isGreaterThanOrEqualTo(second) ? T : NIL;
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            if (first.isGreaterThanOrEqualTo(second) && second.isGreaterThanOrEqualTo(third))
+                return T;
+            else
+                return NIL;
+        }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             final int length = array.length;
-            switch (length) {
-                case 0:
-                    signal(new WrongNumberOfArgumentsException(this));
-                case 1:
-                    return T;
-                case 2:
-                    Debug.assertTrue(false);
-                    return array[0].isGreaterThanOrEqualTo(array[1]) ? T : NIL;
-                default:
-                    for (int i = 1; i < length; i++) {
-                        if (array[i].isGreaterThan(array[i-1]))
-                            return NIL;
-                    }
-                    return T;
+            for (int i = 1; i < length; i++) {
+                if (array[i].isGreaterThan(array[i-1]))
+                    return NIL;
             }
+            return T;
         }
     };
 
