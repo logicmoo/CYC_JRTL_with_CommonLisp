@@ -1,8 +1,8 @@
 /*
  * StackPanel.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: StackPanel.java,v 1.1.1.1 2002-09-24 16:09:43 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: StackPanel.java,v 1.2 2003-05-16 00:37:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,9 +76,9 @@ public final class StackPanel implements ContextListener, MouseListener
         if (threadRef != null) {
             try {
                 frames = threadRef.frames();
+                final Vector v = new Vector();
                 if (frames.size() > 0) {
                     jdb.setCurrentStackFrame((StackFrame)frames.get(0));
-                    final Vector v = new Vector();
                     int index = 1;
                     Iterator iter = frames.iterator();
                     while (iter.hasNext()) {
@@ -110,16 +110,16 @@ public final class StackPanel implements ContextListener, MouseListener
                         }
                         v.add(sb.toString());
                     }
-                    // Update UI in event dispatch thread.
-                    Runnable r = new Runnable() {
-                        public void run()
-                        {
-                            list.setListData(v);
-                            list.setSelectedIndex(0);
-                        }
-                    };
-                    SwingUtilities.invokeLater(r);
                 }
+                // Update UI in event dispatch thread.
+                Runnable r = new Runnable() {
+                    public void run()
+                    {
+                        list.setListData(v);
+                        list.setSelectedIndex(0);
+                    }
+                };
+                SwingUtilities.invokeLater(r);
             }
             catch (Exception e) {
                 Log.error(e);
