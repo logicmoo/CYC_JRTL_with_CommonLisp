@@ -123,19 +123,7 @@ public class RuntimeClass extends Lisp {
 
     public static final LispObject makeLispObject(Object obj) throws ConditionThrowable
     {
-        if (obj instanceof Boolean)
-            return ((Boolean)obj).booleanValue() ? T : NIL;
-        if (obj instanceof Integer)
-            return new Fixnum(((Integer)obj).intValue());
-        if (obj instanceof Long)
-            return new Bignum(((Long)obj).longValue());
-        if (obj instanceof Double || obj instanceof Float)
-            return new LispFloat(((Number)obj).doubleValue());
-        if (obj instanceof String)
-            return new LispString((String)obj);
-        if (obj instanceof Character)
-            return LispCharacter.getInstance(((Character)obj).charValue());
-        return new JavaObject(obj);
+         return new JavaObject(obj);
     }
 
     public static final Fixnum makeLispObject(byte i) throws ConditionThrowable
@@ -150,6 +138,7 @@ public class RuntimeClass extends Lisp {
 
     public static final Fixnum makeLispObject(int i) throws ConditionThrowable
     {
+      Debug.trace("RTC int: " + i);
         return new Fixnum(i);
     }
 
@@ -175,9 +164,9 @@ public class RuntimeClass extends Lisp {
 
     public static final LispObject makeLispObject(boolean i) throws ConditionThrowable
     {
+      Debug.trace("RTC boolean: " + i);
         return i ? T : NIL;
     }
-
 }
   
   
