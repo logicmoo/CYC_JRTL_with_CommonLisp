@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.317 2003-08-10 00:55:27 piso Exp $
+ * $Id: Primitives.java,v 1.318 2003-08-11 01:07:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4122,21 +4122,25 @@ public final class Primitives extends Module
             int length = args.length;
             if (length < 1 || length > 2)
                 throw new WrongNumberOfArgumentsException(this);
-            int limit = Fixnum.getValue(args[0]);
             Random random;
             if (length == 2)
                 random = (Random) JavaObject.getObject(args[1]);
             else
                 random = (Random) JavaObject.getObject(_RANDOM_STATE_.symbolValueNoThrow());
-            if (limit <= Integer.MAX_VALUE) {
+            if (args[0] instanceof Fixnum) {
+                int limit = Fixnum.getValue(args[0]);
                 int n = random.nextInt((int)limit);
                 Debug.assertTrue(n < limit);
                 return new Fixnum(n);
             }
-            double d = random.nextDouble();
-            int n = (int) (d * limit);
-            Debug.assertTrue(n < limit);
-            return new Fixnum(n);
+            if (args[0] instanceof Bignum) {
+                BigInteger limit = Bignum.getValue(args[0]);
+                int bitLength = limit.bitLength();
+                BigInteger rand = new BigInteger(bitLength + 1, random);
+                BigInteger remainder = rand.remainder(limit);
+                return new Bignum(remainder);
+            }
+            throw new TypeError(args[0], "number");
         }
     };
 
