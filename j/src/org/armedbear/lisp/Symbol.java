@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.57 2003-08-04 23:55:42 piso Exp $
+ * $Id: Symbol.java,v 1.58 2003-08-10 04:33:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,6 +71,7 @@ public class Symbol extends LispObject
     public static final Symbol NUMBER               = PACKAGE_CL.addExternalSymbol("NUMBER");
     public static final Symbol OR                   = PACKAGE_CL.addExternalSymbol("OR");
     public static final Symbol PACKAGE              = PACKAGE_CL.addExternalSymbol("PACKAGE");
+    public static final Symbol PATHNAME             = PACKAGE_CL.addExternalSymbol("PATHNAME");
     public static final Symbol RATIO                = PACKAGE_CL.addExternalSymbol("RATIO");
     public static final Symbol RATIONAL             = PACKAGE_CL.addExternalSymbol("RATIONAL");
     public static final Symbol REAL                 = PACKAGE_CL.addExternalSymbol("REAL");
