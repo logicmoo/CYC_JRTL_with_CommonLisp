@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.246 2003-06-20 19:15:08 piso Exp $
+ * $Id: Primitives.java,v 1.247 2003-06-20 19:33:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2066,83 +2066,6 @@ public final class Primitives extends Module
             return element;
         }
     };
-
-    // ### describe
-    // Need to support optional second argument specifying output stream.
-    private static final Primitive DESCRIBE = new Primitive("describe") {
-        public LispObject execute(LispObject[] args) throws Condition
-        {
-            if (args.length != 1)
-                throw new WrongNumberOfArgumentsException(this);
-            describe(args[0]);
-            return LispThread.currentThread().nothing();
-        }
-    };
-
-    private static void describe(LispObject obj) throws Condition
-    {
-        StringBuffer sb = new StringBuffer(String.valueOf(obj));
-        if (obj instanceof Symbol) {
-            Symbol symbol = (Symbol) obj;
-            LispObject pkg = symbol.getPackage();
-            sb.append(" is an ");
-            if (pkg == NIL)
-                sb.append("uninterned");
-            else
-                sb.append(symbol.isExternal() ? "external" : "internal");
-            sb.append(" symbol");
-            if (pkg != NIL) {
-                sb.append(" in the ");
-                sb.append(pkg.getName());
-                sb.append(" package");
-            }
-            sb.append(".\n");
-            if (symbol.isSpecialVariable()) {
-                sb.append("It is a special variable; ");
-                LispObject value = symbol.getSymbolValue();
-                if (value != null) {
-                    sb.append("its value is ");
-                    sb.append(value);
-                } else
-                    sb.append("no current value");
-                sb.append(".\n");
-            }
-            LispObject function = symbol.getSymbolFunction();
-            if (function != null) {
-                sb.append("Its function binding is ");
-                sb.append(function);
-                sb.append(".\n");
-                LispObject documentation =
-                    eval(list(Symbol.DOCUMENTATION,
-                              list(Symbol.QUOTE, symbol),
-                              list(Symbol.QUOTE, Symbol.FUNCTION)),
-                         new Environment(),
-                         LispThread.currentThread());
-                if (documentation instanceof LispString) {
-                    sb.append("Function documentation:\n  ");
-                    sb.append(((LispString)documentation).getValue());
-                    sb.append('\n');
-                }
-            }
-            LispObject plist = symbol.getPropertyList();
-            if (plist != NIL) {
-                sb.append("Its property list has these indicator/value pairs:\n");
-                LispObject[] array = plist.copyToArray();
-                for (int i = 0; i < array.length; i += 2) {
-                    LispObject indicator = array[i];
-                    LispObject value = array[i+1];
-                    sb.append("  ");
-                    sb.append(indicator);
-                    sb.append("\t\t");
-                    sb.append(value);
-                    sb.append('\n');
-                }
-            }
-        }
-        CharacterOutputStream out = getStandardOutput();
-        out.freshLine();
-        out.writeString(sb.toString());
-    }
 
     // ### type-of
     private static final Primitive1 TYPE_OF = new Primitive1("type-of") {
