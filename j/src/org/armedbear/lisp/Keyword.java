@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Keyword.java,v 1.14 2003-12-12 13:03:39 piso Exp $
+ * $Id: Keyword.java,v 1.15 2004-01-01 01:40:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ public final class Keyword extends Lisp
         ALLOW_OTHER_KEYS    = internKeyword("ALLOW-OTHER-KEYS"),
         BOOLEAN             = internKeyword("BOOLEAN"),
         CAPITALIZE          = internKeyword("CAPITALIZE"),
+        COMMON              = internKeyword("COMMON"),
         COUNT_ONLY          = internKeyword("COUNT-ONLY"),
         DATUM               = internKeyword("DATUM"),
         DECLARED            = internKeyword("DECLARED"),
@@ -49,6 +50,7 @@ public final class Keyword extends Lisp
         INITIAL_CONTENTS    = internKeyword("INITIAL-CONTENTS"),
         INITIAL_ELEMENT     = internKeyword("INITIAL-ELEMENT"),
         INTERNAL            = internKeyword("INTERNAL"),
+        LOCAL               = internKeyword("LOCAL"),
         NAME                = internKeyword("NAME"),
         NICKNAMES           = internKeyword("NICKNAMES"),
         NO_ERROR            = internKeyword("NO-ERROR"),
