@@ -1,7 +1,7 @@
 # Makefile.in
 
-# Copyright (C) 1998-2004 Peter Graves
-# $Id: Makefile.in,v 1.26 2005-02-14 19:12:09 piso Exp $
+# Copyright (C) 1998-2005 Peter Graves
+# $Id: Makefile.in,v 1.27 2005-02-18 00:44:54 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ classes:
 	cd src/org/armedbear/j && date > build && hostname >> build
 
 fasls:
-	$(JAVA) -cp ./src org.armedbear.lisp.Main --eval "(progn (compile-system) (quit))"
+	$(JAVA) -cp ./src org.armedbear.lisp.Main --noinit --eval "(progn (compile-system) (quit))"
 	date > src/org/armedbear/j/build && hostname >> src/org/armedbear/j/build
 
 jpty:

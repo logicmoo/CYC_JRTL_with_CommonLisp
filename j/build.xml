@@ -159,7 +159,7 @@
   <target name="fasls">
     <exec executable="${java}" dir="${basedir}">
       <!-- Use the server VM to avoid stack overflow (Java 1.5, Windows).-->
-      <arg line="-server -cp . org.armedbear.lisp.Main --eval '(progn (compile-system) (quit))'"/>
+      <arg line="-server -cp . org.armedbear.lisp.Main --noinit --eval '(progn (compile-system) (quit))'"/>
     </exec>
   </target>
 
