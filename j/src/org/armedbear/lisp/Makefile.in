@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.94 2003-11-02 00:51:00 piso Exp $
+# $Id: Makefile.in,v 1.95 2003-11-02 14:10:46 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@ CLASSFILES =	AbstractArray.class \
 		AbstractVector.class \
 		ArithmeticError.class \
 		Array.class \
-		ArrayType.class \
 		Autoload.class \
 		AutoloadMacro.class \
 		Bignum.class \
