@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.122 2004-04-24 21:20:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.123 2004-04-25 01:18:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -583,7 +583,7 @@
                 min max
                 realpart imagpart
                 integer-length
-                sqrt isqrt gcd lcm
+                sqrt isqrt gcd lcm signum
                 char schar
                 open
                 svref
@@ -1581,6 +1581,23 @@
 
 (defvar *toplevel-defuns* nil)
 
+;;; MISC.330
+(defun rewrite-function-call (form)
+  (let ((op (car form))
+        (args (cdr form))
+        (syms ())
+        (lets ()))
+    (dolist (arg args)
+      (cond ((and (consp arg) (eq (car arg) 'RETURN-FROM))
+             (let ((sym (gensym)))
+               (push sym syms)
+               (push (list sym arg) lets)))
+            (t
+             (push arg syms))))
+    (if lets
+        (list 'LET* (nreverse lets) (list* op (nreverse syms)))
+        form)))
+
 (defun process-args (args)
   (dolist (form args)
     (compile-form form)
@@ -1589,6 +1606,9 @@
     (maybe-emit-clear-values form)))
 
 (defun compile-function-call (form &optional for-effect)
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-function-call (compile-form new-form))))
   (let ((fun (car form))
         (args (cdr form)))
     (unless (symbolp fun)
@@ -1596,15 +1616,16 @@
     (let ((numargs (length args))
           local-function)
       (when (sys::built-in-function-p fun)
-        (cond ((= numargs 1)
-               (when (compile-function-call-1 fun args)
-                 (return-from compile-function-call)))
-              ((= numargs 2)
-               (when (compile-function-call-2 fun args)
-                 (return-from compile-function-call)))
-              ((= numargs 3)
-               (when (compile-function-call-3 fun args)
-                 (return-from compile-function-call)))))
+        (case numargs
+          (1
+           (when (compile-function-call-1 fun args)
+             (return-from compile-function-call)))
+          (2
+           (when (compile-function-call-2 fun args)
+             (return-from compile-function-call)))
+          (3
+           (when (compile-function-call-3 fun args)
+             (return-from compile-function-call)))))
       (cond
        ((setf local-function
               (find fun *local-functions* :key #'local-function-name))
