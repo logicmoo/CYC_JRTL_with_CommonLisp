@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.46 2003-03-26 01:43:22 piso Exp $
+ * $Id: Lisp.java,v 1.47 2003-03-26 21:48:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -662,26 +662,24 @@ public abstract class Lisp
         return new Bignum(n);
     }
 
-    private static final BigInteger ZERO    = BigInteger.valueOf(0);
-    private static final BigInteger ONE     = BigInteger.valueOf(1);
     private static final BigInteger INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
     private static final BigInteger INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE);
 
     public static final LispObject number(BigInteger numerator,
         BigInteger denominator) throws LispError
     {
-        if (denominator.equals(ZERO))
+        if (denominator.equals(BigInteger.ZERO))
             throw new LispError("division by zero");
         if (denominator.signum() < 0) {
             numerator = numerator.negate();
             denominator = denominator.negate();
         }
         BigInteger gcd = numerator.gcd(denominator);
-        if (!gcd.equals(ONE)) {
+        if (!gcd.equals(BigInteger.ONE)) {
             numerator = numerator.divide(gcd);
             denominator = denominator.divide(gcd);
         }
-        if (denominator.equals(ONE))
+        if (denominator.equals(BigInteger.ONE))
             return number(numerator);
         return new Ratio(numerator, denominator);
     }
