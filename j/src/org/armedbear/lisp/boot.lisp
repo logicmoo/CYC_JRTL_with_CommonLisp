@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.155 2004-03-24 15:11:20 piso Exp $
+;;; $Id: boot.lisp,v 1.156 2004-03-24 15:41:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,9 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (sys::%in-package "COMMON-LISP")
+
+(format t "Low-level initialization completed in ~A seconds.~%"
+        (float (/ (ext:uptime) 1000)))
 
 (setq ext:*autoload-verbose* nil)
 (setq *load-verbose* nil)
@@ -313,4 +316,4 @@
 (sys::load-system-file "restart")
 (sys::load-system-file "debug")
 
-(format t "Startup completed in ~A seconds." (float (/ (ext:uptime) 1000)))
+(format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000)))
