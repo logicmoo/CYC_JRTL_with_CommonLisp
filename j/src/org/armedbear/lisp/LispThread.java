@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.23 2003-11-15 15:53:38 piso Exp $
+ * $Id: LispThread.java,v 1.24 2003-11-16 15:02:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,15 +111,47 @@ public final class LispThread extends LispObject
         return _values;
     }
 
-    public final void setValues(LispObject[] array)
+    public final LispObject setValues()
     {
-        if (array == null)
+        _values = new LispObject[0];
+        return NIL;
+    }
+
+    public final LispObject setValues(LispObject value1)
+    {
+        _values = null;
+        return value1;
+    }
+
+    public final LispObject setValues(LispObject value1, LispObject value2)
+    {
+        _values = new LispObject[2];
+        _values[0] = value1;
+        _values[1] = value2;
+        return value1;
+    }
+
+    public final LispObject setValues(LispObject value1, LispObject value2,
+                                      LispObject value3)
+    {
+        _values = new LispObject[3];
+        _values[0] = value1;
+        _values[1] = value2;
+        _values[2] = value3;
+        return value1;
+    }
+
+    public final LispObject setValues(LispObject[] values)
+    {
+        if (values == null) {
+            Debug.assertTrue(false);
             _values = null;
-        else {
-            _values = new LispObject[array.length];
-            for (int i = array.length; i-- > 0;)
-                _values[i] = array[i];
+        } else {
+            _values = new LispObject[values.length];
+            for (int i = values.length; i-- > 0;)
+                _values[i] = values[i];
         }
+        return values.length > 0 ? values[0] : NIL;
     }
 
     public final void clearValues()
