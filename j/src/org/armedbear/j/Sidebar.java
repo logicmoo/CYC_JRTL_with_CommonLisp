@@ -2,7 +2,7 @@
  * Sidebar.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Sidebar.java,v 1.3 2003-07-25 17:48:51 piso Exp $
+ * $Id: Sidebar.java,v 1.4 2003-08-07 17:34:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class Sidebar extends JComponent implements Constants
     private final SplitPane splitPane;
     private final SidebarPanel topPanel;
     private final SidebarPanel bottomPanel;
-    private final SidebarBufferList bufferList;
+    private final SidebarBufferTree bufferTree;
 
     private NavigationComponent bottomComponent;
     private int updateFlag;
@@ -44,8 +44,8 @@ public final class Sidebar extends JComponent implements Constants
         this.frame = frame;
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         topPanel = new SidebarPanel(this);
-        bufferList = new SidebarBufferList(this);
-        JScrollPane bufferListScrollPane = new JScrollPane(bufferList);
+        bufferTree = new SidebarBufferTree(this);
+        JScrollPane bufferListScrollPane = new JScrollPane(bufferTree);
         bufferListScrollPane.setAlignmentX(LEFT_ALIGNMENT);
         bufferListScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         bufferListScrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -67,9 +67,14 @@ public final class Sidebar extends JComponent implements Constants
         return frame.getCurrentEditor();
     }
 
-    public final SidebarBufferList getBufferList()
+    public final SidebarBufferTree getBufferList()
     {
-        return bufferList;
+        return bufferTree;
+    }
+
+    public final SidebarBufferTree getBufferTree()
+    {
+        return bufferTree;
     }
 
     public NavigationComponent getBottomComponent()
@@ -79,8 +84,8 @@ public final class Sidebar extends JComponent implements Constants
 
     public void activateBufferList()
     {
-        if (bufferList != null)
-            frame.setFocus(bufferList);
+        if (bufferTree != null)
+            frame.setFocus(bufferTree);
     }
 
     public void activateNavigationComponent()
@@ -116,10 +121,10 @@ public final class Sidebar extends JComponent implements Constants
 
     public void setBuffer()
     {
-        if (bufferList != null) {
+        if (bufferTree != null) {
             Buffer buffer = frame.getCurrentEditor().getBuffer();
-            if (buffer != bufferList.getSelectedValue())
-                bufferList.setSelectedValue(buffer, true);
+            if (buffer != bufferTree.getSelectedBuffer())
+                bufferTree.setSelectedBuffer(buffer);
         }
     }
 
@@ -138,8 +143,8 @@ public final class Sidebar extends JComponent implements Constants
     public synchronized final void setUpdateFlag(int mask)
     {
         updateFlag |= mask;
-        if (bufferList != null)
-            bufferList.setUpdateFlag(updateFlag & SIDEBAR_BUFFER_LIST_ALL);
+        if (bufferTree != null)
+            bufferTree.setUpdateFlag(updateFlag & SIDEBAR_BUFFER_LIST_ALL);
     }
 
     public static void setUpdateFlagInAllFrames(int mask)
@@ -196,9 +201,9 @@ public final class Sidebar extends JComponent implements Constants
     {
         if (updateFlag != 0) {
             if ((updateFlag & SIDEBAR_BUFFER_LIST_ALL) != 0) {
-                SidebarBufferList bufferList = getBufferList();
-                if (bufferList != null && bufferList != frame.getFocusedComponent())
-                    bufferList.updateBufferList();
+                SidebarBufferTree bufferTree = getBufferTree();
+                if (bufferTree != null && bufferTree != frame.getFocusedComponent())
+                    bufferTree.updateBufferList();
             }
             if (bottomComponent == null || bottomComponent != frame.getFocusedComponent()) {
                 setBottomComponent();
