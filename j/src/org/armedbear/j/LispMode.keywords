@@ -89,6 +89,7 @@ coerce
 compile-file
 compile-file-pathname
 compiler-macro-function
+complement
 concatenate
 cond
 cons
