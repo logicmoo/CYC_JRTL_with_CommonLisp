@@ -2,7 +2,7 @@
  * UndefinedFunctionError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndefinedFunctionError.java,v 1.1 2003-02-15 16:54:25 piso Exp $
+ * $Id: UndefinedFunctionError.java,v 1.2 2003-06-24 18:21:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,29 +23,36 @@ package org.armedbear.lisp;
 
 public final class UndefinedFunctionError extends LispError
 {
+    private final LispObject object;
     private final String name;
 
     public UndefinedFunctionError()
     {
+        object = null;
         name = null;
     }
 
     public UndefinedFunctionError(LispObject object)
     {
-        this(object.getName());
+        this.object = object;
+        this.name = null;
     }
 
     public UndefinedFunctionError(String name)
     {
+        this.object = null;
         this.name = name;
     }
 
     public String getMessage()
     {
         StringBuffer sb = new StringBuffer("undefined function");
-        if (name != null && name.length() > 0) {
+        if (name != null) {
             sb.append(' ');
             sb.append(name);
+        } else if (object != null) {
+            sb.append(' ');
+            sb.append(String.valueOf(object));
         }
         return sb.toString();
     }
