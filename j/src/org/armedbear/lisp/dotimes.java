@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dotimes.java,v 1.2 2003-09-23 15:42:18 piso Exp $
+ * $Id: dotimes.java,v 1.3 2003-11-19 17:04:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,27 @@ public final class dotimes extends SpecialOperator
         LispObject resultForm = args.cdr().cdr().car();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         int depth = thread.getStackDepth();
+        // Process declarations.
+        LispObject specials = NIL;
+        while (bodyForm != NIL) {
+            LispObject obj = bodyForm.car();
+            if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
+                LispObject decls = obj.cdr();
+                while (decls != NIL) {
+                    LispObject decl = decls.car();
+                    if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
+                        LispObject vars = decl.cdr();
+                        while (vars != NIL) {
+                            specials = new Cons(vars.car(), specials);
+                            vars = vars.cdr();
+                        }
+                    }
+                    decls = decls.cdr();
+                }
+                bodyForm = bodyForm.cdr();
+            } else
+                break;
+        }
         try {
             LispObject limit = eval(countForm, env, thread);
             // Look for tags.
@@ -58,7 +79,13 @@ public final class dotimes extends SpecialOperator
                 int i;
                 for (i = 0; i < count; i++) {
                     Environment ext = new Environment(env);
-                    bind(var, new Fixnum(i), ext);
+                    if (specials != NIL && memq(var, specials)) {
+                        thread.bindSpecial(var, new Fixnum(i));
+                        ext.declareSpecial(var);
+                    } else if (var.isSpecialVariable()) {
+                        thread.bindSpecial(var, new Fixnum(i));
+                    } else
+                        ext.bind(var, new Fixnum(i));
                     LispObject body = bodyForm;
                     while (body != NIL) {
                         LispObject current = body.car();
