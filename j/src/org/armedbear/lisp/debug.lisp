@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.11 2003-12-14 17:16:04 piso Exp $
+;;; $Id: debug.lisp,v 1.12 2003-12-16 14:37:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,14 +19,16 @@
 
 (in-package "EXTENSIONS")
 
-(export '*debug-condition*)
+(export '(*debug-condition* *debug-level*))
 
 (defvar *debug-condition* nil)
+
+(defvar *debug-level* 0)
 
 (in-package "SYSTEM")
 
 (defun debug-loop ()
-  (let ((tpl::*break-level* (1+ tpl::*break-level*)))
+  (let ((*debug-level* (1+ *debug-level*)))
   (fresh-line *debug-io*)
   (%format *debug-io* "Type :CONTINUE to return from break or :RESET to return to top level.~%")
     (loop

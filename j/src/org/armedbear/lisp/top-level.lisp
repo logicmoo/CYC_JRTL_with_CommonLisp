@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.20 2003-12-14 17:17:34 piso Exp $
+;;; $Id: top-level.lisp,v 1.21 2003-12-16 14:38:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,8 +23,6 @@
 
 (import 'sys::%format)
 
-(defvar *break-level* 0)
-
 (defparameter *command-char* #\:)
 
 (defvar *cmd-number* 1
@@ -39,8 +37,8 @@
 
 (defun repl-prompt-fun (stream)
   (fresh-line stream)
-  (when (> *break-level* 0)
-    (%format stream "[~D] " *break-level*))
+  (when (> *debug-level* 0)
+    (%format stream "[~D] " *debug-level*))
   (%format stream "~A(~D): " (prompt-package-name) *cmd-number*))
 
 (defparameter *repl-prompt-fun* #'repl-prompt-fun)
@@ -73,7 +71,7 @@
   (values))
 
 (defun continue-command (ignored)
-  (if (> *break-level* 0)
+  (if (> *debug-level* 0)
       (throw 'continue-catcher nil)))
 
 (defun describe-command (args)
