@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.7 2004-03-07 17:43:58 piso Exp $
+ * $Id: Readtable.java,v 1.8 2004-03-10 20:10:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,9 @@ public final class Readtable extends LispObject
 
     private Readtable(Readtable rt)
     {
-        synchronized (rt.table) {
+        synchronized (rt) {
             table = new ArrayList(rt.table);
+            readtableCase = rt.readtableCase;
         }
     }
 
@@ -147,7 +148,9 @@ public final class Readtable extends LispObject
             if (second == NIL)
                 return new Readtable(from);
             Readtable to = checkReadtable(second);
+            // FIXME synchronization
             to.table = new ArrayList(from.table);
+            to.readtableCase = from.readtableCase;
             return to;
         }
     };
