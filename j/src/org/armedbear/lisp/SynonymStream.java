@@ -2,7 +2,7 @@
  * SynonymStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SynonymStream.java,v 1.5 2004-06-22 23:07:46 piso Exp $
+ * $Id: SynonymStream.java,v 1.6 2004-06-23 01:41:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,11 @@ public final class SynonymStream extends Stream
         if (typeSpecifier == BuiltInClass.SYNONYM_STREAM)
             return T;
         return super.typep(typeSpecifier);
+    }
+
+    public LispObject getElementType() throws ConditionThrowable
+    {
+        return checkStream(symbol.symbolValue()).getElementType();
     }
 
     public LispObject listen() throws ConditionThrowable
