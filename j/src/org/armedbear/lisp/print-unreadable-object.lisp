@@ -1,7 +1,7 @@
 ;;; print-unreadable-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: print-unreadable-object.lisp,v 1.3 2004-05-22 17:23:07 piso Exp $
+;;; $Id: print-unreadable-object.lisp,v 1.4 2004-10-01 00:23:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,20 +19,20 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun %print-unreadable-object (object stream type identity body)
+  (setf stream (decode-stream-arg stream))
   (when *print-readably*
     (error 'print-not-readable :object object))
   (%format stream "#<")
   (when type
     (%format stream "~S" (type-of object))
-    (when (or body identity)
-      (%format stream " ")))
+      (%format stream " "))
   (when body
     (funcall body))
   (when identity
-    (when body
+    (when (or body (not type))
       (%format stream " "))
     (%format stream "@ #x~X" (identity-hash-code object)))
   (%format stream ">")
