@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.239 2004-07-24 20:37:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.240 2004-07-25 18:13:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -185,30 +185,95 @@
          nil)
         (t
          (setf form (list* 'BLOCK (cadr form) (mapcar #'p1 (cddr form))))
-;;          (make-block-node :form form :name (cadr form))
-         form
+         (make-block-node :form form :name (cadr form))
+;;          form
          )))
 
 (defun p1-flet/labels (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
-  form)
+;;   form)
+  (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
+
+(defun p1-function (form)
+  (if (and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
+      (list 'FUNCTION (p1 (cadr form)))
+      form))
+
+(defun p1-lambda (form)
+  (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
+
+(defun p1-setq (form)
+  (unless (= (length form) 3)
+    (error "Too many arguments for SETQ."))
+  (list 'SETQ (second form) (p1 (third form))))
+
+(defun p1-tagbody (form)
+  (list* (car form) (mapcar #'p1 (cdr form))))
+
+(defun p1-default (form)
+  (list* (car form) (mapcar #'p1 (cdr form))))
+
+(defun p1-throw (form)
+  (let ((new-form (rewrite-throw form)))
+    (when (neq new-form form)
+      (return-from p1-throw (p1 new-form))))
+  (list* 'THROW (mapcar #'p1 (cdr form))))
 
 (defun p1 (form)
   (if (atom form)
-      form
-      (case (car form)
-        (QUOTE
-         form)
-        ((FLET LABELS)
-         (p1-flet/labels form))
-        (BLOCK
-         (p1-block form))
-        (LAMBDA
-         (list* 'LAMBDA (cadr form) (mapcar #'p1 (cddr form))))
-        ((LET LET*)
-         (p1-let/let* form))
-        (t
-         (list* (car form) (mapcar #'p1 (cdr form)))))))
+      (progn
+;;         (assert (not (node-p form)))
+        form)
+      (let ((op (car form))
+            handler)
+        (cond ((symbolp op)
+               (cond ((setf handler (get op 'p1-handler))
+                      (funcall handler form))
+                     ((macro-function op)
+                      (p1 (macroexpand form)))
+                     ((special-operator-p op)
+                      (error "P1: unsupported special operator ~S" op))
+                     (t
+                      ;; Function call.
+                      (let ((new-form (rewrite-function-call form)))
+                        (if (neq new-form form)
+                            (p1 new-form)
+                            (p1-default form))))))
+              (t
+               form)))))
+
+(defun install-p1-handler (symbol handler)
+  (setf (get symbol 'p1-handler) handler))
+
+(install-p1-handler 'block                'p1-block)
+(install-p1-handler 'catch                'p1-default)
+(install-p1-handler 'declare              'identity)
+(install-p1-handler 'eval-when            'p1-lambda)
+(install-p1-handler 'flet                 'p1-flet/labels)
+(install-p1-handler 'function             'p1-function)
+(install-p1-handler 'go                   'identity)
+(install-p1-handler 'if                   'p1-default)
+(install-p1-handler 'labels               'p1-flet/labels)
+(install-p1-handler 'lambda               'p1-lambda)
+(install-p1-handler 'let                  'p1-let/let*)
+(install-p1-handler 'let*                 'p1-let/let*)
+(install-p1-handler 'load-time-value      'identity)
+(install-p1-handler 'locally              'p1-default)
+(install-p1-handler 'multiple-value-bind  'p1-lambda)
+(install-p1-handler 'multiple-value-call  'identity)
+(install-p1-handler 'multiple-value-list  'p1-default)
+(install-p1-handler 'multiple-value-prog1 'p1-default)
+(install-p1-handler 'multiple-value-setq  'p1-lambda)
+(install-p1-handler 'progn                'p1-default)
+(install-p1-handler 'progv                'identity)
+(install-p1-handler 'quote                'identity)
+(install-p1-handler 'return-from          'p1-lambda)
+(install-p1-handler 'setq                 'p1-setq)
+(install-p1-handler 'symbol-macrolet      'identity)
+(install-p1-handler 'tagbody              'p1-tagbody)
+(install-p1-handler 'the                  'p1-lambda)
+(install-p1-handler 'throw                'p1-throw)
+(install-p1-handler 'unwind-protect       'p1-default)
 
 (defun dump-pool ()
   (let ((pool (reverse *pool*))
@@ -529,7 +594,9 @@
   (single-valued-p-init))
 
 (defun single-valued-p (form)
-  (cond ((atom form)
+  (cond ((node-p form)
+         (single-valued-p (node-form form)))
+        ((atom form)
          t)
         ((eq (first form) 'if)
          (and (single-valued-p (second form))
@@ -1790,17 +1857,20 @@
          nil)))
 
 (defun unsafe-p (args)
-  (if (atom args)
-      nil
-      (case (car args)
-        (QUOTE
+  (cond ((node-p args)
+         (unsafe-p (node-form args)))
+        ((atom args)
          nil)
-        ((RETURN-FROM GO CATCH THROW UNWIND-PROTECT BLOCK)
-         t)
         (t
-         (dolist (arg args)
-           (when (unsafe-p arg)
-             (return t)))))))
+         (case (car args)
+           (QUOTE
+            nil)
+           ((RETURN-FROM GO CATCH THROW UNWIND-PROTECT BLOCK)
+            t)
+           (t
+            (dolist (arg args)
+              (when (unsafe-p arg)
+                (return t))))))))
 
 (defun rewrite-function-call (form)
   (let ((args (cdr form)))
@@ -1823,10 +1893,11 @@
     (maybe-emit-clear-values form)))
 
 (defun compile-function-call (form &key (target *val*))
+;;   (format t "compile-function-call ~S~%" form)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
+;;       (format t "new-form = ~S~%" new-form)
       (return-from compile-function-call (compile-form new-form :target target))))
-;;   (format t "compile-function-call ~S~%" form)
   (let ((fun (car form))
         (args (cdr form)))
     (unless (symbolp fun)
@@ -2387,14 +2458,16 @@
         (body (cdr form)))
     ;; Scan for tags.
     (dolist (subform body)
-      (when (atom subform)
+;;       (when (atom subform)
+      (when (or (symbolp subform) (integerp subform))
         (let* ((tag (make-tag :name subform :label (gensym))))
           (push tag *local-tags*)
           (push tag *all-tags*))))
     (do* ((rest body (cdr rest))
           (subform (car rest) (car rest)))
          ((null rest))
-      (cond ((atom subform)
+;;       (cond ((atom subform)
+      (cond ((or (symbolp subform) (integerp subform))
              (let ((tag (find-tag subform)))
                (unless tag
                  (error "COMPILE-TAGBODY: tag not found: ~S~%" subform))
@@ -2438,7 +2511,9 @@
 
 (defun contains-return (form)
   (if (atom form)
-      nil
+      (if (node-p form)
+          (contains-return (node-form form))
+          nil)
       (case (car form)
         (QUOTE
          nil)
@@ -2450,6 +2525,9 @@
              (return t)))))))
 
 (defun compile-block (form &key (target *val*))
+;;   (format t "compile-block ~S~%" (cadr form))
+  ;; This shouldn't be called, now that we have pass 1.
+;;   (assert nil)
   (let ((block (make-block-node :form form
                                 :name (cadr form)
                                 :target target)))
@@ -2457,6 +2535,9 @@
   ))
 
 (defun compile-block-node (block target)
+;;   (%format t "entering compile-block-node~%")
+;;   (%format t "form = ~S~%" (block-form block))
+  (assert (node-p block))
   (let* (
 ;;          (block (make-block-node :form form
 ;;                                  :name (cadr form)
@@ -2464,6 +2545,7 @@
          (*blocks* *blocks*)
          (*register* *register*)
          env-register)
+    (setf (block-target block) target)
     (push block *blocks*)
     (when (contains-return (cddr (block-form block)))
       ;; Save current dynamic environment.
@@ -2515,7 +2597,9 @@
       ;; We saved the dynamic environment above. Restore it now.
       (emit 'aload *thread*)
       (emit 'aload env-register)
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)))
+;;   (%format t "leaving compile-block-node~%")
+  )
 
 (defun compile-return-from (form &key (target *val*))
   (let* ((name (second form))
@@ -2711,23 +2795,29 @@
       (error "COMPILE-LABELS: unsupported case.")))
 
 (defun contains-symbol (symbol form)
-  (if (atom form)
-      (eq form symbol)
-      (or (contains-symbol symbol (car form))
-          (contains-symbol symbol (cdr form)))))
+  (cond ((node-p form)
+         (contains-symbol symbol (node-form form)))
+        ((atom form)
+         (eq form symbol))
+        (t
+         (or (contains-symbol symbol (car form))
+             (contains-symbol symbol (cdr form))))))
 
 (defun contains-go (form)
-  (if (atom form)
-      nil
-      (case (car form)
-        (QUOTE
+  (cond ((node-p form)
+         (contains-go (node-form form)))
+        ((atom form)
          nil)
-        (GO
-         t)
         (t
-         (dolist (subform form)
-           (when (contains-go subform)
-             (return t)))))))
+         (case (car form)
+           (QUOTE
+            nil)
+           (GO
+            t)
+           (t
+            (dolist (subform form)
+              (when (contains-go subform)
+                (return t))))))))
 
 (defun compile-lambda (form target)
   (let* ((closure-vars *visible-variables*)
@@ -3312,9 +3402,9 @@
         form)))
 
 (defun compile-throw (form &key (target *val*))
-  (let ((new-form (rewrite-throw form)))
-    (when (neq new-form form)
-      (return-from compile-throw (compile-form new-form :target target))))
+;;   (let ((new-form (rewrite-throw form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-throw (compile-form new-form :target target))))
   (emit-push-current-thread)
   (compile-form (second form) :target :stack) ; Tag.
   (compile-form (third form) :target :stack) ; Result.
@@ -3387,17 +3477,17 @@
          (let ((op (car form))
                handler)
            (cond ((symbolp op)
-                  (cond ((setf handler (get op 'jvm-compile-handler))
+                  (cond ((setf handler (get op 'p2-handler))
                          (funcall handler form :target target)
                          )
                         ((macro-function op)
                          (compile-form (macroexpand form) :target target))
                         ((special-operator-p op)
-                         (error "COMPILE-FORM: unsupported special operator ~S." op))
+                         (error "COMPILE-FORM: unsupported special operator ~S" op))
                         (t
                          (compile-function-call form :target target))))
                  ((and (consp op) (eq (car op) 'LAMBDA))
-                  (format t "compile-form lambda case~%")
+;;                   (format t "compile-form lambda case~%")
                   (let ((new-form (list* 'FUNCALL form)))
                     (compile-form new-form :target target)))
                  (t
@@ -3419,8 +3509,7 @@
           (t
            (compile-variable-reference form target))))
         ((block-node-p form)
-         (assert nil)
-         (%format t "COMPILE-FORM block-node case~S~%")
+;;          (%format t "COMPILE-FORM block-node case~S~%")
          (compile-block-node form target))
         ((constantp form)
          (compile-constant form :target target))
@@ -3451,7 +3540,9 @@
        #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
 (defun contains-lambda (form)
-  (cond ((atom form)
+  (cond ((node-p form)
+         (contains-lambda (node-form form)))
+        ((atom form)
          nil)
         ((eq (car form) 'QUOTE)
          nil)
@@ -3826,43 +3917,43 @@
                 (jvm-compile sym)))))))
   t)
 
-(defun install-handler (fun &optional handler)
+(defun install-p2-handler (symbol &optional handler)
   (let ((handler (or handler
-                     (find-symbol (concatenate 'string "COMPILE-" (symbol-name fun)) 'jvm))))
+                     (find-symbol (concatenate 'string "COMPILE-" (symbol-name symbol)) 'jvm))))
     (unless (and handler (fboundp handler))
       (error "Handler not found: ~S" handler))
-    (setf (get fun 'jvm-compile-handler) handler)))
+    (setf (get symbol 'p2-handler) handler)))
 
-(mapc #'install-handler '(atom
-                          block
-                          catch
-                          cons
-                          declare
-                          flet
-                          function
-                          go
-                          if
-                          labels
-                          locally
-                          multiple-value-bind
-                          multiple-value-list
-                          multiple-value-prog1
-                          progn
-                          quote
-                          return-from
-                          rplacd
-                          setq
-                          tagbody
-                          throw
-                          unwind-protect
-                          values))
+(mapc #'install-p2-handler '(atom
+                             block
+                             catch
+                             cons
+                             declare
+                             flet
+                             function
+                             go
+                             if
+                             labels
+                             locally
+                             multiple-value-bind
+                             multiple-value-list
+                             multiple-value-prog1
+                             progn
+                             quote
+                             return-from
+                             rplacd
+                             setq
+                             tagbody
+                             throw
+                             unwind-protect
+                             values))
 
-(install-handler 'let  'compile-let/let*)
-(install-handler 'let* 'compile-let/let*)
-(install-handler '+    'compile-plus)
-(install-handler '-    'compile-minus)
-(install-handler 'not  'compile-not/null)
-(install-handler 'null 'compile-not/null)
+(install-p2-handler 'let  'compile-let/let*)
+(install-p2-handler 'let* 'compile-let/let*)
+(install-p2-handler '+    'compile-plus)
+(install-p2-handler '-    'compile-minus)
+(install-p2-handler 'not  'compile-not/null)
+(install-p2-handler 'null 'compile-not/null)
 
 (defun process-optimization-declarations (forms)
   (let (alist ())
