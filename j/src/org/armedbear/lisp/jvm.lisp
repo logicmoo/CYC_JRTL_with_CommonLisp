@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.289 2004-08-27 00:49:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.290 2004-09-18 18:33:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3236,7 +3236,7 @@
                               (%format nil "local-~D.class" *child-count*)
                               (incf *child-count*)))
              (compile-defun name form nil classfile)
-             (setf function (sys::load-compiled-function classfile)))))
+             (setf function (sys:load-compiled-function classfile)))))
     (cond (local-function
            (setf (local-function-classfile local-function) classfile)
            (let ((g (if *compile-file-truename*
@@ -3340,7 +3340,7 @@
                    (prog1
                     (%format nil "local-~D.class" *child-count*)
                     (incf *child-count*)))
-                  (compiled-function (sys::load-compiled-function
+                  (compiled-function (sys:load-compiled-function
                                       (let ((*nesting-level* (1+ *nesting-level*)))
                                         (compile-defun nil form nil classfile)))))
              (emit 'getstatic
@@ -4221,7 +4221,7 @@
                             (symbol-package name)
                             *package*))
              (classfile (compile-defun name expr env))
-             (compiled-definition (sys::load-compiled-function classfile)))
+             (compiled-definition (sys:load-compiled-function classfile)))
         (when (and name (functionp compiled-definition))
           (sys::%set-lambda-name compiled-definition name)
           (sys::%set-call-count compiled-definition (sys::%call-count definition))
