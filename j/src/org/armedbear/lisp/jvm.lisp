@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.376 2005-01-29 16:24:54 piso Exp $
+;;; $Id: jvm.lisp,v 1.377 2005-01-29 17:17:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -286,8 +286,6 @@
 
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
-
-(defvar *val* nil) ; index of value register
 
 (defstruct node
   ;; Block name or (TAGBODY) or (LET) or (MULTIPLE-VALUE-BIND).
@@ -2217,7 +2215,7 @@
         (setf (gethash string *declared-strings*) g)))
     g))
 
-(defun compile-constant (form &key (target *val*) representation)
+(defun compile-constant (form &key (target :stack) representation)
   (unless target
     (return-from compile-constant))
   (when (eq representation :unboxed-fixnum)
@@ -2443,7 +2441,7 @@
             (emit 'iload (variable-register variable))
             (aver nil)))))
 
-(defun p2-eql (form &key (target *val*) representation)
+(defun p2-eql (form &key (target :stack) representation)
   (unless (= (length form) 3)
     (error "Wrong number of arguments for EQL."))
   (let ((arg1 (second form))
@@ -2688,7 +2686,7 @@
         (t
          form)))
 
-(defun compile-funcall (form &key (target *val*) representation)
+(defun compile-funcall (form &key (target :stack) representation)
   (unless (> (length form) 1)
     (compiler-style-warn "Wrong number of arguments for ~A." (car form))
     (compile-function-call form target representation))
@@ -2866,7 +2864,7 @@
   (emit-push-nil)
   (if negatep 'if_acmpne 'if_acmpeq))
 
-(defun p2-numeric-comparison (form &key (target *val*) representation)
+(defun p2-numeric-comparison (form &key (target :stack) representation)
   (let ((op (car form))
         (args (cdr form)))
     (case (length args)
@@ -3043,7 +3041,7 @@
   (emit-push-nil)
   (if negatep 'if_acmpne 'if_acmpeq))
 
-(defun compile-if (form &key (target *val*) representation)
+(defun compile-if (form &key (target :stack) representation)
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
@@ -3063,14 +3061,14 @@
            (compile-form alternate :target target)
            (label LABEL2)))))
 
-(defun compile-multiple-value-list (form &key (target *val*) representation)
+(defun compile-multiple-value-list (form &key (target :stack) representation)
   (emit-clear-values)
   (compile-form (second form) :target :stack)
   (emit-invokestatic +lisp-class+ "multipleValueList"
                      (list +lisp-object+) +lisp-object+)
   (emit-move-from-stack target))
 
-(defun compile-multiple-value-prog1 (form &key (target *val*) representation)
+(defun compile-multiple-value-prog1 (form &key (target :stack) representation)
   (let ((first-subform (cadr form))
         (subforms (cddr form))
         (result-register (allocate-register))
@@ -3092,7 +3090,7 @@
     (emit 'aload result-register)
     (emit-move-from-stack target)))
 
-(defun compile-multiple-value-call (form &key (target *val*) representation)
+(defun compile-multiple-value-call (form &key (target :stack) representation)
   (case (length form)
     (1
      (error "Wrong number of arguments for MULTIPLE-VALUE-CALL."))
@@ -3405,7 +3403,7 @@
             (setf specials (append (cdr decl) specials))))))
     specials))
 
-(defun compile-locally (form &key (target *val*) representation)
+(defun compile-locally (form &key (target :stack) representation)
   (let ((*visible-variables* *visible-variables*)
         (specials (process-special-declarations (cdr form))))
     (dolist (var specials)
@@ -3563,7 +3561,7 @@
       (emit-push-nil)
       (emit-move-from-stack target))))
 
-(defun compile-atom (form &key (target *val*) representation)
+(defun compile-atom (form &key (target :stack) representation)
   (unless (= (length form) 2)
     (error "Wrong number of arguments for ATOM."))
   (compile-form (cadr form) :target :stack)
@@ -3594,7 +3592,7 @@
 ;;            (when (contains-return subform)
 ;;              (return t)))))))
 
-(defun compile-block (form &key (target *val*) representation)
+(defun compile-block (form &key (target :stack) representation)
 ;;   (format t "compile-block ~S~%" (cadr form))
   ;; This shouldn't be called, now that we have pass 1.
 ;;   (assert nil)
@@ -3657,7 +3655,7 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
-(defun p2-return-from (form &key (target *val*) representation)
+(defun p2-return-from (form &key (target :stack) representation)
   (let* ((name (second form))
          (result-form (third form))
          (block (find-block name)))
@@ -3708,7 +3706,7 @@
       (emit-push-nil)
       (emit-move-from-stack target))))
 
-(defun compile-cons (form &key (target *val*) representation)
+(defun compile-cons (form &key (target :stack) representation)
   (unless (check-args form 2)
     (compile-function-call form target representation)
     (return-from compile-cons))
@@ -3738,12 +3736,12 @@
                  (unless (single-valued-p form)
                    (setf must-clear-values t)))))))))
 
-(defun compile-progn (form &key (target *val*) representation)
+(defun compile-progn (form &key (target :stack) representation)
   (compile-progn-body (cdr form) target)
   (when (eq representation :unboxed-fixnum)
     (emit-unbox-fixnum)))
 
-(defun compile-quote (form &key (target *val*) representation)
+(defun compile-quote (form &key (target :stack) representation)
    (let ((obj (second form)))
      (cond ((null obj)
             (when target
@@ -3770,7 +3768,7 @@
            (t
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
-(defun compile-rplacd (form &key (target *val*) representation)
+(defun compile-rplacd (form &key (target :stack) representation)
   (let ((args (cdr form)))
     (unless (= (length args) 2)
       (error "wrong number of arguments for RPLACD"))
@@ -3846,7 +3844,7 @@
                                         :class-file class-file)
                    *local-functions*))))))
 
-(defun p2-flet (form &key (target *val*) representation)
+(defun p2-flet (form &key (target :stack) representation)
   (let ((*local-functions* *local-functions*)
         (compilands (cadr form))
         (body (cddr form)))
@@ -3920,7 +3918,7 @@
          (aver nil))) ;; Shouldn't happen.
   (emit-move-from-stack target))
 
-(defun p2-function (form &key (target *val*) representation)
+(defun p2-function (form &key (target :stack) representation)
   (let ((name (second form))
         (local-function))
     (cond ((symbolp name)
@@ -3982,7 +3980,7 @@
           (t
            (error "p2-function: unsupported case: ~S" form)))))
 
-(defun p2-ash (form &key (target *val*) representation)
+(defun p2-ash (form &key (target :stack) representation)
   (dformat t "p2-ash form = ~S representation = ~S~%" form representation)
   (unless (check-args form 2)
     (compile-function-call form target representation)
@@ -4044,7 +4042,7 @@
           (t (dformat t "p2-ash case 6~%")
              (compile-function-call form target representation)))))
 
-(defun p2-logand (form &key (target *val*) representation)
+(defun p2-logand (form &key (target :stack) representation)
   (let* ((args (cdr form))
          (len (length args)))
     (when (= len 2)
@@ -4124,7 +4122,7 @@
                 (return-from derive-type 'FIXNUM)))))))
   t)
 
-(defun compile-length (form &key (target *val*) representation)
+(defun compile-length (form &key (target :stack) representation)
   (check-args form 1)
   (let ((arg (cadr form)))
     (compile-form arg :target :stack)
@@ -4135,7 +4133,7 @@
            (emit-invokevirtual +lisp-object-class+ "LENGTH" nil +lisp-object+)))
     (emit-move-from-stack target representation)))
 
-(defun compile-nth (form &key (target *val*) representation)
+(defun compile-nth (form &key (target :stack) representation)
   (unless (check-args form 2)
     (compile-function-call form target representation)
     (return-from compile-nth))
@@ -4152,7 +4150,7 @@
       (emit-unbox-fixnum))
     (emit-move-from-stack target representation)))
 
-(defun p2-plus (form &key (target *val*) representation)
+(defun p2-plus (form &key (target :stack) representation)
   (case (length form)
     (3
      (let* ((args (cdr form))
@@ -4282,7 +4280,7 @@
      (dformat t "p2-plus case 10~%")
      (compile-function-call form target representation))))
 
-(defun p2-minus (form &key (target *val*) representation)
+(defun p2-minus (form &key (target :stack) representation)
   (case (length form)
     (3
      (let* ((args (cdr form))
@@ -4372,7 +4370,7 @@
      (dformat t "p2-minus case 10~%")
      (compile-function-call form target representation))))
 
-(defun compile-schar (form &key (target *val*) representation)
+(defun compile-schar (form &key (target :stack) representation)
   (unless (= (length form) 3)
     (error 'program-error
            :format-control "Wrong number of arguments for ~S."
@@ -4385,7 +4383,7 @@
   (emit-invokevirtual +lisp-object-class+ "SCHAR" '("I") +lisp-object+)
   (emit-move-from-stack target))
 
-(defun compile-aref (form &key (target *val*) representation)
+(defun compile-aref (form &key (target :stack) representation)
   (unless (= (length form) 3)
     (return-from compile-aref (compile-function-call form target representation)))
   (compile-form (second form) :target :stack)
@@ -4396,7 +4394,7 @@
   (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
   (emit-move-from-stack target))
 
-(defun compile-not/null (form &key (target *val*) representation)
+(defun compile-not/null (form &key (target :stack) representation)
   (unless (= (length form) 2)
     (error 'program-error
            :format-control "Wrong number of arguments for ~S."
@@ -4433,7 +4431,7 @@
              (emit 'label `,label2)))))
   (emit-move-from-stack target))
 
-(defun compile-values (form &key (target *val*) representation)
+(defun compile-values (form &key (target :stack) representation)
   (let ((args (cdr form)))
     (case (length args)
       (1
@@ -4526,7 +4524,7 @@
           (list 'LET (list (list sym expr)) (list 'SETQ (second form) sym)))
         form)))
 
-(defun compile-setq (form &key (target *val*) representation)
+(defun compile-setq (form &key (target :stack) representation)
 ;;   (dformat t "compile-setq form = ~S target = ~S representation = ~S~%"
 ;;            form target representation)
   (unless (= (length form) 3)
@@ -4588,7 +4586,7 @@
                  (emit-unbox-fixnum))
                (emit-move-from-stack target))))))
 
-(defun p2-the (form &key (target *val*) representation)
+(defun p2-the (form &key (target :stack) representation)
 ;;   (compile-form (third form) :target target :representation representation)
   (cond ((subtypep (second form) 'FIXNUM)
          (unless (eq representation :unboxed-fixnum)
@@ -4601,7 +4599,7 @@
         (t
          (compile-form (third form) :target target :representation representation))))
 
-(defun compile-catch (form &key (target *val*) representation)
+(defun compile-catch (form &key (target :stack) representation)
   (when (= (length form) 2) ; (catch 'foo)
     (when target
       (emit-push-nil)
@@ -4688,7 +4686,7 @@
           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
         form)))
 
-(defun compile-throw (form &key (target *val*) representation)
+(defun compile-throw (form &key (target :stack) representation)
   (emit-push-current-thread)
   (compile-form (second form) :target :stack) ; Tag.
   (emit-clear-values) ; Do this unconditionally! (MISC.503)
@@ -4756,7 +4754,7 @@
                                    :catch-type 0)))
         (push handler *handlers*)))))
 
-(defun compile-form (form &key (target *val*) representation)
+(defun compile-form (form &key (target :stack) representation)
   (cond ((consp form)
          (let ((op (car form))
                handler)
@@ -5035,7 +5033,7 @@
           (setf (compiland-p1-result compiland)
                 (list* 'LAMBDA lambda-list (mapcar #'p1 body))))))))
 
-(defun p2-%call-internal (form &key (target *val*) representation)
+(defun p2-%call-internal (form &key (target :stack) representation)
   (dformat t "p2-%call-internal~%")
   (emit 'aload_0) ; this
   (let ((args (cdr form))
@@ -5081,7 +5079,6 @@
 
          (parameters ())
 
-         (*val* nil)
          (*thread* nil)
          (*initialize-thread-var* nil))
 
@@ -5182,8 +5179,6 @@
     (when (and *closure-variables* (not *child-p*))
        (setf (compiland-closure-register compiland) (allocate-register))
        (dformat t "closure register = ~S~%" (compiland-closure-register compiland)))
-    ;; Reserve the next available slot for the value register.
-    (setf *val* (allocate-register))
     ;; Reserve the next available slot for the thread register.
     (setf *thread* (allocate-register))
 
