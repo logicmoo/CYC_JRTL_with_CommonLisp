@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.691 2004-10-19 23:26:42 piso Exp $
+ * $Id: Primitives.java,v 1.692 2004-10-22 15:52:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1376,7 +1376,8 @@ public final class Primitives extends Lisp
                             list2(Symbol.CDR, formArg)));
             Closure expansionFunction =
                 new Closure(expander.cadr(), expander.cddr(), env);
-            MacroObject macroObject = new MacroObject(expansionFunction);
+            MacroObject macroObject =
+                new MacroObject(symbol, expansionFunction);
             if (symbol.getSymbolFunction() instanceof SpecialOperator)
                 put(symbol, Symbol.MACROEXPAND_MACRO, macroObject);
             else
@@ -1388,12 +1389,13 @@ public final class Primitives extends Lisp
     };
 
     // ### make-macro
-    private static final Primitive1 MAKE_MACRO =
-        new Primitive1("make-macro", PACKAGE_SYS, false)
+    private static final Primitive MAKE_MACRO =
+        new Primitive("make-macro", PACKAGE_SYS, true, "name expansion-function")
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            return new MacroObject(arg);
+            return new MacroObject(first, second);
         }
     };
 
@@ -2126,22 +2128,23 @@ public final class Primitives extends Lisp
         }
         private LispObject requireFunction(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof Function || arg instanceof GenericFunction)
-                return arg;
-            if (arg instanceof Symbol) {
-                LispObject function = arg.getSymbolFunction();
-                if (function instanceof Function || function instanceof GenericFunction)
-                    return function;
-                return signal(new UndefinedFunction(arg));
-            }
+//             if (arg instanceof Function || arg instanceof GenericFunction)
+//                 return arg;
+//             if (arg instanceof Symbol) {
+//                 LispObject function = arg.getSymbolFunction();
+//                 if (function instanceof Function || function instanceof GenericFunction)
+//                     return function;
+//                 return signal(new UndefinedFunction(arg));
+//             }
             if (arg.listp() && arg.car() == Symbol.LAMBDA) {
                 LispObject rest = arg.cdr();
                 Closure closure = new Closure(rest.car(), rest.cdr(),
                                               new Environment());
                 return closure;
             }
-            return signal(new TypeError(arg, list3(Symbol.OR, Symbol.FUNCTION,
-                                                   Symbol.SYMBOL)));
+//             return signal(new TypeError(arg, list3(Symbol.OR, Symbol.FUNCTION,
+//                                                    Symbol.SYMBOL)));
+            return arg;
         }
     };
 
@@ -2830,7 +2833,8 @@ public final class Primitives extends Lisp
     };
 
     // ### macrolet
-    private static final SpecialOperator MACROLET = new SpecialOperator("macrolet", "definitions &rest body")
+    private static final SpecialOperator MACROLET =
+        new SpecialOperator("macrolet", "definitions &rest body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -2858,7 +2862,7 @@ public final class Primitives extends Lisp
                     Closure expansionFunction =
                         new Closure(expander.cadr(), expander.cddr(), env);
                     MacroObject macroObject =
-                        new MacroObject(expansionFunction);
+                        new MacroObject(symbol, expansionFunction);
                     ext.bindFunctional(symbol, macroObject);
                     defs = defs.cdr();
                 }
@@ -2870,7 +2874,8 @@ public final class Primitives extends Lisp
     };
 
     // ### tagbody
-    private static final SpecialOperator TAGBODY = new SpecialOperator("tagbody", "&rest statements")
+    private static final SpecialOperator TAGBODY =
+        new SpecialOperator("tagbody", "&rest statements")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
