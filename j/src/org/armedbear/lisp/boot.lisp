@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.44 2003-05-27 19:35:56 piso Exp $
+;;; $Id: boot.lisp,v 1.45 2003-05-27 20:13:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -185,8 +185,16 @@
     (cl::%defun ',name ',lambda-list ',body)
     (compile ',name)))
 
+;; Redefine DEFMACRO to compile the expansion function on the fly.
+(defmacro defmacro (name lambda-list &rest body)
+  (let* ((form (gensym))
+         (env (gensym))
+         (body (parse-defmacro lambda-list form body name 'defmacro
+                               :environment env))
+         (expander `(lambda (,form ,env) (block ,name ,body))))
+    `(fset ',name (make-macro (compile nil ,expander)))))
 
-;; Load loop.lisp AFTER redefining DEFUN...
+;; Load loop.lisp AFTER redefining DEFUN and DEFMACRO...
 (cl::%load "loop.lisp")
 
 
