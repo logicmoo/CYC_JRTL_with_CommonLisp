@@ -2,7 +2,7 @@
  * UndoDeleteLineSeparator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndoDeleteLineSeparator.java,v 1.3 2003-06-11 13:54:39 piso Exp $
+ * $Id: UndoDeleteLineSeparator.java,v 1.4 2003-06-11 15:05:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,11 +33,6 @@ public final class UndoDeleteLineSeparator extends AbstractUndoableEdit
     public UndoDeleteLineSeparator(Editor editor)
     {
         preState = new PreState(editor);
-    }
-
-    public boolean addEdit(UndoableEdit edit)
-    {
-        return false;
     }
 
     public void undo()
