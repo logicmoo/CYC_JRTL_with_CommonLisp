@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.235 2004-07-23 19:27:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.236 2004-07-24 01:53:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 (defvar *use-locals-vector* nil)
 
 ;; FIXME Get rid of this!
-(defvar *support-non-local-returns* nil)
+(defvar *support-non-local-returns* t)
 
 ;; FIXME
 ;; This controls compiler debugging output, not debuggability of compiled code!
@@ -234,7 +234,18 @@
   (list (logand (ash n -8) #xff)
         (logand n #xff)))
 
-(defstruct instruction opcode args stack depth)
+(defstruct instruction
+  opcode
+  args
+  stack
+  depth)
+
+(defun clear (instruction)
+  (declare (optimize speed (safety 0)))
+  (setf (instruction-opcode instruction) 0
+        (instruction-args instruction) nil
+        (instruction-stack instruction) nil
+        (instruction-depth instruction) nil))
 
 (defun print-instruction (instruction)
   (format nil "~A ~A stack = ~S depth = ~S"
@@ -256,6 +267,10 @@
   (let ((instruction (inst instr args)))
     (push instruction *code*)
     instruction))
+
+(defun label (symbol)
+  (declare (optimize speed (safety 0)))
+  (emit 'label symbol))
 
 (defconstant +java-string+ "Ljava/lang/String;")
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
@@ -855,7 +870,7 @@
         (when (= (instruction-opcode instruction) 202) ; LABEL
           (let ((label (car (instruction-args instruction))))
             (unless (memq label branch-targets)
-              (setf (instruction-opcode instruction) 0)
+              (clear instruction)
               (setf locally-changed-p t))))))
     (when locally-changed-p
       (setf *code* (delete 0 *code* :key #'instruction-opcode))
@@ -872,11 +887,11 @@
                                  (eq (car (instruction-args instruction))
                                      (car (instruction-args next-instruction))))
                             ;; GOTO next instruction.
-                            (setf (instruction-opcode instruction) 0)
+                            (clear instruction)
                             (setf locally-changed-p t))
                            ((= (instruction-opcode next-instruction) 167) ; GOTO
                             ;; One GOTO right after another.
-                            (setf (instruction-opcode next-instruction) 0)
+                            (clear next-instruction)
                             (setf locally-changed-p t))))))))
     (when locally-changed-p
       (setf *code* (delete 0 *code* :key #'instruction-opcode))
@@ -900,7 +915,7 @@
               (let ((previous-instruction (svref *code* (1- i))))
                 (when (eql (instruction-opcode previous-instruction) 204) ; STORE-VALUE
                   (setf (instruction-opcode previous-instruction) 176) ; ARETURN
-                  (setf (instruction-opcode instruction) 0)
+                  (clear instruction)
                   (setf locally-changed-p t))))))))
     (when locally-changed-p
       (setf *code* (delete 0 *code* :key #'instruction-opcode))
@@ -917,8 +932,8 @@
                    (eql (instruction-opcode instr2) 203)
                    (eql (instruction-opcode instr3) 176))
           (setf (instruction-opcode instr1) 176)
-          (setf (instruction-opcode instr2) 0)
-          (setf (instruction-opcode instr3) 0)
+          (clear instr2)
+          (clear instr3)
           (setf locally-changed-p t))))
     (when locally-changed-p
       (setf *code* (delete 0 *code* :key #'instruction-opcode))
@@ -932,7 +947,7 @@
       (let ((instruction (svref *code* i)))
         (when (eql (instruction-opcode instruction) 205) ; CLEAR-VALUES
           (when (eql previous-opcode 205)
-            (setf (instruction-opcode instruction) 0)
+            (clear instruction)
             (setf locally-changed-p t)))
         (setf previous-opcode (instruction-opcode instruction))))
     (when locally-changed-p
@@ -954,10 +969,7 @@
                      (setf after-goto nil)
                      ;; Unreachable.
                      (progn
-                       (setf (instruction-opcode instruction) 0)
-                       (setf (instruction-args instruction) nil)
-                       (setf (instruction-stack instruction) nil)
-                       (setf (instruction-depth instruction) nil)
+                       (clear instruction)
                        (setf locally-changed-p t))))
                 ((= (instruction-opcode instruction) 167) ; GOTO
                  (setf after-goto t)))))
@@ -2391,7 +2403,9 @@
   (compiland *current-compiland*)
   exit
   target
-  catch-tag)
+  catch-tag
+  non-local-return-p ; True if there is a non-local RETURN from this block.
+  )
 
 (defun compile-block (form &key (target *val*))
   (let* ((name (cadr form))
@@ -2425,64 +2439,54 @@
                  (emit-move-from-stack target))
                (let* ((*register* *register*)
                       (tag-register (allocate-register))
-                      (label1 (gensym))
-                      (label2 (gensym))
-                      (label3 (gensym))
-                      (label4 (gensym))
-                      (label5 (gensym)))
+                      (BEGIN-BLOCK (gensym))
+                      (END-BLOCK (gensym))
+                      (BEGIN-HANDLER (gensym))
+                      (END-HANDLER (gensym))
+                      (RETHROW (gensym)))
 ;;                  (format t "tag-register = ~S~%" tag-register)
-                 (compile-form `',(block-catch-tag block) :target tag-register) ; Tag.
-;;                  (emit-push-current-thread)
-;;                  (emit 'aload tag-register)
-;;                  (emit-invokevirtual +lisp-thread-class+
-;;                                      "pushCatchTag"
-;;                                      "(Lorg/armedbear/lisp/LispObject;)V"
-;;                                      -2) ; Stack depth is 0.
-                 (emit 'label label1) ; Start of protected range.
+;;                  (compile-form `',(block-catch-tag block) :target tag-register) ; Tag.
+                 (label BEGIN-BLOCK) ; Start of protected range.
                  ;; Implicit PROGN.
                  (do ((forms body (cdr forms)))
                      ((null forms))
                    (compile-form (car forms) :target (if (cdr forms) nil target))
                    (when (cdr forms)
                      (maybe-emit-clear-values (car forms))))
-                 (emit 'label label2) ; End of protected range.
-                 (emit 'goto label5) ; Jump over handlers.
+                 (label END-BLOCK) ; End of protected range.
+                 (emit 'goto END-HANDLER) ; Jump over handlers.
 
-                 ; Start of handler for Return.
-                 (emit 'label label3)
-                 ;; The Return object is on the runtime stack. Stack depth is 1.
-                 (emit 'dup) ; Stack depth is 2.
-                 (emit 'getfield "org/armedbear/lisp/Return" "tag" +lisp-object+) ; Still 2.
-                 (emit 'aload tag-register) ; Stack depth is 3.
-                 ;; If it's not the tag we're looking for, we branch to the start of the
-                 ;; catch-all handler, which will do a re-throw.
-                 (emit 'if_acmpne label4) ; Stack depth is 1.
-                 (emit 'getfield "org/armedbear/lisp/Return" "result" +lisp-object+)
-                 (emit-move-from-stack target) ; Stack depth is 0.
-                 (emit 'goto label5)
+;;                  (format t "block-non-local-return-p = ~S~%"
+;;                          (block-non-local-return-p block))
 
-                 ; Start of catch-all handler.
-                 (emit 'label label4)
-                 ;; A Throwable object is on the runtime stack here. Stack depth is 1.
-                 (emit 'athrow) ; And we're gone.
-                 (emit 'label label5)
-                 ;; Finally...
-                 (let ((handler1 (make-handler :from label1
-                                               :to label2
-                                               :code label3
-                                               :catch-type (pool-class "org/armedbear/lisp/Return")))
-;;                        (handler2 (make-handler :from label1
-;;                                                :to label2
-;;                                                :code label4
-;;                                                :catch-type 0))
-                       )
-;;                    (when *debug*
-;;                      (%format t "handler1 from ~S to ~S code at ~S~%" label1 label2 label3)
-;;                      (%format t "handler2 from ~S to ~S code at ~S~%" label1 label2 label4))
-                   (push handler1 *handlers*)
-;;                    (push handler2 *handlers*)
-                   )))
-           )
+                 (when (block-non-local-return-p block)
+                   ; Start of handler for Return.
+                   (label BEGIN-HANDLER)
+                   ;; The Return object is on the runtime stack. Stack depth is 1.
+                   (emit 'dup) ; Stack depth is 2.
+                   (emit 'getfield "org/armedbear/lisp/Return" "tag" +lisp-object+) ; Still 2.
+
+;;                    (emit 'aload tag-register) ; Stack depth is 3.
+                   (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+
+                   ;; If it's not the tag we're looking for, we branch to the start of the
+                   ;; catch-all handler, which will do a re-throw.
+                   (emit 'if_acmpne RETHROW) ; Stack depth is 1.
+                   (emit 'getfield "org/armedbear/lisp/Return" "result" +lisp-object+)
+                   (emit-move-from-stack target) ; Stack depth is 0.
+                   (emit 'goto END-HANDLER)
+                   (label RETHROW)
+                   ;; A Throwable object is on the runtime stack here. Stack depth is 1.
+                   (emit 'athrow) ; And we're gone.
+;;                    (label END-HANDLER)
+                   ;; Finally...
+                   (push (make-handler :from BEGIN-BLOCK
+                                       :to END-BLOCK
+                                       :code BEGIN-HANDLER
+                                       :catch-type (pool-class "org/armedbear/lisp/Return"))
+                         *handlers*))
+
+                 (label END-HANDLER))))
           (t
            ;; Compile subforms.
            (do ((subforms body (cdr subforms)))
@@ -2494,7 +2498,7 @@
                (unless last-subform-p
                  (maybe-emit-clear-values subform))))))
 
-    (emit 'label `,block-exit)
+    (label block-exit)
     (when env-register
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
@@ -2543,23 +2547,18 @@
       (compile-form result-form :target (block-target block))
       (emit 'goto (block-exit block)))
      (*support-non-local-returns*
-;;       (%format t "COMPILE-RETURN-FROM: block not local: ~S~%" name)
-;;       (compile-form (list 'THROW `',(block-catch-tag block) result-form) :target target)
-;;       (emit-push-current-thread)
+      (setf (block-non-local-return-p block) t)
       (emit 'new "org.armedbear.lisp.Return")
       (emit 'dup)
       (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
       (compile-form (third form) :target :stack) ; Result.
-;;       (emit-invokevirtual +lisp-thread-class+
-;;                           "throwReturn"
-;;                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
-;;                           -3)
       (emit-invokespecial "org.armedbear.lisp.Return"
                           "<init>"
                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
                           -3)
       (emit 'athrow)
-      ;; Following code will not be reached.
+      ;; Following code will not be reached, but is needed for JVM stack
+      ;; consistency.
       (when target
         (emit-push-nil)
         (emit-move-from-stack target)))
@@ -3256,31 +3255,31 @@
                         "pushCatchTag"
                         "(Lorg/armedbear/lisp/LispObject;)V"
                         -2) ; Stack depth is 0.
-    (emit 'label `,label1) ; Start of protected range.
+    (emit 'label label1) ; Start of protected range.
     ;; Implicit PROGN.
     (do ((forms (cddr form) (cdr forms)))
         ((null forms))
       (compile-form (car forms) :target (if (cdr forms) nil target))
       (when (cdr forms)
         (maybe-emit-clear-values (car forms))))
-    (emit 'label `,label2) ; End of protected range.
-    (emit 'goto `,label5) ; Jump over handlers.
-    (emit 'label `,label3) ; Start of handler for THROW.
+    (emit 'label label2) ; End of protected range.
+    (emit 'goto label5) ; Jump over handlers.
+    (emit 'label label3) ; Start of handler for THROW.
     ;; The Throw object is on the runtime stack. Stack depth is 1.
     (emit 'dup) ; Stack depth is 2.
     (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
     (emit 'aload tag-register) ; Stack depth is 3.
     ;; If it's not the tag we're looking for, we branch to the start of the
     ;; catch-all handler, which will do a re-throw.
-    (emit 'if_acmpne `,label4) ; Stack depth is 1.
+    (emit 'if_acmpne label4) ; Stack depth is 1.
     (emit 'aload *thread*)
     (emit-invokevirtual +lisp-throw-class+
                         "getResult"
                         "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
                         -1)
     (emit-move-from-stack target) ; Stack depth is 0.
-    (emit 'goto `,label5)
-    (emit 'label `,label4) ; Start of handler for all other Throwables.
+    (emit 'goto label5)
+    (emit 'label label4) ; Start of handler for all other Throwables.
     ;; A Throwable object is on the runtime stack here. Stack depth is 1.
     (emit 'aload *thread*)
     (emit-invokevirtual +lisp-thread-class+
@@ -3288,20 +3287,20 @@
                         "()V"
                         -1)
     (emit 'athrow) ; And we're gone.
-    (emit 'label `,label5)
+    (emit 'label label5)
     ;; Finally...
     (emit 'aload *thread*)
     (emit-invokevirtual +lisp-thread-class+
                         "popCatchTag"
                         "()V"
                         -1)
-    (let ((handler1 (make-handler :from `,label1
-                                  :to `,label2
-                                  :code `,label3
+    (let ((handler1 (make-handler :from label1
+                                  :to label2
+                                  :code label3
                                   :catch-type (pool-class +lisp-throw-class+)))
-          (handler2 (make-handler :from `,label1
-                                  :to `,label2
-                                  :code `,label4
+          (handler2 (make-handler :from label1
+                                  :to label2
+                                  :code label4
                                   :catch-type 0)))
       (push handler1 *handlers*)
       (push handler2 *handlers*))))
