@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.590 2004-03-05 18:32:33 piso Exp $
+ * $Id: Primitives.java,v 1.591 2004-03-06 14:35:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4389,6 +4389,66 @@ public final class Primitives extends Lisp
                 return new File(arg.getStringValue()).mkdir() ? T : NIL;
             else
                 return signal(new TypeError(arg, Symbol.STRING));
+        }
+    };
+
+    // ### simple-vector-search pattern vector => position
+    // Searches vector for pattern.
+    private static final Primitive2 SIMPLE_VECTOR_SEARCH =
+        new Primitive2("simple-vector-search", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            AbstractVector v = checkVector(second);
+            if (first.length() == 0)
+                return Fixnum.ZERO;
+            final int patternLength = first.length();
+            final int limit = v.length() - patternLength;
+            if (first instanceof AbstractVector) {
+                AbstractVector pattern = (AbstractVector) first;
+                LispObject element = pattern.getRowMajor(0);
+                for (int i = 0; i <= limit; i++) {
+                    if (v.getRowMajor(i).eql(element)) {
+                        // Found match for first element of pattern.
+                        boolean match = true;
+                        // We've already checked the first element.
+                        int j = i + 1;
+                        for (int k = 1; k < patternLength; k++) {
+                            if (v.getRowMajor(j).eql(pattern.getRowMajor(k))) {
+                                ++j;
+                            } else {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match)
+                            return new Fixnum(i);
+                    }
+                }
+            } else {
+                // Pattern is a list.
+                LispObject element = first.car();
+                for (int i = 0; i <= limit; i++) {
+                    if (v.getRowMajor(i).eql(element)) {
+                        // Found match for first element of pattern.
+                        boolean match = true;
+                        // We've already checked the first element.
+                        int j = i + 1;
+                        for (LispObject rest = first.cdr(); rest != NIL; rest = rest.cdr()) {
+                            if (v.getRowMajor(j).eql(rest.car())) {
+                                ++j;
+                            } else {
+                                match = false;
+                                break;
+                            }
+                        }
+                        if (match)
+                            return new Fixnum(i);
+                    }
+                }
+            }
+            return NIL;
         }
     };
 
