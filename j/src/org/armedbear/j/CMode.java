@@ -2,7 +2,7 @@
  * CMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CMode.java,v 1.2 2003-06-12 16:39:40 piso Exp $
+ * $Id: CMode.java,v 1.3 2003-12-30 19:28:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -193,5 +193,29 @@ public class CMode extends JavaMode implements Constants, Mode
             }
         }
         return null;
+    }
+
+    public boolean isIdentifierStart(char c)
+    {
+        if (c >= 'a' && c <= 'z')
+            return true;
+        if (c >='A' && c <= 'Z')
+            return true;
+        if (c == '_')
+            return true;
+        return false;
+    }
+
+    public boolean isIdentifierPart(char c)
+    {
+        if (c >= 'a' && c <= 'z')
+            return true;
+        if (c >='A' && c <= 'Z')
+            return true;
+        if (c >= '0' && c <= '9')
+            return true;
+        if (c == '_')
+            return true;
+        return false;
     }
 }
