@@ -114,6 +114,7 @@ copy-alist
 copy-list
 copy-readtable
 copy-seq
+copy-structure
 copy-symbol
 copy-tree
 count
@@ -210,6 +211,7 @@ function-lambda-expression
 functionp
 gensym
 get
+getf
 get-dispatch-macro-character
 get-output-stream-string
 get-setf-expansion
