@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.8 2003-07-02 18:16:46 piso Exp $
+ * $Id: LispThread.java,v 1.9 2003-09-03 23:45:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -336,11 +336,11 @@ public final class LispThread extends LispObject
     private static final Primitive1 SLEEP = new Primitive1("sleep") {
         public LispObject execute(LispObject arg) throws LispError
         {
-            float f =
-                ((LispFloat)arg.multiplyBy(new LispFloat((float)1000))).getValue();
-            if (f < 0)
+            double d =
+                ((LispFloat)arg.multiplyBy(new LispFloat(1000))).getValue();
+            if (d < 0)
                 throw new TypeError(arg, "non-negative real");
-            long millis = f < Long.MAX_VALUE ? (long) f : Long.MAX_VALUE;
+            long millis = d < Long.MAX_VALUE ? (long) d : Long.MAX_VALUE;
             try {
                 Thread.currentThread().sleep(millis);
             }

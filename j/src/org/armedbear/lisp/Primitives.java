@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.366 2003-09-02 18:29:02 piso Exp $
+ * $Id: Primitives.java,v 1.367 2003-09-03 23:44:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4200,8 +4200,8 @@ public final class Primitives extends Module
                 return number(remainder);
             }
             if (args[0] instanceof LispFloat) {
-                float limit = ((LispFloat)args[0]).getValue();
-                float rand = random.nextFloat();
+                double limit = ((LispFloat)args[0]).getValue();
+                double rand = random.nextDouble();
                 return new LispFloat(rand * limit);
             }
             throw new TypeError(args[0], "number");
@@ -4285,7 +4285,7 @@ public final class Primitives extends Module
                 if (n instanceof Fixnum || n instanceof Bignum)
                     result = new Fixnum(1);
                 else
-                    result = new LispFloat((float)1);
+                    result = new LispFloat(1);
                 int count = Fixnum.getInt(power);
                 if (count > 0) {
                     for (int i = count; i-- > 0;)
@@ -4299,8 +4299,8 @@ public final class Primitives extends Module
             if (power instanceof LispFloat) {
                 if (n instanceof Fixnum) {
                     double d = Math.pow(((Fixnum)n).getValue(),
-                        ((LispFloat)power).getValue());
-                    return new LispFloat(new Float(d).floatValue());
+                                        ((LispFloat)power).getValue());
+                    return new LispFloat(d);
                 }
             }
             throw new LispError("EXPT: unsupported case");
@@ -4804,13 +4804,13 @@ public final class Primitives extends Module
     private static final LispFloat sqrt(LispObject obj) throws TypeError
     {
         if (obj instanceof Fixnum)
-            return new LispFloat((float)Math.sqrt(((Fixnum)obj).getValue()));
+            return new LispFloat(Math.sqrt(((Fixnum)obj).getValue()));
         if (obj instanceof Bignum)
-            return new LispFloat((float)Math.sqrt(((Bignum)obj).floatValue()));
+            return new LispFloat(Math.sqrt(((Bignum)obj).floatValue()));
         if (obj instanceof Ratio)
-            return new LispFloat((float)Math.sqrt(((Ratio)obj).floatValue()));
+            return new LispFloat(Math.sqrt(((Ratio)obj).floatValue()));
         if (obj instanceof LispFloat)
-            return new LispFloat((float)Math.sqrt(((LispFloat)obj).getValue()));
+            return new LispFloat(Math.sqrt(((LispFloat)obj).getValue()));
         throw new TypeError(obj, "number");
     }
 

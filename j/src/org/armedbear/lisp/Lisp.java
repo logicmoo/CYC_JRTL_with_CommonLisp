@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.123 2003-08-27 17:28:27 piso Exp $
+ * $Id: Lisp.java,v 1.124 2003-09-03 23:40:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1136,135 +1136,135 @@ public abstract class Lisp
 
     public static final Symbol PI =
         exportConstant("PI", PACKAGE_CL,
-                       new LispFloat((float)3.141592653589793));
+                       new LispFloat((double)3.141592653589793));
 
     public static final Symbol SHORT_FLOAT_EPSILON =
         exportConstant("SHORT-FLOAT-EPSILON", PACKAGE_CL,
-                       new LispFloat((float)5.960465E-8));
+                       new LispFloat((double)1.1102230246251568E-16));
 
     public static final Symbol SINGLE_FLOAT_EPSILON =
         exportConstant("SINGLE-FLOAT-EPSILON", PACKAGE_CL,
-                       new LispFloat((float)5.960465E-8));
+                       new LispFloat((double)1.1102230246251568E-16));
 
     public static final Symbol DOUBLE_FLOAT_EPSILON =
         exportConstant("DOUBLE-FLOAT-EPSILON", PACKAGE_CL,
-                       new LispFloat((float)5.960465E-8));
+                       new LispFloat((double)1.1102230246251568E-16));
 
     public static final Symbol LONG_FLOAT_EPSILON =
         exportConstant("LONG-FLOAT-EPSILON", PACKAGE_CL,
-                       new LispFloat((float)5.960465E-8));
+                       new LispFloat((double)1.1102230246251568E-16));
 
     public static final Symbol SHORT_FLOAT_NEGATIVE_EPSILON =
         exportConstant("SHORT-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-                       new LispFloat((float)2.9802325E-8));
+                       new LispFloat((double)5.551115123125784E-17));
 
     public static final Symbol SINGLE_FLOAT_NEGATIVE_EPSILON =
         exportConstant("SINGLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-                       new LispFloat((float)2.9802325E-8));
+                       new LispFloat((double)5.551115123125784E-17));
 
     public static final Symbol DOUBLE_FLOAT_NEGATIVE_EPSILON =
         exportConstant("DOUBLE-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-                       new LispFloat((float)2.9802325E-8));
+                       new LispFloat((double)5.551115123125784E-17));
 
     public static final Symbol LONG_FLOAT_NEGATIVE_EPSILON =
         exportConstant("LONG-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
-                       new LispFloat((float)2.9802325E-8));
+                       new LispFloat((double)5.551115123125784E-17));
 
     public static final Symbol MOST_POSITIVE_SHORT_FLOAT =
         exportConstant("MOST-POSITIVE-SHORT-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MAX_VALUE));
+                       new LispFloat(Double.MAX_VALUE));
 
     public static final Symbol MOST_POSITIVE_SINGLE_FLOAT =
         exportConstant("MOST-POSITIVE-SINGLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MAX_VALUE));
+                       new LispFloat(Double.MAX_VALUE));
 
     public static final Symbol MOST_POSITIVE_DOUBLE_FLOAT =
         exportConstant("MOST-POSITIVE-DOUBLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MAX_VALUE));
+                       new LispFloat(Double.MAX_VALUE));
 
     public static final Symbol MOST_POSITIVE_LONG_FLOAT =
         exportConstant("MOST-POSITIVE-LONG-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MAX_VALUE));
+                       new LispFloat(Double.MAX_VALUE));
 
     public static final Symbol LEAST_POSITIVE_SHORT_FLOAT =
         exportConstant("LEAST-POSITIVE-SHORT-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MIN_VALUE));
+                       new LispFloat(Double.MIN_VALUE));
 
     public static final Symbol LEAST_POSITIVE_SINGLE_FLOAT =
         exportConstant("LEAST-POSITIVE-SINGLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MIN_VALUE));
+                       new LispFloat(Double.MIN_VALUE));
 
     public static final Symbol LEAST_POSITIVE_DOUBLE_FLOAT =
         exportConstant("LEAST-POSITIVE-DOUBLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MIN_VALUE));
+                       new LispFloat(Double.MIN_VALUE));
 
     public static final Symbol LEAST_POSITIVE_LONG_FLOAT =
         exportConstant("LEAST-POSITIVE-LONG-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MIN_VALUE));
+                       new LispFloat(Double.MIN_VALUE));
 
     public static final Symbol LEAST_POSITIVE_NORMALIZED_SHORT_FLOAT =
         exportConstant("LEAST-POSITIVE-NORMALIZED-SHORT-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MIN_VALUE));
+                       new LispFloat(Double.MIN_VALUE));
 
     public static final Symbol LEAST_POSITIVE_NORMALIZED_SINGLE_FLOAT =
         exportConstant("LEAST-POSITIVE-NORMALIZED-SINGLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MIN_VALUE));
+                       new LispFloat(Double.MIN_VALUE));
 
     public static final Symbol LEAST_POSITIVE_NORMALIZED_DOUBLE_FLOAT =
         exportConstant("LEAST-POSITIVE-NORMALIZED-DOUBLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MIN_VALUE));
+                       new LispFloat(Double.MIN_VALUE));
 
     public static final Symbol LEAST_POSITIVE_NORMALIZED_LONG_FLOAT =
         exportConstant("LEAST-POSITIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
-                       new LispFloat(Float.MIN_VALUE));
+                       new LispFloat(Double.MIN_VALUE));
 
     public static final Symbol MOST_NEGATIVE_SHORT_FLOAT =
         exportConstant("MOST-NEGATIVE-SHORT-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MAX_VALUE));
+                       new LispFloat(- Double.MAX_VALUE));
 
     public static final Symbol MOST_NEGATIVE_SINGLE_FLOAT =
         exportConstant("MOST-NEGATIVE-SINGLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MAX_VALUE));
+                       new LispFloat(- Double.MAX_VALUE));
 
     public static final Symbol MOST_NEGATIVE_DOUBLE_FLOAT =
         exportConstant("MOST-NEGATIVE-DOUBLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MAX_VALUE));
+                       new LispFloat(- Double.MAX_VALUE));
 
     public static final Symbol MOST_NEGATIVE_LONG_FLOAT =
         exportConstant("MOST-NEGATIVE-LONG-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MAX_VALUE));
+                       new LispFloat(- Double.MAX_VALUE));
 
     public static final Symbol LEAST_NEGATIVE_SHORT_FLOAT =
         exportConstant("LEAST-NEGATIVE-SHORT-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MIN_VALUE));
+                       new LispFloat(- Double.MIN_VALUE));
 
     public static final Symbol LEAST_NEGATIVE_SINGLE_FLOAT =
         exportConstant("LEAST-NEGATIVE-SINGLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MIN_VALUE));
+                       new LispFloat(- Double.MIN_VALUE));
 
     public static final Symbol LEAST_NEGATIVE_DOUBLE_FLOAT =
         exportConstant("LEAST-NEGATIVE-DOUBLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MIN_VALUE));
+                       new LispFloat(- Double.MIN_VALUE));
 
     public static final Symbol LEAST_NEGATIVE_LONG_FLOAT =
         exportConstant("LEAST-NEGATIVE-LONG-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MIN_VALUE));
+                       new LispFloat(- Double.MIN_VALUE));
 
     public static final Symbol LEAST_NEGATIVE_NORMALIZED_SHORT_FLOAT =
         exportConstant("LEAST-NEGATIVE-NORMALIZED-SHORT-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MIN_VALUE));
+                       new LispFloat(- Double.MIN_VALUE));
 
     public static final Symbol LEAST_NEGATIVE_NORMALIZED_SINGLE_FLOAT =
         exportConstant("LEAST-NEGATIVE-NORMALIZED-SINGLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MIN_VALUE));
+                       new LispFloat(- Double.MIN_VALUE));
 
     public static final Symbol LEAST_NEGATIVE_NORMALIZED_DOUBLE_FLOAT =
         exportConstant("LEAST-NEGATIVE-NORMALIZED-DOUBLE-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MIN_VALUE));
+                       new LispFloat(- Double.MIN_VALUE));
 
     public static final Symbol LEAST_NEGATIVE_NORMALIZED_LONG_FLOAT =
         exportConstant("LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
-                       new LispFloat(- Float.MIN_VALUE));
+                       new LispFloat(- Double.MIN_VALUE));
 
     static {
         loadClass("org.armedbear.lisp.Primitives");

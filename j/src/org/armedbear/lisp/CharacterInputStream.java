@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.43 2003-08-12 01:36:08 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.44 2003-09-03 23:46:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -721,7 +721,7 @@ public class CharacterInputStream extends LispStream
         // Append rest of token.
         sb.append(token.substring(i));
         try {
-            return new LispFloat(Float.parseFloat(sb.toString()));
+            return new LispFloat(Double.parseDouble(sb.toString()));
         }
         catch (NumberFormatException e) {
             return null;
