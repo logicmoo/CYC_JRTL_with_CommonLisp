@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: BroadcastStream.java,v 1.3 2004-01-31 19:25:12 piso Exp $
+ * $Id: BroadcastStream.java,v 1.4 2004-01-31 20:13:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class BroadcastStream extends Stream
 {
     private final Stream[] streams;
 
-    public BroadcastStream(Stream[] streams)
+    private BroadcastStream(Stream[] streams)
     {
         this.streams = streams;
         isOutputStream = true;
@@ -176,6 +176,7 @@ public final class BroadcastStream extends Stream
         signal(new TypeError("Operation is not supported for streams of type BROADCAST-STREAM."));
     }
 
+    // ### make-broadcast-stream &rest streams => broadcast-stream
     private static final Primitive MAKE_BROADCAST_STREAM =
         new Primitive("make-broadcast-stream", "&rest streams")
     {
@@ -197,6 +198,7 @@ public final class BroadcastStream extends Stream
         }
     };
 
+    // ### broadcast-stream-streams broadcast-stream => streams
     private static final Primitive1 BROADCAST_STREAM_STREAMS =
         new Primitive1("broadcast-stream-streams", "broadcast-stream")
     {
