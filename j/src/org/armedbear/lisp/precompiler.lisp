@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.40 2004-04-06 02:43:48 piso Exp $
+;;; $Id: precompiler.lisp,v 1.41 2004-04-14 14:35:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -354,12 +354,14 @@
          (mapcar #'precompile1 (cddr form))))
 
 (defun precompile-case (form)
-  (let* ((keyform (cadr form))
-         (clauses (cddr form))
-         (result (list (precompile1 keyform))))
-    (dolist (clause clauses)
-      (push (precompile-case-clause clause) result))
-    (cons (car form) (nreverse result))))
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (let* ((keyform (cadr form))
+             (clauses (cddr form))
+             (result (list (precompile1 keyform))))
+        (dolist (clause clauses)
+          (push (precompile-case-clause clause) result))
+        (cons (car form) (nreverse result)))))
 
 (defun precompile-case-clause (clause)
   (let ((keys (car clause))
@@ -367,11 +369,13 @@
     (cons keys (mapcar #'precompile1 forms))))
 
 (defun precompile-cond (form)
-  (let ((clauses (cdr form))
-        (result nil))
-    (dolist (clause clauses)
-      (push (precompile-cond-clause clause) result))
-    (cons 'COND (nreverse result))))
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (let ((clauses (cdr form))
+            (result nil))
+        (dolist (clause clauses)
+          (push (precompile-cond-clause clause) result))
+        (cons 'COND (nreverse result)))))
 
 (defun precompile-cond-clause (clause)
   (let ((test (car clause))
@@ -437,6 +441,7 @@
            (precompile1 values-form)
            (mapcar #'precompile1 body))))
 
+;; MULTIPLE-VALUE-LIST is handled explicitly by the JVM compiler.
 (defun precompile-multiple-value-list (form)
   (list 'MULTIPLE-VALUE-LIST (precompile1 (cadr form))))
 
@@ -462,8 +467,8 @@
          (precompile1 (cadr form))
          (mapcar #'precompile1 (cddr form))))
 
-;; EXPAND-MACRO is like MACROEXPAND, but EXPAND-MACRO quits if *in-jvm-compile*
-;; is false and a macro is encountered that's also implemented as a special
+;; EXPAND-MACRO is like MACROEXPAND, but EXPAND-MACRO quits if *IN-JVM-COMPILE*
+;; is false and a macro is encountered that is also implemented as a special
 ;; operator, so interpreted code can use the special operator implementation.
 (defun expand-macro (form)
   (loop
