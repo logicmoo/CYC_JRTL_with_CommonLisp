@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.83 2004-12-15 16:30:56 piso Exp $
+;;; $Id: precompiler.lisp,v 1.84 2004-12-26 18:45:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -689,9 +689,6 @@
 (defun precompile-eval-when (form)
   (list* 'EVAL-WHEN (cadr form) (mapcar #'precompile1 (cddr form))))
 
-(defun precompile-the (form)
-  (precompile1 (caddr form)))
-
 (defun precompile-unwind-protect (form)
   (list* 'UNWIND-PROTECT
          (precompile1 (cadr form))
@@ -751,7 +748,6 @@
                             setq
                             symbol-macrolet
                             tagbody
-                            the
                             unwind-protect
                             unless
                             when))
@@ -779,6 +775,7 @@
 (install-handler 'defun                'precompile-identity)
 (install-handler 'go                   'precompile-identity)
 (install-handler 'quote                'precompile-identity)
+(install-handler 'the                  'precompile-identity)
 (install-handler 'throw                'precompile-cons)
 
 (in-package "SYSTEM")
