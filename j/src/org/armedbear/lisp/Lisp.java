@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.308 2005-01-10 17:46:03 piso Exp $
+ * $Id: Lisp.java,v 1.309 2005-01-15 02:50:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.lisp;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.Hashtable;
@@ -745,7 +746,7 @@ public abstract class Lisp
                                     loader.loadClassFromByteArray(null, bytes, 0, bytes.length);
                                 if (c != null) {
                                     Class[] parameterTypes = new Class[0];
-                                    java.lang.reflect.Constructor constructor =
+                                    Constructor constructor =
                                         c.getConstructor(parameterTypes);
                                     Object[] initargs = new Object[0];
                                     LispObject obj =
@@ -776,7 +777,7 @@ public abstract class Lisp
                     Class c = loader.loadClassFromFile(file);
                     if (c != null) {
                         Class[] parameterTypes = new Class[0];
-                        java.lang.reflect.Constructor constructor =
+                        Constructor constructor =
                             c.getConstructor(parameterTypes);
                         Object[] initargs = new Object[0];
                         LispObject obj =
