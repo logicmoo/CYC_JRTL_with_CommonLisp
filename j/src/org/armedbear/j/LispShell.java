@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.26 2003-02-16 18:22:23 piso Exp $
+ * $Id: LispShell.java,v 1.27 2003-02-17 01:09:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class LispShell extends Shell
         "^[^>\\*\\]]*[:>\\*\\]] *";
 
     private static final String ALLEGRO_PROMPT_PATTERN =
-        "^(\\[[0-9+]\\] )?[-a-zA-z]+\\([0-9]+\\): ";
+        "^(\\[[0-9+][i]?\\] )?[-a-zA-z]+\\([0-9]+\\): ";
 
     private static final String CLISP_PROMPT_PATTERN =
         "^[^>\\*\\]]*\\[[0-9]+\\]> ";
