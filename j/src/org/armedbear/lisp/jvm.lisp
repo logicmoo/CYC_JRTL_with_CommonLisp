@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.11 2003-11-05 21:00:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.12 2003-11-06 17:14:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1631,6 +1631,10 @@
            (t
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
+(defun compile-declare (form)
+  ;; Nothing to do.
+  )
+
 (defun compile-function (form)
    (let ((obj (second form)))
      (cond ((symbolp obj)
@@ -2001,6 +2005,7 @@
     (setf (get fun 'jvm-compile) handler)))
 
 (mapc #'install-handler '(block
+                          declare
                           function
                           go
                           if
