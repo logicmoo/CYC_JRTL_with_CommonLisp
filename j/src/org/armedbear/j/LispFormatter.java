@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.18 2003-01-05 15:28:17 piso Exp $
+ * $Id: LispFormatter.java,v 1.19 2003-02-14 02:21:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -345,7 +345,7 @@ public final class LispFormatter extends Formatter
             if (c == '#') {
                 if (pos.lookingAt("#|")) {
                     pos.skip(2);
-                    changed = skipMultilineComment(pos) || changed;
+                    changed = skipBalancedComment(pos) || changed;
                 } else if (pos.lookingAt("#'"))
                     pos.skip(2);
                 else
@@ -426,9 +426,10 @@ public final class LispFormatter extends Formatter
         return changed;
     }
 
-    private static boolean skipMultilineComment(Position pos)
+    private static boolean skipBalancedComment(Position pos)
     {
         boolean changed = false;
+        int count = 1;
         while (!pos.atEnd()) {
             char c = pos.getChar();
             if (c == EOL) {
@@ -445,11 +446,17 @@ public final class LispFormatter extends Formatter
                 pos.next();
                 continue;
             }
-            if (c == '|') {
-                if (pos.lookingAt("|#")) {
-                    pos.skip(2);
+            if (c == '#' && pos.lookingAt("#|")) {
+                pos.skip(2);
+                ++count;
+                continue;
+            }
+            if (c == '|' && pos.lookingAt("|#")) {
+                pos.skip(2);
+                if (--count == 0)
                     break; // End of comment.
-                }
+                else
+                    continue;
             }
             // Default.
             pos.skip();
