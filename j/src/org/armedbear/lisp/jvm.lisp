@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.391 2005-02-05 16:38:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.392 2005-02-05 17:45:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3866,6 +3866,16 @@
   (when (eq representation :unboxed-fixnum)
     (emit-unbox-fixnum)))
 
+(defun p2-eval-when (form &key (target :stack) representation)
+  (cond ((or (memq :execute (cadr form))
+             (memq 'eval (cadr form)))
+         (compile-progn-body (cddr form) target)
+         (when (eq representation :unboxed-fixnum)
+           (emit-unbox-fixnum)))
+        (t
+         (emit-push-nil)
+         (emit-move-from-stack target))))
+
 (defun compile-quote (form &key (target :stack) representation)
    (let ((obj (second form)))
      (cond ((null obj)
@@ -5792,6 +5802,7 @@
 (install-p2-handler 'atom           'p2-atom)
 (install-p2-handler 'cons           'p2-cons)
 (install-p2-handler 'eql            'p2-eql)
+(install-p2-handler 'eval-when      'p2-eval-when)
 (install-p2-handler 'flet           'p2-flet)
 (install-p2-handler 'go             'p2-go)
 (install-p2-handler 'function       'p2-function)
