@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.7 2003-10-11 14:58:59 piso Exp $
+;;; $Id: defclass.lisp,v 1.8 2003-10-11 17:31:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -351,14 +351,13 @@
                         (class-slots class)
                         :key #'slot-definition-name)))
         (if (null slot)
-            (error "The slot ~S is missing from the class ~S."
+            (error "the slot ~S is missing from the class ~S"
                    slot-name class)
             (let ((pos (position slot
                                  (remove-if-not #'instance-slot-p
                                                 (class-slots class)))))
               (if (null pos)
-                  (error "The slot ~S is not an instance~@
-                  slot in the class ~S."
+                  (error "the slot ~S is not an instance slot in the class ~S"
                          slot-name class)
                   pos))))))
 
@@ -426,6 +425,8 @@
   (eq (slot-definition-allocation slot) ':instance))
 
 (defun std-allocate-instance (class)
+;;   (format t "std-allocate-instance class = ~S~%" class)
+;;   (format t "class-slots = ~S~%" (class-slots class))
   (allocate-std-instance
    class
    (allocate-slot-storage (count-if #'instance-slot-p (class-slots class))
@@ -499,18 +500,30 @@
 ;;; Generic function metaobjects and standard-generic-function
 ;;;
 
-(defparameter the-defclass-standard-generic-function
-  '(defclass standard-generic-function ()
-    ((name :initarg :name)      ; :accessor generic-function-name
-     (lambda-list               ; :accessor generic-function-lambda-list
-      :initarg :lambda-list)
-     (methods :initform ())     ; :accessor generic-function-methods
-     (method-class              ; :accessor generic-function-method-class
-      :initarg :method-class)
-     (discriminating-function)  ; :accessor generic-function-
-     ;    -discriminating-function
-     (classes-to-emf-table      ; :accessor classes-to-emf-table
-      :initform (make-hash-table :test #'equal)))))
+;; (defparameter the-defclass-standard-generic-function
+;;   '(defclass standard-generic-function ()
+;;     ((name :initarg :name)      ; :accessor generic-function-name
+;;      (lambda-list               ; :accessor generic-function-lambda-list
+;;       :initarg :lambda-list)
+;;      (methods :initform ())     ; :accessor generic-function-methods
+;;      (method-class              ; :accessor generic-function-method-class
+;;       :initarg :method-class)
+;;      (discriminating-function)  ; :accessor generic-function-
+;;      ;    -discriminating-function
+;;      (classes-to-emf-table      ; :accessor classes-to-emf-table
+;;       :initform (make-hash-table :test #'equal)))))
+
+(defclass standard-generic-function ()
+  ((name :initarg :name)      ; :accessor generic-function-name
+   (lambda-list               ; :accessor generic-function-lambda-list
+    :initarg :lambda-list)
+   (methods :initform ())     ; :accessor generic-function-methods
+   (method-class              ; :accessor generic-function-method-class
+    :initarg :method-class)
+   (discriminating-function)  ; :accessor generic-function-
+   ;    -discriminating-function
+   (classes-to-emf-table      ; :accessor classes-to-emf-table
+    :initform (make-hash-table :test #'equal))))
 
 (defvar the-class-standard-gf (find-class 'standard-generic-function))
 
@@ -593,11 +606,25 @@
 
 ;;; defgeneric
 
-;; (defmacro defgeneric (function-name lambda-list &rest options)
-;;   `(ensure-generic-function
-;;     ',function-name
-;;     :lambda-list ',lambda-list
-;;     ,@(canonicalize-defgeneric-options options)))
+(defmacro defgeneric (function-name lambda-list
+                                    &rest options-and-method-descriptions)
+  (let ((options ())
+        (methods ()))
+    (dolist (item options-and-method-descriptions)
+      (case (car item)
+        (declare) ; FIXME
+        (:method
+         (push `(defmethod ,function-name ,@(cdr item)) methods))
+        (t
+         (push item options))))
+    (setf options (nreverse options)
+          methods (nreverse methods))
+    `(prog1
+       (ensure-generic-function
+        ',function-name
+        :lambda-list ',lambda-list
+        ,@(canonicalize-defgeneric-options options))
+       ,@methods)))
 
 (defun canonicalize-defgeneric-options (options)
   (mapappend #'canonicalize-defgeneric-option options))
@@ -636,6 +663,9 @@
    (method-class the-class-standard-method)
    &allow-other-keys)
   (format t "ensure-generic-function function-name = ~S~%" function-name)
+  (when (fboundp function-name)
+    (error "~A already names an ordinary function, macro, or special operator"
+           function-name))
   (if (find-generic-function function-name nil)
       (find-generic-function function-name)
       (let ((gf (apply (if (eq generic-function-class the-class-standard-gf)
@@ -669,10 +699,11 @@
 ;;; instance of standard-generic-function without falling into method lookup.
 ;;; However, it cannot be called until standard-generic-function exists.
 
-(defun make-instance-standard-generic-function
-  (generic-function-class &key name lambda-list method-class)
+(defun make-instance-standard-generic-function (generic-function-class
+                                                &key name lambda-list method-class)
   (declare (ignore generic-function-class))
   (let ((gf (std-allocate-instance the-class-standard-gf)))
+    (format t "gf = ~S~%" gf)
     (setf (generic-function-name gf) name)
     (setf (generic-function-lambda-list gf) lambda-list)
     (setf (generic-function-methods gf) ())
@@ -911,3 +942,157 @@
                 new-value)
    :environment (top-level-environment))
   (values))
+
+;;;
+;;; Generic function invocation
+;;;
+
+;;; apply-generic-function
+
+(defun apply-generic-function (gf args)
+  (apply (generic-function-discriminating-function gf) args))
+
+;;; compute-discriminating-function
+
+(defun std-compute-discriminating-function (gf)
+  #'(lambda (&rest args)
+     (let* ((classes (mapcar #'class-of
+                             (required-portion gf args)))
+            (emfun (gethash classes (classes-to-emf-table gf) nil)))
+       (if emfun
+           (funcall emfun args)
+           (slow-method-lookup gf args classes)))))
+
+(defun slow-method-lookup (gf args classes)
+  (let* ((applicable-methods
+          (compute-applicable-methods-using-classes gf classes))
+         (emfun
+          (funcall
+           (if (eq (class-of gf) the-class-standard-gf)
+               #'std-compute-effective-method-function
+               #'compute-effective-method-function)
+           gf applicable-methods)))
+    (setf (gethash classes (classes-to-emf-table gf)) emfun)
+    (funcall emfun args)))
+
+;;; compute-applicable-methods-using-classes
+
+(defun compute-applicable-methods-using-classes
+  (gf required-classes)
+  (sort
+   (copy-list
+    (remove-if-not #'(lambda (method)
+                      (every #'subclassp
+                             required-classes
+                             (method-specializers method)))
+                   (generic-function-methods gf)))
+   #'(lambda (m1 m2)
+      (funcall
+       (if (eq (class-of gf) the-class-standard-gf)
+           #'std-method-more-specific-p
+           #'method-more-specific-p)
+       gf m1 m2 required-classes))))
+
+;;; method-more-specific-p
+
+(defun std-method-more-specific-p (gf method1 method2 required-classes)
+  (declare (ignore gf))
+  (mapc #'(lambda (spec1 spec2 arg-class)
+           (unless (eq spec1 spec2)
+             (return-from std-method-more-specific-p
+                          (sub-specializer-p spec1 spec2 arg-class))))
+        (method-specializers method1)
+        (method-specializers method2)
+        required-classes)
+  nil)
+
+;;; apply-methods and compute-effective-method-function
+
+(defun apply-methods (gf args methods)
+  (funcall (compute-effective-method-function gf methods)
+           args))
+
+(defun primary-method-p (method)
+  (null (method-qualifiers method)))
+(defun before-method-p (method)
+  (equal '(:before) (method-qualifiers method)))
+(defun after-method-p (method)
+  (equal '(:after) (method-qualifiers method)))
+(defun around-method-p (method)
+  (equal '(:around) (method-qualifiers method)))
+
+(defun std-compute-effective-method-function (gf methods)
+  (let ((primaries (remove-if-not #'primary-method-p methods))
+        (around (find-if #'around-method-p methods)))
+    (when (null primaries)
+      (error "No primary methods for the~@
+      generic function ~S." gf))
+    (if around
+        (let ((next-emfun
+               (funcall
+                (if (eq (class-of gf) the-class-standard-gf)
+                    #'std-compute-effective-method-function
+                    #'compute-effective-method-function)
+                gf (remove around methods))))
+          #'(lambda (args)
+             (funcall (method-function around) args next-emfun)))
+        (let ((next-emfun (compute-primary-emfun (cdr primaries)))
+              (befores (remove-if-not #'before-method-p methods))
+              (reverse-afters
+               (reverse (remove-if-not #'after-method-p methods))))
+          #'(lambda (args)
+             (dolist (before befores)
+               (funcall (method-function before) args nil))
+             (multiple-value-prog1
+              (funcall (method-function (car primaries)) args next-emfun)
+              (dolist (after reverse-afters)
+                (funcall (method-function after) args nil))))))))
+
+;;; compute an effective method function from a list of primary methods:
+
+(defun compute-primary-emfun (methods)
+  (if (null methods)
+      nil
+      (let ((next-emfun (compute-primary-emfun (cdr methods))))
+        #'(lambda (args)
+           (funcall (method-function (car methods)) args next-emfun)))))
+
+;;; apply-method and compute-method-function
+
+(defun apply-method (method args next-methods)
+  (funcall (method-function method)
+           args
+           (if (null next-methods)
+               nil
+               (compute-effective-method-function
+                (method-generic-function method) next-methods))))
+
+(defun std-compute-method-function (method)
+  (let ((form (method-body method))
+        (lambda-list (method-lambda-list method)))
+    (compile-in-lexical-environment (method-environment method)
+                                    `(lambda (args next-emfun)
+                                       (flet ((call-next-method (&rest cnm-args)
+                                                                (if (null next-emfun)
+                                                                    (error "No next method for the~@
+                                                                    generic function ~S."
+                                                                           (method-generic-function ',method))
+                                                                    (funcall next-emfun (or cnm-args args))))
+                                              (next-method-p ()
+                                                             (not (null next-emfun))))
+                                         (apply #'(lambda ,(kludge-arglist lambda-list)
+                                                   ,form)
+                                                args))))))
+
+;;; N.B. The function kludge-arglist is used to pave over the differences
+;;; between argument keyword compatibility for regular functions versus
+;;; generic functions.
+
+(defun kludge-arglist (lambda-list)
+  (if (and (member '&key lambda-list)
+           (not (member '&allow-other-keys lambda-list)))
+      (append lambda-list '(&allow-other-keys))
+      (if (and (not (member '&rest lambda-list))
+               (not (member '&key lambda-list)))
+          (append lambda-list '(&key &allow-other-keys))
+          lambda-list)))

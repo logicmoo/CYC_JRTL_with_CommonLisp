@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.3 2003-10-11 00:17:18 piso Exp $
+ * $Id: StandardObject.java,v 1.4 2003-10-11 17:28:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,14 @@ package org.armedbear.lisp;
 public class StandardObject extends LispObject
 {
     // Slots.
-    private LispObject cls;
+    private LispClass cls;
     private LispObject slots; // A simple vector.
 
     protected StandardObject()
     {
     }
 
-    private StandardObject(LispObject cls, LispObject slots)
+    private StandardObject(LispClass cls, LispObject slots)
     {
         this.cls = cls;
         this.slots = slots;
@@ -44,7 +44,7 @@ public class StandardObject extends LispObject
 
     public LispClass classOf()
     {
-        return BuiltInClass.STANDARD_OBJECT;
+        return cls;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
@@ -52,6 +52,8 @@ public class StandardObject extends LispObject
         if (type == Symbol.STANDARD_OBJECT)
             return T;
         if (type == BuiltInClass.STANDARD_OBJECT)
+            return T;
+        if (type == cls)
             return T;
         return super.typep(type);
     }
@@ -73,10 +75,13 @@ public class StandardObject extends LispObject
         new Primitive2("allocate-std-instance", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
             if (first == BuiltInClass.STANDARD_CLASS)
                 return new StandardClass();
-            return new StandardObject(first, second);
+            if (first instanceof LispClass)
+                return new StandardObject((LispClass)first, second);
+            throw new ConditionThrowable(new TypeError(first, "class"));
         }
     };
 }
