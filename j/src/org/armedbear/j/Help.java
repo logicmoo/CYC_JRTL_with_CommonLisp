@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.4 2003-05-18 16:01:18 piso Exp $
+ * $Id: Help.java,v 1.5 2003-06-18 23:43:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,11 +65,15 @@ public final class Help
                 return;
             Buffer buf = null;
             // Look for existing help buffer.
-            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                Buffer b = it.nextBuffer();
-                if (isHelpBuffer(b)) {
-                    buf = b;
-                    break;
+            if (isHelpBuffer(editor.getBuffer()))
+                buf = editor.getBuffer();
+            else {
+                for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                    Buffer b = it.nextBuffer();
+                    if (isHelpBuffer(b)) {
+                        buf = b;
+                        break;
+                    }
                 }
             }
             if (buf != null) {
