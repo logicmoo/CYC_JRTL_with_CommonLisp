@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: typep.lisp,v 1.16 2004-01-30 20:14:43 piso Exp $
+;;; $Id: typep.lisp,v 1.17 2004-02-10 15:54:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,8 +20,6 @@
 ;;; Adapted from GCL.
 
 (in-package "SYSTEM")
-
-(resolve 'subtypep)
 
 (defun simple-array-p (object)
   (and (arrayp object)
@@ -53,32 +51,32 @@
 	       (eql (car dim) (car pat)))
 	   (match-dimensions (cdr dim) (cdr pat)))))
 
-(defun typep (object type)
+(defun %typep (object type)
   (when (atom type)
     (unless (and (symbolp type) (get type 'deftype-definition))
-      (return-from typep (simple-typep object type))))
+      (return-from %typep (simple-typep object type))))
   (setf type (normalize-type type))
   (when (atom type)
-    (return-from typep (simple-typep object type)))
+    (return-from %typep (simple-typep object type)))
   (let ((tp (car type))
         (i (cdr type)))
     (case tp
       (AND
        (dolist (type i)
-         (unless (typep object type)
-           (return-from typep nil)))
+         (unless (%typep object type)
+           (return-from %typep nil)))
        t)
       (OR
        (dolist (type i)
-         (when (typep object type)
-           (return-from typep t)))
+         (when (%typep object type)
+           (return-from %typep t)))
        nil)
-      (NOT (not (typep object (car i))))
+      (NOT (not (%typep object (car i))))
       (MEMBER (member object i))
       (CONS
        (and (consp object)
-            (or (null (car i)) (eq (car i) '*) (typep (car object) (car i)))
-            (or (null (cadr i)) (eq (cadr i) '*) (typep (cdr object) (cadr i)))))
+            (or (null (car i)) (eq (car i) '*) (%typep (car object) (car i)))
+            (or (null (cadr i)) (eq (cadr i) '*) (%typep (cdr object) (cadr i)))))
       (FLOAT
        (and (floatp object) (in-interval-p object i)))
       (INTEGER
@@ -127,3 +125,6 @@
        (funcall (car i) object))
       (t
        nil))))
+
+(defun typep (object type &optional environment)
+  (%typep object type))
