@@ -1,8 +1,8 @@
 /*
  * ListOccurrencesMode.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: ListOccurrencesMode.java,v 1.1.1.1 2002-09-24 16:08:11 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: ListOccurrencesMode.java,v 1.2 2004-04-02 03:28:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,5 +59,6 @@ public final class ListOccurrencesMode extends AbstractMode implements Constants
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "findOccurrenceAtDot");
         km.mapKey(VK_DOUBLE_MOUSE_1, 0, "mouseFindOccurrence");
         km.mapKey(VK_MOUSE_2, 0, "mouseFindOccurrence");
+        km.mapKey(KeyEvent.VK_ENTER, CTRL_MASK, "findOccurrenceAtDotAndKillList");
     }
 }
