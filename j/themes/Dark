@@ -1,6 +1,6 @@
 # Dark
 # Bruce Hellstrom
-# $Id: Dark,v 1.2 2002-10-30 20:54:16 piso Exp $
+# $Id: Dark,v 1.3 2003-01-09 00:18:54 piso Exp $
 
 # Possible color settings for each mode
 #
@@ -35,7 +35,7 @@ color.brace                   = 255 255 255
 color.caret                   = 255 0 0
 color.change                  = 255   0   0
 color.comment                 = 128 128 128
-color.currentLineBackground   = 16 16 72
+color.currentLineBackground   = 72 64 96
 color.disabled                = 128 128 128
 color.function                = 255 255 255
 color.gutterBorder            = 96 96 96
@@ -93,4 +93,6 @@ DirectoryMode.style.directory = 2
 
 style.keyword                 = 0
 style.function                = 0
+style.tag                     = 0
+style.section                 = 0
 
