@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.34 2004-03-29 04:42:11 piso Exp $
+;;; $Id: precompiler.lisp,v 1.35 2004-03-29 18:38:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -270,8 +270,7 @@
 (defun precompile-macrolet (form)
   (let ((*local-macros* *local-macros*)
         (macros (cadr form))
-        (body (cddr form))
-        compiled-body)
+        (body (cddr form)))
     (dolist (macro macros)
       (let ((name (car macro))
             (lambda-list (cadr macro))
@@ -460,6 +459,15 @@
                    ;; Fall through if no change...
                    (unless (equal result form)
                      (return-from precompile1 (precompile1 result)))))
+                ((eq op 'setf)
+                 (let ((place (second form)))
+                   (when (and (consp place)
+                              (local-macro-function (car place)))
+                     (let ((expansion (expand-local-macro place)))
+                       (return-from precompile1
+                                    (precompile1 (list* op expansion
+                                                        (cddr form))))))
+                   (return-from precompile1 (precompile1 (expand-macro form)))))
                 ((and (not (eq op 'LAMBDA))
                       (macro-function op))
                  ;; It's a macro...
