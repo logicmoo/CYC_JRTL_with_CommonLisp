@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: FindInFiles.java,v 1.2 2002-10-11 14:07:31 piso Exp $
+ * $Id: FindInFiles.java,v 1.3 2002-11-22 02:05:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -706,8 +706,6 @@ public class FindInFiles extends Replacement implements Constants, BackgroundPro
         } else {
             // There was no buffer for the file in question prior to this operation.
             SystemBuffer buf = new SystemBuffer(file);
-            if (buf == null)
-                return; // Error handling?
             buf.load();
             if (!buf.isLoaded())
                 return; // Error handling?
