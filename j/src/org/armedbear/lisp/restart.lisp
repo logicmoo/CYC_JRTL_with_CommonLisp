@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.1 2003-09-29 01:28:20 piso Exp $
+;;; $Id: restart.lisp,v 1.2 2003-12-06 15:44:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,11 @@
 ;;; Adapted from GCL.
 
 (in-package "SYSTEM")
+
+(defun read-evaluated-form ()
+  (fresh-line *query-io*)
+  (format *query-io* "Enter a form to be evaluated:~%")
+  (list (eval (read *query-io*))))
 
 (defvar *restart-clusters* ())
 
