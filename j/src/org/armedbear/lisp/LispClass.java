@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.41 2004-02-13 16:25:19 piso Exp $
+ * $Id: LispClass.java,v 1.42 2004-02-13 18:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -441,7 +441,7 @@ public class LispClass extends StandardObject
             throws ConditionThrowable
         {
             if (arg instanceof LispClass)
-                return ((LispClass)arg).directMethods;
+                return ((LispClass)arg).documentation;
             return signal(new TypeError(arg, "class"));
         }
     };
@@ -454,7 +454,7 @@ public class LispClass extends StandardObject
             throws ConditionThrowable
         {
             if (first instanceof LispClass) {
-                ((LispClass)first).directMethods = second;
+                ((LispClass)first).documentation = second;
                 return second;
             }
             return signal(new TypeError(first, "class"));
