@@ -85,6 +85,7 @@ concatenate
 cond
 cons
 consp
+constantly
 constantp
 continue
 copy-alist
@@ -171,6 +172,7 @@ gethash
 go
 handler-bind
 handler-case
+identity
 if
 ignore-errors
 import
