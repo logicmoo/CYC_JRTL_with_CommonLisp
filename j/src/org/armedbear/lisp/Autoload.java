@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.118 2004-01-01 02:04:22 piso Exp $
+ * $Id: Autoload.java,v 1.119 2004-01-01 17:17:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -234,6 +234,8 @@ public class Autoload extends Function
         autoload("gethash", "HashTable");
         autoload("hash-table-count", "HashTable");
         autoload("hash-table-p", "HashTable");
+        autoload("hash-table-rehash-size", "HashTable");
+        autoload("hash-table-rehash-threshold", "HashTable");
         autoload("hash-table-size", "HashTable");
         autoload("hash-table-test", "HashTable");
         autoload("import", "PackageFunctions");
