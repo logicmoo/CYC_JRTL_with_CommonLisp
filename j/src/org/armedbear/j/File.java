@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.2 2002-11-28 16:08:21 piso Exp $
+ * $Id: File.java,v 1.3 2002-11-30 15:30:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -717,6 +717,25 @@ public class File implements Comparable
 
     public String[] list()
     {
+        if (this instanceof FtpFile || this instanceof SshFile) {
+            String listing = getDirectoryListing();
+            if (listing == null)
+                return null;
+            FastStringReader reader = new FastStringReader(listing);
+            ArrayList list = new ArrayList();
+            String s;
+            while ((s = reader.readLine()) != null) {
+                String name = DirectoryEntry.getName(s);
+                if (name == null || name.equals(".") || name.equals(".."))
+                    continue;
+                list.add(name);
+            }
+            if (list.size() == 0)
+                return null;
+            String[] names = new String[list.size()];
+            list.toArray(names);
+            return names;
+        }
         if (isRemote)
             return null;
         if (file == null)
@@ -801,6 +820,11 @@ public class File implements Comparable
     }
 
     public String getDirectoryListing()
+    {
+        return null;
+    }
+    
+    public String getDirectoryListing(boolean forceRefresh)
     {
         return null;
     }
