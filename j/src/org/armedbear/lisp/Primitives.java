@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.337 2003-08-16 16:54:25 piso Exp $
+ * $Id: Primitives.java,v 1.338 2003-08-16 18:23:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4257,7 +4257,7 @@ public final class Primitives extends Module
 
     // ### expt
     // expt base-number power-number => result
-    private static final Primitive2 EXPT = new Primitive2("expt") {
+    public static final Primitive2 EXPT = new Primitive2("expt") {
         public LispObject execute(LispObject n, LispObject power)
             throws LispError
         {
