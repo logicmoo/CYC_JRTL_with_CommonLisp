@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.7 2004-06-20 16:35:14 piso Exp $
+;;; $Id: print.lisp,v 1.8 2004-09-28 17:35:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;;; Can this object contain other objects?
 (defun compound-object-p (x)
@@ -41,15 +41,13 @@
 (defun output-integer (integer stream)
   (%output-object integer stream))
 
-(defvar *current-level-in-print* 0)
-
 (defun output-list (list stream)
   (cond ((and (null *print-readably*)
               *print-level*
-              (>= *current-level-in-print* *print-level*))
+              (>= *current-print-level* *print-level*))
          (write-char #\# stream))
         (t
-         (let ((*current-level-in-print* (1+ *current-level-in-print*)))
+         (let ((*current-print-level* (1+ *current-print-level*)))
                 (write-char #\( stream)
                 (let ((length 0)
                       (list list))
@@ -96,10 +94,10 @@
 	   (error 'print-not-readable :object vector))
          (cond ((and (null *print-readably*)
                      *print-level*
-                     (>= *current-level-in-print* *print-level*))
+                     (>= *current-print-level* *print-level*))
                 (write-char #\# stream))
                (t
-                (let ((*current-level-in-print* (1+ *current-level-in-print*)))
+                (let ((*current-print-level* (1+ *current-print-level*)))
                   (write-string "#(" stream)
                   (dotimes (i (length vector))
                     (unless (zerop i)
