@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.28 2003-02-05 04:00:14 piso Exp $
+ * $Id: Buffer.java,v 1.29 2003-02-05 15:49:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,12 +381,17 @@ public class Buffer extends SystemBuffer
 
     public Mode getDefaultMode()
     {
+        final File file = getFile();
         final ModeList modeList = Editor.getModeList();
         switch (fileType) {
             case FILETYPE_XML:
                 return modeList.getMode(XML_MODE);
-            case FILETYPE_SHELLSCRIPT:
+            case FILETYPE_SHELLSCRIPT: {
+                Mode m = grovelModeFromFile(file);
+                if (m != null)
+                    return m;
                 return modeList.getMode(SHELL_SCRIPT_MODE);
+            }
             case FILETYPE_PERL:
                 return modeList.getMode(PERL_MODE);
             case FILETYPE_PHP:
@@ -402,8 +407,7 @@ public class Buffer extends SystemBuffer
                 return modeList.getMode(WORD_MODE);
             case FILETYPE_TEXT:
             default: {
-                final File file = getFile();
-                Mode m = grovelMode(file);
+                Mode m = grovelModeFromFile(file);
                 if (m == null) {
                     if (entryName != null)
                         m = getModeForFileName(entryName);
@@ -429,7 +433,7 @@ public class Buffer extends SystemBuffer
         }
     }
 
-    private static final Mode grovelMode(File file)
+    private static final Mode grovelModeFromFile(File file)
     {
         if (file == null)
             return null;
@@ -442,37 +446,49 @@ public class Buffer extends SystemBuffer
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(file.getInputStream()));
             String s = reader.readLine();
-            if (s != null) {
-                int begin = s.indexOf("-*-");
-                if (begin >= 0) {
-                    s = s.substring(begin + 3);
-                    int end = s.indexOf("-*-");
-                    if (end >= 0) {
-                        s = s.substring(0, end).trim().toLowerCase();
-                        int index = s.indexOf("mode:");
-                        String modeName;
-                        if (index < 0) {
-                            // "-*- Lisp -*-"
-                            modeName = s;
-                        } else {
-                            // "-*- Mode: LISP; Syntax: ANSI-Common-Lisp; Base: 10 -*-"
-                            s = s.substring(5).trim();
-                            for (end = 0; end < s.length(); end++) {
-                                char c = s.charAt(end);
-                                if (c == ' ' || c == '\t' || c == ';')
-                                    break;
-                            }
-                            modeName = s.substring(0, end);
-                        }
-                        mode = Editor.getModeList().getModeFromModeName(modeName);
-                    }
-                }
+            mode = grovelModeFromString(s);
+            if (mode == null && s.startsWith("#!")) {
+                // Consider second line too.
+                s = reader.readLine();
+                mode = grovelModeFromString(s);
             }
+            reader.close();
         }
         catch (IOException e) {
             Log.error(e);
         }
         return mode;
+    }
+
+    private static final Mode grovelModeFromString(String s)
+    {
+        if (s != null) {
+            int begin = s.indexOf("-*-");
+            if (begin >= 0) {
+                s = s.substring(begin + 3);
+                int end = s.indexOf("-*-");
+                if (end >= 0) {
+                    s = s.substring(0, end).trim().toLowerCase();
+                    int index = s.indexOf("mode:");
+                    String modeName;
+                    if (index < 0) {
+                        // "-*- Lisp -*-"
+                        modeName = s;
+                    } else {
+                        // "-*- Mode: LISP; Syntax: ANSI-Common-Lisp; Base: 10 -*-"
+                        s = s.substring(5).trim();
+                        for (end = 0; end < s.length(); end++) {
+                            char c = s.charAt(end);
+                            if (c == ' ' || c == '\t' || c == ';')
+                                break;
+                        }
+                        modeName = s.substring(0, end);
+                    }
+                    return Editor.getModeList().getModeFromModeName(modeName);
+                }
+            }
+        }
+        return null;
     }
 
     // Locking.
