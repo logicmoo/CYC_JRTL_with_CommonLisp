@@ -63,14 +63,19 @@ public final class FindTagTextFieldHandler extends DefaultTextFieldHandler
         List tags = findMatchingTags(buffer, pattern);
         if (tags != null) {
             if (tags.size() > 1) {
-                // Can we get a unique match if we just consider methods and
-                // explicit tags?
+                // Can we get a unique match if we just consider defuns etc.
+                // and explicit tags?
                 ArrayList shortList = new ArrayList();
                 for (Iterator it = tags.iterator(); it.hasNext();) {
                     Tag tag = (Tag) it.next();
                     if (tag instanceof LocalTag) {
                         int type = ((LocalTag)tag).getType();
+                        // Java etc.
                         if (type == TAG_METHOD || type == TAG_EXPLICIT)
+                            shortList.add(tag);
+                        // Lisp.
+                        if (type == TAG_DEFUN || type == TAG_GENERIC_FUNCTION ||
+                            type == TAG_MACRO)
                             shortList.add(tag);
                     }
                 }
