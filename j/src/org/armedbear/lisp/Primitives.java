@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.723 2004-12-16 15:07:14 piso Exp $
+ * $Id: Primitives.java,v 1.724 2004-12-21 18:05:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1223,18 +1223,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            int index = Fixnum.getValue(first);
-            if (index < 0)
-                signal(new TypeError("NTH: invalid index " + index + "."));
-            int i = 0;
-            while (true) {
-                if (i == index)
-                    return second.car();
-                second = second.cdr();
-                if (second == NIL)
-                    return NIL;
-                ++i;
-            }
+            return second.NTH(first);
         }
     };
 
