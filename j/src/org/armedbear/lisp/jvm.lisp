@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.24 2003-11-11 20:13:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.25 2003-11-11 20:29:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1731,7 +1731,10 @@
          (index (position sym *locals* :from-end t)))
     (when index
       (compile-form (cadr rest))
-      (emit-push-value)
+      (if for-effect
+          (unless (remove-store-value)
+            (emit-push-value))
+          (emit-push-value))
       (emit 'astore index)
       (return-from compile-setq))
     ;; index is NIL, look in *args* ...
