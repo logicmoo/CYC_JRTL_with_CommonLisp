@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.160 2004-09-07 15:42:52 piso Exp $
+;;; $Id: autoloads.lisp,v 1.161 2004-09-09 12:43:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -266,6 +266,8 @@
 (autoload-macro 'aver)
 (export 'collect)
 (autoload-macro 'collect)
+(export 'with-mutex)
+(autoload-macro 'with-mutex)
 
 ;; JVM compiler.
 (in-package "JVM")
