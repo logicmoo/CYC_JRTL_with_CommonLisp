@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.11 2002-10-15 01:23:03 piso Exp $
+ * $Id: Shell.java,v 1.12 2002-10-15 16:27:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,51 +21,26 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REException;
 import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.List;
 import java.util.StringTokenizer;
-import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 
-public class Shell extends Buffer implements Constants
+public class Shell extends CommandInterpreter implements Constants
 {
     protected static final String JPTY_NOT_FOUND =
         "Unable to start shell process (jpty not found in PATH)";
 
-    private RE promptRE = new UncheckedRE(DEFAULT_SHELL_PROMPT_PATTERN);
-
     protected String shellCommand;
-
-    protected OutputStreamWriter stdin;
-
     private Process process;
-
-    protected ReaderThread stdoutThread;
-    protected ReaderThread stderrThread;
-
-    protected String input;
-
     private String command; // First token on command line.
-
-    protected Position posEndOfBuffer;
-    protected Position posEndOfOutput;
-
     private boolean promptIsStderr = true;
-
-    protected boolean stripEcho = false;
-
     private File oldDir;
     private File currentDir;
     private File initialDir;
-
-    protected History history;
 
     protected Shell()
     {
@@ -115,24 +90,6 @@ public class Shell extends Buffer implements Constants
         return "bash -i";
     }
 
-    public final RE getPromptRE()
-    {
-        return promptRE;
-    }
-
-    public final void setPromptRE(String pattern)
-    {
-        Debug.assertTrue(promptRE != null);
-        try {
-            promptRE = new RE(pattern);
-        }
-        catch (REException e) {
-            Log.error(e);
-        }
-        Debug.assertTrue(promptRE != null);
-    }
-
-    // Derived classes override this method.
     protected void initializeHistory()
     {
         history = new History("shell.history", 30);
@@ -254,197 +211,9 @@ public class Shell extends Buffer implements Constants
         new Thread(r).start();
     }
 
-    private void home()
+    protected void enter(final String s)
     {
-        final Editor editor = Editor.currentEditor();
-        if (editor.getDotOffset() == 0)
-            return;
-        editor.addUndo(SimpleEdit.MOVE);
-        editor.beginningOfBlock();
-        int offset = 0;
-        if (promptRE != null) {
-            Line dotLine = editor.getDotLine();
-            if (dotLine.next() == null || dotLine.flags() == STATE_INPUT) {
-                REMatch match = promptRE.getMatch(dotLine.getText());
-                if (match != null)
-                    offset = match.getEndIndex();
-            }
-        }
-        // If we're already at the prompt or to the left of it, go to column 0.
-        if (editor.getDotOffset() <= offset)
-            offset = 0;
-        editor.getDot().setOffset(offset);
-        editor.getDisplay().moveCaretToDotCol();
-    }
-
-    private void backspace()
-    {
-        boolean ok = true;
-        final Editor editor = Editor.currentEditor();
-        if (editor.getDotLine() == posEndOfOutput.getLine()) {
-            if (editor.getDotOffset() <= posEndOfOutput.getOffset())
-                ok = false;
-        } else{
-            String text = editor.getDotLine().getText();
-            if (promptRE != null) {
-                REMatch match = promptRE.getMatch(text);
-                if (match != null) {
-                    if (editor.getDotOffset() <= match.getEndIndex())
-                        ok = false;
-                }
-            }
-        }
-        if (ok)
-            editor.backspace();
-    }
-
-    private void getInputFromHistory(int direction)
-    {
-        final Editor editor = Editor.currentEditor();
-        final Line dotLine = editor.getDotLine();
-        if (dotLine.next() != null) {
-            editor.status("Not at command line");
-            return;
-        }
-        if (editor.getLastCommand() != COMMAND_HISTORY)
-            history.reset();
-        String currentInput = dotLine.getText();
-        REMatch prompt = promptRE.getMatch(currentInput);
-        // Actual input does not include prompt.
-        if (prompt != null)
-            currentInput = currentInput.substring(prompt.getEndIndex());
-        String s;
-        while (true) {
-            s = direction < 0 ? history.getPrevious() : history.getNext();
-            if (s == null)
-                break;
-            if (!s.equals(currentInput))
-                break;
-        }
-        if (s != null) {
-            CompoundEdit compoundEdit = beginCompoundEdit();
-            editor.addUndo(SimpleEdit.LINE_EDIT);
-
-            // Keep the prompt, if any, but replace whatever is after it.
-            if (prompt != null)
-                dotLine.setText(prompt.toString() + s);
-            else
-                dotLine.setText(s);
-
-            editor.updateDotLine();
-            editor.addUndo(SimpleEdit.MOVE);
-            editor.getDot().setOffset(dotLine.length());
-            editor.moveCaretToDotCol();
-            endCompoundEdit(compoundEdit);
-        }
-        editor.setCurrentCommand(COMMAND_HISTORY);
-    }
-
-    private void previousInput()
-    {
-        getInputFromHistory(-1);
-    }
-
-    private void nextInput()
-    {
-        getInputFromHistory(1);
-    }
-
-    private void escape()
-    {
-        Editor editor = Editor.currentEditor();
-        if (editor.getMark() != null || editor.getDotLine().next() != null) {
-            // There's a marked block, or we're not at the command line.
-            editor.escape();
-            return;
-        }
-
-        // Check for transient buffer in other editor in current frame.
-        Editor ed = editor.getOtherEditor();
-        if (ed != null && ed.getBuffer().isTransient()) {
-            editor.unsplitWindow();
-            editor.maybeKillBuffer(ed.getBuffer());
-            return;
-        }
-
-        String text = editor.getDotLine().getText();
-        REMatch match = promptRE.getMatch(text);
-        if (match == null)
-            return;
-        String prompt = match.toString();
-        if (text.equals(prompt) && editor.getDotOffset() == prompt.length())
-            return; // Nothing to do.
-
-        CompoundEdit compoundEdit = beginCompoundEdit();
-        if (!text.equals(prompt)) {
-            editor.addUndo(SimpleEdit.LINE_EDIT);
-            editor.getDotLine().setText(prompt);
-            Editor.updateInAllEditors(editor.getDotLine());
-        }
-        if (editor.getDotOffset() != prompt.length()) {
-            editor.addUndo(SimpleEdit.MOVE);
-            editor.getDot().setOffset(prompt.length());
-            editor.moveCaretToDotCol();
-        }
-        endCompoundEdit(compoundEdit);
-    }
-
-    private void enter()
-    {
-        if (!checkProcess())
-            return;
-        final Editor editor = Editor.currentEditor();
-        final Line dotLine = editor.getDotLine();
-        if (posEndOfOutput == null) {
-            // Ignore input before first prompt is displayed.
-            dotLine.setText("");
-            return;
-        }
-        if (posEndOfOutput.getLine() == dotLine) {
-            if (posEndOfOutput.getOffset() < dotLine.length())
-                input = dotLine.getText().substring(posEndOfOutput.getOffset());
-            else
-                input = "";
-        } else {
-            // We're not at the end of the buffer.
-            input = stripPrompt(dotLine.getText());
-        }
-        enter(input);
-    }
-
-    private void enter(final String s)
-    {
-        if (s.length() != 0) {
-            history.append(s);
-            history.save();
-        }
-        final Editor editor = Editor.currentEditor();
-        Line dotLine = editor.getDotLine();
-        if (dotLine.next() != null) {
-            // Go to end of buffer (if we're not already there) to append input.
-            editor.eob();
-            dotLine = editor.getDotLine();
-
-            // Keep the prompt, but throw away anything after it.
-            final REMatch match = promptRE.getMatch(dotLine.getText());
-            if (match != null)
-                dotLine.setText(dotLine.substring(0, match.getEndIndex()));
-
-            // Append s.
-            dotLine.setText(dotLine.getText() + s);
-        }
-        if (dotLine.flags() == 0)
-            dotLine.setFlags(STATE_INPUT);
-        editor.eol();
-        editor.insertLineSeparator();
-        editor.getDotLine().setFlags(0);
-        if (needsRenumbering)
-            renumber();
-        editor.moveCaretToDotCol();
-        editor.getDisplay().setReframe(-2);
-        posEndOfBuffer = editor.getDotCopy();
-        resetUndo();
-
+        super.enter(s);
         // If it's a local shell (i.e. not telnet or ssh), keep track of the
         // current directory.
         if (type == TYPE_SHELL) {
@@ -468,19 +237,9 @@ public class Shell extends Buffer implements Constants
             } else if (command.equals("pushd"))
                 changeDirectory(arg);
         }
-
-        stripEcho = true;
-
-        try {
-            stdin.write(s.concat("\n"));
-            stdin.flush();
-        }
-        catch (IOException e) {
-            Log.error(e);
-        }
     }
 
-    private boolean checkProcess()
+    protected boolean checkProcess()
     {
         Process p = getProcess();
         if (p == null)
@@ -518,7 +277,6 @@ public class Shell extends Buffer implements Constants
                     {
                         appendString("\nProcess exited\n");
                         updateDisplayInAllFrames();
-                        posEndOfOutput = new Position(posEndOfBuffer);
                     }
                 };
                 if (stderrThread != null)
@@ -527,21 +285,6 @@ public class Shell extends Buffer implements Constants
             }
         };
         new Thread(r).start();
-    }
-
-    private String stripPrompt(String s)
-    {
-        if (promptRE != null) {
-            REMatch match = promptRE.getMatch(s);
-            if (match != null)
-                return s.substring(match.getEndIndex());
-        }
-        // Look for login name or password prompt.
-        RE re = new UncheckedRE(".*: ?");
-        REMatch match = re.getMatch(s);
-        if (match != null)
-            return s.substring(match.getEndIndex());
-        return s;
     }
 
     private void tab()
@@ -602,26 +345,6 @@ public class Shell extends Buffer implements Constants
                 resetUndo();
             }
         }
-    }
-
-    public int load()
-    {
-        try {
-            lockWrite();
-        }
-        catch (InterruptedException e) {
-            Log.debug(e);
-            return LOAD_FAILED; // Shouldn't happen.
-        }
-        try {
-            appendLine("");
-            setLoaded(true);
-            posEndOfBuffer = new Position(getFirstLine(), 0);
-        }
-        finally {
-            unlockWrite();
-        }
-        return LOAD_COMPLETED;
     }
 
     private void updateDirectory(String output)
@@ -701,29 +424,10 @@ public class Shell extends Buffer implements Constants
         return sb.toString();
     }
 
-    private void sendChar(int c)
-    {
-        final Editor editor = Editor.currentEditor();
-        if (editor.getDotLine().next() == null)
-            editor.getDotLine().setFlags(STATE_INPUT);
-        try {
-            stdin.write(c);
-            stdin.flush();
-        }
-        catch (IOException e) {
-            Log.error(e);
-        }
-    }
-
     // For the buffer list.
     public String toString()
     {
         return shellCommand;
-    }
-
-    public Icon getIcon()
-    {
-        return Utilities.getIconFromFile("jpty.png");
     }
 
     public String getTitle()
@@ -740,11 +444,6 @@ public class Shell extends Buffer implements Constants
     public File getCurrentDirectory()
     {
         return currentDir;
-    }
-
-    public boolean isModified()
-    {
-        return false;
     }
 
     protected void appendString(String s)
@@ -765,43 +464,7 @@ public class Shell extends Buffer implements Constants
             }
             s = sb.toString();
         }
-        try {
-            lockWrite();
-        }
-        catch (InterruptedException e) {
-            Log.error(e);
-            return;
-        }
-        try {
-            Position pos = posEndOfBuffer;
-            insertString(pos, s);
-            if (needsRenumbering)
-                renumber();
-            if (pos != posEndOfBuffer)
-                posEndOfBuffer.moveTo(pos);
-            enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
-        }
-        finally {
-            unlockWrite();
-        }
-    }
-
-    protected void updateDisplayInAllFrames()
-    {
-        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-            Editor ed = it.nextEditor();
-            if (ed.getBuffer() == this) {
-                ed.eob();
-                ed.getDisplay().setReframe(-2);
-                ed.setUpdateFlag(REPAINT);
-                ed.updateDisplay();
-            }
-        }
-    }
-
-    protected String stdOutFilter(String s)
-    {
-        return s;
+        super.appendString(s);
     }
 
     protected void stdOutUpdate(final String s)
@@ -812,7 +475,6 @@ public class Shell extends Buffer implements Constants
                 if (s.length() > 0) {
                     updateDirectory(s);
                     appendString(s);
-                    posEndOfOutput = new Position(posEndOfBuffer);
                 }
                 updateLineFlags();
                 updateDisplayInAllFrames();
@@ -823,24 +485,7 @@ public class Shell extends Buffer implements Constants
         SwingUtilities.invokeLater(r);
     }
 
-    protected String stdErrFilter(String s)
-    {
-        if (stripEcho && input != null && s.startsWith(input)) {
-            int begin = input.length();
-            if (s.length() > begin && s.charAt(begin) == '\r')
-                ++begin;
-            if (s.length() > begin && s.charAt(begin) == '\n')
-                ++begin;
-            s = s.substring(begin);
-
-            // Strip echo only once per command line.
-            stripEcho = false;
-        }
-
-        return s;
-    }
-
-    private void stdErrUpdate(final String s)
+    protected void stdErrUpdate(final String s)
     {
         if (promptIsStderr) {
             REMatch match = promptRE.getMatch(s);
@@ -859,7 +504,6 @@ public class Shell extends Buffer implements Constants
             public void run()
             {
                 appendString(s);
-                posEndOfOutput = new Position(posEndOfBuffer);
                 updateLineFlags();
                 updateDisplayInAllFrames();
                 resetUndo();
@@ -952,48 +596,6 @@ public class Shell extends Buffer implements Constants
         }
     }
 
-    public static void shellEscape()
-    {
-        final Buffer buffer = Editor.currentEditor().getBuffer();
-        if (buffer instanceof Shell)
-            ((Shell)buffer).escape();
-    }
-
-    public static void shellHome()
-    {
-        final Buffer buffer = Editor.currentEditor().getBuffer();
-        if (buffer instanceof Shell)
-            ((Shell)buffer).home();
-    }
-
-    public static void shellBackspace()
-    {
-        final Buffer buffer = Editor.currentEditor().getBuffer();
-        if (buffer instanceof Shell)
-            ((Shell)buffer).backspace();
-    }
-
-    public static void shellPreviousInput()
-    {
-        final Buffer buffer = Editor.currentEditor().getBuffer();
-        if (buffer instanceof Shell)
-            ((Shell)buffer).previousInput();
-    }
-
-    public static void shellNextInput()
-    {
-        final Buffer buffer = Editor.currentEditor().getBuffer();
-        if (buffer instanceof Shell)
-            ((Shell)buffer).nextInput();
-    }
-
-    public static void shellEnter()
-    {
-        final Buffer buffer = Editor.currentEditor().getBuffer();
-        if (buffer instanceof Shell)
-            ((Shell)buffer).enter();
-    }
-
     public static void shellTab()
     {
         final Buffer buffer = Editor.currentEditor().getBuffer();
@@ -1006,43 +608,5 @@ public class Shell extends Buffer implements Constants
         final Buffer buffer = Editor.currentEditor().getBuffer();
         if (buffer instanceof Shell)
             ((Shell)buffer).sendChar(3);
-    }
-
-    protected class StdoutThread extends ReaderThread
-    {
-        // If this constructor is private, we run into jikes 1.15 bug #2256.
-        StdoutThread(InputStream stdout)
-        {
-            super(stdout);
-        }
-
-        public String filter(String s)
-        {
-            return stdOutFilter(s);
-        }
-
-        public void update(String s)
-        {
-            stdOutUpdate(s);
-        }
-    }
-
-    protected class StderrThread extends ReaderThread
-    {
-        // If this constructor is private, we run into jikes 1.15 bug #2256.
-        StderrThread(InputStream stderr)
-        {
-            super(stderr);
-        }
-
-        public String filter(String s)
-        {
-            return stdErrFilter(s);
-        }
-
-        public void update(String s)
-        {
-            stdErrUpdate(s);
-        }
     }
 }
