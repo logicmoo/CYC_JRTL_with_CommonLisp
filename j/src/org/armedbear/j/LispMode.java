@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.8 2002-10-18 21:44:32 piso Exp $
+ * $Id: LispMode.java,v 1.9 2002-10-19 15:25:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,7 +130,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
             return 0;
         if (modelTrim.charAt(0) == ';')
             return buffer.getIndentation(model);
-        
+
         final int indentSize = buffer.getIndentSize();
         Position pos = findContainingSexp(new Position(line, 0));
         if (pos != null) {
@@ -147,26 +147,39 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 // Otherwise...
                 String token = gatherToken(it.getPosition());
                 if (token.equals("if")) {
+                    int depth = depth(line, buffer);
+                    int modelDepth = depth(model, buffer);
+                    if (pos.getLine() == model || modelDepth > depth)
+                        return buffer.getCol(pos) + indentSize * 2;
+                    else
+                        return buffer.getCol(pos) + indentSize;
+                }
+                if (token.equals("prog1")) {
                     if (pos.getLine() == model)
                         return buffer.getCol(pos) + indentSize * 2;
                     else
                         return buffer.getCol(pos) + indentSize;
-                } 
+                }
                 if (token.equals("let"))
                     return buffer.getCol(pos) + indentSize;
                 if (token.equals("while"))
+                    return buffer.getCol(pos) + indentSize;
+                if (token.equals("when"))
+                    return buffer.getCol(pos) + indentSize;
+                if (token.equals("unless"))
+                    return buffer.getCol(pos) + indentSize;
+                if (token.equals("unwind-protect"))
                     return buffer.getCol(pos) + indentSize;
                 if (token.startsWith("def"))
                     return buffer.getCol(pos) + indentSize;
                 pos = forwardSexp(pos);
                 if (pos != null)
                     return buffer.getCol(pos);
-                
                 break; // Fall through.
             }
         }
 
-        int depth = depth(new Position(line, 0), buffer);
+        int depth = depth(line, buffer);
         if (depth > 0)
             return indentSize * depth;
         return 0;
@@ -214,10 +227,11 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return sb.toString();
     }
 
-    private int depth(Position pos, Buffer buffer)
+    private int depth(Line line, Buffer buffer)
     {
         if (buffer.needsRenumbering())
             buffer.renumber();
+        Position pos = new Position(line, 0);
         Position start = findStartOfDefun(pos);
         if (pos.equals(start))
             return 0;
