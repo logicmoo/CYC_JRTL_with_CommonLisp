@@ -239,6 +239,7 @@ host-namestring
 identity
 if
 ignore-errors
+imagpart
 import
 in-package
 incf
@@ -422,6 +423,7 @@ read-sequence
 readtable-case
 readtablep
 realp
+realpart
 reduce
 rem
 remf
