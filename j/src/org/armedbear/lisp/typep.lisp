@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: typep.lisp,v 1.23 2005-03-12 18:36:06 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: typep.lisp,v 1.24 2005-03-14 18:55:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,24 +92,29 @@
                      (typep (imagpart object) i)))))
       (SIMPLE-BIT-VECTOR
        (and (simple-bit-vector-p object)
-            (or (endp i) (match-dimensions (array-dimensions object) i))))
+            (or (endp i)
+                (eq (car i) '*)
+                (eql (car i) (array-dimension object 0)))))
       (BIT-VECTOR
        (and (bit-vector-p object)
-            (or (endp i) (match-dimensions (array-dimensions object) i))))
+            (or (endp i)
+                (eq (car i) '*)
+                (eql (car i) (array-dimension object 0)))))
       (SIMPLE-STRING
        (and (simple-string-p object)
-            (or (null i)
+            (or (endp i)
                 (eq (car i) '*)
-                (eql (car i) (length object)))))
+                (eql (car i) (array-dimension object 0)))))
       (STRING
        (and (stringp object)
-            (or (null i)
+            (or (endp i)
                 (eq (car i) '*)
-                (eql (car i) (length object)))))
+                (eql (car i) (array-dimension object 0)))))
       (SIMPLE-VECTOR
        (and (simple-vector-p object)
-            (or (endp i) (eq (car i) '*)
-                (= (length object) (car i)))))
+            (or (endp i)
+                (eq (car i) '*)
+                (eql (car i) (array-dimension object 0)))))
       (VECTOR
        (and (vectorp object)
             (or (endp i)
@@ -117,7 +122,9 @@
                 (and (eq (car i) t) (not (stringp object)) (not (bit-vector-p object)))
                 (and (stringp object) (%subtypep (car i) 'character))
                 (equal (array-element-type object) (car i)))
-            (or (endp (cdr i)) (match-dimensions (array-dimensions object) (cdr i)))))
+            (or (endp (cdr i))
+                (eq (cadr i) '*)
+                (eql (cadr i) (array-dimension object 0)))))
       (SIMPLE-ARRAY
        (and (simple-array-p object)
             (or (endp i) (eq (car i) '*)
