@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Frame.java,v 1.12 2003-06-29 01:26:20 piso Exp $
+ * $Id: Frame.java,v 1.13 2003-07-25 16:30:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,6 @@ import java.lang.reflect.Method;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
 public final class Frame extends JFrame implements Constants, ComponentListener,
@@ -183,17 +182,17 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
         return sidebar;
     }
 
-    private JSplitPane sidebarSplitPane;
+    private SplitPane sidebarSplitPane;
 
-    public final JSplitPane getSidebarSplitPane()
+    public final SplitPane getSidebarSplitPane()
     {
         return sidebarSplitPane;
     }
 
-    private JSplitPane createSidebarSplitPane()
+    private SplitPane createSidebarSplitPane()
     {
-        JSplitPane splitPane =
-            new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+        SplitPane splitPane =
+            new SplitPane(SplitPane.HORIZONTAL_SPLIT,
                 sidebar, getEditorPane());
         int dividerLocation =
             Editor.getSessionProperties().getSidebarWidth(this);
@@ -427,9 +426,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
             editors[1] = new Editor(this);
             editors[1].activate(editors[0].getBuffer());
             editors[1].updateLocation();
-            JSplitPane sp =
-                new JSplitPane(JSplitPane.VERTICAL_SPLIT, editors[0],
-                    editors[1]);
+            SplitPane sp = new SplitPane(SplitPane.VERTICAL_SPLIT,
+                                         editors[0], editors[1]);
             sp.setBorder(null);
             sp.setDividerLocation(height / 2);
             editorPane = sp;
@@ -476,8 +474,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
                 if (editors[1].getBuffer() != secondary)
                     editors[1].activate(secondary);
                 // Adjust split pane divider location.
-                if (editorPane instanceof JSplitPane) {
-                    JSplitPane sp = (JSplitPane) editorPane;
+                if (editorPane instanceof SplitPane) {
+                    SplitPane sp = (SplitPane) editorPane;
                     int height = sp.getHeight();
                     float split = secondary.getSplit();
                     int dividerLocation =
@@ -553,8 +551,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
             editors[1] = new Editor(this);
             editors[1].activate(buf2);
             editors[1].updateLocation();
-            JSplitPane sp = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                editors[0], editors[1]);
+            SplitPane sp = new SplitPane(SplitPane.VERTICAL_SPLIT,
+                                         editors[0], editors[1]);
             sp.setBorder(null);
             int dividerLocation =
                 (int)(height * (1 - split) - sp.getDividerSize());
@@ -605,8 +603,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
             editors[1] = new Editor(this);
             editors[1].activate(buffer);
             editors[1].updateLocation();
-            JSplitPane sp =
-                new JSplitPane(JSplitPane.VERTICAL_SPLIT, editor, editors[1]);
+            SplitPane sp = new SplitPane(SplitPane.VERTICAL_SPLIT,
+                                         editor, editors[1]);
             sp.setBorder(null);
             int dividerLocation =
                 (int)(editor.getHeight() * (1 - split) - sp.getDividerSize());
