@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Frame.java,v 1.4 2002-11-15 02:02:41 piso Exp $
+ * $Id: Frame.java,v 1.5 2002-11-15 15:03:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -474,15 +474,13 @@ public final class Frame extends JFrame implements Constants, WindowListener,
             primary = buf;
             secondary = buf.getSecondary();
         } else {
-            Debug.assertTrue(buf.isSecondary());
+            Debug.bugIfNot(buf.isSecondary());
             primary = buf.getPrimary();
-            Debug.assertTrue(primary != null);
+            Debug.bugIfNot(primary != null);
             secondary = buf;
         }
         if (getEditorCount() == 2) {
             // Window is already split.
-            Debug.assertTrue(editors[0] != null);
-            Debug.assertTrue(editors[1] != null);
             if (secondary != null) {
                 // Activate primary in editor 0.
                 // Activate secondary in editor 1.
@@ -504,12 +502,10 @@ public final class Frame extends JFrame implements Constants, WindowListener,
                 editors[1].updateDisplay();
             } else {
                 // No secondary.
-                Debug.assertTrue(secondary == null);
+                Debug.bugIfNot(secondary == null);
                 // We don't need a split window. Close editor 1.
                 Editor keep = editors[0];
                 Editor kill = editors[1];
-                Debug.assertTrue(keep != null);
-                Debug.assertTrue(kill != null);
                 // Save information about the buffer in the editor that we're
                 // going to close.
                 final Buffer b = kill.getBuffer();
@@ -522,12 +518,12 @@ public final class Frame extends JFrame implements Constants, WindowListener,
                 }
                 unsplitInternal(keep, kill);
                 // Activate primary in editor 0.
-                Debug.assertTrue(editors[0] == keep);
+                Debug.bugIfNot(editors[0] == keep);
                 keep.activate(primary);
             }
         } else {
             // Window is not split.
-            Debug.assertTrue(getEditorCount() == 1);
+            Debug.bugIfNot(getEditorCount() == 1);
             if (secondary != null) {
                 // Split the window, activate primary in editor 0, activate
                 // secondary in editor 1.
@@ -538,9 +534,9 @@ public final class Frame extends JFrame implements Constants, WindowListener,
                 restoreFocus();
             } else {
                 // Only one editor, no secondary.
-                Debug.assertTrue(editors[0] != null);
-                Debug.assertTrue(editors[1] == null);
-                Debug.assertTrue(secondary == null);
+                Debug.bugIfNot(editors[0] != null);
+                Debug.bugIfNot(editors[1] == null);
+                Debug.bugIfNot(secondary == null);
                 // Activate primary in editor 0.
                 editors[0].activate(primary);
             }
@@ -548,12 +544,12 @@ public final class Frame extends JFrame implements Constants, WindowListener,
         buf.setLastActivated(System.currentTimeMillis());
         if (Editor.isDebugEnabled()) {
             if (buf.isPrimary()) {
-                Debug.assertTrue(getPrimaryEditor().getBuffer() == buf);
+                Debug.bugIfNot(getPrimaryEditor().getBuffer() == buf);
             } else {
-                Debug.assertTrue(buf.isSecondary());
+                Debug.bugIfNot(buf.isSecondary());
                 Buffer bufPrimary = buf.getPrimary();
-                Debug.assertTrue(primary != null);
-                Debug.assertTrue(getPrimaryEditor().getBuffer() == bufPrimary);
+                Debug.bugIfNot(primary != null);
+                Debug.bugIfNot(getPrimaryEditor().getBuffer() == bufPrimary);
             }
         }
     }
