@@ -2,7 +2,7 @@
  * WrapText.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WrapText.java,v 1.4 2002-11-05 19:06:35 piso Exp $
+ * $Id: WrapText.java,v 1.5 2002-11-06 18:13:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,7 @@ public final class WrapText implements Constants
         buffer = editor.getBuffer();
         dot = editor.getDot();
         mark = editor.getMark();
-        // The column numbers we use internally are 0-based.
-        wrapCol = buffer.getIntegerProperty(Property.WRAP_COL) - 1;
+        wrapCol = buffer.getIntegerProperty(Property.WRAP_COL);
         tabWidth = buffer.getTabWidth();
         isHtml = buffer.getModeId() == HTML_MODE;
     }
@@ -97,7 +96,7 @@ public final class WrapText implements Constants
             unwrapRegion(r);
         }
     }
-    
+
     private void wrapCommentInternal()
     {
         String commentStart = null;
@@ -315,7 +314,7 @@ public final class WrapText implements Constants
                 if (where <= savedOffset)
                     ++adjust;
                 remaining = remaining.substring(breakOffset);
-                if (remaining.startsWith(" ")) {
+                if (remaining.length() > 0 && remaining.charAt(0) == ' ') {
                     remaining = remaining.substring(1);
                     if (where <= savedOffset)
                         --adjust;
@@ -538,9 +537,9 @@ public final class WrapText implements Constants
             return new Position(endLine.next(), 0);
         return new Position(endLine, endLine.length());
     }
-    
-    private static final RE prefixRE = new UncheckedRE("^[> ]+");
-    
+
+    private static final RE prefixRE = new UncheckedRE("^>[> ]*");
+
     private static String getPrefix(Line line)
     {
         REMatch match = prefixRE.getMatch(line.getText());
