@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.17 2003-03-14 18:47:39 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.18 2003-03-15 17:38:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -536,25 +536,10 @@ public class CharacterInputStream extends LispStream
             return NIL;
 
         char c = token.charAt(0);
-        if (c == '-' || Character.isDigit(token.charAt(0))) {
-            if (token.indexOf('.') >= 0) {
-                // FIXME If '.' is last char in token, it's an integer rather
-                // than a float.
-                try {
-                    return new LispFloat(Float.parseFloat(token));
-                }
-                catch (NumberFormatException e) {}
-            } else {
-                try {
-                    return new Fixnum(Integer.parseInt(token));
-                }
-                catch (NumberFormatException e) {}
-                // parseInt() failed.
-                try {
-                    return new Bignum(new BigInteger(token));
-                }
-                catch (NumberFormatException e) {}
-            }
+        if ("-+0123456789".indexOf(c) >= 0) {
+            LispObject number = makeNumber(token);
+            if (number != null)
+                return number;
         }
         token = token.toUpperCase();
         if (token.equals("T"))
@@ -596,6 +581,69 @@ public class CharacterInputStream extends LispStream
             return symbol;
         }
         return intern(token, getCurrentPackage());
+    }
+
+    private LispObject makeNumber(String token) throws LispError
+    {
+        if (token.endsWith("."))
+            token = token.substring(0, token.length()-1);
+        LispObject number = makeFloat(token);
+        if (number != null)
+            return number;
+        try {
+            return new Fixnum(Integer.parseInt(token));
+        }
+        catch (NumberFormatException e) {}
+        // parseInt() failed.
+        try {
+            return new Bignum(new BigInteger(token));
+        }
+        catch (NumberFormatException e) {}
+        // Not a number.
+        return null;
+    }
+
+    private LispObject makeFloat(String token) throws LispError
+    {
+        final int length = token.length();
+        if (length == 0)
+            return null;
+        StringBuffer sb = new StringBuffer();
+        int i = 0;
+        boolean maybe = false;
+        char c = token.charAt(i);
+        if (c == '-' || c == '+') {
+            sb.append(c);
+            ++i;
+        }
+        while (i < length) {
+            c = token.charAt(i);
+            if (c == '.' || (c >= '0' && c <= '9')) {
+                if (c == '.')
+                    maybe = true;
+                sb.append(c);
+                ++i;
+            } else
+                break;
+        }
+        if (i < length) {
+            if ("esfdlESFDL".indexOf(token.charAt(i)) >= 0) {
+                // Exponent marker.
+                maybe = true;
+                sb.append('E');
+                ++i;
+            }
+        }
+        if (!maybe)
+            return null;
+        // Append rest of token.
+        sb.append(token.substring(i));
+        try {
+            return new LispFloat(Float.parseFloat(sb.toString()));
+        }
+        catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private char flushWhitespace() throws LispError
