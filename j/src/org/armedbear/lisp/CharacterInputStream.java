@@ -1,8 +1,8 @@
 /*
  * CharacterInputStream.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.60 2003-12-17 03:40:55 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: CharacterInputStream.java,v 1.61 2004-01-02 19:07:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ import java.math.BigInteger;
 public class CharacterInputStream extends LispInputStream
 {
     private final PushbackReader reader;
+
     protected int offset;
     protected int lineNumber;
 
@@ -42,9 +43,14 @@ public class CharacterInputStream extends LispInputStream
 
     public CharacterInputStream(InputStream in)
     {
-        reader = new PushbackReader(
-            new BufferedReader(new InputStreamReader(in)),
-            2);
+        reader = new PushbackReader(new BufferedReader(new InputStreamReader(in)),
+                                    2);
+    }
+
+    public CharacterInputStream(InputStream in, LispObject pathname)
+    {
+        this(in);
+        setPathname(pathname);
     }
 
     public int getOffset()
