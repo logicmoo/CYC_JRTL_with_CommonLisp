@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.3 2003-06-04 18:12:35 piso Exp $
+ * $Id: XmlMode.java,v 1.4 2003-06-06 00:09:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
     private static final String COMMENT_START = "<!--";
     private static final String COMMENT_END   = "-->";
 
-    private static final Mode mode = new XmlMode();
+    private static final XmlMode mode = new XmlMode();
 
     private static RE tagNameRE;
     private static RE attributeNameRE;
@@ -55,7 +55,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         setProperty(Property.INDENT_SIZE, 2);
     }
 
-    public static final Mode getMode()
+    public static final XmlMode getMode()
     {
         return mode;
     }
