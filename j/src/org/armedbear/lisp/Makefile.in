@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.7 2003-03-14 02:54:18 piso Exp $
+# $Id: Makefile.in,v 1.8 2003-03-14 18:45:27 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
 
 CLASSFILES =	AbstractVector.class \
 		ArrayType.class \
+		Bignum.class \
 		Binding.class \
 		BitVector.class \
 		Block.class \
