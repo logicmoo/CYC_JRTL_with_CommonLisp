@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: arrays.lisp,v 1.6 2003-04-24 14:06:00 piso Exp $
+;;; $Id: arrays.lisp,v 1.7 2003-04-25 00:34:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,7 +24,8 @@
           make-array
           array-row-major-index
           array-in-bounds-p
-          aref))
+          aref
+          bit sbit))
 
 (defconstant array-total-size-limit #x1000000)
 (defconstant array-rank-limit 8)
@@ -88,3 +89,13 @@
 
 (defsetf aref %aset)
 (defsetf row-major-aref %set-row-major-aref)
+
+(defun bit (bit-array &rest subscripts)
+  (row-major-aref bit-array (%array-row-major-index bit-array subscripts)))
+
+(defun sbit (simple-bit-array &rest subscripts)
+  (row-major-aref simple-bit-array
+		  (%array-row-major-index simple-bit-array subscripts)))
+
+(defsetf bit %aset)
+(defsetf sbit %aset)
