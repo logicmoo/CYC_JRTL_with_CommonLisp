@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.34 2004-10-20 01:16:26 piso Exp $
+ * $Id: BuiltInClass.java,v 1.35 2004-11-08 18:26:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,6 +91,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass FLOATING_POINT_INVALID_OPERATION = addClass(Symbol.FLOATING_POINT_INVALID_OPERATION);
     public static final BuiltInClass FLOATING_POINT_OVERFLOW          = addClass(Symbol.FLOATING_POINT_OVERFLOW);
     public static final BuiltInClass FLOATING_POINT_UNDERFLOW         = addClass(Symbol.FLOATING_POINT_UNDERFLOW);
+    public static final BuiltInClass FORWARD_REFERENCED_CLASS         = addClass(Symbol.FORWARD_REFERENCED_CLASS);
     public static final BuiltInClass FUNCTION                         = addClass(Symbol.FUNCTION);
     public static final BuiltInClass HASH_TABLE                       = addClass(Symbol.HASH_TABLE);
     public static final BuiltInClass INTEGER                          = addClass(Symbol.INTEGER);
@@ -346,6 +347,8 @@ public class BuiltInClass extends LispClass
         FLOATING_POINT_UNDERFLOW.setCPL(FLOATING_POINT_UNDERFLOW, ARITHMETIC_ERROR,
                                         ERROR, SERIOUS_CONDITION, CONDITION,
                                         STANDARD_OBJECT, CLASS_T);
+        FORWARD_REFERENCED_CLASS.setDirectSuperclass(CLASS);
+        FORWARD_REFERENCED_CLASS.setCPL(FORWARD_REFERENCED_CLASS, CLASS, CLASS_T);
         FUNCTION.setDirectSuperclass(CLASS_T);
         FUNCTION.setCPL(FUNCTION, CLASS_T);
         GENERIC_FUNCTION.setCPL(GENERIC_FUNCTION, STANDARD_OBJECT, FUNCTION,
