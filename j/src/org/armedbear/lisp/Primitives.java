@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.617 2004-03-17 13:19:46 piso Exp $
+ * $Id: Primitives.java,v 1.618 2004-03-23 03:31:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4477,6 +4477,16 @@ public final class Primitives extends Lisp
                 }
             }
             return NIL;
+        }
+    };
+
+    // ### uptime
+    private static final Primitive0 UPTIME =
+        new Primitive0("uptime", PACKAGE_EXT, true)
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return number(System.currentTimeMillis() - Main.startTimeMillis);
         }
     };
 
