@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.118 2003-08-14 17:21:25 piso Exp $
+ * $Id: Lisp.java,v 1.119 2003-08-14 18:17:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -460,6 +460,20 @@ public abstract class Lisp
                                   LispObject third)
     {
         return new Cons(first, new Cons(second, new Cons(third)));
+    }
+
+    // Used by jvm compiler.
+    public static final LispObject multipleValueList(LispObject result)
+    {
+        LispThread thread = LispThread.currentThread();
+        LispObject[] values = thread.getValues();
+        thread.clearValues();
+        if (values == null)
+            return new Cons(result);
+        LispObject list = NIL;
+        for (int i = values.length; i-- > 0;)
+            list = new Cons(values[i], list);
+        return list;
     }
 
     public static Symbol checkSymbol(LispObject obj) throws LispError
