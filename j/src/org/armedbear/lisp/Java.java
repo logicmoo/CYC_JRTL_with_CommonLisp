@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.19 2003-11-07 19:02:11 asimon Exp $
+ * $Id: Java.java,v 1.20 2003-11-09 20:53:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,6 +216,8 @@ public final class Java extends Module
                         parameterTypes));
                 }
                 // Parameter types not explicitly specified.
+                if (argCount < 0)
+                    argCount = 0;
                 Method[] methods = c.getMethods();
                 for (int i = 0; i < methods.length; i++) {
                     Method method = methods[i];
