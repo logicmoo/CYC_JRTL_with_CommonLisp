@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.169 2004-04-16 00:58:41 piso Exp $
+# $Id: Makefile.in,v 1.170 2004-04-28 01:48:19 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -241,6 +241,8 @@ lisp: Site.java $(CLASSFILES)
 
 clean:
 	-rm -rf *.class
+	-rm -rf *.fasl
+	-rm -rf *.cls
 	if [ -e build ]; then rm build; fi
 
 Makefile: Makefile.in ../../../../config.status
