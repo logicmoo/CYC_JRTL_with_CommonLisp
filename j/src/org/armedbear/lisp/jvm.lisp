@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.210 2004-07-11 12:46:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.211 2004-07-11 14:13:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -78,6 +78,8 @@
 (defvar *child-count* 0)
 
 (defvar *context* nil)
+
+(defvar *context-register* nil)
 
 (defstruct context vars parent)
 
@@ -2578,44 +2580,17 @@
           (t
             (ecase (variable-kind variable)
               (LOCAL
-               (cond (
-;;                       (and (variable-context variable)
-;;                            (neq (variable-context variable) *context*))
-                      *child-p*
-
-;;                       ;; Compile call to getVariableValue().
-;;                       (emit 'aload 0) ; this
-
-;;                       (emit 'bipush (variable-index variable))
-;;                       (emit-invokevirtual *this-class*
-;;                                           "getVariableValue"
-;;                                           "(I)Lorg/armedbear/lisp/LispObject;"
-;;                                           -1))
-
-                      (emit 'aload 2) ; FIXME 2 => *context-register* (or something)
+               (cond (*child-p*
+                      (emit 'aload *context-register*)
                       (emit 'bipush (variable-index variable))
                       (emit 'aaload))
-
-
                      (*use-locals-vector*
                       (emit 'aload 1)
                       (emit 'bipush (variable-index variable))
                       (emit 'aaload))))
               (ARG
-               (cond (
-;;                       (and (variable-context variable)
-;;                            (neq (variable-context variable) *context*))
-                      *child-p*
-
-;;                       ;; Compile call to LispThread.getVariableValue().
-;;                       (emit 'aload 0) ; this
-
-;;                       (emit 'bipush (variable-index variable))
-;;                       (emit-invokevirtual *this-class*
-;;                                           "getVariableValue"
-;;                                           "(I)Lorg/armedbear/lisp/LispObject;"
-;;                                           -1))
-                      (emit 'aload 2) ; FIXME 2 => *context-register* (or something)
+               (cond (*child-p*
+                      (emit 'aload *context-register*)
                       (emit 'bipush (variable-index variable))
                       (emit 'aaload))
                      (t
@@ -2651,20 +2626,8 @@
          (maybe-emit-clear-values (cadr rest))
          (unless for-effect
            (emit 'dup)) ; Stack: value value
-         (cond (
-;;                 (and (variable-context variable)
-;;                      (neq (variable-context variable) *context*))
-                *child-p*
-
-                ;; Compile call to LispThread.setVariableValue().
-;;                 (emit 'aload 0) ; this
-;;                 (emit 'swap) ; Stack: this value
-;;                 (emit 'bipush (variable-index variable)) ; Stack: value thread value index
-;;                 (emit-invokevirtual *this-class*
-;;                                     "setVariableValue"
-;;                                     "(Lorg/armedbear/lisp/LispObject;I)V"
-;;                                     -3) ; Stack: value
-                (emit 'aload 2) ; Stack: value context
+         (cond (*child-p*
+                (emit 'aload *context-register*) ; Stack: value context
                 (emit 'swap) ; context value
                 (emit 'bipush (variable-index variable)) ; context value index
                 (emit 'swap) ; context index value
@@ -2691,22 +2654,9 @@
          (maybe-emit-clear-values (cadr rest))
          (unless for-effect
            (emit 'dup)) ; Stack: value value
-         (cond (
-;;                 (and (variable-context variable)
-;;                      (neq (variable-context variable) *context*))
-                *child-p*
-
-;;                 ;; Compile call to setVariableValue().
-;;                 (emit 'aload 0) ; this
-;;                 (emit 'swap) ; Stack: this value
-;;                 (emit 'bipush (variable-index variable)) ; Stack: value thread value index
-;;                 (emit-invokevirtual *this-class*
-;;                                     "setVariableValue"
-;;                                     "(Lorg/armedbear/lisp/LispObject;I)V"
-;;                                     -3) ; Stack: value
-
+         (cond (*child-p*
                 (format t "compile-setq *child-p* case~%")
-                (emit 'aload 2) ; Stack: value context
+                (emit 'aload *context-register*) ; Stack: value context
                 (emit 'swap) ; context value
                 (emit 'bipush (variable-index variable)) ; context value index
                 (emit 'swap) ; context index value
@@ -2719,10 +2669,6 @@
                 (emit 'aload 1)
                 (emit 'swap)
                 (emit 'bipush (variable-index variable))
-;;                 (compile-form (cadr rest))
-;;                 (unless (remove-store-value)
-;;                   (emit-push-value))
-;;                 (maybe-emit-clear-values (cadr rest))
                 (emit 'swap)
                 (emit 'aastore)
                 (unless for-effect
@@ -2991,6 +2937,8 @@
 ;;          (*context* (make-context :parent *context*))
          (*context* (if *context* *context* (make-context)))
 
+         (*context-register* *context-register*)
+
          (*variables* *variables*)
 
          (parameters ())
@@ -3051,9 +2999,12 @@
         (allocate-register) ;; One slot for arg array.
         (dolist (arg args) ;; One slot for each argument.
           (allocate-register)))
-    (when *child-p*
-      (let ((context-register (allocate-register)))
-        (assert (eql context-register 2))))
+    (cond (*child-p*
+           (setf *context-register* (allocate-register))
+           (assert (eql *context-register* 2)))
+          (*use-locals-vector*
+           (assert *using-arg-array*)
+           (setf *context-register* 1)))
     ;; Reserve the next available slot for the value register.
     (setf *val* (allocate-register))
     ;; Reserve the next available slot for the thread register.
@@ -3092,28 +3043,14 @@
                     (error "error: need to establish dynamic binding"))))
             ;; Copy args to context vector.
             (*child-p*
-             (format t "line 3088~%")
-;;              (assert nil) ; FIXME! Needs code!
-             (format t "*child-p* case: variable = ~S index = ~S arg-index = ~S~%"
-                     (variable-name variable)
-                     (variable-index variable)
-                     (variable-arg-index variable))
-             ;; Destination first.
-             (emit 'aload 2)
+             ;; Destination.
+             (emit 'aload *context-register*)
              (emit 'bipush (variable-index variable))
-             ;; Now value.
+             ;; Value.
              (emit 'aload 1)
              (emit 'bipush (variable-arg-index variable))
              (emit 'aaload)
-;;              (emit-push-current-thread)
-;;              (emit 'swap) ; Stack: thread value
-;;              (emit 'bipush (variable-index variable)) ; thread value index
-;;              (emit-invokevirtual +lisp-thread-class+
-;;                                  "setVariableValue"
-;;                                  "(Lorg/armedbear/lisp/LispObject;I)V"
-;;                                  -3))
-             (emit 'aastore))
-            ))
+             (emit 'aastore))))
 
     (process-optimization-declarations body)
     (dolist (f body)
