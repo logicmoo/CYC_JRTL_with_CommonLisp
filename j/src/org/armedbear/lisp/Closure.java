@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.32 2003-06-08 16:21:34 piso Exp $
+ * $Id: Closure.java,v 1.33 2003-06-08 16:30:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,27 +79,21 @@ public class Closure extends Function
             ArrayList auxVars = null;
             ArrayList requiredParameters = new ArrayList();
             ArrayList optionalParameters = new ArrayList();
-            boolean optional = false;
-            boolean key = false;
-            boolean aux = false;
             int state = STATE_REQUIRED;
             LispObject remaining = lambdaList;
             while (remaining != NIL) {
                 LispObject obj = remaining.car();
                 if (obj instanceof Symbol) {
-                    if (aux) {
+                    if (state == STATE_AUX) {
                         if (auxVars == null)
                             auxVars = new ArrayList();
                         auxVars.add(new Parameter((Symbol)obj, NIL, AUX));
                     } else if (obj == Symbol.AND_OPTIONAL) {
                         state = STATE_OPTIONAL;
-                        optional = true;
                         arity = -1;
                     } else if (obj == Symbol.AND_REST || obj == Symbol.AND_BODY) {
                         state = STATE_REST;
                         restp = true;
-                        optional = false;
-                        key = false;
                         arity = -1;
                         maxArgs = -1;
                         remaining = remaining.cdr();
@@ -111,8 +105,6 @@ public class Closure extends Function
                         arrayList.add(new Parameter(restVar, NIL, REST));
                     } else if (obj == Symbol.AND_KEY) {
                         state = STATE_KEYWORD;
-                        key = true;
-                        optional = false;
                         arity = -1;
                     } else if (obj == Symbol.AND_ALLOW_OTHER_KEYS) {
                         allowOtherKeys = true;
@@ -121,17 +113,15 @@ public class Closure extends Function
                         // All remaining specifiers are aux variable specifiers.
                         state = STATE_AUX;
                         arity = -1; // FIXME
-                        aux = true;
                     } else {
-                        if (optional) {
-                            Debug.assertTrue(state == STATE_OPTIONAL);
+                        if (state == STATE_OPTIONAL) {
                             arrayList.add(new Parameter((Symbol)obj, NIL,
                                 OPTIONAL));
                             optionalParameters.add(new Parameter((Symbol)obj,
                                 NIL, OPTIONAL));
                             if (maxArgs >= 0)
                                 ++maxArgs;
-                        } else if (key) {
+                        } else if (state == STATE_KEYWORD) {
                             arrayList.add(new Parameter((Symbol)obj, NIL, KEYWORD));
                             keywordParameters.add(new Parameter((Symbol)obj, NIL, KEYWORD));
                             ++keywordParameterCount;
@@ -147,14 +137,14 @@ public class Closure extends Function
                         }
                     }
                 } else if (obj instanceof Cons) {
-                    if (aux) {
+                    if (state == STATE_AUX) {
                         Symbol symbol = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         Debug.assertTrue(initForm != null);
                         if (auxVars == null)
                             auxVars = new ArrayList();
                         auxVars.add(new Parameter(symbol, initForm, AUX));
-                    } else if (optional) {
+                    } else if (state == STATE_OPTIONAL) {
                         Symbol symbol = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         LispObject svar = obj.cdr().cdr().car();
@@ -162,7 +152,7 @@ public class Closure extends Function
                         optionalParameters.add(new Parameter(symbol, initForm, svar, OPTIONAL));
                         if (maxArgs >= 0)
                             ++maxArgs;
-                    } else if (key) {
+                    } else if (state == STATE_KEYWORD) {
                         Symbol keyword;
                         Symbol var;
                         LispObject initForm = NIL;
