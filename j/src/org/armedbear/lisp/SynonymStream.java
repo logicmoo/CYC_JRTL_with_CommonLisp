@@ -2,7 +2,7 @@
  * SynonymStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SynonymStream.java,v 1.1 2004-01-31 20:12:22 piso Exp $
+ * $Id: SynonymStream.java,v 1.2 2004-02-01 16:50:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,16 @@ public final class SynonymStream extends Stream
     public boolean isOutputStream() throws ConditionThrowable
     {
         return checkStream(symbol.symbolValue()).isOutputStream();
+    }
+
+    public boolean isCharacterStream() throws ConditionThrowable
+    {
+        return checkStream(symbol.symbolValue()).isCharacterStream();
+    }
+
+    public boolean isBinaryStream() throws ConditionThrowable
+    {
+        return checkStream(symbol.symbolValue()).isBinaryStream();
     }
 
     public LispObject typeOf()
