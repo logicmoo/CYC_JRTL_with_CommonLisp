@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.490 2003-11-04 01:42:26 piso Exp $
+ * $Id: Primitives.java,v 1.491 2003-11-04 03:12:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1343,20 +1343,10 @@ public final class Primitives extends Module
         }
     };
 
-    // ### lambda
-    private static final SpecialOperator LAMBDA = new SpecialOperator("lambda")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            return new Closure(args.car(), args.cdr(), env);
-        }
-    };
-
     // ### macro-function
     // Need to support optional second argument specifying environment.
-    private static final Primitive MACRO_FUNCTION =
-        new Primitive("macro-function") {
+    private static final Primitive MACRO_FUNCTION = new Primitive("macro-function")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 1)
@@ -1380,8 +1370,8 @@ public final class Primitives extends Module
     };
 
     // ### defmacro
-    private static final SpecialOperator DEFMACRO =
-        new SpecialOperator("defmacro") {
+    private static final SpecialOperator DEFMACRO = new SpecialOperator("defmacro")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -1389,7 +1379,8 @@ public final class Primitives extends Module
             LispObject lambdaList = checkList(args.cadr());
             LispObject body = args.cddr();
             LispObject block = new Cons(Symbol.BLOCK, new Cons(symbol, body));
-            LispObject toBeApplied = list3(Symbol.LAMBDA, lambdaList, block);
+            LispObject toBeApplied =
+                list2(Symbol.FUNCTION, list3(Symbol.LAMBDA, lambdaList, block));
             LispObject formArg = gensym("FORM-");
             LispObject envArg = gensym("ENV-"); // Ignored.
             LispObject expander =
