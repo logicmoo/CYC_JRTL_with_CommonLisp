@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.67 2003-03-03 02:15:25 piso Exp $
+ * $Id: Primitives.java,v 1.68 2003-03-03 02:42:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1542,7 +1542,14 @@ public final class Primitives extends Module
                     Cons binding = checkCons(bindings.car());
                     LispObject type = binding.car();
                     if (isConditionOfType(e, type)) {
-                        LispObject handler = eval(binding.cadr(), env);
+                        LispObject obj = eval(binding.cadr(), env);
+                        LispObject handler;
+                        if (obj instanceof Symbol) {
+                            handler = obj.getSymbolFunction();
+                            if (handler == null)
+                                throw new UndefinedFunctionError(obj);
+                        } else
+                            handler = obj;
                         LispObject[] handlerArgs = new LispObject[1];
                         handlerArgs[0] = new JavaObject(e);
                         funcall(handler, handlerArgs); // Might not return.
