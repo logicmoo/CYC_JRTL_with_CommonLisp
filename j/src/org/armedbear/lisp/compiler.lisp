@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.42 2003-10-02 15:48:33 piso Exp $
+;;; $Id: compiler.lisp,v 1.43 2003-10-12 18:24:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -237,7 +237,9 @@
 (in-package :cl)
 
 (defun compile (name &optional definition)
-  (c::%compile name definition))
+  (if (and name (fboundp name) (typep (symbol-function name) 'generic-function))
+      (values name nil nil)
+      (c::%compile name definition)))
 
 ;; Redefine DEFUN to compile the definition on the fly.
 (defmacro defun (name lambda-list &rest body)
