@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Display.java,v 1.13 2003-07-23 00:16:15 piso Exp $
+ * $Id: Display.java,v 1.14 2003-07-27 00:43:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -350,15 +350,16 @@ public final class Display extends JComponent implements Constants,
             if (g2d != null) {
                 Line line = topLine;
                 int y = - pixelsAboveTopLine;
-                while (line != null && y < getHeight()) {
+                final int limit = getHeight();
+                while (line != null && y < limit) {
                     if (changedLines.containsKey(line))
                         paintLine(line, g2d, y);
                     y += line.getHeight();
                     line = line.nextVisible();
                 }
-                if (y < getHeight()) {
+                if (y < limit) {
                     g2d.setColor(editor.getFormatter().getBackgroundColor());
-                    final int height = getHeight() - y;
+                    final int height = limit - y;
                     g2d.fillRect(0, y, getWidth(), height);
                     if (showLineNumbers)
                         drawGutterBorder(g2d, y, height);
@@ -594,14 +595,53 @@ public final class Display extends JComponent implements Constants,
         Position dot = editor.getDot();
         if (dot != null) {
             caretVisible = !caretVisible;
-            lineChanged(dot.getLine());
+            final Line line = dot.getLine();
             Runnable r = new Runnable() {
                 public void run()
                 {
-                    repaintChangedLines();
+                    repaintLine(line);
                 }
             };
             SwingUtilities.invokeLater(r);
+        }
+    }
+
+    private synchronized void repaintLine(Line l)
+    {
+        if (!Editor.displayReady())
+            return;
+        if ((updateFlag & REPAINT) == REPAINT) {
+            repaint();
+            return;
+        }
+        final Buffer buffer = editor.getBuffer();
+        initializePaint();
+        try {
+            buffer.lockRead();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+            return;
+        }
+        try {
+            Graphics2D g2d = (Graphics2D) getGraphics();
+            if (g2d != null) {
+                Line line = topLine;
+                int y = - pixelsAboveTopLine;
+                final int limit = getHeight();
+                while (line != null && y < limit) {
+                    if (line == l) {
+                        paintLine(line, g2d, y);
+                        break;
+                    }
+                    y += line.getHeight();
+                    line = line.nextVisible();
+                }
+                drawCaret(g2d);
+            }
+        }
+        finally {
+            buffer.unlockRead();
         }
     }
 
