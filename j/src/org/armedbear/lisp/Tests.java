@@ -1,8 +1,8 @@
 /*
  * Tests.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.25 2004-03-16 02:39:05 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Tests.java,v 1.26 2004-03-16 02:39:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
