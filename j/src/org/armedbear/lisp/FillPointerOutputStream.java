@@ -2,7 +2,7 @@
  * FillPointerOutputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.7 2004-02-23 14:24:46 piso Exp $
+ * $Id: FillPointerOutputStream.java,v 1.8 2004-02-23 14:54:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,10 +42,12 @@ public final class FillPointerOutputStream extends Stream
         new Primitive1("make-fill-pointer-output-stream", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispString string = checkString(arg);
-            if (string.getFillPointer() < 0)
-                return signal(new TypeError(arg, "string with a fill pointer"));
-            return new FillPointerOutputStream(string);
+            if (arg instanceof LispString) {
+                LispString string = (LispString) arg;
+                if (string.getFillPointer() >= 0)
+                    return new FillPointerOutputStream(string);
+            }
+            return signal(new TypeError(arg, "string with a fill pointer"));
         }
     };
 
