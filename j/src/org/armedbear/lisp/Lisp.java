@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.293 2004-11-04 11:28:33 piso Exp $
+ * $Id: Lisp.java,v 1.294 2004-11-04 17:19:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -334,19 +334,14 @@ public abstract class Lisp
                         return eval(obj, env, thread);
                     }
                     default: {
-                        return funcall(fun,
-                                       evalList(obj.cdr(), env, thread),
-                                       thread);
+                        return evalCall(fun, obj.cdr(), env, thread);
                     }
                 }
             } else {
-                LispObject args = obj.cdr();
-                if (!args.listp())
-                    return signal(new TypeError(args, "list"));
                 if (first.car() == Symbol.LAMBDA) {
                     LispObject rest = first.cdr();
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
-                    return closure.execute(evalList(args, env, thread));
+                    return closure.execute(evalList(obj.cdr(), env, thread));
                 } else
                     return signal(new ProgramError("Illegal function object: " +
                                                    first.writeToString()));
@@ -355,16 +350,69 @@ public abstract class Lisp
             return obj;
     }
 
-    private static final LispObject[] evalList(LispObject exps,
+    private static final LispObject eval1(LispObject obj,
+                                          Environment env,
+                                          LispThread thread)
+        throws ConditionThrowable
+    {
+        LispObject result = eval(obj, env, thread);
+        thread._values = null;
+        return result;
+    }
+
+    private static final LispObject evalCall(LispObject function,
+                                             LispObject args,
+                                             Environment env,
+                                             LispThread thread)
+        throws ConditionThrowable
+    {
+        if (args == NIL)
+            return thread.execute(function);
+        LispObject first = args.car();
+        LispObject rest = args.cdr();
+        if (rest == NIL) {
+            first = eval1(first, env, thread);
+            return thread.execute(function, first);
+        }
+        LispObject second = rest.car();
+        rest = rest.cdr();
+        if (rest == NIL) {
+            first = eval1(first, env, thread);
+            second = eval1(second, env, thread);
+            return thread.execute(function, first, second);
+        }
+        LispObject third = rest.car();
+        rest = rest.cdr();
+        if (rest == NIL) {
+            first = eval1(first, env, thread);
+            second = eval1(second, env, thread);
+            third = eval1(third, env, thread);
+            return thread.execute(function, first, second, third);
+        }
+        LispObject fourth = rest.car();
+        rest = rest.cdr();
+        if (rest == NIL) {
+            first = eval1(first, env, thread);
+            second = eval1(second, env, thread);
+            third = eval1(third, env, thread);
+            fourth = eval1(fourth, env, thread);
+            return thread.execute(function, first, second, third, fourth);
+        }
+        return funcall(function,
+                       evalList(args, env, thread),
+                       thread);
+    }
+
+    private static final LispObject[] evalList(LispObject args,
                                                Environment env,
                                                LispThread thread)
         throws ConditionThrowable
     {
-        final int length = exps.length();
+        final int length = args.length();
         LispObject[] results = new LispObject[length];
         for (int i = 0; i < length; i++) {
-            results[i] = eval(exps.car(), env, thread);
-            exps = exps.cdr();
+            results[i] = eval(args.car(), env, thread);
+            args = args.cdr();
         }
         // Ignore multiple values!
         thread.clearValues();
