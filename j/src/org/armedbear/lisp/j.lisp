@@ -13,6 +13,8 @@
           restore-focus
           status
           defcommand
+          open-file-hook
+          after-save-hook
           key-pressed-hook
           variable-value
           with-editor
@@ -84,6 +86,10 @@
     (setq command (remove #\- (string `,name))))
   `(setf (symbol-function ',name)
          (lambda () (execute-command ,command))))
+
+(defvar open-file-hook nil)
+
+(defvar after-save-hook nil)
 
 (defvar key-pressed-hook nil)
 
