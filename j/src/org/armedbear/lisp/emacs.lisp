@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.11 2005-03-07 03:34:53 piso Exp $
+;;; $Id: emacs.lisp,v 1.12 2005-03-07 20:23:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,10 @@
 
 (in-package #:j)
 
-(export '(emacs-mode java-mode-map lisp-mode-map))
+(export '(emacs-mode
+          java-mode-map
+          lisp-mode-map
+          directory-mode-map))
 
 (defpackage #:emacs
   (:use #:cl #:ext #:j))
@@ -90,6 +93,8 @@
 
 ;; // Goto menu.
 ;; mapKey(KeyEvent.VK_J, CTRL_MASK, "jumpToLine");
+(define-key *emacs-global-map* "Alt G" "jumpToLine")
+(define-key *esc-map* #\g "jumpToLine")
 ;; mapKey(KeyEvent.VK_J, CTRL_MASK | SHIFT_MASK, "jumpToColumn");
 ;; mapKey(KeyEvent.VK_M, CTRL_MASK, "findMatchingChar");
 ;; mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "selectSyntax");
@@ -178,6 +183,7 @@
   '((#\<                        "bob")
     (#\>                        "eob")
     (#\.                        "findTagAtDot")
+    (#\,                        "listMatchingTagsAtDot")
     (#\%                        "replace")
     ))
 
@@ -216,13 +222,14 @@
     ("Ctrl M"                   "newline")
     ("Ctrl J"                   "newlineAndIndent")))
 
-;; keyboard-quit
-(define-key *emacs-global-map* "Ctrl G" "escape")
+(define-key *emacs-global-map* "Shift Alt 9" "insertParentheses")
+(define-key *emacs-global-map* "Shift Alt 0" "movePastCloseAndReindent")
 
-;; mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "gotoFile");
-;; mapKey(KeyEvent.VK_B, CTRL_MASK | SHIFT_MASK, "browseFileAtDot");
+(define-key *emacs-global-map* "Ctrl G" "escape") ; keyboard-quit
 
-;; mapKey(KeyEvent.VK_D, CTRL_MASK, "dir");
+(define-key *emacs-global-map* "Ctrl Shift G" "gotoFile")
+(define-key *emacs-global-map* "Ctrl Shift B" "browsefileatdot")
+
 (define-key *control-x-map* #\d "dir")
 
 ;; mapKey(KeyEvent.VK_F2, SHIFT_MASK, "stamp");
@@ -293,22 +300,22 @@
 
 ;; mapKey(KeyEvent.VK_W, ALT_MASK, "selectWord");
 
-;; mapKey(VK_MOUSE_1, 0, "mouseMoveDotToPoint");
-(define-key *emacs-global-map* "Mouse-1" "mouseMoveDotToPoint")
-;; mapKey(VK_MOUSE_1, SHIFT_MASK, "mouseSelect");
-;; mapKey(VK_MOUSE_1, CTRL_MASK | SHIFT_MASK, "mouseSelectColumn");
-;; mapKey(VK_DOUBLE_MOUSE_1, 0, "selectWord");
-(define-key *emacs-global-map* "Double Mouse-1" "selectWord")
+;; FIXME These are j's normal mouse bindings. We don't have the required
+;; functionality in the right form to support the emacs mouse bindings.
+(define-keys *emacs-global-map*
+  '(("Mouse-1"                  "mouseMoveDotToPoint")
+    ("Shift Mouse-1"            "mouseSelect")
+    ("Ctrl Shift Mouse-1"       "mouseSelectColumn")
+    ("Double Mouse-1"           "selectWord")
+    ("Mouse-3"                  "mouseShowContextMenu")))
 
-;; if (Platform.isPlatformUnix()) {
-;; mapKey(VK_MOUSE_2, 0, "pastePrimarySelection");
-;; mapKey(KeyEvent.VK_INSERT, SHIFT_MASK, "pastePrimarySelection");
-;; }
+(when (featurep :unix)
+  (define-key *emacs-global-map* "Mouse-2" "pastePrimarySelection"))
 
-;; mapKey(VK_MOUSE_3, 0, "mouseShowContextMenu");
-
-;; mapKey(KeyEvent.VK_F7, 0, "recordMacro");
-;; mapKey(KeyEvent.VK_F8, 0, "playbackMacro");
+(define-keys *control-x-map*
+  '((#\(                        "startMacro")
+    (#\)                        "endMacro")
+    (#\e                        "playbackMacro")))
 
 ;; mapKey(KeyEvent.VK_W, CTRL_MASK | SHIFT_MASK, "killFrame");
 
@@ -323,101 +330,105 @@
     ("0"                        "killWindow")
     ("o"                        "otherwindow")))
 
-;; if (Editor.preferences().getBooleanProperty(Property.ENABLE_EXPERIMENTAL_FEATURES))
-;; mapKey(KeyEvent.VK_F9, ALT_MASK, "shell");
+(when (variable-value 'enable-experimental-features)
+  (define-key *emacs-global-map* "Alt F9" "shell"))
 
-;; // Map these globally so they're available in the compilation buffer too.
-;; mapKey(KeyEvent.VK_F4, 0, "nextError");
 (define-key *control-x-map* "`" "nextError")
 (define-key *emacs-global-map* "F4" "nextError")
-;; mapKey(KeyEvent.VK_F4, SHIFT_MASK, "previousError");
 (define-key *emacs-global-map* "Shift F4" "previousError")
-;; mapKey(KeyEvent.VK_M, CTRL_MASK | ALT_MASK, "showMessage");
 (define-key *emacs-global-map* "Ctrl Alt M" "showMessage")
 
-;; // Windows VM seems to need this mapping for the tab key to work properly.
-;; // There's also code in Dispatcher.dispatchKeyTyped to handle the tab key.
-;; mapKey(KeyEvent.VK_TAB, 0, "insertTab");
-
-;; if (Platform.isPlatformLinux()) {
-;; // These mappings work with Blackdown 1.2.2 (and 1.2 pre-release v2).
-;; mapKey(0x2d, CTRL_MASK, "toCenter"); // Ctrl -
-;; mapKey(0x5f, CTRL_MASK | SHIFT_MASK, "toTop"); // Ctrl Shift -
-
-;; // IBM 1.3, Sun 1.4.0 beta 2.
-;; mapKey(0x2d, CTRL_MASK | SHIFT_MASK, "toTop"); // Ctrl Shift -
-;; } else if (Platform.isPlatformWindows()) {
-;; mapKey(0x2d, CTRL_MASK, "toCenter"); // Ctrl -
-;; mapKey(0x2d, CTRL_MASK | SHIFT_MASK, "toTop"); // Ctrl Shift -
-;; }
-
+;; FIXME We need a binding for findTag.
 (define-key *emacs-global-map* "Alt ." "findTagAtDot")
+(define-key *emacs-global-map* "Alt ," "listMatchingTagsAtDot")
 
-;; Help.
+;;; Help.
+
 (define-keys *help-map*
   '(("a"                        "apropos")
     ("b"                        "describeBindings")
+    ("c"                        "describeKey") ; describe-key-briefly
     ("i"                        "help")
     ("k"                        "describeKey")))
 
-;; Java mode.
-(define-key *java-mode-map* "{" "electricOpenBrace")
-(define-key *java-mode-map* "}" "electricCloseBrace")
-(define-key *java-mode-map* "Tab" "tab")
-(define-key *java-mode-map* "Ctrl Tab" "insertTab")
-(define-key *java-mode-map* "';'" "electricSemi")
-;;                km.mapKey(':', "electricColon");
-(define-key *java-mode-map* #\: "electricColon")
-;;                km.mapKey('*', "electricStar");
-;;                km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
-;;                km.mapKey(KeyEvent.VK_PERIOD, ALT_MASK, "findTagAtDot");
-;;                km.mapKey(KeyEvent.VK_COMMA, ALT_MASK, "listMatchingTagsAtDot");
-;;                km.mapKey(KeyEvent.VK_PERIOD, CTRL_MASK | ALT_MASK, "findTagAtDotOtherWindow");
-;;                km.mapKey(')', "closeParen");
-;; km.mapKey(KeyEvent.VK_I, ALT_MASK, "cycleIndentSize");
+;;; Java mode.
 
-;; km.mapKey(KeyEvent.VK_9, CTRL_MASK | SHIFT_MASK, "insertParentheses");
-;; km.mapKey(KeyEvent.VK_0, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
+(define-key *java-mode-map*
+  '(("{"                        "electricOpenBrace")
+    ("}"                        "electricCloseBrace")
+    ("Tab"                      "tab")
+    ("Ctrl Tab"                 "insertTab")
+    ("';'"                      "electricSemi")
+    (#\:                        "electricColon")
+    (#\*                        "electricStar")
+    (#\)                        "closeParen")
+    ("Ctrl Shift ["             "insertBraces")
+    ("F12"                      "wrapComment")
+    ("F9"                       "compile")
+    ("Ctrl F9"                  "recompile")
+    ("Alt F1"                   "jdkHelp")
+    ("Ctrl F1"                  "source")))
 
-;; km.mapKey(KeyEvent.VK_OPEN_BRACKET, CTRL_MASK | SHIFT_MASK, "insertBraces");
-(define-key *java-mode-map* "Ctrl Shift [" "insertBraces")
-;; // Duplicate mapping for 1.4.
-;; km.mapKey(KeyEvent.VK_BRACELEFT, CTRL_MASK | SHIFT_MASK, "insertBraces");
+(defun java-mode-map ()
+  *java-mode-map*)
 
-;; km.mapKey(KeyEvent.VK_F12, 0, "wrapComment");
-(define-key *java-mode-map* "F12" "wrapComment")
+;;; Lisp mode
 
-;; // Duplicate mapping to support IBM 1.3 for Linux.
-;; km.mapKey(0xffc9, 0, "wrapComment"); // F12
+(defparameter *lisp-mode-map* (make-keymap))
+(defparameter *lisp-mode-control-c-map* (make-keymap))
+(define-key *lisp-mode-map* "Ctrl C" *lisp-mode-control-c-map*)
 
-;; km.mapKey(KeyEvent.VK_OPEN_BRACKET, CTRL_MASK, "fold");
-;; km.mapKey(KeyEvent.VK_CLOSE_BRACKET, CTRL_MASK, "unfold");
+(define-keys *lisp-mode-map*
+  '(("Tab"                      "tab")
+    ("Ctrl Tab"                 "insertTab")
+    ("F12"                      "wrapComment")
+    (#\)                        "closeParen")
+    ("Alt F1"                   "hyperspec")
+    ("Ctrl Alt F"               "forwardSexp")
+    ("Ctrl Alt B"               "backwardSexp")
+    ("Ctrl Alt Space"           "markSexp")
+    ("Ctrl Alt D"               "downList")
+    ("Ctrl Alt U"               "backwardUpList")
+    ("Ctrl Alt X"               "evalDefunLisp")))
 
-;; km.mapKey(KeyEvent.VK_F9, 0, "compile");
-(define-key *java-mode-map* "F9" "compile")
-;; km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
-(define-key *java-mode-map* "Ctrl F9" "recompile")
-;; km.mapKey(KeyEvent.VK_F1, ALT_MASK, "jdkHelp");
-;; km.mapKey(KeyEvent.VK_F1, CTRL_MASK, "source");
+(define-keys *lisp-mode-control-c-map*
+  '(("Ctrl C"                   "compileDefunLisp")
+    ("Ctrl R"                   "evalRegionLisp")))
 
-;; // This is the "normal" mapping.
-;; km.mapKey(KeyEvent.VK_COMMA,  CTRL_MASK | SHIFT_MASK, "htmlInsertTag");
-;; // The "normal" mapping doesn't work for Linux, but this does.
-;; km.mapKey(0x7c, CTRL_MASK | SHIFT_MASK, "htmlInsertTag");
+(defun lisp-mode-map ()
+  *lisp-mode-map*)
 
-;; if (Editor.checkExperimental()) {
-;; km.mapKey(KeyEvent.VK_SEMICOLON, ALT_MASK, "JavaMode.insertComment");
-;; km.mapKey(KeyEvent.VK_ENTER, ALT_MASK, "JavaMode.newlineAndIndentForComment");
-;; }
+;;; Directory mode.
 
-;; if (Platform.isPlatformLinux()) {
-;; // Blackdown 1.1.7v3, 1.2pre2, IBM 1.1.8.
-;; // Duplicate mappings needed for VK_9, VK_0 and VK_OPEN_BRACKET.
-;; km.mapKey(0x68, CTRL_MASK | SHIFT_MASK, "insertParentheses");
-;; km.mapKey(0x69, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
-;; km.mapKey(0xbb, CTRL_MASK | SHIFT_MASK, "insertBraces");
-;; }
+(defparameter *directory-mode-map* (make-keymap))
 
+;; These are basically j's normal directory mode bindings. J's directory mode
+;; doesn't really work like dired in emacs.
+(define-keys *directory-mode-map*
+  '(("Enter"                    "dirOpenFile")
+    ("Ctrl Shift G"             "diropenfile")
+    ("Double Mouse-1"           "dirOpenFile")
+    ("Mouse-2"                  "dirOpenFile")
+    ("Ctrl Enter"               "diropenfileandkilldirectory")
+    ("Ctrl Shift B"             "dirBrowseFile")
+    ("Backspace"                "dirUpDir")
+    (#\u                        "dirUpDir")
+    (#\l                        "dirLimit")
+    (#\L                        "dirUnlimit")
+    (#\s                        "dirCycleSortBy")
+    (#\r                        "dirRescan")
+    ("Delete"                   "dirDeleteFiles")
+    (#\c                        "dirCopyFile")
+    (#\g                        "dirGetFile")
+    (#\m                        "dirMoveFile")
+    (#\t                        "dirTagFile")
+    (#\!                        "dirDoShellCommand")
+    ("Home"                     "dirHome")
+    (#\b                        "dirBack")
+    (#\f                        "dirForward")))
+
+(defun directory-mode-map ()
+  *directory-mode-map*)
 
 (defun emacs-mode (&optional (arg t))
   (cond (arg
@@ -428,47 +439,6 @@
          (use-global-map *emacs-global-map*)
          (j::%execute-command "reloadKeyMaps"))
         ((null arg)
-         (set-global-property "useMenuMnemonics" "false")
+         (set-global-property "useMenuMnemonics" "true")
          (set-global-property "emulation" nil)
          (j::%execute-command "defaultKeyMaps"))))
-
-(defun java-mode-map ()
-  *java-mode-map*)
-
-;;; Lisp mode
-
-(defparameter *lisp-mode-map* (make-keymap))
-
-;; km.mapKey(KeyEvent.VK_TAB, 0, "tab");
-(define-key *lisp-mode-map* "Tab" "tab")
-;; km.mapKey(KeyEvent.VK_TAB, CTRL_MASK, "insertTab");
-(define-key *lisp-mode-map* "Ctrl Tab" "insertTab")
-;; km.mapKey(KeyEvent.VK_F12, 0, "wrapComment");
-(define-key *lisp-mode-map* "F12" "wrapComment")
-;; km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
-;; km.mapKey(KeyEvent.VK_COMMA, ALT_MASK, "listMatchingTagsAtDot");
-;; km.mapKey(KeyEvent.VK_PERIOD, CTRL_MASK | ALT_MASK, "findTagAtDotOtherWindow");
-(define-key *lisp-mode-map* #\) "closeParen")
-;; km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
-(define-key *lisp-mode-map* "Alt F1" "hyperspec")
-;; km.mapKey(KeyEvent.VK_F, CTRL_MASK | ALT_MASK, "forwardSexp");
-(define-key *lisp-mode-map* "Ctrl Alt F" "forwardSexp")
-;; km.mapKey(KeyEvent.VK_B, CTRL_MASK | ALT_MASK, "backwardSexp");
-(define-key *lisp-mode-map* "Ctrl Alt B" "backwardSexp")
-(define-key *lisp-mode-map* "Ctrl Alt Space" "markSexp")
-;; km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "downList");
-(define-key *lisp-mode-map* "Ctrl Alt D" "downList")
-;; km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "backwardUpList");
-(define-key *lisp-mode-map* "Ctrl Alt U" "backwardUpList")
-;; km.mapKey(KeyEvent.VK_X, CTRL_MASK | ALT_MASK, "evalDefunLisp");
-;; km.mapKey(KeyEvent.VK_C, CTRL_MASK | ALT_MASK, "compileDefunLisp");
-;; km.mapKey(KeyEvent.VK_R, CTRL_MASK | ALT_MASK, "evalRegionLisp");
-;; km.mapKey(KeyEvent.VK_M, CTRL_MASK, "lispFindMatchingChar");
-;; km.mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "lispSelectSyntax");
-;; km.mapKey(KeyEvent.VK_9, CTRL_MASK | SHIFT_MASK, "insertParentheses");
-;; km.mapKey(KeyEvent.VK_0, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
-
-(defun lisp-mode-map ()
-  *lisp-mode-map*)
-
-(provide 'emacs)
