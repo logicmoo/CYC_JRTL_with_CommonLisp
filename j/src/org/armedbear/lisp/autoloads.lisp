@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.4 2003-07-15 18:29:25 piso Exp $
+;;; $Id: autoloads.lisp,v 1.5 2003-08-02 18:46:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@
 (autoload 'revappend)
 (autoload '(butlast nbutlast) "butlast.lisp")
 (autoload 'ldiff)
-(autoload '(subst subst-it subst-if-not nsubst nsubst-if nsubst-if-not)
+(autoload '(subst subst-if subst-if-not nsubst nsubst-if nsubst-if-not)
           "subst.lisp")
 (autoload '(sublis nsublis) "sublis.lisp")
 (autoload '(member-if member-if-not) "member-if.lisp")
