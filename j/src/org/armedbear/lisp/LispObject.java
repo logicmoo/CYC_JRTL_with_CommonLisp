@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.17 2003-03-24 18:08:21 piso Exp $
+ * $Id: LispObject.java,v 1.18 2003-06-01 01:37:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,11 @@ package org.armedbear.lisp;
 public class LispObject extends Lisp
 {
     public int getType()
+    {
+        return 0;
+    }
+
+    public int getFunctionalType()
     {
         return 0;
     }
