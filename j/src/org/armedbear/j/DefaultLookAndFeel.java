@@ -2,7 +2,7 @@
  * DefaultLookAndFeel.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DefaultLookAndFeel.java,v 1.5 2003-07-24 19:41:20 piso Exp $
+ * $Id: DefaultLookAndFeel.java,v 1.6 2003-07-25 18:45:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,9 +110,9 @@ public final class DefaultLookAndFeel extends DefaultMetalTheme
         table.put("Button.border", BorderFactory.createRaisedBevelBorder());
         table.put("TextField.border", BorderFactory.createLoweredBevelBorder());
         table.put("SplitPaneUI", "javax.swing.plaf.basic.BasicSplitPaneUI");
-        table.put("ScrollBarUI", "javax.swing.plaf.basic.BasicScrollBarUI");
+        table.put("ScrollBarUI", "org.armedbear.j.ScrollBarUI");
         table.put("TreeUI", "javax.swing.plaf.basic.BasicTreeUI");
-        table.put("SplitPane.dividerSize", new Integer(1));
+        table.put("SplitPane.dividerSize", new Integer(3));
         table.put("ScrollBar.background", new Color(0xe0e0e0));
         table.put("ScrollBar.foreground", new Color(0xc0c0c0));
         table.put("ScrollBar.track", new Color(0xe0e0e0));
@@ -120,7 +120,8 @@ public final class DefaultLookAndFeel extends DefaultMetalTheme
         table.put("ScrollBar.thumb", new Color(0xc0c0c0));
         table.put("ScrollBar.thumbHighlight", Color.white);
         table.put("ScrollBar.thumbDarkShadow", Color.black);
-        table.put("ScrollBar.thumbLightShadow", new Color(0x808080));
+        table.put("ScrollBar.thumbShadow", new Color(0x808080));
+        table.put("ScrollBar.width", new Integer(16));
         table.put("Button.textIconGap", new Integer(1));
     }
 
