@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.396 2005-02-10 12:53:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.397 2005-02-14 04:06:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4328,6 +4328,33 @@
       (emit-unbox-fixnum))
     (emit-move-from-stack target representation)))
 
+(defun p2-times (form &key (target :stack) representation)
+  (case (length form)
+    (3
+     (let* ((args (cdr form))
+            (arg1 (first args))
+            (arg2 (second args)))
+       (dformat t "p2-times form = ~S~%" form)
+       (when (fixnump arg1)
+         (dformat t "p2-times arg1 is a fixnum, swapping...~%")
+         (rotatef arg1 arg2)
+         (dformat t "arg1 => ~S~%" arg1)
+         (dformat t "arg2 => ~S~%" arg2))
+       (cond ((fixnump arg2)
+              (dformat t "p2-times case 1~%")
+              (compile-form arg1 :target :stack)
+              (maybe-emit-clear-values arg1)
+              (emit-push-int arg2)
+              (emit-invokevirtual +lisp-object-class+ "multiplyBy" '("I") +lisp-object+)
+              (when (eq representation :unboxed-fixnum)
+                (emit-unbox-fixnum))
+              (emit-move-from-stack target representation))
+             (t
+              (dformat t "p2-times default case~%")
+              (compile-binary-operation "multiplyBy" args target representation)))))
+    (t
+     (compile-function-call form target representation))))
+
 (defun p2-plus (form &key (target :stack) representation)
   (case (length form)
     (3
@@ -4336,6 +4363,13 @@
             (arg2 (second args))
             (var1 (unboxed-fixnum-variable arg1))
             (var2 (unboxed-fixnum-variable arg2)))
+       (dformat t "p2-plus form = ~S~%" form)
+       (when (fixnump arg1)
+         (dformat t "p2-plus arg1 is a fixnum, swapping...~%")
+         (rotatef arg1 arg2)
+         (rotatef var1 var2)
+         (dformat t "arg1 => ~S~%" arg1)
+         (dformat t "arg2 => ~S~%" arg2))
        (cond ((and (numberp arg1) (numberp arg2))
               (compile-constant (+ arg1 arg2)
                                 :target target
@@ -5804,14 +5838,15 @@
                              throw
                              values))
 
-(install-p2-handler '<              'p2-numeric-comparison)
-(install-p2-handler '<=             'p2-numeric-comparison)
-(install-p2-handler '>              'p2-numeric-comparison)
-(install-p2-handler '>=             'p2-numeric-comparison)
-(install-p2-handler '=              'p2-numeric-comparison)
-(install-p2-handler '/=             'p2-numeric-comparison)
+(install-p2-handler '*              'p2-times)
 (install-p2-handler '+              'p2-plus)
 (install-p2-handler '-              'p2-minus)
+(install-p2-handler '/=             'p2-numeric-comparison)
+(install-p2-handler '<              'p2-numeric-comparison)
+(install-p2-handler '<=             'p2-numeric-comparison)
+(install-p2-handler '=              'p2-numeric-comparison)
+(install-p2-handler '>              'p2-numeric-comparison)
+(install-p2-handler '>=             'p2-numeric-comparison)
 (install-p2-handler 'aref           'p2-aref)
 (install-p2-handler 'ash            'p2-ash)
 (install-p2-handler 'atom           'p2-atom)
