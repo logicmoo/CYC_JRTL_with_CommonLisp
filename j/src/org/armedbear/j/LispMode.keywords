@@ -104,6 +104,7 @@ class-of
 clear-input
 clear-output
 close
+clrhash
 code-char
 coerce
 compile
