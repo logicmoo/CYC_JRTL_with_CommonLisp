@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.398 2005-02-17 18:38:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.399 2005-02-18 14:30:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -778,9 +778,7 @@
                         ((special-operator-p op)
                          (compiler-unsupported "P1: unsupported special operator ~S" op))
                         (t
-                         (p1-function-call form)
-                         )
-                        ))
+                         (p1-function-call form))))
                  ((and (consp op) (eq (car op) 'LAMBDA))
                   (p1 (list* 'FUNCALL form)))
                  (t
@@ -2227,6 +2225,22 @@
     (emit 'ldc (pool-string s))
     (emit-invokestatic +lisp-class+ "readObjectFromString"
                        (list +java-string+) +lisp-object+)
+    (emit 'putstatic *this-class* g +lisp-object+)
+    (setf *static-code* *code*)
+    g))
+
+(defun declare-load-time-value (obj)
+  (let* ((g (symbol-name (gensym)))
+         (*print-level* nil)
+         (*print-length* nil)
+         (s (%format nil "~S" obj))
+         (*code* *static-code*))
+    (declare-field g +lisp-object+)
+    (emit 'ldc (pool-string s))
+    (emit-invokestatic +lisp-class+ "readObjectFromString"
+                       (list +java-string+) +lisp-object+)
+    (emit-invokestatic +lisp-class+ "loadTimeValue"
+                       (list +lisp-object+) +lisp-object+)
     (emit 'putstatic *this-class* g +lisp-object+)
     (setf *static-code* *code*)
     g))
@@ -3883,6 +3897,15 @@
         (t
          (emit-push-nil)
          (emit-move-from-stack target))))
+
+(defun p2-load-time-value (form &key (target :stack) representation)
+  (cond (*compile-file-truename*
+         (emit 'getstatic *this-class*
+               (declare-load-time-value (second form)) +lisp-object+))
+        (t
+         (compile-constant (eval (second form))
+                           :target target
+                           :representation representation))))
 
 (defun compile-quote (form &key (target :stack) representation)
    (let ((obj (second form)))
@@ -5851,36 +5874,37 @@
                              throw
                              values))
 
-(install-p2-handler '*              'p2-times)
-(install-p2-handler '+              'p2-plus)
-(install-p2-handler '-              'p2-minus)
-(install-p2-handler '/=             'p2-numeric-comparison)
-(install-p2-handler '<              'p2-numeric-comparison)
-(install-p2-handler '<=             'p2-numeric-comparison)
-(install-p2-handler '=              'p2-numeric-comparison)
-(install-p2-handler '>              'p2-numeric-comparison)
-(install-p2-handler '>=             'p2-numeric-comparison)
-(install-p2-handler 'aref           'p2-aref)
-(install-p2-handler 'ash            'p2-ash)
-(install-p2-handler 'atom           'p2-atom)
-(install-p2-handler 'cons           'p2-cons)
-(install-p2-handler 'eql            'p2-eql)
-(install-p2-handler 'eval-when      'p2-eval-when)
-(install-p2-handler 'flet           'p2-flet)
-(install-p2-handler 'go             'p2-go)
-(install-p2-handler 'function       'p2-function)
-(install-p2-handler 'labels         'p2-labels)
-(install-p2-handler 'length         'p2-length)
-(install-p2-handler 'logand         'p2-logand)
-(install-p2-handler 'mod            'p2-mod)
-(install-p2-handler 'not            'p2-not/null)
-(install-p2-handler 'null           'p2-not/null)
-(install-p2-handler 'return-from    'p2-return-from)
-(install-p2-handler 'rplacd         'p2-rplacd)
-(install-p2-handler 'schar          'p2-schar)
-(install-p2-handler 'setq           'p2-setq)
-(install-p2-handler 'the            'p2-the)
-(install-p2-handler 'zerop          'p2-zerop)
+(install-p2-handler '*               'p2-times)
+(install-p2-handler '+               'p2-plus)
+(install-p2-handler '-               'p2-minus)
+(install-p2-handler '/=              'p2-numeric-comparison)
+(install-p2-handler '<               'p2-numeric-comparison)
+(install-p2-handler '<=              'p2-numeric-comparison)
+(install-p2-handler '=               'p2-numeric-comparison)
+(install-p2-handler '>               'p2-numeric-comparison)
+(install-p2-handler '>=              'p2-numeric-comparison)
+(install-p2-handler 'aref            'p2-aref)
+(install-p2-handler 'ash             'p2-ash)
+(install-p2-handler 'atom            'p2-atom)
+(install-p2-handler 'cons            'p2-cons)
+(install-p2-handler 'eql             'p2-eql)
+(install-p2-handler 'eval-when       'p2-eval-when)
+(install-p2-handler 'flet            'p2-flet)
+(install-p2-handler 'go              'p2-go)
+(install-p2-handler 'function        'p2-function)
+(install-p2-handler 'labels          'p2-labels)
+(install-p2-handler 'length          'p2-length)
+(install-p2-handler 'logand          'p2-logand)
+(install-p2-handler 'load-time-value 'p2-load-time-value)
+(install-p2-handler 'mod             'p2-mod)
+(install-p2-handler 'not             'p2-not/null)
+(install-p2-handler 'null            'p2-not/null)
+(install-p2-handler 'return-from     'p2-return-from)
+(install-p2-handler 'rplacd          'p2-rplacd)
+(install-p2-handler 'schar           'p2-schar)
+(install-p2-handler 'setq            'p2-setq)
+(install-p2-handler 'the             'p2-the)
+(install-p2-handler 'zerop           'p2-zerop)
 
 (install-p2-handler '%call-internal 'p2-%call-internal)
 
