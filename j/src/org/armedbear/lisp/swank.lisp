@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.5 2004-09-04 00:56:30 piso Exp $
+;;; $Id: swank.lisp,v 1.6 2004-09-05 20:04:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -177,3 +177,8 @@
         (format-arglist-for-echo-area (parse-symbol name) name)))
 ;;     )
   )
+
+(defun find-definitions-for-function-name (function-name package-name)
+  (let ((package (if package-name (find-package package-name) *package*)))
+    (when package
+      (find-definitions (intern function-name package)))))
