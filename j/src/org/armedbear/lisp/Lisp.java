@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.250 2004-06-09 12:10:03 piso Exp $
+ * $Id: Lisp.java,v 1.251 2004-06-10 12:26:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1516,9 +1516,15 @@ public abstract class Lisp
     public static final Symbol _READTABLE_ =
         exportSpecial("*READTABLE*", PACKAGE_CL, new Readtable());
 
-    public static final Readtable currentReadtable()
+    public static final Readtable currentReadtable() throws ConditionThrowable
     {
-        return (Readtable) _READTABLE_.symbolValueNoThrow();
+        return (Readtable) _READTABLE_.symbolValue();
+    }
+
+    public static final Readtable currentReadtable(LispThread thread)
+        throws ConditionThrowable
+    {
+        return (Readtable) _READTABLE_.symbolValue(thread);
     }
 
     public static final Symbol _READ_SUPPRESS_ =
