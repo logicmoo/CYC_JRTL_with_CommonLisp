@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.9 2003-11-15 19:09:39 piso Exp $
+;;; $Id: debug.lisp,v 1.10 2003-12-08 02:52:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,12 +22,12 @@
 (defun debug-loop ()
   (let ((tpl::*break-level* (1+ tpl::*break-level*)))
   (fresh-line *debug-io*)
-  (format *debug-io* "Type :CONTINUE to return from break or :RESET to return to top level.~%")
+  (%format *debug-io* "Type :CONTINUE to return from break or :RESET to return to top level.~%")
     (loop
       (catch 'debug-loop-catcher
         (handler-case
             (tpl::repl)
-          (error (c) (format t "Error: ~S.~%" c) (break) (throw 'debug-loop-catcher nil)))))))
+          (error (c) (%format t "Error: ~S.~%" c) (break) (throw 'debug-loop-catcher nil)))))))
 
 (defun invoke-debugger (condition)
   (when *debugger-hook*
@@ -40,7 +40,7 @@
 
 (defun break (&optional format-control &rest format-arguments)
   (fresh-line *debug-io*)
-  (format *debug-io* "BREAK called.~%")
+  (%format *debug-io* "BREAK called.~%")
   (if format-control
-      (apply #'format *debug-io* format-control format-arguments))
+      (apply #'%format *debug-io* format-control format-arguments))
   (invoke-debugger nil))
