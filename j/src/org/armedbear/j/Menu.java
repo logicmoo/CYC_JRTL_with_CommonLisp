@@ -2,7 +2,7 @@
  * Menu.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Menu.java,v 1.2 2003-06-12 16:43:05 piso Exp $
+ * $Id: Menu.java,v 1.3 2003-06-12 17:37:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,14 +51,14 @@ public final class Menu extends JMenu implements Constants
     }
 
     public MenuItem add(Editor editor, String label, char mnemonic,
-        String methodName, boolean enabled)
+        String command, boolean enabled)
     {
-        KeyStroke keyStroke = null;
         // Look in buffer-local keymap first.
-        keyStroke = editor.getBuffer().getKeyMapForMode().getKeyStroke(methodName);
+        KeyStroke keyStroke =
+            editor.getBuffer().getKeyMapForMode().getKeyStroke(command);
         // If not found there, try global keymap.
         if (keyStroke == null) {
-            keyStroke = KeyMap.getGlobalKeyMap().getKeyStroke(methodName);
+            keyStroke = KeyMap.getGlobalKeyMap().getKeyStroke(command);
 
             // Don't let a global mapping hide a different mapping of the same
             // keystroke in the buffer-local keymap!
@@ -72,7 +72,7 @@ public final class Menu extends JMenu implements Constants
         MenuItem menuItem = new MenuItem(label, acceleratorText);
         if (mnemonic != '\0')
             menuItem.setMnemonic(mnemonic);
-        menuItem.setActionCommand(methodName);
+        menuItem.setActionCommand(command);
         menuItem.addActionListener(editor.getDispatcher());
         if (!enabled)
             menuItem.setEnabled(false);
@@ -81,8 +81,8 @@ public final class Menu extends JMenu implements Constants
     }
 
     public MenuItem add(Editor editor, String label, char mnemonic,
-        String methodName)
+        String command)
     {
-        return add(editor, label, mnemonic, methodName, true);
+        return add(editor, label, mnemonic, command, true);
     }
 }
