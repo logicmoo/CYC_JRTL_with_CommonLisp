@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.62 2004-05-19 14:32:45 piso Exp $
+;;; $Id: precompiler.lisp,v 1.63 2004-05-19 14:56:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -296,12 +296,6 @@
           (t
            (precompile1 (expand-macro form))))))
 
-(defun precompile-psetf (form)
-  (setf form
-        (list* 'PSETF
-               (mapcar #'precompile1 (cdr form))))
-  (precompile1 (expand-macro form)))
-
 (defun precompile-setq (form)
   (let* ((args (cdr form))
          (len (length args)))
@@ -324,6 +318,24 @@
           (setq result (nreverse result))
           (push 'PROGN result)
           result))))
+
+(defun precompile-psetf (form)
+  (setf form
+        (list* 'PSETF
+               (mapcar #'precompile1 (cdr form))))
+  (precompile1 (expand-macro form)))
+
+(defun precompile-psetq (form)
+  ;; Make sure all the vars are symbols.
+  (do* ((rest (cdr form) (cddr rest))
+        (var (car rest)))
+       ((null rest))
+    (unless (symbolp var)
+      (error 'simple-error
+             :format-control "~S is not a symbol."
+             :format-arguments (list var))))
+  ;; Delegate to PRECOMPILE-PSETF so symbol macros are handled correctly.
+  (precompile-psetf form))
 
 (defun maybe-rewrite-lambda (form)
   (let* ((args (cdr form))
@@ -697,6 +709,7 @@
                             progn
                             progv
                             psetf
+                            psetq
                             restart-case
                             return
                             return-from
