@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.16 2003-04-03 16:55:18 piso Exp $
+ * $Id: Property.java,v 1.17 2003-05-15 12:47:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +101,7 @@ public final class Property implements Comparable, Constants
     public static final Property CHECK_ENABLED =
         createProperty("checkEnabled", false);
     public static final Property CONFIRM_SEND =
-        createProperty("confirmSend", false);
+        createProperty("confirmSend", true);
     public static final Property DEBUG =
         createProperty("debug", false);
     public static final Property DIR_SORT_DIRECTORIES_FIRST =
