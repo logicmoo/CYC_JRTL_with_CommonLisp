@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.2 2004-01-25 15:53:31 piso Exp $
+ * $Id: Stream.java,v 1.3 2004-01-26 00:29:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,8 @@ public class Stream extends LispObject
     protected LispObject elementType;
     protected boolean isInputStream;
     protected boolean isOutputStream;
+    protected boolean isCharacterStream;
+    protected boolean isBinaryStream;
 
     private LispObject pathname;
     private boolean interactive;
@@ -72,11 +74,14 @@ public class Stream extends LispObject
     public Stream(InputStream inputStream, LispObject elementType)
     {
         this.elementType = elementType;
-        if (elementType == Symbol.CHARACTER)
+        if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
+            isCharacterStream = true;
             reader = new PushbackReader(new BufferedReader(new InputStreamReader(inputStream)),
                                         2);
-        else
+        } else {
+            isBinaryStream = true;
             in = new BufferedInputStream(inputStream);
+        }
         isInputStream = true;
         isOutputStream = false;
     }
@@ -98,10 +103,13 @@ public class Stream extends LispObject
     public Stream(OutputStream outputStream, LispObject elementType)
     {
         this.elementType = elementType;
-        if (elementType == Symbol.CHARACTER)
+        if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
+            isCharacterStream = true;
             writer = new OutputStreamWriter(outputStream);
-        else
+        } else {
+            isBinaryStream = true;
             out = new BufferedOutputStream(outputStream);
+        }
         isInputStream = false;
         isOutputStream = true;
     }
@@ -132,12 +140,12 @@ public class Stream extends LispObject
 
     public boolean isCharacterStream()
     {
-        return elementType == Symbol.CHARACTER;
+        return isCharacterStream;
     }
 
     public boolean isBinaryStream()
     {
-        return elementType != Symbol.CHARACTER;
+        return isBinaryStream;
     }
 
     public LispObject getPathname()
@@ -1191,7 +1199,7 @@ public class Stream extends LispObject
     {
         int n;
         try {
-            n = in.read();
+            n = in.read(); // Reads an 8-bit byte.
         }
         catch (IOException e) {
             return signal(new StreamError(e));
@@ -1387,7 +1395,7 @@ public class Stream extends LispObject
     public void writeByte(int n) throws ConditionThrowable
     {
         try {
-            out.write(n);
+            out.write(n); // Writes an 8-bit byte.
         }
         catch (IOException e) {
             signal(new StreamError(e));
