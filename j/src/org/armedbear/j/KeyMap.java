@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.13 2003-07-18 15:03:31 piso Exp $
+ * $Id: KeyMap.java,v 1.14 2003-08-04 12:58:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,6 +168,7 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_J, CTRL_MASK, "jumpToLine");
         mapKey(KeyEvent.VK_J, CTRL_MASK | SHIFT_MASK, "jumpToColumn");
         mapKey(KeyEvent.VK_M, CTRL_MASK, "findMatchingChar");
+        mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "selectSyntax");
         mapKey(KeyEvent.VK_UP, CTRL_MASK | ALT_MASK, "findFirstOccurrence");
         mapKey(KeyEvent.VK_KP_UP, CTRL_MASK | ALT_MASK, "findFirstOccurrence");
         mapKey(KeyEvent.VK_UP, ALT_MASK, "findPrevWord");
@@ -351,7 +352,7 @@ public final class KeyMap implements Constants
         // Map these globally so they're available in the compilation buffer too.
         mapKey(KeyEvent.VK_F4, 0, "nextError");
         mapKey(KeyEvent.VK_F4, SHIFT_MASK, "previousError");
-        mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "showMessage");
+        mapKey(KeyEvent.VK_M, CTRL_MASK | ALT_MASK, "showMessage");
 
         // Windows VM seems to need this mapping for the tab key to work properly.
         // There's also code in Dispatcher.dispatchKeyTyped to handle the tab key.
