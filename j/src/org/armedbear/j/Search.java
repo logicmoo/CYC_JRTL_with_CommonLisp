@@ -2,7 +2,7 @@
  * Search.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Search.java,v 1.1.1.1 2002-09-24 16:08:34 piso Exp $
+ * $Id: Search.java,v 1.2 2003-07-26 17:06:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,6 +198,11 @@ public class Search implements Cloneable
         return regularExpression ? findRegExp(s) : findString(s);
     }
 
+    public final boolean findDelimited(String s, Mode mode)
+    {
+        return regularExpression ? findRegExpDelimited(s, mode) : findStringDelimited(s, mode);
+    }
+
     // Search is restricted to region if restrictToSelection is true and
     // region is not null.
     private final Position findString(Buffer buffer, Position start)
@@ -285,19 +290,39 @@ public class Search implements Cloneable
         return null;
     }
 
-    private boolean findString(String toBeSearched)
+    private boolean findString(String s)
     {
         Debug.assertTrue(patternLength == pattern.length());
         int index = 0;
-        int limit = toBeSearched.length() - patternLength;
+        int limit = s.length() - patternLength;
         while (index <= limit) {
             if (ignoreCase)
-                index = toBeSearched.toLowerCase().indexOf(lowerCasePattern, index);
+                index = s.toLowerCase().indexOf(lowerCasePattern, index);
             else
-                index = toBeSearched.indexOf(pattern, index);
+                index = s.indexOf(pattern, index);
             if (index < 0)
                 break;
-            if (!wholeWordsOnly || Utilities.isDelimited(toBeSearched, index, patternLength))
+            if (!wholeWordsOnly || Utilities.isDelimited(s, index, patternLength))
+                return true;
+            ++index;
+        }
+        return false;
+    }
+
+    private boolean findStringDelimited(String s, Mode mode)
+    {
+        Debug.assertTrue(wholeWordsOnly);
+        Debug.assertTrue(patternLength == pattern.length());
+        int index = 0;
+        int limit = s.length() - patternLength;
+        while (index <= limit) {
+            if (ignoreCase)
+                index = s.toLowerCase().indexOf(lowerCasePattern, index);
+            else
+                index = s.indexOf(pattern, index);
+            if (index < 0)
+                break;
+            if (Utilities.isDelimited(s, index, patternLength, mode))
                 return true;
             ++index;
         }
@@ -470,6 +495,22 @@ public class Search implements Cloneable
             if (match == null)
                 break;
             if (!wholeWordsOnly || Utilities.isDelimited(toBeSearched, match.getStartIndex(), match.toString().length()))
+                return true;
+            index = match.getStartIndex() + 1;
+        }
+        return false;
+    }
+
+    private boolean findRegExpDelimited(String s, Mode mode)
+    {
+        Debug.assertTrue(wholeWordsOnly);
+        int index = 0;
+        int limit = s.length();
+        while (index <= limit) {
+            match = re.getMatch(s, index);
+            if (match == null)
+                break;
+            if (Utilities.isDelimited(s, match.getStartIndex(), match.toString().length(), mode))
                 return true;
             index = match.getStartIndex() + 1;
         }
