@@ -2,7 +2,7 @@
  * DispatchMacroFunction.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: DispatchMacroFunction.java,v 1.1 2004-03-16 16:11:12 piso Exp $
+ * $Id: DispatchMacroFunction.java,v 1.2 2004-04-18 04:50:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,11 @@ public abstract class DispatchMacroFunction extends Function
     {
         Stream stream = inSynonymOf(first);
         char c = LispCharacter.getValue(second);
-        int n = Fixnum.getValue(third);
+        int n;
+        if (third == NIL)
+            n = -1;
+        else
+            n = Fixnum.getValue(third);
         return execute(stream, c, n);
     }
 
