@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.22 2003-05-23 17:41:56 piso Exp $
+ * $Id: Jdb.java,v 1.23 2003-05-25 00:57:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -233,9 +233,14 @@ public final class Jdb extends Buffer implements JdbConstants
         isSuspended = b;
     }
 
-    public void setCurrentStackFrame(StackFrame stackFrame)
+    public synchronized void setCurrentStackFrame(StackFrame stackFrame)
     {
         currentStackFrame = stackFrame;
+    }
+
+    public synchronized StackFrame getCurrentStackFrame()
+    {
+        return currentStackFrame;
     }
 
     public List getBreakpoints()
@@ -1535,16 +1540,35 @@ public final class Jdb extends Buffer implements JdbConstants
             prompt();
     }
 
-    private static String getStringValueOfObject(ObjectReference objRef,
-        ThreadReference thread)
+    private String getStringValueOfObject(ObjectReference objRef,
+        ThreadReference threadRef)
     {
         try {
+            // Get index of current stack frame so we can restore it later.
+            List frames = threadRef.frames();
+            int index = -1;
+            if (frames.size() > 0) {
+                for (int i = 0; i < frames.size(); i++) {
+                    StackFrame frame = (StackFrame) frames.get(i);
+                    if (frame != null && frame.equals(currentStackFrame)) {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
             ReferenceType refType = objRef.referenceType();
-            List methods = refType.methodsByName("toString",
-                "()Ljava/lang/String;");
+            List methods =
+                refType.methodsByName("toString", "()Ljava/lang/String;");
             Method method = (Method) methods.get(0);
-            Value value = objRef.invokeMethod(thread, method,
+            Value value = objRef.invokeMethod(threadRef, method,
                 new ArrayList(), ObjectReference.INVOKE_SINGLE_THREADED);
+
+            // Restore current stack frame if possible.
+            frames = threadRef.frames();
+            if (frames != null && index >= 0 && index < frames.size())
+                currentStackFrame = (StackFrame) frames.get(index);
+
             if (value != null)
                 return value.toString();
         }
