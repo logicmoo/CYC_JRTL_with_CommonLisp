@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.12 2004-01-29 00:48:01 piso Exp $
+;;; $Id: open.lisp,v 1.13 2004-01-29 01:52:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -60,7 +60,10 @@
           (unless (probe-file pathname)
             (error 'file-error
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list (namestring pathname))))))
+                   :format-arguments (list (namestring pathname)))))
+         (:create
+          (unless (probe-file pathname)
+            (create-new-file pathname))))
        (let ((stream (make-file-stream pathname element-type :input nil)))
          (when stream
            (close stream))
@@ -71,7 +74,10 @@
           (unless (probe-file pathname)
             (error 'file-error
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list (namestring pathname))))))
+                   :format-arguments (list (namestring pathname)))))
+         ((nil)
+          (unless (probe-file pathname)
+            (return-from open nil))))
        (case if-exists
          (:error
           (when (probe-file pathname)
