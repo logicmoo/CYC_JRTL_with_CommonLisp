@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.9 2003-07-06 18:12:52 piso Exp $
+ * $Id: PackageFunctions.java,v 1.10 2003-07-06 19:04:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -179,6 +179,22 @@ public final class PackageFunctions extends Lisp
             } else
                 pkg.unusePackage(coerceToPackage(args[0]));
             return T;
+        }
+    };
+
+    // ### rename-package
+    // rename-package package new-name &optional new-nicknames => package-object
+    private static final Primitive RENAME_PACKAGE =
+        new Primitive("rename-package") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 2 || args.length > 3)
+                throw new WrongNumberOfArgumentsException(this);
+            Package pkg = coerceToPackage(args[0]);
+            String newName = javaString(args[1]);
+            LispObject nicknames = args.length == 3 ? checkList(args[2]) : NIL;
+            pkg.rename(newName, nicknames);
+            return pkg;
         }
     };
 
