@@ -1,8 +1,8 @@
 /*
  * AbstractDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: AbstractDialog.java,v 1.2 2003-07-24 16:55:00 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: AbstractDialog.java,v 1.3 2003-07-27 01:12:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -208,6 +209,13 @@ public abstract class AbstractDialog extends JDialog implements ActionListener,
     public void keyPressed(KeyEvent e)
     {
         if (e.getModifiers() == 0) {
+            // Special case for combo box.
+            if (e.getComponent() instanceof JComboBox) {
+                JComboBox cb = (JComboBox) e.getComponent();
+                if (cb.isPopupVisible())
+                    return;
+                // Combo box popup is not visible. Fall through...
+            }
             switch (e.getKeyCode()){
                 case KeyEvent.VK_ENTER:
                     e.consume();
