@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.94 2004-03-30 01:51:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.95 2004-03-31 00:24:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -591,7 +591,7 @@
               symbol-name symbol-function
               coerce
               reverse nreverse
-              cons
+              cons rplaca rplacd
               copy-list
               make-sequence make-list make-array make-package make-hash-table
               find-package
@@ -601,6 +601,8 @@
               aref elt
               not null endp
               concatenate
+              format prin1 princ print write
+              compute-restarts find-restart restart-name
               string
               string=
               setq
