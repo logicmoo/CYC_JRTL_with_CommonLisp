@@ -1,8 +1,8 @@
 /*
  * SimpleVector.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.18 2004-12-20 01:52:07 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: SimpleVector.java,v 1.19 2005-01-13 12:33:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,10 +37,18 @@ public final class SimpleVector extends AbstractVector
         this.capacity = capacity;
     }
 
-    public SimpleVector(LispObject list) throws ConditionThrowable
+    public SimpleVector(LispObject obj) throws ConditionThrowable
     {
-        elements = list.copyToArray();
-        capacity = elements.length;
+        if (obj.listp()) {
+            elements = obj.copyToArray();
+            capacity = elements.length;
+        } else if (obj instanceof AbstractVector) {
+            capacity = obj.length();
+            elements = new LispObject[capacity];
+            for (int i = 0; i < capacity; i++)
+                elements[i] = obj.elt(i);
+        } else
+            Debug.assertTrue(false);
     }
 
     public SimpleVector(LispObject[] array)
