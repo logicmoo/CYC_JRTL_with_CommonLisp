@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.5 2003-03-03 03:04:50 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.6 2003-03-03 17:58:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,6 +116,8 @@ public class CharacterInputStream extends LispStream
                 return readBackquote();
             case '#':
                 return readSharp();
+            case '|':
+                return readMultipleEscape();
             default:
                 return readToken(c);
         }
@@ -413,6 +415,26 @@ public class CharacterInputStream extends LispStream
     {
         LispObject obj = read(true, NIL, true);
         return NIL; // FIXME
+    }
+
+    private LispObject readMultipleEscape() throws Condition
+    {
+        try {
+            StringBuffer sb = new StringBuffer();
+            while (true) {
+                int n = read();
+                if (n < 0)
+                    break;
+                char c = (char) n;
+                if (c == '|')
+                    break;
+                sb.append(c);
+            }
+            return intern(sb.toString(), getCurrentPackage());
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
+        }
     }
 
     private LispObject readToken(char firstChar) throws LispError
