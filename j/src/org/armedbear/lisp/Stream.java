@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.22 2004-02-15 17:49:22 piso Exp $
+ * $Id: Stream.java,v 1.23 2004-02-16 02:33:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -511,6 +511,9 @@ public class Stream extends LispObject
             case 'c':
             case 'C':
                 return readComplex();
+            case 'o':
+            case 'O':
+                return readOctal();
             case 'p':
             case 'P':
                 return readPathname();
@@ -927,6 +930,7 @@ public class Stream extends LispObject
         return signal(new LispError());
     }
 
+    // FIXME rationals
     private LispObject readHex() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
@@ -954,6 +958,36 @@ public class Stream extends LispObject
         // parseInt() failed.
         try {
             return new Bignum(new BigInteger(s, 16));
+        }
+        catch (NumberFormatException e) {}
+        // Not a number.
+        return signal(new LispError());
+    }
+
+    // FIXME Need to support rationals e.g. #o37/15 => 31/13
+    private LispObject readOctal() throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer();
+        while (true) {
+            int n = _readChar();
+            if (n < 0)
+                break;
+            char c = (char) n;
+            if (c >= '0' && c <= '7')
+                sb.append(c);
+            else {
+                _unreadChar(c);
+                break;
+            }
+        }
+        String s = sb.toString();
+        try {
+            return new Fixnum(Integer.parseInt(s, 8));
+        }
+        catch (NumberFormatException e) {}
+        // parseInt() failed.
+        try {
+            return new Bignum(new BigInteger(s, 8));
         }
         catch (NumberFormatException e) {}
         // Not a number.
