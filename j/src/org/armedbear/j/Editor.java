@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.18 2002-11-14 16:02:43 piso Exp $
+ * $Id: Editor.java,v 1.19 2002-11-15 15:58:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7118,6 +7118,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public void killWindow()
     {
         frame.unsplitWindowKeepOther();
+        Sidebar sidebar = getSidebar();
+        if (sidebar != null) {
+            sidebar.setUpdateFlag(SIDEBAR_ALL);
+            sidebar.refreshSidebar();
+        }
     }
 
     public void otherWindow()
