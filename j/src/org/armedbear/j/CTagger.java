@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CTagger.java,v 1.6 2002-11-25 16:21:42 piso Exp $
+ * $Id: CTagger.java,v 1.7 2002-11-26 02:08:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,6 +133,10 @@ public final class CTagger extends JavaTagger
                     while ((c = pos.getChar()) != '{') {
                         if (c == '"' || c == '\'') {
                             pos.skipQuote();
+                            continue;
+                        }
+                        if (c == '/' && pos.lookingAt("/*")) {
+                            skipComment(pos);
                             continue;
                         }
                         if (!pos.next())
