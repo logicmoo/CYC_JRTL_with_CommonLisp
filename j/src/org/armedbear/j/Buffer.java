@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.19 2002-12-24 16:25:22 piso Exp $
+ * $Id: Buffer.java,v 1.20 2003-02-02 02:29:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,13 +261,7 @@ public class Buffer extends SystemBuffer
 
     protected static Buffer createBuffer(File file, File cache, String listing)
     {
-        int fileType = FILETYPE_UNKNOWN;
-
-        if (cache != null)
-            fileType = Utilities.getFileType(cache);
-        else
-            fileType = Utilities.getFileType(file);
-
+        int fileType = Utilities.getFileType(cache != null ? cache : file);
         if (fileType == FILETYPE_GZIP) {
             // If we're looking at a remote file, gunzip the cached copy of it;
             // otherwise, gunzip the file itself into the cache.
@@ -278,16 +272,13 @@ public class Buffer extends SystemBuffer
             } else
                 fileType = FILETYPE_BINARY; // Something went wrong.
         }
-
         Buffer buffer = null;
-
         if (fileType == FILETYPE_JPEG ||
             Editor.getModeList().modeAccepts(IMAGE_MODE, file.getName())) {
             buffer = ImageBuffer.createImageBuffer(file, cache, listing);
             if (buffer != null)
                 buffer.setFileType(fileType);
         }
-
         if (buffer == null) {
             buffer = new Buffer(file);
             Debug.assertTrue(Editor.getBufferList().contains(buffer));
@@ -297,7 +288,6 @@ public class Buffer extends SystemBuffer
             if (file.isLocal() && !file.isFile())
                 buffer.setNewFile(true);
         }
-
         return buffer;
     }
 
