@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.39 2003-06-22 17:55:45 piso Exp $
+;;; $Id: list.lisp,v 1.40 2003-06-22 18:19:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,28 +19,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(list-length
-          fifth sixth seventh eighth ninth tenth
-          make-list
-          copy-list copy-alist copy-tree
-          revappend nconc
-          butlast nbutlast
-          ldiff
-          complement constantly
-          sublis nsublis
-          member member-if member-if-not tailp adjoin
-          acons pairlis
-          assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not
-          mapc mapcan mapl maplist mapcon))
-
-(defun list-length (list)
-  (do ((n 0 (+ n 2))
-       (y list (cddr y))
-       (z list (cdr z)))
-      (())
-    (when (endp y) (return n))
-    (when (endp (cdr y)) (return (+ n 1)))
-    (when (and (eq y z) (> n 0)) (return nil))))
+(autoload 'list-length)
 
 (defun fifth (list)
   (car (cddddr list)))
@@ -58,28 +37,14 @@
 (defun make-list (size &key initial-element)
   (%make-list size initial-element))
 
-(defun copy-list (list)
-  (if (atom list)
-      list
-      (let ((result (list (car list))))
-	(do ((x (cdr list) (cdr x))
-	     (splice result
-		     (cdr (rplacd splice (cons (car x) '())))))
-            ((atom x)
-             (unless (null x)
-               (rplacd splice x))))
-	result)))
+(autoload 'copy-list)
 
 (defun copy-tree (object)
   (if (consp object)
       (cons (copy-tree (car object)) (copy-tree (cdr object)))
       object))
 
-(defun revappend (x y)
-  (do ((top x (cdr top))
-       (result y (cons (car top) result)))
-      ((endp top) result)))
-
+(autoload 'revappend)
 (autoload '(butlast nbutlast) "butlast.lisp")
 (autoload 'ldiff)
 
@@ -101,31 +66,9 @@
 (defun member (item list &key key test test-not)
   (%member item list key test test-not))
 
-(defun member-if (test list &key key)
-  (do ((list list (cdr list)))
-      ((endp list) nil)
-    (if (funcall test (apply-key key (car list)))
-	(return list))))
-
-(defun member-if-not (test list &key key)
-  (do ((list list (cdr list)))
-      ((endp list) ())
-    (if (not (funcall test (apply-key key (car list))))
-	(return list))))
-
-(defun tailp (object list)
-  (do ((list list (cdr list)))
-      ((atom list) (eql list object))
-    (if (eql object list)
-	(return t))))
-
-(defun adjoin (item list &key key (test #'eql) (test-not nil notp))
-  (if (let ((key-val (apply-key key item)))
-	(if notp
-	    (member key-val list :test-not test-not :key key)
-	    (member key-val list :test test :key key)))
-      list
-      (cons item list)))
+(autoload '(member-if member-if-not) "member-if.lisp")
+(autoload 'tailp)
+(autoload 'adjoin)
 
 (autoload '(union nunion
             intersection nintersection
