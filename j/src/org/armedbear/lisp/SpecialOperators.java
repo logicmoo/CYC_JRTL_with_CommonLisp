@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.9 2003-10-27 19:02:28 piso Exp $
+ * $Id: SpecialOperators.java,v 1.10 2003-10-28 16:01:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,13 +162,21 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### load-time-value
+    // load-time-value form &optional read-only-p => object
     private static final SpecialOperator LOAD_TIME_VALUE =
         new SpecialOperator("load-time-value")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
-            throw new ConditionThrowable(new LispError("LOAD-TIME-VALUE is not implemented"));
+            switch (args.length()) {
+                case 1:
+                case 2:
+                    return eval(args.car(), new Environment(),
+                                LispThread.currentThread());
+                default:
+                    throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            }
         }
     };
 
