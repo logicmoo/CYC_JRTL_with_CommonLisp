@@ -5,5 +5,6 @@
                 "setf"
                 "macros"
                 "list"
+                "sequences"
                 "symbol"))
   (cl::%load (concatenate 'string name ".lisp")))
