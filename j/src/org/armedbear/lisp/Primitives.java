@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.649 2004-06-04 00:35:07 piso Exp $
+ * $Id: Primitives.java,v 1.650 2004-06-07 01:33:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -780,42 +780,32 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### terpri
-    // terpri &optional output-stream => nil
-    private static final Primitive TERPRI = new Primitive("terpri","&optional output-stream") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+    // ### %terpri
+    // %terpri output-stream => nil
+    private static final Primitive1 _TERPRI =
+        new Primitive1("%terpri", PACKAGE_SYS, false, "&optional output-stream")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (args.length > 1)
-                signal(new WrongNumberOfArgumentsException(this));
-            final Stream out;
-            if (args.length == 0)
-                out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-            else
-                out = outSynonymOf(args[0]);
-            return out.terpri();
+            return outSynonymOf(arg).terpri();
         }
     };
 
-    // ### fresh-line
-    // fresh-line &optional output-stream => generalized-boolean
-    private static final Primitive FRESH_LINE = new Primitive("fresh-line","&optional output-stream") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+    // ### %fresh-line
+    // %fresh-line &optional output-stream => generalized-boolean
+    private static final Primitive1 _FRESH_LINE =
+        new Primitive1("%fresh-line", PACKAGE_SYS, false, "&optional output-stream")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (args.length > 1)
-                signal(new WrongNumberOfArgumentsException(this));
-            Stream out;
-            if (args.length == 0)
-                out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-            else
-                out = outSynonymOf(args[0]);
-            return out.freshLine();
+            return outSynonymOf(arg).freshLine();
         }
     };
 
     // ### boundp
     // Determines only whether a symbol has a value in the global environment;
     // any lexical bindings are ignored.
-    private static final Primitive1 BOUNDP = new Primitive1("boundp","symbol")
+    private static final Primitive1 BOUNDP = new Primitive1("boundp", "symbol")
     {
         public LispObject execute(LispObject obj) throws ConditionThrowable
         {
