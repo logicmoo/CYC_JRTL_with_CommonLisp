@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.76 2003-07-16 17:11:43 piso Exp $
+;;; $Id: boot.lisp,v 1.77 2003-07-16 18:14:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -80,22 +80,37 @@
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
 
-(dolist (name '("autoloads.lisp"
-                "early-defuns.lisp"
-                "backquote.lisp"
-                "setf.lisp"
-                "macros.lisp"
-                "destructuring-bind.lisp"
-;;                 "defmacro.lisp"
-                "arrays.lisp"
-                "compiler.lisp"
-                "list.lisp"
-                "sequences.lisp"
-                "error.lisp"
-                "defpackage.lisp"
-                "defstruct.lisp"
-                "loop.lisp"))
-  (%load name))
+(%load "autoloads.lisp")
+(%load "early-defuns.lisp")
+(%load "backquote.lisp")
+(%load "setf.lisp")
+(%load "macros.lisp")
+(%load "destructuring-bind.lisp")
+(%load "arrays.lisp")
+(%load "compiler.lisp")
+(%load "list.lisp")
+(%load "sequences.lisp")
+(%load "error.lisp")
+(%load "defpackage.lisp")
+
+
+;;; PROVIDE, REQUIRE (from SBCL)
+(defun provide (module-name)
+  (pushnew (string module-name) *modules* :test #'string=)
+  t)
+
+(defun require (module-name &optional pathnames)
+  (finish-output)
+  (unless (member (string module-name) *modules* :test #'string=)
+    (let ((saved-modules (copy-list *modules*)))
+      (cond (pathnames
+             (unless (listp pathnames) (setf pathnames (list pathnames)))
+             (dolist (x pathnames)
+               (load x)))
+            (t
+             (%load (concatenate 'string (string-downcase (string module-name))
+                                 ".lisp"))))
+      (set-difference *modules* saved-modules))))
 
 
 ;;; Miscellany.
