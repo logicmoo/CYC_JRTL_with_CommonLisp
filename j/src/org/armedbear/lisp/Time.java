@@ -1,8 +1,8 @@
 /*
  * Time.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Time.java,v 1.23 2004-12-12 16:43:32 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Time.java,v 1.24 2005-01-10 17:43:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,8 +35,7 @@ public final class Time extends Lisp
             Cons.setCount(0);
             long start = System.currentTimeMillis();
             try {
-                LispObject result = arg.execute(new LispObject[0]);
-                return result;
+                return arg.execute();
             }
             finally {
                 long elapsed = System.currentTimeMillis() - start;
