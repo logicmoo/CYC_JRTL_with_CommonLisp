@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.77 2004-09-07 02:23:30 piso Exp $
+ * $Id: LispMode.java,v 1.78 2004-09-07 20:23:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -595,21 +595,21 @@ public class LispMode extends AbstractMode implements Constants, Mode
     public static void forwardSexp()
     {
         final Editor editor = Editor.currentEditor();
-        if (editor.getMode() != mode)
-            return;
-        Position pos = mode.forwardSexp(editor.getDot());
-        if (pos != null)
-            editor.moveDotTo(pos);
+        if (editor.getMode() instanceof LispMode) {
+            Position pos = mode.forwardSexp(editor.getDot());
+            if (pos != null)
+                editor.moveDotTo(pos);
+        }
     }
 
     public static void backwardSexp()
     {
         final Editor editor = Editor.currentEditor();
-        if (editor.getMode() != mode)
-            return;
-        Position pos = mode.backwardSexp(editor.getDot());
-        if (pos != null)
-            editor.moveDotTo(pos);
+        if (editor.getMode() instanceof LispMode) {
+            Position pos = mode.backwardSexp(editor.getDot());
+            if (pos != null)
+                editor.moveDotTo(pos);
+        }
     }
 
     public static void lispFindMatchingChar()
