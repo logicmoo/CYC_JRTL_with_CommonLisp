@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2004 Peter Graves
-dnl  $Id: configure.ac,v 1.30 2004-04-27 01:30:18 piso Exp $
+dnl  $Id: configure.ac,v 1.31 2004-04-30 01:51:10 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.30 $)
+AC_REVISION($Revision: 1.31 $)
 
 BOOTFILE=./configure-options
 
@@ -84,6 +84,7 @@ elif test -x $JDK/Home/bin/java; then
 else
     AC_MSG_ERROR(Java not found)
 fi
+AC_SUBST(JDK)
 AC_SUBST(JAVA)
 
 
@@ -123,6 +124,11 @@ if test "$JAVAC" = jikes; then
     JAVACFLAGS="+D +F"
 fi
 AC_SUBST(JAVACFLAGS)
+
+dnl javah
+
+JAVAH=$JDK/bin/javah
+AC_SUBST(JAVAH)
 
 
 dnl  fastjar/jar
