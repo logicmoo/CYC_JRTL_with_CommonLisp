@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandInterpreter.java,v 1.25 2004-05-21 16:51:15 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.26 2004-09-02 21:25:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,7 @@ public class CommandInterpreter extends Buffer
             Line line = eob.getLine();
             while (line != null) {
                 int flags = line.flags();
-                if (flags == STATE_PROMPT || flags == STATE_INPUT) {
+                if (flags == 0 || flags == STATE_PROMPT || flags == STATE_INPUT) {
                     final REMatch match = promptRE.getMatch(line.getText());
                     if (match != null && match.getStartIndex() == 0) {
                         return new Position(line, match.getEndIndex());
