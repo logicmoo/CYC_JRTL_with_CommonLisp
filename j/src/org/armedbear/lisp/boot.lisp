@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.86 2003-08-10 01:24:38 piso Exp $
+;;; $Id: boot.lisp,v 1.87 2003-08-10 16:31:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -135,7 +135,7 @@
 
 (defconstant multiple-values-limit 20)
 
-(defconstant char-code-limit 96)
+(defconstant char-code-limit 128)
 
 (defconstant internal-time-units-per-second 1000)
 
