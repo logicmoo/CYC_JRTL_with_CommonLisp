@@ -1,8 +1,8 @@
 /*
  * MacroObject.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: MacroObject.java,v 1.7 2004-10-22 15:51:38 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: MacroObject.java,v 1.8 2005-02-27 20:10:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,11 +30,6 @@ public final class MacroObject extends Functional
     {
         this.name = name;
         this.expander = expander;
-    }
-
-    public int getFunctionalType()
-    {
-        return FTYPE_MACRO;
     }
 
     public LispObject getExpander()

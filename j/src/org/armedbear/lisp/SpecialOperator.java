@@ -1,8 +1,8 @@
 /*
  * SpecialOperator.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: SpecialOperator.java,v 1.13 2004-10-22 19:22:47 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: SpecialOperator.java,v 1.14 2005-02-27 20:09:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,11 +39,6 @@ public class SpecialOperator extends Functional
     {
         this(name);
         setArglist(new SimpleString(arglist));
-    }
-
-    public final int getFunctionalType()
-    {
-        return FTYPE_SPECIAL_OPERATOR;
     }
 
     public final String getName()

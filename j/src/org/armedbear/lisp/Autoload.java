@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.216 2005-02-13 04:12:44 piso Exp $
+ * $Id: Autoload.java,v 1.217 2005-02-27 20:09:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,11 +123,6 @@ public class Autoload extends Function
         if (fileName != null)
             return fileName;
         return getSymbol().getName().toLowerCase();
-    }
-
-    public final int getFunctionalType()
-    {
-        return FTYPE_AUTOLOAD;
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
