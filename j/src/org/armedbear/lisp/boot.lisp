@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.189 2004-09-28 14:07:45 piso Exp $
+;;; $Id: boot.lisp,v 1.190 2004-09-29 19:01:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -342,10 +342,11 @@
 
 (defconstant internal-time-units-per-second 1000)
 
-(sys::load-system-file "restart")
-(sys::load-system-file "late-setf")
-(sys::load-system-file "debug")
-(sys::load-system-file "print")
+(load-system-file "restart")
+(load-system-file "late-setf")
+(load-system-file "debug")
+(load-system-file "print")
+(load-system-file "pprint-dispatch")
 
 (unless (sys::featurep :j)
   (sys::load-system-file "top-level")
