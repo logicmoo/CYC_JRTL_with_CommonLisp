@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.400 2005-02-18 18:22:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.401 2005-02-20 15:19:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@
 
 (require '#:format)
 (require '#:clos)
+(require '#:print-object)
 (require '#:source-transform)
 (require '#:opcodes)
 
@@ -134,7 +135,7 @@
              (class-file-fixnums ,var)      *declared-fixnums*
              ))))
 
-(defstruct (compiland (:print-function print-compiland))
+(defstruct compiland
   name
   (kind :external) ; :INTERNAL or :EXTERNAL
   lambda-expression
@@ -146,10 +147,9 @@
   argument-register
   closure-register
   class-file ; class-file object
-  (single-valued-p t)
-  )
+  (single-valued-p t))
 
-(defun print-compiland (compiland stream depth)
+(defmethod print-object ((compiland compiland) stream)
   (%format stream "#<~S ~S>" 'compiland (compiland-name compiland)))
 
 (defvar *current-compiland* nil)
@@ -2755,7 +2755,7 @@
       (unless (or (fboundp op)
                   (eq op (compiland-name *current-compiland*))
                   (memq op *defined-functions*))
-        (push op *undefined-functions*)))
+        (pushnew op *undefined-functions*)))
     (let ((numargs (length args)))
       (case (length args)
         (1
@@ -5689,7 +5689,6 @@
   (aver (eq (car form) 'LAMBDA))
   (unless (or (null environment) (sys::empty-environment-p environment))
     (compiler-unsupported "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
-  (aver (null *current-compiland*))
   (catch 'compile-defun-abort
     (let* ((class-file (make-class-file :pathname filespec
                                         :lambda-list (cadr form)))
