@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.46 2003-09-20 17:02:03 piso Exp $
+ * $Id: Bignum.java,v 1.47 2003-10-30 21:40:10 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -371,38 +371,45 @@ public final class Bignum extends LispObject
     {
         final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
-        if (obj instanceof Ratio) {
+	try {
+	  if (obj instanceof Ratio) {
             Ratio divisor = (Ratio) obj;
             LispObject quotient =
-                multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
+	      multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
             LispObject remainder =
-                subtract(quotient.multiplyBy(divisor));
+	      subtract(quotient.multiplyBy(divisor));
             values[0] = quotient;
             values[1] = remainder;
-        } else if (obj instanceof Fixnum) {
+	  } else if (obj instanceof Fixnum) {
             BigInteger divisor = ((Fixnum)obj).getBigInteger();
             BigInteger[] results = value.divideAndRemainder(divisor);
             BigInteger quotient = results[0];
             BigInteger remainder = results[1];
             values[0] = number(quotient);
             values[1] = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
-        } else if (obj instanceof Bignum) {
+	  } else if (obj instanceof Bignum) {
             BigInteger divisor = ((Bignum)obj).getValue();
             BigInteger[] results = value.divideAndRemainder(divisor);
             BigInteger quotient = results[0];
             BigInteger remainder = results[1];
             values[0] = number(quotient);
             values[1] = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
-        } else if (obj instanceof Ratio) {
+	  } else if (obj instanceof Ratio) {
             Ratio divisor = (Ratio) obj;
             LispObject quotient =
-                multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
+	      multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
             LispObject remainder =
-                subtract(quotient.multiplyBy(divisor));
+	      subtract(quotient.multiplyBy(divisor));
             values[0] = quotient;
             values[1] = remainder;
-        } else
+	  } else
             throw new ConditionThrowable(new LispError("Bignum.truncate(): not implemented: " + obj.typeOf()));
+        }
+        catch (ArithmeticException e) {
+            if (obj.zerop())
+                throw new ConditionThrowable(new DivisionByZero());
+            throw new ConditionThrowable(new ArithmeticError(e.getMessage()));
+        }
         thread.setValues(values);
         return values[0];
     }

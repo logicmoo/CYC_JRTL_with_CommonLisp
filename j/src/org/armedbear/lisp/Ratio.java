@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.36 2003-10-13 11:50:32 piso Exp $
+ * $Id: Ratio.java,v 1.37 2003-10-30 21:40:10 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -377,37 +377,44 @@ public final class Ratio extends LispObject
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         BigInteger n, d;
-        if (obj instanceof Fixnum) {
+	try {
+	  if (obj instanceof Fixnum) {
             n = ((Fixnum)obj).getBigInteger();
             d = BigInteger.ONE;
-        } else if (obj instanceof Bignum) {
+	  } else if (obj instanceof Bignum) {
             n = ((Bignum)obj).getValue();
             d = BigInteger.ONE;
-        } else if (obj instanceof Ratio) {
+	  } else if (obj instanceof Ratio) {
             n = ((Ratio)obj).numerator();
             d = ((Ratio)obj).denominator();
-        } else {
+	  } else {
             Thread.dumpStack();
             throw new ConditionThrowable(new TypeError(obj, "number"));
+	  }
+
+	  // Invert and multiply.
+	  BigInteger num = numerator.multiply(d);
+	  BigInteger den = denominator.multiply(n);
+	  BigInteger quotient = num.divide(den);
+
+	  // Multiply quotient by divisor.
+	  LispObject product = number(quotient.multiply(n), d);
+
+	  // Subtract to get remainder.
+	  LispObject remainder = subtract(product);
+
+	  final LispThread thread = LispThread.currentThread();
+	  LispObject[] values = new LispObject[2];
+	  values[0] = number(quotient);
+	  values[1] = remainder;
+	  thread.setValues(values);
+	  return values[0];
         }
-
-        // Invert and multiply.
-        BigInteger num = numerator.multiply(d);
-        BigInteger den = denominator.multiply(n);
-        BigInteger quotient = num.divide(den);
-
-        // Multiply quotient by divisor.
-        LispObject product = number(quotient.multiply(n), d);
-
-        // Subtract to get remainder.
-        LispObject remainder = subtract(product);
-
-        final LispThread thread = LispThread.currentThread();
-        LispObject[] values = new LispObject[2];
-        values[0] = number(quotient);
-        values[1] = remainder;
-        thread.setValues(values);
-        return values[0];
+        catch (ArithmeticException e) {
+            if (obj.zerop())
+                throw new ConditionThrowable(new DivisionByZero());
+            throw new ConditionThrowable(new ArithmeticError(e.getMessage()));
+        }
     }
 
     public int hashCode()
