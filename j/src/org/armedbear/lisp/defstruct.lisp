@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.6 2003-07-10 17:50:10 piso Exp $
+;;; $Id: defstruct.lisp,v 1.7 2003-07-11 15:27:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,15 +19,25 @@
 
 (in-package "SYSTEM")
 
+(defvar *ds-name*)
+(defvar *ds-conc-name*)
+(defvar *ds-constructor*)
+(defvar *ds-copier*)
+(defvar *ds-named*)
+(defvar *ds-predicate*)
+(defvar *ds-print-function*)
+
 (defun make-constructor (name slots)
-  (let ((constructor (intern (concatenate 'string "MAKE-" (symbol-name name))))
+  (let ((constructor-name (intern (concatenate 'string "MAKE-" (symbol-name name))))
         (keys (cons '&key slots)))
-    (eval `(defun ,constructor ,keys
+    (eval `(defun ,constructor-name ,keys
              (vector ',name ,@slots)))))
 
-(defun make-access-function (name slot index)
+(defun make-access-function (conc-name slot index)
   (let ((accessor
-         (intern (concatenate 'string (symbol-name name) "-" (symbol-name slot))))
+         (if conc-name
+             (intern (concatenate 'string (symbol-name conc-name) (symbol-name slot)))
+             slot))
         (setf-expander (gensym)))
     (eval `(progn
              (defun ,accessor (instance)
@@ -42,10 +52,39 @@
       (make-access-function name slot index)
       (incf index))))
 
+(defun parse-1-option (option)
+  (case (car option)
+    (:conc-name
+     (setf *ds-conc-name* (if (symbolp (cadr option))
+                              (cadr option)
+                              (make-symbol (string (cadr option))))))))
+
+(defun parse-name-and-options (name-and-options)
+  (setf *ds-name* (car name-and-options))
+  (setf *ds-conc-name* (make-symbol (concatenate 'string (symbol-name *ds-name*) "-")))
+  (let ((options (cdr name-and-options)))
+    (dolist (option options)
+      (cond ((consp option)
+             (parse-1-option option))
+            ((eq option :named)
+             (setf *ds-named* t))
+            ((member option '(:constructor :copier :predicate :named
+                              :conc-name))
+             (parse-1-option (list option)))
+            (t
+             (error "unrecognized DEFSTRUCT option: ~S" option))))))
+
 (defmacro defstruct (name-and-options &rest slots)
-  (let ((name (if (atom name-and-options)
-                  name-and-options (car name-and-options))))
+  (let ((*ds-name* nil)
+        (*ds-conc-name* nil)
+        (*ds-constructor* nil)
+        (*ds-copier* nil)
+        (*ds-predicate* nil)
+        (*ds-print-function* nil))
+    (parse-name-and-options (if (atom name-and-options)
+                                (list name-and-options)
+                                name-and-options))
     `(progn
-       (make-constructor ',name ',slots)
-       (make-access-functions ',name ',slots)
-       ',name)))
+       (make-constructor ',*ds-name* ',slots)
+       (make-access-functions ',*ds-conc-name* ',slots)
+       ',*ds-name*)))
