@@ -131,6 +131,7 @@ deftype
 defun
 defvar
 delete
+delete-duplicates
 delete-if
 delete-if-not
 delete-package
@@ -360,6 +361,7 @@ readtablep
 remf
 remhash
 remove
+remove-duplicates
 remove-if
 remove-if-not
 remprop
