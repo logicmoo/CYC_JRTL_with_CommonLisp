@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.8 2003-11-13 17:52:07 piso Exp $
+;;; $Id: debug.lisp,v 1.9 2003-11-15 19:09:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,7 +39,6 @@
     (debug-loop)))
 
 (defun break (&optional format-control &rest format-arguments)
-  (setf *saved-backtrace* (cdr (backtrace-as-list)))
   (fresh-line *debug-io*)
   (format *debug-io* "BREAK called.~%")
   (if format-control
