@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.7 2003-09-28 18:35:17 piso Exp $
+;;; $Id: fixme.lisp,v 1.8 2003-10-12 19:48:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,11 +58,4 @@
 (defvar *readtable* nil)
 
 (defun copy-readtable (&rest ignored)
-  nil)
-
-(defmacro defgeneric (function-name lambda-list &rest options)
-  `(prog1
-    (sys::%defun ',function-name ',lambda-list nil)))
-
-(defmacro defmethod (&rest args)
   nil)
