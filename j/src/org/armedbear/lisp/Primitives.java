@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.249 2003-06-20 23:59:08 piso Exp $
+ * $Id: Primitives.java,v 1.250 2003-06-21 01:01:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2975,6 +2975,25 @@ public final class Primitives extends Module
         }
     };
 
+    // ### return-from
+    private static final SpecialOperator RETURN_FROM =
+        new SpecialOperator("return-from") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            final int length = args.length();
+            if (length < 1 || length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject name = args.car();
+            LispObject result;
+            if (length == 2)
+                result = eval(args.cadr(), env, LispThread.currentThread());
+            else
+                result = NIL;
+            throw new Return(name, result);
+        }
+    };
+
     // ### catch
     private static final SpecialOperator CATCH = new SpecialOperator("catch") {
         public LispObject execute(LispObject args, Environment env)
@@ -3062,25 +3081,6 @@ public final class Primitives extends Module
                     return new Closure(arg.cadr(), arg.cddr(), env);
             }
             throw new UndefinedFunctionError(String.valueOf(arg));
-        }
-    };
-
-    // ### return-from
-    private static final SpecialOperator RETURN_FROM =
-        new SpecialOperator("return-from") {
-        public LispObject execute(LispObject args, Environment env)
-            throws Condition
-        {
-            final int length = args.length();
-            if (length < 1 || length > 2)
-                throw new WrongNumberOfArgumentsException(this);
-            LispObject name = args.car();
-            LispObject result;
-            if (length == 2)
-                result = eval(args.cadr(), env, LispThread.currentThread());
-            else
-                result = NIL;
-            throw new Return(name, result);
         }
     };
 
