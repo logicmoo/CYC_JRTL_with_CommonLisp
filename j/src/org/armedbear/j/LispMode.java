@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.6 2002-10-14 03:42:38 piso Exp $
+ * $Id: LispMode.java,v 1.7 2002-10-15 01:32:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
 
-public final class LispMode extends AbstractMode implements Constants, Mode
+public class LispMode extends AbstractMode implements Constants, Mode
 {
     private static final LispMode mode = new LispMode();
 
@@ -34,7 +34,12 @@ public final class LispMode extends AbstractMode implements Constants, Mode
         setProperty(Property.INDENT_SIZE, 2);
     }
 
-    public static final LispMode getMode()
+    protected LispMode(int id, String displayName)
+    {
+        super(id, displayName);
+    }
+
+    public static Mode getMode()
     {
         return mode;
     }
@@ -137,7 +142,7 @@ public final class LispMode extends AbstractMode implements Constants, Mode
                 break; // Fall through.
             }
         }
-        
+
         int depth = depth(new Position(line, 0), buffer);
         if (depth > 0)
             return buffer.getIndentSize() * depth;
@@ -177,7 +182,7 @@ public final class LispMode extends AbstractMode implements Constants, Mode
             line = prev;
         }
     }
-    
+
     protected Position findContainingSexp(Position start)
     {
         SyntaxIterator it = getSyntaxIterator(start);
@@ -201,7 +206,7 @@ public final class LispMode extends AbstractMode implements Constants, Mode
             }
         }
     }
-    
+
     protected Position forwardSexp(Position start)
     {
         // Skip to whitespace.
