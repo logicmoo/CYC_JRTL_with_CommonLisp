@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.30 2003-11-15 18:23:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.31 2003-11-15 19:18:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -602,6 +602,7 @@
          (setf (instruction-args instruction) (u2 index))
          instruction))
       ((189 ; ANEWARRAY class-name
+        193 ; INSTANCEOF
         )
        (let ((index (pool-class (first args))))
          (inst opcode (u2 index))))
@@ -681,6 +682,8 @@
      -1)
     (189 ; ANEWARRAY
      0)
+    (193 ; INSTANCEOF
+     0)
     ((153 ; IFEQ
       )
      -1)
@@ -703,8 +706,7 @@
     (177 ; RETURN
      0)
     (t
-     (format t "STACK-EFFECT unsupported opcode ~S~%"
-             (instruction-opcode instruction))
+     (format t "STACK-EFFECT unsupported opcode ~S~%" opcode)
      0)))
 
 (defun walk-code (code start-index depth)
@@ -1499,21 +1501,27 @@
              (emit-push-value))
            (emit-push-nil)
            (return-from compile-test 'if_acmpne))
-         (let ((s (cdr (assoc (car form)
-                              '((ATOM      . "atom")
-                                (EVENP     . "evenp")
-                                (FLOATP    . "floatp")
-                                (INTEGERP  . "integerp")
-                                (MINUSP    . "minusp")
-                                (LISTP     . "listp")
-                                (NUMBERP   . "numberp")
-                                (ODDP      . "oddp")
-                                (PLUSP     . "plusp")
-                                (RATIONALP . "rationalp")
-                                (REALP     . "realp")
-                                (VECTORP   . "vectorp")
-                                (ZEROP     . "zerop")
-                                )))))
+         (when (eq (car form) 'SYMBOLP)
+           (compile-form (second form))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (emit 'instanceof +lisp-symbol-class+)
+           (return-from compile-test 'ifeq))
+         (let ((s (cdr (assq (car form)
+                             '((ATOM      . "atom")
+                               (EVENP     . "evenp")
+                               (FLOATP    . "floatp")
+                               (INTEGERP  . "integerp")
+                               (MINUSP    . "minusp")
+                               (LISTP     . "listp")
+                               (NUMBERP   . "numberp")
+                               (ODDP      . "oddp")
+                               (PLUSP     . "plusp")
+                               (RATIONALP . "rationalp")
+                               (REALP     . "realp")
+                               (VECTORP   . "vectorp")
+                               (ZEROP     . "zerop")
+                               )))))
            (when s
              (compile-form (second form))
              (unless (remove-store-value)
@@ -1531,17 +1539,17 @@
            (unless (remove-store-value)
              (emit-push-value))
            (return-from compile-test 'if_acmpne))
-         (let ((s (cdr (assoc (car form)
-                              '((=      . "isEqualTo")
-                                (/=     . "isNotEqualTo")
-                                (<      . "isLessThan")
-                                (<=     . "isLessThanOrEqualTo")
-                                (>      . "isGreaterThan")
-                                (>=     . "isGreaterThanOrEqualTo")
-                                (EQL    . "eql")
-                                (EQUAL  . "equal")
-                                (EQUALP . "equalp")
-                                )))))
+         (let ((s (cdr (assq (car form)
+                             '((=      . "isEqualTo")
+                               (/=     . "isNotEqualTo")
+                               (<      . "isLessThan")
+                               (<=     . "isLessThanOrEqualTo")
+                               (>      . "isGreaterThan")
+                               (>=     . "isGreaterThanOrEqualTo")
+                               (EQL    . "eql")
+                               (EQUAL  . "equal")
+                               (EQUALP . "equalp")
+                               )))))
            (when s
              (compile-form (second form))
              (unless (remove-store-value)
