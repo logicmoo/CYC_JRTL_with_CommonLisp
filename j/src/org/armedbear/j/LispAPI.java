@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.41 2004-09-03 14:43:30 piso Exp $
+ * $Id: LispAPI.java,v 1.42 2004-09-04 02:18:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1089,6 +1089,56 @@ public final class LispAPI extends Lisp
             return NIL;
         }
     };
+
+    // ### %status string => generalized-boolean
+    private static final Primitive STATUS =
+        new Primitive("status", PACKAGE_J, true, "string")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof AbstractString) {
+                final String s = ((AbstractString)arg).getStringValue();
+                Runnable r = new Runnable() {
+                    public void run()
+                    {
+                        try {
+                            Editor.currentEditor().status(s);
+                        }
+                        catch (Throwable t) {
+                            Log.error(t);
+                        }
+                    }
+                };
+                SwingUtilities.invokeLater(r);
+                return T;
+            }
+            return signal(new TypeError(arg, Symbol.STRING));
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof AbstractString) {
+                final String s = ((AbstractString)first).getStringValue();
+                final Editor editor = checkEditor(second);
+                Runnable r = new Runnable() {
+                    public void run()
+                    {
+                        try {
+                            editor.status(s);
+                        }
+                        catch (Throwable t) {
+                            Log.error(t);
+                        }
+                    }
+                };
+                SwingUtilities.invokeLater(r);
+                return T;
+            }
+            return signal(new TypeError(first, Symbol.STRING));
+        }
+    };
+
 
     static {
         for (Iterator it = Property.iterator(); it.hasNext();)
