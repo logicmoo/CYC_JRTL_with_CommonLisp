@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.18 2002-12-11 15:04:11 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.19 2002-12-11 16:03:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,9 @@ import javax.swing.SwingUtilities;
 public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     implements Constants
 {
+    private static final boolean filenamesIgnoreCase =
+        Platform.isPlatformWindows();
+
     private String title = "Open File";
 
     // Options.
@@ -46,9 +49,6 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     private boolean fileMustExist = false;
     private boolean checkBuffers = true;
     private boolean checkSourcePath = true;
-
-    private final boolean completionsIgnoreCase;
-    private final boolean filenamesIgnoreCase;
 
     private Object returned;
     private String encoding;
@@ -59,14 +59,6 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     public OpenFileTextFieldHandler(Editor editor, HistoryTextField textField)
     {
         super(editor, textField);
-        if (Platform.isPlatformWindows()) {
-            completionsIgnoreCase = true;
-            filenamesIgnoreCase = true;
-        } else {
-            completionsIgnoreCase = Editor.preferences().getBooleanProperty(
-                Property.FILENAME_COMPLETIONS_IGNORE_CASE);
-            filenamesIgnoreCase = false;
-        }
     }
 
     public final void setTitle(String s)
@@ -463,11 +455,10 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         ArrayList completions = new ArrayList();
         final String sourcePath = checkSourcePath ? getSourcePath() : null;
         prefix = File.normalize(prefix);
-        long start = System.currentTimeMillis();
+        boolean ignoreCase = Platform.isPlatformWindows() ||
+            Utilities.isLowerCase(prefix);
         FilenameCompletion completion =
-            new FilenameCompletion(dir, prefix, sourcePath,
-                completionsIgnoreCase);
-        long elapsed = System.currentTimeMillis() - start;
+            new FilenameCompletion(dir, prefix, sourcePath, ignoreCase);
         final File currentDirectory = getCurrentDirectory();
         final File currentFile = editor.getBuffer().getFile();
         List files = completion.listFiles();
@@ -477,25 +468,26 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 final File file = (File) files.get(i);
                 final String name = getNameForFile(file, currentDirectory);
                 if (file.isDirectory()) {
-                    addCompletion(completions,
-                        name.concat(file.getSeparator()));
+                    addCompletion(completions, name.concat(file.getSeparator()),
+                                  ignoreCase);
                     continue;
                 }
                 if (isExcluded(name))
                     continue;
-                addCompletion(completions, name);
+                addCompletion(completions, name, ignoreCase);
             }
         }
         if (checkBuffers && !Utilities.isFilenameAbsolute(prefix) &&
             prefix.indexOf(LocalFile.getSeparatorChar()) < 0) {
             // Short name.
-            addCompletionsFromBufferList(completions, prefix, currentDirectory);
+            addCompletionsFromBufferList(completions, prefix, currentDirectory,
+                                         ignoreCase);
         }
         return completions;
     }
 
     private void addCompletionsFromBufferList(List list, String prefix,
-        File currentDirectory)
+        File currentDirectory, boolean ignoreCase)
     {
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
             Buffer buf = it.nextBuffer();
@@ -506,13 +498,14 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             File file = buf.getFile();
             if (file != null) {
                 boolean isMatch = false;
-                if (completionsIgnoreCase)
+                if (ignoreCase)
                     isMatch = file.getName().regionMatches(true, 0, prefix, 0,
                         prefix.length());
                 else
                     isMatch = file.getName().startsWith(prefix);
                 if (isMatch)
-                    addCompletion(list, getNameForFile(file, currentDirectory));
+                    addCompletion(list, getNameForFile(file, currentDirectory),
+                                  ignoreCase);
             }
         }
     }
@@ -546,11 +539,11 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     }
 
     // Add string to list if it's not already there.
-    private void addCompletion(List list, String s)
+    private void addCompletion(List list, String s, boolean ignoreCase)
     {
         if (s != null) {
             for (int i = list.size(); i-- > 0;) {
-                if (completionsIgnoreCase) {
+                if (ignoreCase) {
                     if (s.equalsIgnoreCase((String)list.get(i)))
                         return;
                 } else if (s.equals((String)list.get(i)))
