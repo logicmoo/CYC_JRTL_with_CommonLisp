@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.187 2004-09-18 00:23:22 piso Exp $
+# $Id: Makefile.in,v 1.188 2004-09-26 08:45:23 asimon Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -138,6 +138,8 @@ CLASSFILES =	AbstractArray.class \
 		SimpleWarning.class \
 		Site.class \
 		SiteName.class \
+		SlimeInputStream.class \
+		SlimeOutputStream.class \
 		SlotClass.class \
 		SocketStream.class \
 		SpecialOperator.class \
