@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.59 2004-06-15 19:41:10 piso Exp $
+ * $Id: Load.java,v 1.60 2004-06-24 16:36:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,9 +257,12 @@ public final class Load extends Lisp
         long start = System.currentTimeMillis();
         LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
-        thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue());
-        int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue());
+        thread.bindSpecial(_PACKAGE_, _PACKAGE_.symbolValue(thread));
+        int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue(thread));
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
+        // Compiler policy.
+        thread.bindSpecial(_SPEED_, _SPEED_.symbolValue(thread));
+        thread.bindSpecial(_SAFETY_, _SAFETY_.symbolValue(thread));
         final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
             Pathname p = Pathname.parseNamestring(truename);
