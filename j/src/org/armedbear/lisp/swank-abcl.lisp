@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.2 2004-09-02 21:30:37 piso Exp $
+;;; $Id: swank-abcl.lisp,v 1.3 2004-09-05 19:51:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,3 +42,15 @@
     (if known-p
         arglist
         :not-available)))
+
+(defun find-definitions (name)
+  (when (ext:autoloadp name)
+    (let ((*load-verbose* nil)
+          (*load-print* nil)
+          (ext:*autoload-verbose* nil))
+      (ext:resolve name)))
+  (when (ext:source name)
+    `(((,name)
+       (:location
+        (:file ,(namestring (ext:source-pathname name)))
+        (:position ,(or (ext:source-file-position name) 0) t))))))
