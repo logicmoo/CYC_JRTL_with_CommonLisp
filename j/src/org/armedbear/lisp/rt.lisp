@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.100 2003-08-14 17:37:13 piso Exp $
+;;; $Id: rt.lisp,v 1.101 2003-08-15 17:29:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,28 +72,36 @@
 					  (row-major-aref y i))))))
    (t (eql x y))))
 
-
-(defmacro deftest (name form &rest values)
+(defmacro deftest (name &rest body)
   (format t "Test ~s~%" `,name)
   (finish-output)
-  (let* ((aborted nil)
-        (r (handler-case (multiple-value-list
-                          (if *compile-tests*
-                              (funcall (compile nil `(lambda () ,form)))
-                              (eval `,form)))
-                         (error (c) (setf aborted t) (list c))))
-        (passed (and (not aborted) (equalp-with-case r `,values))))
-    (unless passed
-      (format t "  Expected value: ~s~%"
-              (if (= (length `,values) 1)
-                  (car `,values)
-                  `,values))
-      (format t "    Actual value: ~s~%"
-              (if (= (length r) 1)
-                  (car r)
-                  r))
-      (finish-output))
-    (if passed (incf *passed*) (incf *failed*))))
+  (let* ((p body)
+	 (properties
+	  (loop while (keywordp (first p))
+            unless (cadr p)
+            do (error "Poorly formed deftest: ~A~%"
+                      (list* 'deftest name body))
+            append (list (pop p) (pop p))))
+	 (form (pop p))
+	 (values p))
+    (let* ((aborted nil)
+           (r (handler-case (multiple-value-list
+                             (if *compile-tests*
+                                 (funcall (compile nil `(lambda () ,form)))
+                                 (eval `,form)))
+                            (error (c) (setf aborted t) (list c))))
+           (passed (and (not aborted) (equalp-with-case r `,values))))
+      (unless passed
+        (format t "  Expected value: ~s~%"
+                (if (= (length `,values) 1)
+                    (car `,values)
+                    `,values))
+        (format t "    Actual value: ~s~%"
+                (if (= (length r) 1)
+                    (car r)
+                    r))
+        (finish-output))
+      (if passed (incf *passed*) (incf *failed*)))))
 
 (unless (find-package :cl-test)
   (make-package :cl-test)
