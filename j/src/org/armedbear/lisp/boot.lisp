@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.43 2003-05-25 13:29:14 piso Exp $
+;;; $Id: boot.lisp,v 1.44 2003-05-27 19:35:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -112,7 +112,6 @@
                 "sort.lisp"
                 "arrays.lisp"
                 "defstruct.lisp"
-                "loop.lisp"
                 "compiler.lisp"))
   (cl::%load name))
 
@@ -172,16 +171,23 @@
 (finish-output)
 (let ((start (get-internal-real-time))
       elapsed)
+  (c::compile-package :compiler)
   (c::compile-package :cl)
   (setq elapsed (- (get-internal-real-time) start))
   (format t "; Expanded macros (~A seconds)~%"
           (/ (coerce elapsed 'float) internal-time-units-per-second))
   (finish-output))
 
+
 ;; Redefine DEFUN to compile the definition on the fly.
 (defmacro defun (name lambda-list &rest body)
   `(prog1
     (cl::%defun ',name ',lambda-list ',body)
     (compile ',name)))
+
+
+;; Load loop.lisp AFTER redefining DEFUN...
+(cl::%load "loop.lisp")
+
 
 (debug)
