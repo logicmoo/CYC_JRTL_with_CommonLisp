@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.90 2003-03-07 17:24:09 piso Exp $
+ * $Id: Primitives.java,v 1.91 2003-03-07 17:44:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,6 @@ public final class Primitives extends Module
     private static final int DO                         = 1;
     private static final int DO_                        = 2;
     private static final int FLET                       = 3;
-    private static final int IF                         = 4;
     private static final int LABELS                     = 5;
     private static final int LAMBDA                     = 6;
     private static final int LET                        = 7;
@@ -135,7 +134,6 @@ public final class Primitives extends Module
     {
         defineSpecialOperator("do", DO);
         defineSpecialOperator("do*", DO_);
-        defineSpecialOperator("if", IF);
         defineSpecialOperator("flet", FLET);
         defineSpecialOperator("labels", LABELS);
         defineSpecialOperator("lambda", LAMBDA);
@@ -241,21 +239,6 @@ public final class Primitives extends Module
                 return _do(args, env, false);
             case DO_:
                 return _do(args, env, true);
-            case IF:
-                switch (args.length()) {
-                    case 2: {
-                        if (eval(args.car(), env) != NIL)
-                            return eval(args.cadr(), env);
-                        return NIL;
-                    }
-                    case 3: {
-                        if (eval(args.car(), env) != NIL)
-                            return eval(args.cadr(), env);
-                        return eval(args.cdr().cadr(), env);
-                    }
-                    default:
-                        throw new WrongNumberOfArgumentsException("IF");
-                }
             case LAMBDA:                        // ### lambda
                 // Should be a macro.
                 return new Closure(args.car(), args.cdr(), env);
@@ -634,6 +617,28 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws LispError
         {
             return arg instanceof Cons ? NIL : T;
+        }
+    };
+
+    // ### if
+    private static final SpecialOperator IF = new SpecialOperator("if") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            switch (args.length()) {
+                case 2: {
+                    if (eval(args.car(), env) != NIL)
+                        return eval(args.cadr(), env);
+                    return NIL;
+                }
+                case 3: {
+                    if (eval(args.car(), env) != NIL)
+                        return eval(args.cadr(), env);
+                    return eval(args.cdr().cadr(), env);
+                }
+                default:
+                    throw new WrongNumberOfArgumentsException("IF");
+            }
         }
     };
 
@@ -2936,14 +2941,12 @@ public final class Primitives extends Module
         {
             if (args.length() < 1)
                 throw new WrongNumberOfArgumentsException(this);
-            Block block;
+            LispObject name;
             if (args.car() == NIL)
-                block = new Block(NIL, args.cdr());
-            else {
-                Symbol symbol = checkSymbol(args.car());
-                block = new Block(symbol, args.cdr());
-            }
-            LispObject body = block.getBody();
+                name = NIL;
+            else
+                name = checkSymbol(args.car());
+            LispObject body = args.cdr();
             LispObject result = NIL;
             int depth = stack.size();
             try {
@@ -2954,7 +2957,7 @@ public final class Primitives extends Module
                 return result;
             }
             catch (Return ret) {
-                if (ret.getName() == block.getName()) {
+                if (ret.getName() == name) {
                     stack.setSize(depth);
                     return ret.getResult();
                 }
