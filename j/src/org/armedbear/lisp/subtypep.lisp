@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.5 2003-09-14 01:38:42 piso Exp $
+;;; $Id: subtypep.lisp,v 1.6 2003-09-14 14:24:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@
              (EXTENDED-CHAR CHARACTER NIL)
              (FIXNUM INTEGER)
              (FLOAT REAL)
+             (HASH-TABLE)
              (INTEGER RATIONAL)
              (KEYWORD SYMBOL)
              (LIST SEQUENCE)
@@ -169,7 +170,11 @@
              (return-from subtypep (values nil t)))
             (t
              (return-from subtypep (values (simple-subtypep t1 t2) t)))))
-    (cond ((eq t2 'sequence)
+    (cond ((eq t2 'atom)
+           (cond ((member t1 '(cons list)) (values nil t))
+                 ((known-type-p t1) (values t t))
+                 (t (values nil nil))))
+          ((eq t2 'sequence)
            (values (simple-subtypep t2 t2) t))
           ((eq t2 'simple-string)
            (if (memq t1 '(simple-string simple-base-string))
