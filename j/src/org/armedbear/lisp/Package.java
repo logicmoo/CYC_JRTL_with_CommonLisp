@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.22 2003-06-22 16:33:49 piso Exp $
+ * $Id: Package.java,v 1.23 2003-06-22 18:35:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,16 @@ public final class Package extends LispObject
         Symbol symbol = new Symbol(symbolName, this);
         externalSymbols.put(symbolName, symbol);
         return symbol;
+    }
+
+    public synchronized void addInitialExports(String[] names)
+    {
+        for (int i = names.length; i-- > 0;) {
+            String symbolName = names[i];
+            Debug.assertTrue(internalSymbols.get(symbolName) == null);
+            if (externalSymbols.get(symbolName) == null)
+                externalSymbols.put(symbolName, new Symbol(symbolName, this));
+        }
     }
 
     public synchronized Symbol intern(String symbolName)
