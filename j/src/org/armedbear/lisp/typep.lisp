@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.3 2003-09-14 12:25:27 piso Exp $
+;;; $Id: typep.lisp,v 1.4 2003-09-14 17:57:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,6 +42,16 @@
   (let ((tp (car type))
         (i (cdr type)))
     (case tp
+      (AND
+       (dolist (type i)
+         (unless (typep object type)
+           (return-from typep nil)))
+       t)
+      (OR
+       (dolist (type i)
+         (when (typep object type)
+           (return-from typep t)))
+       nil)
       (SIMPLE-BIT-VECTOR
        (and (simple-bit-vector-p object)
             (or (endp i) (match-dimensions (array-dimensions object) i))))
