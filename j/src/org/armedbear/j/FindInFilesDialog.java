@@ -1,8 +1,8 @@
 /*
  * FindInFilesDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: FindInFilesDialog.java,v 1.2 2002-12-28 19:29:31 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: FindInFilesDialog.java,v 1.3 2003-07-23 04:58:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,6 @@ import gnu.regexp.RE;
 import gnu.regexp.REException;
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 
 public class FindInFilesDialog extends AbstractDialog implements TextListener
 {
@@ -55,13 +53,13 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
     private History replacementHistory;
     private History filesHistory;
 
-    private JCheckBox ignoreCaseCheckBox;
-    private JCheckBox wholeWordsOnlyCheckBox;
-    private JCheckBox regExpCheckBox;
-    private JCheckBox confirmChangesCheckBox;
-    private JCheckBox includeSubdirsCheckBox;
-    private JCheckBox searchFilesInMemoryCheckBox;
-    private JCheckBox listOccurrencesCheckBox;
+    private CheckBox ignoreCaseCheckBox;
+    private CheckBox wholeWordsOnlyCheckBox;
+    private CheckBox regExpCheckBox;
+    private CheckBox confirmChangesCheckBox;
+    private CheckBox includeSubdirsCheckBox;
+    private CheckBox searchFilesInMemoryCheckBox;
+    private CheckBox listOccurrencesCheckBox;
 
     public FindInFilesDialog(Editor editor, boolean replace)
     {
@@ -87,7 +85,7 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
         else
             patternControl.recallLast();
 
-        JLabel label = new JLabel("Pattern:");
+        Label label = new Label("Pattern:");
         label.setDisplayedMnemonic('P');
         addLabelAndTextField(label, patternControl);
         patternControl.addTextListener(this);
@@ -99,7 +97,7 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
             replacementHistory = new History(replacementKey);
             replacementControl.setHistory(replacementHistory);
             replacementControl.recallLast();
-            label = new JLabel("Replace with:");
+            label = new Label("Replace with:");
             label.setDisplayedMnemonic('E');
             addLabelAndTextField(label, replacementControl);
             addVerticalStrut();
@@ -109,35 +107,35 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
         filesHistory = new History(filesKey);
         filesControl.setHistory(filesHistory);
         filesControl.recallLast();
-        label = new JLabel("Files:");
+        label = new Label("Files:");
         label.setDisplayedMnemonic('F');
         addLabelAndTextField(label, filesControl);
 
         addVerticalStrut();
 
-        ignoreCaseCheckBox = new JCheckBox("Ignore case");
+        ignoreCaseCheckBox = new CheckBox("Ignore case");
         ignoreCaseCheckBox.setMnemonic('I');
         setIgnoreCaseDefault();
         addCheckBox(ignoreCaseCheckBox);
 
-        wholeWordsOnlyCheckBox = new JCheckBox("Whole words only",
+        wholeWordsOnlyCheckBox = new CheckBox("Whole words only",
             sessionProperties.getBooleanProperty(wholeWordsOnlyKey, false));
         wholeWordsOnlyCheckBox.setMnemonic('W');
         addCheckBox(wholeWordsOnlyCheckBox);
 
-        regExpCheckBox = new JCheckBox(
+        regExpCheckBox = new CheckBox(
             replace ? "Regular expressions" : "Regular expression",
             sessionProperties.getBooleanProperty(regExpKey, false));
         regExpCheckBox.setMnemonic('X');
         addCheckBox(regExpCheckBox);
 
         if (replace) {
-            confirmChangesCheckBox = new JCheckBox("Confirm changes", true);
+            confirmChangesCheckBox = new CheckBox("Confirm changes", true);
             confirmChangesCheckBox.setMnemonic('C');
             addCheckBox(confirmChangesCheckBox);
         }
 
-        includeSubdirsCheckBox = new JCheckBox("Include subdirectories",
+        includeSubdirsCheckBox = new CheckBox("Include subdirectories",
             sessionProperties.getBooleanProperty(includeSubdirsKey, false));
         includeSubdirsCheckBox.setMnemonic('S');
         addCheckBox(includeSubdirsCheckBox);
@@ -146,12 +144,12 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
         // Otherwise it's up to the user.
         if (!replace) {
             searchFilesInMemoryCheckBox =
-                new JCheckBox("Search files in memory",
+                new CheckBox("Search files in memory",
                     sessionProperties.getBooleanProperty(searchFilesInMemoryKey,
                         true));
             searchFilesInMemoryCheckBox.setMnemonic('M');
             addCheckBox(searchFilesInMemoryCheckBox);
-            listOccurrencesCheckBox = new JCheckBox("List occurrences",
+            listOccurrencesCheckBox = new CheckBox("List occurrences",
                 sessionProperties.getBooleanProperty(listOccurrencesKey, true));
             listOccurrencesCheckBox.setMnemonic('L');
             addCheckBox(listOccurrencesCheckBox);
