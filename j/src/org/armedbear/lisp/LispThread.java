@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.53 2004-08-16 20:36:23 piso Exp $
+ * $Id: LispThread.java,v 1.54 2004-08-18 02:17:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -323,14 +323,7 @@ public final class LispThread extends LispObject
         public StackFrame(LispObject functional, LispObject[] argv)
         {
             this.functional = functional;
-            this.argv = new LispObject[argv.length];
-            for (int i = 0; i < argv.length; i++) {
-                if (argv[i] == null) {
-                    Debug.trace("argv[" + i + "] is null");
-                    Debug.assertTrue(false);
-                }
-                this.argv[i] = argv[i];
-            }
+            this.argv = argv;
         }
 
         public LispObject getFunctional()
