@@ -2,7 +2,7 @@
  * SidebarTagList.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarTagList.java,v 1.1.1.1 2002-09-24 16:09:32 piso Exp $
+ * $Id: SidebarTagList.java,v 1.2 2002-10-09 13:05:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,8 +84,7 @@ public class SidebarTagList extends SidebarList implements Constants,
             return;
         tags = buf.getTags();
         if (tags != null) {
-            Object[] listData = tags.toArray();
-            setListData(listData);
+            setListData(tags.toArray());
             setBuffer(buf);
             updatePosition();
             return;
