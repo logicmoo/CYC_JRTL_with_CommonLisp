@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.57 2004-05-27 20:29:02 piso Exp $
+ * $Id: Package.java,v 1.58 2004-07-20 04:33:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -697,9 +697,9 @@ public final class Package extends LispObject
             sb.append("\")");
             return sb.toString();
         } else if (name != null) {
-            StringBuffer sb = new StringBuffer("#<The ");
+            StringBuffer sb = new StringBuffer("#<PACKAGE \"");
             sb.append(name);
-            sb.append(" package>");
+            sb.append("\">");
             return sb.toString();
         } else
             return unreadableString("PACKAGE");
