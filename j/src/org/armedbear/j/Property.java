@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Property.java,v 1.18 2003-05-21 14:08:38 piso Exp $
+ * $Id: Property.java,v 1.19 2003-05-21 17:13:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,6 +220,8 @@ public final class Property implements Comparable, Constants
         createProperty("wrap", false);
 
     // String properties with default values.
+    public static final Property ATTRIBUTION =
+        createProperty("attribution", "On %d, %n wrote:");
     public static final Property CLHS_ROOT =
         createProperty("clhsRoot", "/usr/share/doc/hyperspec");
     public static final Property DEFAULT_ENCODING =
@@ -240,8 +242,6 @@ public final class Property implements Comparable, Constants
         createProperty("textFieldFontName", "Monospaced");
 
     // String properties with no default values.
-    public static final Property ATTRIBUTION =
-        createProperty("attribution");
     public static final Property BACKUP_DIRECTORY =
         createProperty("backupDirectory");
     public static final Property BROWSER =
