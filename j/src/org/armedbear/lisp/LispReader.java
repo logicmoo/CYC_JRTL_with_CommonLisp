@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.27 2004-10-01 18:17:37 piso Exp $
+ * $Id: LispReader.java,v 1.28 2004-10-03 19:46:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,8 +57,7 @@ public final class LispReader extends Lisp
                     // Not reached.
                     return null;
                 }
-                char c = (char) n;
-                if (c == '\\') {
+                if (n == '\\') {
                     // Single escape.
                     n = stream._readChar();
                     if (n < 0) {
@@ -69,6 +68,25 @@ public final class LispReader extends Lisp
                     sb.append((char)n);
                     continue;
                 }
+                if (Utilities.isPlatformWindows) {
+                    if (n == '\r') {
+                        n = stream._readChar();
+                        if (n < 0) {
+                            signal(new EndOfFile(stream));
+                            // Not reached.
+                            return null;
+                        }
+                        if (n == '\n') {
+                            sb.append('\n');
+                        } else {
+                            // '\r' was not followed by '\n'.
+                            stream._unreadChar(n);
+                            sb.append('\r');
+                        }
+                        continue;
+                    }
+                }
+                char c = (char) n;
                 if (c == terminator)
                     break;
                 // Default.
