@@ -2,7 +2,7 @@
  * JavaTree.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: JavaTree.java,v 1.1.1.1 2002-09-24 16:08:31 piso Exp $
+ * $Id: JavaTree.java,v 1.2 2002-12-24 17:01:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,7 +128,9 @@ public final class JavaTree extends SidebarTree implements Constants,
                 refreshInternal(buffer, bufferTags);
             }
         };
-        new Thread(r).start();
+        Thread thread = new Thread(r, "JavaTree.refresh()");
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private void refreshInternal(Buffer buffer, List bufferTags)
