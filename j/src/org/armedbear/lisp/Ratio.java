@@ -1,8 +1,8 @@
 /*
  * Ratio.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Ratio.java,v 1.47 2004-10-13 00:22:19 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Ratio.java,v 1.48 2005-02-23 16:30:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,8 +104,8 @@ public final class Ratio extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof Ratio) {
-            return numerator.equals(((Ratio)obj).numerator) &&
-                denominator.equals(((Ratio)obj).denominator);
+            return (numerator.equals(((Ratio)obj).numerator) &&
+                    denominator.equals(((Ratio)obj).denominator));
         }
         return false;
     }
@@ -224,7 +224,7 @@ public final class Ratio extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        return signal(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -256,7 +256,7 @@ public final class Ratio extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        Fixnum.ZERO.subtract(c.getImaginaryPart()));
         }
-        return signal(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -277,7 +277,12 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return new LispFloat(floatValue() * ((LispFloat)obj).getValue());
         }
-        return signal(new TypeError(obj, "number"));
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(multiplyBy(c.getRealPart()),
+                                       multiplyBy(c.getImaginaryPart()));
+        }
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -300,7 +305,20 @@ public final class Ratio extends LispObject
                 return signal(new DivisionByZero());
             return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
         }
-        return signal(new TypeError(obj, "number"));
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            // numerator
+            LispObject realPart = this.multiplyBy(c.getRealPart());
+            LispObject imagPart =
+                Fixnum.ZERO.subtract(this).multiplyBy(c.getImaginaryPart());
+            // denominator
+            LispObject d =
+                c.getRealPart().multiplyBy(c.getRealPart());
+            d = d.add(c.getImaginaryPart().multiplyBy(c.getImaginaryPart()));
+            return Complex.getInstance(realPart.divideBy(d),
+                                       imagPart.divideBy(d));
+        }
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
@@ -312,7 +330,7 @@ public final class Ratio extends LispObject
             return isEqualTo(((LispFloat)obj).rational());
         if (obj.numberp())
             return false;
-        signal(new TypeError(obj, "number"));
+        signal(new TypeError(obj, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -426,7 +444,7 @@ public final class Ratio extends LispObject
             n = ((Ratio)obj).numerator();
             d = ((Ratio)obj).denominator();
 	  } else {
-            return signal(new TypeError(obj, "number"));
+            return signal(new TypeError(obj, Symbol.NUMBER));
 	  }
 	  // Invert and multiply.
 	  BigInteger num = numerator.multiply(d);
