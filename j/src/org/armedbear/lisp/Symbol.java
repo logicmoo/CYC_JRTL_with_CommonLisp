@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.161 2004-11-18 16:04:33 piso Exp $
+ * $Id: Symbol.java,v 1.162 2004-11-23 14:31:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,7 +203,8 @@ public class Symbol extends LispObject
         return symbol;
     }
 
-    private final String name;
+    private final AbstractString name;
+    private int hash = -1;
     private LispObject pkg;
     private LispObject value;
     private LispObject function;
@@ -211,15 +212,21 @@ public class Symbol extends LispObject
     private int flags;
 
     // Construct an uninterned symbol.
-    public Symbol(String name)
+    public Symbol(String s)
     {
-        this.name = name;
+        name = new SimpleString(s);
+        pkg = NIL;
+    }
+    
+    public Symbol(AbstractString string)
+    {
+        name = string;
         pkg = NIL;
     }
 
-    public Symbol(String name, Package pkg)
+    public Symbol(String s, Package pkg)
     {
-        this.name = name;
+        name = new SimpleString(s);
         this.pkg = pkg;
     }
 
@@ -237,17 +244,17 @@ public class Symbol extends LispObject
         return BuiltInClass.SYMBOL;
     }
 
-    public LispObject getDescription()
+    public LispObject getDescription() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("The symbol ");
-        sb.append(name);
+        sb.append(name.writeToString());
         return new SimpleString(sb);
     }
 
     public LispObject getParts() throws ConditionThrowable
     {
         LispObject parts = NIL;
-        parts = parts.push(new Cons("name", new SimpleString(name)));
+        parts = parts.push(new Cons("name", name));
         parts = parts.push(new Cons("package", pkg));
         parts = parts.push(new Cons("value", value));
         parts = parts.push(new Cons("function", function));
@@ -280,7 +287,7 @@ public class Symbol extends LispObject
 
     public final LispObject STRING()
     {
-        return new SimpleString(name);
+        return name;
     }
 
     public final LispObject getPackage()
@@ -334,22 +341,35 @@ public class Symbol extends LispObject
 
     public final String getName()
     {
-        return name;
+        try {
+            return name.getStringValue();
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+            return null;
+        }
     }
 
     public final String getQualifiedName()
     {
-        if (pkg == NIL)
-            return("#:".concat(name));
-        if (pkg == PACKAGE_KEYWORD)
-            return ":".concat(name);
-        StringBuffer sb = new StringBuffer(pkg.getName());
-        if (((Package)pkg).findExternalSymbol(name) != null)
-            sb.append(':');
-        else
-            sb.append("::");
-        sb.append(name);
-        return sb.toString();
+        try {
+            String s = name.getStringValue();
+            if (pkg == NIL)
+                return("#:".concat(s));
+            if (pkg == PACKAGE_KEYWORD)
+                return ":".concat(s);
+            StringBuffer sb = new StringBuffer(pkg.getName());
+            if (((Package)pkg).findExternalSymbol(s) != null)
+                sb.append(':');
+            else
+                sb.append("::");
+            sb.append(s);
+            return sb.toString();
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+            return null;
+        }
     }
 
     // Raw accessor.
@@ -419,11 +439,13 @@ public class Symbol extends LispObject
         return function;
     }
 
-    public final LispObject getSymbolSetfFunctionOrDie() throws ConditionThrowable
+    public final LispObject getSymbolSetfFunctionOrDie()
+        throws ConditionThrowable
     {
         LispObject obj = get(this, Symbol._SETF_FUNCTION);
         if (obj == null)
-            return signal(new LispError("The function (SETF " + name +
+            return signal(new LispError("The function (SETF " +
+                                        name.writeToString() +
                                         ") is undefined."));
         return obj;
     }
@@ -477,6 +499,7 @@ public class Symbol extends LispObject
 
     public String writeToString() throws ConditionThrowable
     {
+        String n = name.getStringValue();
         final LispThread thread = LispThread.currentThread();
         boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValue(thread);
@@ -495,7 +518,7 @@ public class Symbol extends LispObject
                 } else {
                     sb.append("#:");
                 }
-                sb.append(multipleEscape(name));
+                sb.append(multipleEscape(n));
                 return sb.toString();
             } else
                 printEscape = true;
@@ -503,37 +526,37 @@ public class Symbol extends LispObject
         if (!printEscape) {
             if (pkg == PACKAGE_KEYWORD) {
                 if (printCase == Keyword.DOWNCASE)
-                    return name.toLowerCase();
+                    return n.toLowerCase();
                 if (printCase == Keyword.CAPITALIZE)
-                    return capitalize(name, readtableCase);
-                return name;
+                    return capitalize(n, readtableCase);
+                return n;
             }
             // Printer escaping is disabled.
             if (readtableCase == Keyword.UPCASE) {
                 if (printCase == Keyword.DOWNCASE)
-                    return name.toLowerCase();
+                    return n.toLowerCase();
                 if (printCase == Keyword.CAPITALIZE)
-                    return capitalize(name, readtableCase);
-                return name;
+                    return capitalize(n, readtableCase);
+                return n;
             } else if (readtableCase == Keyword.DOWNCASE) {
                 // "When the readtable case is :DOWNCASE, uppercase characters
                 // are printed in their own case, and lowercase characters are
                 // printed in the case specified by *PRINT-CASE*." (22.1.3.3.2)
                 if (printCase == Keyword.DOWNCASE)
-                    return name;
+                    return n;
                 if (printCase == Keyword.UPCASE)
-                    return name.toUpperCase();
+                    return n.toUpperCase();
                 if (printCase == Keyword.CAPITALIZE)
-                    return capitalize(name, readtableCase);
-                return name;
+                    return capitalize(n, readtableCase);
+                return n;
             } else if (readtableCase == Keyword.PRESERVE) {
-                return name;
+                return n;
             } else // INVERT
-                return invert(name);
+                return invert(n);
         }
         // Printer escaping is enabled.
-        final boolean escape = needsEscape(name, readtableCase, thread);
-        String s = escape ? multipleEscape(name) : name;
+        final boolean escape = needsEscape(n, readtableCase, thread);
+        String s = escape ? multipleEscape(n) : n;
         if (!escape) {
             if (readtableCase == Keyword.PRESERVE)
                 ;
@@ -560,15 +583,15 @@ public class Symbol extends LispObject
             return s;
         if (currentPackage != null && currentPackage.uses(pkg)) {
             // Check for name conflict in current package.
-            if (currentPackage.findExternalSymbol(name) == null)
-                if (currentPackage.findInternalSymbol(name) == null)
-                    if (((Package)pkg).findExternalSymbol(name) != null)
+            if (currentPackage.findExternalSymbol(n) == null)
+                if (currentPackage.findInternalSymbol(n) == null)
+                    if (((Package)pkg).findExternalSymbol(n) != null)
                         return s;
         }
         // Has this symbol been imported into the current package?
-        if (currentPackage.findExternalSymbol(name) == this)
+        if (currentPackage.findExternalSymbol(n) == this)
             return s;
-        if (currentPackage.findInternalSymbol(name) == this)
+        if (currentPackage.findInternalSymbol(n) == this)
             return s;
         // Package prefix is necessary.
         String packageName = pkg.getName();
@@ -577,7 +600,7 @@ public class Symbol extends LispObject
         else if (printCase == Keyword.DOWNCASE)
             packageName = packageName.toLowerCase();
         StringBuffer sb = new StringBuffer(packageName);
-        if (((Package)pkg).findExternalSymbol(name) != null)
+        if (((Package)pkg).findExternalSymbol(n) != null)
             sb.append(':');
         else
             sb.append("::");
@@ -688,9 +711,14 @@ public class Symbol extends LispObject
         return sb.toString();
     }
 
-    public final int hashCode()
+    public final int sxhash() throws ConditionThrowable
     {
-        return name.hashCode();
+        int h = hash;
+        if (h < 0) {
+            h = name.sxhash();
+            hash = h;
+        }
+        return h;
     }
 
     public final boolean equals(Object obj)
@@ -782,12 +810,13 @@ public class Symbol extends LispObject
     }
 
     // ### symbol-name
-    public static final Primitive SYMBOL_NAME = new Primitive("symbol-name","symbol")
+    public static final Primitive SYMBOL_NAME =
+        new Primitive("symbol-name", "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return new SimpleString(((Symbol)arg).name);
+                return ((Symbol)arg).name;
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.SYMBOL));
@@ -796,7 +825,8 @@ public class Symbol extends LispObject
     };
 
     // ### symbol-package
-    public static final Primitive SYMBOL_PACKAGE = new Primitive("symbol-package","symbol")
+    public static final Primitive SYMBOL_PACKAGE =
+        new Primitive("symbol-package", "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -828,7 +858,8 @@ public class Symbol extends LispObject
     };
 
     // ### symbol-plist
-    public static final Primitive SYMBOL_PLIST = new Primitive("symbol-plist", "symbol")
+    public static final Primitive SYMBOL_PLIST =
+        new Primitive("symbol-plist", "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -856,16 +887,23 @@ public class Symbol extends LispObject
     };
 
     // ### make-symbol
-    public static final Primitive MAKE_SYMBOL = new Primitive("make-symbol", "name")
+    public static final Primitive MAKE_SYMBOL =
+        new Primitive("make-symbol", "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new Symbol(arg.getStringValue());
+            try {
+                return new Symbol((AbstractString)arg);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.STRING));
+            }
         }
     };
 
     // makunbound
-    public static final Primitive MAKUNBOUND = new Primitive("makunbound", "symbol")
+    public static final Primitive MAKUNBOUND =
+        new Primitive("makunbound", "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -874,7 +912,7 @@ public class Symbol extends LispObject
                 return arg;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, Symbol.SYMBOL));
             }
         }
     };
