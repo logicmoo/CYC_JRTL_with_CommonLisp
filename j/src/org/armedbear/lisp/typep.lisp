@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.12 2003-11-17 16:31:01 piso Exp $
+;;; $Id: typep.lisp,v 1.13 2003-11-17 18:35:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -75,6 +75,8 @@
        (and (consp object)
             (or (null (car i)) (eq (car i) '*) (typep (car object) (car i)))
             (or (null (cadr i)) (eq (cadr i) '*) (typep (cdr object) (cadr i)))))
+      (FLOAT
+       (and (floatp object) (in-interval-p object i)))
       (INTEGER
        (and (integerp object) (in-interval-p object i)))
       (RATIONAL
