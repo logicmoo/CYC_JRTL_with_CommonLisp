@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.178 2004-06-08 11:26:42 piso Exp $
+# $Id: Makefile.in,v 1.179 2004-06-08 23:28:07 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -36,6 +36,8 @@ CLASSFILES =	AbstractArray.class \
 		Block.class \
 		BroadcastStream.class \
 		BuiltInClass.class \
+		CapitalizeFirstStream.class \
+		CapitalizeStream.class \
 		CaseFrobStream.class \
 		CellError.class \
 		CharacterFunctions.class \
@@ -56,6 +58,7 @@ CLASSFILES =	AbstractArray.class \
 		DispatchMacroFunction.class \
 		DivisionByZero.class \
 		Do.class \
+		DowncaseStream.class \
 		EchoStream.class \
 		EndOfFile.class \
 		Environment.class \
@@ -159,6 +162,7 @@ CLASSFILES =	AbstractArray.class \
 		UnboundSlot.class \
 		UnboundVariable.class \
 		UndefinedFunction.class \
+		UpcaseStream.class \
 		Utilities.class \
 		Version.class \
 		Warning.class \
