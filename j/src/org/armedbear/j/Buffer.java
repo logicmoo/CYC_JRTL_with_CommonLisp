@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.23 2003-02-03 01:39:00 piso Exp $
+ * $Id: Buffer.java,v 1.24 2003-02-04 16:39:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,61 +338,35 @@ public class Buffer extends SystemBuffer
         final File file = getFile();
         if (fileType == FILETYPE_UNKNOWN)
             fileType = getFileType(file, cache);
+        mode = getDefaultMode();
+        formatter = mode.getFormatter(this);
         if (fileType == FILETYPE_ZIP) {
             supportsUndo = false;
             type = TYPE_ARCHIVE;
             readOnly = true;
-            mode = Editor.getModeList().getMode(ARCHIVE_MODE);
-            formatter = mode.getFormatter(this);
         } else if (fileType == FILETYPE_BINARY) {
-            setMode("Binary");
+            readOnly = true;
         } else if (fileType == FILETYPE_WORD) {
-            setMode("Word");
-        } else {
-            FileHistoryEntry entry = null;
-            if (file != null)
-                entry = FileHistory.getFileHistory().findEntry(file.netPath());
+            readOnly = true;
+        } else if (file != null) {
+            FileHistoryEntry entry =
+                FileHistory.getFileHistory().findEntry(file.netPath());
             if (entry != null) {
                 // Set encoding.
                 final String encoding = entry.getEncoding();
                 if (encoding != null && Utilities.isSupportedEncoding(encoding))
                     file.setEncoding(encoding);
                 // Set mode.
-                setMode(entry.getMode());
+                mode =
+                    Editor.getModeList().getModeFromModeName(entry.getMode());
+                if (mode == null)
+                    mode = Editor.getModeList().getMode(PLAIN_TEXT_MODE);
+                else if (mode.getId() == BINARY_MODE)
+                    readOnly = true;
+                formatter = mode.getFormatter(this);
                 // Properties from FileHistoryEntry override defaults set by
                 // mode.
                 properties.putAll(entry.getProperties());
-
-            } else if (fileType == FILETYPE_XML) {
-                setMode("XML");
-            } else if (fileType == FILETYPE_SHELLSCRIPT) {
-                setMode("Shell-script");
-            } else if (fileType == FILETYPE_PERL) {
-                setMode("Perl");
-            } else if (fileType == FILETYPE_PHP) {
-                setMode("PHP");
-            } else {
-                if (entryName != null)
-                    mode = getModeForFileName(entryName);
-                else if (file != null)
-                    mode = getModeForFileName(file.getName());
-                if (mode != null && mode.getId() == IMAGE_MODE) {
-                    if (fileType == FILETYPE_TEXT)
-                        mode = Editor.getModeList().getMode(PLAIN_TEXT_MODE);
-                    else
-                        mode = Editor.getModeList().getMode(BINARY_MODE);
-                }
-                if (mode == null) {
-                    if (file != null) {
-                        if (file.getProtocol() == File.PROTOCOL_HTTP ||
-                            file.getProtocol() == File.PROTOCOL_HTTPS) {
-                            mode = Editor.getModeList().getMode(HTML_MODE);
-                        }
-                    }
-                    if (mode == null)
-                        mode = Editor.getModeList().getMode(PLAIN_TEXT_MODE);
-                }
-                formatter = mode.getFormatter(this);
             }
         }
         if (file != null) {
@@ -401,6 +375,52 @@ public class Buffer extends SystemBuffer
                 readOnly = true;
         }
         initialized = true;
+    }
+
+    public Mode getDefaultMode()
+    {
+        final ModeList modeList = Editor.getModeList();
+        switch (fileType) {
+            case FILETYPE_XML:
+                return modeList.getMode(XML_MODE);
+            case FILETYPE_SHELLSCRIPT:
+                return modeList.getMode(SHELL_SCRIPT_MODE);
+            case FILETYPE_PERL:
+                return modeList.getMode(PERL_MODE);
+            case FILETYPE_PHP:
+                return modeList.getMode(PHP_MODE);
+            case FILETYPE_ZIP:
+                return modeList.getMode(ARCHIVE_MODE);
+            case FILETYPE_GZIP:
+            case FILETYPE_BINARY:
+                return modeList.getMode(BINARY_MODE);
+            case FILETYPE_JPEG:
+                return modeList.getMode(IMAGE_MODE);
+            case FILETYPE_WORD:
+                return modeList.getMode(WORD_MODE);
+            case FILETYPE_TEXT:
+            default: {
+                final File file = getFile();
+                Mode m = null;
+                if (entryName != null)
+                    m = getModeForFileName(entryName);
+                else if (file != null)
+                    m = getModeForFileName(file.getName());
+                if (m != null && m.getId() == IMAGE_MODE) {
+                    if (fileType == FILETYPE_TEXT)
+                        m = modeList.getMode(PLAIN_TEXT_MODE);
+                    else
+                        m = modeList.getMode(BINARY_MODE);
+                } else if (m == null) {
+                    if (file.getProtocol() == File.PROTOCOL_HTTP ||
+                        file.getProtocol() == File.PROTOCOL_HTTPS)
+                        m = modeList.getMode(HTML_MODE);
+                    else
+                        m = modeList.getMode(PLAIN_TEXT_MODE);
+                }
+                return m;
+            }
+        }
     }
 
     // Locking.
@@ -652,50 +672,6 @@ public class Buffer extends SystemBuffer
         this.fileType = fileType;
     }
 
-    public Mode getDefaultMode()
-    {
-        final File file = getFile();
-        if (file != null) {
-            final ModeList modeList = Editor.getModeList();
-            switch (fileType) {
-                case FILETYPE_XML:
-                    return modeList.getMode(XML_MODE);
-                case FILETYPE_SHELLSCRIPT:
-                    return modeList.getMode(SHELL_SCRIPT_MODE);
-                case FILETYPE_PERL:
-                    return modeList.getMode(PERL_MODE);
-                case FILETYPE_PHP:
-                    return modeList.getMode(PHP_MODE);
-                case FILETYPE_ZIP:
-                    return modeList.getMode(ARCHIVE_MODE);
-                case FILETYPE_GZIP:
-                case FILETYPE_BINARY:
-                    return modeList.getMode(BINARY_MODE);
-                case FILETYPE_JPEG:
-                    return modeList.getMode(IMAGE_MODE);
-                case FILETYPE_WORD:
-                    return modeList.getMode(WORD_MODE);
-                case FILETYPE_TEXT:
-                default:
-                    Mode mode = getModeForFileName(file.getName());
-                    if (mode != null && mode.getId() == IMAGE_MODE) {
-                        if (fileType == FILETYPE_TEXT)
-                            mode = modeList.getMode(PLAIN_TEXT_MODE);
-                        else
-                            mode = modeList.getMode(BINARY_MODE);
-                    } else if (mode == null) {
-                        if (file.getProtocol() == File.PROTOCOL_HTTP ||
-                            file.getProtocol() == File.PROTOCOL_HTTPS)
-                            mode = modeList.getMode(HTML_MODE);
-                        else
-                            mode = modeList.getMode(PLAIN_TEXT_MODE);
-                    }
-                    return mode;
-            }
-        }
-        return null;
-    }
-
     private static File cacheGZIP(File f)
     {
         try {
@@ -792,16 +768,6 @@ public class Buffer extends SystemBuffer
     public final void setMode(Mode mode)
     {
         this.mode = mode;
-        formatter = mode.getFormatter(this);
-    }
-
-    private void setMode(String modeName)
-    {
-        mode = Editor.getModeList().getModeFromModeName(modeName);
-        if (mode == null)
-            mode = Editor.getModeList().getMode(PLAIN_TEXT_MODE);
-        else if (mode.getId() == BINARY_MODE)
-            readOnly = true;
         formatter = mode.getFormatter(this);
     }
 
