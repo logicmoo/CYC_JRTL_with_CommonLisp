@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.8 2003-11-23 00:58:20 piso Exp $
+;;; $Id: clos.lisp,v 1.9 2003-11-25 06:41:04 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1084,16 +1084,18 @@
            (slow-method-lookup gf args classes)))))
 
 (defun slow-method-lookup (gf args classes)
-  (let* ((applicable-methods
-          (compute-applicable-methods-using-classes gf classes))
-         (emfun
-          (funcall
-           (if (eq (class-of gf) the-class-standard-gf)
-               #'std-compute-effective-method-function
-               #'compute-effective-method-function)
-           gf applicable-methods)))
-    (setf (gethash classes (classes-to-emf-table gf)) emfun)
-    (funcall emfun args)))
+  (let ((applicable-methods
+         (compute-applicable-methods-using-classes gf classes)))
+    (if applicable-methods
+        (let ((emfun
+               (funcall
+                (if (eq (class-of gf) the-class-standard-gf)
+                    #'std-compute-effective-method-function
+                  #'compute-effective-method-function)
+                gf applicable-methods)))
+          (setf (gethash classes (classes-to-emf-table gf)) emfun)
+          (funcall emfun args))
+      (error "no methods applicable for generic function ~S with arguments ~S of classes ~S" gf args classes))))
 
 ;;; compute-applicable-methods-using-classes
 
