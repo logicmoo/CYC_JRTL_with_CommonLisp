@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.281 2003-07-06 18:08:12 piso Exp $
+ * $Id: Primitives.java,v 1.282 2003-07-07 01:13:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2802,9 +2802,8 @@ public final class Primitives extends Module
     };
 
     // ### package-symbols
-    // Internal.
     private static final Primitive1 PACKAGE_SYMBOLS =
-        new Primitive1("package-symbols") {
+        new Primitive1("package-symbols", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws Condition
         {
             Package pkg = coerceToPackage(arg);
