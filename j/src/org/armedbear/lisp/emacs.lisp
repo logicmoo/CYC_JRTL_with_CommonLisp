@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.5 2005-03-05 04:22:06 piso Exp $
+;;; $Id: emacs.lisp,v 1.6 2005-03-05 20:52:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package #:j)
 
-(export '(java-mode-map))
+(export '(java-mode-map lisp-mode-map))
 
 (defpackage #:emacs
   (:use #:cl #:ext #:j))
@@ -39,6 +39,7 @@
 (defparameter *control-x-map* (make-keymap))
 (defparameter *help-map* (make-keymap))
 (defparameter *java-mode-map* (make-keymap))
+(defparameter *lisp-mode-map* (make-keymap))
 
 (define-key *global-map* "Escape" *esc-map*)
 (define-key *global-map* "Ctrl X" *control-x-map*)
@@ -376,15 +377,10 @@
     ("k"                        "describeKey")))
 
 ;; Java mode.
-;; km.mapKey('{', "electricOpenBrace");
 (define-key *java-mode-map* "{" "electricOpenBrace")
-;; km.mapKey('}', "electricCloseBrace");
 (define-key *java-mode-map* "}" "electricCloseBrace")
-;; km.mapKey(KeyEvent.VK_TAB, CTRL_MASK, "insertTab");
-;; km.mapKey(KeyEvent.VK_TAB, 0, "tab");
 (define-key *java-mode-map* "Tab" "tab")
-;; km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
-;; km.mapKey(';', "electricSemi");
+(define-key *java-mode-map* "Ctrl Tab" "insertTab")
 (define-key *java-mode-map* "';'" "electricSemi")
 ;;                km.mapKey(':', "electricColon");
 ;;                km.mapKey('*', "electricStar");
@@ -446,5 +442,38 @@
 
 (defun java-mode-map ()
   *java-mode-map*)
+
+;; km.mapKey(KeyEvent.VK_TAB, 0, "tab");
+(define-key *lisp-mode-map* "Tab" "tab")
+;; km.mapKey(KeyEvent.VK_TAB, CTRL_MASK, "insertTab");
+(define-key *lisp-mode-map* "Ctrl Tab" "insertTab")
+;; km.mapKey(KeyEvent.VK_F12, 0, "wrapComment");
+(define-key *lisp-mode-map* "F12" "wrapComment")
+;; km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
+;; km.mapKey(KeyEvent.VK_COMMA, ALT_MASK, "listMatchingTagsAtDot");
+;; km.mapKey(KeyEvent.VK_PERIOD, CTRL_MASK | ALT_MASK, "findTagAtDotOtherWindow");
+(define-key *lisp-mode-map* #\) "closeParen")
+;; km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
+(define-key *lisp-mode-map* "Alt F1" "hyperspec")
+;; km.mapKey(KeyEvent.VK_F, CTRL_MASK | ALT_MASK, "forwardSexp");
+(define-key *lisp-mode-map* "Ctrl Alt F" "forwardSexp")
+;; km.mapKey(KeyEvent.VK_B, CTRL_MASK | ALT_MASK, "backwardSexp");
+(define-key *lisp-mode-map* "Ctrl Alt B""backwardSexp")
+(define-key *lisp-mode-map* "Ctrl Alt Space" "markSexp")
+;; km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "downList");
+(define-key *lisp-mode-map* "Ctrl Alt D" "downList")
+;; km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "backwardUpList");
+(define-key *lisp-mode-map* "Ctrl Alt U" "backwardUpList")
+;; km.mapKey(KeyEvent.VK_X, CTRL_MASK | ALT_MASK, "evalDefunLisp");
+;; km.mapKey(KeyEvent.VK_C, CTRL_MASK | ALT_MASK, "compileDefunLisp");
+;; km.mapKey(KeyEvent.VK_R, CTRL_MASK | ALT_MASK, "evalRegionLisp");
+;; km.mapKey(KeyEvent.VK_M, CTRL_MASK, "lispFindMatchingChar");
+;; km.mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "lispSelectSyntax");
+;; km.mapKey(KeyEvent.VK_9, CTRL_MASK | SHIFT_MASK, "insertParentheses");
+;; km.mapKey(KeyEvent.VK_0, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
+
+(defun lisp-mode-map ()
+  (format t "lisp-mode-map called~%")
+  *lisp-mode-map*)
 
 (provide 'emacs)
