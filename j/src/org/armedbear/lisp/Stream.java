@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.43 2004-03-11 19:44:24 piso Exp $
+ * $Id: Stream.java,v 1.44 2004-03-11 20:04:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,16 +255,16 @@ public class Stream extends LispObject
         if (handler instanceof ReaderMacroFunction)
             return ((ReaderMacroFunction)handler).execute(this, c);
         switch (c) {
-            case '"':
-                return readString();
+//             case '"':
+//                 return LispReader.READ_STRING.execute(this, c);
             case '\'':
                 return readQuote();
             case '(':
                 return readList();
             case ')':
                 return readRightParen();
-            case ';':
-                return LispReader.READ_COMMENT.execute(this, c);
+//             case ';':
+//                 return LispReader.READ_COMMENT.execute(this, c);
             case ',':
                 return readComma();
             case '`':
@@ -280,36 +280,6 @@ public class Stream extends LispObject
             default:
                 return makeObject(readToken(c));
         }
-    }
-
-    private SimpleString readString() throws ConditionThrowable
-    {
-        StringBuffer sb = new StringBuffer();
-        while (true) {
-            int n = _readChar();
-            if (n < 0) {
-                signal(new EndOfFile(this));
-                // Not reached.
-                return null;
-            }
-            char c = (char) n;
-            if (c == '\\') {
-                // Single escape.
-                n = _readChar();
-                if (n < 0) {
-                    signal(new EndOfFile(this));
-                    // Not reached.
-                    return null;
-                }
-                sb.append((char)n);
-                continue;
-            }
-            if (c == '"')
-                break;
-            // Default.
-            sb.append(c);
-        }
-        return new SimpleString(sb);
     }
 
     private LispObject readPathname() throws ConditionThrowable
