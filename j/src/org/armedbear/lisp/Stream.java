@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.61 2004-03-24 02:48:57 piso Exp $
+ * $Id: Stream.java,v 1.62 2004-04-17 10:53:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -441,7 +441,7 @@ public class Stream extends LispObject
         String token = sb.toString();
         if (token.length() == 1)
             return LispCharacter.getInstance(token.charAt(0));
-        n = nameToChar(token);
+        n = LispCharacter.nameToChar(token);
         if (n >= 0)
             return LispCharacter.getInstance((char)n);
         return signal(new LispError("Unrecognized character name: \"" + token + '"'));
