@@ -2,7 +2,7 @@
  * TypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: TypeSpecifier.java,v 1.3 2003-08-14 01:57:03 piso Exp $
+ * $Id: TypeSpecifier.java,v 1.4 2003-09-11 16:05:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public abstract class TypeSpecifier extends Lisp
+public abstract class TypeSpecifier extends LispObject
 {
     public static TypeSpecifier getInstance(LispObject arg) throws LispError
     {
@@ -43,10 +43,6 @@ public abstract class TypeSpecifier extends Lisp
 
     public LispObject isSubtypeOf(TypeSpecifier ts) throws LispError
     {
-        LispObject[] values = new LispObject[2];
-        values[0] = NIL;
-        values[1] = NIL;
-        LispThread.currentThread().setValues(values);
-        return NIL;
+        return values(NIL, NIL);
     }
 }
