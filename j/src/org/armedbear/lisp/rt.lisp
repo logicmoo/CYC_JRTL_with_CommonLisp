@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.101 2003-08-15 17:29:14 piso Exp $
+;;; $Id: rt.lisp,v 1.102 2003-08-22 18:46:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -335,6 +335,7 @@
                               "revappend"
                               "reverse"
                               "rotatef"
+                              "round"
                               "row-major-aref"
                               "rplaca"
                               "rplacd"
