@@ -2,7 +2,7 @@
  * NewsGroupSummary.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummary.java,v 1.3 2002-11-11 14:15:20 piso Exp $
+ * $Id: NewsGroupSummary.java,v 1.4 2002-11-11 18:18:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,7 +156,8 @@ public final class NewsGroupSummary extends Mailbox
             editor.setDefaultCursor();
             if (errorText != null)
                 MessageDialog.showMessageDialog(errorText, "Error");
-            kill();
+            if (Editor.getBufferList().contains(NewsGroupSummary.this))
+                kill();
         }
     };
 
@@ -180,10 +181,22 @@ public final class NewsGroupSummary extends Mailbox
     private void addEntriesToBuffer()
     {
         if (entries != null) {
-            int limit = entries.size();
-            for (int i = 0; i < limit; i++)
-                appendLine((NewsGroupSummaryEntry)entries.get(i));
-            renumber();
+            try {
+                lockWrite();
+            }
+            catch (InterruptedException e) {
+                Log.error(e);
+                return;
+            }
+            try {
+                int limit = entries.size();
+                for (int i = 0; i < limit; i++)
+                    appendLine((NewsGroupSummaryEntry)entries.get(i));
+                renumber();
+            }
+            finally {
+                unlockWrite();
+            }
         }
     }
 
