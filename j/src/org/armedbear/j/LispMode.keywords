@@ -370,6 +370,7 @@ open-stream-p
 or
 otherwise
 output-stream-p
+package-error-package
 package-name
 package-nicknames
 package-shadowing-symbols
