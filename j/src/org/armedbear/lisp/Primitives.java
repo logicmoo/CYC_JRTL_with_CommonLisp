@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.7 2003-01-30 22:23:54 piso Exp $
+ * $Id: Primitives.java,v 1.8 2003-01-31 00:56:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1826,6 +1826,7 @@ public final class Primitives extends Module
         return new Fixnum(used);
     }
 
+    // ### funcall
     private static final Primitive FUNCALL = new Primitive("funcall") {
         public LispObject execute(LispObject[] args) throws LispException
         {
@@ -1844,6 +1845,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### apply
     private static final Primitive APPLY = new Primitive("apply") {
         public LispObject execute(LispObject[] args) throws LispException
         {
@@ -2564,7 +2566,10 @@ public final class Primitives extends Module
         {
             LispObject arg = args.car();
             if (arg instanceof Symbol) {
-                LispObject f = arg.getSymbolFunction();
+                LispObject f = env.lookupFunctional(arg);
+                if (f != null)
+                    return f;
+                f = arg.getSymbolFunction();
                 if (f instanceof Function)
                     return f;
                 throw new UndefinedFunctionException(arg);
