@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.21 2003-02-02 17:53:27 piso Exp $
+ * $Id: Buffer.java,v 1.22 2003-02-03 00:37:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,22 +262,23 @@ public class Buffer extends SystemBuffer
     protected static Buffer createBuffer(File file, File cache, String listing)
     {
         int fileType = getFileType(file, cache);
-        Buffer buffer = null;
         if (fileType == FILETYPE_JPEG ||
             Editor.getModeList().modeAccepts(IMAGE_MODE, file.getName())) {
-            buffer = ImageBuffer.createImageBuffer(file, cache, listing);
-            if (buffer != null)
+            Buffer buffer =
+                ImageBuffer.createImageBuffer(file, cache, listing);
+            if (buffer != null) {
                 buffer.setFileType(fileType);
+                return buffer;
+            }
         }
-        if (buffer == null) {
-            buffer = new Buffer(file);
-            Debug.assertTrue(Editor.getBufferList().contains(buffer));
-            buffer.setFileType(fileType);
-            buffer.setCache(cache);
-            buffer.setListing(listing);
-            if (file.isLocal() && !file.isFile())
-                buffer.setNewFile(true);
-        }
+        // Normal case.
+        Buffer buffer = new Buffer(file);
+        Debug.assertTrue(Editor.getBufferList().contains(buffer));
+        buffer.setFileType(fileType);
+        buffer.setCache(cache);
+        buffer.setListing(listing);
+        if (file.isLocal() && !file.isFile())
+            buffer.setNewFile(true);
         return buffer;
     }
 
