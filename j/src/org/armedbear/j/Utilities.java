@@ -1,8 +1,8 @@
 /*
  * Utilities.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.20 2003-04-10 18:53:40 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Utilities.java,v 1.21 2003-04-10 23:30:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1295,20 +1295,6 @@ public final class Utilities implements Constants
                 sb.append(' ');
             return sb.toString();
         }
-    }
-
-    // Converts "this is a (test)" into "this\ is\ a\ \(test\)".
-    public static final String escapeSpacesAndParens(String s)
-    {
-        final int length = s.length();
-        FastStringBuffer sb = new FastStringBuffer(length * 2);
-        for (int i = 0; i < length; i++) {
-            char c = s.charAt(i);
-            if (" ()".indexOf(c) >= 0)
-                sb.append('\\');
-            sb.append(c);
-        }
-        return sb.toString();
     }
 
     public static final String getCharsetFromContentType(String contentType)
