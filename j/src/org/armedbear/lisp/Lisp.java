@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.236 2004-05-06 18:47:57 piso Exp $
+ * $Id: Lisp.java,v 1.237 2004-05-11 15:13:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1555,9 +1555,29 @@ public abstract class Lisp
 
     // ### *features*
     public static final Symbol _FEATURES_ =
-        exportSpecial("*FEATURES*", PACKAGE_CL, list3(Keyword.ARMEDBEAR,
-                                                      Keyword.COMMON_LISP,
-                                                      Keyword.ANSI_CL));
+        PACKAGE_CL.addExternalSymbol("*FEATURES*");
+    static {
+        _FEATURES_.setSpecial(true);
+        String osName = System.getProperty("os.name");
+        if (osName.startsWith("Linux")) {
+            _FEATURES_.setSymbolValue(list5(Keyword.ARMEDBEAR,
+                                            Keyword.COMMON_LISP,
+                                            Keyword.ANSI_CL,
+                                            Keyword.UNIX,
+                                            Keyword.LINUX));
+        } else if (osName.startsWith("Mac OS X")) {
+            _FEATURES_.setSymbolValue(list5(Keyword.ARMEDBEAR,
+                                            Keyword.COMMON_LISP,
+                                            Keyword.ANSI_CL,
+                                            Keyword.UNIX,
+                                            Keyword.DARWIN));
+        } else if (osName.startsWith("Windows")) {
+            _FEATURES_.setSymbolValue(list4(Keyword.ARMEDBEAR,
+                                            Keyword.COMMON_LISP,
+                                            Keyword.ANSI_CL,
+                                            Keyword.WINDOWS));
+        }
+    }
 
     // ### *modules*
     public static final Symbol _MODULES_ =
