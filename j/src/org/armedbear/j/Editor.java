@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.101 2003-07-25 15:57:00 piso Exp $
+ * $Id: Editor.java,v 1.102 2003-07-26 00:38:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1267,7 +1267,7 @@ public final class Editor extends JPanel implements Constants,
 
     private boolean prevChar()
     {
-        if  (getDotOffset() > 0) {
+        if (getDotOffset() > 0) {
             dot.skip(-1);
             return true;
         }
@@ -6462,11 +6462,9 @@ public final class Editor extends JPanel implements Constants,
     {
         if (!checkReadOnly())
             return;
-
-        boolean parensRequireSpaces = buffer.getBooleanProperty(Property.PARENS_REQUIRE_SPACES);
-
+        boolean parensRequireSpaces =
+            buffer.getBooleanProperty(Property.PARENS_REQUIRE_SPACES);
         CompoundEdit compoundEdit = beginCompoundEdit();
-
         if (mark != null) {
             Position begin, end;
             if (mark.isBefore(dot)) {
@@ -6495,7 +6493,6 @@ public final class Editor extends JPanel implements Constants,
             dot.skip(parensRequireSpaces ? -2 : -1);
             buffer.modified();
         }
-
         moveCaretToDotCol();
         endCompoundEdit(compoundEdit);
     }
