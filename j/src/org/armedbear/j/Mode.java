@@ -2,7 +2,7 @@
  * Mode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Mode.java,v 1.4 2003-03-31 16:35:40 piso Exp $
+ * $Id: Mode.java,v 1.5 2003-06-12 15:57:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,6 +149,8 @@ public interface Mode
      */
     public void populateMenu(Editor editor, Menu menu);
 
+    public void populateModeMenu(Editor editor, Menu menu);
+
     /**
      * Returns a context menu populated with entries specific to the given
      * mode and the current location in the specified <code>Editor</code>.
@@ -245,7 +247,7 @@ public interface Mode
      *          indentation of pasted text.
      */
     public boolean canIndentPaste();
-    
+
     public boolean acceptsLinePaste(Editor editor);
 
     /**

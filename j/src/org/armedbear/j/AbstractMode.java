@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.8 2003-06-12 14:29:42 piso Exp $
+ * $Id: AbstractMode.java,v 1.9 2003-06-12 15:58:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,40 +197,17 @@ public abstract class AbstractMode implements Constants, Mode
 
     public MenuBar createMenuBar(Frame frame)
     {
-        return createDefaultMenuBar(frame);
-    }
-
-    private static MenuBar createDefaultMenuBar(Frame frame)
-    {
         MenuBar menuBar = new MenuBar("Default");
         menuBar.add(new Menu("File", 'F'));
         menuBar.add(new Menu("Edit", 'E'));
         menuBar.add(new Menu("View", 'V'));
         menuBar.add(new Menu("Search", 'S'));
         menuBar.add(new Menu("Go", 'G'));
+        menuBar.add(new Menu("Mode", 'M'));
         menuBar.add(new Menu("Help", 'H'));
         return menuBar;
     }
 
-    /**
-     * {@inheritDoc}
-     * In order for this to populate a menu, the text of the menu must be
-     * one of the following:<br>
-     * <ul>
-     * <li>File
-     * <li>Edit
-     * <li>View
-     * <li>Search
-     * <li>Go
-     * <li>Help
-     * </ul>
-     * This does not take into account whether or not <code>menu<code>
-     * currently has items on it, so repeated calls will result in duplicate
-     * menu items.
-     *
-     * @param editor    {@inheritDoc}
-     * @param menu      {@inheritDoc}
-     */
     public void populateMenu(Editor editor, Menu menu)
     {
         final String text = menu.getText();
@@ -244,6 +221,8 @@ public abstract class AbstractMode implements Constants, Mode
             populateSearchMenu(editor, menu);
         else if (text == "Go")
             populateGoMenu(editor, menu);
+        else if (text == "Mode")
+            populateModeMenu(editor, menu);
         else if (text == "Help")
             populateHelpMenu(editor, menu);
     }
@@ -363,6 +342,11 @@ public abstract class AbstractMode implements Constants, Mode
         menu.addSeparator();
         menu.add(editor, "Push Position", 'U', "pushPosition");
         menu.add(editor, "Pop Position", 'O', "popPosition");
+    }
+
+    public void populateModeMenu(Editor editor, Menu menu)
+    {
+        menu.add(new JMenuItem("This menu isn't here yet!")).setEnabled(false);
     }
 
     private static void populateHelpMenu(Editor editor, Menu menu)
