@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Java.java,v 1.47 2005-01-22 11:54:15 piso Exp $
+ * $Id: Java.java,v 1.48 2005-01-24 14:37:14 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -356,7 +356,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass));
+		  signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t))); 
                 }
                 signal(new LispError(getMessage(t)));
             }
@@ -392,7 +392,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass));
+                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
                 }
                 signal(new LispError(getMessage(t)));
             }
@@ -457,7 +457,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass));
+                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
                 }
                 signal(new LispError(getMessage(t)));
             }
@@ -486,7 +486,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass));
+                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
                 }
                 signal(new LispError(getMessage(t)));
             }
@@ -537,7 +537,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Class tClass = t.getClass();
                 if (registeredExceptions.containsKey(tClass)) {
-                    signal((Symbol)registeredExceptions.get(tClass));
+                    signal((Symbol)registeredExceptions.get(tClass), new SimpleString(getMessage(t)));
                 }
                 signal(new LispError(getMessage(t)));
             }
