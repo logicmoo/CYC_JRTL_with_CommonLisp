@@ -2,7 +2,7 @@
  * NewsGroupSummary.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummary.java,v 1.5 2002-11-15 20:26:44 piso Exp $
+ * $Id: NewsGroupSummary.java,v 1.6 2002-12-05 16:54:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,18 @@
 
 package org.armedbear.j.mail;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
+import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.FastStringReader;
+import org.armedbear.j.File;
 import org.armedbear.j.InputDialog;
 import org.armedbear.j.Line;
 import org.armedbear.j.Log;
@@ -40,6 +47,7 @@ public final class NewsGroupSummary extends Mailbox
 {
     private final NntpSession session;
     private final String groupName;
+    private final HashMap map = new HashMap();
 
     private ProgressNotifier progressNotifier;
     private String errorText;
@@ -174,7 +182,49 @@ public final class NewsGroupSummary extends Mailbox
 
     public String getArticle(int articleNumber, ProgressNotifier progressNotifier)
     {
-        return session.getArticle(articleNumber, progressNotifier);
+        String key = String.valueOf(articleNumber);
+        String filename = (String) map.get(key);
+        if (filename != null) {
+            File file = File.getInstance(filename);
+            if (file != null) {
+                try {
+                    MailReader reader = new MailReader(file.getInputStream());
+                    long length = file.length();
+                    FastStringBuffer sb = new FastStringBuffer((int)length);
+                    String s;
+                    while ((s = reader.readLine()) != null) {
+                        sb.append(s);
+                        sb.append('\n');
+                    }
+                    return sb.toString();
+                }
+                catch (IOException e) {
+                    Log.error(e);
+                }
+            }
+        }
+        String text = session.getArticle(articleNumber, progressNotifier);
+        if (text != null) {
+            File file = Utilities.getTempFile();
+            try {
+                FastStringReader reader = new FastStringReader(text);
+                BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(file.getOutputStream(),
+                        "ISO-8859-1"));
+                String s;
+                while ((s = reader.readLine()) != null) {
+                    writer.write(s);
+                    writer.write('\n');
+                }
+                writer.flush();
+                writer.close();
+            }
+            catch (IOException e) {
+                Log.error(e);
+            }
+            map.put(key, file.canonicalPath());
+        }
+        return text;
     }
 
     private void addEntriesToBuffer()
