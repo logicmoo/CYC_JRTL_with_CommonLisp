@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.34 2004-04-12 23:02:33 piso Exp $
+ * $Id: LispAPI.java,v 1.35 2004-04-22 15:15:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,7 +229,7 @@ public final class LispAPI extends Lisp
                 return new JavaObject(new Position(checkMarker(arg)));
             }
             catch (Exception e) {
-                throw new ConditionThrowable(new TypeError(arg, "marker"));
+                return signal(new TypeError(arg, "marker"));
             }
         }
     };
@@ -433,13 +433,13 @@ public final class LispAPI extends Lisp
                 if (n > 0) {
                     while (n-- > 0) {
                         if (!pos.next())
-                            throw new ConditionThrowable(new LispError("reached end of buffer"));
+                            return signal(new LispError("reached end of buffer"));
                     }
                 } else {
                     Debug.assertTrue(n < 0);
                     while (n++ < 0) {
                         if (!pos.prev())
-                            throw new ConditionThrowable(new LispError("reached beginning of buffer"));
+                            return signal(new LispError("reached beginning of buffer"));
                     }
                 }
                 editor.moveCaretToDotCol();
@@ -587,7 +587,7 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 4)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Symbol symbol = checkSymbol(args[0]);
             JVar jvar = JVar.getJVar(symbol);
             Property property = jvar.getProperty();
@@ -718,7 +718,7 @@ public final class LispAPI extends Lisp
             String modeName = third.getStringValue();
             Mode mode = Editor.getModeList().getModeFromModeName(modeName);
             if (mode == null)
-                throw new ConditionThrowable(new LispError("unknown mode \"".concat(modeName).concat("\"")));
+                return signal(new LispError("Unknown mode \"".concat(modeName).concat("\"")));
             return mode.getKeyMap().mapKey(keyText, command) ? T : NIL;
         }
     };
@@ -733,7 +733,7 @@ public final class LispAPI extends Lisp
             String modeName = second.getStringValue();
             Mode mode = Editor.getModeList().getModeFromModeName(modeName);
             if (mode == null)
-                throw new ConditionThrowable(new LispError("unknown mode \"".concat(modeName).concat("\"")));
+                return signal(new LispError("Unknown mode \"".concat(modeName).concat("\"")));
             return mode.getKeyMap().unmapKey(keyText) ? T : NIL;
         }
     };
@@ -774,7 +774,7 @@ public final class LispAPI extends Lisp
                     } else if (obj instanceof AbstractString) {
                         editor.insertString(obj.getStringValue());
                     } else
-                        throw new ConditionThrowable(new TypeError(obj, "character or string"));
+                        return signal(new TypeError(obj, "character or string"));
                 }
                 return NIL;
             }
@@ -844,7 +844,7 @@ public final class LispAPI extends Lisp
                 return NIL;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "compound edit"));
+                return signal(new TypeError(arg, "compound edit"));
             }
         }
     };
@@ -934,7 +934,7 @@ public final class LispAPI extends Lisp
                 SwingUtilities.invokeLater(r);
                 return NIL;
             }
-            throw new ConditionThrowable(new UndefinedFunction(arg));
+            return signal(new UndefinedFunction(arg));
         }
     };
 
