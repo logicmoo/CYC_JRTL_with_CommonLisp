@@ -433,6 +433,7 @@ signal
 simple-bit-vector-p
 simple-string-p
 sixth
+slot-exists-p
 slot-value
 some
 sort
