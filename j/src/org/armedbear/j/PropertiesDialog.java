@@ -2,7 +2,7 @@
  * PropertiesDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: PropertiesDialog.java,v 1.4 2003-07-05 18:01:32 piso Exp $
+ * $Id: PropertiesDialog.java,v 1.5 2003-07-24 16:25:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
@@ -52,9 +50,9 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
     private JTextField tabWidthTextField;
     private JTextField indentSizeTextField;
     private JTextField wrapColumnTextField;
-    private JCheckBox useTabsCheckBox;
-    private JCheckBox indentBeforeBraceCheckBox;
-    private JCheckBox indentAfterBraceCheckBox;
+    private CheckBox useTabsCheckBox;
+    private CheckBox indentBeforeBraceCheckBox;
+    private CheckBox indentAfterBraceCheckBox;
     private JComboBox lineSeparatorComboBox;
 
     public PropertiesDialog()
@@ -169,7 +167,7 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
             JPanel flow = new JPanel();
             flow.setLayout(new BoxLayout(flow, BoxLayout.X_AXIS));
             flow.setAlignmentX(LEFT_ALIGNMENT);
-            JLabel label = new JLabel("Mode:");
+            Label label = new Label("Mode:");
             flow.add(label);
             label.setDisplayedMnemonic('M');
 
@@ -186,7 +184,7 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
                 flow = new JPanel();
                 flow.setLayout(new BoxLayout(flow, BoxLayout.X_AXIS));
                 flow.setAlignmentX(LEFT_ALIGNMENT);
-                label = new JLabel("Tab width:");
+                label = new Label("Tab width:");
                 label.setDisplayedMnemonic('T');
                 flow.add(label);
                 flow.add(Box.createHorizontalStrut(5));
@@ -202,7 +200,7 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
                 if (!buffer.isReadOnly()) {
                     flow.add(Box.createHorizontalStrut(5));
 
-                    label = new JLabel("Indent size:");
+                    label = new Label("Indent size:");
                     label.setDisplayedMnemonic('I');
                     flow.add(label);
                     flow.add(Box.createHorizontalStrut(5));
@@ -217,7 +215,7 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
 
                     flow.add(Box.createHorizontalStrut(5));
 
-                    label = new JLabel("Wrap column:");
+                    label = new Label("Wrap column:");
                     label.setDisplayedMnemonic('W');
                     flow.add(label);
                     flow.add(Box.createHorizontalStrut(5));
@@ -235,7 +233,7 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
                 mainPanel.add(flow);
 
                 if (!buffer.isReadOnly()) {
-                    useTabsCheckBox = new JCheckBox("Use tabs", buffer.getUseTabs());
+                    useTabsCheckBox = new CheckBox("Use tabs", buffer.getUseTabs());
                     useTabsCheckBox.setMnemonic('U');
                     addVerticalStrut();
                     addCheckBox(useTabsCheckBox);
@@ -248,13 +246,15 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
                         case CPP_MODE:
                         case PERL_MODE:
                         case TCL_MODE:
-                            indentBeforeBraceCheckBox = new JCheckBox("Indent before '{'",
-                                buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE));
+                            indentBeforeBraceCheckBox =
+                                new CheckBox("Indent before '{'",
+                                             buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE));
                             indentBeforeBraceCheckBox.setMnemonic('b');
                             addVerticalStrut();
                             addCheckBox(indentBeforeBraceCheckBox);
-                            indentAfterBraceCheckBox = new JCheckBox("Indent after '{'",
-                                buffer.getBooleanProperty(Property.INDENT_AFTER_BRACE));
+                            indentAfterBraceCheckBox =
+                                new CheckBox("Indent after '{'",
+                                             buffer.getBooleanProperty(Property.INDENT_AFTER_BRACE));
                             indentAfterBraceCheckBox.setMnemonic('a');
                             addVerticalStrut();
                             addCheckBox(indentAfterBraceCheckBox);
@@ -277,7 +277,7 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
                     flow = new JPanel();
                     flow.setLayout(new BoxLayout(flow, BoxLayout.X_AXIS));
                     flow.setAlignmentX(LEFT_ALIGNMENT);
-                    label = new JLabel("Line separator:");
+                    label = new Label("Line separator:");
                     flow.add(label);
                     label.setDisplayedMnemonic('L');
 
