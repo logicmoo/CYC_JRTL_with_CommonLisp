@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.11 2004-05-31 20:12:27 piso Exp $
+;;; $Id: compile-system.lisp,v 1.12 2004-06-03 21:39:43 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -184,6 +184,7 @@
                             "with-package-iterator.lisp"
                             "with-slots.lisp"
                             "with-standard-io-syntax.lisp"
+                            "with-thread-lock.lisp"
                             "write-sequence.lisp"
                             "write-string.lisp"
                             "write-to-string.lisp"
