@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.7 2003-03-06 02:10:44 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.8 2003-03-07 03:09:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,19 +338,9 @@ public class CharacterInputStream extends LispStream
             String token = sb.toString();
             if (token.length() == 1)
                 return new LispCharacter(token.charAt(0));
-            String lower = token.toLowerCase();
-            if (lower.equals("tab"))
-                return new LispCharacter('\t');
-            if (lower.equals("linefeed"))
-                return new LispCharacter('\n');
-            if (lower.equals("newline"))
-                return new LispCharacter('\n');
-            if (lower.equals("page"))
-                return new LispCharacter('\f');
-            if (lower.equals("return"))
-                return new LispCharacter('\r');
-            if (lower.equals("space"))
-                return new LispCharacter(' ');
+            int n = nameToChar(token);
+            if (n >= 0)
+                return new LispCharacter((char)n);
             throw new LispError("unrecognized character name: " + token);
         }
         catch (IOException e) {
