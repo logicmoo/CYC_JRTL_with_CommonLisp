@@ -400,6 +400,7 @@ rename-package
 replace
 require
 rest
+restart-bind
 restart-case
 return
 return-from
