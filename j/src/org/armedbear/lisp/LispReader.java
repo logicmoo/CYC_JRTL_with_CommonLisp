@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispReader.java,v 1.1 2003-01-17 19:43:20 piso Exp $
+ * $Id: LispReader.java,v 1.2 2003-01-29 17:32:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,15 +22,11 @@
 package org.armedbear.lisp;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 // Not to be confused with a real Lisp reader... ;)
 public final class LispReader extends Lisp
@@ -80,8 +76,6 @@ public final class LispReader extends Lisp
         }
     }
 
-    private String ldArgs;
-
     // Throws EndOfFileException if the file ends in the middle of an object
     // representation, otherwise returns EOF at end of file.
     public LispObject readObject(boolean recursive) throws LispException
@@ -107,108 +101,11 @@ public final class LispReader extends Lisp
             throw new LispException("unmatched ')'");
         if (token.equals("\""))
             return readString();
-        if (!recursive) {
-
-            // FIXME A better way to do this is to return the keyword to the
-            // top level and process it there (calling READ again if necessary
-            // to get the arguments for the command).
-
-            // Check for top-level command.
-            if (token.length() > 1 && token.charAt(0) == ':') {
-                String command = token.substring(1).toLowerCase();
-                if (command.equals("ld")) {
-                    String s = readLine().trim();
-                    if (s.length() == 0) {
-                        if (ldArgs != null)
-                            s = ldArgs;
-                        else
-                            throw new LispException("ld: no previous file");
-                    }
-                    if (s.length() > 0) {
-                        ldArgs = s;
-                        LispObject result = NIL;
-                        List args = tokenize(s);
-                        for (Iterator it = args.iterator(); it.hasNext();) {
-                            String filename = (String) it.next();
-                            result = Load.load(filename);
-                            if (result == NIL)
-                                break;
-                        }
-                        return result;
-                    }
-                } else if (command.length() >= 2 && "exit".startsWith(command)) {
-                    exit();
-                    return T;
-                } else if (command.equals("pwd")) {
-                    return _DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue();
-                } else if (command.equals("cd")) {
-                    String s = readLine().trim();
-                    if (s.length() == 0)
-                        s = System.getProperty("user.home");
-                    String oldDir = LispString.getValue(
-                        _DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue());
-                    File file;
-                    if (s.startsWith(File.separator))
-                        file = new File(s);
-                    else if ((System.getProperty("os.name").indexOf("Windows") >= 0) &&
-                        s.length() > 2 && s.charAt(1) == ':')
-                        file = new File(s);
-                    else
-                        file = new File(oldDir, s);
-                    if (file.isDirectory()) {
-                        try {
-                            _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(
-                                new LispString(file.getCanonicalPath()));
-                        }
-                        catch (IOException e) {
-                            throw new LispException(e.getMessage());
-                        }
-                    }
-                    return _DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue();
-                }
-            }
-        }
         return makeObject(token);
     }
 
-    private static List tokenize(String s)
-    {
-        ArrayList list = new ArrayList();
-        StringBuffer sb = new StringBuffer();
-        boolean inQuote = false;
-        final int limit = s.length();
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            switch (c) {
-                case ' ':
-                    if (inQuote)
-                        sb.append(c);
-                    else if (sb.length() > 0) {
-                        list.add(sb.toString());
-                        sb.setLength(0);
-                    }
-                    break;
-                case '"':
-                    if (inQuote) {
-                        if (sb.length() > 0) {
-                            list.add(sb.toString());
-                            sb.setLength(0);
-                        }
-                        inQuote = false;
-                    }
-                    break;
-                default:
-                    sb.append(c);
-                    break;
-            }
-        }
-        if (sb.length() > 0)
-            list.add(sb.toString());
-        return list;
-    }
-
     // Never returns null.
-    private String readLine() throws LispException
+    public String readLine() throws LispException
     {
         StringBuffer sb = new StringBuffer();
         while (true) {
