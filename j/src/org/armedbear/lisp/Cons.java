@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.44 2004-06-04 17:47:59 piso Exp $
+ * $Id: Cons.java,v 1.45 2004-08-21 18:09:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,14 +106,38 @@ public final class Cons extends LispObject
         return cdr;
     }
 
-    public final void setCar(LispObject car)
+    public final void setCar(LispObject obj)
     {
-        this.car = car;
+        car = obj;
     }
 
-    public final void setCdr(LispObject cdr)
+    public LispObject RPLACA(LispObject obj) throws ConditionThrowable
     {
-        this.cdr = cdr;
+        car = obj;
+        return this;
+    }
+
+    public LispObject _RPLACA(LispObject obj) throws ConditionThrowable
+    {
+        car = obj;
+        return obj;
+    }
+
+    public final void setCdr(LispObject obj)
+    {
+        cdr = obj;
+    }
+
+    public LispObject RPLACD(LispObject obj) throws ConditionThrowable
+    {
+        cdr = obj;
+        return this;
+    }
+
+    public LispObject _RPLACD(LispObject obj) throws ConditionThrowable
+    {
+        cdr = obj;
+        return obj;
     }
 
     public final LispObject cadr() throws ConditionThrowable
@@ -141,8 +165,8 @@ public final class Cons extends LispObject
     {
         if (obj instanceof Cons) {
             if (depth > 0) {
-                int n1 = computeHash(((Cons)obj).car(), depth - 1);
-                int n2 = computeHash(((Cons)obj).cdr(), depth - 1);
+                int n1 = computeHash(((Cons)obj).car, depth - 1);
+                int n2 = computeHash(((Cons)obj).cdr, depth - 1);
                 return n1 ^ n2;
             } else {
                 // This number comes from SBCL, but since we're not really
@@ -187,7 +211,7 @@ public final class Cons extends LispObject
             }
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "list"));
+            signal(new TypeError(obj, Symbol.LIST));
         }
         return length;
     }

@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.96 2004-08-18 02:17:54 piso Exp $
+ * $Id: LispObject.java,v 1.97 2004-08-21 18:07:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,6 +115,16 @@ public class LispObject extends Lisp
         signal(new TypeError(this, Symbol.CONS));
     }
 
+    public LispObject RPLACA(LispObject obj) throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.CONS));
+    }
+
+    public LispObject _RPLACA(LispObject obj) throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.CONS));
+    }
+
     public LispObject cdr() throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.LIST));
@@ -123,6 +133,16 @@ public class LispObject extends Lisp
     public void setCdr(LispObject obj) throws ConditionThrowable
     {
         signal(new TypeError(this, Symbol.CONS));
+    }
+
+    public LispObject RPLACD(LispObject obj) throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.CONS));
+    }
+
+    public LispObject _RPLACD(LispObject obj) throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.CONS));
     }
 
     public LispObject cadr() throws ConditionThrowable
