@@ -2,7 +2,7 @@
  * MethodBreakpoint.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: MethodBreakpoint.java,v 1.3 2003-05-18 19:25:15 piso Exp $
+ * $Id: MethodBreakpoint.java,v 1.4 2003-05-25 01:25:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,11 @@ public final class MethodBreakpoint extends ResolvableBreakpoint
         super(jdb);
         this.className = className;
         this.methodName = methodName;
+    }
+
+    public String getMethodName()
+    {
+        return methodName;
     }
 
     public EventRequest resolveEventRequest(ReferenceType refType) throws Exception
