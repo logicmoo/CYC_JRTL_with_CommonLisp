@@ -2,7 +2,7 @@
  * ShellFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: ShellFormatter.java,v 1.1.1.1 2002-09-24 16:09:15 piso Exp $
+ * $Id: ShellFormatter.java,v 1.2 2002-10-15 01:01:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,11 +26,6 @@ import gnu.regexp.REMatch;
 
 public final class ShellFormatter extends Formatter
 {
-    // States.
-    public static final int STATE_INPUT           = 1;
-    public static final int STATE_PROMPT          = 2;
-    public static final int STATE_PASSWORD_PROMPT = 3;
-
     // Formats.
     private static final byte SHELL_FORMAT_TEXT   = 0;
     private static final byte SHELL_FORMAT_PROMPT = 1;
