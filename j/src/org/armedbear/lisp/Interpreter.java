@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.15 2003-03-03 03:04:50 piso Exp $
+ * $Id: Interpreter.java,v 1.16 2003-03-03 15:05:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,11 +188,11 @@ public final class Interpreter extends Lisp
                     in.clearInput();
                     out.writeLine("Stack overflow");
                 }
-                catch (LispError e) {
+                catch (Condition c) {
                     in.clearInput();
-                    String message = e.getMessage();
+                    String message = c.getMessage();
                     if (message != null)
-                        out.writeLine("Error: " + e.getMessage() + ".");
+                        out.writeLine("Error: " + c.getMessage() + ".");
                     else
                         out.writeLine("Error");
                     backtrace();
