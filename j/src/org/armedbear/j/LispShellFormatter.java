@@ -2,7 +2,7 @@
  * LispShellFormatter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShellFormatter.java,v 1.10 2004-01-07 19:56:00 piso Exp $
+ * $Id: LispShellFormatter.java,v 1.11 2004-03-01 18:02:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,13 +85,13 @@ public final class LispShellFormatter extends Formatter
             line.setFlags(STATE_OUTPUT);
             // Fall through...
         }
-        int format = (line.flags() == STATE_INPUT) ? FORMAT_INPUT : FORMAT_TEXT;
-        int commentStart = text.indexOf(';');
-        if (commentStart >= 0) {
-            addSegment(text, 0, commentStart, format);
-            addSegment(text, commentStart, FORMAT_COMMENT);
-        } else
+        if (text.indexOf(';') == 0) {
+            addSegment(text, FORMAT_COMMENT);
+        } else {
+            int format =
+                (line.flags() == STATE_INPUT) ? FORMAT_INPUT : FORMAT_TEXT;
             addSegment(text, format);
+        }
         return segmentList;
     }
 
