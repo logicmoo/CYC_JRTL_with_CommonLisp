@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.18 2003-12-09 02:48:27 piso Exp $
+;;; $Id: clos.lisp,v 1.19 2003-12-09 20:02:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -146,9 +146,13 @@
                 #'(lambda (x) x)
                 (mapplist
                  #'(lambda (key value)
-                    `(',key ,value))
+                    `(',key ,(make-initfunction value)))
                  (cdr option))))))
-    (t (list `',(car option) `',(cadr option)))))
+    (t
+     (list `',(car option) `',(cadr option)))))
+
+(defun make-initfunction (initform)
+  `(function (lambda () ,initform)))
 
 (defconstant +slot-unbound+ (make-symbol "SLOT-UNBOUND"))
 
@@ -1357,31 +1361,45 @@
 ;;; Instance creation and initialization
 
 (defgeneric make-instance (class &key))
+
 (defmethod make-instance ((class standard-class) &rest initargs)
+  (let ((class-default-initargs (class-default-initargs class)))
+    (when class-default-initargs
+      (let ((default-initargs ())
+            (not-found (gensym)))
+        (do* ((list class-default-initargs (cddr list))
+              (key (car list) (car list))
+              (fn (cadr list) (cadr list)))
+             ((null list))
+          (when (eq (getf initargs key not-found) not-found)
+            (setf default-initargs (append default-initargs (list key (funcall fn))))))
+        (setf initargs (append initargs default-initargs)))))
   (let ((instance (allocate-instance class)))
-    (apply #'initialize-instance instance
-           (append initargs (class-default-initargs class)))
+    (apply #'initialize-instance instance initargs)
     instance))
+
 (defmethod make-instance ((class symbol) &rest initargs)
   (apply #'make-instance (find-class class) initargs))
 
 (defgeneric initialize-instance (instance &key))
+
 (defmethod initialize-instance ((instance standard-object) &rest initargs)
   (apply #'shared-initialize instance t initargs))
 
 (defgeneric reinitialize-instance (instance &key))
+
 (defmethod reinitialize-instance
   ((instance standard-object) &rest initargs)
   (apply #'shared-initialize instance () initargs))
 
 (defgeneric shared-initialize (instance slot-names &key))
+
 (defmethod shared-initialize ((instance standard-object)
                               slot-names &rest all-keys)
   (dolist (slot (class-slots (class-of instance)))
     (let ((slot-name (slot-definition-name slot)))
       (multiple-value-bind (init-key init-value foundp)
-        (get-properties
-         all-keys (slot-definition-initargs slot))
+        (get-properties all-keys (slot-definition-initargs slot))
         (declare (ignore init-key))
         (if foundp
             (setf (slot-value instance slot-name) init-value)
