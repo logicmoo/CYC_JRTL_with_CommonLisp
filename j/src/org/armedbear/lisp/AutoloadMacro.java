@@ -2,7 +2,7 @@
  * AutoloadMacro.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AutoloadMacro.java,v 1.6 2003-10-25 20:53:52 piso Exp $
+ * $Id: AutoloadMacro.java,v 1.7 2003-11-14 17:47:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public final class AutoloadMacro extends Autoload
     }
 
     private static final Primitive AUTOLOAD_MACRO =
-        new Primitive("autoload-macro", PACKAGE_SYS, true)
+        new Primitive("autoload-macro", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject first) throws ConditionThrowable
         {
