@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.518 2003-12-08 04:25:04 piso Exp $
+ * $Id: Primitives.java,v 1.519 2003-12-08 04:49:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,77 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public final class Primitives extends Module
+public final class Primitives extends Lisp
 {
-    // Primitive1
-    private static final int ABS                        = 1;
-    private static final int ARRAYP                     = 2;
-    private static final int ARRAY_HAS_FILL_POINTER_P   = 3;
-    private static final int BIT_VECTOR_P               = 4;
-    private static final int COMPILED_FUNCTION_P        = 5;
-    private static final int CONSP                      = 6;
-    private static final int EVAL                       = 7;
-    private static final int IDENTITY                   = 8;
-    private static final int LISTP                      = 9;
-    private static final int SIMPLE_BIT_VECTOR_P        = 10;
-    private static final int SIMPLE_VECTOR_P            = 11;
-    private static final int VECTORP                    = 12;
-
-    private Primitives()
-    {
-        definePrimitive1("abs", ABS);
-        definePrimitive1("array-has-fill-pointer-p", ARRAY_HAS_FILL_POINTER_P);
-        definePrimitive1("arrayp", ARRAYP);
-        definePrimitive1("bit-vector-p", BIT_VECTOR_P);
-        definePrimitive1("compiled-function-p", COMPILED_FUNCTION_P);
-        definePrimitive1("consp", CONSP);
-        definePrimitive1("eval", EVAL);
-        definePrimitive1("identity", IDENTITY);
-        definePrimitive1("listp", LISTP);
-        definePrimitive1("simple-bit-vector-p", SIMPLE_BIT_VECTOR_P);
-        definePrimitive1("simple-vector-p", SIMPLE_VECTOR_P);
-        definePrimitive1("vectorp", VECTORP);
-    }
-
-    // Primitive1
-    public LispObject dispatch(LispObject arg, int index)
-        throws ConditionThrowable
-    {
-        switch (index) {
-            case IDENTITY:                      // ### identity
-                return arg;
-            case COMPILED_FUNCTION_P:           // ### compiled-function-p
-                return arg.typep(Symbol.COMPILED_FUNCTION);
-            case CONSP:                         // ### consp
-                return arg instanceof Cons ? T : NIL;
-            case LISTP:                         // ### listp
-                return arg.LISTP();
-            case ABS:                           // ### abs
-                return arg.ABS();
-            case ARRAYP:                        // ### arrayp
-                return arg instanceof AbstractArray ? T : NIL;
-            case ARRAY_HAS_FILL_POINTER_P:      // ### array-has-fill-pointer-p
-                if (arg instanceof AbstractVector)
-                    return ((AbstractVector)arg).getFillPointer() >= 0 ? T : NIL;
-                if (arg instanceof AbstractArray)
-                    return NIL;
-                throw new ConditionThrowable(new TypeError(arg, "array"));
-            case VECTORP:                       // ### vectorp
-                return arg.VECTORP();
-            case SIMPLE_VECTOR_P:               // ### simple-vector-p
-                return arg.typep(Symbol.SIMPLE_VECTOR);
-            case BIT_VECTOR_P:                  // ### bit-vector-p
-                return arg.BIT_VECTOR_P();
-            case SIMPLE_BIT_VECTOR_P:           // ### simple-bit-vector-p
-                return arg.typep(Symbol.SIMPLE_BIT_VECTOR);
-            case EVAL:                          // ### eval
-                return eval(arg, new Environment(), LispThread.currentThread());
-            default:
-                Debug.trace("bad index " + index);
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException((String)null));
-        }
-    }
-
     // ### *
     public static final Primitive MULTIPLY = new Primitive("*")
     {
@@ -200,6 +131,123 @@ public final class Primitives extends Module
                     result = args[i];
             }
             return result;
+        }
+    };
+
+    // ### identity
+    private static final Primitive1 IDENTITY = new Primitive1("identity")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg;
+        }
+    };
+
+    // ### compiled-function-p
+    private static final Primitive1 COMPILED_FUNCTION_P =
+        new Primitive1("compiled-function-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.typep(Symbol.COMPILED_FUNCTION);
+        }
+    };
+
+    // ### consp
+    private static final Primitive1 CONSP = new Primitive1("consp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg instanceof Cons ? T : NIL;
+        }
+    };
+
+    // ### listp
+    private static final Primitive1 LISTP = new Primitive1("listp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.LISTP();
+        }
+    };
+
+    // ### abs
+    private static final Primitive1 ABS = new Primitive1("abs")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.ABS();
+        }
+    };
+
+    // ### arrayp
+    private static final Primitive1 ARRAYP = new Primitive1("arrayp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg instanceof AbstractArray ? T : NIL;
+        }
+    };
+
+    // ### array-has-fill-pointer-p
+    private static final Primitive1 ARRAY_HAS_FILL_POINTER_P =
+        new Primitive1("array-has-fill-pointer-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof AbstractVector)
+                return ((AbstractVector)arg).getFillPointer() >= 0 ? T : NIL;
+            if (arg instanceof AbstractArray)
+                return NIL;
+            throw new ConditionThrowable(new TypeError(arg, "array"));
+        }
+    };
+
+    // ### vectorp
+    private static final Primitive1 VECTORP = new Primitive1("vectorp")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.VECTORP();
+        }
+    };
+
+    // ### simple-vector-p
+    private static final Primitive1 SIMPLE_VECTOR_P =
+        new Primitive1("simple-vector-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.typep(Symbol.SIMPLE_VECTOR);
+        }
+    };
+
+    // ### bit-vector-p
+    private static final Primitive1 BIT_VECTOR_P =
+        new Primitive1("bit-vector-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.BIT_VECTOR_P();
+        }
+    };
+
+    // ### simple-bit-vector-p
+    private static final Primitive1 SIMPLE_BIT_VECTOR_P =
+        new Primitive1("simple-bit-vector-p")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.typep(Symbol.SIMPLE_BIT_VECTOR);
+        }
+    };
+
+    // ### eval
+    private static final Primitive1 EVAL = new Primitive1("eval")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return eval(arg, new Environment(), LispThread.currentThread());
         }
     };
 
