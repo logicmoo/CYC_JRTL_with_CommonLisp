@@ -1,8 +1,8 @@
 /*
  * Expansion.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Expansion.java,v 1.2 2002-10-12 00:06:39 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Expansion.java,v 1.3 2003-06-07 11:03:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +42,7 @@ public class Expansion implements Constants
 
     private String current;
 
-    /**
-     * @see     org.armedbear.j.MailAddressExpansion
-     */
+    // For MailAddressExpansion.
     protected Expansion()
     {
         mode = Editor.getModeList().getMode(PLAIN_TEXT_MODE);
