@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.374 2003-09-08 02:35:47 piso Exp $
+ * $Id: Primitives.java,v 1.375 2003-09-08 12:38:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4192,23 +4192,26 @@ public final class Primitives extends Module
                 random = (Random) JavaObject.getObject(_RANDOM_STATE_.symbolValueNoThrow());
             if (args[0] instanceof Fixnum) {
                 int limit = ((Fixnum)args[0]).getValue();
-                int n = random.nextInt((int)limit);
-                Debug.assertTrue(n < limit);
-                return new Fixnum(n);
-            }
-            if (args[0] instanceof Bignum) {
+                if (limit > 0) {
+                    int n = random.nextInt((int)limit);
+                    return new Fixnum(n);
+                }
+            } else if (args[0] instanceof Bignum) {
                 BigInteger limit = ((Bignum)args[0]).getValue();
-                int bitLength = limit.bitLength();
-                BigInteger rand = new BigInteger(bitLength + 1, random);
-                BigInteger remainder = rand.remainder(limit);
-                return number(remainder);
-            }
-            if (args[0] instanceof LispFloat) {
+                if (limit.signum() > 0) {
+                    int bitLength = limit.bitLength();
+                    BigInteger rand = new BigInteger(bitLength + 1, random);
+                    BigInteger remainder = rand.remainder(limit);
+                    return number(remainder);
+                }
+            } else if (args[0] instanceof LispFloat) {
                 double limit = ((LispFloat)args[0]).getValue();
-                double rand = random.nextDouble();
-                return new LispFloat(rand * limit);
+                if (limit > 0) {
+                    double rand = random.nextDouble();
+                    return new LispFloat(rand * limit);
+                }
             }
-            throw new TypeError(args[0], "number");
+            throw new TypeError(args[0], "positive integer or positive float");
         }
     };
 
