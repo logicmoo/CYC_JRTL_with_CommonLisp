@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.195 2004-07-03 17:24:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.196 2004-07-03 17:57:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2355,16 +2355,11 @@
                                :classfile classfile)
           *local-functions*)))
 
-;; (defun compile-local-functions (definitions)
-;;   (dolist (definition definitions)
-;;     (compile-local-function-definition definition)))
-
 (defun compile-flet (form for-effect)
   (if *use-locals-vector*
       (let ((*local-functions* *local-functions*)
             (definitions (cadr form))
             (body (cddr form)))
-;;         (compile-local-functions locals)
         (dolist (definition definitions)
           (compile-local-function-definition definition))
         (do ((forms body (cdr forms)))
@@ -2572,6 +2567,16 @@
       (t
        (compile-function-call form for-effect)))))
 
+(defun context-depth (context)
+  (let ((parent (context-parent *context*))
+        (depth 0))
+    (loop
+      (cond ((eq context parent)
+             (return depth))
+            (t
+             (incf depth)
+             (setf parent (context-parent parent)))))))
+
 (defun compile-variable-reference (var)
   (let ((v (find-variable var)))
     (unless (and v (variable-special-p v))
@@ -2582,19 +2587,7 @@
                  ;; Compile call to LispThread.getVariableValue().
                  (ensure-thread-var-initialized)
                  (emit 'aload *thread*)
-                 ;; Calculate depth.
-                 (let ((depth 0)
-                       (parent (context-parent *context*)))
-                   (loop
-                     (cond ((null *context*)
-                            (error "*context* is NIL"))
-                           ((eq (variable-context v) parent)
-                            (return))
-                           (t
-                            (incf depth)
-                            (setf parent (context-parent parent)))))
-                   (%format t "depth = ~D~%" depth)
-                   (emit 'bipush depth))
+                 (emit 'bipush (context-depth (variable-context v)))
                  (emit 'bipush index)
                  (emit-invokevirtual +lisp-thread-class+
                                      "getVariableValue"
@@ -2664,19 +2657,7 @@
              (ensure-thread-var-initialized)
              (emit 'aload *thread*)
              (emit 'swap)
-             ;; Calculate depth.
-             (let ((depth 0)
-                   (parent (context-parent *context*)))
-               (loop
-                 (cond ((null *context*)
-                        (error "*context* is NIL"))
-                       ((eq (variable-context v) parent)
-                        (return))
-                       (t
-                        (incf depth)
-                        (setf parent (context-parent parent)))))
-               (%format t "depth = ~D~%" depth)
-               (emit 'bipush depth))
+             (emit 'bipush (context-depth (variable-context v)))
              (emit 'bipush index) ; Stack: value value depth index
              (emit-invokevirtual +lisp-thread-class+
                                  "setVariableValue"
