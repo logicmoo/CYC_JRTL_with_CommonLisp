@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.521 2003-12-10 08:55:00 asimon Exp $
+ * $Id: Primitives.java,v 1.522 2003-12-10 21:34:50 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1455,6 +1455,7 @@ public final class Primitives extends Lisp
                 put(symbol, Symbol.MACROEXPAND_MACRO, macroObject);
             else
                 symbol.setSymbolFunction(macroObject);
+	    macroObject.setArglist(lambdaList);
             LispThread.currentThread().clearValues();
             return symbol;
         }

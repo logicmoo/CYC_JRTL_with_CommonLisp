@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.19 2003-12-07 01:16:53 piso Exp $
+;;; $Id: precompiler.lisp,v 1.20 2003-12-10 21:35:17 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -552,6 +552,7 @@
       (precompile name definition)))
 
 ;; Redefine DEFMACRO to compile the expansion function on the fly.
+
 (defmacro defmacro (name lambda-list &rest body)
   (let* ((form (gensym))
          (env (gensym))
@@ -559,13 +560,12 @@
                                :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(progn
-       (if (special-operator-p ',name)
-           (%put ',name
-                 'macroexpand-macro
-                 (make-macro (or (precompile nil ,expander) ,expander)))
-           (fset ',name
-                 (make-macro (or (precompile nil ,expander) ,expander))))
-       ',name)))
+       (let ((mac (make-macro (or (precompile nil ,expander) ,expander))))
+	 (if (special-operator-p ',name)
+           (%put ',name 'macroexpand-macro mac)
+           (fset ',name mac))
+	 (%set-arglist mac ',lambda-list)
+	 ',name))))
 
 ;; Make an exception just this one time...
 (fset 'defmacro (get 'defmacro 'macroexpand-macro))
@@ -576,3 +576,5 @@
      (%defun ',name ',lambda-list ',body ,env)
      (precompile ',name)
      ',name))
+
+
