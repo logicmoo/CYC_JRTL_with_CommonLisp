@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.79 2005-02-14 19:07:00 piso Exp $
+ * $Id: Interpreter.java,v 1.80 2005-02-18 00:43:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,37 +124,6 @@ public final class Interpreter extends Lisp
                     Autoload autoload = (Autoload) tplFun;
                     autoload.load();
                 }
-                do {
-                    String userHome = System.getProperty("user.home");
-                    File file = new File(userHome, ".abclrc");
-                    if (file.isFile()) {
-                        Load.load(file.getCanonicalPath());
-                        break;
-                    }
-                    if (Utilities.isPlatformWindows()) {
-                        file = new File("C:\\.abclrc");
-                        if (file.isFile()) {
-                            Load.load(file.getCanonicalPath());
-                            break;
-                        }
-                    }
-                    file = new File(userHome, ".ablrc");
-                    if (file.isFile()) {
-                        String message =
-                            "Warning: use of .ablrc is deprecated; use .abclrc instead.";
-                        getStandardOutput()._writeLine(message);
-                        Load.load(file.getCanonicalPath());
-                        break;
-                    }
-                    file = new File(userHome, ".ablisprc");
-                    if (file.isFile()) {
-                        String message =
-                            "Warning: use of .ablisprc is deprecated; use .abclrc instead.";
-                        getStandardOutput()._writeLine(message);
-                        Load.load(file.getCanonicalPath());
-                        break;
-                    }
-                } while (false);
             }
             catch (Throwable t) {
                 t.printStackTrace();
@@ -163,10 +132,81 @@ public final class Interpreter extends Lisp
         }
     }
 
-    private void processCommandLineArguments(String[] args)
+    private static synchronized void processInitializationFile()
+    {
+        try {
+            String userHome = System.getProperty("user.home");
+            File file = new File(userHome, ".abclrc");
+            if (file.isFile()) {
+                Load.load(file.getCanonicalPath());
+                return;
+            }
+            if (Utilities.isPlatformWindows()) {
+                file = new File("C:\\.abclrc");
+                if (file.isFile()) {
+                    Load.load(file.getCanonicalPath());
+                    return;
+                }
+            }
+            file = new File(userHome, ".ablrc");
+            if (file.isFile()) {
+                String message =
+                    "Warning: use of .ablrc is deprecated; use .abclrc instead.";
+                getStandardOutput()._writeLine(message);
+                Load.load(file.getCanonicalPath());
+                return;
+            }
+            file = new File(userHome, ".ablisprc");
+            if (file.isFile()) {
+                String message =
+                    "Warning: use of .ablisprc is deprecated; use .abclrc instead.";
+                getStandardOutput()._writeLine(message);
+                Load.load(file.getCanonicalPath());
+                return;
+            }
+        }
+        catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
+
+    private static boolean noinit;
+
+    // Check for --noinit; verify that arguments are supplied for --load and
+    // --eval options.
+    private void preprocessCommandLineArguments(String[] args)
         throws ConditionThrowable
     {
-        if (args.length > 0) {
+        if (args != null) {
+            for (int i = 0; i < args.length; ++i) {
+                String arg = args[i];
+                if (arg.equals("--noinit")) {
+                    noinit = true;
+                } else if (arg.equals("--eval")) {
+                    if (i + 1 < args.length) {
+                        ++i;
+                    } else {
+                        System.err.println("No argument supplied to --eval");
+                        System.exit(1);
+                    }
+                } else if (arg.equals("--load") ||
+                           arg.equals("--load-system-file")) {
+                    if (i + 1 < args.length) {
+                        ++i;
+                    } else {
+                        System.err.println("No argument supplied to --load");
+                        System.exit(1);
+                    }
+                }
+            }
+        }
+    }
+
+    // Do the --load and --eval actions.
+    private void postprocessCommandLineArguments(String[] args)
+        throws ConditionThrowable
+    {
+        if (args != null) {
             for (int i = 0; i < args.length; ++i) {
                 String arg = args[i];
                 if (arg.equals("--eval")) {
@@ -184,6 +224,7 @@ public final class Interpreter extends Lisp
                         }
                         ++i;
                     } else {
+                        // Shouldn't happen.
                         System.err.println("No argument supplied to --eval");
                         System.exit(1);
                     }
@@ -205,6 +246,7 @@ public final class Interpreter extends Lisp
                         }
                         ++i;
                     } else {
+                        // Shouldn't happen.
                         System.err.println("No argument supplied to --load");
                         System.exit(1);
                     }
@@ -244,8 +286,17 @@ public final class Interpreter extends Lisp
             }
             initializeLisp(jlisp);
             initializeTopLevel();
-            if (args != null)
-                processCommandLineArguments(args);
+            if (jlisp) {
+                Debug.assertTrue(args == null);
+                processInitializationFile();
+            } else {
+                if (args != null)
+                    preprocessCommandLineArguments(args);
+                if (!noinit)
+                    processInitializationFile();
+                if (args != null)
+                    postprocessCommandLineArguments(args);
+            }
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
             LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
             if (tplFun instanceof Function) {
