@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.28 2003-11-14 17:54:23 piso Exp $
+;;; $Id: jvm.lisp,v 1.29 2003-11-15 16:15:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1531,10 +1531,10 @@
          (instr (compile-test test)))
     (emit-clear-values)
     (emit instr `,label1)
-    (compile-form consequent)
+    (compile-form consequent for-effect)
     (emit 'goto `,label2)
     (emit 'label `,label1)
-    (compile-form alternate)
+    (compile-form alternate for-effect)
     (emit 'label `,label2)))
 
 (defun compile-multiple-value-list (form for-effect)
