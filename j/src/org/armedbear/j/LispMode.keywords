@@ -90,6 +90,7 @@ char>=
 character
 characterp
 check-type
+class-of
 clear-output
 close
 code-char
