@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.29 2003-01-02 19:36:57 piso Exp $
+ * $Id: Editor.java,v 1.30 2003-01-07 20:09:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4455,16 +4455,14 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
 
         if (buffer instanceof CompilationBuffer) {
-            if (((CompilationBuffer)buffer).exitValue() == 0) {
-                if (buffer.unsplitOnClose()) {
-                    buffer.windowClosing();
-                    otherWindow();
-                    unsplitWindow();
-                }
-                maybeKillBuffer(buffer);
-                restoreFocus();
-                Sidebar.refreshSidebarInAllFrames();
+            if (buffer.unsplitOnClose()) {
+                buffer.windowClosing();
+                otherWindow();
+                unsplitWindow();
             }
+            maybeKillBuffer(buffer);
+            restoreFocus();
+            Sidebar.refreshSidebarInAllFrames();
             return;
         }
 
@@ -4494,14 +4492,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         if (ed != null) {
             Buffer buf = ed.getBuffer();
             if (buf instanceof CompilationBuffer) {
-                if (((CompilationBuffer)buf).exitValue() == 0) {
-                    if (buf.unsplitOnClose())
-                        unsplitWindow();
-                    maybeKillBuffer(buf);
-                    if (!buf.unsplitOnClose())
-                        ed.updateDisplay();
-                    Sidebar.refreshSidebarInAllFrames();
-                }
+                if (buf.unsplitOnClose())
+                    unsplitWindow();
+                maybeKillBuffer(buf);
+                if (!buf.unsplitOnClose())
+                    ed.updateDisplay();
+                Sidebar.refreshSidebarInAllFrames();
                 return;
             }
             if (buf.isTransient()) {
