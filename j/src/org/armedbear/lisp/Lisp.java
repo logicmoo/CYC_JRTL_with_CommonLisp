@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.121 2003-08-16 01:20:28 piso Exp $
+ * $Id: Lisp.java,v 1.122 2003-08-24 18:23:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1155,7 +1155,7 @@ public abstract class Lisp
                        new LispFloat((float)5.960465E-8));
 
     public static final Symbol SHORT_FLOAT_NEGATIVE_EPSILON =
-        exportConstant("SHORT-FLOAT-NEGATIVE_EPSILON", PACKAGE_CL,
+        exportConstant("SHORT-FLOAT-NEGATIVE-EPSILON", PACKAGE_CL,
                        new LispFloat((float)2.9802325E-8));
 
     public static final Symbol SINGLE_FLOAT_NEGATIVE_EPSILON =
