@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.13 2003-02-15 16:57:37 piso Exp $
+ * $Id: Lisp.java,v 1.14 2003-02-15 17:13:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -615,6 +615,12 @@ public abstract class Lisp
         Symbol symbol = pkg.intern(name);
         symbol.setExternal(true);
         return symbol;
+    }
+
+    // Export symbol from the COMMON-LISP package.
+    public static final Symbol export(String name)
+    {
+        export(name, PACKAGE_CL);
     }
 
     public static final Symbol internSpecial(String name, Package pkg,
