@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.38 2003-02-21 14:52:27 piso Exp $
+ * $Id: Editor.java,v 1.39 2003-03-15 16:19:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1078,9 +1078,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         AWTEvent e = dispatcher.getLastEvent();
         if (e.getID() == KeyEvent.KEY_PRESSED) {
-            int keyCode = ((KeyEvent) e).getKeyCode();
+            int keyCode = ((KeyEvent)e).getKeyCode();
             int index = keyCode - KeyEvent.VK_0;
-            if (index < bookmarks.length) {
+            if (index >= 0 && index < bookmarks.length) {
                 if (bookmarks[index] == null ||
                     confirm("Drop Bookmark", "Overwrite existing bookmark?")) {
                     bookmarks[index] = new Marker(buffer, dot);
@@ -1094,9 +1094,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         AWTEvent e = dispatcher.getLastEvent();
         if (e.getID() == KeyEvent.KEY_PRESSED) {
-            int keyCode = ((KeyEvent) e).getKeyCode();
+            int keyCode = ((KeyEvent)e).getKeyCode();
             int index = keyCode - KeyEvent.VK_0;
-            if (index < bookmarks.length) {
+            if (index >= 0 && index < bookmarks.length) {
                 Marker m = bookmarks[index];
                 if (m != null)
                     gotoBookmark(m);
