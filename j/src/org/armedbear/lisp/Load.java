@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.72 2004-09-15 13:20:54 piso Exp $
+ * $Id: Load.java,v 1.73 2004-09-15 17:51:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -419,9 +419,10 @@ public final class Load extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
+            final LispThread thread = LispThread.currentThread();
             return loadSystemFile(arg.getStringValue(),
-                                  _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                                  _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                                  _LOAD_VERBOSE_.symbolValue(thread) != NIL,
+                                  _LOAD_PRINT_.symbolValue(thread) != NIL,
                                   false);
         }
     };
