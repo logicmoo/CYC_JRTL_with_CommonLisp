@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandTable.java,v 1.51 2004-09-13 20:18:24 piso Exp $
+ * $Id: CommandTable.java,v 1.52 2004-09-19 15:14:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,6 +203,7 @@ public class CommandTable
             addCommand("wordLeft");
             addCommand("wordRight");
             addCommand("wrapParagraph");
+            addCommand("wrapRegion");
 
             // Commands implemented in other classes.
             addCommand("about", "AboutDialog");
