@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.9 2003-06-28 19:17:29 piso Exp $
+;;; $Id: init.lisp,v 1.10 2003-07-03 02:01:28 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -7,6 +7,7 @@
   (let ((filename (concatenate 'string "/home/peter/depot/j/themes/" name ".lisp")))
     (unless (probe-file filename)
       (error "file not found: ~A" filename))
+    (kill-theme)
     (load filename)
     ;; In my world, antialiasing looks good with Kodiak but not with other
     ;; themes, and italics don't look good without antialiasing...
