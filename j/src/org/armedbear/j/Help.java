@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.5 2003-06-18 23:43:00 piso Exp $
+ * $Id: Help.java,v 1.6 2003-06-19 00:16:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,29 +39,34 @@ public final class Help
     {
         final Editor editor = Editor.currentEditor();
         final Frame frame = editor.getFrame();
+        final File dir = getDocumentationDirectory();
+        if (dir == null)
+            return;
         frame.setWaitCursor();
-        String fileName, commandName;
-        if (arg == null || arg.length() == 0) {
-            fileName = "contents.html";
-            commandName = null;
-        } else if (arg.endsWith(".html")) {
-            fileName = arg;
-            commandName = null;
-        } else {
-            fileName = "commands.html";
-            commandName = arg;
-        }
-        if (commandName != null) {
-            Command command = CommandTable.getCommand(commandName);
-            if (command != null)
-                commandName = command.getName();
-        }
         try {
-            File dir = getDocumentationDirectory();
-            if (dir == null)
-                return;
+            String fileName = "contents.html";
+            String ref = null;
+            if (arg == null || arg.length() == 0)
+                ;
+            else if (arg.endsWith(".html")) {
+                File file = File.getInstance(dir, arg);
+                if (file != null && file.isFile())
+                    fileName = arg;
+            } else {
+                Command command = CommandTable.getCommand(arg);
+                if (command != null) {
+                    fileName = "commands.html";
+                    ref = command.getName();
+                } else {
+                    Property property = Property.findProperty(arg);
+                    if (property != null) {
+                        fileName = "preferences.html";
+                        ref = property.getDisplayName();
+                    }
+                }
+            }
             File file = File.getInstance(dir, fileName);
-            if (file == null)
+            if (file == null || !file.isFile())
                 return;
             Buffer buf = null;
             // Look for existing help buffer.
@@ -96,7 +101,7 @@ public final class Help
                     // Existing buffer is not looking at the right file.
                     ((WebBuffer)buf).go(file, 0, null);
                 }
-                Position pos = ((WebBuffer) buf).findRef(commandName);
+                Position pos = ((WebBuffer) buf).findRef(ref);
                 if (editor.getBuffer() == buf) {
                     if (pos != null)
                         editor.moveDotTo(pos);
@@ -109,7 +114,7 @@ public final class Help
                     }
                 }
             } else {
-                buf = WebBuffer.createWebBuffer(file, null, commandName);
+                buf = WebBuffer.createWebBuffer(file, null, ref);
                 Editor otherEditor = editor.getOtherEditor();
                 if (otherEditor != null) {
                     buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
