@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.633 2004-04-26 01:42:52 piso Exp $
+ * $Id: Primitives.java,v 1.634 2004-04-30 16:48:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -335,7 +335,8 @@ public final class Primitives extends Lisp
     };
 
     // ### cons
-    private static final Primitive2 CONS = new Primitive2("cons","object-1 object-2")
+    private static final Primitive2 CONS =
+        new Primitive2("cons", "object-1 object-2")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -345,7 +346,8 @@ public final class Primitives extends Lisp
     };
 
     // ### length
-    private static final Primitive1 LENGTH = new Primitive1("length","sequence")
+    private static final Primitive1 LENGTH =
+        new Primitive1("length", "sequence")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -354,7 +356,8 @@ public final class Primitives extends Lisp
     };
 
     // ### elt
-    private static final Primitive2 ELT = new Primitive2("elt","sequence index")
+    private static final Primitive2 ELT =
+        new Primitive2("elt", "sequence index")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -369,7 +372,7 @@ public final class Primitives extends Lisp
     };
 
     // ### atom
-    private static final Primitive1 ATOM = new Primitive1("atom","object")
+    private static final Primitive1 ATOM = new Primitive1("atom", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -378,7 +381,8 @@ public final class Primitives extends Lisp
     };
 
     // ### constantp
-    private static final Primitive CONSTANTP = new Primitive("constantp","form &optional environment")
+    private static final Primitive CONSTANTP =
+        new Primitive("constantp", "form &optional environment")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2289,7 +2293,8 @@ public final class Primitives extends Lisp
     };
 
     // ### mapcar
-    private static final Primitive MAPCAR = new Primitive("mapcar","function &rest lists")
+    private static final Primitive MAPCAR =
+        new Primitive("mapcar", "function &rest lists")
     {
         public LispObject execute(LispObject op, LispObject list)
             throws ConditionThrowable
