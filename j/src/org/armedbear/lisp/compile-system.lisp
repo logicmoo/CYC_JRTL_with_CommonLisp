@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.9 2004-05-25 18:43:12 piso Exp $
+;;; $Id: compile-system.lisp,v 1.10 2004-05-31 02:51:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,8 +34,8 @@
                    "*LISP-HOME* is NIL or invalid.~%  Please set *LISP-HOME* to the full pathname of the directory containing the Lisp system files."))))
   (time
    (let ((*default-pathname-defaults* (pathname *lisp-home*)))
-     (unless (compiled-function-p 'precompile)
-       (jvm:jvm-compile-package "PRECOMPILER"))
+     (load (compile-file "precompiler.lisp"))
+     (load (compile-file "jvm.lisp"))
      ;; Order matters for these files.
      (mapc #'compile-file '("collect.lisp"
                             "macros.lisp"
@@ -102,7 +102,6 @@
                             "inspect.lisp"
                             ;;"j.lisp"
                             "java.lisp"
-                            "jvm.lisp"
                             "late-setf.lisp"
                             "lcm.lisp"
                             "ldb.lisp"
@@ -136,7 +135,6 @@
                             "parse-namestring.lisp"
                             "pathnames.lisp"
                             ;;"pprint.lisp"
-                            "precompiler.lisp"
                             "print.lisp"
                             ;;"print-object.lisp"
                             "print-unreadable-object.lisp"
