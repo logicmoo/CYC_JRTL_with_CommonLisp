@@ -2,7 +2,7 @@
  * JdbControlDialog.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbControlDialog.java,v 1.3 2003-05-17 17:38:27 piso Exp $
+ * $Id: JdbControlDialog.java,v 1.4 2003-05-17 19:27:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ import org.armedbear.j.SessionProperties;
 import org.armedbear.j.StandardButton;
 
 public final class JdbControlDialog extends JDialog implements JdbConstants,
-    Constants, ActionListener, ComponentListener, KeyListener
+    Constants, ContextListener, ActionListener, ComponentListener, KeyListener
 {
     private static final String commandKey = "jdb.command";
 
@@ -67,6 +67,8 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
     private final JToolBar toolBar;
     private final HistoryTextField commandTextField;
     private final History commandHistory;
+    private final StandardButton suspendButton;
+    private final StandardButton continueButton;
 
     public JdbControlDialog(Jdb jdb)
     {
@@ -76,11 +78,14 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         toolBar.setOrientation(JToolBar.HORIZONTAL);
         toolBar.setFloatable(false);
         toolBar.putClientProperty("JToolBar.isRollover", Boolean.FALSE);
-        addButton("Set/Clear Breakpoint", null, "jdbToggleBreakpoint");
         addButton("Next", null, "jdbNext");
         addButton("Step", null, "jdbStep");
-        addButton("Step Out", null, "jdbStepOut");
-        addButton("Go", null, "jdbResume");
+        addButton("Step Out", null, "jdbFinish");
+        addSeparator();
+        suspendButton = addButton("Suspend", null, "jdbSuspend");
+        continueButton = addButton("Continue", null, "jdbContinue");
+        addSeparator();
+        addButton("Quit", null, "jdbQuit");
         getContentPane().add(toolBar, "North");
         JTabbedPane tabbedPane = new JTabbedPane();
         StackPanel stackPanel = new StackPanel(jdb, this);
@@ -101,11 +106,13 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         commandPanel.add(commandTextField);
         getContentPane().add(commandPanel, "South");
         pack();
+        jdb.addContextListener(this);
         addComponentListener(this);
         addWindowListener(new WindowMonitor());
         commandTextField.addKeyListener(this);
         if (jdb.getStartSuspended())
             tabbedPane.setSelectedComponent(breakpointPanel.getComponent());
+        contextChanged();
         requestDefaultFocus();
     }
 
@@ -114,7 +121,7 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         commandTextField.requestFocus();
     }
 
-    private void addButton(String text, String iconFile, String command)
+    private StandardButton addButton(String text, String iconFile, String command)
     {
         StandardButton button = new StandardButton(text);
         Font font = button.getFont();
@@ -129,6 +136,12 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         button.addActionListener(this);
         button.setRequestFocusEnabled(false);
         toolBar.add(button);
+        return button;
+    }
+
+    private void addSeparator()
+    {
+        toolBar.addSeparator();
     }
 
     public void show()
@@ -161,6 +174,17 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
                 Editor.currentEditor().centerDialog(this);
         }
         super.show();
+    }
+
+    public void contextChanged()
+    {
+        if (jdb.isSuspended()) {
+            suspendButton.setEnabled(false);
+            continueButton.setEnabled(true);
+        } else {
+            suspendButton.setEnabled(true);
+            continueButton.setEnabled(false);
+        }
     }
 
     public void actionPerformed(ActionEvent e)
