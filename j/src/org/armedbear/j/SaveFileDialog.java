@@ -1,8 +1,8 @@
 /*
  * SaveFileDialog.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: SaveFileDialog.java,v 1.4 2003-06-29 00:19:34 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: SaveFileDialog.java,v 1.5 2004-09-12 23:49:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ public class SaveFileDialog extends JDialog implements FocusListener, KeyListene
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        panel.add(new JLabel(prompt));
+        panel.add(new Label(prompt));
         textField = new HistoryTextField(20);
         history = new History("saveFile.file");
         textField.setHistory(history);
