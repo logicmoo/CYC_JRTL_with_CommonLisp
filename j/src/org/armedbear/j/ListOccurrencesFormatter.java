@@ -1,8 +1,8 @@
 /*
  * ListOccurrencesFormatter.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: ListOccurrencesFormatter.java,v 1.1.1.1 2002-09-24 16:09:06 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: ListOccurrencesFormatter.java,v 1.2 2003-07-26 16:20:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,9 +38,7 @@ public final class ListOccurrencesFormatter extends Formatter
     {
         this.buffer = buffer;
         search = (Search) ((ListOccurrences)buffer).getSearch().clone();
-        Buffer sourceBuffer = ((ListOccurrences)buffer).getSourceBuffer();
-        if (sourceBuffer != null)
-            parentMode = sourceBuffer.getMode();
+        parentMode = ((ListOccurrences)buffer).getParentMode();
     }
 
     public LineSegmentList formatLine(Line line)
