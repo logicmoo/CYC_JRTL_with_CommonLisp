@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.9 2003-03-12 20:03:01 piso Exp $
+ * $Id: Function.java,v 1.10 2003-03-13 18:19:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,9 +117,9 @@ public abstract class Function extends Functional
         return callCount;
     }
 
-    public final void clearCallCount()
+    public void setCallCount(long l)
     {
-        callCount = 0;
+        callCount = l;
     }
 
     public final void incrementCallCount()

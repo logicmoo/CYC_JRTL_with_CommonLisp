@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.35 2003-03-13 03:10:53 piso Exp $
+ * $Id: Lisp.java,v 1.36 2003-03-13 18:23:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,14 +78,14 @@ public abstract class Lisp
         return obj;
     }
 
-    public static final LispObject funcall(LispObject fun, LispObject[] args)
+    public static final LispObject funcall(LispObject fun, LispObject[] argv)
         throws Condition
     {
         if (debug) {
-            stack.push(new StackFrame((Function)fun, args));
+            stack.push(new StackFrame((Function)fun, argv));
         }
         LispObject result;
-        final int length = args.length;
+        final int length = argv.length;
         switch (fun.getType()) {
             case TYPE_PRIMITIVE0: {
                 if (length != 0)
@@ -100,7 +100,7 @@ public abstract class Lisp
                     throw new WrongNumberOfArgumentsException(fun);
                 if (profiling)
                     fun.incrementCallCount();
-                result = fun.execute(args[0]);
+                result = fun.execute(argv[0]);
                 break;
             }
             case TYPE_PRIMITIVE2: {
@@ -108,7 +108,7 @@ public abstract class Lisp
                     throw new WrongNumberOfArgumentsException(fun);
                 if (profiling)
                     fun.incrementCallCount();
-                result = fun.execute(args[0], args[1]);
+                result = fun.execute(argv[0], argv[1]);
                 break;
             }
             case TYPE_PRIMITIVE:
@@ -116,7 +116,7 @@ public abstract class Lisp
             case TYPE_MACRO:
                 if (profiling)
                     fun.incrementCallCount();
-                result = fun.execute(args);
+                result = fun.execute(argv);
                 break;
             case TYPE_SPECIAL_OPERATOR:
             default:
@@ -157,6 +157,8 @@ public abstract class Lisp
         Symbol symbol = checkSymbol(form.car());
         LispObject macro = symbol.getSymbolFunction();
         if (macro instanceof Macro) {
+            if (profiling)
+                macro.incrementCallCount();
             results[0] = macro.execute(form.cdr(), env);
             results[1] = T;
             setValues(results);
@@ -362,6 +364,8 @@ public abstract class Lisp
         if (debug) {
             stack.push(new StackFrame(fun, argv));
         }
+        if (profiling)
+            fun.incrementCallCount();
         LispObject result;
         switch (fun.getType()) {
             case TYPE_PRIMITIVE0: {
@@ -392,8 +396,6 @@ public abstract class Lisp
                 result = fun.execute(argv);
                 break;
         }
-        if (profiling)
-            fun.incrementCallCount();
         if (debug) {
             if (!stack.empty())
                 stack.pop();
@@ -920,14 +922,14 @@ public abstract class Lisp
                         Symbol symbol = symbols[j];
                         LispObject f = symbol.getSymbolFunction();
                         if (f != null)
-                            f.clearCallCount();
+                            f.setCallCount(0);
                     }
                 }
-                out.writeLine("Profiling started.");
+                out.writeLine("; Profiling started.");
                 out.finishOutput();
                 profiling = true;
             } else {
-                out.writeLine("Profiling already enabled.");
+                out.writeLine("; Profiling already enabled.");
                 out.finishOutput();
             }
             return nothing();
@@ -943,9 +945,9 @@ public abstract class Lisp
             out.freshLine();
             if (profiling) {
                 profiling = false;
-                out.writeLine("Profiling stopped.");
+                out.writeLine("; Profiling stopped.");
             } else
-                out.writeLine("Profiling not enabled.");
+                out.writeLine("; Profiling not enabled.");
             out.finishOutput();
             return nothing();
         }

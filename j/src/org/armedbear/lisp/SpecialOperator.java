@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SpecialOperator.java,v 1.5 2003-03-12 20:04:05 piso Exp $
+ * $Id: SpecialOperator.java,v 1.6 2003-03-13 18:19:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,9 +75,9 @@ public class SpecialOperator extends Functional
         return callCount;
     }
 
-    public final void clearCallCount()
+    public final void setCallCount(long l)
     {
-        callCount = 0;
+        callCount = l;
     }
 
     public final void incrementCallCount()
