@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.542 2003-12-27 05:18:26 piso Exp $
+ * $Id: Primitives.java,v 1.543 2003-12-27 05:37:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3933,9 +3933,10 @@ public final class Primitives extends Lisp
                     list.setCar(list3.car());
                     list3.setCar(h);
                     list3.setCdr(obj);
-                } else {
+                } else if (list3 == NIL) {
                     list.setCdr(obj);
-                }
+                } else
+                    signal(new TypeError(list3, Symbol.LIST));
                 return list;
             } else
                 return obj;
