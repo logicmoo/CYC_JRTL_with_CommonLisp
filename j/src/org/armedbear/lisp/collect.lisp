@@ -1,7 +1,7 @@
 ;;; collect.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: collect.lisp,v 1.1 2003-08-10 16:37:44 piso Exp $
+;;; $Id: collect.lisp,v 1.2 2004-03-10 19:55:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -103,4 +103,4 @@
 		  macros))))
     `(macrolet ,macros (let* ,(nreverse binds) ,@body))))
 
-(provide :collect)
+(provide 'collect)
