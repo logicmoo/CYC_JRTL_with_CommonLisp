@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.327 2003-08-15 01:18:09 piso Exp $
+ * $Id: Primitives.java,v 1.328 2003-08-15 13:10:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,49 +66,47 @@ public final class Primitives extends Module
     private static final int COMPILED_FUNCTION_P        = 24;
     private static final int CONSP                      = 25;
     private static final int CONSTANTP                  = 26;
-    private static final int ENDP                       = 27;
-    private static final int EVAL                       = 28;
-    private static final int EVENP                      = 29;
-    private static final int FBOUNDP                    = 30;
-    private static final int FMAKUNBOUND                = 31;
-    private static final int FOURTH                     = 32;
-    private static final int FUNCTIONP                  = 33;
-    private static final int IDENTITY                   = 34;
-    private static final int KEYWORDP                   = 35;
-    private static final int LENGTH                     = 36;
-    private static final int LISTP                      = 37;
-    private static final int LOWER_CASE_P               = 38;
-    private static final int MAKE_SYMBOL                = 39;
-    private static final int MAKUNBOUND                 = 40;
-    private static final int NUMBERP                    = 41;
-    private static final int ODDP                       = 42;
-    private static final int PREDECESSOR                = 43;
-    private static final int SECOND                     = 44;
-    private static final int SIMPLE_BIT_VECTOR_P        = 45;
-    private static final int SIMPLE_STRING_P            = 46;
-    private static final int SIMPLE_VECTOR_P            = 47;
-    private static final int SPECIAL_OPERATOR_P         = 48;
-    private static final int STRINGP                    = 49;
-    private static final int SUCCESSOR                  = 50;
-    private static final int SYMBOLP                    = 51;
-    private static final int SYMBOL_FUNCTION            = 52;
-    private static final int SYMBOL_NAME                = 53;
-    private static final int SYMBOL_PACKAGE             = 54;
-    private static final int SYMBOL_PLIST               = 55;
-    private static final int SYMBOL_VALUE               = 56;
-    private static final int THIRD                      = 57;
-    private static final int UPPER_CASE_P               = 58;
-    private static final int VALUES_LIST                = 59;
-    private static final int VECTORP                    = 60;
+    private static final int EVAL                       = 27;
+    private static final int EVENP                      = 28;
+    private static final int FBOUNDP                    = 29;
+    private static final int FMAKUNBOUND                = 30;
+    private static final int FOURTH                     = 31;
+    private static final int FUNCTIONP                  = 32;
+    private static final int IDENTITY                   = 33;
+    private static final int KEYWORDP                   = 34;
+    private static final int LENGTH                     = 35;
+    private static final int LISTP                      = 36;
+    private static final int LOWER_CASE_P               = 37;
+    private static final int MAKE_SYMBOL                = 38;
+    private static final int MAKUNBOUND                 = 39;
+    private static final int NUMBERP                    = 40;
+    private static final int ODDP                       = 41;
+    private static final int PREDECESSOR                = 42;
+    private static final int SECOND                     = 43;
+    private static final int SIMPLE_BIT_VECTOR_P        = 44;
+    private static final int SIMPLE_STRING_P            = 45;
+    private static final int SIMPLE_VECTOR_P            = 46;
+    private static final int SPECIAL_OPERATOR_P         = 47;
+    private static final int STRINGP                    = 48;
+    private static final int SUCCESSOR                  = 49;
+    private static final int SYMBOL_FUNCTION            = 50;
+    private static final int SYMBOL_NAME                = 51;
+    private static final int SYMBOL_PACKAGE             = 52;
+    private static final int SYMBOL_PLIST               = 53;
+    private static final int SYMBOL_VALUE               = 54;
+    private static final int THIRD                      = 55;
+    private static final int UPPER_CASE_P               = 56;
+    private static final int VALUES_LIST                = 57;
+    private static final int VECTORP                    = 58;
 
     // Primitive2
-    private static final int MEMBER                     = 61;
-    private static final int MOD                        = 62;
-    private static final int RPLACA                     = 63;
-    private static final int RPLACD                     = 64;
-    private static final int SET                        = 65;
-    private static final int _RPLACA                    = 66;
-    private static final int _RPLACD                    = 67;
+    private static final int MEMBER                     = 59;
+    private static final int MOD                        = 60;
+    private static final int RPLACA                     = 61;
+    private static final int RPLACD                     = 62;
+    private static final int SET                        = 63;
+    private static final int _RPLACA                    = 64;
+    private static final int _RPLACD                    = 65;
 
     private Primitives()
     {
@@ -142,7 +140,6 @@ public final class Primitives extends Module
         definePrimitive1("compiled-function-p", COMPILED_FUNCTION_P);
         definePrimitive1("consp", CONSP);
         definePrimitive1("constantp", CONSTANTP);
-        definePrimitive1("endp", ENDP);
         definePrimitive1("eval", EVAL);
         definePrimitive1("evenp", EVENP);
         definePrimitive1("fboundp", FBOUNDP);
@@ -169,7 +166,6 @@ public final class Primitives extends Module
         definePrimitive1("symbol-package", SYMBOL_PACKAGE);
         definePrimitive1("symbol-plist", SYMBOL_PLIST);
         definePrimitive1("symbol-value", SYMBOL_VALUE);
-        definePrimitive1("symbolp", SYMBOLP);
         definePrimitive1("third", THIRD);
         definePrimitive1("upper-case-p", UPPER_CASE_P);
         definePrimitive1("values-list", VALUES_LIST);
@@ -308,16 +304,12 @@ public final class Primitives extends Module
                 return NIL;
             case SPECIAL_OPERATOR_P:            // ### special-operator-p
                 return arg.getSymbolFunction() instanceof SpecialOperator ? T : NIL;
-            case ENDP:                          // ### endp
-                return arg.ENDP();
             case EVENP:                         // ### evenp
                 return (Fixnum.getValue(arg) % 2) == 0 ? T : NIL;
             case ODDP:                          // ### oddp
                 return (Fixnum.getValue(arg) % 2) == 0 ? NIL : T;
             case NUMBERP:                       // ### numberp
                 return (arg.getType() & TYPE_NUMBER) != 0 ? T : NIL;
-            case SYMBOLP:                       // ### symbolp
-                return (arg.getType() & TYPE_SYMBOL) != 0 ? T : NIL;
             case LENGTH:                        // ### length
                 return arg.LENGTH();
             case CONSP:                         // ### consp
@@ -537,6 +529,22 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws LispError
         {
             return arg instanceof Cons ? NIL : T;
+        }
+    };
+
+    // ### symbolp
+    private static final Primitive1 SYMBOLP = new Primitive1("symbolp") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg.SYMBOLP();
+        }
+    };
+
+    // ### endp
+    private static final Primitive1 ENDP = new Primitive1("endp") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg.ENDP();
         }
     };
 
@@ -824,6 +832,14 @@ public final class Primitives extends Module
 
     // ### append
     private static final Primitive APPEND = new Primitive("append") {
+        public LispObject execute()
+        {
+            return NIL;
+        }
+        public LispObject execute(LispObject arg)
+        {
+            return arg;
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
@@ -844,46 +860,38 @@ public final class Primitives extends Module
         }
         public LispObject execute(LispObject[] args) throws LispError
         {
-            switch (args.length) {
-                case 0:
-                    return NIL;
-                case 1:
-                    return args[0];
-                default: {
-                    Cons result = null;
-                    Cons splice = null;
-                    final int limit = args.length - 1;
-                    int i;
-                    for (i = 0; i < limit; i++) {
-                        LispObject top = args[i];
-                        if (top == NIL)
-                            continue;
-                        result = new Cons(top.car());
-                        splice = result;
-                        top = top.cdr();
-                        while (top != NIL) {
-                            Cons temp = new Cons(top.car());
-                            splice.setCdr(temp);
-                            splice = temp;
-                            top = top.cdr();
-                        }
-                        break;
-                    }
-                    if (result == null)
-                        return args[i];
-                    for (++i; i < limit; i++) {
-                        LispObject top = args[i];
-                        while (top != NIL) {
-                            Cons temp = new Cons(top.car());
-                            splice.setCdr(temp);
-                            splice = temp;
-                            top = top.cdr();
-                        }
-                    }
-                    splice.setCdr(args[i]);
-                    return result;
+            Cons result = null;
+            Cons splice = null;
+            final int limit = args.length - 1;
+            int i;
+            for (i = 0; i < limit; i++) {
+                LispObject top = args[i];
+                if (top == NIL)
+                    continue;
+                result = new Cons(top.car());
+                splice = result;
+                top = top.cdr();
+                while (top != NIL) {
+                    Cons temp = new Cons(top.car());
+                    splice.setCdr(temp);
+                    splice = temp;
+                    top = top.cdr();
+                }
+                break;
+            }
+            if (result == null)
+                return args[i];
+            for (++i; i < limit; i++) {
+                LispObject top = args[i];
+                while (top != NIL) {
+                    Cons temp = new Cons(top.car());
+                    splice.setCdr(temp);
+                    splice = temp;
+                    top = top.cdr();
                 }
             }
+            splice.setCdr(args[i]);
+            return result;
         }
     };
 
@@ -955,6 +963,11 @@ public final class Primitives extends Module
 
     // Returns true if no two numbers are the same; otherwise returns false.
     private static final Primitive NOT_EQUALS = new Primitive("/=") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.isNotEqualTo(second) ? T : NIL;
+        }
         public LispObject execute(LispObject[] array) throws LispError
         {
             final int length = array.length;
