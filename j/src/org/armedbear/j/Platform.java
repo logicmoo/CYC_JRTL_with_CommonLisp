@@ -1,8 +1,8 @@
 /*
  * Platform.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: Platform.java,v 1.5 2004-06-09 23:44:24 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Platform.java,v 1.6 2005-02-16 19:45:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,9 +25,10 @@ public final class Platform
 {
     private static final String osName = System.getProperty("os.name");
     private static final boolean isPlatformLinux = osName.startsWith("Linux");
+    private static final boolean isPlatformSunOS = osName.startsWith("SunOS");
     private static final boolean isPlatformUnix =
         isPlatformLinux || osName.startsWith("Mac OS X") ||
-        osName.startsWith("Solaris") || osName.startsWith("SunOS") ||
+        osName.startsWith("Solaris") || isPlatformSunOS ||
         osName.startsWith("AIX");
     private static final boolean isPlatformWindows =
         osName.startsWith("Windows");
@@ -41,6 +42,11 @@ public final class Platform
     public static final boolean isPlatformLinux()
     {
         return isPlatformLinux;
+    }
+
+    public static final boolean isPlatformSunOS()
+    {
+        return isPlatformSunOS;
     }
 
     public static final boolean isPlatformUnix()

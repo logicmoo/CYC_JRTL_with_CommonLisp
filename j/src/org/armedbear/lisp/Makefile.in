@@ -1,7 +1,7 @@
 # Makefile.in
 
-# Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.196 2005-02-14 19:08:50 piso Exp $
+# Copyright (C) 2003-2005 Peter Graves
+# $Id: Makefile.in,v 1.197 2005-02-16 19:45:46 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,6 +23,8 @@ JAVAH = @JAVAH@
 JAVACFLAGS = @JAVACFLAGS@
 COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
 LIBABCL=@LIBABCL@
+
+PLATFORM := $(shell uname)
 
 CLASSFILES =	AbstractArray.class \
 		AbstractBitVector.class \
@@ -284,4 +286,8 @@ Makefile: Makefile.in ../../../../config.status
 
 libabcl.so: Native.class native.c
 	cd ../../.. && $(JAVAH) -o org/armedbear/lisp/native.h org.armedbear.lisp.Native
-	gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I$(JDK)/include -I$(JDK)/include/linux native.c
+	if [ "X${PLATFORM}" = "XSunOS" ]; then \
+	    gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I$(JDK)/include -I$(JDK)/include/solaris native.c ; \
+	else \
+	    gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I$(JDK)/include -I$(JDK)/include/linux native.c ; \
+	fi
