@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.34 2004-10-17 13:31:33 piso Exp $
+;;; $Id: compile-system.lisp,v 1.35 2004-10-17 19:34:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,15 +34,23 @@
 
 (defun grovel-java-definitions-in-file (file out)
   (with-open-file (in file)
-    (let ((line-number 1))
+    (let ((system-package (find-package "SYSTEM"))
+          (line-number 1))
       (loop
         (let ((text (read-line in nil in))
               position)
           (cond ((eq text in)
                  (return))
                 ((setf position (search "###" text))
-                 (let ((name (read-from-string (subseq text (+ position 3)))))
-                   (format out "~S ~S ~S~%" name file line-number))))
+                 ;; The following code is based on the assumption that all the
+                 ;; Java builtins are accessible in the SYSTEM package (which
+                 ;; uses CL and EXT).
+                 (let* ((name (string (read-from-string (subseq text (+ position 3)))))
+                        (symbol (find-symbol name system-package)))
+                   (when symbol
+                     ;; Force the symbol's package prefix to be written out.
+                     (let ((*package* *keyword-package*))
+                       (format out "~S ~S ~S~%" symbol file line-number))))))
           (incf line-number))))))
 
 (defun grovel-java-definitions ()
