@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.6 2002-11-30 15:47:51 piso Exp $
+ * $Id: SshSession.java,v 1.7 2002-12-24 17:59:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,7 @@ public final class SshSession implements Constants
     private String cd = "\\cd";
 
     private Buffer outputBuffer;
-    
+
     private String passwordTitle;
     private String passwordPrompt;
 
@@ -86,7 +86,7 @@ public final class SshSession implements Constants
         this.locked = locked;
         register(this);
     }
-    
+
     private SshSession(SshSession other, boolean locked)
     {
         hostName = other.getHostName();
@@ -143,7 +143,7 @@ public final class SshSession implements Constants
         // No session to clone.
         return new SshSession(file, true);
     }
-    
+
     private static SshSession lockSession(SshFile file)
     {
         if (sessionList != null) {
@@ -226,7 +226,7 @@ public final class SshSession implements Constants
     {
         this.password = password;
     }
-    
+
     public final String getPassphrase()
     {
         return passphrase;
@@ -501,7 +501,7 @@ public final class SshSession implements Constants
     {
         boolean oldEcho = echo;
         echo = true;
-        String response = command("/bin/sh");
+        String response = command("exec /bin/sh");
         Log.debug("response = |" + response + "|");
         FastStringBuffer sb = new FastStringBuffer("PS1='");
         sb.append(PROMPT);
@@ -535,14 +535,14 @@ public final class SshSession implements Constants
             Log.debug("pre-authenticated");
             connected();
             return true;
-        } 
+        }
         if (response == PASSWORD)
             return authenticateWithPassword();
         if (response == PASSPHRASE)
             return authenticateWithPassphrase();
         return false;
     }
-    
+
     private boolean authenticateWithPassword()
     {
         if (password == null) {
@@ -575,7 +575,7 @@ public final class SshSession implements Constants
         }
         return _authenticate(password);
     }
-    
+
     private boolean authenticateWithPassphrase()
     {
         if (passphrase == null) {
@@ -605,7 +605,7 @@ public final class SshSession implements Constants
         }
         return _authenticate(passphrase);
     }
-    
+
     private boolean _authenticate(String pass)
     {
         Log.debug("authenticate pass = " + pass); // REMOVE THIS!!
@@ -622,7 +622,7 @@ public final class SshSession implements Constants
             Log.debug("authenticate FAILED!");
             echo = oldEcho;
             return false;
-        }        
+        }
     }
 
     private int checkInitialResponse()
