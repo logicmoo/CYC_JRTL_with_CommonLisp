@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.406 2005-03-19 20:01:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.407 2005-03-21 00:33:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -775,8 +775,8 @@
            (cond ((symbolp op)
                   (cond ((setf handler (get op 'p1-handler))
                          (funcall handler form))
-                        ((macro-function op)
-                         (p1 (macroexpand form)))
+                        ((macro-function op sys:*compile-file-environment*)
+                         (p1 (macroexpand form sys:*compile-file-environment*)))
                         ((special-operator-p op)
                          (compiler-unsupported "P1: unsupported special operator ~S" op))
                         (t
@@ -4836,8 +4836,8 @@
 ;;            form target representation)
   (unless (= (length form) 3)
     (return-from p2-setq (compile-form (precompiler::precompile-setq form)
-                                            :target target)))
-  (let ((expansion (macroexpand (second form))))
+                                       :target target)))
+  (let ((expansion (macroexpand (second form) sys:*compile-file-environment*)))
     (unless (eq expansion (second form))
       (compile-form (list 'SETF expansion (third form)))
       (return-from p2-setq)))
@@ -5082,8 +5082,8 @@
                          (funcall handler form
                                   :target target
                                   :representation representation))
-                        ((macro-function op)
-                         (compile-form (macroexpand form)
+                        ((macro-function op sys:*compile-file-environment*)
+                         (compile-form (macroexpand form sys:*compile-file-environment*)
                                        :target target
                                        :representation representation))
                         ((special-operator-p op)
@@ -5112,7 +5112,7 @@
                 (emit-move-from-stack target))
                (t
                 ;; Maybe it's a symbol macro...
-                (let ((expansion (macroexpand form)))
+                (let ((expansion (macroexpand form sys:*compile-file-environment*)))
                   (if (eq expansion form)
                       (compile-variable-reference form target representation)
                       (compile-form expansion

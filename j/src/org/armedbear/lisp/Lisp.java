@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.329 2005-03-19 20:00:25 piso Exp $
+ * $Id: Lisp.java,v 1.330 2005-03-21 00:32:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1957,6 +1957,9 @@ public abstract class Lisp
     // ### *debug* compiler policy
     public static final Symbol _DEBUG_ =
         exportSpecial("*DEBUG*", PACKAGE_JVM, Fixnum.ONE);
+
+    public static final Symbol _COMPILE_FILE_ENVIRONMENT_ =
+        exportSpecial("*COMPILE-FILE-ENVIRONMENT*", PACKAGE_SYS, NIL);
 
     public static final LispObject UNBOUND_VALUE = new LispObject()
     {
