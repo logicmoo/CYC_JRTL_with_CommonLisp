@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.14 2003-09-20 18:18:28 piso Exp $
+ * $Id: StructureObject.java,v 1.15 2003-09-21 15:07:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,19 @@ package org.armedbear.lisp;
 
 public final class StructureObject extends LispObject
 {
-    private final Symbol symbol;
+    private final LispClass structureClass;
     private final LispObject[] slots;
 
     public StructureObject(Symbol symbol, LispObject list) throws ConditionThrowable
     {
-        this.symbol = symbol;
+        structureClass = LispClass.findClass(symbol); // Might return null.
+        Debug.assertTrue(structureClass instanceof StructureClass);
         slots = list.copyToArray();
     }
 
     public StructureObject(StructureObject obj)
     {
-        this.symbol = obj.symbol;
+        this.structureClass = obj.structureClass;
         slots = new LispObject[obj.slots.length];
         for (int i = slots.length; i-- > 0;)
             slots[i] = obj.slots[i];
@@ -42,20 +43,20 @@ public final class StructureObject extends LispObject
 
     public LispObject typeOf()
     {
-        return symbol;
+        return structureClass.getSymbol();
     }
 
     public LispClass classOf()
     {
-        return LispClass.findClass(symbol);
+        return structureClass;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type == symbol)
-            return T;
         if (type instanceof StructureClass)
-            return type == LispClass.findClass(symbol) ? T : NIL;
+            return type == structureClass ? T : NIL; // FIXME Could be a superclass.
+        if (type == structureClass.getSymbol())
+            return T;
         if (type == Symbol.STRUCTURE_OBJECT)
             return T;
         if (type == BuiltInClass.STRUCTURE_OBJECT)
@@ -66,7 +67,7 @@ public final class StructureObject extends LispObject
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#S(");
-        sb.append(symbol);
+        sb.append(structureClass.getSymbol());
         // FIXME Use *PRINT-LENGTH*.
         final int limit = Math.min(slots.length, 10);
         for (int i = 0; i < limit; i++) {

@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardClass.java,v 1.2 2003-09-20 18:16:55 piso Exp $
+ * $Id: StandardClass.java,v 1.3 2003-09-21 15:07:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,16 @@ package org.armedbear.lisp;
 
 public class StandardClass extends LispClass
 {
-    protected LispObject directSuperclasses; // A list.
-
-    public StandardClass(Symbol symbol)
+    public StandardClass(Symbol symbol, LispObject directSuperclasses)
     {
-        super(symbol);
+        super(symbol, directSuperclasses);
+    }
+
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer("#<STANDARD-CLASS ");
+        sb.append(symbol.getName());
+        sb.append('>');
+        return sb.toString();
     }
 }

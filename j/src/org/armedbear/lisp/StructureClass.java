@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureClass.java,v 1.1 2003-09-20 18:15:48 piso Exp $
+ * $Id: StructureClass.java,v 1.2 2003-09-21 15:06:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public class StructureClass extends LispClass
 {
     private StructureClass(Symbol symbol)
     {
-        super(symbol);
+        super(symbol, new Cons(BuiltInClass.STRUCTURE_OBJECT));
     }
 
     public LispObject typeOf()
@@ -63,7 +63,7 @@ public class StructureClass extends LispClass
         {
             Symbol symbol = checkSymbol(arg);
             StructureClass c = new StructureClass(symbol);
-            map.put(symbol, c);
+            addClass(symbol, c);
             return c;
         }
     };
