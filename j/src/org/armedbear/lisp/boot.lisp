@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.55 2003-06-10 17:55:01 piso Exp $
+;;; $Id: boot.lisp,v 1.56 2003-06-10 18:40:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -116,10 +116,8 @@
                 "loop.lisp"))
   (%load name))
 
-(autoload 'remprop "symbol.lisp")
-(autoload 'get-properties "symbol.lisp")
-(autoload 'copy-symbol "symbol.lisp")
-
+(autoload '(remprop get-properties copy-symbol) "symbol.lisp")
+(autoload '(open sort merge parse-integer))
 
 ;;; Miscellany.
 
@@ -137,8 +135,6 @@
 
 (defun character (x)
   (coerce x 'character))
-
-(autoload 'open "open.lisp")
 
 (defun read-from-string (string &optional eof-error-p eof-value
 				&key (start 0) end preserve-whitespace)
@@ -158,11 +154,5 @@
 ;; FIXME
 (defun proclaim (decl)
   nil)
-
-
-(autoload 'sort "sort.lisp")
-(autoload 'merge "merge.lisp")
-(autoload 'parse-integer "parse-integer.lisp")
-
 
 (debug)

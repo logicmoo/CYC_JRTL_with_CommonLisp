@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.46 2003-06-10 16:36:48 piso Exp $
+;;; $Id: sequences.lisp,v 1.47 2003-06-10 18:40:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
           position position-if position-if-not
           find find-if find-if-not))
 
-(autoload 'make-sequence "make-sequence.lisp")
+(autoload 'make-sequence)
 
 (defmacro type-specifier-atom (type)
   `(if (atom ,type) ,type (car ,type)))
@@ -65,8 +65,7 @@
       (vector-subseq sequence start end)))
 
 
-(autoload 'copy-seq "copy-seq.lisp")
-(autoload 'fill "fill.lisp")
+(autoload '(copy-seq fill))
 
 
 (defun bad-seq-limit (x &optional y)
@@ -182,36 +181,13 @@
 			   sequences)))))
   result-sequence)
 
-(autoload 'reduce "reduce.lisp")
-(autoload 'delete "delete.lisp")
-(autoload 'delete-if "delete.lisp")
-(autoload 'delete-if-not "delete.lisp")
-(autoload 'remove "remove.lisp")
-(autoload 'remove-if "remove.lisp")
-(autoload 'remove-if-not "remove.lisp")
-
-(autoload 'remove-duplicates "remove-duplicates.lisp")
-(autoload 'delete-duplicates "delete-duplicates.lisp")
-
-(autoload 'substitute "substitute.lisp")
-(autoload 'substitute-if "substitute.lisp")
-(autoload 'substitute-if-not "substitute.lisp")
-
-(autoload 'nsubstitute "nsubstitute.lisp")
-(autoload 'nsubstitute-if "nsubstitute.lisp")
-(autoload 'nsubstitute-if-not "nsubstitute.lisp")
-
-(autoload 'position "find.lisp")
-(autoload 'position-if "find.lisp")
-(autoload 'position-if-not "find.lisp")
-(autoload 'find "find.lisp")
-(autoload 'find-if "find.lisp")
-(autoload 'find-if-not "find.lisp")
-
-(autoload 'count "count.lisp")
-(autoload 'count-if "count.lisp")
-(autoload 'count-if-not "count.lisp")
-
-(autoload 'mismatch "mismatch.lisp")
-
-(autoload 'search "search.lisp")
+(autoload 'reduce)
+(autoload '(delete delete-if delete-if-not) "delete.lisp")
+(autoload '(remove remove-if remove-if-not) "remove.lisp")
+(autoload '(remove-duplicates delete-duplicates))
+(autoload '(substitute substitute-if substitute-if-not) "substitute.lisp")
+(autoload '(nsubstitute nsubstitute-if nsubstitute-if-not) "nsubstitute.lisp")
+(autoload '(position position-if position-if-not find find-if find-if-not)
+          "find.lisp")
+(autoload '(count count-if count-if-not) "count.lisp")
+(autoload '(mismatch search))

@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.33 2003-06-10 17:38:23 piso Exp $
+;;; $Id: list.lisp,v 1.34 2003-06-10 18:40:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -169,15 +169,9 @@
 (defun constantly (x)
   #'(lambda (&rest args) x))
 
-(autoload 'subst "subst.lisp")
-(autoload 'subst-if "subst.lisp")
-(autoload 'subst-if-not "subst.lisp")
-(autoload 'nsubst "subst.lisp")
-(autoload 'nsubst-if "subst.lisp")
-(autoload 'nsubst-if-not "subst.lisp")
-
-(autoload 'sublis "sublis.lisp")
-(autoload 'nsublist "nsublis.lisp")
+(autoload '(subst subst-it subst-if-not nsubst nsubst-if nsubst-if-not)
+          "subst.lisp")
+(autoload '(sublis nsublis) "sublis.lisp")
 
 (defun member (item list &key key test test-not)
   (%member item list key test test-not))
@@ -208,17 +202,12 @@
       list
       (cons item list)))
 
-
-(autoload 'union "sets.lisp")
-(autoload 'nunion "sets.lisp")
-(autoload 'intersection "sets.lisp")
-(autoload 'nintersection "sets.lisp")
-(autoload 'set-difference "sets.lisp")
-(autoload 'nset-difference "sets.lisp")
-(autoload 'set-exclusive-or "sets.lisp")
-(autoload 'nset-exclusive-or "sets.lisp")
-(autoload 'subsetp "sets.lisp")
-
+(autoload '(union nunion
+            intersection nintersection
+            set-difference nset-difference
+            set-exclusive-or nset-exclusive-or
+            subsetp)
+          "sets.lisp")
 
 (defun acons (key datum alist)
   (cons (cons key datum) alist))
@@ -231,12 +220,8 @@
 	(error "the lists of keys and data are of unequal length"))
     (setq alist (acons (car x) (car y) alist))))
 
-(autoload 'assoc "assoc.lisp")
-(autoload 'assoc-if "assoc.lisp")
-(autoload 'assoc-if-not "assoc.lisp")
-(autoload 'rassoc "assoc.lisp")
-(autoload 'rassoc-if "assoc.lisp")
-(autoload 'rassoc-if-not "assoc.lisp")
+(autoload '(assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not)
+          "assoc.lisp")
 
 ;;; Mapping functions (from CMUCL)
 
