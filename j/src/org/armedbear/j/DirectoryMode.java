@@ -2,7 +2,7 @@
  * DirectoryMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DirectoryMode.java,v 1.3 2003-05-11 14:36:42 piso Exp $
+ * $Id: DirectoryMode.java,v 1.4 2003-05-13 13:50:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,6 +107,11 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
             menu.addSeparator();
             menu.add(editor, "New Frame", 'M', "newFrame");
             menu.add(editor, "Execute Command...", 'D', "executeCommand");
+            menu.addSeparator();
+            menu.add(editor, "Save Session", 'S', "saveSession");
+            menu.add(editor, "Load Session...", 'L', "loadSession");
+            menu.addSeparator();
+            menu.add(editor, "Print...", 'P', "print");
             menu.addSeparator();
             menu.add(editor, "Save All/Exit", '/', "saveAllExit");
             menu.add(editor, "Exit", 'X', "quit");
