@@ -2,7 +2,7 @@
  * IdleThread.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: IdleThread.java,v 1.2 2002-10-13 16:55:34 piso Exp $
+ * $Id: IdleThread.java,v 1.3 2003-01-09 16:17:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,6 +81,8 @@ public class IdleThread extends Thread
         addTask(autosaveTask);
         addTask(saveStateTask);
         addTask(tagCurrentDirectoryTask);
+        if (Editor.isDebugEnabled())
+            addListThreadsTask();
     }
 
     private synchronized IdleThreadTask getTask(int index)
@@ -232,4 +234,24 @@ public class IdleThread extends Thread
         new TagCurrentDirectoryTask();
 
     private static IdleThreadTask followContextTask;
+
+    private void addListThreadsTask()
+    {
+        Runnable listThreadsRunnable = new Runnable() {
+            private long lastRun = 0;
+            public void run()
+            {
+                int minutes = Editor.preferences().getIntegerProperty(
+                    Property.LIST_THREADS);
+                if (minutes == 0)
+                    return; // Not enabled.
+                long millis = minutes * 60000;
+                if (System.currentTimeMillis() - lastRun > millis) {
+                    Debug.listThreads();
+                    lastRun = System.currentTimeMillis();
+                }
+            }
+        };
+        addTask(new IdleThreadTask(listThreadsRunnable, 10000, true));
+    }
 }
