@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003-2004 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.9 2004-06-27 14:34:13 piso Exp $
+ * $Id: SidebarBufferTree.java,v 1.10 2004-09-16 16:49:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -461,13 +461,15 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
 
     private DefaultMutableTreeNode findNodeForObject(Object userObj)
     {
-        Enumeration enumeration = rootNode.breadthFirstEnumeration();
-        while (enumeration.hasMoreElements()) {
-            Object next = enumeration.nextElement();
-            if (next instanceof DefaultMutableTreeNode) {
-                Object obj = ((DefaultMutableTreeNode)next).getUserObject();
-                if (userObj.equals(obj))
-                    return (DefaultMutableTreeNode) next;
+        if (rootNode != null) {
+            Enumeration enumeration = rootNode.breadthFirstEnumeration();
+            while (enumeration.hasMoreElements()) {
+                Object next = enumeration.nextElement();
+                if (next instanceof DefaultMutableTreeNode) {
+                    Object obj = ((DefaultMutableTreeNode)next).getUserObject();
+                    if (userObj.equals(obj))
+                        return (DefaultMutableTreeNode) next;
+                }
             }
         }
         return null;
