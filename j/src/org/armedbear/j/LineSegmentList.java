@@ -1,8 +1,8 @@
 /*
  * LineSegmentList.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: LineSegmentList.java,v 1.1.1.1 2002-09-24 16:07:43 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: LineSegmentList.java,v 1.2 2004-04-01 15:47:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,8 +91,11 @@ public final class LineSegmentList
 
     public final void recycleSegments()
     {
-        for (int i = size-1; i >= 0; i--)
+        for (int i = size; i-- > 0;) {
             array[i].recycle();
+            array[i] = null;
+        }
+        size = 0;
     }
 
     private void ensureCapacity(int minimumCapacity)
