@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.37 2003-11-21 01:19:32 piso Exp $
+;;; $Id: defstruct.lisp,v 1.38 2003-11-21 02:41:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,46 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "SYSTEM")
+
+(defmacro ds-name (x)           `(aref ,x  0))
+(defmacro ds-conc-name (x)      `(aref ,x  1))
+(defmacro ds-constructors (x)   `(aref ,x  2))
+(defmacro ds-copier (x)         `(aref ,x  3))
+(defmacro ds-include (x)        `(aref ,x  4))
+(defmacro ds-type (x)           `(aref ,x  5))
+(defmacro ds-named (x)          `(aref ,x  6))
+(defmacro ds-initial-offset (x) `(aref ,x  7))
+(defmacro ds-predicate (x)      `(aref ,x  8))
+(defmacro ds-print-function (x) `(aref ,x  9))
+(defmacro ds-direct-slots (x)   `(aref ,x 10))
+(defmacro ds-slots (x)          `(aref ,x 11))
+
+(defun make-defstruct-definition (&key name
+                                       conc-name
+                                       constructors
+                                       copier
+                                       include
+                                       type
+                                       named
+                                       initial-offset
+                                       predicate
+                                       print-function
+                                       direct-slots
+                                       slots)
+  (let ((def (make-array 12)))
+    (setf (ds-name def) name
+          (ds-conc-name def) conc-name
+          (ds-constructors def) constructors
+          (ds-copier def) copier
+          (ds-include def) include
+          (ds-type def) type
+          (ds-named def) named
+          (ds-initial-offset def) initial-offset
+          (ds-predicate def) predicate
+          (ds-print-function def) print-function
+          (ds-direct-slots def) direct-slots
+          (ds-slots def) slots)
+    def))
 
 (defvar *ds-name*)
 (defvar *ds-conc-name*)
@@ -242,8 +282,25 @@
                                   (list :name (car slot) :initform (cadr slot)))))
         (push slot-description *ds-direct-slots*)))
     (setf *ds-direct-slots* (nreverse *ds-direct-slots*))
-    (setf *ds-slots* *ds-direct-slots*)
+    (if *ds-include*
+        (let* ((def (get (car *ds-include*) 'structure-definition))
+               (included-slots (ds-slots def)))
+          (setf *ds-slots* (append included-slots *ds-direct-slots*)))
+        (setf *ds-slots* *ds-direct-slots*))
     `(progn
+       (setf (get ',*ds-name* 'structure-definition)
+             (make-defstruct-definition :name ',*ds-name*
+                                        :conc-name ',*ds-conc-name*
+                                        :constructors ',*ds-constructors*
+                                        :copier ',*ds-copier*
+                                        :include ',*ds-include*
+                                        :type ',*ds-type*
+                                        :named ,*ds-named*
+                                        :initial-offset ,*ds-initial-offset*
+                                        :predicate ,*ds-predicate*
+                                        :print-function ,*ds-print-function*
+                                        :direct-slots ',*ds-direct-slots*
+                                        :slots ',*ds-slots*))
        (make-structure-class ',*ds-name* ',*ds-direct-slots* ',*ds-slots*)
        ,@(define-constructors)
        ,@(define-predicate)
