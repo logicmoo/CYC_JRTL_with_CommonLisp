@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispString.java,v 1.75 2004-02-11 20:00:59 piso Exp $
+ * $Id: LispString.java,v 1.76 2004-02-12 01:55:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,7 @@ public final class LispString extends AbstractVector
         return false;
     }
 
-    public boolean equal(LispObject obj)
+    public boolean equal(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;
@@ -122,6 +122,8 @@ public final class LispString extends AbstractVector
                     return false;
             return true;
         }
+        if (obj instanceof NilVector)
+            return obj.equal(this);
         return false;
     }
 
