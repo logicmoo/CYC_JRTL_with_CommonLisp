@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.395 2003-09-14 17:14:22 piso Exp $
+ * $Id: Primitives.java,v 1.396 2003-09-14 17:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -213,7 +213,7 @@ public final class Primitives extends Module
                 if (args.length < 1)
                     throw new WrongNumberOfArgumentsException("MIN");
                 LispObject result = args[0];
-                if ((result.getType() & TYPE_REAL) == 0)
+                if (!result.realp())
                     throw new TypeError(result, "real");
                 for (int i = 1; i < args.length; i++) {
                     if (args[i].isLessThan(result))
@@ -225,7 +225,7 @@ public final class Primitives extends Module
                 if (args.length < 1)
                     throw new WrongNumberOfArgumentsException("MAX");
                 LispObject result = args[0];
-                if ((result.getType() & TYPE_REAL) == 0)
+                if (!result.realp())
                     throw new TypeError(result, "real");
                 for (int i = 1; i < args.length; i++) {
                     if (args[i].isGreaterThan(result))
@@ -4629,7 +4629,7 @@ public final class Primitives extends Module
         {
             if (arg instanceof LispFloat)
                 return Complex.getInstance(arg, LispFloat.ZERO);
-            if ((arg.getType() & TYPE_REAL) != 0)
+            if (arg.realp())
                 return arg;
             throw new TypeError(arg, "real number");
         }
