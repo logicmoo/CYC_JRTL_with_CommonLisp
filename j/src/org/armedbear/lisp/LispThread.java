@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.78 2005-03-19 20:00:27 piso Exp $
+ * $Id: LispThread.java,v 1.79 2005-03-30 14:59:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -502,54 +502,54 @@ public final class LispThread extends LispObject
     public void pushStackFrame(LispObject operator)
         throws ConditionThrowable
     {
+        stack = new Cons((new StackFrame(operator)), stack);
         if (profiling && sampling) {
             if (sampleNow)
                 Profiler.sample(this);
         }
-        stack = new Cons((new StackFrame(operator)), stack);
     }
 
     public void pushStackFrame(LispObject operator, LispObject arg)
         throws ConditionThrowable
     {
+        stack = new Cons((new StackFrame(operator, arg)), stack);
         if (profiling && sampling) {
             if (sampleNow)
                 Profiler.sample(this);
         }
-        stack = new Cons((new StackFrame(operator, arg)), stack);
     }
 
     public void pushStackFrame(LispObject operator, LispObject first,
                                LispObject second)
         throws ConditionThrowable
     {
+        stack = new Cons((new StackFrame(operator, first, second)), stack);
         if (profiling && sampling) {
             if (sampleNow)
                 Profiler.sample(this);
         }
-        stack = new Cons((new StackFrame(operator, first, second)), stack);
     }
 
     public void pushStackFrame(LispObject operator, LispObject first,
                                LispObject second, LispObject third)
         throws ConditionThrowable
     {
+        stack = new Cons((new StackFrame(operator, first, second, third)),
+                         stack);
         if (profiling && sampling) {
             if (sampleNow)
                 Profiler.sample(this);
         }
-        stack = new Cons((new StackFrame(operator, first, second, third)),
-                         stack);
     }
 
     public void pushStackFrame(LispObject operator, LispObject[] args)
         throws ConditionThrowable
     {
+        stack = new Cons((new StackFrame(operator, args)), stack);
         if (profiling && sampling) {
             if (sampleNow)
                 Profiler.sample(this);
         }
-        stack = new Cons((new StackFrame(operator, args)), stack);
     }
 
     public void resetStack()
