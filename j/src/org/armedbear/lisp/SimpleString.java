@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.4 2004-02-24 00:41:33 piso Exp $
+ * $Id: SimpleString.java,v 1.5 2004-02-24 12:54:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,8 +81,10 @@ public final class SimpleString extends AbstractString
                 return T;
             if (type == Symbol.SIMPLE_BASE_STRING)
                 return T;
+            if (type == Symbol.SIMPLE_ARRAY)
+                return T;
         }
-        // FIXME BuiltInClass.SIMPLE_STRING
+        // FIXME BuiltInClass.SIMPLE_STRING, BuiltInClass.SIMPLE_ARRAY
         return super.typep(type);
     }
 
