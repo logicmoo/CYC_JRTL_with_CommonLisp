@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.37 2004-08-27 00:48:53 piso Exp $
+;;; $Id: compile-file.lisp,v 1.38 2004-08-27 16:17:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,7 +44,14 @@
             (values nil condition))))
 
 ;; Dummy function. Should never be called.
-(defun dummy (&rest ignored) (assert nil))
+(defun dummy (&rest ignored)
+  (assert nil))
+
+(defun verify-load (classfile)
+  (and classfile
+       (let ((*default-pathname-defaults* *compile-file-pathname*))
+         (report-error
+          (load-compiled-function classfile)))))
 
 (defun process-toplevel-form (form stream compile-time-too)
   (cond ((atom form)
@@ -90,9 +97,7 @@
                        (classfile-name (next-classfile-name))
                        (classfile (report-error
                                    (jvm:compile-defun name expr nil classfile-name)))
-                       (compiled-function (and classfile
-                                               (report-error
-                                                (load-compiled-function classfile)))))
+                       (compiled-function (verify-load classfile)))
                   (if compiled-function
                       (progn
                         (%format t ";  ~A => ~A.cls~%" name
@@ -127,8 +132,7 @@
                      (classfile
                       (ignore-errors
                        (jvm:compile-defun nil expr nil classfile-name))))
-                (if (and classfile
-                         (ignore-errors (load-compiled-function classfile)))
+                (if (verify-load classfile)
                     (progn
                       (%format t ";  Macro ~A => ~A.cls~%" name
                                (pathname-name (pathname classfile-name)))
