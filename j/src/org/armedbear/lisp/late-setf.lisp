@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: late-setf.lisp,v 1.3 2004-03-18 19:06:00 piso Exp $
+;;; $Id: late-setf.lisp,v 1.4 2004-03-19 00:55:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -81,8 +81,8 @@
   (unless (and (listp functionoid)
                (= (length functionoid) 2)
                (eq (first functionoid) 'function)
-               (symbolp (second functionoid)))
-    (error "SETF of APPLY is only defined for function arguments (e.g. #'AREF)."))
+               (memq (second functionoid) '(aref bit sbit)))
+    (error "SETF of APPLY is only defined for #'AREF, #'BIT and #'SBIT."))
   (let ((function (second functionoid))
         (new-var (gensym))
         (vars (make-gensym-list (length args))))
