@@ -2,7 +2,7 @@
  * ConditionThrowable.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ConditionThrowable.java,v 1.5 2003-09-19 00:42:26 piso Exp $
+ * $Id: ConditionThrowable.java,v 1.6 2003-09-19 01:09:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,15 @@ package org.armedbear.lisp;
 
 public class ConditionThrowable extends Throwable
 {
+    public Condition condition;
+
     public ConditionThrowable()
     {
+    }
+
+    public ConditionThrowable(Condition condition)
+    {
+        this.condition = condition;
     }
 
     public ConditionThrowable(String message)
@@ -34,6 +41,6 @@ public class ConditionThrowable extends Throwable
 
     public Condition getCondition()
     {
-        return new Condition();
+        return condition != null ? condition : new Condition();
     }
 }
