@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.1 2003-08-16 02:14:23 piso Exp $
+;;; $Id: debug.lisp,v 1.2 2003-09-21 00:53:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,10 @@
   (format stream "~%> "))
 
 (defun invoke-debugger (condition)
+  (when *debugger-hook*
+    (let ((hook-function *debugger-hook*)
+          (*debugger-hook* nil))
+      (funcall hook-function condition hook-function)))
   (catch 'continue
     (debugger-loop)))
 
