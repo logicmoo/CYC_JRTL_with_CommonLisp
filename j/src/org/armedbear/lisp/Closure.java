@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.88 2004-11-13 15:01:57 piso Exp $
+ * $Id: Closure.java,v 1.89 2004-12-17 20:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -814,6 +814,7 @@ public class Closure extends Function
         return array;
     }
 
+    // No optional or keyword parameters.
     protected final LispObject[] fastProcessArgs(LispObject[] args, int extra)
         throws ConditionThrowable
     {
