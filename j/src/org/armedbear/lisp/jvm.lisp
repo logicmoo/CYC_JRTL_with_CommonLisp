@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.217 2004-07-14 19:50:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.218 2004-07-15 20:03:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -221,19 +221,6 @@
   (let ((instruction (inst instr args)))
     (push instruction *code*)
     instruction))
-
-(defmacro emit-store-value ()
-  `(emit 'store-value))
-
-(defmacro emit-push-value ()
-  `(emit 'push-value))
-
-(defun remove-store-value ()
-  (let* ((instruction (car *code*))
-         (opcode (instruction-opcode instruction)))
-    (when (eql opcode 204) ; STORE-VALUE
-      (setf *code* (cdr *code*))
-      t)))
 
 (defconstant +java-string+ "Ljava/lang/String;")
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
@@ -634,25 +621,24 @@
 (defun walk-code (code start-index depth)
   (do* ((i start-index (1+ i))
         (limit (length code)))
-       ((>= i limit) depth)
+       ((>= i limit))
     (let ((instruction (aref code i)))
       (when (instruction-depth instruction)
+        (unless (eql (instruction-depth instruction) (+ depth (instruction-stack instruction)))
+          (format t "Stack inconsistency at index ~D: found ~S, expected ~S.~%"
+                  i
+                  (instruction-depth instruction)
+                  (+ depth (instruction-stack instruction))))
         (return-from walk-code))
-
-;;       (setf (instruction-depth instruction) depth)
-;;       (setf depth (+ depth (instruction-stack instruction)))
       (setf depth (+ depth (instruction-stack instruction)))
       (setf (instruction-depth instruction) depth)
-
       (let ((opcode (instruction-opcode instruction)))
         (when (branch-opcode-p opcode)
           (let ((label (car (instruction-args instruction))))
             (walk-code code (symbol-value label) depth)))
-        (when (eql opcode 167) ; GOTO
+        (when (member opcode '(167 191)) ; GOTO ATHROW
           ;; Current path ends.
-          (return-from walk-code)))
-
-      )))
+          (return-from walk-code))))))
 
 (defun analyze-stack ()
   (sys::require-type *code* 'vector)
@@ -662,8 +648,6 @@
       (when (eql opcode 202) ; LABEL
         (let ((label (car (instruction-args instruction))))
           (set label i)))
-;;       (unless (instruction-stack instruction)
-;;         (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
       (if (instruction-stack instruction)
           (when (opcode-stack-effect opcode)
             (unless (eql (instruction-stack instruction) (opcode-stack-effect opcode))
@@ -672,9 +656,11 @@
                       (opcode-stack-effect opcode))
               (format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
           (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
-      (assert (not (null (instruction-stack instruction))))
-      ))
+      (assert (not (null (instruction-stack instruction))))))
   (walk-code *code* 0 0)
+  (dolist (handler *handlers*)
+    ;; Stack depth is always 1 when handler is called.
+    (walk-code *code* (symbol-value (handler-code handler)) 1))
   (let ((max-stack 0))
     (dotimes (i (length *code*))
       (let* ((instruction (aref *code* i))
@@ -688,6 +674,7 @@
     max-stack))
 
 (defun emit-move-from-stack (target)
+  (declare (optimize (speed 3) (safety 0)))
   (cond ((null target)
          (emit 'pop))
         ((eq target :stack))
@@ -707,25 +694,19 @@
            (assert (variable-p variable))
            (cond ((variable-register variable)
                   (emit 'aload (variable-register variable))
-;;                   (emit-store-value)
-                  (emit-move-from-stack target)
-                  )
+                  (emit-move-from-stack target))
                  ((variable-special-p variable)
                   (compile-special-reference (variable-name variable) target))
                  (*child-p*
                   (emit 'aload *context-register*)
                   (emit 'bipush (variable-index variable))
                   (emit 'aaload)
-;;                   (emit-store-value)
-                  (emit-move-from-stack target)
-                  )
+                  (emit-move-from-stack target))
                  (t
                   (emit 'aload 1)
                   (emit 'bipush (variable-index variable))
                   (emit 'aaload)
-;;                   (emit-store-value)
-                  (emit-move-from-stack target)
-                  ))))
+                  (emit-move-from-stack target)))))
         (207 ; VAR-SET
          (let ((variable (car (instruction-args instruction))))
            (assert (variable-p variable))
@@ -770,7 +751,6 @@
 
 ;; Remove unused labels.
 (defun optimize-1 ()
-;;   (sys::%format t "optimize-1~%")
   (let ((locally-changed-p nil)
         (branch-targets ()))
     ;; Make a list of the labels that are actually branched to.
@@ -796,7 +776,6 @@
       t)))
 
 (defun optimize-2 ()
-;;   (sys::%format t "optimize-2~%")
   (let ((locally-changed-p nil))
     (dotimes (i (length *code*))
       (let ((instruction (svref *code* i)))
@@ -819,7 +798,6 @@
 
 ;; Reduce GOTOs.
 (defun optimize-3 ()
-;;   (sys::%format t "optimize-3~%")
   (validate-labels)
   (let ((locally-changed-p nil))
     (dotimes (i (length *code*))
@@ -844,7 +822,6 @@
 
 ;; Look for the sequence STORE-VALUE LOAD-VALUE ARETURN.
 (defun optimize-4 ()
-;;   (sys::%format t "optimize-4~%")
   (let ((locally-changed-p nil))
     (dotimes (i (- (length *code*) 2))
       (let ((instr1 (svref *code* i))
@@ -863,7 +840,6 @@
 
 ;; Don't do CLEAR-VALUES twice in a row.
 (defun optimize-5 ()
-;;   (sys::%format t "optimize-5~%")
   (let ((locally-changed-p nil)
         (previous-opcode nil))
     (dotimes (i (length *code*))
@@ -881,10 +857,9 @@
 
 (defun delete-unreachable-code ()
   (when *delete-unreachable-code-flag*
-;;     (format t "deleting unreachable code~%")
     ;; Look for unreachable code after GOTO.
     (validate-labels)
-    (let (;;(locally-changed-p nil)
+    (let ((locally-changed-p nil)
           (after-goto nil))
       (dotimes (i (length *code*))
         (let ((instruction (svref *code* i)))
@@ -893,22 +868,18 @@
                      (setf after-goto nil)
                      ;; Unreachable.
                      (progn
-;;                        (format t "deleting unreachable code at index ~D: ~S~%"
-;;                                i (print-instruction instruction))
                        (setf (instruction-opcode instruction) 0)
                        (setf (instruction-args instruction) nil)
                        (setf (instruction-stack instruction) nil)
                        (setf (instruction-depth instruction) nil)
-                       )))
+                       (setf locally-changed-p t))))
                 ((= (instruction-opcode instruction) 167) ; GOTO
                  (setf after-goto t)))))
-      ;;       (when locally-changed-p
-      ;;         ;;             (setf *code* (delete 0 *code* :key #'instruction-opcode))
-      ;;         (setf changed-p t))
-      )))
+      (when locally-changed-p
+        (setf *code* (delete 0 *code* :key #'instruction-opcode))
+        t))))
 
 (defun optimize-code ()
-;;   (sys::%format t "entering optimize-code~%")
   (when *debug*
     (sys::%format t "----- before optimization -----~%")
     (print-code))
@@ -919,18 +890,13 @@
       (setf changed-p (or (optimize-3) changed-p))
       (setf changed-p (or (optimize-4) changed-p))
       (setf changed-p (or (optimize-5) changed-p))
-;;       (sys::%format t "changed-p = ~S~%" changed-p)
+      (setf changed-p (or (delete-unreachable-code) changed-p))
       (unless changed-p
-;;         (sys::%format t "returning...~%")
         (return))))
-  (delete-unreachable-code)
+;;   (delete-unreachable-code)
   (when *debug*
     (format t "----- after optimization -----~%")
-    (print-code))
-;;   (format t "leaving optimize-code~%")
-  )
-
-;; (defvar *max-stack*)
+    (print-code)))
 
 (defun code-bytes (code)
   (let ((length 0))
@@ -1020,8 +986,7 @@
     ((7 8)
      (write-u2 (second entry)))
     (t
-     (error "WRITE-CP-ENTRY unhandled tag ~D~%" (car entry)))
-  ))
+     (error "WRITE-CP-ENTRY unhandled tag ~D~%" (car entry)))))
 
 (defun write-constant-pool ()
   (write-u2 *pool-count*)
@@ -1442,9 +1407,7 @@
     g))
 
 (defun compile-constant (form &key (target *val*))
-;;   (format t "compile-constant form = ~S target = ~S~%" form target)
   (unless target
-;;     (format t "compile-constant returning (no target)~%")
     (return-from compile-constant))
   (cond
    ((fixnump form)
@@ -1528,12 +1491,8 @@
 
 (defun compile-binary-operation (op args &key (target *val*))
   (compile-form (first args) :target :stack)
-;;   (unless (remove-store-value)
-;;     (emit-push-value))
   (maybe-emit-clear-values (first args))
   (compile-form (second args) :target :stack)
-;;   (unless (remove-store-value)
-;;     (emit-push-value))
   (maybe-emit-clear-values (second args))
   (emit-invokevirtual +lisp-object-class+
                       op
@@ -1719,9 +1678,6 @@
 (defun compile-function-call (form &key (target *val*))
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
-;;       (format t "old form = ~S~%" form)
-;;       (format t "new form = ~S~%" new-form)
-;;       (format t "compile-function-call target = ~S~%" target)
       (return-from compile-function-call (compile-form new-form :target target))))
   (let ((fun (car form))
         (args (cdr form)))
@@ -1768,8 +1724,6 @@
                  (emit 'dup)
                  (emit 'sipush i)
                  (compile-form arg :target :stack)
-;;                  (unless (remove-store-value)
-;;                    (emit-push-value)) ; leaves value on stack
                  (emit 'aastore) ; store value in array
                  (maybe-emit-clear-values arg)
                  (incf i))) ; array left on stack here
@@ -1831,9 +1785,7 @@
       (dolist (arg args)
         (emit 'dup)
         (emit 'sipush i)
-        (compile-form arg)
-        (unless (remove-store-value)
-          (emit-push-value)) ; leaves value on stack
+        (compile-form arg :target :stack)
         (emit 'aastore) ; store value in array
         (maybe-emit-clear-values arg)
         (incf i))) ; array left on stack here
@@ -1843,7 +1795,7 @@
     (emit-invokevirtual +lisp-object-class+
                         "execute"
                         "([Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                        -1)
+                        -2)
     (cond ((null target)
            (emit 'pop)
            (maybe-emit-clear-values form))
@@ -1974,6 +1926,7 @@
           (t
            (emit (compile-test test) `,label1)
 ;;            (format t "consequent = ~S~%" consequent)
+
            (compile-form consequent :target :stack)
            (emit-move-from-stack target)
 ;;            (compile-form consequent :target target)
@@ -1981,6 +1934,7 @@
            (emit 'goto `,label2)
            (emit 'label `,label1)
 ;;            (format t "alternate = ~S~%" alternate)
+
            (compile-form alternate :target :stack)
            (emit-move-from-stack target)
 ;;            (compile-form consequent :target target)
@@ -2011,7 +1965,7 @@
          (emit-invokevirtual +lisp-thread-class+
                              "bindSpecial"
                              "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                             -2))
+                             -3))
         (*child-p*
          (emit 'aload *context-register*) ; Stack: value context
          (emit 'swap) ; context value
@@ -2059,7 +2013,7 @@
     (emit-invokevirtual +lisp-thread-class+
                         "getValues"
                         "(Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                        0)
+                        -2)
     ;; Values array is now on the stack at runtime.
     (let ((index 0))
       (dolist (var vars)
@@ -2215,7 +2169,6 @@
       (tag-label (aref *tags* index)))))
 
 (defun compile-tagbody (form &key (target *val*))
-;;   (format t "compile-tagbody target = ~S~%" target)
   (let ((saved-fp (fill-pointer *tags*))
         (body (cdr form)))
     ;; Scan for tags.
@@ -2231,14 +2184,12 @@
              (let ((label (label-for-tag subform)))
                (unless label
                  (error "COMPILE-TAGBODY: tag not found: ~S" subform))
-;;                (format t "emitting label ~S~%" label)
                (emit 'label label)))
             (t
              (when (and (null (cdr rest)) ;; Last subform.
                         (consp subform)
                         (eq (car subform) 'GO))
                (generate-interrupt-check))
-;;              (format t "compile-tagbody target = nil subform = ~S~%" subform)
              (compile-form subform :target nil)
              (maybe-emit-clear-values subform))))
     (setf (fill-pointer *tags*) saved-fp))
@@ -2253,7 +2204,7 @@
          (label (label-for-tag name)))
     (unless label
       (error "COMPILE-GO: tag not found: ~S" name))
-  (emit 'goto label)))
+    (emit 'goto label)))
 
 (defun compile-atom (form &key (target *val*))
   (unless (= (length form) 2)
@@ -2289,32 +2240,22 @@
   target)
 
 (defun compile-block (form &key (target *val*))
-;;   (format t "compile-block form = ~S~%" form)
-;;   (format t "compile-block target = ~S~%" target)
-  (let* (;;(original-target target)
-         (block-label (cadr form))
+  (let* ((block-label (cadr form))
          (body (cddr form))
          (block-exit (gensym))
          (cblock (make-cblock :label block-label
                               :exit block-exit
                               :target target))
-;;          (*blocks* (acons block-label block-exit *blocks*))
-;;          (*blocks* (push cblock *blocks*))
          (*blocks* *blocks*)
-
          (*register* *register*)
          env-register)
-;;     (format t "entering compile-block ~A A~%" block-label block-exit)
     (push cblock *blocks*)
     (when (contains-return body)
       ;; Save current dynamic environment.
       (setf env-register (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-      (emit 'astore env-register)
-;;       (unless original-target
-;;         (setf target *val*))
-      )
+      (emit 'astore env-register))
     ;; Compile subforms.
     (do ((subforms body (cdr subforms)))
         ((null subforms))
@@ -2325,34 +2266,21 @@
         (unless last-subform-p
           (maybe-emit-clear-values subform))))
     (emit 'label `,block-exit)
-;;     (unless (eql target original-target)
-;;       (assert (eql target *val*))
-;;       (emit 'aload target)
-;;       (emit-move-from-stack original-target))
     (when env-register
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
       (emit 'aload env-register)
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))
-;;     (format t "leaving compile-block ~S~%" block-label)
-    ))
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-return-from (form &key (target *val*))
-;;   (format t "compile-return-from blocks:~%")
-;;   (dolist (cb *blocks*)
-;;     (format t "block ~A ~A~%" (cblock-label cb) (cblock-exit cb)))
-;;   (format t "compile-return-from end blocks~%")
-;;   (format t "compile-return-from form = ~S target = ~S~%" form target)
   (let* ((rest (cdr form))
          (block-label (car rest))
          (cblock (find block-label *blocks* :key #'cblock-label))
-;;          (block-exit (cdr (assoc block-label *blocks*)))
          (block-exit (and cblock (cblock-exit cblock)))
          (result-form (cadr rest)))
     (unless block-exit
       (error "No block named ~S is currently visible." block-label))
     (compile-form result-form :target (cblock-target cblock))
-;;     (format t "compile-return-from GOTO ~S~%" `,block-exit)
     (emit 'goto `,block-exit)))
 
 (defun compile-cons (form &key (target *val*))
@@ -2415,6 +2343,9 @@
             (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
 (defun compile-rplacd (form &key (target *val*))
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-rplacd (compile-form new-form :target target))))
   (let ((args (cdr form)))
     (unless (= (length args) 2)
       (error "wrong number of arguments for RPLACD"))
@@ -2717,8 +2648,6 @@
                (variable-special-p variable))
            (let ((new-form (rewrite-setq form)))
              (when (neq new-form form)
-;;                (format t "old form = ~S~%" form)
-;;                (format t "new form = ~S~%" new-form)
                (return-from compile-setq (compile-form new-form :target target))))
            (emit 'getstatic
                  *this-class*
@@ -2730,7 +2659,7 @@
            (emit-invokestatic +lisp-class+
                               "setSpecialVariable"
                               "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
-                              -1)
+                              -2)
            (emit-move-from-stack target))
           (t
            (compile-form value-form :target :stack)
@@ -2754,8 +2683,6 @@
          (label3 (gensym))
          (label4 (gensym))
          (label5 (gensym)))
-;;     (compile-form (second form) :target :stack) ; Tag.
-;;     (emit 'astore tag-register)
     (compile-form (second form) :target tag-register) ; Tag.
     (emit-push-current-thread)
     (emit 'aload tag-register)
@@ -2777,16 +2704,15 @@
     (emit 'dup) ; Stack depth is 2.
     (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
     (emit 'aload tag-register) ; Stack depth is 3.
+    ;; If it's not the tag we're looking for, we branch to the start of the
+    ;; catch-all handler, which will do a re-throw.
     (emit 'if_acmpne `,label4) ; Stack depth is 1.
     (emit 'aload *thread*)
     (emit-invokevirtual +lisp-throw-class+
                         "getResult"
                         "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
                         -1)
-
-;;     (emit-store-value) ; Stack depth is 0.
-    (emit-move-from-stack target)
-
+    (emit-move-from-stack target) ; Stack depth is 0.
     (emit 'goto `,label5)
     (emit 'label `,label4) ; Start of handler for all other Throwables.
     ;; A Throwable object is on the runtime stack here. Stack depth is 1.
@@ -2795,7 +2721,7 @@
                         "popCatchTag"
                         "()V"
                         -1)
-    (emit 'athrow) ; And gone.
+    (emit 'athrow) ; And we're gone.
     (emit 'label `,label5)
     ;; Finally...
     (emit 'aload *thread*)
@@ -2843,11 +2769,8 @@
         form)))
 
 (defun compile-throw (form &key (target *val*))
-;;   (format t "compile-throw form = ~S target = ~S~%" form target)
   (let ((new-form (rewrite-throw form)))
     (when (neq new-form form)
-;;       (format t "old form = ~S~%" form)
-;;       (format t "new form = ~S~%" new-form)
       (return-from compile-throw (compile-form new-form :target target))))
   (emit-push-current-thread)
   (compile-form (second form) :target :stack) ; Tag.
@@ -2855,14 +2778,13 @@
   (emit-invokevirtual +lisp-thread-class+
                       "throwToTag"
                       "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
-                      -2)
+                      -3)
   ;; Following code will not be reached.
   (when target
     (emit-push-nil)
     (emit-move-from-stack target)))
 
-(defun compile-form (form &key (target *val* target-supplied-p))
-;;   (format t "target = ~S target-supplied-p = ~S~%" target target-supplied-p)
+(defun compile-form (form &key (target *val*))
   (cond ((consp form)
          (let ((op (car form))
                handler)
@@ -2893,9 +2815,7 @@
                  *this-class*
                  g
                  +lisp-symbol+)
-;;            (emit-store-value)
-           (emit-move-from-stack target)
-           ))
+           (emit-move-from-stack target)))
         ((symbolp form)
          (compile-variable-reference form target))
         ((constantp form)
@@ -3088,10 +3008,6 @@
                (emit 'aastore))))
 
       (process-optimization-declarations body)
-;;       (dolist (f body)
-;;         (compile-form f))
-;;       (unless (remove-store-value)
-;;         (emit-push-value)) ; leave result on stack
       (do ((forms body (cdr forms)))
           ((null forms))
         (compile-form (car forms) :target (if (cdr forms) nil :stack))
@@ -3117,7 +3033,7 @@
           (emit-invokevirtual *this-class*
                               "processArgs"
                               "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                              -1)
+                              -2)
           (emit 'astore_1))
         (initialize-thread-var)
         (setf *code* (append code *code*)))
@@ -3125,11 +3041,7 @@
       (finalize-code)
       (optimize-code)
       (setf *code* (resolve-opcodes *code*))
-      (setf (method-max-stack execute-method)
-            ; If handlers are involved, stack depth must be at least 3.
-            (if *handlers*
-                (max (analyze-stack) 3)
-                (analyze-stack)))
+      (setf (method-max-stack execute-method) (analyze-stack))
       (setf (method-code execute-method) (code-bytes *code*))
       (setf (method-max-locals execute-method) *registers-allocated*)
       (setf (method-handlers execute-method) (nreverse *handlers*))
