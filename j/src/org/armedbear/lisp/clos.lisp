@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.19 2003-12-09 20:02:31 piso Exp $
+;;; $Id: clos.lisp,v 1.20 2003-12-09 21:14:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -168,7 +168,7 @@
   allocation
   location)
 
-(defun make-direct-slot-definition (&rest properties
+(defun make-direct-slot-definition (class &rest properties
                                           &key name
                                           (initargs ())
                                           (initform nil)
@@ -494,7 +494,7 @@
     (dolist (superclass supers)
       (push class (class-direct-subclasses superclass))))
   (let ((slots (mapcar #'(lambda (slot-properties)
-                          (apply #'make-direct-slot-definition slot-properties))
+                          (apply #'make-direct-slot-definition class slot-properties))
                        direct-slots)))
     (setf (class-direct-slots class) slots)
     (dolist (direct-slot slots)
