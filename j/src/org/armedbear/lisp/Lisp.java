@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.42 2003-03-15 03:56:01 piso Exp $
+ * $Id: Lisp.java,v 1.43 2003-03-17 18:24:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -590,6 +590,19 @@ public abstract class Lisp
         }
         catch (ClassCastException e) {
             throw new TypeError(obj, "sequence");
+        }
+    }
+
+    public static final AbstractArray checkArray(LispObject obj)
+        throws LispError
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        try {
+            return (AbstractArray) obj;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "array");
         }
     }
 
