@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.16 2004-05-02 01:16:53 piso Exp $
+# $Id: Makefile.in,v 1.17 2004-05-02 02:52:15 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -33,9 +33,11 @@ JAR=@JAR@
 
 JPTY=@JPTY@
 
+LIBABCL=@LIBABCL@
+
 distdir = j-$(version)
 
-all: j.jar $(JPTY)
+all: j.jar $(JPTY) $(LIBABCL)
 
 Makefile: Makefile.in config.status
 	$(SHELL) ./config.status
@@ -62,6 +64,9 @@ jpty:
 
 jpty.exe:
 	cd src/jpty && $(MAKE)
+
+libabcl.so:
+	cd src/org/armedbear/lisp && $(MAKE) libabcl.so
 
 j.jar: classes.stamp
 	cd src && $(JAR) cmf manifest ../j.jar Main.class org/armedbear/j/*.class \
