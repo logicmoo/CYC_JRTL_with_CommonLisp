@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.2 2003-06-10 17:11:03 piso Exp $
+ * $Id: Autoload.java,v 1.3 2003-06-10 18:18:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,10 +61,20 @@ public final class Autoload extends Function
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
-            Symbol symbol = checkSymbol(first);
-            String fileName = LispString.getValue(second);
-            symbol.setSymbolFunction(new Autoload(symbol, fileName));
-            return symbol;
+            final String fileName = LispString.getValue(second);
+            if (first instanceof Symbol) {
+                Symbol symbol = (Symbol) first;
+                symbol.setSymbolFunction(new Autoload(symbol, fileName));
+                return T;
+            }
+            if (first instanceof Cons) {
+                for (LispObject list = first; list != NIL; list = list.cdr()) {
+                    Symbol symbol = checkSymbol(list.car());
+                    symbol.setSymbolFunction(new Autoload(symbol, fileName));
+                }
+                return T;
+            }
+            throw new TypeError(first);
         }
     };
 }
