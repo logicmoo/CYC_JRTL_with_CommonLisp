@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CompilationBuffer.java,v 1.15 2003-06-06 15:08:18 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.16 2003-06-12 13:48:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import javax.swing.Icon;
 import javax.swing.SwingUtilities;
 
 public final class CompilationBuffer extends CompilationErrorBuffer
@@ -329,12 +328,6 @@ public final class CompilationBuffer extends CompilationErrorBuffer
     public String toString()
     {
         return command;
-    }
-
-    // For the buffer list.
-    public Icon getIcon()
-    {
-        return Utilities.getIconFromFile("jpty.png");
     }
 
     private class CompilationBufferReaderThread extends ReaderThread
