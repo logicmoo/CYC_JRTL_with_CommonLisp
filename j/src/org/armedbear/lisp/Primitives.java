@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.155 2003-04-01 14:39:50 piso Exp $
+ * $Id: Primitives.java,v 1.156 2003-04-01 19:25:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -3176,6 +3177,63 @@ public final class Primitives extends Module
             LispObject result = progn(args.cdr(), ext);
             dynEnv = oldDynEnv;
             return result;
+        }
+    };
+
+    // ### multiple-value-prog1
+    private static final SpecialOperator MULTIPLE_VALUE_PROG1 =
+        new SpecialOperator("multiple-value-prog1") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            if (args.length() == 0)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject result = eval(args.car(), env);
+            LispObject[] values = getValues();
+            while ((args = args.cdr()) != NIL)
+                eval(args.car(), env);
+            setValues(values);
+            return result;
+        }
+    };
+
+    // ### multiple-value-call
+    private static final SpecialOperator MULTIPLE_VALUE_CALL =
+        new SpecialOperator("multiple-value-call") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            if (args.length() == 0)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject function;
+            LispObject obj = eval(args.car(), env);
+            args = args.cdr();
+            if (obj instanceof Symbol) {
+                function = obj.getSymbolFunction();
+                if (function == null)
+                    throw new UndefinedFunctionError(obj);
+                if (function instanceof Macro)
+                    throw new LispError(String.valueOf(obj) +
+                        "is a macro, not a function");
+            } else if (obj instanceof Function) {
+                function = obj;
+            } else
+                throw new LispError(String.valueOf(obj) + " is not a function name");
+            ArrayList arrayList = new ArrayList();
+            while (args != NIL) {
+                LispObject form = args.car();
+                LispObject result = eval(form, env);
+                LispObject[] values = getValues();
+                if (values != null) {
+                    for (int i = 0; i < values.length; i++)
+                        arrayList.add(values[i]);
+                } else
+                    arrayList.add(result);
+                args = args.cdr();
+            }
+            LispObject[] argv = new LispObject[arrayList.size()];
+            arrayList.toArray(argv);
+            return funcall(function, argv);
         }
     };
 
