@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.117 2003-08-12 14:15:53 piso Exp $
+ * $Id: Lisp.java,v 1.118 2003-08-14 17:21:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -595,11 +595,10 @@ public abstract class Lisp
         return new Bignum(n);
     }
 
-    public static final LispObject list(String s)
+    public static final LispObject readObjectFromString(String s)
     {
         try {
-            CharacterInputStream in =
-                new CharacterInputStream(s);
+            CharacterInputStream in = new CharacterInputStream(s);
             return in.read(true, NIL, false);
         }
         catch (Throwable t) {
