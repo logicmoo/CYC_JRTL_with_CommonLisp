@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.276 2004-08-27 00:50:42 piso Exp $
+ * $Id: Lisp.java,v 1.277 2004-09-01 17:29:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1928,6 +1928,9 @@ public abstract class Lisp
             return new SimpleString("..unbound..");
         }
     };
+
+    public static final Symbol _KEYWORD_PACKAGE_ =
+        exportConstant("*KEYWORD-PACKAGE*", PACKAGE_SYS, PACKAGE_KEYWORD);
 
     // Initialized in function_info.java.
     public static EqualHashTable FUNCTION_TABLE;
