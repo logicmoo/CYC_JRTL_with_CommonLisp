@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.23 2003-07-27 19:16:10 piso Exp $
+ * $Id: LispAPI.java,v 1.24 2003-08-02 21:55:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -350,7 +350,7 @@ public final class LispAPI extends Lisp
         new Primitive1("char-after", PACKAGE_J, true) {
         public LispObject execute(LispObject arg) throws LispError
         {
-            return new LispCharacter(checkMarker(arg).getChar());
+            return LispCharacter.getInstance(checkMarker(arg).getChar());
         }
     };
 
@@ -361,7 +361,7 @@ public final class LispAPI extends Lisp
         public LispObject execute(LispObject arg) throws LispError
         {
             Position pos = checkMarker(arg).copy();
-            return pos.prev() ? new LispCharacter(pos.getChar()) : NIL;
+            return pos.prev() ? LispCharacter.getInstance(pos.getChar()) : NIL;
         }
     };
 
