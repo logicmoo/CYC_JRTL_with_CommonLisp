@@ -2,7 +2,7 @@
  * BinaryOutputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BinaryOutputStream.java,v 1.8 2004-01-02 19:08:22 piso Exp $
+ * $Id: BinaryOutputStream.java,v 1.9 2004-01-16 17:11:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,7 @@ public final class BinaryOutputStream extends LispOutputStream
     {
         try {
             out.close();
+            setOpen(false);
             return T;
         }
         catch (IOException e) {

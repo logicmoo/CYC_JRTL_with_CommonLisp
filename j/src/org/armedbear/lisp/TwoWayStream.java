@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.11 2004-01-16 16:54:10 piso Exp $
+ * $Id: TwoWayStream.java,v 1.12 2004-01-16 17:11:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,7 @@ public final class TwoWayStream extends LispStream
     {
         in.close(abort);
         out.close(abort);
+        setOpen(false);
         return T;
     }
 

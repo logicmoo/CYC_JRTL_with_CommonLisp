@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.7 2004-01-05 18:40:26 piso Exp $
+ * $Id: StringInputStream.java,v 1.8 2004-01-16 17:11:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,7 @@ public final class StringInputStream extends CharacterInputStream
 
     public LispObject close(LispObject abort) throws ConditionThrowable
     {
+        setOpen(false);
         return T;
     }
 
