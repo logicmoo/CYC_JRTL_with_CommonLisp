@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.46 2003-03-08 18:56:14 piso Exp $
+;;; $Id: rt.lisp,v 1.47 2003-03-08 21:26:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -198,6 +198,28 @@
 	(and
 	 (check-scaffold-copy (car x) (scaffold-car xcopy))
 	 (check-scaffold-copy (cdr x) (scaffold-cdr xcopy))))))
+
+;;;
+;;; The function SUBTYPEP should return two generalized booleans.
+;;; This auxiliary function returns booleans instead
+;;; (which makes it easier to write tests).
+;;;
+(defun subtypep* (type1 type2)
+  (apply #'values
+	 (mapcar #'notnot
+		 (multiple-value-list (subtypep type1 type2)))))
+
+(defun subtypep*-or-fail (type1 type2)
+  (let ((results (multiple-value-list (subtypep type1 type2))))
+    (and (= (length results) 2)
+	 (or (not (second results))
+	     (notnot (first results))))))
+
+(defun subtypep*-not-or-fail (type1 type2)
+  (let ((results (multiple-value-list (subtypep type1 type2))))
+    (and (= (length results) 2)
+	 (or (not (second results))
+	     (not (first results))))))
 
 (defun compose (&rest fns)
   (let ((rfns (reverse fns)))
