@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.13 2004-09-11 03:22:23 piso Exp $
+;;; $Id: swank.lisp,v 1.14 2004-09-11 18:55:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -240,18 +240,8 @@
 (defun eval-region (string package-name)
   (let ((package (if package-name (find-package package-name) *package*)))
     (let* ((*package* (or package *package*))
-           (values (eval-string string))
-;;            ok
-;;            result
-           )
+           (values (eval-string string)))
       (force-output)
-;;       (setf result (format-values-for-echo-area values))
-;;       (when (listp values) ;; No error.
-;;         (setf ok t))
-;;       (swank-protocol:encode-message `(:return
-;;                                        ,(if ok `(:ok ,result) `(:abort ,result))
-;;                                        ,id)
-;;                                      *stream*))))
       values)))
 
 (defun shorten-string-for-transcript (string)
@@ -259,7 +249,6 @@
     (string-right-trim '(#\space) (substitute #\space #\newline s))))
 
 (defun eval-string-async (string package-name)
-;;   (declare (ignorable id))
   (write-string ";;;; ")
   (write-string (shorten-string-for-transcript string))
   (write-string " ...")
@@ -267,19 +256,21 @@
   (force-output)
   (let ((package (if package-name (find-package package-name) *package*)))
     (let* ((*package* (or package *package*))
-           (values (eval-string string))
-;;            ok
-;;            result
-           )
-
+           (values (eval-string string)))
       (force-output)
-;;       (setf result (format-values-for-echo-area values))
-;;       (when (listp values) ;; No error.
-;;         (setf ok t))
-;;       (swank-protocol:encode-message `(:return
-;;                                        ,(if ok `(:ok ,result) `(:abort ,result))
-;;                                        ,id)
-;;                                      *stream*))))
       values)))
+
+(defun swank-compile-file (pathname load-p)
+  (swank-format t "swank-compile-file called~%")
+  (force-output)
+  (write-string ";;;; Compile file ")
+  (write-string (namestring pathname))
+  (write-string " ...")
+  (terpri)
+  (force-output)
+  (let ((result (let ((output-file (compile-file pathname)))
+                  (when (and load-p output-file)
+                    (load output-file)))))
+    (list result)))
 
 (provide '#:swank)
