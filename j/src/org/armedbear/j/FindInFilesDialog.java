@@ -2,7 +2,7 @@
  * FindInFilesDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFilesDialog.java,v 1.4 2003-07-26 17:03:51 piso Exp $
+ * $Id: FindInFilesDialog.java,v 1.5 2003-07-27 00:51:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,13 +156,12 @@ public class FindInFilesDialog extends AbstractDialog implements Constants,
         panel.add(Box.createHorizontalStrut(22));
         modeLabel = new Label("Mode:");
         panel.add(modeLabel);
-        modeLabel.setDisplayedMnemonic('M');
+        modeLabel.setDisplayedMnemonic('O');
         modeLabel.setLabelFor(modeComboBox);
         panel.add(Box.createHorizontalStrut(5));
         panel.add(modeComboBox);
         updateModeControl();
         mainPanel.add(panel);
-
 
         regExpCheckBox = new CheckBox(
             replace ? "Regular expressions" : "Regular expression",
