@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.300 2004-10-24 23:35:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.301 2004-10-25 16:00:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2208,7 +2208,9 @@
       (emit-move-from-stack target))))
 
 (define-source-transform funcall (&whole form fun &rest args)
-  (cond ((and (consp fun)
+  (cond ((> *debug* *speed*)
+         form)
+        ((and (consp fun)
               (eq (car fun) 'FUNCTION)
               (symbolp (cadr fun)))
          `(,(cadr fun) ,@args))
@@ -2226,6 +2228,8 @@
 (defun compile-funcall (form &key (target *val*))
   (unless (> (length form) 1)
     (error "Wrong number of arguments for FUNCALL."))
+  (when (> *debug* *speed*)
+    (return-from compile-funcall (compile-function-call form :target target)))
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
       (return-from compile-funcall (compile-form new-form :target target))))
