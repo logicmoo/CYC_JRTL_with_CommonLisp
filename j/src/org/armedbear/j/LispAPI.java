@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.12 2003-07-19 01:12:14 piso Exp $
+ * $Id: LispAPI.java,v 1.13 2003-07-19 04:46:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -202,7 +202,6 @@ public final class LispAPI extends Lisp
         new Primitive0("point", PACKAGE_J, true) {
         public LispObject execute()
         {
-            Editor editor = Editor.currentEditor();
             Position dot = Editor.currentEditor().getDot();
             if (dot != null)
                 return new JavaObject(dot);
@@ -252,6 +251,58 @@ public final class LispAPI extends Lisp
             return pos.prev() ? new LispCharacter(pos.getChar()) : NIL;
         }
     };
+
+    // ### forward-char
+    // Move point right N characters (left if N is negative).
+    private static final Primitive FORWARD_CHAR =
+        new Primitive("forward-char", PACKAGE_J, true) {
+        public LispObject execute() throws LispError
+        {
+            Position pos = Editor.currentEditor().getDot();
+            if (!pos.next())
+                throw new LispError("reached end of buffer");
+            return NIL;
+        }
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            forwardChar(Fixnum.getValue(arg));
+            return NIL;
+        }
+    };
+
+    // ### backward-char
+    // Move point left N characters (right if N is negative).
+    private static final Primitive BACKWARD_CHAR =
+        new Primitive("backward-char", PACKAGE_J, true) {
+        public LispObject execute() throws LispError
+        {
+            Position pos = Editor.currentEditor().getDot();
+            if (!pos.prev())
+                throw new LispError("reached beginning of buffer");
+            return NIL;
+        }
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            forwardChar(- Fixnum.getValue(arg));
+            return NIL;
+        }
+    };
+
+    private static final void forwardChar(int n) throws LispError
+    {
+        Position pos = Editor.currentEditor().getDot();
+        if (n > 0) {
+            while (n-- > 0) {
+                if (!pos.next())
+                    throw new LispError("reached end of buffer");
+            }
+        } else if ( n < 0) {
+            while (n++ < 0) {
+                if (!pos.prev())
+                    throw new LispError("reached beginning of buffer");
+            }
+        }
+    }
 
     private static final Symbol KEYWORD_GLOBAL =
         Keyword.internKeyword("GLOBAL");
