@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.29 2003-03-14 02:54:49 piso Exp $
+ * $Id: Symbol.java,v 1.30 2003-03-14 18:34:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@ public class Symbol extends LispObject
         export("ARRAY-DIMENSION-LIMIT");
 
     static {
-        ARRAY_DIMENSION_LIMIT.setSymbolValue(new Fixnum(0x1000000L));
+        ARRAY_DIMENSION_LIMIT.setSymbolValue(new Fixnum(0x1000000));
         ARRAY_DIMENSION_LIMIT.setConstant(true);
     }
 
