@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.4 2003-07-14 13:20:06 piso Exp $
+ * $Id: StructureObject.java,v 1.5 2003-07-15 19:28:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,11 +79,11 @@ public final class StructureObject extends LispObject
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#S(");
+        sb.append(name);
         // FIXME Use *PRINT-LENGTH*.
         final int limit = Math.min(slots.length, 10);
         for (int i = 0; i < limit; i++) {
-            if (i > 0)
-                sb.append(' ');
+            sb.append(' ');
             sb.append(slots[i]);
         }
         if (limit < slots.length)
