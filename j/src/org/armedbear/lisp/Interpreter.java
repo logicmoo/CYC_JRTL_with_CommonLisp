@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.65 2004-05-11 20:02:55 piso Exp $
+ * $Id: Interpreter.java,v 1.66 2004-05-27 20:33:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,14 @@ public final class Interpreter extends Lisp
                 }
             }
             catch (ConditionThrowable c) {
-                reportError(c, LispThread.currentThread());
+                LispThread thread = null;
+                try {
+                    thread = LispThread.currentThread();
+                }
+                catch (Throwable t) {
+                    ;
+                }
+                reportError(c, thread);
             }
             catch (Throwable t) {
                 t.printStackTrace();
@@ -162,7 +169,13 @@ public final class Interpreter extends Lisp
 
     public void run()
     {
-        final LispThread thread = LispThread.currentThread();
+        LispThread thread = null;
+        try {
+            thread = LispThread.currentThread();
+        }
+        catch (Throwable t) {
+            return;
+        }
         commandNumber = 0;
         done = false;
         try {
@@ -256,7 +269,8 @@ public final class Interpreter extends Lisp
             out.freshLine();
             out._writeLine("Error: unhandled condition: " +
                            c.getCondition().writeToString());
-            thread.backtrace();
+            if (thread != null)
+                thread.backtrace();
         }
         catch (Throwable t) {
             ;

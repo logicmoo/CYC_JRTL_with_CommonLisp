@@ -1,8 +1,8 @@
 /*
  * Throw.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Throw.java,v 1.8 2003-12-12 01:10:16 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Throw.java,v 1.9 2004-05-27 20:32:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public final class Throw extends ConditionThrowable
     private final LispObject result;
     private final LispObject[] values;
 
-    public Throw(LispObject tag, LispObject result)
+    public Throw(LispObject tag, LispObject result) throws ConditionThrowable
     {
         this.tag = tag;
         this.result = result;
@@ -39,7 +39,7 @@ public final class Throw extends ConditionThrowable
         return tag;
     }
 
-    public LispObject getResult()
+    public LispObject getResult() throws ConditionThrowable
     {
         if (values != null)
             LispThread.currentThread().setValues(values);
