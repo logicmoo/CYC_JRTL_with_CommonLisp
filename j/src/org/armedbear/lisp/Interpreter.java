@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.12 2003-02-20 01:18:25 piso Exp $
+ * $Id: Interpreter.java,v 1.13 2003-02-20 18:53:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,8 +119,8 @@ public final class Interpreter extends Lisp
     {
         Debug.assertTrue(inputStream != null);
         LispReader reader = new LispReader(inputStream);
-        if (history == null)
-            history = new ArrayList();
+        history = new ArrayList();
+        commandNumber = 0;
         done = false;
         try {
             CharacterOutputStream out = getStandardOutput();
