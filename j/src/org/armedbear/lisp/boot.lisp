@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.98 2003-08-25 14:56:58 piso Exp $
+;;; $Id: boot.lisp,v 1.99 2003-08-25 18:00:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -148,7 +148,7 @@
 
 (defun read-from-string (string &optional eof-error-p eof-value
 				&key (start 0) end preserve-whitespace)
-  (%read-from-string string eof-error-p eof-value start end preserve-whitespace))
+  (sys::%read-from-string string eof-error-p eof-value start end preserve-whitespace))
 
 (defconstant call-arguments-limit 50)
 
