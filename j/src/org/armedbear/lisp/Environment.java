@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Environment.java,v 1.23 2005-03-15 03:58:06 piso Exp $
+ * $Id: Environment.java,v 1.24 2005-03-21 17:17:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,6 +223,7 @@ public final class Environment extends LispObject
         return unreadableString(Symbol.ENVIRONMENT);
     }
 
+    // ### make-environment
     public static final Primitive MAKE_ENVIRONMENT =
         new Primitive("make-environment", PACKAGE_SYS, true,
                       "&optional parent-environment")
@@ -239,6 +240,7 @@ public final class Environment extends LispObject
         }
     };
 
+    // ### environment-add-macro-definition
     public static final Primitive ENVIRONMENT_ADD_MACRO_DEFINITION =
         new Primitive("environment-add-macro-definition", PACKAGE_SYS, true,
                       "environment name expander")
@@ -252,6 +254,20 @@ public final class Environment extends LispObject
             LispObject expander = third;
             env.addFunctionBinding(name, expander);
             return env;
+        }
+    };
+
+    // ### environment-add-function-definition
+    public static final Primitive ENVIRONMENT_ADD_FUNCTION_DEFINITION =
+        new Primitive("environment-add-function-definition", PACKAGE_SYS, true,
+                      "environment name lambda-expression")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            checkEnvironment(first).addFunctionBinding(second, third);
+            return first;
         }
     };
 
