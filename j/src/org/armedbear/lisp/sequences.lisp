@@ -4,7 +4,8 @@
 
 (export '(some every notany notevery copy-seq reverse nreverse
           position position-if position-if-not
-          find find-if find-if-not))
+          find find-if find-if-not
+          count count-if count-if-not))
 
 (defun signal-index-too-large-error (sequence index)
   (error 'type-error))
@@ -319,3 +320,69 @@
     (seq-dispatch sequence
 		  (list-find-if-not test sequence)
 		  (vector-find-if-not test sequence))))
+
+(defmacro vector-count-if (not-p from-end-p predicate sequence)
+  (let ((next-index (if from-end-p '(1- index) '(1+ index)))
+        (pred `(funcall ,predicate (apply-key key (aref ,sequence index)))))
+    `(let ((%start ,(if from-end-p '(1- end) 'start))
+           (%end ,(if from-end-p '(1- start) 'end)))
+       (do ((index %start ,next-index)
+            (count 0))
+         ((= index (the fixnum %end)) count)
+         (declare (fixnum index count))
+         (,(if not-p 'unless 'when) ,pred
+           (setq count (1+ count)))))))
+
+(defmacro list-count-if (not-p from-end-p predicate sequence)
+  (let ((pred `(funcall ,predicate (apply-key key (pop sequence)))))
+    `(let ((%start ,(if from-end-p '(- length end) 'start))
+           (%end ,(if from-end-p '(- length start) 'end))
+           (sequence ,(if from-end-p '(reverse sequence) 'sequence)))
+       (do ((sequence (nthcdr %start ,sequence))
+            (index %start (1+ index))
+            (count 0))
+         ((or (= index (the fixnum %end)) (null sequence)) count)
+         (declare (fixnum index count))
+         (,(if not-p 'unless 'when) ,pred
+           (setq count (1+ count)))))))
+
+(defun count (item sequence &key from-end (test #'eql test-p) (test-not nil test-not-p)
+		   (start 0) end key)
+  (when (and test-p test-not-p)
+    (error ":TEST and :TEST-NOT are both present."))
+  (let* ((length (length sequence))
+	 (end (or end length)))
+    (let ((%test (if test-not-p
+		     (lambda (x)
+		       (not (funcall test-not item x)))
+		     (lambda (x)
+		       (funcall test item x)))))
+      (seq-dispatch sequence
+		    (if from-end
+			(list-count-if nil t %test sequence)
+			(list-count-if nil nil %test sequence))
+		    (if from-end
+			(vector-count-if nil t %test sequence)
+			(vector-count-if nil nil %test sequence))))))
+
+(defun count-if (test sequence &key from-end (start 0) end key)
+  (let* ((length (length sequence))
+	 (end (or end length)))
+    (seq-dispatch sequence
+		  (if from-end
+		      (list-count-if nil t test sequence)
+		      (list-count-if nil nil test sequence))
+		  (if from-end
+		      (vector-count-if nil t test sequence)
+		      (vector-count-if nil nil test sequence)))))
+
+(defun count-if-not (test sequence &key from-end (start 0) end key)
+  (let* ((length (length sequence))
+	 (end (or end length)))
+    (seq-dispatch sequence
+		  (if from-end
+		      (list-count-if t t test sequence)
+		      (list-count-if t nil test sequence))
+		  (if from-end
+		      (vector-count-if t t test sequence)
+		      (vector-count-if t nil test sequence)))))
