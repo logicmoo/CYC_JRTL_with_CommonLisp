@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.421 2003-09-21 01:40:57 piso Exp $
+ * $Id: Primitives.java,v 1.422 2003-09-21 23:06:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1706,7 +1706,8 @@ public final class Primitives extends Module
 
     // ### handler-bind
     private static final SpecialOperator HANDLER_BIND =
-        new SpecialOperator("handler-bind") {
+        new SpecialOperator("handler-bind")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -1720,10 +1721,11 @@ public final class Primitives extends Module
                 throw ret;
             }
             catch (ConditionThrowable c) {
+                Condition condition = c.getCondition();
                 while (bindings != NIL) {
                     Cons binding = checkCons(bindings.car());
                     LispObject type = binding.car();
-                    if (isConditionOfType(c, type)) {
+                    if (condition.typep(type) != NIL) {
                         LispObject obj = eval(binding.cadr(), env, thread);
                         LispObject handler;
                         if (obj instanceof Symbol) {
@@ -1733,13 +1735,13 @@ public final class Primitives extends Module
                         } else
                             handler = obj;
                         LispObject[] handlerArgs = new LispObject[1];
-                        handlerArgs[0] = c.getCondition();
+                        handlerArgs[0] = condition;
                          // Might not return.
                         funcall(handler, handlerArgs, thread);
                     }
                     bindings = bindings.cdr();
                 }
-                // Re-throw condition.
+                // Re-throw.
                 throw c;
             }
         }
@@ -1761,18 +1763,19 @@ public final class Primitives extends Module
                 result = eval(form, env, thread);
             }
             catch (ConditionThrowable c) {
+                Condition condition = c.getCondition();
                 thread.setStackDepth(depth);
                 while (clauses != NIL) {
                     Cons clause = checkCons(clauses.car());
                     LispObject type = clause.car();
-                    if (isConditionOfType(c, type)) {
+                    if (condition.typep(type) != NIL) {
                         LispObject parameterList = clause.cadr();
                         LispObject body = clause.cdr().cdr();
                         Closure handler = new Closure(parameterList, body, env);
                         int numArgs = parameterList.length();
                         if (numArgs == 1) {
                             LispObject[] handlerArgs = new LispObject[1];
-                            handlerArgs[0] = c.getCondition();
+                            handlerArgs[0] = condition;
                             return funcall(handler, handlerArgs, thread);
                         }
                         if (numArgs == 0) {
@@ -1783,7 +1786,7 @@ public final class Primitives extends Module
                     }
                     clauses = clauses.cdr();
                 }
-                // Re-throw condition.
+                // Re-throw.
                 throw c;
             }
             // No error.
@@ -1803,47 +1806,6 @@ public final class Primitives extends Module
             return result;
         }
     };
-
-    private static boolean isConditionOfType(ConditionThrowable c, LispObject type)
-        throws ConditionThrowable
-    {
-        if (type == Symbol.END_OF_FILE)
-            return c.getCondition() instanceof EndOfFileException;
-        if (type == Symbol.STREAM_ERROR)
-            return c.getCondition() instanceof StreamError;
-        if (type == Symbol.UNDEFINED_FUNCTION)
-            return c.getCondition() instanceof UndefinedFunction;
-        if (type == Symbol.TYPE_ERROR)
-            return c.getCondition() instanceof TypeError;
-        if (type == Symbol.PACKAGE_ERROR)
-            return c.getCondition() instanceof PackageError;
-        if (type == Symbol.PARSE_ERROR)
-            return c.getCondition() instanceof ParseError;
-        if (type == Symbol.PROGRAM_ERROR)
-            return c.getCondition() instanceof ProgramError;
-        if (type == Symbol.CONTROL_ERROR)
-            return c.getCondition() instanceof ControlError;
-        if (type == Symbol.SIMPLE_ERROR)
-            return c.getCondition() instanceof SimpleError;
-        if (type == Symbol.CELL_ERROR)
-            return c.getCondition() instanceof CellError;
-        if (type == Symbol.ERROR || type == BuiltInClass.ERROR) {
-            Condition condition = c.getCondition();
-            if (condition.typep(Symbol.ERROR) == T)
-                return true;
-            return false;
-        }
-        if (type == Symbol.CONDITION)
-            return true;
-        if (type == Symbol.SIMPLE_CONDITION)
-            return c.getCondition() instanceof SimpleCondition;
-        if (type == Symbol.DIVISION_BY_ZERO)
-            return c.getCondition() instanceof DivisionByZero;
-        if (type == Symbol.ARITHMETIC_ERROR)
-            return c.getCondition() instanceof ArithmeticError;
-
-        return false;
-    }
 
     // ### upgraded-array-element-type
     // upgraded-array-element-type typespec &optional environment
