@@ -2,7 +2,7 @@
  * SaveFileDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: SaveFileDialog.java,v 1.2 2003-06-26 00:30:01 piso Exp $
+ * $Id: SaveFileDialog.java,v 1.3 2003-06-28 00:50:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -340,5 +340,38 @@ public class SaveFileDialog extends JDialog implements FocusListener, KeyListene
     {
         super.dispose();
         editor.restoreFocus();
+    }
+
+    public static File getSaveFile(Editor editor, String dialogTitle)
+    {
+        final File file = editor.getBuffer().getFile();
+        final String defaultName = file != null ? file.getName() : null;
+        SaveFileDialog d =
+            new SaveFileDialog(editor, dialogTitle, "File:", defaultName);
+        editor.centerDialog(d);
+        d.show();
+        return d.getDestination();
+    }
+
+    public static void writeGlobalKeyMap()
+    {
+        final Editor editor = Editor.currentEditor();
+        SaveFileDialog d = new SaveFileDialog(editor, "Write Global Key Map");
+        editor.centerDialog(d);
+        d.show();
+        File file = d.getDestination();
+        if (file != null)
+            KeyMap.getGlobalKeyMap().writeKeyMap(file);
+    }
+
+    public static void writeLocalKeyMap()
+    {
+        final Editor editor = Editor.currentEditor();
+        SaveFileDialog d = new SaveFileDialog(editor, "Write Local Key Map");
+        editor.centerDialog(d);
+        d.show();
+        File file = d.getDestination();
+        if (file != null)
+            editor.getBuffer().getKeyMapForMode().writeKeyMap(file);
     }
 }

@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.72 2003-06-27 14:28:30 piso Exp $
+ * $Id: Editor.java,v 1.73 2003-06-28 00:50:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2040,7 +2040,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             return;
         if (toBeSaved.getType() == Buffer.TYPE_NORMAL) {
             final String dialogTitle = "Save As";
-            File destination = getSaveFile(dialogTitle);
+            File destination =
+                SaveFileDialog.getSaveFile(this, dialogTitle);
             if (destination == null)
                 return;
 
@@ -2074,7 +2075,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             return;
         if (buffer.getType() == Buffer.TYPE_NORMAL) {
             final String dialogTitle = "Save Copy";
-            final File destination = getSaveFile(dialogTitle);
+            final File destination =
+                SaveFileDialog.getSaveFile(this, dialogTitle);
             if (destination == null)
                 return;
 
@@ -2097,16 +2099,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             if (buf != null && buf.isLoaded())
                 reload(buf);
         }
-    }
-
-    private File getSaveFile(String dialogTitle)
-    {
-        final File file = buffer.getFile();
-        final String defaultName = file != null ? file.getName() : null;
-        SaveFileDialog d = new SaveFileDialog(this, dialogTitle, "File:", defaultName);
-        centerDialog(d);
-        d.show();
-        return d.getDestination();
     }
 
     public void saveAll()
@@ -6913,26 +6905,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         prefs.reload();
         debug = prefs.getBooleanProperty(Property.DEBUG);
-    }
-
-    public void writeGlobalKeyMap()
-    {
-        SaveFileDialog d = new SaveFileDialog(this, "Write Global Key Map");
-        centerDialog(d);
-        d.show();
-        File file = d.getDestination();
-        if (file != null)
-            KeyMap.getGlobalKeyMap().writeKeyMap(file);
-    }
-
-    public void writeLocalKeyMap()
-    {
-        SaveFileDialog d = new SaveFileDialog(this, "Write Local Key Map");
-        centerDialog(d);
-        d.show();
-        File file = d.getDestination();
-        if (file != null)
-            buffer.getKeyMapForMode().writeKeyMap(file);
     }
 
     private boolean insertingKeyText = false;
