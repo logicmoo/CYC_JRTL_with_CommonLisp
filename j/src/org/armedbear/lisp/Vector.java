@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.16 2003-03-19 15:24:42 piso Exp $
+ * $Id: Vector.java,v 1.17 2003-04-06 19:54:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,15 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, elements.length);
         }
+    }
+
+    public LispObject subseq(int start, int end) throws LispError
+    {
+        Vector v = new Vector(end - start);
+        int i = start, j = 0;
+        while (i < end)
+            v.elements[j++] = elements[i++];
+        return v;
     }
 
     public void fill(LispObject obj) throws LispError

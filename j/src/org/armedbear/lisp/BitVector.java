@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.12 2003-03-19 21:53:54 piso Exp $
+ * $Id: BitVector.java,v 1.13 2003-04-06 19:54:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,6 +163,19 @@ public final class BitVector extends AbstractVector implements SequenceType,
     {
         int offset = index >> 6;
         bits[offset] &= ~(1L << index);
+    }
+
+    public LispObject subseq(int start, int end) throws LispError
+    {
+        BitVector v = new BitVector(end - start);
+        int i = start, j = 0;
+        while (i < end) {
+            if (_get(i++) == 0)
+                v.clear(j++);
+            else
+                v.set(j++);
+        }
+        return v;
     }
 
     public void fill(LispObject obj) throws LispError

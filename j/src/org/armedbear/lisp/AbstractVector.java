@@ -137,6 +137,8 @@ public abstract class AbstractVector extends AbstractArray
 
     public abstract void set(int index, LispObject newValue) throws LispError;
 
+    public abstract LispObject subseq(int start, int end) throws LispError;
+
     public abstract void fill(LispObject obj) throws LispError;
 
     public abstract void shrink(int n) throws LispError;
