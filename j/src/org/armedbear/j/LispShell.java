@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.5 2002-10-26 16:44:58 piso Exp $
+ * $Id: LispShell.java,v 1.6 2002-10-26 18:31:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public final class LispShell extends Shell
         "^[^>\\*\\]]*[>\\*\\]] *";
 
     private static final String CLISP_PROMPT_PATTERN =
-        "^[^>\\*\\]]*\\[[0-9+]\\]> ";
+        "^[^>\\*\\]]*\\[[0-9]+\\]> ";
 
     private static final String CMUCL_PROMPT_PATTERN =
         "^\\* |^[0-9]+\\] ";
