@@ -1,7 +1,7 @@
 ;;; apropos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: apropos.lisp,v 1.1 2003-09-18 01:38:17 piso Exp $
+;;; $Id: apropos.lisp,v 1.2 2003-10-06 13:26:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 ;;; Adapted from SBCL.
 
 (in-package "SYSTEM")
+
+(resolve 'write-string)
 
 (defun apropos-list (string-designator &optional package-designator)
   (if package-designator
