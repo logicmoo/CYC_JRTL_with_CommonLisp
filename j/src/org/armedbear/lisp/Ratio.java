@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Ratio.java,v 1.45 2004-06-23 14:03:09 piso Exp $
+ * $Id: Ratio.java,v 1.46 2004-07-29 23:25:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,22 +154,34 @@ public final class Ratio extends LispObject
     public double floatValue()
     {
         double result = numerator.doubleValue() / denominator.doubleValue();
-        if (result != 0 && !Double.isNaN(result))
+        if (result != 0 && !Double.isNaN(result) && !Double.isInfinite(result))
             return result;
         final boolean negative = numerator.signum() < 0;
         final BigInteger num = negative ? numerator.negate() : numerator;
         final BigInteger den = denominator;
         final int numLen = num.bitLength();
         final int denLen = den.bitLength();
-        final int minLength = Math.min(numLen, denLen);
-        if (minLength <= 1)
+        int length = Math.min(numLen, denLen);
+        if (length <= 1)
             return result;
-        for (int i = 1; i < minLength; i++) {
-            final BigInteger n = num.shiftRight(i);
-            final BigInteger d = den.shiftRight(i);
+        BigInteger n = num;
+        BigInteger d = den;
+        final int digits = 54;
+        if (length > digits) {
+            n = n.shiftRight(length - digits);
+            d = d.shiftRight(length - digits);
+            length -= digits;
+        } else {
+            n = n.shiftRight(1);
+            d = d.shiftRight(1);
+            --length;
+        }
+        for (int i = 0; i < length; i++) {
             result = n.doubleValue() / d.doubleValue();
-            if (result != 0 && !Double.isNaN(result))
+            if (result != 0 && !Double.isNaN(result) && !Double.isInfinite(result))
                 break;
+            n = n.shiftRight(1);
+            d = d.shiftRight(1);
         }
         return negative ? -result : result;
     }
@@ -400,6 +412,8 @@ public final class Ratio extends LispObject
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
+        if (obj instanceof LispFloat)
+            return new LispFloat(floatValue()).truncate(obj);
         BigInteger n, d;
 	try {
 	  if (obj instanceof Fixnum) {
@@ -412,21 +426,16 @@ public final class Ratio extends LispObject
             n = ((Ratio)obj).numerator();
             d = ((Ratio)obj).denominator();
 	  } else {
-            Thread.dumpStack();
             return signal(new TypeError(obj, "number"));
 	  }
-
 	  // Invert and multiply.
 	  BigInteger num = numerator.multiply(d);
 	  BigInteger den = denominator.multiply(n);
 	  BigInteger quotient = num.divide(den);
-
 	  // Multiply quotient by divisor.
 	  LispObject product = number(quotient.multiply(n), d);
-
 	  // Subtract to get remainder.
 	  LispObject remainder = subtract(product);
-
           return LispThread.currentThread().setValues(number(quotient), remainder);
         }
         catch (ArithmeticException e) {
