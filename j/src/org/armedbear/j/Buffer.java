@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.36 2003-05-18 00:00:44 piso Exp $
+ * $Id: Buffer.java,v 1.37 2003-05-19 14:39:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2602,10 +2602,6 @@ public class Buffer extends SystemBuffer
             // Not in use. OK to delete.
             cache.delete();
         }
-        if (getFile() instanceof SshFile)
-            SshSession.cleanup();
-        else if (getFile() instanceof FtpFile)
-            FtpSession.cleanup();
     }
 
     protected void finalize() throws Throwable
