@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.6 2002-10-16 02:39:40 piso Exp $
+ * $Id: CommandTable.java,v 1.7 2002-11-15 20:19:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -406,6 +406,7 @@ public class CommandTable
             addCommand("openGroup", "mail.NewsCommands");
             addCommand("openGroupAtDot", "mail.NewsCommands");
             addCommand("readArticle", "mail.NewsCommands");
+            addCommand("readArticleOtherWindow", "mail.NewsCommands");
 
             // jdb commands.
             addCommand("jdb", "jdb.Jdb");
