@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.3 2004-02-12 14:12:08 piso Exp $
+ * $Id: EchoStream.java,v 1.4 2004-02-12 19:11:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,11 +39,11 @@ public final class EchoStream extends Stream
         setInteractive(interactive);
     }
 
-    public LispObject getElementType()
+    public LispObject getElementType() throws ConditionThrowable
     {
         LispObject itype = in.getElementType();
         LispObject otype = out.getElementType();
-        if (itype == otype)
+        if (itype.equal(otype))
             return itype;
         return Symbol.NULL; // FIXME
     }
@@ -135,7 +135,8 @@ public final class EchoStream extends Stream
     public int _readByte() throws ConditionThrowable
     {
         int n = in._readByte();
-        out._writeByte(n);
+        if (n >= 0)
+            out._writeByte(n);
         return n;
     }
 
