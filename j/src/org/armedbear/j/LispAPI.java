@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.18 2003-07-19 18:32:41 piso Exp $
+ * $Id: LispAPI.java,v 1.19 2003-07-20 10:57:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,7 +214,7 @@ public final class LispAPI extends Lisp
         {
             Position dot = Editor.currentEditor().getDot();
             if (dot != null)
-                return new JavaObject(dot);
+                return new JavaObject(dot.copy());
             return NIL;
         }
     };
