@@ -278,6 +278,9 @@ package-used-by-list
 packagep
 parse-integer
 pop
+position
+position-if
+position-if-not
 pprint
 prin1
 prin1-to-string
