@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.35 2003-09-28 18:35:44 piso Exp $
+;;; $Id: autoloads.lisp,v 1.36 2003-09-29 01:28:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,3 +94,10 @@
 (autoload-macro 'check-type)
 (autoload-macro 'deftype)
 (autoload-macro 'defclass)
+
+(autoload '(find-restart invoke-restart restart-name compute-restarts
+            abort continue muffle-warning store-value use-value)
+          "restart.lisp")
+(autoload-macro '(with-simple-restart restart-bind restart-case
+                  with-condition-restarts)
+                "restart.lisp")
