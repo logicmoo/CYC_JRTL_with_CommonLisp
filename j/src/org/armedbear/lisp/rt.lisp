@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.43 2003-03-08 17:28:48 piso Exp $
+;;; $Id: rt.lisp,v 1.44 2003-03-08 18:15:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -198,6 +198,10 @@
 	(and
 	 (check-scaffold-copy (car x) (scaffold-car xcopy))
 	 (check-scaffold-copy (cdr x) (scaffold-cdr xcopy))))))
+
+(defun compose (&rest fns)
+  (let ((rfns (reverse fns)))
+    #'(lambda (x) (loop for f in rfns do (setf x (funcall f x))) x)))
 
 (defun evendigitp (c)
   (notnot (find c "02468")))
