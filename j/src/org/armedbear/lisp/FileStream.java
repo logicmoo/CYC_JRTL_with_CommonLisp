@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.18 2004-10-02 19:37:10 piso Exp $
+ * $Id: FileStream.java,v 1.19 2004-10-03 19:32:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,6 @@ import java.io.RandomAccessFile;
 
 public final class FileStream extends Stream
 {
-    private static final boolean isPlatformWindows =
-        Utilities.isPlatformWindows();
-
     private static final int BUFSIZE = 4096;
 
     private final RandomAccessFile raf;
@@ -158,7 +155,7 @@ public final class FileStream extends Stream
     protected int _readChar() throws ConditionThrowable
     {
         try {
-            if (isPlatformWindows) {
+            if (Utilities.isPlatformWindows) {
                 int c = raf.read();
                 if (c == '\r') {
                     int c2 = raf.read();
@@ -186,7 +183,7 @@ public final class FileStream extends Stream
             long pos = raf.getFilePointer();
             if (pos > 0)
                 raf.seek(pos - 1);
-            if (isPlatformWindows && n == '\n') {
+            if (Utilities.isPlatformWindows && n == '\n') {
                 // Check for preceding '\r'.
                 pos = raf.getFilePointer();
                 if (pos > 0) {
@@ -210,7 +207,7 @@ public final class FileStream extends Stream
     public void _writeChar(char c) throws ConditionThrowable
     {
         try {
-            if (c == '\n' && isPlatformWindows)
+            if (c == '\n' && Utilities.isPlatformWindows)
                 raf.write((byte)'\r');
             raf.write((byte)c);
             if (c == '\n')
@@ -238,7 +235,7 @@ public final class FileStream extends Stream
                 // No newlines in string.
                 raf.writeBytes(s);
                 charPos += length;
-            } else if (isPlatformWindows) {
+            } else if (Utilities.isPlatformWindows) {
                 for (int i = 0; i < length; i++) {
                     char c = s.charAt(i);
                     if (c == '\n') {
@@ -264,7 +261,7 @@ public final class FileStream extends Stream
     public void _writeLine(String s) throws ConditionThrowable
     {
         try {
-            if (isPlatformWindows) {
+            if (Utilities.isPlatformWindows) {
                 // Convert newlines.
                 _writeString(s);
                 raf.write((byte)'\r');
