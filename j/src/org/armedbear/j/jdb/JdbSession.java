@@ -2,7 +2,7 @@
  * JdbSession.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: JdbSession.java,v 1.2 2003-05-15 01:17:48 piso Exp $
+ * $Id: JdbSession.java,v 1.3 2003-06-03 16:51:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +35,13 @@ import org.armedbear.j.Editor;
 import org.armedbear.j.File;
 import org.armedbear.j.Log;
 import org.armedbear.j.Utilities;
-import org.xml.sax.AttributeList;
-import org.xml.sax.DocumentHandler;
-import org.xml.sax.HandlerBase;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 public final class JdbSession extends Properties
 {
@@ -240,11 +241,12 @@ public final class JdbSession extends Properties
     private void load(File file)
     {
         try {
-            Parser parser =
-                (Parser) Class.forName("org.armedbear.j.aelfred.SAXDriver").newInstance();
-            parser.setDocumentHandler(new Handler());
+            String defaultReader = "org.apache.crimson.parser.XMLReaderImpl";
+            XMLReader xmlReader =
+                XMLReaderFactory.createXMLReader(defaultReader);
+            xmlReader.setContentHandler(new Handler());
             InputSource inputSource = new InputSource(file.getInputStream());
-            parser.parse(inputSource);
+            xmlReader.parse(inputSource);
         }
         catch (EOFException ignored) {}
         catch (Exception e) {
@@ -267,25 +269,25 @@ public final class JdbSession extends Properties
         return "1";
     }
 
-    private class Handler extends HandlerBase implements DocumentHandler
+    private class Handler extends DefaultHandler implements ContentHandler
     {
-        public void startElement(String elementName,
-            AttributeList attributeList) throws SAXException
+        public void startElement(String uri, String localName, String qName,
+            Attributes attributes) throws SAXException
         {
-            if (elementName.equals("session")) {
-                String version = attributeList.getValue("version");
+            if (localName.equals("session")) {
+                String version = attributes.getValue("version");
                 if (!version.equals(getVersion()))
                     throw new SAXException("Unknown session format");
-            } else if (elementName.equals("property")) {
+            } else if (localName.equals("property")) {
                 // Session property.
-                String propertyName = attributeList.getValue("name");
-                String value = attributeList.getValue("value");
+                String propertyName = attributes.getValue("name");
+                String value = attributes.getValue("value");
                 setProperty(propertyName, value);
-            } else if (elementName.equals("breakpoints")) {
+            } else if (localName.equals("breakpoints")) {
                 breakpointSpecifications = new ArrayList();
-            } else if (elementName.equals("breakpoint")) {
+            } else if (localName.equals("breakpoint")) {
                 BreakpointSpecification spec =
-                    new BreakpointSpecification(attributeList);
+                    new BreakpointSpecification(attributes);
                 breakpointSpecifications.add(spec);
             }
         }

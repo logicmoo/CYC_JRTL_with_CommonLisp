@@ -1,8 +1,8 @@
 /*
  * BreakpointSpecification.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: BreakpointSpecification.java,v 1.1.1.1 2002-09-24 16:09:44 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: BreakpointSpecification.java,v 1.2 2003-06-03 16:51:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.j.jdb;
 
 import org.armedbear.j.FastStringBuffer;
 import org.armedbear.j.Log;
-import org.xml.sax.AttributeList;
+import org.xml.sax.Attributes;
 
 public final class BreakpointSpecification
 {
@@ -32,13 +32,13 @@ public final class BreakpointSpecification
     private final String fileName;
     private final int lineNumber;
 
-    public BreakpointSpecification(AttributeList attributeList)
+    public BreakpointSpecification(Attributes attributes)
     {
-        className = attributeList.getValue("className");
-        methodName = attributeList.getValue("methodName");
-        fileName = attributeList.getValue("fileName");
+        className = attributes.getValue("className");
+        methodName = attributes.getValue("methodName");
+        fileName = attributes.getValue("fileName");
         int n = 0;
-        String s = attributeList.getValue("lineNumber");
+        String s = attributes.getValue("lineNumber");
         if (s != null) {
             try {
                 n = Integer.parseInt(s);
