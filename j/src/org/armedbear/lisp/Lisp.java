@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.171 2003-10-26 19:13:26 piso Exp $
+ * $Id: Lisp.java,v 1.172 2003-11-04 01:41:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -979,15 +979,21 @@ public abstract class Lisp
                                        LispObject defaultValue)
         throws ConditionThrowable
     {
-        LispObject result = get(symbol, indicator);
-        return result != null ? result : defaultValue;
+        LispObject list = symbol.getPropertyList();
+        while (list != NIL) {
+            LispObject obj = list.car();
+            if (obj.eql(indicator))
+                return list.cadr();
+            list = list.cddr();
+        }
+        return defaultValue;
     }
 
     // Returns null if there is no property with the specified indicator.
     public static final LispObject get(Symbol symbol, LispObject indicator)
         throws ConditionThrowable
     {
-        LispObject list = checkList(symbol.getPropertyList());
+        LispObject list = symbol.getPropertyList();
         while (list != NIL) {
             LispObject obj = list.car();
             if (obj.eql(indicator))
@@ -1001,7 +1007,7 @@ public abstract class Lisp
                                        LispObject value)
         throws ConditionThrowable
     {
-        LispObject list = checkList(symbol.getPropertyList());
+        LispObject list = symbol.getPropertyList();
         while (list != NIL) {
             if (list.car().eql(indicator)) {
                 // Found it!
