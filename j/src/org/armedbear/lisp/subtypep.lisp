@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.55 2005-02-06 12:48:38 piso Exp $
+;;; $Id: subtypep.lisp,v 1.56 2005-02-06 12:54:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -221,7 +221,7 @@
              ((ARRAY VECTOR STRING SIMPLE-ARRAY SIMPLE-STRING BASE-STRING
                SIMPLE-BASE-STRING BIT-VECTOR SIMPLE-BIT-VECTOR NIL-VECTOR)
               (make-ctype 'ARRAY type))
-             ((REAL INTEGER BIT FIXNUM UNSIGNED-BYTE BIGNUM RATIO
+             ((REAL INTEGER BIT FIXNUM SIGNED-BYTE UNSIGNED-BYTE BIGNUM RATIO
                FLOAT SINGLE-FLOAT DOUBLE-FLOAT SHORT-FLOAT LONG-FLOAT)
               (make-ctype 'REAL type))
              (COMPLEX
