@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.27 2004-09-30 19:21:26 piso Exp $
+ * $Id: Condition.java,v 1.28 2004-10-01 18:18:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ public class Condition extends StandardObject
     private LispObject formatControl = NIL;
     private LispObject formatArguments = NIL;
 
-    private String message = null;
+    protected String message = null;
 
     public Condition()
     {
