@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.4 2003-10-11 17:28:52 piso Exp $
+ * $Id: StandardObject.java,v 1.5 2003-10-11 19:44:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,12 +39,12 @@ public class StandardObject extends LispObject
 
     public LispObject typeOf()
     {
-        return Symbol.STANDARD_OBJECT;
+        return cls != null ? cls.getSymbol() : Symbol.STANDARD_OBJECT;
     }
 
     public LispClass classOf()
     {
-        return cls;
+        return cls != null ? cls : BuiltInClass.STANDARD_OBJECT;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
@@ -53,8 +53,12 @@ public class StandardObject extends LispObject
             return T;
         if (type == BuiltInClass.STANDARD_OBJECT)
             return T;
-        if (type == cls)
-            return T;
+        if (cls != null) {
+            if (type == cls)
+                return T;
+            if (type == cls.getSymbol())
+                return T;
+        }
         return super.typep(type);
     }
 
