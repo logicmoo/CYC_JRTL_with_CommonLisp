@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.210 2003-05-31 18:15:18 piso Exp $
+ * $Id: Primitives.java,v 1.211 2003-05-31 20:20:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -412,11 +412,11 @@ public final class Primitives extends Module
             case ARRAY_HAS_FILL_POINTER_P:      // ### array-has-fill-pointer-p
                 return checkVector(arg).getFillPointer() >= 0 ? T : NIL;
             case VECTORP:                       // ### vectorp
-                return arg instanceof VectorType ? T : NIL;
+                return (arg.getType() & TYPE_VECTOR) != 0 ? T : NIL;
             case SIMPLE_VECTOR_P:               // ### simple-vector-p
                 return arg.typep(Symbol.SIMPLE_VECTOR);
             case BIT_VECTOR_P:                  // ### bit-vector-p
-                return arg instanceof BitVector ? T : NIL;
+                return (arg.getType() & TYPE_BIT_VECTOR) != 0 ? T : NIL;
             case SIMPLE_BIT_VECTOR_P:           // ### simple-bit-vector-p
                 return arg.typep(Symbol.SIMPLE_BIT_VECTOR);
             case CHAR_CODE:                     // ### char-code
@@ -448,7 +448,7 @@ public final class Primitives extends Module
                 return new LispCharacter(Character.toUpperCase(
                     LispCharacter.getValue(arg)));
             case STRINGP:                       // ### stringp
-                return arg instanceof LispString ? T : NIL;
+                return (arg.getType() & TYPE_STRING) != 0 ? T : NIL;
             case SIMPLE_STRING_P:               // ### simple-string-p
                 return arg.typep(Symbol.SIMPLE_STRING);
             case ZEROP:                         // ### zerop
@@ -1988,7 +1988,8 @@ public final class Primitives extends Module
                     // Initial element was specified.
                     v.fill(initialElement);
                 } else if (initialContents != NIL) {
-                    checkSequence(initialContents);
+                    if ((initialContents.getType() & TYPE_SEQUENCE) == 0)
+                        throw new TypeError(initialContents, "sequence");
                     // FIXME Don't use ELT for lists!
                     for (int i = 0; i < size; i++)
                         v.set(i, initialContents.elt(i));

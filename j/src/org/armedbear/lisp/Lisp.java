@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.71 2003-05-31 18:12:16 piso Exp $
+ * $Id: Lisp.java,v 1.72 2003-05-31 20:22:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +42,11 @@ public abstract class Lisp
     static final int TYPE_FLOAT             = 0x00000020;
     static final int TYPE_COMPLEX           = 0x00000040;
 
-    static final int TYPE_CHARACTER         = 0x00000080;
+    static final int TYPE_NULL              = 0x00000080;
+
     static final int TYPE_VECTOR            = 0x00000100;
-    static final int TYPE_NULL              = 0x00000200;
+    static final int TYPE_STRING            = 0x00000200;
+    static final int TYPE_BIT_VECTOR        = 0x00000400;
 
     // Functions, special operators, macros.
     static final int TYPE_PRIMITIVE         = 0x00010000;
@@ -55,7 +57,7 @@ public abstract class Lisp
     static final int TYPE_CLOSURE           = 0x00200000;
     static final int TYPE_SPECIAL_OPERATOR  = 0x00400000;
     static final int TYPE_COMPILED_FUNCTION = 0x00800000;
-    static final int TYPE_MACRO             = 0x01000000;
+
     static final int TYPE_MACRO_OBJECT      = 0x02000000;
 
     // Composite types.
@@ -65,6 +67,7 @@ public abstract class Lisp
     static final int TYPE_NUMBER   = TYPE_REAL | TYPE_COMPLEX;
 
     static final int TYPE_LIST     = TYPE_CONS | TYPE_NULL;
+    static final int TYPE_SEQUENCE = TYPE_VECTOR | TYPE_LIST;
 
     public static final LispObject funcall(LispObject fun, LispObject[] argv,
         LispThread thread) throws Condition
@@ -181,7 +184,6 @@ public abstract class Lisp
                         return fun.execute(obj.cdr(), env);
                     }
                     case TYPE_MACRO_OBJECT:
-                    case TYPE_MACRO:
                         return eval(macroexpand(obj, env, thread), env, thread);
                     default: {
                         if (debug)
@@ -352,19 +354,6 @@ public abstract class Lisp
         if (obj.listp())
             return obj;
         throw new TypeError(obj, "list");
-    }
-
-    public static final SequenceType checkSequence(LispObject obj)
-        throws LispError
-    {
-        if (obj == null)
-            throw new NullPointerException();
-        try {
-            return (SequenceType) obj;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "sequence");
-        }
     }
 
     public static final AbstractArray checkArray(LispObject obj)
