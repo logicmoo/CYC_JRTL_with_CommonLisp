@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.217 2004-03-12 17:28:37 piso Exp $
+ * $Id: Lisp.java,v 1.218 2004-03-16 18:33:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1483,7 +1483,8 @@ public abstract class Lisp
     }
 
     public static final Primitive0 DEBUG =
-        new Primitive0("%debug", PACKAGE_SYS, false) {
+        new Primitive0("%debug", PACKAGE_SYS, false)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
@@ -1496,7 +1497,8 @@ public abstract class Lisp
     };
 
     public static final Primitive0 NODEBUG =
-        new Primitive0("%nodebug", PACKAGE_SYS, false) {
+        new Primitive0("%nodebug", PACKAGE_SYS, false)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
@@ -1517,6 +1519,10 @@ public abstract class Lisp
         T.setSymbolValue(T);
         T.setConstant(true);
     }
+
+    // ### *read-eval*
+    public static final Symbol _READ_EVAL_ =
+        exportSpecial("*READ-EVAL*", PACKAGE_CL, T);
 
     // ### *modules*
     public static final Symbol _MODULES_ =
