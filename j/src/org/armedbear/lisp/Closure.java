@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.10 2003-03-08 16:08:15 piso Exp $
+ * $Id: Closure.java,v 1.11 2003-03-08 16:56:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,10 +30,12 @@ public class Closure extends Function
     private static final int OPTIONAL = 1;
     private static final int KEYWORD  = 2;
     private static final int REST     = 3;
+    private static final int AUX      = 4;
 
     private final LispObject parameterList;
     private final Parameter[] parameterArray;
     private final Parameter[] keywordParameterArray;
+    private final Parameter[] auxVarArray;
     private final LispObject body;
     private final Environment env;
     private final LispObject function;
@@ -59,14 +61,20 @@ public class Closure extends Function
             final int length = parameterList.length();
             ArrayList arrayList = new ArrayList();
             ArrayList keywordParameters = new ArrayList();
+            ArrayList auxVars = null;
             LispObject remaining = parameterList;
             boolean optional = false;
             boolean rest = false;
             boolean key = false;
+            boolean aux = false;
             for (int i = 0; i < length; i++) {
                 LispObject obj = remaining.car();
                 if (obj instanceof Symbol) {
-                    if (obj == Symbol.AND_OPTIONAL) {
+                    if (aux) {
+                        if (auxVars == null)
+                            auxVars = new ArrayList();
+                        auxVars.add(new Parameter((Symbol)obj, NIL, AUX));
+                    } else if (obj == Symbol.AND_OPTIONAL) {
                         optional = true;
                         arity = -1;
                     } else if (obj == Symbol.AND_REST) {
@@ -87,6 +95,10 @@ public class Closure extends Function
                         arity = -1;
                     } else if (obj == Symbol.AND_ALLOW_OTHER_KEYS) {
                         allowOtherKeys = true;
+                    } else if (obj == Symbol.AND_AUX) {
+                        // All remaining specifiers are aux variable specifiers.
+                        arity = -1; // FIXME
+                        aux = true;
                     } else {
                         if (optional) {
                             arrayList.add(new Parameter((Symbol)obj, NIL,
@@ -101,7 +113,14 @@ public class Closure extends Function
                         }
                     }
                 } else if (obj instanceof Cons) {
-                    if (optional) {
+                    if (aux) {
+                        Symbol symbol = checkSymbol(obj.car());
+                        LispObject initForm = obj.cadr();
+                        Debug.assertTrue(initForm != null);
+                        if (auxVars == null)
+                            auxVars = new ArrayList();
+                        auxVars.add(new Parameter(symbol, initForm, AUX));
+                    } else if (optional) {
                         Symbol symbol = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         LispObject svar = obj.cdr().cdr().car();
@@ -148,10 +167,16 @@ public class Closure extends Function
                 keywordParameters.toArray(keywordParameterArray);
             } else
                 keywordParameterArray = null;
+            if (auxVars != null && auxVars.size() > 0) {
+                auxVarArray = new Parameter[auxVars.size()];
+                auxVars.toArray(auxVarArray);
+            } else
+                auxVarArray = null;
         } else {
             Debug.assertTrue(parameterList == NIL);
             parameterArray = new Parameter[0];
             keywordParameterArray = null;
+            auxVarArray = null;
             arity = 0;
         }
         this.body = body;
@@ -216,7 +241,12 @@ public class Closure extends Function
             for (int i = 0; i < arity; i++)
                 bind(parameterArray[i].var, args[i], ext);
         } else {
-            Debug.assertTrue(required < parameterArray.length);
+            if (required > parameterArray.length) {
+                Debug.trace("invocation error in function " + getName());
+                Debug.trace("required = " + required);
+                Debug.trace("parameterArray.length = " + parameterArray.length);
+                Debug.assertTrue(false);
+            }
             // Required parameters.
             int i;
             for (i = 0; i < required; i++) {
@@ -323,6 +353,16 @@ public class Closure extends Function
                         boundpArray[n] = true;
                     }
                 }
+            }
+        }
+        if (auxVarArray != null) {
+            // Aux variable processing is analogous to let* processing.
+            for (int i = 0; i < auxVarArray.length; i++) {
+                Parameter parameter = auxVarArray[i];
+                Symbol symbol = parameter.var;
+                LispObject initForm = parameter.initForm;
+                LispObject value = initForm == NIL ? NIL : eval(initForm, ext);
+                bind(symbol, value, ext);
             }
         }
         LispObject result = NIL;
