@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.25 2002-12-14 01:17:42 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.26 2002-12-14 15:48:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -387,8 +387,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         if (dir == null)
             return;
         String prefix = null;
-        if (dir.isLocal() &&
-            (Utilities.isFilenameAbsolute(entry) || entry.startsWith(".."))) {
+        if (Utilities.isFilenameAbsolute(entry) || entry.startsWith("..")) {
             File file = File.getInstance(dir, entry);
             if (file != null) {
                 prefix = file.canonicalPath();
