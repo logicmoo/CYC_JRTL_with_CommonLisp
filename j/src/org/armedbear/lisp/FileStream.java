@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.15 2004-09-01 17:28:42 piso Exp $
+ * $Id: FileStream.java,v 1.16 2004-09-18 20:28:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,6 +185,10 @@ public final class FileStream extends Stream
     {
         try {
             raf.write((byte)c);
+            if (c == '\n')
+                charPos = 0;
+            else
+                ++charPos;
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -201,6 +205,11 @@ public final class FileStream extends Stream
     {
         try {
             raf.writeBytes(s);
+            int index = s.lastIndexOf('\n');
+            if (index < 0)
+                charPos += s.length();
+            else
+                charPos = s.length() - (index + 1);
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -212,6 +221,7 @@ public final class FileStream extends Stream
         try {
             raf.writeBytes(s);
             raf.write((byte)'\n');
+            charPos = 0;
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
