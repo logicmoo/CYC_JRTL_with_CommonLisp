@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.300 2003-07-18 15:12:31 piso Exp $
+ * $Id: Primitives.java,v 1.301 2003-07-18 15:47:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4663,16 +4663,7 @@ public final class Primitives extends Module
         new Primitive1("coerce-to-function") {
         public LispObject execute(LispObject arg) throws Condition
         {
-            if (arg instanceof Function)
-                return arg;
-            if (arg instanceof Symbol) {
-                LispObject fun = arg.getSymbolFunction();
-                if (fun instanceof Function)
-                    return fun;
-            }
-            if (arg instanceof Cons && arg.car() == Symbol.LAMBDA)
-                return new Closure(arg.cadr(), arg.cdr().cdr(), new Environment());
-            throw new UndefinedFunctionError(arg);
+            return coerceToFunction(arg);
         }
     };
 }
