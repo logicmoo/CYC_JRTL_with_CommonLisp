@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.186 2004-06-24 14:50:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.187 2004-06-24 16:24:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3064,16 +3064,14 @@
                          (memq quantity '(debug speed space safety compilation-speed)))
                 (push (cons quantity val) alist)))))))
     (when alist
-      (%format t "declarations = ~S~%" alist)
       (dolist (cons alist)
         (let ((symbol (car cons))
               (value (cdr cons)))
           (case symbol
-            ('speed
+            (SPEED
              (setf *speed* value))
-            ('safety
-             (setf *safety* value)))))
-      (%format t "*speed* = ~S *safety* = ~S~%" *speed* *safety*))
+            (SAFETY
+             (setf *safety* value))))))
     alist))
 
 (defun compile (name &optional definition)
