@@ -102,6 +102,9 @@ copy-readtable
 copy-seq
 copy-symbol
 copy-tree
+count
+count-if
+count-if-not
 ctypecase
 decf
 declaim
