@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.4 2003-11-02 19:10:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.5 2003-11-04 17:38:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -591,7 +591,9 @@
       (18 ; LDC
        (unless (= (length args) 1)
          (error "wrong number of args for LDC"))
-       (inst opcode args))
+       (if (> (car args) 255)
+           (inst 19 (u2 (car args))) ; LDC_W
+           (inst opcode args)))
       (t
        (error "RESOLVE-ARGS unsupported opcode ~D" opcode)))))
 
