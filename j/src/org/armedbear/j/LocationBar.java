@@ -2,7 +2,7 @@
  * LocationBar.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LocationBar.java,v 1.7 2003-07-04 15:53:12 piso Exp $
+ * $Id: LocationBar.java,v 1.8 2003-07-23 00:30:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,14 +35,13 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public final class LocationBar extends JPanel implements Constants,
     ActionListener, MouseListener
 {
     private Editor editor;
-    private final JLabel label;
+    private final Label label;
     private final HistoryTextField textField;
     private JButton closeButton;
 
@@ -65,13 +64,13 @@ public final class LocationBar extends JPanel implements Constants,
         setBorder(BorderFactory.createEmptyBorder(3, 3, 4, 3));
         // Make the label wide enough for the widest string that needs to go
         // there.
-        label = new JLabel(getWidestPrompt());
+        label = new Label(getWidestPrompt());
         label.setBorder(BorderFactory.createEmptyBorder(3, 0, 1, 0));
         Dimension dim = label.getPreferredSize();
         label.setPreferredSize(dim);
         label.setMinimumSize(dim);
         label.setMaximumSize(dim);
-        label.setHorizontalAlignment(JLabel.RIGHT);
+        label.setHorizontalAlignment(Label.RIGHT);
         add(label);
         textField = new HistoryTextField(editor, 20);
         textField.setFocusTraversalKeysEnabled(false);
@@ -110,7 +109,7 @@ public final class LocationBar extends JPanel implements Constants,
     private static String getWidestPrompt()
     {
         if (widest == null) {
-            Font font = new JLabel().getFont();
+            Font font = new Label().getFont();
             FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
             int maxWidth = -1;
             for (int i = 0; i < prompts.length; i++) {
