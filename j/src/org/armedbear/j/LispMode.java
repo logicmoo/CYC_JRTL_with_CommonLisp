@@ -1,8 +1,8 @@
 /*
  * LispMode.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.64 2003-11-03 02:06:32 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: LispMode.java,v 1.65 2004-04-11 18:33:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,19 +115,26 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return validChars.indexOf(c) >= 0;
     }
 
-    private static final String[] definers = new String[] {
-        "defclass", "defconstant", "defgeneric", "define-condition",
-        "defmacro", "defmethod", "defparameter", "defstruct", "deftype",
-        "defun", "defvar"
-    };
+    private static final HashMap definers = new HashMap();
 
-    public static final boolean isDefiner(String s)
+    static {
+        String[] strings = new String[] {
+            "defclass", "defconstant", "defgeneric", "define-condition",
+            "defmacro", "defmethod", "defparameter", "defstruct", "deftype",
+            "defun", "defvar"
+        };
+        for (int i = strings.length; i-- > 0;)
+            definers.put(strings[i], strings[i]);
+        // SBCL
+        definers.put("def!struct", "defstruct");
+        definers.put("defmacro-mundanely", "defmacro");
+    }
+
+    public static final String translateDefiner(String s)
     {
         if (s.length() >= 5 && s.startsWith("def"))
-            if (Utilities.isOneOf(s, definers))
-                return true;
-
-        return false;
+            return (String) definers.get(s);
+        return null;
     }
 
     public boolean isInQuote(Buffer buffer, Position pos)
