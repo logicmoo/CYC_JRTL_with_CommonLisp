@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.618 2004-03-23 03:31:35 piso Exp $
+ * $Id: Primitives.java,v 1.619 2004-03-26 00:55:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2319,13 +2319,16 @@ public final class Primitives extends Lisp
                     }
                     list = list.cdr();
                 }
+                thread.clearValues();
                 return result;
             }
             signal(new UndefinedFunction(op));
             return NIL;
         }
+
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             // First argument must be a function.
             LispObject fun = first;
@@ -2353,8 +2356,10 @@ public final class Primitives extends Lisp
                 list1 = list1.cdr();
                 list2 = list2.cdr();
             }
+            thread.clearValues();
             return result;
         }
+
         public LispObject execute(final LispObject[] args) throws ConditionThrowable
         {
             final int numArgs = args.length;
@@ -2388,6 +2393,7 @@ public final class Primitives extends Lisp
                 for (int j = 1; j < numArgs; j++)
                     args[j] = args[j].cdr();
             }
+            thread.clearValues();
             LispObject result = NIL;
             for (int i = commonLength; i-- > 0;)
                 result = new Cons(results[i], result);
@@ -2396,7 +2402,9 @@ public final class Primitives extends Lisp
     };
 
     // ### macroexpand
-    private static final Primitive MACROEXPAND = new Primitive("macroexpand","form &optional env") {
+    private static final Primitive MACROEXPAND =
+        new Primitive("macroexpand", "form &optional env")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
@@ -2413,7 +2421,8 @@ public final class Primitives extends Lisp
     };
 
     // ### macroexpand-1
-    private static final Primitive MACROEXPAND_1 = new Primitive("macroexpand-1","form &optional env")
+    private static final Primitive MACROEXPAND_1 =
+        new Primitive("macroexpand-1", "form &optional env")
     {
         public LispObject execute(LispObject form) throws ConditionThrowable
         {
