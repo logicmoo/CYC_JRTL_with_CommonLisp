@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.95 2004-03-04 20:17:09 piso Exp $
+;;; $Id: clos.lisp,v 1.96 2004-03-17 17:58:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -506,10 +506,10 @@
   (let* ((layout (class-layout class))
          (length (and layout (layout-length layout))))
     (unless layout
-      (format t "no layout for class ~S~%" class)
+      (format t "No layout for class ~S.~%" class)
       (backtrace))
     (unless length
-      (format t "no layout length for class ~S~%" class)
+      (format t "No layout length for class ~S~%." class)
       (setf length (count-if #'instance-slot-p (class-slots class))))
     (allocate-std-instance class
                            (allocate-slot-storage length +slot-unbound+))))
