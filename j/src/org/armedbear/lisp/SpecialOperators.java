@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.8 2003-10-27 17:57:41 piso Exp $
+ * $Id: SpecialOperators.java,v 1.9 2003-10-27 19:02:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,7 +135,8 @@ public final class SpecialOperators extends Lisp
                         varList = varList.cdr();
                         if (obj instanceof Cons && obj.length() == 2) {
                             bind(checkSymbol(obj.car()),
-                                 new SymbolMacro(eval(obj.cadr(), evalEnv, thread)),
+//                                  new SymbolMacro(eval(obj.cadr(), evalEnv, thread)),
+                                 new SymbolMacro(obj.cadr()),
                                  ext);
                         } else
                             throw new ConditionThrowable(new ProgramError("SYMBOL-MACROLET: bad symbol-expansion pair: " + obj));
@@ -343,10 +344,23 @@ public final class SpecialOperators extends Lisp
                     // Not special.
                     binding = env.getBinding(symbol);
                 }
-                if (binding != null)
-                    binding.value = value;
-                else
-                    symbol.setSymbolValue(value);
+                if (binding != null) {
+                    if (binding.value instanceof SymbolMacro) {
+                        LispObject expansion =
+                            ((SymbolMacro)binding.value).getExpansion();
+                        LispObject form = list3(Symbol.SETF, expansion, value);
+                        eval(form, env, thread);
+                    } else
+                        binding.value = value;
+                } else {
+                    if (symbol.getSymbolValue() instanceof SymbolMacro) {
+                        LispObject expansion =
+                            ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
+                        LispObject form = list3(Symbol.SETF, expansion, value);
+                        eval(form, env, thread);
+                    } else
+                        symbol.setSymbolValue(value);
+                }
                 args = args.cdr();
             }
             // Return primary value only!
