@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.40 2004-01-27 14:46:29 piso Exp $
+ * $Id: LispClass.java,v 1.41 2004-02-13 16:25:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,7 @@ public class LispClass extends StandardObject
     private LispObject directSubclasses;
     private LispObject classPrecedenceList = NIL;
     private LispObject directMethods = NIL;
+    private LispObject documentation = NIL;
 
     protected LispClass()
     {
@@ -420,6 +421,34 @@ public class LispClass extends StandardObject
     // ### %set-class-direct-methods
     private static final Primitive2 _SET_CLASS_DIRECT_METHODS =
         new Primitive2("%set-class-direct-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).directMethods = second;
+                return second;
+            }
+            return signal(new TypeError(first, "class"));
+        }
+    };
+
+    // ### class-documentation
+    private static final Primitive1 CLASS_DOCUMENTATION =
+        new Primitive1("class-documentation", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).directMethods;
+            return signal(new TypeError(arg, "class"));
+        }
+    };
+
+    // ### %set-class-documentation
+    private static final Primitive2 _SET_CLASS_DOCUMENTATION =
+        new Primitive2("%set-class-documentation", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
