@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.13 2003-02-20 18:53:28 piso Exp $
+ * $Id: Interpreter.java,v 1.14 2003-02-23 01:36:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,7 +118,7 @@ public final class Interpreter extends Lisp
     public void run()
     {
         Debug.assertTrue(inputStream != null);
-        LispReader reader = new LispReader(inputStream);
+        CharacterInputStream in = new CharacterInputStream(inputStream);
         history = new ArrayList();
         commandNumber = 0;
         done = false;
@@ -133,16 +133,19 @@ public final class Interpreter extends Lisp
                     ++commandNumber;
                     out.writeString(prompt());
                     out.finishOutput();
-                    char c = reader.peekCharNonWhitespace();
+                    char c = peekCharNonWhitespace(in);
                     if (c == '\n') {
                         // Blank line.
-                        reader.readChar();
+                        in.readChar(true, NIL);
                         --commandNumber;
                         continue;
                     }
                     LispObject object = null;
                     if (c == ':') {
-                        String s = reader.readLine();
+                        LispObject input = in.readLine(false, EOF);
+                        if (input == EOF)
+                            break;
+                        String s = LispString.getValue(input);
                         Object obj = getHistory(s);
                         if (obj instanceof String) {
                             s = (String) obj;
@@ -162,7 +165,7 @@ public final class Interpreter extends Lisp
                         }
                     }
                     if (object == null)
-                        object = reader.readObject(false); // Top level read.
+                        object = in.read(false, EOF, false); // Top level read.
                     if (object == EOF)
                         break;
                     addHistory(commandNumber, object);
@@ -182,9 +185,11 @@ public final class Interpreter extends Lisp
                     out.finishOutput();
                 }
                 catch (StackOverflowError e) {
+                    in.clearInput();
                     out.writeLine("Stack overflow");
                 }
                 catch (LispError e) {
+                    in.clearInput();
                     String message = e.getMessage();
                     if (message != null)
                         out.writeLine("Error: " + e.getMessage() + ".");
@@ -193,6 +198,7 @@ public final class Interpreter extends Lisp
                     backtrace();
                 }
                 catch (Throwable t) {
+                    in.clearInput();
                     out.printStackTrace(t);
                     backtrace();
                 }
@@ -200,6 +206,22 @@ public final class Interpreter extends Lisp
         }
         catch (Throwable t) {
             t.printStackTrace();
+        }
+    }
+
+    // Skip whitespace except for newline and peek at the next
+    // character.
+    private char peekCharNonWhitespace(CharacterInputStream stream)
+        throws LispError
+    {
+        while (true) {
+            LispCharacter character =
+                (LispCharacter) stream.readChar(true, NIL);
+            char c = character.getValue();
+            if (!Character.isWhitespace(c) || c == '\n') {
+                stream.unreadChar(character);
+                return c;
+            }
         }
     }
 
@@ -438,9 +460,8 @@ public final class Interpreter extends Lisp
 
     public static LispObject evaluate(String s) throws LispError
     {
-        LispReader reader = new LispReader(s);
-        // Use readObject(false) here to simulate top level.
-        LispObject obj = reader.readObject(false);
+        StringInputStream stream = new StringInputStream(s);
+        LispObject obj = stream.read(false, EOF, false);
         if (obj == EOF)
             throw new EndOfFileException();
         return eval(obj, new Environment());
@@ -452,12 +473,11 @@ public final class Interpreter extends Lisp
     // Used only by the JUnit test suite (Tests.java).
     public static String evalString(String s)
     {
-        LispReader reader = new LispReader(s);
+        StringInputStream stream = new StringInputStream(s);
         StringBuffer sb = new StringBuffer();
         while (true) {
             try {
-                // Use readObject(false) here to simulate top level.
-                LispObject obj = reader.readObject(false);
+                LispObject obj = stream.read(false, EOF, false);
                 if (obj == EOF)
                     break;
                 LispObject result = eval(obj, new Environment());
