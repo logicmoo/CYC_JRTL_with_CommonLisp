@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.1 2003-01-17 19:43:10 piso Exp $
+ * $Id: Closure.java,v 1.2 2003-01-26 16:40:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public class Closure extends Function
                         optional = false;
                         rest = false;
                         arity = -1;
-                    } else{
+                    } else {
                         if (optional) {
                             arrayList.add(new Parameter((Symbol)obj, NIL,
                                 OPTIONAL));
@@ -123,8 +123,9 @@ public class Closure extends Function
                         arrayList.add(new Parameter(keyword, var, initForm,
                                                     svar));
                     } else
-                        Debug.assertTrue(false);
-                }
+                        invalidParameter(obj);
+                } else if (obj != NIL)
+                    invalidParameter(obj);
                 remaining = remaining.cdr();
             }
             if (arity == 0)
@@ -141,6 +142,13 @@ public class Closure extends Function
         this.function = new Cons(Symbol.LAMBDA, new Cons(parameterList, body));
         if (arity >= 0)
             Debug.assertTrue(arity == required);
+    }
+
+    private static final void invalidParameter(LispObject obj)
+        throws LispException
+    {
+        throw new LispException(String.valueOf(obj) +
+            " may not be used as a variable in a lambda list");
     }
 
     public int getType()
