@@ -1,8 +1,8 @@
 /*
  * FindInFiles.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: FindInFiles.java,v 1.6 2003-05-10 14:22:25 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: FindInFiles.java,v 1.7 2003-06-27 18:08:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 
@@ -210,7 +213,7 @@ public class FindInFiles extends Replacement implements Constants,
         for (Iterator it = filters.iterator(); it.hasNext();) {
             Filter filter = (Filter) it.next();
             File dir = null;
-            File spec = File.getInstance(filter.getPattern());
+            File spec = File.getInstance(filter.getOriginalPattern());
             if (spec != null) {
                 File parent = spec.getParentFile();
                 if (parent != null)
@@ -319,6 +322,7 @@ public class FindInFiles extends Replacement implements Constants,
     private void processFile(File file)
     {
         try {
+            boolean update = false;
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(file.getInputStream(),
                     encoding));
@@ -343,6 +347,7 @@ public class FindInFiles extends Replacement implements Constants,
                             outputBuffer.appendFileLine(file,
                                 listEachOccurrence);
                             results.add(file);
+                            update = true;
                         }
                         ++matches;
                         if (listEachOccurrence)
@@ -354,10 +359,11 @@ public class FindInFiles extends Replacement implements Constants,
                         outputBuffer.renumber();
                         outputBuffer.unlockWrite();
                     }
-                    // Update display once per file.
-                    SwingUtilities.invokeLater(updateDisplayRunnable);
                 }
             }
+            // Update display once per file.
+            if (update)
+                SwingUtilities.invokeLater(updateDisplayRunnable);
         }
         catch (IOException e) {
             Log.error(e);
@@ -965,78 +971,57 @@ public class FindInFiles extends Replacement implements Constants,
 
     private static final class Filter
     {
-        private final String pattern;
+        private final String originalPattern;
+        private final boolean ignoreCase;
+        private Pattern pattern;
 
-        private String prefix;
-        private String suffix;
-        private String substring;
-        private boolean ignoreCase;
-
-        Filter(String pattern) throws Exception
+        public Filter(String s) throws Exception
         {
-            this.pattern = pattern;
-            File file = File.getInstance(pattern);
-            // BUG! Error handling!
+            this.originalPattern = s;
+            ignoreCase = Platform.isPlatformWindows();
+            File file = File.getInstance(ignoreCase ? s.toLowerCase() : s);
             if (!processFilter(file.getName()))
                 throw new Exception("process pattern failed");
-            if (Platform.isPlatformWindows()) {
-                ignoreCase = true;
-                if (prefix != null)
-                    prefix = prefix.toLowerCase();
-                if (suffix != null)
-                    suffix = suffix.toLowerCase();
-                if (substring != null)
-                    substring = substring.toLowerCase();
-            }
         }
 
-        String getPattern()
+        public String getOriginalPattern()
         {
-            return pattern;
+            return originalPattern;
         }
 
         private boolean processFilter(String s)
         {
-            if (s.indexOf("*") < 0)
-                return false;
-            if (s.startsWith("*")) {
-                suffix = s.substring(1);
-                if (suffix.endsWith("*")) {
-                    substring = suffix.substring(0, suffix.length()-1);
-                    suffix = null;
-                    if (substring.indexOf("*") >= 0)
-                        return false;
+            FastStringBuffer sb = new FastStringBuffer();
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                switch (c) {
+                    case '*':
+                        sb.append(".*");
+                        break;
+                    case '?':
+                        sb.append(".?");
+                        break;
+                    default:
+                        sb.append(c);
+                        break;
                 }
+            }
+            try {
+                pattern = Pattern.compile(sb.toString());
                 return true;
             }
-            if (s.endsWith("*")) {
-                prefix = s.substring(0, s.length()-1);
-                if (prefix.indexOf("*") >= 0)
-                    return false;
-            }
-            int index = s.indexOf("*");
-            prefix = s.substring(0, index);
-            suffix = s.substring(index+1, s.length());
-            if (suffix.indexOf("*") >= 0)
+            catch (PatternSyntaxException e) {
+                Log.error(e);
                 return false;
-            return true;
+            }
         }
 
-        // Returns true if name meets pattern criteria (dir is ignored).
         public boolean accepts(String name)
         {
             if (ignoreCase)
                 name = name.toLowerCase();
-            if (prefix != null)
-                if (!name.startsWith(prefix))
-                    return false;
-            if (suffix != null)
-                if (!name.endsWith(suffix))
-                    return false;
-            if (substring != null)
-                if (name.indexOf(substring) >= 0)
-                    return false;
-            return true;
+            Matcher matcher = pattern.matcher(name);
+            return matcher.matches();
         }
     }
 
