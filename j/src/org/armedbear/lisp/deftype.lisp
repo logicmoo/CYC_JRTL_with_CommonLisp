@@ -1,7 +1,7 @@
 ;;; deftype.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: deftype.lisp,v 1.1 2003-09-27 17:30:58 piso Exp $
+;;; $Id: deftype.lisp,v 1.2 2004-05-19 20:05:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,21 @@
 (in-package "SYSTEM")
 
 (defmacro deftype (name lambda-list &rest body)
+  ;; Optional parameters default to * rather than NIL.
+  ;; FIXME Extend this code to handle keyword parameters too!
+  (when (memq '&optional lambda-list)
+    (let ((new-lambda-list ())
+          (optionalp nil))
+      (dolist (thing lambda-list)
+        (cond (optionalp
+               (when (symbolp thing)
+                 (setf thing (list thing ''*))))
+              ((eq thing '&optional)
+               (setf optionalp t))
+              ((memq thing lambda-list-keywords)
+               (setf optionalp nil)))
+        (push thing new-lambda-list))
+      (setf lambda-list (nreverse new-lambda-list))))
   `(progn
      (setf (get ',name 'deftype-definition) #'(lambda ,lambda-list ,@body))
      ',name))
