@@ -1,8 +1,8 @@
 /*
  * LispShell.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.81 2004-12-25 13:41:44 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: LispShell.java,v 1.82 2005-01-31 19:37:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,7 +204,9 @@ public class LispShell extends Shell
         try {
             stdin  = new OutputStreamWriter(p.getOutputStream());
             stdoutThread = new StdoutThread(p.getInputStream());
+            stdoutThread.setTimeOut(50);
             stderrThread = new StderrThread(p.getErrorStream());
+            stderrThread.setTimeOut(50);
             stdoutThread.start();
             stderrThread.start();
             readOnly = false;
