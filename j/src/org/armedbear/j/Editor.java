@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.139 2005-03-02 23:32:30 piso Exp $
+ * $Id: Editor.java,v 1.140 2005-03-03 19:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2489,7 +2489,6 @@ public final class Editor extends JPanel implements Constants,
             } else if (command instanceof KeyMap) {
                 requestedKeyMap = (KeyMap) command;
                 if (prefixKeyStatusText == null) {
-                    //                     prefixKeyStatusText = mapping.getKeyText() + "-";
                     prefixKeyStatusText = mapping.getKeyText();
                 } else {
                     prefixKeyStatusText =
@@ -4642,18 +4641,7 @@ public final class Editor extends JPanel implements Constants,
 
     public boolean escapeInternal()
     {
-        if (buffer instanceof CompilationBuffer) {
-            if (buffer.unsplitOnClose()) {
-                buffer.windowClosing();
-                otherWindow();
-                unsplitWindow();
-            }
-            maybeKillBuffer(buffer);
-            restoreFocus();
-            Sidebar.refreshSidebarInAllFrames();
-            return true;
-        }
-        if (buffer.isTransient()) {
+        if (buffer instanceof CompilationBuffer || buffer.isTransient()) {
             if (buffer.unsplitOnClose()) {
                 buffer.windowClosing();
                 otherWindow();
@@ -4693,6 +4681,21 @@ public final class Editor extends JPanel implements Constants,
             }
         }
         return false;
+    }
+
+    public void tempBufferQuit()
+    {
+        if (buffer instanceof CompilationBuffer || buffer.isTransient()) {
+            if (buffer.unsplitOnClose()) {
+                buffer.windowClosing();
+                otherWindow();
+                unsplitWindow();
+            }
+            maybeKillBuffer(buffer);
+            restoreFocus();
+            Sidebar.refreshSidebarInAllFrames();
+            return;
+        }
     }
 
     public void stamp()
