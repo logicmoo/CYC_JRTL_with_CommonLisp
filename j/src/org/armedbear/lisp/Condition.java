@@ -1,8 +1,8 @@
 /*
  * Condition.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Condition.java,v 1.17 2003-12-19 18:44:33 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Condition.java,v 1.18 2004-01-02 19:12:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public class Condition extends StandardObject
         LispObject formatControl = NIL;
         LispObject formatArguments = NIL;
         LispObject first, second;
-        while (initArgs != NIL) {
+        while (initArgs instanceof Cons) {
             first = initArgs.car();
             initArgs = initArgs.cdr();
             second = initArgs.car();
