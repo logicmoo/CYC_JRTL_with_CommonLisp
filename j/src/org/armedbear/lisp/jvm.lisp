@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.123 2004-04-25 01:18:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.124 2004-04-25 14:37:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package "JVM")
 
-(export '(compile-defun jvm-compile jvm-compile-package))
+(export '(compile-defun *catch-errors* jvm-compile jvm-compile-package))
 
 (import 'sys::%format)
 
@@ -2664,7 +2664,9 @@
 
 (setq *compile-print* t)
 
-(defun jvm-compile (name &optional definition)
+(defvar *catch-errors* t)
+
+(defun %jvm-compile (name definition)
   (let ((prefix (load-verbose-prefix)))
     (when *compile-print*
       (if name
@@ -2673,10 +2675,10 @@
             (when (and (fboundp name)
                        (sys::%typep (fdefinition name) 'generic-function))
               (%format t "~A Unable to compile generic function ~S~%" prefix name)
-              (return-from jvm-compile (values name nil t)))
+              (return-from %jvm-compile (values name nil t)))
             (unless (symbolp name)
               (%format t "~A Unable to compile ~S~%" prefix name)
-              (return-from jvm-compile (values name nil t))))
+              (return-from %jvm-compile (values name nil t))))
           (%format t "~A Compiling top-level form ...~%" prefix)))
     (unless definition
       (resolve name)
@@ -2684,31 +2686,37 @@
       (when (compiled-function-p definition)
         (when (and *compile-print* name)
           (%format t "~A Already compiled ~S~%" prefix name))
-        (return-from jvm-compile (values name nil nil))))
-    (handler-case
-        (multiple-value-bind (expr env) (get-lambda-to-compile definition)
-          (let* ((*package* (if (and name (symbol-package name))
-                                (symbol-package name)
-                                *package*))
-                 (classfile (compile-defun name expr env))
-                 (compiled-definition (sys::load-compiled-function classfile)))
-            (when (and name (functionp compiled-definition))
-              (sys::%set-lambda-name compiled-definition name)
-              (sys::%set-call-count compiled-definition (sys::%call-count definition))
-              (sys::%set-arglist compiled-definition (sys::arglist definition))
-              (if (macro-function name)
-                  (setf (fdefinition name) (sys::make-macro compiled-definition))
-                  (setf (fdefinition name) compiled-definition)))
-            (when *compile-print*
-              (if name
-                  (%format t "~A Compiled ~S~%" prefix name)
-                  (%format t "~A Compiled top-level form~%" prefix)))
-            (values (or name compiled-definition) nil nil)))
-      (error (c)
-             (%format t "~A Note: ~A~%" prefix c)
-             (when name
-               (%format t "~A Unable to compile ~S~%" prefix name))
-             (values (or name (sys::coerce-to-function definition)) nil t)))))
+        (return-from %jvm-compile (values name nil nil))))
+    (multiple-value-bind (expr env) (get-lambda-to-compile definition)
+      (let* ((*package* (if (and name (symbol-package name))
+                            (symbol-package name)
+                            *package*))
+             (classfile (compile-defun name expr env))
+             (compiled-definition (sys::load-compiled-function classfile)))
+        (when (and name (functionp compiled-definition))
+          (sys::%set-lambda-name compiled-definition name)
+          (sys::%set-call-count compiled-definition (sys::%call-count definition))
+          (sys::%set-arglist compiled-definition (sys::arglist definition))
+          (if (macro-function name)
+              (setf (fdefinition name) (sys::make-macro compiled-definition))
+              (setf (fdefinition name) compiled-definition)))
+        (when *compile-print*
+          (if name
+              (%format t "~A Compiled ~S~%" prefix name)
+              (%format t "~A Compiled top-level form~%" prefix)))
+        (values (or name compiled-definition) nil nil)))))
+
+(defun jvm-compile (name &optional definition)
+  (if *catch-errors*
+      (let ((prefix (load-verbose-prefix)))
+        (handler-case
+            (%jvm-compile name definition)
+          (error (c)
+                 (%format t "~A Note: ~A~%" prefix c)
+                 (when name
+                   (%format t "~A Unabled to compile ~S~%" prefix name))
+                 (values (or name (sys::coerce-to-function definition)) nil t))))
+      (%jvm-compile name definition)))
 
 (defun jvm-compile-package (package-designator)
   (let ((pkg (if (packagep package-designator)
