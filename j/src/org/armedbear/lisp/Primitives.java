@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.133 2003-03-16 18:35:12 piso Exp $
+ * $Id: Primitives.java,v 1.134 2003-03-16 19:26:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1620,20 +1620,28 @@ public final class Primitives extends Module
                     break;
                 progn(body, ext);
                 // Update variables.
-                // Evaluate step forms.
-                LispObject results[] = new LispObject[length];
-                for (int i = 0; i < length; i++) {
-                    LispObject update = updates[i];
-                    if (update != null) {
-                        LispObject result = eval(update, ext);
-                        results[i] = result;
+                if (sequential) {
+                    for (int i = 0; i < length; i++) {
+                        LispObject update = updates[i];
+                        if (update != null)
+                            rebind(variables[i], eval(update, ext), ext);
                     }
-                }
-                // Update variables.
-                for (int i = 0; i < length; i++) {
-                    if (results[i] != null) {
-                        Symbol symbol = variables[i];
-                        rebind(symbol, results[i], ext);
+                } else {
+                    // Evaluate step forms.
+                    LispObject results[] = new LispObject[length];
+                    for (int i = 0; i < length; i++) {
+                        LispObject update = updates[i];
+                        if (update != null) {
+                            LispObject result = eval(update, ext);
+                            results[i] = result;
+                        }
+                    }
+                    // Update variables.
+                    for (int i = 0; i < length; i++) {
+                        if (results[i] != null) {
+                            Symbol symbol = variables[i];
+                            rebind(symbol, results[i], ext);
+                        }
                     }
                 }
             }
