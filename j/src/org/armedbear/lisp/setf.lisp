@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.50 2005-02-12 02:12:16 piso Exp $
+;;; $Id: setf.lisp,v 1.51 2005-02-28 20:22:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@
           (t
            (expand-or-get-setf-inverse form environment)))))
 
-(defmacro setf (&rest args)
+(defmacro setf (&rest args &environment environment)
   (let ((count (length args)))
     (cond
      ((= count 2)
@@ -71,7 +71,7 @@
               (when (symbolp (car place))
                 (resolve (car place)))
               (multiple-value-bind (dummies vals store-vars setter getter)
-                (get-setf-expansion place)
+                (get-setf-expansion place environment)
                 (let ((inverse (get (car place) 'setf-inverse)))
                   (if (and inverse (eq inverse (car setter)))
                       (if (functionp inverse)
