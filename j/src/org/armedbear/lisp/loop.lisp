@@ -1,5 +1,5 @@
 ;;;   -*- Mode: LISP; Package: ANSI-LOOP; Syntax: Common-lisp; Base: 10; Lowercase:T -*-
-;;; $Id: loop.lisp,v 1.6 2003-08-03 16:32:11 piso Exp $
+;;; $Id: loop.lisp,v 1.7 2003-09-20 00:28:46 piso Exp $
 ;;;>
 ;;;> Portions of LOOP are Copyright (c) 1986 by the Massachusetts Institute of Technology.
 ;;;> All Rights Reserved.
@@ -47,9 +47,6 @@
 ;;;>      +1-617-221-1000
 
 ;;;; LOOP Iteration Macro
-
-#+armedbear
-(require 'defstruct)
 
 #+armedbear
 (defpackage :ansi-loop (:use :cl))
