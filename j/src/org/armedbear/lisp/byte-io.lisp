@@ -1,7 +1,7 @@
 ;;; byte-io.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: byte-io.lisp,v 1.4 2004-03-09 02:23:25 piso Exp $
+;;; $Id: byte-io.lisp,v 1.5 2004-03-11 12:13:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,20 +33,26 @@
               (write-8-bits b stream)))))))
 
 (defun read-byte (stream &optional (eof-error-p t) eof-value)
-  (let* ((element-type (stream-element-type stream))
-         (width (cadr element-type)))
+  (let* ((element-type (stream-element-type stream)))
     (unless element-type
       (if eof-error-p
           (error 'end-of-file :stream stream)
           (return-from read-byte eof-value)))
-    (if (= width 8)
-        (read-8-bits stream eof-error-p eof-value)
-        (let ((result 0))
-          (dotimes (i (/ width 8))
-            (let ((byte (read-8-bits stream eof-error-p eof-value)))
-              (setf result (ash result 8))
-              (setf result (+ result byte))))
-          (if (and (eq (car element-type) 'signed-byte)
-                   (not (zerop (logand result (expt 2 (1- width))))))
-              (- result (expt 2 width))
-              result)))))
+    (unless (consp element-type)
+      (error 'simple-type-error
+             :format-control "READ-BYTE: unsupported element type ~S."
+             :format-arguments (list element-type)))
+    (let ((width (cadr element-type)))
+      (if (= width 8)
+          (read-8-bits stream eof-error-p eof-value)
+          (let ((result 0))
+            (dotimes (i (/ width 8))
+              (let ((byte (read-8-bits stream eof-error-p eof-value)))
+                (when (eq byte eof-value)
+                  (return-from read-byte eof-value))
+                (setf result (ash result 8))
+                (setf result (+ result byte))))
+            (if (and (eq (car element-type) 'signed-byte)
+                     (not (zerop (logand result (expt 2 (1- width))))))
+                (- result (expt 2 width))
+                result))))))
