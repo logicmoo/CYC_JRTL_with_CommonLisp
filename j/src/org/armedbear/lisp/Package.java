@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.15 2003-05-24 17:52:47 piso Exp $
+ * $Id: Package.java,v 1.16 2003-05-25 17:20:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,11 @@ public final class Package extends LispObject
     public LispObject typeOf()
     {
         return Symbol.PACKAGE;
+    }
+
+    public LispObject constantp()
+    {
+        return T;
     }
 
     public final String getName()

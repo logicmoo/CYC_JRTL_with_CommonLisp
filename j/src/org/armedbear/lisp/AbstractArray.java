@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AbstractArray.java,v 1.2 2003-03-18 03:49:16 piso Exp $
+ * $Id: AbstractArray.java,v 1.3 2003-05-25 17:19:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,11 @@ package org.armedbear.lisp;
 
 public abstract class AbstractArray extends LispObject
 {
+    public final LispObject constantp()
+    {
+        return T;
+    }
+
     public abstract int getRank();
 
     public abstract LispObject getDimensions();
