@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.53 2003-07-27 18:49:07 piso Exp $
+ * $Id: Symbol.java,v 1.54 2003-07-27 19:12:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -322,6 +322,12 @@ public class Symbol extends LispObject
         throws LispError
     {
         put(this, _FUNCTION_DOCUMENTATION, new LispString(docstring));
+    }
+
+    public final void setFunctionDocumentation(LispObject documentation)
+        throws LispError
+    {
+        put(this, _FUNCTION_DOCUMENTATION, documentation);
     }
 
     public String toString()
