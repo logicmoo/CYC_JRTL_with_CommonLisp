@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.15 2003-11-14 01:41:54 piso Exp $
+;;; $Id: top-level.lisp,v 1.16 2003-12-08 02:59:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,6 +21,8 @@
 
 (in-package "TOP-LEVEL")
 
+(import 'sys::%format)
+
 (defvar *break-level* 0)
 
 (defparameter *command-char* #\:)
@@ -38,8 +40,8 @@
 (defun repl-prompt-fun (stream)
   (fresh-line stream)
   (when (> *break-level* 0)
-    (format stream "[~D] " *break-level*))
-  (format stream "~A(~D): " (prompt-package-name) *cmd-number*))
+    (%format stream "[~D] " *break-level*))
+  (%format stream "~A(~D): " (prompt-package-name) *cmd-number*))
 
 (defparameter *repl-prompt-fun* #'repl-prompt-fun)
 
@@ -64,7 +66,7 @@
                    most-positive-fixnum))
         (n 0))
     (dolist (frame *saved-backtrace*)
-      (format t "  ~D: ~S~%" n frame)
+      (%format t "  ~D: ~S~%" n frame)
       (incf n)
       (when (>= n count)
         (return))))
@@ -211,7 +213,7 @@
       (let ((fun (find-command cmd)))
         (if fun
             (funcall fun args)
-            (format t "Unknown top-level command ~S.~%" cmd)))
+            (%format t "Unknown top-level command ~S.~%" cmd)))
       (return-from process-cmd t)))
   nil)
 
@@ -242,10 +244,10 @@
 
 (defun top-level-loop ()
   (fresh-line)
-  (format t "Type :HELP for a list of top-level commands.~%")
+  (%format t "Type :HELP for a list of top-level commands.~%")
   (loop
     (catch 'top-level-catcher
       (handler-case
           (repl)
         #+j (stream-error (c) (return-from top-level-loop)) ; FIXME
-        (error (c) (format t "Error: ~S.~%" c) (break) (throw 'top-level-catcher nil))))))
+        (error (c) (%format t "Error: ~S.~%" c) (break) (throw 'top-level-catcher nil))))))
