@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.92 2003-10-16 02:18:51 piso Exp $
+# $Id: Makefile.in,v 1.93 2003-10-25 21:43:44 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -112,6 +112,7 @@ CLASSFILES =	AbstractArray.class \
 		StructureClass.class \
 		StructureObject.class \
 		Symbol.class \
+		SymbolMacro.class \
 		ThreadDestroyed.class \
 		Throw.class \
 		Time.class \
