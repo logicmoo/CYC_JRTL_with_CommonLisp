@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.21 2003-06-02 20:11:32 piso Exp $
+;;; $Id: compiler.lisp,v 1.22 2003-06-07 20:58:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -161,6 +161,18 @@
 ;;        (format t "    skipping ~S~%" first)
        form))))
 
+;; EXPAND-MACRO is like MACROEXPAND, but EXPAND-MACRO quits if it encounters a
+;; macro that's also implemented as a special operator, so interpreted code can
+;; use the (faster) special operator implementation.
+(defun expand-macro (form)
+  (loop
+    (multiple-value-bind (result expanded) (macroexpand-1 form)
+      (unless expanded (return-from expand-macro result))
+      (when (and (consp result)
+                 (symbolp (car result))
+                 (special-operator-p (car result)))
+        (return-from expand-macro result))
+      (setq form result))))
 
 (defun compile-sexp (form)
   (if (atom form) form
@@ -173,7 +185,7 @@
               ((special-operator-p first)
                (compile-special form))
               ((macro-function first)
-               (compile-sexp (macroexpand form)))
+               (compile-sexp (expand-macro form)))
               (t
                (let ((args (mapcar #'compile-sexp (cdr form))))
                  (cons first args)))))))
