@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.29 2005-01-24 14:00:08 asimon Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: debug.lisp,v 1.30 2005-01-24 19:17:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

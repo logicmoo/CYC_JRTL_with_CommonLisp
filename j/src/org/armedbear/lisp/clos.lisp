@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.133 2005-01-24 14:00:06 asimon Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: clos.lisp,v 1.134 2005-01-24 19:15:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -545,7 +545,7 @@
     (dolist (s1 slots)
       (let ((name1 (canonical-slot-name s1)))
         (dolist (s2 (cdr (memq s1 slots)))
-	  (when (eq name1 (canonical-slot-name s2))
+          (when (eq name1 (canonical-slot-name s2))
             (error 'program-error "Duplicate slot ~S" name1))))))
   ;; Check for duplicate argument names in :DEFAULT-INITARGS.
   (let ((names ()))
@@ -641,7 +641,7 @@
 (defun intern-eql-specializer (object)
   (or (gethash object *eql-specializer-table*)
       (setf (gethash object *eql-specializer-table*)
-	    (make-eql-specializer :object object))))
+            (make-eql-specializer :object object))))
 
 (defclass standard-generic-function (generic-function)
   ((lambda-list               ; :accessor generic-function-lambda-list
@@ -1107,31 +1107,31 @@
                         to the generic function~2I~_~S;~I~_~
                         but ~?~:>"
                         :format-arguments (list method gf string args)))
-	   (comparison-description (x y)
+           (comparison-description (x y)
                                    (if (> x y) "more" "fewer")))
       (let ((gf-nreq (arg-info-number-required arg-info))
-	    (gf-nopt (arg-info-number-optional arg-info))
-	    (gf-key/rest-p (arg-info-key/rest-p arg-info))
-	    (gf-keywords (arg-info-keys arg-info)))
-	(unless (= nreq gf-nreq)
-	  (lose
-	   "the method has ~A required arguments than the generic function."
-	   (comparison-description nreq gf-nreq)))
-	(unless (= nopt gf-nopt)
-	  (lose
-	   "the method has ~A optional arguments than the generic function."
-	   (comparison-description nopt gf-nopt)))
-	(unless (eq (or keysp restp) gf-key/rest-p)
-	  (lose
-	   "the method and generic function differ in whether they accept~_~
-	    &REST or &KEY arguments."))
-	(when (consp gf-keywords)
-	  (unless (or (and restp (not keysp))
-		      allow-other-keys-p
-		      (every (lambda (k) (memq k keywords)) gf-keywords))
-	    (lose "the method does not accept each of the &KEY arguments~2I~_~
+            (gf-nopt (arg-info-number-optional arg-info))
+            (gf-key/rest-p (arg-info-key/rest-p arg-info))
+            (gf-keywords (arg-info-keys arg-info)))
+        (unless (= nreq gf-nreq)
+          (lose
+           "the method has ~A required arguments than the generic function."
+           (comparison-description nreq gf-nreq)))
+        (unless (= nopt gf-nopt)
+          (lose
+           "the method has ~A optional arguments than the generic function."
+           (comparison-description nopt gf-nopt)))
+        (unless (eq (or keysp restp) gf-key/rest-p)
+          (lose
+           "the method and generic function differ in whether they accept~_~
+            &REST or &KEY arguments."))
+        (when (consp gf-keywords)
+          (unless (or (and restp (not keysp))
+                      allow-other-keys-p
+                      (every (lambda (k) (memq k keywords)) gf-keywords))
+            (lose "the method does not accept each of the &KEY arguments~2I~_~
             ~S."
-		  gf-keywords)))))))
+                  gf-keywords)))))))
 
 (defun check-method-lambda-list (method-lambda-list gf-lambda-list)
   (let* ((gf-restp (not (null (memq '&rest gf-lambda-list))))
@@ -1457,7 +1457,7 @@
                             (dolist (after ',reverse-afters)
                               (funcall (method-function after) args nil)))))
                     nil)))
-	     (setf code (or (compile nil code) code))
+             (setf code (or (compile nil code) code))
              code))
           (t
            (let ((mc-obj (get mc-name 'method-combination-object)))
@@ -1851,7 +1851,7 @@
 ;;; Conditions.
 
 (defmacro define-condition (name (&rest parent-types) (&rest slot-specs)
-				 &body options)
+                                 &body options)
   (let ((parent-types (or parent-types '(condition)))
         (report nil))
     (dolist (option options)
@@ -1871,7 +1871,7 @@
              (if *print-escape*
                  (call-next-method)
                  (funcall ,report condition stream)))
-	   (setf (get ',name 'sys::condition-report-function) ,report)
+           (setf (get ',name 'sys::condition-report-function) ,report)
            ',name)
         `(progn
            (defclass ,name ,parent-types ,slot-specs ,@options)
@@ -1885,25 +1885,25 @@
 ;; Originally defined in signal.lisp. Redefined here now that we have MAKE-CONDITION.
 (defun coerce-to-condition (datum arguments default-type fun-name)
   (cond ((typep datum 'condition)
-	 (when arguments
+         (when arguments
            (error 'simple-type-error
                   :datum arguments
                   :expected-type 'null
                   :format-control "You may not supply additional arguments when giving ~S to ~S."
                   :format-arguments (list datum fun-name)))
-	 datum)
-	((symbolp datum)
-	 (apply #'make-condition datum arguments))
-	((or (stringp datum) (functionp datum))
-	 (make-condition default-type
+         datum)
+        ((symbolp datum)
+         (apply #'make-condition datum arguments))
+        ((or (stringp datum) (functionp datum))
+         (make-condition default-type
                          :format-control datum
                          :format-arguments arguments))
-	(t
-	 (error 'simple-type-error
-		:datum datum
-		:expected-type '(or symbol string)
-		:format-control "Bad argument to ~S: ~S."
-		:format-arguments (list fun-name datum)))))
+        (t
+         (error 'simple-type-error
+                :datum datum
+                :expected-type '(or symbol string)
+                :format-control "Bad argument to ~S: ~S."
+                :format-arguments (list fun-name datum)))))
 
 ;; Originally defined in Primitives.java. Redefined here to support arbitrary
 ;; conditions.
@@ -1937,7 +1937,7 @@
 
 (defmethod no-applicable-method (generic-function &rest args)
   (error "No applicable method for the generic function ~S when called with arguments ~S."
-	 generic-function
-	 args))
+         generic-function
+         args))
 
 (provide 'clos)
