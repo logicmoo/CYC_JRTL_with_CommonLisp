@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.145 2005-03-06 19:35:20 piso Exp $
+ * $Id: Editor.java,v 1.146 2005-03-06 21:29:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4655,9 +4655,11 @@ public final class Editor extends JPanel implements Constants,
             backgroundProcess.cancel();
     }
 
-    // Returns after doing exactly one thing.
+    // Calls buffer.setMark(null), then returns after doing exactly one thing.
     public void escape()
     {
+        buffer.setMark(null); // keyboard-quit
+
         // Cancel background process (if any).
         BackgroundProcess backgroundProcess = buffer.getBackgroundProcess();
         if (backgroundProcess != null) {
