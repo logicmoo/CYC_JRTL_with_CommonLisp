@@ -2,7 +2,7 @@
  * Position.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Position.java,v 1.1.1.1 2002-09-24 16:09:00 piso Exp $
+ * $Id: Position.java,v 1.2 2002-12-26 15:40:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,6 +215,22 @@ public final class Position implements Constants
             return true;
         }
         return false;
+    }
+
+    public boolean nextLine()
+    {
+        if (line.next() != null) {
+            line = line.next();
+            offset = 0;
+            return true;
+        }
+        return false;
+    }
+
+    // No range checking!
+    public final void skip()
+    {
+        ++offset;
     }
 
     // No range checking!
