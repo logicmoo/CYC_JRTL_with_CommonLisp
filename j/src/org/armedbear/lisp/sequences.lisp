@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.47 2003-06-10 18:40:12 piso Exp $
+;;; $Id: sequences.lisp,v 1.48 2003-06-10 18:56:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,63 +65,7 @@
       (vector-subseq sequence start end)))
 
 
-(autoload '(copy-seq fill))
-
-
-(defun bad-seq-limit (x &optional y)
-  (error "bad sequence limit ~a" (if y (list x y) x)))
-
-(defun the-end (x y)
-  (cond ((fixnump x)
-	 (unless (<= x (length y))
-	   (bad-seq-limit x))
-	 x)
-	((null x)
-	 (length y))
-	(t (bad-seq-limit x))))
-
-(defun the-start (x)
-  (cond ((fixnump x)
-	 (unless (>= x 0)
-           (bad-seq-limit x))
-	 x)
-	((null x) 0)
-	(t (bad-seq-limit x))))
-
-(defmacro with-start-end (start end seq &body body)
-  `(let* ((,start (if ,start (the-start ,start) 0))
-          (,end (the-end ,end ,seq)))
-     (unless (<= ,start ,end) (bad-seq-limit ,start ,end))
-     ,@ body))
-
-
-;;; REPLACE (from ECL)
-
-(defun replace (sequence1 sequence2
-                          &key start1  end1
-                          start2 end2 )
-  (with-start-end start1 end1 sequence1
-    (with-start-end start2 end2 sequence2
-      (if (and (eq sequence1 sequence2)
-               (> start1 start2))
-          (do* ((i 0 (1+ i))
-                (l (if (< (- end1 start1)
-                          (- end2 start2))
-                       (- end1 start1)
-                       (- end2 start2)))
-                (s1 (+ start1 (1- l)) (1- s1))
-                (s2 (+ start2 (1- l)) (1- s2)))
-               ((>= i l) sequence1)
-            (setf (elt sequence1 s1) (elt sequence2 s2)))
-          (do ((i 0 (1+ i))
-               (l (if (< (- end1 start1)
-                         (- end2 start2))
-                      (- end1 start1)
-                      (- end2 start2)))
-               (s1 start1 (1+ s1))
-               (s2 start2 (1+ s2)))
-              ((>= i l) sequence1)
-            (setf (elt sequence1 s1) (elt sequence2 s2)))))))
+(autoload '(copy-seq fill replace))
 
 
 ;;; CONCATENATE (from GCL)
