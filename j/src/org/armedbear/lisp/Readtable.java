@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.15 2004-03-12 01:58:22 piso Exp $
+ * $Id: Readtable.java,v 1.16 2004-03-12 02:36:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,12 @@ import java.util.ArrayList;
 
 public final class Readtable extends LispObject
 {
+    private static final byte ATTR_CONSTITUENT           = 0;
+    private static final byte ATTR_WHITESPACE            = 1;
+    private static final byte ATTR_TERMINATING_MACRO     = 2;
+    private static final byte ATTR_NON_TERMINATING_MACRO = 3;
+
+    private final byte[] attributes = new byte[CHAR_MAX];
     private final Function[] readerMacroFunctions = new Function[CHAR_MAX];
 
     private ArrayList table;
@@ -32,14 +38,31 @@ public final class Readtable extends LispObject
 
     public Readtable()
     {
-        readerMacroFunctions[';'] = LispReader.READ_COMMENT;
-        readerMacroFunctions['"'] = LispReader.READ_STRING;
-        readerMacroFunctions['('] = LispReader.READ_LIST;
-        readerMacroFunctions[')'] = LispReader.READ_RIGHT_PAREN;
+        attributes[9]    = ATTR_WHITESPACE; // tab
+        attributes[10]   = ATTR_WHITESPACE; // linefeed
+        attributes[12]   = ATTR_WHITESPACE; // form feed
+        attributes[13]   = ATTR_WHITESPACE; // return
+        attributes[' ']  = ATTR_WHITESPACE;
+
+        attributes['"']  = ATTR_TERMINATING_MACRO;
+        attributes['\''] = ATTR_TERMINATING_MACRO;
+        attributes['(']  = ATTR_TERMINATING_MACRO;
+        attributes[')']  = ATTR_TERMINATING_MACRO;
+        attributes[',']  = ATTR_TERMINATING_MACRO;
+        attributes[';']  = ATTR_TERMINATING_MACRO;
+        attributes['`']  = ATTR_TERMINATING_MACRO;
+
+        attributes['#']  = ATTR_NON_TERMINATING_MACRO;
+
+        readerMacroFunctions[';']  = LispReader.READ_COMMENT;
+        readerMacroFunctions['"']  = LispReader.READ_STRING;
+        readerMacroFunctions['(']  = LispReader.READ_LIST;
+        readerMacroFunctions[')']  = LispReader.READ_RIGHT_PAREN;
         readerMacroFunctions['\''] = LispReader.READ_QUOTE;
-        readerMacroFunctions['#'] = LispReader.READ_DISPATCH_CHAR;
-        readerMacroFunctions['`'] = LispReader.BACKQUOTE_MACRO;
-        readerMacroFunctions[','] = LispReader.COMMA_MACRO;
+        readerMacroFunctions['#']  = LispReader.READ_DISPATCH_CHAR;
+        readerMacroFunctions['`']  = LispReader.BACKQUOTE_MACRO;
+        readerMacroFunctions[',']  = LispReader.COMMA_MACRO;
+
         table = new ArrayList();
         readtableCase = Keyword.UPCASE;
     }
@@ -47,6 +70,8 @@ public final class Readtable extends LispObject
     private Readtable(Readtable rt)
     {
         synchronized (rt) {
+            System.arraycopy(rt.attributes, 0, attributes, 0,
+                             CHAR_MAX);
             System.arraycopy(rt.readerMacroFunctions, 0, readerMacroFunctions, 0,
                              CHAR_MAX);
             table = new ArrayList(rt.table);
@@ -69,6 +94,24 @@ public final class Readtable extends LispObject
             return readerMacroFunctions[c];
         else
             return null;
+    }
+
+    private LispObject getMacroCharacter(char c)
+    {
+        LispObject[] values = new LispObject[2];
+        values[0] = getReaderMacroFunction(c);
+        if (values[0] != null) {
+            byte attribute = attributes[c];
+            if (attribute == ATTR_NON_TERMINATING_MACRO)
+                values[1] = T;
+            else
+                values[1] = NIL;
+        } else {
+            values[0] = NIL;
+            values[1] = NIL;
+        }
+        LispThread.currentThread().setValues(values);
+        return values[0];
     }
 
     public LispObject getReadtableCase()
@@ -179,6 +222,27 @@ public final class Readtable extends LispObject
             Readtable to = checkReadtable(second);
             copyReadtable(from, to);
             return to;
+        }
+    };
+
+    // ### get-macro-character char &optional readtable
+    // => function, non-terminating-p
+    private static final Primitive GET_MACRO_CHARACTER =
+        new Primitive("get-macro-character", "char &optional readtable")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            char c = LispCharacter.getValue(arg);
+            Readtable rt = getCurrentReadtable();
+            return rt.getMacroCharacter(c);
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            char c = LispCharacter.getValue(first);
+            Readtable rt = checkReadtable(second);
+            return rt.getMacroCharacter(c);
         }
     };
 
