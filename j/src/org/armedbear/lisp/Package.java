@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.18 2003-06-03 14:04:04 piso Exp $
+ * $Id: Package.java,v 1.19 2003-06-21 03:55:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,6 +134,16 @@ public final class Package extends LispObject
         values[1] = NIL;
         thread.setValues(values);
         return NIL;
+    }
+
+    // Helper function to add NIL to PACKAGE_CL.
+    public synchronized void addSymbol(Symbol symbol)
+    {
+        Debug.assertTrue(symbol.getPackage() == this);
+        final String name = symbol.getName();
+        Debug.assertTrue(name.equals("NIL"));
+        Debug.assertTrue(map.get(name) == null);
+        map.put(symbol.getName(), symbol);
     }
 
     private synchronized Symbol addSymbol(String name)
