@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.5 2003-09-22 17:20:27 piso Exp $
+;;; $Id: fixme.lisp,v 1.6 2003-09-26 18:39:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,10 +34,6 @@
 (defmacro locally (&rest forms)
   `(progn ,@forms))
 
-;; Should be a special operator.
-(defmacro eval-when (situation &rest forms)
-  `(progn ,@forms))
-
 (defun proclaim (decl)
   nil)
 
@@ -67,3 +63,9 @@
 (defmacro defgeneric (function-name lambda-list &rest options)
   `(prog1
     (sys::%defun ',function-name ',lambda-list nil)))
+
+(defmacro defclass (&rest args)
+  nil)
+
+(defmacro defmethod (&rest args)
+  nil)
