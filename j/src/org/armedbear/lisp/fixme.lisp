@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: fixme.lisp,v 1.24 2004-07-13 00:57:17 piso Exp $
+;;; $Id: fixme.lisp,v 1.25 2004-08-10 03:26:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,7 +46,9 @@
              (SPEED
               (setf jvm::*speed* val))
              (SAFETY
-              (setf jvm::*safety* val)))))))
+              (setf jvm::*safety* val))
+             (DEBUG
+              (setf jvm::*debug* val)))))))
     ((INLINE NOTINLINE)
      (dolist (name (cdr declaration-specifier))
        (when (symbolp name) ; FIXME Need to support non-symbol function names.
