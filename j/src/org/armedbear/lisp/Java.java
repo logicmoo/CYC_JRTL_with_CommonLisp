@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.25 2003-11-19 23:04:52 asimon Exp $
+ * $Id: Java.java,v 1.26 2003-12-02 14:20:38 dmcnaught Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -369,7 +369,18 @@ public final class Java extends Module
             }
         }
     };
-
+    
+    private static final Primitive1 JAVA_OBJECT_P = new Primitive1("java-object-p", PACKAGE_JAVA)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof JavaObject)
+                return T;
+            else
+                return NIL;
+        }
+    };
+        
     // Supports Java primitive types too.
     private static Class forClassRef(LispObject classRef) throws ClassNotFoundException, ConditionThrowable
     {
@@ -465,5 +476,6 @@ public final class Java extends Module
         export("JSTATIC", PACKAGE_JAVA);
         export("JNEW", PACKAGE_JAVA);
         export("JCALL", PACKAGE_JAVA);
+        export("JAVA-OBJECT-P", PACKAGE_JAVA);
     }
 }
