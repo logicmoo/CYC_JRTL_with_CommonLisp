@@ -2,7 +2,7 @@
  * SendMail.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: SendMail.java,v 1.8 2003-06-28 00:20:29 piso Exp $
+ * $Id: SendMail.java,v 1.9 2003-08-09 17:42:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -544,7 +544,7 @@ public final class SendMail extends Buffer
             s = DEFAULT_TITLE;
         if (title == null || !title.equals(s)) {
             title = s;
-            Sidebar.setUpdateFlagInAllFrames(SIDEBAR_REPAINT_BUFFER_LIST);
+            Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
         }
     }
 
