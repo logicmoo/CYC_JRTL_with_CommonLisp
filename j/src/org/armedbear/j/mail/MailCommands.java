@@ -2,7 +2,7 @@
  * MailCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: MailCommands.java,v 1.1.1.1 2002-09-24 16:09:51 piso Exp $
+ * $Id: MailCommands.java,v 1.2 2002-10-02 16:19:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,11 @@ public final class MailCommands implements Constants
             return;
         final Editor editor = Editor.currentEditor();
         openMailbox(editor);
+    }
+
+    public static void openMailbox(String args)
+    {
+        openMailbox(Editor.currentEditor(), args);
     }
 
     private static void openMailbox(Editor editor)
