@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.83 2004-09-28 01:47:51 piso Exp $
+ * $Id: Stream.java,v 1.84 2004-09-28 14:06:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -253,26 +253,36 @@ public class Stream extends LispObject
             return result;
     }
 
+    // ### *sharp-equal-alist*
+    // internal symbol
+    public static final Symbol _SHARP_EQUAL_ALIST_ =
+        internSpecial("*SHARP-EQUAL-ALIST*", PACKAGE_SYS, NIL);
+
     public LispObject readPreservingWhitespace(boolean eofError,
                                                LispObject eofValue,
                                                boolean recursive)
         throws ConditionThrowable
     {
-        final Readtable rt = currentReadtable();
-        while (true) {
-            int n = _readChar();
-            if (n < 0) {
-                if (eofError)
-                    return signal(new EndOfFile(this));
-                else
-                    return eofValue;
+        if (recursive) {
+            final Readtable rt = currentReadtable();
+            while (true) {
+                int n = _readChar();
+                if (n < 0) {
+                    if (eofError)
+                        return signal(new EndOfFile(this));
+                    else
+                        return eofValue;
+                }
+                char c = (char) n;
+                if (rt.isWhitespace(c))
+                    continue;
+                LispObject result = processChar(c);
+                if (result != null)
+                    return result;
             }
-            char c = (char) n;
-            if (rt.isWhitespace(c))
-                continue;
-            LispObject result = processChar(c);
-            if (result != null)
-                return result;
+        } else {
+            LispThread.currentThread().bindSpecial(_SHARP_EQUAL_ALIST_, NIL);
+            return readPreservingWhitespace(eofError, eofValue, true);
         }
     }
 
