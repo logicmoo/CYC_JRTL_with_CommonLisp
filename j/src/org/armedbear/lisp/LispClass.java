@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.16 2003-09-19 16:04:50 piso Exp $
+ * $Id: LispClass.java,v 1.17 2003-09-19 23:56:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +78,7 @@ public final class LispClass extends LispObject
     public static final LispClass CONDITION          = addClass(Symbol.CONDITION);
     public static final LispClass CONS               = addClass(Symbol.CONS);
     public static final LispClass CONTROL_ERROR      = addClass(Symbol.CONTROL_ERROR);
+    public static final LispClass ERROR              = addClass(Symbol.ERROR);
     public static final LispClass FIXNUM             = addClass(Symbol.FIXNUM);
     public static final LispClass FLOAT              = addClass(Symbol.FLOAT);
     public static final LispClass FUNCTION           = addClass(Symbol.FUNCTION);
