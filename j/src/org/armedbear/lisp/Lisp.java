@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.126 2003-09-11 14:58:01 piso Exp $
+ * $Id: Lisp.java,v 1.127 2003-09-14 11:38:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -657,6 +657,17 @@ public abstract class Lisp
             return '\f';
         // Unknown.
         return -1;
+    }
+
+    public static final LispObject getUpgradedArrayElementType(LispObject type)
+    {
+        if (type == Symbol.CHARACTER || type == Symbol.BASE_CHAR || type == Symbol.STANDARD_CHAR)
+            return Symbol.CHARACTER;
+        if (type == Symbol.BIT)
+            return Symbol.BIT;
+        if (type == NIL)
+            return Symbol.CHARACTER;
+        return T;
     }
 
     public static final LispCharacter checkCharacter(LispObject obj)
