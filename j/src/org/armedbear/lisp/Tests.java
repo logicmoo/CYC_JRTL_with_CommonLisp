@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.16 2003-03-13 03:13:19 piso Exp $
+ * $Id: Tests.java,v 1.17 2003-03-14 21:09:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -334,7 +334,7 @@ public class Tests extends TestCase
         verify("(= 3 6 5 2)", "NIL");
         verify("(= 3 2 3)", "NIL");
         verify("(= 3)", "T");
-        verify("(= 3 4 'foo)", ERROR);
+        verify("(= 3 4 'foo)", "NIL");
         verify("(= 23 (+ 11 12))", "T");
 
         // /=
@@ -345,7 +345,7 @@ public class Tests extends TestCase
         verify("(/= 3 6 5 2)", "T");
         verify("(/= 3 2 3)", "NIL");
         verify("(/= 3)", "T");
-        verify("(/= 3 3 'foo)", ERROR);
+        verify("(/= 3 3 'foo)", "NIL");
 
         // <=
         verify("(<= 14 14)", "T");
