@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.50 2003-12-20 03:08:23 piso Exp $
+;;; $Id: clos.lisp,v 1.51 2003-12-20 16:26:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -889,7 +889,9 @@
 (defun required-portion (gf args)
   (let ((number-required (length (gf-required-args gf))))
     (when (< (length args) number-required)
-      (error 'program-error "not enough arguments for generic function ~S" gf))
+      (error 'program-error
+             :format-control "Not enough arguments for generic function ~S."
+             :format-arguments (list gf)))
     (subseq args 0 number-required)))
 
 (defun extract-lambda-list (specialized-lambda-list)
