@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.22 2003-10-13 14:12:26 piso Exp $
+;;; $Id: defclass.lisp,v 1.23 2003-10-13 18:43:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -907,23 +907,18 @@
           (std-compute-method-function method))
     method))
 
-;;; add-method
-
-;;; N.B. This version first removes any existing method on the generic function
-;;; with the same qualifiers and specializers.  It's a pain to develop
-;;; programs without this feature of full CLOS.
-
 (defun add-method (gf method)
-  (let ((old-method
-         (find-method gf (method-qualifiers method)
-                      (method-specializers method) nil)))
-    (when old-method (remove-method gf old-method)))
+  ;; Remove existing method with same qualifiers and specializers (if any).
+  (let ((old-method (find-method gf (method-qualifiers method)
+                                 (method-specializers method) nil)))
+    (when old-method
+      (remove-method gf old-method)))
   (setf (method-generic-function method) gf)
   (push method (generic-function-methods gf))
   (dolist (specializer (method-specializers method))
     (pushnew method (class-direct-methods specializer)))
   (finalize-generic-function gf)
-  method)
+  gf)
 
 (defun remove-method (gf method)
   (setf (generic-function-methods gf)
@@ -934,10 +929,9 @@
     (setf (class-direct-methods class)
           (remove method (class-direct-methods class))))
   (finalize-generic-function gf)
-  method)
+  gf)
 
-(defun find-method (gf qualifiers specializers
-                       &optional (errorp t))
+(defun find-method (gf qualifiers specializers &optional (errorp t))
   (let ((method
          (find-if #'(lambda (method)
                      (and (equal qualifiers
@@ -946,7 +940,7 @@
                                  (method-specializers method))))
                   (generic-function-methods gf))))
     (if (and (null method) errorp)
-        (error "No such method for ~S." (generic-function-name gf))
+        (error "no such method for ~S" (generic-function-name gf))
         method)))
 
 ;;; Reader and write methods
