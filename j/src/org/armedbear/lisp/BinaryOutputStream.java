@@ -2,7 +2,7 @@
  * BinaryOutputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryOutputStream.java,v 1.1 2003-04-09 13:40:02 piso Exp $
+ * $Id: BinaryOutputStream.java,v 1.2 2003-04-09 18:09:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,13 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class BinaryOutputStream extends LispStream
+public final class BinaryOutputStream extends LispStream
 {
     private final BufferedOutputStream out;
 
     public BinaryOutputStream(OutputStream outputStream)
     {
-        this.out = new BufferedOutputStream(outputStream);
+        out = new BufferedOutputStream(outputStream);
     }
 
     public void writeByte(int n) throws StreamError
