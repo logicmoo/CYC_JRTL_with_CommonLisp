@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.105 2005-02-05 18:41:50 piso Exp $
+ * $Id: Stream.java,v 1.106 2005-02-05 19:54:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -536,7 +536,7 @@ public class Stream extends LispObject
         return signal(new ReaderError(sb.toString()));
     }
 
-    private String readMultipleEscape() throws ConditionThrowable
+    private String readMultipleEscape(Readtable rt) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         while (true) {
@@ -544,7 +544,8 @@ public class Stream extends LispObject
             if (n < 0)
                 break;
             char c = (char) n;
-            if (c == '\\') {
+            byte attr = rt.getAttribute(c);
+            if (attr == Readtable.ATTR_SINGLE_ESCAPE) {
                 n = _readChar();
                 if (n < 0) {
                     signal(new EndOfFile(this));
@@ -554,7 +555,7 @@ public class Stream extends LispObject
                 sb.append((char)n);
                 continue;
             }
-            if (c == '|')
+            if (attr == Readtable.ATTR_MULTIPLE_ESCAPE)
                 break;
             sb.append(c);
         }
@@ -689,14 +690,8 @@ public class Stream extends LispObject
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
             char c = sb.charAt(0);
-            rt.checkInvalid(c);
-            if (c == '|') {
-                sb.setLength(0);
-                sb.append(readMultipleEscape());
-                flags = new BitSet(sb.length());
-                for (int i = sb.length(); i-- > 0;)
-                    flags.set(i);
-            } else if (c == '\\') {
+            byte attr = rt.getAttribute(c);
+            if (attr == Readtable.ATTR_SINGLE_ESCAPE) {
                 int n = _readChar();
                 if (n < 0) {
                     signal(new EndOfFile(this));
@@ -706,6 +701,14 @@ public class Stream extends LispObject
                 sb.setCharAt(0, (char) n);
                 flags = new BitSet(1);
                 flags.set(0);
+            } else if (attr == Readtable.ATTR_MULTIPLE_ESCAPE) {
+                sb.setLength(0);
+                sb.append(readMultipleEscape(rt));
+                flags = new BitSet(sb.length());
+                for (int i = sb.length(); i-- > 0;)
+                    flags.set(i);
+            } else if (rt.isInvalid(c)) {
+                rt.checkInvalid(c); // Signals a reader-error.
             } else if (readtableCase == Keyword.UPCASE) {
                 sb.setCharAt(0, Utilities.toUpperCase(c));
             } else if (readtableCase == Keyword.DOWNCASE) {
@@ -722,38 +725,36 @@ public class Stream extends LispObject
                 _unreadChar(n);
                 break;
             }
-            if (rt.getAttribute(c) == Readtable.ATTR_TERMINATING_MACRO) {
+            byte attribute = rt.getAttribute(c);
+            if (attribute == Readtable.ATTR_TERMINATING_MACRO) {
                 _unreadChar(c);
                 break;
             }
             rt.checkInvalid(c);
-            switch (c) {
-                case '\\':
-                    n = _readChar();
-                    if (n < 0)
-                        break loop;
-                    sb.append((char)n);
-                    if (flags == null)
-                        flags = new BitSet(sb.length());
-                    flags.set(sb.length() - 1);
+            if (attribute == Readtable.ATTR_SINGLE_ESCAPE) {
+                n = _readChar();
+                if (n < 0)
                     break;
-                case '|': {
-                    int begin = sb.length();
-                    sb.append(readMultipleEscape());
-                    int end = sb.length();
-                    if (flags == null)
-                        flags = new BitSet(sb.length());
-                    for (int i = begin; i < end; i++)
-                        flags.set(i);
-                    break;
-                }
-                default:
-                    if (readtableCase == Keyword.UPCASE)
-                        c = Utilities.toUpperCase(c);
-                    else if (readtableCase == Keyword.DOWNCASE)
-                        c = Utilities.toLowerCase(c);
-                    sb.append(c);
+                sb.append((char)n);
+                if (flags == null)
+                    flags = new BitSet(sb.length());
+                flags.set(sb.length() - 1);
+                continue;
             }
+            if (attribute == Readtable.ATTR_MULTIPLE_ESCAPE) {
+                int begin = sb.length();
+                sb.append(readMultipleEscape(rt));
+                int end = sb.length();
+                if (flags == null)
+                    flags = new BitSet(sb.length());
+                for (int i = begin; i < end; i++)
+                    flags.set(i);
+            }
+            if (readtableCase == Keyword.UPCASE)
+                c = Utilities.toUpperCase(c);
+            else if (readtableCase == Keyword.DOWNCASE)
+                c = Utilities.toLowerCase(c);
+            sb.append(c);
         }
         return flags;
     }
