@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.4 2003-03-20 20:23:18 piso Exp $
+# $Id: Makefile.in,v 1.5 2003-03-29 20:15:53 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -133,6 +133,8 @@ distdir:
 	cp -p  doc/*.css $(distdir)/doc
 	mkdir $(distdir)/themes
 	-cp -p  themes/* $(distdir)/themes
+	mkdir $(distdir)/examples
+	-cp -p  examples/* $(distdir)/examples
 
 dist: distdir
 	-rm -f $(distdir).zip
@@ -159,6 +161,8 @@ bindistdir: j.jar
 	cp -p  doc/*.css $(distdir)/doc
 	mkdir $(distdir)/themes
 	-cp -p  themes/* $(distdir)/themes
+	mkdir $(distdir)/examples
+	-cp -p  examples/* $(distdir)/examples
 
 bindist: bindistdir
 	-rm -f $(distdir)-binary.tar.gz
@@ -275,7 +279,8 @@ j.zip:
 		src/org/armedbear/j/aelfred/Makefile.in src/org/armedbear/j/aelfred/*.java \
 		doc/*.html doc/*.css \
 		themes/* \
-		-x themes/CVS/
+		examples/* \
+		-x themes/CVS/ examples/CVS/
 	unzip -t -qq j.zip
 
 j-jar.zip: j.jar

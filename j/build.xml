@@ -285,6 +285,7 @@
         <include name="doc/*.html"/>
         <include name="doc/*.css"/>
         <include name="themes/*"/>
+        <include name="examples/*"/>
       </fileset>
     </copy>
   </target>
