@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.10 2003-09-04 00:17:46 piso Exp $
+;;; $Id: numbers.lisp,v 1.11 2003-09-06 14:08:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,15 @@
 ;;; From CMUCL.
 
 (in-package "SYSTEM")
+
+(defun signum (number)
+  "If NUMBER is zero, return NUMBER, else return (/ NUMBER (ABS NUMBER))."
+  (if (zerop number)
+      number
+      (if (rationalp number)
+	  (if (plusp number) 1 -1)
+	  (/ number (abs number)))))
+
 
 ;;; If the numbers do not divide exactly and the result of (/ number divisor)
 ;;; would be negative then decrement the quotient and augment the remainder by
