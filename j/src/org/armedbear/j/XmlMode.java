@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.10 2003-06-17 15:28:14 piso Exp $
+ * $Id: XmlMode.java,v 1.11 2003-06-29 17:24:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,8 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
 {
     private static final String COMMENT_START = "<!--";
     private static final String COMMENT_END   = "-->";
+    private static final String CDATA_START   = "<![CDATA[";
+    private static final String CDATA_END     = "]]>";
 
     private static final XmlMode mode = new XmlMode();
 
@@ -82,12 +84,12 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
 
     public String getCommentStart()
     {
-        return "<!--";
+        return COMMENT_START;
     }
 
     public String getCommentEnd()
     {
-        return "-->";
+        return COMMENT_END;
     }
 
     public Formatter getFormatter(Buffer buffer)
@@ -108,12 +110,9 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_E, CTRL_MASK, "xmlInsertMatchingEndTag");
         km.mapKey('/', "xmlElectricSlash");
         km.mapKey(KeyEvent.VK_I, ALT_MASK, "cycleIndentSize");
-
-        // These are the "normal" mappings.
         km.mapKey(KeyEvent.VK_COMMA, CTRL_MASK | SHIFT_MASK, "xmlInsertTag");
         km.mapKey(KeyEvent.VK_PERIOD, CTRL_MASK | SHIFT_MASK,
             "xmlInsertEmptyElementTag");
-
         km.mapKey(KeyEvent.VK_P, CTRL_MASK, "xmlParseBuffer");
         km.mapKey(KeyEvent.VK_P, CTRL_MASK | SHIFT_MASK, "xmlValidateBuffer");
         km.mapKey(KeyEvent.VK_EQUALS, CTRL_MASK, "xmlFindCurrentNode");
@@ -286,16 +285,18 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         String lookFor = "<" + name;
         int count = 1;
         boolean succeeded = false;
-
         if (pos.lookingAt(endTagToBeMatched))
             pos.prev();
-
         // Search backward.
         while (!pos.atStart()) {
             if (pos.lookingAt(COMMENT_END)) {
                 do {
                     pos.prev();
                 } while (!pos.atStart() && !pos.lookingAt(COMMENT_START));
+            } else if (pos.lookingAt(CDATA_END)) {
+                do {
+                    pos.prev();
+                } while (!pos.atStart() && !pos.lookingAt(CDATA_START));
             } else if (pos.lookingAt(endTagToBeMatched)) {
                 ++count;
             } else if (pos.lookingAt(lookFor)) {
@@ -326,10 +327,8 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         String startTagToBeMatched = "<" + name;
         String lookFor = "</" + name + ">";
         int count = 1;
-
         if (pos.lookingAt(startTagToBeMatched))
             pos.skip(startTagToBeMatched.length());
-
         // Search forward.
         while (!pos.atEnd()) {
             if (pos.lookingAt(COMMENT_START)) {
@@ -340,6 +339,17 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                     break;
                 } else {
                     pos.skip(COMMENT_END.length());
+                    continue;
+                }
+            }
+            if (pos.lookingAt(CDATA_START)) {
+                do {
+                    pos.next();
+                } while (!pos.atEnd() && !pos.lookingAt(CDATA_END));
+                if (pos.atEnd()) {
+                    break;
+                } else {
+                    pos.skip(CDATA_END.length());
                     continue;
                 }
             }
@@ -370,9 +380,11 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
     private static String getUnmatchedStartTag(Position start)
     {
         Position pos = start.copy();
-        if (inComment(pos))
+        if (isInComment(pos))
             return null;
-        if (inTag(pos))
+        if (isInTag(pos))
+            return null;
+        if (isInCDataSection(pos))
             return null;
         int count = 1;
         if (!pos.lookingAt("<") || pos.prev()) {
@@ -381,6 +393,10 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                     do {
                         pos.prev();
                     } while (!pos.atStart() && !pos.lookingAt(COMMENT_START));
+                } else if (pos.lookingAt(CDATA_END)) {
+                    do {
+                        pos.prev();
+                    } while (!pos.atStart() && !pos.lookingAt(CDATA_START));
                 } else if (pos.getChar() == '<') {
                     if (pos.lookingAt("</"))
                         ++count;
@@ -403,7 +419,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         return null;
     }
 
-    private static boolean inTag(Position position)
+    private static boolean isInTag(Position position)
     {
         Position pos = position.copy();
         while (pos.prev()) {
@@ -422,7 +438,7 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         return false;
     }
 
-    private static boolean inComment(Position position)
+    private static boolean isInComment(Position position)
     {
         Position pos = position.copy();
         boolean inComment = pos.getLine().flags() == STATE_COMMENT;
@@ -445,6 +461,31 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
             pos.next();
         }
         return inComment;
+    }
+
+    private static boolean isInCDataSection(Position position)
+    {
+        Position pos = position.copy();
+        boolean inCDataSection = pos.getLine().flags() == STATE_CDATA;
+        pos.setOffset(0);
+        final int limit = position.getOffset();
+        while (pos.getOffset() < limit) {
+            if (inCDataSection) {
+                if (pos.lookingAt(CDATA_END)) {
+                    pos.skip(CDATA_END.length());
+                    if (pos.getOffset() > limit)
+                        break;
+                    inCDataSection = false;
+                    continue;
+                }
+            } else if (pos.lookingAt(CDATA_START)) {
+                inCDataSection = true;
+                pos.skip(CDATA_START.length());
+                continue;
+            }
+            pos.next();
+        }
+        return inCDataSection;
     }
 
     private static String getTag(String s)
@@ -899,6 +940,14 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
     {
         final Editor editor = Editor.currentEditor();
         final Position dot = editor.getDot();
+        if (isInComment(dot)) {
+            editor.status("In comment");
+            return;
+        }
+        if (isInCDataSection(dot)) {
+            editor.status("In CDATA section");
+            return;
+        }
         Position pos = findStartOfTag(dot);
         if (pos == null) {
             final Line dotLine = dot.getLine();
@@ -969,6 +1018,8 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         final Buffer buffer = editor.getBuffer();
         if (buffer.needsRenumbering())
             buffer.renumber();
+        if (buffer.needsParsing())
+            buffer.getFormatter().parseBuffer();
         final Position dot = editor.getDot();
         String tag = getUnmatchedStartTag(dot);
         if (tag != null) {
