@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.17 2003-04-28 00:26:19 piso Exp $
+# $Id: Makefile.in,v 1.18 2003-05-11 16:03:24 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -86,6 +86,7 @@ CLASSFILES =	AbstractArray.class \
 		StringOutputStream.class \
 		Symbol.class \
 		Tagbody.class \
+		ThreadDestroyed.class \
 		Throw.class \
 		Type.class \
 		TypeError.class \
