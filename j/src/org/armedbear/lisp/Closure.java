@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.20 2003-05-27 02:12:57 piso Exp $
+ * $Id: Closure.java,v 1.21 2003-05-29 14:41:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class Closure extends Function
     private final Parameter[] keywordParameterArray;
     private final Parameter[] auxVarArray;
     private final LispObject body;
-    private final Environment env;
+    private final Environment environment;
     private final LispObject function;
     private final boolean allowOtherKeys;
     private final boolean haveRest;
@@ -213,7 +213,7 @@ public class Closure extends Function
             minArgs = maxArgs = 0;
         }
         this.body = body;
-        this.env = env;
+        this.environment = env;
         this.function = new Cons(Symbol.LAMBDA, new Cons(parameterList, body));
         if (arity >= 0)
             Debug.assertTrue(arity == required);
@@ -260,7 +260,7 @@ public class Closure extends Function
 
     public final Environment getEnvironment()
     {
-        return env;
+        return environment;
     }
 
     public LispObject execute() throws Condition
@@ -273,7 +273,7 @@ public class Closure extends Function
     {
         LispObject[] args = new LispObject[1];
         args[0] = arg;
-        return execute(args, env);
+        return execute(args, environment);
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -306,7 +306,7 @@ public class Closure extends Function
 //                     ", received " + args.length);
 //             }
 //         }
-        return execute(args, env);
+        return execute(args, environment);
     }
 
     public LispObject execute(LispObject args, Environment env)
