@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.415 2003-09-19 23:56:10 piso Exp $
+ * $Id: Primitives.java,v 1.416 2003-09-20 00:12:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1745,7 +1745,8 @@ public final class Primitives extends Module
 
     // ### handler-case
     private static final SpecialOperator HANDLER_CASE =
-        new SpecialOperator("handler-case") {
+        new SpecialOperator("handler-case")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -1753,8 +1754,9 @@ public final class Primitives extends Module
             LispObject clauses = args.cdr();
             final LispThread thread = LispThread.currentThread();
             final int depth = thread.getStackDepth();
+            LispObject result;
             try {
-                return eval(form, env, thread);
+                result = eval(form, env, thread);
             }
             catch (ConditionThrowable c) {
                 thread.setStackDepth(depth);
@@ -1782,6 +1784,21 @@ public final class Primitives extends Module
                 // Re-throw condition.
                 throw c;
             }
+            // No error.
+            while (clauses != NIL) {
+                Cons clause = checkCons(clauses.car());
+                if (clause.car() == Keyword.NO_ERROR) {
+                    Closure closure = new Closure(clause.cadr(), clause.cddr(),
+                                                  env);
+                    if (thread.getValues() != null)
+                        result = closure.execute(thread.getValues());
+                    else
+                        result = closure.execute(result);
+                    break;
+                }
+                clauses = clauses.cdr();
+            }
+            return result;
         }
     };
 
