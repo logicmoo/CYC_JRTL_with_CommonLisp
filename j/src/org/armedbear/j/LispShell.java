@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.59 2004-08-31 23:26:31 piso Exp $
+ * $Id: LispShell.java,v 1.60 2004-09-02 00:53:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,7 +110,8 @@ public class LispShell extends Shell
             shell.setResetCommand(":abort");
             shell.setExitCommand("(quit)");
         } else if (shellCommand.indexOf("org.armedbear.lisp") >= 0 ||
-            shellCommand.indexOf("abcl") >= 0) {
+                   shellCommand.indexOf("abcl") >= 0)
+        {
             shell.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
             shell.setResetCommand(":reset");
         } else {
@@ -118,7 +119,9 @@ public class LispShell extends Shell
             if (shellCommand.equals("rep") || shellCommand.equals("/usr/bin/rep"))
                 shell.setExitCommand(",quit");
         }
-        shell.needsRenumbering = true;
+        shell.needsRenumbering(true);
+        if (Editor.isLispInitialized())
+            LispAPI.invokeLispShellStartupHook(shell, shellCommand);
         return shell;
     }
 
