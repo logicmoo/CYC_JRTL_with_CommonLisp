@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.14 2003-10-03 16:49:05 piso Exp $
+ * $Id: JLisp.java,v 1.15 2003-10-05 00:25:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import javax.swing.SwingUtilities;
 import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Interpreter;
 
@@ -78,6 +79,14 @@ public final class JLisp extends LispShell
                     Log.error(e);
                 }
                 Log.debug("interpreter thread exiting");
+                Runnable processExitedRunnable = new Runnable() {
+                    public void run()
+                    {
+                        appendString("\nProcess exited\n");
+                        updateDisplayInAllFrames();
+                    }
+                };
+                SwingUtilities.invokeLater(processExitedRunnable);
             }
         };
         thread.setDaemon(true);
