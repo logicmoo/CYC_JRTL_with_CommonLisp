@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.40 2004-05-10 13:15:09 piso Exp $
+ * $Id: Cons.java,v 1.41 2004-05-22 17:22:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,6 +117,11 @@ public final class Cons extends LispObject
     public final LispObject cddr() throws ConditionThrowable
     {
         return cdr.cdr();
+    }
+
+    public final LispObject push(LispObject obj)
+    {
+        return new Cons(obj, this);
     }
 
     public final int hashCode()
