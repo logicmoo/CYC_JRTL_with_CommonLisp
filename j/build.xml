@@ -299,7 +299,7 @@
     <zip
       zipfile="${topdir}/j.zip"
       basedir="${topdir}"
-      excludes="**/*.class, **/*.jar, **/*.zip, src/test/**, **/Makefile.in, **/Makefile,
+      excludes="src/TEST-*.txt, src/org/armedbear/lisp/**, **/*.class, **/*.jar, **/*.zip, src/test/**, **/Makefile.in, **/Makefile,
         **/configure.in, **/configure, **/config.status, **/config.cache, **/config.log,
         **/install-sh, **/mkinstalldirs, **/classes.stamp, **/build, **/version,
         **/j, **/j.bat, **/jpty, **/ChangeLog"
