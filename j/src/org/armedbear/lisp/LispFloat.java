@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.31 2003-08-26 16:17:37 piso Exp $
+ * $Id: LispFloat.java,v 1.32 2003-08-26 17:18:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,6 +121,11 @@ public final class LispFloat extends LispObject
     public LispObject ZEROP()
     {
         return value == 0 ? T : NIL;
+    }
+
+    public LispObject FLOATP()
+    {
+        return T;
     }
 
     public static float getValue(LispObject obj) throws LispError
@@ -413,7 +418,7 @@ public final class LispFloat extends LispObject
     private static final Primitive1 FLOATP = new Primitive1("floatp") {
         public LispObject execute(LispObject arg) throws LispError
         {
-            return arg instanceof LispFloat ? T : NIL;
+            return arg.FLOATP();
         }
     };
 }
