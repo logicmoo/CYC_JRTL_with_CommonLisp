@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.6 2003-03-09 02:36:09 piso Exp $
+;;; $Id: compiler.lisp,v 1.7 2003-03-10 19:49:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -224,7 +224,13 @@
 (defun compile (name &optional (definition (fdefinition name)))
   (let (expr result)
     (cond ((functionp definition)
-           (setq expr (function-lambda-expression definition)))
+           (multiple-value-bind (form closure-p)
+             (function-lambda-expression definition)
+             (when closure-p
+               (format t "; Note: unable to compile function ~S defined in non-null lexical environment.~%" name)
+               (finish-output)
+               (return-from compile (values nil t t)))
+             (setq expr form)))
           ((and (consp definition) (eq (car definition) 'lambda))
            (setq expr definition))
           (t
