@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CompilationBuffer.java,v 1.16 2003-06-12 13:48:29 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.17 2003-09-30 21:35:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,7 +218,15 @@ public final class CompilationBuffer extends CompilationErrorBuffer
                             if (i+4 == length || s.charAt(i+4) == ' ') {
                                 File file = parentBuffer.getFile();
                                 if (file != null) {
-                                    sb.append(file.canonicalPath());
+                                    String cp = file.canonicalPath();
+                                    if (cp.indexOf(' ') >= 0) {
+                                        // Enclose filename in double quotes
+                                        // since it contains an embedded space.
+                                        sb.append('"');
+                                        sb.append(cp);
+                                        sb.append('"');
+                                    } else
+                                        sb.append(cp);
                                     replaced = true;
                                 }
                             }
