@@ -58,6 +58,8 @@
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.tar.gz"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.jar"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.class"/>
+      <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.fasl"/>
+      <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.cls"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*~"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/.#*"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/TEST-*.txt"/>
