@@ -1,7 +1,7 @@
 ;;; remove-duplicates.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: remove-duplicates.lisp,v 1.7 2004-03-13 17:51:01 piso Exp $
+;;; $Id: remove-duplicates.lisp,v 1.8 2004-09-27 13:58:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 ;;; Adapted from CMUCL.
 
@@ -26,12 +26,12 @@
 	 (splice result)
 	 (current list))
     (do ((index 0 (1+ index)))
-      ((= index start))
+        ((= index start))
       (setq splice (cdr (rplacd splice (list (car current)))))
       (setq current (cdr current)))
-    (do ((index 0 (1+ index)))
-      ((or (and end (= index end))
-           (atom current)))
+    (do ((index start (1+ index)))
+        ((or (and end (= index end))
+             (atom current)))
       (if (or (and from-end
 		   (not (member (apply-key key (car current))
 				(nthcdr (1+ start) result)
@@ -51,7 +51,7 @@
 	  (setq splice (cdr (rplacd splice (list (car current))))))
       (setq current (cdr current)))
     (do ()
-      ((atom current))
+        ((atom current))
       (setq splice (cdr (rplacd splice (list (car current)))))
       (setq current (cdr current)))
     (cdr result)))
@@ -63,7 +63,7 @@
 	(index 0)
 	(jndex start))
     (do ()
-      ((= index start))
+        ((= index start))
       (setf (aref result index) (aref vector index))
       (setq index (1+ index)))
     (do ((elt))
