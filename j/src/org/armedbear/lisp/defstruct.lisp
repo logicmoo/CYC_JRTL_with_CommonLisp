@@ -5,21 +5,21 @@
 (export 'defstruct)
 
 (defun make-constructor (name slots)
-  (let ((nslots (length slots))
-        (constructor (intern (concatenate 'string "MAKE-" (symbol-name name)))))
-    (setf (symbol-function constructor)
-          #'(lambda ()
-             (let ((structure (make-array (1+ nslots))))
-               (setf (svref structure 0) name)
-               structure)))))
+  (let ((constructor (intern (concatenate 'string "MAKE-" (symbol-name name))))
+        (keys (cons '&key slots)))
+    (eval `(defun ,constructor ,keys
+             (vector ',name ,@slots)))))
 
 (defun make-access-function (name slot index)
   (let ((accessor
-         (intern (concatenate 'string (symbol-name name) "-" (symbol-name slot)))))
-    (setf (symbol-function accessor)
-          #'(lambda (instance) (svref instance `,index)))
-    (%put accessor *setf-expander*
-          #'(lambda (instance new-value) (%svset instance `,index new-value)))))
+         (intern (concatenate 'string (symbol-name name) "-" (symbol-name slot))))
+        (setf-expander (gensym)))
+    (eval `(progn
+             (defun ,accessor (instance)
+               (svref instance ,index))
+             (defun ,setf-expander (instance new-value)
+               (setf (svref instance ,index) new-value))
+             (defsetf ,accessor ,setf-expander)))))
 
 (defun make-access-functions (name slots)
   (let ((index 1))
@@ -28,6 +28,7 @@
       (incf index))))
 
 (defmacro defstruct (name &rest slots)
-  (make-constructor name slots)
-  (make-access-functions name slots)
-  `',name)
+  `(progn
+     (make-constructor ',name ',slots)
+     (make-access-functions ',name ',slots)
+     ',name))
