@@ -2,21 +2,26 @@
 
 (in-package "COMMON-LISP")
 
-(export '(cdddr list-length copy-list copy-tree revappend nconc nreconc))
+(export '(cdddr list-length make-list copy-list copy-tree revappend nconc
+          nreconc))
 
 (defun cdddr (list)
   (cdr (cdr (cdr list))))
 
 (defun list-length (list)
-  "Returns the length of the given List, or Nil if the List is circular."
+  "Returns the length of the list, or NIL if the list is circular."
   (do ((n 0 (+ n 2))
        (y list (cddr y))
        (z list (cdr z)))
     (())
-    (declare (fixnum n) (list y z))
     (when (endp y) (return n))
     (when (endp (cdr y)) (return (+ n 1)))
     (when (and (eq y z) (> n 0)) (return nil))))
+
+(defun make-list (size &key initial-element)
+  (do ((count size (1- count))
+       (result '() (cons initial-element result)))
+    ((zerop count) result)))
 
 (defun copy-list (list)
   (if (atom list)
@@ -55,5 +60,3 @@
        (3rd y 2nd))		;3rd follows 2nd down the list.
     ((atom 2nd) 3rd)
     (rplacd 2nd 3rd)))
-
-(provide "list")
