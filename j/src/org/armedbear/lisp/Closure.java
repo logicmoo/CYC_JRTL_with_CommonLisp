@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.74 2004-05-05 18:50:22 piso Exp $
+ * $Id: Closure.java,v 1.75 2004-05-05 19:35:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,11 +64,11 @@ public class Closure extends Function
         this(null, lambdaList, body, env);
     }
 
-    public Closure(String name, LispObject lambdaList, LispObject body,
+    public Closure(Symbol symbol, LispObject lambdaList, LispObject body,
                    Environment env)
         throws ConditionThrowable
     {
-        super(name, getCurrentPackage());
+        super(symbol);
         this.lambdaList = lambdaList;
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
         boolean andKey = false;
@@ -98,7 +98,7 @@ public class Closure extends Function
                         remaining = remaining.cdr();
                         if (remaining == NIL) {
                             signal(new LispError(
-                                "&REST/&BODY must be followed by a variable"));
+                                "&REST/&BODY must be followed by a variable."));
                         }
                         Debug.assertTrue(restVar == null);
                         try {
@@ -106,7 +106,7 @@ public class Closure extends Function
                         }
                         catch (ClassCastException e) {
                             signal(new LispError(
-                                "&REST/&BODY must be followed by a variable"));
+                                "&REST/&BODY must be followed by a variable."));
                         }
                     } else if (obj == Symbol.AND_ENVIRONMENT) {
                         remaining = remaining.cdr();
