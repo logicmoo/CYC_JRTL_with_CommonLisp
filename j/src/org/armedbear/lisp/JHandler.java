@@ -2,7 +2,7 @@
  * JHandler.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JHandler.java,v 1.5 2003-12-13 00:58:51 piso Exp $
+ * $Id: JHandler.java,v 1.6 2003-12-24 16:06:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,42 +98,48 @@ public final class JHandler extends Lisp
             return T;
         }
     };
-}
+    
+    private static class Entry
+    {
+        Function handler;
+        LispObject data;
+        int count = -1;
+        Map entryTable;
+        String event;
+        
+        public Entry (Function handler, LispObject data, String event, Map entryTable)
+        {
+            this.entryTable = entryTable;
+            this.event = event;
+            this.handler = handler;
+            this.data = data;
+        }
 
-class Entry
-{
-    public Entry (Function handler, LispObject data, String event, Map entryTable) {
-        this.entryTable = entryTable;
-        this.event = event;
-        this.handler = handler;
-        this.data = data;
+        public Function getHandler ()
+        {
+            return handler;
+        }
+
+        public void addData (LispObject data)
+        {
+            this.data = data;
+        }
+
+        public LispObject getData ()
+        {
+            return data;
+        }
+
+        public void addCount (int count)
+        {
+            this.count = count;
+        }
+
+        public Fixnum getCount ()
+        {
+            if (count == 0)
+                entryTable.remove(event);
+            return (new Fixnum (count--));
+        }
     }
-
-    public Function getHandler () {
-        return handler;
-    }
-
-    public void addData (LispObject data) {
-        this.data = data;
-    }
-
-    public LispObject getData () {
-        return data;
-    }
-
-    public void addCount (int count) {
-        this.count = count;
-    }
-
-    public Fixnum getCount () {
-        if (count == 0)
-            entryTable.remove(event);
-        return (new Fixnum (count--));
-    }
-
-    Function handler;
-    LispObject data;
-    int count = -1;
-    Map entryTable;
-    String event;
 }

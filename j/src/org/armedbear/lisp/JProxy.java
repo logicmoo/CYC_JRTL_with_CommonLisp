@@ -2,7 +2,7 @@
  * JProxy.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JProxy.java,v 1.2 2003-12-24 15:58:53 asimon Exp $
+ * $Id: JProxy.java,v 1.3 2003-12-24 16:09:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,18 @@
 
 package org.armedbear.lisp;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.lang.reflect.InvocationHandler;
 
 public final class JProxy extends Lisp
 {
     private static final Map table = new WeakHashMap();
 
-    // ### %jnew-proxy  
+    // ### %jnew-proxy
     // %jnew-proxy interface &rest method-names-and-defs
     private static final Primitive _JNEW_PROXY =
         new Primitive("%jnew-proxy", PACKAGE_JAVA, false, "interface &rest method-names-and-defs")
@@ -46,66 +46,72 @@ public final class JProxy extends Lisp
             for (int i = 1; i < length; i = i+2)
                 lispDefinedMethods.put(LispString.getValue(args[i]),(Function)args[i+1]);
             Class iface = (Class) args[0].javaInstance();
-            Object proxy = 
-                Proxy.newProxyInstance(iface.getClassLoader(), new Class[] { iface }, new LispHandler(table)); 
+            Object proxy =
+                Proxy.newProxyInstance(iface.getClassLoader(), new Class[] { iface }, new LispHandler(table));
             table.put(proxy, new Entry(iface, lispDefinedMethods));
             return new JavaObject(proxy);
         }
     };
-}
 
-class LispHandler implements InvocationHandler {
+    private static class LispHandler implements InvocationHandler
+    {
+        Map table;
 
-    LispHandler (Map table) { this.table = table; }
-  
-    Map table;
-
-    public Object invoke(Object proxy, Method method, Object[] args) {
-        String methodName = method.getName();
-
-        if (methodName.equals("hashCode"))  {
-            return new Integer(System.identityHashCode(proxy));   
-        } else if (methodName.equals("equals")) {
-            return (proxy == args[0] ? Boolean.TRUE : Boolean.FALSE);
-        } else if (methodName.equals("toString")) {
-            return proxy.getClass().getName() + '@' + Integer.toHexString(proxy.hashCode());
+        LispHandler (Map table)
+        {
+            this.table = table;
         }
-           
-        if (table.containsKey(proxy)) {
-            Entry entry = (Entry)table.get(proxy);
-            Function f = entry.getLispMethod(methodName);
-            if (f != null) {
-                if (args == null) // method needs no argument
-                    args = new Object[0];
-                LispObject[] lispArgs = new LispObject[args.length];
-                for (int i = 0 ; i< args.length; i++)
-                    lispArgs[i] = new JavaObject(args[i]);
-                try {
-                    LispObject result = f.execute(lispArgs);
-                    return (method.getReturnType() == void.class ? null : result.javaInstance());
-                } 
-                catch (ConditionThrowable t) {
-                    t.printStackTrace();
+
+        public Object invoke(Object proxy, Method method, Object[] args)
+        {
+            String methodName = method.getName();
+
+            if (methodName.equals("hashCode"))  {
+                return new Integer(System.identityHashCode(proxy));
+            } else if (methodName.equals("equals")) {
+                return (proxy == args[0] ? Boolean.TRUE : Boolean.FALSE);
+            } else if (methodName.equals("toString")) {
+                return proxy.getClass().getName() + '@' + Integer.toHexString(proxy.hashCode());
+            }
+
+            if (table.containsKey(proxy)) {
+                Entry entry = (Entry)table.get(proxy);
+                Function f = entry.getLispMethod(methodName);
+                if (f != null) {
+                    if (args == null) // method needs no argument
+                        args = new Object[0];
+                    LispObject[] lispArgs = new LispObject[args.length];
+                    for (int i = 0 ; i< args.length; i++)
+                        lispArgs[i] = new JavaObject(args[i]);
+                    try {
+                        LispObject result = f.execute(lispArgs);
+                        return (method.getReturnType() == void.class ? null : result.javaInstance());
+                    }
+                    catch (ConditionThrowable t) {
+                        t.printStackTrace();
+                    }
                 }
             }
+            return null;
         }
-        return null;
-    }
-}
-
-class Entry
-{
-    public Entry (Class iface, Map lispDefinedMethods) {
-        this.iface = iface;
-        this.lispDefinedMethods = lispDefinedMethods;
     }
 
-    Class iface;
-    Map lispDefinedMethods;
+    private static class Entry
+    {
+        Class iface;
+        Map lispDefinedMethods;
 
-    public Function getLispMethod(String methodName) {
-        if (lispDefinedMethods.containsKey(methodName)) 
-            return (Function)lispDefinedMethods.get(methodName);
-        return null;
+        public Entry (Class iface, Map lispDefinedMethods)
+        {
+            this.iface = iface;
+            this.lispDefinedMethods = lispDefinedMethods;
+        }
+
+        public Function getLispMethod(String methodName)
+        {
+            if (lispDefinedMethods.containsKey(methodName))
+                return (Function)lispDefinedMethods.get(methodName);
+            return null;
+        }
     }
 }
