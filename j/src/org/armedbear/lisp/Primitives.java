@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.339 2003-08-17 00:15:55 piso Exp $
+ * $Id: Primitives.java,v 1.340 2003-08-17 16:03:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2227,6 +2227,34 @@ public final class Primitives extends Module
             if (fillPointer >= v.capacity())
                 return NIL;
             v.set(fillPointer, first);
+            v.setFillPointer(fillPointer + 1);
+            return new Fixnum(fillPointer);
+        }
+    };
+
+    // ### vector-push-extend
+    // vector-push new-element vector &optional extension => index-of-new-element
+    private static final Primitive VECTOR_PUSH_EXTEND =
+        new Primitive("vector-push-extend") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length < 2 || args.length > 3)
+                throw new WrongNumberOfArgumentsException(this);
+            AbstractVector v = checkVector(args[1]);
+            int extension = 0;
+            if (args.length == 3) {
+                // Extension was supplied.
+                extension = Fixnum.getValue(args[2]);
+            }
+            int fillPointer = v.getFillPointer();
+            if (fillPointer < 0)
+                throw new TypeError("array does not have a fill pointer");
+            if (fillPointer >= v.capacity()) {
+                // Need to extend vector.
+                extension = Math.max(extension, v.capacity() + 1);
+                v.ensureCapacity(v.capacity() + extension);
+            }
+            v.set(fillPointer, args[0]);
             v.setFillPointer(fillPointer + 1);
             return new Fixnum(fillPointer);
         }
