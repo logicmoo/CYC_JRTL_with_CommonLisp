@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: j.lisp,v 1.36 2004-09-05 19:11:01 piso Exp $
+;;; $Id: j.lisp,v 1.37 2004-09-15 17:50:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,34 +17,86 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "J")
+(in-package #:j)
 
-(export '(set-global-property
-          reset-display
-          log-debug
-          add-hook
+(export '(add-hook
+          after-save-hook
+          backward-char
+          backward-sexp
+          backward-up-list
+          beginning-of-line
+          buffer-activated-hook
+          buffer-name
+          buffer-pathname
+          buffer-stream-buffer
+          buffer-string
+          buffer-substring
+          char-after
+          char-before
+          current-buffer
+          current-editor
+          current-line
+          current-mark
+          current-point
+          defcommand
+          defun-at-point
+          delete-region
+          editor-buffer
+          end-of-line
+          execute-command
+          find-file-buffer
+          forward-char
+          forward-sexp
+          get-buffer
+          get-last-event-internal-time
+          global-map-key
+          global-unmap-key
+          goto-char
+          insert
           invoke-hook
+          invoke-later
+          key-pressed-hook
+          kill-theme
+          line-chars
+          line-flags
+          line-next
+          line-number
+          line-previous
+          lisp-shell-startup-hook
+          location-bar-cancel-input
+          log-debug
+          looking-at
+          make-buffer-stream
+          make-mark
+          map-key-for-mode
+          mark-charpos
+          mark-line
+          move-to-position
+          open-file-hook
+          other-editor
+          point-max
+          point-min
+          pop-to-buffer
+          re-search-backward
+          re-search-forward
+          reset-display
+          restore-focus
+          save-excursion
+          search-backward
+          search-forward
+          set-global-property
+          set-mark
+          status
+          status
+          switch-to-buffer
+          undo
+          unmap-key-for-mode
           update-display
           update-location-bar
-          location-bar-cancel-input
-          status
-          defcommand
-          execute-command
-          open-file-hook
-          buffer-activated-hook
-          after-save-hook
-          key-pressed-hook
-          lisp-shell-startup-hook
           variable-value
           with-editor
           with-other-editor
-          with-single-undo
-          save-excursion
-          search-forward
-          search-backward
-          re-search-forward
-          re-search-backward
-          ))
+          with-single-undo))
 
 (defun set-global-property (&rest args)
   (let ((count (length args)) key value)
@@ -198,4 +250,6 @@
 
 (in-package "COMMON-LISP-USER")
 
-(use-package "J")
+(use-package '#:j)
+
+(provide '#:j)
