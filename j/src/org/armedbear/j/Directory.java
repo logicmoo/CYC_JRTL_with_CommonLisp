@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.17 2003-05-11 17:29:46 piso Exp $
+ * $Id: Directory.java,v 1.18 2003-05-12 02:26:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,8 +62,6 @@ public final class Directory extends Buffer
 
     private static final RE nativeMoveToFilenameRegExp;
     private static final RE internalMoveToFilenameRegExp;
-
-    private long totalSize;
 
     private boolean loadError;
 
@@ -354,13 +352,10 @@ public final class Directory extends Buffer
         if (f == null)
             return;
         DirectoryEntry de;
-        if (f.isDirectory()) {
+        if (f.isDirectory())
             de = new DirectoryEntry(name, f.lastModified(), 0, true);
-        } else {
-            long size = f.length();
-            totalSize += size;
-            de = new DirectoryEntry(name, f.lastModified(), size);
-        }
+        else
+            de = new DirectoryEntry(name, f.lastModified(), f.length());
         if (!name.equals(".") && !name.equals("..")) {
             try {
                 String cp = f.getCanonicalPath();
@@ -563,7 +558,6 @@ public final class Directory extends Buffer
                 useNativeFormat = false;
         }
         loadError = false;
-        totalSize = 0;
         try {
             DirectoryFilenameFilter dff = null;
             final File file = getFile();
@@ -623,10 +617,8 @@ public final class Directory extends Buffer
                     while ((s = reader.readLine()) != null) {
                         DirectoryEntry entry =
                             DirectoryEntry.getDirectoryEntry(s, dff);
-                        if (entry != null) {
-                            totalSize += entry.getSize();
+                        if (entry != null)
                             entries.add(entry);
-                        }
                     }
                 }
             } else {
@@ -674,7 +666,8 @@ public final class Directory extends Buffer
             }
             try {
                 addEntriesToBuffer();
-                if (totalSize != 0) {
+                long totalSize = getTotalSize();
+                if (totalSize > 0) {
                     int end;
                     if (usingNativeFormat) {
                         end = getFileSizeEndOffset();
@@ -709,6 +702,63 @@ public final class Directory extends Buffer
         catch (Exception e) {
             Log.error(e);
         }
+    }
+
+    private long getTotalSize()
+    {
+        long totalSize = 0;
+        int endOffset = -1;
+        final int limit = entries.size();
+        for (int i = 0; i < limit; i++) {
+            DirectoryEntry entry = (DirectoryEntry) entries.get(i);
+            long size = entry.getSize();
+            if (size >= 0) {
+                totalSize += size;
+                continue;
+            }
+            String text = entry.getString();
+            if (endOffset < 0) {
+                REMatch match = nativeMoveToFilenameRegExp.getMatch(text);
+                if (match != null) {
+                    // The file size is followed by a single space.
+                    endOffset = text.indexOf(' ', match.getStartIndex());
+                }
+                if (endOffset < 0)
+                    endOffset = 42;
+            }
+            if (endOffset < text.length()) {
+                int end;
+                if (text.charAt(endOffset) == ' ') {
+                    // Expected.
+                    end = endOffset;
+                } else {
+                    // Encountered unexpected char at endOffset.
+                    REMatch match = nativeMoveToFilenameRegExp.getMatch(text);
+                    if (match == null)
+                        return totalSize = -1;
+                    end = text.indexOf(' ', match.getStartIndex());
+                    if (end < endOffset) {
+                        // Correct anomaly.
+                        endOffset = end;
+                        Log.debug("endOffset = " + endOffset);
+                    }
+                }
+                int begin = text.lastIndexOf(' ', end - 1);
+                if (begin < 0)
+                    return -1;
+                try {
+                    size = Long.parseLong(text.substring(begin + 1, end));
+                    entry.setSize(size);
+                    totalSize += size;
+                }
+                catch (NumberFormatException e) {
+                    Log.error(e);
+                    return -1;
+                }
+            } else
+                return -1; // Shouldn't happen.
+        }
+        return totalSize;
     }
 
     public int load()
@@ -1949,12 +1999,13 @@ public final class Directory extends Buffer
         return -1; // Error!
     }
 
-    private Line findName(String name)
+    private Line findName(final String name)
     {
         if (name != null) {
             for (Line line = getFirstLine(); line != null; line = line.next()) {
-                if (name.equals(getName(line)))
-                    return line;
+                if (line.getText().indexOf(name) >= 0) // Performance!
+                    if (name.equals(getName(line)))
+                        return line;
             }
         }
         return null;

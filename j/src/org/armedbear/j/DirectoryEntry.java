@@ -1,8 +1,8 @@
 /*
  * DirectoryEntry.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryEntry.java,v 1.4 2002-12-07 12:25:51 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: DirectoryEntry.java,v 1.5 2003-05-12 02:27:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -162,9 +162,12 @@ public final class DirectoryEntry
 
     public final long getSize()
     {
-        if (size < 0 && string != null)
-            size = getFileSize(string);
         return size;
+    }
+
+    public final void setSize(long size)
+    {
+        this.size = size;
     }
 
     public final boolean isDirectory()
@@ -224,23 +227,5 @@ public final class DirectoryEntry
             sb.append(linkedTo);
         }
         return sb.toString();
-    }
-
-    private static long getFileSize(String s)
-    {
-        try {
-            final REMatch match =
-                Directory.getNativeMoveToFilenameRegExp().getMatch(s);
-            if (match != null) {
-                int begin = match.getStartIndex();
-                int end = s.indexOf(' ', begin);
-                if (end >= 0)
-                    return Long.parseLong(s.substring(begin, end));
-            }
-        }
-        catch (NumberFormatException e) {
-            Log.error(e);
-        }
-        return 0;
     }
 }
