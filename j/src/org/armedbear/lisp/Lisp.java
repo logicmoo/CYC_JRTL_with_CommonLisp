@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.152 2003-09-26 18:48:00 piso Exp $
+ * $Id: Lisp.java,v 1.153 2003-09-27 18:29:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -785,6 +785,34 @@ public abstract class Lisp
         if (obj instanceof TwoWayStream)
             return ((TwoWayStream)obj).getOutputStream();
         throw new ConditionThrowable(new TypeError(obj, "output stream"));
+    }
+
+    public static final CharacterInputStream inSynonymOf(LispObject obj)
+        throws ConditionThrowable
+    {
+        if (obj == T)
+            return checkInputStream(_TERMINAL_IO_.symbolValue());
+        if (obj == NIL)
+            return checkInputStream(_STANDARD_INPUT_.symbolValue());
+        if (obj instanceof CharacterInputStream)
+            return (CharacterInputStream) obj;
+        if (obj instanceof TwoWayStream)
+            return ((TwoWayStream)obj).getInputStream();
+        throw new ConditionThrowable(new TypeError(obj, "character input stream"));
+    }
+
+    public static final CharacterOutputStream outSynonymOf(LispObject obj)
+        throws ConditionThrowable
+    {
+        if (obj == T)
+            return checkOutputStream(_TERMINAL_IO_.symbolValue());
+        if (obj == NIL)
+            return checkOutputStream(_STANDARD_OUTPUT_.symbolValue());
+        if (obj instanceof CharacterOutputStream)
+            return (CharacterOutputStream) obj;
+        if (obj instanceof TwoWayStream)
+            return ((TwoWayStream)obj).getOutputStream();
+        throw new ConditionThrowable(new TypeError(obj, "character output stream"));
     }
 
     public static final Readtable checkReadtable(LispObject obj)
