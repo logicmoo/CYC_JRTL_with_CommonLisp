@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.6 2003-11-15 14:30:30 piso Exp $
+;;; $Id: precompiler.lisp,v 1.7 2003-11-15 15:26:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,6 +25,21 @@
               (or (equal (fourth args) '(quote eq))
                   (equal (fourth args) '(function eq))))
          `(assq ,(first args) ,(second args)))
+        (t form)))
+
+(define-compiler-macro member (&whole form &rest args)
+  (cond ((and (= (length args) 4)
+              (eq (third args) :test)
+              (or (equal (fourth args) '(quote eq))
+                  (equal (fourth args) '(function eq))))
+         `(memq ,(first args) ,(second args)))
+        ((and (= (length args) 4)
+              (eq (third args) :test)
+              (or (equal (fourth args) '(quote eql))
+                  (equal (fourth args) '(function eql))))
+         `(memql ,(first args) ,(second args)))
+        ((= (length args) 2)
+         `(memql ,(first args) ,(second args)))
         (t form)))
 
 (define-compiler-macro identity (&whole form &rest args)
@@ -294,12 +309,14 @@
         (values form
                 nil))))
 
-;;; From OpenMCL.
 (defun compiler-macroexpand (form &optional env)
-  (multiple-value-bind (new win) (compiler-macroexpand-1 form env)
-    (do* ((won-at-least-once win))
-         ((null win) (values new won-at-least-once))
-      (multiple-value-setq (new win) (compiler-macroexpand-1 new env)))))
+  (let ((expanded-p nil))
+    (loop
+      (multiple-value-bind (expansion exp-p) (compiler-macroexpand-1 form env)
+        (if exp-p
+            (setf form expansion expanded-p t)
+            (return))))
+    (values form expanded-p)))
 
 (defun precompile1 (form)
   (if (atom form)
