@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Environment.java,v 1.14 2004-07-23 15:28:53 piso Exp $
+ * $Id: Environment.java,v 1.15 2004-07-30 16:02:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,14 @@ public final class Environment extends LispObject
 
     public boolean isEmpty()
     {
-        return (vars == null && functions == null);
+        if (functions != null)
+            return false;
+        if (vars != null) {
+            for (Binding binding = vars; binding != null; binding = binding.next)
+                if (!binding.specialp)
+                    return false;
+        }
+        return true;
     }
 
     public void bind(Symbol symbol, LispObject value)
