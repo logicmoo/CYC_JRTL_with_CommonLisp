@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.3 2003-02-25 16:35:51 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.4 2003-02-28 18:43:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -270,10 +270,17 @@ public class CharacterInputStream extends LispStream
     private LispObject readSharp() throws LispError
     {
         try {
-            int n = read();
-            if (n < 0)
-                throw new EndOfFileException();
-            char c = (char) n;
+            int numArg = 0;
+            char c;
+            while (true) {
+                int n = read();
+                if (n < 0)
+                    throw new EndOfFileException();
+                c = (char) n;
+                if (c < '0' || c > '9')
+                    break;
+                numArg = numArg * 10 + c - '0';
+            }
             switch (c) {
                 case '\'':
                     return new Cons(Symbol.FUNCTION,
@@ -294,6 +301,9 @@ public class CharacterInputStream extends LispStream
                     return eval(read(true, NIL, true), new Environment());
                 case '*':
                     return readBitVector();
+                case 'a':
+                case 'A':
+                    return readArray(numArg);
                 default:
                     //clearInput();
                     //throw new LispError("unsupported '#' macro character '" +
@@ -397,6 +407,12 @@ public class CharacterInputStream extends LispStream
         catch (IOException e) {
             throw new StreamError(e);
         }
+    }
+
+    private LispObject readArray(int dimensions) throws LispError
+    {
+        LispObject obj = read(true, NIL, true);
+        return NIL; // FIXME
     }
 
     private LispObject readToken(char firstChar) throws LispError
