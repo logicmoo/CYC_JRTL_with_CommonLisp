@@ -1,8 +1,8 @@
 /*
  * FtpSession.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: FtpSession.java,v 1.1.1.1 2002-09-24 16:08:34 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: FtpSession.java,v 1.2 2003-05-16 17:18:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -389,20 +389,22 @@ public class FtpSession implements Constants
                 String parent = index == 0 ? "/" : filename.substring(0, index);
                 String name = filename.substring(index + 1);
                 String parentListing = getDirectoryListing(parent);
-                BufferedReader reader =
-                    new BufferedReader(new StringReader(parentListing));
-                String entry;
-                try {
-                    while ((entry = reader.readLine()) != null) {
-                        if (name.equals(DirectoryEntry.getName(entry))) {
-                            // Found it!
-                            listing = entry;
-                            break;
+                if (parentListing != null) {
+                    BufferedReader reader =
+                        new BufferedReader(new StringReader(parentListing));
+                    String entry;
+                    try {
+                        while ((entry = reader.readLine()) != null) {
+                            if (name.equals(DirectoryEntry.getName(entry))) {
+                                // Found it!
+                                listing = entry;
+                                break;
+                            }
                         }
                     }
-                }
-                catch (IOException e) {
-                    Log.error(e);
+                    catch (IOException e) {
+                        Log.error(e);
+                    }
                 }
             }
         }
