@@ -2,7 +2,7 @@
  * Sidebar.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Sidebar.java,v 1.2 2003-07-24 19:31:37 piso Exp $
+ * $Id: Sidebar.java,v 1.3 2003-07-25 17:48:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,13 +26,12 @@ import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 
 public final class Sidebar extends JComponent implements Constants
 {
     private final Frame frame;
-    private final JSplitPane splitPane;
+    private final SplitPane splitPane;
     private final SidebarPanel topPanel;
     private final SidebarPanel bottomPanel;
     private final SidebarBufferList bufferList;
@@ -52,7 +51,7 @@ public final class Sidebar extends JComponent implements Constants
         bufferListScrollPane.setBorder(BorderFactory.createEmptyBorder());
         topPanel.addScrollPane(bufferListScrollPane);
         bottomPanel = new SidebarPanel(this);
-        splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topPanel, bottomPanel);
+        splitPane = new SplitPane(SplitPane.VERTICAL_SPLIT, topPanel, bottomPanel);
         splitPane.setBorder(BorderFactory.createEmptyBorder());
         splitPane.setDividerLocation(Editor.getSessionProperties().getSidebarDividerLocation(frame));
         add(splitPane);
