@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.2 2003-09-20 18:21:23 piso Exp $
+ * $Id: BuiltInClass.java,v 1.3 2003-09-21 02:03:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass BIGNUM             = addClass(Symbol.BIGNUM);
     public static final BuiltInClass BIT_VECTOR         = addClass(Symbol.BIT_VECTOR);
     public static final BuiltInClass BUILT_IN_CLASS     = addClass(Symbol.BUILT_IN_CLASS);
+    public static final BuiltInClass CELL_ERROR         = addClass(Symbol.CELL_ERROR);
     public static final BuiltInClass CHARACTER          = addClass(Symbol.CHARACTER);
     public static final BuiltInClass CLASS              = addClass(Symbol.CLASS);
     public static final BuiltInClass COMPLEX            = addClass(Symbol.COMPLEX);
