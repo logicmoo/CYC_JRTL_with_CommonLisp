@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.18 2004-03-12 18:48:48 piso Exp $
+ * $Id: Readtable.java,v 1.19 2004-03-12 19:34:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,6 +256,58 @@ public final class Readtable extends LispObject
             char c = LispCharacter.getValue(first);
             Readtable rt = checkReadtable(second);
             return rt.getMacroCharacter(c);
+        }
+    };
+
+    // ### set-macro-character char new-function &optional non-terminating-p readtable
+    // => t
+    private static final Primitive SET_MACRO_CHARACTER =
+        new Primitive("set-macro-character",
+                      "char new-function &optional non-terminating-p readtable")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            char c = LispCharacter.getValue(first);
+            Readtable rt = currentReadtable();
+            // FIXME synchronization
+            rt.attributes[c] = ATTR_TERMINATING_MACRO;
+            rt.readerMacroFunctions[c] = coerceToFunction(second);
+            return T;
+        }
+
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            char c = LispCharacter.getValue(first);
+            Readtable rt = currentReadtable();
+            byte attribute;
+            if (third != NIL)
+                attribute = ATTR_NON_TERMINATING_MACRO;
+            else
+                attribute = ATTR_TERMINATING_MACRO;
+            // FIXME synchronization
+            rt.attributes[c] = attribute;
+            rt.readerMacroFunctions[c] = coerceToFunction(second);
+            return T;
+        }
+
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length != 4)
+                return signal(new WrongNumberOfArgumentsException(this));
+            char c = LispCharacter.getValue(args[0]);
+            byte attribute;
+            if (args[2] != NIL)
+                attribute = ATTR_NON_TERMINATING_MACRO;
+            else
+                attribute = ATTR_TERMINATING_MACRO;
+            Readtable rt = checkReadtable(args[3]);
+            // FIXME synchronization
+            rt.attributes[c] = attribute;
+            rt.readerMacroFunctions[c] = coerceToFunction(args[1]);
+            return T;
         }
     };
 
