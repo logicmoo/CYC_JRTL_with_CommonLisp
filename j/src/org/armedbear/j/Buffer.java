@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.10 2002-10-13 16:55:03 piso Exp $
+ * $Id: Buffer.java,v 1.11 2002-10-15 01:22:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2221,8 +2221,7 @@ public class Buffer extends SystemBuffer
             final Line newLine = new TextLine("");
             newLine.setNew(true);
             // Assume that the line flags should carry over to the new line.
-            if (mode.getId() != SHELL_MODE)
-                newLine.setFlags(line.flags());
+            newLine.setFlags(line.flags());
             final Line prevLine = line.previous();
             newLine.setPrevious(prevLine);
             if (prevLine != null) {
@@ -2237,8 +2236,7 @@ public class Buffer extends SystemBuffer
             final Line newLine = new TextLine("");
             newLine.setNew(true);
             // Assume that the line flags should carry over to the new line.
-            if (mode.getId() != SHELL_MODE)
-                newLine.setFlags(line.flags());
+            newLine.setFlags(line.flags());
             final Line prevLine = line;
             final Line nextLine = line.next();
             newLine.setPrevious(prevLine);
@@ -2260,8 +2258,7 @@ public class Buffer extends SystemBuffer
             final Line newLine = new TextLine(tail);
             newLine.setNew(true);
             // Assume that the line flags should carry over to the new line.
-            if (mode.getId() != SHELL_MODE)
-                newLine.setFlags(line.flags());
+            newLine.setFlags(line.flags());
             line.setNext(newLine);
             newLine.setPrevious(line);
             newLine.setNext(nextLine);
