@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispString.java,v 1.81 2004-02-16 01:25:47 piso Exp $
+ * $Id: LispString.java,v 1.82 2004-02-19 01:34:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -370,6 +370,34 @@ public final class LispString extends AbstractVector
             badIndex(Fixnum.getValue(index), chars.length);
             return NIL; // Not reached.
         }
+    }
+
+    public LispObject vectorPushExtend(LispObject element)
+        throws ConditionThrowable
+    {
+        if (fillPointer < 0)
+            noFillPointer();
+        if (fillPointer >= chars.length) {
+            // Need to extend vector.
+            ensureCapacity(chars.length * 2 + 1);
+        }
+        chars[fillPointer] = LispCharacter.getValue(element);
+        return new Fixnum(fillPointer++);
+    }
+
+    public LispObject vectorPushExtend(LispObject element, LispObject extension)
+        throws ConditionThrowable
+    {
+        int ext = Fixnum.getValue(extension);
+        if (fillPointer < 0)
+            noFillPointer();
+        if (fillPointer >= chars.length) {
+            // Need to extend vector.
+            ext = Math.max(ext, chars.length + 1);
+            ensureCapacity(chars.length + ext);
+        }
+        chars[fillPointer] = LispCharacter.getValue(element);
+        return new Fixnum(fillPointer++);
     }
 
     public LispObject remove(LispObject item) throws ConditionThrowable

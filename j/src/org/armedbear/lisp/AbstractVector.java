@@ -181,4 +181,36 @@ public abstract class AbstractVector extends AbstractArray
         }
         return this;
     }
+
+    public LispObject vectorPushExtend(LispObject element)
+        throws ConditionThrowable
+    {
+        final int fp = getFillPointer();
+        if (fp < 0)
+            noFillPointer();
+        if (fp >= capacity()) {
+            // Need to extend vector.
+            ensureCapacity(capacity() * 2 + 1);
+        }
+        set(fp, element);
+        setFillPointer(fp + 1);
+        return new Fixnum(fp);
+    }
+
+    public LispObject vectorPushExtend(LispObject element, LispObject extension)
+        throws ConditionThrowable
+    {
+        int ext = Fixnum.getValue(extension);
+        final int fp = getFillPointer();
+        if (fp < 0)
+            noFillPointer();
+        if (fp >= capacity()) {
+            // Need to extend vector.
+            ext = Math.max(ext, capacity() + 1);
+            ensureCapacity(capacity() + ext);
+        }
+        set(fp, element);
+        setFillPointer(fp + 1);
+        return new Fixnum(fp);
+    }
 }
