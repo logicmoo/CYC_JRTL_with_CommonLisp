@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.21 2003-03-15 18:10:53 piso Exp $
+ * $Id: Fixnum.java,v 1.22 2003-03-21 11:54:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,8 @@ public final class Fixnum extends LispObject
         if (typeSpecifier == Symbol.FIXNUM)
             return T;
         if (typeSpecifier == Symbol.INTEGER)
+            return T;
+        if (typeSpecifier == Symbol.NUMBER)
             return T;
         return super.typep(typeSpecifier);
     }
@@ -137,6 +139,13 @@ public final class Fixnum extends LispObject
                 return number(getBigInteger().add(Bignum.getValue(obj)));
             if (obj instanceof LispFloat)
                 return new LispFloat(value + LispFloat.getValue(obj));
+            if (obj instanceof Ratio) {
+                BigInteger numerator = ((Ratio)obj).numerator();
+                BigInteger denominator = ((Ratio)obj).denominator();
+                return number(
+                    getBigInteger().multiply(denominator).add(numerator),
+                    denominator);
+            }
             throw new TypeError(obj, "number");
         }
     }
@@ -152,6 +161,13 @@ public final class Fixnum extends LispObject
                 return number(getBigInteger().subtract(Bignum.getValue(obj)));
             if (obj instanceof LispFloat)
                 return new LispFloat(value - LispFloat.getValue(obj));
+            if (obj instanceof Ratio) {
+                BigInteger numerator = ((Ratio)obj).numerator();
+                BigInteger denominator = ((Ratio)obj).denominator();
+                return number(
+                    getBigInteger().multiply(denominator).subtract(numerator),
+                    denominator);
+            }
             throw new TypeError(obj, "number");
         }
     }
@@ -167,6 +183,13 @@ public final class Fixnum extends LispObject
                 return number(getBigInteger().multiply(Bignum.getValue(obj)));
             if (obj instanceof LispFloat)
                 return new LispFloat(value * LispFloat.getValue(obj));
+            if (obj instanceof Ratio) {
+                BigInteger numerator = ((Ratio)obj).numerator();
+                BigInteger denominator = ((Ratio)obj).denominator();
+                return number(
+                    getBigInteger().multiply(numerator),
+                    denominator);
+            }
             throw new TypeError(obj, "number");
         }
     }
@@ -174,7 +197,11 @@ public final class Fixnum extends LispObject
     public LispObject divideBy(LispObject obj) throws LispError
     {
         try {
-            return number((long) value / ((Fixnum)obj).value);
+            final int divisor = ((Fixnum)obj).value;
+            if (value % divisor == 0)
+                return new Fixnum(value / divisor);
+            return number(BigInteger.valueOf(value),
+                BigInteger.valueOf(divisor));
         }
         catch (ClassCastException e) {
             // obj is not a fixnum.
@@ -182,6 +209,13 @@ public final class Fixnum extends LispObject
                 return number(getBigInteger().divide(Bignum.getValue(obj)));
             if (obj instanceof LispFloat)
                 return new LispFloat(value / LispFloat.getValue(obj));
+            if (obj instanceof Ratio) {
+                BigInteger numerator = ((Ratio)obj).numerator();
+                BigInteger denominator = ((Ratio)obj).denominator();
+                return number(
+                    getBigInteger().multiply(denominator),
+                    numerator);
+            }
             throw new TypeError(obj, "number");
         }
     }
