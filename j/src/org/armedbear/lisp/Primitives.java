@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.198 2003-05-27 17:47:39 piso Exp $
+ * $Id: Primitives.java,v 1.199 2003-05-27 19:08:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4385,15 +4385,24 @@ public final class Primitives extends Module
         new Primitives();
     }
 
+    // ### list
     private static final Primitive LIST = new Primitive("list") {
-        public LispObject execute(LispObject arg) throws LispError {
+        public LispObject execute(LispObject arg) throws LispError
+        {
             return new Cons(arg);
         }
         public LispObject execute(LispObject first, LispObject second)
-            throws LispError {
+            throws LispError
+        {
             return new Cons(first, new Cons(second));
         }
-        public LispObject execute(LispObject[] args) throws LispError {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            return new Cons(first, new Cons(second, new Cons(third)));
+        }
+        public LispObject execute(LispObject[] args) throws LispError
+        {
             LispObject result = NIL;
             for (int i = args.length; i-- > 0;)
                 result = new Cons(args[i], result);
