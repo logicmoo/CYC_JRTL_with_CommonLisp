@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.82 2005-01-31 19:37:32 piso Exp $
+ * $Id: LispShell.java,v 1.83 2005-02-01 03:32:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.OutputStreamWriter;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import org.armedbear.lisp.Site;
+import org.armedbear.lisp.LispThread;
 
 public class LispShell extends Shell
 {
@@ -546,6 +547,8 @@ public class LispShell extends Shell
                     stdin.write("\n");
                     stdin.flush();
                     stdin.close();
+                    if (slime)
+                        killSlime();
                     final Process p = getProcess();
                     if (p != null) {
                         p.destroy();
@@ -668,13 +671,32 @@ public class LispShell extends Shell
                     JLisp.runLispCommand("(setq slime::*repl-buffer-name* \"" +
                                          buffer.getTitle() + "\")");
                     JLisp.runLispCommand("(slime:slime)");
+                    LispThread.remove(Thread.currentThread());
                 }
                 catch (Throwable t) {
                     Log.debug(t);
                 }
             }
         };
-        new Thread(r).start();
+        new Thread(r, "startSlime").start();
+    }
+
+    private static void killSlime()
+    {
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                try {
+                    JLisp.runLispCommand("(slime::disconnect)");
+                    JLisp.runLispCommand("(setq slime::*repl-buffer* nil)");
+                    LispThread.remove(Thread.currentThread());
+                }
+                catch (Throwable t) {
+                    Log.debug(t);
+                }
+            }
+        };
+        new Thread(r, "killSlime").start();
     }
 
     private static String getDefaultLispShellCommand()
