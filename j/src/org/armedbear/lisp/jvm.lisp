@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.225 2004-07-20 15:19:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.226 2004-07-20 16:30:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -167,8 +167,8 @@
   (declare (optimize speed (safety 0)))
   (let ((index *pool-count*))
     (push entry *pool*)
-    (setf (gethash entry *pool-entries*) *pool-count*)
-    (incf *pool-count*)
+    (setf (gethash entry *pool-entries*) index)
+    (setf *pool-count* (1+ index))
     index))
 
 ;; Returns index of entry (1-based).
@@ -219,7 +219,8 @@
 
 (defun u2 (n)
   (declare (optimize speed (safety 0)))
-  (list (ash n -8) (logand n #xff)))
+  (list (logand (ash n -8) #xff)
+        (logand n #xff)))
 
 (defstruct instruction opcode args stack depth)
 
@@ -1018,13 +1019,14 @@
 
 (defun write-utf8 (string)
   (declare (optimize speed (safety 0)))
-  (dotimes (i (length string))
-    (let ((c (char string i)))
-      (if (eql c #\null)
-          (progn
-            (write-u1 #xC0)
-            (write-u1 #x80))
-          (write-u1 (char-int c))))))
+  (let ((stream *stream*))
+    (dotimes (i (length string))
+      (let ((c (char string i)))
+        (if (eql c #\null)
+            (progn
+              (sys::write-8-bits #xC0 stream)
+              (sys::write-8-bits #x80 stream))
+            (sys::write-8-bits (char-int c) stream))))))
 
 (defun utf8-length (string)
   (declare (optimize speed (safety 0)))
