@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.12 2003-11-13 17:50:51 piso Exp $
+;;; $Id: top-level.lisp,v 1.13 2003-11-14 00:55:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 ;;; Adapted from SB-ACLREPL (originally written by Kevin Rosenberg).
 
 ;;; A few things we're gonna be needing...
-(mapc #'sys::resolve '(sort position break write make-sequence))
+;;(mapc #'sys::resolve '(position break write make-sequence))
 
 (in-package "TOP-LEVEL")
 
@@ -32,10 +32,12 @@
   "Number of the next command")
 
 (defun prompt-package-name ()
-  (car (sort (append
-              (package-nicknames cl:*package*)
-              (list (package-name cl:*package*)))
-             (lambda (a b) (< (length a) (length b))))))
+  (let ((names (package-nicknames *package*))
+        (result (package-name *package*)))
+    (dolist (name names)
+      (when (< (length name) (length result))
+        (setf result name)))
+    result))
 
 (defun repl-prompt-fun (stream)
   (fresh-line stream)
