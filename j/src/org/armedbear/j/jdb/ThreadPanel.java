@@ -2,7 +2,7 @@
  * ThreadPanel.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: ThreadPanel.java,v 1.3 2003-05-16 15:18:00 piso Exp $
+ * $Id: ThreadPanel.java,v 1.4 2003-05-18 01:27:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,7 @@ import com.sun.jdi.IncompatibleThreadStateException;
 import com.sun.jdi.Location;
 import com.sun.jdi.StackFrame;
 import com.sun.jdi.ThreadReference;
+import com.sun.jdi.VirtualMachine;
 import java.awt.Component;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
@@ -71,41 +72,44 @@ public final class ThreadPanel implements ContextListener, MouseListener
     public void contextChanged()
     {
         final Vector v = new Vector();
-        threads = jdb.getVM().allThreads();
         int index = -1;
-        for (Iterator iter = threads.iterator(); iter.hasNext();) {
-            ThreadReference threadRef = (ThreadReference) iter.next();
-            FastStringBuffer sb = new FastStringBuffer();
-            sb.append(threadRef.name());
-            sb.append(" (id=");
-            sb.append(threadRef.uniqueID());
-            sb.append(") ");
-            switch (threadRef.status()) {
-                case ThreadReference.THREAD_STATUS_UNKNOWN:
-                    sb.append("UNKNOWN");
-                    break;
-                case ThreadReference.THREAD_STATUS_ZOMBIE:
-                    sb.append("ZOMBIE");
-                    break;
-                case ThreadReference.THREAD_STATUS_RUNNING:
-                    sb.append("RUNNING");
-                    break;
-                case ThreadReference.THREAD_STATUS_SLEEPING:
-                    sb.append("SLEEPING");
-                    break;
-                case ThreadReference.THREAD_STATUS_MONITOR:
-                    sb.append("MONITOR");
-                    break;
-                case ThreadReference.THREAD_STATUS_WAIT:
-                    sb.append("WAIT");
-                    break;
-                case ThreadReference.THREAD_STATUS_NOT_STARTED:
-                    sb.append("NOT_STARTED");
-                    break;
+        VirtualMachine vm = jdb.getVM();
+        if (vm != null) {
+            threads = vm.allThreads();
+            for (Iterator iter = threads.iterator(); iter.hasNext();) {
+                ThreadReference threadRef = (ThreadReference) iter.next();
+                FastStringBuffer sb = new FastStringBuffer();
+                sb.append(threadRef.name());
+                sb.append(" (id=");
+                sb.append(threadRef.uniqueID());
+                sb.append(") ");
+                switch (threadRef.status()) {
+                    case ThreadReference.THREAD_STATUS_UNKNOWN:
+                        sb.append("UNKNOWN");
+                        break;
+                    case ThreadReference.THREAD_STATUS_ZOMBIE:
+                        sb.append("ZOMBIE");
+                        break;
+                    case ThreadReference.THREAD_STATUS_RUNNING:
+                        sb.append("RUNNING");
+                        break;
+                    case ThreadReference.THREAD_STATUS_SLEEPING:
+                        sb.append("SLEEPING");
+                        break;
+                    case ThreadReference.THREAD_STATUS_MONITOR:
+                        sb.append("MONITOR");
+                        break;
+                    case ThreadReference.THREAD_STATUS_WAIT:
+                        sb.append("WAIT");
+                        break;
+                    case ThreadReference.THREAD_STATUS_NOT_STARTED:
+                        sb.append("NOT_STARTED");
+                        break;
+                }
+                if (threadRef == jdb.getCurrentThread())
+                    index = v.size();
+                v.add(sb.toString());
             }
-            if (threadRef == jdb.getCurrentThread())
-                index = v.size();
-            v.add(sb.toString());
         }
         // Update UI in event dispatch thread.
         final int finalIndex = index;
