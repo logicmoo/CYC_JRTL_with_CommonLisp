@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.149 2004-05-06 11:17:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.150 2004-05-06 16:04:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -151,11 +151,11 @@
         ((>= i code-length))
       (let* ((opcode (svref code i))
              (size (opcode-size opcode)))
-        (out "~D (#x~X) ~A~%" opcode opcode (instr opcode))
+        (out "~D: ~D (#x~X) ~A~%" i opcode opcode (instr opcode))
         (incf i)
         (dotimes (j (1- size))
           (let ((byte (svref code i)))
-            (out "~D (#x~X)~%" byte byte))
+            (out "~D: ~D (#x~X)~%" i byte byte))
           (incf i))))))
 
 (defun dump-code-attribute (stream)
