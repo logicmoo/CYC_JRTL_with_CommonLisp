@@ -2,7 +2,7 @@
  * TagCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: TagCommands.java,v 1.2 2002-10-09 13:06:39 piso Exp $
+ * $Id: TagCommands.java,v 1.3 2002-10-12 13:07:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,7 +271,6 @@ public final class TagCommands implements Constants
     public static boolean findClass(Editor editor, String className,
         boolean useOtherWindow)
     {
-        Log.debug("findClass " + className);
         editor.setWaitCursor();
         boolean succeeded = false;
         File file = JavaSource.findSource(editor.getBuffer(), className,
