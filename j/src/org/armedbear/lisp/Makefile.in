@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.15 2003-04-14 16:32:03 piso Exp $
+# $Id: Makefile.in,v 1.16 2003-04-27 16:13:01 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -59,6 +59,7 @@ CLASSFILES =	AbstractArray.class \
 		LispObject.class \
 		LispStream.class \
 		LispString.class \
+		LispThread.class \
 		Load.class \
 		Macro.class \
 		Main.class \
