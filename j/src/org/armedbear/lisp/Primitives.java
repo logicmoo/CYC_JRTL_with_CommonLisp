@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.225 2003-06-02 14:43:43 piso Exp $
+ * $Id: Primitives.java,v 1.226 2003-06-02 14:58:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,14 +113,13 @@ public final class Primitives extends Module
     // Primitive2
     private static final int CONS                       = 71;
     private static final int ELT                        = 72;
-    private static final int EQL                        = 73;
-    private static final int EQUAL                      = 74;
-    private static final int EQUALP                     = 75;
-    private static final int MEMBER                     = 76;
-    private static final int MOD                        = 77;
-    private static final int RPLACA                     = 78;
-    private static final int RPLACD                     = 79;
-    private static final int SET                        = 80;
+    private static final int EQUAL                      = 73;
+    private static final int EQUALP                     = 74;
+    private static final int MEMBER                     = 75;
+    private static final int MOD                        = 76;
+    private static final int RPLACA                     = 77;
+    private static final int RPLACD                     = 78;
+    private static final int SET                        = 79;
 
     private Primitives()
     {
@@ -199,7 +198,6 @@ public final class Primitives extends Module
 
         definePrimitive2("cons", CONS);
         definePrimitive2("elt", ELT);
-        definePrimitive2("eql", EQL);
         definePrimitive2("equal", EQUAL);
         definePrimitive2("equalp", EQUALP);
         definePrimitive2("member", MEMBER);
@@ -476,8 +474,6 @@ public final class Primitives extends Module
                 return new Cons(first, second);
             case ELT:                           // ### elt
                 return first.elt(Fixnum.getValue(second));
-            case EQL:                           // ### eql
-                return first.eql(second) ? T : NIL;
             case EQUAL:                         // ### equal
                 return first.equal(second) ? T : NIL;
             case EQUALP:                        // ### equalp
@@ -527,6 +523,15 @@ public final class Primitives extends Module
             throws LispError
         {
             return first == second ? T : NIL;
+        }
+    };
+
+    // ### eql
+    private static final Primitive2 EQL = new Primitive2("eql") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.eql(second) ? T : NIL;
         }
     };
 
