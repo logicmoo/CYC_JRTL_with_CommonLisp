@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.13 2003-02-12 02:37:25 piso Exp $
+ * $Id: Primitives.java,v 1.14 2003-02-13 17:47:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1435,6 +1435,39 @@ public final class Primitives extends Module
             LispObject result = eval(resultForm, ext);
             dynEnv = oldDynEnv;
             return result;
+        }
+    };
+
+    private static final SpecialOperator HANDLER_BIND =
+        new SpecialOperator("handler-bind") {
+        public LispObject execute(LispObject args, Environment env)
+            throws LispException
+        {
+            LispObject bindings = checkList(args.car());
+            LispObject forms = args.cdr();
+            try {
+                return progn(args.cdr(), env);
+            }
+            catch (LispException e) {
+                while (bindings != NIL) {
+                    Cons binding = checkCons(bindings.car());
+                    LispObject type = binding.car();
+                    LispObject handler = eval(binding.cadr(), env);
+                    if (isMatch(e, type)) {
+                        LispObject[] handlerArgs = new LispObject[1];
+                        handlerArgs[0] = new JavaObject(e);
+                        funcall(handler, handlerArgs); // Might not return.
+                    }
+                    bindings = bindings.cdr();
+                }
+                // Re-throw condition.
+                throw e;
+            }
+        }
+
+        private boolean isMatch(LispException e, LispObject type)
+        {
+            return type == Symbol.ERROR;
         }
     };
 
