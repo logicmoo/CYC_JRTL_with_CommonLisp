@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.610 2004-03-16 20:00:13 piso Exp $
+ * $Id: Primitives.java,v 1.611 2004-03-16 20:14:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -411,15 +411,17 @@ public final class Primitives extends Lisp
     };
 
     // ### symbolp
-    private static final Primitive1 SYMBOLP = new Primitive1("symbolp","object") {
+    private static final Primitive1 SYMBOLP = new Primitive1("symbolp", "object")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return arg.SYMBOLP();
+            return arg instanceof Symbol ? T : NIL;
         }
     };
 
     // ### endp
-    private static final Primitive1 ENDP = new Primitive1("endp","list") {
+    private static final Primitive1 ENDP = new Primitive1("endp", "list")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.ENDP();
@@ -427,7 +429,8 @@ public final class Primitives extends Lisp
     };
 
     // ### null
-    private static final Primitive1 NULL = new Primitive1("null","object") {
+    private static final Primitive1 NULL = new Primitive1("null", "object")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg == NIL ? T : NIL;
@@ -435,7 +438,8 @@ public final class Primitives extends Lisp
     };
 
     // ### not
-    private static final Primitive1 NOT = new Primitive1("not","x") {
+    private static final Primitive1 NOT = new Primitive1("not", "x")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg == NIL ? T : NIL;
@@ -443,7 +447,8 @@ public final class Primitives extends Lisp
     };
 
     // ### plusp
-    private static final Primitive1 PLUSP = new Primitive1("plusp","real") {
+    private static final Primitive1 PLUSP = new Primitive1("plusp", "real")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.PLUSP();
@@ -451,7 +456,8 @@ public final class Primitives extends Lisp
     };
 
     // ### minusp
-    private static final Primitive1 MINUSP = new Primitive1("minusp","real") {
+    private static final Primitive1 MINUSP = new Primitive1("minusp", "real")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.MINUSP();
