@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.102 2004-12-16 16:31:52 piso Exp $
+ * $Id: Fixnum.java,v 1.103 2004-12-16 17:27:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -609,6 +609,23 @@ public final class Fixnum extends LispObject
             if (shift.signum() < 0)
                 return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
             Debug.bug(); // Shouldn't happen.
+        }
+        return signal(new TypeError(obj, Symbol.INTEGER));
+    }
+
+    public LispObject logand(int n) throws ConditionThrowable
+    {
+        return new Fixnum(value & n);
+    }
+
+    public LispObject logand(LispObject obj) throws ConditionThrowable
+    {
+        if (obj instanceof Fixnum)
+            return new Fixnum(value & ((Fixnum)obj).value);
+        if (obj instanceof Bignum) {
+            BigInteger n1 = getBigInteger();
+            BigInteger n2 = ((Bignum)obj).value;
+            return number(n1.and(n2));
         }
         return signal(new TypeError(obj, Symbol.INTEGER));
     }

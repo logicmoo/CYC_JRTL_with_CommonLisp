@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Bignum.java,v 1.59 2004-10-19 03:17:53 piso Exp $
+ * $Id: Bignum.java,v 1.60 2004-12-16 17:26:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -455,6 +455,23 @@ public final class Bignum extends LispObject
             Debug.bug(); // Shouldn't happen.
         }
         return signal(new TypeError(obj, Symbol.INTEGER));
+    }
+
+    public LispObject logand(int n) throws ConditionThrowable
+    {
+        return number(value.and(BigInteger.valueOf(n)));
+    }
+
+    public LispObject logand(LispObject obj) throws ConditionThrowable
+    {
+        final BigInteger n;
+        if (obj instanceof Fixnum)
+            n = ((Fixnum)obj).getBigInteger();
+        else if (obj instanceof Bignum)
+            n = ((Bignum)obj).value;
+        else
+            return signal(new TypeError(obj, Symbol.INTEGER));
+        return number(value.and(n));
     }
 
     public int hashCode()
