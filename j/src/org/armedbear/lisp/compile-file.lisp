@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.8 2004-04-18 14:51:53 piso Exp $
+;;; $Id: compile-file.lisp,v 1.9 2004-04-18 18:46:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -129,10 +129,11 @@
               (return-from process-toplevel-form))
             (when compile-time-too
               (eval form))))))
-  (let ((*print-level* nil)
-        (*print-length* nil))
-    (write form :stream stream))
-  (terpri stream))
+  (when (and (consp form) (neq (car form) 'QUOTE))
+    (let ((*print-level* nil)
+          (*print-length* nil))
+      (write form :stream stream))
+    (terpri stream)))
 
 (defun process-toplevel-progn (forms stream compile-time-too)
   (dolist (form forms)
