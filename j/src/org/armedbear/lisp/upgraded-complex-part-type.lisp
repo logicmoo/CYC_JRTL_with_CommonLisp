@@ -1,7 +1,7 @@
 ;;; upgraded-complex-part-type.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: upgraded-complex-part-type.lisp,v 1.2 2004-05-03 15:24:54 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: upgraded-complex-part-type.lisp,v 1.3 2005-02-06 18:28:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,10 @@
 ;;; Adapted from SBCL.
 
 (defun upgraded-complex-part-type (typespec &optional environment)
-  (cond ((subtypep typespec 'float)
+  (declare (ignore environment))
+  (cond ((null typespec)
+         nil)
+        ((subtypep typespec 'float)
 	 'float)
 	((subtypep typespec 'rational)
 	 'rational)
