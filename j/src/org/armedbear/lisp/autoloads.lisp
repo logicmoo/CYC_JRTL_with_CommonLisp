@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.65 2003-11-21 02:56:15 dmcnaught Exp $
+;;; $Id: autoloads.lisp,v 1.66 2003-11-21 22:19:19 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -134,6 +134,8 @@
 (autoload 'jregister-handler "java.lisp")
 (export 'jclass-name "JAVA")
 (autoload 'jclass-name "java.lisp")
+(export 'jclass-for-name "JAVA")
+(autoload 'jclass-for-name "java.lisp")
 (export 'jobject-class "JAVA")
 (autoload 'jobject-class "java.lisp")
 (export 'jclass-constructors "JAVA")
@@ -144,10 +146,22 @@
 (autoload 'jclass-fields "java.lisp")
 (export 'jfield-type "JAVA")
 (autoload 'jfield-type "java.lisp")
+(export 'jfield-name "JAVA")
+(autoload 'jfield-name "java.lisp")
 (export 'jclass-methods "JAVA")
 (autoload 'jclass-methods "java.lisp")
+(export 'jmethod-params "JAVA")
+(autoload 'jmethod-params "java.lisp")
+(export 'jmethod-return-type "JAVA")
+(autoload 'jmethod-return-type "java.lisp")
+(export 'jmethod-name "JAVA")
+(autoload 'jmethod-name "java.lisp")
 (export 'jinstance-of-p "JAVA")
 (autoload 'jinstance-of-p "java.lisp")
+(export 'jmember-static-p "JAVA")
+(autoload 'jmember-static-p "java.lisp")
+(export 'jmember-public-p "JAVA")
+(autoload 'jmember-public-p "java.lisp")
 
 
 
