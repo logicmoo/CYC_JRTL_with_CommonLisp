@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.477 2003-10-16 19:40:49 piso Exp $
+ * $Id: Primitives.java,v 1.478 2003-10-17 19:37:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2021,6 +2021,28 @@ public final class Primitives extends Module
             LispObject element = v.get(newFillPointer);
             v.setFillPointer(newFillPointer);
             return element;
+        }
+    };
+
+    // ### adjust-array
+    // FIXME Very incomplete!
+    private static final Primitive2 ADJUST_ARRAY = new Primitive2("adjust-array")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof Vector) {
+                Vector v = (Vector) first;
+                LispObject newSize = null;
+                if (second instanceof Cons) {
+                    if (second.length() == 1)
+                        newSize = second.car();
+                } else
+                    newSize = second;
+                if (newSize != null)
+                    return v.adjustArray(Fixnum.getValue(newSize));
+            }
+            throw new ConditionThrowable(new LispError("ADJUST-ARRAY: unsupported case"));
         }
     };
 
