@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.17 2004-05-15 19:10:23 piso Exp $
+;;; $Id: compile-file.lisp,v 1.18 2004-05-21 12:03:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,6 +31,13 @@
                       (incf *class-number*))))
     (namestring (merge-pathnames (make-pathname :name name :type "cls")
                                  *compile-file-pathname*))))
+
+(defmacro report-error (&rest forms)
+  `(handler-case (progn ,@forms)
+     (error (condition)
+            (fresh-line)
+            (%format t "~A Note: ~A~%" (jvm::load-verbose-prefix) condition)
+            (values nil condition))))
 
 ;; Dummy function. Should never be called.
 (defun dummy (&rest ignored) (assert nil))
@@ -64,10 +71,10 @@
                      (body (nthcdr 3 form))
                      (expr (list 'lambda lambda-list (list* 'block name body)) nil)
                      (classfile-name (next-classfile-name))
-                     (classfile (ignore-errors
+                     (classfile (report-error
                                  (jvm:compile-defun nil expr nil classfile-name)))
                      (compiled-function (and classfile
-                                             (ignore-errors
+                                             (report-error
                                               (load-compiled-function classfile)))))
                 (if compiled-function
                     (progn
