@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.74 2003-09-16 16:15:05 piso Exp $
+ * $Id: Symbol.java,v 1.75 2003-09-17 14:50:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,7 @@ public class Symbol extends LispObject
     public static final Symbol FIXNUM               = PACKAGE_CL.addExternalSymbol("FIXNUM");
     public static final Symbol FLOAT                = PACKAGE_CL.addExternalSymbol("FLOAT");
     public static final Symbol FUNCTION             = PACKAGE_CL.addExternalSymbol("FUNCTION");
+    public static final Symbol HASH_TABLE           = PACKAGE_CL.addExternalSymbol("HASH-TABLE");
     public static final Symbol INTEGER              = PACKAGE_CL.addExternalSymbol("INTEGER");
     public static final Symbol KEYWORD              = PACKAGE_CL.addExternalSymbol("KEYWORD");
     public static final Symbol LIST                 = PACKAGE_CL.addExternalSymbol("LIST");
@@ -79,6 +80,7 @@ public class Symbol extends LispObject
     public static final Symbol OR                   = PACKAGE_CL.addExternalSymbol("OR");
     public static final Symbol PACKAGE              = PACKAGE_CL.addExternalSymbol("PACKAGE");
     public static final Symbol PATHNAME             = PACKAGE_CL.addExternalSymbol("PATHNAME");
+    public static final Symbol RANDOM_STATE         = PACKAGE_CL.addExternalSymbol("RANDOM-STATE");
     public static final Symbol RATIO                = PACKAGE_CL.addExternalSymbol("RATIO");
     public static final Symbol RATIONAL             = PACKAGE_CL.addExternalSymbol("RATIONAL");
     public static final Symbol REAL                 = PACKAGE_CL.addExternalSymbol("REAL");
@@ -91,9 +93,12 @@ public class Symbol extends LispObject
     public static final Symbol SIMPLE_VECTOR        = PACKAGE_CL.addExternalSymbol("SIMPLE-VECTOR");
     public static final Symbol SINGLE_FLOAT         = PACKAGE_CL.addExternalSymbol("SINGLE-FLOAT");
     public static final Symbol STANDARD_CHAR        = PACKAGE_CL.addExternalSymbol("STANDARD-CHAR");
+    public static final Symbol STANDARD_CLASS       = PACKAGE_CL.addExternalSymbol("STANDARD-CLASS");
     public static final Symbol STANDARD_OBJECT      = PACKAGE_CL.addExternalSymbol("STANDARD-OBJECT");
     public static final Symbol STREAM               = PACKAGE_CL.addExternalSymbol("STREAM");
     public static final Symbol STRING               = PACKAGE_CL.addExternalSymbol("STRING");
+    public static final Symbol STRING_STREAM        = PACKAGE_CL.addExternalSymbol("STRING-STREAM");
+    public static final Symbol STRUCTURE_CLASS      = PACKAGE_CL.addExternalSymbol("STRUCTURE-CLASS");
     public static final Symbol STRUCTURE_OBJECT     = PACKAGE_CL.addExternalSymbol("STRUCTURE-OBJECT");
     public static final Symbol SYMBOL               = PACKAGE_CL.addExternalSymbol("SYMBOL");
     public static final Symbol TWO_WAY_STREAM       = PACKAGE_CL.addExternalSymbol("TWO-WAY-STREAM");
