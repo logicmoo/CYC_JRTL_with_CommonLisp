@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.204 2004-07-05 16:02:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.205 2004-07-05 18:20:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,8 +46,13 @@
 (defvar *fields* ())
 
 (defvar *blocks* ())
-(defvar *locals* ())
-(defvar *max-locals* 0)
+
+;; Next available register.
+(defvar *register* 0)
+
+;; Total number of registers allocated.
+(defvar *registers-allocated* 0)
+
 (defvar *all-locals* ())
 
 (defvar *handlers* ())
@@ -100,22 +105,12 @@
 ;;                (when (null context)
 ;;                  (return nil))))))))
 
-;; Returns index of allocated slot.
-(defun allocate-local (symbol)
-  (let ((index (length *locals*)))
-    (push symbol *locals*)
-    (when (< *max-locals* (1+ index))
-      (setf *max-locals* (1+ index)))
-    index))
-
-;; Returns index of allocated slot.
-(defun local-index (symbol)
-  (if *use-locals-vector*
-      (let ((var (find-visible-variable symbol)))
-        (and var (variable-index var)))
-      (let ((tail (memq symbol *locals*)))
-        (and tail (1- (length tail))))))
-
+(defun allocate-register ()
+  (prog1
+   *register*
+   (incf *register*)
+   (when (< *registers-allocated* *register*)
+     (setf *registers-allocated* *register*))))
 
 (defvar *local-functions* ())
 
@@ -128,12 +123,6 @@
 (defvar *hairy-arglist-p* nil)
 
 (defvar *val* nil) ; index of value register
-
-;; (defun clear ()
-;;   (setf *pool* nil
-;;         *pool-count* 1
-;;         *code* nil)
-;;   t)
 
 (defun dump-pool ()
   (let ((pool (reverse *pool*))
@@ -1851,7 +1840,7 @@
   (emit-store-value))
 
 (defun compile-multiple-value-bind (form for-effect)
-  (let* ((*locals* *locals*)
+  (let* ((*register* *register*)
          (*variables* *variables*)
          (specials ())
          (vars (second form))
@@ -1873,7 +1862,7 @@
     ;; If so...
     (when specialp
       ;; Save current dynamic environment.
-      (setf env-var (allocate-local nil))
+      (setf env-var (allocate-register))
       (ensure-thread-var-initialized)
       (emit 'aload *thread*)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
@@ -1894,8 +1883,8 @@
       (dolist (var vars)
         (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
         (let ((variable (push-variable var specialp)))
-          (unless specialp
-            (setf (variable-register variable) (allocate-local var)))
+          (unless (or specialp *use-locals-vector*)
+            (setf (variable-register variable) (allocate-register)))
           (when (< index (1- (length vars)))
             (emit 'dup))
           (emit 'bipush index)
@@ -1917,7 +1906,7 @@
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-let/let* (form for-effect)
-  (let* ((*locals* *locals*)
+  (let* ((*register* *register*)
          (*variables* *variables*)
          (specials ())
          (varlist (cadr form))
@@ -1940,7 +1929,7 @@
     ;; If so...
     (when specialp
       ;; Save current dynamic environment.
-      (setf env-var (allocate-local nil))
+      (setf env-var (allocate-register))
       (ensure-thread-var-initialized)
       (emit 'aload *thread*)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
@@ -2010,8 +1999,8 @@
       (let* ((name (if (consp varspec) (car varspec) varspec))
              (specialp (if (or (memq name specials) (special-variable-p name)) t nil))
              (variable (push-variable name specialp)))
-        (unless specialp
-          (setf (variable-register variable) (allocate-local name)))
+        (unless (or specialp *use-locals-vector*)
+          (setf (variable-register variable) (allocate-register)))
         (push variable variables)))
     ;; At this point the initial values are on the runtime stack. Now generate
     ;; code to pop them off one by one and store each one in the corresponding
@@ -2034,8 +2023,8 @@
             (t
              (emit-push-nil)))
       (setf variable (push-variable var specialp))
-      (unless specialp
-        (setf (variable-register variable) (allocate-local var)))
+      (unless (or specialp *use-locals-vector*)
+        (setf (variable-register variable) (allocate-register)))
       (compile-binding variable))))
 
 ;; Returns list of declared specials.
@@ -2145,11 +2134,11 @@
          (body (cddr form))
          (block-exit (gensym))
          (*blocks* (acons block-label block-exit *blocks*))
-         (*locals* *locals*)
+         (*register* *register*)
          env-var)
     (when (contains-return body)
       ;; Save current dynamic environment.
-      (setf env-var (allocate-local nil))
+      (setf env-var (allocate-register))
       (ensure-thread-var-initialized)
       (emit 'aload *thread*)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
@@ -2272,7 +2261,6 @@
   )
 
 (defun compile-local-function-definition (def)
-  (format t "*locals* = ~S~%" *locals*)
   (let* ((name (car def))
          (arglist (cadr def))
          (body (cddr def))
@@ -2292,7 +2280,8 @@
           *local-functions*)))
 
 (defun compile-flet (form for-effect)
-  (if *use-locals-vector*
+;;   (if *use-locals-vector*
+  (if nil
       (let ((*local-functions* *local-functions*)
             (definitions (cadr form))
             (body (cddr form)))
@@ -2671,8 +2660,8 @@
       (emit-push-nil)
       (emit-store-value))
     (return-from compile-catch))
-  (let* ((*locals* *locals*)
-         (tag-var (allocate-local nil))
+  (let* ((*register* *register*)
+         (tag-var (allocate-register))
          (label1 (gensym))
          (label2 (gensym))
          (label3 (gensym))
@@ -2878,8 +2867,8 @@
          (*fields* ())
          (*blocks* ())
          (*tags* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
-         (*locals* ())
-         (*max-locals* 0)
+         (*register* 0)
+         (*registers-allocated* 0)
          (*all-locals* ())
          (*handlers* ())
 
@@ -2921,15 +2910,15 @@
               (push v *variables*)
               (add-variable-to-context v)
               (incf register)))))
-    (allocate-local nil) ;; "this" pointer
+    (allocate-register) ;; "this" pointer
     (if *using-arg-array*
-        (allocate-local nil) ;; One slot for arg array.
+        (allocate-register) ;; One slot for arg array.
         (dolist (arg args) ;; One slot for each argument.
-          (allocate-local nil)))
+          (allocate-register)))
     ;; Reserve the next available slot for the value register.
-    (setf *val* (allocate-local nil))
+    (setf *val* (allocate-register))
     ;; Reserve the next available slot for the thread register.
-    (setf *thread* (allocate-local nil))
+    (setf *thread* (allocate-register))
 
     (process-optimization-declarations body)
     (dolist (f body)
@@ -2968,7 +2957,7 @@
               (max (analyze-stack) 3)
               (analyze-stack)))
     (setf (method-code execute-method) (code-bytes *code*))
-    (setf (method-max-locals execute-method) *max-locals*)
+    (setf (method-max-locals execute-method) *registers-allocated*)
     (setf (method-handlers execute-method) (nreverse *handlers*))
 
     (let* ((super
