@@ -1,8 +1,8 @@
 /*
  * CommmandInterpreter.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.17 2003-04-03 18:37:36 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: CommandInterpreter.java,v 1.18 2003-05-16 17:43:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,7 +216,8 @@ public class CommandInterpreter extends Buffer
     protected void escape()
     {
         Editor editor = Editor.currentEditor();
-        if (editor.getMark() != null || editor.getDot().isBefore(posEndOfOutput)) {
+        if (editor.getMark() != null || posEndOfOutput == null ||
+            editor.getDot().isBefore(posEndOfOutput)) {
             // There's a marked block, or we're not at the command line.
             editor.escape();
             return;
@@ -265,6 +266,8 @@ public class CommandInterpreter extends Buffer
 
     protected void backspace()
     {
+        if (posEndOfOutput == null)
+            return;
         boolean ok = true;
         final Editor editor = Editor.currentEditor();
         if (editor.getDotLine() == posEndOfOutput.getLine()) {
