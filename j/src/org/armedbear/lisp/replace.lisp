@@ -1,7 +1,7 @@
 ;;; replace.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: replace.lisp,v 1.2 2003-07-02 16:42:23 piso Exp $
+;;; $Id: replace.lisp,v 1.3 2003-08-25 18:22:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
   (error "bad sequence limit ~a" (if y (list x y) x)))
 
 (defun the-end (x y)
-  (cond ((sys:fixnump x)
+  (cond ((sys::fixnump x)
 	 (unless (<= x (length y))
 	   (bad-seq-limit x))
 	 x)
@@ -36,7 +36,7 @@
 	(t (bad-seq-limit x))))
 
 (defun the-start (x)
-  (cond ((sys:fixnump x)
+  (cond ((sys::fixnump x)
 	 (unless (>= x 0)
            (bad-seq-limit x))
 	 x)

@@ -1,7 +1,7 @@
 ;;; remove-duplicates.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: remove-duplicates.lisp,v 1.3 2003-07-02 18:20:29 piso Exp $
+;;; $Id: remove-duplicates.lisp,v 1.4 2003-08-25 18:22:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@
       (setf (aref result jndex) (aref vector index))
       (setq index (1+ index))
       (setq jndex (1+ jndex)))
-    (sys:shrink-vector result jndex)))
+    (sys::shrink-vector result jndex)))
 
 
 (defun remove-duplicates (sequence &key (test #'eql) test-not (start 0) from-end

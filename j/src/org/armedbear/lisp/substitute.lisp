@@ -1,7 +1,7 @@
 ;;; substitute.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: substitute.lisp,v 1.6 2003-08-06 19:17:17 piso Exp $
+;;; $Id: substitute.lisp,v 1.7 2003-08-25 18:22:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 
 (defmacro real-count (count)
   `(cond ((null ,count) most-positive-fixnum)
-         ((sys:fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((sys::fixnump ,count) (if (minusp ,count) 0 ,count))
          ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
          (t ,count)))
 

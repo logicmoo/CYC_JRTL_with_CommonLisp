@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.352 2003-08-25 17:56:59 piso Exp $
+ * $Id: Primitives.java,v 1.353 2003-08-25 18:20:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -570,7 +570,7 @@ public final class Primitives extends Module
 
     // ### fixnump
     private static final Primitive1 FIXNUMP =
-        new Primitive1("fixnump", PACKAGE_SYS, true) {
+        new Primitive1("fixnump", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws LispError
         {
             return arg instanceof Fixnum ? T : NIL;
@@ -1121,7 +1121,7 @@ public final class Primitives extends Module
     // ### %setnth
     // %setnth n list new-object => new-object
     private static final Primitive3 _SETNTH =
-        new Primitive3("%setnth", PACKAGE_SYS, true) {
+        new Primitive3("%setnth", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -4148,7 +4148,7 @@ public final class Primitives extends Module
     // must be less than or equal to its current length.
     // shrink-vector vector new-size => vector
     private static final Primitive2 SHRINK_VECTOR =
-        new Primitive2("shrink-vector", PACKAGE_SYS, true) {
+        new Primitive2("shrink-vector", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
@@ -4158,7 +4158,7 @@ public final class Primitives extends Module
     };
 
     private static final Primitive3 VECTOR_SUBSEQ =
-        new Primitive3("vector-subseq", PACKAGE_SYS, true) {
+        new Primitive3("vector-subseq", PACKAGE_SYS, false) {
         public LispObject execute(LispObject vector, LispObject start,
             LispObject end) throws LispError
         {
@@ -4642,26 +4642,6 @@ public final class Primitives extends Module
             if (first != NIL)
                 return funcall1(first, second, LispThread.currentThread());
             return second;
-        }
-    };
-
-    // ### %compare-elements
-    // %compare-elements test key elt1 elt2
-    private static final Primitive _COMPARE_ELEMENTS =
-        new Primitive("%compare-elements", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject args[]) throws Condition
-        {
-            if (args[1] == NIL) {
-                // No key function.
-                return funcall2(args[0], args[2], args[3],
-                                LispThread.currentThread());
-            }
-            LispObject key = args[1];
-            final LispThread thread = LispThread.currentThread();
-            return funcall2(args[0],
-                            funcall1(key, args[2], thread),
-                            funcall1(key, args[3], thread),
-                            thread);
         }
     };
 

@@ -1,7 +1,7 @@
 ;;; delete-duplicates.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: delete-duplicates.lisp,v 1.4 2003-07-02 18:32:30 piso Exp $
+;;; $Id: delete-duplicates.lisp,v 1.5 2003-08-25 18:22:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@
      (do ((index index (1+ index))		; copy the rest of the vector
           (jndex jndex (1+ jndex)))
        ((= index length)
-        (sys:shrink-vector vector jndex)
+        (shrink-vector vector jndex)
         vector)
        (setf (aref vector jndex) (aref vector index))))
     (setf (aref vector jndex) (aref vector index))

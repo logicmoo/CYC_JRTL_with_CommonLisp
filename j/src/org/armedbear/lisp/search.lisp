@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: search.lisp,v 1.13 2003-08-06 23:08:20 piso Exp $
+;;; $Id: search.lisp,v 1.14 2003-08-25 18:22:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,14 +21,6 @@
 
 ;; From CMUCL.
 
-;; (defmacro compare-elements (elt1 elt2)
-;;   `(if test-not
-;;        (if (%compare-elements test-not key ,elt1 ,elt2)
-;;            (return nil)
-;;            t)
-;;        (if (%compare-elements test key ,elt1 ,elt2)
-;;            t
-;;            (return nil))))
 (defmacro compare-elements (elt1 elt2)
   `(if test-not
        (if (funcall test-not (apply-key key ,elt1) (apply-key key ,elt2))
