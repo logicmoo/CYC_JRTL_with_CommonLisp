@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.163 2004-04-24 12:41:15 piso Exp $
+;;; $Id: boot.lisp,v 1.164 2004-04-26 16:17:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -125,8 +125,11 @@
 (defvar jvm::*auto-compile* nil)
 (export 'jvm::*auto-compile* "JVM")
 
-(defun compile (name &optional definition)
+(defun sys::%compile (name definition)
   (values (if name name definition) nil nil))
+
+(defun compile (name &optional definition)
+  (sys::%compile name definition))
 
 (sys::load-system-file "macros")
 (sys::load-system-file "fixme")

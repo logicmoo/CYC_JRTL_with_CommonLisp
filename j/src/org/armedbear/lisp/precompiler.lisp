@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.44 2004-04-26 02:01:43 piso Exp $
+;;; $Id: precompiler.lisp,v 1.45 2004-04-26 16:19:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -320,7 +320,7 @@
          (body (sys::parse-defmacro lambda-list form body name 'macrolet
                                     :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body)))
-         (compiled-expander (compile nil expander)))
+         (compiled-expander (sys::%compile nil expander)))
     (sys::coerce-to-function (or compiled-expander expander))))
 
 (defvar *local-macros* ())
@@ -628,10 +628,13 @@
             (precompile sym))))))
   t)
 
-(defun compile (name &optional definition)
+(defun %compile (name definition)
   (if (and name (fboundp name) (%typep (symbol-function name) 'generic-function))
       (values name nil nil)
       (precompile name definition)))
+
+(defun compile (name &optional definition)
+  (%compile name definition))
 
 ;; Redefine DEFMACRO to precompile the expansion function on the fly.
 
