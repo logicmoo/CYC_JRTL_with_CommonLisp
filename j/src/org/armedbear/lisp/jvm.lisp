@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.321 2004-12-27 15:38:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.322 2004-12-27 17:43:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2905,13 +2905,18 @@
   (if negatep 'if_acmpne 'if_acmpeq))
 
 (defun compile-if (form &key (target *val*) representation)
+  (dformat t "compile-if form = ~S~%" form)
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
          (LABEL1 (gensym))
          (LABEL2 (gensym)))
     (cond ((eq test t)
-           (compile-form consequent :target target))
+           (compile-form consequent :target target :representation representation))
+          ((null test)
+           (compile-form alternate :target target :representation representation))
+          ((numberp test)
+           (compile-form consequent :target target :representation representation))
           (t
            (emit (compile-test test nil) LABEL1)
            (compile-form consequent :target target)
@@ -4053,21 +4058,23 @@
                            :representation representation))
         ((and var1 var2)
          (dformat t "compile-plus case 1~%")
+         (dformat t "target = ~S representation = ~S~%" target representation)
          (aver (variable-register var1))
          (aver (variable-register var2))
-         (cond
-          ((eq representation :unboxed-fixnum)
-           (emit-push-int var1)
-           (emit-push-int arg2)
-           (emit 'iadd))
-          (t
-           (emit 'iload (variable-register var1))
-           (emit 'i2l)
-           (emit 'iload (variable-register var2))
-           (emit 'i2l)
-           (emit 'ladd)
-           (emit-box-long))
-          (emit-move-from-stack target representation)))
+         (when target
+           (cond
+            ((eq representation :unboxed-fixnum)
+             (emit-push-int var1)
+             (emit-push-int arg2)
+             (emit 'iadd))
+            (t
+             (emit 'iload (variable-register var1))
+             (emit 'i2l)
+             (emit 'iload (variable-register var2))
+             (emit 'i2l)
+             (emit 'ladd)
+             (emit-box-long)))
+           (emit-move-from-stack target representation)))
         ((and var1 (fixnump arg2))
          (dformat t "compile-plus case 2~%")
          (aver (variable-register var1))
@@ -4169,19 +4176,20 @@
          (dformat t "compile-minus case 1~%")
          (aver (variable-register var1))
          (aver (variable-register var2))
-         (cond
-          ((eq representation :unboxed-fixnum)
-           (emit 'iload (variable-register var1))
-           (emit 'iload (variable-register var2))
-           (emit 'isub))
-          (t
-           (emit 'iload (variable-register var1))
-           (emit 'i2l)
-           (emit 'iload (variable-register var2))
-           (emit 'i2l)
-           (emit 'lsub)
-           (emit-box-long)))
-         (emit-move-from-stack target representation))
+         (when target
+           (cond
+            ((eq representation :unboxed-fixnum)
+             (emit 'iload (variable-register var1))
+             (emit 'iload (variable-register var2))
+             (emit 'isub))
+            (t
+             (emit 'iload (variable-register var1))
+             (emit 'i2l)
+             (emit 'iload (variable-register var2))
+             (emit 'i2l)
+             (emit 'lsub)
+             (emit-box-long)))
+           (emit-move-from-stack target representation)))
         ((and var1 (fixnump arg2))
          (dformat t "compile-minus case 2~%")
          (aver (variable-register var1))
