@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.111 2003-09-08 01:40:13 piso Exp $
+;;; $Id: rt.lisp,v 1.112 2003-09-08 01:43:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -376,6 +376,7 @@
                               "set-difference"
                               "set-exclusive-or"
                               "shiftf"
+                              "signum"
                               "simple-array"
                               "simple-array-t"
                               "simple-bit-vector"
