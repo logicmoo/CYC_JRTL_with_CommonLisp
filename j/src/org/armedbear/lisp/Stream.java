@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.32 2004-03-04 10:48:48 piso Exp $
+ * $Id: Stream.java,v 1.33 2004-03-05 16:10:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -236,7 +236,7 @@ public class Stream extends LispObject
             int n = _readChar();
             if (n < 0) {
                 if (eofError)
-                    return signal(new EndOfFile());
+                    return signal(new EndOfFile(this));
                 else
                     return eofValue;
             }
@@ -283,7 +283,7 @@ public class Stream extends LispObject
         while (true) {
             int n = _readChar();
             if (n < 0) {
-                signal(new EndOfFile());
+                signal(new EndOfFile(this));
                 // Not reached.
                 return null;
             }
@@ -292,7 +292,7 @@ public class Stream extends LispObject
                 // Single escape.
                 n = _readChar();
                 if (n < 0) {
-                    signal(new EndOfFile());
+                    signal(new EndOfFile(this));
                     // Not reached.
                     return null;
                 }
@@ -355,7 +355,7 @@ public class Stream extends LispObject
             if (c == '.') {
                 int n = _readChar();
                 if (n < 0)
-                    return signal(new EndOfFile());
+                    return signal(new EndOfFile(this));
                 char nextChar = (char) n;
                 if (nextChar == ',') {
                     LispObject obj = readComma();
@@ -424,7 +424,7 @@ public class Stream extends LispObject
     {
         int n = _readChar();
         if (n < 0)
-            return signal(new EndOfFile());
+            return signal(new EndOfFile(this));
         char c = (char) n;
         switch (c) {
             case '@':
@@ -452,7 +452,7 @@ public class Stream extends LispObject
         while (true) {
             int n = _readChar();
             if (n < 0)
-                return signal(new EndOfFile());
+                return signal(new EndOfFile(this));
             c = (char) n;
             if (c < '0' || c > '9')
                 break;
@@ -533,7 +533,7 @@ public class Stream extends LispObject
     {
         int n = _readChar();
         if (n < 0)
-            return signal(new EndOfFile());
+            return signal(new EndOfFile(this));
         char c = (char) n;
         StringBuffer sb = new StringBuffer();
         sb.append(c);
@@ -586,7 +586,7 @@ public class Stream extends LispObject
     {
         int n = _readChar();
         if (n < 0) {
-            signal(new EndOfFile());
+            signal(new EndOfFile(this));
             // Not reached.
             return null;
         }
@@ -596,7 +596,7 @@ public class Stream extends LispObject
             while (true) {
                 n = _readChar();
                 if (n < 0) {
-                    signal(new EndOfFile());
+                    signal(new EndOfFile(this));
                     // Not reached.
                     return null;
                 }
@@ -605,7 +605,7 @@ public class Stream extends LispObject
                     // Single escape.
                     n = _readChar();
                     if (n < 0) {
-                        signal(new EndOfFile());
+                        signal(new EndOfFile(this));
                         // Not reached.
                         return null;
                     }
@@ -627,7 +627,7 @@ public class Stream extends LispObject
                     // Single escape.
                     n = _readChar();
                     if (n < 0) {
-                        signal(new EndOfFile());
+                        signal(new EndOfFile(this));
                         // Not reached.
                         return null;
                     }
@@ -984,7 +984,7 @@ public class Stream extends LispObject
         while (true) {
             int n = _readChar();
             if (n < 0) {
-                signal(new EndOfFile());
+                signal(new EndOfFile(this));
                 // Not reached.
                 return 0;
             }
@@ -1007,7 +1007,7 @@ public class Stream extends LispObject
             if (n < 0) {
                 if (sb.length() == 0) {
                     if (eofError)
-                        return signal(new EndOfFile());
+                        return signal(new EndOfFile(this));
                     return thread.setValues(eofValue, T);
                 }
                 return thread.setValues(new SimpleString(sb), T);
@@ -1027,7 +1027,7 @@ public class Stream extends LispObject
         int n = _readChar();
         if (n < 0) {
             if (eofError)
-                return signal(new EndOfFile());
+                return signal(new EndOfFile(this));
             else
                 return eofValue;
         }
@@ -1094,7 +1094,7 @@ public class Stream extends LispObject
         int n = _readByte();
         if (n < 0) {
             if (eofError)
-                return signal(new EndOfFile());
+                return signal(new EndOfFile(this));
             else
                 return eofValue;
         }
@@ -1179,7 +1179,7 @@ public class Stream extends LispObject
             return n;
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
             // Not reached.
             return -1;
         }
@@ -1194,7 +1194,7 @@ public class Stream extends LispObject
                 --lineNumber;
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -1204,7 +1204,7 @@ public class Stream extends LispObject
             return reader.ready();
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
             // Not reached.
             return false;
         }
@@ -1221,7 +1221,7 @@ public class Stream extends LispObject
                 ++charPos;
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -1238,7 +1238,7 @@ public class Stream extends LispObject
             }
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -1251,7 +1251,7 @@ public class Stream extends LispObject
             charPos = 0;
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -1262,7 +1262,7 @@ public class Stream extends LispObject
             return in.read(); // Reads an 8-bit byte.
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
             // Not reached.
             return -1;
         }
@@ -1275,7 +1275,7 @@ public class Stream extends LispObject
             out.write(n); // Writes an 8-bit byte.
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -1288,7 +1288,7 @@ public class Stream extends LispObject
                 out.flush();
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -1303,7 +1303,7 @@ public class Stream extends LispObject
                     in.read();
             }
             catch (IOException e) {
-                signal(new StreamError(e));
+                signal(new StreamError(this, e));
             }
         }
     }
@@ -1332,7 +1332,7 @@ public class Stream extends LispObject
             setOpen(false);
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -1348,7 +1348,7 @@ public class Stream extends LispObject
             charPos = 0;
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 

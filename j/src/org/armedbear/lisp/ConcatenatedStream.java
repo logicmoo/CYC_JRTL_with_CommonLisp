@@ -2,7 +2,7 @@
  * ConcatenatedStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ConcatenatedStream.java,v 1.1 2004-02-15 17:48:39 piso Exp $
+ * $Id: ConcatenatedStream.java,v 1.2 2004-03-05 16:10:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@ public final class ConcatenatedStream extends Stream
     {
         if (streams == NIL) {
             if (eofError)
-                return signal(new EndOfFile());
+                return signal(new EndOfFile(this));
             else
                 return eofValue;
         }
@@ -121,7 +121,7 @@ public final class ConcatenatedStream extends Stream
     protected void _unreadChar(int n) throws ConditionThrowable
     {
         if (unreadChar >= 0)
-            signal(new StreamError("UNREAD-CHAR was invoked twice consecutively without an intervening call to READ-CHAR."));
+            signal(new StreamError(this, "UNREAD-CHAR was invoked twice consecutively without an intervening call to READ-CHAR."));
         unreadChar = n;
     }
 
@@ -190,7 +190,8 @@ public final class ConcatenatedStream extends Stream
 
     private void outputStreamError() throws ConditionThrowable
     {
-        signal(new StreamError(String.valueOf(this) + " is not an output stream."));
+        signal(new StreamError(this,
+                               String.valueOf(this) + " is not an output stream."));
     }
 
     // ### make-concatenated-stream &rest streams => concatenated-stream

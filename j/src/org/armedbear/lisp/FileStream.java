@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.9 2004-02-14 02:03:36 piso Exp $
+ * $Id: FileStream.java,v 1.10 2004-03-05 16:10:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,7 @@ public final class FileStream extends Stream
             return raf.getFilePointer() < raf.length() ? T : NIL;
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
             // Not reached.
             return NIL;
         }
@@ -143,7 +143,7 @@ public final class FileStream extends Stream
             return raf.read();
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
             // Not reached.
             return -1;
         }
@@ -157,7 +157,7 @@ public final class FileStream extends Stream
                 raf.seek(pos - 1);
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -172,7 +172,7 @@ public final class FileStream extends Stream
             raf.write((byte)c);
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -182,7 +182,7 @@ public final class FileStream extends Stream
             raf.writeBytes(s);
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -193,7 +193,7 @@ public final class FileStream extends Stream
             raf.writeBytes(lineSeparator);
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -204,7 +204,7 @@ public final class FileStream extends Stream
             return raf.read(); // Reads an 8-bit byte.
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
             // Not reached.
             return -1;
         }
@@ -217,7 +217,7 @@ public final class FileStream extends Stream
             raf.write((byte)n); // Writes an 8-bit byte.
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -231,7 +231,7 @@ public final class FileStream extends Stream
             raf.seek(raf.length());
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -242,7 +242,7 @@ public final class FileStream extends Stream
             return pos / bytesPerUnit;
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
             // Not reached.
             return -1;
         }
@@ -263,7 +263,7 @@ public final class FileStream extends Stream
             raf.seek(pos);
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
         return true;
     }
@@ -275,7 +275,7 @@ public final class FileStream extends Stream
             setOpen(false);
         }
         catch (IOException e) {
-            signal(new StreamError(e));
+            signal(new StreamError(this, e));
         }
     }
 
@@ -311,7 +311,7 @@ public final class FileStream extends Stream
                 return NIL;
             }
             catch (IOException e) {
-                return signal(new StreamError(e));
+                return signal(new StreamError(null, e));
             }
         }
     };
