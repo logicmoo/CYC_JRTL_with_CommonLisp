@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.6 2003-03-14 18:51:38 piso Exp $
+ * $Id: Java.java,v 1.7 2003-04-03 18:36:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,10 @@ public final class Java extends Module
             String methodName = LispString.getValue(args[1]);
             try {
                 final Class c = Class.forName(className);
-                if (args.length > 2) {
+                int argCount = -1;
+                if (args.length == 3 && args[2] instanceof Fixnum) {
+                    argCount = Fixnum.getValue(args[2]);
+                } else if (args.length > 2) {
                     Class[] parameterTypes = new Class[args.length-2];
                     for (int i = 2; i < args.length; i++) {
                         className = LispString.getValue(args[i]);
@@ -95,16 +98,21 @@ public final class Java extends Module
                     }
                     return new JavaObject(c.getMethod(methodName,
                         parameterTypes));
-                } else {
-                    // Parameter types not specified.
-                    Method[] methods = c.getMethods();
-                    for (int i = 0; i < methods.length; i++) {
-                        Method method = methods[i];
-                        if (method.getName().equals(methodName))
+                }
+                // Parameter types not explicitly specified.
+                Method[] methods = c.getMethods();
+                for (int i = 0; i < methods.length; i++) {
+                    Method method = methods[i];
+                    if (method.getName().equals(methodName)) {
+                        if (argCount >= 0) {
+                            Class[] parameterTypes = method.getParameterTypes();
+                            if (parameterTypes.length == argCount)
+                                return new JavaObject(method);
+                        } else
                             return new JavaObject(method);
                     }
-                    throw new LispError("no such method");
                 }
+                throw new LispError("no such method");
             }
             catch (ClassNotFoundException e) {
                 throw new LispError("class not found: " + className);
@@ -194,6 +202,8 @@ public final class Java extends Module
                     LispObject arg = args[i];
                     if (arg instanceof LispString)
                         initargs[i-1] = ((LispString)arg).getValue();
+                    else if (arg instanceof Fixnum)
+                        initargs[i-1] = new Integer(((Fixnum)arg).getValue());
                 }
                 return new JavaObject(constructor.newInstance(initargs));
             }
@@ -212,7 +222,11 @@ public final class Java extends Module
                 throw new WrongNumberOfArgumentsException(this);
             try {
                 Method method = (Method) JavaObject.getObject(args[0]);
-                Object instance = JavaObject.getObject(args[1]);
+                Object instance;
+                if (args[1] instanceof LispString)
+                    instance = LispString.getValue(args[1]);
+                else
+                    instance = JavaObject.getObject(args[1]);
                 Object[] methodArgs = new Object[args.length-2];
                 for (int i = 2; i < args.length; i++) {
                     LispObject arg = args[i];
@@ -255,7 +269,7 @@ public final class Java extends Module
         return Class.forName(className);
     }
 
-    private static final LispObject makeLispObject(Object obj)
+    private static final LispObject makeLispObject(Object obj) throws LispError
     {
         if (obj == null)
             return NIL;
@@ -267,6 +281,13 @@ public final class Java extends Module
             return new Fixnum(((Integer)obj).intValue());
         if (obj instanceof String)
             return new LispString((String)obj);
+        if (obj instanceof Object[]) {
+            Object[] array = (Object[]) obj;
+            Vector v = new Vector(array.length);
+            for (int i = array.length; i-- > 0;)
+                v.set(i, new JavaObject(array[i]));
+            return v;
+        }
         return new JavaObject(obj);
     }
 
