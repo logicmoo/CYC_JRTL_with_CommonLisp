@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.17 2003-03-06 03:57:59 piso Exp $
+;;; $Id: sequences.lisp,v 1.18 2003-03-06 04:25:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 (export '(some every notany notevery subseq copy-seq reverse nreverse
           reduce
           remove-duplicates delete-duplicates
+          substitute substitute-if substitute-if-not
+          nsubstitute nsubstitute-if nsubstitute-if-not
           position position-if position-if-not
           find find-if find-if-not
           count count-if count-if-not
@@ -376,6 +378,248 @@
                 (if sequence
                     (list-delete-duplicates* sequence test test-not key from-end start end))
                 (vector-delete-duplicates* sequence test test-not key from-end start end)))
+
+
+(defmacro real-count (count)
+  `(cond ((null ,count) most-positive-fixnum)
+	 ((fixnump ,count) (if (minusp ,count) 0 ,count))
+	 ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
+	 (t ,count)))
+
+
+(defun list-substitute* (pred new list start end count key test test-not old)
+  (let* ((result (list nil))
+	 elt
+	 (splice result)
+	 (list list))           ; Get a local list for a stepper.
+    (do ((index 0 (1+ index)))
+      ((= index start))
+      (setq splice (cdr (rplacd splice (list (car list)))))
+      (setq list (cdr list)))
+    (do ((index start (1+ index)))
+      ((or (= index end) (null list) (= count 0)))
+      (setq elt (car list))
+      (setq splice
+	    (cdr (rplacd splice
+			 (list
+			  (cond
+			   ((case pred
+                              (normal
+                               (if test-not
+                                   (not
+                                    (funcall test-not old (apply-key key elt)))
+                                   (funcall test old (apply-key key elt))))
+                              (if (funcall test (apply-key key elt)))
+                              (if-not (not (funcall test (apply-key key elt)))))
+			    (setq count (1- count))
+			    new)
+                           (t elt))))))
+      (setq list (cdr list)))
+    (do ()
+      ((null list))
+      (setq splice (cdr (rplacd splice (list (car list)))))
+      (setq list (cdr list)))
+    (cdr result)))
+
+
+;;; Replace old with new in sequence moving from left to right by incrementer
+;;; on each pass through the loop. Called by all three substitute functions.
+(defun vector-substitute* (pred new sequence incrementer left right length
+                                start end count key test test-not old)
+  (let ((result (make-sequence-like sequence length))
+	(index left))
+    (do ()
+      ((= index start))
+      (setf (aref result index) (aref sequence index))
+      (setq index (+ index incrementer)))
+    (do ((elt))
+      ((or (= index end) (= count 0)))
+      (setq elt (aref sequence index))
+      (setf (aref result index)
+	    (cond ((case pred
+                     (normal
+                      (if test-not
+                          (not (funcall test-not old (apply-key key elt)))
+                          (funcall test old (apply-key key elt))))
+                     (if (funcall test (apply-key key elt)))
+                     (if-not (not (funcall test (apply-key key elt)))))
+		   (setq count (1- count))
+		   new)
+		  (t elt)))
+      (setq index (+ index incrementer)))
+    (do ()
+      ((= index right))
+      (setf (aref result index) (aref sequence index))
+      (setq index (+ index incrementer)))
+    result))
+
+(eval-when (compile eval)
+
+
+           (defmacro subst-dispatch (pred)
+             `(if (listp sequence)
+                  (if from-end
+                      (nreverse (list-substitute* ,pred new (reverse sequence)
+                                                  (- (the fixnum length) (the fixnum end))
+                                                  (- (the fixnum length) (the fixnum start))
+                                                  count key test test-not old))
+                      (list-substitute* ,pred new sequence start end count key test test-not
+                                        old))
+                  (if from-end
+                      (vector-substitute* ,pred new sequence -1 (1- (the fixnum length))
+                                          -1 length (1- (the fixnum end))
+                                          (1- (the fixnum start)) count key test test-not old)
+                      (vector-substitute* ,pred new sequence 1 0 length length
+                                          start end count key test test-not old))))
+
+           )
+
+
+;; SUBSTITUTE (from CMUCL)
+
+(defun substitute (new old sequence &key from-end (test #'eql) test-not
+                       (start 0) count end key)
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count)))
+    (subst-dispatch 'normal)))
+
+
+;; SUBSTITUTE-IF (from CMUCL)
+
+(defun substitute-if (new test sequence &key from-end (start 0) end count key)
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count))
+	 test-not
+	 old)
+    (subst-dispatch 'if)))
+
+
+;; SUBSTITUTE-IF-NOT (from CMUCL)
+
+(defun substitute-if-not (new test sequence &key from-end (start 0)
+                              end count key)
+  (let* ((length (length sequence))
+	 (end (or end length))
+	 (count (real-count count))
+	 test-not
+	 old)
+    (subst-dispatch 'if-not)))
+
+
+;; NSUBSTITUTE (from CMUCL)
+
+(defun nsubstitute (new old sequence &key from-end (test #'eql) test-not
+                        end count key (start 0))
+  (let ((end (or end (length sequence)))
+	(count (real-count count)))
+    (if (listp sequence)
+	(if from-end
+	    (let ((length (length sequence)))
+	      (nreverse (nlist-substitute*
+			 new old (nreverse (the list sequence))
+			 test test-not (- length end) (- length start) count key)))
+	    (nlist-substitute* new old sequence
+			       test test-not start end count key))
+	(if from-end
+	    (nvector-substitute* new old sequence -1
+				 test test-not (1- end) (1- start) count key)
+	    (nvector-substitute* new old sequence 1
+				 test test-not start end count key)))))
+
+(defun nlist-substitute* (new old sequence test test-not start end count key)
+  (do ((list (nthcdr start sequence) (cdr list))
+       (index start (1+ index)))
+    ((or (= index end) (null list) (= count 0)) sequence)
+    (when (if test-not
+	      (not (funcall test-not old (apply-key key (car list))))
+	      (funcall test old (apply-key key (car list))))
+      (rplaca list new)
+      (setq count (1- count)))))
+
+(defun nvector-substitute* (new old sequence incrementer
+                                test test-not start end count key)
+  (do ((index start (+ index incrementer)))
+    ((or (= index end) (= count 0)) sequence)
+    (when (if test-not
+	      (not (funcall test-not old (apply-key key (aref sequence index))))
+	      (funcall test old (apply-key key (aref sequence index))))
+      (setf (aref sequence index) new)
+      (setq count (1- count)))))
+
+
+;; NSUBSTITUTE-IF (from CMUCL)
+
+(defun nsubstitute-if (new test sequence &key from-end (start 0) end count key)
+  (let ((end (or end (length sequence)))
+	(count (real-count count)))
+    (if (listp sequence)
+	(if from-end
+	    (let ((length (length sequence)))
+	      (nreverse (nlist-substitute-if*
+			 new test (nreverse (the list sequence))
+			 (- length end) (- length start) count key)))
+	    (nlist-substitute-if* new test sequence
+				  start end count key))
+	(if from-end
+	    (nvector-substitute-if* new test sequence -1
+				    (1- end) (1- start) count key)
+	    (nvector-substitute-if* new test sequence 1
+				    start end count key)))))
+
+(defun nlist-substitute-if* (new test sequence start end count key)
+  (do ((list (nthcdr start sequence) (cdr list))
+       (index start (1+ index)))
+    ((or (= index end) (null list) (= count 0)) sequence)
+    (when (funcall test (apply-key key (car list)))
+      (rplaca list new)
+      (setq count (1- count)))))
+
+(defun nvector-substitute-if* (new test sequence incrementer
+                                   start end count key)
+  (do ((index start (+ index incrementer)))
+    ((or (= index end) (= count 0)) sequence)
+    (when (funcall test (apply-key key (aref sequence index)))
+      (setf (aref sequence index) new)
+      (setq count (1- count)))))
+
+
+;; NSUBSTITUTE-IF-NOT (from CMUCL)
+
+(defun nsubstitute-if-not (new test sequence &key from-end (start 0)
+			       end count key)
+  (let ((end (or end (length sequence)))
+	(count (real-count count)))
+    (if (listp sequence)
+	(if from-end
+	    (let ((length (length sequence)))
+	      (nreverse (nlist-substitute-if-not*
+			 new test (nreverse (the list sequence))
+			 (- length end) (- length start) count key)))
+	    (nlist-substitute-if-not* new test sequence
+				      start end count key))
+	(if from-end
+	    (nvector-substitute-if-not* new test sequence -1
+					(1- end) (1- start) count key)
+	    (nvector-substitute-if-not* new test sequence 1
+					start end count key)))))
+
+(defun nlist-substitute-if-not* (new test sequence start end count key)
+  (do ((list (nthcdr start sequence) (cdr list))
+       (index start (1+ index)))
+    ((or (= index end) (null list) (= count 0)) sequence)
+    (when (not (funcall test (apply-key key (car list))))
+      (rplaca list new)
+      (setq count (1- count)))))
+
+(defun nvector-substitute-if-not* (new test sequence incrementer
+                                       start end count key)
+  (do ((index start (+ index incrementer)))
+    ((or (= index end) (= count 0)) sequence)
+    (when (not (funcall test (apply-key key (aref sequence index))))
+      (setf (aref sequence index) new)
+      (setq count (1- count)))))
 
 
 (defmacro vector-locater-macro (sequence body-form return-type)
