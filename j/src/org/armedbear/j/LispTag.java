@@ -1,8 +1,8 @@
 /*
  * LispTag.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: LispTag.java,v 1.1.1.1 2002-09-24 16:09:06 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: LispTag.java,v 1.2 2003-05-07 01:26:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,11 @@ public final class LispTag extends LocalTag
     public LispTag(String name, Position pos)
     {
         super(name, pos);
+    }
+
+    public LispTag(String name, Position pos, int type)
+    {
+        super(name, pos, type);
     }
 
     public String getLongName()
