@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.73 2004-04-27 23:55:34 piso Exp $
+ * $Id: Closure.java,v 1.74 2004-05-05 18:50:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,19 +149,19 @@ public class Closure extends Function
                     }
                 } else if (obj instanceof Cons) {
                     if (state == STATE_AUX) {
-                        Symbol symbol = checkSymbol(obj.car());
+                        Symbol sym = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         Debug.assertTrue(initForm != null);
                         if (aux == null)
                             aux = new ArrayList();
-                        aux.add(new Parameter(symbol, initForm, AUX));
+                        aux.add(new Parameter(sym, initForm, AUX));
                     } else if (state == STATE_OPTIONAL) {
-                        Symbol symbol = checkSymbol(obj.car());
+                        Symbol sym = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         LispObject svar = obj.cdr().cdr().car();
                         if (optional == null)
                             optional = new ArrayList();
-                        optional.add(new Parameter(symbol, initForm, svar,
+                        optional.add(new Parameter(sym, initForm, svar,
                             OPTIONAL));
                         if (maxArgs >= 0)
                             ++maxArgs;
@@ -556,11 +556,11 @@ public class Closure extends Function
         args = processArgs(args);
         Debug.assertTrue(args.length == variables.length);
         for (int i = 0; i < variables.length; i++) {
-            Symbol symbol = variables[i];
-            if (isSpecial(symbol))
-                thread.bindSpecial(symbol, args[i]);
+            Symbol sym = variables[i];
+            if (isSpecial(sym))
+                thread.bindSpecial(sym, args[i]);
             else
-                ext.bind(symbol, args[i]);
+                ext.bind(sym, args[i]);
         }
         if (auxVars != null)
             bindAuxVars(ext, thread);
@@ -578,13 +578,13 @@ public class Closure extends Function
         return result;
     }
 
-    private final boolean isSpecial(Symbol symbol)
+    private final boolean isSpecial(Symbol sym)
     {
-        if (symbol.isSpecialVariable())
+        if (sym.isSpecialVariable())
             return true;
         if (specials != null) {
             for (int i = specials.length; i-- > 0;) {
-                if (symbol == specials[i])
+                if (sym == specials[i])
                     return true;
             }
         }
@@ -827,11 +827,11 @@ public class Closure extends Function
         // Aux variable processing is analogous to LET* processing.
         for (int i = 0; i < auxVars.length; i++) {
             Parameter parameter = auxVars[i];
-            Symbol symbol = parameter.var;
+            Symbol sym = parameter.var;
             LispObject initForm = parameter.initForm;
             LispObject value =
                 initForm == NIL ? NIL : eval(initForm, env, thread);
-            bind(symbol, value, env);
+            bind(sym, value, env);
         }
     }
 
