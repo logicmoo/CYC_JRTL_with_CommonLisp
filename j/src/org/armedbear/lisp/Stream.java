@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.109 2005-02-06 00:55:08 piso Exp $
+ * $Id: Stream.java,v 1.110 2005-02-06 01:15:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -887,10 +887,16 @@ public class Stream extends LispObject
                 new BigInteger(token.substring(0, index), radix);
             BigInteger denominator =
                 new BigInteger(token.substring(index + 1), radix);
+            // Check the denominator here, before calling number(), so we can
+            // signal a READER-ERROR, as required by ANSI, instead of DIVISION-
+            // BY-ZERO.
+            if (denominator.signum() == 0)
+                signal(new ReaderError("Division by zero."));
             return number(numerator, denominator);
         }
-        catch (NumberFormatException e) {}
-        return null;
+        catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private static final LispObject makeFloat(final String token,
