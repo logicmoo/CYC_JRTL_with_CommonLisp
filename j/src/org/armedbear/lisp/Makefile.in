@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.120 2004-01-07 18:54:52 piso Exp $
+# $Id: Makefile.in,v 1.121 2004-01-07 19:06:00 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -146,6 +146,7 @@ CLASSFILES =	AbstractArray.class \
 		describe.class \
 		dolist.class \
 		dotimes.class \
+		file_author.class \
 		file_error_pathname.class \
 		file_write_date.class \
 		gc.class \
