@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.21 2003-12-16 14:38:11 piso Exp $
+;;; $Id: top-level.lisp,v 1.22 2003-12-19 03:23:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,15 +46,9 @@
 (defun peek-char-non-whitespace (stream)
   (loop
     (let ((c (read-char stream nil)))
-      (unless (eql c #\Space)
+      (unless (eql c #\space)
         (unread-char c stream)
         (return c)))))
-
-(defun read-cmd (stream)
-  (let ((c (peek-char-non-whitespace stream)))
-    (if (eql c *command-char*)
-        (read-line stream)
-        (read stream nil))))
 
 (defun apropos-command (args)
   (when args (apropos args)))
@@ -70,13 +64,27 @@
         (return))))
   (values))
 
-(defun continue-command (ignored)
-  (if (> *debug-level* 0)
-      (throw 'continue-catcher nil)))
+(defun continue-command (args)
+  (when args
+    (let ((n (read-from-string args)))
+      (let ((restarts (compute-restarts)))
+        (when (< -1 n (length restarts))
+          (invoke-restart (nth n restarts)))))))
 
 (defun describe-command (args)
   (let ((obj (eval (read-from-string args))))
     (describe obj)))
+
+(defun error-command (args)
+  (when *debug-condition*
+    (let* ((s (%format nil "~A" *debug-condition*))
+           (len (length s)))
+      (when (plusp len)
+        (setf (schar s 0) (char-upcase (schar s 0)))
+        (unless (eql (schar s (1- len)) #\.)
+          (setf s (concatenate 'string s "."))))
+      (format *debug-io* "~A~%" s))
+    (show-restarts (compute-restarts) *debug-io*)))
 
 (defun inspect-command (args)
   (let ((obj (eval (read-from-string args))))
@@ -105,7 +113,7 @@
                (format *standard-output* "Unknown package ~A.~%" args))))))
 
 (defun reset-command (ignored)
-  (throw 'top-level-catcher nil))
+  (invoke-restart 'top-level))
 
 (defun exit-command (ignored)
   (exit))
@@ -167,8 +175,9 @@
   '(("apropos" 2 apropos-command "show apropos")
     ("bt" 2 backtrace-command "backtrace n stack frames (default all)")
     ("cd" 2 cd-command "change default directory")
-    ("continue" 4 continue-command "return from break")
+    ("continue" 4 continue-command "invoke restart n")
     ("describe" 2 describe-command "describe an object")
+    ("error" 3 error-command "print the current error message")
     ("exit" 2 exit-command "exit lisp")
     ("help" 2 help-command "print this help")
     ("inspect" 2 inspect-command "inspect an object")
@@ -205,8 +214,10 @@
           (return (entry-command entry)))))))
 
 (defun process-cmd (form)
-  (when (and (stringp form) (> (length form) 1) (eql (char form 0) *command-char*))
-    (let* ((pos (position #\Space form))
+  (when (and (stringp form)
+             (> (length form) 1)
+             (eql (char form 0) *command-char*))
+    (let* ((pos (position #\space form))
            (cmd (subseq form 1 pos))
            (args (if pos (subseq form (1+ pos)) nil)))
       (when args
@@ -220,6 +231,12 @@
       (return-from process-cmd t)))
   nil)
 
+(defun read-cmd (stream)
+  (let ((c (peek-char-non-whitespace stream)))
+    (if (eql c *command-char*)
+        (read-line stream)
+        (read stream nil))))
+
 (defun repl-read-form-fun (in out)
   (loop
     (let ((form (read-cmd in)))
@@ -228,6 +245,13 @@
       (cond ((process-cmd form)
              (funcall *repl-prompt-fun* *standard-output*)
              (finish-output *standard-output*))
+            ((and (> *debug-level* 0)
+                  (fixnump form))
+             (let ((n form)
+                   (restarts (compute-restarts)))
+               (if (< -1 n (length restarts))
+                   (invoke-restart (nth n restarts))
+                   (return form))))
             (t
              (return form))))))
 
@@ -247,12 +271,13 @@
 
 (defun top-level-loop ()
   (fresh-line)
-  (%format t "Type :HELP for a list of top-level commands.~%")
+  (%format t "Type :HELP for a list of available commands.~%")
   (loop
-    (catch 'top-level-catcher
-      (handler-case
-          (repl)
-        #+j (stream-error (c) (return-from top-level-loop)) ; FIXME
-        (error (c)
-               (invoke-debugger c)
-               (throw 'top-level-catcher nil))))))
+      (with-simple-restart (top-level
+                            "Return to top level.")
+        #+j
+        (handler-case
+            (repl)
+          (stream-error (c) (return-from top-level-loop)))
+        #-j
+        (repl))))

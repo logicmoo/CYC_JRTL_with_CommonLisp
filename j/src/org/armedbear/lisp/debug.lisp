@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.12 2003-12-16 14:37:57 piso Exp $
+;;; $Id: debug.lisp,v 1.13 2003-12-19 03:24:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,11 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+;;; Adapted from SBCL.
+
 (in-package "EXTENSIONS")
 
-(export '(*debug-condition* *debug-level*))
+(export '(*debug-condition* *debug-level* show-restarts))
 
 (defvar *debug-condition* nil)
 
@@ -27,33 +29,56 @@
 
 (in-package "SYSTEM")
 
+(defun show-restarts (restarts stream)
+  (when restarts
+    (fresh-line stream)
+    (format stream "Restarts:~%")
+    (let ((max-name-len 0))
+      (dolist (restart restarts)
+        (let ((name (restart-name restart)))
+          (when name
+            (let ((len (length (princ-to-string name))))
+              (when (> len max-name-len)
+                (setf max-name-len len))))))
+      (let ((count 0))
+        (dolist (restart restarts)
+          (let ((name (restart-name restart))
+                (report-function (restart-report-function restart)))
+            (%format stream "  ~D: ~A" count name)
+            (when (functionp report-function)
+              (dotimes (i (1+ (- max-name-len (length (princ-to-string name)))))
+                (write-char #\space stream))
+              (funcall report-function stream))
+            (terpri stream))
+          (incf count))))))
+
 (defun debug-loop ()
   (let ((*debug-level* (1+ *debug-level*)))
-  (fresh-line *debug-io*)
-  (%format *debug-io* "Type :CONTINUE to return from break or :RESET to return to top level.~%")
+    (show-restarts (compute-restarts) *debug-io*)
     (loop
-      (catch 'debug-loop-catcher
-        (handler-case
-            (tpl::repl)
-          (error (c) (%format t "Error: ~S.~%" c) (break) (throw 'debug-loop-catcher nil)))))))
+      (tpl::repl))))
 
 (defun invoke-debugger (condition)
   (when *debugger-hook*
     (let ((hook-function *debugger-hook*)
           (*debugger-hook* nil))
       (funcall hook-function condition hook-function)))
-  (setf *debug-condition* condition)
   (when condition
     (fresh-line *debug-io*)
     (%format *debug-io* "Debugger invoked on condition of type ~A:~%" (type-of condition))
     (%format *debug-io* "  ~A~%" condition))
-  (catch 'tpl::continue-catcher
+  (let ((*debug-condition* condition)
+        (level *debug-level*))
     (clear-input)
-    (debug-loop)))
+    (if (> level 0)
+        (with-simple-restart (abort "Return to debug level ~D." level)
+          (debug-loop))
+        (debug-loop))))
 
-(defun break (&optional format-control &rest format-arguments)
-  (fresh-line *debug-io*)
-  (%format *debug-io* "BREAK called.~%")
-  (if format-control
-      (apply #'%format *debug-io* format-control format-arguments))
-  (invoke-debugger nil))
+(defun break (&optional (format-control "BREAK called") &rest format-arguments)
+  (with-simple-restart (continue "Return from BREAK.")
+    (invoke-debugger
+     (make-condition 'simple-condition
+                     :format-control format-control
+                     :format-arguments format-arguments)))
+  nil)
