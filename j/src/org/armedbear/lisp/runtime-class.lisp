@@ -326,7 +326,7 @@
 (defun primitive-type-p (type)
   (assoc type *primitive-types* :test #'string=))
 
-(defun type-name (type) ;;array is
+(defun type-name (type)
   (let* ((dim (count #\[ type :test #'char=))
          (prefix (make-string dim :initial-element #\[))
          (base-type (string-right-trim "[ ]" type))
@@ -401,7 +401,7 @@
                          "getLispMethod"
                          "(Ljava/lang/String;)Lorg/armedbear/lisp/Function;")
     (visit-var-insn-2 cv constants.astore (1+ args-size))
-    (visit-int-insn-2 cv constants.bipush arg-count)
+    (visit-int-insn-2 cv constants.bipush (1+ arg-count))
     (visit-type-insn-2 cv constants.anewarray "org/armedbear/lisp/LispObject")
     (visit-var-insn-2 cv constants.astore (+ 2 args-size))
 
@@ -413,7 +413,6 @@
 	do
 	(visit-var-insn-2 cv constants.aload index)
 	(visit-int-insn-2 cv constants.bipush i)
-
 	(visit-var-insn-2 cv (load-instruction arg-type) j)
 	(visit-method-insn-4 cv constants.invokestatic
                              "org/armedbear/lisp/RuntimeClass" "makeLispObject"
@@ -422,9 +421,18 @@
                                      (decorate-type-name (return-type-for-make-lisp-object arg-type))))
 	(visit-insn-1 cv constants.aastore))
 
+      (visit-var-insn-2 cv constants.aload index)
+      (visit-int-insn-2 cv constants.bipush arg-count)
+      (visit-var-insn-2 cv constants.aload 0)
+      (visit-method-insn-4 cv constants.invokestatic
+                           "org/armedbear/lisp/RuntimeClass" "makeLispObject"
+                           (format nil "(~a)~a"
+                                   (arg-type-for-make-lisp-object "java.lang.Object")
+                                   (decorate-type-name (return-type-for-make-lisp-object "java.lang.Object"))))
+      (visit-insn-1 cv constants.aastore)
+
       (visit-var-insn-2 cv constants.aload (1- index))
       (visit-var-insn-2 cv constants.aload index)
-      
       (visit-method-insn-4 cv constants.invokevirtual
                            "org/armedbear/lisp/Function"
                            "execute"
@@ -466,9 +474,7 @@
       (visit-insn-1 cv (return-instruction result-type))
       (visit-try-catch-block-4 cv l0 l1 l2 "org/armedbear/lisp/ConditionThrowable")
 
-      (visit-maxs-2 cv
-                    index ;;FIXME
-                    (+ 2 index)))))
+      (visit-maxs-2 cv 0 0))))
   
 
 
@@ -478,37 +484,38 @@
    Method definitions are lists of the form 
    (method-name return-type argument-types function)
    where method-name and return-type are strings, argument-types is a list of strings and function
-   is a lisp function of the apropriate number of arguments.
+   is a lisp function of (1+ (length argument-types)) arguments; the instance (`this') is
+   passed in as the last argument.
    If FILE-NAME is given, a .class file will be written; this is useful for debugging only.
    Example:
 
    (java:jnew-runtime-class \"Test\" \"javax.swing.table.AbstractTableModel\" 
-   `((\"getColumnCount\" \"int\" nil ,#'(lambda () (format t \"getColumnCount~%\") 42))
-   (\"getRowCount\" \"int\" nil ,#'(lambda ()  (format t \"getRowCount~%\") 13))
-   (\"getColumnName\" \"java.lang.String\" (\"int\") ,#'(lambda (i) (format nil \"getColumnName: ~d\" i)))
-   (\"getValueAt\" \"java.lang.Object\" (\"int\" \"int\") ,#'(lambda (i j) (format nil \"getColumnCount: ~d, ~d\" i j)))
+   `((\"getColumnCount\" \"int\" nil ,#'(lambda (this) (format t \"getColumnCount~%\") 42))
+   (\"getRowCount\" \"int\" nil ,#'(lambda (this)  (format t \"getRowCount~%\") 13))
+   (\"getColumnName\" \"java.lang.String\" (\"int\") ,#'(lambda (i this) (format nil \"getColumnName: ~d\" i)))
+   (\"getValueAt\" \"java.lang.Object\" (\"int\" \"int\") ,#'(lambda (i j this) (format nil \"getColumnCount: ~d, ~d\" i j)))
      
-   (\"doStringString\" \"java.lang.String\" (\"java.lang.String\") ,#'(lambda (s) (format nil \"getColumnCount: ~s\" s)))
-   (\"doArray\" \"java.lang.String[]\" (\"int[]\" \"long[]\" \"java.lang.String[]\") ,#'(lambda (a b c) (format t \"doArray: ~s\" (jarray-ref c 1)) (setf (jarray-ref c 1) \"changed\") c))
-   (\"dobb\" \"boolean\" (\"boolean\") ,#'(lambda (b) (format t \"dobb: ~s~%\" b) (not b)))
-   (\"dob_\" \"void\" (\"boolean\") ,#'(lambda (b) (format t \"dob_: ~s~%\" b) ))
-   (\"do_b\" \"boolean\" () ,#'(lambda () (format t \"do_b:~%\")(make-immediate-object t :boolean))))
+   (\"doStringString\" \"java.lang.String\" (\"java.lang.String\") ,#'(lambda (s this) (format nil \"getColumnCount: ~s\" s)))
+   (\"doArray\" \"java.lang.String[]\" (\"int[]\" \"long[]\" \"java.lang.String[]\") ,#'(lambda (a b c this) (format t \"doArray: ~s\" (jarray-ref c 1)) (setf (jarray-ref c 1) \"changed\") c))
+   (\"dobb\" \"boolean\" (\"boolean\") ,#'(lambda (b this) (format t \"dobb: ~s~%\" b) (not b)))
+   (\"dob_\" \"void\" (\"boolean\") ,#'(lambda (b this) (format t \"dob_: ~s~%\" b) ))
+   (\"do_b\" \"boolean\" () ,#'(lambda (this) (format t \"do_b:~%\")(make-immediate-object t :boolean))))
    \"/tmp/Test.class\")
 
    Classes created this way can be used like any other Java class:
 
    (jcall (jmethod \"Test\" \"doArray\" \"[I\" \"[J\" \"[Ljava.lang.String;\")
-          (jnew (jconstructor \"Test\"))
-          (jnew-array-from-array \"int\" #(0 1 2))
-          (jnew-array-from-array \"long\" #(0 1 2))
-          (jnew-array-from-array \"java.lang.String\" #(\"a\" \"b\" \"c\")))
+   (jnew (jconstructor \"Test\"))
+   (jnew-array-from-array \"int\" #(0 1 2))
+   (jnew-array-from-array \"long\" #(0 1 2))
+   (jnew-array-from-array \"java.lang.String\" #(\"a\" \"b\" \"c\")))
 
 
    (jcall (jmethod \"Test\" \"dobb\" \"boolean\")
-          (jnew (jconstructor \"Test\")) (make-immediate-object t :boolean))
+   (jnew (jconstructor \"Test\")) (make-immediate-object t :boolean))
    "
 
-  (let ((cw (make-class-writer-1 (make-instance 'jboolean :java-instance nil)))
+  (let ((cw (make-class-writer-1 (make-instance 'jboolean :java-instance t)))
         (class-type-name (type-name class-name))
         (super-type-name (type-name super-name)))
     (visit-3 cw (+ constants.acc-public constants.acc-super)
@@ -543,16 +550,16 @@
 
 (defun jredefine-method (class-name method-name arg-types method-def)
   "Replace the definition of the method named METHDO-NAME of argument types ARG-TYPES of the
-class named CLASS-NAME defined with JNEW-RUNTIME-CLASS with METHOD-DEF. See the documentation of
-JNEW-RUNTIME-CLASS."
+   class named CLASS-NAME defined with JNEW-RUNTIME-CLASS with METHOD-DEF. See the documentation of
+   JNEW-RUNTIME-CLASS."
   (assert (jruntime-class-exists-p class-name) (class-name)
-    "Can't redefine methods of undefined runtime class ~a" class-name)
+          "Can't redefine methods of undefined runtime class ~a" class-name)
   (let ((unique-method-name (apply #'concatenate 'string method-name "|" arg-types)))
     (java::%jredefine-method class-name unique-method-name method-def)))
 
 (defun jruntime-class-exists-p (class-name)
   "Returns true if a class named CLASS-NAME has been created and loaded by JNEW-RUNTIME-CLASS.
-Needed because Java classes cannot be reloaded."
+   Needed because Java classes cannot be reloaded."
   (when 
     (jstatic (jmethod "org.armedbear.lisp.RuntimeClass" "getRuntimeClass" "java.lang.String")
              "org.armedbear.lisp.RuntimeClass"
