@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.102 2004-05-25 15:52:33 piso Exp $
+;;; $Id: clos.lisp,v 1.103 2004-06-11 12:19:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1339,8 +1339,7 @@
           (when classes
             (setf (gethash classes (classes-to-emf-table gf)) emfun))
           (funcall emfun args))
-        (error "No applicable method for generic function ~A with arguments ~S of classes ~S."
-               (generic-function-name gf) args classes))))
+        (apply #'no-applicable-method gf args))))
 
 (defun sub-specializer-p (c1 c2 c-arg)
   (find c2 (cdr (memq c1 (class-precedence-list c-arg)))))
@@ -1878,8 +1877,7 @@
 (defgeneric make-load-form (object &optional environment))
 
 (defmethod make-load-form ((object t) &optional environment)
-  (error 'simple-error
-         :format-control "No applicable method for MAKE-LOAD-FORM."))
+  (apply #'no-applicable-method #'make-load-form (list object)))
 
 (defmethod make-load-form ((class class) &optional environment)
   (let ((name (class-name class)))
@@ -1896,5 +1894,12 @@
 (defun method-combination-error (format-control &rest args)
   (let ((message (apply #'format nil format-control args)))
     (error "Method combination error in CLOS dispatch:~%    ~A" message)))
+
+(defgeneric no-applicable-method (generic-function &rest args))
+
+(defmethod no-applicable-method (generic-function &rest args)
+  (error "No applicable method for the generic function ~S when called with arguments ~S."
+	 generic-function
+	 args))
 
 (provide 'clos)
