@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.310 2003-08-02 20:32:14 piso Exp $
+ * $Id: Primitives.java,v 1.311 2003-08-03 00:11:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1850,13 +1850,22 @@ public final class Primitives extends Module
             LispObject displacedIndexOffset = args[8];
             if (initialElementProvided != NIL && initialContents != NIL) {
                 throw new LispError("MAKE-ARRAY: cannot specify both " +
-                    ":initial-element and :initial-contents");
+                                    ":INITIAL-ELEMENT AND :INITIAL-CONTENTS");
             }
-            final int rank;
-            if (dimensions.listp()) {
-                rank = dimensions.length();
-            } else
-                rank = 1;
+            final int rank = dimensions.listp() ? dimensions.length() : 1;
+            if (displacedTo != NIL) {
+                final AbstractArray array = checkArray(displacedTo);
+                final int offset;
+                if (displacedIndexOffset != NIL)
+                    offset = Fixnum.getValue(displacedIndexOffset);
+                else
+                    offset = 0;
+                if (initialElementProvided != NIL)
+                    throw new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO");
+                if (initialContents != NIL)
+                    throw new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO");
+                return new DisplacedArray(array, offset);
+            }
             if (rank == 1) {
                 final int size;
                 if (dimensions instanceof Cons)
