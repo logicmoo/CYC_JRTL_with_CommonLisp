@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.4 2003-06-10 18:37:35 piso Exp $
+ * $Id: Autoload.java,v 1.5 2003-06-10 18:38:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public final class Autoload extends Function
         StringBuffer sb = new StringBuffer("#<AUTOLOAD ");
         sb.append(symbol);
         sb.append(" \"");
-        sb.append(fileName);
+        sb.append(getFileName());
         sb.append("\">");
         return sb.toString();
     }
