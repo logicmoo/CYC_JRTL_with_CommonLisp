@@ -2,7 +2,7 @@
  * LispSyntaxIterator.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispSyntaxIterator.java,v 1.1.1.1 2002-09-24 16:09:30 piso Exp $
+ * $Id: LispSyntaxIterator.java,v 1.2 2002-10-18 21:35:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,37 +24,58 @@ package org.armedbear.j;
 // Supports movement through the syntactically important text of a buffer,
 // i.e. skipping whitespace and comments.
 public final class LispSyntaxIterator extends DefaultSyntaxIterator
+    implements Constants
 {
     public LispSyntaxIterator(Position pos)
     {
         super(pos);
     }
 
-    // Returns char array with syntactic whitespace (quotes and comments)
-    // replaced with actual space characters.
+    // Caller must make sure parseBuffer() has been called so flags will be
+    // correct.
+    public char[] hideSyntacticWhitespace(Line line)
+    {
+        if (line.flags() == STATE_QUOTE)
+            return hideSyntacticWhitespace(line.getText(), STATE_QUOTE);
+        else
+            return hideSyntacticWhitespace(line.getText(), STATE_NEUTRAL);
+    }
+
     public char[] hideSyntacticWhitespace(String s)
     {
+        return hideSyntacticWhitespace(s, STATE_NEUTRAL);
+    }
+
+    // Returns char array with syntactic whitespace (quotes and comments)
+    // replaced with actual space characters.
+    public char[] hideSyntacticWhitespace(String s, int initialState)
+    {
         char[] chars = s.toCharArray();
-        boolean inQuote = false;
+        int state = initialState;
         int length = chars.length;
         for (int i = 0; i < length; i++) {
             char c = chars[i];
-            if (inQuote) {
+            if (c == '\\' && i < length-1) {
+                // Escape character.
+                chars[i++] = ' ';
                 chars[i] = ' ';
-                if (c == '\\' && i < length-1) {
-                    // Handle escape char.
-                    chars[++i] = ' ';
-                } else if (c == '"')
-                    inQuote = false;
+                continue;
+            }
+            if (state == STATE_QUOTE) {
+                chars[i] = ' ';
+                if (c == '"')
+                    state = STATE_NEUTRAL;
             } else if (c == '"') {
-                inQuote = true;
+                state = STATE_QUOTE;
                 chars[i] = ' ';
             }
         }
         // Handle comment part if any.
         int index = -1;
         for (int i = 0; i < length-1; i++) {
-            if (chars[i] == ';') {
+            if (chars[i] == '\\')
+                ++i; // Escape character.
+            else if (chars[i] == ';') {
                 index = i;
                 break;
             }
