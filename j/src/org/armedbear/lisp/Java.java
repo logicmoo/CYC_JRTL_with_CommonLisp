@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.26 2003-12-02 14:20:38 dmcnaught Exp $
+ * $Id: Java.java,v 1.27 2003-12-08 04:50:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public final class Java extends Module
+public final class Java extends Lisp
 {
     // ### jclass
     private static final Primitive1 JCLASS = new Primitive1("jclass", PACKAGE_JAVA)
@@ -166,7 +166,7 @@ public final class Java extends Module
                 int argCount = 0;
                 if (args.length == 2 && args[1] instanceof Fixnum) {
                     argCount = Fixnum.getValue(args[1]);
-                } else { 
+                } else {
                     Class[] parameterTypes = new Class[args.length-1];
                     for (int i = 1; i < args.length; i++) {
                         parameterTypes[i-1] = forClassRef(args[i]);
@@ -211,7 +211,7 @@ public final class Java extends Module
                 int argCount = 0;
                 if (args.length == 3 && args[2] instanceof Fixnum) {
                     argCount = Fixnum.getValue(args[2]);
-                } else { 
+                } else {
                     Class[] parameterTypes = new Class[args.length-2];
                     for (int i = 2; i < args.length; i++) {
                         parameterTypes[i-2] = forClassRef(args[i]);
@@ -223,7 +223,7 @@ public final class Java extends Module
                 Method[] methods = c.getMethods();
                 for (int i = 0; i < methods.length; i++) {
                     Method method = methods[i];
-                    if (method.getName().equals(methodName) 
+                    if (method.getName().equals(methodName)
                         && method.getParameterTypes().length == argCount)
                         return new JavaObject(method);
                 }
@@ -369,7 +369,7 @@ public final class Java extends Module
             }
         }
     };
-    
+
     private static final Primitive1 JAVA_OBJECT_P = new Primitive1("java-object-p", PACKAGE_JAVA)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -380,7 +380,7 @@ public final class Java extends Module
                 return NIL;
         }
     };
-        
+
     // Supports Java primitive types too.
     private static Class forClassRef(LispObject classRef) throws ClassNotFoundException, ConditionThrowable
     {
@@ -404,7 +404,7 @@ public final class Java extends Module
                 return Double.TYPE;
             // Not a primitive Java type.
             return Class.forName(className);
-        } else 
+        } else
             try {
                 return (Class)JavaObject.getObject(classRef);
             }
