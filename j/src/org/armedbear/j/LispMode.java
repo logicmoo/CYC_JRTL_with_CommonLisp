@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.9 2002-10-19 15:25:49 piso Exp $
+ * $Id: LispMode.java,v 1.10 2002-10-21 17:01:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
 
     public String getCommentStart()
     {
-        return "; ";
+        return ";; ";
     }
 
     public final SyntaxIterator getSyntaxIterator(Position pos)
