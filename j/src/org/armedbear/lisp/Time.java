@@ -1,8 +1,8 @@
 /*
  * Time.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.16 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Time.java,v 1.17 2004-01-05 00:42:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,17 +86,12 @@ public final class Time extends Lisp
 
     // ### file-write-date
     private static final Primitive1 FILE_WRITE_DATE =
-        new Primitive1("file-write-date","pathspec") {
+        new Primitive1("file-write-date","pathspec")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String namestring;
-            if (arg instanceof LispString)
-                namestring = ((LispString)arg).getValue();
-            else if (arg instanceof Pathname)
-                namestring = ((Pathname)arg).getNamestring();
-            else
-                return signal(new TypeError(arg, "pathname designator"));
-            File file = new File(namestring);
+            Pathname pathname = Pathname.coerceToPathname(arg);
+            File file = Utilities.getFile(pathname);
             long lastModified = file.lastModified();
             if (lastModified == 0)
                 return NIL;
