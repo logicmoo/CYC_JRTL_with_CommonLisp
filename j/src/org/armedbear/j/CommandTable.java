@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.16 2003-03-31 01:54:15 piso Exp $
+ * $Id: CommandTable.java,v 1.17 2003-03-31 02:13:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -213,6 +213,7 @@ public class CommandTable
             addCommand("alignStrings",  "AlignStrings");
             addCommand("archiveOpenFile", "ArchiveMode");
             addCommand("backwardSexp", "LispMode");
+            addCommand("backwardUpList", "LispMode");
             addCommand("binaryMode", "BinaryMode");
             addCommand("browseFileAtDot", "BrowseFile");
             addCommand("centerTag", "TagCommands");
@@ -346,7 +347,6 @@ public class CommandTable
             addCommand("telnet", "RemoteShell");
             addCommand("thisError", "CompilationBuffer");
             addCommand("toggleWrap", "WrapText");
-            addCommand("upList", "LispMode");
             addCommand("upperCaseRegion", "RegionCommands");
             addCommand("whereIs", "ExecuteCommandDialog");
             addCommand("wrapComment", "WrapText");

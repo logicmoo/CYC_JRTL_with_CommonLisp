@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.36 2003-03-31 01:55:46 piso Exp $
+ * $Id: LispMode.java,v 1.37 2003-03-31 02:13:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_F, CTRL_MASK | ALT_MASK, "forwardSexp");
         km.mapKey(KeyEvent.VK_B, CTRL_MASK | ALT_MASK, "backwardSexp");
         km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "downList");
-        km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "upList");
+        km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "backwardUpList");
         km.mapKey(KeyEvent.VK_E, CTRL_MASK | ALT_MASK, "evalDefunLisp");
         km.mapKey(KeyEvent.VK_R, CTRL_MASK | ALT_MASK, "evalRegionLisp");
     }
@@ -378,7 +378,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
             editor.moveDotTo(pos);
     }
 
-    public static void upList()
+    public static void backwardUpList()
     {
         final Editor editor = Editor.currentEditor();
         if (editor.getMode() != mode)
