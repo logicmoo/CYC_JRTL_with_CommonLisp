@@ -1,7 +1,7 @@
 ;;; read-sequence.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: read-sequence.lisp,v 1.2 2004-02-28 15:46:35 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: read-sequence.lisp,v 1.3 2005-03-29 19:30:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,23 +17,47 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
+
+(defun read-specialized-vector-unsigned-byte-8 (vector stream start end)
+  (declare (optimize speed))
+  (declare (type '(array (unsigned-byte-8) (*)) vector))
+  (declare (type fixnum start end))
+  (do ((pos start (the fixnum (1+ pos))))
+      ((>= pos end) pos)
+    (declare (type fixnum pos))
+    (let ((element (read-8-bits stream nil :eof)))
+      (when (eq element :eof)
+        (return pos))
+      (setf (aref vector pos) element))))
 
 (defun read-sequence (sequence stream &key (start 0) end)
   (require-type start '(integer 0))
   (if end
       (require-type end '(integer 0))
       (setf end (length sequence)))
-  (let* ((element-type (stream-element-type stream))
-         (read-function (cond ((eq element-type 'character)
-                               #'read-char)
-                              ((equal element-type '(unsigned-byte 8))
-                               #'read-8-bits)
-                              (t
-                               #'read-byte))))
-    (do ((pos start (1+ pos)))
-        ((>= pos end) pos)
-      (let ((element (funcall read-function stream nil :eof)))
-        (when (eq element :eof)
-          (return pos))
-        (setf (elt sequence pos) element)))))
+  (let* ((element-type (stream-element-type stream)))
+    (cond ((eq element-type 'character)
+           (do ((pos start (1+ pos)))
+               ((>= pos end) pos)
+             (let ((element (read-char stream nil :eof)))
+               (when (eq element :eof)
+                 (return pos))
+               (setf (elt sequence pos) element))))
+          ((equal element-type '(unsigned-byte 8))
+           (if (and (vectorp sequence)
+                    (equal (array-element-type sequence) '(unsigned-byte 8)))
+               (read-specialized-vector-unsigned-byte-8 sequence stream start end)
+               (do ((pos start (1+ pos)))
+                   ((>= pos end) pos)
+                 (let ((element (read-8-bits stream nil :eof)))
+                   (when (eq element :eof)
+                     (return pos))
+                   (setf (elt sequence pos) element)))))
+          (t
+           (do ((pos start (1+ pos)))
+               ((>= pos end) pos)
+             (let ((element (read-byte stream nil :eof)))
+               (when (eq element :eof)
+                 (return pos))
+               (setf (elt sequence pos) element)))))))
