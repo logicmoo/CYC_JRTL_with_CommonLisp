@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.65 2004-05-01 23:38:58 piso Exp $
+ * $Id: Stream.java,v 1.66 2004-05-05 18:04:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -505,10 +505,29 @@ public class Stream extends LispObject
     public LispObject readComplex() throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
+        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+            return NIL;
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
-        return signal(new LispError("Invalid complex number format: #C" +
-                                    obj.writeToString()));
+        // Error.
+        Debug.trace("*READ-SUPPRESS* = " + _READ_SUPPRESS_.symbolValue().writeToString());
+        StringBuffer sb = new StringBuffer("Invalid complex number format");
+        if (this instanceof FileStream) {
+            Pathname p = ((FileStream)this).getPathname();
+            if (p != null) {
+                String namestring = p.getNamestring();
+                if (namestring != null) {
+                    sb.append(" in #P\"");
+                    sb.append(namestring);
+                    sb.append('"');
+                }
+            }
+            sb.append(" at offset ");
+            sb.append(_getFilePosition());
+        }
+        sb.append(": #C");
+        sb.append(obj.writeToString());
+        return signal(new ReaderError(sb.toString()));
     }
 
     private String readMultipleEscape() throws ConditionThrowable
@@ -1274,6 +1293,7 @@ public class Stream extends LispObject
         }
     };
 
+    // ### stream-line-number
     private static final Primitive1 STREAM_LINE_NUMBER =
         new Primitive1("stream-line-number", PACKAGE_SYS, false, "stream")
     {
@@ -1284,6 +1304,7 @@ public class Stream extends LispObject
         }
     };
 
+    // ### stream-offset
     private static final Primitive1 STREAM_OFFSET =
         new Primitive1("stream-offset", PACKAGE_SYS, false, "stream")
     {
