@@ -1,8 +1,8 @@
 /*
  * DescribeKeyDialog.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: DescribeKeyDialog.java,v 1.2 2002-11-10 00:49:43 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: DescribeKeyDialog.java,v 1.3 2003-06-13 14:58:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,24 +98,15 @@ public final class DescribeKeyDialog extends AbstractDialog
         modifiers &= 0x0f;
         if (keyCode == 0 && modifiers == InputEvent.SHIFT_MASK) // Shift only.
             modifiers = 0; // Ignore modifier.
-        KeyMapping mapping = null;
         boolean local = false;
         final Mode mode = buffer.getMode();
-        // Look in user's mode-specific overrides (if any).
-        KeyMap km = mode.getOverrides();
-        if (km != null)
-            mapping = km.lookup(keyChar, keyCode, modifiers);
-        if (mapping == null)
-            mapping = mode.getKeyMap().lookup(keyChar, keyCode, modifiers);
+        KeyMapping mapping =
+            mode.getKeyMap().lookup(keyChar, keyCode, modifiers);
         if (mapping != null)
             local = true;
         else {
-            // Look in user's global overrides (if any).
-            km = KeyMap.getGlobalOverrides();
-            if (km != null)
-                mapping = km.lookup(keyChar, keyCode, modifiers);
-            if (mapping == null)
-                mapping = KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode, modifiers);
+            mapping =
+                KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode, modifiers);
         }
         FastStringBuffer sb = new FastStringBuffer();
         if (mapping != null) {
@@ -124,12 +115,13 @@ public final class DescribeKeyDialog extends AbstractDialog
             sb.append(mapping.getCommand());
             if (local) {
                 sb.append(" (");
-                sb.append(buffer.mode.toString());
+                sb.append(mode.toString());
                 sb.append(" mode)");
             } else
                 sb.append(" (global mapping)");
             dispose();
-            MessageDialog.showMessageDialog(editor, sb.toString(), "Describe Key");
+            MessageDialog.showMessageDialog(editor, sb.toString(),
+                "Describe Key");
         }
     }
 
