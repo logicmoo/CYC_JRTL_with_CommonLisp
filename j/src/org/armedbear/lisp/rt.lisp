@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.129 2003-09-13 17:35:27 piso Exp $
+;;; $Id: rt.lisp,v 1.130 2003-09-13 18:48:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 
 (in-package :rt)
 
-(export '(deftest))
+(export '(deftest my-aref))
 
 (defvar *prefix* "/home/peter/gcl/ansi-tests/")
 
@@ -39,6 +39,12 @@
 
 (defvar *passed* 0)
 (defvar *failed* 0)
+
+(defun my-aref (a &rest args)
+  (apply #'aref a args))
+
+(defun my-row-major-aref (a index)
+  (row-major-aref a index))
 
 (defun equalp-with-case (x y)
   (cond
