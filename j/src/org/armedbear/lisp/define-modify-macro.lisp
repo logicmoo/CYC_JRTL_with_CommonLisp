@@ -1,7 +1,7 @@
 ;;; define-modify-macro.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: define-modify-macro.lisp,v 1.1 2003-10-06 00:16:18 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: define-modify-macro.lisp,v 1.2 2005-02-03 02:27:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,11 +74,21 @@
    decremented by the second argument, DELTA, which defaults to 1.")
 
 (defmacro incf (place &optional (delta 1))
-  (if (symbolp place)
-      `(setq ,place (+ ,place ,delta))
-      `(incf-complex ,place ,delta)))
+  (cond ((symbolp place)
+         `(setq ,place (+ ,place ,delta)))
+        ((and (consp place) (eq (car place) 'THE))
+         (let ((res (gensym)))
+           `(let ((,res (the ,(second place) (+ ,place ,delta))))
+              (setq ,(third place) ,res))))
+        (t
+         `(incf-complex ,place ,delta))))
 
 (defmacro decf (place &optional (delta 1))
-  (if (symbolp place)
-      `(setq ,place (- ,place ,delta))
-      `(decf-complex ,place ,delta)))
+  (cond ((symbolp place)
+         `(setq ,place (- ,place ,delta)))
+        ((and (consp place) (eq (car place) 'THE))
+         (let ((res (gensym)))
+           `(let ((,res (the ,(second place) (- ,place ,delta))))
+              (setq ,(third place) ,res))))
+        (t
+         `(decf-complex ,place ,delta))))
