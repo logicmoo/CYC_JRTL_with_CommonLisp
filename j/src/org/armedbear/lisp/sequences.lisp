@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.37 2003-05-30 18:58:46 piso Exp $
+;;; $Id: sequences.lisp,v 1.38 2003-06-10 00:48:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,14 +19,12 @@
 
 (in-package "COMMON-LISP")
 
-(export '(make-sequence
-          subseq copy-seq fill
+(export '(subseq copy-seq fill
           replace
           reverse nreverse
           concatenate
           map map-into
           reduce
-          delete delete-if delete-if-not
           remove remove-if remove-if-not
           remove-duplicates delete-duplicates
           substitute substitute-if substitute-if-not
@@ -37,76 +35,7 @@
           mismatch
           search))
 
-
-;;; MAKE-SEQUENCE (from ECL)
-
-;;; Returns two values:
-;;;  VALUE-1 = normalized type name or object
-;;;  VALUE-2 = normalized type arguments or nil
-(defun normalize-type (type)
-  (let (tp i fd)
-    (cond ((symbolp type)
-           (values type nil))
-          ((consp type)
-           (setq tp (car type) i (cdr type))
-           (if (and (eq tp 'INTEGER) (consp (cadr i)))
-               (values tp (list (car i) (1- (caadr i))))
-               (values tp i)))
-          (t
-           (error "normalize-type: bogus type specifier ~A" type)))))
-
-
-(defun make-sequence (type size	&key (initial-element nil iesp))
-  (let (element-type sequence)
-    (if (atom type)
-        (cond ((memq type '(LIST CONS))
-               (when (zerop size)
-                 (if (eq type 'CONS)
-                     (error 'type-error
-                            "the requested length (0) does not match the specified type CONS")
-                     (return-from make-sequence nil)))
-               (return-from make-sequence
-                            (if iesp
-                                (make-list size :initial-element initial-element)
-                                (make-list size))))
-              ((memq type '(STRING SIMPLE-STRING))
-               (return-from make-sequence
-                            (if iesp
-                                (make-string size :initial-element initial-element)
-                                (make-string size))))
-              (t
-               (setq element-type
-                     (cond ((memq type '(BIT-VECTOR SIMPLE-BIT-VECTOR)) 'BIT)
-                           ((memq type '(VECTOR SIMPLE-VECTOR)) t)
-                           (t
-                            (error 'type-error "~S is not a sequence type" type))))))
-        (multiple-value-bind (name args) (normalize-type type)
-          (when (memq name '(LIST CONS))
-            (return-from make-sequence
-                         (if iesp
-                             (make-list size :initial-element initial-element)
-                             (make-list size))))
-          (unless (memq name '(ARRAY VECTOR SIMPLE-VECTOR BIT-VECTOR
-                               SIMPLE-BIT-VECTOR STRING SIMPLE-STRING))
-            (error 'type-error "~S is not a sequence type" type))
-          (let ((len nil))
-            (cond ((memq name '(STRING SIMPLE-STRING))
-                   (setq element-type 'character
-                         len (car args)))
-                  (t
-                   (setq element-type (or (car args) t)
-                         len (cadr args))))
-            (unless (or (null len) (eq len '*))
-              (when (/= size len)
-                (error 'type-error
-                       "the requested length (~A) does not match the specified type ~A"
-                       size type))))))
-    (setq sequence (make-array size :element-type element-type))
-    (when iesp
-      (dotimes (i size)
-        (setf (elt sequence i) initial-element)))
-    sequence))
-
+(autoload 'make-sequence "make-sequence.lisp")
 
 (defmacro seq-dispatch (sequence list-form array-form)
   `(if (listp ,sequence)
@@ -345,176 +274,9 @@
                  value (funcall function (if from-end element value) (if from-end value element))))))))
 
 
-;;; DELETE (from CMUCL)
-
-(defmacro mumble-delete (pred)
-  `(do ((index start (1+ index))
-        (jndex start)
-        (number-zapped 0))
-     ((or (= index end) (= number-zapped count))
-      (do ((index index (1+ index))		; copy the rest of the vector
-           (jndex jndex (1+ jndex)))
-        ((= index length)
-         (shrink-vector sequence jndex))
-        (setf (aref sequence jndex) (aref sequence index))))
-     (setf (aref sequence jndex) (aref sequence index))
-     (if ,pred
-         (setq number-zapped (1+ number-zapped))
-         (setq jndex (1+ jndex)))))
-
-(defmacro mumble-delete-from-end (pred)
-  `(do ((index (1- end) (1- index)) ; find the losers
-        (number-zapped 0)
-        (losers ())
-        this-element
-        (terminus (1- start)))
-     ((or (= index terminus) (= number-zapped count))
-      (do ((losers losers)			 ; delete the losers
-           (index start (1+ index))
-           (jndex start))
-        ((or (null losers) (= index end))
-         (do ((index index (1+ index))	 ; copy the rest of the vector
-              (jndex jndex (1+ jndex)))
-           ((= index length)
-            (shrink-vector sequence jndex))
-           (setf (aref sequence jndex) (aref sequence index))))
-        (setf (aref sequence jndex) (aref sequence index))
-        (if (= index (car losers))
-            (pop losers)
-            (setq jndex (1+ jndex)))))
-     (setq this-element (aref sequence index))
-     (when ,pred
-       (setq number-zapped (1+ number-zapped))
-       (push index losers))))
-
-(defmacro normal-mumble-delete ()
-  `(mumble-delete
-    (if test-not
-        (not (funcall test-not item (apply-key key (aref sequence index))))
-        (funcall test item (apply-key key (aref sequence index))))))
-
-(defmacro normal-mumble-delete-from-end ()
-  `(mumble-delete-from-end
-    (if test-not
-        (not (funcall test-not item (apply-key key this-element)))
-        (funcall test item (apply-key key this-element)))))
-
-(defmacro list-delete (pred)
-  `(let ((handle (cons nil sequence)))
-     (do ((current (nthcdr start sequence) (cdr current))
-          (previous (nthcdr start handle))
-          (index start (1+ index))
-          (number-zapped 0))
-       ((or (= index end) (= number-zapped count))
-        (cdr handle))
-       (cond (,pred
-              (rplacd previous (cdr current))
-              (setq number-zapped (1+ number-zapped)))
-             (t
-              (setq previous (cdr previous)))))))
-
-(defmacro list-delete-from-end (pred)
-  `(let* ((reverse (nreverse sequence))
-          (handle (cons nil reverse)))
-     (do ((current (nthcdr (- length end) reverse)
-                   (cdr current))
-          (previous (nthcdr (- length end) handle))
-          (index start (1+ index))
-          (number-zapped 0))
-       ((or (= index end) (= number-zapped count))
-        (nreverse (cdr handle)))
-       (cond (,pred
-              (rplacd previous (cdr current))
-              (setq number-zapped (1+ number-zapped)))
-             (t
-              (setq previous (cdr previous)))))))
-
-(defmacro normal-list-delete ()
-  '(list-delete
-    (if test-not
-        (not (funcall test-not item (apply-key key (car current))))
-        (funcall test item (apply-key key (car current))))))
-
-(defmacro normal-list-delete-from-end ()
-  '(list-delete-from-end
-    (if test-not
-        (not (funcall test-not item (apply-key key (car current))))
-        (funcall test item (apply-key key (car current))))))
-
-(defmacro real-count (count)
-  `(cond ((null ,count) most-positive-fixnum)
-         ((fixnump ,count) (if (minusp ,count) 0 ,count))
-         ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
-         (t ,count)))
-
-(defun delete (item sequence &key from-end (test #'eql) test-not (start 0)
-                    end count key)
-  (let* ((length (length sequence))
-	 (end (or end length))
-	 (count (real-count count)))
-    (seq-dispatch sequence
-		  (if from-end
-		      (normal-list-delete-from-end)
-		      (normal-list-delete))
-		  (if from-end
-		      (normal-mumble-delete-from-end)
-		      (normal-mumble-delete)))))
-
-(defmacro if-mumble-delete ()
-  `(mumble-delete
-    (funcall predicate (apply-key key (aref sequence index)))))
-
-(defmacro if-mumble-delete-from-end ()
-  `(mumble-delete-from-end
-    (funcall predicate (apply-key key this-element))))
-
-(defmacro if-list-delete ()
-  '(list-delete
-    (funcall predicate (apply-key key (car current)))))
-
-(defmacro if-list-delete-from-end ()
-  '(list-delete-from-end
-    (funcall predicate (apply-key key (car current)))))
-
-(defun delete-if (predicate sequence &key from-end (start 0) key end count)
-  (let* ((length (length sequence))
-	 (end (or end length))
-	 (count (real-count count)))
-    (seq-dispatch sequence
-		  (if from-end
-		      (if-list-delete-from-end)
-		      (if-list-delete))
-		  (if from-end
-		      (if-mumble-delete-from-end)
-		      (if-mumble-delete)))))
-
-(defmacro if-not-mumble-delete ()
-  `(mumble-delete
-    (not (funcall predicate (apply-key key (aref sequence index))))))
-
-(defmacro if-not-mumble-delete-from-end ()
-  `(mumble-delete-from-end
-    (not (funcall predicate (apply-key key this-element)))))
-
-(defmacro if-not-list-delete ()
-  '(list-delete
-    (not (funcall predicate (apply-key key (car current))))))
-
-(defmacro if-not-list-delete-from-end ()
-  '(list-delete-from-end
-    (not (funcall predicate (apply-key key (car current))))))
-
-(defun delete-if-not (predicate sequence &key from-end (start 0) end key count)
-  (let* ((length (length sequence))
-	 (end (or end length))
-	 (count (real-count count)))
-    (seq-dispatch sequence
-		  (if from-end
-		      (if-not-list-delete-from-end)
-		      (if-not-list-delete))
-		  (if from-end
-		      (if-not-mumble-delete-from-end)
-		      (if-not-mumble-delete)))))
+(autoload 'delete "delete.lisp")
+(autoload 'delete-if "delete.lisp")
+(autoload 'delete-if-not "delete.lisp")
 
 
 ;;; REMOVE (from CMUCL)
@@ -636,6 +398,12 @@
 (defmacro if-not-list-remove-from-end ()
   `(list-remove-from-end
     (not (funcall predicate (apply-key key this-element)))))
+
+(defmacro real-count (count)
+  `(cond ((null ,count) most-positive-fixnum)
+         ((fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
+         (t ,count)))
 
 (defun remove (item sequence &key from-end (test #'eql) test-not (start 0)
                     end count key)
