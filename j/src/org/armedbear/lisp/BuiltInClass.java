@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.29 2004-05-23 15:22:20 piso Exp $
+ * $Id: BuiltInClass.java,v 1.30 2004-05-25 18:34:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,6 +114,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SIMPLE_STRING                    = addClass(Symbol.SIMPLE_STRING);
     public static final BuiltInClass SIMPLE_VECTOR                    = addClass(Symbol.SIMPLE_VECTOR);
     public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
+    public static final BuiltInClass SOCKET_STREAM                    = addClass(Symbol.SOCKET_STREAM);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
     public static final BuiltInClass STRING                           = addClass(Symbol.STRING);
@@ -414,6 +415,8 @@ public class BuiltInClass extends LispClass
                              CLASS_T);
         SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
                               CONDITION, STANDARD_OBJECT, CLASS_T);
+        SOCKET_STREAM.setDirectSuperclass(TWO_WAY_STREAM);
+        SOCKET_STREAM.setCPL(SOCKET_STREAM, TWO_WAY_STREAM, STREAM, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
         STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
