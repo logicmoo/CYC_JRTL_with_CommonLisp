@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.39 2003-08-29 15:48:30 piso Exp $
+ * $Id: LispObject.java,v 1.40 2003-08-30 15:06:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,6 +151,11 @@ public class LispObject extends Lisp
     public LispObject FLOATP()
     {
         return NIL;
+    }
+
+    public boolean floatp()
+    {
+        return false;
     }
 
     public int length() throws LispError
