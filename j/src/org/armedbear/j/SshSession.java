@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.5 2002-11-28 22:37:49 piso Exp $
+ * $Id: SshSession.java,v 1.6 2002-11-30 15:47:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,9 @@ public final class SshSession implements Constants
     private static final int TRY_AGAIN     = 0;
     private static final int AUTHENTICATED = 1;
     private static final int PASSWORD      = 2;
-    private static final int YES           = 3;
-    private static final int NO            = 4;
+    private static final int PASSPHRASE    = 3;
+    private static final int YES           = 4;
+    private static final int NO            = 5;
 
     private static final String PROMPT = "$ ";
 
@@ -48,6 +49,7 @@ public final class SshSession implements Constants
     private String hostName;
     private String userName;
     private String password;
+    private String passphrase;
     private int port;
 
     private boolean locked;
@@ -84,13 +86,25 @@ public final class SshSession implements Constants
         this.locked = locked;
         register(this);
     }
+    
+    private SshSession(SshSession other, boolean locked)
+    {
+        hostName = other.getHostName();
+        Debug.assertTrue(hostName != null);
+        userName = other.getUserName();
+        password = other.getPassword();
+        passphrase = other.getPassphrase();
+        port = other.getPort();
+        this.locked = locked;
+        register(this);
+    }
 
     private static synchronized void register(SshSession session)
     {
         if (sessionList == null)
             sessionList = new ArrayList();
         sessionList.add(session);
-        Log.debug("register size = " + sessionList.size());
+        Log.debug("leaving register() size = " + sessionList.size());
     }
 
     private static synchronized void unregister(SshSession session)
@@ -102,7 +116,7 @@ public final class SshSession implements Constants
         if (!sessionList.contains(session))
             Debug.bug("SshSession.unregister session not in list");
         sessionList.remove(session);
-        Log.debug("unregister size = " + sessionList.size());
+        Log.debug("leaving unregister() size = " + sessionList.size());
     }
 
     public static synchronized SshSession getSession(SshFile file)
@@ -119,6 +133,19 @@ public final class SshSession implements Constants
             Debug.bug();
             file.setUserName(System.getProperty("user.name"));
         }
+        SshSession session = lockSession(file);
+        if (session != null)
+            return session;
+        // No idle session found for this file. Try to find a session to clone.
+        session = findSession(file);
+        if (session != null)
+            return new SshSession(session, true);
+        // No session to clone.
+        return new SshSession(file, true);
+    }
+    
+    private static SshSession lockSession(SshFile file)
+    {
         if (sessionList != null) {
             for (int i = sessionList.size(); i-- > 0;) {
                 SshSession session = (SshSession) sessionList.get(i);
@@ -126,8 +153,6 @@ public final class SshSession implements Constants
                     if (session.getHostName().equals(file.getHostName())) {
                         if (session.getPort() == file.getPort()) {
                             if (session.lock()) {
-                                Log.debug(file.netPath().concat(
-                                    " re-using existing session"));
                                 return session;
                             }
                         }
@@ -135,9 +160,24 @@ public final class SshSession implements Constants
                 }
             }
         }
-        // Not found.
-        Log.debug("new session");
-        return new SshSession(file, true);
+        return null;
+    }
+
+    private static SshSession findSession(SshFile file)
+    {
+        if (sessionList != null) {
+            for (int i = sessionList.size(); i-- > 0;) {
+                SshSession session = (SshSession) sessionList.get(i);
+                if (session.getUserName().equals(file.getUserName())) {
+                    if (session.getHostName().equals(file.getHostName())) {
+                        if (session.getPort() == file.getPort()) {
+                            return session;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     public final synchronized boolean isLocked()
@@ -155,7 +195,6 @@ public final class SshSession implements Constants
 
     public synchronized void unlock()
     {
-        Log.debug("SshSession.unlock");
         if (locked)
             locked = false;
         else
@@ -187,6 +226,11 @@ public final class SshSession implements Constants
     {
         this.password = password;
     }
+    
+    public final String getPassphrase()
+    {
+        return passphrase;
+    }
 
     public final int getPort()
     {
@@ -205,6 +249,10 @@ public final class SshSession implements Constants
 
     public boolean isDirectory(String canonicalPath)
     {
+        SshFile file =
+            new SshFile(hostName, canonicalPath, userName, null, port);
+        if (DirectoryCache.getDirectoryCache().getListing(file) != null)
+            return true;
         if (!connect())
             return false;
         try {
@@ -351,10 +399,8 @@ public final class SshSession implements Constants
             if (session != null) {
                 listing = session.retrieveDirectoryListing(file);
                 session.unlock();
-                if (listing != null) {
-                    Log.debug("adding " + file + " to cache");
+                if (listing != null)
                     DirectoryCache.getDirectoryCache().put(file, listing);
-                }
             }
         }
         return listing;
@@ -463,6 +509,7 @@ public final class SshSession implements Constants
         response = command(sb.toString());
         Log.debug("response = |" + response + "|");
         Log.debug("PROMPT   = |" + PROMPT + "|");
+        response = command("unset MAILCHECK");
         loginDirectory = getCurrentDirectory();
         connected = true;
         echo = oldEcho;
@@ -488,7 +535,18 @@ public final class SshSession implements Constants
             Log.debug("pre-authenticated");
             connected();
             return true;
-        } else if (response == PASSWORD) {
+        } 
+        if (response == PASSWORD)
+            return authenticateWithPassword();
+        if (response == PASSPHRASE)
+            return authenticateWithPassphrase();
+        return false;
+    }
+    
+    private boolean authenticateWithPassword()
+    {
+        if (password == null) {
+            password = Netrc.getPassword(hostName, userName);
             if (password == null) {
                 if (SwingUtilities.isEventDispatchThread())
                     getPasswordRunnable.run();
@@ -511,27 +569,60 @@ public final class SshSession implements Constants
                         Log.error(e);
                     }
                     connected = false;
-                    dispose();
                     return false;
                 }
             }
-
-            output.setLength(0);
-            Log.debug("sending password ...");
-            boolean oldEcho = echo;
-            echo = true;
-            sendPassword();
-
-            if (checkAuthenticationResponse()) {
-                connected();
-                echo = oldEcho;
-                return true;
-            } else {
-                echo = oldEcho;
+        }
+        return _authenticate(password);
+    }
+    
+    private boolean authenticateWithPassphrase()
+    {
+        if (passphrase == null) {
+            if (SwingUtilities.isEventDispatchThread())
+                getPassphraseRunnable.run();
+            else {
+                try {
+                    SwingUtilities.invokeAndWait(getPassphraseRunnable);
+                }
+                catch (Exception e) {
+                    Log.error(e);
+                }
+            }
+            if (passphrase == null) {
+                try {
+                    Log.debug("calling process.destroy()");
+                    process.destroy();
+                    Log.debug("calling process.waitFor()");
+                    process.waitFor();
+                }
+                catch (InterruptedException e) {
+                    Log.error(e);
+                }
+                connected = false;
                 return false;
             }
-        } else
+        }
+        return _authenticate(passphrase);
+    }
+    
+    private boolean _authenticate(String pass)
+    {
+        Log.debug("authenticate pass = " + pass); // REMOVE THIS!!
+        output.setLength(0);
+        boolean oldEcho = echo;
+        echo = true;
+        sendPass(pass);
+        if (checkAuthenticationResponse()) {
+            Log.debug("authenticate SUCCEEDED!");
+            connected();
+            echo = oldEcho;
+            return true;
+        } else {
+            Log.debug("authenticate FAILED!");
+            echo = oldEcho;
             return false;
+        }        
     }
 
     private int checkInitialResponse()
@@ -560,7 +651,7 @@ public final class SshSession implements Constants
             password = null;
             passwordTitle = "Passphrase";
             passwordPrompt = check;
-            return PASSWORD;
+            return PASSPHRASE;
         }
         RE promptRE = getPromptRE();
         if (promptRE.getMatch(lower) != null)
@@ -587,6 +678,7 @@ public final class SshSession implements Constants
             result = checkResponse(s);
             Log.debug("checkAuthenticationResponse result = " + result);
         }
+        Log.debug("checkAuthenticationResponse returning " + (result == YES));
         return result == YES;
     }
 
@@ -638,6 +730,17 @@ public final class SshSession implements Constants
             final Editor editor = Editor.currentEditor();
             editor.setDefaultCursor();
             password = PasswordDialog.showPasswordDialog(editor, passwordPrompt,
+                passwordTitle);
+            editor.setWaitCursor();
+        }
+    };
+
+    private Runnable getPassphraseRunnable = new Runnable() {
+        public void run()
+        {
+            final Editor editor = Editor.currentEditor();
+            editor.setDefaultCursor();
+            passphrase = PasswordDialog.showPasswordDialog(editor, passwordPrompt,
                 passwordTitle);
             editor.setWaitCursor();
         }
@@ -818,16 +921,17 @@ public final class SshSession implements Constants
         return s;
     }
 
-    private void sendPassword()
+    // Password or passphrase.
+    private void sendPass(String pass)
     {
-        Debug.assertTrue(password != null);
+        Debug.assertTrue(pass != null);
         try {
-            stdin.write(password);
+            stdin.write(pass);
             stdin.write("\n");
             stdin.flush();
             if (outputBuffer != null) {
                 FastStringBuffer sb = new FastStringBuffer("==> ");
-                for (int i = password.length(); i-- > 0;)
+                for (int i = pass.length(); i-- > 0;)
                     sb.append('*');
                 sb.append('\n');
                 writeToOutputBuffer(sb.toString());
@@ -891,34 +995,30 @@ public final class SshSession implements Constants
         SwingUtilities.invokeLater(r);
     }
 
-    public boolean checkLogin()
+    public void checkLogin()
     {
         if (userName == null)
             userName = System.getProperty("user.name");
-        if (password != null)
-            return true;
-        password = Netrc.getPassword(hostName, userName);
-        if (password != null)
-            return true;
-        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-            Buffer buf = it.nextBuffer();
-            if (buf.getFile() instanceof SshFile) {
-                SshFile f = (SshFile) buf.getFile();
-                if (f.hostName != null && f.hostName.equals(hostName)) {
-                    if (f.getUserName() != null && f.getUserName().equals(userName)) {
-                        password = f.getPassword();
-                        break;
+        if (password == null) {
+            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                Buffer buf = it.nextBuffer();
+                if (buf.getFile() instanceof SshFile) {
+                    SshFile f = (SshFile) buf.getFile();
+                    if (f.hostName != null && f.hostName.equals(hostName)) {
+                        if (f.getUserName() != null && f.getUserName().equals(userName)) {
+                            password = f.getPassword();
+                            break;
+                        }
                     }
                 }
             }
         }
-        return true;
     }
 
     public static synchronized void cleanup()
     {
         if (sessionList != null) {
-            for (int i = sessionList.size() - 1; i >= 0; i--) {
+            for (int i = sessionList.size(); i-- > 0;) {
                 SshSession session = (SshSession) sessionList.get(i);
                 boolean inUse = false;
                 for (BufferIterator it = new BufferIterator(); it.hasNext();) {
@@ -942,8 +1042,7 @@ public final class SshSession implements Constants
             Log.debug("leaving SshSession.cleanup size = " + sessionList.size());
             if (sessionList.size() == 0)
                 sessionList = null;
-        }
-        else
+        } else
             Debug.bug("SshSession.cleanup no session list");
     }
 
