@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.55 2003-10-18 22:57:25 piso Exp $
+;;; $Id: compiler.lisp,v 1.56 2003-10-18 23:10:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -249,7 +249,7 @@
 ;; macro that's also implemented as a special operator, so interpreted code can
 ;; use the (faster) special operator implementation.
 (defun expand-macro (form)
-  (do () ()
+  (loop
     (multiple-value-bind (result expanded) (macroexpand-1 form)
       (unless expanded (return-from expand-macro result))
       (when (and (consp result)
