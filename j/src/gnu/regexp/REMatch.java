@@ -54,8 +54,14 @@ public final class REMatch implements Serializable, Cloneable {
 	    REMatch copy = (REMatch) super.clone();
 	    copy.next = null;
 
-	    copy.start = (int[]) start.clone();
-	    copy.end = (int[]) end.clone();
+            // Jun 25 2003 3:39 PM PG
+            // Work around problem with jikes 1.18 and IBM Java 1.4.1.
+            //copy.start = (int[]) start.clone();
+            //copy.end = (int[]) end.clone();
+            copy.start = new int[start.length];
+            System.arraycopy(start, 0, copy.start, 0, start.length);
+            copy.end = new int[end.length];
+            System.arraycopy(end, 0, copy.end, 0, end.length);
 
 	    return copy;
 	} catch (CloneNotSupportedException e) {
@@ -96,7 +102,7 @@ public final class REMatch implements Serializable, Cloneable {
 	}
 	next = null; // cut off alternates
     }
-    
+
     /** Clears the current match and moves the offset to the new index. */
     void clear(int index) {
 	offset = index;
@@ -106,12 +112,12 @@ public final class REMatch implements Serializable, Cloneable {
 	}
 	next = null; // cut off alternates
     }
-    
+
     /**
      * Returns the string matching the pattern.  This makes it convenient
      * to write code like the following:
      * <P>
-     * <code> 
+     * <code>
      * REMatch myMatch = myExpression.getMatch(myString);<br>
      * if (myMatch != null) System.out.println("Regexp found: "+myMatch);
      * </code>
@@ -119,7 +125,7 @@ public final class REMatch implements Serializable, Cloneable {
     public String toString() {
 	return matchedText;
     }
-    
+
     /**
      * Returns the index within the input text where the match in its entirety
      * began.
@@ -127,7 +133,7 @@ public final class REMatch implements Serializable, Cloneable {
     public int getStartIndex() {
 	return offset + start[0];
     }
-    
+
     /**
      * Returns the index within the input string where the match in
      * its entirety ends.  The return value is the next position after
@@ -143,12 +149,12 @@ public final class REMatch implements Serializable, Cloneable {
      * myMatch.getEndIndex());</code>
      * <P>
      * But you can save yourself that work, since the <code>toString()</code>
-     * method (above) does exactly that for you.  
+     * method (above) does exactly that for you.
      */
     public int getEndIndex() {
 	return offset + end[0];
     }
-  
+
     /**
      * Returns the string matching the given subexpression.  The subexpressions
      * are indexed starting with one, not zero.  That is, the subexpression
@@ -161,8 +167,8 @@ public final class REMatch implements Serializable, Cloneable {
 	if ((sub >= start.length) || (start[sub] == -1)) return "";
 	return (matchedText.substring(start[sub],end[sub]));
     }
-    
-    /** 
+
+    /**
      * Returns the index within the input string used to generate this match
      * where subexpression number <i>sub</i> begins, or <code>-1</code> if
      * the subexpression does not exist.  The initial position is zero.
@@ -175,8 +181,8 @@ public final class REMatch implements Serializable, Cloneable {
 	int x = start[sub];
 	return (x == -1) ? x : offset + x;
     }
-    
-    /** 
+
+    /**
      * Returns the index within the input string used to generate this match
      * where subexpression number <i>sub</i> begins, or <code>-1</code> if
      * the subexpression does not exist.  The initial position is zero.
@@ -189,8 +195,8 @@ public final class REMatch implements Serializable, Cloneable {
 	int x = start[sub];
 	return (x == -1) ? x : offset + x;
     }
-  
-    /** 
+
+    /**
      * Returns the index within the input string used to generate this match
      * where subexpression number <i>sub</i> ends, or <code>-1</code> if
      * the subexpression does not exist.  The initial position is zero.
@@ -203,8 +209,8 @@ public final class REMatch implements Serializable, Cloneable {
 	int x = end[sub];
 	return (x == -1) ? x : offset + x;
     }
-    
-    /** 
+
+    /**
      * Returns the index within the input string used to generate this match
      * where subexpression number <i>sub</i> ends, or <code>-1</code> if
      * the subexpression does not exist.  The initial position is zero.
@@ -216,7 +222,7 @@ public final class REMatch implements Serializable, Cloneable {
 	int x = end[sub];
 	return (x == -1) ? x : offset + x;
     }
-    
+
     /**
      * Substitute the results of this match to create a new string.
      * This is patterned after PERL, so the tokens to watch out for are
@@ -235,7 +241,7 @@ public final class REMatch implements Serializable, Cloneable {
 		int val = Character.digit(input.charAt(++pos),10);
 		if (val < start.length) {
 		    output.append(toString(val));
-		} 
+		}
 	    } else output.append(input.charAt(pos));
 	}
 	if (pos < input.length()) output.append(input.charAt(pos));
