@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.114 2004-04-18 18:41:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.115 2004-04-20 15:14:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2393,39 +2393,39 @@
                 (t
                  (emit 'aload (1+ index))
                  (emit-store-value)
-                 (return-from compile-variable-ref))))))
-    (when (memq var *closure-vars*)
-      (let ((g (declare-object *env*)))
-        (emit 'getstatic
-              *this-class*
-              g
-              "Lorg/armedbear/lisp/LispObject;"))
-      ;; FIXME Move this to constructor!
-      ;; Cast it to an Environment object.
-      (emit 'checkcast +lisp-environment-class+)
-      (let ((g (declare-symbol var)))
-        (emit 'getstatic
-              *this-class*
-              g
-              "Lorg/armedbear/lisp/Symbol;"))
-      (emit-invokevirtual +lisp-environment-class+
-                          "lookup"
-                          "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                          -1)
-      (emit-store-value)
-      (return-from compile-variable-ref))
-    ;; Otherwise it must be a global variable.
+                 (return-from compile-variable-ref)))))))
+  (when (memq var *closure-vars*)
+    (let ((g (declare-object *env*)))
+      (emit 'getstatic
+            *this-class*
+            g
+            "Lorg/armedbear/lisp/LispObject;"))
+    ;; FIXME Move this to constructor!
+    ;; Cast it to an Environment object.
+    (emit 'checkcast +lisp-environment-class+)
     (let ((g (declare-symbol var)))
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/Symbol;")
-      (emit-invokevirtual +lisp-symbol-class+
-                          "symbolValue"
-                          "()Lorg/armedbear/lisp/LispObject;"
-                          0)
-      (emit-store-value)
-      (return-from compile-variable-ref))))
+            "Lorg/armedbear/lisp/Symbol;"))
+    (emit-invokevirtual +lisp-environment-class+
+                        "lookup"
+                        "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                        -1)
+    (emit-store-value)
+    (return-from compile-variable-ref))
+  ;; Otherwise it must be a global variable.
+  (let ((g (declare-symbol var)))
+    (emit 'getstatic
+          *this-class*
+          g
+          "Lorg/armedbear/lisp/Symbol;")
+    (emit-invokevirtual +lisp-symbol-class+
+                        "symbolValue"
+                        "()Lorg/armedbear/lisp/LispObject;"
+                        0)
+    (emit-store-value)
+    (return-from compile-variable-ref)))
 
 ;; If for-effect is true, no value needs to be left on the stack.
 (defun compile-form (form &optional for-effect)
