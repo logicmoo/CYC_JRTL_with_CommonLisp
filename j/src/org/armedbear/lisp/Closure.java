@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.45 2003-06-09 01:38:43 piso Exp $
+ * $Id: Closure.java,v 1.46 2003-06-09 01:59:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,11 +279,19 @@ public class Closure extends Function
 
     public LispObject execute(LispObject arg) throws Condition
     {
-        if (arity == 1) {
+        if (minArgs == 1) {
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
             bind(requiredParameters[0].var, arg, ext);
+            if (arity != 1) {
+                if (optionalParameters != null)
+                    bindOptionalParameterDefaults(ext, thread);
+                if (restVar != null)
+                    bind(restVar, NIL, ext);
+                if (keywordParameters != null)
+                    bindKeywordParameterDefaults(ext, thread);
+            }
             if (auxVars != null)
                 bindAuxVars(ext, thread);
             LispObject result = NIL;
@@ -339,13 +347,21 @@ public class Closure extends Function
     public LispObject execute(LispObject first, LispObject second,
         LispObject third) throws Condition
     {
-        if (arity == 3) {
+        if (minArgs == 3) {
             final LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(environment);
             bind(requiredParameters[0].var, first, ext);
             bind(requiredParameters[1].var, second, ext);
             bind(requiredParameters[2].var, third, ext);
+            if (arity != 3) {
+                if (optionalParameters != null)
+                    bindOptionalParameterDefaults(ext, thread);
+                if (restVar != null)
+                    bind(restVar, NIL, ext);
+                if (keywordParameters != null)
+                    bindKeywordParameterDefaults(ext, thread);
+            }
             if (auxVars != null)
                 bindAuxVars(ext, thread);
             LispObject result = NIL;
