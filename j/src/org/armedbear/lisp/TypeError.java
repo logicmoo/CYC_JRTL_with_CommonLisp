@@ -1,8 +1,8 @@
 /*
  * TypeError.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: TypeError.java,v 1.16 2003-12-27 05:36:41 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: TypeError.java,v 1.17 2004-02-13 18:06:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,30 +92,38 @@ public class TypeError extends LispError
 
     public String getMessage()
     {
-        String s = super.getMessage();
-        if (s != null)
-            return s;
-        StringBuffer sb = new StringBuffer();
-        String name = datum != null ? String.valueOf(datum) : null;
-        String type = null;
-        if (typeString != null)
-            type = typeString;
-        else if (expectedType != null)
-            type = String.valueOf(expectedType);
-        if (type != null) {
-            if (name != null) {
-                sb.append("The value ");
+        final LispThread thread = LispThread.currentThread();
+        final Environment oldDynEnv = thread.getDynamicEnvironment();
+        thread.bindSpecial(_PRINT_ESCAPE_, T);
+        try {
+            String s = super.getMessage();
+            if (s != null)
+                return s;
+            StringBuffer sb = new StringBuffer();
+            String name = datum != null ? String.valueOf(datum) : null;
+            String type = null;
+            if (typeString != null)
+                type = typeString;
+            else if (expectedType != null)
+                type = String.valueOf(expectedType);
+            if (type != null) {
+                if (name != null) {
+                    sb.append("The value ");
+                    sb.append(name);
+                } else
+                    sb.append("Value");
+                sb.append(" is not of type ");
+                sb.append(type);
+            } else if (name != null) {
+                sb.append("Wrong type: ");
                 sb.append(name);
-            } else
-                sb.append("Value");
-            sb.append(" is not of type ");
-            sb.append(type);
-        } else if (name != null) {
-            sb.append("Wrong type: ");
-            sb.append(name);
+            }
+            sb.append('.');
+            return sb.toString();
         }
-        sb.append('.');
-        return sb.toString();
+        finally {
+            thread.setDynamicEnvironment(oldDynEnv);
+        }
     }
 
     // ### type-error-datum
