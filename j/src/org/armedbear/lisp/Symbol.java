@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.135 2004-06-02 11:43:35 piso Exp $
+ * $Id: Symbol.java,v 1.136 2004-06-02 21:22:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -470,14 +470,14 @@ public class Symbol extends LispObject
         boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValue(thread);
         LispObject readtableCase = currentReadtable().getReadtableCase();
-        if (pkg == PACKAGE_KEYWORD) {
-            if (printCase == Keyword.DOWNCASE)
-                return ":".concat(name.toLowerCase());
-            if (printCase == Keyword.CAPITALIZE)
-                return ":".concat(capitalize(name, readtableCase));
-            return ":".concat(name);
-        }
         if (!printEscape) {
+            if (pkg == PACKAGE_KEYWORD) {
+                if (printCase == Keyword.DOWNCASE)
+                    return name.toLowerCase();
+                if (printCase == Keyword.CAPITALIZE)
+                    return capitalize(name, readtableCase);
+                return name;
+            }
             // Printer escaping is disabled.
             if (readtableCase == Keyword.UPCASE) {
                 if (printCase == Keyword.DOWNCASE)
@@ -502,6 +502,13 @@ public class Symbol extends LispObject
                 return invert(name);
         }
         // Printer escaping is enabled.
+        if (pkg == PACKAGE_KEYWORD) {
+            if (printCase == Keyword.DOWNCASE)
+                return ":".concat(name.toLowerCase());
+            if (printCase == Keyword.CAPITALIZE)
+                return ":".concat(capitalize(name, readtableCase));
+            return ":".concat(name);
+        }
         boolean escape = false;
         final int length = name.length();
         if (length == 0)
