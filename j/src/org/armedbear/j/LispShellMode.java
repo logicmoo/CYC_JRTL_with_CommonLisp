@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShellMode.java,v 1.15 2004-09-04 13:29:07 piso Exp $
+ * $Id: LispShellMode.java,v 1.16 2004-10-25 01:44:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,6 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_C, CTRL_MASK | ALT_MASK, "shellInterrupt");
         km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
         km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
-        km.mapKey(')', "closeParen");
         km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK, "lispFindMatchingChar");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "lispSelectSyntax");
@@ -109,6 +108,20 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         }
         if (buffer instanceof LispShell)
             ((LispShell)buffer).enter();
+        else
+            Debug.bug();
+    }
+
+    public static void electricCloseParen()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer.getMode() != mode) {
+            Debug.bug();
+            return;
+        }
+        if (buffer instanceof LispShell)
+            ((LispShell)buffer).electricCloseParen();
         else
             Debug.bug();
     }

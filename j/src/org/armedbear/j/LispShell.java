@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.79 2004-10-05 14:18:29 piso Exp $
+ * $Id: LispShell.java,v 1.80 2004-10-25 01:43:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,6 +277,60 @@ public class LispShell extends Shell
             sendInputToLisp(s);
         } else
             indentLineAtDot(editor);
+    }
+
+    public void electricCloseParen()
+    {
+        final Editor editor = Editor.currentEditor();
+        editor.closeParen();
+        Position dot = editor.getDotCopy();
+        if (dot == null)
+            return;
+        if (needsRenumbering)
+            renumber();
+        final Line dotLine = dot.getLine();
+        final Position endOfOutput = getEndOfOutput();
+        if (endOfOutput == null)
+            return;
+        if (dot.isBefore(endOfOutput))
+            return;
+        final Line promptLine = endOfOutput.getLine();
+        Position end = getEnd();
+        if (dot.isBefore(end))
+            return;
+        Position pos = LispMode.findContainingSexp(end);
+        boolean isComplete = (pos == null || pos.isBefore(endOfOutput));
+        if (isComplete) {
+            // Complete sexp.
+            Annotation a = new Annotation(endOfOutput.getOffset());
+            promptLine.setAnnotation(a);
+            promptLine.setFlags(STATE_PROMPT);
+            editor.eob();
+            editor.insertLineSeparator();
+            editor.getDotLine().setFlags(0);
+        }
+        if (needsRenumbering)
+            renumber();
+        editor.moveCaretToDotCol();
+        editor.getDisplay().setReframe(-2);
+        resetUndo();
+        stripEcho = true;
+        if (isComplete) {
+            // No containing sexp. Send input to lisp process.
+            Position begin = endOfOutput;
+            end = editor.getDotCopy();
+            end.setOffset(end.getLineLength());
+            setEndOfOutput(end);
+            Line lineBeforeLastPrompt = promptLine.previous();
+            if (lineBeforeLastPrompt != null) {
+                posBeforeLastPrompt =
+                    new Position(lineBeforeLastPrompt,
+                                 lineBeforeLastPrompt.length());
+            }
+            posEndOfInput = end.copy();
+            String s = new Region(this, begin, end).toString();
+            sendInputToLisp(s);
+        }
     }
 
     public void resetLisp()
