@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.172 2003-11-04 01:41:21 piso Exp $
+ * $Id: Lisp.java,v 1.173 2003-11-07 19:52:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -981,8 +981,7 @@ public abstract class Lisp
     {
         LispObject list = symbol.getPropertyList();
         while (list != NIL) {
-            LispObject obj = list.car();
-            if (obj.eql(indicator))
+            if (list.car() == indicator)
                 return list.cadr();
             list = list.cddr();
         }
@@ -995,8 +994,7 @@ public abstract class Lisp
     {
         LispObject list = symbol.getPropertyList();
         while (list != NIL) {
-            LispObject obj = list.car();
-            if (obj.eql(indicator))
+            if (list.car() == indicator)
                 return list.cadr();
             list = list.cddr();
         }
@@ -1009,7 +1007,7 @@ public abstract class Lisp
     {
         LispObject list = symbol.getPropertyList();
         while (list != NIL) {
-            if (list.car().eql(indicator)) {
+            if (list.car() == indicator) {
                 // Found it!
                 LispObject rest = list.cdr();
                 rest.setCar(value);
@@ -1033,13 +1031,12 @@ public abstract class Lisp
             if (!(list.cdr() instanceof Cons))
                 throw new ConditionThrowable(new ProgramError(String.valueOf(symbol) +
                                                               " has an odd number of items in its property list"));
-            if (list.car().eql(indicator)) {
+            if (list.car() == indicator) {
                 // Found it!
-                if (prev != null) {
+                if (prev != null)
                     prev.setCdr(list.cddr());
-                } else {
+                else
                     symbol.setPropertyList(list.cddr());
-                }
                 return T;
             }
             prev = list;
