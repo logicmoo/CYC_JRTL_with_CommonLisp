@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.68 2004-09-12 18:45:22 piso Exp $
+ * $Id: LispShell.java,v 1.69 2004-09-13 14:54:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,8 @@ public class LispShell extends Shell
     private static final String SBCL_PROMPT_PATTERN =
         CMUCL_PROMPT_PATTERN + "|" + ALLEGRO_PROMPT_PATTERN;
 
+    private final boolean slime;
+
     private String resetCommand = null;
     private String exitCommand = "(exit)";
 
@@ -60,6 +62,7 @@ public class LispShell extends Shell
     {
         setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
         setResetCommand(":reset");
+        slime = false;
     }
 
     private LispShell(String shellCommand, String title)
@@ -67,6 +70,7 @@ public class LispShell extends Shell
         super(shellCommand, LispShellMode.getMode());
         this.title = title;
         formatter = mode.getFormatter(this);
+        slime = title.startsWith("slime ");
     }
 
     public final boolean isLisp()
@@ -99,7 +103,6 @@ public class LispShell extends Shell
                     shellCommand + " --load " + swankLoader.canonicalPath();
             }
         }
-
         LispShell lisp = new LispShell(shellCommand, title);
         lisp.startProcess();
         if (lisp.getProcess() == null) {
@@ -238,7 +241,7 @@ public class LispShell extends Shell
         String prompt;
         int index = s.lastIndexOf('\n');
         if (index >= 0)
-            prompt = s.substring(index+1);
+            prompt = s.substring(index + 1);
         else
             prompt = s;
         final REMatch match = promptRE.getMatch(prompt);
@@ -307,38 +310,54 @@ public class LispShell extends Shell
             return;
         }
         try {
-            if (posEndOfInput == null)
-                posEndOfInput = new Position(getFirstLine(), 0);
-            final Position pos;
-            if (posBeforeLastPrompt != null && posEndOfInput != null) {
-                if (posEndOfInput.isAfter(posBeforeLastPrompt)) {
-                    // There has been user input since the last prompt.
-                    pos = getEnd();
-                } else {
-                    pos = posBeforeLastPrompt;
-                }
-            } else {
-                pos = getEnd();
-            }
-            if (pos != null) {
-                if (pos == posBeforeLastPrompt) {
-                    if (s.length() > 0) {
-                        if (s.charAt(s.length() - 1) == '\n')
-                            s = s.substring(0, s.length() - 1);
+            if (slime) {
+                // Slime.
+                if (posEndOfInput == null)
+                    posEndOfInput = new Position(getFirstLine(), 0);
+                final Position pos;
+                if (posBeforeLastPrompt != null && posEndOfInput != null) {
+                    if (posEndOfInput.isAfter(posBeforeLastPrompt)) {
+                        // There has been user input since the last prompt.
+                        pos = getEnd();
+                    } else {
+                        pos = posBeforeLastPrompt;
                     }
-                    if (s.length() > 0 && s.charAt(0) != '\n')
-                        insertLineSeparator(pos);
+                } else {
+                    pos = getEnd();
                 }
-                insertString(pos, s);
-                if (needsRenumbering())
-                    renumber();
-                enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
-                if (pos != posBeforeLastPrompt)
-                    setEndOfOutput(pos.copy());
+                if (pos != null) {
+                    if (pos == posBeforeLastPrompt) {
+                        if (s.length() > 0) {
+                            if (s.charAt(s.length() - 1) == '\n')
+                                s = s.substring(0, s.length() - 1);
+                        }
+                        if (s.length() > 0 && s.charAt(0) != '\n')
+                            insertLineSeparator(pos);
+                    }
+                    insertString(pos, s);
+                    if (needsRenumbering())
+                        renumber();
+                    enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
+                    if (pos != posBeforeLastPrompt)
+                        setEndOfOutput(pos.copy());
+                } else {
+                    // Empty buffer.
+                    setText(s);
+                    setEndOfOutput(getEnd().copy());
+                }
             } else {
-                // Empty buffer.
-                setText(s);
-                setEndOfOutput(getEnd().copy());
+                // No slime.
+                Position pos = getEnd();
+                if (pos != null) {
+                    insertString(pos, s);
+                    if (needsRenumbering())
+                        renumber();
+                    enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
+                    setEndOfOutput(pos.copy());
+                } else {
+                    setText(s);
+                    setEndOfOutput(getEnd().copy());
+                }
             }
         }
         finally {
@@ -442,13 +461,14 @@ public class LispShell extends Shell
 
     public static void slime()
     {
-        lisp(getDefaultLispShellCommand(), "abcl", false, true);
+        lisp(getDefaultLispShellCommand(), "slime abcl", false, true);
     }
 
     public static void slime(String shellCommand)
     {
         // Require jpty on Unix platforms.
-        lisp(shellCommand, shellCommand, Platform.isPlatformUnix(), true);
+        lisp(shellCommand, "slime ".concat(shellCommand),
+             Platform.isPlatformUnix(), true);
     }
 
     public static void lisp()
