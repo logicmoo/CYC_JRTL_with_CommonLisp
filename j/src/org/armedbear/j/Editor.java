@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.19 2002-11-15 15:58:32 piso Exp $
+ * $Id: Editor.java,v 1.20 2002-11-19 00:23:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -362,10 +362,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         Directories.moveUnsentMessagesToDraftsFolder();
         loadExtensions();
         if (quick == 0) {
-            long start = System.currentTimeMillis();
-            runStartupScript();
-            long elapsed = System.currentTimeMillis() - start;
-            Log.debug("runStartupScript() " + elapsed + " ms");
+            runStartupScript("org.armedbear.j.JLisp", "init.lisp");
+            runStartupScript("org.armedbear.j.BeanShell", "init.bsh");
         }
         DefaultLookAndFeel.setLookAndFeel();
 
@@ -6843,7 +6841,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         displayReady = b;
     }
 
-    private static final Cursor waitCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+    private static final Cursor waitCursor =
+        Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
 
     public final void setWaitCursor()
     {
@@ -7049,27 +7048,67 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         return c;
     }
 
-    public static final File getStartupScript()
+    private static void runStartupScript(String className, String fileName)
     {
-        return File.getInstance(getEditorDirectory(), "init.bsh");
-    }
-
-    private static void runStartupScript()
-    {
-        File file = getStartupScript();
+        File file = File.getInstance(getEditorDirectory(), fileName);
         if (file != null && file.isFile()) {
             try {
-                Class c = Class.forName("org.armedbear.j.BeanShell");
+                long start = System.currentTimeMillis();
+                Class c = Class.forName(className);
                 if (c != null) {
+                    Class[] parameterTypes = new Class[1];
+                    parameterTypes[0] = File.class;
                     Method method =
-                        c.getMethod("runStartupScript", new Class[0]);
-                    if (method != null)
-                        method.invoke(null, new Object[0]);
+                        c.getMethod("runStartupScript", parameterTypes);
+                    if (method != null) {
+                        Object[] args = new Object[1];
+                        args[0] = file;
+                        method.invoke(null, args);
+                    }
                 }
+                long elapsed = System.currentTimeMillis() - start;
+                FastStringBuffer sb = new FastStringBuffer("loaded ");
+                sb.append(file.canonicalPath());
+                sb.append(" (");
+                sb.append(elapsed);
+                sb.append(" ms)");
+                Log.info(sb.toString());
             }
             catch (Throwable t) {
                 Log.error(t);
+                Log.error("unable to load " + file.canonicalPath());
             }
+        }
+    }
+
+    public static void runLispCommand(String command)
+    {
+        Log.debug("runLispCommand |" + command + "|");
+        try {
+            Class c = Class.forName("org.armedbear.j.JLisp");
+            if (c != null) {
+                Class[] parameterTypes = new Class[1];
+                parameterTypes[0] = String.class;
+                Method method =
+                    c.getMethod("runLispCommand", parameterTypes);
+                if (method != null) {
+                    Object[] args = new Object[1];
+                    args[0] = command;
+                    method.invoke(null, args);
+                }
+            }
+        }
+        catch (ClassNotFoundException e) {
+            // Not an error.
+        }
+        catch (NoSuchMethodException e) {
+            Log.error(e);
+        }
+        catch (IllegalAccessException e) {
+            Log.error(e);
+        }
+        catch (Throwable t) {
+            Log.error(t);
         }
     }
 
@@ -7078,7 +7117,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         Mode mode = buffer.getDefaultMode();
         if (mode != buffer.getMode()) {
             if (buffer.isModified()) {
-                FastStringBuffer sb = new FastStringBuffer("Buffer will be reloaded in ");
+                FastStringBuffer sb =
+                    new FastStringBuffer("Buffer will be reloaded in ");
                 sb.append(mode.toString());
                 sb.append(" mode; discard changes?");
                 if (!confirm(buffer.getFile().getName(), sb.toString()))
@@ -7094,7 +7134,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         if (buffer.getModeId() == BINARY_MODE) {
             if (buffer.isModified()) {
-                String prompt = "Buffer will be reloaded in text mode; discard changes?";
+                String prompt =
+                    "Buffer will be reloaded in text mode; discard changes?";
                 if (!confirm(buffer.getFile().getName(), prompt))
                     return;
             }
