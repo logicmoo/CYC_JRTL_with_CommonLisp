@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.18 2002-12-12 14:19:03 piso Exp $
+ * $Id: LispMode.java,v 1.19 2002-12-15 02:54:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -455,7 +455,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         if (editor.getMode() != mode)
             return;
         // Look for Lisp shell.
-        LispShell lisp = LispShell.findLispShell(null);
+        CommandInterpreter lisp = LispShell.findLisp(null);
         if (lisp == null) {
             MessageDialog.showMessageDialog("No Lisp shell is running", "Error");
             return;
@@ -482,7 +482,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 lisp.insertString(bufEnd,
                     ";;; Evaluating defun " + defunName + "\n");
                 lisp.renumber();
-                lisp.eval(r.toString().trim());
+                lisp.send(r.toString().trim());
             }
         }
         ed.eob();
@@ -500,7 +500,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
             return;
         }
         // Look for Lisp shell.
-        LispShell lisp = LispShell.findLispShell(null);
+        CommandInterpreter lisp = LispShell.findLisp(null);
         if (lisp == null) {
             MessageDialog.showMessageDialog("No Lisp shell is running",
                 "Error");
@@ -513,7 +513,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         bufEnd.getLine().setFlags(STATE_INPUT);
         lisp.insertString(bufEnd, ";;; Evaluating region\n");
         lisp.renumber();
-        lisp.eval(new Region(editor).toString().trim());
+        lisp.send(new Region(editor).toString().trim());
         ed.eob();
     }
 
