@@ -237,6 +237,7 @@ gensym
 get
 get-decoded-time
 get-dispatch-macro-character
+get-internal-real-time
 get-output-stream-string
 get-setf-expansion
 get-universal-time
