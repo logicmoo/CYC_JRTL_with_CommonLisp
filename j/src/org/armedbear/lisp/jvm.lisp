@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.100 2004-04-06 00:21:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.101 2004-04-06 02:44:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2306,7 +2306,7 @@
 (defun compile-function (form for-effect)
    (let ((obj (second form)))
      (cond ((symbolp obj)
-            (if nil ;; (memq (symbol-package obj) +known-packages+)
+            (if (or (sys::built-in-function-p obj) (memq obj *toplevel-defuns*))
                 (let ((g (declare-function obj)))
                   (emit 'getstatic
                         *this-class*
