@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.184 2004-09-01 17:30:34 piso Exp $
+;;; $Id: boot.lisp,v 1.185 2004-09-07 15:37:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -93,6 +93,9 @@
 
 (defun clear-output (&optional output-stream)
   (%clear-output output-stream))
+
+(defun simple-format (destination control-string &rest args)
+  (apply *simple-format-function* destination control-string args))
 
 ;; INVOKE-DEBUGGER is redefined in debug.lisp.
 (defun invoke-debugger (condition)
