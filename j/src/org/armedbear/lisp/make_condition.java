@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_condition.java,v 1.1 2003-09-20 16:56:33 piso Exp $
+ * $Id: make_condition.java,v 1.2 2003-09-21 01:56:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+// ### make-condition
 public final class make_condition extends Primitive
 {
     private make_condition(String name)
@@ -28,9 +29,28 @@ public final class make_condition extends Primitive
         super(name);
     }
 
+    // make-condition type &rest slot-initializations => condition
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return new Condition();
+        if (args.length < 1)
+            throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+        LispObject type = args[0];
+        LispObject initArgs = NIL;
+        for (int i = args.length; i-- > 1;)
+            initArgs = new Cons(args[i], initArgs);
+        if (type == Symbol.CONDITION)
+            return new Condition(initArgs);
+        if (type == Symbol.SIMPLE_CONDITION)
+            return new SimpleCondition(initArgs);
+        if (type == Symbol.ERROR)
+            return new LispError(initArgs);
+        if (type == Symbol.SIMPLE_ERROR)
+            return new SimpleError(initArgs);
+        if (type == Symbol.UNBOUND_VARIABLE)
+            return new UnboundVariable(initArgs);
+        if (type == Symbol.UNDEFINED_FUNCTION)
+            return new UndefinedFunction(initArgs);
+        throw new ConditionThrowable(new LispError("MAKE-CONDITION: unsupported type " + type));
     }
 
     private static final make_condition MAKE_CONDITION =
