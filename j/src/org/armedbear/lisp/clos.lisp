@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.129 2004-11-08 19:24:11 piso Exp $
+;;; $Id: clos.lisp,v 1.130 2004-11-09 01:48:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -648,6 +648,7 @@
     :initarg :lambda-list)
    (documentation
     :initarg :documentation)  ; :accessor generic-function-documentation
+   (initial-methods :initform ())
    (methods :initform ())     ; :accessor generic-function-methods
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
@@ -679,6 +680,11 @@
   (slot-value gf 'documentation))
 (defun (setf generic-function-documentation) (new-value gf)
   (setf (slot-value gf 'documentation) new-value))
+
+(defun generic-function-initial-methods (gf)
+  (slot-value gf 'initial-methods))
+(defun (setf generic-function-initial-methods) (new-value gf)
+  (setf (slot-value gf 'initial-methods) new-value))
 
 (defun generic-function-methods (gf)
   (slot-value gf 'methods))
@@ -777,7 +783,10 @@
          (setf documentation t)
          (push item options))
         (:method
-         (push `(defmethod ,function-name ,@(cdr item)) methods))
+         (push
+          `(push (defmethod ,function-name ,@(cdr item))
+                 (generic-function-initial-methods (fdefinition ',function-name)))
+          methods))
         (t
          (push item options))))
     (setf options (nreverse options)
@@ -860,6 +869,16 @@
                    :format-arguments (list lambda-list gf)))
           (setf (generic-function-lambda-list gf) lambda-list)
           (setf (generic-function-documentation gf) documentation)
+          ;; Remove methods defined by previous DEFGENERIC form.
+          ;; FIXME This should be done before the call to ENSURE-GENERIC-FUNCTION!
+          ;; "The effect of the DEFGENERIC macro is as if the following three
+          ;; steps were performed: first, methods defined by previous
+          ;; DEFGENERIC forms are removed; second, ENSURE-GENERIC-FUNCTION is
+          ;; called; and finally, methods specified by the current DEFGENERIC
+          ;; form are added to the generic function."
+          (dolist (method (generic-function-initial-methods gf))
+            (remove-method gf method)
+            (setf (generic-function-initial-methods gf) ()))
           gf)
         (progn
           (when (fboundp function-name)
@@ -897,6 +916,7 @@
   (let ((gf (std-allocate-instance the-class-standard-gf)))
     (setf (generic-function-name gf) name)
     (setf (generic-function-lambda-list gf) lambda-list)
+    (setf (generic-function-initial-methods gf) ())
     (setf (generic-function-methods gf) ())
     (setf (generic-function-method-class gf) method-class)
     (setf (generic-function-method-combination gf) method-combination)
