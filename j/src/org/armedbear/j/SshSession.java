@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SshSession.java,v 1.12 2003-05-19 14:59:27 piso Exp $
+ * $Id: SshSession.java,v 1.13 2003-05-25 13:43:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1092,8 +1092,6 @@ public final class SshSession implements Constants
                 if (!inUse)
                     session.dispose();
             }
-            Log.debug("leaving SshSession.cleanup session count = " +
-                sessionList.size());
             if (sessionList.size() == 0) {
                 sessionList = null;
                 if (cleanupThread != null) {

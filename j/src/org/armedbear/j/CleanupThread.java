@@ -2,7 +2,7 @@
  * CleanupThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CleanupThread.java,v 1.1 2003-05-19 14:29:33 piso Exp $
+ * $Id: CleanupThread.java,v 1.2 2003-05-25 13:43:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,20 +40,15 @@ public final class CleanupThread extends Thread
             try {
                 Thread.sleep(60000); // 60 seconds
             }
-            catch (InterruptedException e) {
-                Log.debug("cleanup thread interrupted");
-            }
-            if (cancelled) {
-                Log.debug("CleanupThread.run() exiting");
+            catch (InterruptedException e) {}
+            if (cancelled)
                 return;
-            }
             SwingUtilities.invokeLater(runnable);
         }
     }
 
     public void cancel()
     {
-        Log.debug("CleanupThread.cancel()");
         cancelled = true;
         interrupt();
     }
