@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.58 2003-11-03 03:01:53 piso Exp $
+;;; $Id: autoloads.lisp,v 1.59 2003-11-07 19:16:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,3 +124,4 @@
 (autoload-macro 'with-accessors)
 (autoload-macro 'print-unreadable-object)
 (autoload 'print-object)
+(autoload-macro '(prog prog*) "prog.lisp")
