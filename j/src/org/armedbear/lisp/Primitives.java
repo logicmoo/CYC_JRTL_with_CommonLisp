@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.166 2003-04-09 23:56:12 piso Exp $
+ * $Id: Primitives.java,v 1.167 2003-04-10 00:54:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1256,26 +1256,18 @@ public final class Primitives extends Module
                 if (c == 'A' || c == 'a') {
                     if (j < args.length) {
                         LispObject obj = args[j++];
-                        String s;
-                        if (obj instanceof LispString)
-                            s = ((LispString)obj).getValue();
-                        else if (obj instanceof Symbol)
-                            s = ((Symbol)obj).getName();
-                        else
-                            s = String.valueOf(obj);
-                        sb.append(s);
+                        Environment oldDynEnv = dynEnv;
+                        bindSpecial(_PRINT_ESCAPE_, NIL);
+                        sb.append(String.valueOf(obj));
+                        dynEnv = oldDynEnv;
                     }
                 } else if (c == 'S' || c == 's') {
                     if (j < args.length) {
                         LispObject obj = args[j++];
-                        String s;
-                        if (obj instanceof LispString)
-                            s = ((LispString)obj).getValue();
-                        else if (obj instanceof Symbol)
-                            s = ((Symbol)obj).getName();
-                        else
-                            s = String.valueOf(obj);
-                        sb.append(s);
+                        Environment oldDynEnv = dynEnv;
+                        bindSpecial(_PRINT_ESCAPE_, T);
+                        sb.append(String.valueOf(obj));
+                        dynEnv = oldDynEnv;
                     }
                 } else if (c == '%') {
                     sb.append(System.getProperty("line.separator"));
