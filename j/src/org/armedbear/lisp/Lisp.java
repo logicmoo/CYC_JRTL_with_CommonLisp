@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.265 2004-08-01 14:59:37 piso Exp $
+ * $Id: Lisp.java,v 1.266 2004-08-01 15:16:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -668,10 +668,10 @@ public abstract class Lisp
 
     // Used by JVM compiler for MULTIPLE-VALUE-CALLs with a single values form.
     public static final LispObject multipleValueCall1(LispObject result,
-                                                      LispObject function)
+                                                      LispObject function,
+                                                      LispThread thread)
         throws ConditionThrowable
     {
-        LispThread thread = LispThread.currentThread();
         LispObject[] values = thread.getValues();
         thread.clearValues();
         if (values == null)
