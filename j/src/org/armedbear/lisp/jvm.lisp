@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.150 2004-05-06 16:04:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.151 2004-05-06 18:46:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,6 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+(require '#:opcodes)
+
 (in-package "JVM")
 
 (export '(compile-defun *catch-errors* jvm-compile jvm-compile-package))
@@ -26,81 +28,6 @@
 (shadow '(method variable))
 
 (defvar *debug* nil)
-
-(defvar *instructions*
-  '(nop             aconst_null  iconst_m1       iconst_0      iconst_1     ;   0
-    iconst_2        iconst_3     iconst_4        iconst_5      lconst_0     ;   5
-    lconst_1        fconst_0     fconst_1        fconst_2      dconst_0     ;  10
-    dconst_1        bipush       sipush          ldc           ldc_w        ;  15
-    ldc2_w          iload        lload           fload         dload        ;  20
-    aload           iload_0      iload_1         iload_2       iload_3      ;  25
-    lload_0         lload_1      lload_2         lload_3       fload_0      ;  30
-    fload_1         fload_2      fload_3         dload_0       dload_1      ;  35
-    dload_2         dload_3      aload_0         aload_1       aload_2      ;  40
-    aload_3         iaload       laload          faload        daload       ;  45
-    aaload          baload       caload          saload        istore       ;  50
-    lstore          fstore       dstore          astore        istore_0     ;  55
-    istore_1        istore_2     istore_3        lstore_0      lstore_1     ;  60
-    lstore_2        lstore_3     fstore_0        fstore_1      fstore_2     ;  65
-    fstore_3        dstore_0     dstore_1        dstore_2      dstore_3     ;  70
-    astore_0        astore_1     astore_2        astore_3      iastore      ;  75
-    lastore         fastore      dastore         aastore       bastore      ;  80
-    castore         sastore      pop             pop2          dup          ;  85
-    dup_x1          dup_x2       dup2            dup2_x1       dup2_x2      ;  90
-    swap            iadd         ladd            fadd          dadd         ;  95
-    isub            lsub         fsub            dsub          imul         ; 100
-    lmul            fmul         dmul            idiv          ldiv         ; 105
-    fdiv            ddiv         irem            lrem          frem         ; 110
-    drem            ineg         lneg            fneg          dneg         ; 115
-    ishl            lshl         ishr            lshr          iushr        ; 120
-    lushr           iand         land            ior           lor          ; 125
-    ixor            lxor         iinc            i2l           i2f          ; 130
-    i2d             l2i          l2f             l2d           f2i          ; 135
-    f2l             f2d          d2i             d2l           d2f          ; 140
-    i2b             i2c          i2s             lcmp          fcmpl        ; 145
-    fcmpg           dcmpl        dcmpg           ifeq          ifne         ; 150
-    iflt            ifge         ifgt            ifle          if_icmpeq    ; 155
-    if_icmpne       if_icmplt    if_icmpge       if_icmpgt     if_icmple    ; 160
-    if_acmpeq       if_acmpne    goto            jsr           ret          ; 165
-    tableswitch     lookupswitch ireturn         lreturn       freturn      ; 170
-    dreturn         areturn      return          getstatic     putstatic    ; 175
-    getfield        putfield     invokevirtual   invokespecial invokestatic ; 180
-    invokeinterface unused       new             newarray      anewarray    ; 185
-    arraylength     athrow       checkcast       instanceof    monitorenter ; 190
-    monitorexit     wide         multianewarray  ifnull        ifnonnull    ; 195
-    goto_w          jsr_w        label           push-value    store-value  ; 200
-    ))
-
-(unless (vectorp *instructions*)
-  (let* ((list *instructions*)
-         (vector (make-array (length *instructions*)))
-         (index 0))
-    (dolist (instr list)
-      (setf (get instr 'opcode) index)
-      (setf (svref vector index) instr)
-      (incf index))
-    (setq *instructions* vector)))
-
-(defun instr (opcode)
-  (svref *instructions* opcode))
-
-(defparameter *opcode-size*
-  ;; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
-  '#(1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 3 2 3  ;; 000-019
-     3 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1  ;; 020-039
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 1  ;; 040-059
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  ;; 060-079
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  ;; 080-099
-     1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  ;; 100-119
-     1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1  ;; 120-139
-     1 1 1 1 1 1 1 1 1 1 1 1 1 3 3 3 3 3 3 3  ;; 140-159
-     3 3 3 3 3 3 3 3 3 2 0 0 1 1 1 1 1 1 3 3  ;; 160-179
-     3 3 3 3 3 5 0 3 2 3 1 1 3 3 1 1 0 4 3 3  ;; 180-199
-     5 5 0                                    ;; 200-202
-     ))
-
-(defun opcode-size (opcode)
-  (svref *opcode-size* opcode))
 
 (defvar *pool* nil)
 
@@ -151,7 +78,7 @@
         ((>= i code-length))
       (let* ((opcode (svref code i))
              (size (opcode-size opcode)))
-        (out "~D: ~D (#x~X) ~A~%" i opcode opcode (instr opcode))
+        (out "~D: ~D (#x~X) ~A~%" i opcode opcode (opcode-name opcode))
         (incf i)
         (dotimes (j (1- size))
           (let ((byte (svref code i)))
@@ -424,7 +351,7 @@
 
 (defun emit (instr &rest args)
   (unless (numberp instr)
-    (setq instr (get instr 'opcode)))
+    (setf instr (opcode-number instr)))
   (let ((instruction (inst instr args)))
     (setq *code* (cons instruction *code*))
     instruction))
@@ -779,82 +706,6 @@
       167 ; GOTO
       )))
 
-(defun stack-effect (opcode)
-  (case opcode
-    (203 ; PUSH-VALUE
-     1)
-    (204 ; STORE-VALUE
-     -1)
-    ((25 ; ALOAD
-      42 ; ALOAD_0
-      43 ; ALOAD_1
-      44 ; ALOAD_2
-      45 ; ALOAD_3
-      )
-     1)
-    ((58 ; ASTORE
-      75 ; ASTORE_0
-      76 ; ASTORE_1
-      77 ; ASTORE_2
-      78 ; ASTORE_3
-      )
-     -1)
-    (50 ; AALOAD
-     -1)
-    (83 ; AASTORE
-     -3)
-    ((1 ; ACONST_NULL
-      3 4 5 6 7 8 ; ICONST_0 ... ICONST_5
-      16 ; BIPUSH
-      17 ; SIPUSH
-      )
-     1)
-    (18 ; LDC
-     1)
-    (178 ; GETSTATIC
-     1)
-    (179 ; PUTSTATIC
-     -1)
-    (180 ; GETFIELD
-     0)
-    (181 ; PUTFIELD
-     -2)
-    (187 ; NEW
-     1)
-    (189 ; ANEWARRAY
-     0)
-    (192 ; CHECKCAST
-     0)
-    (193 ; INSTANCEOF
-     0)
-    ((153 ; IFEQ
-      154 ; IFNE
-      )
-     -1)
-    ((165 ; IF_ACMPEQ
-      166 ; IF_ACMPNE
-      )
-     -2)
-    ((167 ; GOTO
-      202 ; LABEL
-      )
-     0)
-    (89 ; DUP
-     1)
-    (91
-     1) ; DUP_X2
-    (95 ; SWAP
-     0)
-    (87 ; POP
-     -1)
-    (176 ; ARETURN
-     -1)
-    (177 ; RETURN
-     0)
-    (t
-     (format t "STACK-EFFECT unsupported opcode ~S~%" opcode)
-     0)))
-
 (defun walk-code (code start-index depth)
   (do* ((i start-index (1+ i))
         (limit (length code)))
@@ -880,7 +731,7 @@
         (let ((label (car (instruction-args instruction))))
           (set label i)))
       (unless (instruction-stack instruction)
-        (setf (instruction-stack instruction) (stack-effect opcode)))))
+        (setf (instruction-stack instruction) (opcode-stack-effect opcode)))))
   (walk-code *code* 0 0)
   (let ((max-stack 0))
     (dotimes (i (length *code*))
