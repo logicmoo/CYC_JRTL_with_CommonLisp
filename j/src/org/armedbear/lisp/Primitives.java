@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.305 2003-07-29 15:00:38 piso Exp $
+ * $Id: Primitives.java,v 1.306 2003-07-29 18:04:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -326,7 +326,7 @@ public final class Primitives extends Module
             case CONSP:                         // ### consp
                 return arg instanceof Cons ? T : NIL;
             case LISTP:                         // ### listp
-                return (arg.getType() & TYPE_LIST) != 0 ? T : NIL;
+                return arg.LISTP();
             case MAKE_SYMBOL:                   // ### make-symbol
                 return new Symbol(LispString.getValue(arg));
             case FBOUNDP:                       // ### fboundp
