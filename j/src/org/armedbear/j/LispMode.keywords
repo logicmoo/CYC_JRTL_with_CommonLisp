@@ -239,6 +239,7 @@ in-package
 incf
 input-stream-p
 inspect
+integer-decode-float
 integer-length
 integerp
 intern
