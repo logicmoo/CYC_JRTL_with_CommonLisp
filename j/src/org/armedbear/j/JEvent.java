@@ -2,7 +2,7 @@
  * JEvent.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: JEvent.java,v 1.1 2005-03-04 17:33:19 piso Exp $
+ * $Id: JEvent.java,v 1.2 2005-03-04 19:01:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,6 +97,11 @@ public final class JEvent
         return modifiers;
     }
 
+    public String getKeyText()
+    {
+        return Utilities.getKeyText(keyChar, keyCode, modifiers);
+    }
+
     public String toString()
     {
         FastStringBuffer sb = new FastStringBuffer();
@@ -119,6 +124,9 @@ public final class JEvent
         sb.append(Integer.toHexString((int)keyChar));
         sb.append(' ');
         sb.append(String.valueOf(keyChar));
+        sb.append(" \"");
+        sb.append(Utilities.getKeyText(keyChar, keyCode, modifiers));
+        sb.append('"');
         return sb.toString();
     }
 }
