@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.744 2005-03-19 20:00:28 piso Exp $
+ * $Id: Primitives.java,v 1.745 2005-03-21 17:14:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4496,7 +4496,7 @@ public final class Primitives extends Lisp
 
     // ### coerce-to-function
     private static final Primitive COERCE_TO_FUNCTION =
-        new Primitive("coerce-to-function", PACKAGE_SYS, false)
+        new Primitive("coerce-to-function", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
