@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.26 2004-10-25 01:45:30 piso Exp $
+;;; $Id: init.lisp,v 1.27 2004-11-03 18:04:18 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -17,11 +17,10 @@
     (with-open-file (f "/etc/hostname")
       (read-line f))))
 
-;; Use Kodiak on prufrock, AnokhaClassic on the laptops.
 (let ((hostname (hostname)))
-  (if (and hostname (search "prufrock" hostname))
-      (load-theme "Kodiak")
-      (load-theme "AnokhaClassic")))
+  (when hostname
+    (unless (member hostname '("mars" "prufrock") :test #'string=)
+      (load-theme "AnokhaClassic"))))
 
 (defun java-version ()
   (jstatic "getProperty" "java.lang.System" "java.version"))
