@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.312 2004-12-17 20:43:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.313 2004-12-18 02:39:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -117,7 +117,7 @@
 (defun dump-1-variable (variable)
   (%format t "  ~S ~A special-p = ~S register = ~S level = ~S index = ~S~%"
            (variable-name variable)
-           (variable-kind variable)
+;;            (variable-kind variable)
            (variable-special-p variable)
            (variable-register variable)
            (variable-level variable)
@@ -137,8 +137,9 @@
   name
   initform
   temp-register
-  (kind 'LOCAL) ; ARG, LOCAL, SPECIAL
+;;   (kind 'LOCAL) ; ARG, LOCAL, SPECIAL
   special-p
+  declared-type
   register ; register number or NIL
   (level *nesting-level*)
   index)
@@ -236,7 +237,7 @@
 
 ;;; Pass 1.
 
-(defun p1-let/let*-vars (varlist block)
+(defun p1-let/let*-vars (varlist)
   (let ((vars nil))
     (dolist (varspec varlist)
       (cond ((consp varspec)
@@ -245,32 +246,45 @@
                (push (make-variable :name name :initform initform) vars)))
             (t
              (push (make-variable :name varspec) vars))))
-    (setf (block-vars block) (nreverse vars))))
+    ;; Check for globally declared specials.
+    (dolist (variable vars)
+      (when (special-variable-p (variable-name variable))
+        (setf (variable-special-p variable) t)))
+    (nreverse vars)))
 
 (defun p1-let/let* (form)
   (let* ((block (make-block-node :name '(LET)))
          (*blocks* (cons block *blocks*))
+         (op (car form))
+         (varlist (cadr form))
          (body (cddr form)))
-    (p1-let/let*-vars (cadr form) block)
+    (when (eq op 'LET)
+      ;; Convert to LET* if possible.
+      (dolist (varspec varlist (setf op 'LET*))
+        (or (atom varspec)
+            (constantp (cadr varspec))
+            (eq (car varspec) (cadr varspec))
+            (return nil))))
+    (setf (block-vars block) (p1-let/let*-vars varlist))
     (setf body (mapcar #'p1 body))
-    (setf (block-form block) (list* (car form)
-                                    (cadr form)
-                                    body))
-    ;; Check for globally declared specials.
-    (dolist (variable (block-vars block))
-      (when (special-variable-p (variable-name variable))
-        (setf (variable-special-p variable) t)))
+    (setf (block-form block) (list* op varlist body))
     ;; Process declarations.
     (dolist (subform body)
       (unless (and (consp subform) (eq (car subform) 'DECLARE))
         (return))
       (let ((decls (cdr subform)))
         (dolist (decl decls)
-          (when (eq (car decl) 'SPECIAL)
-            (dolist (variable (block-vars block))
-              (unless (variable-special-p variable)
-                (when (memq (variable-name variable) (cdr decl))
-                  (setf (variable-special-p variable) t))))))))
+          (case (car decl)
+            (SPECIAL
+             (dolist (sym (cdr decl))
+               (dolist (variable (block-vars block))
+                 (when (eq sym (variable-name variable))
+                   (setf (variable-special-p variable) t)))))
+            (TYPE
+             (dolist (sym (cddr decl))
+               (dolist (variable (block-vars block))
+                 (when (eq sym (variable-name variable))
+                   (setf (variable-declared-type variable) (cadr decl))))))))))
     block))
 
 (defun p1-block (form)
@@ -2335,22 +2349,23 @@
 (defun define-java-predicate (predicate translation)
   (setf (gethash predicate java-predicates) translation))
 
-(define-java-predicate 'CHARACTERP "characterp")
-(define-java-predicate 'CONSTANTP  "constantp")
-(define-java-predicate 'ENDP       "endp")
-(define-java-predicate 'EVENP      "evenp")
-(define-java-predicate 'FLOATP     "floatp")
-(define-java-predicate 'INTEGERP   "integerp")
-(define-java-predicate 'LISTP      "listp")
-(define-java-predicate 'MINUSP     "minusp")
-(define-java-predicate 'NUMBERP    "numberp")
-(define-java-predicate 'ODDP       "oddp")
-(define-java-predicate 'PLUSP      "plusp")
-(define-java-predicate 'RATIONALP  "rationalp")
-(define-java-predicate 'REALP      "realp")
-(define-java-predicate 'STRINGP    "stringp")
-(define-java-predicate 'VECTORP    "vectorp")
-(define-java-predicate 'ZEROP      "zerop")
+(define-java-predicate 'CHARACTERP         "characterp")
+(define-java-predicate 'CONSTANTP          "constantp")
+(define-java-predicate 'ENDP               "endp")
+(define-java-predicate 'EVENP              "evenp")
+(define-java-predicate 'FLOATP             "floatp")
+(define-java-predicate 'INTEGERP           "integerp")
+(define-java-predicate 'LISTP              "listp")
+(define-java-predicate 'MINUSP             "minusp")
+(define-java-predicate 'NUMBERP            "numberp")
+(define-java-predicate 'ODDP               "oddp")
+(define-java-predicate 'PLUSP              "plusp")
+(define-java-predicate 'RATIONALP          "rationalp")
+(define-java-predicate 'REALP              "realp")
+(define-java-predicate 'STRINGP            "stringp")
+(define-java-predicate 'SPECIAL-VARIABLE-P "isSpecialVariable")
+(define-java-predicate 'VECTORP            "vectorp")
+(define-java-predicate 'ZEROP              "zerop")
 
 (defun compile-test (form negatep)
   ;; Use a Java boolean if possible.
@@ -2769,8 +2784,21 @@
   (let ((must-clear-values nil))
     ;; Generate code to evaluate initforms and bind variables.
     (dolist (variable (block-vars block))
-      (let* ((initform (variable-initform variable)))
-        (cond (initform
+      (let* ((initform (variable-initform variable))
+             (boundp nil))
+        (cond ((and (variable-special-p variable)
+                    (eq initform (variable-name variable)))
+               (emit-push-current-thread)
+               (emit 'getstatic
+                     *this-class*
+                     (declare-symbol (variable-name variable))
+                     +lisp-symbol+)
+               (emit-invokevirtual +lisp-thread-class+
+                                   "bindSpecialToCurrentValue"
+                                   "(Lorg/armedbear/lisp/Symbol;)V"
+                                   -2)
+               (setf boundp t))
+              (initform
                (compile-form initform :target :stack)
                (unless must-clear-values
                  (unless (single-valued-p initform)
@@ -2784,7 +2812,8 @@
           (add-variable-to-context variable))
         (push variable *visible-variables*)
         (push variable *all-variables*)
-        (compile-binding variable)))
+        (unless boundp
+          (compile-binding variable))))
     (when must-clear-values
       (emit-clear-values))))
 
@@ -4079,7 +4108,7 @@
                     (index 0))
                (dolist (var vars)
                  (let ((variable (make-variable :name var
-                                                :kind 'ARG
+;;                                                 :kind 'ARG
                                                 :special-p nil ;; FIXME
                                                 :register nil
                                                 :index index)))
@@ -4094,7 +4123,7 @@
                (dolist (arg args)
                  (aver (= index (length (context-vars *context*))))
                  (let ((variable (make-variable :name arg
-                                                :kind 'ARG
+;;                                                 :kind 'ARG
                                                 :special-p nil ;; FIXME
                                                 :register (if *using-arg-array* nil register)
                                                 :index index)))
@@ -4110,7 +4139,7 @@
           (let ((variable (find-visible-variable name)))
             (cond ((null variable)
                    (setf variable (make-variable :name name
-                                                 :kind 'SPECIAL
+;;                                                  :kind 'SPECIAL
                                                  :special-p t))
                    (push variable *all-variables*)
                    (push variable *visible-variables*))
