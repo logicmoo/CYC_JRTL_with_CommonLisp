@@ -1,8 +1,8 @@
 /*
  * Preferences.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Preferences.java,v 1.1.1.1 2002-09-24 16:07:56 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Preferences.java,v 1.2 2003-05-10 16:13:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +31,6 @@ import java.util.Properties;
 public final class Preferences
 {
     private Properties properties = new Properties();
-    private Properties overrides;
-
     private ArrayList listeners;
 
     public static final File getPreferencesFile()
@@ -195,17 +193,14 @@ public final class Preferences
         return null;
     }
 
-    public synchronized void setOverride(String key, String value)
+    public synchronized void setProperty(String key, String value)
     {
-        if (overrides == null)
-            overrides = new Properties();
-        overrides.put(key.toLowerCase(), value);
+        properties.setProperty(key.toLowerCase(), value);
     }
 
-    public synchronized void removeOverride(String key)
+    public synchronized void removeProperty(String key)
     {
-        if (overrides != null)
-            overrides.remove(key.toLowerCase());
+        properties.remove(key.toLowerCase());
     }
 
     // Strips quotes if present.
@@ -285,16 +280,9 @@ public final class Preferences
         return null;
     }
 
-    // Checks overrides first then properties.
     private String getProperty(String key)
     {
-        key = key.toLowerCase();
-        if (overrides != null) {
-            String value = overrides.getProperty(key);
-            if (value != null)
-                return value;
-        }
-        return properties.getProperty(key);
+        return properties.getProperty(key.toLowerCase());
     }
 
     private static String stripQuotes(String s)
