@@ -358,6 +358,7 @@ read-preserving-whitespace
 read-sequence
 readtable-case
 readtablep
+reduce
 remf
 remhash
 remove
