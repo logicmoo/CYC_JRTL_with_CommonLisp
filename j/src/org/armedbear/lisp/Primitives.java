@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.731 2005-02-08 16:42:17 piso Exp $
+ * $Id: Primitives.java,v 1.732 2005-02-09 18:37:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1214,7 +1214,7 @@ public final class Primitives extends Lisp
                     if (cons.car().eql(item))
                         return cons;
                 } else if (cons != NIL)
-                    signal(new TypeError(cons, "list"));
+                    signal(new TypeError(cons, Symbol.LIST));
                 alist = alist.cdr();
             }
             return NIL;
