@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.37 2004-03-24 01:05:10 piso Exp $
+ * $Id: Load.java,v 1.38 2004-03-24 15:09:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,9 +313,9 @@ public final class Load extends Lisp
         }
     };
 
-    // ### %load
+    // ### load-system-file
     public static final Primitive1 _LOAD =
-        new Primitive1("%load", PACKAGE_SYS, false)
+        new Primitive1("load-system-file", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

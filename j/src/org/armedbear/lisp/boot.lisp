@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.154 2004-03-24 02:31:18 piso Exp $
+;;; $Id: boot.lisp,v 1.155 2004-03-24 15:11:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,11 +54,11 @@
 (defun class-name (class)
   (sys::%class-name class))
 
-(sys::%load "autoloads")
-(sys::%load "early-defuns")
-(sys::%load "backquote")
-(sys::%load "setf")
-(sys::%load "documentation")
+(sys::load-system-file "autoloads")
+(sys::load-system-file "early-defuns")
+(sys::load-system-file "backquote")
+(sys::load-system-file "setf")
+(sys::load-system-file "documentation")
 
 (defmacro defvar (var &optional (val nil valp) (doc nil docp))
   `(progn
@@ -117,26 +117,26 @@
 (defun compile (name &optional definition)
   (values (if name name definition) nil nil))
 
-(sys::%load "macros")
-(sys::%load "fixme")
-(sys::%load "destructuring-bind")
-(sys::%load "arrays")
-(sys::%load "compiler-macro")
-(sys::%load "subtypep")
-(sys::%load "typep")
-(sys::%load "precompiler")
+(sys::load-system-file "macros")
+(sys::load-system-file "fixme")
+(sys::load-system-file "destructuring-bind")
+(sys::load-system-file "arrays")
+(sys::load-system-file "compiler-macro")
+(sys::load-system-file "subtypep")
+(sys::load-system-file "typep")
+(sys::load-system-file "precompiler")
 
 (sys::precompile-package "PRECOMPILER")
 (sys::precompile-package "EXTENSIONS")
 (sys::precompile-package "SYSTEM")
 (sys::precompile-package "COMMON-LISP")
 
-(sys::%load "signal")
-(sys::%load "list")
-(sys::%load "sequences")
-(sys::%load "error")
-(sys::%load "defpackage")
-(sys::%load "define-modify-macro")
+(sys::load-system-file "signal")
+(sys::load-system-file "list")
+(sys::load-system-file "sequences")
+(sys::load-system-file "error")
+(sys::load-system-file "defpackage")
+(sys::load-system-file "define-modify-macro")
 
 ;;; PROVIDE, REQUIRE (from SBCL)
 (defun provide (module-name)
@@ -151,7 +151,7 @@
              (dolist (x pathnames)
                (load x)))
             (t
-             (sys::%load (concatenate 'string (string-downcase (string module-name))
+             (sys::load-system-file (concatenate 'string (string-downcase (string module-name))
                                       ".lisp"))))
       (set-difference *modules* saved-modules))))
 
@@ -208,7 +208,7 @@
 		  ,n-result
 		  (or ,@(rest forms))))))))
 
-(sys::%load "case")
+(sys::load-system-file "case")
 
 (defmacro cond (&rest clauses)
   (if (endp clauses)
@@ -296,7 +296,7 @@
     `(let* ((,g (multiple-value-list ,form)) ,@(nreverse poplist))
        ,@body)))
 
-(sys::%load "late-setf")
+(sys::load-system-file "late-setf")
 
 ;; MULTIPLE-VALUE-SETQ (from CMUCL)
 (defmacro multiple-value-setq (varlist value-form)
@@ -310,7 +310,7 @@
 (defmacro multiple-value-list (form)
   `(multiple-value-call #'list ,form))
 
-(sys::%load "restart")
-(sys::%load "debug")
+(sys::load-system-file "restart")
+(sys::load-system-file "debug")
 
 (format t "Startup completed in ~A seconds." (float (/ (ext:uptime) 1000)))
