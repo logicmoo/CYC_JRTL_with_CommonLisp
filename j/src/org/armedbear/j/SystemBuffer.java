@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.7 2002-10-11 16:00:56 piso Exp $
+ * $Id: SystemBuffer.java,v 1.8 2002-10-11 16:05:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -548,7 +548,7 @@ public class SystemBuffer implements Constants
         return bytes;
     }
 
-    /*package*/ void _empty()
+    /*package*/ synchronized void _empty()
     {
         Line line = getFirstLine();
         while (line != null) {
