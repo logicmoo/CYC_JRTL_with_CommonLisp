@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.124 2003-09-03 23:40:10 piso Exp $
+ * $Id: Lisp.java,v 1.125 2003-09-05 14:29:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -584,10 +584,11 @@ public abstract class Lisp
     private static final BigInteger INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE);
 
     public static final LispObject number(BigInteger numerator,
-        BigInteger denominator) throws LispError
+                                          BigInteger denominator)
+        throws LispError
     {
-        if (denominator.equals(BigInteger.ZERO))
-            throw new LispError("division by zero");
+        if (denominator.signum() == 0)
+            throw new DivisionByZero();
         if (denominator.signum() < 0) {
             numerator = numerator.negate();
             denominator = denominator.negate();
