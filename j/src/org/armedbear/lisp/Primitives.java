@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.545 2003-12-27 15:53:55 piso Exp $
+ * $Id: Primitives.java,v 1.546 2003-12-27 17:01:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,6 +203,8 @@ public final class Primitives extends Lisp
         {
             if (arg instanceof AbstractVector)
                 return ((AbstractVector)arg).getFillPointer() >= 0 ? T : NIL;
+            if (arg instanceof DisplacedArray)
+                return ((DisplacedArray)arg).getFillPointer() >= 0 ? T : NIL;
             if (arg instanceof AbstractArray)
                 return NIL;
             signal(new TypeError(arg, "array"));
@@ -1884,14 +1886,22 @@ public final class Primitives extends Lisp
 
     // ### fill-pointer
     private static final Primitive1 FILL_POINTER =
-        new Primitive1("fill-pointer","vector") {
+        new Primitive1("fill-pointer", "vector")
+    {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
         {
-            int fillPointer = checkVector(arg).getFillPointer();
-            if (fillPointer < 0)
-                signal(new TypeError("array does not have a fill pointer"));
-            return new Fixnum(fillPointer);
+            int fillPointer = -1;
+            if (arg instanceof AbstractVector)
+                fillPointer = ((AbstractVector)arg).getFillPointer();
+            else if (arg instanceof DisplacedArray)
+                fillPointer = ((DisplacedArray)arg).getFillPointer();
+            if (fillPointer >= 0)
+                return new Fixnum(fillPointer);
+            if (arg instanceof AbstractArray)
+                return signal(new TypeError("Array does not have a fill pointer."));
+            else
+                return signal(new TypeError(arg, Symbol.ARRAY));
         }
     };
 
