@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.111 2005-02-06 01:36:17 piso Exp $
+ * $Id: Stream.java,v 1.112 2005-02-14 00:49:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -360,6 +360,7 @@ public class Stream extends LispObject
                         else
                             return signal(new ReaderError("Nothing appears before . in list."));
                     }
+                    _unreadChar(nextChar);
                     LispObject obj = read(true, NIL, true);
                     if (requireProper) {
                         if (!obj.listp())
@@ -724,7 +725,7 @@ public class Stream extends LispObject
                 sb.setCharAt(0, Utilities.toLowerCase(c));
             }
         }
-      loop:
+//       loop:
         while (true) {
             int n = _readChar();
             if (n < 0)
