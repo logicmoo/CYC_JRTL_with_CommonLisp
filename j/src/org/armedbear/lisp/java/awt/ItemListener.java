@@ -37,7 +37,7 @@ public class ItemListener implements java.awt.event.ItemListener {
 
     public void itemStateChanged(ItemEvent itemevent) {
         String as[] = { itemevent.paramString(), itemevent.getItem().toString() };
-        int ai[] = { itemevent.getStateChange() != 1 ? 0 : 1 };
+        int ai[] = { itemevent.getStateChange() != itemevent.SELECTED ? 0 : 1 };
         JHandler.callLisp("ITEMSTATECHANGED", handle, as, ai);
     }
 
