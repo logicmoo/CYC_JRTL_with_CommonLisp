@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.53 2003-08-17 15:14:08 piso Exp $
+ * $Id: LispString.java,v 1.54 2003-08-25 17:57:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -368,7 +368,8 @@ public final class LispString extends AbstractVector
         }
     };
 
-    private static final Primitive3 _SET_CHAR = new Primitive3("%set-char") {
+    private static final Primitive3 _SET_CHAR =
+        new Primitive3("%set-char", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -385,7 +386,8 @@ public final class LispString extends AbstractVector
         }
     };
 
-    private static final Primitive3 _SET_SCHAR = new Primitive3("%set-schar") {
+    private static final Primitive3 _SET_SCHAR =
+        new Primitive3("%set-schar", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
