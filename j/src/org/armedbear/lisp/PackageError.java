@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: PackageError.java,v 1.11 2004-03-05 15:24:22 piso Exp $
+ * $Id: PackageError.java,v 1.12 2004-03-05 16:05:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,7 @@ package org.armedbear.lisp;
 
 public class PackageError extends LispError
 {
-    final LispObject pkg;
-
-    public PackageError()
-    {
-        pkg = NIL;
-    }
+    private final LispObject pkg;
 
     public PackageError(LispObject initArgs) throws ConditionThrowable
     {
