@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.51 2003-10-18 16:23:59 piso Exp $
+;;; $Id: compiler.lisp,v 1.52 2003-10-18 16:59:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -146,6 +146,8 @@
 ;;     (format t "compiled-body = ~S~%" compiled-body)
     (setf res (list* 'macrolet (reverse res) compiled-body))
     res))
+;;     (setf res (list* 'progn compiled-body))
+;;     res))
 
 (defun compile-special (form)
   (let ((first (car form)))
@@ -226,6 +228,8 @@
       (GO form)
       (MACROLET
        (compile-macrolet form))
+      (MULTIPLE-VALUE-SETQ
+       (list 'multiple-value-setq (second form) (compile-sexp (third form))))
       (t
 ;;        (format t "COMPILE-SPECIAL skipping ~S~%" first)
        form))))
