@@ -2,7 +2,7 @@
  * ComplexArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexArray.java,v 1.7 2004-03-15 17:47:06 piso Exp $
+ * $Id: ComplexArray.java,v 1.8 2004-05-27 17:12:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,7 +157,7 @@ public final class ComplexArray extends AbstractArray
         return totalSize;
     }
 
-    public LispObject arrayDisplacement()
+    public LispObject arrayDisplacement() throws ConditionThrowable
     {
         LispObject value1, value2;
         if (array != null) {

@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.14 2004-03-14 01:11:10 piso Exp $
+ * $Id: ComplexString.java,v 1.15 2004-05-27 17:09:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,7 +102,7 @@ public final class ComplexString extends AbstractString
         return isDisplaced;
     }
 
-    public LispObject arrayDisplacement()
+    public LispObject arrayDisplacement() throws ConditionThrowable
     {
         LispObject value1, value2;
         if (array != null) {

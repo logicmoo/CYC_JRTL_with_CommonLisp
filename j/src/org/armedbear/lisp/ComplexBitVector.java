@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.8 2004-03-15 17:02:47 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.9 2004-05-27 17:11:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,7 +90,7 @@ public final class ComplexBitVector extends AbstractBitVector
         }
     }
 
-    public LispObject arrayDisplacement()
+    public LispObject arrayDisplacement() throws ConditionThrowable
     {
         LispObject value1, value2;
         if (array != null) {

@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.12 2004-03-04 01:54:20 piso Exp $
+ * $Id: ComplexVector.java,v 1.13 2004-05-27 17:10:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,7 +105,7 @@ public final class ComplexVector extends AbstractVector
         return isDisplaced;
     }
 
-    public LispObject arrayDisplacement()
+    public LispObject arrayDisplacement() throws ConditionThrowable
     {
         LispObject value1, value2;
         if (array != null) {
