@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Environment.java,v 1.9 2003-12-14 17:12:28 piso Exp $
+ * $Id: Environment.java,v 1.10 2003-12-27 04:29:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,22 +79,32 @@ public final class Environment extends LispObject
     }
 
     // Functional bindings.
-    public void bindFunctional(Symbol symbol, LispObject value)
+    public void bindFunctional(LispObject name, LispObject value)
     {
-        functions = new Binding(symbol, value, functions);
+        functions = new Binding(name, value, functions);
     }
 
-    public LispObject lookupFunctional(LispObject symbol)
+    public LispObject lookupFunctional(LispObject name)
         throws ConditionThrowable
     {
         Binding binding = functions;
-        while (binding != null) {
-            if (binding.symbol == symbol)
-                return binding.value;
-            binding = binding.next;
+        if (name instanceof Symbol) {
+            while (binding != null) {
+                if (binding.symbol == name)
+                    return binding.value;
+                binding = binding.next;
+            }
+            // Not found in environment.
+            return name.getSymbolFunction();
         }
-        // Not found in environment.
-        return symbol.getSymbolFunction();
+        if (name instanceof Cons) {
+            while (binding != null) {
+                if (binding.symbol.equal(name))
+                    return binding.value;
+                binding = binding.next;
+            }
+        }
+        return null;
     }
 
     public void addBlock(LispObject tag, Block block)
