@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.62 2005-03-05 04:05:41 piso Exp $
+ * $Id: LispAPI.java,v 1.63 2005-03-07 03:31:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1100,17 +1100,19 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### %set-global-property
-    private static final Primitive _SET_GLOBAL_PROPERTY =
-        new Primitive("%set-global-property", PACKAGE_J, false)
+    // ### set-global-property
+    private static final Primitive SET_GLOBAL_PROPERTY =
+        new Primitive("set-global-property", PACKAGE_J, true, "key value")
     {
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
         {
             String key = first.getStringValue();
             final String value;
-            if (second instanceof Fixnum)
-                value = String.valueOf(Fixnum.getValue(second));
+            if (second == NIL)
+                value = null;
+            else if (second instanceof Fixnum)
+                value = String.valueOf(((Fixnum)second).value);
             else
                 value = second.getStringValue();
             Editor.setGlobalProperty(key, value);
