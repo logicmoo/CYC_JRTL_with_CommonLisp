@@ -1,8 +1,8 @@
 /*
  * StatusBar.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: StatusBar.java,v 1.2 2003-07-23 00:27:49 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: StatusBar.java,v 1.3 2003-07-24 19:36:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -29,8 +30,10 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import javax.swing.JComponent;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
 public final class StatusBar extends JComponent implements PreferencesChangeListener
 {
@@ -50,8 +53,8 @@ public final class StatusBar extends JComponent implements PreferencesChangeList
     private static FontMetrics fm;
     private static int displayContext = 1;
 
-    private Frame frame;
-    private Border border;
+    private final Frame frame;
+    private final Border border;
     private int charAscent;
     private String messageText;
 
@@ -67,7 +70,9 @@ public final class StatusBar extends JComponent implements PreferencesChangeList
         Dimension dim = frame.getSize();
         Insets insets = frame.getInsets();
         dim.width -= (insets.left + insets.right);
-        setBorder(border = new BevelBorder(BevelBorder.LOWERED));
+        border = new CompoundBorder(new MatteBorder(1, 0, 0, 0, Color.gray),
+                                    new EmptyBorder(2, 0, 2, 0));
+        setBorder(border);
         insets = border.getBorderInsets(this);
         dim.height = charAscent + charDescent + insets.top + insets.bottom;
         setPreferredSize(dim);
