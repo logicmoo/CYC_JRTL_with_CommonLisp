@@ -2,7 +2,7 @@
  * RemoteShell.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: RemoteShell.java,v 1.1.1.1 2002-09-24 16:09:23 piso Exp $
+ * $Id: RemoteShell.java,v 1.2 2002-10-10 18:28:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,15 +36,15 @@ public class RemoteShell extends Shell
         this.type = type;
         this.host = host;
         if (type == TYPE_TELNET) {
-            shellFileName = Editor.preferences().getStringProperty(Property.TELNET);
-            if (shellFileName == null)
-                shellFileName = "telnet";
+            shellCommand = Editor.preferences().getStringProperty(Property.TELNET);
+            if (shellCommand == null)
+                shellCommand = "telnet";
         } else if (type == TYPE_SSH) {
-            shellFileName = Editor.preferences().getStringProperty(Property.SSH);
-            if (shellFileName == null)
-                shellFileName = "ssh";
+            shellCommand = Editor.preferences().getStringProperty(Property.SSH);
+            if (shellCommand == null)
+                shellCommand = "ssh";
         }
-        title = shellFileName + " " + host;
+        title = shellCommand + " " + host;
     }
 
     // Called in Shell constructor, so we override it here.
@@ -53,10 +53,10 @@ public class RemoteShell extends Shell
         history = new History("remoteShell.history");
     }
 
-    protected void startProcess()
+    private void startProcess()
     {
         try {
-            process = Runtime.getRuntime().exec("jpty " + shellFileName + " " + host);
+            process = Runtime.getRuntime().exec("jpty " + shellCommand + " " + host);
         }
         catch (Throwable t) {}
         if (process != null) {
@@ -86,8 +86,8 @@ public class RemoteShell extends Shell
                 setPromptRE(Editor.preferences().getStringProperty(p));
             try {
                 stdin  = new OutputStreamWriter(process.getOutputStream());
-                stdoutThread = new StdoutThread(this);
-                stderrThread = new StderrThread(this);
+                stdoutThread = new StdoutThread();
+                stderrThread = new StderrThread();
                 stdoutThread.start();
                 stderrThread.start();
                 readOnly = false;
