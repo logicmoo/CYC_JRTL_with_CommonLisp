@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.101 2004-04-06 02:44:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.102 2004-04-08 12:06:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -588,8 +588,8 @@
               append nconc subseq adjoin
               revappend nreconc
               copy-seq
-              assoc assoc-if assoc-if-not acons
-              char-code char-int digit-char-p
+              assoc assoc-if assoc-if-not acons assq assql
+              char-code code-char char-int digit-char-p
               member ext:memq
               remove remove-if remove-if-not delete delete-if delete-if-not
               special-variable-p
@@ -601,8 +601,9 @@
               cons rplaca rplacd
               copy-list
               make-sequence make-list make-array make-package make-hash-table
+              make-string
               find-package
-              pathname make-pathname directory
+              pathname make-pathname pathname-name directory
               package-used-by-list package-shadowing-symbols
               nthcdr
               aref elt
@@ -630,8 +631,21 @@
               exp expt log
               min max
               realpart imagpart
+              integer-length
+              sqrt isqrt gcd lcm
+              char schar
+              open
+              svref
+              fill-pointer
+              symbol-value symbol-package package-name
+              fourth
+              vector-push vector-push-extend
+              union nunion
+              remove-duplicates delete-duplicates
+              read-byte
               ext:classp
               ext:fixnump
+              ext:memql
               sys::generic-function-name
               precompiler::precompile1
               ))
