@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.48 2004-09-06 18:43:05 piso Exp $
+ * $Id: LispAPI.java,v 1.49 2004-09-06 23:24:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,6 +262,30 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### buffer-substring
+    private static final Primitive BUFFER_SUBSTRING =
+        new Primitive("buffer-substring", PACKAGE_J, true,
+                      "start end &optional buffer")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Region region = new Region(Editor.currentEditor().getBuffer(),
+                                       checkMark(first),
+                                       checkMark(second));
+            return new SimpleString(region.toString());
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            Position start = checkMark(first);
+            Position end = checkMark(second);
+            Region region = new Region(checkBuffer(third), start, end);
+            return new SimpleString(region.toString());
+        }
+    };
+
     // ### goto-char
     // goto-char position
     private static final Primitive GOTO_CHAR =
@@ -307,7 +331,7 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### point
+    // ### current-point
     private static final Primitive0 CURRENT_POINT =
         new Primitive0("current-point", PACKAGE_J, true, "")
     {
@@ -316,6 +340,19 @@ public final class LispAPI extends Lisp
             Position dot = Editor.currentEditor().getDot();
             if (dot != null)
                 return new JavaObject(dot.copy());
+            return NIL;
+        }
+    };
+
+    // ### current-mark
+    private static final Primitive0 CURRENT_MARK =
+        new Primitive0("current-mark", PACKAGE_J, true, "")
+    {
+        public LispObject execute()
+        {
+            Position mark = Editor.currentEditor().getMark();
+            if (mark != null)
+                return new JavaObject(mark.copy());
             return NIL;
         }
     };
