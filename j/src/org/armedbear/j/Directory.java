@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.6 2002-11-17 15:32:42 piso Exp $
+ * $Id: Directory.java,v 1.7 2002-11-19 19:37:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1931,8 +1931,18 @@ public final class Directory extends Buffer
             sb.append(file.netPath());
             sb.append(']');
             return sb.toString();
-        } else
-            return file.canonicalPath();
+        }
+        if (Platform.isPlatformUnix()) {
+            String userHome = Utilities.getUserHome();
+            if (userHome != null && userHome.length() > 0) {
+                String s = file.canonicalPath();
+                if (s.equals(userHome))
+                    return "~";
+                if (s.startsWith(userHome.concat("/")))
+                    return "~".concat(s.substring(userHome.length()));
+            }
+        }
+        return file.canonicalPath();
     }
 
     // For the buffer list.
