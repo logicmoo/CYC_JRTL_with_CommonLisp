@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.18 2003-03-08 04:27:40 piso Exp $
+;;; $Id: boot.lisp,v 1.19 2003-03-08 18:15:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@
 (export '(plusp minusp integerp
           character
           open
+          read-from-string
           call-arguments-limit
           lambda-parameters-limit
           multiple-values-limit
@@ -72,6 +73,10 @@
   (if (eq direction :output)
       (%open-output-file filename)
       (error "operation not supported")))
+
+(defun read-from-string (string &optional eof-error-p eof-value
+				&key (start 0) end preserve-whitespace)
+  (%read-from-string string eof-error-p eof-value start end preserve-whitespace))
 
 (defconstant call-arguments-limit 50)
 
