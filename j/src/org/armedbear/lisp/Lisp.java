@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.229 2004-04-16 01:00:11 piso Exp $
+ * $Id: Lisp.java,v 1.230 2004-04-17 10:53:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -788,29 +788,6 @@ public abstract class Lisp
         catch (Throwable t) {
             return null;
         }
-    }
-
-    public static final int nameToChar(String s)
-    {
-        String lower = s.toLowerCase();
-        if (lower.equals("space"))
-            return ' ';
-        if (lower.equals("tab"))
-            return '\t';
-        if (lower.equals("newline"))
-            return '\n';
-        if (lower.equals("linefeed"))
-            return '\n';
-        if (lower.equals("return"))
-            return '\r';
-        if (lower.equals("page"))
-            return '\f';
-        if (lower.equals("null"))
-            return 0;
-        if (lower.equals("backspace"))
-            return '\b';
-        // Unknown.
-        return -1;
     }
 
     public static final LispObject getUpgradedArrayElementType(LispObject type)
