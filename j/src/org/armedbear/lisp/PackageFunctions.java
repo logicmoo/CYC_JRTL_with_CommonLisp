@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.2 2003-06-22 00:06:43 piso Exp $
+ * $Id: PackageFunctions.java,v 1.3 2003-07-06 14:05:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,28 @@ public final class PackageFunctions extends Lisp
                 }
             } else
                 pkg.shadow(javaString(symbols));
+            return T;
+        }
+    };
+
+    // ### shadowing-import
+    // shadowing-import symbols &optional package => t
+    private static final Primitive SHADOWING_IMPORT =
+        new Primitive("shadowing-import") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length == 0 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject symbols = args[0];
+            Package pkg =
+                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
+            if (symbols.listp()) {
+                while (symbols != NIL) {
+                    pkg.shadowingImport(checkSymbol(symbols.car()));
+                    symbols = symbols.cdr();
+                }
+            } else
+                pkg.shadowingImport(checkSymbol(symbols));
             return T;
         }
     };
