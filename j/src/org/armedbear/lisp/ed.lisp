@@ -1,7 +1,7 @@
 ;;; ed.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: ed.lisp,v 1.2 2004-10-17 13:32:34 piso Exp $
+;;; $Id: ed.lisp,v 1.3 2004-10-17 14:00:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,8 +20,6 @@
 ;;; Adapted from SBCL.
 
 (in-package #:system)
-
-(setf *ed-functions* (adjoin 'default-ed-function *ed-functions*))
 
 (defun ed (&optional x)
   "Starts the editor (on a file or a function if named).  Functions
