@@ -2,7 +2,7 @@
  * Completion.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Completion.java,v 1.3 2003-04-10 18:54:16 piso Exp $
+ * $Id: Completion.java,v 1.4 2003-04-10 23:29:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,12 +103,26 @@ public final class Completion
                     if (toBeAdded.startsWith(parentDirName))
                         toBeAdded = parentPrefix + toBeAdded.substring(parentDirName.length());
                 }
-                toBeAdded = Utilities.escapeSpacesAndParens(toBeAdded);
+                toBeAdded = escapeSpaces(toBeAdded);
                 if (file.isDirectory())
                     toBeAdded += separatorChar;
                 list.add(toBeAdded);
             }
         }
+    }
+
+    // Converts "this is a test" into "this\ is\ a\ test".
+    private static final String escapeSpaces(String s)
+    {
+        final int length = s.length();
+        FastStringBuffer sb = new FastStringBuffer(length * 2);
+        for (int i = 0; i < length; i++) {
+            char c = s.charAt(i);
+            if (c == ' ')
+                sb.append('\\');
+            sb.append(c);
+        }
+        return sb.toString();
     }
 
     private final char getSeparatorChar()
