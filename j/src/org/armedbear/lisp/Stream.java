@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.57 2004-03-16 18:33:25 piso Exp $
+ * $Id: Stream.java,v 1.58 2004-03-16 19:19:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,16 +255,9 @@ public class Stream extends LispObject
         LispObject handler = currentReadtable().getReaderMacroFunction(c);
         if (handler instanceof ReaderMacroFunction)
             return ((ReaderMacroFunction)handler).execute(this, c);
-        switch (c) {
-            case '|':
-                // Let readToken() process the multiple escape.
-                _unreadChar(c);
-                return makeSymbol(readToken());
-            case ':':
-                return PACKAGE_KEYWORD.intern(readToken());
-            default:
-                return makeObject(readToken(c));
-        }
+        if (handler != null && handler != NIL)
+            return handler.execute(this, LispCharacter.getInstance(c));
+        return makeObject(readToken(c));
     }
 
     public LispObject readPathname() throws ConditionThrowable
@@ -553,7 +546,10 @@ public class Stream extends LispObject
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
             char c = sb.charAt(0);
-            if (c == '\\') {
+            if (c == '|') {
+                sb.setLength(0);
+                sb.append(readMultipleEscape());
+            } else if (c == '\\') {
                 int n = _readChar();
                 if (n < 0) {
                     signal(new EndOfFile(this));
