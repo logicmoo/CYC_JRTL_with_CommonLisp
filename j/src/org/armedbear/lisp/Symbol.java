@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.157 2004-11-06 20:03:18 piso Exp $
+ * $Id: Symbol.java,v 1.158 2004-11-06 20:56:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,7 @@ public class Symbol extends LispObject
     public static final Symbol QUOTE                            = PACKAGE_CL.addExternalSymbol("QUOTE");
     public static final Symbol SETF                             = PACKAGE_CL.addExternalSymbol("SETF");
     public static final Symbol SIGNAL                           = PACKAGE_CL.addExternalSymbol("SIGNAL");
+    public static final Symbol SLOT_BOUNDP                      = PACKAGE_CL.addExternalSymbol("SLOT-BOUNDP");
     public static final Symbol SLOT_MISSING                     = PACKAGE_CL.addExternalSymbol("SLOT-MISSING");
     public static final Symbol SLOT_UNBOUND                     = PACKAGE_CL.addExternalSymbol("SLOT-UNBOUND");
     public static final Symbol SLOT_VALUE                       = PACKAGE_CL.addExternalSymbol("SLOT-VALUE");
