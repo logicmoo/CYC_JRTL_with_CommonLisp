@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.258 2004-08-01 00:21:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.259 2004-08-01 15:10:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2320,6 +2320,34 @@
     (emit 'aload result-register)
     (emit-move-from-stack target)))
 
+(defun compile-multiple-value-call (form &key (target *val*))
+  (%format t "COMPILE-MULTIPLE-VALUE-CALL~%")
+  (case (length form)
+    (2
+     (compile-form (second form) :target :stack)
+     (emit-invokestatic +lisp-class+
+                        "coerceToFunction"
+                        "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+                        0)
+     (emit-invokevirtual +lisp-object-class+
+                         "execute"
+                         "()Lorg/armedbear/lisp/LispObject;"
+                         0)
+     (emit-move-from-stack target))
+    (3
+     (let* ((*register* *register*)
+            (function-register (allocate-register)))
+       (compile-form (second form) :target function-register)
+       (compile-form (third form) :target :stack)
+       (emit 'aload function-register)
+       (emit-invokestatic +lisp-class+
+                          "multipleValueCall1"
+                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                          -1)
+       (emit-move-from-stack target)))
+    (t
+     (error "COMPILE-MULTIPLE-VALUE-CALL: unsupported case: ~S" form))))
+
 ;; Generates code to bind variable to value at top of runtime stack.
 (defun compile-binding (variable)
   (cond ((variable-register variable)
@@ -2593,10 +2621,10 @@
     (emit 'goto EXIT)
     (when (block-non-local-go-p block)
       ; We need a handler to catch non-local GOs.
-      (let ((HANDLER (gensym))
-            (*register* *register*)
-            (go-register (allocate-register))
-            (tag-register (allocate-register)))
+      (let* ((HANDLER (gensym))
+             (*register* *register*)
+             (go-register (allocate-register))
+             (tag-register (allocate-register)))
         (label HANDLER)
         ;; The Go object is on the runtime stack. Stack depth is 1.
         (emit 'dup)
@@ -4118,6 +4146,7 @@
                              labels
                              locally
                              multiple-value-bind
+                             multiple-value-call
                              multiple-value-list
                              multiple-value-prog1
                              progn
