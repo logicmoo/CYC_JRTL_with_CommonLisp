@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.47 2004-05-23 17:42:02 piso Exp $
+ * $Id: LispClass.java,v 1.48 2004-10-11 18:04:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,7 +269,7 @@ public class LispClass extends StandardObject
                 map.remove(symbol);
                 return second;
             }
-            return signal(new TypeError(second, "class"));
+            return signal(new TypeError(second, Symbol.CLASS));
         }
     };
 
@@ -283,7 +283,7 @@ public class LispClass extends StandardObject
                 return ((LispClass)arg).symbol;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "class"));
+                return signal(new TypeError(arg, Symbol.CLASS));
             }
         }
     };
@@ -300,7 +300,7 @@ public class LispClass extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first, "class"));
+                return signal(new TypeError(first, Symbol.CLASS));
             }
         }
     };
@@ -316,7 +316,7 @@ public class LispClass extends StandardObject
                 return layout != null ? layout : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "class"));
+                return signal(new TypeError(arg, Symbol.CLASS));
             }
         }
     };
@@ -334,7 +334,7 @@ public class LispClass extends StandardObject
             }
             catch (ClassCastException e) {
                 if (!(first instanceof LispClass))
-                    return signal(new TypeError(first, "class"));
+                    return signal(new TypeError(first, Symbol.CLASS));
                 if (!(second instanceof Layout))
                     return signal(new TypeError(second, "layout"));
                 // Not reached.
@@ -351,7 +351,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getDirectSuperclasses();
-            return signal(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, Symbol.CLASS));
         }
     };
 
@@ -366,7 +366,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).setDirectSuperclasses(second);
                 return second;
             }
-            return signal(new TypeError(first, "class"));
+            return signal(new TypeError(first, Symbol.CLASS));
         }
     };
 
@@ -378,7 +378,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getDirectSubclasses();
-            return signal(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, Symbol.CLASS));
         }
     };
 
@@ -393,7 +393,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).setDirectSubclasses(second);
                 return second;
             }
-            return signal(new TypeError(first, "class"));
+            return signal(new TypeError(first, Symbol.CLASS));
         }
     };
 
@@ -405,7 +405,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getCPL();
-            return signal(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, Symbol.CLASS));
         }
     };
 
@@ -420,7 +420,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).classPrecedenceList = second;
                 return second;
             }
-            return signal(new TypeError(first, "class"));
+            return signal(new TypeError(first, Symbol.CLASS));
         }
     };
 
@@ -433,7 +433,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).directMethods;
-            return signal(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, Symbol.CLASS));
         }
     };
 
@@ -448,7 +448,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).directMethods = second;
                 return second;
             }
-            return signal(new TypeError(first, "class"));
+            return signal(new TypeError(first, Symbol.CLASS));
         }
     };
 
@@ -461,7 +461,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).documentation;
-            return signal(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, Symbol.CLASS));
         }
     };
 
@@ -476,7 +476,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).documentation = second;
                 return second;
             }
-            return signal(new TypeError(first, "class"));
+            return signal(new TypeError(first, Symbol.CLASS));
         }
     };
 
