@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: arrays.lisp,v 1.4 2003-04-04 02:19:22 piso Exp $
+;;; $Id: arrays.lisp,v 1.5 2003-04-07 01:58:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 (export '(make-array
           array-row-major-index
+          array-in-bounds-p
           aref))
 
 (defun make-array (dimensions &key
@@ -32,12 +33,15 @@
                initial-contents adjustable fill-pointer displaced-to
                displaced-index-offset))
 
-(defun %array-row-major-index (array subscripts)
+(defun %array-row-major-index (array subscripts
+                                     &optional (invalid-index-error-p t))
   (let ((rank  (array-rank array))
         (nsubs (length subscripts))
         (sum 0))
     (unless (eql rank nsubs)
-      (error 'program-error))
+      (error 'program-error
+             "wrong number of subscripts (~A) for array of rank ~A"
+             nsubs rank))
     (if (eql 0 rank)
         0
         (do* ((i (1- rank) (1- i))
@@ -46,14 +50,20 @@
               (size dim (* dim size)))
           (nil)
           (let ((s (elt subscripts i)))
-            (require-type s 'fixnum)
+            (require-type s 'integer)
             (when (or (< s 0) (>= s dim))
-              (error 'program-error))
+              (if invalid-index-error-p
+                  (error 'program-error)
+                  (return-from %array-row-major-index nil)))
             (incf sum (* s last-size))
             (when (eql i 0) (return sum)))))))
 
 (defun array-row-major-index (array &rest subscripts)
   (%array-row-major-index array subscripts))
+
+(defun array-in-bounds-p (array &rest subscripts)
+  (if (%array-row-major-index array subscripts nil)
+      t))
 
 (defun aref (array &rest subscripts)
   (cond ((null subscripts)
