@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.25 2004-06-15 01:03:07 piso Exp $
+;;; $Id: compile-file.lisp,v 1.26 2004-06-15 02:41:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -220,6 +220,8 @@
                 (jvm::*toplevel-defuns* ())
                 (*fbound-names* ()))
             (write (list 'init-fasl :version *fasl-version*) :stream out)
+            (terpri out)
+            (write (list 'setq '*fasl-source* *compile-file-truename*) :stream out)
             (terpri out)
             (loop
               (let ((form (read in nil in)))
