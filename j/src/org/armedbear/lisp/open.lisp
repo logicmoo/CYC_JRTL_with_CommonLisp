@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: open.lisp,v 1.3 2003-10-17 15:35:53 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: open.lisp,v 1.4 2004-01-18 15:21:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,4 +31,6 @@
         ((eq direction :output)
          (%open-output-file (pathname filename) element-type if-exists))
         (t
-         (error "OPEN: operation not supported"))))
+         (error 'simple-error
+                :format-control ":DIRECTION ~S not supported."
+                :format-arguments (list direction)))))
