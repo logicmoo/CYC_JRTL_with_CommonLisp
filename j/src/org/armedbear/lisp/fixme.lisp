@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.8 2003-10-12 19:48:48 piso Exp $
+;;; $Id: fixme.lisp,v 1.9 2003-10-15 15:27:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,12 +35,6 @@
   `(progn ,@forms))
 
 (defun proclaim (decl)
-  nil)
-
-(defun compute-restarts (&optional condition)
-  nil)
-
-(defun restart-name (restart)
   nil)
 
 (defun warn (&rest args)
