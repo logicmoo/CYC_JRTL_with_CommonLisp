@@ -1,8 +1,8 @@
 /*
  * Main.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Main.java,v 1.2 2003-12-05 23:41:01 dmcnaught Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Main.java,v 1.3 2004-03-23 03:28:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,16 +23,18 @@ package org.armedbear.lisp;
 
 public final class Main
 {
+    public static final long startTimeMillis = System.currentTimeMillis();
+
     public static void main(String[] args)
     {
         Interpreter interpreter = Interpreter.createInstance();
-        
+
         boolean print = true;
-        
+
         // check for command-line args
         if (args.length > 0) {
             interpreter.initializeLisp(false);
-            
+
            for (int i = 0; i < args.length; ++i) {
                 if (args[i].equals("--noprint"))
                     print = false;
@@ -52,12 +54,11 @@ public final class Main
                         System.err.println("No argument supplied to --eval");
                         System.exit(1);
                     }
-                } 
-                else if (args[i].equals("--load")) {
+                } else if (args[i].equals("--load")) {
                     if (i+1 < args.length) {
                         LispObject result = null;
                         try {
-                            // String loadStr = "(load \"" + String.valueOf(args[i+1]) + "\")";                            
+                            // String loadStr = "(load \"" + String.valueOf(args[i+1]) + "\")";
                             result = Load.load(args[i+1], false, false);
                         } catch (ConditionThrowable c) {
                             System.err.println("Caught condition: " + c.getCondition().toString()
@@ -73,9 +74,8 @@ public final class Main
                 }
             }
         }
-        
-        // Now the toplevel will run unless we got an error or the user called EXTENSIONS:EXIT
-        
+        // Now the toplevel will run unless we got an error or the user called
+        // EXTENSIONS:EXIT.
         if (interpreter != null)
             interpreter.run();
     }
