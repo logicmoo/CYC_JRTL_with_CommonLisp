@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.54 2003-06-10 17:47:56 piso Exp $
+;;; $Id: boot.lisp,v 1.55 2003-06-10 17:55:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
           make-hash-table
           plusp minusp integerp
           character
-          open
           read-from-string
           call-arguments-limit
           lambda-parameters-limit
@@ -139,19 +138,7 @@
 (defun character (x)
   (coerce x 'character))
 
-(defun open (filename
-	     &key
-	     (direction :input)
-	     (element-type 'base-char)
-	     (if-exists nil if-exists-given)
-	     (if-does-not-exist nil if-does-not-exist-given)
-	     (external-format :default))
-  (cond ((eq direction :input)
-         (%open-input-file filename element-type))
-        ((eq direction :output)
-         (%open-output-file filename element-type if-exists))
-        (t
-         (error "operation not supported"))))
+(autoload 'open "open.lisp")
 
 (defun read-from-string (string &optional eof-error-p eof-value
 				&key (start 0) end preserve-whitespace)
