@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.4 2002-10-14 16:30:19 piso Exp $
+ * $Id: CommandTable.java,v 1.5 2002-10-15 16:28:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,13 +320,13 @@ public class CommandTable
             addCommand("saveToRegister", "Registers");
             addCommand("shellCommand", "ShellCommand");
             addCommand("shell", "Shell");
-            addCommand("shellBackspace", "Shell");
-            addCommand("shellEnter", "Shell");
-            addCommand("shellEscape", "Shell");
-            addCommand("shellHome", "Shell");
+            addCommand("shellBackspace", "CommandInterpreter");
+            addCommand("shellEnter", "CommandInterpreter");
+            addCommand("shellEscape", "CommandInterpreter");
+            addCommand("shellHome", "CommandInterpreter");
             addCommand("shellInterrupt", "Shell");
-            addCommand("shellNextInput", "Shell");
-            addCommand("shellPreviousInput", "Shell");
+            addCommand("shellNextInput", "CommandInterpreter");
+            addCommand("shellPreviousInput", "CommandInterpreter");
             addCommand("shellTab", "Shell");
             addCommand("sortLines", "Sort");
             addCommand("source", "JDKHelp");
