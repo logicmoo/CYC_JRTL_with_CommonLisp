@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.28 2004-09-20 23:37:12 asimon Exp $
+;;; $Id: pprint.lisp,v 1.29 2004-09-28 17:31:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1285,11 +1285,14 @@
 	     ,@ body)
 	   (end-block ,var ,suffix))))))
 
+;; "If stream is a pretty printing stream and the value of *PRINT-PRETTY* is
+;; true, a line break is inserted in the output when the appropriate condition
+;; below is satisfied; otherwise, PPRINT-NEWLINE has no effect."
 (defun pprint-newline (kind &optional (stream *standard-output*))
   (setq stream (decode-stream-arg stream))
   (when (not (member kind '(:linear :miser :fill :mandatory)))
     (error "Invalid KIND argument ~A to PPRINT-NEWLINE." kind))
-  (when (xp-structure-p stream)
+  (when (and (xp-structure-p stream) *print-pretty*)
     (pprint-newline+ kind stream))
   nil)
 
