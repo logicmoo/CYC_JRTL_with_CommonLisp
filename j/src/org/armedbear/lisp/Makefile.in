@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.77 2003-09-20 18:17:49 piso Exp $
+# $Id: Makefile.in,v 1.78 2003-09-21 02:00:50 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@ CLASSFILES =	AbstractArray.class \
 		BitVector.class \
 		Block.class \
 		BuiltInClass.class \
+		CellError.class \
 		CharacterFunctions.class \
 		CharacterInputStream.class \
 		CharacterOutputStream.class \
@@ -117,6 +118,7 @@ CLASSFILES =	AbstractArray.class \
 		Version.class \
 		WrongNumberOfArgumentsException.class \
 		atan.class \
+		cell_error_name.class \
 		coerce.class \
 		cxr.class \
 		define_condition.class \
