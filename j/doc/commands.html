@@ -252,6 +252,7 @@
     <li><a href="commands.html#prevBuffer">prevBuffer</a></li>
     <li><a href="commands.html#previousChange">previousChange</a></li>
     <li><a href="commands.html#previousComment">previousComment</a></li>
+    <li><a href="commands.html#previousError">previousError</a></li>
     <li><a href="commands.html#print">print</a></li>
     <li><a href="commands.html#properties">properties</a></li>
     <li><a href="commands.html#pushPosition">pushPosition</a></li>
@@ -341,6 +342,7 @@
     <li><a href="commands.html#xmlInsertMatchingEndTag">xmlInsertMatchingEndTag</a></li>
     <li><a href="commands.html#xmlInsertTag">xmlInsertTag</a></li>
     <li><a href="commands.html#xmlParseBuffer">xmlParseBuffer</a></li>
+    <li><a href="commands.html#xmlValidateBuffer">xmlValidateBuffer</a></li>
 </ul>
 
 <a name="about">about</a><dl><dd>
@@ -3164,7 +3166,8 @@ compilation error.
 <p>
 <b>Default key mapping:</b> F4
 <p>
-<b>See also:</b> <a href="#thisError">thisError</a>,
+<b>See also:</b> <a href="#previousError">previousError</a>,
+<a href="#thisError">thisError</a>,
 <a href="compilation.html">Compilation Buffers</a>
 <br><br>
 </dl><!--<hr>-->
@@ -3403,6 +3406,19 @@ Cycles backwards through the history of CVS checkin comments.
 <b>See also:</b> <a href="#nextComment">nextComment</a>,
 <a href="#cvsCommit">cvsCommit</a>, <a href="#finish">finish</a>,
 <a href="cvs.html">CVS Support</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="previousError">previousError</a><dl><dd>
+<p>
+Jumps to the location in the source file that corresponds to the previous
+compilation error.
+<p>
+<b>Default key mapping:</b> Shift F4
+<p>
+<b>See also:</b> <a href="#nextError">nextError</a>,
+<a href="#thisError">thisError</a>,
+<a href="compilation.html">Compilation Buffers</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -3985,7 +4001,8 @@ Displays the current compiler or XML parser error message.
 <br><br>
 <b>Default key mapping:</b> Alt M
 <br><br>
-<b>See also:</b> <a href="#xmlParseBuffer">xmlParseBuffer</a>
+<b>See also:</b> <a href="#xmlParseBuffer">xmlParseBuffer</a>,
+<a href="#xmlValidateBuffer">xmlValidateBuffer</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -4125,6 +4142,7 @@ at the current location in the compilation buffer.
 compilation buffers
 <p>
 <b>See also:</b> <a href="#nextError">nextError</a>,
+<a href="#previousError">previousError</a>,
 <a href="compilation.html">Compilation Buffers</a>
 <br><br>
 </dl><!--<hr>-->
@@ -4496,15 +4514,44 @@ when it is inserted in the buffer.
 <a name="xmlParseBuffer">xmlParseBuffer</a><dl><dd>
 <p>
 In XML mode, parses the current buffer. If the operation succeeds, the document
-tree in the sidebar is updated. If an error occurs, the parser's error message
-is displayed in a message box and the caret is moved to the location of the
-error in the edit buffer.
-<br><br>
+tree in the sidebar is updated.
+<p>
+If there are errors or warnings, the parser's error messages are displayed in a
+transient output buffer. You can use the commands
+<a href="commands.html#nextError">nextError</a>,
+<a href="commands.html#previousError">previousError</a> and
+<a href="commands.html#thisError">thisError</a> to jump to the location of each
+error in the source.
+<p>
 <b>Default key mapping:</b> Ctrl P in XML mode
-<br><br>
-<b>See also:</b> <a href="xmlmode.html">XML Mode</a>,
+<p>
+<b>See also:</b>
+<a href="commands.html#xmlValidateBuffer">xmlValidateBuffer</a>,
+<a href="xmlmode.html">XML Mode</a>,
 <a href="preferences.html#enableTree">enableTree</a>,
-<a href="preferences.html#org.xml.sax.parser">org.xml.sax.parser </a>
+<a href="preferences.html#org.xml.sax.driver">org.xml.sax.driver</a>,
+<a href="compilation.html">Compilation Buffers</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="xmlValidateBuffer">xmlValidateBuffer</a><dl><dd>
+<p>
+In XML mode, validates the current buffer.
+<p>
+If there are errors or warnings, the parser's error messages are displayed in a
+transient output buffer. You can use the commands
+<a href="commands.html#nextError">nextError</a>,
+<a href="commands.html#previousError">previousError</a> and
+<a href="commands.html#thisError">thisError</a> to jump to the location of each
+error in the source.
+<p>
+<b>Default key mapping:</b> None
+<p>
+<b>See also:</b> <a href="commands.html#xmlParseBuffer">xmlParseBuffer</a>,
+<a href="xmlmode.html">XML Mode</a>,
+<a href="preferences.html#enableTree">enableTree</a>,
+<a href="preferences.html#org.xml.sax.driver">org.xml.sax.driver</a>,
+<a href="compilation.html">Compilation Buffers</a>
 <br><br>
 </dl><!--<hr>-->
 
