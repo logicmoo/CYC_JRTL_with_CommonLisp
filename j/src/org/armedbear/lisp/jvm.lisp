@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.356 2005-01-19 13:02:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.357 2005-01-19 14:57:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -461,16 +461,25 @@
          (tag (find-tag name)))
     (unless tag
       (error "p1-go: tag not found: ~S" name))
-    (unless (eq (tag-compiland tag) *current-compiland*)
-      (setf (block-non-local-go-p (tag-block tag)) t)))
+    (let ((tag-block (tag-block tag)))
+      (cond ((eq (tag-compiland tag) *current-compiland*)
+             ;; Does the GO leave an enclosing UNWIND-PROTECT?
+             (let ((protected
+                    (dolist (enclosing-block *blocks*)
+                      (when (eq enclosing-block tag-block)
+                        (return nil))
+                      (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
+                        (return t)))))
+               (when protected
+                 (setf (block-non-local-go-p tag-block) t))))
+            (t
+             (setf (block-non-local-go-p tag-block) t)))))
   form)
 
 (defun p1-flet (form)
-;;   (when *current-compiland*
-    (incf (compiland-children *current-compiland*) (length (cadr form)))
-;;     )
+  (incf (compiland-children *current-compiland*) (length (cadr form)))
   (let ((*current-compiland* *current-compiland*)
-        (compilands ()))
+        (compilands '()))
     (dolist (definition (cadr form))
       (let* ((name (car definition))
              (lambda-list (cadr definition))
@@ -2811,70 +2820,67 @@
       (emit 'aastore))))
 
 (defun compile-local-function-call (form target)
-  (let* ((op (car form))
+  (let* ((compiland *current-compiland*)
+         (op (car form))
          (args (cdr form))
          (local-function (find-local-function op))
          (*register* *register*)
          (saved-vars '()))
-    (cond
-     ((eq (local-function-compiland local-function) *current-compiland*)
-      ;; Recursive call.
-      (dformat t "compile-local-function-call recursive case~%")
-      (setf saved-vars
-            (save-variables (compiland-arg-vars (local-function-compiland local-function))))
-      (emit 'aload_0))
-     ((local-function-variable local-function)
-      ;; LABELS
-      (dformat t "compile-local-function-call LABELS case~%")
-      (dformat t "save args here: ~S~%"
-               (mapcar #'variable-name
-                       (compiland-arg-vars (local-function-compiland local-function))))
-      (setf saved-vars
-            (save-variables (compiland-arg-vars (local-function-compiland local-function))))
-      (emit 'var-ref (local-function-variable local-function) :stack))
-     (t
-      (dformat t "compile-local-function-call default case~%")
-      (let* ((g (if *compile-file-truename*
-                    (declare-local-function local-function)
-                    (declare-object (local-function-function local-function)))))
-        (emit 'getstatic
-              *this-class*
-              g
-              +lisp-object+)))) ; Stack: template-function
+    (cond ((eq (local-function-compiland local-function) compiland)
+           ;; Recursive call.
+           (dformat t "compile-local-function-call recursive case~%")
+           (setf saved-vars
+                 (save-variables (compiland-arg-vars (local-function-compiland local-function))))
+           (emit 'aload_0))
+          ((local-function-variable local-function)
+           ;; LABELS
+           (dformat t "compile-local-function-call LABELS case~%")
+           (dformat t "save args here: ~S~%"
+                    (mapcar #'variable-name
+                            (compiland-arg-vars (local-function-compiland local-function))))
+           (unless (null (compiland-parent compiland))
+             (setf saved-vars
+                   (save-variables (compiland-arg-vars (local-function-compiland local-function)))))
+           (emit 'var-ref (local-function-variable local-function) :stack))
+          (t
+           (dformat t "compile-local-function-call default case~%")
+           (let* ((g (if *compile-file-truename*
+                         (declare-local-function local-function)
+                         (declare-object (local-function-function local-function)))))
+             (emit 'getstatic
+                   *this-class*
+                   g
+                   +lisp-object+)))) ; Stack: template-function
 
     (when *closure-variables*
       (emit 'checkcast +lisp-ctf-class+))
 
     (when *closure-variables*
       ;; First arg is closure variable array.
-      (aver (not (null (compiland-closure-register *current-compiland*))))
-      (emit 'aload (compiland-closure-register *current-compiland*)))
-    (cond
-     ((> (length args) 4)
-      (emit-push-constant-int (length args))
-      (emit 'anewarray "org/armedbear/lisp/LispObject")
-      (let ((i 0)
-            (must-clear-values nil))
-        (dolist (arg args)
-          (emit 'dup)
-          (emit 'sipush i)
-          (compile-form arg :target :stack)
-          (emit 'aastore) ; store value in array
-          (unless must-clear-values
-            (unless (single-valued-p arg)
-              (setf must-clear-values t)))
-          (incf i))
-        (when must-clear-values
-          (emit-clear-values)))) ; array left on stack here
-     (t
-      (let ((must-clear-values nil))
-        (dolist (arg args)
-          (compile-form arg :target :stack)
-          (unless must-clear-values
-            (unless (single-valued-p arg)
-              (setf must-clear-values t))))
-        (when must-clear-values
-          (emit-clear-values))))) ; args left on stack here
+      (aver (not (null (compiland-closure-register compiland))))
+      (emit 'aload (compiland-closure-register compiland)))
+    (let ((must-clear-values nil))
+      (cond ((> (length args) 4)
+             (emit-push-constant-int (length args))
+             (emit 'anewarray "org/armedbear/lisp/LispObject")
+             (let ((i 0))
+               (dolist (arg args)
+                 (emit 'dup)
+                 (emit-push-constant-int i)
+                 (compile-form arg :target :stack)
+                 (emit 'aastore) ; store value in array
+                 (unless must-clear-values
+                   (unless (single-valued-p arg)
+                     (setf must-clear-values t)))
+                 (incf i)))) ; array left on stack here
+            (t
+             (dolist (arg args)
+               (compile-form arg :target :stack)
+               (unless must-clear-values
+                 (unless (single-valued-p arg)
+                   (setf must-clear-values t)))))) ; args left on stack here
+      (when must-clear-values
+        (emit-clear-values)))
 
     (if *closure-variables*
           (case (length args)
@@ -3722,57 +3728,59 @@
               *handlers*)))
     (label EXIT)
     (when must-clear-values
-;;       (dformat t "p2-tagbody-node calling emit-clear-values~%")
       (emit-clear-values))
     ;; TAGBODY returns NIL.
     (when target
       (emit-push-nil)
       (emit-move-from-stack target))))
 
-(defun compile-go (form &key target representation)
+(defun p2-go (form &key target representation)
   (let* ((name (cadr form))
          (tag (find-tag name)))
     (unless tag
-      (error "COMPILE-GO: tag not found: ~S" name))
-    (cond ((eq (tag-compiland tag) *current-compiland*)
-           ;; Local case.
-           (let ((tag-block (tag-block tag))
-                 (register nil))
-             ;; Does the GO leave an enclosing UNWIND-PROTECT?
-             (let ((protected
-                    (dolist (enclosing-block *blocks*)
-                      (when (eq enclosing-block tag-block)
-                        (return nil))
-                      (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
-                        (return t)))))
-               (when protected
-                 (error "COMPILE-GO: enclosing UNWIND-PROTECT")))
-             (dolist (block *blocks*)
-               (if (eq block tag-block)
-                   (return)
-                   (setf register (or (block-environment-register block) register))))
-             (when register
-               ;; Restore dynamic environment.
-               (emit 'aload *thread*)
-               (emit 'aload register)
-               (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)))
-           (maybe-generate-interrupt-check) ;; FIXME not exactly right, but better than nothing
-           (emit 'goto (tag-label tag)))
-          (t
-           ;; Non-local GO.
-           (emit 'new +lisp-go-class+)
-           (emit 'dup)
-           (compile-form `',(tag-label tag) :target :stack) ; Tag.
-           (emit-invokespecial +lisp-go-class+
-                               "<init>"
-                               "(Lorg/armedbear/lisp/LispObject;)V"
-                               -2)
-           (emit 'athrow)
-           ;; Following code will not be reached, but is needed for JVM stack
-           ;; consistency.
-           (when target
-             (emit-push-nil)
-             (emit-move-from-stack target))))))
+      (error "p2-go: tag not found: ~S" name))
+    (when (eq (tag-compiland tag) *current-compiland*)
+      ;; Local case.
+      (let* ((tag-block (tag-block tag))
+             (register nil)
+             (protected
+              ;; Does the GO leave an enclosing UNWIND-PROTECT?
+              (dolist (enclosing-block *blocks*)
+                (when (eq enclosing-block tag-block)
+                  (return nil))
+                (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
+                  (return t)))))
+        (unless protected
+          (dolist (block *blocks*)
+            (if (eq block tag-block)
+                (return)
+                (setf register (or (block-environment-register block) register))))
+          (when register
+            ;; Restore dynamic environment.
+            (emit 'aload *thread*)
+            (emit 'aload register)
+            (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))
+
+          ;; FIXME Not exactly the right place for this, but better than nothing.
+          (maybe-generate-interrupt-check)
+
+          (emit 'goto (tag-label tag))
+          (return-from p2-go))))
+
+    ;; Non-local GO.
+    (emit 'new +lisp-go-class+)
+    (emit 'dup)
+    (compile-form `',(tag-label tag) :target :stack) ; Tag.
+    (emit-invokespecial +lisp-go-class+
+                        "<init>"
+                        "(Lorg/armedbear/lisp/LispObject;)V"
+                        -2)
+    (emit 'athrow)
+    ;; Following code will not be reached, but is needed for JVM stack
+    ;; consistency.
+    (when target
+      (emit-push-nil)
+      (emit-move-from-stack target))))
 
 (defun compile-atom (form &key (target *val*) representation)
   (unless (= (length form) 2)
@@ -5788,7 +5796,6 @@
                              cons
                              declare
                              funcall
-                             go
                              if
                              length
                              locally
@@ -5815,6 +5822,7 @@
 (install-p2-handler 'ash            'p2-ash)
 (install-p2-handler 'eql            'p2-eql)
 (install-p2-handler 'flet           'p2-flet)
+(install-p2-handler 'go             'p2-go)
 (install-p2-handler 'function       'p2-function)
 (install-p2-handler 'labels         'p2-labels)
 (install-p2-handler 'logand         'p2-logand)
