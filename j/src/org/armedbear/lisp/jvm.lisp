@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.332 2004-12-31 16:49:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.333 2004-12-31 19:13:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -245,6 +245,7 @@
 (defvar *val* nil) ; index of value register
 
 (defstruct node
+  ;; Block name or (TAGBODY) or (LET) or (MULTIPLE-VALUE-BIND).
   name
   form
   (compiland *current-compiland*))
@@ -252,7 +253,6 @@
 ;; Used to wrap TAGBODYs, UNWIND-PROTECTs and LET/LET*/M-V-B forms as well as
 ;; BLOCKs per se.
 (defstruct (block-node (:conc-name block-) (:include node))
-  ;; Block name, or (TAGBODY), or (LET).
   (exit (gensym))
   target
   catch-tag
@@ -292,7 +292,7 @@
                (push (make-variable :name name :initform initform) vars)))
             (t
              (push (make-variable :name varspec) vars))))
-    (setf var (nreverse vars))
+    (setf vars (nreverse vars))
     (dolist (variable vars)
       (push variable *visible-variables*))
     vars))
@@ -353,6 +353,42 @@
                  (when (eq sym (variable-name variable))
                    (setf (variable-declared-type variable) (cadr decl))))))))))
     block))
+
+(defun p1-multiple-value-bind (form)
+;;   (dformat t "p1-multiple-value-bind~%")
+  (let ((*visible-variables* *visible-variables*)
+        (varlist (cadr form))
+        (values-form (caddr form))
+        (body (cdddr form)))
+    ;; Process the values-form first. ("The scopes of the name binding and
+    ;; declarations do not include the values-form.")
+    (setf values-form (if (consp values-form)
+                          (mapcar #'p1 values-form)
+                          (p1 values-form)))
+    (let ((vars ()))
+      (dolist (symbol varlist)
+        (let ((var (make-variable :name symbol)))
+          (push var vars)
+          (push var *visible-variables*)))
+      ;; Process declarations.
+      (dolist (subform body)
+        (unless (and (consp subform) (eq (car subform) 'DECLARE))
+          (return))
+        (let ((decls (cdr subform)))
+          (dolist (decl decls)
+            (case (car decl)
+              (SPECIAL
+               (dolist (sym (cdr decl))
+                 (dolist (variable vars)
+                   (when (eq sym (variable-name variable))
+                     (setf (variable-special-p variable) t)))))
+              (TYPE
+               (dolist (sym (cddr decl))
+                 (dolist (variable vars)
+                   (when (eq sym (variable-name variable))
+                     (setf (variable-declared-type variable) (cadr decl)))))))))))
+    (setf body (mapcar #'p1 body))
+    (list* 'MULTIPLE-VALUE-BIND varlist values-form body)))
 
 (defun p1-block (form)
   (let* ((block (make-block-node :name (cadr form)))
@@ -566,7 +602,7 @@
 (install-p1-handler 'let*                 'p1-let/let*)
 (install-p1-handler 'load-time-value      'identity)
 (install-p1-handler 'locally              'p1-default)
-(install-p1-handler 'multiple-value-bind  'p1-lambda)
+(install-p1-handler 'multiple-value-bind  'p1-multiple-value-bind)
 (install-p1-handler 'multiple-value-call  'p1-default)
 (install-p1-handler 'multiple-value-list  'p1-default)
 (install-p1-handler 'multiple-value-prog1 'p1-default)
