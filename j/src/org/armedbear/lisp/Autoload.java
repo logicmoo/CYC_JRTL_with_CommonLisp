@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.48 2003-08-24 16:41:22 piso Exp $
+ * $Id: Autoload.java,v 1.49 2003-09-07 16:41:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,6 +218,9 @@ public final class Autoload extends Function
         autoload(PACKAGE_SYS, "%string>", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
         autoload(PACKAGE_SYS, "%structure-ref", "StructureObject");
+        autoload(PACKAGE_SYS, "%structure-ref-0", "StructureObject");
+        autoload(PACKAGE_SYS, "%structure-ref-1", "StructureObject");
+        autoload(PACKAGE_SYS, "%structure-ref-2", "StructureObject");
         autoload(PACKAGE_SYS, "%structure-set", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
