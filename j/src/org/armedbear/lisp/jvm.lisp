@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.255 2004-07-31 17:57:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.256 2004-07-31 18:30:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2510,24 +2510,26 @@
           (add-variable-to-context variable))
         (push variable variables)))
     (let ((*register* *register*))
-      ;; Generate code to evaluate each initform and leave the result in the
-      ;; variable's temp register. We do it this way to ensure JVM stack
-      ;; consistency if there is a non-local GO or RETURN from one of the
-      ;; initforms.
-      ;; FIXME Optimizations are possible here!
+      ;; Generate code to evaluate each initform and leave the result in a
+      ;; register. We use the variable's register, if it has one; otherwise we
+      ;; allocate a temporary register for the variable. (We can't just leave
+      ;; the values on the stack because we'll lose JVM stack consistency if
+      ;; there is a non-local GO or RETURN from one of the initforms.)
       (dolist (variable (reverse variables))
-        (let ((initform (variable-initform variable)))
+        (let ((initform (variable-initform variable))
+              (register (or (variable-register variable)
+                            (setf (variable-temp-register variable) (allocate-register)))))
           (cond (initform
                  (compile-form initform :target :stack)
                  (maybe-emit-clear-values initform))
                 (t
                  (emit-push-nil)))
-          (setf (variable-temp-register variable) (allocate-register))
-          (emit-move-from-stack (variable-temp-register variable))))
-      ;; Move each result from the temp register to the proper destination.
+          (emit-move-from-stack register)))
+      ;; Move results from temp registers (if any) to their proper destinations.
       (dolist (variable variables)
-        (emit 'aload (variable-temp-register variable))
-        (compile-binding variable)))
+        (when (variable-temp-register variable)
+          (emit 'aload (variable-temp-register variable))
+          (compile-binding variable))))
     ;; Now make the variables visible.
     (dolist (variable (reverse variables))
       (push variable *visible-variables*)
