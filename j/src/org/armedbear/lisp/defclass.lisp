@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.35 2003-10-21 01:00:52 piso Exp $
+;;; $Id: defclass.lisp,v 1.36 2003-10-21 11:01:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -814,15 +814,16 @@
 
 (defun extract-lambda-list (specialized-lambda-list)
   (let* ((plist (analyze-lambda-list specialized-lambda-list))
-         (requireds (getf plist ':required-names))
-         (rv (getf plist ':rest-var))
-         (ks (getf plist ':key-args))
-         (aok (getf plist ':allow-other-keys))
-         (opts (getf plist ':optional-args))
-         (auxs (getf plist ':auxiliary-args)))
+         (requireds (getf plist :required-names))
+         (rv (getf plist :rest-var))
+         (ks (getf plist :key-args))
+         (keysp (getf plist :keysp))
+         (aok (getf plist :allow-other-keys))
+         (opts (getf plist :optional-args))
+         (auxs (getf plist :auxiliary-args)))
     `(,@requireds
       ,@(if rv `(&rest ,rv) ())
-      ,@(if (or ks aok) `(&key ,@ks) ())
+      ,@(if (or ks keysp aok) `(&key ,@ks) ())
       ,@(if aok '(&allow-other-keys) ())
       ,@(if opts `(&optional ,@opts) ())
       ,@(if auxs `(&aux ,@auxs) ()))))
@@ -843,6 +844,7 @@
                                      (make-keyword arg))))
           (let ((keys ())           ; Just the keywords
                 (key-args ())       ; Keywords argument specs
+                (keysp nil)         ;
                 (required-names ()) ; Just the variable names
                 (required-args ())  ; Variable names & specializers
                 (specializers ())   ; Just the specializers
@@ -859,6 +861,7 @@
                     (&rest
                      (setq state :parsing-rest))
                     (&key
+                     (setq keysp t)
                      (setq state :parsing-key))
                     (&allow-other-keys
                      (setq allow-other-keys 't))
@@ -884,21 +887,76 @@
                    :rest-var rest-var
                    :keywords keys
                    :key-args key-args
+                   :keysp keysp
                    :auxiliary-args auxs
                    :optional-args optionals
                    :allow-other-keys allow-other-keys))))
 
 ;;; ensure method
 
+#+nil
+(defun check-method-arg-info (gf arg-info method)
+  (multiple-value-bind (nreq nopt keysp restp allow-other-keys-p keywords)
+    (analyze-lambda-list (if (consp method)
+                             (early-method-lambda-list method)
+                             (method-lambda-list method)))
+    (flet ((lose (string &rest args)
+                 (error 'simple-program-error
+                        :format-control "~@<attempt to add the method~2I~_~S~I~_~
+                        to the generic function~2I~_~S;~I~_~
+                        but ~?~:>"
+                        :format-arguments (list method gf string args)))
+	   (comparison-description (x y)
+                                   (if (> x y) "more" "fewer")))
+      (let ((gf-nreq (arg-info-number-required arg-info))
+	    (gf-nopt (arg-info-number-optional arg-info))
+	    (gf-key/rest-p (arg-info-key/rest-p arg-info))
+	    (gf-keywords (arg-info-keys arg-info)))
+	(unless (= nreq gf-nreq)
+	  (lose
+	   "the method has ~A required arguments than the generic function."
+	   (comparison-description nreq gf-nreq)))
+	(unless (= nopt gf-nopt)
+	  (lose
+	   "the method has ~A optional arguments than the generic function."
+	   (comparison-description nopt gf-nopt)))
+	(unless (eq (or keysp restp) gf-key/rest-p)
+	  (lose
+	   "the method and generic function differ in whether they accept~_~
+	    &REST or &KEY arguments."))
+	(when (consp gf-keywords)
+	  (unless (or (and restp (not keysp))
+		      allow-other-keys-p
+		      (every (lambda (k) (memq k keywords)) gf-keywords))
+	    (lose "the method does not accept each of the &KEY arguments~2I~_~
+            ~S."
+		  gf-keywords)))))))
+
+
 (defun ensure-method (gf &rest all-keys)
   (let* ((plist-gf (analyze-lambda-list (generic-function-lambda-list gf)))
-         (plist-method (analyze-lambda-list (getf all-keys :lambda-list))))
+         (plist-method (analyze-lambda-list (getf all-keys :lambda-list)))
+;;          (gf-restp (not (null (getf plist-gf :rest-var))))
+;;          (method-restp (not (null (getf plist-method :rest-var))))
+;;          (gf-keysp (not (null (getf plist-gf :keywords))))
+;;          (method-keysp (not (null (getf plist-method :keywords)))))
+         (gf-restp (not (null (memq '&rest (generic-function-lambda-list gf)))))
+         (gf-keysp (getf plist-gf :keysp))
+         (method-restp (not (null (memq '&rest (getf all-keys :lambda-list)))))
+         (method-keysp (getf plist-method :keysp)))
     (unless (= (length (getf plist-gf :required-args))
                (length (getf plist-method :required-args)))
-      (error "method has wrong number of required arguments for generic function"))
+      (error "the method has the wrong number of required arguments for the generic function"))
     (unless (= (length (getf plist-gf :optional-args))
                (length (getf plist-method :optional-args)))
-      (error "method has wrong number of optional arguments for generic function")))
+      (error "the method has the wrong number of optional arguments for the generic function"))
+    (unless (eq (or gf-restp gf-keysp) (or method-restp method-keysp))
+;;       (format t "gf-restp = ~S gf-keysp = ~S~%" gf-restp gf-keysp)
+;;       (format t "method-restp = ~S method-keysp = ~S~%" method-restp method-keysp)
+;;       (format t "method lambda list = ~S~%" (getf all-keys :lambda-list))
+;;       (format t "all-keys = ~S~%" all-keys)
+      (error "the method and the generic function differ in whether they accept &REST or &KEY arguments"))
+    )
   (let ((new-method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
