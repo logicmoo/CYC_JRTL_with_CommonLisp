@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.57 2003-06-10 19:14:23 piso Exp $
+;;; $Id: boot.lisp,v 1.58 2003-06-20 03:03:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -129,6 +129,7 @@
           "strings.lisp")
 (autoload '(remprop get-properties copy-symbol) "symbol.lisp")
 (autoload '(open sort merge parse-integer))
+(autoload 'tree-equal)
 
 ;;; Miscellany.
 
