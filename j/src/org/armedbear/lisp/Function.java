@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.39 2004-10-13 00:22:18 piso Exp $
+ * $Id: Function.java,v 1.40 2004-11-03 15:06:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,26 +132,22 @@ public abstract class Function extends Functional
         return symbol != null ? symbol.getName() : null;
     }
 
-    // Primitive0
     public LispObject execute() throws ConditionThrowable
     {
         return signal(new WrongNumberOfArgumentsException(this));
     }
 
-    // Primitive1
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         return signal(new WrongNumberOfArgumentsException(this));
     }
 
-    // Primitive2
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
         return signal(new WrongNumberOfArgumentsException(this));
     }
 
-    // Primitive3
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
@@ -159,7 +155,6 @@ public abstract class Function extends Functional
         return signal(new WrongNumberOfArgumentsException(this));
     }
 
-    // Primitive4
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
@@ -167,7 +162,6 @@ public abstract class Function extends Functional
         return signal(new WrongNumberOfArgumentsException(this));
     }
 
-    // Primitive
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         return signal(new WrongNumberOfArgumentsException(this));

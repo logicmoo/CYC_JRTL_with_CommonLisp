@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.35 2004-10-13 00:22:20 piso Exp $
+ * $Id: StructureObject.java,v 1.36 2004-11-03 15:06:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -235,8 +235,8 @@ public final class StructureObject extends LispObject
 
     // ### %structure-set
     // %structure-set instance index new-value => new-value
-    private static final Primitive3 _STRUCTURE_SET =
-        new Primitive3("%structure-set", PACKAGE_SYS, false)
+    private static final Primitive _STRUCTURE_SET =
+        new Primitive("%structure-set", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)

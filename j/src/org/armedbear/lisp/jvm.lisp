@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.301 2004-10-25 16:00:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.302 2004-11-03 15:06:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3922,7 +3922,7 @@
                    (0 "org/armedbear/lisp/Primitive0")
                    (1 "org/armedbear/lisp/Primitive1")
                    (2 "org/armedbear/lisp/Primitive2")
-                   (3 "org/armedbear/lisp/Primitive3")
+                   (3 "org/armedbear/lisp/Primitive")
                    (4 "org/armedbear/lisp/Primitive4")
                    (t "org/armedbear/lisp/Primitive")))))
          (this-index (pool-class *this-class*))

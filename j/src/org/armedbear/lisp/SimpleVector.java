@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.15 2004-10-13 00:22:19 piso Exp $
+ * $Id: SimpleVector.java,v 1.16 2004-11-03 15:06:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,8 +275,8 @@ public final class SimpleVector extends AbstractVector
 
     // ### %svset
     // %svset simple-vector index new-value => new-value
-    private static final Primitive3 _SVSET =
-        new Primitive3("%svset", PACKAGE_SYS, false, "simple-vector index new-value")
+    private static final Primitive _SVSET =
+        new Primitive("%svset", PACKAGE_SYS, false, "simple-vector index new-value")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)

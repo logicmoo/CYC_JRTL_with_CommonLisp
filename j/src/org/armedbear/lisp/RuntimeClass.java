@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: RuntimeClass.java,v 1.7 2004-08-24 18:22:36 asimon Exp $
+ * $Id: RuntimeClass.java,v 1.8 2004-11-03 15:06:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,10 +54,12 @@ public class RuntimeClass extends Lisp
 
     // ### jredefine-method
     // %jredefine-method class-name method-name method-def
-    private static final Primitive3 _JREDEFINE_METHOD =
-        new Primitive3("%jredefine-method", PACKAGE_JAVA, false, "class-name method-name method-def")
+    private static final Primitive _JREDEFINE_METHOD =
+        new Primitive("%jredefine-method", PACKAGE_JAVA, false,
+                      "class-name method-name method-def")
     {
-        public LispObject execute(LispObject className, LispObject methodName, LispObject methodDef)
+        public LispObject execute(LispObject className, LispObject methodName,
+                                  LispObject methodDef)
             throws ConditionThrowable
         {
 
@@ -77,12 +79,13 @@ public class RuntimeClass extends Lisp
         }
     };
 
-
     // ### %load-java-class-from-byte-array
     private static final Primitive2 _LOAD_JAVA_CLASS_FROM_BYTE_ARRAY =
-        new Primitive2("%load-java-class-from-byte-array", PACKAGE_JAVA, false, "classname bytearray")
+        new Primitive2("%load-java-class-from-byte-array", PACKAGE_JAVA, false,
+                       "classname bytearray")
     {
-        public LispObject execute(LispObject className, LispObject classBytes) throws ConditionThrowable
+        public LispObject execute(LispObject className, LispObject classBytes)
+            throws ConditionThrowable
         {
             String cn = className.getStringValue();
 	    String pn = cn.substring(0,cn.lastIndexOf('.'));

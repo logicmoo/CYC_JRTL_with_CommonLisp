@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Layout.java,v 1.5 2004-10-21 18:18:16 piso Exp $
+ * $Id: Layout.java,v 1.6 2004-11-03 15:06:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,8 +40,8 @@ public final class Layout extends LispObject
     }
 
     // ### make-layout
-    private static final Primitive3 MAKE_LAYOUT =
-        new Primitive3("make-layout", PACKAGE_SYS, false)
+    private static final Primitive MAKE_LAYOUT =
+        new Primitive("make-layout", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)

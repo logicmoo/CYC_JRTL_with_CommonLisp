@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.697 2004-10-24 18:04:14 piso Exp $
+ * $Id: Primitives.java,v 1.698 2004-11-03 15:06:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1092,8 +1092,8 @@ public final class Primitives extends Lisp
 
     // ### %set-nth
     // %setnth n list new-object => new-object
-    private static final Primitive3 _SET_NTH =
-        new Primitive3("%set-nth", PACKAGE_SYS, false)
+    private static final Primitive _SET_NTH =
+        new Primitive("%set-nth", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -1408,8 +1408,8 @@ public final class Primitives extends Lisp
     };
 
     // ### %defparameter
-    private static final Primitive3 _DEFPARAMETER =
-        new Primitive3("%defparameter", PACKAGE_SYS, false)
+    private static final Primitive _DEFPARAMETER =
+        new Primitive("%defparameter", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -1447,8 +1447,8 @@ public final class Primitives extends Lisp
     };
 
     // ### %defconstant
-    private static final Primitive3 _DEFCONSTANT =
-        new Primitive3("%defconstant", PACKAGE_SYS, false)
+    private static final Primitive _DEFCONSTANT =
+        new Primitive("%defconstant", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -1888,8 +1888,8 @@ public final class Primitives extends Lisp
 
     // ### %set-row-major-aref
     // %set-row-major-aref array index new-value => new-value
-    private static final Primitive3 _SET_ROW_MAJOR_AREF =
-        new Primitive3("%set-row-major-aref", PACKAGE_SYS, false)
+    private static final Primitive _SET_ROW_MAJOR_AREF =
+        new Primitive("%set-row-major-aref", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -1919,8 +1919,8 @@ public final class Primitives extends Lisp
 
     // ### %vset
     // %vset vector index new-value => new-value
-    private static final Primitive3 _VSET =
-        new Primitive3("%vset", PACKAGE_SYS, false)
+    private static final Primitive _VSET =
+        new Primitive("%vset", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -2451,8 +2451,8 @@ public final class Primitives extends Lisp
 
     // ### %make-package
     // %make-package package-name nicknames use => package
-    private static final Primitive3 _MAKE_PACKAGE =
-        new Primitive3("%make-package", PACKAGE_SYS, false) {
+    private static final Primitive _MAKE_PACKAGE =
+        new Primitive("%make-package", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -3914,8 +3914,8 @@ public final class Primitives extends Lisp
 
     // ### %set-elt
     // %setelt sequence index newval => newval
-    private static final Primitive3 _SET_ELT =
-        new Primitive3("%set-elt", PACKAGE_SYS, false)
+    private static final Primitive _SET_ELT =
+        new Primitive("%set-elt", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)

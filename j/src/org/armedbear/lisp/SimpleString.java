@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.21 2004-10-20 01:48:25 piso Exp $
+ * $Id: SimpleString.java,v 1.22 2004-11-03 15:06:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -425,8 +425,8 @@ public final class SimpleString extends AbstractString
     };
 
     // ### %set-schar
-    private static final Primitive3 _SET_SCHAR =
-        new Primitive3("%set-schar", PACKAGE_SYS, false)
+    private static final Primitive _SET_SCHAR =
+        new Primitive("%set-schar", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
