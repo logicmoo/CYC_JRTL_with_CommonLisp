@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.69 2004-02-08 00:50:30 piso Exp $
+;;; $Id: clos.lisp,v 1.70 2004-02-08 02:40:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -663,6 +663,8 @@
    ;; combination type and whose cdr is a list of options.
    (method-combination
     :initarg :method-combination)
+   (argument-precedence-order
+    :initarg :argument-precedence-order)
    (classes-to-emf-table      ; :accessor classes-to-emf-table
     :initform (make-hash-table :test #'equal))
    (required-args :initform ())))
@@ -707,6 +709,11 @@
   (slot-value gf 'method-combination))
 (defun (setf generic-function-method-combination) (new-value gf)
   (setf (slot-value gf 'method-combination) new-value))
+
+(defun generic-function-argument-precedence-order (gf)
+  (slot-value gf 'argument-precedence-order))
+(defun (setf generic-function-argument-precedence-order) (new-value gf)
+  (setf (slot-value gf 'argument-precedence-order) new-value))
 
 ;;; Internal accessor for effective method function table
 
@@ -775,11 +782,17 @@
 (defmacro defgeneric (function-name lambda-list
                                     &rest options-and-method-descriptions)
   (let ((options ())
-        (methods ()))
+        (methods ())
+        (documentation nil))
     (dolist (item options-and-method-descriptions)
       (case (car item)
         (declare) ; FIXME
         (:documentation
+         (when documentation
+           (error 'program-error
+                  :format-control "Documentation option was specified twice for generic function ~S."
+                  :format-arguments (list function-name)))
+         (setf documentation t)
          (push item options))
         (:method
          (push `(defmethod ,function-name ,@(cdr item)) methods))
@@ -805,11 +818,30 @@
      (list :method-class `(find-class ',(cadr option))))
     (:method-combination
      (list :method-combination `',(cdr option)))
+    (:argument-precedence-order
+     (list :argument-precedence-order `',(cdr option)))
     (t
      (list `',(car option) `',(cadr option)))))
 
+;; From OpenMCL.
+(defun canonicalize-argument-precedence-order (apo req)
+  (cond ((equal apo req) nil)
+        ((not (eql (length apo) (length req)))
+         (error 'program-error
+                :format-control "Specified argument precedence order ~S does not match lambda list."
+                :format-arguments (list apo)))
+        (t (let ((res nil))
+             (dolist (arg apo (nreverse res))
+               (let ((index (position arg req)))
+                 (if (or (null index) (memq index res))
+                     (error 'program-error
+                            :format-control "Specified argument precedence order ~S does not match lambda list."
+                            :format-arguments (list apo)))
+                 (push index res)))))))
+
 (defparameter generic-function-table (make-hash-table :test #'equal))
 
+;; FIXME Do we still need this?
 (defun find-generic-function (symbol &optional (errorp t))
   (let ((gf (gethash symbol generic-function-table nil)))
     (if (and (null gf) errorp)
@@ -818,8 +850,6 @@
 
 (defun (setf find-generic-function) (new-value symbol)
   (setf (gethash symbol generic-function-table) new-value))
-
-;;; ensure-generic-function
 
 (defun ensure-generic-function (function-name
                                 &rest all-keys
@@ -867,6 +897,7 @@
                                                 &key name lambda-list
                                                 method-class
                                                 method-combination
+                                                argument-precedence-order
                                                 documentation)
   (declare (ignore generic-function-class))
   (let ((gf (std-allocate-instance the-class-standard-gf)))
@@ -877,9 +908,13 @@
     (setf (generic-function-method-combination gf) method-combination)
     (setf (generic-function-documentation gf) documentation)
     (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
-    (setf (slot-value gf 'required-args)
-          (let ((plist (analyze-lambda-list (generic-function-lambda-list gf))))
-            (getf plist ':required-args)))
+    (let* ((plist (analyze-lambda-list (generic-function-lambda-list gf)))
+           (required-args (getf plist ':required-args)))
+      (setf (slot-value gf 'required-args) required-args)
+      (when argument-precedence-order
+        (setf (slot-value gf 'argument-precedence-order)
+              (canonicalize-argument-precedence-order argument-precedence-order
+                                                      required-args))))
     (finalize-generic-function gf)
     gf))
 
