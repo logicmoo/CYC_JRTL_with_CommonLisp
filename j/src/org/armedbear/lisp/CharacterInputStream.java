@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.12 2003-03-12 01:39:51 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.13 2003-03-13 03:09:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,21 +385,38 @@ public class CharacterInputStream extends LispStream
     private Symbol readUninternedSymbol() throws LispError
     {
         try {
+            int n = read();
+            if (n < 0)
+                throw new EndOfFileException();
+            char c = (char) n;
             StringBuffer sb = new StringBuffer();
-            while (true) {
-                int n = read();
-                if (n < 0)
-                    return new Symbol(sb.toString());
-                char c = (char) n;
-                if (Character.isWhitespace(c))
-                    return new Symbol(sb.toString());
-                switch (c) {
-                    case '(':
-                    case ')':
-                        unread(c);
+            if (c == '|') {
+                while (true) {
+                    n = read();
+                    if (n < 0)
+                        throw new EndOfFileException();
+                    c = (char) n;
+                    if (c == '|')
                         return new Symbol(sb.toString());
-                    default:
-                        sb.append(c);
+                    sb.append(c);
+                }
+            } else {
+                sb.append(c);
+                while (true) {
+                    n = read();
+                    if (n < 0)
+                        return new Symbol(sb.toString());
+                    c = (char) n;
+                    if (Character.isWhitespace(c))
+                        return new Symbol(sb.toString());
+                    switch (c) {
+                        case '(':
+                        case ')':
+                            unread(c);
+                            return new Symbol(sb.toString());
+                        default:
+                            sb.append(c);
+                    }
                 }
             }
         }
