@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.44 2003-07-05 16:04:01 piso Exp $
+ * $Id: Buffer.java,v 1.45 2003-07-05 16:59:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,8 @@
 package org.armedbear.j;
 
 import java.awt.Cursor;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import javax.swing.Icon;
 import javax.swing.SwingUtilities;
@@ -276,6 +279,7 @@ public class Buffer extends SystemBuffer
 
     protected static Buffer createBuffer(File file, File cache, String listing)
     {
+        Compression compression = null;
         int fileType = Utilities.getFileType(cache != null ? cache : file);
         if (fileType == FILETYPE_GZIP) {
             // If we're looking at a remote file, gunzip the cached copy
@@ -284,6 +288,7 @@ public class Buffer extends SystemBuffer
             if (uncompressed != null) {
                 cache = uncompressed;
                 fileType = Utilities.getFileType(cache);
+                compression = new Compression(COMPRESSION_GZIP);
             } else
                 fileType = FILETYPE_BINARY; // Something went wrong.
         }
@@ -302,6 +307,7 @@ public class Buffer extends SystemBuffer
         buffer.setFileType(fileType);
         buffer.setCache(cache);
         buffer.setListing(listing);
+        buffer.setCompression(compression);
         if (file.isLocal() && !file.isFile())
             buffer.setNewFile(true);
         return buffer;
@@ -354,6 +360,7 @@ public class Buffer extends SystemBuffer
                 if (uncompressed != null) {
                     cache = uncompressed;
                     fileType = Utilities.getFileType(cache);
+                    compression = new Compression(COMPRESSION_GZIP);
                 } else
                     fileType = FILETYPE_BINARY; // Something went wrong.
             }
@@ -427,7 +434,7 @@ public class Buffer extends SystemBuffer
             default: {
                 Mode m = grovelModeFromFile(file);
                 if (m == null) {
-                    if (compression != null) {
+                    if (compression != null && compression.getType() == COMPRESSION_ZIP) {
                         String entryName = compression.getEntryName();
                         if (entryName != null)
                             m = getModeForFileName(entryName);
@@ -799,6 +806,7 @@ public class Buffer extends SystemBuffer
         File oldFile = getFile();
         String oldName = oldFile != null ? oldFile.canonicalPath() : null;
         setFile(f);
+        setCompression(null);
         type = TYPE_NORMAL;
         title = null;
         Mode oldMode = mode;
@@ -1295,7 +1303,6 @@ public class Buffer extends SystemBuffer
 
     private boolean maybeWriteBackupFromCache()
     {
-        Debug.assertTrue(getFile().isRemote());
         if (cache == null) {
             Log.error("maybeWriteBackupFromCache cache is null");
             return false;
@@ -1335,6 +1342,10 @@ public class Buffer extends SystemBuffer
     private boolean saveLocal(final File file)
     {
         Debug.assertTrue(file.isLocal());
+
+        if (compression != null)
+            return saveLocalCompressed(file);
+
         try {
             writeBuffer();
             renumberOriginal();
@@ -1429,6 +1440,54 @@ public class Buffer extends SystemBuffer
             }
             Editor.restoreFocus();
         }
+        return true;
+    }
+
+    private boolean saveLocalCompressed(File file)
+    {
+        final String dialogTitle = "Save";
+        final Editor editor = Editor.currentEditor();
+        // Do this before saving changes to cache!
+        if (!maybeWriteBackupFromCache()) {
+            FastStringBuffer sb =
+                new FastStringBuffer("Unable to write backup file for ");
+            sb.append(file.getName());
+            sb.append(". Save anyway?");
+            if (!editor.confirm(dialogTitle, sb.toString()))
+                return false;
+        }
+        if (!saveToCache()) {
+            FastStringBuffer sb =
+                new FastStringBuffer("Unable to write temporary file for ");
+            sb.append(file.getName());
+            MessageDialog.showMessageDialog(sb.toString(), dialogTitle);
+            return false;
+        }
+        try {
+            final int bufSize = 32768;
+            BufferedInputStream in =
+                new BufferedInputStream(cache.getInputStream());
+            GZIPOutputStream out =
+                new GZIPOutputStream(new BufferedOutputStream(file.getOutputStream()),
+                                     bufSize);
+            byte[] buffer = new byte[bufSize];
+            while (true) {
+                int bytesRead = in.read(buffer, 0, bufSize);
+                if (bytesRead > 0)
+                    out.write(buffer, 0, bytesRead);
+                else
+                    break;
+            }
+            in.close();
+            out.flush();
+            out.close();
+        }
+        catch (IOException e) {
+            Log.error(e);
+            return false;
+        }
+        saved();
+        lastModified = file.lastModified();
         return true;
     }
 
