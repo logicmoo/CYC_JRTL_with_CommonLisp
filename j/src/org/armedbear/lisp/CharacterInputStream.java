@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.30 2003-04-27 16:08:03 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.31 2003-04-28 01:48:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -744,8 +744,7 @@ public class CharacterInputStream extends LispStream
                     return values[0];
                 }
                 switch (n) {
-                    case '\n':
-                    case '\r': {
+                    case '\n': {
                         LispObject[] values = new LispObject[2];
                         values[0] = new LispString(sb.toString());
                         values[1] = NIL;
