@@ -2,7 +2,7 @@
  * Search.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Search.java,v 1.6 2003-10-14 00:12:36 piso Exp $
+ * $Id: Search.java,v 1.7 2003-10-14 00:24:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -435,21 +435,25 @@ public class Search implements Cloneable
                 return null;
             }
         }
-        int startIndex = buffer.getAbsoluteOffset(start);
-        final String s = buffer.getText().substring(0, startIndex);
-        while (startIndex >= 0) {
+        int startIndex = 0;
+        int endIndex = buffer.getAbsoluteOffset(start);
+        final String s = buffer.getText().substring(0, endIndex);
+        REMatch lastMatch = null;
+        while (true) {
             match = findMatch(s, startIndex, -1);
-            if (match != null) {
-                if (!wholeWordsOnly)
-                    break;
-                if (Utilities.isDelimited(buffer.getMode(), s,
-                                          match.getStartIndex(), match.getEndIndex()))
-                    break;
-            }
-            --startIndex;
+            if (match == null)
+                break;
+            if (!wholeWordsOnly)
+                lastMatch = match;
+            else if (Utilities.isDelimited(buffer.getMode(), s,
+                                             match.getStartIndex(),
+                                             match.getEndIndex()))
+                lastMatch = match;
+            startIndex = match.getStartIndex() + 1;
         }
-        if (match == null)
+        if (lastMatch == null)
             return null;
+        match = lastMatch;
         return buffer.getPosition(match.getStartIndex());
     }
 
