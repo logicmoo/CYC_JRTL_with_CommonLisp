@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.82 2003-08-06 01:31:13 piso Exp $
+;;; $Id: boot.lisp,v 1.83 2003-08-06 18:32:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -194,7 +194,7 @@
   (case-expand 'case 'eql keyform clauses))
 
 
-;; TYPECASE (from CLISP)
+;;; TYPECASE (from CLISP)
 
 (defmacro typecase (keyform &rest typeclauselist)
   (let* ((tempvar (gensym))
@@ -255,12 +255,31 @@
       (pop body)))
 
 
-(defmacro dolist ((var list &optional result) &rest body)
-  (let ((g (gensym)))
-    `(do ((,g ,list (cdr ,g)))
-         ((atom ,g) (let ((,var nil)) ,result))
-       (let ((,var (car ,g)))
-         ,@body))))
+;;; DOLIST (from CMUCL)
+
+;;; We repeatedly bind the var instead of setting it so that we never give the
+;;; var a random value such as NIL (which might conflict with a declaration).
+;;; If there is a result form, we introduce a gratitous binding of the variable
+;;; to NIL w/o the declarations, then evaluate the result form in that
+;;; environment.  We spuriously reference the gratuitous variable, since we
+;;; don't want to use IGNORABLE on what might be a special var.
+;;;
+(defmacro dolist ((var list &optional (result nil)) &body body)
+  (multiple-value-bind (forms decls)
+    (parse-body body nil nil)
+    (let ((n-list (gensym)))
+      `(do* ((,n-list ,list (cdr ,n-list)))
+	    ((endp ,n-list)
+	     ,@(if (constantp result)
+		   `(,result)
+		   `((let ((,var nil))
+		       ,@decls
+		       ,var
+		       ,result))))
+         (let ((,var (car ,n-list)))
+           ,@decls
+           (tagbody
+            ,@forms))))))
 
 
 ;; FIXME
