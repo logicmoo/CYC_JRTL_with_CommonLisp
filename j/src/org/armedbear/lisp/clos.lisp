@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.22 2003-12-10 02:34:47 piso Exp $
+;;; $Id: clos.lisp,v 1.23 2003-12-10 02:48:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,6 +100,10 @@
             ((null olist))
           (case (car olist)
             (:initform
+             (when initform
+               (error 'program-error
+                      "duplicate slot option :INITFORM for slot named ~S"
+                      name))
              (setq initfunction
                    `(function (lambda () ,(cadr olist))))
              (setq initform `',(cadr olist)))
