@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.30 2004-03-07 02:00:44 piso Exp $
+ * $Id: LispThread.java,v 1.31 2004-04-18 19:29:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,11 +146,8 @@ public final class LispThread extends LispObject
         if (values == null) {
             Debug.assertTrue(false);
             _values = null;
-        } else {
-            _values = new LispObject[values.length];
-            for (int i = values.length; i-- > 0;)
-                _values[i] = values[i];
-        }
+        } else
+            _values = values;
         return values.length > 0 ? values[0] : NIL;
     }
 
