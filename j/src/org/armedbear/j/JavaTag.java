@@ -2,7 +2,7 @@
  * JavaTag.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: JavaTag.java,v 1.1.1.1 2002-09-24 16:09:06 piso Exp $
+ * $Id: JavaTag.java,v 1.2 2002-11-10 01:05:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,12 +29,7 @@ public final class JavaTag extends LocalTag
 
     public JavaTag(String name, Position pos, int type, int flags)
     {
-        super(name, pos, type, flags);
-        parent = null;
-        if (type == TAG_METHOD)
-            canonicalSignature = parseCanonicalSignatureForMethod();
-        else
-            canonicalSignature = null;
+        this(name, pos, type, flags, null);
     }
 
     public JavaTag(String name, Position pos, int type, int flags,
@@ -42,10 +37,14 @@ public final class JavaTag extends LocalTag
     {
         super(name, pos, type, flags);
         this.parent = parent;
-        if (type == TAG_METHOD)
-            canonicalSignature = parseCanonicalSignatureForMethod();
-        else
-            canonicalSignature = null;
+        switch (type) {
+            case TAG_METHOD:
+                canonicalSignature = parseCanonicalSignatureForMethod();
+                break;
+            case TAG_EXPLICIT:
+                canonicalSignature = pos.getLine().trim();
+                break;
+        }
     }
 
     public final JavaClass getParent()
