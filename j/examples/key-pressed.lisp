@@ -1,7 +1,7 @@
 ;;; key-pressed.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: key-pressed.lisp,v 1.5 2003-12-04 17:22:11 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: key-pressed.lisp,v 1.6 2004-03-19 01:31:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -159,3 +159,14 @@
 ;;; Enable the hook.
 (add-hook 'key-pressed-hook 'key-pressed)
 (setf (variable-value 'enable-key-pressed-hook :global) t)
+
+#|
+
+NOTE: ENABLE-KEY-PRESSED-HOOK will be reset to its default value (NIL) when
+preferences are reloaded (which happens automatically when you edit your
+preferences file). To prevent this (and keep the key-pressed hook working
+properly across preference file edits), add this line to ~/.j/prefs:
+
+     enableKeyPressedHook = true
+
+|#
