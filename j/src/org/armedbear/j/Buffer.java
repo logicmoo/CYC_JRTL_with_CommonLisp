@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.35 2003-05-13 16:36:26 piso Exp $
+ * $Id: Buffer.java,v 1.36 2003-05-18 00:00:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2626,7 +2626,7 @@ public class Buffer extends SystemBuffer
         super.finalize();
     }
 
-    final boolean canBeRestored()
+    public final boolean canBeRestored()
     {
         final File file = getFile();
         if (file != null && file.isRemote())
