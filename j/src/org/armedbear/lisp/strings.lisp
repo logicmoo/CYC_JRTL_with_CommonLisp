@@ -1,7 +1,7 @@
 ;;; strings.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: strings.lisp,v 1.3 2003-04-25 02:04:13 piso Exp $
+;;; $Id: strings.lisp,v 1.4 2003-04-25 03:26:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@
 
 (in-package "COMMON-LISP")
 
-(export '(string-upcase string-downcase
-          nstring-upcase nstring-downcase
+(export '(string-upcase string-downcase string-capitalize
+          nstring-upcase nstring-downcase nstring-capitalize
           string= string/= string-equal string-not-equal
           string< string>
           string<= string>=
@@ -33,11 +33,17 @@
 (defun string-downcase (string &key (start 0) end)
   (%string-downcase string start end))
 
+(defun string-capitalize (string &key (start 0) end)
+  (%string-capitalize string start end))
+
 (defun nstring-upcase (string &key (start 0) end)
   (%nstring-upcase string start end))
 
 (defun nstring-downcase (string &key (start 0) end)
   (%nstring-downcase string start end))
+
+(defun nstring-capitalize (string &key (start 0) end)
+  (%nstring-capitalize string start end))
 
 (defun string= (string1 string2 &key (start1 0) end1 (start2 0) end2)
   (let* ((string1 (string string1))
