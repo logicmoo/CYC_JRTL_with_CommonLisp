@@ -1,8 +1,8 @@
 /*
  * Ssh.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: Ssh.java,v 1.2 2002-11-28 15:42:23 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: Ssh.java,v 1.3 2003-04-10 18:54:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public final class Ssh
             sb.append(source.getHostName());
             sb.append(':');
         }
-        sb.append(Utilities.escapeSpaces(source.canonicalPath()));
+        sb.append(Utilities.escapeSpacesAndParens(source.canonicalPath()));
         list.add(sb.toString());
         sb.setLength(0);
         if (destination instanceof SshFile) {
@@ -85,7 +85,7 @@ public final class Ssh
             sb.append(destination.getHostName());
             sb.append(':');
         }
-        sb.append(Utilities.escapeSpaces(destination.canonicalPath()));
+        sb.append(Utilities.escapeSpacesAndParens(destination.canonicalPath()));
         list.add(sb.toString());
         String[] array = new String[list.size()];
         cmdarray = (String[]) list.toArray(array);
@@ -209,7 +209,7 @@ public final class Ssh
             return sb.toString();
         }
     }
-        
+
     private boolean isPasswordPrompt(String s)
     {
         String trim = s.trim().toLowerCase();
