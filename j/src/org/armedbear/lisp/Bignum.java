@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.37 2003-09-14 15:08:42 piso Exp $
+ * $Id: Bignum.java,v 1.38 2003-09-14 15:33:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,6 +67,11 @@ public final class Bignum extends LispObject
     public LispObject NUMBERP()
     {
         return T;
+    }
+
+    public boolean numberp()
+    {
+        return true;
     }
 
     public boolean integerp()
@@ -266,7 +271,7 @@ public final class Bignum extends LispObject
             return value.equals(((Bignum)obj).value);
         if (obj instanceof LispFloat)
             return floatValue() == ((LispFloat)obj).getValue();
-        if ((obj.getType() & TYPE_NUMBER) != 0)
+        if (obj.numberp())
             return false;
         throw new TypeError(obj, "number");
     }
@@ -277,7 +282,7 @@ public final class Bignum extends LispObject
             return !value.equals(((Bignum)obj).value);
         if (obj instanceof LispFloat)
             return floatValue() != ((LispFloat)obj).getValue();
-        if ((obj.getType() & TYPE_NUMBER) != 0)
+        if (obj.numberp())
             return true;
         throw new TypeError(obj, "number");
     }

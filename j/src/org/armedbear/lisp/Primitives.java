@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.391 2003-09-14 15:11:43 piso Exp $
+ * $Id: Primitives.java,v 1.392 2003-09-14 15:33:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4668,7 +4668,7 @@ public final class Primitives extends Module
         {
             if (arg instanceof Complex)
                 return ((Complex)arg).getRealPart();
-            if ((arg.getType() & TYPE_NUMBER) != 0)
+            if (arg.numberp())
                 return arg;
             throw new TypeError(arg, "number");
         }

@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.17 2003-09-14 15:11:07 piso Exp $
+ * $Id: Complex.java,v 1.18 2003-09-14 15:33:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +78,11 @@ public final class Complex extends LispObject
     public LispObject NUMBERP()
     {
         return T;
+    }
+
+    public boolean numberp()
+    {
+        return true;
     }
 
     public boolean eql(LispObject obj)
@@ -174,7 +179,7 @@ public final class Complex extends LispObject
             return (realpart.isEqualTo(c.realpart) &&
                     imagpart.isEqualTo(c.imagpart));
         }
-        if ((obj.getType() & TYPE_NUMBER) != 0) {
+        if (obj.numberp()) {
             // obj is a number, but not complex.
             if (imagpart instanceof LispFloat) {
                 if (((LispFloat)imagpart).getValue() == 0) {

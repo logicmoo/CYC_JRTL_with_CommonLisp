@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.63 2003-09-14 15:07:41 piso Exp $
+ * $Id: Fixnum.java,v 1.64 2003-09-14 15:33:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,11 @@ public final class Fixnum extends LispObject
     public LispObject NUMBERP()
     {
         return T;
+    }
+
+    public boolean numberp()
+    {
+        return true;
     }
 
     public boolean integerp()
@@ -334,7 +339,7 @@ public final class Fixnum extends LispObject
             return (float) value == LispFloat.getValue(obj);
         if (obj instanceof Complex)
             return obj.isEqualTo(this);
-        if ((obj.getType() & TYPE_NUMBER) != 0)
+        if (obj.numberp())
             return false;
         throw new TypeError(obj, "number");
     }
@@ -348,7 +353,7 @@ public final class Fixnum extends LispObject
             return (float) value != LispFloat.getValue(obj);
         if (obj instanceof Complex)
             return obj.isNotEqualTo(this);
-        if ((obj.getType() & TYPE_NUMBER) != 0)
+        if (obj.numberp())
             return true;
         throw new TypeError(obj, "number");
     }
