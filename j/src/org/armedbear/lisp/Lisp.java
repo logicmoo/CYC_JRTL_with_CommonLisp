@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.53 2003-04-09 17:54:54 piso Exp $
+ * $Id: Lisp.java,v 1.54 2003-04-10 00:54:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -499,6 +499,15 @@ public abstract class Lisp
             dynEnv.rebind(symbol, value);
         } else
             env.rebind(symbol, value);
+    }
+
+    public static final void bindSpecial(Symbol symbol, LispObject value)
+    {
+        if (symbol.isSpecialVariable()) {
+            dynEnv = new Environment(dynEnv);
+            dynEnv.bind(symbol, value);
+        } else
+            Debug.assertTrue(false);
     }
 
     public static final boolean equalp(LispObject first, LispObject second)
