@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardClass.java,v 1.5 2003-09-28 18:32:16 piso Exp $
+ * $Id: StandardClass.java,v 1.6 2003-09-28 19:34:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,15 +55,25 @@ public class StandardClass extends LispClass
         return sb.toString();
     }
 
-    private static final Primitive MAKE_INSTANCE_STANDARD_CLASS =
-        new Primitive("make-instance-standard-class", PACKAGE_SYS, false)
+    // ### make-instance-standard-class
+    // make-instance-standard-class name all-keys => class
+    private static final Primitive2 MAKE_INSTANCE_STANDARD_CLASS =
+        new Primitive2("make-instance-standard-class", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            if (args.length < 1)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            Symbol symbol = checkSymbol(args[0]);
-            return new StandardClass(symbol, NIL);
+            Symbol symbol = checkSymbol(first);
+            LispObject directSuperclasses = NIL;
+            LispObject allKeys = second;
+            while (allKeys != NIL) {
+                LispObject key = allKeys.car();
+                LispObject value = allKeys.cadr();
+                if (key == Keyword.DIRECT_SUPERCLASSES)
+                    directSuperclasses = value;
+                allKeys = allKeys.cddr();
+            }
+            return new StandardClass(symbol, directSuperclasses);
         }
     };
 }
