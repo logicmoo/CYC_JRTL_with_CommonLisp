@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Constants.java,v 1.14 2003-10-10 18:57:33 piso Exp $
+ * $Id: Constants.java,v 1.15 2003-12-29 19:22:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,6 +71,7 @@ public interface Constants
     int LANGUAGE_JAVASCRIPT      = 1;
     int LANGUAGE_C               = 2;
     int LANGUAGE_CPP             = 3;
+    int LANGUAGE_OBJC            = 4;
 
     int LOAD_COMPLETED           = 1;
     int LOAD_PENDING             = 2;
@@ -140,48 +141,50 @@ public interface Constants
 
     // Modes.
     int ARCHIVE_MODE            =  1;   String ARCHIVE_MODE_NAME = "Archive";
-    int AUTOCONF_MODE           =  2;   String AUTOCONF_MODE_NAME = "Autoconf";
-    int BEANSHELL_MODE          =  3;   String BEANSHELL_MODE_NAME = "BeanShell";
-    int BINARY_MODE             =  4;   String BINARY_MODE_NAME = "Binary";
-    int CHECKIN_MODE            =  5;   String CHECKIN_MODE_NAME = "Checkin";
-    int COMPILATION_MODE        =  6;   String COMPILATION_MODE_NAME = "Compilation";
-    int CPP_MODE                =  7;   String CPP_MODE_NAME = "C++";
-    int CSS_MODE                =  8;   String CSS_MODE_NAME = "CSS";
-    int C_MODE                  =  9;   String C_MODE_NAME = "C";
-    int DIFF_MODE               = 10;   String DIFF_MODE_NAME = "Diff";
-    int DIRECTORY_MODE          = 11;   String DIRECTORY_MODE_NAME = "Directory";
-    int HTML_MODE               = 12;   String HTML_MODE_NAME = "HTML";
-    int IMAGE_MODE              = 13;   String IMAGE_MODE_NAME = "Image";
-    int JAVASCRIPT_MODE         = 14;   String JAVASCRIPT_MODE_NAME = "JavaScript";
-    int JAVA_MODE               = 15;   String JAVA_MODE_NAME = "Java";
-    int JDB_MODE                = 16;   String JDB_MODE_NAME = "JDB";
-    int LISP_MODE               = 17;   String LISP_MODE_NAME = "Lisp";
-    int LISP_SHELL_MODE         = 18;   String LISP_SHELL_MODE_NAME = "Lisp Shell";
-    int LIST_OCCURRENCES_MODE   = 19;   String LIST_OCCURRENCES_MODE_NAME = "List Occurrences";
-    int LIST_REGISTERS_MODE     = 20;   String LIST_REGISTERS_MODE_NAME = "List Registers";
-    int LIST_TAGS_MODE          = 21;   String LIST_TAGS_MODE_NAME = "List Tags";
-    int MAILBOX_MODE            = 22;   String MAILBOX_MODE_NAME = "Mailbox";
-    int MAKEFILE_MODE           = 23;   String MAKEFILE_MODE_NAME = "Makefile";
-    int MAN_MODE                = 24;   String MAN_MODE_NAME = "Man";
-    int MESSAGE_MODE            = 25;   String MESSAGE_MODE_NAME = "Message";
-    int NEWS_GROUPS_MODE        = 26;   String NEWS_GROUPS_MODE_NAME = "Groups";
-    int NEWS_GROUP_SUMMARY_MODE = 27;   String NEWS_GROUP_SUMMARY_MODE_NAME = "Summary";
-    int PERL_MODE               = 28;   String PERL_MODE_NAME = "Perl";
-    int PHP_MODE                = 29;   String PHP_MODE_NAME = "PHP";
-    int PLAIN_TEXT_MODE         = 30;   String PLAIN_TEXT_MODE_NAME = "Plain Text";
-    int PROPERTIES_MODE         = 31;   String PROPERTIES_MODE_NAME = "Properties";
-    int PYTHON_MODE             = 32;   String PYTHON_MODE_NAME = "Python";
-    int RUBY_MODE               = 33;   String RUBY_MODE_NAME = "Ruby";
-    int SCHEME_MODE             = 34;   String SCHEME_MODE_NAME = "Scheme";
-    int SEND_MAIL_MODE          = 35;   String SEND_MAIL_MODE_NAME = "Send Mail";
-    int SHELL_MODE              = 36;   String SHELL_MODE_NAME = "Shell";
-    int SHELL_SCRIPT_MODE       = 37;   String SHELL_SCRIPT_MODE_NAME = "Shell-script";
-    int TCL_MODE                = 38;   String TCL_MODE_NAME = "Tcl";
-    int VERILOG_MODE            = 39;   String VERILOG_MODE_NAME = "Verilog";
-    int VHDL_MODE               = 40;   String VHDL_MODE_NAME = "VHDL";
-    int WEB_MODE                = 41;   String WEB_MODE_NAME = "Web";
-    int WORD_MODE               = 42;   String WORD_MODE_NAME = "Word";
-    int XML_MODE                = 43;   String XML_MODE_NAME = "XML";
+    int ASM_MODE                =  2;   String ASM_MODE_NAME = "Assembly";
+    int AUTOCONF_MODE           =  3;   String AUTOCONF_MODE_NAME = "Autoconf";
+    int BEANSHELL_MODE          =  4;   String BEANSHELL_MODE_NAME = "BeanShell";
+    int BINARY_MODE             =  5;   String BINARY_MODE_NAME = "Binary";
+    int CHECKIN_MODE            =  6;   String CHECKIN_MODE_NAME = "Checkin";
+    int COMPILATION_MODE        =  7;   String COMPILATION_MODE_NAME = "Compilation";
+    int CPP_MODE                =  8;   String CPP_MODE_NAME = "C++";
+    int CSS_MODE                =  9;   String CSS_MODE_NAME = "CSS";
+    int C_MODE                  = 10;   String C_MODE_NAME = "C";
+    int DIFF_MODE               = 11;   String DIFF_MODE_NAME = "Diff";
+    int DIRECTORY_MODE          = 12;   String DIRECTORY_MODE_NAME = "Directory";
+    int HTML_MODE               = 13;   String HTML_MODE_NAME = "HTML";
+    int IMAGE_MODE              = 14;   String IMAGE_MODE_NAME = "Image";
+    int JAVASCRIPT_MODE         = 15;   String JAVASCRIPT_MODE_NAME = "JavaScript";
+    int JAVA_MODE               = 16;   String JAVA_MODE_NAME = "Java";
+    int JDB_MODE                = 17;   String JDB_MODE_NAME = "JDB";
+    int LISP_MODE               = 18;   String LISP_MODE_NAME = "Lisp";
+    int LISP_SHELL_MODE         = 19;   String LISP_SHELL_MODE_NAME = "Lisp Shell";
+    int LIST_OCCURRENCES_MODE   = 20;   String LIST_OCCURRENCES_MODE_NAME = "List Occurrences";
+    int LIST_REGISTERS_MODE     = 21;   String LIST_REGISTERS_MODE_NAME = "List Registers";
+    int LIST_TAGS_MODE          = 22;   String LIST_TAGS_MODE_NAME = "List Tags";
+    int MAILBOX_MODE            = 23;   String MAILBOX_MODE_NAME = "Mailbox";
+    int MAKEFILE_MODE           = 24;   String MAKEFILE_MODE_NAME = "Makefile";
+    int MAN_MODE                = 25;   String MAN_MODE_NAME = "Man";
+    int MESSAGE_MODE            = 26;   String MESSAGE_MODE_NAME = "Message";
+    int NEWS_GROUPS_MODE        = 27;   String NEWS_GROUPS_MODE_NAME = "Groups";
+    int NEWS_GROUP_SUMMARY_MODE = 28;   String NEWS_GROUP_SUMMARY_MODE_NAME = "Summary";
+    int OBJC_MODE               = 29;   String OBJC_MODE_NAME = "Objective C";
+    int PERL_MODE               = 30;   String PERL_MODE_NAME = "Perl";
+    int PHP_MODE                = 31;   String PHP_MODE_NAME = "PHP";
+    int PLAIN_TEXT_MODE         = 32;   String PLAIN_TEXT_MODE_NAME = "Plain Text";
+    int PROPERTIES_MODE         = 33;   String PROPERTIES_MODE_NAME = "Properties";
+    int PYTHON_MODE             = 34;   String PYTHON_MODE_NAME = "Python";
+    int RUBY_MODE               = 35;   String RUBY_MODE_NAME = "Ruby";
+    int SCHEME_MODE             = 36;   String SCHEME_MODE_NAME = "Scheme";
+    int SEND_MAIL_MODE          = 37;   String SEND_MAIL_MODE_NAME = "Send Mail";
+    int SHELL_MODE              = 38;   String SHELL_MODE_NAME = "Shell";
+    int SHELL_SCRIPT_MODE       = 39;   String SHELL_SCRIPT_MODE_NAME = "Shell-script";
+    int TCL_MODE                = 40;   String TCL_MODE_NAME = "Tcl";
+    int VERILOG_MODE            = 41;   String VERILOG_MODE_NAME = "Verilog";
+    int VHDL_MODE               = 42;   String VHDL_MODE_NAME = "VHDL";
+    int WEB_MODE                = 43;   String WEB_MODE_NAME = "Web";
+    int WORD_MODE               = 44;   String WORD_MODE_NAME = "Word";
+    int XML_MODE                = 45;   String XML_MODE_NAME = "XML";
 
     int SUCCESS    =  0;
     int ERROR      = -1;

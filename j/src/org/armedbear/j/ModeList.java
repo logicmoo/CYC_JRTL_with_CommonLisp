@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ModeList.java,v 1.14 2003-10-21 18:30:33 piso Exp $
+ * $Id: ModeList.java,v 1.15 2003-12-29 19:26:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,7 @@ public final class ModeList implements Constants
     {
         list = new ArrayList();
         addEntry(ARCHIVE_MODE, ARCHIVE_MODE_NAME, "ArchiveMode", false, null);
+        addEntry(ASM_MODE, ASM_MODE_NAME, "AsmMode", true, ".+\\.asm|.+\\inc");
         addEntry(AUTOCONF_MODE, AUTOCONF_MODE_NAME, "AutoconfMode", true, "configure.ac|configure.in|aclocal.m4");
         addEntry(BINARY_MODE, BINARY_MODE_NAME, "BinaryMode", true, null);
         addEntry(CHECKIN_MODE, CHECKIN_MODE_NAME, "CheckinMode", false, null);
@@ -55,8 +56,7 @@ public final class ModeList implements Constants
         addEntry(JAVASCRIPT_MODE, JAVASCRIPT_MODE_NAME, "JavaScriptMode", true, ".+\\.js");
         addEntry(JAVA_MODE, JAVA_MODE_NAME, "JavaMode", true, ".+\\.java|.+\\.jad");
         addEntry(JDB_MODE, JDB_MODE_NAME, "JdbMode", false, null);
-        addEntry(LISP_MODE, LISP_MODE_NAME, "LispMode", true,
-            ".+\\.[ej]l|.*\\.li?sp|.*\\.cl|.*\\.emacs");
+        addEntry(LISP_MODE, LISP_MODE_NAME, "LispMode", true, ".+\\.[ej]l|.*\\.li?sp|.*\\.cl|.*\\.emacs");
         addEntry(LIST_OCCURRENCES_MODE, LIST_OCCURRENCES_MODE_NAME, "ListOccurrencesMode", false, null);
         addEntry(LIST_REGISTERS_MODE, LIST_REGISTERS_MODE_NAME, "ListRegistersMode", false, null);
         addEntry(LIST_TAGS_MODE, LIST_TAGS_MODE_NAME, "ListTagsMode", false, null);
@@ -66,6 +66,7 @@ public final class ModeList implements Constants
         addEntry(MESSAGE_MODE, MESSAGE_MODE_NAME, "mail.MessageMode", false, null);
         addEntry(NEWS_GROUPS_MODE, NEWS_GROUPS_MODE_NAME, "mail.NewsGroupsMode", false, null);
         addEntry(NEWS_GROUP_SUMMARY_MODE, NEWS_GROUP_SUMMARY_MODE_NAME, "mail.NewsGroupsSummaryMode", false, null);
+        addEntry(OBJC_MODE, OBJC_MODE_NAME, "ObjCMode", true, ".+\\.m");
         addEntry(PERL_MODE, PERL_MODE_NAME, "PerlMode", true, ".+\\.p[lm]");
         addEntry(PHP_MODE, PHP_MODE_NAME, "PHPMode", true, ".+\\.php[34]?");
         addEntry(PLAIN_TEXT_MODE, PLAIN_TEXT_MODE_NAME, "PlainTextMode", true, null);
@@ -81,8 +82,7 @@ public final class ModeList implements Constants
         addEntry(VHDL_MODE, VHDL_MODE_NAME, "VHDLMode", true, ".+\\.vhdl?");
         addEntry(WEB_MODE, WEB_MODE_NAME, "WebMode", false, null);
         addEntry(WORD_MODE, WORD_MODE_NAME, "WordMode", false, null);
-        addEntry(XML_MODE, XML_MODE_NAME, "XmlMode", true,
-            ".+\\.x[msu]l|.+\\.dtd");
+        addEntry(XML_MODE, XML_MODE_NAME, "XmlMode", true, ".+\\.x[msu]l|.+\\.dtd");
     }
 
     public synchronized Mode getMode(int id)
