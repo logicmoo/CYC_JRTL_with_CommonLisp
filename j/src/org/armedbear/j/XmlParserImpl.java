@@ -2,7 +2,7 @@
  * XmlParserImpl.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlParserImpl.java,v 1.5 2003-06-06 15:44:01 piso Exp $
+ * $Id: XmlParserImpl.java,v 1.6 2003-06-06 15:48:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,7 +187,7 @@ public final class XmlParserImpl extends DefaultHandler implements Runnable,
         output.append(" (");
         if (!validating)
             output.append("not ");
-        output.append("validating) ...\n");
+        output.append("validating)\n");
 
         // Parser must be associated with a buffer.
         if (buffer == null) {
