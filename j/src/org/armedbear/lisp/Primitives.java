@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.132 2003-03-15 22:09:54 piso Exp $
+ * $Id: Primitives.java,v 1.133 2003-03-16 18:35:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -665,26 +665,44 @@ public final class Primitives extends Module
     };
 
     // ### princ
-    private static final Primitive1 PRINC = new Primitive1("princ") {
-        public LispObject execute(LispObject arg) throws LispError
+    private static final Primitive PRINC = new Primitive("princ") {
+        public LispObject execute(LispObject[] args) throws LispError
         {
-            CharacterOutputStream out =
-                getStandardOutput();
+            if (args.length < 1 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            CharacterOutputStream out = null;
+            if (args.length == 2) {
+                if (args[1] instanceof CharacterOutputStream)
+                    out = (CharacterOutputStream) args[1];
+                else
+                    throw new TypeError(args[0], "output stream");
+            }
+            if (out == null)
+                out = getStandardOutput();
             if (out != null)
-                out.princ(arg);
-            return arg;
+                out.princ(args[0]);
+            return args[0];
         }
     };
 
     // ### prin1
-    private static final Primitive1 PRIN1 = new Primitive1("prin1") {
-        public LispObject execute(LispObject arg) throws LispError
+    private static final Primitive PRIN1 = new Primitive("prin1") {
+        public LispObject execute(LispObject[] args) throws LispError
         {
-            CharacterOutputStream out =
-                getStandardOutput();
+            if (args.length < 1 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            CharacterOutputStream out = null;
+            if (args.length == 2) {
+                if (args[1] instanceof CharacterOutputStream)
+                    out = (CharacterOutputStream) args[1];
+                else
+                    throw new TypeError(args[0], "output stream");
+            }
+            if (out == null)
+                out = getStandardOutput();
             if (out != null)
-                out.prin1(arg);
-            return arg;
+                out.prin1(args[0]);
+            return args[0];
         }
     };
 
@@ -702,6 +720,25 @@ public final class Primitives extends Module
                 out.writeString(" ");
             }
             return arg;
+        }
+    };
+
+    // ### terpri
+    private static final Primitive TERPRI = new Primitive("terpri") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length > 1)
+                throw new WrongNumberOfArgumentsException(this);
+            CharacterOutputStream out = null;
+            if (args.length == 1) {
+                if (args[0] instanceof CharacterOutputStream)
+                    out = (CharacterOutputStream) args[0];
+                else
+                    throw new TypeError(args[0], "output stream");
+            }
+            if (out == null)
+                out = getStandardOutput();
+            return out.terpri();
         }
     };
 
