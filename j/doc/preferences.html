@@ -1081,14 +1081,15 @@ When the log file exceeds its maximum size, it is rolled over to the file
 <a href="#Log.maxBackupIndex">Log.maxBackupIndex</a>
 </dl>
 
-<code><a name="org.xml.sax.parser">org.xml.sax.parser</a></code>
+<code><a name="org.xml.sax.driver">org.xml.sax.driver</a></code>
 <dl>
 <dd>
 Class name of XML parser to use. For example:
 <pre>
-    org.xml.sax.parser=org.apache.xerces.parsers.SAXParser
+        org.xml.sax.driver = org.apache.xerces.parsers.SAXParser
 </pre>
-If this property is not specified, j's built-in XML parser (&AElig;lfred) will be used.
+If this property is not specified, the XML parser provided as part of the Java
+1.4 runtime library will be used.
 <p>
 <b>Default value:</b> None
 <p>

@@ -32,10 +32,9 @@ Parsing is done in a background thread, so it may take a little while for the
 tree to appear (or possibly a long while, if the document references a DTD on
 the Internet, for example).
 <p>
-The j distribution includes a version of the &AElig;lfred XML parser from
-<a href="http://www.microstar.com">Microstar</a>, taken from David Brownell's
-<a href="http://home.pacbell.net/david-b/xml">SAX2 XML Utilities</a>.
-
+Starting with version 0.19.0.2, j uses the XML parser provided as part of the
+Java 1.4 runtime library. (Earlier versions of j included a version of the
+&AElig;lfred XML parser.)
 <p>
 If you would rather use a different XML parser, you need to do two things:
 <p>
@@ -45,7 +44,7 @@ Add the relevant jar file(s) to j's runtime <code>CLASSPATH</code>. If you
 build j from source, you can use the configure script's
 <code>--with-extensions</code> option to do this:
 <pre>
-    ./configure --with-extensions=/usr/share/java/xerces.jar:/usr/share/java/xp.jar
+    ./configure --with-extensions=/usr/share/java/xercesImpl.jar
 </pre>
 The j shell script that is automatically generated and installed will then use
 the correct <code>CLASSPATH</code>.
@@ -55,12 +54,14 @@ the correct <code>CLASSPATH</code>.
 <li>
 
 Add a line to your <a href="preferences.html">preferences</a> file to specify
-the <a href="preferences.html#org.xml.sax.parser">org.xml.sax.parser</a>
+the <a href="preferences.html#org.xml.sax.driver">org.xml.sax.driver</a>
 property, which tells j the fully qualified class name of the parser to use.
 For example:
 <pre>
-    org.xml.sax.parser = org.apache.xerces.parsers.SAXParser
+    org.xml.sax.driver = org.apache.xerces.parsers.SAXParser
 </pre>
+(The corresponding property in versions of j prior to 0.19.0.2 was
+"org.xml.sax.parser".)
 </li>
 </ol>
 
