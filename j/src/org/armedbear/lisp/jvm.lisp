@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.222 2004-07-19 17:07:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.223 2004-07-19 20:34:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2541,6 +2541,12 @@
           (compile-form (car forms) :target (if (cdr forms) nil target))))
       (error "COMPILE-LABELS: unsupported case.")))
 
+(defun contains-symbol (symbol form)
+  (if (atom form)
+      (eq form symbol)
+      (or (contains-symbol symbol (car form))
+          (contains-symbol symbol (cdr form)))))
+
 (defun compile-function (form &key (target *val*))
    (let ((name (second form))
          (local-function))
@@ -2592,38 +2598,25 @@
                 (progn
                   (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
            ((and (consp name) (eq (car name) 'LAMBDA))
-;;             (let ((closure-vars
-;;                    (remove-duplicates (union (remove nil (coerce *all-locals* 'list))
-;;                                              (remove nil (coerce *args* 'list)))))
-;;                   (lambda-body (cddr name)))
-;;               (cond (closure-vars
-;;                      (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))
-;;                     ((contains-return lambda-body)
-;;                      (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
-;;                     (t
-;;                      (fresh-line)
-;;                      (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
-;;                      (let ((g (if *compile-file-truename*
-;;                                   (declare-lambda name)
-;;                                   (declare-object (sys::coerce-to-function name)))))
-;;                        (emit 'getstatic
-;;                              *this-class*
-;;                              g
-;;                              +lisp-object+)
-;;                        (emit-store-value))))))
-           ;;             ;; FIXME We need to construct a proper lexical environment here
-           ;;             ;; and pass it to coerceToFunction().
-           ;;             (let ((g (declare-object-as-string name)))
-           ;;               (emit 'getstatic
-           ;;                     *this-class*
-           ;;                     g
-           ;;                     +lisp-object+)
-           ;;               (emit-invokestatic +lisp-class+
-           ;;                                  "coerceToFunction"
-           ;;                                  "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
-           ;;                                  0)
-           ;;               (emit-store-value)))
-;;            (t
+            (let ((closure-vars *visible-variables*)
+                  (lambda-body (cddr name)))
+              (when closure-vars
+                (dolist (variable closure-vars)
+                  (when (contains-symbol (variable-name variable) lambda-body)
+                    (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))))
+              (when (contains-return lambda-body)
+                (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
+              (fresh-line)
+              (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
+              (let ((g (if *compile-file-truename*
+                           (declare-lambda name)
+                           (declare-object (sys::coerce-to-function name)))))
+                (emit 'getstatic
+                      *this-class*
+                      g
+                      +lisp-object+)
+                (emit-move-from-stack target))))
+           (t
             (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
 (defun compile-plus (form &key (target *val*))
