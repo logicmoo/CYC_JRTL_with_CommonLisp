@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.30 2004-06-06 19:32:31 piso Exp $
+;;; $Id: numbers.lisp,v 1.31 2004-06-13 01:22:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -95,19 +95,17 @@
    completely accurate, giving a result that isn't as pretty."
   (etypecase number
     (float
-      (multiple-value-bind (bits exp)
-        (integer-decode-float number)
-        (if (eql bits 0)
-          0
-          (let* ((int (if (minusp number) (- bits) bits))
+     (multiple-value-bind (bits exp)
+       (integer-decode-float number)
+       (if (eql bits 0)
+           0
+           (let* ((int (if (minusp number) (- bits) bits))
                   (digits (float-digits number))
                   (ex (+ exp digits)))
-            (if (minusp ex)
-              (/ int (ash 1 (+ digits (- ex))))
-              (/ (ash int ex) (ash 1 digits)))))))
+             (if (minusp ex)
+                 (/ int (ash 1 (+ digits (- ex))))
+                 (/ (ash int ex) (ash 1 digits)))))))
     (rational number)))
-
-
 
 ;;; FIXME
 (defun rationalize (number)
