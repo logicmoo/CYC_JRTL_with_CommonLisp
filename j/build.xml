@@ -214,6 +214,7 @@
       <fileset dir="${topdir}" includes="**/.#*"/>
       <fileset dir="${topdir}" includes="**/TEST-*.txt"/>
     </delete>
+    <delete dir="${topdir}/autom4te.cache"/>
     <delete file="${topdir}/j"/>
     <delete file="${topdir}/j.bat"/>
     <delete file="${basedir}/jpty/jpty"/>
