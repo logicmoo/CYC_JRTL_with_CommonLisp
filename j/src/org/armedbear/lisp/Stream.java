@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.74 2004-06-10 12:27:23 piso Exp $
+ * $Id: Stream.java,v 1.75 2004-06-11 14:45:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -505,12 +505,11 @@ public class Stream extends LispObject
     public LispObject readComplex() throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
-        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+        if (_READ_SUPPRESS_.symbolValue() != NIL)
             return NIL;
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
         // Error.
-        Debug.trace("*READ-SUPPRESS* = " + _READ_SUPPRESS_.symbolValue().writeToString());
         StringBuffer sb = new StringBuffer("Invalid complex number format");
         if (this instanceof FileStream) {
             Pathname p = ((FileStream)this).getPathname();
