@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.40 2004-10-13 00:22:18 piso Exp $
+ * $Id: HashTable.java,v 1.41 2004-10-24 04:04:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,6 +288,15 @@ public abstract class HashTable extends LispObject
         Symbol.EQUAL.getSymbolFunction();
     private static final LispObject FUNCTION_EQUALP =
         Symbol.EQUALP.getSymbolFunction();
+
+    // For EQUALP hash tables.
+    public int psxhash() throws ConditionThrowable
+    {
+        long result = 2062775257; // Chosen at random.
+        result = mix(result, count);
+        result = mix(result, test);
+        return (int) (result & 0x7fffffff);
+    }
 
     // ### %make-hash-table
     private static final Primitive4 _MAKE_HASH_TABLE =

@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.48 2004-10-22 17:03:04 piso Exp $
+ * $Id: Cons.java,v 1.49 2004-10-24 04:05:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,6 +176,25 @@ public final class Cons extends LispObject
             }
         } else
             return obj.sxhash();
+    }
+
+    public final int psxhash() throws ConditionThrowable
+    {
+        return computeEqualpHash(this, 4);
+    }
+
+    private static final int computeEqualpHash(LispObject obj, int depth)
+        throws ConditionThrowable
+    {
+        if (obj instanceof Cons) {
+            if (depth > 0) {
+                int n1 = computeEqualpHash(((Cons)obj).car, depth - 1);
+                int n2 = computeEqualpHash(((Cons)obj).cdr, depth - 1);
+                return n1 ^ n2;
+            } else
+                return 261835505; // See above.
+        } else
+            return obj.psxhash();
     }
 
     public final boolean equal(LispObject obj) throws ConditionThrowable
