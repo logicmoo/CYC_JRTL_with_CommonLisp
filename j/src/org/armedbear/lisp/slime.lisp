@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.3 2004-09-02 21:28:26 piso Exp $
+;;; $Id: slime.lisp,v 1.4 2004-09-03 19:37:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,11 +30,15 @@
 
 (defpackage #:slime
   (:use #:cl #:ext #:j)
-  (:export #:complete-symbol))
+  (:export #:complete-symbol
+           #:slime-space))
 
 (in-package "SLIME")
 
 (defvar *stream* nil)
+
+(defun slime-connected-p ()
+  (not (null *stream*)))
 
 (defun remote-eval (form)
   (swank-protocol:encode-message form *stream*)
@@ -52,11 +56,12 @@
 
 (defun disconnect ()
   (when *stream*
-    (close *stream*)
+    (ignore-errors
+     (close *stream*))
     (setf *stream* nil)))
 
 (defun slime-read-port-and-connect (retries)
-  (invoke-later #'(lambda () (status "Slime waiting to connect...")))
+  (invoke-later #'(lambda () (status "Slime polling for connection...")))
   (dotimes (i retries)
     (when (probe-file (swank-protocol:port-file))
       (with-open-file (s (swank-protocol:port-file)
@@ -72,11 +77,7 @@
   (make-thread #'(lambda ()
                   (progn
                     (slime-read-port-and-connect 20)
-                    (invoke-later #'(lambda () (status "Connected!"))))))
-  (send-to-lisp (concatenate 'string
-                             "(load (merge-pathnames \"swank-loader.lisp\" "
-                             (write-to-string *lisp-home*)
-                             "))")))
+                    (invoke-later #'(lambda () (status "Slime connected")))))))
 
 (defvar *prefix* nil)
 (defvar *completions* ())
@@ -147,10 +148,16 @@
 
 (defun enclosing-operator-names ()
   "Return the list of operator names of the forms containing point."
-  (let ((result '()))
+  (let ((result ()))
      (save-excursion
       (loop
-        (backward-up-list)
+        (let ((point1 (point))
+              (point2 (progn (backward-up-list) (point))))
+          (when (and (equal (marker-line point1) (marker-line point2))
+                     (eql (marker-charpos point1) (marker-charpos point2)))
+            (return)))
+        (unless (looking-at "(")
+          (return))
         (when (looking-at "(")
           (forward-char)
           (let ((name (symbol-name-at-point)))
@@ -160,29 +167,18 @@
                    (return))
                   (t
                    (push name result))))
-          (backward-up-list))
-        ))
+          (backward-up-list))))
     (nreverse result)))
 
-#+nil
-(defun slime-space (n)
-  "Insert a space and print some relevant information (function arglist).
-   Designed to be bound to the SPC key.  Prefix argument can be used to insert
-   more than one space."
-  (interactive "p")
+(defun slime-space ()
   (unwind-protect
-   (when (and slime-space-information-p
-              (slime-connected-p)
-              (or (not (slime-busy-p))
-                  ;; XXX should we enable this?
-                  ;; (not slime-use-sigint-for-interrupt))
-                  ))
+   (when (slime-connected-p)
      (let ((names (enclosing-operator-names)))
        (when names
-         (remote-eval `(swank:arglist-for-echo-area (quote ,names)))
-          (lambda (message)
-            (if message
-                (slime-message "%s" message)))))))
-   (self-insert-command n))
+         (let ((message (remote-eval `(swank:arglist-for-echo-area (quote ,names)))))
+           (when message
+             (invoke-later #'(lambda () (status message))))))))
+   (insert #\space)))
 
 (j::map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
+(j::map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")

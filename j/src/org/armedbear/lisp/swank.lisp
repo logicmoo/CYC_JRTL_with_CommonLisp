@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.3 2004-09-02 21:30:37 piso Exp $
+;;; $Id: swank.lisp,v 1.4 2004-09-03 19:39:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -107,11 +107,12 @@
                    (push (symbol-name symbol) result)))))))
     result))
 
+(defvar keyword-package (find-package "KEYWORD"))
+
 ;;; FIXME! FOO::BAR will intern FOO in BAR.
-#+nil
 (defun parse-symbol (string &optional (package *package*))
   "Find the symbol named STRING.
-   Return the symbol and a flag indicating if the symbols was found."
+   Return the symbol and a flag indicating if the symbol was found."
   (multiple-value-bind (sym pos) (let ((*package* keyword-package))
                                    (ignore-errors (read-from-string string)))
     (if (and (symbolp sym) (eql (length string) pos))
@@ -120,22 +121,44 @@
             (find-symbol (string sym) package))
         (values nil nil))))
 
-#+nil
 (defun valid-operator-name-p (string)
   "Test if STRING names a function, macro, or special-operator."
   (let ((symbol (parse-symbol string)))
     (or (fboundp symbol)
         (macro-function symbol)
         (special-operator-p symbol))))
-#+nil
-(defun arglist-for-echo-area (names)
-  "Return the arglist for the first function, macro, or special-op in NAMES."
-  (with-buffer-syntax ()
-    (let ((name (find-if #'valid-operator-name-p names)))
-      (if name (format-arglist-for-echo-area (parse-symbol name) name)))))
-#+nil
+
+(defun write-arglist (obj stream)
+  (cond ((stringp obj)
+         (write-string obj stream))
+        ((symbolp obj)
+         (write-string (symbol-name obj) stream))
+        ((listp obj)
+         (cond ((and (= (length obj) 2)
+                     (eq (car obj) 'FUNCTION))
+                (write-char #\# stream)
+                (write-char #\' stream)
+                (write-arglist (cadr obj) stream))
+               (t
+                (write-char #\( stream)
+                (do* ((list obj (cdr list))
+                      (item (car list) (car list)))
+                     ((null list))
+                  (write-arglist item stream)
+                  (when (cdr list)
+                    (write-char #\space stream)))
+                (write-char #\) stream))))
+        (t
+         (write obj :stream stream))))
+
+(defun arglist-to-string (arglist package)
+  (let ((result
+         (with-output-to-string (s)
+           (write-arglist arglist s))))
+    (swank-format nil "~A" (string-downcase result))))
+
 (defun format-arglist-for-echo-area (symbol name)
-  "Return SYMBOL's arglist as string for display in the echo area.
+  "Return SYMBOL's arglist as a string for display in the echo area.
    Use the string NAME as operator name."
   (let ((arglist (arglist symbol)))
     (etypecase arglist
@@ -144,3 +167,12 @@
       (list
        (arglist-to-string (cons name arglist)
                           (symbol-package symbol))))))
+
+(defun arglist-for-echo-area (names)
+  "Return the arglist for the first function, macro, or special operator in NAMES."
+;;   (with-buffer-syntax ()
+    (let ((name (find-if #'valid-operator-name-p names)))
+      (when name
+        (format-arglist-for-echo-area (parse-symbol name) name)))
+;;     )
+  )
