@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.51 2003-12-20 16:26:27 piso Exp $
+;;; $Id: clos.lisp,v 1.52 2003-12-20 18:12:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1062,8 +1062,7 @@
     (setf (method-body method) (precompile-form body nil))
     (setf (method-environment method) environment)
     (setf (method-generic-function method) nil)
-    (setf (method-function method)
-          (std-compute-method-function method))
+    (setf (method-function method) (std-compute-method-function method))
     method))
 
 (defun check-congruent (gf method)
@@ -1170,7 +1169,8 @@
                 gf applicable-methods)))
           (setf (gethash classes (classes-to-emf-table gf)) emfun)
           (funcall emfun args))
-        (error "no applicable methods for generic function ~S with arguments ~S of classes ~S" gf args classes))))
+        (error "No applicable methods for generic function ~S with arguments ~S of classes ~S."
+               gf args classes))))
 
 (defun compute-applicable-methods-using-classes (gf required-classes)
   (sort
@@ -1350,22 +1350,43 @@
                (compute-effective-method-function
                 (method-generic-function method) next-methods))))
 
+(defvar *call-next-method-p*)
+(defvar *next-method-p-p*)
+
+(defun walk-form (form)
+  (cond ((atom form)
+         (cond ((eq form 'call-next-method)
+                (setf *call-next-method-p* t))
+               ((eq form 'next-method-p)
+                (setf *next-method-p-p* t))))
+        (t
+         (walk-form (car form))
+         (walk-form (cdr form)))))
+
 (defun std-compute-method-function (method)
   (let ((form (method-body method))
-        (lambda-list (method-lambda-list method)))
+        (lambda-list (method-lambda-list method))
+        (*call-next-method-p* nil)
+        (*next-method-p-p* nil))
+    (walk-form form)
     (compile-in-lexical-environment
      (method-environment method)
-     `(lambda (args next-emfun)
-        (flet ((call-next-method (&rest cnm-args)
-                                 (if (null next-emfun)
-                                     (error "no next method for generic function ~S"
-                                            (method-generic-function ',method))
-                                     (funcall next-emfun (or cnm-args args))))
-               (next-method-p ()
-                              (not (null next-emfun))))
-          (apply #'(lambda ,(kludge-arglist lambda-list)
-                    ,form)
-                 args))))))
+     (if (or *call-next-method-p* *next-method-p-p*)
+         `(lambda (args next-emfun)
+            (flet ((call-next-method (&rest cnm-args)
+                                     (if (null next-emfun)
+                                         (error "No next method for generic function ~S."
+                                                (method-generic-function ',method))
+                                         (funcall next-emfun (or cnm-args args))))
+                   (next-method-p ()
+                                  (not (null next-emfun))))
+              (apply #'(lambda ,(kludge-arglist lambda-list)
+                        ,form)
+                     args)))
+         `(lambda (args next-emfun)
+            (apply #'(lambda ,(kludge-arglist lambda-list)
+                      ,form)
+                   args))))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
