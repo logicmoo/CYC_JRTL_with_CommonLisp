@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.98 2004-04-05 01:09:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.99 2004-04-05 14:02:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1611,7 +1611,7 @@
 
     ;; FIXME This shouldn't go here! Do this in the constructor of the
     ;; compiled function!
-    (resolve fun)
+;;     (resolve fun)
 
     (cond
      ((setf local-function
