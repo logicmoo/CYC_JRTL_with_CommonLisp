@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.42 2003-05-24 20:13:17 piso Exp $
+;;; $Id: boot.lisp,v 1.43 2003-05-25 13:29:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -101,6 +101,8 @@
                 "backquote.lisp"
                 "setf.lisp"
                 "macros.lisp"
+                "destructuring-bind.lisp"
+                "defmacro.lisp"
                 "list.lisp"
                 "sequences.lisp"
                 "symbol.lisp"
@@ -109,8 +111,6 @@
                 "strings.lisp"
                 "sort.lisp"
                 "arrays.lisp"
-                "destructuring-bind.lisp"
-                "defmacro.lisp"
                 "defstruct.lisp"
                 "loop.lisp"
                 "compiler.lisp"))
