@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.13 2003-10-11 20:41:28 piso Exp $
+;;; $Id: defclass.lisp,v 1.14 2003-10-12 01:21:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -643,21 +643,18 @@
 
 ;;; ensure-generic-function
 
-(defun ensure-generic-function
-  (function-name
-   &rest all-keys
-   &key (generic-function-class the-class-standard-gf)
-   (method-class the-class-standard-method)
-   &allow-other-keys)
-;;   (format t "ensure-generic-function function-name = ~S~%" function-name)
-;;   (when (fboundp function-name)
-;;     (error "~A already names an ordinary function, macro, or special operator"
-;;            function-name))
+(defun ensure-generic-function (function-name
+                                &rest all-keys
+                                &key
+                                (generic-function-class the-class-standard-gf)
+                                (method-class the-class-standard-method)
+                                &allow-other-keys)
   (if (find-generic-function function-name nil)
       (find-generic-function function-name)
       (progn
         (when (fboundp function-name)
-          (error "~A already names an ordinary function, macro, or special operator"
+          (error 'program-error
+                 "~A already names an ordinary function, macro, or special operator"
                  function-name))
         (let ((gf (apply (if (eq generic-function-class the-class-standard-gf)
                              #'make-instance-standard-generic-function
