@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.27 2003-12-09 06:07:05 asimon Exp $
+ * $Id: Function.java,v 1.28 2003-12-10 21:33:35 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@ public abstract class Function extends Functional
 
     private int callCount;
 
-    private LispObject arglist;
-
     protected Function()
     {
         name = null;
@@ -47,7 +45,7 @@ public abstract class Function extends Functional
     public Function(String name, String arglist)
     {
         this(name);
-        this.arglist = new LispString(arglist);
+        setArglist(new LispString(arglist));
     }
 
     public Function(String name, Package pkg)
@@ -66,7 +64,7 @@ public abstract class Function extends Functional
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
         if (arglist instanceof String)
-            this.arglist = new LispString(arglist);
+            setArglist(new LispString(arglist));
         if (name != null) {
             Symbol symbol = pkg.intern(this.name);
             symbol.setSymbolFunction(this);
@@ -114,16 +112,6 @@ public abstract class Function extends Functional
     public final String getName()
     {
         return name;
-    }
-
-    public final LispObject getArglist()
-    {
-        return arglist;
-    }
-
-    public final void setArglist(LispObject obj)
-    {
-        arglist = obj;
     }
 
     // Primitive
