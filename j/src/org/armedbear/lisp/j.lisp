@@ -9,6 +9,7 @@
 (export '(global-map-key global-unmap-key map-key-for-mode unmap-key-for-mode
           set-global-property
           reset-display
+          log.debug
           add-hook
           invoke-hook
           current-editor
@@ -36,10 +37,10 @@
   (jstatic "setGlobalProperty" "org.armedbear.j.Editor" key value))
 
 (defun set-global-property (&rest args)
-  (let ((n-args (length args)) key value)
-    (cond ((oddp n-args)
+  (let ((count (length args)) key value)
+    (cond ((oddp count)
            (error "odd number of arguments to SET-GLOBAL-PROPERTY"))
-          ((= n-args 2)
+          ((= count 2)
            (%set-global-property (string (first args)) (second args)))
           (t
            (do ((args args (cddr args)))
@@ -56,6 +57,7 @@
 
 (defun add-hook (hook function)
   (when (symbolp hook)
+    (unless (boundp hook) (set hook nil))
     (let ((hook-functions (symbol-value hook)))
       (unless (memq function hook-functions)
         (setq hook-functions (cons function hook-functions))
