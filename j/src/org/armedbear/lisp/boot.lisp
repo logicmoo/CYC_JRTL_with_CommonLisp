@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.90 2003-08-16 02:15:07 piso Exp $
+;;; $Id: boot.lisp,v 1.91 2003-08-16 13:24:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -78,20 +78,20 @@
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
 
-(%load "autoloads.lisp")
-(%load "early-defuns.lisp")
-(%load "backquote.lisp")
-(%load "setf.lisp")
-(%load "macros.lisp")
-(%load "fixme.lisp")
-(%load "destructuring-bind.lisp")
-(%load "arrays.lisp")
-(%load "compiler.lisp")
-(%load "list.lisp")
-(%load "sequences.lisp")
-(%load "error.lisp")
-(%load "defpackage.lisp")
-(%load "debug.lisp")
+(sys::%load "autoloads.lisp")
+(sys::%load "early-defuns.lisp")
+(sys::%load "backquote.lisp")
+(sys::%load "setf.lisp")
+(sys::%load "macros.lisp")
+(sys::%load "fixme.lisp")
+(sys::%load "destructuring-bind.lisp")
+(sys::%load "arrays.lisp")
+(sys::%load "compiler.lisp")
+(sys::%load "list.lisp")
+(sys::%load "sequences.lisp")
+(sys::%load "error.lisp")
+(sys::%load "defpackage.lisp")
+(sys::%load "debug.lisp")
 
 
 (defpackage "JVM" (:use "COMMON-LISP" "EXTENSIONS"))
@@ -111,8 +111,8 @@
              (dolist (x pathnames)
                (load x)))
             (t
-             (%load (concatenate 'string (string-downcase (string module-name))
-                                 ".lisp"))))
+             (sys::%load (concatenate 'string (string-downcase (string module-name))
+                                      ".lisp"))))
       (set-difference *modules* saved-modules))))
 
 
