@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.23 2003-10-13 18:43:41 piso Exp $
+;;; $Id: defclass.lisp,v 1.24 2003-10-13 19:21:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -793,9 +793,7 @@
     (subseq args 0 number-required)))
 
 (defun gf-required-arglist (gf)
-  (let ((plist
-         (analyze-lambda-list
-          (generic-function-lambda-list gf))))
+  (let ((plist (analyze-lambda-list (generic-function-lambda-list gf))))
     (getf plist ':required-args)))
 
 (defun extract-lambda-list (specialized-lambda-list)
@@ -907,7 +905,16 @@
           (std-compute-method-function method))
     method))
 
+(defun check-congruent (gf method)
+  (let* ((plist1 (analyze-lambda-list (generic-function-lambda-list gf)))
+         (args1 (getf plist1 :required-args))
+         (plist2 (analyze-lambda-list (method-lambda-list method)))
+         (args2 (getf plist2 :required-args)))
+    (unless (= (length args1) (length args2))
+      (error "lambda lists are not congruent"))))
+
 (defun add-method (gf method)
+  (check-congruent gf method)
   ;; Remove existing method with same qualifiers and specializers (if any).
   (let ((old-method (find-method gf (method-qualifiers method)
                                  (method-specializers method) nil)))
