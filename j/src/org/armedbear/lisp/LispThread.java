@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.40 2004-05-29 15:22:33 piso Exp $
+ * $Id: LispThread.java,v 1.41 2004-05-29 19:05:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -412,7 +412,7 @@ public final class LispThread extends LispObject
                 t.printStackTrace();
             }
         }
-        return Primitives.NREVERSE.execute(result);
+        return result.nreverse();
     }
 
     public void saveBacktrace() throws ConditionThrowable
