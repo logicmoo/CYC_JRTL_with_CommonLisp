@@ -272,6 +272,7 @@ max
 member
 merge-pathnames
 min
+mod
 multiple-value-bind
 multiple-value-call
 multiple-value-list
