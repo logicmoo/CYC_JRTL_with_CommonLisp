@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.10 2004-08-11 11:06:30 asimon Exp $
+;;; $Id: runtime-class.lisp,v 1.11 2004-08-11 15:59:53 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -588,12 +588,14 @@
     (java::%load-java-class-from-byte-array class-name (java-instance (to-byte-array-0 cw)))))
 
 (defun jredefine-method (class-name method-name arg-types method-def)
-  "Replace the definition of the method named METHDO-NAME of argument types ARG-TYPES of the
-   class named CLASS-NAME defined with JNEW-RUNTIME-CLASS with METHOD-DEF. See the documentation of
-   JNEW-RUNTIME-CLASS."
+  "Replace the definition of the method named METHDO-NAME (or
+  constructor, if METHD-NAME is nil) of argument types ARG-TYPES of the
+  class named CLASS-NAME defined with JNEW-RUNTIME-CLASS with
+  METHOD-DEF. See the documentation of JNEW-RUNTIME-CLASS."
   (assert (jruntime-class-exists-p class-name) (class-name)
           "Can't redefine methods of undefined runtime class ~a" class-name)
-  (let ((unique-method-name (apply #'concatenate 'string method-name "|" arg-types)))
+  (let ((unique-method-name 
+	 (apply #'concatenate 'string (if method-name method-name "<init>") "|" arg-types)))
     (java::%jredefine-method class-name unique-method-name method-def)))
 
 (defun jruntime-class-exists-p (class-name)
