@@ -1,8 +1,8 @@
 /*
  * DescribeKeyDialog.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: DescribeKeyDialog.java,v 1.5 2003-06-26 00:32:20 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: DescribeKeyDialog.java,v 1.6 2004-08-08 01:46:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public final class DescribeKeyDialog extends AbstractDialog
     private boolean disposed;
     private String keyStrokeText;
 
-    public DescribeKeyDialog(Editor editor)
+    private DescribeKeyDialog(Editor editor)
     {
         super(editor, title, true); // Modal.
         this.editor = editor;
@@ -49,6 +49,7 @@ public final class DescribeKeyDialog extends AbstractDialog
         addCancel();
         pack();
         textField.setFocusTraversalKeysEnabled(false);
+        textField.requestFocus();
     }
 
     public void keyPressed(KeyEvent e)
