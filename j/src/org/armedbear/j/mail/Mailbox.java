@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Mailbox.java,v 1.3 2002-10-17 13:55:51 piso Exp $
+ * $Id: Mailbox.java,v 1.4 2002-11-23 04:41:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -699,15 +699,20 @@ public abstract class Mailbox extends Buffer
     public MailboxLine findLineForEntry(MailboxEntry entry)
     {
         if (entry != null) {
+            // First look through all the entries for an exact match.
+            for (Line l = getFirstLine(); l != null; l = l.next()) {
+                MailboxLine line = (MailboxLine) l;
+                MailboxEntry e = line.getMailboxEntry();
+                if (e == entry)
+                    return line;
+            }
+            // We didn't find an exact match.
             boolean groupByThread =
                 getBooleanProperty(Property.GROUP_BY_THREAD);
             for (Line l = getFirstLine(); l != null; l = l.next()) {
                 if (l instanceof MailboxLine) {
                     MailboxLine line = (MailboxLine) l;
                     MailboxEntry e = line.getMailboxEntry();
-                    // Added Aug 10 2002 10:07 AM
-                    if (e == entry)
-                        return line;
                     // Only check date and size.
                     if (e.getDate().equals(entry.getDate())) {
                         if (e.getSize() == entry.getSize()) {
