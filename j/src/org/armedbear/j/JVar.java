@@ -2,7 +2,7 @@
  * JVar.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JVar.java,v 1.2 2003-09-19 17:42:09 piso Exp $
+ * $Id: JVar.java,v 1.3 2003-10-06 13:51:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,12 +29,10 @@ import org.armedbear.lisp.Symbol;
 
 public final class JVar extends LispObject
 {
-    private static final ArrayList variables = new ArrayList();
-
     private static final Symbol J_VARIABLE_VALUE =
         LispAPI.PACKAGE_J_INTERNALS.addInternalSymbol("J-VARIABLE-VALUE");
 
-    private Property property;
+    private final Property property;
 
     private JVar(String name, Property property)
     {
@@ -58,14 +56,22 @@ public final class JVar extends LispObject
     public static JVar getJVar(Symbol symbol) throws ConditionThrowable
     {
         LispObject obj = get(symbol, J_VARIABLE_VALUE, null);
-        if (!(obj instanceof JVar))
-            throw new ConditionThrowable(new LispError(String.valueOf(symbol) +
-                                                       " is not defined as an editor variable"));
-        return (JVar) obj;
+        if (obj instanceof JVar)
+            return (JVar) obj;
+        throw new ConditionThrowable(new LispError(String.valueOf(symbol) +
+            " is not defined as an editor variable"));
     }
 
-    public static void addVariableForProperty(Property property)
+    public static synchronized void addVariableForProperty(Property property)
     {
-        variables.add(new JVar(property.getLispName(), property));
+        new JVar(property.getLispName(), property);
+    }
+
+    public String toString()
+    {
+        FastStringBuffer sb = new FastStringBuffer("#<J-VARIABLE @ #x");
+        sb.append(Integer.toHexString(hashCode()));
+        sb.append(">");
+        return sb.toString();
     }
 }
