@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.274 2004-08-21 16:21:03 piso Exp $
+ * $Id: Lisp.java,v 1.275 2004-08-25 17:42:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1231,6 +1231,7 @@ public abstract class Lisp
                             LispObject obj = args[j++];
                             Environment oldDynEnv = thread.getDynamicEnvironment();
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                            thread.bindSpecial(_PRINT_READABLY_, NIL);
                             sb.append(obj.writeToString());
                             thread.setDynamicEnvironment(oldDynEnv);
                         }
