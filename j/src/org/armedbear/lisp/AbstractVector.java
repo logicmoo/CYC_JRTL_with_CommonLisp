@@ -110,7 +110,7 @@ public abstract class AbstractVector extends AbstractArray
         StringBuffer sb = new StringBuffer("Invalid array index ");
         sb.append(index);
         sb.append(" for ");
-        sb.append(toString());
+        sb.append(writeToString());
         if (limit > 0) {
             sb.append(" (should be >= 0 and < ");
             sb.append(limit);
