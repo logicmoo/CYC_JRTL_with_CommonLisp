@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.69 2004-08-31 23:30:07 piso Exp $
+ * $Id: Interpreter.java,v 1.70 2004-09-01 14:19:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,8 @@ public final class Interpreter extends Lisp
         this.outputStream = outputStream;
         resetIO(new Stream(inputStream, Symbol.CHARACTER),
                 new Stream(outputStream, Symbol.CHARACTER));
+        if (!initialDirectory.endsWith(File.separator))
+            initialDirectory = initialDirectory.concat(File.separator);
         try {
             _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(new Pathname(initialDirectory));
         }
