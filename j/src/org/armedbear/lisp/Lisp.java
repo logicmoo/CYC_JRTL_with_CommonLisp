@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.131 2003-09-14 17:45:07 piso Exp $
+ * $Id: Lisp.java,v 1.132 2003-09-16 16:26:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,7 +203,9 @@ public abstract class Lisp
     }
 
     public static final LispObject macroexpand(LispObject form,
-        final Environment env, final LispThread thread) throws Condition
+                                               final Environment env,
+                                               final LispThread thread)
+        throws Condition
     {
         LispObject expanded = NIL;
         while (true) {
@@ -218,13 +220,20 @@ public abstract class Lisp
     }
 
     public static final LispObject macroexpand_1(final LispObject form,
-        final Environment env, final LispThread thread) throws Condition
+                                                 final Environment env,
+                                                 final LispThread thread)
+        throws Condition
     {
         LispObject[] results = new LispObject[2];
         if (form instanceof Cons) {
             LispObject car = form.car();
             if (car instanceof Symbol) {
                 LispObject obj = env.lookupFunctional(car);
+                if (obj instanceof Autoload) {
+                    Autoload autoload = (Autoload) obj;
+                    autoload.load();
+                    obj = autoload.getSymbol().getSymbolFunction();
+                }
                 if (obj instanceof SpecialOperator)
                     obj = Primitives.get((Symbol)car,
                         Symbol.MACROEXPAND_MACRO, NIL);
@@ -1034,16 +1043,6 @@ public abstract class Lisp
         }
     };
 
-    private static final void loadClass(String className)
-    {
-        try {
-            Class.forName(className);
-        }
-        catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     // ### t
     public static final Symbol T = PACKAGE_CL.addExternalSymbol("T");
     static {
@@ -1253,12 +1252,23 @@ public abstract class Lisp
         exportConstant("LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
                        new LispFloat(- Double.MIN_VALUE));
 
+    private static final void loadClass(String className)
+    {
+        try {
+            Class.forName(className);
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     static {
         loadClass("org.armedbear.lisp.Primitives");
         loadClass("org.armedbear.lisp.Extensions");
         loadClass("org.armedbear.lisp.Java");
         loadClass("org.armedbear.lisp.CompiledFunction");
         loadClass("org.armedbear.lisp.Autoload");
+        loadClass("org.armedbear.lisp.AutoloadMacro");
         loadClass("org.armedbear.lisp.cxr");
     }
 }
