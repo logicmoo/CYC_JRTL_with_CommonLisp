@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.143 2004-08-15 10:58:21 piso Exp $
+ * $Id: Symbol.java,v 1.144 2004-08-18 17:13:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -367,17 +367,12 @@ public class Symbol extends LispObject
 
     public final LispObject symbolValueNoThrow()
     {
-        try {
-            if ((flags & FLAG_SPECIAL) != 0) {
-                LispObject val = LispThread.currentThread().lookupSpecial(this);
-                if (val != null)
-                    return val;
-            }
-            return value;
+        if ((flags & FLAG_SPECIAL) != 0) {
+            LispObject val = LispThread.currentThread().lookupSpecial(this);
+            if (val != null)
+                return val;
         }
-        catch (ConditionThrowable t) {
-            return null;
-        }
+        return value;
     }
 
     public final LispObject symbolValueNoThrow(LispThread thread)
