@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.118 2003-03-13 20:35:54 piso Exp $
+ * $Id: Primitives.java,v 1.119 2003-03-14 01:59:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -651,7 +651,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
-            return Fixnum.sum(first, second);
+            return first.add(second);
         }
     };
 
@@ -660,7 +660,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
-            return Fixnum.difference(first, second);
+            return first.subtract(second);
         }
     };
 
@@ -910,15 +910,11 @@ public final class Primitives extends Module
                 case 1:
                     return T;
                 case 2:
-                    return Fixnum.getValue(array[0]) <= Fixnum.getValue(array[1]) ? T : NIL;
+                    return array[0].isLessThanOrEqualTo(array[1]);
                 default: {
                     final int length = array.length;
-                    long[] values = new long[length];
-                    // Make sure all of the arguments are numbers.
-                    for (int i = 0; i < length; i++)
-                        values[i] = Fixnum.getValue(array[i]);
                     for (int i = 1; i < length; i++) {
-                        if (values[i] < values[i-1])
+                        if (array[i].isLessThan(array[i-1]) != NIL)
                             return NIL;
                     }
                     return T;
