@@ -2,7 +2,7 @@
  * StatusBar.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: StatusBar.java,v 1.7 2005-03-07 03:33:33 piso Exp $
+ * $Id: StatusBar.java,v 1.8 2005-03-07 19:51:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,8 +88,9 @@ public final class StatusBar extends JComponent
         FastStringBuffer sb = new FastStringBuffer();
         String emulation = buffer.getStringProperty(Property.EMULATION);
         if (emulation != null && emulation.length() > 0) {
+            sb.append('[');
             sb.append(emulation);
-            sb.append("   ");
+            sb.append("]   ");
         }
         String modeName = buffer.getMode().getDisplayName();
         if (modeName != null)
