@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.40 2004-09-02 21:24:30 piso Exp $
+ * $Id: LispAPI.java,v 1.41 2004-09-03 14:43:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -371,7 +371,8 @@ public final class LispAPI extends Lisp
 
     // ### line-flags
     private static final Primitive1 LINE_FLAGS =
-        new Primitive1("line-flags", PACKAGE_J, true) {
+        new Primitive1("line-flags", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return number(checkLine(arg).flags());
@@ -389,6 +390,16 @@ public final class LispAPI extends Lisp
             int flags = Fixnum.getValue(second);
             line.setFlags(flags);
             return second;
+        }
+    };
+
+    // ### line-number
+    private static final Primitive1 LINE_NUMBER =
+        new Primitive1("line-number", PACKAGE_J, true, "line")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return number(checkLine(arg).lineNumber());
         }
     };
 
