@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.2 2003-08-09 17:47:18 piso Exp $
+ * $Id: SidebarBufferTree.java,v 1.3 2003-08-13 17:00:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,6 @@ package org.armedbear.j;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
@@ -37,9 +36,9 @@ import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTree;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -49,7 +48,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
@@ -551,27 +550,29 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
     {
     }
 
-    private static class SidebarTreeCellRenderer extends DefaultTreeCellRenderer
+    private static class SidebarTreeCellRenderer extends JLabel
+        implements TreeCellRenderer
     {
-        private static ImageIcon openIcon =
-            Utilities.getIconFromFile("dir_open.png");
-        private static ImageIcon closedIcon =
-            Utilities.getIconFromFile("dir_close.png");
-        private static Color noFocusSelectionBackground = new Color(208, 208, 208);
-        private static Border noFocusBorder;
+        private static final Color textForeground =
+            UIManager.getColor("Tree.textForeground");
+        private static final Color textBackground =
+            UIManager.getColor("Tree.textBackground");
+        private static final Color selectionForeground =
+            UIManager.getColor("Tree.selectionForeground");
+        private static final Color selectionBackground =
+            UIManager.getColor("Tree.selectionBackground");
+        private static final Color noFocusSelectionBackground =
+            new Color(208, 208, 208);
+        private static final Border noFocusBorder =
+            new EmptyBorder(1, 1, 1, 1);
 
         private Sidebar sidebar;
-        private Color oldBackgroundSelectionColor;
 
         public SidebarTreeCellRenderer(Sidebar sidebar)
         {
             super();
             this.sidebar = sidebar;
-            noFocusBorder = new EmptyBorder(1, 1, 1, 1);
             setOpaque(true);
-            oldBackgroundSelectionColor = getBackgroundSelectionColor();
-            setOpenIcon(openIcon);
-            setClosedIcon(closedIcon);
         }
 
         public Component getTreeCellRendererComponent(JTree tree,
@@ -582,42 +583,34 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
                                                       int row,
                                                       boolean hasFocus)
         {
-            // value should always be a DefaultMutableTreeNode.
+            Object userObject = null;
             if (value instanceof DefaultMutableTreeNode)
-                value = ((DefaultMutableTreeNode)value).getUserObject();
-
-            // Set up the appropriate leaf icon.
+                userObject = ((DefaultMutableTreeNode)value).getUserObject();
             Border innerBorder = null;
-            // Let our super do its business.
-            super.getTreeCellRendererComponent(tree, value, selected, expanded,
-                                               leaf, row, hasFocus);
-
-            if (value instanceof Buffer) {
-                setText(value.toString());
-                Buffer buffer = (Buffer) value;
+            if (userObject instanceof Buffer) {
+                setText(userObject.toString());
+                Buffer buffer = (Buffer) userObject;
                 setIcon(buffer.getIcon());
                 if (buffer.isSecondary())
                     innerBorder = new EmptyBorder(0, 10, 0, 0);
-            } else if (value instanceof LocalTag) {
-                LocalTag tag = (LocalTag) value;
+            } else if (userObject instanceof LocalTag) {
+                LocalTag tag = (LocalTag) userObject;
                 setText(tag.getSidebarText());
                 setIcon(tag.getIcon());
             } else {
                 setIcon(null);
             }
-
             Frame frame = sidebar.getFrame();
             if (selected) {
                 if (frame.isActive() && tree.hasFocus())
-                    setBackground(getBackgroundSelectionColor());
+                    setBackground(selectionBackground);
                 else
                     setBackground(noFocusSelectionBackground);
-                setForeground(getTextSelectionColor());
+                setForeground(selectionForeground);
             } else {
-                setBackground(getBackgroundNonSelectionColor());
-                setForeground(getTextNonSelectionColor());
+                setBackground(textBackground);
+                setForeground(textForeground);
             }
-
             setEnabled(tree.isEnabled());
             setFont(tree.getFont());
             Border outerBorder;
