@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.23 2004-03-17 02:22:34 piso Exp $
+ * $Id: LispReader.java,v 1.24 2004-04-17 10:54:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -336,6 +336,24 @@ public final class LispReader extends Lisp
         {
             stream.skipBalancedComment();
             return null;
+        }
+    };
+
+    // ### sharp-illegal
+    public static final DispatchMacroFunction SHARP_ILLEGAL =
+        new DispatchMacroFunction("sharp-illegal", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            StringBuffer sb = new StringBuffer("Illegal # macro character: #\\");
+            String s = LispCharacter.charToName(c);
+            if (s != null)
+                sb.append(s);
+            else
+                sb.append(c);
+            return signal(new ReaderError(sb.toString()));
         }
     };
 }
