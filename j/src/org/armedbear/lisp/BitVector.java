@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.16 2003-06-01 20:51:15 piso Exp $
+ * $Id: BitVector.java,v 1.17 2003-06-23 12:05:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -245,18 +245,34 @@ public final class BitVector extends AbstractVector
         if (this == obj)
             return true;
         if (obj instanceof BitVector) {
-            // FIXME Efficiency!
             BitVector v = (BitVector) obj;
             if (length() != v.length())
                 return false;
-            for (int i = 0; i < length(); i++) {
-                LispObject o1 = get(i);
-                LispObject o2 = v.get(i);
-                if (!o1.eql(o2))
+            for (int i = length(); i-- > 0;) {
+                if (_get(i) != v._get(i))
                     return false;
             }
             return true;
         }
+        return false;
+    }
+
+    public boolean equalp(LispObject obj) throws LispError
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof BitVector) {
+            BitVector v = (BitVector) obj;
+            if (length() != v.length())
+                return false;
+            for (int i = length(); i-- > 0;) {
+                if (_get(i) != v._get(i))
+                    return false;
+            }
+            return true;
+        }
+        if (obj instanceof AbstractVector)
+            return ((AbstractVector)obj).equalp(this);
         return false;
     }
 
