@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.30 2003-06-19 01:51:14 piso Exp $
+ * $Id: CommandTable.java,v 1.31 2003-06-28 00:51:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,8 +204,6 @@ public class CommandTable
             addCommand("wordLeft");
             addCommand("wordRight");
             addCommand("wrapParagraph");
-            addCommand("writeGlobalKeyMap");
-            addCommand("writeLocalKeyMap");
 
             // Commands implemented in other classes.
             addCommand("about", "AboutDialog");
@@ -357,6 +355,8 @@ public class CommandTable
             addCommand("upperCaseRegion", "RegionCommands");
             addCommand("whereIs", "ExecuteCommandDialog");
             addCommand("wrapComment", "WrapText");
+            addCommand("writeGlobalKeyMap", "SaveFileDialog");
+            addCommand("writeLocalKeyMap", "SaveFileDialog");
             addCommand("xmlElectricEquals", "XmlMode");
             addCommand("xmlElectricSlash", "XmlMode");
             addCommand("xmlFindCurrentNode", "XmlMode");
