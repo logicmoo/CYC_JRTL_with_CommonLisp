@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.242 2004-05-25 18:09:43 piso Exp $
+ * $Id: Lisp.java,v 1.243 2004-05-26 01:04:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1377,6 +1377,16 @@ public abstract class Lisp
         return symbol;
     }
 
+    public static final Symbol internConstant(String name, Package pkg,
+                                              LispObject value)
+    {
+        Symbol symbol = pkg.intern(name);
+        symbol.setSpecial(true);
+        symbol.setSymbolValue(value);
+        symbol.setConstant(true);
+        return symbol;
+    }
+
     public static final Symbol exportSpecial(String name, Package pkg,
                                              LispObject value)
     {
@@ -1645,7 +1655,7 @@ public abstract class Lisp
     // ### *compile-file-type*
     public static final String COMPILE_FILE_TYPE = "fasl";
     public static final Symbol _COMPILE_FILE_TYPE_ =
-        exportConstant("*COMPILE-FILE-TYPE*", PACKAGE_SYS,
+        internConstant("*COMPILE-FILE-TYPE*", PACKAGE_SYS,
                        new SimpleString(COMPILE_FILE_TYPE));
 
     // ### *macroexpand-hook*
