@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.389 2005-02-03 23:16:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.390 2005-02-04 04:26:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1764,37 +1764,6 @@
       (when (label-p instruction)
         (setf pending-label (instruction-label instruction))))
     ht))
-
-;; (defun optimize-2a ()
-;;   (let* ((code (coerce *code* 'list))
-;;          (tail code)
-;;          (changed nil))
-;;     (dolist (instruction code)
-;;       (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
-;;         (let* ((target-label (car (instruction-args instruction)))
-;;                (target-instruction nil)
-;;                (next-instruction nil))
-;;           (dolist (instr code)
-;;             (when target-instruction
-;;               (setf next-instruction instr)
-;;               (return))
-;;             (when (and instr
-;;                        (label-p instr)
-;;                        (eq (car (instruction-args instr)) target-label))
-;;               (setf target-instruction instr)))
-;;           (when next-instruction
-;;             (case (instruction-opcode next-instruction)
-;;               (167 ; GOTO
-;;                (setf (instruction-args instruction)
-;;                      (instruction-args next-instruction)
-;;                      changed t))
-;;               (176 ; ARETURN
-;;                (setf (instruction-opcode instruction) 176
-;;                      (instruction-args instruction) nil
-;;                      changed t)))))))
-;;     (when changed
-;;       (setf *code* (delete nil code))
-;;       t)))
 
 (defun optimize-2b ()
   (let* ((code (coerce *code* 'list))
@@ -4791,15 +4760,16 @@
            (emit 'istore (variable-register variable))
            (when target
              (emit-move-from-stack target)))
-          (t (compile-form value-form :target :stack)
-             (maybe-emit-clear-values value-form)
-             (when target
-               (emit 'dup))
-             (emit 'var-set variable)
-             (when target
-               (when (eq representation :unboxed-fixnum)
-                 (emit-unbox-fixnum))
-               (emit-move-from-stack target))))))
+          (t
+           (compile-form value-form :target :stack)
+           (maybe-emit-clear-values value-form)
+           (when target
+             (emit 'dup))
+           (emit 'var-set variable)
+           (when target
+             (when (eq representation :unboxed-fixnum)
+               (emit-unbox-fixnum))
+             (emit-move-from-stack target))))))
 
 (defun p2-the (form &key (target :stack) representation)
 ;;   (compile-form (third form) :target target :representation representation)
