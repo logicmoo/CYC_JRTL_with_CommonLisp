@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.2 2003-07-02 15:27:01 piso Exp $
+ * $Id: StringFunctions.java,v 1.3 2003-07-20 18:17:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,10 +39,14 @@ public final class StringFunctions extends Lisp
             int end2 = Fixnum.getInt(args[5]);
             if ((end1 - start1) != (end2 - start2))
                 return NIL;
-            int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
-                if (array1[i] != array2[j])
-                    return NIL;
+            try {
+                for (int i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                    if (array1[i] != array2[j])
+                        return NIL;
+                }
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                return NIL;
             }
             return T;
         }
