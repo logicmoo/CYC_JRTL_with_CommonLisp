@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.1.1.1 2002-09-24 16:08:59 piso Exp $
+ * $Id: SshSession.java,v 1.2 2002-10-10 17:58:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -834,8 +834,20 @@ public final class SshSession implements Constants
                 final Buffer buf = outputBuffer;
                 if (buf == null)
                     return;
-                buf.append(s);
-                buf.renumber();
+                try {
+                    buf.lockWrite();
+                }
+                catch (InterruptedException e) {
+                    Log.debug(e);
+                    return;
+                }
+                try {
+                    buf.append(s);
+                    buf.renumber();
+                }
+                finally {
+                    buf.unlockWrite();
+                }
                 for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                     Editor ed = it.nextEditor();
                     if (ed.getBuffer() == buf) {
