@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.19 2003-12-13 00:02:47 piso Exp $
+ * $Id: SpecialOperators.java,v 1.20 2003-12-27 00:59:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,9 +276,18 @@ public final class SpecialOperators extends Lisp
                 LispObject rest = def.cdr();
                 LispObject parameters = rest.car();
                 LispObject body = rest.cdr();
+                LispObject decls = NIL;
+                while (body.car() instanceof Cons && body.car().car() == Symbol.DECLARE) {
+                    decls = new Cons(body.car(), decls);
+                    body = body.cdr();
+                }
                 body = new Cons(symbol, body);
                 body = new Cons(Symbol.BLOCK, body);
                 body = new Cons(body, NIL);
+                while (decls != NIL) {
+                    body = new Cons(decls.car(), body);
+                    decls = decls.cdr();
+                }
                 Closure closure;
                 if (recursive)
                     closure = new Closure(parameters, body, ext);
