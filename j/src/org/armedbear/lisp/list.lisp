@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.38 2003-06-22 17:51:07 piso Exp $
+;;; $Id: list.lisp,v 1.39 2003-06-22 17:55:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,15 +88,8 @@
        (funcall ,key ,element)
        ,element))
 
-(defun complement (function)
-  #'(lambda (&optional (arg0 nil arg0-p) (arg1 nil arg1-p) (arg2 nil arg2-p)
-		       &rest more-args)
-     (not (cond (more-args (apply function arg0 arg1 arg2 more-args))
-                (arg2-p (funcall function arg0 arg1 arg2))
-                (arg1-p (funcall function arg0 arg1))
-                (arg0-p (funcall function arg0))
-                (t (funcall function))))))
-
+(defun complement (f)
+  #'(lambda (&rest x) (not (apply f x))))
 
 (defun constantly (x)
   #'(lambda (&rest args) x))
