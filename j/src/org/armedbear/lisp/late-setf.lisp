@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: late-setf.lisp,v 1.1 2003-10-28 02:28:04 piso Exp $
+;;; $Id: late-setf.lisp,v 1.2 2003-12-20 14:13:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -50,3 +50,24 @@
         (push getter getters)))
     (values all-dummies all-vals newvals
             `(values ,@(reverse setters)) `(values ,@(reverse getters)))))
+
+(defun %putf (place property new-value)
+  (do ((plist place (cddr plist)))
+      ((endp plist) (list* property new-value place))
+    (when (eq (car plist) property)
+      (setf (cadr plist) new-value)
+      (return place))))
+
+(define-setf-expander getf (place prop &optional default &environment env)
+  (multiple-value-bind (temps values stores set get)
+    (get-setf-expansion place env)
+    (let ((newval (gensym))
+          (ptemp (gensym))
+          (def-temp (if default (gensym))))
+      (values `(,@temps ,ptemp ,@(if default `(,def-temp)))
+              `(,@values ,prop ,@(if default `(,default)))
+              `(,newval)
+              `(let ((,(car stores) (%putf ,get ,ptemp ,newval)))
+                 ,set
+                 ,newval)
+              `(getf ,get ,ptemp ,@(if default `(,def-temp)))))))
