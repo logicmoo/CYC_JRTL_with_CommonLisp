@@ -1,8 +1,8 @@
 /*
  * FtpSaveProcess.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: FtpSaveProcess.java,v 1.1.1.1 2002-09-24 16:09:02 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: FtpSaveProcess.java,v 1.2 2003-07-05 17:42:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,11 +44,12 @@ public class FtpSaveProcess implements BackgroundProcess, Constants
     private String listing;
     private boolean force;
 
-    public FtpSaveProcess(Buffer buffer, FtpFile destination, FtpSession session)
+    public FtpSaveProcess(Buffer buffer, File source, FtpFile destination,
+                          FtpSession session)
     {
         this.buffer = buffer;
         Debug.assertTrue(buffer != null);
-        this.source = buffer.getCache();
+        this.source = source;
         Debug.assertTrue(source != null);
         this.destination = destination;
         Debug.assertTrue(destination != null);
@@ -123,7 +124,6 @@ public class FtpSaveProcess implements BackgroundProcess, Constants
         Log.debug("doSave force = " + force);
         Debug.assertTrue(buffer != null);
         Debug.assertTrue(source != null);
-        Debug.assertTrue(source == buffer.getCache());
         Debug.assertTrue(!SwingUtilities.isEventDispatchThread());
 
         final String hostName = destination.getHostName();
