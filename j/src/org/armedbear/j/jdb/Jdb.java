@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.15 2003-05-17 19:28:14 piso Exp $
+ * $Id: Jdb.java,v 1.16 2003-05-18 01:34:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,6 +159,11 @@ public final class Jdb extends Buffer implements JdbConstants
     public void setVM(VirtualMachine vm)
     {
         this.vm = vm;
+        if (vm == null) {
+            isSuspended = true;
+            currentThread = null;
+            currentStackFrame = null;
+        }
     }
 
     public String getMainClass()
@@ -936,15 +941,7 @@ public final class Jdb extends Buffer implements JdbConstants
             controlDialog = null;
         }
         saveSession();
-        if (breakpoints != null) {
-            Iterator iter = breakpoints.iterator();
-            while (iter.hasNext()) {
-                ResolvableBreakpoint bp = (ResolvableBreakpoint) iter.next();
-                Line line = bp.getLine();
-                if (line != null)
-                    line.setAnnotation(null);
-            }
-        }
+        removeAnnotations();
         synchronized (Jdb.class) {
             if (JavaMode.getJdb() != this)
                 Debug.bug();
@@ -952,9 +949,25 @@ public final class Jdb extends Buffer implements JdbConstants
         }
     }
 
+    private void removeAnnotations()
+    {
+        if (breakpoints != null) {
+            for (Iterator it = breakpoints.iterator(); it.hasNext();) {
+                Object obj = it.next();
+                if (obj instanceof ResolvableBreakpoint) {
+                    ResolvableBreakpoint bp = (ResolvableBreakpoint) obj;
+                    Line line = bp.getLine();
+                    if (line != null)
+                        line.setAnnotation(null);
+                }
+            }
+        }
+    }
+
     private void quit()
     {
         stop();
+        removeAnnotations();
         // Copy editor list since unsplitWindow() may close an editor.
         ArrayList editors = new ArrayList();
         for (EditorIterator it = new EditorIterator(); it.hasNext();)
@@ -978,8 +991,10 @@ public final class Jdb extends Buffer implements JdbConstants
     private void restart()
     {
         stop();
+        removeAnnotations();
         initializeBreakpoints();
         startProcess();
+        fireContextChanged();
     }
 
     private void stop()
@@ -991,7 +1006,7 @@ public final class Jdb extends Buffer implements JdbConstants
             catch (VMDisconnectedException e) {
                 // Already exited.
             }
-            vm = null;
+            setVM(null);
         }
     }
 
