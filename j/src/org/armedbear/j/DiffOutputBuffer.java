@@ -2,7 +2,7 @@
  * DiffOutputBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: DiffOutputBuffer.java,v 1.1.1.1 2002-09-24 16:08:11 piso Exp $
+ * $Id: DiffOutputBuffer.java,v 1.2 2003-04-04 14:06:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,8 @@ public final class DiffOutputBuffer extends Buffer
         formatter = new DiffFormatter(this);
         lineSeparator = System.getProperty("line.separator");
         readOnly = true;
+        setProperty(Property.VERTICAL_RULE, 0);
+        setProperty(Property.SHOW_LINE_NUMBERS, false);
         setTransient(true);
         setInitialized(true);
     }
