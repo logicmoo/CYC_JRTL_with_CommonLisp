@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.68 2004-08-03 21:36:04 piso Exp $
+ * $Id: LispMode.java,v 1.69 2004-08-04 01:59:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class LispMode extends AbstractMode implements Constants, Mode
 {
@@ -726,52 +727,52 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return null;
     }
 
-        // Look for Lisp shell.
-    private static LispEd getLispEd (Editor editor) {
+    private static Editor getLispShellEditor(Editor editor)
+    {
         Editor ed = editor.getOtherEditor();
-        CommandInterpreter lisp = null;
         if (ed != null) {
             Buffer b = ed.getBuffer();
             if (b instanceof CommandInterpreter) {
                 CommandInterpreter comint = (CommandInterpreter) b;
                 if (comint.isLisp())
-                    lisp = comint;
+                    return ed;
             }
         }
+        CommandInterpreter lisp = LispShell.findLisp(null);
         if (lisp == null) {
-            lisp = LispShell.findLisp(null);
-            if (lisp == null) {
-                MessageDialog.showMessageDialog("No Lisp shell is running",
-                                                "Error");
-                return null;
-            }
-            ed = findEditor(lisp);
-            if (ed == null)
-                ed = editor.displayInOtherWindow(lisp);
+            MessageDialog.showMessageDialog("No Lisp shell is running", "Error");
+            return null;
         }
-        return new LispEd(lisp,ed);
+        ed = findEditor(lisp);
+        if (ed != null)
+            return ed;
+        return editor.displayInOtherWindow(lisp);
     }
 
-    // get current defun
-    public static DefunString getCurrentDefun (Editor editor) {
+    private static String getCurrentDefun(Editor editor)
+    {
         Position begin = findStartOfDefun(editor.getDot());
         if (begin != null && begin.lookingAt("(def")) {
             Position end = mode.forwardSexp(begin);
             if (end != null) {
                 Region r = new Region(editor.getBuffer(), begin, end);
-                String defunName = "";
-                Position pos = mode.downList(begin);
-                if (pos != null) {
-                    pos = mode.forwardSexp(pos);
-                    if (pos != null) {
-                        pos.skipWhitespace();
-                        defunName = pos.getIdentifier(mode);
-                    }
-                }
-                return new DefunString(defunName,r.toString().trim());
+                return r.toString().trim();
             }
         }
         return null;
+    }
+
+    private static String getDefunName(String s)
+    {
+        StringTokenizer st = new StringTokenizer(s);
+        int count = st.countTokens();
+        if (count >= 2) {
+            // Skip first token.
+            st.nextToken();
+            // Return second token.
+            return st.nextToken().toUpperCase();
+        }
+        return "";
     }
 
     public static void evalDefunLisp()
@@ -779,38 +780,46 @@ public class LispMode extends AbstractMode implements Constants, Mode
         final Editor editor = Editor.currentEditor();
         if (editor.getMode() != mode)
             return;
-        LispEd le = getLispEd(editor);
-        if (le == null) return;
-        DefunString ds = getCurrentDefun(editor);
-        if (ds != null) {
-            Position bufEnd = le.lisp.getEnd();
-                bufEnd.getLine().setFlags(STATE_INPUT);
-            le.lisp.insertString(bufEnd,
-                                 ";;; Evaluating defun " + ds.name + "\n");
-            le.lisp.renumber();
-            le.ed.eob();
-            le.ed.getDotLine().setFlags(0);
-            le.lisp.send(ds.defun);
+        Editor ed = getLispShellEditor(editor);
+        if (ed != null) {
+            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+            String defun = getCurrentDefun(editor);
+            if (defun != null) {
+                String name = getDefunName(defun);
+                if (name != null) {
+                    Position end = lisp.getEnd();
+                    end.getLine().setFlags(STATE_INPUT);
+                    lisp.insertString(end, ";;; Evaluating defun " + name + " ...\n");
+                    lisp.renumber();
+                    ed.eob();
+                    ed.getDotLine().setFlags(0);
+                    lisp.send(defun);
+                }
             }
         }
+    }
 
     public static void compileDefunLisp()
     {
         final Editor editor = Editor.currentEditor();
         if (editor.getMode() != mode)
             return;
-        LispEd le = getLispEd(editor);
-        if (le == null) return;
-        DefunString ds = getCurrentDefun(editor);
-        if (ds != null) {
-            Position bufEnd = le.lisp.getEnd();
-            bufEnd.getLine().setFlags(STATE_INPUT);
-            le.lisp.insertString(bufEnd,
-                                 ";;; Compiling defun " + ds.name + "\n");
-            le.lisp.renumber();
-            le.ed.eob();
-            le.ed.getDotLine().setFlags(0);
-            le.lisp.send(ds.defun + "\n(CL:COMPILE '" + ds.name + ")\n");
+        Editor ed = getLispShellEditor(editor);
+        if (ed != null) {
+            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+            String defun = getCurrentDefun(editor);
+            if (defun != null) {
+                String name = getDefunName(defun);
+                if (name != null) {
+                    Position end = lisp.getEnd();
+                    end.getLine().setFlags(STATE_INPUT);
+                    lisp.insertString(end, ";;; Compiling defun " + name + " ...\n");
+                    lisp.renumber();
+                    ed.eob();
+                    ed.getDotLine().setFlags(0);
+                    lisp.send("(CL:PROGN " + defun + " (CL:COMPILE '" + name + "))\n");
+                }
+            }
         }
     }
 
@@ -825,15 +834,17 @@ public class LispMode extends AbstractMode implements Constants, Mode
             editor.notSupportedForColumnSelections();
             return;
         }
-        LispEd le = getLispEd(editor);
-        if (le == null) return;
-        Position bufEnd = le.lisp.getEnd();
-        bufEnd.getLine().setFlags(STATE_INPUT);
-        le.lisp.insertString(bufEnd, ";;; Evaluating region\n");
-        le.lisp.renumber();
-        le.ed.eob();
-        le.ed.getDotLine().setFlags(0);
-        le.lisp.send(new Region(editor).toString().trim());
+        Editor ed = getLispShellEditor(editor);
+        if (ed != null) {
+            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+            Position bufEnd = lisp.getEnd();
+            bufEnd.getLine().setFlags(STATE_INPUT);
+            lisp.insertString(bufEnd, ";;; Evaluating region ...\n");
+            lisp.renumber();
+            ed.eob();
+            ed.getDotLine().setFlags(0);
+            lisp.send(new Region(editor).toString().trim());
+        }
     }
 
     private static Editor findEditor(Buffer buf)
@@ -948,22 +959,5 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 editor.makeNext(buf);
             editor.displayInOtherWindow(buf);
         }
-    }
-}
-
-class DefunString {
-    public String name;
-    public String defun;
-    public DefunString (String n, String d) {
-        name = n;
-        defun = d;
-    }
-}
-class LispEd {
-    public CommandInterpreter lisp;
-    public Editor ed;
-    public LispEd (CommandInterpreter l, Editor e) {
-        lisp = l;
-        ed = e;
     }
 }
