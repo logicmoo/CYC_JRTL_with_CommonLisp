@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.302 2004-11-18 16:01:42 piso Exp $
+ * $Id: Lisp.java,v 1.303 2004-11-21 14:17:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -933,19 +933,6 @@ public abstract class Lisp
         if (obj == null)
             throw new NullPointerException();
         signal(new TypeError(obj, "binary input stream"));
-        // Not reached.
-        return null;
-    }
-
-    public static final Stream checkBinaryOutputStream(LispObject obj)
-        throws ConditionThrowable
-    {
-        if (obj instanceof Stream)
-            if (((Stream)obj).isBinaryOutputStream())
-                return (Stream) obj;
-        if (obj == null)
-            throw new NullPointerException();
-        signal(new TypeError(obj, "binary output stream"));
         // Not reached.
         return null;
     }
