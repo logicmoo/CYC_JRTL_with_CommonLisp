@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.107 2003-08-04 15:40:30 piso Exp $
+ * $Id: Editor.java,v 1.108 2003-08-04 15:46:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1429,18 +1429,15 @@ public final class Editor extends JPanel implements Constants,
 
     private Position findDelimiterNearDot()
     {
-        Position saved = dot.copy();
         Position pos = dot.copy();
-        char charToMatch = 0;
-        char c = pos.getChar();
-        if ("{([".indexOf(c) >= 0) {
+        if ("{([".indexOf(pos.getChar()) >= 0) {
             // The character to the right of the caret is a left delimiter.
             return pos;
         }
+        Position saved = dot.copy();
         if (pos.getOffset() > 0) {
             pos.prev();
-            c = pos.getChar();
-            if ("})]".indexOf(c) >= 0) {
+            if ("})]".indexOf(pos.getChar()) >= 0) {
                 // The character to the left of the caret is a right delimiter.
                 return pos;
             }
@@ -1451,16 +1448,16 @@ public final class Editor extends JPanel implements Constants,
         while (pos.getOffset() > 0) {
             // Look at previous char.
             pos.prev();
-            c = pos.getChar();
+            char c = pos.getChar();
             if (delimiters.indexOf(c) >= 0)
                 return pos;
             if (!Character.isWhitespace(c) && c != ';')
                 break;
         }
         pos.moveTo(saved);
-        final int limit = pos.getLineLength();// - 1;
+        final int limit = pos.getLineLength();
         while (pos.getOffset() < limit) {
-            c = pos.getChar();
+            char c = pos.getChar();
             if (delimiters.indexOf(c) >= 0)
                 return pos;
             if (!Character.isWhitespace(c))
