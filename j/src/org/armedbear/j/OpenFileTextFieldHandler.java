@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.54 2004-09-20 00:44:11 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.55 2004-10-07 00:35:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -566,6 +566,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 return true;
         }
         String extension = Utilities.getExtension(pathname);
+        if (extension == null)
+            return false;
         if (Platform.isPlatformWindows())
             extension = extension.toLowerCase();
         if (extension.equals(".class") ||
