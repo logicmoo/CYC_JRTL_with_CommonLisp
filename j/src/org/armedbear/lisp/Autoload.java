@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.181 2004-03-24 15:24:04 piso Exp $
+ * $Id: Autoload.java,v 1.182 2004-04-05 01:07:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ public class Autoload extends Function
         this.symbol = symbol;
         fileName = null;
         className = null;
+        symbol.setBuiltInFunction(false);
     }
 
     protected Autoload(Symbol symbol, String fileName, String className)
@@ -39,6 +40,7 @@ public class Autoload extends Function
         this.symbol = symbol;
         this.fileName = fileName;
         this.className = className;
+        symbol.setBuiltInFunction(false);
     }
 
     public static void autoload(String symbolName, String className)
