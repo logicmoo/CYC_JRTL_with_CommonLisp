@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.7 2003-11-05 01:48:52 piso Exp $
+;;; $Id: clos.lisp,v 1.8 2003-11-23 00:58:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -379,15 +379,11 @@
 (defvar the-class-standard-class (find-class 'standard-class))
 
 (defun slot-location (class slot-name)
-  (if (and (eq slot-name 'effective-slots)
-           (eq class the-class-standard-class))
-      (position 'effective-slots the-slots-of-standard-class
-                :key #'slot-definition-name)
-      (let ((slot (find slot-name (class-slots class)
-                        :key #'slot-definition-name)))
-        (if slot
-            (position slot (remove-if-not #'instance-slot-p (class-slots class)))
-            nil))))
+  (let ((slot (find slot-name (class-slots class)
+                    :key #'slot-definition-name)))
+    (if slot
+        (position slot (remove-if-not #'instance-slot-p (class-slots class)))
+        nil)))
 
 (defun slot-contents (slots location)
   (svref slots location))
