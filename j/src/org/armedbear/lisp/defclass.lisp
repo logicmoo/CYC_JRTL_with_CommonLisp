@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.26 2003-10-19 18:33:16 piso Exp $
+;;; $Id: defclass.lisp,v 1.27 2003-10-19 20:26:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -752,8 +752,7 @@
 ;;; defmethod
 
 (defmacro defmethod (&rest args)
-  (multiple-value-bind (function-name qualifiers lambda-list specializers
-                                      body)
+  (multiple-value-bind (function-name qualifiers lambda-list specializers body)
     (parse-defmethod args)
     `(progn
       (ensure-generic-function
@@ -888,10 +887,21 @@
 ;;; ensure method
 
 (defun ensure-method (gf &rest all-keys)
+;;   (format t "ENSURE-METHOD ~S all-keys = ~S~%" (generic-function-name gf) all-keys)
+;;   (format t "ENSURE-METHOD gf type = ~S~%" (generic-function-method-combination gf))
+;;   (format t "ENSURE-METHOD qualifiers = ~S~%" (getf all-keys :qualifiers))
+  (let ((gf-method-combination-type (generic-function-method-combination gf))
+        (qualifiers (getf all-keys :qualifiers)))
+    (if (eq gf-method-combination-type 'standard)
+        (unless (or (null qualifiers)
+                    (and (= (length qualifiers) 1)
+                         (memq (car qualifiers) '(:before :after :around))))
+          (error "method combination type mismatch"))
+        (unless (memq gf-method-combination-type qualifiers)
+          (error "method combination type mismatch"))))
   (let ((new-method
          (apply
-          (if (eq (generic-function-method-class gf)
-                  the-class-standard-method)
+          (if (eq (generic-function-method-class gf) the-class-standard-method)
               #'make-instance-standard-method
               #'make-instance)
           (generic-function-method-class gf)
@@ -1066,11 +1076,14 @@
            args))
 
 (defun primary-method-p (method)
-  (null (method-qualifiers method)))
+  (null (intersection '(:before :after :around) (method-qualifiers method))))
+
 (defun before-method-p (method)
   (equal '(:before) (method-qualifiers method)))
+
 (defun after-method-p (method)
   (equal '(:after) (method-qualifiers method)))
+
 (defun around-method-p (method)
   (equal '(:around) (method-qualifiers method)))
 
