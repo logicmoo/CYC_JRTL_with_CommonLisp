@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.16 2004-09-20 19:32:41 piso Exp $
+ * $Id: ComplexString.java,v 1.17 2004-09-20 20:15:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,17 +117,11 @@ public final class ComplexString extends AbstractString
 
     public char[] chars() throws ConditionThrowable
     {
-        if (chars != null) {
-            if (fillPointer < 0)
-                return chars;
-            char[] ret = new char[fillPointer];
-            System.arraycopy(chars, 0, ret, 0, fillPointer);
-            return ret;
-        }
+        if (chars != null)
+            return chars;
         Debug.assertTrue(array != null);
-        final int length = fillPointer >= 0 ? fillPointer : capacity;
-        char[] chars = new char[length];
-        System.arraycopy(array.chars(), displacement, chars, 0, length);
+        char[] chars = new char[capacity];
+        System.arraycopy(array.chars(), displacement, chars, 0, capacity);
         return chars;
     }
 
@@ -269,7 +263,10 @@ public final class ComplexString extends AbstractString
 
     public String getStringValue() throws ConditionThrowable
     {
-        return new String(chars());
+        if (fillPointer >= 0)
+            return new String(chars(), 0, fillPointer);
+        else
+            return new String(chars());
     }
 
     public Object javaInstance() throws ConditionThrowable
