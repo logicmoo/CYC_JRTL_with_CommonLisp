@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.123 2004-04-20 15:09:39 piso Exp $
+ * $Id: Symbol.java,v 1.124 2004-04-23 12:50:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -454,6 +454,7 @@ public class Symbol extends LispObject
             return ":".concat(name);
         }
         if (!printEscape) {
+            // Printer escaping is disabled.
             if (readtableCase == Keyword.UPCASE) {
                 if (printCase == Keyword.DOWNCASE)
                     return name.toLowerCase();
@@ -476,6 +477,7 @@ public class Symbol extends LispObject
             } else // INVERT
                 return invert(name);
         }
+        // Printer escaping is enabled.
         boolean escape = false;
         final int length = name.length();
         if (length == 0)
@@ -483,6 +485,16 @@ public class Symbol extends LispObject
         else if (name.charAt(0) == '#')
             escape = true;
         else {
+            int radix;
+            try {
+                radix = ((Fixnum)_PRINT_BASE_.symbolValue()).value;
+            }
+            catch (Throwable t) {
+                // FIXME What if *PRINT-BASE* is invalid?
+                Debug.trace(t);
+                radix = 10;
+            }
+            boolean seenNonDigit = false;
             for (int i = length; i-- > 0;) {
                 char c = name.charAt(i);
                 if (c == '(' || c == ')' || c == ',' || c == '|' || c == '\\') {
@@ -504,6 +516,16 @@ public class Symbol extends LispObject
                         break;
                     }
                 }
+                if (!escape && !seenNonDigit) {
+                    if (Character.digit(c, radix) < 0)
+                        seenNonDigit = true;
+                }
+            }
+            if (!escape) {
+                if (!seenNonDigit)
+                    escape = true;
+                else if (name.equals("."))
+                    escape = true;
             }
         }
         String s = escape ? multipleEscape(name) : name;
@@ -536,6 +558,11 @@ public class Symbol extends LispObject
                     if (((Package)pkg).findExternalSymbol(name) != null)
                         return s;
         }
+        // Has this symbol been imported into the current package?
+        if (currentPackage.findExternalSymbol(name) == this)
+            return s;
+        if (currentPackage.findInternalSymbol(name) == this)
+            return s;
         // Package prefix is necessary.
         String packageName = pkg.getName();
         if (printCase == Keyword.DOWNCASE)
