@@ -1,24 +1,21 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-
 <html>
-
 <head>
 <title>init.bsh</title>
 <LINK REL="stylesheet" HREF="j.css" TYPE="text/css">
 </head>
-
 <body>
-
 <a href="contents.html">Top</a>
-
 <hr>
-
 <h1>init.bsh</h1>
-
 <hr>
-
 <p>
-Starting with version 0.11.0, j executes the 
+<b>NOTE: </b><i>Starting with version 0.20.0, the use of BeanShell to customize
+j is officially deprecated. BeanShell will no longer be bundled with j in
+future versions. Use j's built-in Lisp instead. See
+<a href="init.lisp.html">init.lisp</a>.</i>
+<p>
+Starting with version 0.11.0, j executes the
 <a href="http://www.beanshell.org">BeanShell</a> script ~/.j/init.bsh (Unix)
 or C:\.j\init.bsh (Windows) on startup if it exists. This is done after the
 user's preferences, theme, and custom key maps (if any) have been loaded.
@@ -32,15 +29,15 @@ only the following commands are officially supported:
         void unmapKeyForMode(String keyText, String modeName)
 </pre>
 You can use these commands to make minor changes to the default key mappings
-without having to define a full set of custom key maps (see 
+without having to define a full set of custom key maps (see
 <a href="keys.html">Key Mappings</a>).
 <p>
 For these commands, the <code>keyText</code> parameter is the name of the key
 or key combination to be mapped or unmapped (e.g. "F7", "Ctrl Shift G",
-"J"). When in doubt, you can use 
+"J"). When in doubt, you can use
 <a href="commands.html#insertKeyText">insertKeyText</a> to insert the
 appropriate text string. The <code>command</code> parameter is the name of the
-command to be mapped (e.g. "openFile", "cyclePaste", "jdkHelp"). The 
+command to be mapped (e.g. "openFile", "cyclePaste", "jdkHelp"). The
 <code>modeName</code> parameter is the name of the mode, as displayed in the
 status bar when that particular mode is in effect in the current buffer (e.g.
 "Java", "HTML", "Plain Text").
@@ -52,9 +49,8 @@ Some examples:
         mapKeyForMode("Alt Mouse-1", "mouseFindTag", "Java");
         unmapKeyForMode("F4", "perl");
 </pre>
-If you make changes to init.bsh while j is running, you can use the command 
+If you make changes to init.bsh while j is running, you can use the command
 <a href="commands.html#evalBuffer">evalBuffer</a> to execute the changed
 script without restarting j.
 </body>
-
 </html>
