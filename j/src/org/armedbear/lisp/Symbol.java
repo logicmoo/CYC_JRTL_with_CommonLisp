@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.167 2005-01-13 19:44:51 piso Exp $
+ * $Id: Symbol.java,v 1.168 2005-01-31 05:51:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,6 +173,8 @@ public class Symbol extends LispObject
     public static final Symbol UNBOUND_VARIABLE                 = PACKAGE_CL.addExternalSymbol("UNBOUND-VARIABLE");
     public static final Symbol UNDEFINED_FUNCTION               = PACKAGE_CL.addExternalSymbol("UNDEFINED-FUNCTION");
     public static final Symbol WARNING                          = PACKAGE_CL.addExternalSymbol("WARNING");
+
+    public static final Symbol COMPILER_UNSUPPORTED_FEATURE_ERROR = PACKAGE_EXT.addExternalSymbol("COMPILER-UNSUPPORTED-FEATURE-ERROR");
 
     // Internal symbols.
     public static final Symbol BACKQUOTE_MACRO                  = PACKAGE_SYS.addInternalSymbol("BACKQUOTE-MACRO");
