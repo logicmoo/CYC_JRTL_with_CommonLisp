@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.10 2002-11-04 15:55:07 piso Exp $
+ * $Id: SystemBuffer.java,v 1.11 2002-11-04 16:34:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -409,6 +409,11 @@ public class SystemBuffer implements Constants
 
     public void writeBuffer() throws SaveException
     {
+        if (file.isFile() && !file.canWrite()) {
+            Log.error("writeFile: file is not writable: " + file);
+            throw new SaveException(file,
+                                    file.canonicalPath() + " is not writable");
+        }
         if (Platform.isPlatformWindows()) {
             // writeTemporaryFile() throws a SaveException if an error occurs.
             File tempFile = writeTemporaryFile();
