@@ -1,7 +1,7 @@
-;;; shift.lisp
+;;; shiftf.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: shiftf.lisp,v 1.1 2003-10-06 01:12:50 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: shiftf.lisp,v 1.2 2004-04-02 18:05:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@
              ;; and the getter is just the last arg itself.
              (setters nil)
              (getters (car (last args)))
-	
+
              (labels ((thunk (mv-bindings getters)
                              (if mv-bindings
                                  `((multiple-value-bind
