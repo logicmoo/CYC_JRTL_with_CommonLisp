@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.53 2003-08-16 01:43:49 piso Exp $
+ * $Id: LispMode.java,v 1.54 2003-08-16 23:52:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -700,14 +700,27 @@ public class LispMode extends AbstractMode implements Constants, Mode
         if (editor.getMode() != mode)
             return;
         // Look for Lisp shell.
-        CommandInterpreter lisp = LispShell.findLisp(null);
-        if (lisp == null) {
-            MessageDialog.showMessageDialog("No Lisp shell is running", "Error");
-            return;
+        CommandInterpreter lisp = null;
+        Editor ed = editor.getOtherEditor();
+        if (ed != null) {
+            Buffer b = ed.getBuffer();
+            if (b instanceof CommandInterpreter) {
+                CommandInterpreter comint = (CommandInterpreter) b;
+                if (comint.isLisp())
+                    lisp = comint;
+            }
         }
-        Editor ed = findEditor(lisp);
-        if (ed == null)
-            ed = editor.displayInOtherWindow(lisp);
+        if (lisp == null) {
+            lisp = LispShell.findLisp(null);
+            if (lisp == null) {
+                MessageDialog.showMessageDialog("No Lisp shell is running",
+                                                "Error");
+                return;
+            }
+            ed = findEditor(lisp);
+            if (ed == null)
+                ed = editor.displayInOtherWindow(lisp);
+        }
         Position begin = findStartOfDefun(editor.getDot());
         if (begin != null && begin.lookingAt("(def")) {
             Position end = mode.forwardSexp(begin);
@@ -746,15 +759,27 @@ public class LispMode extends AbstractMode implements Constants, Mode
             return;
         }
         // Look for Lisp shell.
-        CommandInterpreter lisp = LispShell.findLisp(null);
-        if (lisp == null) {
-            MessageDialog.showMessageDialog("No Lisp shell is running",
-                "Error");
-            return;
+        CommandInterpreter lisp = null;
+        Editor ed = editor.getOtherEditor();
+        if (ed != null) {
+            Buffer b = ed.getBuffer();
+            if (b instanceof CommandInterpreter) {
+                CommandInterpreter comint = (CommandInterpreter) b;
+                if (comint.isLisp())
+                    lisp = comint;
+            }
         }
-        Editor ed = findEditor(lisp);
-        if (ed == null)
-            ed = editor.displayInOtherWindow(lisp);
+        if (lisp == null) {
+            lisp = LispShell.findLisp(null);
+            if (lisp == null) {
+                MessageDialog.showMessageDialog("No Lisp shell is running",
+                                                "Error");
+                return;
+            }
+            ed = findEditor(lisp);
+            if (ed == null)
+                ed = editor.displayInOtherWindow(lisp);
+        }
         Position bufEnd = lisp.getEnd();
         bufEnd.getLine().setFlags(STATE_INPUT);
         lisp.insertString(bufEnd, ";;; Evaluating region\n");
