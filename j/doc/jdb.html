@@ -19,7 +19,62 @@
 
 <p>
 
-This page isn't here yet!
+J provides a very simple JPDA-based debugger.
+<p>
+The command <a href="commands.html#jdb">jdb</a>
+(Alt X, "jdb") starts the debugger. Enter the appropriate information in the
+dialog box.
+<p>
+"Main class" is the fully qualified name of the main class of your
+application. For example:
+<pre>
+    org.armedbear.j.Editor</pre>
+<p>
+"Arguments for main class" should contain any command-line arguments to be
+passed to the application. For example:
+<pre>
+    --force-new-instance --no-session Lisp.java</pre>
+<p>
+The value you enter for "Class path" will be passed to the debuggee Java VM as
+the "-classpath" option. Use the platform-specific path delimiter character
+(':' for Unix, ';' for Windows). For example:
+<pre>
+    /home/peter/j/src</pre>
+<p>
+"Java home" is the value of JAVA_HOME for the debuggee VM. The default is
+usually acceptable, unless you have some particular axe to grind.
+<p>
+The "Java executable" is normally just "java".
+<p>
+"Arguments for Java executable" should contain any command-line arguments to be
+passed to the debuggee VM (for example, "-server"). Usually no arguments are
+required.
+<p>
+If the "Start suspended" checkbox is checked, the Java VM will initially be
+suspended, and you will need to use the "run" command to start it.
+<p>
+If the "Start suspended" checkbox is unchecked, the Java VM will start up
+normally. In this case, if you don't have any breakpoints set, a breakpoint
+will automatically be placed on the main() method of your application's main
+class.
+<p>
+"Source path" should contain a list of the directories in which to look for the
+Java source of the code being debugged. You should specify the root directory
+of each package tree that you care about. Use the platform-specific path
+delimiter character (':' for Unix, ';' for Windows). For example:
+<pre>
+    /home/peter/j/src:/home/peter/sun/j2sdk1.4.1_02/src</pre>
+<p>
+All of the textfields in this dialog remember their most recent contents, and,
+like most textfields in j, they have persistent history that can be navigated
+with the up and down arrows (or Ctrl P and Ctrl N).
+<p>
+When you finally click the "OK" button or press Enter, the debugger process
+will start. You'll get a transcript buffer in the lower half of the current
+editor frame, and a modeless control dialog will appear as a separate,
+always-on-top top-level window (if you put it somewhere convenient, it will try
+to remember where it belongs).
+<p>
 
 </body>
 
