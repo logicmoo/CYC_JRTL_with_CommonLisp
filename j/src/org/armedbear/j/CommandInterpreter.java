@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandInterpreter.java,v 1.21 2003-11-24 16:05:33 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.22 2003-12-04 14:56:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -540,49 +540,37 @@ public class CommandInterpreter extends Buffer
 
     public static void shellPreviousPrompt()
     {
-        final Editor editor = Editor.currentEditor();
-        final Buffer buffer = editor.getBuffer();
-        if (buffer instanceof CommandInterpreter) {
-            RE promptRE = ((CommandInterpreter)buffer).getPromptRE();
-            if (promptRE != null) {
-                Position dot = editor.getDot();
-                if (dot != null) {
-                    Line line = dot.getLine().previous();
-                    while (line != null) {
-                        final REMatch match = promptRE.getMatch(line.getText());
-                        if (match != null && match.getStartIndex() == 0) {
-                            // Found it.
-                            Position pos = new Position(line, match.getEndIndex());
-                            editor.moveDotTo(pos);
-                            return;
-                        }
-                        line = line.previous();
-                    }
-                }
-            }
-        }
+        findPrompt(-1);
     }
 
     public static void shellNextPrompt()
     {
+        findPrompt(1);
+    }
+
+    private static final void findPrompt(int direction)
+    {
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();
         if (buffer instanceof CommandInterpreter) {
-            RE promptRE = ((CommandInterpreter)buffer).getPromptRE();
-            if (promptRE != null) {
-                Position dot = editor.getDot();
-                if (dot != null) {
-                    Line line = dot.getLine().next();
-                    while (line != null) {
-                        final REMatch match = promptRE.getMatch(line.getText());
-                        if (match != null && match.getStartIndex() == 0) {
-                            // Found it.
-                            Position pos = new Position(line, match.getEndIndex());
-                            editor.moveDotTo(pos);
-                            return;
+            Position dot = editor.getDot();
+            if (dot != null) {
+                Line line =
+                    direction > 0 ? dot.getLine().next() : dot.getLine().previous();
+                while (line != null) {
+                    int flags = line.flags();
+                    if (flags == STATE_PROMPT || flags == STATE_INPUT) {
+                        RE promptRE = ((CommandInterpreter)buffer).getPromptRE();
+                        if (promptRE != null) {
+                            final REMatch match = promptRE.getMatch(line.getText());
+                            if (match != null && match.getStartIndex() == 0) {
+                                Position pos = new Position(line, match.getEndIndex());
+                                editor.moveDotTo(pos);
+                                return;
+                            }
                         }
-                        line = line.next();
                     }
+                    line = direction > 0 ? line.next() : line.previous();
                 }
             }
         }
