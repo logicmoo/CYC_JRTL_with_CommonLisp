@@ -2,7 +2,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(prog1 prog2 push pop loop
+(export '(prog1 prog2 push pop psetq loop
           the declare declaim locally eval-when
           time))
 
@@ -20,6 +20,15 @@
 
 (defmacro pop (place)
   `(prog1 (car ,place) (setf ,place (cdr ,place))))
+
+(defmacro psetq (&rest args)
+  (do ((l args (cddr l))
+       (forms nil)
+       (bindings nil))
+    ((endp l) (list* 'let* (reverse bindings) (reverse (cons nil forms))))
+    (let ((sym (gensym)))
+      (push (list sym (cadr l)) bindings)
+      (push (list 'setq (car l) sym) forms))))
 
 (defmacro loop (&rest exps)
   (if (and exps (symbolp (car exps)))
