@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.31 2002-12-26 17:13:59 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.32 2002-12-26 17:26:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -943,9 +943,6 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
                 case KeyEvent.VK_KP_LEFT:
-                    left();
-                    e.consume();
-                    return;
                 case KeyEvent.VK_RIGHT:
                 case KeyEvent.VK_KP_RIGHT:
                     textField.getCaret().setVisible(true);
