@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.25 2003-07-06 14:05:56 piso Exp $
+ * $Id: Autoload.java,v 1.26 2003-07-06 14:09:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -195,6 +195,7 @@ public final class Autoload extends Function
         autoload("package-shadowing-symbols", "PackageFunctions");
         autoload("package-use-list", "PackageFunctions");
         autoload("package-used-by-list", "PackageFunctions");
+        autoload("packagep", "PackageFunctions");
         autoload("puthash", "HashTable");
         autoload("remhash", "HashTable");
         autoload("room", "room");
