@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.22 2003-12-19 03:23:38 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: top-level.lisp,v 1.23 2004-01-09 18:20:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -264,7 +264,8 @@
     (let* ((form (funcall *repl-read-form-fun*
                           *standard-input*
                           *standard-output*))
-           (results (multiple-value-list (sys::interactive-eval form))))
+           (results (multiple-value-list (sys::interactive-eval form)))
+           (*print-length* 10))
       (dolist (result results)
         (fresh-line)
         (prin1 result)))))
