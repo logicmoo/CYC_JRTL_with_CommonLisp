@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.18 2003-12-11 20:40:34 piso Exp $
+ * $Id: BuiltInClass.java,v 1.19 2003-12-11 21:06:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,11 +116,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SYMBOL                           = addClass(Symbol.SYMBOL);
     public static final BuiltInClass SYNONYM_STREAM                   = addClass(Symbol.SYNONYM_STREAM);
     public static final BuiltInClass TWO_WAY_STREAM                   = addClass(Symbol.TWO_WAY_STREAM);
-    public static final BuiltInClass UNBOUND_SLOT                     = addClass(Symbol.UNBOUND_SLOT);
-    public static final BuiltInClass UNBOUND_VARIABLE                 = addClass(Symbol.UNBOUND_VARIABLE);
-    public static final BuiltInClass UNDEFINED_FUNCTION               = addClass(Symbol.UNDEFINED_FUNCTION);
     public static final BuiltInClass VECTOR                           = addClass(Symbol.VECTOR);
-    public static final BuiltInClass WARNING                          = addClass(Symbol.WARNING);
 
     public static final StandardClass STANDARD_CLASS =
         new StandardClass(Symbol.STANDARD_CLASS, list1(CLASS_T));
@@ -146,6 +142,12 @@ public class BuiltInClass extends LispClass
         addClass(Symbol.SERIOUS_CONDITION, SERIOUS_CONDITION);
     }
 
+    public static final StandardClass WARNING =
+        new StandardClass(Symbol.WARNING, list1(CONDITION));
+    static {
+        addClass(Symbol.WARNING, WARNING);
+    }
+
     public static final StandardClass ERROR =
         new StandardClass(Symbol.ERROR, list1(SERIOUS_CONDITION));
     static {
@@ -162,6 +164,24 @@ public class BuiltInClass extends LispClass
         new StandardClass(Symbol.CELL_ERROR, list1(ERROR));
     static {
         addClass(Symbol.CELL_ERROR, CELL_ERROR);
+    }
+
+    public static final StandardClass UNBOUND_SLOT =
+        new StandardClass(Symbol.UNBOUND_SLOT, list1(CELL_ERROR));
+    static {
+        addClass(Symbol.UNBOUND_SLOT, UNBOUND_SLOT);
+    }
+
+    public static final StandardClass UNBOUND_VARIABLE =
+        new StandardClass(Symbol.UNBOUND_VARIABLE, list1(CELL_ERROR));
+    static {
+        addClass(Symbol.UNBOUND_VARIABLE, UNBOUND_VARIABLE);
+    }
+
+    public static final StandardClass UNDEFINED_FUNCTION =
+        new StandardClass(Symbol.UNDEFINED_FUNCTION, list1(CELL_ERROR));
+    static {
+        addClass(Symbol.UNDEFINED_FUNCTION, UNDEFINED_FUNCTION);
     }
 
     public static final StandardClass CONTROL_ERROR =
@@ -382,18 +402,16 @@ public class BuiltInClass extends LispClass
         TWO_WAY_STREAM.setCPL(TWO_WAY_STREAM, STREAM, CLASS_T);
         TYPE_ERROR.setCPL(TYPE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                           STANDARD_OBJECT, CLASS_T);
-        UNBOUND_SLOT.setDirectSuperclass(CELL_ERROR);
         UNBOUND_SLOT.setCPL(UNBOUND_SLOT, CELL_ERROR, ERROR, SERIOUS_CONDITION,
-                            CONDITION, CLASS_T);
-        UNBOUND_VARIABLE.setDirectSuperclass(CELL_ERROR);
+                            CONDITION, STANDARD_OBJECT, CLASS_T);
         UNBOUND_VARIABLE.setCPL(UNBOUND_VARIABLE, CELL_ERROR, ERROR,
-                                SERIOUS_CONDITION, CONDITION, CLASS_T);
-        UNDEFINED_FUNCTION.setDirectSuperclass(CELL_ERROR);
+                                SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                                CLASS_T);
         UNDEFINED_FUNCTION.setCPL(UNDEFINED_FUNCTION, CELL_ERROR, ERROR,
-                                  SERIOUS_CONDITION, CONDITION, CLASS_T);
+                                  SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                                  CLASS_T);
         VECTOR.setDirectSuperclasses(list2(ARRAY, SEQUENCE));
         VECTOR.setCPL(VECTOR, ARRAY, SEQUENCE, CLASS_T);
-        WARNING.setDirectSuperclass(CONDITION);
-        WARNING.setCPL(WARNING, CONDITION, CLASS_T);
+        WARNING.setCPL(WARNING, CONDITION, STANDARD_OBJECT, CLASS_T);
     }
 }
