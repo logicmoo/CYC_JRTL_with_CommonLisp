@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.3 2003-07-31 16:55:22 piso Exp $
+ * $Id: CompiledFunction.java,v 1.4 2003-08-01 01:37:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,33 @@ public class CompiledFunction extends Closure
             LispObject body = third;
             return new CompiledFunction(name, lambdaList, body,
                                         new Environment());
+        }
+    };
+
+    private static final Primitive1 LOAD_COMPILED_FUNCTION =
+        new Primitive1("load-compiled-function", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            String className = ((LispString)arg).getValue();
+            if (className.endsWith(".class")) {
+                try {
+                    JavaClassLoader loader = new JavaClassLoader();
+                    Class c = loader.loadClassFromFile(className);
+                    if (c != null) {
+                        Class[] parameterTypes = new Class[0];
+                        java.lang.reflect.Constructor constructor =
+                            c.getConstructor(parameterTypes);
+                        Object[] initargs = new Object[0];
+                        LispObject obj =
+                            (LispObject) constructor.newInstance(initargs);
+                        return obj;
+                    }
+                }
+                catch (Throwable t) {
+                    Debug.trace(t);
+                }
+            }
+            throw new LispError("unable to load ".concat(className));
         }
     };
 
