@@ -2,7 +2,7 @@
  * socket_accept.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: socket_accept.java,v 1.1 2004-05-25 18:11:29 piso Exp $
+ * $Id: socket_accept.java,v 1.2 2004-06-13 17:48:39 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,9 @@ public final class socket_accept extends Primitive1
          ServerSocket serverSocket =
             (ServerSocket) ((JavaObject)first).getObject();
 	 try {
-            Socket socket = serverSocket.accept();
+	   System.out.println(">>>sock try");
+	   Socket socket = serverSocket.accept();
+	   System.out.println(">>>sock acc");
             return new JavaObject(socket);
         }
         catch (Exception e) {
