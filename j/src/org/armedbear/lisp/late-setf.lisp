@@ -1,0 +1,52 @@
+;;; late-setf.lisp
+;;;
+;;; Copyright (C) 2003 Peter Graves
+;;; $Id: late-setf.lisp,v 1.1 2003-10-28 02:28:04 piso Exp $
+;;;
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License
+;;; as published by the Free Software Foundation; either version 2
+;;; of the License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+;;; From CMUCL/SBCL.
+
+(in-package "SYSTEM")
+
+(defmacro define-setf-expander (access-fn lambda-list &body body)
+  (require-type access-fn 'symbol)
+  (let ((whole (gensym "WHOLE-"))
+	(environment (gensym "ENV-")))
+    (multiple-value-bind (body local-decs doc)
+			 (parse-defmacro lambda-list whole body access-fn
+					 'define-setf-expander
+					 :environment environment)
+      `(setf (get ',access-fn 'setf-expander)
+             #'(lambda (,whole ,environment)
+                ,@local-decs
+                (block ,access-fn ,body))))))
+
+(define-setf-expander values (&rest places &environment env)
+  (let ((setters ())
+        (getters ())
+        (all-dummies ())
+        (all-vals ())
+        (newvals ()))
+    (dolist (place places)
+      (multiple-value-bind (dummies vals newval setter getter)
+        (get-setf-expansion place env)
+        (setq all-dummies (append all-dummies dummies)
+              all-vals (append all-vals vals)
+              newvals (append newvals newval))
+        (push setter setters)
+        (push getter getters)))
+    (values all-dummies all-vals newvals
+            `(values ,@(reverse setters)) `(values ,@(reverse getters)))))
