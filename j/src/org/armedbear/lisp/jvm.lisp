@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.230 2004-07-22 13:48:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.231 2004-07-22 14:21:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -958,7 +958,7 @@
 (defun optimize-code ()
   (when *enable-optimization*
     (when *debug*
-      (sys::%format t "----- before optimization -----~%")
+      (%format t "----- before optimization -----~%")
       (print-code))
     (loop
       (let ((changed-p nil))
@@ -967,12 +967,11 @@
         (setf changed-p (or (optimize-3) changed-p))
         (setf changed-p (or (optimize-4) changed-p))
         (setf changed-p (or (optimize-5) changed-p))
-        ;;       (setf changed-p (or (delete-unreachable-code) changed-p))
+        (setf changed-p (or (delete-unreachable-code) changed-p))
         (unless changed-p
           (return))))
-    (delete-unreachable-code)
     (when *debug*
-      (format t "----- after optimization -----~%")
+      (%format t "----- after optimization -----~%")
       (print-code))))
 
 (defun code-bytes (code)
@@ -3177,7 +3176,6 @@
          (label2 (gensym))
          (label3 (gensym))
          (label4 (gensym))
-         (label5 (gensym))
          (cleanup (gensym)))
     (when (contains-return protected-form)
       (error "COMPILE-UNWIND-PROTECT: unhandled case (RETURN)"))
@@ -3190,7 +3188,7 @@
     (emit 'astore values-register)
     (emit 'label `,label2) ; End of protected range.
     (emit 'jsr `,cleanup)
-    (emit 'goto `,label5) ; Jump over handler.
+    (emit 'goto `,label4) ; Jump over handler.
     (emit 'label `,label3) ; Start of exception handler.
     ;; The Throw object is on the runtime stack. Stack depth is 1.
     (emit 'astore exception-register)
@@ -3204,7 +3202,7 @@
       (compile-form subform :target nil)
       (maybe-emit-clear-values subform))
     (emit 'ret return-address-register)
-    (emit 'label `,label5)
+    (emit 'label `,label4)
     ;; Restore multiple values returned by protected form.
     (emit-push-current-thread)
     (emit 'aload values-register)
