@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.124 2003-11-04 03:11:01 piso Exp $
+;;; $Id: boot.lisp,v 1.125 2003-11-07 19:15:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -311,28 +311,6 @@
 	      `(if ,test
 		   (progn ,@forms)
 		   (cond ,@(rest clauses))))))))
-
-
-;;; PROG, PROG* (from GCL)
-
-(defmacro prog (vl &rest body &aux (decl nil))
-  (do ()
-      ((or (endp body)
-           (not (consp (car body)))
-           (not (eq (caar body) 'declare)))
-       `(block nil (let ,vl ,@decl (tagbody ,@body))))
-      (push (car body) decl)
-      (pop body)))
-
-(defmacro prog* (vl &rest body &aux (decl nil))
-  (do ()
-      ((or (endp body)
-           (not (consp (car body)))
-           (not (eq (caar body) 'declare)))
-       `(block nil (let* ,vl ,@decl (tagbody ,@body))))
-      (push (car body) decl)
-      (pop body)))
-
 
 ;;; DOTIMES (from CMUCL)
 (defmacro dotimes ((var count &optional (result nil)) &body body)
