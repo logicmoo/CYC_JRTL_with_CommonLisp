@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.275 2004-08-16 03:29:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.276 2004-08-16 20:36:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -625,7 +625,8 @@
                 reverse nreverse
                 last
                 cons rplaca rplacd
-                copy-list
+                sys::%rplaca sys::%rplacd
+                copy-list copy-tree
                 make-sequence make-list make-array make-package make-hash-table
                 make-string
                 find-package
@@ -686,15 +687,21 @@
   (single-valued-p-init))
 
 (defun single-valued-p (form)
-  (cond ((node-p form)
-         (single-valued-p (node-form form)))
+  (cond ((block-node-p form)
+         (if (equal (block-name form) '(TAGBODY))
+             t
+             (single-valued-p (node-form form))))
         ((atom form)
          t)
-        ((eq (first form) 'if)
-         (and (single-valued-p (second form))
+        ((eq (first form) 'IF)
+         (and ;;(single-valued-p (second form))
               (single-valued-p (third form))
               (single-valued-p (fourth form))))
-        ((memq (car form) '(and or))
+        ((eq (first form) 'PROGN)
+         (single-valued-p (car (last form))))
+        ((memq (first form) '(LET LET*))
+         (single-valued-p (car (last (cddr form)))))
+        ((memq (car form) '(AND OR))
          (every #'single-valued-p (cdr form)))
         (t
          (values (gethash (car form) single-valued-operators)))))
@@ -862,13 +869,13 @@
          (index (pool-class (first args))))
     (inst (instruction-opcode instruction) (u2 index))))
 
-(defun resolve-args (instruction)
+(defun resolve-instruction (instruction)
   (let ((resolver (gethash (instruction-opcode instruction) *resolvers*)))
     (if resolver
         (funcall resolver instruction)
         instruction)))
 
-(defun resolve-opcodes (code)
+(defun resolve-instructions (code)
   (let ((vector (make-array 512 :fill-pointer 0 :adjustable t)))
     (dotimes (index (length code) vector)
       (let ((instruction (svref code index)))
@@ -881,9 +888,9 @@
                    (inst 'putfield (list +lisp-thread-class+ "_values"
                                          "[Lorg/armedbear/lisp/LispObject;")))))
              (dolist (instruction instructions)
-               (vector-push-extend (resolve-args instruction) vector))))
+               (vector-push-extend (resolve-instruction instruction) vector))))
           (t
-           (vector-push-extend (resolve-args instruction) vector)))))))
+           (vector-push-extend (resolve-instruction instruction) vector)))))))
 
 (defun branch-opcode-p (opcode)
   (declare (optimize speed (safety 0)))
@@ -1309,7 +1316,7 @@
   (declare (optimize speed (safety 0)))
   (let ((stream *stream*))
     (dotimes (i (length string))
-      (let ((c (char string i)))
+      (let ((c (schar string i)))
         (if (eql c #\null)
             (progn
               (sys::write-8-bits #xC0 stream)
@@ -1318,29 +1325,31 @@
 
 (defun utf8-length (string)
   (declare (optimize speed (safety 0)))
-  (let ((len 0))
-    (dotimes (i (length string))
-      (incf len (if (eql (char string i) #\null) 2 1)))
-    len))
+  (let ((length (length string)))
+    (dotimes (i length)
+      (when (eql (schar string i) #\null)
+        (incf length)))
+    length))
 
 (defun write-constant-pool-entry (entry)
-  (write-u1 (first entry))
-  (case (first entry)
-    (1 ; UTF8
-     (write-u2 (utf8-length (third entry)))
-     (write-utf8 (third entry)))
-    (3 ; int
-     (write-s4 (second entry)))
-    ((5 6)
-     (write-u4 (second entry))
-     (write-u4 (third entry)))
-    ((9 10 11 12)
-     (write-u2 (second entry))
-     (write-u2 (third entry)))
-    ((7 8)
-     (write-u2 (second entry)))
-    (t
-     (error "WRITE-CP-ENTRY unhandled tag ~D~%" (car entry)))))
+  (let ((tag (first entry)))
+    (write-u1 tag)
+    (case tag
+      (1 ; UTF8
+       (write-u2 (utf8-length (third entry)))
+       (write-utf8 (third entry)))
+      (3 ; int
+       (write-s4 (second entry)))
+      ((5 6)
+       (write-u4 (second entry))
+       (write-u4 (third entry)))
+      ((9 10 11 12)
+       (write-u2 (second entry))
+       (write-u2 (third entry)))
+      ((7 8)
+       (write-u2 (second entry)))
+      (t
+       (error "WRITE-CP-ENTRY unhandled tag ~D~%" tag)))))
 
 (defun write-constant-pool ()
   (write-u2 *pool-count*)
@@ -1418,7 +1427,7 @@
     (emit 'return)
     (finalize-code)
 ;;     (optimize-code)
-    (setf *code* (resolve-opcodes *code*))
+    (setf *code* (resolve-instructions *code*))
     (setf (method-max-stack constructor) (analyze-stack))
     (setf (method-code constructor) (code-bytes *code*))
     (setf (method-handlers constructor) (nreverse *handlers*))
@@ -4056,7 +4065,7 @@
       (finalize-code)
       (optimize-code)
 
-      (setf *code* (resolve-opcodes *code*))
+      (setf *code* (resolve-instructions *code*))
       (setf (method-max-stack execute-method) (analyze-stack))
       (setf (method-code execute-method) (code-bytes *code*))
 
