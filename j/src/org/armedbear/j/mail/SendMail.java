@@ -1,8 +1,8 @@
 /*
  * SendMail.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: SendMail.java,v 1.5 2003-02-13 00:33:49 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: SendMail.java,v 1.6 2003-05-07 18:03:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public final class SendMail extends Buffer
             if (senders != null) {
                 Debug.assertTrue(senders.size() > 0);
                 // Remove user's address from list of senders.
-                for (int i = senders.size()-1; i >= 0; i--) {
+                for (int i = senders.size(); i-- > 0;) {
                     MailAddress a = (MailAddress) senders.get(i);
                     if (a.addressMatches(Mail.getUserMailAddress()))
                         senders.remove(i);
@@ -217,6 +217,20 @@ public final class SendMail extends Buffer
                 }
             }
             removeDuplicateAddresses(group);
+            if (senders != null) {
+                // Make sure we don't duplicate entries in the "To:" header.
+                for (int i = senders.size(); i-- > 0;) {
+                    MailAddress toAddress = (MailAddress) senders.get(i);
+                    for (int j = group.size(); j-- > 0;) {
+                        MailAddress a = (MailAddress) group.get(j);
+                        if (a.equals(toAddress)) {
+                            // It's a duplicate. Remove it from the group.
+                            group.remove(j);
+                            break;
+                        }
+                    }
+                }
+            }
             // Add group to recipients if applicable.
             if (replyToGroup && group.size() > 0)
                 appendAddressHeader("Cc: ", group);
