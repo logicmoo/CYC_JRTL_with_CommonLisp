@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.4 2002-11-04 15:38:57 piso Exp $
+ * $Id: Utilities.java,v 1.5 2002-11-14 15:33:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -799,6 +799,10 @@ public final class Utilities implements Constants
 
     public static boolean deleteRename(File source, File destination)
     {
+        if (!source.isFile()) {
+            Log.warn("deleteRename source file " + source + " does not exist");
+            return false;
+        }
         // The delete/rename operation sometimes fails on NT at first, but then
         // succeeds later, so we do some retries here if necessary.
         for (int i = 0; i < 5; i++) {
@@ -909,7 +913,7 @@ public final class Utilities implements Constants
 
     private static boolean overwriteFile(File source, File destination)
     {
-        if (!source.exists() || !source.isFile())
+        if (!source.isFile())
             return false;
         boolean error = false;
         long length = source.length();
