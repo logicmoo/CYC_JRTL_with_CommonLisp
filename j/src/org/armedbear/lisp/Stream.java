@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.90 2004-10-18 05:29:20 piso Exp $
+ * $Id: Stream.java,v 1.91 2004-10-24 18:05:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -351,20 +351,15 @@ public class Stream extends LispObject
                 if (n < 0)
                     return signal(new EndOfFile(this));
                 char nextChar = (char) n;
-                if (nextChar == ',') {
-                    LispObject obj = readComma();
-                    last.setCdr(obj);
-                    continue;
-                } else if (isTokenDelimiter(nextChar)) {
+                if (isTokenDelimiter(nextChar)) {
                     if (last == null)
                         return signal(new ReaderError("Nothing appears before . in list."));
                     LispObject obj = read(true, NIL, true);
                     last.setCdr(obj);
                     continue;
-                } else {
-                    // normal token beginning with '.'
-                    _unreadChar(nextChar);
                 }
+                // normal token beginning with '.'
+                _unreadChar(nextChar);
             }
             LispObject obj = processChar(c);
             if (obj == null) {
@@ -396,26 +391,6 @@ public class Stream extends LispObject
                 return true;
             default:
                 return currentReadtable().isWhitespace(c);
-        }
-    }
-
-    public LispObject readComma() throws ConditionThrowable
-    {
-        int n = _readChar();
-        if (n < 0)
-            return signal(new EndOfFile(this));
-        char c = (char) n;
-        switch (c) {
-            case '@':
-                return new Cons(Symbol.COMMA_ATSIGN,
-                                new Cons(read(true, NIL, true), NIL));
-            case '.':
-                return new Cons(Symbol.COMMA_DOT,
-                                new Cons(read(true, NIL, true), NIL));
-            default:
-                _unreadChar(c);
-                return new Cons(Symbol.COMMA,
-                                new Cons(read(true, NIL, true), NIL));
         }
     }
 

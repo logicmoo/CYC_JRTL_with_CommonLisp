@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.33 2004-10-13 00:22:19 piso Exp $
+ * $Id: Readtable.java,v 1.34 2004-10-24 18:03:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,8 +66,10 @@ public final class Readtable extends LispObject
         readerMacroFunctions[')']  = LispReader.READ_RIGHT_PAREN;
         readerMacroFunctions['\''] = LispReader.READ_QUOTE;
         readerMacroFunctions['#']  = LispReader.READ_DISPATCH_CHAR;
-        readerMacroFunctions['`']  = LispReader.BACKQUOTE_MACRO;
-        readerMacroFunctions[',']  = LispReader.COMMA_MACRO;
+
+        // BACKQUOTE-MACRO and COMMA-MACRO are defined in backquote.lisp.
+        readerMacroFunctions['`']  = Symbol.BACKQUOTE_MACRO;
+        readerMacroFunctions[',']  = Symbol.COMMA_MACRO;
 
         DispatchTable dt = new DispatchTable();
         dt.functions['(']  = LispReader.SHARP_LEFT_PAREN;

@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.28 2004-10-03 19:46:46 piso Exp $
+ * $Id: LispReader.java,v 1.29 2004-10-24 18:05:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,31 +145,6 @@ public final class LispReader extends Lisp
         }
     };
 
-    // ### backquote-macro
-    public static final ReaderMacroFunction BACKQUOTE_MACRO =
-        new ReaderMacroFunction("backquote-macro", PACKAGE_SYS, false,
-                                "stream character")
-    {
-        public LispObject execute(Stream stream, char ignored)
-            throws ConditionThrowable
-        {
-            return new Cons(Symbol.BACKQUOTE,
-                            new Cons(stream.read(true, NIL, true)));
-        }
-    };
-
-    // ### comma-macro
-    public static final ReaderMacroFunction COMMA_MACRO =
-        new ReaderMacroFunction("comma-macro", PACKAGE_SYS, false,
-                                "stream character")
-    {
-        public LispObject execute(Stream stream, char ignored)
-            throws ConditionThrowable
-        {
-            return stream.readComma();
-        }
-    };
-
     // ### sharp-left-paren
     public static final DispatchMacroFunction SHARP_LEFT_PAREN =
         new DispatchMacroFunction("sharp-left-paren", PACKAGE_SYS, false,
@@ -179,16 +154,19 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             LispObject list = stream.readList();
-            if (n >= 0) {
-                LispObject[] array = new LispObject[n];
-                for (int i = 0; i < n; i++) {
-                    array[i] = list.car();
-                    if (list.cdr() != NIL)
-                        list = list.cdr();
-                }
-                return new SimpleVector(array);
-            } else
-                return new SimpleVector(list);
+            if (_BACKQUOTE_COUNT_.symbolValue().zerop()) {
+                if (n >= 0) {
+                    LispObject[] array = new LispObject[n];
+                    for (int i = 0; i < n; i++) {
+                        array[i] = list.car();
+                        if (list.cdr() != NIL)
+                            list = list.cdr();
+                    }
+                    return new SimpleVector(array);
+                } else
+                    return new SimpleVector(list);
+            }
+            return new Cons(_BQ_VECTOR_FLAG_.symbolValue(), list);
         }
     };
 
