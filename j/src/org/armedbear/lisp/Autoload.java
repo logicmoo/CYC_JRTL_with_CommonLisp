@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.8 2003-06-20 17:24:52 piso Exp $
+ * $Id: Autoload.java,v 1.9 2003-06-20 17:44:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,7 +138,12 @@ public final class Autoload extends Function
     };
 
     static {
+        autoload("%make-hash-table", "org.armedbear.lisp.HashTable");
         autoload("coerce", "org.armedbear.lisp.coerce");
+        autoload("gethash", "org.armedbear.lisp.HashTable");
+        autoload("puthash", "org.armedbear.lisp.HashTable");
+        autoload("remhash", "org.armedbear.lisp.HashTable");
         autoload("room", "org.armedbear.lisp.room");
+        autoload("sxhash", "org.armedbear.lisp.HashTable");
     }
 }
