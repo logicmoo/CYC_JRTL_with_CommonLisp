@@ -138,7 +138,6 @@ public class RuntimeClass extends Lisp {
 
     public static final Fixnum makeLispObject(int i) throws ConditionThrowable
     {
-      Debug.trace("RTC int: " + i);
         return new Fixnum(i);
     }
 
@@ -164,7 +163,6 @@ public class RuntimeClass extends Lisp {
 
     public static final LispObject makeLispObject(boolean i) throws ConditionThrowable
     {
-      Debug.trace("RTC boolean: " + i);
         return i ? T : NIL;
     }
 }
