@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.15 2004-06-13 17:48:39 asimon Exp $
+;;; $Id: compile-system.lisp,v 1.16 2004-06-13 18:16:25 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,31 +34,23 @@
                    "*LISP-HOME* is NIL or invalid.~%  Please set *LISP-HOME* to the full pathname of the directory containing the Lisp system files."))))
   (time
    (let ((*default-pathname-defaults* (pathname *lisp-home*)))
-     (load (compile-file "precompiler.lisp" :record-source-location nil))
-     (load (compile-file "opcodes.lisp" :record-source-location nil))
-     (load (compile-file "jvm.lisp" :record-source-location nil))
+     (load (compile-file "precompiler.lisp"))
+     (load (compile-file "opcodes.lisp"))
+     (load (compile-file "jvm.lisp"))
      ;; Order matters for these files.
-     (mapc #'(lambda (fn) (compile-file fn :record-source-location nil))
-       '("collect.lisp"
+     (mapc #'compile-file '("collect.lisp"
                             "macros.lisp"
                             "loop.lisp"))
      ;; But not for these.
-     (mapc #'(lambda (file-spec)
-	       (destructuring-bind (fn record)
-		 (if (consp file-spec)
-		   file-spec
-		   (list file-spec t))
-		 (compile-file fn :record-source-location record)))
-
-		       '("adjoin.lisp"
+     (mapc #'compile-file '("adjoin.lisp"
                             "and.lisp"
                             "apropos.lisp"
-                            ("arrays.lisp" nil)
+                            "arrays.lisp"
                             "asdf.lisp"
                             "assert.lisp"
                             "assoc.lisp"
                             "autoloads.lisp"
-                            ("backquote.lisp" nil)
+                            "backquote.lisp"
                             "bit-array-ops.lisp"
                             "boole.lisp"
                             "boot.lisp"
@@ -70,60 +62,60 @@
                             ;;"clos.lisp"
                             "coerce.lisp"
                             "compile-file.lisp"
-                            ("compiler-macro.lisp" nil)
-                            ("concatenate.lisp" nil)
+                            "compiler-macro.lisp"
+                            "concatenate.lisp"
                             "cond.lisp"
                             "copy-list.lisp"
                             "copy-seq.lisp"
                             "copy-symbol.lisp"
                             "count.lisp"
-                            ("debug.lisp" nil)
-                            ("define-modify-macro.lisp" nil)
+                            "debug.lisp"
+                            "define-modify-macro.lisp"
                             "define-symbol-macro.lisp"
-                            ("defpackage.lisp" nil)
+                            "defpackage.lisp"
                             ;;"defsetf.lisp"
-                            ("defstruct.lisp" nil)
+                            "defstruct.lisp"
                             "deftype.lisp"
                             "delete-duplicates.lisp"
-                            ("delete.lisp" nil)
+                            "delete.lisp"
                             "deposit-field.lisp"
-                            ("destructuring-bind.lisp" nil)
+                            "destructuring-bind.lisp"
                             "directory.lisp"
                             "do-all-symbols.lisp"
                             "do-external-symbols.lisp"
                             "do-symbols.lisp"
                             "do.lisp"
-                            ("documentation.lisp" nil)
+                            "documentation.lisp"
                             "dolist.lisp"
                             "dotimes.lisp"
                             "dribble.lisp"
                             "dump-class.lisp"
-                            ("early-defuns.lisp" nil)
+                            "early-defuns.lisp"
                             "enough-namestring.lisp"
                             "ensure-directories-exist.lisp"
-                            ("error.lisp" nil)
+                            "error.lisp"
                             "fill.lisp"
                             "find-all-symbols.lisp"
                             "find.lisp"
-                            ("fixme.lisp" nil)
+                            "fixme.lisp"
                             "format.lisp"
                             "gentemp.lisp"
                             "gray-streams.lisp"
                             "inspect.lisp"
                             ;;"j.lisp"
                             "java.lisp"
-                            ("late-setf.lisp" nil)
+                            "late-setf.lisp"
                             "lcm.lisp"
                             "ldb.lisp"
-                            ("ldiff.lisp" nil)
+                            "ldiff.lisp"
                             "list-length.lisp"
-                            ("list.lisp" nil)
+                            "list.lisp"
                             "load.lisp"
-                            ("make-hash-table.lisp" nil)
+                            "make-hash-table.lisp"
                             "make-load-form-saving-slots.lisp"
-                            ("make-sequence.lisp" nil)
+                            "make-sequence.lisp"
                             "make-string-output-stream.lisp"
-                            ("make-string.lisp" nil)
+                            "make-string.lisp"
                             "map-into.lisp"
                             "map.lisp"
                             "map1.lisp"
@@ -144,7 +136,7 @@
                             "parse-namestring.lisp"
                             "pathnames.lisp"
                             "pprint.lisp"
-                            ("print.lisp" nil)
+                            "print.lisp"
                             ;;"print-object.lisp"
                             "print-unreadable-object.lisp"
                             "profiler.lisp"
@@ -157,18 +149,18 @@
                             "remove-duplicates.lisp"
                             "remove.lisp"
                             "replace.lisp"
-                            ("restart.lisp" nil)
+                            "restart.lisp"
                             "revappend.lisp"
                             ;;"rt.lisp"
                             ;;"run-benchmarks.lisp"
                             "run-shell-command.lisp"
                             ;;"runtime-class.lisp"
                             "search.lisp"
-                            ("sequences.lisp" nil)
-                            ("setf.lisp" nil)
+                            "sequences.lisp"
+                            "setf.lisp"
                             "sets.lisp"
                             "shiftf.lisp"
-                            ("signal.lisp" nil)
+                            "signal.lisp"
                             "socket.lisp"
                             "sort.lisp"
                             "step.lisp"
@@ -176,14 +168,14 @@
                             "sublis.lisp"
                             "subst.lisp"
                             "substitute.lisp"
-                            ;("subtypep.lisp" nil)
+                            "subtypep.lisp"
                             "tailp.lisp"
                             "time.lisp"
                             "top-level.lisp"
                             "trace.lisp"
                             "translate-logical-pathname.lisp"
                             "tree-equal.lisp"
-                            ("typep.lisp" nil)
+                            "typep.lisp"
                             "upgraded-complex-part-type.lisp"
                             "with-accessors.lisp"
                             "with-hash-table-iterator.lisp"
