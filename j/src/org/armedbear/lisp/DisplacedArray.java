@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.21 2004-02-14 15:33:10 piso Exp $
+ * $Id: DisplacedArray.java,v 1.22 2004-02-14 17:28:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ public final class DisplacedArray extends AbstractArray
     private final int size;
     private final AbstractArray array;
     private final int offset;
+    private final boolean stringp;
 
     private int fillPointer = -1; // -1 indicates no fill pointer.
 
@@ -36,6 +37,7 @@ public final class DisplacedArray extends AbstractArray
         size = computeTotalSize(dimv);
         this.array = array;
         this.offset = offset;
+        stringp = (dimv.length == 1 && array.stringp());
     }
 
     private static int computeTotalSize(int[] dimensions)
@@ -78,16 +80,22 @@ public final class DisplacedArray extends AbstractArray
 
     public LispObject STRINGP()
     {
-        if (dimv.length == 1)
-            return array.STRINGP();
-        return NIL;
+        return stringp ? T : NIL;
     }
 
     public boolean stringp()
     {
-        if (dimv.length == 1)
-            return array.stringp();
-        return false;
+        return stringp;
+    }
+
+    public char[] chars() throws ConditionThrowable
+    {
+        if (!stringp)
+            signal(new TypeError(this, Symbol.STRING));
+        char[] chars = new char[size];
+        Debug.assertTrue(array.stringp());
+        System.arraycopy(array.chars(), offset, chars, 0, size);
+        return chars;
     }
 
     public boolean vectorp()

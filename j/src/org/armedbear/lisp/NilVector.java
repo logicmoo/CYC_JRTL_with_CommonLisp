@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.2 2004-02-12 01:44:19 piso Exp $
+ * $Id: NilVector.java,v 1.3 2004-02-14 17:26:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,13 @@ public final class NilVector extends AbstractVector
     public NilVector(int capacity) throws ConditionThrowable
     {
         this.capacity = capacity;
+    }
+
+    public char[] chars() throws ConditionThrowable
+    {
+        if (capacity != 0)
+            accessError();
+        return new char[0];
     }
 
     public LispObject typeOf()
