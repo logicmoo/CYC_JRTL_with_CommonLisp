@@ -29,6 +29,7 @@ arrayp
 ash
 assert
 assoc
+atan
 atom
 bit
 bit-vector-p
@@ -381,6 +382,7 @@ pathname-type
 pathname-version
 pathnamep
 peek-char
+phase
 plusp
 pop
 position
