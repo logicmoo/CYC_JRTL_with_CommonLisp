@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.9 2004-03-04 01:55:14 piso Exp $
+ * $Id: NilVector.java,v 1.10 2004-03-15 19:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,20 +56,20 @@ public final class NilVector extends AbstractString
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type instanceof Symbol) {
-            if (type == Symbol.NIL_VECTOR)
-                return T;
-            if (type == Symbol.SIMPLE_STRING)
-                return T;
-            if (type == Symbol.STRING)
-                return T;
-        }
-        if (type instanceof LispClass) {
-            if (type == BuiltInClass.NIL_VECTOR)
-                return T;
-            if (type == BuiltInClass.STRING)
-                return T;
-        }
+        if (type == Symbol.NIL_VECTOR)
+            return T;
+        if (type == Symbol.SIMPLE_STRING)
+            return T;
+        if (type == Symbol.STRING)
+            return T;
+        if (type == Symbol.SIMPLE_ARRAY)
+            return T;
+        if (type == BuiltInClass.NIL_VECTOR)
+            return T;
+        if (type == BuiltInClass.STRING)
+            return T;
+        if (type == BuiltInClass.SIMPLE_ARRAY)
+            return T;
         return super.typep(type);
     }
 
