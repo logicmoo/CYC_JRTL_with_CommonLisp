@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.19 2003-12-11 21:06:34 piso Exp $
+ * $Id: BuiltInClass.java,v 1.20 2003-12-12 13:40:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,12 +111,17 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass STRING                           = addClass(Symbol.STRING);
     public static final BuiltInClass STRING_STREAM                    = addClass(Symbol.STRING_STREAM);
     public static final BuiltInClass STRUCTURE_CLASS                  = addClass(Symbol.STRUCTURE_CLASS);
-    public static final BuiltInClass STRUCTURE_OBJECT                 = addClass(Symbol.STRUCTURE_OBJECT);
     public static final BuiltInClass STYLE_WARNING                    = addClass(Symbol.STYLE_WARNING);
     public static final BuiltInClass SYMBOL                           = addClass(Symbol.SYMBOL);
     public static final BuiltInClass SYNONYM_STREAM                   = addClass(Symbol.SYNONYM_STREAM);
     public static final BuiltInClass TWO_WAY_STREAM                   = addClass(Symbol.TWO_WAY_STREAM);
     public static final BuiltInClass VECTOR                           = addClass(Symbol.VECTOR);
+
+    public static final StructureClass STRUCTURE_OBJECT =
+        new StructureClass(Symbol.STRUCTURE_OBJECT, list1(CLASS_T));
+    static {
+        addClass(Symbol.STRUCTURE_OBJECT, STRUCTURE_OBJECT);
+    }
 
     public static final StandardClass STANDARD_CLASS =
         new StandardClass(Symbol.STANDARD_CLASS, list1(CLASS_T));
@@ -390,7 +395,6 @@ public class BuiltInClass extends LispClass
         STRUCTURE_CLASS.setDirectSuperclass(CLASS);
         STRUCTURE_CLASS.setCPL(STRUCTURE_CLASS, CLASS, STANDARD_OBJECT,
                                CLASS_T);
-        STRUCTURE_OBJECT.setDirectSuperclass(CLASS_T);
         STRUCTURE_OBJECT.setCPL(STRUCTURE_OBJECT, CLASS_T);
         STYLE_WARNING.setDirectSuperclass(WARNING);
         STYLE_WARNING.setCPL(STYLE_WARNING, WARNING, CONDITION, CLASS_T);
