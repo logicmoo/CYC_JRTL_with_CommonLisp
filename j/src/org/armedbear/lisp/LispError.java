@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispError.java,v 1.7 2003-09-20 17:02:04 piso Exp $
+ * $Id: LispError.java,v 1.8 2003-09-21 02:04:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,11 @@ public class LispError extends Condition
     {
     }
 
+    public LispError(LispObject initArgs)
+    {
+        this(); // FIXME
+    }
+
     public LispError(String message)
     {
         super(message);
@@ -45,6 +50,8 @@ public class LispError extends Condition
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.ERROR)
+            return T;
+        if (type == BuiltInClass.ERROR)
             return T;
         return super.typep(type);
     }

@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleCondition.java,v 1.4 2003-09-20 17:02:05 piso Exp $
+ * $Id: SimpleCondition.java,v 1.5 2003-09-21 02:03:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,11 @@ public class SimpleCondition extends Condition
     {
     }
 
+    public SimpleCondition(LispObject initArgs)
+    {
+        this(); // FIXME
+    }
+
     public SimpleCondition(String message)
     {
         super(message);
@@ -45,6 +50,8 @@ public class SimpleCondition extends Condition
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.CONDITION)
+            return T;
+        if (type == BuiltInClass.CONDITION)
             return T;
         return super.typep(type);
     }
