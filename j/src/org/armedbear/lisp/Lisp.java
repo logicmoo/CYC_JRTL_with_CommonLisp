@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.299 2004-11-06 20:07:08 piso Exp $
+ * $Id: Lisp.java,v 1.300 2004-11-12 14:01:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1968,7 +1968,13 @@ public abstract class Lisp
         }
     };
 
-    public static final LispObject UNBOUND_SLOT_VALUE = new LispObject();
+    public static final LispObject UNBOUND_SLOT_VALUE = new LispObject()
+    {
+        public String writeToString()
+        {
+            return "#<UNBOUND>";
+        }
+    };
 
     public static final Symbol _SLOT_UNBOUND_ =
         internConstant("+SLOT-UNBOUND+", PACKAGE_SYS, UNBOUND_SLOT_VALUE);
