@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.22 2003-11-13 17:48:19 piso Exp $
+ * $Id: LispThread.java,v 1.23 2003-11-15 15:53:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -296,19 +296,21 @@ public final class LispThread extends LispObject
             try {
                 for (int i = stack.size(); i-- > 0;) {
                     StackFrame frame = (StackFrame) stack.get(i);
-                    LispObject obj = NIL;
-                    LispObject[] argv = frame.getArgumentVector();
-                    for (int j = argv.length; j-- > 0;)
-                        obj = new Cons(argv[j], obj);
-                    LispObject functional = frame.getFunctional();
-                    if (functional instanceof Functional &&
-                        ((Functional)functional).getLambdaName() != null)
-                        obj = new Cons(((Functional)functional).getLambdaName(), obj);
-                    else
-                        obj = new Cons(functional, obj);
-                    result = new Cons(obj, result);
-                    if (limit > 0 && ++count == limit)
-                        break;
+                    if (frame != null) {
+                        LispObject obj = NIL;
+                        LispObject[] argv = frame.getArgumentVector();
+                        for (int j = argv.length; j-- > 0;)
+                            obj = new Cons(argv[j], obj);
+                        LispObject functional = frame.getFunctional();
+                        if (functional instanceof Functional &&
+                            ((Functional)functional).getLambdaName() != null)
+                            obj = new Cons(((Functional)functional).getLambdaName(), obj);
+                        else
+                            obj = new Cons(functional, obj);
+                        result = new Cons(obj, result);
+                        if (limit > 0 && ++count == limit)
+                            break;
+                    }
                 }
             }
             catch (Throwable t) {
