@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.15 2002-12-03 17:35:02 piso Exp $
+ * $Id: Buffer.java,v 1.16 2002-12-08 01:26:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -729,7 +729,8 @@ public class Buffer extends SystemBuffer
         String newName = f.canonicalPath();
         if (newName == null)
             return;
-        String oldName = canonicalPath();
+        File oldFile = getFile();
+        String oldName = oldFile != null ? oldFile.canonicalPath() : null;
         setFile(f);
         type = TYPE_NORMAL;
         title = null;
@@ -942,7 +943,7 @@ public class Buffer extends SystemBuffer
                         lineSeparator = System.getProperty("line.separator");
                     }
                     renumberOriginal();
-                    setModeFromFilename(canonicalPath());
+                    setModeFromFilename(file.canonicalPath());
                     setLoaded(true);
                 }
             }
@@ -1288,7 +1289,7 @@ public class Buffer extends SystemBuffer
             if (message != null)
                 MessageDialog.showMessageDialog(message, where);
             // Display summary message.
-            message = "Unable to save " + canonicalPath();
+            message = "Unable to save " + file.canonicalPath();
             MessageDialog.showMessageDialog(message, where);
             return false;
         }
@@ -1327,7 +1328,7 @@ public class Buffer extends SystemBuffer
         String theme = Editor.preferences().getStringProperty(Property.THEME);
         if (theme != null) {
             if (Utilities.isFilenameAbsolute(theme)) {
-                if (canonicalPath().equals(File.getInstance(theme).canonicalPath())) {
+                if (file.canonicalPath().equals(File.getInstance(theme).canonicalPath())) {
                     Editor.loadPreferences();
                     repaint = true;
                 }
@@ -1467,7 +1468,7 @@ public class Buffer extends SystemBuffer
                 MessageDialog.showMessageDialog(message, title);
 
             // Display summary message.
-            message = "Unable to save " + canonicalPath();
+            message = "Unable to save " + file.canonicalPath();
             MessageDialog.showMessageDialog(message, title);
         }
 

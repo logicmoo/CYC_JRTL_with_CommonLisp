@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.8 2002-12-07 10:13:25 piso Exp $
+ * $Id: Directory.java,v 1.9 2002-12-08 01:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -359,8 +359,9 @@ public final class Directory extends Buffer
                 String cp = f.getCanonicalPath();
                 String ap = f.getAbsolutePath();
                 if (!cp.equals(ap)) {
-                    if (cp.startsWith(canonicalPath() + LocalFile.getSeparator()))
-                        de.setLinkedTo(cp.substring(canonicalPath().length()+1));
+                    final String canonicalPath = getFile().canonicalPath();
+                    if (cp.startsWith(canonicalPath + LocalFile.getSeparator()))
+                        de.setLinkedTo(cp.substring(canonicalPath.length()+1));
                     else
                         de.setLinkedTo(cp);
                 }
@@ -603,7 +604,7 @@ public final class Directory extends Buffer
                     // Local file.
                     Process process = null;
                     if (Platform.isPlatformUnix()) {
-                        String cmd = "(\\cd \"" + canonicalPath() + "\" && \\ls " + flags;
+                        String cmd = "(\\cd \"" + file.canonicalPath() + "\" && \\ls " + flags;
                         if (limitPattern != null && limitPattern.length() != 0)
                             cmd += " -d " + limitPattern;
                         cmd += ")";
@@ -611,7 +612,7 @@ public final class Directory extends Buffer
                         process = Runtime.getRuntime().exec(cmdarray);
                     } else {
                         // Windows.
-                        String cp = canonicalPath();
+                        String cp = file.canonicalPath();
                         // Convert "C:\" into "//c" for Cygwin ls.
                         if (cp.length() == 3 && cp.charAt(1) == ':' && cp.charAt(2) == '\\')
                             cp = "//" + Character.toLowerCase(cp.charAt(0));
@@ -639,7 +640,7 @@ public final class Directory extends Buffer
                     dff = new DirectoryFilenameFilter(limitPattern);
                 boolean dirIsRoot = false;
                 if (Platform.isPlatformWindows()) {
-                    String cp = canonicalPath();
+                    String cp = file.canonicalPath();
                     if (cp.length() == 3 && cp.endsWith(":\\")) // "C:\"
                         dirIsRoot = true;
                 }
@@ -845,12 +846,13 @@ public final class Directory extends Buffer
             upDir();
             return;
         }
-        if (getFile().isRemote()) {
-            String fullpath = canonicalPath();
+        final File dir = getFile();
+        if (dir.isRemote()) {
+            String fullpath = dir.canonicalPath();
             if (!fullpath.endsWith("/"))
                 fullpath += "/";
             fullpath += name;
-            File newFile = File.getInstance(getFile(), fullpath);
+            File newFile = File.getInstance(dir, fullpath);
             Buffer buf = Editor.getBufferList().findBuffer(newFile);
             if (buf != null) {
                 editor.makeNext(buf);
@@ -867,7 +869,7 @@ public final class Directory extends Buffer
             if (isDirectory) {
                 setBusy(true);
                 history.truncate();
-                history.append(getFile(),
+                history.append(dir,
                     getName(editor.getDotLine()), editor.getDotOffset());
                 history.reset();
                 empty();
@@ -1601,7 +1603,8 @@ public final class Directory extends Buffer
             return;
         }
         if (status == 2) {
-            MessageDialog.showMessageDialog(canonicalPath() + " is a directory",
+            MessageDialog.showMessageDialog(
+                sourceFile.canonicalPath() + " is a directory",
                 "Get File");
             return;
         }
@@ -1671,7 +1674,8 @@ public final class Directory extends Buffer
 
     public String getTitle()
     {
-        title = canonicalPath();
+        File dir = getFile();
+        title = dir.canonicalPath();
         if (limitPattern != null) {
             title += LocalFile.getSeparator();
             title += limitPattern;
@@ -1683,9 +1687,8 @@ public final class Directory extends Buffer
             title += "date)";
         else if (sortBy == SORT_BY_SIZE)
             title += "size)";
-        if (getFile().isRemote())
-            title += "   " + getFile().getHostName();
-
+        if (dir.isRemote())
+            title += "   " + dir.getHostName();
         return title;
     }
 
