@@ -1,8 +1,0 @@
-bsh.help.unset = "usage: unset( name )";
-
-unset( String name ) {
-	if ( arg == null )
-		return;
-
-	this.caller.namespace.setVariable(name, null);
-}

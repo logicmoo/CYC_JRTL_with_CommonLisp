@@ -1,9 +1,0 @@
-
-bsh.help.show = "usage: show()";
-
-show() {
-	if ( bsh.show == void )
-		bsh.show = false;
-
-	bsh.show = !bsh.show;
-}

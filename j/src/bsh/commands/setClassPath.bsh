@@ -1,9 +1,0 @@
-
-bsh.help.setClassPath= "usage: setClassPath( URL [] )";
-
-import bsh.BshClassManager;
-
-setClassPath( urls ) {
-	BshClassManager.getClassManager().setClassPath( urls );
-}
-

@@ -1,8 +1,0 @@
-
-bsh.help.exit = "usage: exit()";
-
-exit() {
-	// shutdown Java VM unless flagged
-	if ( bsh.system.shutdownOnExit != false )
-		System.exit(0);
-}
