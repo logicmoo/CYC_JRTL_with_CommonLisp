@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.350 2003-08-25 14:56:33 piso Exp $
+ * $Id: Primitives.java,v 1.351 2003-08-25 17:33:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,7 @@
 
 package org.armedbear.lisp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -104,8 +98,6 @@ public final class Primitives extends Module
     private static final int RPLACA                     = 60;
     private static final int RPLACD                     = 61;
     private static final int SET                        = 62;
-    private static final int _RPLACA                    = 63;
-    private static final int _RPLACD                    = 64;
 
     private Primitives()
     {
@@ -174,8 +166,6 @@ public final class Primitives extends Module
         definePrimitive2("rplaca", RPLACA);
         definePrimitive2("rplacd", RPLACD);
         definePrimitive2("set", SET);
-        definePrimitive2("%rplaca", _RPLACA);
-        definePrimitive2("%rplacd", _RPLACD);
     }
 
     // SpecialOperator
@@ -436,12 +426,6 @@ public final class Primitives extends Module
             case RPLACD:                        // ### rplacd
                 first.setCdr(second);
                 return first;
-            case _RPLACA:                       // ### %rplaca
-                first.setCar(second);
-                return second;
-            case _RPLACD:                       // ### %rplacd
-                first.setCdr(second);
-                return second;
             case SET:                           // ### set
                 checkSymbol(first).setSymbolValue(second);
                 return second;
@@ -4354,27 +4338,6 @@ public final class Primitives extends Module
                 result = result.or(n);
             }
             return number(result);
-        }
-    };
-
-    // ### make-socket
-    // make-socket host port => stream
-    private static final Primitive2 MAKE_SOCKET = new Primitive2("make-socket") {
-        public LispObject execute(LispObject first, LispObject second) throws LispError
-        {
-            String host = LispString.getValue(first);
-            int port = Fixnum.getValue(second);
-            try {
-                Socket socket = new Socket(host, port);
-                CharacterInputStream in =
-                    new CharacterInputStream(socket.getInputStream());
-                CharacterOutputStream out =
-                    new CharacterOutputStream(socket.getOutputStream());
-                return new TwoWayStream(in, out);
-            }
-            catch (Exception e) {
-                throw new LispError(e.getMessage());
-            }
         }
     };
 
