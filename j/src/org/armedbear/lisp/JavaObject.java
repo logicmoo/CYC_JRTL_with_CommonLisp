@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaObject.java,v 1.10 2003-12-05 02:45:44 piso Exp $
+ * $Id: JavaObject.java,v 1.11 2003-12-09 19:04:59 dmcnaught Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,11 @@ public class JavaObject extends LispObject
         return equal(other);
     }
 
+    public Fixnum sxhash()
+    {
+        return new Fixnum(obj.hashCode() & 0x7ffffff);
+    }
+    
     public String toString()
     {
         if (obj instanceof ConditionThrowable)
