@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.109 2004-03-07 17:44:24 piso Exp $
+ * $Id: Symbol.java,v 1.110 2004-03-07 18:08:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -419,17 +419,20 @@ public class Symbol extends LispObject
             if (readtableCase == Keyword.UPCASE) {
                 if (printCase == Keyword.DOWNCASE)
                     return name.toLowerCase();
-                else if (printCase == Keyword.CAPITALIZE)
+                if (printCase == Keyword.CAPITALIZE)
                     return capitalize(name, readtableCase);
-                else
-                    return name;
+                return name;
             } else if (readtableCase == Keyword.DOWNCASE) {
+                // "When the readtable case is :DOWNCASE, uppercase characters
+                // are printed in their own case, and lowercase characters are
+                // printed in the case specified by *PRINT-CASE*." (22.1.3.3.2)
                 if (printCase == Keyword.DOWNCASE)
-                    return name.toUpperCase();
-                else if (printCase == Keyword.CAPITALIZE)
-                    return capitalize(name, readtableCase);
-                else
                     return name;
+                if (printCase == Keyword.UPCASE)
+                    return name.toUpperCase();
+                if (printCase == Keyword.CAPITALIZE)
+                    return capitalize(name, readtableCase);
+                return name;
             } else if (readtableCase == Keyword.PRESERVE) {
                 return name;
             } else // INVERT
@@ -519,9 +522,9 @@ public class Symbol extends LispObject
 
     public static final String invert(String s)
     {
-        // "When the readtable case is :invert, the case of all alphabetic
+        // "When the readtable case is :INVERT, the case of all alphabetic
         // characters in single case symbol names is inverted. Mixed-case
-        // symbol names are printed as is."
+        // symbol names are printed as is." (22.1.3.3.2)
         final int limit = s.length();
         final int LOWER = 1;
         final int UPPER = 2;
