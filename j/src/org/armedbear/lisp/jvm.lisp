@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.243 2004-07-26 05:31:54 piso Exp $
+;;; $Id: jvm.lisp,v 1.244 2004-07-26 15:38:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -435,7 +435,8 @@
 
 (defun label (symbol)
   (declare (optimize speed (safety 0)))
-  (emit 'label symbol))
+  (emit 'label symbol)
+  (setf (symbol-value symbol) nil))
 
 (defconstant +java-string+ "Ljava/lang/String;")
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
@@ -1020,49 +1021,54 @@
 
 ;; Remove unused labels.
 (defun optimize-1 ()
-  (let ((locally-changed-p nil)
-        (branch-targets ()))
-    ;; Make a list of the labels that are actually branched to.
-    (dotimes (i (length *code*))
-      (let ((instruction (svref *code* i)))
+  (let ((code *code*)
+        (changed nil)
+        (marker (gensym)))
+    ;; Mark the labels that are actually branched to.
+    (dotimes (i (length code))
+      (let ((instruction (svref code i)))
         (when (branch-opcode-p (instruction-opcode instruction))
-          (push (car (instruction-args instruction)) branch-targets))))
+          (let ((label (car (instruction-args instruction))))
+            (set label marker)))))
     ;; Add labels used for exception handlers.
     (dolist (handler *handlers*)
-      (push (handler-from handler) branch-targets)
-      (push (handler-to handler) branch-targets)
-      (push (handler-code handler) branch-targets))
+      (set (handler-from handler) marker)
+      (set (handler-to handler) marker)
+      (set (handler-code handler) marker))
     ;; Remove labels that are not used as branch targets.
-    (dotimes (i (length *code*))
-      (let ((instruction (svref *code* i)))
+    (dotimes (i (length code))
+      (let ((instruction (svref code i)))
         (when (= (instruction-opcode instruction) 202) ; LABEL
           (let ((label (car (instruction-args instruction))))
-            (unless (memq label branch-targets)
-              (clear instruction)
-              (setf locally-changed-p t))))))
-    (when locally-changed-p
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+            (unless (eq (symbol-value label) marker)
+              (setf (svref code i) nil)
+              (setf changed t))))))
+    (when changed
+      (setf *code* (delete nil code))
       t)))
 
 (defun optimize-2 ()
-  (let ((locally-changed-p nil))
-    (dotimes (i (length *code*))
-      (let ((instruction (svref *code* i)))
-        (when (and (< i (1- (length *code*)))
+  (let* ((code *code*)
+         (limit (1- (length code)))
+         (changed nil))
+    (dotimes (i limit)
+      (let ((instruction (svref code i))
+            next-instruction)
+        (when (and instruction
                    (= (instruction-opcode instruction) 167) ; GOTO
-                   (let ((next-instruction (svref *code* (1+ i))))
-                     (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
-                                 (eq (car (instruction-args instruction))
-                                     (car (instruction-args next-instruction))))
-                            ;; GOTO next instruction.
-                            (clear instruction)
-                            (setf locally-changed-p t))
-                           ((= (instruction-opcode next-instruction) 167) ; GOTO
-                            ;; One GOTO right after another.
-                            (clear next-instruction)
-                            (setf locally-changed-p t))))))))
-    (when locally-changed-p
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+                   (setf next-instruction (svref code (1+ i))))
+          (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
+                      (eq (car (instruction-args instruction))
+                          (car (instruction-args next-instruction))))
+                 ;; GOTO next instruction: we don't need this one.
+                 (setf (svref code i) nil)
+                 (setf changed t))
+                ((= (instruction-opcode next-instruction) 167) ; GOTO
+                 ;; Two GOTOs in a row: the next instruction is unreachable.
+                 (setf (svref code (1+ i)) nil)
+                 (setf changed t))))))
+    (when changed
+      (setf *code* (delete nil code))
       t)))
 
 ;; Reduce GOTOs.
@@ -2596,7 +2602,6 @@
          env-register)
     (setf (block-target block) target)
     (push block *blocks*)
-;;     (when (contains-return (cddr (block-form block)))
     (when (block-return-p block)
       ;; Save current dynamic environment.
       (setf env-register (allocate-register))
@@ -2605,12 +2610,9 @@
       (emit 'astore env-register))
     (setf (block-catch-tag block) (gensym))
     (let* ((*register* *register*)
-           (tag-register (allocate-register))
            (BEGIN-BLOCK (gensym))
            (END-BLOCK (gensym))
-           (BEGIN-HANDLER (gensym))
-           (END-HANDLER (gensym))
-           (RETHROW (gensym)))
+           (BLOCK-EXIT (block-exit block)))
       (label BEGIN-BLOCK) ; Start of protected range.
       ;; Implicit PROGN.
       (do ((forms (cddr (block-form block)) (cdr forms)))
@@ -2619,30 +2621,31 @@
         (when (cdr forms)
           (maybe-emit-clear-values (car forms))))
       (label END-BLOCK) ; End of protected range.
-      (emit 'goto END-HANDLER) ; Jump over handler (if any).
+      (emit 'goto BLOCK-EXIT) ; Jump over handler (if any).
       (when (block-non-local-return-p block)
-        ; Start of handler for Return.
-        (label BEGIN-HANDLER)
-        ;; The Return object is on the runtime stack. Stack depth is 1.
-        (emit 'dup) ; Stack depth is 2.
-        (emit 'getfield +lisp-return-class+ "tag" +lisp-object+) ; Still 2.
-        (compile-form `',(block-catch-tag block) :target :stack) ; Tag. Stack depth is 3.
-        ;; If it's not the tag we're looking for...
-        (emit 'if_acmpne RETHROW) ; Stack depth is 1.
-        (emit 'getfield +lisp-return-class+ "result" +lisp-object+)
-        (emit-move-from-stack target) ; Stack depth is 0.
-        (emit 'goto END-HANDLER)
-        (label RETHROW)
-        ;; Not the tag we're looking for.
-        (emit 'athrow)
-        ;; Finally...
-        (push (make-handler :from BEGIN-BLOCK
-                            :to END-BLOCK
-                            :code BEGIN-HANDLER
-                            :catch-type (pool-class +lisp-return-class+))
-              *handlers*))
-      (label END-HANDLER))
-    (label (block-exit block))
+        ; We need a handler to catch non-local RETURNs.
+        (let ((HANDLER (gensym))
+              (RETHROW (gensym)))
+          (label HANDLER)
+          ;; The Return object is on the runtime stack. Stack depth is 1.
+          (emit 'dup) ; Stack depth is 2.
+          (emit 'getfield +lisp-return-class+ "tag" +lisp-object+) ; Still 2.
+          (compile-form `',(block-catch-tag block) :target :stack) ; Tag. Stack depth is 3.
+          ;; If it's not the tag we're looking for...
+          (emit 'if_acmpne RETHROW) ; Stack depth is 1.
+          (emit 'getfield +lisp-return-class+ "result" +lisp-object+)
+          (emit-move-from-stack target) ; Stack depth is 0.
+          (emit 'goto BLOCK-EXIT)
+          (label RETHROW)
+          ;; Not the tag we're looking for.
+          (emit 'athrow)
+          ;; Finally...
+          (push (make-handler :from BEGIN-BLOCK
+                              :to END-BLOCK
+                              :code HANDLER
+                              :catch-type (pool-class +lisp-return-class+))
+                *handlers*)))
+      (label BLOCK-EXIT))
     (when env-register
       ;; We saved the dynamic environment above. Restore it now.
       (emit 'aload *thread*)
