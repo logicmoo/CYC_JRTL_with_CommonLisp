@@ -2,7 +2,7 @@
  * JavaTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaTagger.java,v 1.3 2002-11-10 01:07:02 piso Exp $
+ * $Id: JavaTagger.java,v 1.4 2002-11-26 02:07:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -300,10 +300,14 @@ public class JavaTagger extends Tagger implements Constants
 
     protected static final void skipComment(Position pos)
     {
-        while (!pos.lookingAt("*/") && pos.next())
-            ;
-        if (pos.lookingAt("*/"))
-            pos.skip(2);
+        while (true) {
+            if (pos.lookingAt("*/")) {
+                pos.skip(2);
+                return;
+            }
+            if (!pos.next())
+                return;
+        }
     }
 
     protected final void skipSingleLineComment(Position pos)
