@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.23 2003-09-16 17:39:58 piso Exp $
+ * $Id: Tests.java,v 1.24 2003-11-30 05:10:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -521,8 +521,8 @@ public class Tests extends TestCase
         verify("(setq temp-two 0)", "0");
 
         // member
-        verify("(member 2 '(1 2 3))", "(2 3)");
-        verify("(member 'e '(a b c d))", "NIL");
+//         verify("(member 2 '(1 2 3))", "(2 3)");
+//         verify("(member 'e '(a b c d))", "NIL");
 
         // nth
         verify("(nth 0 '(foo bar baz))", "FOO");
