@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.26 2003-07-06 17:41:07 piso Exp $
+ * $Id: Package.java,v 1.27 2003-07-06 19:03:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class Package extends LispObject
     private final HashMap internalSymbols;
     private final HashMap externalSymbols;
 
-    private final ArrayList nicknames = new ArrayList();
+    private ArrayList nicknames;
     private final ArrayList useList = new ArrayList();
     private ArrayList usedByList = null;
     private final ArrayList shadowingSymbols = new ArrayList();
@@ -84,10 +84,26 @@ public final class Package extends LispObject
         if (name != null) {
             Packages.deletePackage(this);
             name = null;
-            nicknames.clear();
+            nicknames = null;
             return true;
         }
         return false;
+    }
+
+    public final synchronized void rename(String newName, LispObject newNicks)
+        throws LispError
+    {
+        ArrayList arrayList = null;
+        while (newNicks != NIL) {
+            if (arrayList == null)
+                arrayList = new ArrayList();
+            arrayList.add(javaString(newNicks.car()));
+            newNicks = newNicks.cdr();
+        }
+        // Must do this before changing name or nicknames.
+        Packages.deletePackage(this);
+        name = newName;
+        nicknames = arrayList;
     }
 
     public synchronized Symbol findInternalSymbol(String name)
@@ -397,23 +413,30 @@ public final class Package extends LispObject
 
     public final void addNickname(String s) throws LispError
     {
-        if (!nicknames.contains(s)) {
-            nicknames.add(s);
-            Packages.addNickname(this, s);
-        }
+        if (nicknames != null) {
+            if (nicknames.contains(s))
+                return; // Nothing to do.
+        } else
+            nicknames = new ArrayList();
+        nicknames.add(s);
+        Packages.addNickname(this, s);
     }
 
     public String getNickname()
     {
-        return (nicknames.size() > 0) ? (String) nicknames.get(0) : null;
+        if (nicknames != null && nicknames.size() > 0)
+            return (String) nicknames.get(0);
+        return null;
     }
 
     public LispObject packageNicknames()
     {
         LispObject list = NIL;
-        for (int i = nicknames.size(); i-- > 0;) {
-            String nickname = (String) nicknames.get(i);
-            list = new Cons(new LispString(nickname), list);
+        if (nicknames != null) {
+            for (int i = nicknames.size(); i-- > 0;) {
+                String nickname = (String) nicknames.get(i);
+                list = new Cons(new LispString(nickname), list);
+            }
         }
         return list;
     }
