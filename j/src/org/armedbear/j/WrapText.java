@@ -2,7 +2,7 @@
  * WrapText.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WrapText.java,v 1.3 2002-10-11 14:07:35 piso Exp $
+ * $Id: WrapText.java,v 1.4 2002-11-05 19:06:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,9 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.RE;
+import gnu.regexp.REMatch;
+import gnu.regexp.UncheckedRE;
 import javax.swing.undo.CompoundEdit;
 import org.armedbear.j.mail.SendMail;
 
@@ -69,11 +72,19 @@ public final class WrapText implements Constants
 
     public void wrapParagraph()
     {
-        Position begin = findStartOfParagraph(dot);
-        Position end = findEndOfParagraph(dot);
+        String prefix = getPrefix(dot.getLine());
+        final Position begin, end;
+        if (prefix != null) {
+            int prefixLength = prefix.length();
+            begin = findStartOfQuotedText(dot, prefix, prefixLength);
+            end = findEndOfQuotedText(dot, prefix, prefixLength);
+        } else {
+            begin = findStartOfParagraph(dot);
+            end = findEndOfParagraph(dot);
+        }
         if (begin != null && end != null) {
             Region r = new Region(buffer, begin, end);
-            wrapRegion(r);
+            wrapRegion(r, prefix);
         }
     }
 
@@ -86,7 +97,7 @@ public final class WrapText implements Constants
             unwrapRegion(r);
         }
     }
-
+    
     private void wrapCommentInternal()
     {
         String commentStart = null;
@@ -140,6 +151,11 @@ public final class WrapText implements Constants
 
     private void wrapRegion(Region r)
     {
+        wrapRegion(r, null);
+    }
+
+    private void wrapRegion(Region r, String prefix)
+    {
         try {
             r.getBuffer().lockWrite();
         }
@@ -148,7 +164,7 @@ public final class WrapText implements Constants
             return;
         }
         try {
-            processRegion(r, null, true);
+            processRegion(r, prefix, true);
         }
         finally {
             r.getBuffer().unlockWrite();
@@ -521,6 +537,44 @@ public final class WrapText implements Constants
         if (endLine.next() != null)
             return new Position(endLine.next(), 0);
         return new Position(endLine, endLine.length());
+    }
+    
+    private static final RE prefixRE = new UncheckedRE("^[> ]+");
+    
+    private static String getPrefix(Line line)
+    {
+        REMatch match = prefixRE.getMatch(line.getText());
+        return match != null ? match.toString() : null;
+    }
+
+    private static Position findStartOfQuotedText(Position pos, String prefix,
+        int prefixLength)
+    {
+        Line start = pos.getLine();
+        for (Line line = start.previous(); line != null; line = line.previous()) {
+            if (!prefix.equals(getPrefix(line)))
+                break;
+            if (line.substring(prefixLength).trim().length() == 0)
+                break; // Blank line (except for prefix string).
+            start = line;
+        }
+        return new Position(start, 0);
+    }
+
+    private static Position findEndOfQuotedText(Position pos, String prefix,
+        int prefixLength)
+    {
+        Line end = pos.getLine();
+        for (Line line = end.next(); line != null; line = line.next()) {
+            if (!prefix.equals(getPrefix(line)))
+                break;
+            if (line.substring(prefixLength).trim().length() == 0)
+                break; // Blank line (except for prefix string).
+            end = line;
+        }
+        if (end.next() != null)
+            return new Position(end.next(), 0);
+        return new Position(end, end.length());
     }
 
     private void detab(Region r)
