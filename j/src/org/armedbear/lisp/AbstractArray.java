@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.17 2004-02-24 12:30:37 piso Exp $
+ * $Id: AbstractArray.java,v 1.18 2004-02-26 01:34:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,7 @@ public abstract class AbstractArray extends LispObject
         StringBuffer sb = new StringBuffer("AREF: ");
         sb.append("wrong number of subscripts (1) for array of rank ");
         sb.append(getRank());
+        sb.append(".");
         return signal(new ProgramError(sb.toString()));
     }
 
@@ -92,6 +93,17 @@ public abstract class AbstractArray extends LispObject
     public abstract LispObject getRowMajor(int index) throws ConditionThrowable;
 
     public abstract void setRowMajor(int index, LispObject newValue) throws ConditionThrowable;
+
+    public abstract void fill(LispObject obj) throws ConditionThrowable;
+
+    // FIXME Detect overflow!
+    protected static int computeTotalSize(int[] dimensions)
+    {
+        int size = 1;
+        for (int i = dimensions.length; i-- > 0;)
+            size *= dimensions[i];
+        return size;
+    }
 
     // Helper for toString().
     protected void appendContents(int[] dimensions, int index, StringBuffer sb)

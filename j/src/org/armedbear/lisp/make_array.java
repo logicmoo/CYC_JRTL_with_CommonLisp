@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.20 2004-02-25 18:36:12 piso Exp $
+ * $Id: make_array.java,v 1.21 2004-02-26 01:39:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,27 +72,19 @@ public final class make_array extends Primitive
             else
                 displacement = 0;
             if (rank == 1) {
+                AbstractVector v;
                 if (array.getElementType() == Symbol.CHARACTER) {
-                    ComplexString s = new ComplexString(dimv[0], array, displacement);
-                    if (fillPointer != NIL)
-                        s.setFillPointer(fillPointer);
-                    return s;
+                    v = new ComplexString(dimv[0], array, displacement);
                 } else if (array.getElementType() == Symbol.BIT) {
-                    ComplexBitVector v = new ComplexBitVector(dimv[0], array, displacement);
-                    if (fillPointer != NIL)
-                        v.setFillPointer(fillPointer);
-                    return v;
+                    v = new ComplexBitVector(dimv[0], array, displacement);
                 } else {
-                    ComplexVector v = new ComplexVector(dimv[0], array, displacement);
-                    if (fillPointer != NIL)
-                        v.setFillPointer(fillPointer);
-                    return v;
+                    v = new ComplexVector(dimv[0], array, displacement);
                 }
+                if (fillPointer != NIL)
+                    v.setFillPointer(fillPointer);
+                return v;
             }
-            DisplacedArray displacedArray = new DisplacedArray(dimv, array, displacement);
-            if (rank == 1 && fillPointer != NIL)
-                displacedArray.setFillPointer(fillPointer);
-            return displacedArray;
+            return new ComplexArray(dimv, array, displacement);
         }
         if (rank == 0) {
             LispObject data;
@@ -162,13 +154,23 @@ public final class make_array extends Primitive
             return v;
         }
         // rank != 1
-        Array array;
-        if (initialContents != NIL) {
-            array = new Array(dimv, initialContents);
+        AbstractArray array;
+        if (adjustable == NIL) {
+            if (initialContents != NIL) {
+                array = new SimpleArray(dimv, initialContents);
+            } else {
+                array = new SimpleArray(dimv);
+                if (initialElementProvided != NIL)
+                    array.fill(initialElement);
+            }
         } else {
-            array = new Array(dimv);
-            if (initialElementProvided != NIL)
-                array.fill(initialElement);
+            if (initialContents != NIL) {
+                array = new ComplexArray(dimv, initialContents);
+            } else {
+                array = new ComplexArray(dimv);
+                if (initialElementProvided != NIL)
+                    array.fill(initialElement);
+            }
         }
         return array;
     }

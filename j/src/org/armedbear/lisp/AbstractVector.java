@@ -92,8 +92,6 @@ public abstract class AbstractVector extends AbstractArray
 
     public abstract LispObject subseq(int start, int end) throws ConditionThrowable;
 
-    public abstract void fill(LispObject obj) throws ConditionThrowable;
-
     public abstract void shrink(int n) throws ConditionThrowable;
 
     public int checkIndex(int index) throws ConditionThrowable
