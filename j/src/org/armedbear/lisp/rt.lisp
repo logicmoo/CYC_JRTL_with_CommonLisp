@@ -420,6 +420,7 @@
                               "unless"
                               "unwind-protect"
                               "values"
+                              "values-list"
                               "vector"
                               "vector-pop"
                               "vector-push"
