@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.40 2004-10-04 18:47:10 piso Exp $
+;;; $Id: pprint.lisp,v 1.41 2004-10-05 13:20:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1354,6 +1354,9 @@
 	    (loop (print-clause xp)
 		  (write-char #\space xp)
 		  (pprint-newline :linear xp)))))))
+
+(defun output-pretty-object (object stream)
+  (basic-write object stream))
 
 (provide 'pprint)
 
