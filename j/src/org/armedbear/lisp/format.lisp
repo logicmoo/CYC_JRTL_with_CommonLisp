@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.14 2004-10-05 02:56:33 piso Exp $
+;;; $Id: format.lisp,v 1.15 2004-11-20 19:29:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -640,11 +640,21 @@
 
 ;;; FIXME: only used in this file, could be SB!XC:DEFMACRO in EVAL-WHEN
 (defmacro def-complex-format-directive (char lambda-list &body body)
-  (let ((defun-name (intern (sys::%format nil
-;; 				    "~:@(~:C~)-FORMAT-DIRECTIVE-EXPANDER"
-;; 				    char)))
-                                          "FORMAT-DIRECTIVE-EXPANDER-~D"
-                                          (char-code char))))
+  (let ((defun-name
+;;           (intern (sys::%format nil
+;; ;; 				    "~:@(~:C~)-FORMAT-DIRECTIVE-EXPANDER"
+;; ;; 				    char)))
+;;                                           "FORMAT-DIRECTIVE-EXPANDER-~D"
+;;                                           (char-code char)))
+          (intern (concatenate 'string
+                               (let ((name (char-name char)))
+                                 (cond (name
+                                        (string-capitalize name))
+                                       (t
+                                        (string char))))
+                               "-FORMAT-DIRECTIVE-EXPANDER"))
+                               
+          )
 	(directive (gensym))
 	(directives (if lambda-list (car (last lambda-list)) (gensym))))
     `(progn
@@ -1768,11 +1778,19 @@
 
   (defmacro def-complex-format-interpreter (char lambda-list &body body)
     (let ((defun-name
-	    (intern (sys::%format nil
-                                  ;; 			    "~:@(~:C~)-FORMAT-DIRECTIVE-INTERPRETER"
-                                  ;; 			    char
-                                  "FORMAT-DIRECTIVE-INTERPRETER-~D"
-                                  (char-code char))))
+;; 	    (intern (sys::%format nil
+;;                                   ;; 			    "~:@(~:C~)-FORMAT-DIRECTIVE-INTERPRETER"
+;;                                   ;; 			    char
+;;                                   "FORMAT-DIRECTIVE-INTERPRETER-~D"
+;;                                   (char-code char)))
+            (intern (concatenate 'string
+                                 (let ((name (char-name char)))
+                                   (cond (name
+                                          (string-capitalize name))
+                                         (t
+                                          (string char))))
+                                 "-FORMAT-DIRECTIVE-INTERPRETER"))
+            )
           (directive (gensym))
           (directives (if lambda-list (car (last lambda-list)) (gensym))))
       `(progn
@@ -2646,7 +2664,7 @@
 		 (null *outside-args*)
 		 (null args)))
 	  (1 (interpret-bind-defaults ((count 0)) params
-                                      (zerop count)))
+                                      (and (numberp count) (zerop count))))
 	  (2 (interpret-bind-defaults ((arg1 0) (arg2 0)) params
                                       (= arg1 arg2)))
 	  (t (interpret-bind-defaults ((arg1 0) (arg2 0) (arg3 0)) params
