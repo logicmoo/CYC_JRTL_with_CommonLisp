@@ -2,7 +2,7 @@
  * JdbFormatter.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: JdbFormatter.java,v 1.3 2003-05-12 17:11:44 piso Exp $
+ * $Id: JdbFormatter.java,v 1.4 2003-05-23 17:42:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,9 @@ import org.armedbear.j.Utilities;
 
 public final class JdbFormatter extends Formatter
 {
+    private static final String prompt = Jdb.getPrompt();
+    private static final int promptLength = prompt.length();
+
     // Formats.
     public static final byte JDB_FORMAT_TEXT   = 0;
     public static final byte JDB_FORMAT_PROMPT = 1;
@@ -54,10 +57,10 @@ public final class JdbFormatter extends Formatter
         String text = getDetabbedText(line);
         if (flags == JDB_FORMAT_OUTPUT) {
             addSegment(text, JDB_FORMAT_OUTPUT);
-        } else if (text.startsWith("> ")) {
-            addSegment(text, 0, 2, JDB_FORMAT_PROMPT);
-            if (text.length() > 2)
-                addSegment(text, 2, JDB_FORMAT_INPUT);
+        } else if (text.startsWith(prompt)) {
+            addSegment(text, 0, promptLength, JDB_FORMAT_PROMPT);
+            if (text.length() > promptLength)
+                addSegment(text, promptLength, JDB_FORMAT_INPUT);
         } else
             addSegment(text, JDB_FORMAT_LOG);
         return segmentList;
