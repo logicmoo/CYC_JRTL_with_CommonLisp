@@ -188,6 +188,7 @@ fourth
 fresh-line
 funcall
 function
+function-lambda-expression
 functionp
 gensym
 get
