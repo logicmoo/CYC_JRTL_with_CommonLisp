@@ -1,7 +1,7 @@
 ;;; ed.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: ed.lisp,v 1.1 2004-10-17 12:09:16 piso Exp $
+;;; $Id: ed.lisp,v 1.2 2004-10-17 13:32:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,32 +58,53 @@ the file system."
                     (*load-print* nil)
                     (*autoload-verbose* nil))
                 (resolve what)))
-            (if (source what)
-                (let ((file (namestring (source-pathname what)))
-                      (position (source-file-position what))
-                      (line-number 1)
-                      (pattern (string what)))
-                  (with-open-file (s file)
-                    (dotimes (i position)
-                      (let ((c (read-char s nil s)))
-                        (cond ((eq c s)
-                               (return))
-                              ((eql c #\newline)
-                               (incf line-number)))))
-                    (dotimes (i 10)
-                      (let ((text (read-line s nil s)))
-                        (cond ((eq text s)
-                               (return))
-                              ((search pattern text :test 'string-equal)
-                               (return))
-                              (t
-                               (incf line-number))))))
-                  (if stream
-                      (progn
-                        (write-string (namestring (user-homedir-pathname)) stream)
-                        (terpri stream)
-                        (write-string (format nil "+~D~%~S~%" line-number file) stream))
-                      (run-shell-command (format nil "j +~D ~S" line-number file)))))))
+            (cond ((source what)
+                   (let ((file (namestring (source-pathname what)))
+                         (position (source-file-position what))
+                         (line-number 1)
+                         (pattern (string what)))
+                     (with-open-file (s file)
+                       (dotimes (i position)
+                         (let ((c (read-char s nil s)))
+                           (cond ((eq c s)
+                                  (return))
+                                 ((eql c #\newline)
+                                  (incf line-number)))))
+                       (dotimes (i 10)
+                         (let ((text (read-line s nil s)))
+                           (cond ((eq text s)
+                                  (return))
+                                 ((search pattern text :test 'string-equal)
+                                  (return))
+                                 (t
+                                  (incf line-number))))))
+                     (if stream
+                         (progn
+                           (write-string (namestring (user-homedir-pathname)) stream)
+                           (terpri stream)
+                           (write-string (format nil "+~D~%~S~%" line-number file) stream))
+                         (run-shell-command (format nil "j +~D ~S" line-number file)))))
+                  ((not (null *lisp-home*))
+                   (let ((tagfile (merge-pathnames "tags" *lisp-home*)))
+                     (when (and tagfile (probe-file tagfile))
+                       (with-open-file (s tagfile)
+                         (loop
+                           (let ((text (read-line s nil s)))
+                             (cond ((eq text s)
+                                    (return))
+                                   ((string-equal what (read-from-string text nil nil))
+                                    ;; Found it!
+                                    (with-input-from-string (string-stream text :start (length (string what)))
+                                      (let* ((file (read string-stream text nil nil))
+                                             (line-number (read string-stream text nil nil)))
+                                        (when (pathnamep file)
+                                          (setf file (namestring file)))
+                                        (if stream
+                                            (progn
+                                              (write-string (namestring (user-homedir-pathname)) stream)
+                                              (terpri stream)
+                                              (write-string (format nil "+~D~%~S~%" line-number file) stream))
+                                            (run-shell-command (format nil "j +~D ~S" line-number file))))))))))))))))
      (when stream
        (close stream))))
   t)
