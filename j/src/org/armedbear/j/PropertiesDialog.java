@@ -2,7 +2,7 @@
  * PropertiesDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: PropertiesDialog.java,v 1.3 2003-06-06 12:34:08 piso Exp $
+ * $Id: PropertiesDialog.java,v 1.4 2003-07-05 18:01:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,14 +75,14 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
             Border titledBorder = BorderFactory.createTitledBorder(etchedBorder, "File");
             group.setBorder(titledBorder);
 
+            final File file = buffer.getFile();
             StaticTextField fileTextField =
-                new StaticTextField(buffer.getFile().netPath());
-
+                new StaticTextField(file.isRemote() ? file.netPath() :
+                                    file.canonicalPath());
             group.add(fileTextField);
 
             StaticTextField modificationTextField = null;
 
-            final File file = buffer.getFile();
             if (file.getProtocol() == File.PROTOCOL_HTTP) {
                 if (buffer.getLastModified() != 0) {
                     Date date = new Date(buffer.getLastModified());
