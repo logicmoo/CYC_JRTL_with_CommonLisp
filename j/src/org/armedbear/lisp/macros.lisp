@@ -23,6 +23,9 @@
 (defmacro pop (place)
   `(prog1 (car ,place) (setf ,place (cdr ,place))))
 
+(defmacro pushnew (item place &rest keys)
+  `(setf ,place (adjoin ,item ,place ,@keys)))
+
 (defmacro psetq (&rest args)
   (do ((l args (cddr l))
        (forms nil)
