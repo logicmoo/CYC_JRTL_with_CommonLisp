@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.36 2003-10-21 11:01:48 piso Exp $
+;;; $Id: defclass.lisp,v 1.37 2003-10-22 17:26:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,24 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Adapted from Closette.
+
+;;; Closette Version 1.0 (February 10, 1991)
+;;;
+;;; Copyright (c) 1990, 1991 Xerox Corporation.
+;;; All rights reserved.
+;;;
+;;; Use and copying of this software and preparation of derivative works
+;;; based upon this software are permitted.  Any distribution of this
+;;; software or derivative works must comply with all applicable United
+;;; States export control laws.
+;;;
+;;; This software is made available AS IS, and Xerox Corporation makes no
+;;; warranty about the software, its performance or its conformity to any
+;;; specification.
+;;;
+;;; Closette is an implementation of a subset of CLOS with a metaobject
+;;; protocol as described in "The Art of The Metaobject Protocol",
+;;; MIT Press, 1991.
 
 (in-package "SYSTEM")
 
@@ -131,9 +149,6 @@
     (t (list `',(car option) `',(cadr option)))))
 
 ;;; Slot definition metaobjects
-
-;;; N.B. Quietly retain all unknown slot options (rather than signaling an
-;;; error), so that it's easy to add new ones.
 
 (defun make-direct-slot-definition (&rest properties
                                           &key name
@@ -512,9 +527,7 @@
                  ,(canonicalize-direct-slots direct-slots)
                  ,@(canonicalize-defclass-options options)))
 
-;;;
 ;;; Generic function metaobjects and standard-generic-function
-;;;
 
 (defun method-combination-type (method-combination)
   (if (atom method-combination)
@@ -533,7 +546,6 @@
    (methods :initform ())     ; :accessor generic-function-methods
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
-;;    (discriminating-function)  ; :accessor generic-function-discriminating-function
    (method-combination
     :initarg :method-combination)
    (classes-to-emf-table      ; :accessor classes-to-emf-table
@@ -556,10 +568,6 @@
 (defun (setf generic-function-methods) (new-value gf)
   (setf (slot-value gf 'methods) new-value))
 
-;; (defun generic-function-discriminating-function (gf)
-;;   (slot-value gf 'discriminating-function))
-;; (defun (setf generic-function-discriminating-function) (new-value gf)
-;;   (setf (slot-value gf 'discriminating-function) new-value))
 (defsetf generic-function-discriminating-function
   %set-generic-function-discriminating-function)
 
@@ -580,9 +588,7 @@
 (defun (setf classes-to-emf-table) (new-value gf)
   (setf (slot-value gf 'classes-to-emf-table) new-value))
 
-;;;
 ;;; Method metaobjects and standard-method
-;;;
 
 (defclass standard-method ()
   ((lambda-list :initarg :lambda-list)     ; :accessor method-lambda-list
@@ -661,10 +667,6 @@
     (t
      (list `',(car option) `',(cadr option)))))
 
-;;; find-generic-function looks up a generic function by name.  It's an
-;;; artifact of the fact that our generic function metaobjects can't legally
-;;; be stored a symbol's function value.
-
 (defparameter generic-function-table (make-hash-table :test #'equal))
 
 (defun find-generic-function (symbol &optional (errorp t))
@@ -705,25 +707,15 @@
 
 ;;; finalize-generic-function
 
-;;; N.B. Same basic idea as finalize-inheritance.  Takes care of recomputing
-;;; and storing the discriminating function, and clearing the effective method
-;;; function table.
-
 (defun finalize-generic-function (gf)
   (setf (generic-function-discriminating-function gf)
         (funcall (if (eq (class-of gf) the-class-standard-gf)
                      #'std-compute-discriminating-function
                      #'compute-discriminating-function)
                  gf))
-  (setf (fdefinition (generic-function-name gf))
-;;         (generic-function-discriminating-function gf))
-        gf)
+  (setf (fdefinition (generic-function-name gf)) gf)
   (clrhash (classes-to-emf-table gf))
   (values))
-
-;;; make-instance-standard-generic-function creates and initializes an
-;;; instance of standard-generic-function without falling into method lookup.
-;;; However, it cannot be called until standard-generic-function exists.
 
 (defun make-instance-standard-generic-function (generic-function-class
                                                 &key name lambda-list
@@ -932,31 +924,31 @@
             ~S."
 		  gf-keywords)))))))
 
-
 (defun ensure-method (gf &rest all-keys)
-  (let* ((plist-gf (analyze-lambda-list (generic-function-lambda-list gf)))
-         (plist-method (analyze-lambda-list (getf all-keys :lambda-list)))
-;;          (gf-restp (not (null (getf plist-gf :rest-var))))
-;;          (method-restp (not (null (getf plist-method :rest-var))))
-;;          (gf-keysp (not (null (getf plist-gf :keywords))))
-;;          (method-keysp (not (null (getf plist-method :keywords)))))
-         (gf-restp (not (null (memq '&rest (generic-function-lambda-list gf)))))
-         (gf-keysp (getf plist-gf :keysp))
-         (method-restp (not (null (memq '&rest (getf all-keys :lambda-list)))))
-         (method-keysp (getf plist-method :keysp)))
-    (unless (= (length (getf plist-gf :required-args))
-               (length (getf plist-method :required-args)))
+  (let* ((gf-lambda-list (generic-function-lambda-list gf))
+         (gf-restp (not (null (memq '&rest gf-lambda-list))))
+         (gf-plist (analyze-lambda-list gf-lambda-list))
+         (gf-keysp (getf gf-plist :keysp))
+         (gf-keywords (getf gf-plist :keywords))
+         (method-lambda-list (getf all-keys :lambda-list))
+         (method-plist (analyze-lambda-list method-lambda-list))
+         (method-restp (not (null (memq '&rest method-lambda-list))))
+         (method-keysp (getf method-plist :keysp))
+         (method-keywords (getf method-plist :keywords))
+         (method-allow-other-keys-p (getf method-plist :allow-other-keys)))
+    (unless (= (length (getf gf-plist :required-args))
+               (length (getf method-plist :required-args)))
       (error "the method has the wrong number of required arguments for the generic function"))
-    (unless (= (length (getf plist-gf :optional-args))
-               (length (getf plist-method :optional-args)))
+    (unless (= (length (getf gf-plist :optional-args))
+               (length (getf method-plist :optional-args)))
       (error "the method has the wrong number of optional arguments for the generic function"))
     (unless (eq (or gf-restp gf-keysp) (or method-restp method-keysp))
-;;       (format t "gf-restp = ~S gf-keysp = ~S~%" gf-restp gf-keysp)
-;;       (format t "method-restp = ~S method-keysp = ~S~%" method-restp method-keysp)
-;;       (format t "method lambda list = ~S~%" (getf all-keys :lambda-list))
-;;       (format t "all-keys = ~S~%" all-keys)
       (error "the method and the generic function differ in whether they accept &REST or &KEY arguments"))
-    )
+    (when (consp gf-keywords)
+      (unless (or (and method-restp (not method-keysp))
+                  method-allow-other-keys-p
+                  (every (lambda (k) (memq k method-keywords)) gf-keywords))
+        (error "the method does not accept all of the keyword arguments defined for the generic function"))))
   (let ((new-method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
@@ -966,10 +958,6 @@
           all-keys)))
     (add-method gf new-method)
     new-method))
-
-;;; make-instance-standard-method creates and initializes an instance of
-;;; standard-method without falling into method lookup.  However, it cannot
-;;; be called until standard-method exists.
 
 (defun make-instance-standard-method (method-class
                                       &key lambda-list qualifiers
@@ -1031,7 +1019,7 @@
         (error "no such method for ~S" (generic-function-name gf))
         method)))
 
-;;; Reader and write methods
+;;; Reader and writer methods
 
 (defun add-reader-method (class fn-name slot-name)
   (ensure-method
@@ -1256,7 +1244,7 @@
                   (push (funcall (method-function primary) args nil) result))
                 (apply #'min result))))
           (t
-           (error "unsupported method combination type ~S~" type))))))
+           (error "unsupported method combination type ~S" type))))))
 
 ;;; compute an effective method function from a list of primary methods:
 
@@ -1320,9 +1308,6 @@
 (defmethod (setf slot-value-using-class)
   (new-value (class standard-class) instance slot-name)
   (setf (std-slot-value instance slot-name) new-value))
-;;; N.B. To avoid making a forward reference to a (setf xxx) generic function:
-;; (defun setf-slot-value-using-class (new-value class object slot-name)
-;;   (setf (slot-value-using-class class object slot-name) new-value))
 
 (defgeneric slot-exists-p-using-class (class instance slot-name))
 (defmethod slot-exists-p-using-class
@@ -1413,9 +1398,7 @@
                             (class-slots (class-of new))))))
     (apply #'shared-initialize new added-slots initargs)))
 
-;;;
 ;;;  Methods having to do with class metaobjects.
-;;;
 
 (defmethod print-object ((class standard-class) stream)
   (print-unreadable-object (class stream :identity t)
@@ -1451,9 +1434,7 @@
   ((class standard-class) direct-slots)
   (std-compute-effective-slot-definition class direct-slots))
 
-;;;
 ;;; Methods having to do with generic function metaobjects.
-;;;
 
 (defmethod print-object ((gf standard-generic-function) stream)
   (print-unreadable-object (gf stream :identity t)
@@ -1465,9 +1446,7 @@
 (defmethod initialize-instance :after ((gf standard-generic-function) &key)
   (finalize-generic-function gf))
 
-;;;
 ;;; Methods having to do with method metaobjects.
-;;;
 
 (defmethod print-object ((method standard-method) stream)
   (print-unreadable-object (method stream :identity t)
@@ -1483,9 +1462,7 @@
 (defmethod initialize-instance :after ((method standard-method) &key)
   (setf (method-function method) (compute-method-function method)))
 
-;;;
 ;;; Methods having to do with generic function invocation.
-;;;
 
 (defgeneric compute-discriminating-function (gf))
 (defmethod compute-discriminating-function ((gf standard-generic-function))
