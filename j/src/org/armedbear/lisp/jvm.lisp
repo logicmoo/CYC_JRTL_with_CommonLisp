@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.252 2004-07-28 23:55:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.253 2004-07-30 16:03:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2351,12 +2351,13 @@
          (aver nil))))
 
 (defun compile-multiple-value-bind (form &key (target *val*))
-  (let* ((*register* *register*)
+  (let* ((block (make-block-node :name '(MULTIPLE-VALUE-BIND)))
+         (*blocks* (cons block *blocks*))
+         (*register* *register*)
          (*visible-variables* *visible-variables*)
          (specials ())
          (vars (second form))
-         (specialp nil)
-         env-var)
+         (specialp nil))
     ;; Process declarations.
     (dolist (f (cdddr form))
       (unless (and (consp f) (eq (car f) 'declare))
@@ -2373,10 +2374,10 @@
     ;; If so...
     (when specialp
       ;; Save current dynamic environment.
-      (setf env-var (allocate-register))
+      (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-      (emit 'astore env-var))
+      (emit 'astore (block-environment-register block)))
     (compile-form (third form) :target :stack) ;; Values form.
     (emit-push-current-thread)
     (emit 'swap)
@@ -2409,7 +2410,7 @@
     (when specialp
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
-      (emit 'aload env-var)
+      (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-let/let* (form &key (target *val*))
@@ -3746,7 +3747,7 @@
 ;;   (%format t "COMPILE-DEFUN ~S ~S~%" name classfile)
   (unless (eq (car form) 'LAMBDA)
     (return-from compile-defun nil))
-  (unless (null environment)
+  (unless (or (null environment) (sys::empty-environment-p environment))
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
 ;;   (prog1
   (let ((precompiled-form (precompile-form form t)))
