@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.18 2002-12-14 15:49:49 piso Exp $
+ * $Id: Buffer.java,v 1.19 2002-12-24 16:25:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,6 @@ public class Buffer extends SystemBuffer
     private static int untitledCount = 0;
 
     protected boolean isUntitled;
-    private boolean isTransient;
 
     protected Formatter formatter;
 
@@ -2600,6 +2599,8 @@ public class Buffer extends SystemBuffer
         return isUntitled;
     }
 
+    private boolean isTransient;
+
     public boolean isTransient()
     {
         return isTransient;
@@ -2607,7 +2608,19 @@ public class Buffer extends SystemBuffer
 
     public final void setTransient(boolean b)
     {
-        isTransient = b;
+        unsplitOnClose = isTransient = b;
+    }
+
+    private boolean unsplitOnClose;
+
+    public boolean unsplitOnClose()
+    {
+        return unsplitOnClose;
+    }
+
+    public final void setUnsplitOnClose(boolean b)
+    {
+        unsplitOnClose = b;
     }
 
     // Cache for getText().
