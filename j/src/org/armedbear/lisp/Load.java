@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.67 2004-08-18 18:57:35 piso Exp $
+ * $Id: Load.java,v 1.68 2004-08-25 17:44:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,6 +251,8 @@ public final class Load extends Lisp
                     thread.bindSpecial(_READTABLE_, readtable);
                     thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_, NIL);
                     thread.bindSpecial(_FASL_SOURCE_, NIL);
+                    thread.bindSpecial(_DEFAULT_PATHNAME_DEFAULTS_,
+                                       _LOAD_TRUENAME_.symbolValue(thread));
                     return T;
                 }
             }
