@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.31 2003-10-10 17:03:17 piso Exp $
+ * $Id: LispClass.java,v 1.32 2003-10-11 18:48:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@ public class LispClass extends StandardObject
     private LispObject directSuperclasses;
     private LispObject directSubclasses;
     private LispObject classPrecedenceList = NIL;
+    private LispObject directMethods = NIL;
 
     protected LispClass()
     {
@@ -326,6 +327,34 @@ public class LispClass extends StandardObject
         {
             if (first instanceof LispClass) {
                 ((LispClass)first).classPrecedenceList = second;
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "class"));
+        }
+    };
+
+    // ### class-direct-methods
+    private static final Primitive1 CLASS_DIRECT_METHODS =
+        new Primitive1("class-direct-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).directMethods;
+            throw new ConditionThrowable(new TypeError(arg, "class"));
+        }
+    };
+
+    // ### %set-class-direct-methods
+    private static final Primitive2 _SET_CLASS_DIRECT_METHODS =
+        new Primitive2("%set-class-direct-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).directMethods = second;
                 return second;
             }
             throw new ConditionThrowable(new TypeError(first, "class"));
