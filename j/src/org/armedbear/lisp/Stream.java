@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.106 2005-02-05 19:54:56 piso Exp $
+ * $Id: Stream.java,v 1.107 2005-02-05 20:49:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -749,6 +749,7 @@ public class Stream extends LispObject
                     flags = new BitSet(sb.length());
                 for (int i = begin; i < end; i++)
                     flags.set(i);
+                continue;
             }
             if (readtableCase == Keyword.UPCASE)
                 c = Utilities.toUpperCase(c);
