@@ -2,7 +2,7 @@
  * FindInFilesDialog.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: FindInFilesDialog.java,v 1.1.1.1 2002-09-24 16:08:10 piso Exp $
+ * $Id: FindInFilesDialog.java,v 1.2 2002-12-28 19:29:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,13 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
         patternControl.setHistory(patternHistory);
 
         // Pre-fill pattern control.
-        String s = editor.getCurrentText();
+        String s;
+        if (editor.getBuffer() instanceof Directory)
+            // It's not very likely that we want to search for the text at dot
+            // in a directory buffer.
+            s = null;
+        else
+            s = editor.getCurrentText();
         if (s != null)
             patternControl.setText(s);
         else
