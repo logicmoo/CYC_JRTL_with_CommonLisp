@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.29 2004-06-19 02:54:39 piso Exp $
+;;; $Id: compile-file.lisp,v 1.30 2004-06-24 16:35:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,36 +73,39 @@
               (%format t "; Processing function ~A~%" name)
               (let* ((lambda-list (third form))
                      (body (nthcdr 3 form))
-                     (expr (list 'lambda lambda-list (list* 'block name body)) nil)
-                     (classfile-name (next-classfile-name))
-                     (classfile (report-error
-                                 (jvm:compile-defun name expr nil classfile-name)))
-                     (compiled-function (and classfile
-                                             (report-error
-                                              (load-compiled-function classfile)))))
-                (if compiled-function
-                    (progn
-                      (%format t ";  ~A => ~A.cls~%" name
-                               (pathname-name (pathname classfile-name)))
-                      (setf form
-                            `(fset ',name (load-compiled-function ,classfile) ,*source-position*))
-                      (when compile-time-too
-                        (fset name compiled-function)))
-                    (progn
-                      (%format t ";  Unable to compile function ~A~%" name)
-                      (let ((precompiled-function (precompile-form expr nil)))
+                     (jvm::*speed* jvm::*speed*)
+                     (jvm::*safety* jvm::*safety*))
+                (jvm::process-optimization-declarations body)
+                (let* ((expr (list 'lambda lambda-list (list* 'block name body)) nil)
+                       (classfile-name (next-classfile-name))
+                       (classfile (report-error
+                                   (jvm:compile-defun name expr nil classfile-name)))
+                       (compiled-function (and classfile
+                                               (report-error
+                                                (load-compiled-function classfile)))))
+                  (if compiled-function
+                      (progn
+                        (%format t ";  ~A => ~A.cls~%" name
+                                 (pathname-name (pathname classfile-name)))
                         (setf form
-                              `(fset ',name ,precompiled-function ,*source-position*)))
-                      (when compile-time-too
-                        (eval form))))
-                (push name jvm::*toplevel-defuns*)
-                ;; If NAME is not fbound, provide a dummy definition so that
-                ;; getSymbolFunctionOrDie() will succeed when we try to verify that
-                ;; functions defined later in the same file can be loaded correctly.
-                (unless (fboundp name)
-                  (%format t "; Installing dummy function for ~A~%" name)
-                  (setf (symbol-function name) #'dummy)
-                  (push name *fbound-names*)))))
+                              `(fset ',name (load-compiled-function ,classfile) ,*source-position*))
+                        (when compile-time-too
+                          (fset name compiled-function)))
+                      (progn
+                        (%format t ";  Unable to compile function ~A~%" name)
+                        (let ((precompiled-function (precompile-form expr nil)))
+                          (setf form
+                                `(fset ',name ,precompiled-function ,*source-position*)))
+                        (when compile-time-too
+                          (eval form))))
+                  (push name jvm::*toplevel-defuns*)
+                  ;; If NAME is not fbound, provide a dummy definition so that
+                  ;; getSymbolFunctionOrDie() will succeed when we try to verify that
+                  ;; functions defined later in the same file can be loaded correctly.
+                  (unless (fboundp name)
+                    (%format t "; Installing dummy function for ~A~%" name)
+                    (setf (symbol-function name) #'dummy)
+                    (push name *fbound-names*))))))
            (DEFMACRO
             (let ((name (second form)))
               (%format t "; Processing macro ~A~%" name)
@@ -219,6 +222,8 @@
         (with-open-file (out temp-file :direction :output :if-exists :supersede)
           (let ((*readtable* *readtable*)
                 (*package* *package*)
+                (jvm::*speed* jvm::*speed*)
+                (jvm::*safety* jvm::*safety*)
                 (jvm::*toplevel-defuns* ())
                 (*fbound-names* ()))
             (write (list 'init-fasl :version *fasl-version*) :stream out)
