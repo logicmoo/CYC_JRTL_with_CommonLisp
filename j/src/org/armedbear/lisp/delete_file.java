@@ -2,7 +2,7 @@
  * delete_file.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: delete_file.java,v 1.4 2004-05-13 01:51:11 piso Exp $
+ * $Id: delete_file.java,v 1.5 2004-09-16 18:34:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,15 +39,17 @@ public final class delete_file extends Primitive1
         if (truename instanceof Pathname) {
             // File exists.
             File file = Utilities.getFile((Pathname)truename);
-            if (file.delete()) {
-                return T;
-            } else {
-                StringBuffer sb = new StringBuffer("Unable to delete ");
-                sb.append(file.isDirectory() ? "directory " : "file ");
-                sb.append(truename.writeToString());
-                sb.append('.');
-                return signal(new FileError(sb.toString()));
+            for (int i = 0; i < 5; i++) {
+                if (file.delete())
+                    return T;
+                System.gc();
+                Thread.yield();
             }
+            StringBuffer sb = new StringBuffer("Unable to delete ");
+            sb.append(file.isDirectory() ? "directory " : "file ");
+            sb.append(truename.writeToString());
+            sb.append('.');
+            return signal(new FileError(sb.toString()));
         } else {
             // File does not exist.
             return T;
