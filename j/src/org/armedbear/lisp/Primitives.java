@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.297 2003-07-15 15:34:10 piso Exp $
+ * $Id: Primitives.java,v 1.298 2003-07-16 17:19:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3068,6 +3068,46 @@ public final class Primitives extends Module
             result = progn(args.cdr(), env, thread);
         return result;
     }
+
+    // ### macrolet
+    private static final SpecialOperator MACROLET =
+        new SpecialOperator("macrolet") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            LispObject defs = checkList(args.car());
+            final LispThread thread = LispThread.currentThread();
+            LispObject result;
+            if (defs != NIL) {
+                Environment ext = new Environment(env);
+                while (defs != NIL) {
+                    LispObject def = checkList(defs.car());
+                    Symbol symbol = checkSymbol(def.car());
+                    LispObject lambdaList = def.cadr();
+                    LispObject body = def.cddr();
+                    LispObject block =
+                        new Cons(Symbol.BLOCK, new Cons(symbol, body));
+                    LispObject toBeApplied =
+                        list(Symbol.LAMBDA, lambdaList, block);
+                    LispObject formArg = gensym("FORM-");
+                    LispObject envArg = gensym("ENV-"); // Ignored.
+                    LispObject expander =
+                        list(Symbol.LAMBDA, list(formArg, envArg),
+                             list(Symbol.APPLY, toBeApplied,
+                                  list(Symbol.CDR, formArg)));
+                    Closure expansionFunction =
+                        new Closure(expander.cadr(), expander.cddr(), env);
+                    MacroObject macroObject =
+                        new MacroObject(expansionFunction);
+                    ext.bindFunctional(symbol, macroObject);
+                    defs = defs.cdr();
+                }
+                result = progn(args.cdr(), ext, thread);
+            } else
+                result = progn(args.cdr(), env, thread);
+            return result;
+        }
+    };
 
     // ### tagbody
     private static final SpecialOperator TAGBODY =
