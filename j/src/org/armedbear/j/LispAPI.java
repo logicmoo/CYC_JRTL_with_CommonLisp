@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.13 2003-07-19 04:46:15 piso Exp $
+ * $Id: LispAPI.java,v 1.14 2003-07-19 14:35:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -258,15 +258,11 @@ public final class LispAPI extends Lisp
         new Primitive("forward-char", PACKAGE_J, true) {
         public LispObject execute() throws LispError
         {
-            Position pos = Editor.currentEditor().getDot();
-            if (!pos.next())
-                throw new LispError("reached end of buffer");
-            return NIL;
+            return forwardChar(1);
         }
         public LispObject execute(LispObject arg) throws LispError
         {
-            forwardChar(Fixnum.getValue(arg));
-            return NIL;
+            return forwardChar(Fixnum.getValue(arg));
         }
     };
 
@@ -276,19 +272,15 @@ public final class LispAPI extends Lisp
         new Primitive("backward-char", PACKAGE_J, true) {
         public LispObject execute() throws LispError
         {
-            Position pos = Editor.currentEditor().getDot();
-            if (!pos.prev())
-                throw new LispError("reached beginning of buffer");
-            return NIL;
+            return forwardChar(-1);
         }
         public LispObject execute(LispObject arg) throws LispError
         {
-            forwardChar(- Fixnum.getValue(arg));
-            return NIL;
+            return forwardChar(-Fixnum.getValue(arg));
         }
     };
 
-    private static final void forwardChar(int n) throws LispError
+    private static final LispObject forwardChar(int n) throws LispError
     {
         Position pos = Editor.currentEditor().getDot();
         if (n > 0) {
@@ -302,6 +294,8 @@ public final class LispAPI extends Lisp
                     throw new LispError("reached beginning of buffer");
             }
         }
+        Editor.currentEditor().moveCaretToDotCol();
+        return NIL;
     }
 
     private static final Symbol KEYWORD_GLOBAL =
