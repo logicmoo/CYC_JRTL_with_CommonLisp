@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.2 2004-09-02 00:47:46 piso Exp $
+;;; $Id: slime.lisp,v 1.3 2004-09-02 21:28:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,14 +41,12 @@
   (swank-protocol:decode-message *stream*))
 
 (defun connect (host port)
-  (sys::%format t "slime-connect~%")
   (when *stream*
     (disconnect))
   (ignore-errors
    (let* ((socket (sys::make-socket host port))
           (stream (and socket (get-socket-stream socket))))
      (when stream
-       (sys::%format t "connected!~%")
        (setf *stream* stream)
        (return-from connect t)))))
 
@@ -58,12 +56,12 @@
     (setf *stream* nil)))
 
 (defun slime-read-port-and-connect (retries)
+  (invoke-later #'(lambda () (status "Slime waiting to connect...")))
   (dotimes (i retries)
     (when (probe-file (swank-protocol:port-file))
       (with-open-file (s (swank-protocol:port-file)
                          :direction :input)
         (let ((port (read s)))
-          (sys::%format t "port = ~S~%" port)
           (when (connect "localhost" port)
             (return)))))
     (sleep 1)))
@@ -74,7 +72,11 @@
   (make-thread #'(lambda ()
                   (progn
                     (slime-read-port-and-connect 20)
-                    (sys::%format t "connect thread exiting~%")))))
+                    (invoke-later #'(lambda () (status "Connected!"))))))
+  (send-to-lisp (concatenate 'string
+                             "(load (merge-pathnames \"swank-loader.lisp\" "
+                             (write-to-string *lisp-home*)
+                             "))")))
 
 (defvar *prefix* nil)
 (defvar *completions* ())
@@ -83,13 +85,16 @@
 (defun completions (prefix)
   (remote-eval `(swank::completion-set ,prefix ,(package-name *package*))))
 
+(defun delimiter-p (c)
+  (member c '(#\space #\( #\) #\')))
+
 (defun completion-prefix ()
   (let* ((string (line-chars (current-line)))
          (end (marker-charpos (point))))
     (do ((start (1- end) (1- start)))
         ((< start 0) (subseq string 0 end))
       (let ((c (schar string start)))
-        (when (or (eql c #\space) (eql c #\())
+        (when (delimiter-p c)
           (incf start)
           (return-from completion-prefix (subseq string start end)))))))
 
@@ -120,9 +125,6 @@
         (setf (line-flags (marker-line point)) flags)))
     (setf *current-command* 'complete))
   (values))
-
-(defun delimiter-p (c)
-  (member c '(#\space #\( #\))))
 
 (defun symbol-name-at-point ()
   (let ((string (line-chars (current-line)))

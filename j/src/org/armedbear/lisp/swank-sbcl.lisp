@@ -3,8 +3,8 @@
 ;;; From SLIME.
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (require 'sb-bsd-sockets)
-  (load "swank-package"))
+  (require '#:sb-bsd-sockets)
+  (require '#:sb-introspect))
 
 (in-package #:swank)
 
@@ -51,3 +51,6 @@
 
 (defun make-thread (function)
   (sb-thread:make-thread function))
+
+(defun arglist (function-name)
+  (sb-introspect:function-arglist function-name))

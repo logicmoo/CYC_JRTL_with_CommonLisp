@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.2 2004-09-02 16:16:34 piso Exp $
+;;; $Id: swank.lisp,v 1.3 2004-09-02 21:30:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,18 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Adapted from SLIME.
-
-#+abcl
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (require '#:swank-protocol)
-  (sys:load-system-file "swank-package")
-  (sys:load-system-file "swank-abcl"))
-
-#+sbcl
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "swank-protocol")
-  (load "swank-package")
-  (load "swank-sbcl"))
 
 (in-package #:swank)
 
@@ -90,34 +78,33 @@
              (return nil))))))
 
 (defun completion-set (prefix default-package-name)
-  (let ((pos (position #\: prefix))
-        internal-p
-        package
+  (let ((first-colon (position #\: prefix))
         result)
-    (cond (pos
+    (cond (first-colon
            ;; Qualified.
-           (setf package (find-package (string-upcase (subseq prefix 0 pos))))
-           (when package
-             (setf internal-p (search "::" prefix))
-             (setf prefix (subseq prefix (1+ (position #\: prefix :from-end t))))
-             (do-symbols (symbol package)
-               (when (eq (symbol-package symbol) package)
-                 (when (compound-prefix-match prefix (symbol-name symbol))
-                   (when (or internal-p
-                             (eq (nth-value 1 (find-symbol (symbol-name symbol) package))
-                                 :external))
-                     (push (concatenate 'string
-                                        (package-name package)
-                                        (if internal-p "::" ":")
-                                        (symbol-name symbol))
-                           result)))))))
+           (let* ((last-colon (position #\: prefix :from-end t))
+                  (package-prefix (subseq prefix 0 (1+ last-colon)))
+                  (package (find-package (string-upcase (subseq prefix 0 first-colon)))))
+             (when package
+               (let ((internal-p (search "::" prefix)))
+                 (setf prefix (subseq prefix (1+ last-colon)))
+                 (do-symbols (symbol package)
+                   (when (eq (symbol-package symbol) package)
+                     (when (compound-prefix-match prefix (symbol-name symbol))
+                       (when (or internal-p
+                                 (eq (nth-value 1 (find-symbol (symbol-name symbol) package))
+                                     :external))
+                         (push (concatenate 'string
+                                            package-prefix
+                                            (symbol-name symbol))
+                               result)))))))))
           (t
            ;; Not qualified.
-           (setf package (find-package default-package-name))
-           (when package
-             (do-symbols (symbol package)
-               (when (compound-prefix-match prefix (symbol-name symbol))
-                 (push (symbol-name symbol) result))))))
+           (let ((package (find-package default-package-name)))
+             (when package
+               (do-symbols (symbol package)
+                 (when (compound-prefix-match prefix (symbol-name symbol))
+                   (push (symbol-name symbol) result)))))))
     result))
 
 ;;; FIXME! FOO::BAR will intern FOO in BAR.

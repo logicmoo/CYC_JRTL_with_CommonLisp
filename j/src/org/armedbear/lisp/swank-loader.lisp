@@ -1,7 +1,7 @@
 ;;; swank-loader.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-loader.lisp,v 1.1 2004-09-01 20:00:29 piso Exp $
+;;; $Id: swank-loader.lisp,v 1.2 2004-09-02 21:30:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,13 @@
 
 (in-package #:cl-user)
 
+(load (merge-pathnames "swank-package.lisp" *load-truename*))
+
 (dolist (file '("swank-protocol.lisp"
+                #+abcl
+                "swank-abcl.lisp"
+                #+sbcl
+                "swank-sbcl.lisp"
                 "swank.lisp"))
   (let* ((source-file (merge-pathnames file *load-truename*))
          (binary-file (compile-file-pathname source-file)))
