@@ -1,8 +1,8 @@
 /*
  * Autoload.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.127 2004-01-04 21:09:06 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Autoload.java,v 1.128 2004-01-05 02:09:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,7 +223,6 @@ public class Autoload extends Function
         autoload("delete-file", "delete_file");
         autoload("delete-package", "PackageFunctions");
         autoload("describe", "describe");
-        autoload("directory-namestring", "Pathname");
         autoload("file-error-pathname", "file_error_pathname");
         autoload("file-write-date", "Time");
         autoload("find-class", "LispClass");
@@ -259,11 +258,8 @@ public class Autoload extends Function
         autoload("logorc2", "logorc2");
         autoload("logtest", "logtest");
         autoload("logxor", "logxor");
-        autoload("make-pathname", "Pathname");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
-        autoload("merge-pathnames", "Pathname");
-        autoload("namestring", "Pathname");
         autoload("output-stream-p", "output_stream_p");
         autoload("package-name", "PackageFunctions");
         autoload("package-nicknames", "PackageFunctions");
@@ -271,9 +267,6 @@ public class Autoload extends Function
         autoload("package-use-list", "PackageFunctions");
         autoload("package-used-by-list", "PackageFunctions");
         autoload("packagep", "PackageFunctions");
-        autoload("pathname", "Pathname");
-        autoload("pathname-version", "Pathname");
-        autoload("pathnamep", "Pathname");
         autoload("probe-file", "probe_file");
         autoload("remhash", "HashTable");
         autoload("rename-package", "PackageFunctions");
@@ -285,7 +278,6 @@ public class Autoload extends Function
         autoload("unbound-slot-instance", "unbound_slot_instance");
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
-        autoload("user-homedir-pathname", "Pathname");
         autoload(PACKAGE_EXT, "add-class", "LispClass", true);
         autoload(PACKAGE_EXT, "arglist", "arglist", true);
         autoload(PACKAGE_EXT, "assq", "assq", true);
@@ -299,7 +291,6 @@ public class Autoload extends Function
         autoload(PACKAGE_PROF, "%start-profiler", "Profiler", true);
         autoload(PACKAGE_PROF, "stop-profiler", "Profiler", true);
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
-        autoload(PACKAGE_SYS, "%directory", "Pathname");
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
@@ -309,11 +300,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%open-input-file", "open");
         autoload(PACKAGE_SYS, "%open-output-file", "open");
-        autoload(PACKAGE_SYS, "%pathname-device", "Pathname");
-        autoload(PACKAGE_SYS, "%pathname-directory", "Pathname");
-        autoload(PACKAGE_SYS, "%pathname-host", "Pathname");
-        autoload(PACKAGE_SYS, "%pathname-name", "Pathname");
-        autoload(PACKAGE_SYS, "%pathname-type", "Pathname");
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
         autoload(PACKAGE_SYS, "%set-class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");
@@ -345,7 +331,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%structure-set-1", "StructureObject");
         autoload(PACKAGE_SYS, "%structure-set-2", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
-        autoload(PACKAGE_SYS, "%wild-pathname-p", "Pathname");
         autoload(PACKAGE_SYS, "allocate-slot-storage", "StandardObject");
         autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObject");
         autoload(PACKAGE_SYS, "class-direct-methods", "LispClass");
