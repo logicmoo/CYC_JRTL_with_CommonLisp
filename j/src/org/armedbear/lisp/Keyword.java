@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Keyword.java,v 1.11 2003-11-14 14:26:22 piso Exp $
+ * $Id: Keyword.java,v 1.12 2003-11-19 23:00:29 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,7 @@ public final class Keyword extends Lisp
     public static final Symbol
         ABORT               = internKeyword("ABORT"),
         ALLOW_OTHER_KEYS    = internKeyword("ALLOW-OTHER-KEYS"),
+        BOOLEAN             = internKeyword("BOOLEAN"),
         CAPITALIZE          = internKeyword("CAPITALIZE"),
         COUNT_ONLY          = internKeyword("COUNT-ONLY"),
         DATUM               = internKeyword("DATUM"),
