@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.63 2005-03-13 16:25:45 piso Exp $
+;;; $Id: compile-file.lisp,v 1.64 2005-03-15 03:58:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 (in-package #:system)
 
 (require 'jvm)
+
+(defvar *compile-file-environment* nil)
 
 (defvar *fbound-names*)
 
@@ -157,9 +159,8 @@
         (t
          (case (car form)
            (MACROLET
-            (let ((new-form (precompiler::precompile-macrolet form)))
-              (process-toplevel-form new-form stream compile-time-too)
-              (return-from process-toplevel-form)))
+            (process-toplevel-macrolet form stream compile-time-too)
+            (return-from process-toplevel-form))
            ((IN-PACKAGE DEFPACKAGE)
             (eval form))
            ((DEFVAR DEFPARAMETER)
@@ -228,7 +229,8 @@
                   (push name *fbound-names*)))))
            ((DEFGENERIC DEFMETHOD)
             (jvm::note-name-defined (second form))
-            (process-toplevel-form (macroexpand-1 form) stream compile-time-too)
+            (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
+                                   stream compile-time-too)
             (return-from process-toplevel-form))
            (DEFMACRO
             (let ((name (second form)))
@@ -270,9 +272,9 @@
               (return-from process-toplevel-form)))
            (LOCALLY
             ;; FIXME Need to handle special declarations too!
-            (let ((jvm:*speed* jvm:*speed*)
+            (let ((jvm:*speed*  jvm:*speed*)
                   (jvm:*safety* jvm:*safety*)
-                  (jvm:*debug* jvm:*debug*))
+                  (jvm:*debug*  jvm:*debug*))
               (jvm::process-optimization-declarations (cdr form))
               (process-toplevel-progn (cdr form) stream compile-time-too)
               (return-from process-toplevel-form)))
@@ -281,15 +283,26 @@
             (return-from process-toplevel-form))
            (t
             (when (and (symbolp (car form))
-                       (macro-function (car form)))
+                       (macro-function (car form) *compile-file-environment*))
               ;; Note that we want MACROEXPAND-1 and not MACROEXPAND here, in
               ;; case the form being expanded expands into something that needs
               ;; special handling by PROCESS-TOPLEVEL-FORM (e.g. DEFMACRO).
-              (process-toplevel-form (macroexpand-1 form) stream compile-time-too)
+              (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
+                                     stream compile-time-too)
               (return-from process-toplevel-form))
             (when compile-time-too
               (eval form))))))
   (dump-form form stream))
+
+(defun process-toplevel-macrolet (form stream compile-time-too)
+  (let ((*compile-file-environment* (make-environment *compile-file-environment*)))
+    (dolist (definition (cadr form))
+      (environment-add-macro-definition *compile-file-environment*
+                                        (car definition)
+                                        (make-macro (car definition)
+                                                    (make-expander-for-macrolet definition))))
+    (dolist (body-form (cddr form))
+      (process-toplevel-form body-form stream compile-time-too))))
 
 (defun process-toplevel-progn (forms stream compile-time-too)
   (dolist (form forms)
