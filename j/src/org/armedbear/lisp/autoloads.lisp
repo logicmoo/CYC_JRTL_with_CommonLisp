@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.153 2004-08-02 19:21:57 piso Exp $
+;;; $Id: autoloads.lisp,v 1.154 2004-08-04 19:23:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -138,6 +138,7 @@
 (autoload 'concatenate)
 (autoload 'parse-lambda-list)
 (autoload-macro 'assert)
+(autoload '(sys::assert-error sys::assert-prompt) "assert")
 (autoload-macro 'with-input-from-string)
 (autoload-macro 'with-output-to-string)
 (autoload 'ensure-directories-exist)
