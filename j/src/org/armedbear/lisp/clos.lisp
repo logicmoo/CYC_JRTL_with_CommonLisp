@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.21 2003-12-09 22:07:57 piso Exp $
+;;; $Id: clos.lisp,v 1.22 2003-12-10 02:34:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -531,6 +531,19 @@
         (dolist (s2 (cdr (memq s1 slots)))
 	  (when (eq name1 (canonical-slot-name s2))
             (error 'program-error "duplicate slot ~S" name1))))))
+  ;; Check for duplicate argument names in :DEFAULT-INITARGS.
+  (let ((names ()))
+    (do* ((initargs (getf all-keys :direct-default-initargs) (cddr initargs))
+          (name (car initargs) (car initargs)))
+         ((null initargs))
+      (push name names))
+    (do* ((names names (cdr names))
+          (name (car names) (car names)))
+         ((null names))
+      (when (memq name (cdr names))
+        (error 'program-error
+               "duplicate initialization argument name ~S in :DEFAULT-INITARGS"
+               name))))
   (let ((class (find-class name nil)))
     (unless class
       (setf class (apply #'make-instance-standard-class (find-class 'standard-class)
