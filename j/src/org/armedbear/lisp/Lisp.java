@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.271 2004-08-17 20:06:32 piso Exp $
+ * $Id: Lisp.java,v 1.272 2004-08-18 17:15:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,12 @@ package org.armedbear.lisp;
 import java.io.File;
 import java.math.BigInteger;
 import java.util.Hashtable;
-import java.util.Random;
 
 public abstract class Lisp
 {
     public static boolean cold = true;
+
+    public static boolean initialized;
 
     // Packages.
     public static final Package PACKAGE_CL =
