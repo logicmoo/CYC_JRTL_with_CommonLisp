@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: coerce.lisp,v 1.5 2004-03-16 00:57:48 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: coerce.lisp,v 1.6 2005-02-26 17:38:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun coerce-list-to-vector (list result-type)
   (let* ((length (length list))
@@ -70,4 +70,7 @@
               (%subtypep result-type 'sequence))
          (concatenate result-type object))
         (t
+         (let ((expanded-type (expand-deftype result-type)))
+           (unless (eq expanded-type result-type)
+             (return-from coerce (coerce object expanded-type))))
          (coerce-error object result-type))))
