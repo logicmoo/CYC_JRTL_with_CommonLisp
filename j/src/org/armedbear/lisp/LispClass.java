@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.30 2003-10-10 14:46:21 piso Exp $
+ * $Id: LispClass.java,v 1.31 2003-10-10 17:03:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ public class LispClass extends StandardObject
 
     protected Symbol symbol;
     private LispObject directSuperclasses;
+    private LispObject directSubclasses;
     private LispObject classPrecedenceList = NIL;
 
     protected LispClass()
@@ -80,6 +81,16 @@ public class LispClass extends StandardObject
     public final void setDirectSuperclass(LispObject superclass)
     {
         directSuperclasses = new Cons(superclass);
+    }
+
+    public final LispObject getDirectSubclasses()
+    {
+        return directSubclasses;
+    }
+
+    public final void setDirectSubclasses(LispObject directSubclasses)
+    {
+        this.directSubclasses = directSubclasses;
     }
 
     public final LispObject getCPL()
@@ -267,6 +278,33 @@ public class LispClass extends StandardObject
         }
     };
 
+    // ### class-direct-subclasses
+    private static final Primitive1 CLASS_DIRECT_SUBCLASSES =
+        new Primitive1("class-direct-subclasses", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).getDirectSubclasses();
+            throw new ConditionThrowable(new TypeError(arg, "class"));
+        }
+    };
+
+    // ### %set-class-direct-subclasses
+    private static final Primitive2 _SET_CLASS_DIRECT_SUBCLASSES =
+        new Primitive2("%set-class-direct-subclasses", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).setDirectSubclasses(second);
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "class"));
+        }
+    };
+
     // ### class-precedence-list
     private static final Primitive1 CLASS_PRECEDENCE_LIST =
         new Primitive1("class-precedence-list", PACKAGE_SYS, false)
@@ -276,6 +314,21 @@ public class LispClass extends StandardObject
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getCPL();
             throw new ConditionThrowable(new TypeError(arg, "class"));
+        }
+    };
+
+    // ### %set-class-precedence-list
+    private static final Primitive1 _SET_CLASS_PRECEDENCE_LIST =
+        new Primitive1("%set-class-precedence-list", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).classPrecedenceList = second;
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "class"));
         }
     };
 
