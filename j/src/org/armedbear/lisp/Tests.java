@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.1 2003-01-17 19:43:31 piso Exp $
+ * $Id: Tests.java,v 1.2 2003-01-30 22:22:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -600,6 +600,13 @@ public class Tests extends TestCase
             "10");
         verify("(catch 'bar (catch 'foo (unwind-protect (throw 'foo 3) (throw 'bar 4) (print 'xxx))))",
             "4");
+
+        // flet
+        verify("(flet ((double (x) (+ x x))) (double 42))", "84");
+        verify("(flet ((plus (a b) (+ a b)) (minus (a b) (- a b))) (list (plus 1 2) (minus 1 2)))",
+            "(3 -1)");
+        verify("(list (flet ((+ (a b) (- a b))) (+ 3 2)) (+ 3 2))", "(1 5)");
+        verify("(flet ((+ (a b) (+ (+ a b a) b))) (+ 3 2))", "10");
     }
 
     private void verify(String input, String expected)
