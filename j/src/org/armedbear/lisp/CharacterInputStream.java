@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.44 2003-09-03 23:46:27 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.45 2003-09-10 00:42:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -336,6 +336,9 @@ public class CharacterInputStream extends LispStream
                 case 'a':
                 case 'A':
                     return readArray(numArg);
+                case 'b':
+                case 'B':
+                    return readBinary();
                 case 'c':
                 case 'C':
                     return readComplex();
@@ -725,6 +728,40 @@ public class CharacterInputStream extends LispStream
         }
         catch (NumberFormatException e) {
             return null;
+        }
+    }
+
+    private LispObject readBinary() throws LispError
+    {
+        try {
+            StringBuffer sb = new StringBuffer();
+            while (true) {
+                int n = read();
+                if (n < 0)
+                    break;
+                char c = (char) n;
+                if (c == '0' || c == '1')
+                    sb.append(c);
+                else {
+                    unread(c);
+                    break;
+                }
+            }
+            String s = sb.toString();
+            try {
+                return new Fixnum(Integer.parseInt(s, 2));
+            }
+            catch (NumberFormatException e) {}
+            // parseInt() failed.
+            try {
+                return new Bignum(new BigInteger(s, 2));
+            }
+            catch (NumberFormatException e) {}
+            // Not a number.
+            throw new LispError();
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
         }
     }
 
