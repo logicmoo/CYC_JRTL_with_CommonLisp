@@ -1,8 +1,8 @@
 /*
  * Extensions.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.19 2003-12-13 00:28:08 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Extensions.java,v 1.20 2004-01-24 19:15:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,9 +85,8 @@ public final class Extensions extends Lisp
         new Primitive1("charpos", PACKAGE_EXT, true) {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof CharacterOutputStream)
-                return new Fixnum(((CharacterOutputStream)arg).getCharPos());
-            return signal(new TypeError(arg, "character output stream"));
+            Stream stream = checkCharacterOutputStream(arg);
+            return new Fixnum(stream.getCharPos());
         }
     };
 
@@ -99,11 +98,9 @@ public final class Extensions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            if (first instanceof CharacterOutputStream) {
-                ((CharacterOutputStream)first).setCharPos(Fixnum.getValue(second));
-                return second;
-            }
-            return signal(new TypeError(first, "character output stream"));
+            Stream stream = checkCharacterOutputStream(first);
+            stream.setCharPos(Fixnum.getValue(second));
+            return second;
         }
     };
 
@@ -118,10 +115,10 @@ public final class Extensions extends Lisp
             int port = Fixnum.getValue(second);
             try {
                 Socket socket = new Socket(host, port);
-                CharacterInputStream in =
-                    new CharacterInputStream(socket.getInputStream());
-                CharacterOutputStream out =
-                    new CharacterOutputStream(socket.getOutputStream());
+                Stream in =
+                    new Stream(socket.getInputStream(), Symbol.CHARACTER);
+                Stream out =
+                    new Stream(socket.getOutputStream(), Symbol.CHARACTER);
                 return new TwoWayStream(in, out);
             }
             catch (Exception e) {
@@ -141,10 +138,10 @@ public final class Extensions extends Lisp
             int port = Fixnum.getValue(second);
             try {
                 Socket socket = new Socket(host, port);
-                BinaryInputStream in =
-                    new BinaryInputStream(socket.getInputStream());
-                BinaryOutputStream out =
-                    new BinaryOutputStream(socket.getOutputStream());
+                Stream in =
+                    new Stream(socket.getInputStream(), Symbol.INTEGER);
+                Stream out =
+                    new Stream(socket.getOutputStream(), Symbol.INTEGER);
                 return new TwoWayStream(in, out);
             }
             catch (Exception e) {

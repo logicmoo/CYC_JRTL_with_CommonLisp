@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.139 2004-01-20 02:27:36 piso Exp $
+ * $Id: Autoload.java,v 1.140 2004-01-24 19:10:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@ public class Autoload extends Function
             try {
                 if (_AUTOLOAD_VERBOSE_.symbolValueNoThrow() != NIL) {
                     final String prefix = Load.getLoadVerbosePrefix(loadDepth);
-                    CharacterOutputStream out = getStandardOutput();
+                    Stream out = getStandardOutput();
                     out.writeString(prefix);
                     out.writeString(" Autoloading ");
                     out.writeString(className);

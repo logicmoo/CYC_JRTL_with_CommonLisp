@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.198 2004-01-16 16:54:29 piso Exp $
+ * $Id: Lisp.java,v 1.199 2004-01-24 19:20:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -856,121 +856,135 @@ public abstract class Lisp
         }
     }
 
-    public static final LispStream checkStream(LispObject obj)
+    public static final Stream checkStream(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
         try {
-            return (LispStream) obj;
+            return (Stream) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "stream"));
+            signal(new TypeError(obj, Symbol.STREAM));
             // Not reached.
             return null;
         }
     }
 
-    public static final CharacterInputStream checkCharacterInputStream(LispObject obj)
+    public static final Stream checkCharacterInputStream(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
-        if (obj instanceof CharacterInputStream)
-            return (CharacterInputStream) obj;
         if (obj instanceof TwoWayStream) {
-            LispInputStream in = ((TwoWayStream)obj).getInputStream();
-            if (in instanceof CharacterInputStream)
-                return (CharacterInputStream) in;
+            Stream in = ((TwoWayStream)obj).getInputStream();
+            if (in.isCharacterStream())
+                return in;
         }
+        if (obj instanceof Stream)
+            if (((Stream)obj).isInputStream())
+                if (((Stream)obj).isCharacterStream())
+                    return (Stream) obj;
         signal(new TypeError(obj, "character input stream"));
         // Not reached.
         return null;
     }
 
-    public static final CharacterOutputStream checkCharacterOutputStream(LispObject obj)
+    public static final Stream checkCharacterOutputStream(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
-        if (obj instanceof CharacterOutputStream)
-            return (CharacterOutputStream) obj;
         if (obj instanceof TwoWayStream) {
-            LispOutputStream out = ((TwoWayStream)obj).getOutputStream();
-            if (out instanceof CharacterOutputStream)
-                return (CharacterOutputStream) out;
+            Stream out = ((TwoWayStream)obj).getOutputStream();
+            if (out.isCharacterStream())
+                return out;
         }
+        if (obj instanceof Stream)
+            if (((Stream)obj).isOutputStream())
+                if (((Stream)obj).isCharacterStream())
+                    return (Stream) obj;
         signal(new TypeError(obj, "character output stream"));
         // Not reached.
         return null;
     }
 
-    public static final BinaryInputStream checkBinaryInputStream(LispObject obj)
+    public static final Stream checkBinaryInputStream(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
-        if (obj instanceof BinaryInputStream)
-            return (BinaryInputStream) obj;
         if (obj instanceof TwoWayStream) {
-            LispInputStream in = ((TwoWayStream)obj).getInputStream();
-            if (in instanceof BinaryInputStream)
-                return (BinaryInputStream) in;
+            Stream in = ((TwoWayStream)obj).getInputStream();
+            if (in.isBinaryStream())
+                return in;
         }
+        if (obj instanceof Stream)
+            if (((Stream)obj).isInputStream())
+                if (((Stream)obj).isBinaryStream())
+                    return (Stream) obj;
         signal(new TypeError(obj, "binary input stream"));
         // Not reached.
         return null;
     }
 
-    public static final BinaryOutputStream checkBinaryOutputStream(LispObject obj)
+    public static final Stream checkBinaryOutputStream(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == null)
             throw new NullPointerException();
-        if (obj instanceof BinaryOutputStream)
-            return (BinaryOutputStream) obj;
         if (obj instanceof TwoWayStream) {
-            LispOutputStream out = ((TwoWayStream)obj).getOutputStream();
-            if (out instanceof BinaryOutputStream)
-                return (BinaryOutputStream) out;
+            Stream out = ((TwoWayStream)obj).getOutputStream();
+            if (out.isBinaryStream())
+                return out;
         }
+        if (obj instanceof Stream)
+            if (((Stream)obj).isOutputStream())
+                if (((Stream)obj).isBinaryStream())
+                    return (Stream) obj;
         signal(new TypeError(obj, "binary output stream"));
         // Not reached.
         return null;
     }
 
-    public static final CharacterInputStream inSynonymOf(LispObject obj)
+    public static final Stream inSynonymOf(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == T)
             return checkCharacterInputStream(_TERMINAL_IO_.symbolValue());
         if (obj == NIL)
             return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue());
-        if (obj instanceof CharacterInputStream)
-            return (CharacterInputStream) obj;
-        if (obj instanceof TwoWayStream) {
-            LispInputStream in = ((TwoWayStream)obj).getInputStream();
-            if (in instanceof CharacterInputStream)
-                return (CharacterInputStream) in;
+        if (obj instanceof Stream) {
+            Stream stream = (Stream) obj;
+            if (stream instanceof TwoWayStream) {
+                Stream in = ((TwoWayStream)stream).getInputStream();
+                if (in.isInputStream() && in.isCharacterStream())
+                    return in;
+            }
+            if (stream.isInputStream() && stream.isCharacterStream())
+                return stream;
         }
         signal(new TypeError(obj, "character input stream"));
         // Not reached.
         return null;
     }
 
-    public static final CharacterOutputStream outSynonymOf(LispObject obj)
+    public static final Stream outSynonymOf(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == T)
             return checkCharacterOutputStream(_TERMINAL_IO_.symbolValue());
         if (obj == NIL)
             return checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-        if (obj instanceof CharacterOutputStream)
-            return (CharacterOutputStream) obj;
-        if (obj instanceof TwoWayStream) {
-            LispOutputStream out = ((TwoWayStream)obj).getOutputStream();
-            if (out instanceof CharacterOutputStream)
-                return (CharacterOutputStream) out;
+        if (obj instanceof Stream) {
+            Stream stream = (Stream) obj;
+            if (stream instanceof TwoWayStream) {
+                Stream out = ((TwoWayStream)obj).getOutputStream();
+                if (out.isOutputStream() && out.isCharacterStream())
+                    return out;
+            }
+            if (stream.isOutputStream() && stream.isCharacterStream())
+                return stream;
         }
         signal(new TypeError(obj, "character output stream"));
         // Not reached.
@@ -1234,8 +1248,7 @@ public abstract class Lisp
     {
         Package pkg = Packages.findPackage(packageName);
         if (pkg == null)
-            signal(new LispError(packageName +
-                                                       " is not the name of a package"));
+            signal(new LispError(packageName + " is not the name of a package"));
         return pkg.intern(name);
     }
 
@@ -1335,11 +1348,9 @@ public abstract class Lisp
         return (Package) _PACKAGE_.symbolValueNoThrow();
     }
 
-    private static CharacterInputStream stdin =
-        new CharacterInputStream(System.in, true);
+    private static Stream stdin = new Stream(System.in, Symbol.CHARACTER, true);
 
-    private static CharacterOutputStream stdout =
-        new CharacterOutputStream(System.out, true);
+    private static Stream stdout = new Stream(System.out, Symbol.CHARACTER, true);
 
     public static final Symbol _STANDARD_INPUT_ =
         exportSpecial("*STANDARD-INPUT*", PACKAGE_CL, stdin);
@@ -1365,7 +1376,7 @@ public abstract class Lisp
         exportSpecial("*DEBUG-IO*", PACKAGE_CL,
                       new TwoWayStream(stdin, stdout, true));
 
-    public void resetIO(CharacterInputStream in, CharacterOutputStream out)
+    public void resetIO(Stream in, Stream out)
     {
         stdin = in;
         stdout = out;
@@ -1383,19 +1394,19 @@ public abstract class Lisp
         return (TwoWayStream) _TERMINAL_IO_.symbolValueNoThrow();
     }
 
-    public static final CharacterInputStream getStandardInput()
+    public static final Stream getStandardInput()
     {
-        return (CharacterInputStream) _STANDARD_INPUT_.symbolValueNoThrow();
+        return (Stream) _STANDARD_INPUT_.symbolValueNoThrow();
     }
 
-    public static final CharacterOutputStream getStandardOutput() throws ConditionThrowable
+    public static final Stream getStandardOutput() throws ConditionThrowable
     {
         return checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValueNoThrow());
     }
 
-    public static final CharacterOutputStream getTraceOutput()
+    public static final Stream getTraceOutput()
     {
-        return (CharacterOutputStream) _TRACE_OUTPUT_.symbolValueNoThrow();
+        return (Stream) _TRACE_OUTPUT_.symbolValueNoThrow();
     }
 
     public static final Symbol _READTABLE_ =

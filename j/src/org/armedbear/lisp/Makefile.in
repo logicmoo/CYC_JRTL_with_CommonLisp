@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.129 2004-01-20 02:23:09 piso Exp $
+# $Id: Makefile.in,v 1.130 2004-01-24 19:17:06 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,16 +28,12 @@ CLASSFILES =	AbstractArray.class \
 		Autoload.class \
 		AutoloadMacro.class \
 		Bignum.class \
-		BinaryInputStream.class \
-		BinaryOutputStream.class \
 		Binding.class \
 		BitVector.class \
 		Block.class \
 		BuiltInClass.class \
 		CellError.class \
 		CharacterFunctions.class \
-		CharacterInputStream.class \
-		CharacterOutputStream.class \
 		Closure.class \
 		CompiledFunction.class \
 		Complex.class \
@@ -75,10 +71,7 @@ CLASSFILES =	AbstractArray.class \
 		LispClass.class \
 		LispError.class \
 		LispFloat.class \
-		LispInputStream.class \
 		LispObject.class \
-		LispOutputStream.class \
-		LispStream.class \
 		LispString.class \
 		LispThread.class \
 		Load.class \
@@ -116,6 +109,7 @@ CLASSFILES =	AbstractArray.class \
 		SpecialOperators.class \
 		StandardClass.class \
 		StandardObject.class \
+		Stream.class \
 		StreamError.class \
 		StringFunctions.class \
 		StringInputStream.class \

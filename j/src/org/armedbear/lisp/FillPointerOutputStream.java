@@ -1,8 +1,8 @@
 /*
  * FillPointerOutputStream.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.4 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: FillPointerOutputStream.java,v 1.5 2004-01-24 19:16:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,15 @@
 
 package org.armedbear.lisp;
 
-public final class FillPointerOutputStream extends CharacterOutputStream
+public final class FillPointerOutputStream extends Stream
 {
     private LispString string;
 
     private FillPointerOutputStream(LispString string)
     {
+        elementType = Symbol.CHARACTER;
+        isOutputStream = true;
+        isInputStream = false;
         this.string = string;
         setWriter(new Writer());
     }

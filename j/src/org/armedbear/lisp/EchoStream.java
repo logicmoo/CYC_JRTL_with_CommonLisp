@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.1 2004-01-20 02:22:32 piso Exp $
+ * $Id: EchoStream.java,v 1.2 2004-01-24 19:12:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,19 +22,18 @@
 package org.armedbear.lisp;
 
 // FIXME Need to add echo functionality!
-public final class EchoStream extends LispStream
+public final class EchoStream extends Stream
 {
-    private final LispInputStream in;
-    private final LispOutputStream out;
+    private final Stream in;
+    private final Stream out;
 
-    public EchoStream(LispInputStream in, LispOutputStream out)
+    public EchoStream(Stream in, Stream out)
     {
         this.in = in;
         this.out = out;
     }
 
-    public EchoStream(LispInputStream in, LispOutputStream out,
-                      boolean interactive)
+    public EchoStream(Stream in, Stream out, boolean interactive)
     {
         this.in = in;
         this.out = out;
@@ -50,12 +49,12 @@ public final class EchoStream extends LispStream
         return Symbol.NULL; // FIXME
     }
 
-    public LispInputStream getInputStream()
+    public Stream getInputStream()
     {
         return in;
     }
 
-    public LispOutputStream getOutputStream()
+    public Stream getOutputStream()
     {
         return out;
     }
@@ -99,12 +98,11 @@ public final class EchoStream extends LispStream
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            if (!(first instanceof LispInputStream))
-                return signal(new TypeError(first, "input stream"));
-            if (!(second instanceof LispOutputStream))
-                return signal(new TypeError(second, "output stream"));
-            return new EchoStream((LispInputStream) first,
-                                    (LispOutputStream) second);
+            if (!(first instanceof Stream))
+                return signal(new TypeError(first, Symbol.STREAM));
+            if (!(second instanceof Stream))
+                return signal(new TypeError(second, Symbol.STREAM));
+            return new EchoStream((Stream) first, (Stream) second);
         }
     };
 
@@ -116,7 +114,7 @@ public final class EchoStream extends LispStream
         {
             if (arg instanceof EchoStream)
                 return ((EchoStream)arg).getInputStream();
-            return signal(new TypeError(arg, "echo-stream"));
+            return signal(new TypeError(arg, Symbol.ECHO_STREAM));
         }
     };
 
@@ -128,7 +126,7 @@ public final class EchoStream extends LispStream
         {
             if (arg instanceof EchoStream)
                 return ((EchoStream)arg).getOutputStream();
-            return signal(new TypeError(arg, "echo-stream"));
+            return signal(new TypeError(arg, Symbol.ECHO_STREAM));
         }
     };
 }
