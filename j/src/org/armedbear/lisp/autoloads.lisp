@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.106 2004-02-06 11:40:25 piso Exp $
+;;; $Id: autoloads.lisp,v 1.107 2004-02-06 12:58:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -99,7 +99,9 @@
           "bit-array-ops.lisp")
 (autoload 'deposit-field)
 (autoload 'mask-field)
-(autoload '(ensure-generic-function subclassp make-condition) "clos.lisp")
+(autoload '(ensure-generic-function subclassp make-condition
+            define-method-combination)
+          "clos.lisp")
 (autoload 'inspect)
 
 (autoload '(tpl::top-level-loop) "top-level.lisp")
