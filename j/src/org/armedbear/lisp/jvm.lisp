@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.131 2004-04-27 00:32:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.132 2004-04-27 12:38:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1586,20 +1586,22 @@
 ;;; MISC.337, MISC.343: BLOCK
 ;;; MISC.338: IF
 (defun rewrite-function-call (form)
-  (let ((op (car form))
-        (args (cdr form))
-        (syms ())
-        (lets ()))
-    (dolist (arg args)
-      (cond ((and (consp arg)
-                  (memq (car arg) '(RETURN-FROM GO BLOCK IF)))
-             (let ((sym (gensym)))
-               (push sym syms)
-               (push (list sym arg) lets)))
-            (t
-             (push arg syms))))
-    (if lets
-        (list 'LET* (nreverse lets) (list* op (nreverse syms)))
+  (let* ((args (cdr form))
+         (rewrite (dolist (arg args)
+                    (when (and (consp arg)
+                               (memq (car arg) '(RETURN-FROM GO BLOCK IF)))
+                      (return t)))))
+    (if rewrite
+        (let ((op (car form))
+              (syms ())
+              (lets ()))
+          (dolist (arg args)
+            (if (constantp arg)
+                (push arg syms)
+                (let ((sym (gensym)))
+                  (push sym syms)
+                  (push (list sym arg) lets))))
+          (list 'LET* (nreverse lets) (list* op (nreverse syms))))
         form)))
 
 (defun process-args (args)
