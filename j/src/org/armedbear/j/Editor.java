@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.87 2003-07-03 01:04:42 piso Exp $
+ * $Id: Editor.java,v 1.88 2003-07-04 15:06:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4273,7 +4273,7 @@ public final class Editor extends JPanel implements Constants,
             if (s.startsWith("pop://") || s.startsWith("{")) {
                 MailboxURL url = MailboxURL.parse(s);
                 if (url != null) {
-                    Buffer buf = MailCommands.getMailbox(this, url);
+                    Buffer buf = MailCommands.getMailboxBuffer(this, url);
                     if (buf != null) {
                         makeNext(buf);
                         toBeActivated = buf;
