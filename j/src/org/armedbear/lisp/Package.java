@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.53 2004-04-18 04:51:06 piso Exp $
+ * $Id: Package.java,v 1.54 2004-04-20 15:08:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,6 +85,18 @@ public final class Package extends LispObject
     {
         if (name != null) {
             Packages.deletePackage(this);
+            for (Iterator it = internalSymbols.values().iterator(); it.hasNext();) {
+                Symbol symbol = (Symbol) it.next();
+                if (symbol.getPackage() == this)
+                    symbol.setPackage(NIL);
+                it.remove();
+            }
+            for (Iterator it = externalSymbols.values().iterator(); it.hasNext();) {
+                Symbol symbol = (Symbol) it.next();
+                if (symbol.getPackage() == this)
+                    symbol.setPackage(NIL);
+                it.remove();
+            }
             name = null;
             nicknames = null;
             return true;
