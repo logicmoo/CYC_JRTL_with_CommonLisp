@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.50 2004-05-16 14:46:37 piso Exp $
+;;; $Id: subtypep.lisp,v 1.51 2004-10-19 03:17:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -279,40 +279,6 @@
            (return-from %subtypep (values t t)))
           ((null (or i1 i2))
            (return-from %subtypep (values (simple-subtypep t1 t2) t)))
-          ((classp t2)
-           (cond ((eq t2 (find-class t1 nil))
-                  (values t t))
-                 ((and (eq t2 (find-class 'array))
-                       (memq t1 '(array simple-array vector simple-vector string
-                                  simple-string simple-base-string bit-vector
-                                  simple-bit-vector)))
-                  (values t t))
-                 ((eq t2 (find-class 'vector))
-                  (cond ((memq t1 '(string simple-string))
-                         (values t t))
-                        ((eq t1 'array)
-                         (let ((dim (cadr i1)))
-                           (if (or (eql dim 1)
-                                   (and (consp dim) (= (length dim) 1)))
-                               (values t t)
-                               (values nil t))))
-                        (t
-                         (values nil t))))
-                 ((and (eq t2 (find-class 'simple-vector))
-                       (eq t1 'simple-array))
-                  (let ((dim (cadr i1)))
-                    (if (or (eql dim 1)
-                            (and (consp dim) (= (length dim) 1)))
-                        (values t t)
-                        (values nil t))))
-                 ((and (eq t2 (find-class 'bit-vector))
-                       (eq t1 'simple-bit-vector))
-                  (values t t))
-                 ((and (eq t2 (find-class 'string))
-                       (memq t1 '(string simple-string)))
-                  (values t t))
-                 (t
-                  (values nil nil))))
           ((eq t2 'sequence)
            (cond ((memq t1 '(null cons list))
                   (values t t))
@@ -328,7 +294,8 @@
           ((eq t1 'integer)
            (cond ((memq t2 '(integer rational real number))
                   (values (sub-interval-p i1 i2) t))
-                 ((eq t2 'bignum)
+                 ((or (eq t2 'bignum)
+                      (eq t2 (find-class 'bignum)))
                   (values
                    (or (sub-interval-p i1 (list '* (list most-negative-fixnum)))
                        (sub-interval-p i1 (list (list most-positive-fixnum) '*)))
@@ -451,6 +418,40 @@
                             nil) t))
                (t
                 (values nil t)))))
+          ((classp t2)
+           (cond ((eq t2 (find-class t1 nil))
+                  (values t t))
+                 ((and (eq t2 (find-class 'array))
+                       (memq t1 '(array simple-array vector simple-vector string
+                                  simple-string simple-base-string bit-vector
+                                  simple-bit-vector)))
+                  (values t t))
+                 ((eq t2 (find-class 'vector))
+                  (cond ((memq t1 '(string simple-string))
+                         (values t t))
+                        ((eq t1 'array)
+                         (let ((dim (cadr i1)))
+                           (if (or (eql dim 1)
+                                   (and (consp dim) (= (length dim) 1)))
+                               (values t t)
+                               (values nil t))))
+                        (t
+                         (values nil t))))
+                 ((and (eq t2 (find-class 'simple-vector))
+                       (eq t1 'simple-array))
+                  (let ((dim (cadr i1)))
+                    (if (or (eql dim 1)
+                            (and (consp dim) (= (length dim) 1)))
+                        (values t t)
+                        (values nil t))))
+                 ((and (eq t2 (find-class 'bit-vector))
+                       (eq t1 'simple-bit-vector))
+                  (values t t))
+                 ((and (eq t2 (find-class 'string))
+                       (memq t1 '(string simple-string)))
+                  (values t t))
+                 (t
+                  (values nil nil))))
           (t
            (values nil nil)))))
 
