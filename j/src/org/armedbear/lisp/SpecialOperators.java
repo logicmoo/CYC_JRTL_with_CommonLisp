@@ -1,8 +1,8 @@
 /*
  * SpecialOperators.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: SpecialOperators.java,v 1.34 2005-02-28 02:50:04 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: SpecialOperators.java,v 1.35 2005-02-28 17:20:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,9 @@ import java.util.ArrayList;
 public final class SpecialOperators extends Lisp
 {
     // ### quote
-    private static final SpecialOperator QUOTE = new SpecialOperator("quote", "thing") {
+    private static final SpecialOperator QUOTE =
+        new SpecialOperator("quote", "thing")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -35,7 +37,9 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### if
-    private static final SpecialOperator IF = new SpecialOperator("if", "test then &optional else") {
+    private static final SpecialOperator IF =
+        new SpecialOperator("if", "test then &optional else")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -58,7 +62,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### let
-    private static final SpecialOperator LET = new SpecialOperator("let", "bindings &body body")
+    private static final SpecialOperator LET =
+        new SpecialOperator("let", "bindings &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -68,7 +73,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### let*
-    private static final SpecialOperator LETX = new SpecialOperator("let*", "bindings &body body")
+    private static final SpecialOperator LETX =
+        new SpecialOperator("let*", "bindings &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
