@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Help.java,v 1.1.1.1 2002-09-24 16:08:39 piso Exp $
+ * $Id: Help.java,v 1.2 2003-01-07 17:51:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,14 @@ public final class Help
                 }
             } else {
                 buf = WebBuffer.createWebBuffer(file, null, commandName);
-                editor.makeNext(buf);
+                Editor otherEditor = editor.getOtherEditor();
+                if (otherEditor != null) {
+                    buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
+                    otherEditor.makeNext(buf);
+                } else {
+                    buf.setUnsplitOnClose(true);
+                    editor.makeNext(buf);
+                }
                 Editor ed = editor.activateInOtherWindow(buf);
                 ed.updateDisplay();
             }
