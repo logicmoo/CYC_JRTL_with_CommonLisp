@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.33 2003-07-07 14:18:45 piso Exp $
+ * $Id: Autoload.java,v 1.34 2003-07-12 14:40:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,6 +192,7 @@ public final class Autoload extends Function
         autoload("unuse-package", "PackageFunctions");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
+        autoload(PACKAGE_SYS, "%make-structure", "StructureObject");
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
@@ -210,6 +211,8 @@ public final class Autoload extends Function
         autoload(PACKAGE_SYS, "%string=", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
+        autoload(PACKAGE_SYS, "%structure-ref", "StructureObject");
+        autoload(PACKAGE_SYS, "%structure-set", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
     }
 }
