@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.59 2003-12-16 02:23:20 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.60 2003-12-17 03:40:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,10 @@ public class CharacterInputStream extends LispInputStream
                     }
                 }
             }
-            return _READ_SUPPRESS_.symbolValueNoThrow() != NIL ? NIL : result;
+            if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+                return NIL;
+            else
+                return result;
         }
         catch (IOException e) {
             return signal(new StreamError(e));
@@ -342,7 +345,8 @@ public class CharacterInputStream extends LispInputStream
                                              thread);
                 LispObject[] values = thread.getValues();
                 if (values != null && values.length == 0)
-                    return null; // Function returned no values.
+                    result = null;
+                thread.clearValues();
                 return result;
             }
             switch (c) {
@@ -363,7 +367,7 @@ public class CharacterInputStream extends LispInputStream
                     return null;
                 case '.':
                     return eval(read(true, NIL, true), new Environment(),
-                        LispThread.currentThread());
+                                LispThread.currentThread());
                 case '*':
                     return readBitVector();
                 case 'a':
