@@ -26,45 +26,69 @@ public abstract class AbstractVector extends AbstractArray
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
-        if (typeSpecifier == Symbol.VECTOR)
-            return T;
-        if (typeSpecifier == Symbol.ARRAY)
-            return T;
-        if (typeSpecifier == Symbol.SEQUENCE)
-            return T;
-        if (typeSpecifier == Symbol.SIMPLE_VECTOR)
-            return isSimpleVector() ? T : NIL;
-        if (typeSpecifier == Symbol.SIMPLE_ARRAY)
-            return isSimpleVector() ? T : NIL;
-        if (typeSpecifier instanceof LispClass) {
+        if (typeSpecifier instanceof Symbol) {
+            if (typeSpecifier == Symbol.VECTOR)
+                return T;
+            if (typeSpecifier == Symbol.ARRAY)
+                return T;
+            if (typeSpecifier == Symbol.SEQUENCE)
+                return T;
+            if (typeSpecifier == Symbol.SIMPLE_VECTOR)
+                return isSimpleVector() ? T : NIL;
+            if (typeSpecifier == Symbol.SIMPLE_ARRAY)
+                return isSimpleVector() ? T : NIL;
+        } else if (typeSpecifier instanceof LispClass) {
             final String name = typeSpecifier.getName();
             if (name.equals("VECTOR"))
                 return T;
             if (name.equals("ARRAY"))
                 return T;
-        }
-        if (typeSpecifier instanceof Cons) {
+        } else if (typeSpecifier instanceof Cons) {
             final int length = typeSpecifier.length();
             if (length > 3)
                 throw new WrongNumberOfArgumentsException((LispObject)null);
             LispObject type = checkSymbol(typeSpecifier.car());
-            if (type == Symbol.ARRAY ||
-                (type == Symbol.SIMPLE_ARRAY && isSimpleVector())) {
-                if (length == 1)
-                    return T;
-                LispObject elementType = typeSpecifier.cadr();
-                if (elementType == Symbol.UNSPECIFIED || elementType == T)
-                    ;
-                else
+            if (type == Symbol.SIMPLE_VECTOR) {
+                if (!isSimpleVector())
                     return NIL;
-                if (length == 2)
+                if (length > 2)
+                    throw new WrongNumberOfArgumentsException((LispObject)null);
+                LispObject dim = typeSpecifier.cadr();
+                if (dim == Symbol.UNSPECIFIED)
                     return T;
-                LispObject dimensions = typeSpecifier.cddr().car();
-                if (dimensions == Symbol.UNSPECIFIED)
-                    return T;
+                if (dim instanceof Fixnum)
+                    return ((Fixnum)dim).getValue() == capacity() ? T : NIL;
+                throw new LispError("bad dimension in array type");
+            }
+            if (type == Symbol.ARRAY || type == Symbol.VECTOR)
+                ;
+            else if (type == Symbol.SIMPLE_ARRAY) {
+                if (!isSimpleVector())
+                    return NIL;
+            } else
+                return NIL;
+            if (length == 1)
+                return T;
+            LispObject elementType = typeSpecifier.cadr();
+            if (elementType == Symbol.UNSPECIFIED || elementType == getElementType())
+                ;
+            else
+                return NIL;
+            if (length == 2)
+                return T;
+            LispObject dimensions = typeSpecifier.cddr().car();
+            if (dimensions == Symbol.UNSPECIFIED)
+                return T;
+            if (type == Symbol.VECTOR) {
+                if (dimensions instanceof Fixnum) {
+                    return ((Fixnum)dimensions).getValue() == capacity() ? T : NIL;
+                }
+                throw new LispError("bad dimension in array type");
+            }
+            if (type == Symbol.ARRAY || type == Symbol.SIMPLE_ARRAY) {
                 if (dimensions instanceof Fixnum) {
                     // Rank.
-                    return (((Fixnum)dimensions).getValue() == 1) ? T : NIL;
+                    return ((Fixnum)dimensions).getValue() == 1 ? T : NIL;
                 }
                 if (dimensions instanceof Cons) {
                     if (dimensions.length() != 1)
@@ -72,10 +96,13 @@ public abstract class AbstractVector extends AbstractArray
                     LispObject dim = dimensions.car();
                     if (dim == Symbol.UNSPECIFIED)
                         return T;
-                    if (dim instanceof Fixnum) {
+                    if (dim instanceof Fixnum)
                         return (((Fixnum)dim).getValue() == capacity()) ? T : NIL;
-                    }
+                    throw new LispError("bad dimension in array type");
                 }
+                if (dimensions == NIL)
+                    return NIL;
+                throw new LispError("bad dimension in array type");
             }
             return NIL;
         }
