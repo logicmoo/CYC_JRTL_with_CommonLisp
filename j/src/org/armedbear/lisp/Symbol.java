@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.108 2004-02-23 14:24:48 piso Exp $
+ * $Id: Symbol.java,v 1.109 2004-03-07 17:44:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -406,17 +406,34 @@ public class Symbol extends LispObject
     public String toString()
     {
         LispObject printCase = _PRINT_CASE_.symbolValueNoThrow();
+        LispObject readtableCase = getCurrentReadtable().getReadtableCase();
         if (pkg == PACKAGE_KEYWORD) {
             if (printCase == Keyword.DOWNCASE)
                 return ":".concat(name.toLowerCase());
+            else if (printCase == Keyword.CAPITALIZE)
+                return capitalize(name, readtableCase);
             else
                 return ":".concat(name);
         }
         if (_PRINT_ESCAPE_.symbolValueNoThrow() == NIL) {
-            if (printCase == Keyword.DOWNCASE)
-                return name.toLowerCase();
-            else
+            if (readtableCase == Keyword.UPCASE) {
+                if (printCase == Keyword.DOWNCASE)
+                    return name.toLowerCase();
+                else if (printCase == Keyword.CAPITALIZE)
+                    return capitalize(name, readtableCase);
+                else
+                    return name;
+            } else if (readtableCase == Keyword.DOWNCASE) {
+                if (printCase == Keyword.DOWNCASE)
+                    return name.toUpperCase();
+                else if (printCase == Keyword.CAPITALIZE)
+                    return capitalize(name, readtableCase);
+                else
+                    return name;
+            } else if (readtableCase == Keyword.PRESERVE) {
                 return name;
+            } else // INVERT
+                return invert(name);
         }
         boolean escape = false;
         final int length = name.length();
@@ -468,6 +485,70 @@ public class Symbol extends LispObject
         else
             sb.append("::");
         sb.append(s);
+        return sb.toString();
+    }
+
+    private static final String capitalize(String s, LispObject readtableCase)
+    {
+        if (readtableCase == Keyword.INVERT || readtableCase == Keyword.PRESERVE)
+            return s;
+        final int limit = s.length();
+        StringBuffer sb = new StringBuffer(limit);
+        boolean lastCharWasAlphanumeric = false;
+        for (int i = 0; i < limit; i++) {
+            char c = s.charAt(i);
+            if (Character.isLowerCase(c)) {
+                if (readtableCase == Keyword.UPCASE)
+                    sb.append(c);
+                else // DOWNCASE
+                    sb.append(lastCharWasAlphanumeric ? c : Utilities.toUpperCase(c));
+                lastCharWasAlphanumeric = true;
+            } else if (Character.isUpperCase(c)) {
+                if (readtableCase == Keyword.UPCASE)
+                    sb.append(lastCharWasAlphanumeric ? Utilities.toLowerCase(c) : c);
+                else // DOWNCASE
+                    sb.append(c);
+                lastCharWasAlphanumeric = true;
+            } else {
+                sb.append(c);
+                lastCharWasAlphanumeric = Character.isDigit(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    public static final String invert(String s)
+    {
+        // "When the readtable case is :invert, the case of all alphabetic
+        // characters in single case symbol names is inverted. Mixed-case
+        // symbol names are printed as is."
+        final int limit = s.length();
+        final int LOWER = 1;
+        final int UPPER = 2;
+        int state = 0;
+        for (int i = 0; i < limit; i++) {
+            char c = s.charAt(i);
+            if (Character.isUpperCase(c)) {
+                if (state == LOWER)
+                    return s; // Mixed case.
+                state = UPPER;
+            }
+            if (Character.isLowerCase(c)) {
+                if (state == UPPER)
+                    return s; // Mixed case.
+                state = LOWER;
+            }
+        }
+        StringBuffer sb = new StringBuffer(limit);
+        for (int i = 0; i < limit; i++) {
+            char c = s.charAt(i);
+            if (Character.isUpperCase(c))
+                sb.append(Character.toLowerCase(c));
+            else if (Character.isLowerCase(c))
+                sb.append(Character.toUpperCase(c));
+            else
+                sb.append(c);
+        }
         return sb.toString();
     }
 
