@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.26 2003-09-22 12:24:08 piso Exp $
+ * $Id: LispClass.java,v 1.27 2003-09-28 14:58:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,13 +155,38 @@ public class LispClass extends StandardObject
     }
 
     // ### find-class
+    // find-class symbol &optional errorp environment => class
     private static final Primitive FIND_CLASS = new Primitive("find-class") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject symbol) throws ConditionThrowable
         {
-            if (args.length < 1)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            LispObject obj = (LispObject) map.get(checkSymbol(args[0]));
-            return obj != null ? obj : NIL;
+            LispObject c = findClass(checkSymbol(symbol));
+            if (c == null) {
+                StringBuffer sb = new StringBuffer("there is no class named ");
+                sb.append(symbol);
+                throw new ConditionThrowable(new LispError(sb.toString()));
+            }
+            return c;
+        }
+        public LispObject execute(LispObject symbol, LispObject errorp)
+            throws ConditionThrowable
+        {
+            LispObject c = findClass(checkSymbol(symbol));
+            if (c == null) {
+                if (errorp != NIL) {
+                    StringBuffer sb = new StringBuffer("there is no class named ");
+                    sb.append(symbol);
+                    throw new ConditionThrowable(new LispError(sb.toString()));
+                }
+                return NIL;
+            }
+            return c;
+        }
+        public LispObject execute(LispObject symbol, LispObject errorp,
+                                  LispObject environment)
+            throws ConditionThrowable
+        {
+            // FIXME Ignore environment.
+            return execute(symbol, errorp);
         }
     };
 
