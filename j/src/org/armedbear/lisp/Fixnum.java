@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.49 2003-08-15 17:18:02 piso Exp $
+ * $Id: Fixnum.java,v 1.50 2003-08-16 16:56:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,9 +257,8 @@ public final class Fixnum extends LispObject
         if (obj instanceof Ratio) {
             BigInteger numerator = ((Ratio)obj).numerator();
             BigInteger denominator = ((Ratio)obj).denominator();
-            return number(
-                getBigInteger().multiply(denominator),
-                numerator);
+            return number(getBigInteger().multiply(denominator),
+                          numerator);
         }
         if (obj instanceof LispFloat)
             return new LispFloat(value / LispFloat.getValue(obj));
@@ -370,8 +369,24 @@ public final class Fixnum extends LispObject
             thread.setValues(values);
             return values[0];
         }
-        Thread.dumpStack();
-        throw new LispError("not implemented");
+        if (obj instanceof Bignum) {
+            values[0] = ZERO;
+            values[1] = this;
+            thread.setValues(values);
+            return values[0];
+        }
+        if (obj instanceof Ratio) {
+            Ratio divisor = (Ratio) obj;
+            LispObject quotient =
+                multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
+            LispObject remainder =
+                subtract(quotient.multiplyBy(divisor));
+            values[0] = quotient;
+            values[1] = remainder;
+            thread.setValues(values);
+            return values[0];
+        }
+        throw new LispError("Fixnum.truncate(): not implemented: " + obj.typeOf());
     }
 
     public int hashCode()
