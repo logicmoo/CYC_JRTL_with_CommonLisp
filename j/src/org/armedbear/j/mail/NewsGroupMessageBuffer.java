@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.6 2002-11-21 20:37:00 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.7 2002-11-23 05:00:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,6 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         NewsGroupSummaryEntry nextEntry =
             (NewsGroupSummaryEntry) summary.getNextUndeleted(entry);
         if (nextEntry != null) {
-            summary.setDotEntry(nextEntry);
             empty();
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                 Editor ed = it.nextEditor();
@@ -115,7 +114,6 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         NewsGroupSummaryEntry prevEntry =
             (NewsGroupSummaryEntry) summary.getPreviousUndeleted(entry);
         if (prevEntry != null) {
-            summary.setDotEntry(prevEntry);
             empty();
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                 Editor ed = it.nextEditor();
@@ -166,22 +164,24 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                 progressNotifier);
         if (cancelled)
             return;
-        if (rawText != null) {
-            message = new Message(rawText);
-            parseMessage();
-            title = message.getHeaderValue(Headers.SUBJECT);
-            if (title == null)
-                title = "";
-            allHeaders = message.getAllHeaders();
-            defaultHeaders = getDefaultHeaders(allHeaders);
-            rawBody = message.getRawBody();
-            setText();
-            setLoaded(true);
-            formatter.parseBuffer();
-            entry.setFlags(entry.getFlags() | MailboxEntry.SEEN);
-            summary.updateEntry(entry);
-        }
-        Runnable r = new Runnable() {
+        if (rawText == null)
+            return;
+        message = new Message(rawText);
+        parseMessage();
+        title = message.getHeaderValue(Headers.SUBJECT);
+        if (title == null)
+            title = "";
+        allHeaders = message.getAllHeaders();
+        defaultHeaders = getDefaultHeaders(allHeaders);
+        rawBody = message.getRawBody();
+        setText();
+        setLoaded(true);
+        formatter.parseBuffer();
+        entry.setFlags(entry.getFlags() | MailboxEntry.SEEN);
+        summary.updateEntry(entry);
+        final MailboxLine mailboxLine =
+            summary.findLineForEntry(entry);
+        Runnable completionRunnable = new Runnable() {
             public void run()
             {
                 setBusy(false);
@@ -194,13 +194,22 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                             ed.getDisplay().setTopLine(getFirstLine());
                             ed.setUpdateFlag(REPAINT);
                             ed.updateDisplay();
+                        } else if (ed.getBuffer() == summary) {
+                            if (ed.getDot() != null) {
+                                ed.update(ed.getDotLine());
+                                ed.getDot().moveTo(mailboxLine, 0);
+                                ed.update(mailboxLine);
+                                ed.moveCaretToDotCol();
+                                ed.clearStatusText();
+                                ed.updateDisplay();
+                            }
                         }
                     }
                     Sidebar.repaintBufferListInAllFrames();
                 }
             }
         };
-        SwingUtilities.invokeLater(r);
+        SwingUtilities.invokeLater(completionRunnable);
     }
 
     private void appendBody(String rawBody)
