@@ -2,8 +2,7 @@
 
 (in-package "J")
 
-(export '(global-map-key global-unmap-key map-key-for-mode unmap-key-for-mode
-          set-global-property
+(export '(set-global-property
           reset-display
           log.debug
           add-hook
@@ -17,23 +16,6 @@
           key-pressed-hook
           variable-value
           with-editor))
-
-(defun global-map-key (key command)
-  (jstatic "globalMapKey" "org.armedbear.j.API" key command))
-
-(defun global-unmap-key (key)
-  (jstatic "globalUnmapKey" "org.armedbear.j.API" key))
-
-(defun map-key-for-mode (key command mode)
-  (jstatic "mapKeyForMode" "org.armedbear.j.API" key command mode))
-
-(defun unmap-key-for-mode (key mode)
-  (jstatic "unmapKeyForMode" "org.armedbear.j.API" key mode))
-
-(defun %set-global-property (key value)
-  (when (integerp value)
-    (setq value (format nil "~D" value)))
-  (jstatic "setGlobalProperty" "org.armedbear.j.Editor" key value))
 
 (defun set-global-property (&rest args)
   (let ((count (length args)) key value)
