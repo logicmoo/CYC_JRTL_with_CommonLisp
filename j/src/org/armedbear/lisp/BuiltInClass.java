@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.3 2003-09-21 02:03:30 piso Exp $
+ * $Id: BuiltInClass.java,v 1.4 2003-09-21 13:01:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +109,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SYMBOL             = addClass(Symbol.SYMBOL);
     public static final BuiltInClass TWO_WAY_STREAM     = addClass(Symbol.TWO_WAY_STREAM);
     public static final BuiltInClass TYPE_ERROR         = addClass(Symbol.TYPE_ERROR);
+    public static final BuiltInClass UNBOUND_SLOT       = addClass(Symbol.UNBOUND_SLOT);
     public static final BuiltInClass UNBOUND_VARIABLE   = addClass(Symbol.UNBOUND_VARIABLE);
     public static final BuiltInClass UNDEFINED_FUNCTION = addClass(Symbol.UNDEFINED_FUNCTION);
     public static final BuiltInClass VECTOR             = addClass(Symbol.VECTOR);
