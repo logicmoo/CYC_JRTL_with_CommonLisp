@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.137 2003-09-21 13:05:18 piso Exp $
+;;; $Id: rt.lisp,v 1.138 2003-09-24 14:23:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,12 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Adapted from rt.lsp and ansi-aux.lsp in the GCL ANSI test suite.
-
-#+armedbear
-(require 'defstruct)
-
-#+armedbear
-(require 'loop)
 
 (unless (find-package :regression-test)
   (make-package :regression-test :nicknames '(:rt))
