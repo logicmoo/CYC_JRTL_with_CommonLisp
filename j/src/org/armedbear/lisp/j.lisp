@@ -9,7 +9,11 @@
 (export '(global-map-key global-unmap-key map-key-for-mode unmap-key-for-mode
           set-global-property
           run-hooks
+          current-editor
+          update-display
+          update-location-bar
           status
+          execute-command
           defcommand
           key-pressed-hook))
 
@@ -59,6 +63,13 @@
 (defun update-display (&optional ed)
   (let ((ed (or ed (current-editor))))
     (jcall update-display-method ed)))
+
+(defconstant update-location-bar-method
+  (jmethod "org.armedbear.j.Editor" "updateLocation"))
+
+(defun update-location-bar (&optional ed)
+  (let ((ed (or ed (current-editor))))
+    (jcall update-location-bar-method ed)))
 
 (defun status (string &optional ed)
   (let ((ed (or ed (current-editor)))
