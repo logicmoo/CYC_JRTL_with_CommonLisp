@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.308 2003-08-02 17:59:45 piso Exp $
+ * $Id: Primitives.java,v 1.309 2003-08-02 19:39:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2045,13 +2045,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
-            AbstractArray array = checkArray(first);
-            if (array.getRank() == 1)
-                return array.getRowMajor(Fixnum.getValue(second));
-            StringBuffer sb = new StringBuffer("AREF: ");
-            sb.append("wrong number of subscripts (1) for array of rank ");
-            sb.append(array.getRank());
-            throw new ProgramError(sb.toString());
+            return first.AREF(second);
         }
         public LispObject execute(LispObject[] args) throws LispError
         {
