@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.76 2004-02-25 23:45:53 piso Exp $
+ * $Id: LispObject.java,v 1.77 2004-03-14 01:27:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -547,6 +547,24 @@ public class LispObject extends Lisp
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.REAL));
+    }
+
+    public LispObject mod(LispObject divisor) throws ConditionThrowable
+    {
+        truncate(divisor);
+        final LispThread thread = LispThread.currentThread();
+        LispObject remainder = thread._values[1];
+        thread.clearValues();
+        if (!remainder.zerop()) {
+            if (divisor.minusp()) {
+                if (plusp())
+                    return remainder.add(divisor);
+            } else {
+                if (minusp())
+                    return remainder.add(divisor);
+            }
+        }
+        return remainder;
     }
 
     public LispObject ash(LispObject obj) throws ConditionThrowable
