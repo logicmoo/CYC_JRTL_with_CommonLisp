@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: GenericFunction.java,v 1.5 2003-12-19 18:43:52 piso Exp $
+ * $Id: GenericFunction.java,v 1.6 2003-12-19 20:26:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,6 +100,24 @@ public final class GenericFunction extends StandardObject
             }
         }
         return super.toString();
+    }
+
+    // Profiling.
+    private int callCount;
+
+    public final int getCallCount()
+    {
+        return callCount;
+    }
+
+    public void setCallCount(int n)
+    {
+        callCount = n;
+    }
+
+    public final void incrementCallCount()
+    {
+        ++callCount;
     }
 
     private static final Primitive1 GENERIC_FUNCTION_DISCRIMINATING_FUNCTION =
