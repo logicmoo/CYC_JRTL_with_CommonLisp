@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.124 2004-04-25 14:37:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.125 2004-04-26 01:46:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -447,6 +447,7 @@
 (defconstant +lisp-object+ "Lorg/armedbear/lisp/LispObject;")
 (defconstant +lisp-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
+(defconstant +lisp-symbol+ "Lorg/armedbear/lisp/Symbol;")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
 (defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
@@ -1581,14 +1582,16 @@
 
 (defvar *toplevel-defuns* nil)
 
-;;; MISC.330
+;;; MISC.330: RETURN-FROM
+;;; MISC.332: GO
 (defun rewrite-function-call (form)
   (let ((op (car form))
         (args (cdr form))
         (syms ())
         (lets ()))
     (dolist (arg args)
-      (cond ((and (consp arg) (eq (car arg) 'RETURN-FROM))
+      (cond ((and (consp arg)
+                  (memq (car arg) '(RETURN-FROM GO)))
              (let ((sym (gensym)))
                (push sym syms)
                (push (list sym arg) lets)))
@@ -1653,7 +1656,7 @@
           (emit 'getstatic
                 *this-class*
                 g
-                "Lorg/armedbear/lisp/Symbol;"))
+                +lisp-symbol+))
         (emit-invokevirtual +lisp-symbol-class+
                             "getSymbolFunctionOrDie"
                             "()Lorg/armedbear/lisp/LispObject;"
@@ -1692,14 +1695,14 @@
          (emit 'sipush (length args))
          (emit 'anewarray "org/armedbear/lisp/LispObject")
          (let ((i 0))
-           (dolist (form args)
+           (dolist (arg args)
              (emit 'dup)
              (emit 'sipush i)
-             (compile-form form)
+             (compile-form arg)
              (unless (remove-store-value)
                (emit-push-value)) ; leaves value on stack
              (emit 'aastore) ; store value in array
-             (maybe-emit-clear-values form)
+             (maybe-emit-clear-values arg)
              (incf i))) ; array left on stack here
          ;; Stack: function array-ref
          (emit-invokevirtual +lisp-object-class+
@@ -1707,7 +1710,9 @@
                              "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                              -1)))
       (if for-effect
-          (emit 'pop)
+          (progn
+            (emit 'pop)
+            (maybe-emit-clear-values form))
           (emit-store-value)))))
 
 (defun compile-test (form)
@@ -1967,8 +1972,7 @@
         (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
         (push-variable var specialp i)
         (when specialp
-          (ensure-thread-var-initialized)
-          (emit 'aload *thread*))
+          (ensure-thread-var-initialized))
         (cond (initform
                (compile-form initform)
                (unless (remove-store-value)
@@ -1978,10 +1982,13 @@
                (emit-push-nil)))
         (cond (specialp
                (let ((g (declare-symbol var)))
+                 ;; Initial value is on the runtime stack at this point.
+                 (emit 'aload *thread*)
+                 (emit 'swap)
                  (emit 'getstatic
                        *this-class*
                        g
-                       "Lorg/armedbear/lisp/Symbol;")
+                       +lisp-symbol+)
                  (emit 'swap)
                  (emit-invokevirtual +lisp-thread-class+
                                      "bindSpecial"
@@ -2458,7 +2465,6 @@
     (emit-store-value)
     (return-from compile-variable-ref)))
 
-;; If for-effect is true, no value needs to be left on the stack.
 (defun compile-form (form &optional for-effect)
   (cond ((consp form)
          (let ((op (car form)))
