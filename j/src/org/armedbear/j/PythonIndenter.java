@@ -2,7 +2,7 @@
  * PythonIndenter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: PythonIndenter.java,v 1.2 2003-05-07 16:31:43 piso Exp $
+ * $Id: PythonIndenter.java,v 1.3 2003-10-30 19:25:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,15 +55,15 @@ public final class PythonIndenter
         final String modelText = trimSyntacticWhitespace(model.getText());
         if (modelText.length() == 0)
             return 0; // Shouldn't happen.
-        // Indent after '{' or '('.
+        // Indent after '{', '(' or '['.
         char c = modelText.charAt(modelText.length()-1);
-        if (c == '{' || c == '(')
+        if (c == '{' || c == '(' || c == '[')
             return modelIndent + indentSize;
         final String modelFirst = getFirstIdentifier(modelText);
         if (c == ':') {
             final String[] indentAfter = {
                 "class", "def", "if", "else", "elif",
-                "for", "while", "try", "except"
+                "for", "while", "try", "except", "finally"
             };
             if (Utilities.isOneOf(modelFirst, indentAfter))
                 return modelIndent + indentSize;
@@ -74,12 +74,13 @@ public final class PythonIndenter
             return 0;
         if (lineFirst.equals("def"))
             return indentDef();
-        // Unindent after "break", "continue" and "return".
-        final String[] unindentAfter = {"break", "continue", "return"};
+        // Unindent after "break", "continue", "return" and "pass".
+        final String[] unindentAfter = {"break", "continue", "return", "pass"};
         if (Utilities.isOneOf(modelFirst, unindentAfter))
             return Math.max(0, modelIndent - indentSize);
-        // Unindent if the current line starts with "else", "elif" or "except".
-        final String[] unindent = {"else", "elif", "except"};
+        // Unindent if the current line starts with "else", "elif", "except" or
+        // "finally".
+        final String[] unindent = {"else", "elif", "except", "finally"};
         if (Utilities.isOneOf(lineFirst, unindent))
             return Math.max(0, modelIndent - indentSize);
         return modelIndent;
