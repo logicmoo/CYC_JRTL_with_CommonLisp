@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.209 2004-02-23 14:55:42 piso Exp $
+ * $Id: Lisp.java,v 1.210 2004-02-23 19:56:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -321,6 +321,7 @@ public abstract class Lisp
                 throw t;
             }
             catch (Throwable t) {
+                Debug.trace(t);
                 if (debug)
                     thread.saveBacktrace();
                 return signal(new LispError("Caught " + t + "."));

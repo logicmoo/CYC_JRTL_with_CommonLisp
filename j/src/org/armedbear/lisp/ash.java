@@ -1,8 +1,8 @@
 /*
  * ash.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: ash.java,v 1.4 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: ash.java,v 1.5 2004-02-23 19:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,17 +29,17 @@ public final class ash extends Primitive2
 {
     private ash()
     {
-        super("ash","integer count");
+        super("ash", "integer count");
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
         if (first instanceof Fixnum && second instanceof Fixnum) {
-            int count = ((Fixnum)second).getValue();
+            int count = ((Fixnum)second).value;
             if (count == 0)
                 return first;
-            long n = ((Fixnum)first).getValue();
+            long n = ((Fixnum)first).value;
             if (n == 0)
                 return first;
             if (count < -32) {
@@ -51,13 +51,13 @@ public final class ash extends Primitive2
         }
         BigInteger n;
         if (first instanceof Fixnum)
-            n = BigInteger.valueOf(((Fixnum)first).getValue());
+            n = BigInteger.valueOf(((Fixnum)first).value);
         else if (first instanceof Bignum)
             n = ((Bignum)first).getValue();
         else
             return signal(new TypeError(first, "integer"));
         if (second instanceof Fixnum) {
-            int count = Fixnum.getInt(second);
+            int count = ((Fixnum)second).value;
             if (count == 0)
                 return first;
             // BigInteger.shiftLeft() succumbs to a stack overflow if count

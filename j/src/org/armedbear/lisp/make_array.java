@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.12 2004-02-23 15:12:04 piso Exp $
+ * $Id: make_array.java,v 1.13 2004-02-23 19:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,16 +60,22 @@ public final class make_array extends Primitive
             dimv[0] = Fixnum.getValue(dimensions);
         if (displacedTo != NIL) {
             final AbstractArray array = checkArray(displacedTo);
-            final int offset;
-            if (displacedIndexOffset != NIL)
-                offset = Fixnum.getValue(displacedIndexOffset);
-            else
-                offset = 0;
             if (initialElementProvided != NIL)
                 return signal(new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO"));
             if (initialContents != NIL)
                 return signal(new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO"));
-            DisplacedArray displacedArray = new DisplacedArray(dimv, array, offset);
+            final int displacement;
+            if (displacedIndexOffset != NIL)
+                displacement = Fixnum.getValue(displacedIndexOffset);
+            else
+                displacement = 0;
+            if (rank == 1 && array.stringp()) {
+                ComplexString string = new ComplexString(dimv[0], array, displacement);
+                if (fillPointer != NIL)
+                    string.setFillPointer(fillPointer);
+                return string;
+            }
+            DisplacedArray displacedArray = new DisplacedArray(dimv, array, displacement);
             if (rank == 1 && fillPointer != NIL)
                 displacedArray.setFillPointer(fillPointer);
             return displacedArray;

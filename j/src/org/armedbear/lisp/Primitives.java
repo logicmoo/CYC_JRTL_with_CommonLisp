@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.575 2004-02-23 14:24:47 piso Exp $
+ * $Id: Primitives.java,v 1.576 2004-02-23 19:56:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1706,9 +1706,12 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof AbstractArray)
-                return T;
-            return signal(new TypeError(arg, Symbol.ARRAY));
+            try {
+                return ((AbstractArray)arg).isAdjustable() ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.ARRAY));
+            }
         }
     };
 

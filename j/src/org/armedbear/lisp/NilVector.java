@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.5 2004-02-23 14:24:47 piso Exp $
+ * $Id: NilVector.java,v 1.6 2004-02-23 19:56:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class NilVector extends AbstractVector
+public final class NilVector extends AbstractString
 {
     private int capacity;
 
@@ -71,16 +71,6 @@ public final class NilVector extends AbstractVector
                 return T;
         }
         return super.typep(type);
-    }
-
-    public LispObject STRINGP()
-    {
-        return T;
-    }
-
-    public boolean stringp()
-    {
-        return true;
     }
 
     public LispObject SIMPLE_STRING_P()
@@ -161,6 +151,18 @@ public final class NilVector extends AbstractVector
         storeError(newValue);
     }
 
+    public char getChar(int index) throws ConditionThrowable
+    {
+        accessError();
+        // Not reached.
+        return 0;
+    }
+
+    public void setChar(int index, char c) throws ConditionThrowable
+    {
+        storeError(LispCharacter.getInstance(c));
+    }
+
     public LispObject subseq(int start, int end) throws ConditionThrowable
     {
         if (capacity == 0 && start == 0 && end == 0)
@@ -171,6 +173,11 @@ public final class NilVector extends AbstractVector
     public void fill(LispObject obj) throws ConditionThrowable
     {
         storeError(obj);
+    }
+
+    public void fill(char c) throws ConditionThrowable
+    {
+        storeError(LispCharacter.getInstance(c));
     }
 
     public void shrink(int n) throws ConditionThrowable

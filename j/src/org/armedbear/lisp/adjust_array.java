@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.5 2004-02-23 15:12:17 piso Exp $
+ * $Id: adjust_array.java,v 1.6 2004-02-23 19:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,11 @@ public final class adjust_array extends Primitive
         {
             return signal(new LispError("ADJUST-ARRAY: incompatible element type."));
         }
+        final int displacement;
+        if (displacedIndexOffset == NIL)
+            displacement = 0;
+        else
+            displacement = Fixnum.getValue(displacedIndexOffset);
         if (array instanceof Vector) {
             Vector v = (Vector) array;
             LispObject newSize = null;
@@ -68,6 +73,29 @@ public final class adjust_array extends Primitive
                 return v;
             }
         }
+        if (array instanceof SimpleString) {
+            SimpleString s = (SimpleString) array;
+            LispObject newSize = null;
+            if (dimensions instanceof Cons) {
+                if (dimensions.length() == 1)
+                    newSize = dimensions.car();
+            } else
+                newSize = dimensions;
+            if (newSize != null) {
+                AbstractString s2;
+                if (displacedTo != NIL)
+                    s2 = (AbstractString) s.adjustArray(Fixnum.getValue(newSize),
+                                                        checkArray(displacedTo),
+                                                        displacement);
+                else
+                    s2 = (AbstractString) s.adjustArray(Fixnum.getValue(newSize),
+                                                        initialElement,
+                                                        initialContents);
+                if (fillPointer != NIL)
+                    s2.setFillPointer(fillPointer);
+                return s2;
+            }
+        }
         if (array instanceof ComplexString) {
             ComplexString s = (ComplexString) array;
             LispObject newSize = null;
@@ -77,8 +105,13 @@ public final class adjust_array extends Primitive
             } else
                 newSize = dimensions;
             if (newSize != null) {
-                s.adjustArray(Fixnum.getValue(newSize), initialElement,
-                              initialContents);
+                if (displacedTo != NIL)
+                    s.adjustArray(Fixnum.getValue(newSize),
+                                  checkArray(displacedTo),
+                                  displacement);
+                else
+                    s.adjustArray(Fixnum.getValue(newSize), initialElement,
+                                  initialContents);
                 if (fillPointer != NIL)
                     s.setFillPointer(fillPointer);
                 return s;

@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Vector.java,v 1.32 2004-02-16 01:25:22 piso Exp $
+ * $Id: Vector.java,v 1.33 2004-02-23 19:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,8 +81,8 @@ public class Vector extends AbstractVector
         }
     }
 
-    public Vector adjustArray(int size, LispObject initialElement,
-                              LispObject initialContents)
+    public AbstractArray adjustArray(int size, LispObject initialElement,
+                                     LispObject initialContents)
         throws ConditionThrowable
     {
         if (elements.length != size) {

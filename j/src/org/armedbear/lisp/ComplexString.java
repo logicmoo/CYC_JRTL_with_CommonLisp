@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.2 2004-02-23 15:55:14 piso Exp $
+ * $Id: ComplexString.java,v 1.3 2004-02-23 19:56:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,16 +23,28 @@ package org.armedbear.lisp;
 
 public final class ComplexString extends AbstractString
 {
+    private int capacity;
+
+    // For non-displaced arrays.
     private char[] chars;
 
-    public ComplexString(int length)
+    // For displaced arrays.
+    private AbstractArray array;
+    private int displacement;
+
+    public ComplexString(int capacity)
     {
-        chars = new char[length];
+        this.capacity = capacity;
+        chars = new char[capacity];
+        isDisplaced = false;
     }
 
-    public char[] chars()
+    public ComplexString(int capacity, AbstractArray array, int displacement)
     {
-        return chars;
+        this.capacity = capacity;
+        this.array = array;
+        this.displacement = displacement;
+        isDisplaced = true;
     }
 
     public LispObject typeOf()
@@ -43,6 +55,23 @@ public final class ComplexString extends AbstractString
     public LispClass classOf()
     {
         return BuiltInClass.STRING;
+    }
+
+    public LispObject arrayDisplacement()
+    {
+        if (array != null)
+            return LispThread.currentThread().setValues(array, new Fixnum(displacement));
+        return super.arrayDisplacement();
+    }
+
+    public char[] chars() throws ConditionThrowable
+    {
+        if (chars != null)
+            return chars;
+        Debug.assertTrue(array != null);
+        char[] chars = new char[capacity];
+        System.arraycopy(array.chars(), displacement, chars, 0, capacity);
+        return chars;
     }
 
     public boolean equal(LispObject obj) throws ConditionThrowable
@@ -163,61 +192,90 @@ public final class ComplexString extends AbstractString
 
     public char getChar(int index) throws ConditionThrowable
     {
-        try {
-            return chars[index];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, chars.length);
-            return 0; // Not reached.
-        }
+        if (chars != null) {
+            try {
+                return chars[index];
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                badIndex(index, chars.length);
+                return 0; // Not reached.
+            }
+        } else
+            return LispCharacter.getValue(array.getRowMajor(index + displacement));
     }
 
     public void setChar(int index, char c) throws ConditionThrowable
     {
-        try {
-            chars[index] = c;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, chars.length);
-        }
+        if (chars != null) {
+            try {
+                chars[index] = c;
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                badIndex(index, chars.length);
+            }
+        } else
+            array.setRowMajor(index + displacement, LispCharacter.getInstance(c));
     }
 
-    public String getStringValue()
+    public String getStringValue() throws ConditionThrowable
     {
         if (fillPointer >= 0)
-            return new String(chars, 0, fillPointer);
+            return new String(chars(), 0, fillPointer);
         else
-            return new String(chars);
+            return new String(chars());
     }
 
-    public Object javaInstance()
+    public Object javaInstance() throws ConditionThrowable
     {
-        return new String(chars);
+        return new String(chars());
     }
 
-    public Object javaInstance(Class c)
+    public Object javaInstance(Class c) throws ConditionThrowable
     {
         return javaInstance();
     }
 
     public final int capacity()
     {
-        return chars.length;
+        return capacity;
     }
 
-    public final void ensureCapacity(int minCapacity)
+    public final void ensureCapacity(int minCapacity) throws ConditionThrowable
     {
-        if (chars.length < minCapacity) {
-            char[] newArray = new char[minCapacity];
-            System.arraycopy(chars, 0, newArray, 0, chars.length);
-            chars = newArray;
+        if (chars != null) {
+            if (chars.length < minCapacity) {
+                char[] newArray = new char[minCapacity];
+                System.arraycopy(chars, 0, newArray, 0, chars.length);
+                chars = newArray;
+                capacity = minCapacity;
+            }
+        } else {
+            Debug.assertTrue(array != null);
+            if (array.length() - displacement < minCapacity) {
+                // Copy array.
+                char[] chars = new char[minCapacity];
+                System.arraycopy(array.chars(), displacement, chars, 0,
+                                 array.length() - displacement);
+                capacity = minCapacity;
+                array = null;
+                displacement = 0;
+                isDisplaced = false;
+            }
         }
     }
 
-    public ComplexString adjustArray(int size, LispObject initialElement,
-                                  LispObject initialContents)
+    public AbstractArray adjustArray(int size, LispObject initialElement,
+                                     LispObject initialContents)
         throws ConditionThrowable
     {
+        if (chars == null) {
+            // Copy array.
+            chars = new char[capacity];
+            System.arraycopy(array.chars(), displacement, chars, 0, capacity);
+            array = null;
+            displacement = 0;
+            isDisplaced = false;
+        }
         if (chars.length != size) {
             char[] newArray = new char[size];
             if (initialContents != NIL) {
@@ -246,18 +304,31 @@ public final class ComplexString extends AbstractString
                 }
             }
             chars = newArray;
+            capacity = chars.length;
         }
+        return this;
+    }
+
+    public AbstractArray adjustArray(int size, AbstractArray displacedTo,
+                                     int displacement)
+        throws ConditionThrowable
+    {
+        capacity = size;
+        array = displacedTo;
+        this.displacement = displacement;
+        chars = null;
+        isDisplaced = true;
         return this;
     }
 
     public final int length()
     {
-        return fillPointer >= 0 ? fillPointer : chars.length;
+        return fillPointer >= 0 ? fillPointer : capacity;
     }
 
     public LispObject elt(int index) throws ConditionThrowable
     {
-        int limit = fillPointer >= 0 ? fillPointer : chars.length;
+        final int limit = length();
         if (index < 0 || index >= limit)
             badIndex(index, limit);
         return LispCharacter.getInstance(getChar(index));

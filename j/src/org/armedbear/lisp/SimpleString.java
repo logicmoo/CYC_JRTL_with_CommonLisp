@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.2 2004-02-23 15:04:36 piso Exp $
+ * $Id: SimpleString.java,v 1.3 2004-02-23 19:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,33 +23,33 @@ package org.armedbear.lisp;
 
 public final class SimpleString extends AbstractString
 {
+    private int capacity;
     private char[] chars;
-    private int length;
 
     public SimpleString(LispCharacter c)
     {
         chars = new char[1];
         chars[0] = c.getValue();
-        length = 1;
+        capacity = 1;
     }
 
     public SimpleString(char c)
     {
         chars = new char[1];
         chars[0] = c;
-        length = 1;
+        capacity = 1;
     }
 
-    public SimpleString(int length)
+    public SimpleString(int capacity)
     {
-        chars = new char[length];
-        this.length = length;
+        this.capacity = capacity;
+        chars = new char[capacity];
     }
 
     public SimpleString(String s)
     {
         chars = s.toCharArray();
-        length = s.length();
+        capacity = s.length();
     }
 
     public char[] chars()
@@ -65,7 +65,7 @@ public final class SimpleString extends AbstractString
 
     public LispObject typeOf()
     {
-        return list2(Symbol.SIMPLE_STRING, number(chars.length));
+        return list2(Symbol.SIMPLE_STRING, number(capacity));
     }
 
     // FIXME BuiltInClass.SIMPLE_STRING
@@ -91,22 +91,27 @@ public final class SimpleString extends AbstractString
         return T;
     }
 
+    public boolean isAdjustable()
+    {
+        return false;
+    }
+
     public boolean equal(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;
         if (obj instanceof SimpleString) {
             SimpleString string = (SimpleString) obj;
-            if (string.length() != length())
+            if (string.capacity != capacity)
                 return false;
-            for (int i = length(); i-- > 0;)
+            for (int i = capacity; i-- > 0;)
                 if (string.chars[i] != chars[i])
                     return false;
             return true;
         }
         if (obj instanceof AbstractString) {
             AbstractString string = (AbstractString) obj;
-            if (string.length() != length())
+            if (string.length() != capacity)
                 return false;
             for (int i = length(); i-- > 0;)
                 if (string.getChar(i) != chars[i])
@@ -124,9 +129,9 @@ public final class SimpleString extends AbstractString
             return true;
         if (obj instanceof SimpleString) {
             SimpleString string = (SimpleString) obj;
-            if (string.length() != length())
+            if (string.capacity != capacity)
                 return false;
-            for (int i = length(); i-- > 0;) {
+            for (int i = capacity; i-- > 0;) {
                 if (string.chars[i] != chars[i]) {
                     if (Utilities.toLowerCase(string.chars[i]) != Utilities.toLowerCase(chars[i]))
                         return false;
@@ -136,7 +141,7 @@ public final class SimpleString extends AbstractString
         }
         if (obj instanceof AbstractString) {
             AbstractString string = (AbstractString) obj;
-            if (string.length() != length())
+            if (string.length() != capacity)
                 return false;
             for (int i = length(); i-- > 0;) {
                 if (string.getChar(i) != chars[i]) {
@@ -172,29 +177,29 @@ public final class SimpleString extends AbstractString
 
     public void fill(char c)
     {
-        for (int i = length; i-- > 0;)
+        for (int i = capacity; i-- > 0;)
             chars[i] = c;
     }
 
     public void shrink(int n) throws ConditionThrowable
     {
-        if (n < length) {
+        if (n < capacity) {
             char[] newArray = new char[n];
             System.arraycopy(chars, 0, newArray, 0, n);
             chars = newArray;
-            length = n;
+            capacity = n;
             return;
         }
-        if (n == length)
+        if (n == capacity)
             return;
         signal(new LispError());
     }
 
     public LispObject reverse() throws ConditionThrowable
     {
-        SimpleString result = new SimpleString(length);
+        SimpleString result = new SimpleString(capacity);
         int i, j;
-        for (i = 0, j = length - 1; i < length; i++, j--)
+        for (i = 0, j = capacity - 1; i < capacity; i++, j--)
             result.chars[i] = chars[j];
         return result;
     }
@@ -202,7 +207,7 @@ public final class SimpleString extends AbstractString
     public LispObject nreverse() throws ConditionThrowable
     {
         int i = 0;
-        int j = length - 1;
+        int j = capacity - 1;
         while (i < j) {
             char temp = chars[i];
             chars[i] = chars[j];
@@ -219,7 +224,7 @@ public final class SimpleString extends AbstractString
             return LispCharacter.getInstance(chars[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, length);
+            badIndex(index, capacity);
             return NIL; // Not reached.
         }
     }
@@ -230,7 +235,7 @@ public final class SimpleString extends AbstractString
             chars[index] = LispCharacter.getValue(newValue);
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, length);
+            badIndex(index, capacity);
         }
     }
 
@@ -240,7 +245,7 @@ public final class SimpleString extends AbstractString
             return LispCharacter.getInstance(chars[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, length);
+            badIndex(index, capacity);
             return NIL; // Not reached.
         }
     }
@@ -251,7 +256,7 @@ public final class SimpleString extends AbstractString
             chars[index] = LispCharacter.getValue(newValue);
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, length);
+            badIndex(index, capacity);
         }
     }
 
@@ -261,7 +266,7 @@ public final class SimpleString extends AbstractString
             return chars[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, length);
+            badIndex(index, capacity);
             return 0; // Not reached.
         }
     }
@@ -272,14 +277,9 @@ public final class SimpleString extends AbstractString
             chars[index] = c;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, length);
+            badIndex(index, capacity);
         }
     }
-
-//     public final String getValue()
-//     {
-//         return new String(chars);
-//     }
 
     public String getStringValue()
     {
@@ -298,7 +298,7 @@ public final class SimpleString extends AbstractString
 
     public final int capacity()
     {
-        return length;
+        return capacity;
     }
 
     // FIXME This is required by AbstractVector, but should be removed when
@@ -308,9 +308,45 @@ public final class SimpleString extends AbstractString
         Debug.assertTrue(false);
     }
 
+    public AbstractArray adjustArray(int size, LispObject initialElement,
+                                     LispObject initialContents)
+        throws ConditionThrowable
+    {
+        SimpleString s = new SimpleString(size);
+        if (initialContents != NIL) {
+            if (initialContents.listp()) {
+                LispObject list = initialContents;
+                for (int i = 0; i < size; i++) {
+                    s.chars[i] = LispCharacter.getValue(list.car());
+                    list = list.cdr();
+                }
+            } else if (initialContents.vectorp()) {
+                for (int i = 0; i < size; i++)
+                    s.chars[i] = LispCharacter.getValue(initialContents.elt(i));
+            } else
+                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+        } else if (initialElement != NIL) {
+            System.arraycopy(chars, 0, s.chars, 0, Math.min(size, capacity));
+            if (size > capacity) {
+                char c = LispCharacter.getValue(initialElement);
+                for (int i = size; i-- > capacity;)
+                    s.chars[i] = c;
+            }
+        } else
+            System.arraycopy(chars, 0, s.chars, 0, Math.min(size, capacity));
+        return s;
+    }
+
+    public AbstractArray adjustArray(int size, AbstractArray displacedTo,
+                                     int displacement)
+        throws ConditionThrowable
+    {
+        return new ComplexString(size, displacedTo, displacement);
+    }
+
     public final int length()
     {
-        return length;
+        return capacity;
     }
 
     public LispObject elt(int index) throws ConditionThrowable
@@ -319,7 +355,7 @@ public final class SimpleString extends AbstractString
             return LispCharacter.getInstance(chars[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, length);
+            badIndex(index, capacity);
             return NIL; // Not reached.
         }
     }
@@ -334,7 +370,7 @@ public final class SimpleString extends AbstractString
             return signal(new TypeError(index, Symbol.FIXNUM));
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(Fixnum.getValue(index), chars.length);
+            badIndex(((Fixnum)index).value, capacity);
             return NIL; // Not reached.
         }
     }
@@ -346,7 +382,7 @@ public final class SimpleString extends AbstractString
         if (cachedHashCode != 0)
             return cachedHashCode;
         int hashCode = 0;
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < capacity; i++)
             hashCode = hashCode * 31 + chars[i];
         return cachedHashCode = hashCode;
     }

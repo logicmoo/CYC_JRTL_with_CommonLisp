@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.19 2004-02-23 14:53:42 piso Exp $
+ * $Id: StringFunctions.java,v 1.20 2004-02-23 19:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -622,9 +622,14 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            if (!first.stringp())
-                signal(new TypeError(first, Symbol.STRING));
-            final int length = first.length();
+            AbstractString string;
+            try {
+                string = (AbstractString) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STRING));
+            }
+            final int length = string.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
                 return signal(new TypeError("Invalid start position " + start + "."));
@@ -637,19 +642,9 @@ public final class StringFunctions extends Lisp
                 return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
-            if (first instanceof DisplacedArray) {
-                DisplacedArray array = (DisplacedArray) first;
-                for (int i = start; i < end; i++) {
-                    char c = LispCharacter.getValue(array.getRowMajor(i));
-                    c = Utilities.toUpperCase(c);
-                    array.setRowMajor(i, LispCharacter.getInstance(c));
-                }
-            } else {
-                char[] chars = first.chars();
-                for (int i = start; i < end; i++)
-                    chars[i] = Utilities.toUpperCase(chars[i]);
-            }
-            return first;
+            for (int i = start; i < end; i++)
+                string.setChar(i, Utilities.toUpperCase(string.getChar(i)));
+            return string;
         }
     };
 
@@ -660,9 +655,14 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            if (!first.stringp())
-                signal(new TypeError(first, Symbol.STRING));
-            final int length = first.length();
+            AbstractString string;
+            try {
+                string = (AbstractString) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STRING));
+            }
+            final int length = string.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
                 return signal(new TypeError("Invalid start position " + start + "."));
@@ -675,19 +675,9 @@ public final class StringFunctions extends Lisp
                 return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
-            if (first instanceof DisplacedArray) {
-                DisplacedArray array = (DisplacedArray) first;
-                for (int i = start; i < end; i++) {
-                    char c = LispCharacter.getValue(array.getRowMajor(i));
-                    c = Utilities.toLowerCase(c);
-                    array.setRowMajor(i, LispCharacter.getInstance(c));
-                }
-            } else {
-                char[] chars = first.chars();
-                for (int i = start; i < end; i++)
-                    chars[i] = Utilities.toLowerCase(chars[i]);
-            }
-            return first;
+            for (int i = start; i < end; i++)
+                string.setChar(i, Utilities.toLowerCase(string.getChar(i)));
+            return string;
         }
     };
 
@@ -698,9 +688,14 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            if (!first.stringp())
-                signal(new TypeError(first, Symbol.STRING));
-            final int length = first.length();
+            AbstractString string;
+            try {
+                string = (AbstractString) first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STRING));
+            }
+            final int length = string.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
                 return signal(new TypeError("Invalid start position " + start + "."));
@@ -713,44 +708,21 @@ public final class StringFunctions extends Lisp
                 return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
-            if (first instanceof DisplacedArray) {
-                DisplacedArray array = (DisplacedArray) first;
-                boolean lastCharWasAlphanumeric = false;
-                for (int i = start; i < end; i++) {
-                    char c = LispCharacter.getValue(array.getRowMajor(i));
-                    if (Character.isLowerCase(c)) {
-                        if (!lastCharWasAlphanumeric) {
-                            c = Utilities.toUpperCase(c);
-                            array.setRowMajor(i, LispCharacter.getInstance(c));
-                        }
-                        lastCharWasAlphanumeric = true;
-                    } else if (Character.isUpperCase(c)) {
-                        if (lastCharWasAlphanumeric) {
-                            c = Utilities.toLowerCase(c);
-                            array.setRowMajor(i, LispCharacter.getInstance(c));
-                        }
-                        lastCharWasAlphanumeric = true;
-                    } else
-                        lastCharWasAlphanumeric = Character.isDigit(c);
-                }
-            } else {
-                char[] chars = first.chars();
-                boolean lastCharWasAlphanumeric = false;
-                for (int i = start; i < end; i++) {
-                    char c = chars[i];
-                    if (Character.isLowerCase(c)) {
-                        if (!lastCharWasAlphanumeric)
-                            chars[i] = Utilities.toUpperCase(c);
-                        lastCharWasAlphanumeric = true;
-                    } else if (Character.isUpperCase(c)) {
-                        if (lastCharWasAlphanumeric)
-                            chars[i] = Utilities.toLowerCase(c);
-                        lastCharWasAlphanumeric = true;
-                    } else
-                        lastCharWasAlphanumeric = Character.isDigit(c);
-                }
+            boolean lastCharWasAlphanumeric = false;
+            for (int i = start; i < end; i++) {
+                char c = string.getChar(i);
+                if (Character.isLowerCase(c)) {
+                    if (!lastCharWasAlphanumeric)
+                        string.setChar(i, Utilities.toUpperCase(c));
+                    lastCharWasAlphanumeric = true;
+                } else if (Character.isUpperCase(c)) {
+                    if (lastCharWasAlphanumeric)
+                        string.setChar(i, Utilities.toLowerCase(c));
+                    lastCharWasAlphanumeric = true;
+                } else
+                    lastCharWasAlphanumeric = Character.isDigit(c);
             }
-            return first;
+            return string;
         }
     };
 
@@ -759,7 +731,6 @@ public final class StringFunctions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            // Displaced arrays might be strings.
             return arg.STRINGP();
         }
     };
