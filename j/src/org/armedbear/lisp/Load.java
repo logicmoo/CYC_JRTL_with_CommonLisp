@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.31 2004-01-27 14:02:52 piso Exp $
+ * $Id: Load.java,v 1.32 2004-01-28 20:19:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,21 +186,21 @@ public final class Load extends Lisp
             if (verbose) {
                 Stream out = getStandardOutput();
                 out.freshLine();
-                out.writeString(prefix);
-                out.writeString(auto ? " Autoloading " : " Loading ");
-                out.writeString(truename);
-                out.writeLine(" ...");
-                out.flushOutput();
+                out._writeString(prefix);
+                out._writeString(auto ? " Autoloading " : " Loading ");
+                out._writeString(truename);
+                out._writeLine(" ...");
+                out._finishOutput();
                 LispObject result = loadStream(in, print);
                 long elapsed = System.currentTimeMillis() - start;
                 out.freshLine();
-                out.writeString(prefix);
-                out.writeString(auto ? " Autoloaded " : " Loaded ");
-                out.writeString(truename);
-                out.writeString(" (");
-                out.writeString(String.valueOf(((float)elapsed)/1000));
-                out.writeLine(" seconds)");
-                out.flushOutput();
+                out._writeString(prefix);
+                out._writeString(auto ? " Autoloaded " : " Loaded ");
+                out._writeString(truename);
+                out._writeString(" (");
+                out._writeString(String.valueOf(((float)elapsed)/1000));
+                out._writeLine(" seconds)");
+                out._finishOutput();
                 return result;
             } else
                 return loadStream(in, print);
@@ -235,8 +235,8 @@ public final class Load extends Lisp
                 LispObject result = eval(obj, env, thread);
                 if (print) {
                     Stream out = getStandardOutput();
-                    out.writeLine(String.valueOf(result));
-                    out.flushOutput();
+                    out._writeLine(String.valueOf(result));
+                    out._finishOutput();
                 }
             }
             return T;

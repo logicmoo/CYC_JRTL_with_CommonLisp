@@ -2,7 +2,7 @@
  * describe.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: describe.java,v 1.12 2004-01-24 19:48:46 piso Exp $
+ * $Id: describe.java,v 1.13 2004-01-28 20:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,7 +110,7 @@ public final class describe extends Lisp
             }
             Stream out = getStandardOutput();
             out.freshLine();
-            out.writeString(sb.toString());
+            out._writeString(sb.toString());
             out.freshLine();
             return LispThread.currentThread().nothing();
         }

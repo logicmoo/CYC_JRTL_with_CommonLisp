@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.10 2004-01-26 00:35:12 piso Exp $
+ * $Id: StringInputStream.java,v 1.11 2004-01-28 20:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ public final class StringInputStream extends Stream
         return T;
     }
 
-    protected int read()
+    protected int _readChar()
     {
         if (offset >= end)
             return -1;
@@ -72,7 +72,7 @@ public final class StringInputStream extends Stream
         return n;
     }
 
-    protected void unread(int n)
+    protected void _unreadChar(int n)
     {
         if (offset > start) {
             --offset;
@@ -81,7 +81,7 @@ public final class StringInputStream extends Stream
         }
     }
 
-    protected boolean ready()
+    protected boolean _charReady()
     {
         return true;
     }

@@ -2,7 +2,7 @@
  * Profiler.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Profiler.java,v 1.4 2004-01-24 19:46:22 piso Exp $
+ * $Id: Profiler.java,v 1.5 2004-01-28 20:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public class Profiler extends Lisp
             Stream out = getStandardOutput();
             out.freshLine();
             if (profiling) {
-                out.writeLine("; Profiler already started.");
+                out._writeLine("; Profiler already started.");
             } else {
                 if (first == Keyword.TIME)
                     sampling = true;
@@ -90,7 +90,7 @@ public class Profiler extends Lisp
                     t.setPriority(priority);
                     new Thread(profilerRunnable).start();
                 }
-                out.writeLine("; Profiler started.");
+                out._writeLine("; Profiler started.");
                 profiling = true;
             }
             return LispThread.currentThread().nothing();
@@ -107,10 +107,10 @@ public class Profiler extends Lisp
             out.freshLine();
             if (profiling) {
                 profiling = false;
-                out.writeLine("; Profiler stopped.");
+                out._writeLine("; Profiler stopped.");
             } else
-                out.writeLine("; Profiler was not started.");
-            out.flushOutput();
+                out._writeLine("; Profiler was not started.");
+            out._finishOutput();
             return LispThread.currentThread().nothing();
         }
     };

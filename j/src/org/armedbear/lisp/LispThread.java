@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.28 2004-01-24 19:16:32 piso Exp $
+ * $Id: LispThread.java,v 1.29 2004-01-28 20:19:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,7 +271,7 @@ public final class LispThread extends LispObject
     public void checkStack() throws ConditionThrowable
     {
         if (stack.size() > 0) {
-            getStandardOutput().writeLine("stack depth = " + stack.size());
+            getStandardOutput()._writeLine("stack depth = " + stack.size());
             backtrace();
         }
     }
@@ -287,12 +287,12 @@ public final class LispThread extends LispObject
             Stream out = getTraceOutput();
             int count = 0;
             try {
-                out.writeLine("Evaluation stack:");
-                out.flushOutput();
+                out._writeLine("Evaluation stack:");
+                out._finishOutput();
                 for (int i = stack.size(); i-- > 0;) {
-                    out.writeString("  ");
-                    out.writeString(String.valueOf(stack.size() - 1 - i));
-                    out.writeString(": ");
+                    out._writeString("  ");
+                    out._writeString(String.valueOf(stack.size() - 1 - i));
+                    out._writeString(": ");
                     StackFrame frame = (StackFrame) stack.get(i);
                     LispObject obj = NIL;
                     LispObject[] argv = frame.getArgumentVector();
@@ -306,7 +306,7 @@ public final class LispThread extends LispObject
                         obj = new Cons(functional, obj);
                     pprint(obj, out.getCharPos(), out);
                     out.terpri();
-                    out.flushOutput();
+                    out._finishOutput();
                     if (limit > 0 && ++count == limit)
                         break;
                 }
@@ -373,12 +373,12 @@ public final class LispThread extends LispObject
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < indentBy; i++)
                 sb.append(' ');
-            stream.writeString(sb.toString());
+            stream._writeString(sb.toString());
         }
         String raw = String.valueOf(obj);
         if (stream.getCharPos() + raw.length() < 80) {
             // It fits.
-            stream.writeString(raw);
+            stream._writeString(raw);
             return;
         }
         // Object doesn't fit.
@@ -401,7 +401,7 @@ public final class LispThread extends LispObject
                     StringBuffer sb = new StringBuffer();
                     for (int i = charPos; i < indentBy; i++)
                         sb.append(' ');
-                    stream.writeString(sb.toString());
+                    stream._writeString(sb.toString());
                 }
                 stream.print('(');
                 for (int i = 0; i < array.length; i++) {
@@ -419,8 +419,8 @@ public final class LispThread extends LispObject
             StringBuffer sb = new StringBuffer();
             for (int i = 0; i < indentBy; i++)
                 sb.append(' ');
-            stream.writeString(sb.toString());
-            stream.writeString(raw);
+            stream._writeString(sb.toString());
+            stream._writeString(raw);
             return;
         }
     }

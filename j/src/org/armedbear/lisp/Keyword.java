@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Keyword.java,v 1.24 2004-01-09 20:43:18 asimon Exp $
+ * $Id: Keyword.java,v 1.25 2004-01-28 20:19:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,12 +40,14 @@ public final class Keyword extends Lisp
         COUNT_ONLY          = internKeyword("COUNT-ONLY"),
         DATUM               = internKeyword("DATUM"),
         DECLARED            = internKeyword("DECLARED"),
+        DEFAULT             = internKeyword("DEFAULT"),
         DEFAULTS            = internKeyword("DEFAULTS"),
         DEVICE              = internKeyword("DEVICE"),
         DIRECTORY           = internKeyword("DIRECTORY"),
         DIRECT_SUPERCLASSES = internKeyword("DIRECT-SUPERCLASSES"),
         DOWNCASE            = internKeyword("DOWNCASE"),
         ELEMENT_TYPE        = internKeyword("ELEMENT-TYPE"),
+        END                 = internKeyword("END"),
         ERROR               = internKeyword("ERROR"),
         EXPECTED_TYPE       = internKeyword("EXPECTED-TYPE"),
         EXTERNAL            = internKeyword("EXTERNAL"),
@@ -56,18 +58,22 @@ public final class Keyword extends Lisp
         INHERITED           = internKeyword("INHERITED"),
         INITIAL_CONTENTS    = internKeyword("INITIAL-CONTENTS"),
         INITIAL_ELEMENT     = internKeyword("INITIAL-ELEMENT"),
+        INPUT               = internKeyword("INPUT"),
         INSTANCE            = internKeyword("INSTANCE"),
         INTERNAL            = internKeyword("INTERNAL"),
+        IO                  = internKeyword("IO"),
         LOCAL               = internKeyword("LOCAL"),
         NAME                = internKeyword("NAME"),
         NEWEST              = internKeyword("NEWEST"),
         NICKNAMES           = internKeyword("NICKNAMES"),
         NO_ERROR            = internKeyword("NO-ERROR"),
+        OUTPUT              = internKeyword("OUTPUT"),
         PACKAGE             = internKeyword("PACKAGE"),
         PATHNAME            = internKeyword("PATHNAME"),
         PUBLIC              = internKeyword("PUBLIC"),
         REF                 = internKeyword("REF"),
         RELATIVE            = internKeyword("RELATIVE"),
+        START               = internKeyword("START"),
         SUPERSEDE           = internKeyword("SUPERSEDE"),
         TIME                = internKeyword("TIME"),
         TYPE                = internKeyword("TYPE"),

@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.52 2004-01-27 02:11:40 piso Exp $
+ * $Id: Interpreter.java,v 1.53 2004-01-28 20:19:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,7 +123,7 @@ public final class Interpreter extends Lisp
                     if (file.isFile()) {
                         String message =
                             "Warning: use of .ablisprc is deprecated; use .ablrc instead.";
-                        getStandardOutput().writeLine(message);
+                        getStandardOutput()._writeLine(message);
                         Load.load(file.getCanonicalPath());
                     }
                 }
@@ -144,8 +144,8 @@ public final class Interpreter extends Lisp
         done = false;
         try {
             Stream out = getStandardOutput();
-            out.writeString(banner());
-            out.flushOutput();
+            out._writeString(banner());
+            out._finishOutput();
             initializeLisp(jlisp);
             initializeTopLevel();
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
@@ -159,8 +159,8 @@ public final class Interpreter extends Lisp
                     thread.resetStack();
                     thread.setDynamicEnvironment(null);
                     ++commandNumber;
-                    out.writeString(prompt());
-                    out.flushOutput();
+                    out._writeString(prompt());
+                    out._finishOutput();
                     LispObject
                         object = getStandardInput().read(false, EOF, false); // Top level read.
                     if (object == EOF)
@@ -189,16 +189,16 @@ public final class Interpreter extends Lisp
                             slash = new Cons(values[i], slash);
                         Symbol.SLASH.setSymbolValue(slash);
                         for (int i = 0; i < values.length; i++)
-                            out.writeLine(String.valueOf(values[i]));
+                            out._writeLine(String.valueOf(values[i]));
                     } else {
                         Symbol.SLASH.setSymbolValue(new Cons(result));
-                        out.writeLine(String.valueOf(result));
+                        out._writeLine(String.valueOf(result));
                     }
-                    out.flushOutput();
+                    out._finishOutput();
                 }
                 catch (StackOverflowError e) {
                     getStandardInput().clearInput();
-                    out.writeLine("Stack overflow");
+                    out._writeLine("Stack overflow");
                 }
                 catch (ConditionThrowable c) {
                     reportError(c, thread);
@@ -221,7 +221,7 @@ public final class Interpreter extends Lisp
             getStandardInput().clearInput();
             Stream out = getStandardOutput();
             out.freshLine();
-            out.writeLine("Error: unhandled condition: " + c.getCondition());
+            out._writeLine("Error: unhandled condition: " + c.getCondition());
             thread.backtrace();
         }
         catch (Throwable t) {

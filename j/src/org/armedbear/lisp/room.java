@@ -2,7 +2,7 @@
  * room.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: room.java,v 1.6 2004-01-24 19:56:22 piso Exp $
+ * $Id: room.java,v 1.7 2004-01-28 20:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,8 +64,8 @@ public final class room extends Primitive
         sb.append(free);
         sb.append(" bytes free");
         sb.append(System.getProperty("line.separator"));
-        out.writeString(sb.toString());
-        out.flushOutput();
+        out._writeString(sb.toString());
+        out._finishOutput();
         return number(used);
     }
 

@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.10 2004-01-26 20:49:35 piso Exp $
+;;; $Id: open.lisp,v 1.11 2004-01-28 20:19:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,9 +29,9 @@
   (let ((pathname (merge-pathnames filename)))
     (case direction
       (:input
-       (make-file-input-stream pathname element-type))
+       (make-file-stream pathname element-type :input nil))
       (:probe
-       (let ((stream (make-file-input-stream pathname element-type)))
+       (let ((stream (make-file-stream pathname element-type :input nil)))
          (when stream
            (close stream))
          stream))
@@ -50,16 +50,12 @@
          ((nil)
           (when (probe-file pathname)
             (return-from open nil)))
-         ((:new-version :supersede :overwrite)) ; OK to proceed.
+         ((:new-version :supersede :overwrite :append)) ; OK to proceed.
          (t
           (error 'simple-error
                  :format-control "Option not supported: ~S."
                  :format-arguments (list if-exists))))
-       (let ((output-stream (make-file-output-stream pathname element-type)))
-         (if (eq direction :output)
-             output-stream
-             (let ((input-stream (make-file-input-stream pathname element-type)))
-               (make-two-way-stream input-stream output-stream)))))
+       (make-file-stream pathname element-type direction (eq if-exists :append)))
       (t
        (error 'simple-error
               :format-control ":DIRECTION ~S not supported."

@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.143 2004-01-26 18:37:56 piso Exp $
+ * $Id: Autoload.java,v 1.144 2004-01-28 20:19:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,21 +80,21 @@ public class Autoload extends Function
                 if (_AUTOLOAD_VERBOSE_.symbolValueNoThrow() != NIL) {
                     final String prefix = Load.getLoadVerbosePrefix(loadDepth);
                     Stream out = getStandardOutput();
-                    out.writeString(prefix);
-                    out.writeString(" Autoloading ");
-                    out.writeString(className);
-                    out.writeLine(" ...");
-                    out.flushOutput();
+                    out._writeString(prefix);
+                    out._writeString(" Autoloading ");
+                    out._writeString(className);
+                    out._writeLine(" ...");
+                    out._finishOutput();
                     long start = System.currentTimeMillis();
                     Class.forName(className);
                     long elapsed = System.currentTimeMillis() - start;
-                    out.writeString(prefix);
-                    out.writeString(" Autoloaded ");
-                    out.writeString(className);
-                    out.writeString(" (");
-                    out.writeString(String.valueOf(((float)elapsed)/1000));
-                    out.writeLine(" seconds)");
-                    out.flushOutput();
+                    out._writeString(prefix);
+                    out._writeString(" Autoloaded ");
+                    out._writeString(className);
+                    out._writeString(" (");
+                    out._writeString(String.valueOf(((float)elapsed)/1000));
+                    out._writeLine(" seconds)");
+                    out._finishOutput();
                 } else
                     Class.forName(className);
             }
@@ -228,6 +228,7 @@ public class Autoload extends Function
         autoload("file-author", "file_author");
         autoload("file-error-pathname", "file_error_pathname");
         autoload("file-length", "file_length");
+        autoload("file-string-length", "file_string_length");
         autoload("file-write-date", "file_write_date");
         autoload("find-class", "LispClass");
         autoload("get-internal-real-time", "Time");
@@ -283,6 +284,7 @@ public class Autoload extends Function
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
         autoload("stream-element-type", "stream_element_type");
+        autoload("stream-external-format", "stream_external_format");
         autoload("sxhash", "HashTable");
         autoload("truename", "probe_file");
         autoload("unbound-slot-instance", "unbound_slot_instance");
@@ -355,8 +357,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "layout-class", "Layout");
         autoload(PACKAGE_SYS, "layout-length", "Layout");
-        autoload(PACKAGE_SYS, "make-file-input-stream", "FileStream");
-        autoload(PACKAGE_SYS, "make-file-output-stream", "FileStream");
+        autoload(PACKAGE_SYS, "make-file-stream", "FileStream");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
         autoload(PACKAGE_SYS, "make-instance-standard-class", "StandardClass");
         autoload(PACKAGE_SYS, "make-layout", "Layout");
