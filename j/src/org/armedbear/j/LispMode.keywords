@@ -279,6 +279,7 @@ prog*
 prog1
 progn
 progv
+provide
 psetf
 psetq
 push
@@ -298,6 +299,7 @@ remove-if
 remove-if-not
 rename-package
 replace
+require
 restart-case
 return
 return-from
