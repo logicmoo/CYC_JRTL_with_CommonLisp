@@ -2,7 +2,7 @@
  * JavaFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaFormatter.java,v 1.1.1.1 2002-09-24 16:09:19 piso Exp $
+ * $Id: JavaFormatter.java,v 1.2 2004-02-28 17:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -346,7 +346,7 @@ public final class JavaFormatter extends Formatter implements Constants
 
     private static final boolean isOperatorChar(char c)
     {
-        return "!&|<>=+/*-".indexOf(c) >= 0;
+        return "!&|<>=+/*-^".indexOf(c) >= 0;
     }
 
     public FormatTable getFormatTable()
