@@ -19,7 +19,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 JAVA=@JAVA@
-JAVA_OPTIONS=@JAVA_OPTIONS@
-CLASSPATH="@CLASSPATH@"
+ABL_JAVA_OPTIONS=@ABL_JAVA_OPTIONS@
+ABL_CLASSPATH="@ABL_CLASSPATH@"
 
-exec $JAVA $JAVA_OPTIONS -cp $CLASSPATH org.armedbear.lisp.Main "$@"
+exec $JAVA $ABL_JAVA_OPTIONS -cp $ABL_CLASSPATH org.armedbear.lisp.Main "$@"
