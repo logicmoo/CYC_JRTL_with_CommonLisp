@@ -1,8 +1,8 @@
 /*
  * StringInputStream.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: StringInputStream.java,v 1.6 2003-12-09 20:26:23 asimon Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: StringInputStream.java,v 1.7 2004-01-05 18:40:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,11 @@ public final class StringInputStream extends CharacterInputStream
     public LispClass classOf()
     {
         return BuiltInClass.STRING_STREAM;
+    }
+
+    public LispObject close(LispObject abort) throws ConditionThrowable
+    {
+        return T;
     }
 
     protected int read()
@@ -101,6 +106,18 @@ public final class StringInputStream extends CharacterInputStream
                 return new StringInputStream(s.substring(start));
             int end = Fixnum.getValue(third);
             return new StringInputStream(s.substring(start, end));
+        }
+    };
+
+    private static final Primitive1 STRING_INPUT_STREAM_CURRENT =
+        new Primitive1("string-input-stream-current", PACKAGE_EXT, true, "stream")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof StringInputStream)
+                return new Fixnum(((StringInputStream)arg).getOffset());
+            return signal(new TypeError(String.valueOf(arg) +
+                                        " is not a string input stream."));
         }
     };
 }
