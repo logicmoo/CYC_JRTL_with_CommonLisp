@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.41 2004-09-12 18:50:38 piso Exp $
+;;; $Id: compile-file.lisp,v 1.42 2004-09-15 18:36:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -240,10 +240,11 @@
                 (*fbound-names* ()))
             (write "; -*- Mode: Lisp -*-" :escape nil :stream out)
             (terpri out)
-            (write (list 'init-fasl :version *fasl-version*) :stream out)
-            (terpri out)
-            (write (list 'setq '*fasl-source* *compile-file-truename*) :stream out)
-            (terpri out)
+            (let ((*package* (find-package '#:cl)))
+              (write (list 'init-fasl :version *fasl-version*) :stream out)
+              (terpri out)
+              (write (list 'setq '*fasl-source* *compile-file-truename*) :stream out)
+              (terpri out))
             (loop
               (let* ((*source-position* (file-position in))
                      (form (read in nil in)))
