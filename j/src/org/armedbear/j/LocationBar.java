@@ -2,7 +2,7 @@
  * LocationBar.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LocationBar.java,v 1.4 2002-11-15 15:23:54 piso Exp $
+ * $Id: LocationBar.java,v 1.5 2003-02-21 14:51:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,9 +126,10 @@ public final class LocationBar extends JPanel implements Constants,
 
     public final void setLabelText(int index)
     {
-        Debug.assertTrue(index >= 0);
-        Debug.assertTrue(index < prompts.length);
-        label.setText(prompts[index]);
+        if (index >= 0 && index < prompts.length)
+            label.setText(prompts[index]);
+        else
+            Debug.bug();
     }
 
     public void update()
