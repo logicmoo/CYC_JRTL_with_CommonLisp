@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.309 2005-01-15 02:50:47 piso Exp $
+ * $Id: Lisp.java,v 1.310 2005-01-16 00:36:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1276,12 +1276,7 @@ public abstract class Lisp
 
     public static final LispObject recall(SimpleString key)
     {
-        return (LispObject) objectTable.get(key.getStringValue());
-    }
-
-    public static final void forget(SimpleString key)
-    {
-        objectTable.remove(key.getStringValue());
+        return (LispObject) objectTable.remove(key.getStringValue());
     }
 
     public static final Primitive REMEMBER =
