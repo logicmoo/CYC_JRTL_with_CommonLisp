@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.23 2003-03-08 16:06:13 piso Exp $
+ * $Id: Symbol.java,v 1.24 2003-03-08 21:30:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,8 @@ public class Symbol extends LispObject
     public static final Symbol QUOTE                = export("QUOTE");
 
     // Type specifiers.
+    public static final Symbol ARRAY                = export("ARRAY");
+    public static final Symbol ATOM                 = export("ATOM");
     public static final Symbol BASE_CHAR            = export("BASE-CHAR");
     public static final Symbol BASE_STRING          = export("BASE-STRING");
     public static final Symbol BIGNUM               = export("BIGNUM");
@@ -44,13 +46,17 @@ public class Symbol extends LispObject
     public static final Symbol COMPILED_FUNCTION    = export("COMPILED_FUNCTION");
     public static final Symbol CONS                 = export("CONS");
     public static final Symbol CHARACTER            = export("CHARACTER");
+    public static final Symbol EXTENDED_CHAR        = export("EXTENDED-CHAR");
     public static final Symbol FIXNUM               = export("FIXNUM");
     public static final Symbol FUNCTION             = export("FUNCTION");
     public static final Symbol INTEGER              = export("INTEGER");
+    public static final Symbol KEYWORD              = export("KEYWORD");
     public static final Symbol LIST                 = export("LIST");
     public static final Symbol NULL                 = export("NULL");
+    public static final Symbol NUMBER               = export("NUMBER");
     public static final Symbol PACKAGE              = export("PACKAGE");
     public static final Symbol SEQUENCE             = export("SEQUENCE");
+    public static final Symbol SIMPLE_ARRAY         = export("SIMPLE-ARRAY");
     public static final Symbol SIMPLE_BASE_STRING   = export("SIMPLE-BASE-STRING");
     public static final Symbol SIMPLE_BIT_VECTOR    = export("SIMPLE-BIT-VECTOR");
     public static final Symbol SIMPLE_STRING        = export("SIMPLE-STRING");
