@@ -10,6 +10,9 @@
           subst subst-if subst-if-not nsubst nsubst-if nsubst-if-not
           sublis nsublis
           member member-if member-if-not tailp adjoin
+          union nunion intersection nintersection
+          set-difference nset-difference
+          set-exclusive-or nset-exclusive-or subsetp
           acons pairlis
           assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not))
 
@@ -153,6 +156,11 @@
 	 #'(lambda ()
             value))))
 
+(defmacro with-set-keys (funcall)
+  `(cond ((and testp notp) (error "Test and test-not both supplied."))
+	 (notp ,(append funcall '(:key key :test-not test-not)))
+	 (t ,(append funcall '(:key key :test test)))))
+
 (defmacro satisfies-the-test (item elt)
   (let ((key-tmp (gensym)))
     `(let ((,key-tmp (apply-key key ,elt)))
@@ -257,7 +265,6 @@
                                (cons car cdr))))))))
           (s tree)))
 
-;;; In run-time env, since can be referenced in line expansions.
 (defmacro nsublis-macro ()
   (let ((key-tmp (gensym)))
     `(let ((,key-tmp (apply-key key subtree)))
@@ -314,6 +321,136 @@
 	    (member key-val list :test test :key key)))
       list
       (cons item list)))
+
+(defun union (list1 list2 &key key (test #'eql testp) (test-not nil notp))
+  (when (and testp notp) (error "Test and test-not both supplied."))
+  (let ((res list2))
+    (dolist (elt list1)
+      (unless (with-set-keys (member (apply-key key elt) list2))
+	(push elt res)))
+    res))
+
+(defmacro steve-splice (source destination)
+  `(let ((temp ,source))
+     (setf ,source (cdr ,source)
+	   (cdr temp) ,destination
+	   ,destination temp)))
+
+(defun nunion (list1 list2 &key key (test #'eql testp) (test-not nil notp))
+  (if (and testp notp)
+      (error "Test and test-not both supplied."))
+  (let ((res list2)
+	(list1 list1))
+    (do ()
+      ((endp list1))
+      (if (not (with-set-keys (member (apply-key key (car list1)) list2)))
+	  (steve-splice list1 res)
+	  (setf list1 (cdr list1))))
+    res))
+
+
+(defun intersection (list1 list2 &key key
+			   (test #'eql testp) (test-not nil notp))
+  (if (and testp notp)
+      (error "Test and test-not both supplied."))
+  (let ((res nil))
+    (dolist (elt list1)
+      (if (with-set-keys (member (apply-key key elt) list2))
+	  (push elt res)))
+    res))
+
+(defun nintersection (list1 list2 &key key
+			    (test #'eql testp) (test-not nil notp))
+  (if (and testp notp)
+      (error "Test and test-not both supplied."))
+  (let ((res nil)
+	(list1 list1))
+    (do () ((endp list1))
+      (if (with-set-keys (member (apply-key key (car list1)) list2))
+	  (steve-splice list1 res)
+	  (setq list1 (Cdr list1))))
+    res))
+
+(defun set-difference (list1 list2 &key key
+			     (test #'eql testp) (test-not nil notp))
+  (if (and testp notp)
+      (error "Test and test-not both supplied."))
+  (if (null list2)
+      list1
+      (let ((res nil))
+	(dolist (elt list1)
+	  (if (not (with-set-keys (member (apply-key key elt) list2)))
+	      (push elt res)))
+	res)))
+
+
+(defun nset-difference (list1 list2 &key key
+			      (test #'eql testp) (test-not nil notp))
+  (if (and testp notp)
+      (error "Test and test-not both supplied."))
+  (let ((res nil)
+	(list1 list1))
+    (do () ((endp list1))
+      (if (not (with-set-keys (member (apply-key key (car list1)) list2)))
+	  (steve-splice list1 res)
+	  (setq list1 (cdr list1))))
+    res))
+
+
+(defun set-exclusive-or (list1 list2 &key key
+                               (test #'eql testp) (test-not nil notp))
+  (let ((result nil)
+        (key (when key (coerce key 'function)))
+        (test (coerce test 'function))
+        (test-not (if test-not (coerce test-not 'function) #'eql)))
+    (dolist (elt list1)
+      (unless (with-set-keys (member (apply-key key elt) list2))
+	(setq result (cons elt result))))
+    (let ((test (if testp
+                    (lambda (x y) (funcall test y x))
+                    test))
+          (test-not (if notp
+                        (lambda (x y) (funcall test-not y x))
+                        test-not)))
+      (dolist (elt list2)
+        (unless (with-set-keys (member (apply-key key elt) list1))
+          (setq result (cons elt result)))))
+    result))
+
+
+(defun nset-exclusive-or (list1 list2 &key (test #'eql) (test-not nil notp)
+				key)
+  (do ((list1 list1)
+       (list2 list2)
+       (x list1 (cdr x))
+       (splicex ()))
+    ((endp x)
+     (if (null splicex)
+         (setq list1 list2)
+         (rplacd splicex list2))
+     list1)
+    (do ((y list2 (cdr y))
+	 (splicey ()))
+      ((endp y) (setq splicex x))
+      (cond ((let ((key-val-x (apply-key key (car x)))
+		   (key-val-y (apply-key key (Car y))))
+	       (if notp
+		   (not (funcall test-not key-val-x key-val-y))
+		   (funcall test key-val-x key-val-y)))
+	     (if (null splicex)
+		 (setq list1 (cdr x))
+		 (rplacd splicex (cdr x)))
+	     (if (null splicey)
+		 (setq list2 (cdr y))
+		 (rplacd splicey (cdr y)))
+	     (return ()))
+	    (t (setq splicey y))))))
+
+(defun subsetp (list1 list2 &key key (test #'eql testp) (test-not nil notp))
+  (dolist (elt list1)
+    (unless (with-set-keys (member (apply-key key elt) list2))
+      (return-from subsetp nil)))
+  T)
 
 (defun acons (key datum alist)
   (cons (cons key datum) alist))
