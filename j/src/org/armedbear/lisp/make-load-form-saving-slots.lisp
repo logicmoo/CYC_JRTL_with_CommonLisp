@@ -1,7 +1,7 @@
 ;;; make-load-form-saving-slots.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: make-load-form-saving-slots.lisp,v 1.2 2004-11-21 04:34:06 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: make-load-form-saving-slots.lisp,v 1.3 2005-02-22 18:39:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,7 +23,8 @@
 
 (defun make-load-form-saving-slots (object &key slot-names environment)
   (let ((class (class-of object))
-        (inits ()))
+        (inits ())
+        (instance (gensym "INSTANCE-")))
     (cond ((typep object 'structure-object)
            (let ((index 0))
              (dolist (slot (class-slots class))
@@ -31,7 +32,7 @@
                  (when (or (memq slot-name slot-names)
                            (null slot-names))
                    (let ((value (%structure-ref object index)))
-                     (push `(%structure-set ,object ,index ',value) inits))))
+                     (push `(%structure-set ,instance ,index ',value) inits))))
                (incf index))))
           ((typep object 'standard-object)
            (dolist (slot (class-slots class))
@@ -40,6 +41,10 @@
                          (null slot-names))
                  (when (slot-boundp object slot-name)
                    (let ((value (slot-value object slot-name)))
-                     (push `(setf (slot-value ,object ',slot-name) ',value) inits))))))))
-    (values `(allocate-instance (find-class ',(sys::%class-name class)))
-            `(progn ,@inits))))
+                     (push `(setf (slot-value ,instance ',slot-name) ',value) inits))))))))
+;;     (values `(allocate-instance (find-class ',(%class-name class)))
+;;             `(progn ,@inits))))
+    (values `(let ((,instance (allocate-instance (find-class ',(%class-name class)))))
+               (progn ,@inits)
+               ,instance)
+            nil)))

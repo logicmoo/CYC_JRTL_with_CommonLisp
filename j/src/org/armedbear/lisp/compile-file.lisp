@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.57 2005-02-21 18:28:55 piso Exp $
+;;; $Id: compile-file.lisp,v 1.58 2005-02-22 18:38:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -59,6 +59,27 @@
          (report-error
           (load-compiled-function classfile)))))
 
+(defun dump-object (object stream)
+  (cond ((consp object)
+         (write-char #\( stream)
+         (loop
+           (dump-object (car object) stream)
+           (setf object (cdr object))
+           (when (null object)
+             (return))
+           (write-char #\space stream)
+           (when (atom object)
+             (dump-object object stream)
+             (return)))
+         (write-char #\) stream))
+        ((structure-object-p object)
+         (multiple-value-bind (creation-form initialization-form)
+             (make-load-form object)
+           (write-string "#." stream)
+           (write `(prog1 ,creation-form ,initialization-form) :stream stream)))
+        (t
+         (write object :stream stream))))
+
 (defun dump-form (form stream)
   (when (and (consp form) (neq (car form) 'QUOTE))
     (let ((*print-fasl* t)
@@ -67,9 +88,9 @@
           (*print-circle* nil))
       (if (eq (car form) 'IMPORT)
           ;; Make sure package prefix is printed when symbols are imported.
-          (let ((*package* (find-package "COMMON-LISP")))
-            (write form :stream stream))
-          (write form :stream stream)))
+          (let ((*package* +keyword-package+))
+            (dump-object form stream))
+          (dump-object form stream)))
     (terpri stream)))
 
 (defun process-defconstant (form stream)
@@ -225,19 +246,7 @@
               (return-from process-toplevel-form))
             (when compile-time-too
               (eval form))))))
-;;   (when (and (consp form) (neq (car form) 'QUOTE))
-;;     (let ((*print-fasl* t)
-;;           (*print-level* nil)
-;;           (*print-length* nil)
-;;           (*print-circle* nil))
-;;       (if (eq (car form) 'IMPORT)
-;;           ;; Make sure package prefix is printed when symbols are imported.
-;;           (let ((*package* (find-package "COMMON-LISP")))
-;;             (write form :stream stream))
-;;           (write form :stream stream)))
-;;     (terpri stream))
-  (dump-form form stream)
-  )
+  (dump-form form stream))
 
 (defun process-toplevel-progn (forms stream compile-time-too)
   (dolist (form forms)
