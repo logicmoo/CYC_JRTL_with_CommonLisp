@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.169 2003-04-10 02:42:02 piso Exp $
+ * $Id: Primitives.java,v 1.170 2003-04-14 16:08:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2871,7 +2871,31 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
-            checkSymbol(first).setSymbolFunction(second);
+            Symbol symbol = checkSymbol(first);
+            if (second instanceof LispString) {
+                String className = ((LispString)second).getValue();
+                if (className.endsWith(".class")) {
+                    try {
+                        JavaClassLoader loader = new JavaClassLoader();
+                        Class c = loader.loadClassFromFile(className);
+                        if (c != null) {
+                            Class[] parameterTypes = new Class[0];
+                            java.lang.reflect.Constructor constructor =
+                                c.getConstructor(parameterTypes);
+                            Object[] initargs = new Object[0];
+                            LispObject obj =
+                                (LispObject) constructor.newInstance(initargs);
+                            symbol.setSymbolFunction(obj);
+                            return obj;
+                        }
+                    }
+                    catch (Throwable t) {
+                        Debug.trace(t);
+                    }
+                }
+                throw new LispError("unable to load ".concat(className));
+            }
+            symbol.setSymbolFunction(second);
             return second;
         }
     };
