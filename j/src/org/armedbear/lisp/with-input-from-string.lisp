@@ -1,7 +1,7 @@
 ;;; with-input-from-string.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: with-input-from-string.lisp,v 1.1 2004-01-05 19:05:01 piso Exp $
+;;; $Id: with-input-from-string.lisp,v 1.2 2004-02-01 16:47:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,23 +21,25 @@
 
 (in-package "SYSTEM")
 
-(defmacro with-input-from-string ((var string &key index start end) &body forms)
-  `(let ((,var
-          ,(cond ((null end)
-                  `(make-string-input-stream ,string ,(or start 0)))
-                 ((symbolp end)
-                  `(if ,end
-                       (make-string-input-stream ,string
-                                                 ,(or start 0)
-                                                 ,end)
-                       (make-string-input-stream ,string
-                                                 ,(or start 0))))
-                 (t
-                  `(make-string-input-stream ,string
-                                             ,(or start 0)
-                                             ,end)))))
-     (unwind-protect
-      (progn ,@forms)
-      (close ,var)
-      ,@(when index
-          `((setf ,index (string-input-stream-current ,var)))))))
+(defmacro with-input-from-string ((var string &key index start end) &body body)
+  (multiple-value-bind (forms decls) (parse-body body)
+    `(let ((,var
+            ,(cond ((null end)
+                    `(make-string-input-stream ,string ,(or start 0)))
+                   ((symbolp end)
+                    `(if ,end
+                         (make-string-input-stream ,string
+                                                   ,(or start 0)
+                                                   ,end)
+                         (make-string-input-stream ,string
+                                                   ,(or start 0))))
+                   (t
+                    `(make-string-input-stream ,string
+                                               ,(or start 0)
+                                               ,end)))))
+       ,@decls
+       (unwind-protect
+        (progn ,@forms)
+        (close ,var)
+        ,@(when index
+            `((setf ,index (string-input-stream-current ,var))))))))
