@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.6 2003-09-14 13:07:22 piso Exp $
+ * $Id: DisplacedArray.java,v 1.7 2003-09-14 16:46:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,9 +46,11 @@ public final class DisplacedArray extends AbstractArray
 
     public LispObject typeOf()
     {
-        if (getRank() == 1) {
+        if (dimv.length == 1) {
             if (array instanceof LispString)
                 return Symbol.STRING;
+            if (array instanceof BitVector)
+                return Symbol.BIT_VECTOR;
             return list3(Symbol.VECTOR, T, new Fixnum(size));
         }
         return list3(Symbol.ARRAY, T, getDimensions());
@@ -59,7 +61,7 @@ public final class DisplacedArray extends AbstractArray
         if (typeSpecifier == Symbol.ARRAY)
             return T;
         if (typeSpecifier == Symbol.VECTOR)
-            return getRank() == 1 ? T : NIL;
+            return VECTORP();
         if (typeSpecifier == Symbol.BIT_VECTOR)
             return BIT_VECTOR_P();
         if (typeSpecifier instanceof LispClass) {
@@ -74,16 +76,21 @@ public final class DisplacedArray extends AbstractArray
 
     public LispObject BIT_VECTOR_P()
     {
-        if (getRank() == 1)
+        if (dimv.length == 1)
             return array.BIT_VECTOR_P();
         return NIL;
     }
 
     public LispObject STRINGP()
     {
-        if (getRank() == 1)
+        if (dimv.length == 1)
             return array.STRINGP();
         return NIL;
+    }
+
+    public boolean vectorp()
+    {
+        return dimv.length == 1;
     }
 
     public int length() throws LispError
