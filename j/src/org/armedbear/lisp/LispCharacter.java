@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.56 2004-10-13 00:22:18 piso Exp $
+ * $Id: LispCharacter.java,v 1.57 2004-10-19 02:10:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -500,10 +500,7 @@ public final class LispCharacter extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                char c = ((LispCharacter)arg).value;
-                if (Character.isDigit(c))
-                    return T;
-                return Character.isLetter(c) ? T : NIL;
+                return Character.isLetterOrDigit(((LispCharacter)arg).value) ? T : NIL;
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.CHARACTER));
