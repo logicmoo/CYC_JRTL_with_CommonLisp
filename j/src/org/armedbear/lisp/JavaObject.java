@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaObject.java,v 1.12 2003-12-13 00:28:08 piso Exp $
+ * $Id: JavaObject.java,v 1.13 2004-01-09 20:46:35 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@ public class JavaObject extends LispObject
 
     public JavaObject(Object obj)
     {
-        Debug.assertTrue(obj != null);
         this.obj = obj;
     }
 
@@ -69,7 +68,7 @@ public class JavaObject extends LispObject
 
     public Fixnum sxhash()
     {
-        return new Fixnum(obj.hashCode() & 0x7ffffff);
+        return obj == null ? null : new Fixnum(obj.hashCode() & 0x7ffffff);
     }
 
     public String toString()
@@ -78,9 +77,13 @@ public class JavaObject extends LispObject
             return obj.toString();
 
         StringBuffer sb = new StringBuffer("#<JAVAOBJECT ");
-        sb.append(obj.getClass().getName());
-        sb.append(" \"");
-        sb.append(obj.toString());
+	if (obj == null) {
+            sb.append("null");
+	} else {
+            sb.append(obj.getClass().getName());
+            sb.append(" \"");
+            sb.append(obj.toString());
+	}
         sb.append("\">");
         return sb.toString();
     }
