@@ -209,7 +209,7 @@
       <fileset dir="${topdir}" includes="**/*.tar.gz"/>
       <fileset dir="${topdir}" includes="**/*.jar"/>
       <fileset dir="${topdir}" includes="**/*.class"/>
-      <fileset dir="${topdir}" includes="**/*.fasl"/>
+      <fileset dir="${topdir}" includes="**/*.abcl"/>
       <fileset dir="${topdir}" includes="**/*.cls"/>
       <fileset dir="${topdir}" includes="**/*~"/>
       <fileset dir="${topdir}" includes="**/.#*"/>
