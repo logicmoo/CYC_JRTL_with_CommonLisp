@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.4 2003-02-15 16:48:16 piso Exp $
+ * $Id: Load.java,v 1.5 2003-02-23 01:38:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,13 +168,17 @@ public final class Load extends Lisp
         }
     }
 
-    private static final LispObject loadStream(InputStream in, boolean print)
-        throws LispError
+    private static final LispObject loadStream(InputStream inputStream,
+        boolean print) throws LispError
     {
-        LispReader reader = new LispReader(in);
+        CharacterInputStream in = new CharacterInputStream(inputStream);
+        int lineNumber = 0;
+        int offset = 0;
         try {
             while (true) {
-                LispObject obj = reader.readObject(true);
+                lineNumber = in.getLineNumber();
+                offset = in.getOffset();
+                LispObject obj = in.read(false, EOF, true);
                 if (obj == EOF)
                     break;
                 LispObject result = eval(obj, new Environment());
@@ -197,8 +201,11 @@ public final class Load extends Lisp
                 sb.append(" in ");
                 sb.append(truename);
             }
-            sb.append(" at offset ");
-            sb.append(reader.getOffset());
+            sb.append(" at line ");
+            sb.append(lineNumber + 1);
+            sb.append(" (offset ");
+            sb.append(offset);
+            sb.append(')');
             out.writeLine(sb.toString());
             throw e;
         }
