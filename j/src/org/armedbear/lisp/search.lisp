@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: search.lisp,v 1.9 2003-07-31 20:11:06 piso Exp $
+;;; $Id: search.lisp,v 1.10 2003-08-01 16:06:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -104,7 +104,3 @@
     (if (listp sequence2)
         (list-search sequence2 sequence1)
         (vector-search sequence2 sequence1))))
-
-
-(when (fboundp 'cl-user::jvm-compile)
-  (cl-user::jvm-compile 'search))
