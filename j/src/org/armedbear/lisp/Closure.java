@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.42 2003-06-09 00:34:42 piso Exp $
+ * $Id: Closure.java,v 1.43 2003-06-09 00:50:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -415,20 +415,16 @@ public class Closure extends Function
                 if (i < args.length) {
                     bind(parameter.var, args[i], ext);
                     ++argsUsed;
-                    if (parameter.svar != NIL) {
-                        Symbol svar = checkSymbol(parameter.svar);
-                        bind(svar, T, ext);
-                    }
+                    if (parameter.svar != NIL)
+                        bind((Symbol)parameter.svar, T, ext);
                 } else {
                     // We've run out of arguments.
                     LispObject initForm = parameter.initForm;
                     bind(parameter.var,
                         initForm != null ? eval(initForm, ext, thread) : NIL,
                         ext);
-                    if (parameter.svar != NIL) {
-                        Symbol svar = checkSymbol(parameter.svar);
-                        bind(svar, NIL, ext);
-                    }
+                    if (parameter.svar != NIL)
+                        bind((Symbol)parameter.svar, NIL, ext);
                 }
                 ++i;
             }
@@ -458,10 +454,8 @@ public class Closure extends Function
                             Parameter parameter = keywordParameters[k];
                             Symbol symbol = parameter.var;
                             bind(symbol, args[j+1], ext);
-                            if (parameter.svar != NIL) {
-                                Symbol svar = checkSymbol(parameter.svar);
-                                bind(svar, T, ext);
-                            }
+                            if (parameter.svar != NIL)
+                                bind((Symbol)parameter.svar, T, ext);
                             boundpArray[k] = true;
                         }
                         break;
@@ -492,10 +486,8 @@ public class Closure extends Function
                     LispObject value =
                         initForm != null ? eval(initForm, ext, thread) : NIL;
                     bind(parameter.var, value, ext);
-                    if (parameter.svar != NIL) {
-                        Symbol svar = checkSymbol(parameter.svar);
-                        bind(svar, NIL, ext);
-                    }
+                    if (parameter.svar != NIL)
+                        bind((Symbol)parameter.svar, NIL, ext);
                     boundpArray[n] = true;
                 }
             }
@@ -575,7 +567,10 @@ public class Closure extends Function
         }
 
         Parameter(Symbol var, LispObject initForm, LispObject svar, int type)
+            throws LispError
         {
+            if (svar != NIL)
+                checkSymbol(svar);
             this.var = var;
             this.initForm = initForm;
             this.svar = svar;
@@ -585,7 +580,10 @@ public class Closure extends Function
         }
 
         Parameter(Symbol keyword, Symbol var, LispObject initForm, LispObject svar)
+            throws LispError
         {
+            if (svar != NIL)
+                checkSymbol(svar);
             this.keyword = keyword;
             this.var = var;
             this.initForm = initForm;
