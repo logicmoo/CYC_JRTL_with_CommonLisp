@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.80 2004-10-25 16:01:30 piso Exp $
+;;; $Id: precompiler.lisp,v 1.81 2004-12-03 18:27:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -355,34 +355,34 @@
   (let* ((args (cdr form))
          (lambda-list (car args))
          (body (cdr args))
-         (auxvars (memq '&AUX lambda-list)))
+         (auxvars (memq '&AUX lambda-list))
+         (specials '()))
     (when auxvars
       (setf lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
       (setf body (list (append (list 'LET* (cdr auxvars)) body))))
-    (let ((specials ()))
-      (dolist (var lambda-list)
-        (when (consp var)
-          (if (consp (first var))
-              (setf var (second (first var)))   ;; e.g. "&key ((:x *x*) 42)"
-              (setf var (first var))))          ;; e.g. "&optional (*x* 42)"
-        (when (special-variable-p var)
-          (push var specials)))
-      (when specials
-        (dolist (special specials)
-          (let ((sym (gensym)))
-            (let ((res ()))
-              (dolist (var lambda-list)
-                (cond ((and (consp var) (consp (first var))
-                            (eq special (second (first var))))
-                       (push (list (list (first (first var)) sym) (second var)) res))
-                      ((and (consp var) (eq special (first var)))
-                       (push (cons sym (cdr var)) res))
-                      ((eq var special)
-                       (push sym res))
-                      (t
-                       (push var res))))
-              (setf lambda-list (nreverse res)))
-            (setf body (list (append (list 'LET* (list (list special sym))) body)))))))
+    (dolist (var lambda-list)
+      (when (consp var)
+        (if (consp (first var))
+            (setf var (second (first var)))   ;; e.g. "&key ((:x *x*) 42)"
+            (setf var (first var))))          ;; e.g. "&optional (*x* 42)"
+      (when (special-variable-p var)
+        (push var specials)))
+    (when specials
+      (dolist (special specials)
+        (let ((sym (gensym)))
+          (let ((res ()))
+            (dolist (var lambda-list)
+              (cond ((and (consp var) (consp (first var))
+                          (eq special (second (first var))))
+                     (push (list (list (first (first var)) sym) (second var)) res))
+                    ((and (consp var) (eq special (first var)))
+                     (push (cons sym (cdr var)) res))
+                    ((eq var special)
+                     (push sym res))
+                    (t
+                     (push var res))))
+            (setf lambda-list (nreverse res)))
+          (setf body (list (append (list 'LET* (list (list special sym))) body))))))
     (list* 'LAMBDA lambda-list (mapcar #'precompile1 body))))
 
 (defun precompile-lambda (form)
