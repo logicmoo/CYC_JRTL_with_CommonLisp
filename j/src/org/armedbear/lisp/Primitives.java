@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.41 2003-02-19 19:48:53 piso Exp $
+ * $Id: Primitives.java,v 1.42 2003-02-21 00:20:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1271,7 +1271,7 @@ public final class Primitives extends Module
                 LispObject clause = args.car();
                 LispObject keys = clause.car();
                 boolean match = false;
-                if (keys instanceof Cons) {
+                if (keys.listp()) {
                     while (keys != NIL) {
                         LispObject candidate = keys.car();
                         if (eql(key, candidate)) {
