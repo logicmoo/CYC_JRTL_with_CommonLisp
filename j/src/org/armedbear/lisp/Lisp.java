@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.32 2003-03-11 02:20:59 piso Exp $
+ * $Id: Lisp.java,v 1.33 2003-03-12 20:12:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,10 @@ public abstract class Lisp
     public static final LispObject funcall(LispObject fun, LispObject[] args)
         throws Condition
     {
+        if (debug) {
+            stack.push(new StackFrame((Function)fun, args));
+        }
+        LispObject result;
         final int length = args.length;
         switch (fun.getType()) {
             case TYPE_PRIMITIVE0: {
@@ -87,32 +91,41 @@ public abstract class Lisp
                     throw new WrongNumberOfArgumentsException(fun);
                 if (profiling)
                     fun.incrementCallCount();
-                return fun.execute();
+                result = fun.execute();
+                break;
             }
             case TYPE_PRIMITIVE1: {
                 if (length != 1)
                     throw new WrongNumberOfArgumentsException(fun);
                 if (profiling)
                     fun.incrementCallCount();
-                return fun.execute(args[0]);
+                result = fun.execute(args[0]);
+                break;
             }
             case TYPE_PRIMITIVE2: {
                 if (length != 2)
                     throw new WrongNumberOfArgumentsException(fun);
                 if (profiling)
                     fun.incrementCallCount();
-                return fun.execute(args[0], args[1]);
+                result = fun.execute(args[0], args[1]);
+                break;
             }
             case TYPE_PRIMITIVE:
             case TYPE_CLOSURE:
             case TYPE_MACRO:
                 if (profiling)
                     fun.incrementCallCount();
-                return fun.execute(args);
+                result = fun.execute(args);
+                break;
             case TYPE_SPECIAL_OPERATOR:
             default:
                 throw new UndefinedFunctionError(String.valueOf(fun));
         }
+        if (debug) {
+            if (!stack.empty())
+                stack.pop();
+        }
+        return result;
     }
 
     public static final LispObject macroexpand(LispObject form, Environment env)
@@ -155,6 +168,28 @@ public abstract class Lisp
         return results[0];
     }
 
+    private static class StackFrame
+    {
+        private final Functional functional;
+        private final LispObject[] argv;
+
+        public StackFrame(LispObject obj, LispObject[] argv)
+        {
+            functional = (Functional) obj;
+            this.argv = argv;
+        }
+
+        public Functional getFunctional()
+        {
+            return functional;
+        }
+
+        public LispObject[] getArgumentVector()
+        {
+            return argv;
+        }
+    }
+
     public static final Stack stack = new Stack();
 
     public static void resetStack()
@@ -181,7 +216,17 @@ public abstract class Lisp
                     out.writeString("  ");
                     out.writeString(String.valueOf(stack.size() - 1 - i));
                     out.writeString(": ");
-                    pprint((LispObject)stack.get(i), out.getCharPos(), out);
+                    StackFrame frame = (StackFrame) stack.get(i);
+                    LispObject obj = NIL;
+                    LispObject[] argv = frame.getArgumentVector();
+                    for (int j = argv.length; j-- > 0;)
+                        obj = new Cons(argv[j], obj);
+                    Functional functional = frame.getFunctional();
+                    if (functional.getLambdaName() != null)
+                        obj = new Cons(functional.getLambdaName(), obj);
+                    else
+                        obj = new Cons(functional, obj);
+                    pprint(obj, out.getCharPos(), out);
                     out.terpri();
                     out.finishOutput();
                 }
@@ -256,9 +301,6 @@ public abstract class Lisp
     public static final LispObject eval(LispObject obj, Environment env)
         throws Condition
     {
-        if (debug) {
-            stack.push(obj);
-        }
         _values = null;
         LispObject result = null;
         if (obj instanceof Symbol) {
@@ -292,50 +334,8 @@ public abstract class Lisp
                     case TYPE_MACRO:
                         result = eval(macroexpand(obj, env), env);
                         break;
-                    case TYPE_PRIMITIVE0: {
-                        if (obj.cdr() != NIL)
-                            throw new WrongNumberOfArgumentsException(fun);
-                        if (profiling)
-                            fun.incrementCallCount();
-                        result = fun.execute();
-                        break;
-                    }
-                    case TYPE_PRIMITIVE1: {
-                        LispObject args = obj.cdr();
-                        if (args.length() != 1)
-                            throw new WrongNumberOfArgumentsException(fun);
-                        if (profiling)
-                            fun.incrementCallCount();
-                        result = fun.execute(value(eval(args.car(), env)));
-                        break;
-                    }
-                    case TYPE_PRIMITIVE2: {
-                        LispObject args = obj.cdr();
-                        if (args.length() != 2)
-                            throw new WrongNumberOfArgumentsException(fun);
-                        if (profiling)
-                            fun.incrementCallCount();
-                        result = fun.execute(eval(args.car(), env),
-                                             value(eval(args.cadr(), env)));
-                        break;
-                    }
-                    case TYPE_PRIMITIVE3: {
-                        LispObject args = obj.cdr();
-                        if (args.length() != 3)
-                            throw new WrongNumberOfArgumentsException(fun);
-                        if (profiling)
-                            fun.incrementCallCount();
-                        result = fun.execute(
-                            eval(args.car(), env),
-                            eval(args.cadr(), env),
-                            value(eval(args.cdr().cdr().car(), env)));
-                        break;
-                    }
                     default:
-                        if (profiling)
-                            fun.incrementCallCount();
-                        result = fun.execute(evalList(obj.cdr(), env));
-                        break;
+                        result = apply(fun, evalList(obj.cdr(), env);
                 }
             } else {
                 LispObject args = obj.cdr();
@@ -352,6 +352,47 @@ public abstract class Lisp
             }
         } else
             result = obj;
+        return result;
+    }
+
+    private static final LispObject apply(LispObject fun, LispObject[] argv)
+        throws Condition
+    {
+        if (debug) {
+            stack.push(new StackFrame(fun, argv));
+        }
+        LispObject result;
+        switch (fun.getType()) {
+            case TYPE_PRIMITIVE0: {
+                if (argv.length != 0)
+                    throw new WrongNumberOfArgumentsException(fun);
+                result = fun.execute();
+                break;
+            }
+            case TYPE_PRIMITIVE1: {
+                if (argv.length != 1)
+                    throw new WrongNumberOfArgumentsException(fun);
+                result = fun.execute(argv[0]);
+                break;
+            }
+            case TYPE_PRIMITIVE2: {
+                if (argv.length != 2)
+                    throw new WrongNumberOfArgumentsException(fun);
+                result = fun.execute(argv[0], argv[1]);
+                break;
+            }
+            case TYPE_PRIMITIVE3: {
+                if (argv.length != 3)
+                    throw new WrongNumberOfArgumentsException(fun);
+                result = fun.execute(argv[0], argv[1], argv[2]);
+                break;
+            }
+            default:
+                result = fun.execute(argv);
+                break;
+        }
+        if (profiling)
+            fun.incrementCallCount();
         if (debug) {
             if (!stack.empty())
                 stack.pop();
