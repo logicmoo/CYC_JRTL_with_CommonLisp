@@ -1,7 +1,7 @@
 ;;; write-to-string.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: write-to-string.lisp,v 1.3 2004-05-10 01:11:20 piso Exp $
+;;; $Id: write-to-string.lisp,v 1.4 2004-06-11 16:53:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,4 +35,13 @@
                                ((:miser-width *print-miser-width*) *print-miser-width*)
                                ((:lines *print-lines*) *print-lines*)
                                ((:pprint-dispatch *print-pprint-dispatch*) *print-pprint-dispatch*))
-  (%write-to-string object))
+  (if (or *print-pretty* *print-circle*)
+      (cond ((or (symbolp object)
+                 (stringp object)
+                 (fixnump object))
+             (%write-to-string object))
+            (t
+             (let ((stream (make-string-output-stream)))
+               (output-object object stream)
+               (get-output-stream-string stream))))
+      (%write-to-string object)))
