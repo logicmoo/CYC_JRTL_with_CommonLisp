@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dotimes.java,v 1.6 2003-12-14 17:05:12 piso Exp $
+ * $Id: dotimes.java,v 1.7 2004-03-16 02:41:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,8 @@ public final class dotimes extends SpecialOperator
                 // It's a tag.
                 ext.addTagBinding(current, remaining);
             }
+            // Implicit block.
+            ext.addBlock(NIL, new Block());
             LispObject result;
             // Establish a reusable binding.
             final Binding binding;
