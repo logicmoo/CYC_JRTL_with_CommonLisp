@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.1 2003-03-01 02:01:33 piso Exp $
+# $Id: Makefile.in,v 1.2 2003-03-03 15:19:17 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -66,6 +66,8 @@ CLASSFILES =	AbstractVector.class \
 		ProgramError.class \
 		Return.class \
 		SequenceType.class \
+		SimpleCondition.class \
+		SimpleError.class \
 		SpecialOperator.class \
 		StreamError.class \
 		StringInputStream.class \
