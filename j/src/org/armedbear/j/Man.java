@@ -2,7 +2,7 @@
  * Man.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Man.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * $Id: Man.java,v 1.3 2002-10-11 15:30:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,45 +59,61 @@ public final class Man extends Buffer
     public int load()
     {
         if (!isLoaded()) {
-            final File toBeLoaded = getFile();
-            if (toBeLoaded.isFile()) {
-                try {
-                    load(toBeLoaded.getInputStream());
-                }
-                catch (IOException e) {
-                    Log.error(e);
-                }
-                // Handle zero length files.
-                if (getFirstLine() == null) {
-                    appendLine("");
-                    lineSeparator = System.getProperty("line.separator");
-                }
-                setLastModified(toBeLoaded.lastModified());
-                renumber();
-                formatter.parseBuffer();
+            try {
+                lockWrite();
             }
-            setLoaded(true);
+            catch (InterruptedException e) {
+                Log.debug(e);
+                return LOAD_FAILED;
+            }
+            try {
+                final File toBeLoaded = getFile();
+                if (toBeLoaded.isFile()) {
+                    try {
+                        _load(toBeLoaded.getInputStream());
+                    }
+                    catch (IOException e) {
+                        Log.error(e);
+                    }
+                    // Handle zero length files.
+                    if (getFirstLine() == null) {
+                        appendLine("");
+                        lineSeparator = System.getProperty("line.separator");
+                    }
+                    setLastModified(toBeLoaded.lastModified());
+                    renumber();
+                    formatter.parseBuffer();
+                }
+                Line line = getFirstLine();
+                while (line != null && line.isBlank()) {
+                    line = line.next();
+                    setFirstLine(line);
+                }
+                final Line firstLine = getFirstLine();
+                if (firstLine == null) {
+                    appendLine("");
+                    setLoaded(true);
+                    return LOAD_FAILED;
+                }
+                firstLine.setPrevious(null);
+                String header = firstLine.getText();
+                for (line = firstLine.next(); line != null; line = line.next()) {
+                    if (line.isBlank() && line.previous() != null && line.previous().isBlank())
+                        remove(line);
+                    else if (line.getText().equals(header))
+                        remove(line);
+                }
+                renumber();
+                setLoaded(true);
+            }
+            finally {
+                unlockWrite();
+            }
         }
-        Line line = getFirstLine();
-        while (line != null && line.isBlank()) {
-            line = line.next();
-            setFirstLine(line);
-        }
-        if (getFirstLine() == null)
-            return LOAD_FAILED;
-        getFirstLine().setPrevious(null);
-        String header = getFirstLine().getText();
-        for (line = getFirstLine().next(); line != null; line = line.next()) {
-            if (line.isBlank() && line.previous() != null && line.previous().isBlank())
-                remove(line);
-            else if (line.getText().equals(header))
-                remove(line);
-        }
-        renumber();
         return LOAD_COMPLETED;
     }
 
-    public void load(InputStream istream)
+    private void _load(InputStream istream)
     {
         byte[] buf = new byte[4096];
         int totalBytes = 0;
