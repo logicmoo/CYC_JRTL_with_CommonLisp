@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.60 2004-10-09 13:28:42 piso Exp $
+ * $Id: LispThread.java,v 1.61 2004-10-22 15:47:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -317,23 +317,23 @@ public final class LispThread extends LispObject
 
     private static class StackFrame extends LispObject
     {
-        private final LispObject functional;
-        private final LispObject[] argv;
+        private final LispObject operator;
+        private final LispObject[] args;
 
-        public StackFrame(LispObject functional, LispObject[] argv)
+        public StackFrame(LispObject operator, LispObject[] args)
         {
-            this.functional = functional;
-            this.argv = argv;
+            this.operator = operator;
+            this.args = args;
         }
 
-        public LispObject getFunctional()
+        public LispObject getOperator()
         {
-            return functional;
+            return operator;
         }
 
-        public LispObject[] getArgumentVector()
+        public LispObject[] getArguments()
         {
-            return argv;
+            return args;
         }
     }
 
@@ -349,14 +349,14 @@ public final class LispThread extends LispObject
         this.stack = stack;
     }
 
-    public void pushStackFrame(LispObject fun, LispObject[] args)
+    public void pushStackFrame(LispObject operator, LispObject[] args)
         throws ConditionThrowable
     {
         if (profiling && sampling) {
             if (sampleNow)
                 Profiler.sample(this);
         }
-        stack = new Cons((new StackFrame(fun, args)), stack);
+        stack = new Cons((new StackFrame(operator, args)), stack);
     }
 
     public void resetStack()
@@ -504,15 +504,15 @@ public final class LispThread extends LispObject
                     StackFrame frame = (StackFrame) stack.car();
                     stack = stack.cdr();
                     LispObject obj = NIL;
-                    LispObject[] argv = frame.getArgumentVector();
+                    LispObject[] argv = frame.getArguments();
                     for (int j = argv.length; j-- > 0;)
                         obj = new Cons(argv[j], obj);
-                    LispObject functional = frame.getFunctional();
-                    if (functional instanceof Functional &&
-                        ((Functional)functional).getLambdaName() != null)
-                        obj = new Cons(((Functional)functional).getLambdaName(), obj);
+                    LispObject operator = frame.getOperator();
+                    if (operator instanceof Functional &&
+                        ((Functional)operator).getLambdaName() != null)
+                        obj = new Cons(((Functional)operator).getLambdaName(), obj);
                     else
-                        obj = new Cons(functional, obj);
+                        obj = new Cons(operator, obj);
                     pprint(obj, out.getCharPos(), out);
                     out.terpri();
                     out._finishOutput();
@@ -537,17 +537,17 @@ public final class LispThread extends LispObject
                     StackFrame frame = (StackFrame) s.car();
                     if (frame != null) {
                         LispObject obj = NIL;
-                        LispObject[] argv = frame.getArgumentVector();
+                        LispObject[] argv = frame.getArguments();
                         for (int j = argv.length; j-- > 0;) {
                             if (argv[j] != null)
                                 obj = new Cons(argv[j], obj);
                         }
-                        LispObject functional = frame.getFunctional();
-                        if (functional instanceof Functional &&
-                            ((Functional)functional).getLambdaName() != null)
-                            obj = new Cons(((Functional)functional).getLambdaName(), obj);
+                        LispObject operator = frame.getOperator();
+                        if (operator instanceof Functional &&
+                            ((Functional)operator).getLambdaName() != null)
+                            obj = new Cons(((Functional)operator).getLambdaName(), obj);
                         else
-                            obj = new Cons(functional, obj);
+                            obj = new Cons(operator, obj);
                         result = new Cons(obj, result);
                         if (limit > 0 && ++count == limit)
                             break;
@@ -568,9 +568,9 @@ public final class LispThread extends LispObject
         while (s != NIL) {
             StackFrame frame = (StackFrame) s.car();
             if (frame != null) {
-                LispObject functional = frame.getFunctional();
-                if (functional != null)
-                    functional.incrementCallCount();
+                LispObject operator = frame.getOperator();
+                if (operator != null)
+                    operator.incrementCallCount();
             }
             s = s.cdr();
         }
@@ -787,22 +787,6 @@ public final class LispThread extends LispObject
         public LispObject execute() throws ConditionThrowable
         {
             return currentThread();
-        }
-    };
-
-    // ### backtrace
-    private static final Primitive BACKTRACE =
-        new Primitive("backtrace", PACKAGE_EXT, true)
-    {
-        public LispObject execute(LispObject[] args)
-            throws ConditionThrowable
-        {
-            if (args.length > 1)
-                return signal(new WrongNumberOfArgumentsException(this));
-            int count = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
-            LispThread thread = currentThread();
-            thread.backtrace(count);
-            return thread.nothing();
         }
     };
 
