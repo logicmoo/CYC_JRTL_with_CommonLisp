@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.21 2004-03-16 18:02:16 piso Exp $
+ * $Id: LispReader.java,v 1.22 2004-03-16 18:33:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,6 +176,23 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### sharp-dot
+    public static final DispatchMacroFunction SHARP_DOT =
+        new DispatchMacroFunction("sharp-dot", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            if (_READ_EVAL_.symbolValueNoThrow() == NIL)
+                return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL."));
+            else
+                return eval(stream.read(true, NIL, true),
+                            new Environment(),
+                            LispThread.currentThread());
+        }
+    };
+
     // ### sharp-colon
     public static final DispatchMacroFunction SHARP_COLON =
         new DispatchMacroFunction("sharp-colon", PACKAGE_SYS, false,
@@ -284,7 +301,20 @@ public final class LispReader extends Lisp
         }
     };
 
-    // ### sharp-x
+    // ### sharp-quote
+    public static final DispatchMacroFunction SHARP_QUOTE =
+        new DispatchMacroFunction("sharp-quote", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return new Cons(Symbol.FUNCTION,
+                            new Cons(stream.read(true, NIL, true)));
+        }
+    };
+
+    // ### sharp-backslash
     public static final DispatchMacroFunction SHARP_BACKSLASH =
         new DispatchMacroFunction("sharp-backslash", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
