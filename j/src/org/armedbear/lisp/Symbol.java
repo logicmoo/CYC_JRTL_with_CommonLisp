@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.116 2004-03-18 01:03:06 piso Exp $
+ * $Id: Symbol.java,v 1.117 2004-03-24 01:08:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -358,6 +358,10 @@ public class Symbol extends LispObject
     {
         if (function == null)
             return signal(new UndefinedFunction(this));
+        if (function instanceof Autoload) {
+            Autoload autoload = (Autoload) function;
+            autoload.load();
+        }
         return function;
     }
 
