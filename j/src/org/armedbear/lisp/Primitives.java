@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.656 2004-06-11 17:32:55 piso Exp $
+ * $Id: Primitives.java,v 1.657 2004-06-11 18:15:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -711,33 +711,6 @@ public final class Primitives extends Lisp
             SimpleString string = new SimpleString(arg.writeToString());
             thread.setDynamicEnvironment(oldDynEnv);
             return string;
-        }
-    };
-
-    // ### print
-    // print object &optional output-stream => object
-    // PRINT is just like PRIN1 except that the printed representation of
-    // object is preceded by a newline and followed by a space.
-    private static final Primitive1 PRINT =
-        new Primitive1("print", "object &optional output-stream")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            Stream out =
-                checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-            out.terpri();
-            out.prin1(arg);
-            out._writeString(" ");
-            return arg;
-        }
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            Stream out = outSynonymOf(second);
-            out.terpri();
-            out.prin1(first);
-            out._writeString(" ");
-            return first;
         }
     };
 
