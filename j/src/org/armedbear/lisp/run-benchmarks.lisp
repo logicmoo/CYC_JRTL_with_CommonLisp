@@ -111,9 +111,7 @@
       (force-output *benchmark-output*)
       (bench-gc)
       ;; The benchmarks.
-      #+nil
       (run-benchmark 'cl-bench.misc:run-compiler)
-      #+nil
       (run-benchmark 'cl-bench.misc:run-fasload)
       #-allegro
       (run-benchmark 'cl-bench.misc:run-permutations)
