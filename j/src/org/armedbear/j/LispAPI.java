@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.1 2003-06-30 19:11:56 piso Exp $
+ * $Id: LispAPI.java,v 1.2 2003-07-01 17:26:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import java.util.Iterator;
 import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Keyword;
@@ -79,6 +80,7 @@ public final class LispAPI extends Lisp
         }
     }
 
+    // ### current-editor
     private static final Primitive0 CURRENT_EDITOR =
         new Primitive0("current-editor", PACKAGE_J, true) {
         public LispObject execute()
@@ -87,6 +89,7 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### other-editor
     private static final Primitive0 OTHER_EDITOR =
         new Primitive0("other-editor", PACKAGE_J, true) {
         public LispObject execute()
@@ -96,6 +99,7 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### current-buffer
     private static final Primitive0 CURRENT_BUFFER =
         new Primitive0("current-buffer", PACKAGE_J, true) {
         public LispObject execute()
@@ -104,12 +108,27 @@ public final class LispAPI extends Lisp
         }
     };
 
-    private static final Primitive1 EDITOR_BUFFER =
-        new Primitive1("editor-buffer", PACKAGE_J, true) {
+    // ### buffer
+    private static final Primitive1 BUFFER =
+        new Primitive1("buffer", PACKAGE_J, true) {
         public LispObject execute(LispObject arg) throws LispError
         {
-            Editor editor = checkEditor(arg);
-            return new JavaObject(editor.getBuffer());
+            return new JavaObject(checkEditor(arg).getBuffer());
+        }
+    };
+
+    // ### buffer-pathname
+    private static final Primitive1 BUFFER_PATHNAME =
+        new Primitive1("buffer-pathname", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            File file = checkBuffer(arg).getFile();
+            if (file != null) {
+                if (file.isRemote())
+                    return new LispString(file.netPath());
+                return new LispString(file.canonicalPath());
+            }
+            return NIL;
         }
     };
 
@@ -250,7 +269,7 @@ public final class LispAPI extends Lisp
     };
 
     static {
-        for (java.util.Iterator it = Property.iterator(); it.hasNext();)
+        for (Iterator it = Property.iterator(); it.hasNext();)
             JVar.addVariableForProperty((Property)it.next());
     }
 }
