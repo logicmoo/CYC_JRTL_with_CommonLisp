@@ -2,7 +2,7 @@
  * SymbolMacro.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SymbolMacro.java,v 1.1 2003-10-25 21:43:20 piso Exp $
+ * $Id: SymbolMacro.java,v 1.2 2003-10-25 21:51:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class SymbolMacro extends LispObject
 {
     private LispObject expansion;
 
-    private SymbolMacro(LispObject expansion)
+    public SymbolMacro(LispObject expansion)
     {
         this.expansion = expansion;
     }
