@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.8 2002-10-11 18:34:50 piso Exp $
+ * $Id: MessageBuffer.java,v 1.9 2002-10-25 02:45:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,7 @@ import org.armedbear.j.LineSequence;
 import org.armedbear.j.Log;
 import org.armedbear.j.MessageDialog;
 import org.armedbear.j.MessageHeaderLine;
+import org.armedbear.j.Position;
 import org.armedbear.j.ProgressNotifier;
 import org.armedbear.j.Property;
 import org.armedbear.j.SaveFileDialog;
@@ -714,9 +715,9 @@ public class MessageBuffer extends Buffer
 
     private MimePart getAttachmentAtDot()
     {
-        Line dotLine = Editor.currentEditor().getDotLine();
-        if (dotLine != null) {
-            Annotation annotation = dotLine.getAnnotation();
+        Position dot = Editor.currentEditor().getDot();
+        if (dot != null) {
+            Annotation annotation = dot.getLine().getAnnotation();
             if (annotation != null) {
                 Object obj = annotation.getUserObject();
                 if (obj instanceof MimePart)
