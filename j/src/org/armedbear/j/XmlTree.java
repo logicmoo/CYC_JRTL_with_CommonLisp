@@ -2,7 +2,7 @@
  * XmlTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlTree.java,v 1.4 2003-06-04 00:12:56 piso Exp $
+ * $Id: XmlTree.java,v 1.5 2003-06-04 18:13:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,10 +96,9 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
             Debug.bug("XmlTree.refresh() called from background thread!");
         if (modificationCount == buffer.getModCount())
             return;
-        final XmlParserImpl parser = new XmlParserImpl();
-        if (parser == null)
+        final XmlParserImpl parser = new XmlParserImpl(buffer);
+        if (!parser.initialize())
             return;
-        parser.setBuffer(buffer);
         modificationCount = buffer.getModCount();
         final String text = buffer.getText();
         if (text.length() < 7) // "<a></a>"
