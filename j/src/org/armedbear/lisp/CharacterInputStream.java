@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.20 2003-03-18 04:01:24 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.21 2003-03-19 00:48:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -477,12 +477,12 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readArray(int dimensions) throws Condition
+    private LispObject readArray(int rank) throws Condition
     {
         LispObject obj = read(true, NIL, true);
-        if (obj == NIL)
-            return new Array();
-        return NIL; // FIXME
+        if (rank == 1)
+            return new Vector(obj);
+        return new Array(rank, obj);
     }
 
     private LispObject readMultipleEscape() throws Condition
