@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.51 2004-08-15 11:29:50 piso Exp $
+ * $Id: LispCharacter.java,v 1.52 2004-08-15 12:38:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -519,7 +519,7 @@ public final class LispCharacter extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String s = string(arg).getStringValue();
+            String s = arg.STRING().getStringValue();
             int n = nameToChar(s);
             return n >= 0 ? LispCharacter.getInstance((char)n) : NIL;
         }
