@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: P4.java,v 1.16 2004-09-17 18:18:49 piso Exp $
+ * $Id: P4.java,v 1.17 2004-09-17 18:30:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,7 +259,7 @@ public class P4 implements Constants
         final File file = parentBuffer.getFile();
         if (file == null)
             return;
-        final String baseCmd = "p4 diff -du ";
+        final String baseCmd = "p4 diff -f -du ";
         final String name = file.getName();
         final String title = baseCmd + maybeQuote(name);
         boolean save = false;
