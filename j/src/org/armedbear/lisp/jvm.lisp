@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.283 2004-08-21 03:27:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.284 2004-08-21 16:25:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,6 +16,10 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+(in-package "EXT")
+
+(export 'defsubst)
 
 (in-package "JVM")
 
@@ -35,6 +39,25 @@
 (defmacro show (form)
   (let ((format-control (concatenate 'string (write-to-string form) " = ~S~%")))
     `(%format t ,format-control ,form)))
+
+(defun inline-expansion (name)
+  (let ((info (sys::function-info name)))
+    (and info (getf info :inline-expansion))))
+
+(defun (setf inline-expansion) (expansion name)
+  (let ((info (sys::function-info name)))
+    (setf info (sys::%putf info :inline-expansion expansion))
+    (setf (sys::function-info name) info))
+  expansion)
+
+;; Just an experiment...
+(defmacro defsubst (name lambda-list &rest body)
+  `(progn
+     (sys::%defun ',name ',lambda-list ',body)
+     (precompile ',name)
+     (setf (inline-expansion ',name)
+           (precompile-form (list* 'LAMBDA ',lambda-list ',body) t))
+     ',name))
 
 (defvar *use-locals-vector* nil)
 
@@ -162,7 +185,7 @@
 
 (defvar *local-functions* ())
 
-(defun find-local-function (name)
+(defsubst find-local-function (name)
   (find name *local-functions* :key #'local-function-name))
 
 (defvar *using-arg-array* nil)
@@ -307,6 +330,24 @@
       (return-from p1-throw (p1 new-form))))
   (list* 'THROW (mapcar #'p1 (cdr form))))
 
+(defun expand-inline (form expansion)
+;;   (format t "expand-inline form = ~S~%" form)
+  (let ((args (cdr form))
+        (vars (cadr expansion))
+        (varlist ())
+        new-form)
+;;     (format t "var = ~S~%" vars)
+;;     (format t "args = ~S~%" args)
+    (do ((vars vars (cdr vars))
+         (args args (cdr args)))
+        ((null vars))
+      (push (list (car vars) (car args)) varlist))
+    (setf varlist (nreverse varlist))
+;;     (format t "varlist = ~S~%" varlist)
+    (setf new-form (list* 'LET varlist (cddr expansion)))
+;;     (format t "new-form = ~S~%" new-form)
+    new-form))
+
 (defun p1 (form)
   (if (atom form)
       (progn
@@ -331,6 +372,10 @@
                           (let ((new-form (expand-source-transform form)))
                             (when (neq new-form form)
                               (return-from p1 (p1 new-form))))))
+                      (let ((expansion (inline-expansion op)))
+;;                         (format t "expansion = ~S~%" expansion)
+                        (when expansion
+                          (return-from p1 (expand-inline form expansion))))
                       (p1-default form))))
               ((and (consp op) (eq (car op) 'LAMBDA))
                (unless (and *current-compiland*
@@ -397,7 +442,7 @@
   t)
 
 (defun pool-get (entry)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (let ((index (gethash entry *pool-entries*)))
     (unless index
       (setf index *pool-count*)
@@ -407,11 +452,11 @@
     index))
 
 (defun pool-name (name)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (pool-get (list 1 (length name) name)))
 
 (defun pool-name-and-type (name type)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (pool-get (list 12
                   (pool-name name)
                   (pool-name type))))
@@ -419,37 +464,37 @@
 ;; Assumes CLASS-NAME is already in the correct form ("org/armedbear/lisp/Lisp"
 ;; as opposed to "org.armedbear.lisp.Lisp").
 (defun pool-class (class-name)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (pool-get (list 7 (pool-name class-name))))
 
 ;; (tag class-index name-and-type-index)
 (defun pool-field (class-name field-name type-name)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (pool-get (list 9
                   (pool-class class-name)
                   (pool-name-and-type field-name type-name))))
 
 ;; (tag class-index name-and-type-index)
 (defun pool-method (class-name method-name type-name)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (pool-get (list 10
                   (pool-class class-name)
                   (pool-name-and-type method-name type-name))))
 
 (defun pool-string (string)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (pool-get (list 8 (pool-name string))))
 
 (defun pool-int (n)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (pool-get (list 3 n)))
 
 (defun u2 (n)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (list (logand (ash n -8) #xff)
         (logand n #xff)))
 
-(locally (declare (optimize speed (safety 0)))
+(locally (declare (optimize speed))
   (defstruct instruction
     opcode
     args
@@ -472,13 +517,13 @@
     (make-instruction :opcode opcode :args args :stack nil :depth nil)))
 
 (defun emit (instr &rest args)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (let ((instruction (inst instr args)))
     (push instruction *code*)
     instruction))
 
 (defun label (symbol)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (emit 'label symbol)
   (setf (symbol-value symbol) nil))
 
@@ -502,10 +547,10 @@
 (defconstant +lisp-return-class+ "org/armedbear/lisp/Return")
 (defconstant +lisp-go-class+ "org/armedbear/lisp/Go")
 
-(defun emit-push-nil ()
+(defsubst emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
 
-(defun emit-push-t ()
+(defsubst emit-push-t ()
   (emit 'getstatic +lisp-class+ "T" +lisp-symbol+))
 
 (defun make-descriptor (arg-types return-type)
@@ -556,11 +601,11 @@
                        1)
     (emit 'astore *thread*)))
 
-(defun ensure-thread-var-initialized ()
+(defsubst ensure-thread-var-initialized ()
   (setf *initialize-thread-var* t))
 
 (defun emit-push-current-thread ()
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (ensure-thread-var-initialized)
   (emit 'aload *thread*))
 
@@ -880,23 +925,25 @@
           (t
            (vector-push-extend (resolve-instruction instruction) vector)))))))
 
-(defun branch-opcode-p (opcode)
-  (declare (optimize speed (safety 0)))
-  (member opcode
-    '(153 ; IFEQ
-      154 ; IFNE
-      159 ; IF_ICMPEQ
-      160 ; IF_ICMPNE
-      161 ; IF_ICMPLT
-      162 ; IF_ICMPGE
-      163 ; IF_ICMPGT
-      164 ; IF_ICMPLE
-      165 ; IF_ACMPEQ
-      166 ; IF_ACMPNE
-      167 ; GOTO
-      168 ; JSR
-      198 ; IFNULL
-      )))
+(defconstant +branch-opcodes+
+  '(153 ; IFEQ
+    154 ; IFNE
+    159 ; IF_ICMPEQ
+    160 ; IF_ICMPNE
+    161 ; IF_ICMPLT
+    162 ; IF_ICMPGE
+    163 ; IF_ICMPGT
+    164 ; IF_ICMPLE
+    165 ; IF_ACMPEQ
+    166 ; IF_ACMPNE
+    167 ; GOTO
+    168 ; JSR
+    198 ; IFNULL
+    ))
+
+(defsubst branch-opcode-p (opcode)
+  (declare (optimize speed))
+  (member opcode +branch-opcodes+))
 
 (defun walk-code (code start-index depth)
   (declare (optimize speed))
@@ -963,7 +1010,7 @@
       max-stack)))
 
 (defun emit-move-from-stack (target)
-  (declare (optimize (speed 3) (safety 0)))
+  (declare (optimize speed))
   (cond ((null target)
          (emit 'pop))
         ((eq target :stack))
@@ -1253,28 +1300,28 @@
       bytes)))
 
 (defun write-u1 (n)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (sys::write-8-bits n *stream*))
 
 (defun write-u2 (n)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (sys::write-8-bits (ash n -8) *stream*)
   (sys::write-8-bits (logand n #xFF) *stream*))
 
 (defun write-u4 (n)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (write-u2 (ash n -16))
   (write-u2 (logand n #xFFFF)))
 
 (defun write-s4 (n)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (cond ((minusp n)
          (write-u4 (1+ (logxor (- n) #xFFFFFFFF))))
         (t
          (write-u4 n))))
 
 (defun write-utf8 (string)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (let ((stream *stream*))
     (dotimes (i (length string))
       (let ((c (schar string i)))
@@ -1285,7 +1332,7 @@
             (sys::write-8-bits (char-int c) stream))))))
 
 (defun utf8-length (string)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (let ((length (length string)))
     (dotimes (i length)
       (when (eql (schar string i) #\null)
@@ -1973,7 +2020,7 @@
 
 (defvar *toplevel-defuns* nil)
 
-(defun notinline-p (name)
+(defsubst notinline-p (name)
   (declare (optimize speed))
   (eq (get name '%inline) 'NOTINLINE))
 
