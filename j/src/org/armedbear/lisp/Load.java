@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.25 2003-11-13 17:49:47 piso Exp $
+ * $Id: Load.java,v 1.26 2003-11-30 17:27:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,15 +139,17 @@ public final class Load extends Lisp
                 in = null;
             }
         } else {
-            // Look in current directory.
-            File file = new File(System.getProperty("user.dir"), filename);
-            if (file.isFile()) {
-                try {
-                    in = new FileInputStream(file);
-                    truename = file.getCanonicalPath();
-                }
-                catch (IOException e) {
-                    in = null;
+            final String dir = Site.getLispHome();
+            if (dir != null) {
+                File file = new File(dir, filename);
+                if (file.isFile()) {
+                    try {
+                        in = new FileInputStream(file);
+                        truename = file.getCanonicalPath();
+                    }
+                    catch (IOException e) {
+                        in = null;
+                    }
                 }
             }
         }
