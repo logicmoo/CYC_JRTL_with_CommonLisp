@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.12 2003-12-13 00:58:51 piso Exp $
+ * $Id: StandardObject.java,v 1.13 2003-12-19 18:29:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,6 +166,20 @@ public class StandardObject extends LispObject
                 return second;
             }
             return signal(new TypeError(first, "standard object"));
+        }
+    };
+
+    // ### allocate-slot-storage
+    // allocate-slot-storage size initial-value
+    private static final Primitive2 ALLOCATE_SLOT_STORAGE =
+        new Primitive2("allocate-slot-storage", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Vector v = new Vector(Fixnum.getValue(first));
+            v.fill(second);
+            return v;
         }
     };
 
