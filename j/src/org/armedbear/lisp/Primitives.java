@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.87 2003-03-07 13:23:39 piso Exp $
+ * $Id: Primitives.java,v 1.88 2003-03-07 16:06:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -986,6 +986,65 @@ public final class Primitives extends Module
         }
     };
 
+    // ### char-not-greaterp
+    private static final Primitive CHAR_NOT_GREATERP =
+        new Primitive("char-not-greaterp") {
+        public LispObject execute(LispObject[] array) throws LispError
+        {
+            switch (array.length) {
+                case 0:
+                    throw new WrongNumberOfArgumentsException(this);
+                case 1:
+                    return T;
+                case 2: {
+                    char c1 = Character.toUpperCase(LispCharacter.getValue(array[0]));
+                    char c2 = Character.toUpperCase(LispCharacter.getValue(array[1]));
+                    return c1 <= c2 ? T : NIL;
+                }
+                default: {
+                    final int length = array.length;
+                    long[] chars = new long[length];
+                    for (int i = 0; i < length; i++)
+                        chars[i] = Character.toUpperCase(LispCharacter.getValue(array[i]));
+                    for (int i = 1; i < length; i++) {
+                        if (chars[i] < chars[i-1])
+                            return NIL;
+                    }
+                    return T;
+                }
+            }
+        }
+    };
+
+    // ### char-not-lessp
+    private static final Primitive CHAR_NOT_LESSP =
+        new Primitive("char-not-lessp") {
+        public LispObject execute(LispObject[] array) throws LispError
+        {
+            switch (array.length) {
+                case 0:
+                    throw new WrongNumberOfArgumentsException(this);
+                case 1:
+                    return T;
+                case 2: {
+                    char c1 = Character.toUpperCase(LispCharacter.getValue(array[0]));
+                    char c2 = Character.toUpperCase(LispCharacter.getValue(array[1]));
+                    return c1 >= c2 ? T : NIL;
+                }
+                default: {
+                    final int length = array.length;
+                    long[] chars = new long[length];
+                    for (int i = 0; i < length; i++)
+                        chars[i] = Character.toUpperCase(LispCharacter.getValue(array[i]));
+                    for (int i = 1; i < length; i++) {
+                        if (chars[i] > chars[i-1])
+                            return NIL;
+                    }
+                    return T;
+                }
+            }
+        }
+    };
     // ### assoc
     // assoc item alist &key key test test-not => entry
     // This is the bootstrap version (needed for %set-documentation).
@@ -3524,6 +3583,24 @@ public final class Primitives extends Module
             if (c == '\n')
                 return T;
             return NIL;
+        }
+    };
+
+    private static final Primitive1 GRAPHIC_CHAR_P =
+        new Primitive1("graphic-char-p") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            char c = LispCharacter.getValue(arg);
+            return (c >= ' ' && c < 127) ? T : NIL;
+        }
+    };
+
+    private static final Primitive1 ALPHA_CHAR_P =
+        new Primitive1("alpha-char-p") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            char c = LispCharacter.getValue(arg);
+            return Character.isLetter(c) ? T : NIL;
         }
     };
 
