@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.460 2003-10-02 00:20:02 piso Exp $
+ * $Id: Primitives.java,v 1.461 2003-10-04 01:26:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1558,8 +1558,13 @@ public final class Primitives extends Module
             catch (Return ret) {
                 throw ret;
             }
-            catch (ConditionThrowable c) {
-                Condition condition = c.getCondition();
+            catch (ConditionThrowable throwable) {
+                if (throwable instanceof Throw) {
+                    LispObject tag = ((Throw)throwable).getTag();
+                    if (thread.isValidCatchTag(tag))
+                        throw throwable;
+                }
+                Condition condition = throwable.getCondition();
                 while (bindings != NIL) {
                     Cons binding = checkCons(bindings.car());
                     LispObject type = binding.car();
@@ -1580,7 +1585,7 @@ public final class Primitives extends Module
                     bindings = bindings.cdr();
                 }
                 // Re-throw.
-                throw c;
+                throw throwable;
             }
         }
     };
@@ -1600,8 +1605,13 @@ public final class Primitives extends Module
             try {
                 result = eval(form, env, thread);
             }
-            catch (ConditionThrowable c) {
-                Condition condition = c.getCondition();
+            catch (ConditionThrowable throwable) {
+                if (throwable instanceof Throw) {
+                    LispObject tag = ((Throw)throwable).getTag();
+                    if (thread.isValidCatchTag(tag))
+                        throw throwable;
+                }
+                Condition condition = throwable.getCondition();
                 thread.setStackDepth(depth);
                 while (clauses != NIL) {
                     Cons clause = checkCons(clauses.car());
@@ -1625,7 +1635,7 @@ public final class Primitives extends Module
                     clauses = clauses.cdr();
                 }
                 // Re-throw.
-                throw c;
+                throw throwable;
             }
             // No error.
             while (clauses != NIL) {
@@ -2910,7 +2920,8 @@ public final class Primitives extends Module
     };
 
     // ### block
-    private static final SpecialOperator BLOCK = new SpecialOperator("block") {
+    private static final SpecialOperator BLOCK = new SpecialOperator("block")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -2953,8 +2964,8 @@ public final class Primitives extends Module
     };
 
     // ### return-from
-    private static final SpecialOperator RETURN_FROM =
-        new SpecialOperator("return-from") {
+    private static final SpecialOperator RETURN_FROM = new SpecialOperator("return-from")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -2980,8 +2991,8 @@ public final class Primitives extends Module
 
     // ### return
     // Should be a macro.
-    private static final SpecialOperator RETURN =
-        new SpecialOperator("return") {
+    private static final SpecialOperator RETURN = new SpecialOperator("return")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -2999,7 +3010,8 @@ public final class Primitives extends Module
     };
 
     // ### catch
-    private static final SpecialOperator CATCH = new SpecialOperator("catch") {
+    private static final SpecialOperator CATCH = new SpecialOperator("catch")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3007,6 +3019,7 @@ public final class Primitives extends Module
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             LispObject tag = eval(args.car(), env, thread);
+            thread.pushCatchTag(tag);
             LispObject body = args.cdr();
             LispObject result = NIL;
             final int depth = thread.getStackDepth();
@@ -3027,11 +3040,15 @@ public final class Primitives extends Module
             catch (Return ret) {
                 throw ret;
             }
+            finally {
+                thread.popCatchTag();
+            }
         }
     };
 
     // ### throw
-    private static final SpecialOperator THROW = new SpecialOperator("throw") {
+    private static final SpecialOperator THROW = new SpecialOperator("throw")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
