@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFiles.java,v 1.10 2003-07-26 16:01:51 piso Exp $
+ * $Id: FindInFiles.java,v 1.11 2003-07-26 17:56:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -197,15 +197,12 @@ public class FindInFiles extends Replacement implements Constants,
 
     public final void run()
     {
-        if (outputBuffer != null) {
-            outputBuffer.setBusy(true);
-            outputBuffer.setBackgroundProcess(this);
-        }
+        Debug.assertTrue(outputBuffer != null);
+        outputBuffer.setBusy(true);
+        outputBuffer.setBackgroundProcess(this);
         runInternal();
-        if (outputBuffer != null) {
-            outputBuffer.setBackgroundProcess(null);
-            outputBuffer.setBusy(false);
-        }
+        outputBuffer.setBackgroundProcess(null);
+        outputBuffer.setBusy(false);
         if (!cancelled && getReplaceWith() != null) {
             Runnable r = new Runnable() {
                 public void run()
@@ -310,24 +307,16 @@ public class FindInFiles extends Replacement implements Constants,
                     Position pos = findInBuffer(buf);
                     if (pos != null) {
                         results.add(file);
-                        if (outputBuffer != null)
-                            processFile(file, buf.getMode(), pos);
+                        processFile(file, buf.getMode(), pos);
                     }
                     ++numFilesExamined;
                     continue;
                 }
                 // No buffer found, fall through...
             }
-            try {
-                if (outputBuffer != null)
-                    processFile(file);
-                else if (containsPattern(file)) // Might throw CheckFileException.
-                    results.add(file);
+            Debug.assertTrue(outputBuffer != null);
+            processFile(file);
                 ++numFilesExamined;
-            }
-            catch (CheckFileException e) {
-                handleCheckFileException(e);
-            }
         }
     }
 
@@ -337,13 +326,15 @@ public class FindInFiles extends Replacement implements Constants,
             boolean update = false;
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(file.getInputStream(),
-                    encoding));
+                                                         encoding));
             int lineNumber = 0;
             int matches = 0;
+            final boolean delimited = wholeWordsOnly();
             String s;
             while ((s = reader.readLine()) != null) {
                 ++lineNumber;
-                if (find(s)) {
+                boolean found = delimited ? findDelimited(s, mode) : find(s);
+                if (found) {
                     try {
                         outputBuffer.lockWrite();
                     }
@@ -357,7 +348,7 @@ public class FindInFiles extends Replacement implements Constants,
                             if (!listEachOccurrence && results.size() == 0)
                                 outputBuffer.appendLine("Found in:");
                             outputBuffer.appendFileLine(file,
-                                listEachOccurrence);
+                                                        listEachOccurrence);
                             results.add(file);
                             update = true;
                         }
@@ -404,6 +395,7 @@ public class FindInFiles extends Replacement implements Constants,
 
     private void processFile(File file, Mode mode, Position pos)
     {
+        Debug.assertTrue(outputBuffer != null);
         try {
             outputBuffer.lockWrite();
         }
@@ -455,104 +447,6 @@ public class FindInFiles extends Replacement implements Constants,
                 else
                     break;
             }
-        }
-    }
-
-    private boolean containsPattern(File file) throws CheckFileException
-    {
-        try {
-            long size = file.length();
-            if (size > Integer.MAX_VALUE) {
-                Log.error("file too big");
-                return false;
-            }
-            if (size == 0)
-                return false;
-
-            // Read all the bytes of the file into a single string.
-            byte[] bytes = new byte[(int) size];
-            InputStream in = file.getInputStream();
-            if (in.read(bytes) != size) {
-                Log.error("read error");
-                return false;
-            }
-            in.close();
-            String s = new String(bytes);
-            int index = 0;
-            if (isRegularExpression()) {
-                RE re = getRE();
-                Debug.assertTrue(re != null);
-                while (true) {
-                    REMatch match = re.getMatch(s, index);
-
-                    if (match == null)
-                        return false;
-
-                    // We did find the pattern.
-                    if (!wholeWordsOnly())
-                        return true;
-
-                    index = match.getStartIndex();
-
-                    // Check character preceding pattern.
-                    int before = index - 1;
-
-                    if (before >= 0 && Character.isJavaIdentifierPart(s.charAt(before))) {
-                        // No good, keep trying.
-                        ++index;
-                        continue;
-                    }
-
-                    // Check character following pattern.
-                    int after = index + match.toString().length();
-
-                    if (after < s.length() && Character.isJavaIdentifierPart(s.charAt(after))) {
-                        // No good, keep trying.
-                        ++index;
-                        continue;
-                    }
-
-                    return true;
-                }
-            } else {
-                // Not a regular expression.
-                while (true) {
-                    if (ignoreCase())
-                        index = s.toLowerCase().indexOf(getLowerCasePattern(), index);
-                    else
-                        index = s.indexOf(getPattern(), index);
-
-                    if (index < 0)
-                        return false;
-
-                    // We did find the pattern.
-                    if (!wholeWordsOnly())
-                        return true;
-
-                    // Check character preceding pattern.
-                    int before = index - 1;
-                    if (before >= 0 && Character.isJavaIdentifierPart(s.charAt(before))) {
-                        // No good, keep trying.
-                        ++index;
-                        continue;
-                    }
-
-                    // Check character following pattern.
-                    int after = index + getPatternLength();
-                    if (after < s.length() && Character.isJavaIdentifierPart(s.charAt(after))) {
-                        // No good, keep trying.
-                        ++index;
-                        continue;
-                    }
-
-                    return true;
-                }
-            }
-        }
-        catch (Exception e) {
-            checkFile(file);
-            Log.error(e);
-            return false;
         }
     }
 
@@ -713,7 +607,7 @@ public class FindInFiles extends Replacement implements Constants,
             try {
                 CompoundEdit compoundEdit = new CompoundEdit();
                 Position pos = new Position(buffer.getFirstLine(), 0);
-                while ((pos = find(buffer, pos)) != null) {
+                while ((pos = find(mode, pos)) != null) {
                     compoundEdit.addEdit(new UndoLineEdit(buffer, pos.getLine()));
                     replaceOccurrence(pos);
                     buffer.incrementModCount();
@@ -780,7 +674,7 @@ public class FindInFiles extends Replacement implements Constants,
         Position saved = new Position(editor.getDot());
         CompoundEdit compoundEdit = buffer.beginCompoundEdit();
         editor.moveDotTo(buffer.getFirstLine(), 0);
-        Position pos = find(buffer, editor.getDot());
+        Position pos = find(mode, editor.getDot());
         if (pos == null) {
             // Not found.
             buffer.endCompoundEdit(compoundEdit);
@@ -960,7 +854,7 @@ public class FindInFiles extends Replacement implements Constants,
         editor.centerDialog(d);
         d.show();
         editor.repaintNow();
-        if (d.findInFiles == null)
+        if (d.getFindInFiles() == null)
             return;
         if (findInFiles != null) {
             // Kill old output buffer.
@@ -968,7 +862,7 @@ public class FindInFiles extends Replacement implements Constants,
             if (Editor.getBufferList().contains(buf))
                 buf.kill();
         }
-        findInFiles = d.findInFiles;
+        findInFiles = d.getFindInFiles();
         findInFiles.setOutputBuffer(new ListOccurrencesInFiles(findInFiles));
         new Thread(findInFiles).start();
         Buffer outputBuffer = findInFiles.getOutputBuffer();
