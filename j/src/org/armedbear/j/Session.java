@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Session.java,v 1.9 2003-06-03 17:32:24 piso Exp $
+ * $Id: Session.java,v 1.10 2003-06-25 18:17:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -300,16 +300,7 @@ public final class Session extends DefaultHandler implements Constants
         }
         if (inputStream == null)
             return false;
-        XMLReader xmlReader = null;
-        try {
-            String defaultReader = "org.apache.crimson.parser.XMLReaderImpl";
-            xmlReader = XMLReaderFactory.createXMLReader(defaultReader);
-            Log.debug("Session.load xmlReader = " + xmlReader);
-        }
-        catch (Exception e) {
-            Log.error(e);
-            return false;
-        }
+        XMLReader xmlReader = Utilities.getDefaultXMLReader();
         if (xmlReader == null)
             return false;
         xmlReader.setContentHandler(this);
@@ -340,7 +331,7 @@ public final class Session extends DefaultHandler implements Constants
     public void startElement(String uri, String localName, String qName,
         Attributes attributes) throws SAXException
     {
-        if (localName.equals("buffer")) {
+        if (localName.equals("buffer") || qName.equals("buffer")) {
             currentBufferEntry = new SessionBufferEntry();
             String path = attributes.getValue("", "path");
             currentBufferEntry.setPath(path);
@@ -371,7 +362,7 @@ public final class Session extends DefaultHandler implements Constants
 
     public void endElement(String uri, String localName, String qName)
     {
-        if (localName.equals("buffer")) {
+        if (localName.equals("buffer") || qName.equals("buffer")) {
             if (bufferEntries == null)
                 bufferEntries = new ArrayList();
             bufferEntries.add(currentBufferEntry);

@@ -2,7 +2,7 @@
  * ToolBar.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: ToolBar.java,v 1.3 2003-06-03 17:40:48 piso Exp $
+ * $Id: ToolBar.java,v 1.4 2003-06-25 18:21:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,11 +140,10 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
             return null;
         if (!file.isFile())
             return null;
+        XMLReader xmlReader = Utilities.getDefaultXMLReader();
+        if (xmlReader == null)
+            return null;
         try {
-            String defaultReader = "org.apache.crimson.parser.XMLReaderImpl";
-            XMLReader xmlReader =
-                XMLReaderFactory.createXMLReader(defaultReader);
-            Log.debug("ToolBar.createToolBar xmlReader = " + xmlReader);
             ToolBar toolBar = new ToolBar(frame);
             Handler handler = new Handler(toolBar);
             xmlReader.setContentHandler(handler);
@@ -170,12 +169,12 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
         public void startElement(String uri, String localName, String qName,
             Attributes attributes) throws SAXException
         {
-            if (localName.equals("button")) {
+            if (localName.equals("button") || qName.equals("button")) {
                 String label = attributes.getValue("", "label");
                 String icon = attributes.getValue("", "icon");
                 String command = attributes.getValue("", "command");
                 toolBar.addButton(label, icon, command);
-            } else if (localName.equals("separator"))
+            } else if (localName.equals("separator") || qName.equals("separator"))
                 toolBar.addSeparator();
         }
     }

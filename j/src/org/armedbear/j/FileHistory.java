@@ -2,7 +2,7 @@
  * FileHistory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FileHistory.java,v 1.3 2003-06-03 16:25:51 piso Exp $
+ * $Id: FileHistory.java,v 1.4 2003-06-25 18:22:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 public final class FileHistory extends DefaultHandler implements ContentHandler
 {
@@ -93,16 +92,8 @@ public final class FileHistory extends DefaultHandler implements ContentHandler
 
     private void load()
     {
-        XMLReader xmlReader = null;
-        try {
-            String defaultReader = "org.apache.crimson.parser.XMLReaderImpl";
-            xmlReader = XMLReaderFactory.createXMLReader(defaultReader);
-        }
-        catch (Exception e) {
-            Log.error(e);
-        }
+        XMLReader xmlReader = Utilities.getDefaultXMLReader();
         if (xmlReader != null) {
-            Log.debug("FileHistory.load xmlReader = " + xmlReader);
             xmlReader.setContentHandler(this);
             try {
                 InputSource inputSource = new InputSource(file.getInputStream());
@@ -119,11 +110,11 @@ public final class FileHistory extends DefaultHandler implements ContentHandler
     public void startElement(String uri, String localName, String qName,
         Attributes attributes) throws SAXException
     {
-        if (localName.equals("files")) {
+        if (localName.equals("files") || qName.equals("files")) {
             String version = attributes.getValue("version");
             if (!version.equals(getVersion()))
                 throw new SAXException("Unknown file history format");
-        } else if (localName.equals("file")) {
+        } else if (localName.equals("file") || qName.equals("file")) {
             // Start a new entry.
             currentEntry = new FileHistoryEntry();
             currentEntry.setName(attributes.getValue("", "name"));
@@ -135,7 +126,7 @@ public final class FileHistory extends DefaultHandler implements ContentHandler
             catch (NumberFormatException e) {
                 Log.error(e);
             }
-        } else if (localName.equals("property")) {
+        } else if (localName.equals("property") || qName.equals("property")) {
             Debug.assertTrue(currentEntry != null);
             String key = attributes.getValue("", "name");
             String value = attributes.getValue("", "value");
@@ -147,7 +138,7 @@ public final class FileHistory extends DefaultHandler implements ContentHandler
 
     public void endElement(String uri, String localName, String qName)
     {
-        if (localName.equals("file")) {
+        if (localName.equals("file") || qName.equals("file")) {
             list.add(currentEntry);
             currentEntry = null;
         }
