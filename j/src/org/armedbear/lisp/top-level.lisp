@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.16 2003-12-08 02:59:08 piso Exp $
+;;; $Id: top-level.lisp,v 1.17 2003-12-10 14:30:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,18 +88,23 @@
   (format t "~S~%" (macroexpand (read-from-string args)))
   (values))
 
+(defvar *old-package* nil)
+
 (defun package-command (args)
   (cond ((null args)
          (format *standard-output* "The ~A package is current.~%"
                  (package-name *package*)))
+        ((and *old-package* (string= args "-") (null (find-package "-")))
+         (rotatef *old-package* *package*))
         (t
          (when (and (plusp (length args)) (eql (char args 0) #\:))
            (setf args (subseq args 1)))
          (setf args (nstring-upcase args))
          (let ((pkg (find-package args)))
-           (if pkg
-               (setf *package* pkg)
-               (format *standard-output* "Unknown package ~A.~%" args))))))
+           (unless pkg
+             (format *standard-output* "Unknown package ~A.~%" args))
+           (setf *old-package* *package*
+                 *package* pkg)))))
 
 (defun reset-command (ignored)
   (throw 'top-level-catcher nil))
