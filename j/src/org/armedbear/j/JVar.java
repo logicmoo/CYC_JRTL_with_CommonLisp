@@ -1,8 +1,8 @@
 /*
  * JVar.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: JVar.java,v 1.3 2003-10-06 13:51:18 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: JVar.java,v 1.4 2004-11-28 15:44:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,10 +37,10 @@ public final class JVar extends LispObject
     private JVar(String name, Property property)
     {
         this.property = property;
-        Symbol symbol = LispAPI.PACKAGE_J.findAccessibleSymbol(name);
-        if (symbol == null)
-            symbol = LispAPI.PACKAGE_J.addExternalSymbol(name);
         try {
+            Symbol symbol = LispAPI.PACKAGE_J.findAccessibleSymbol(name);
+            if (symbol == null)
+                symbol = LispAPI.PACKAGE_J.addExternalSymbol(name);
             put(symbol, J_VARIABLE_VALUE, this);
         }
         catch (Throwable t) {

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.707 2004-11-21 16:00:33 piso Exp $
+ * $Id: Primitives.java,v 1.708 2004-11-28 15:43:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2307,14 +2307,11 @@ public final class Primitives extends Lisp
 
     // ### *gensym-counter*
     private static final Symbol _GENSYM_COUNTER_ =
-        PACKAGE_CL.addExternalSymbol("*GENSYM-COUNTER*");
-    static {
-        _GENSYM_COUNTER_.setSymbolValue(Fixnum.ZERO);
-        _GENSYM_COUNTER_.setSpecial(true);
-    }
+        exportSpecial("*GENSYM-COUNTER*", PACKAGE_CL, Fixnum.ZERO);
 
     // ### gensym
-    private static final Primitive GENSYM = new Primitive("gensym", "&optional x")
+    private static final Primitive GENSYM =
+        new Primitive("gensym", "&optional x")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -2329,7 +2326,7 @@ public final class Primitives extends Lisp
                     signal(new TypeError(arg, "non-negative integer"));
                 StringBuffer sb = new StringBuffer(prefix);
                 sb.append(n);
-                return new Symbol(sb.toString());
+                return new Symbol(new SimpleString(sb));
             }
             if (arg instanceof Bignum) {
                 BigInteger n = ((Bignum)arg).getValue();
@@ -2337,7 +2334,7 @@ public final class Primitives extends Lisp
                     signal(new TypeError(arg, "non-negative integer"));
                 StringBuffer sb = new StringBuffer(prefix);
                 sb.append(n.toString());
-                return new Symbol(sb.toString());
+                return new Symbol(new SimpleString(sb));
             }
             if (arg instanceof AbstractString)
                 prefix = arg.getStringValue();
@@ -2361,7 +2358,7 @@ public final class Primitives extends Lisp
         }
         StringBuffer sb = new StringBuffer(prefix);
         sb.append(oldValue.writeToString());
-        return new Symbol(sb.toString());
+        return new Symbol(new SimpleString(sb));
     }
 
     // ### string
@@ -2450,8 +2447,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             String packageName = javaString(first);
-            Package pkg =
-                Packages.findPackage(packageName);
+            Package pkg = Packages.findPackage(packageName);
             if (pkg != null)
                 signal(new LispError("Package " + packageName +
                                      " already exists."));
@@ -4412,6 +4408,427 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### symbol-name
+    public static final Primitive SYMBOL_NAME =
+        new Primitive("symbol-name", "symbol")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Symbol)arg).name;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
+        }
+    };
+
+    // ### symbol-package
+    public static final Primitive SYMBOL_PACKAGE =
+        new Primitive("symbol-package", "symbol")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Symbol)arg).getPackage();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
+        }
+    };
+
+    // ### symbol-function
+    public static final Primitive SYMBOL_FUNCTION =
+        new Primitive("symbol-function", "symbol")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                LispObject function = ((Symbol)arg).getSymbolFunction();
+                if (function != null)
+                    return function;
+                return signal(new UndefinedFunction(arg));
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
+        }
+    };
+
+    // ### symbol-plist
+    public static final Primitive SYMBOL_PLIST =
+        new Primitive("symbol-plist", "symbol")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Symbol)arg).getPropertyList();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
+        }
+    };
+
+    // ### keywordp
+    public static final Primitive KEYWORDP = new Primitive("keywordp", "object")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof Symbol) {
+                if (((Symbol)arg).getPackage() == PACKAGE_KEYWORD)
+                    return T;
+            }
+            return NIL;
+        }
+    };
+
+    // ### make-symbol
+    public static final Primitive MAKE_SYMBOL =
+        new Primitive("make-symbol", "name")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return new Symbol((AbstractString)arg);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.STRING));
+            }
+        }
+    };
+
+    // makunbound
+    public static final Primitive MAKUNBOUND =
+        new Primitive("makunbound", "symbol")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                ((Symbol)arg).setSymbolValue(null);
+                return arg;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
+        }
+    };
+    
+    // ### find-class
+    // find-class symbol &optional errorp environment => class
+    private static final Primitive FIND_CLASS =
+        new Primitive("find-class", "symbol &optional errorp environment")
+    {
+        public LispObject execute(LispObject symbol) throws ConditionThrowable
+        {
+            LispObject c = LispClass.findClass(checkSymbol(symbol));
+            if (c == null) {
+                StringBuffer sb = new StringBuffer("There is no class named ");
+                sb.append(symbol.writeToString());
+                sb.append('.');
+                return signal(new LispError(sb.toString()));
+            }
+            return c;
+        }
+        public LispObject execute(LispObject symbol, LispObject errorp)
+            throws ConditionThrowable
+        {
+            LispObject c = LispClass.findClass(checkSymbol(symbol));
+            if (c == null) {
+                if (errorp != NIL) {
+                    StringBuffer sb = new StringBuffer("There is no class named ");
+                    sb.append(symbol.writeToString());
+                    sb.append('.');
+                    return signal(new LispError(sb.toString()));
+                }
+                return NIL;
+            }
+            return c;
+        }
+        public LispObject execute(LispObject symbol, LispObject errorp,
+                                  LispObject environment)
+            throws ConditionThrowable
+        {
+            // FIXME Ignore environment.
+            return execute(symbol, errorp);
+        }
+    };
+
+    // ### %set-find-class
+    private static final Primitive _SET_FIND_CLASS =
+        new Primitive("%set-find-class", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                Symbol symbol = (Symbol) first;
+                if (second instanceof LispClass) {
+                    LispClass.addClass(symbol, (LispClass) second);
+                    return second;
+                }
+                if (second == NIL) {
+                    LispClass.removeClass(symbol);
+                    return second;
+                }
+                return signal(new TypeError(second, Symbol.CLASS));
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.SYMBOL));
+            }
+        }
+    };
+
+    // ### %class-name
+    private static final Primitive _CLASS_NAME =
+        new Primitive("%class-name", PACKAGE_SYS, false, "class")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((LispClass)arg).symbol;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CLASS));
+            }
+        }
+    };
+
+    // ### %set-class-name
+    private static final Primitive _SET_CLASS_NAME =
+        new Primitive("%set-class-name", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((LispClass)first).symbol = checkSymbol(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.CLASS));
+            }
+        }
+    };
+
+    // ### class-layout
+    private static final Primitive CLASS_LAYOUT =
+        new Primitive("class-layout", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                Layout layout = ((LispClass)arg).getClassLayout();
+                return layout != null ? layout : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CLASS));
+            }
+        }
+    };
+
+    // ### %set-class-layout
+    private static final Primitive _SET_CLASS_LAYOUT =
+        new Primitive("%set-class-layout", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((LispClass)first).setClassLayout((Layout)second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                if (!(first instanceof LispClass))
+                    return signal(new TypeError(first, Symbol.CLASS));
+                if (!(second instanceof Layout))
+                    return signal(new TypeError(second, "layout"));
+                // Not reached.
+                return NIL;
+            }
+        }
+    };
+
+    // ### class-direct-superclasses
+    private static final Primitive CLASS_DIRECT_SUPERCLASSES =
+        new Primitive("class-direct-superclasses", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).getDirectSuperclasses();
+            return signal(new TypeError(arg, Symbol.CLASS));
+        }
+    };
+
+    // ### %set-class-direct-superclasses
+    private static final Primitive _SET_CLASS_DIRECT_SUPERCLASSES =
+        new Primitive("%set-class-direct-superclasses", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).setDirectSuperclasses(second);
+                return second;
+            }
+            return signal(new TypeError(first, Symbol.CLASS));
+        }
+    };
+
+    // ### class-direct-subclasses
+    private static final Primitive CLASS_DIRECT_SUBCLASSES =
+        new Primitive("class-direct-subclasses", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).getDirectSubclasses();
+            return signal(new TypeError(arg, Symbol.CLASS));
+        }
+    };
+
+    // ### %set-class-direct-subclasses
+    private static final Primitive _SET_CLASS_DIRECT_SUBCLASSES =
+        new Primitive("%set-class-direct-subclasses", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).setDirectSubclasses(second);
+                return second;
+            }
+            return signal(new TypeError(first, Symbol.CLASS));
+        }
+    };
+
+    // ### class-precedence-list
+    private static final Primitive CLASS_PRECEDENCE_LIST =
+        new Primitive("class-precedence-list", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).getCPL();
+            return signal(new TypeError(arg, Symbol.CLASS));
+        }
+    };
+
+    // ### %set-class-precedence-list
+    private static final Primitive _SET_CLASS_PRECEDENCE_LIST =
+        new Primitive("%set-class-precedence-list", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).classPrecedenceList = second;
+                return second;
+            }
+            return signal(new TypeError(first, Symbol.CLASS));
+        }
+    };
+
+    // ### class-direct-methods
+    private static final Primitive CLASS_DIRECT_METHODS =
+        new Primitive("class-direct-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).directMethods;
+            return signal(new TypeError(arg, Symbol.CLASS));
+        }
+    };
+
+    // ### %set-class-direct-methods
+    private static final Primitive _SET_CLASS_DIRECT_METHODS =
+        new Primitive("%set-class-direct-methods", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).directMethods = second;
+                return second;
+            }
+            return signal(new TypeError(first, Symbol.CLASS));
+        }
+    };
+
+    // ### class-documentation
+    private static final Primitive CLASS_DOCUMENTATION =
+        new Primitive("class-documentation", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof LispClass)
+                return ((LispClass)arg).documentation;
+            return signal(new TypeError(arg, Symbol.CLASS));
+        }
+    };
+
+    // ### %set-class-documentation
+    private static final Primitive _SET_CLASS_DOCUMENTATION =
+        new Primitive("%set-class-documentation", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispClass) {
+                ((LispClass)first).documentation = second;
+                return second;
+            }
+            return signal(new TypeError(first, Symbol.CLASS));
+        }
+    };
+
+    // ### class-finalized-p
+    private static final Primitive CLASS_FINALIZED_P =
+        new Primitive("class-finalized-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((LispClass)arg).getFinalized();
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CLASS));
+            }
+        }
+    };
+
+    // ### %set-class-finalized-p
+    private static final Primitive _SET_CLASS_FINALIZED_P =
+        new Primitive("%set-class-finalized-p", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((LispClass)first).setFinalized(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.CLASS));
+            }
+        }
+    };
+
+    // ### classp
+    private static final Primitive CLASSP =
+        new Primitive("classp", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return arg instanceof LispClass ? T : NIL;
+        }
+    };
+    
     static {
         new Primitives();
     }

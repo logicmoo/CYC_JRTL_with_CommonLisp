@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.305 2004-11-21 18:17:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.306 2004-11-28 15:43:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3650,16 +3650,16 @@
            (let ((new-form (rewrite-setq form)))
              (when (neq new-form form)
                (return-from compile-setq (compile-form new-form :target target))))
+           (emit-push-current-thread)
            (emit 'getstatic
                  *this-class*
                  (declare-symbol name)
                  +lisp-symbol+)
            (compile-form value-form :target :stack)
            (maybe-emit-clear-values value-form)
-           (emit-push-current-thread)
-           (emit-invokestatic +lisp-class+
+           (emit-invokevirtual +lisp-thread-class+
                               "setSpecialVariable"
-                              "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
+                              "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                               -2)
            (emit-move-from-stack target))
           (t

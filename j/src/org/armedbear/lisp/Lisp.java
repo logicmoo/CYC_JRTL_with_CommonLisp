@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.304 2004-11-23 14:38:24 piso Exp $
+ * $Id: Lisp.java,v 1.305 2004-11-28 15:43:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@ import java.util.zip.ZipFile;
 
 public abstract class Lisp
 {
+    public static final boolean debug = true;
+
     public static boolean cold = true;
 
     public static boolean initialized;
@@ -82,13 +84,18 @@ public abstract class Lisp
     }
     public static final Package PACKAGE_KEYWORD =
         Packages.createPackage("KEYWORD", 1024);
+    
+    // ### nil
+    public static final LispObject NIL = new Nil(PACKAGE_CL);
 
+    // Constructing NIL forces the Symbol class to be loaded (since Nil extends
+    // Symbol). The Symbol class defines a number of named Symbol objects so
+    // they can be referred to in the Java code. addInitialExports() is careful
+    // not to touch symbols that have already been defined, so the Java names
+    // assigned in Symbol.java continue to reference the right Symbol objects.
     static {
         PACKAGE_CL.addInitialExports(Exports.COMMON_LISP_SYMBOL_NAMES);
     }
-
-    // ### nil
-    public static final LispObject NIL = new Nil(PACKAGE_CL);
 
     // End-of-file marker.
     public static final LispObject EOF = new LispObject();
@@ -97,8 +104,6 @@ public abstract class Lisp
     static final int FTYPE_SPECIAL_OPERATOR = 1;
     static final int FTYPE_MACRO            = 2;
     static final int FTYPE_AUTOLOAD         = 3;
-
-    private static boolean debug = true;
 
     public static boolean profiling;
 
@@ -410,18 +415,6 @@ public abstract class Lisp
             LispThread.currentThread().bindSpecial(symbol, value);
         else
             env.bind(symbol, value);
-    }
-
-    public static final LispObject setSpecialVariable(Symbol symbol,
-                                                      LispObject value,
-                                                      LispThread thread)
-    {
-        Binding binding = thread.getSpecialBinding(symbol);
-        if (binding != null)
-            binding.value = value;
-        else
-            symbol.setSymbolValue(value);
-        return value;
     }
 
     public static final Cons list1(LispObject obj1)
@@ -1399,7 +1392,7 @@ public abstract class Lisp
     }
 
     public static final Symbol _DEFAULT_PATHNAME_DEFAULTS_ =
-        PACKAGE_CL.addExternalSymbol("*DEFAULT-PATHNAME-DEFAULTS*");
+        exportSpecial("*DEFAULT-PATHNAME-DEFAULTS*", PACKAGE_CL, null);
     static {
         String userDir = System.getProperty("user.dir");
         if (userDir != null && userDir.length() > 0) {
@@ -1408,7 +1401,6 @@ public abstract class Lisp
         }
         // This string will be converted to a pathname when Pathname.java is loaded.
         _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(new SimpleString(userDir));
-        _DEFAULT_PATHNAME_DEFAULTS_.setSpecial(true);
     }
 
     public static final Symbol _PACKAGE_ =
@@ -1519,11 +1511,9 @@ public abstract class Lisp
     // ### t
     // We can't use exportConstant() here since we need to set T's value to
     // itself.
-    public static final Symbol T = PACKAGE_CL.addExternalSymbol("T");
+    public static final Symbol T = exportConstant("T", PACKAGE_CL, null);
     static {
-        T.setSpecial(true);
         T.setSymbolValue(T);
-        T.setConstant(true);
     }
 
     // ### *read-eval*
@@ -1532,9 +1522,8 @@ public abstract class Lisp
 
     // ### *features*
     public static final Symbol _FEATURES_ =
-        PACKAGE_CL.addExternalSymbol("*FEATURES*");
+        exportSpecial("*FEATURES*", PACKAGE_CL, null);
     static {
-        _FEATURES_.setSpecial(true);
         String osName = System.getProperty("os.name");
         if (osName.startsWith("Linux")) {
             _FEATURES_.setSymbolValue(list6(Keyword.ARMEDBEAR,

@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.162 2004-11-23 14:31:35 piso Exp $
+ * $Id: Symbol.java,v 1.163 2004-11-28 15:43:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public class Symbol extends LispObject
 
     public static final Symbol DOUBLE_FLOAT_POSITIVE_INFINITY   = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-POSITIVE-INFINITY");
     public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY   = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-INFINITY");
-
+    
     // Bit flags.
     private static final int FLAG_SPECIAL           = 0x0001;
     private static final int FLAG_CONSTANT          = 0x0002;
@@ -203,7 +203,7 @@ public class Symbol extends LispObject
         return symbol;
     }
 
-    private final AbstractString name;
+    public final AbstractString name;
     private int hash = -1;
     private LispObject pkg;
     private LispObject value;
@@ -227,6 +227,19 @@ public class Symbol extends LispObject
     public Symbol(String s, Package pkg)
     {
         name = new SimpleString(s);
+        this.pkg = pkg;
+    }
+    
+    public Symbol(AbstractString string, Package pkg)
+    {
+        name = string;
+        this.pkg = pkg;
+    }
+
+    public Symbol(AbstractString string, int hash, Package pkg)
+    {
+        name = string;
+        this.hash = hash;
         this.pkg = pkg;
     }
 
@@ -583,15 +596,15 @@ public class Symbol extends LispObject
             return s;
         if (currentPackage != null && currentPackage.uses(pkg)) {
             // Check for name conflict in current package.
-            if (currentPackage.findExternalSymbol(n) == null)
-                if (currentPackage.findInternalSymbol(n) == null)
-                    if (((Package)pkg).findExternalSymbol(n) != null)
+            if (currentPackage.findExternalSymbol(name) == null)
+                if (currentPackage.findInternalSymbol(name) == null)
+                    if (((Package)pkg).findExternalSymbol(name) != null)
                         return s;
         }
         // Has this symbol been imported into the current package?
-        if (currentPackage.findExternalSymbol(n) == this)
+        if (currentPackage.findExternalSymbol(name) == this)
             return s;
-        if (currentPackage.findInternalSymbol(n) == this)
+        if (currentPackage.findInternalSymbol(name) == this)
             return s;
         // Package prefix is necessary.
         String packageName = pkg.getName();
@@ -711,7 +724,7 @@ public class Symbol extends LispObject
         return sb.toString();
     }
 
-    public final int sxhash() throws ConditionThrowable
+    public final int sxhash()
     {
         int h = hash;
         if (h < 0) {
@@ -808,112 +821,4 @@ public class Symbol extends LispObject
             return signal(new LispError("Null pointer exception"));
         }
     }
-
-    // ### symbol-name
-    public static final Primitive SYMBOL_NAME =
-        new Primitive("symbol-name", "symbol")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return ((Symbol)arg).name;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
-            }
-        }
-    };
-
-    // ### symbol-package
-    public static final Primitive SYMBOL_PACKAGE =
-        new Primitive("symbol-package", "symbol")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return ((Symbol)arg).pkg;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
-            }
-        }
-    };
-
-    // ### symbol-function
-    public static final Primitive SYMBOL_FUNCTION =
-        new Primitive("symbol-function", "symbol")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                LispObject function = ((Symbol)arg).function;
-                if (function != null)
-                    return function;
-                return signal(new UndefinedFunction(arg));
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
-            }
-        }
-    };
-
-    // ### symbol-plist
-    public static final Primitive SYMBOL_PLIST =
-        new Primitive("symbol-plist", "symbol")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                LispObject propertyList = ((Symbol)arg).propertyList;
-                return propertyList != null ? propertyList : NIL;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
-            }
-        }
-    };
-
-    // ### keywordp
-    public static final Primitive KEYWORDP = new Primitive("keywordp", "object")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg instanceof Symbol) {
-                if (((Symbol)arg).pkg == PACKAGE_KEYWORD)
-                    return T;
-            }
-            return NIL;
-        }
-    };
-
-    // ### make-symbol
-    public static final Primitive MAKE_SYMBOL =
-        new Primitive("make-symbol", "name")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return new Symbol((AbstractString)arg);
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STRING));
-            }
-        }
-    };
-
-    // makunbound
-    public static final Primitive MAKUNBOUND =
-        new Primitive("makunbound", "symbol")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                ((Symbol)arg).value = null;
-                return arg;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYMBOL));
-            }
-        }
-    };
 }

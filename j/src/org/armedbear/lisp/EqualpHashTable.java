@@ -2,7 +2,7 @@
  * EqualpHashTable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EqualpHashTable.java,v 1.5 2004-11-23 17:39:42 piso Exp $
+ * $Id: EqualpHashTable.java,v 1.6 2004-11-28 15:43:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class EqualpHashTable extends HashTable
         return Symbol.EQUALP;
     }
 
-    protected final int hash(LispObject key) throws ConditionThrowable
+    protected final int hash(LispObject key)
     {
         return (key.psxhash() % buckets.length);
     }

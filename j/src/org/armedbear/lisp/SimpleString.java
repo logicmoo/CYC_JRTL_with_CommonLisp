@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.24 2004-11-23 14:55:07 piso Exp $
+ * $Id: SimpleString.java,v 1.25 2004-11-28 15:43:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,7 +146,7 @@ public final class SimpleString extends AbstractString
             if (string.length() != capacity)
                 return false;
             for (int i = length(); i-- > 0;)
-                if (string.getChar(i) != chars[i])
+                if (string.charAt(i) != chars[i])
                     return false;
             return true;
         }
@@ -176,8 +176,8 @@ public final class SimpleString extends AbstractString
             if (string.length() != capacity)
                 return false;
             for (int i = length(); i-- > 0;) {
-                if (string.getChar(i) != chars[i]) {
-                    if (Utilities.toLowerCase(string.getChar(i)) != Utilities.toLowerCase(chars[i]))
+                if (string.charAt(i) != chars[i]) {
+                    if (Utilities.toLowerCase(string.charAt(i)) != Utilities.toLowerCase(chars[i]))
                         return false;
                 }
             }
@@ -188,7 +188,13 @@ public final class SimpleString extends AbstractString
         return false;
     }
 
-    public LispObject subseq(int start, int end) throws ConditionThrowable
+    public final SimpleString substring(int start) throws ConditionThrowable
+    {
+        return substring(start, capacity);
+    }
+    
+    public final SimpleString substring(int start, int end)
+        throws ConditionThrowable
     {
         SimpleString s = new SimpleString(end - start);
         int i = start, j = 0;
@@ -198,10 +204,17 @@ public final class SimpleString extends AbstractString
             return s;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Array index out of bounds: " + i));
+            signal(new TypeError("Array index out of bounds: " + i));
+            // Not reached.
+            return null;
         }
     }
 
+    public final LispObject subseq(int start, int end) throws ConditionThrowable
+    {
+        return substring(start, end);
+    }
+    
     public void fill(LispObject obj) throws ConditionThrowable
     {
         fill(LispCharacter.getValue(obj));
@@ -271,7 +284,7 @@ public final class SimpleString extends AbstractString
         }
     }
 
-    public char getChar(int index) throws ConditionThrowable
+    public char charAt(int index) throws ConditionThrowable
     {
         try {
             return chars[index];
@@ -282,7 +295,7 @@ public final class SimpleString extends AbstractString
         }
     }
 
-    public void setChar(int index, char c) throws ConditionThrowable
+    public void setCharAt(int index, char c) throws ConditionThrowable
     {
         try {
             chars[index] = c;
@@ -413,53 +426,4 @@ public final class SimpleString extends AbstractString
     {
         return new ComplexString(newCapacity, displacedTo, displacement);
     }
-
-    // ### schar
-    private static final Primitive SCHAR = new Primitive("schar", "string index")
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            try {
-                return LispCharacter.getInstance(((SimpleString)first).chars[((Fixnum)second).value]);
-            }
-            catch (ClassCastException e) {
-                if (first instanceof SimpleString)
-                    return signal(new TypeError(second, Symbol.FIXNUM));
-                else
-                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                return signal(new TypeError("Array index out of bounds: " +
-                                            ((Fixnum)second).value));
-            }
-        }
-    };
-
-    // ### %set-schar
-    private static final Primitive _SET_SCHAR =
-        new Primitive("%set-schar", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            try {
-                ((SimpleString)first).chars[((Fixnum)second).value] =
-                    ((LispCharacter)third).value;
-                return third;
-            }
-            catch (ClassCastException e) {
-                if (!(first instanceof SimpleString))
-                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
-                if (!(second instanceof Fixnum))
-                    return signal(new TypeError(second, Symbol.FIXNUM));
-                return signal(new TypeError(third, Symbol.CHARACTER));
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                return signal(new TypeError("Array index out of bounds: " +
-                                            ((Fixnum)second).value));
-            }
-        }
-    };
 }

@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.31 2004-11-03 15:39:01 piso Exp $
+ * $Id: StringFunctions.java,v 1.32 2004-11-28 15:43:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -694,7 +694,7 @@ public final class StringFunctions extends Lisp
             if (start > end)
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             for (int i = start; i < end; i++)
-                string.setChar(i, Utilities.toUpperCase(string.getChar(i)));
+                string.setCharAt(i, Utilities.toUpperCase(string.charAt(i)));
             return string;
         }
     };
@@ -727,7 +727,7 @@ public final class StringFunctions extends Lisp
             if (start > end)
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             for (int i = start; i < end; i++)
-                string.setChar(i, Utilities.toLowerCase(string.getChar(i)));
+                string.setCharAt(i, Utilities.toLowerCase(string.charAt(i)));
             return string;
         }
     };
@@ -761,14 +761,14 @@ public final class StringFunctions extends Lisp
                 return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             boolean lastCharWasAlphanumeric = false;
             for (int i = start; i < end; i++) {
-                char c = string.getChar(i);
+                char c = string.charAt(i);
                 if (Character.isLowerCase(c)) {
                     if (!lastCharWasAlphanumeric)
-                        string.setChar(i, Utilities.toUpperCase(c));
+                        string.setCharAt(i, Utilities.toUpperCase(c));
                     lastCharWasAlphanumeric = true;
                 } else if (Character.isUpperCase(c)) {
                     if (lastCharWasAlphanumeric)
-                        string.setChar(i, Utilities.toLowerCase(c));
+                        string.setCharAt(i, Utilities.toLowerCase(c));
                     lastCharWasAlphanumeric = true;
                 } else
                     lastCharWasAlphanumeric = Character.isDigit(c);
@@ -895,7 +895,7 @@ public final class StringFunctions extends Lisp
                 return signal(new TypeError(second, Symbol.STRING));
             int start = Fixnum.getValue(third);
             for (int i = start, limit = string.length(); i < limit; i++) {
-                if (string.getChar(i) == c)
+                if (string.charAt(i) == c)
                     return number(i);
             }
             return NIL;
@@ -930,6 +930,55 @@ public final class StringFunctions extends Lisp
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(first, Symbol.SIMPLE_STRING));
+            }
+        }
+    };
+
+    // ### schar
+    private static final Primitive SCHAR = new Primitive("schar", "string index")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                return LispCharacter.getInstance(((SimpleString)first).charAt(((Fixnum)second).value));
+            }
+            catch (ClassCastException e) {
+                if (first instanceof SimpleString)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                return signal(new TypeError("Array index out of bounds: " +
+                                            ((Fixnum)second).value));
+            }
+        }
+    };
+
+    // ### %set-schar
+    private static final Primitive _SET_SCHAR =
+        new Primitive("%set-schar", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                ((SimpleString)first).setCharAt(((Fixnum)second).value,
+                                              ((LispCharacter)third).value);
+                return third;
+            }
+            catch (ClassCastException e) {
+                if (!(first instanceof SimpleString))
+                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
+                if (!(second instanceof Fixnum))
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                return signal(new TypeError(third, Symbol.CHARACTER));
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                return signal(new TypeError("Array index out of bounds: " +
+                                            ((Fixnum)second).value));
             }
         }
     };

@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.21 2004-11-23 14:57:34 piso Exp $
+ * $Id: ComplexString.java,v 1.22 2004-11-28 15:43:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,7 +143,7 @@ public final class ComplexString extends AbstractString
             if (string.length() != length())
                 return false;
             for (int i = length(); i-- > 0;)
-                if (string.getChar(i) != getChar(i))
+                if (string.charAt(i) != charAt(i))
                     return false;
             return true;
         }
@@ -161,8 +161,8 @@ public final class ComplexString extends AbstractString
             if (string.length() != length())
                 return false;
             for (int i = length(); i-- > 0;) {
-                if (string.getChar(i) != getChar(i)) {
-                    if (Utilities.toLowerCase(string.getChar(i)) != Utilities.toLowerCase(getChar(i)))
+                if (string.charAt(i) != charAt(i)) {
+                    if (Utilities.toLowerCase(string.charAt(i)) != Utilities.toLowerCase(charAt(i)))
                         return false;
                 }
             }
@@ -178,7 +178,7 @@ public final class ComplexString extends AbstractString
         SimpleString s = new SimpleString(end - start);
         int i = start, j = 0;
         while (i < end)
-            s.setChar(j++, getChar(i++));
+            s.setCharAt(j++, charAt(i++));
         return s;
     }
 
@@ -190,7 +190,7 @@ public final class ComplexString extends AbstractString
     public void fill(char c) throws ConditionThrowable
     {
         for (int i = length(); i-- > 0;)
-            setChar(i, c);
+            setCharAt(i, c);
     }
 
     public void shrink(int n) throws ConditionThrowable
@@ -213,7 +213,7 @@ public final class ComplexString extends AbstractString
         if (array instanceof AbstractString) {
             AbstractString string = (AbstractString) array;
             for (int i = 0; i < n; i++) {
-                chars[i] = string.getChar(displacement + i);
+                chars[i] = string.charAt(displacement + i);
             }
         } else {
             for (int i = 0; i < n; i++) {
@@ -235,7 +235,7 @@ public final class ComplexString extends AbstractString
         SimpleString result = new SimpleString(length);
         int i, j;
         for (i = 0, j = length - 1; i < length; i++, j--)
-            result.setChar(i, getChar(j));
+            result.setCharAt(i, charAt(j));
         return result;
     }
 
@@ -244,9 +244,9 @@ public final class ComplexString extends AbstractString
         int i = 0;
         int j = length() - 1;
         while (i < j) {
-            char temp = getChar(i);
-            setChar(i, getChar(j));
-            setChar(j, temp);
+            char temp = charAt(i);
+            setCharAt(i, charAt(j));
+            setCharAt(j, temp);
             ++i;
             --j;
         }
@@ -255,15 +255,15 @@ public final class ComplexString extends AbstractString
 
     public LispObject getRowMajor(int index) throws ConditionThrowable
     {
-        return LispCharacter.getInstance(getChar(index));
+        return LispCharacter.getInstance(charAt(index));
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
-        setChar(index, LispCharacter.getValue(newValue));
+        setCharAt(index, LispCharacter.getValue(newValue));
     }
 
-    public char getChar(int index) throws ConditionThrowable
+    public char charAt(int index) throws ConditionThrowable
     {
         if (chars != null) {
             try {
@@ -277,7 +277,7 @@ public final class ComplexString extends AbstractString
             return LispCharacter.getValue(array.getRowMajor(index + displacement));
     }
 
-    public void setChar(int index, char c) throws ConditionThrowable
+    public void setCharAt(int index, char c) throws ConditionThrowable
     {
         if (chars != null) {
             try {
@@ -343,7 +343,7 @@ public final class ComplexString extends AbstractString
                 if (array instanceof AbstractString) {
                     AbstractString string = (AbstractString) array;
                     for (int i = 0; i < limit; i++) {
-                        chars[i] = string.getChar(displacement + i);
+                        chars[i] = string.charAt(displacement + i);
                     }
                 } else {
                     for (int i = 0; i < limit; i++) {
@@ -395,13 +395,13 @@ public final class ComplexString extends AbstractString
         final int limit = length();
         if (index < 0 || index >= limit)
             badIndex(index, limit);
-        return LispCharacter.getInstance(getChar(index));
+        return LispCharacter.getInstance(charAt(index));
     }
 
     // Ignores fill pointer.
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
-        return LispCharacter.getInstance(getChar(Fixnum.getValue(index)));
+        return LispCharacter.getInstance(charAt(Fixnum.getValue(index)));
     }
 
     public LispObject vectorPushExtend(LispObject element)
@@ -466,7 +466,7 @@ public final class ComplexString extends AbstractString
                 if (array instanceof AbstractString) {
                     AbstractString string = (AbstractString) array;
                     for (int i = 0; i < limit; i++) {
-                        chars[i] = string.getChar(displacement + i);
+                        chars[i] = string.charAt(displacement + i);
                     }
                 } else {
                     for (int i = 0; i < limit; i++) {
@@ -483,14 +483,19 @@ public final class ComplexString extends AbstractString
         }
     }
 
-    public int sxhash() throws ConditionThrowable
+    public int sxhash() //throws ConditionThrowable
     {
         int hashCode = 0;
         //         for (int i = 0; i < capacity; i++)
         //             hashCode = hashCode * 31 + chars[i];
         final int limit = length();
         for (int i = 0; i < limit; i++) {
-            hashCode += getChar(i);
+            try {
+                hashCode += charAt(i);
+            }
+            catch (ConditionThrowable t) {
+                Debug.trace(t);
+            }
             hashCode += (hashCode << 10);
             hashCode ^= (hashCode >> 6);
         }
@@ -501,12 +506,17 @@ public final class ComplexString extends AbstractString
     }
 
     // For EQUALP hash tables.
-    public int psxhash() throws ConditionThrowable
+    public int psxhash()
     {
         int hashCode = 0;
         final int limit = length();
         for (int i = 0; i < capacity; i++) {
-            hashCode += Character.toUpperCase(getChar(i));
+            try {
+                hashCode += Character.toUpperCase(charAt(i));
+            }
+            catch (ConditionThrowable t) {
+                Debug.trace(t);
+            }
             hashCode += (hashCode << 10);
             hashCode ^= (hashCode >> 6);
         }

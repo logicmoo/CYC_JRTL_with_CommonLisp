@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.15 2004-10-20 03:01:04 piso Exp $
+ * $Id: NilVector.java,v 1.16 2004-11-28 15:43:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,14 +142,14 @@ public final class NilVector extends AbstractString
         storeError(newValue);
     }
 
-    public char getChar(int index) throws ConditionThrowable
+    public char charAt(int index) throws ConditionThrowable
     {
         accessError();
         // Not reached.
         return 0;
     }
 
-    public void setChar(int index, char c) throws ConditionThrowable
+    public void setCharAt(int index, char c) throws ConditionThrowable
     {
         storeError(LispCharacter.getInstance(c));
     }
@@ -195,10 +195,8 @@ public final class NilVector extends AbstractString
         return unreadableString("NIL-VECTOR");
     }
 
-    public int sxhash() throws ConditionThrowable
+    public int sxhash()
     {
-        if (capacity != 0)
-            accessError();
         return 0;
     }
 

@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.209 2004-11-13 15:01:57 piso Exp $
+ * $Id: Autoload.java,v 1.210 2004-11-28 15:43:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,6 +107,15 @@ public class Autoload extends Function
             }
         } else
             Load.loadSystemFile(getFileName(), true);
+        if (debug) {
+            Symbol symbol = getSymbol();
+            if (symbol != null) {
+                if (symbol.getSymbolFunction() instanceof Autoload) {
+                    Debug.trace("Unable to autoload " + symbol.writeToString());
+                    System.exit(-1);
+                }
+            }       
+        }
     }
 
     protected final String getFileName()
@@ -274,7 +283,8 @@ public class Autoload extends Function
         autoload("char<=", "CharacterFunctions");
         autoload("char=", "CharacterFunctions");
         autoload("cis", "MathFunctions");
-        autoload("clrhash", "HashTable");
+        autoload("clrhash", "HashTableFunctions");
+        autoload("clrhash", "HashTableFunctions");
         autoload("concatenated-stream-streams", "ConcatenatedStream");
         autoload("cos", "MathFunctions");
         autoload("cosh", "MathFunctions");
@@ -298,13 +308,20 @@ public class Autoload extends Function
         autoload("get-output-stream-string", "StringOutputStream");
         autoload("get-properties", "get_properties");
         autoload("get-universal-time", "Time");
-        autoload("gethash", "HashTable");
-        autoload("hash-table-count", "HashTable");
-        autoload("hash-table-p", "HashTable");
-        autoload("hash-table-rehash-size", "HashTable");
-        autoload("hash-table-rehash-threshold", "HashTable");
-        autoload("hash-table-size", "HashTable");
-        autoload("hash-table-test", "HashTable");
+        autoload("gethash", "HashTableFunctions");
+        autoload("gethash", "HashTableFunctions");
+        autoload("hash-table-count", "HashTableFunctions");
+        autoload("hash-table-count", "HashTableFunctions");
+        autoload("hash-table-p", "HashTableFunctions");
+        autoload("hash-table-p", "HashTableFunctions");
+        autoload("hash-table-rehash-size", "HashTableFunctions");
+        autoload("hash-table-rehash-size", "HashTableFunctions");
+        autoload("hash-table-rehash-threshold", "HashTableFunctions");
+        autoload("hash-table-rehash-threshold", "HashTableFunctions");
+        autoload("hash-table-size", "HashTableFunctions");
+        autoload("hash-table-size", "HashTableFunctions");
+        autoload("hash-table-test", "HashTableFunctions");
+        autoload("hash-table-test", "HashTableFunctions");
         autoload("import", "PackageFunctions");
         autoload("input-stream-p", "input_stream_p");
         autoload("interactive-stream-p", "interactive_stream_p");
@@ -343,7 +360,8 @@ public class Autoload extends Function
         autoload("mod", "mod");
         autoload("open-stream-p", "open_stream_p");
         autoload("output-stream-p", "output_stream_p");
-        autoload("package-error-package", "PackageError");
+        autoload("package-error-package", "package_error_package");
+        autoload("package-error-package", "package_error_package");
         autoload("package-name", "PackageFunctions");
         autoload("package-nicknames", "PackageFunctions");
         autoload("package-shadowing-symbols", "PackageFunctions");
@@ -356,9 +374,11 @@ public class Autoload extends Function
         autoload("read-char-no-hang", "read_char_no_hang");
         autoload("read-delimited-list", "read_delimited_list");
         autoload("rem", "rem");
-        autoload("remhash", "HashTable");
+        autoload("remhash", "HashTableFunctions");
+        autoload("remhash", "HashTableFunctions");
         autoload("rename-package", "PackageFunctions");
         autoload("room", "room");
+        autoload("schar", "StringFunctions");
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
         autoload("short-site-name", "SiteName");
@@ -374,7 +394,8 @@ public class Autoload extends Function
         autoload("stream-error-stream", "StreamError");
         autoload("stream-external-format", "stream_external_format");
         autoload("stringp", "StringFunctions");
-        autoload("sxhash", "HashTable");
+        autoload("sxhash", "HashTableFunctions");
+        autoload("sxhash", "HashTableFunctions");
         autoload("synonym-stream-symbol", "SynonymStream");
         autoload("tan", "MathFunctions");
         autoload("tanh", "MathFunctions");
@@ -420,7 +441,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition");
-        autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
+        autoload(PACKAGE_SYS, "%make-hash-table", "HashTableFunctions");
+        autoload(PACKAGE_SYS, "%make-hash-table", "HashTableFunctions");
         autoload(PACKAGE_SYS, "%make-server-socket", "make_server_socket");
         autoload(PACKAGE_SYS, "%make-socket", "make_socket");
         autoload(PACKAGE_SYS, "%make-string", "StringFunctions");
@@ -436,9 +458,10 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-function-info", "function_info");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
-        autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
+        autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
-        autoload(PACKAGE_SYS, "%set-std-slot-value", "StandardObject");
+        autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
+        autoload(PACKAGE_SYS, "%set-std-slot-value", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "%socket-accept", "socket_accept");
         autoload(PACKAGE_SYS, "%socket-close", "socket_close");
         autoload(PACKAGE_SYS, "%socket-stream", "socket_stream");
@@ -458,17 +481,18 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%string>", "StringFunctions");
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
         autoload(PACKAGE_SYS, "%time", "Time");
-        autoload(PACKAGE_SYS, "allocate-slot-storage", "StandardObject");
-        autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObject");
+        autoload(PACKAGE_SYS, "allocate-slot-storage", "StandardObjectFunctions");
+        autoload(PACKAGE_SYS, "allocate-std-instance", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "condition-report", "Condition");
         autoload(PACKAGE_SYS, "create-new-file", "create_new_file");
-        autoload(PACKAGE_SYS, "function-info", "function_info");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
+        autoload(PACKAGE_SYS, "function-info", "function_info");
         autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
-        autoload(PACKAGE_SYS, "hash-table-entries", "HashTable");
-        autoload(PACKAGE_SYS, "instance-ref", "StandardObject");
+        autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
+        autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
+        autoload(PACKAGE_SYS, "instance-ref", "StandardObjectFunctions");
         autoload(PACKAGE_SYS, "layout-class", "Layout");
         autoload(PACKAGE_SYS, "layout-length", "Layout");
         autoload(PACKAGE_SYS, "layout-slot-index", "Layout");
@@ -481,10 +505,13 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "make-layout", "Layout");
         autoload(PACKAGE_SYS, "make-structure-class", "StructureClass");
         autoload(PACKAGE_SYS, "make-symbol-macro", "SymbolMacro");
-        autoload(PACKAGE_SYS, "puthash", "HashTable");
+        autoload(PACKAGE_SYS, "mix", "HashTableFunctions");
+        autoload(PACKAGE_SYS, "psxhash", "HashTableFunctions");
+        autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
+        autoload(PACKAGE_SYS, "puthash", "HashTableFunctions");
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
-        autoload(PACKAGE_SYS, "std-instance-slots", "StandardObject");
-        autoload(PACKAGE_SYS, "std-slot-boundp", "StandardObject");
-        autoload(PACKAGE_SYS, "std-slot-value", "StandardObject");
+        autoload(PACKAGE_SYS, "std-instance-slots", "StandardObjectFunctions");
+        autoload(PACKAGE_SYS, "std-slot-boundp", "StandardObjectFunctions");
+        autoload(PACKAGE_SYS, "std-slot-value", "StandardObjectFunctions");
     }
 }

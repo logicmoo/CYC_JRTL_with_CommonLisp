@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.57 2004-11-07 15:38:24 piso Exp $
+ * $Id: LispAPI.java,v 1.58 2004-11-28 15:44:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,12 +57,12 @@ public final class LispAPI extends Lisp
     public static final Package PACKAGE_J_INTERNALS =
         Packages.createPackage("J-INTERNALS");
     static {
-        PACKAGE_J.usePackage(PACKAGE_CL);
-        PACKAGE_J.usePackage(PACKAGE_EXT);
-        PACKAGE_J.usePackage(PACKAGE_JAVA);
-        PACKAGE_J_INTERNALS.usePackage(PACKAGE_CL);
-        PACKAGE_J_INTERNALS.usePackage(PACKAGE_EXT);
-        PACKAGE_J_INTERNALS.usePackage(PACKAGE_JAVA);
+        PACKAGE_J._usePackage(PACKAGE_CL);
+        PACKAGE_J._usePackage(PACKAGE_EXT);
+        PACKAGE_J._usePackage(PACKAGE_JAVA);
+        PACKAGE_J_INTERNALS._usePackage(PACKAGE_CL);
+        PACKAGE_J_INTERNALS._usePackage(PACKAGE_EXT);
+        PACKAGE_J_INTERNALS._usePackage(PACKAGE_JAVA);
     }
 
     public static final Symbol BUFFER_STREAM =

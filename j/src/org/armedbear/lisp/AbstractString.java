@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractString.java,v 1.7 2004-10-20 00:08:41 piso Exp $
+ * $Id: AbstractString.java,v 1.8 2004-11-28 15:43:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,9 +61,9 @@ public abstract class AbstractString extends AbstractVector
 
     public abstract void fill(char c) throws ConditionThrowable;
 
-    public abstract char getChar(int index) throws ConditionThrowable;
+    public abstract char charAt(int index) throws ConditionThrowable;
 
-    public abstract void setChar(int index, char c) throws ConditionThrowable;
+    public abstract void setCharAt(int index, char c) throws ConditionThrowable;
 
     public final String writeToString(int beginIndex, int endIndex)
         throws ConditionThrowable
@@ -78,7 +78,7 @@ public abstract class AbstractString extends AbstractVector
             StringBuffer sb = new StringBuffer();
             sb.append('"');
             for (int i = beginIndex; i < endIndex; i++) {
-                char c = getChar(i);
+                char c = charAt(i);
                 if (c == '\"' || c == '\\')
                     sb.append('\\');
                 sb.append(c);

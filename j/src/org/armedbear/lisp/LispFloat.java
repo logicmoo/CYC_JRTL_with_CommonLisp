@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.79 2004-11-03 15:39:00 piso Exp $
+ * $Id: LispFloat.java,v 1.80 2004-11-28 15:43:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -445,7 +445,7 @@ public final class LispFloat extends LispObject
         return (int) (bits ^ (bits >>> 32));
     }
 
-    public int psxhash() throws ConditionThrowable
+    public int psxhash()
     {
         if ((value % 1) == 0)
             return (((int)value) & 0x7fffffff);
