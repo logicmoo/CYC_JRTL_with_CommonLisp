@@ -1,8 +1,8 @@
 /*
  * Directory.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.26 2003-07-04 17:49:05 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Directory.java,v 1.27 2004-05-21 16:45:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -202,9 +202,19 @@ public final class Directory extends Buffer
             dialog.show();
             String pattern = dialog.getInput();
             // A null pattern means the user cancelled the input dialog.
-            if (pattern != null)
+            if (pattern != null) {
+                editor.repaintNow();
                 directory.limit(pattern);
+            }
         }
+    }
+
+    public static void dirLimit(String pattern)
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer instanceof Directory)
+            ((Directory)buffer).limit(pattern);
     }
 
     public static void dirUnlimit()
@@ -609,14 +619,18 @@ public final class Directory extends Buffer
         // Default is true for Unix, false otherwise. User can override default.
         boolean useNativeFormat =
             preferences.getBooleanProperty(Property.DIR_USE_NATIVE_FORMAT,
-                Platform.isPlatformUnix());
+                                           Platform.isPlatformUnix());
         if (useNativeFormat) {
             if (!Utilities.haveLs())
                 useNativeFormat = false;
         }
         loadError = false;
         try {
-            DirectoryFilenameFilter dff = null;
+            final DirectoryFilenameFilter dff;
+            if (limitPattern != null)
+                dff = new DirectoryFilenameFilter(limitPattern);
+            else
+                dff = null;
             final File file = getFile();
             if (useNativeFormat || file.isRemote()) {
                 usingNativeFormat = true;
@@ -635,24 +649,19 @@ public final class Directory extends Buffer
                 BufferedReader reader = null;
                 if (getListing() != null) {
                     reader = new BufferedReader(new StringReader(getListing()));
-                    if (limitPattern != null)
-                        dff = new DirectoryFilenameFilter(limitPattern);
                 } else if (file instanceof FtpFile || file instanceof SshFile) {
                     setListing(file.getDirectoryListing());
                     if (getListing() != null)
                         reader = new BufferedReader(new StringReader(getListing()));
                     else
                         loadError = true;
-                    if (limitPattern != null)
-                        dff = new DirectoryFilenameFilter(limitPattern);
                 } else {
                     // Local file.
                     Process process = null;
                     if (Platform.isPlatformUnix()) {
-                        String cmd = "(\\cd \"" + file.canonicalPath() + "\" && \\ls " + flags;
-                        if (limitPattern != null && limitPattern.length() != 0)
-                            cmd += " -d " + limitPattern;
-                        cmd += ")";
+                        String cmd =
+                            "(\\cd \"" + file.canonicalPath() + "\" && \\ls " +
+                            flags + ")";
                         String[] cmdarray = {"/bin/sh", "-c", cmd};
                         process = Runtime.getRuntime().exec(cmdarray);
                     } else {
@@ -662,8 +671,6 @@ public final class Directory extends Buffer
                         if (cp.length() == 3 && cp.charAt(1) == ':' && cp.charAt(2) == '\\')
                             cp = "//" + Character.toLowerCase(cp.charAt(0));
                         String[] cmdarray = {"ls", flags, cp};
-                        if (limitPattern != null)
-                            dff = new DirectoryFilenameFilter(limitPattern);
                         process = Runtime.getRuntime().exec(cmdarray);
                     }
                     reader =
@@ -680,35 +687,30 @@ public final class Directory extends Buffer
                 }
             } else {
                 usingNativeFormat = false;
-                if (limitPattern != null)
-                    dff = new DirectoryFilenameFilter(limitPattern);
                 boolean dirIsRoot = false;
                 if (Platform.isPlatformWindows()) {
                     String cp = file.canonicalPath();
                     if (cp.length() == 3 && cp.endsWith(":\\")) // "C:\"
                         dirIsRoot = true;
                 }
-                String[] files = file.list();
-                if (dff == null) {
-                    if (!dirIsRoot) {
-                        addEntry(".");
-                        addEntry("..");
-                    }
-                    if (files != null) {
-                        for (int i = 0; i < files.length; i++)
-                            addEntry(files[i]);
-                    }
-                } else {
-                    if (!dirIsRoot) {
-                        if (dff.accepts("."))
-                            addEntry(".");
-                        if (dff.accepts(".."))
-                            addEntry("..");
-                    }
-                    if (files != null) {
-                        for (int i = 0; i < files.length; i++) {
-                            if (dff.accepts(files[i]))
-                                addEntry(files[i]);
+                if (!dirIsRoot) {
+                    addEntry(".");
+                    addEntry("..");
+                }
+                String[] names = file.list();
+                if (names != null) {
+                    if (dff == null) {
+                        for (int i = 0; i < names.length; i++)
+                            addEntry(names[i]);
+                    } else {
+                        for (int i = 0; i < names.length; i++) {
+                            if (dff.accepts(names[i]))
+                                addEntry(names[i]);
+                            else {
+                                File f = File.getInstance(file, names[i]);
+                                if (f != null && f.isDirectory())
+                                    addEntry(names[i]);
+                            }
                         }
                     }
                 }
