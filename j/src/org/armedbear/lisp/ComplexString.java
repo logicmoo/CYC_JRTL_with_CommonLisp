@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.13 2004-03-04 01:52:32 piso Exp $
+ * $Id: ComplexString.java,v 1.14 2004-03-14 01:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -384,7 +384,15 @@ public final class ComplexString extends AbstractString
             // Need to extend vector.
             ensureCapacity(capacity * 2 + 1);
         }
-        chars[fillPointer] = LispCharacter.getValue(element);
+        if (chars != null) {
+            try {
+                chars[fillPointer] = ((LispCharacter)element).value;
+            }
+            catch (ClassCastException e) {
+                signal(new TypeError(element, Symbol.CHARACTER));
+            }
+        } else
+            array.setRowMajor(fillPointer + displacement, element);
         return new Fixnum(fillPointer++);
     }
 
@@ -399,7 +407,15 @@ public final class ComplexString extends AbstractString
             ext = Math.max(ext, capacity + 1);
             ensureCapacity(capacity + ext);
         }
-        chars[fillPointer] = LispCharacter.getValue(element);
+        if (chars != null) {
+            try {
+                chars[fillPointer] = ((LispCharacter)element).value;
+            }
+            catch (ClassCastException e) {
+                signal(new TypeError(element, Symbol.CHARACTER));
+            }
+        } else
+            array.setRowMajor(fillPointer + displacement, element);
         return new Fixnum(fillPointer++);
     }
 
