@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.40 2003-03-20 15:56:46 piso Exp $
+ * $Id: Editor.java,v 1.41 2003-03-29 18:22:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7729,5 +7729,24 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         while (positionStack.size() >= 30)
             positionStack.removeElementAt(0);
         positionStack.push(m);
+    }
+
+    public static void resetDisplay()
+    {
+        if (!displayReady())
+            return;
+        // Force formatters to be re-initialized.
+        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+            Buffer buf = it.nextBuffer();
+            if (buf.getFormatter() != null)
+                buf.getFormatter().reset();
+        }
+        Display.initializeStaticValues();
+        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+            Display display = it.nextEditor().getDisplay();
+            display.initialize();
+            display.repaint();
+        }
+        Editor.restoreFocus();
     }
 }
