@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.39 2004-08-27 19:24:00 piso Exp $
+;;; $Id: compile-file.lisp,v 1.40 2004-09-01 18:03:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (require 'jvm)
 
@@ -210,19 +210,6 @@
   (values (intersection '(:compile-toplevel compile) situations)
 	  (intersection '(:load-toplevel load) situations)
 	  (intersection '(:execute eval) situations)))
-
-;; Adapted from SBCL.
-(defun cfp-output-file-default (input-file)
-  (let* ((defaults (merge-pathnames input-file *default-pathname-defaults*))
-	 (retyped (make-pathname :type *compile-file-type* :defaults defaults)))
-    retyped))
-
-(defun compile-file-pathname (input-file
-                              &key
-                              (output-file (cfp-output-file-default
-                                            input-file))
-                              &allow-other-keys)
-  (merge-pathnames output-file (merge-pathnames input-file)))
 
 (defun compile-file (input-file &key output-file verbose print external-format)
   (unless (or (probe-file input-file)

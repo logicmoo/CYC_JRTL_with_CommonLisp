@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.157 2004-08-28 12:55:57 asimon Exp $
+;;; $Id: autoloads.lisp,v 1.158 2004-09-01 18:04:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (autoload '(alphanumericp char/= char< char> char>= char-not-equal)
           "chars")
@@ -145,7 +145,8 @@
 (autoload 'read-sequence)
 (autoload 'write-sequence)
 (autoload 'make-load-form-saving-slots)
-(autoload '(compile-file compile-file-pathname) "compile-file")
+(autoload 'compile-file)
+(autoload 'compile-file-pathname)
 
 (autoload '(pprint pprint-newline copy-pprint-dispatch) "pprint")
 (autoload-macro 'pprint-logical-block "pprint")
