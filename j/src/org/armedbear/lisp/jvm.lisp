@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.106 2004-04-14 16:54:52 piso Exp $
+;;; $Id: jvm.lisp,v 1.107 2004-04-14 17:42:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1522,83 +1522,64 @@
           t)
         nil)))
 
+(defparameter binary-operators (make-hash-table))
+
+(defun define-binary-operator (operator translation)
+  (setf (gethash operator binary-operators) translation))
+
+(define-binary-operator 'eql "EQL")
+(define-binary-operator '+ "add")
+(define-binary-operator '- "subtract")
+(define-binary-operator '/ "divideBy")
+(define-binary-operator '* "multiplyBy")
+(define-binary-operator '< "IS_LT")
+(define-binary-operator '<= "IS_LE")
+(define-binary-operator '> "IS_GT")
+(define-binary-operator '>= "IS_GE")
+(define-binary-operator '= "IS_E")
+(define-binary-operator '/= "IS_NE")
+(define-binary-operator 'mod "MOD")
+(define-binary-operator 'ash "ash")
+(define-binary-operator 'aref "AREF")
+(define-binary-operator 'sys::simple-typep "typep")
+
 (defun compile-function-call-2 (fun args)
-  (case fun
-    (EQ
-     (compile-form (first args))
-     (unless (remove-store-value)
-       (emit-push-value))
-     (compile-form (second args))
-     (unless (remove-store-value)
-       (emit-push-value))
-     (let ((label1 (gensym))
-           (label2 (gensym)))
-       (emit 'if_acmpeq `,label1)
-       (emit-push-nil)
-       (emit 'goto `,label2)
-       (emit 'label `,label1)
-       (emit-push-t)
-       (emit 'label `,label2))
-     (emit-store-value)
-     t)
-    (EQL
-     (compile-binary-operation "EQL" args)
-     t)
-    (+
-     (compile-binary-operation "add" args)
-     t)
-    (-
-     (compile-binary-operation "subtract" args)
-     t)
-    (/
-     (compile-binary-operation "divideBy" args)
-     t)
-    (*
-     (compile-binary-operation "multiplyBy" args)
-     t)
-    (<
-     (compile-binary-operation "IS_LT" args)
-     t)
-    (<=
-     (compile-binary-operation "IS_LE" args)
-     t)
-    (>
-     (compile-binary-operation "IS_GT" args)
-     t)
-    (>=
-     (compile-binary-operation "IS_GE" args)
-     t)
-    (=
-     (compile-binary-operation "IS_E" args)
-     t)
-    (/=
-     (compile-binary-operation "IS_NE" args)
-     t)
-    (MOD
-     (compile-binary-operation "MOD" args))
-    (ASH
-     (compile-binary-operation "ash" args)
-     t)
-    (AREF
-     (compile-binary-operation "AREF" args)
-     t)
-    (LIST
-     (compile-form (first args))
-     (unless (remove-store-value)
-       (emit-push-value))
-     (compile-form (second args))
-     (unless (remove-store-value)
-       (emit-push-value))
-     (emit-invokestatic +lisp-class+
-                        "list2"
-                        "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
-                        -1)
-     (emit-store-value)
-     t)
-    (SYS::SIMPLE-TYPEP
-     (compile-binary-operation "typep" args))
-    (t
-     nil)))
+  (let ((translation (gethash fun binary-operators)))
+    (if translation
+        (compile-binary-operation translation args)
+        (case fun
+          (EQ
+           (compile-form (first args))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (compile-form (second args))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (let ((label1 (gensym))
+                 (label2 (gensym)))
+             (emit 'if_acmpeq `,label1)
+             (emit-push-nil)
+             (emit 'goto `,label2)
+             (emit 'label `,label1)
+             (emit-push-t)
+             (emit 'label `,label2))
+           (emit-store-value)
+           t)
+          (LIST
+           (compile-form (first args))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (compile-form (second args))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (emit-invokestatic +lisp-class+
+                              "list2"
+                              "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Cons;"
+                              -1)
+           (emit-store-value)
+           t)
+          (t
+           nil)))))
 
 (defun compile-function-call-3 (fun args)
   (case fun
