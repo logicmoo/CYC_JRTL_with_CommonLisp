@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.158 2003-09-29 16:15:42 piso Exp $
+ * $Id: Lisp.java,v 1.159 2003-09-29 16:44:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -688,13 +688,15 @@ public abstract class Lisp
         if (lower.equals("tab"))
             return '\t';
         if (lower.equals("newline"))
-            return'\n';
+            return '\n';
         if (lower.equals("linefeed"))
             return '\n';
         if (lower.equals("return"))
             return '\r';
         if (lower.equals("page"))
             return '\f';
+        if (lower.equals("null"))
+            return 0;
         if (lower.equals("backspace"))
             return '\b';
         // Unknown.
