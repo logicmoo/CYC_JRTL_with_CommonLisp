@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.9 2002-10-11 16:09:57 piso Exp $
+ * $Id: Buffer.java,v 1.10 2002-10-13 16:55:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1746,25 +1746,14 @@ public class Buffer extends SystemBuffer
         }
     }
 
-    public synchronized boolean needsAutosave()
+    public synchronized void autosave()
     {
-        if (!Autosave.isAutosaveEnabled() || !autosaveEnabled)
-            return false;
-        return modCount != autosaveModCount;
+        if (autosaveEnabled && Autosave.isAutosaveEnabled())
+            if (modCount != autosaveModCount)
+                new Thread(autosaveRunnable, "autosave").start();
     }
 
-    public void autosave(boolean wait)
-    {
-        if (!needsAutosave())
-            return;
-        Debug.assertTrue(getFile() != null);
-        if (wait)
-            autosaveInternal();
-        else
-            new Thread(autosaveRunnable).start();
-    }
-
-    private Runnable autosaveRunnable = new Runnable() {
+    private final Runnable autosaveRunnable = new Runnable() {
         public void run()
         {
             try {
