@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.10 2002-12-15 02:17:22 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.11 2002-12-15 02:22:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,11 @@ public class CommandInterpreter extends Buffer
     public final String getShellCommand()
     {
         return shellCommand;
+    }
+
+    public boolean isLisp()
+    {
+        return false;
     }
 
     public final boolean isModified()
