@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.85 2003-08-08 13:14:23 piso Exp $
+;;; $Id: boot.lisp,v 1.86 2003-08-10 01:24:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -304,3 +304,7 @@
 ;; FIXME
 (defmacro assert (form &rest stuff)
    `(if (not ,form) (error "assertion failed: ~S" ',form)))
+
+;; FIXME
+(defun compile-file (&rest args)
+  (values nil nil nil))
