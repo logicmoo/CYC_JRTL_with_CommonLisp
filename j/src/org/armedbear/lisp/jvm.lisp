@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.26 2003-11-12 00:54:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.27 2003-11-14 01:42:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1229,6 +1229,7 @@
 (setf (gethash 'LISTP           unary-operators) "LISTP")
 (setf (gethash 'MINUSP          unary-operators) "MINUSP")
 (setf (gethash 'NOT             unary-operators) "NOT")
+(setf (gethash 'NREVERSE        unary-operators) "nreverse")
 (setf (gethash 'NULL            unary-operators) "NOT")
 (setf (gethash 'NUMBERP         unary-operators) "NUMBERP")
 (setf (gethash 'NUMERATOR       unary-operators) "NUMERATOR")
