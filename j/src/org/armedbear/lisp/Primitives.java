@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.252 2003-06-21 19:19:08 piso Exp $
+ * $Id: Primitives.java,v 1.253 2003-06-21 19:55:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,6 +118,8 @@ public final class Primitives extends Module
     private static final int RPLACA                     = 75;
     private static final int RPLACD                     = 76;
     private static final int SET                        = 77;
+    private static final int _RPLACA                    = 78;
+    private static final int _RPLACD                    = 79;
 
     private Primitives()
     {
@@ -201,6 +203,8 @@ public final class Primitives extends Module
         definePrimitive2("rplaca", RPLACA);
         definePrimitive2("rplacd", RPLACD);
         definePrimitive2("set", SET);
+        definePrimitive2("%rplaca", _RPLACA);
+        definePrimitive2("%rplacd", _RPLACD);
     }
 
     // SpecialOperator
@@ -489,6 +493,12 @@ public final class Primitives extends Module
             case RPLACD:                        // ### rplacd
                 first.setCdr(second);
                 return first;
+            case _RPLACA:                       // ### %rplaca
+                first.setCar(second);
+                return second;
+            case _RPLACD:                       // ### %rplacd
+                first.setCdr(second);
+                return second;
             case SET:                           // ### set
                 checkSymbol(first).setSymbolValue(second);
                 return second;
