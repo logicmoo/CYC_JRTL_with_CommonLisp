@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.26 2003-03-13 19:47:45 piso Exp $
+;;; $Id: boot.lisp,v 1.27 2003-03-14 20:06:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -113,13 +113,11 @@
 (defun minusp (n)
   (< n 0))
 
-;; FIXME
 (defun integerp (n)
-  (numberp n))
+  (typep n 'integer))
 
-;; FIXME
 (defun fixnump (n)
-  (numberp n))
+  (typep n 'fixnum))
 
 (defun character (x)
   (coerce x 'character))
