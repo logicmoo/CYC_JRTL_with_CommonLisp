@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.24 2003-03-05 19:41:49 piso Exp $
+ * $Id: Lisp.java,v 1.25 2003-03-06 02:21:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,21 +85,29 @@ public abstract class Lisp
             case TYPE_PRIMITIVE0: {
                 if (length != 0)
                     throw new WrongNumberOfArgumentsException(fun);
+                if (profiling)
+                    fun.incrementCallCount();
                 return fun.execute();
             }
             case TYPE_PRIMITIVE1: {
                 if (length != 1)
                     throw new WrongNumberOfArgumentsException(fun);
+                if (profiling)
+                    fun.incrementCallCount();
                 return fun.execute(args[0]);
             }
             case TYPE_PRIMITIVE2: {
                 if (length != 2)
                     throw new WrongNumberOfArgumentsException(fun);
+                if (profiling)
+                    fun.incrementCallCount();
                 return fun.execute(args[0], args[1]);
             }
             case TYPE_PRIMITIVE:
             case TYPE_CLOSURE:
             case TYPE_MACRO:
+                if (profiling)
+                    fun.incrementCallCount();
                 return fun.execute(args);
             case TYPE_SPECIAL_OPERATOR:
             default:
@@ -274,11 +282,10 @@ public abstract class Lisp
                     if (fun == null)
                         throw new UndefinedFunctionError(first);
                 }
-                if (profiling) {
-                    fun.incrementCallCount();
-                }
                 switch (fun.getType()) {
                     case TYPE_SPECIAL_OPERATOR: {
+                        if (profiling)
+                            fun.incrementCallCount();
                         // Don't eval args!
                         result = fun.execute(obj.cdr(), env);
                         break;
@@ -289,6 +296,8 @@ public abstract class Lisp
                     case TYPE_PRIMITIVE0: {
                         if (obj.cdr() != NIL)
                             throw new WrongNumberOfArgumentsException(fun);
+                        if (profiling)
+                            fun.incrementCallCount();
                         result = fun.execute();
                         break;
                     }
@@ -296,6 +305,8 @@ public abstract class Lisp
                         LispObject args = obj.cdr();
                         if (args.length() != 1)
                             throw new WrongNumberOfArgumentsException(fun);
+                        if (profiling)
+                            fun.incrementCallCount();
                         result = fun.execute(value(eval(args.car(), env)));
                         break;
                     }
@@ -303,6 +314,8 @@ public abstract class Lisp
                         LispObject args = obj.cdr();
                         if (args.length() != 2)
                             throw new WrongNumberOfArgumentsException(fun);
+                        if (profiling)
+                            fun.incrementCallCount();
                         result = fun.execute(eval(args.car(), env),
                                              value(eval(args.cadr(), env)));
                         break;
@@ -311,6 +324,8 @@ public abstract class Lisp
                         LispObject args = obj.cdr();
                         if (args.length() != 3)
                             throw new WrongNumberOfArgumentsException(fun);
+                        if (profiling)
+                            fun.incrementCallCount();
                         result = fun.execute(
                             eval(args.car(), env),
                             eval(args.cadr(), env),
@@ -318,6 +333,8 @@ public abstract class Lisp
                         break;
                     }
                     default:
+                        if (profiling)
+                            fun.incrementCallCount();
                         result = fun.execute(evalList(obj.cdr(), env));
                         break;
                 }
