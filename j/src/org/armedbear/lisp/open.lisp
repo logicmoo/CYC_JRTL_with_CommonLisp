@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.13 2004-01-29 01:52:49 piso Exp $
+;;; $Id: open.lisp,v 1.14 2004-01-29 02:20:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -87,6 +87,21 @@
          ((nil)
           (when (probe-file pathname)
             (return-from open nil)))
+         ((:rename :rename-and-delete)
+          (when (probe-file pathname)
+            ;; Make sure the original file is not a directory.
+            (when (probe-directory pathname)
+              (error 'file-error
+                     :format-control "The file ~S is a directory."
+                     :format-arguments (list (namestring pathname))))
+            (let ((backup-name (concatenate 'string (namestring pathname) ".bak")))
+              (when (probe-file backup-name)
+                (when (probe-directory backup-name)
+                  (error 'file-error
+                         :format-control "Unable to rename ~S."
+                         :format-arguments (list (namestring pathname))))
+                (delete-file backup-name))
+              (rename-file pathname backup-name))))
          ((:new-version :supersede :overwrite :append)) ; OK to proceed.
          (t
           (error 'simple-error
