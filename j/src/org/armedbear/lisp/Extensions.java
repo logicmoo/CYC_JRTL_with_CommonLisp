@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.11 2003-09-19 14:44:10 piso Exp $
+ * $Id: Extensions.java,v 1.12 2003-09-24 22:53:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@ public final class Extensions extends Lisp
     };
 
     // ### charpos
+    // charpos stream => position
     private static final Primitive1 CHARPOS =
         new Primitive1("charpos", PACKAGE_EXT, true) {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -42,6 +43,22 @@ public final class Extensions extends Lisp
             if (arg instanceof CharacterOutputStream)
                 return new Fixnum(((CharacterOutputStream)arg).getCharPos());
             throw new ConditionThrowable(new TypeError(arg, "character output stream"));
+        }
+    };
+
+    // ### %set-charpos
+    // %set-charpos stream newval => newval
+    private static final Primitive2 _SET_CHARPOS =
+        new Primitive2("%set-charpos", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof CharacterOutputStream) {
+                ((CharacterOutputStream)first).setCharPos(Fixnum.getValue(second));
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(first, "character output stream"));
         }
     };
 
