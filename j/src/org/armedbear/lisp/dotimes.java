@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: dotimes.java,v 1.9 2004-04-30 12:23:23 piso Exp $
+ * $Id: dotimes.java,v 1.10 2004-05-29 18:41:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,6 +130,8 @@ public final class dotimes extends SpecialOperator
                         }
                         body = body.cdr();
                     }
+                    if (interrupted)
+                        handleInterrupt();
                 }
                 binding.value = new Fixnum(i);
                 result = eval(resultForm, ext, thread);
@@ -173,6 +175,8 @@ public final class dotimes extends SpecialOperator
                         body = body.cdr();
                     }
                     i = i.incr();
+                    if (interrupted)
+                        handleInterrupt();
                 }
                 binding.value = i;
                 result = eval(resultForm, ext, thread);
