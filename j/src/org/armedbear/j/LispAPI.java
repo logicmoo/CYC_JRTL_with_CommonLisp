@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.32 2004-02-26 20:39:10 piso Exp $
+ * $Id: LispAPI.java,v 1.33 2004-04-12 17:31:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,18 @@ public final class LispAPI extends Lisp
         PACKAGE_J_INTERNALS.usePackage(PACKAGE_CL);
         PACKAGE_J_INTERNALS.usePackage(PACKAGE_EXT);
         PACKAGE_J_INTERNALS.usePackage(PACKAGE_JAVA);
+    }
+
+    public static final Symbol _CURRENT_COMMAND_ =
+        exportSpecial("*CURRENT-COMMAND*", PACKAGE_J, NIL);
+
+    public static final Symbol _LAST_COMMAND_ =
+        exportSpecial("*LAST-COMMAND*", PACKAGE_J, NIL);
+
+    public static final void eventHandled()
+    {
+        _LAST_COMMAND_.setSymbolValue(_CURRENT_COMMAND_.getSymbolValue());
+        _CURRENT_COMMAND_.setSymbolValue(NIL);
     }
 
     public static final Editor checkEditor(LispObject obj)
@@ -764,6 +776,35 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### delete-region => nil
+    private static final Primitive0 DELETE_REGION =
+        new Primitive0("delete-region", PACKAGE_J, true)
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            final Editor editor = Editor.currentEditor();
+            if (!editor.checkReadOnly())
+                return NIL;
+            editor.deleteRegion();
+            return NIL;
+        }
+    };
+
+    // ### set-mark pos => pos
+    private static final Primitive1 SET_MARK =
+        new Primitive1("set-mark", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            final Editor editor = Editor.currentEditor();
+            if (arg != NIL)
+                editor.setMark(checkMarker(arg));
+            else
+                editor.unmark();
+            return arg;
+        }
+    };
+
     private static final Primitive0 BEGIN_COMPOUND_EDIT =
         new Primitive0("begin-compound-edit", PACKAGE_J, false)
     {
@@ -851,7 +892,7 @@ public final class LispAPI extends Lisp
 
     // ### invoke-later
     public static final Primitive1 INVOKE_LATER =
-        new Primitive1("INVOKE-LATER", PACKAGE_J, true)
+        new Primitive1("invoke-later", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
