@@ -2,7 +2,7 @@
  * EqlHashTable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EqlHashTable.java,v 1.1 2004-06-04 16:25:48 piso Exp $
+ * $Id: EqlHashTable.java,v 1.2 2004-08-19 18:11:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,17 +21,15 @@
 
 package org.armedbear.lisp;
 
-public class EqlHashTable extends HashTable
+public final class EqlHashTable extends HashTable
 {
     public EqlHashTable(int size, LispObject rehashSize,
                         LispObject rehashThreshold)
-        throws ConditionThrowable
     {
         super(TEST_EQL, size, rehashSize, rehashThreshold);
     }
 
     protected final boolean equals(LispObject o1, LispObject o2)
-        throws ConditionThrowable
     {
         return o1.eql(o2);
     }

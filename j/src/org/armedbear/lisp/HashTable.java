@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.36 2004-08-19 00:43:53 piso Exp $
+ * $Id: HashTable.java,v 1.37 2004-08-19 18:09:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public abstract class HashTable extends LispObject
     protected static final int TEST_EQUAL  = 2;
     protected static final int TEST_EQUALP = 3;
 
-    protected int test;
+    private int test;
 
     protected final LispObject rehashSize;
     protected final LispObject rehashThreshold;
@@ -47,29 +47,8 @@ public abstract class HashTable extends LispObject
 
     protected HashTable(int test, int size, LispObject rehashSize,
                         LispObject rehashThreshold)
-        throws ConditionThrowable
     {
         this.test = test;
-        this.rehashSize = rehashSize;
-        this.rehashThreshold = rehashThreshold;
-        buckets = new HashEntry[size];
-        threshold = (int) (size * loadFactor);
-    }
-
-    private HashTable(LispObject test, int size, LispObject rehashSize,
-                      LispObject rehashThreshold)
-        throws ConditionThrowable
-    {
-        if (test == NIL || test == Symbol.EQ.getSymbolFunction())
-            this.test = TEST_EQ;
-        else if (test == Symbol.EQL.getSymbolFunction())
-            this.test = TEST_EQL;
-        else if (test == Symbol.EQUAL.getSymbolFunction())
-            this.test = TEST_EQUAL;
-        else if (test == Symbol.EQUALP.getSymbolFunction())
-            this.test = TEST_EQUALP;
-        else
-            signal(new LispError("MAKE-HASH-TABLE:  test " + test));
         this.rehashSize = rehashSize;
         this.rehashThreshold = rehashThreshold;
         buckets = new HashEntry[size];
@@ -176,17 +155,16 @@ public abstract class HashTable extends LispObject
         return null;
     }
 
-    public LispObject put(LispObject key, LispObject value) throws ConditionThrowable
+    public void put(LispObject key, LispObject value) throws ConditionThrowable
     {
         int idx = hash(key);
         HashEntry e = buckets[idx];
         while (e != null) {
             if (equals(key, e.key)) {
-                LispObject r = e.value;
                 e.value = value;
-                return r;
-            } else
-                e = e.next;
+                return;
+            }
+            e = e.next;
         }
         // Not found. We need to add a new entry.
         if (++count > threshold) {
@@ -197,7 +175,6 @@ public abstract class HashTable extends LispObject
         e = new HashEntry(key, value);
         e.next = buckets[idx];
         buckets[idx] = e;
-        return null;
     }
 
     public LispObject remove(LispObject key) throws ConditionThrowable
