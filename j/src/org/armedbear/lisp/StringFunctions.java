@@ -1,8 +1,8 @@
 /*
  * StringFunctions.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.33 2004-12-19 18:34:53 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: StringFunctions.java,v 1.34 2005-03-19 20:00:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,43 +28,44 @@ public final class StringFunctions extends Lisp
     private static final Primitive _STRING_EQUAL =
         new Primitive("%string=", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth)
+            throws ConditionThrowable
         {
-            if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = args[0].STRING().getStringChars();
-            char[] array2 = args[1].STRING().getStringChars();
+            char[] array1 = first.STRING().getStringChars();
+            char[] array2 = second.STRING().getStringChars();
             int start1, end1, start2, end2;
             try {
-                start1 = ((Fixnum)args[2]).value;
+                start1 = ((Fixnum)third).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(args[2], Symbol.FIXNUM));
+                return signal(new TypeError(third, Symbol.FIXNUM));
             }
-            if (args[3] == NIL) {
+            if (fourth == NIL) {
                 end1 = array1.length;
             } else {
                 try {
-                    end1 = ((Fixnum)args[3]).value;
+                    end1 = ((Fixnum)fourth).value;
                 }
                 catch (ClassCastException e) {
-                    return signal(new TypeError(args[3], Symbol.FIXNUM));
+                    return signal(new TypeError(fourth, Symbol.FIXNUM));
                 }
             }
             try {
-                start2 = ((Fixnum)args[4]).value;
+                start2 = ((Fixnum)fifth).value;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(args[4], Symbol.FIXNUM));
+                return signal(new TypeError(fifth, Symbol.FIXNUM));
             }
-            if (args[5] == NIL) {
+            if (sixth == NIL) {
                 end2 = array2.length;
             } else {
                 try {
-                    end2 = ((Fixnum)args[5]).value;
+                    end2 = ((Fixnum)sixth).value;
                 }
                 catch (ClassCastException e) {
-                    return signal(new TypeError(args[5], Symbol.FIXNUM));
+                    return signal(new TypeError(sixth, Symbol.FIXNUM));
                 }
             }
             if ((end1 - start1) != (end2 - start2))
@@ -115,10 +116,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -145,16 +146,17 @@ public final class StringFunctions extends Lisp
     private static final Primitive _STRING_EQUAL_IGNORE_CASE =
         new Primitive("%string-equal", PACKAGE_SYS, true)
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth)
+            throws ConditionThrowable
         {
-            if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
-            char[] array1 = args[0].STRING().getStringChars();
-            char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            char[] array1 = first.STRING().getStringChars();
+            char[] array2 = second.STRING().getStringChars();
+            int start1 = Fixnum.getValue(third);
+            int end1 = Fixnum.getValue(fourth);
+            int start2 = Fixnum.getValue(fifth);
+            int end2 = Fixnum.getValue(sixth);
             if ((end1 - start1) != (end2 - start2))
                 return NIL;
             int i, j;
@@ -184,10 +186,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -227,10 +229,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -270,10 +272,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -311,10 +313,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -352,10 +354,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -395,10 +397,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -438,10 +440,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -479,10 +481,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -522,10 +524,10 @@ public final class StringFunctions extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
-            int start1 = Fixnum.getInt(args[2]);
-            int end1 = Fixnum.getInt(args[3]);
-            int start2 = Fixnum.getInt(args[4]);
-            int end2 = Fixnum.getInt(args[5]);
+            int start1 = Fixnum.getValue(args[2]);
+            int end1 = Fixnum.getValue(args[3]);
+            int start2 = Fixnum.getValue(args[4]);
+            int end2 = Fixnum.getValue(args[5]);
             int i = start1;
             int j = start2;
             while (true) {
@@ -557,7 +559,8 @@ public final class StringFunctions extends Lisp
         new Primitive("%string-upcase", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             LispObject s = first.STRING();
             final int length = s.length();
@@ -591,7 +594,8 @@ public final class StringFunctions extends Lisp
         new Primitive("%string-downcase", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third) throws
+        ConditionThrowable
         {
             LispObject s = first.STRING();
             final int length = s.length();
@@ -625,7 +629,8 @@ public final class StringFunctions extends Lisp
         new Primitive("%string-capitalize", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             LispObject s = first.STRING();
             final int length = s.length();
@@ -671,7 +676,8 @@ public final class StringFunctions extends Lisp
         new Primitive("%nstring-upcase", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             AbstractString string;
             try {
@@ -704,7 +710,8 @@ public final class StringFunctions extends Lisp
         new Primitive("%nstring-downcase", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             AbstractString string;
             try {
@@ -737,7 +744,8 @@ public final class StringFunctions extends Lisp
         new Primitive("%nstring-capitalize", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             AbstractString string;
             try {

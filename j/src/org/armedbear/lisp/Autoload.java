@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.221 2005-03-18 18:42:31 piso Exp $
+ * $Id: Autoload.java,v 1.222 2005-03-19 20:00:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public class Autoload extends Function
         if (className != null) {
             final LispThread thread = LispThread.currentThread();
             final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-            int loadDepth = Fixnum.getInt(_LOAD_DEPTH_.symbolValue());
+            int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue());
             thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
             try {
                 if (_AUTOLOAD_VERBOSE_.symbolValue(thread) != NIL) {
@@ -125,12 +125,6 @@ public class Autoload extends Function
         return getSymbol().getName().toLowerCase();
     }
 
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
-    {
-        load();
-        return getSymbol().execute(args);
-    }
-
     public LispObject execute() throws ConditionThrowable
     {
         load();
@@ -164,6 +158,30 @@ public class Autoload extends Function
     {
         load();
         return getSymbol().execute(first, second, third, fourth);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth)
+        throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute(first, second, third, fourth, fifth);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth)
+        throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute(first, second, third, fourth, fifth, sixth);
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute(args);
     }
 
     public String writeToString() throws ConditionThrowable

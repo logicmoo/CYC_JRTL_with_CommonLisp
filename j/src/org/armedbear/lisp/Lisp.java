@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.328 2005-03-19 14:34:42 piso Exp $
+ * $Id: Lisp.java,v 1.329 2005-03-19 20:00:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,6 +135,14 @@ public abstract class Lisp
                     break;
                 case 4:
                     result = fun.execute(args[0], args[1], args[2], args[3]);
+                    break;
+                case 5:
+                    result = fun.execute(args[0], args[1], args[2], args[3],
+                                         args[4]);
+                    break;
+                case 6:
+                    result = fun.execute(args[0], args[1], args[2], args[3],
+                                         args[4], args[5]);
                     break;
                 default:
                     result = fun.execute(args);
@@ -397,14 +405,30 @@ public abstract class Lisp
             thread._values = null;
             return thread.execute(function, first, second, third, fourth);
         }
-        // More than 4 arguments.
-        final int length = args.length() + 4;
+        LispObject fifth = eval(args.car(), env, thread);
+        args = args.cdr();
+        if (args == NIL) {
+            thread._values = null;
+            return thread.execute(function, first, second, third, fourth,
+                                  fifth);
+        }
+        LispObject sixth = eval(args.car(), env, thread);
+        args = args.cdr();
+        if (args == NIL) {
+            thread._values = null;
+            return thread.execute(function, first, second, third, fourth,
+                                  fifth, sixth);
+        }
+        // More than 6 arguments.
+        final int length = args.length() + 6;
         LispObject[] array = new LispObject[length];
         array[0] = first;
         array[1] = second;
         array[2] = third;
         array[3] = fourth;
-        for (int i = 4; i < length; i++) {
+        array[4] = fifth;
+        array[5] = sixth;
+        for (int i = 6; i < length; i++) {
             array[i] = eval(args.car(), env, thread);
             args = args.cdr();
         }

@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.77 2005-03-17 14:52:44 piso Exp $
+ * $Id: LispThread.java,v 1.78 2005-03-19 20:00:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -640,6 +640,58 @@ public final class LispThread extends LispObject
         pushStackFrame(function, args);
         try {
             return function.execute(first, second, third, fourth);
+        }
+        finally {
+            if (profiling && sampling) {
+                if (sampleNow)
+                    Profiler.sample(this);
+            }
+            stack = oldStack;
+        }
+    }
+
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth)
+        throws ConditionThrowable
+    {
+        LispObject oldStack = stack;
+        LispObject[] args = new LispObject[5];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        args[4] = fifth;
+        pushStackFrame(function, args);
+        try {
+            return function.execute(first, second, third, fourth, fifth);
+        }
+        finally {
+            if (profiling && sampling) {
+                if (sampleNow)
+                    Profiler.sample(this);
+            }
+            stack = oldStack;
+        }
+    }
+
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth,
+                              LispObject sixth)
+        throws ConditionThrowable
+    {
+        LispObject oldStack = stack;
+        LispObject[] args = new LispObject[6];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        args[4] = fifth;
+        args[5] = sixth;
+        pushStackFrame(function, args);
+        try {
+            return function.execute(first, second, third, fourth, fifth, sixth);
         }
         finally {
             if (profiling && sampling) {

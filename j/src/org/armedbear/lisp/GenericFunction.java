@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: GenericFunction.java,v 1.17 2004-11-06 13:48:30 piso Exp $
+ * $Id: GenericFunction.java,v 1.18 2005-03-19 20:00:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,6 +105,26 @@ public final class GenericFunction extends StandardObject
     {
         return LispThread.currentThread().execute(getDiscriminatingFunction(),
                                                   first, second, third, fourth);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth)
+        throws ConditionThrowable
+    {
+        return LispThread.currentThread().execute(getDiscriminatingFunction(),
+                                                  first, second, third, fourth,
+                                                  fifth);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth)
+        throws ConditionThrowable
+    {
+        return LispThread.currentThread().execute(getDiscriminatingFunction(),
+                                                  first, second, third, fourth,
+                                                  fifth, sixth);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable

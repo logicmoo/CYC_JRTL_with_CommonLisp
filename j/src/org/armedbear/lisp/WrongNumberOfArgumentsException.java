@@ -1,8 +1,8 @@
 /*
  * WrongNumberOfArgumentsException.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: WrongNumberOfArgumentsException.java,v 1.5 2004-02-04 15:11:32 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: WrongNumberOfArgumentsException.java,v 1.6 2005-03-19 20:00:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

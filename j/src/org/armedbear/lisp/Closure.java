@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.93 2005-02-28 17:20:54 piso Exp $
+ * $Id: Closure.java,v 1.94 2005-03-19 20:00:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -536,6 +536,110 @@ public class Closure extends Function
             args[1] = second;
             args[2] = third;
             args[3] = fourth;
+            return execute(args);
+        }
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth)
+        throws ConditionThrowable
+    {
+        if (minArgs == 5) {
+            final LispThread thread = LispThread.currentThread();
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+            Environment ext = new Environment(environment);
+            if (specials != null) {
+                for (int i = 0; i < specials.length; i++)
+                    ext.declareSpecial(specials[i]);
+            }
+            bind(requiredParameters[0].var, first, ext);
+            bind(requiredParameters[1].var, second, ext);
+            bind(requiredParameters[2].var, third, ext);
+            bind(requiredParameters[3].var, fourth, ext);
+            bind(requiredParameters[4].var, fifth, ext);
+            if (arity != 5) {
+                if (optionalParameters != null)
+                    bindOptionalParameterDefaults(ext, thread);
+                if (restVar != null)
+                    bind(restVar, NIL, ext);
+                if (keywordParameters != null)
+                    bindKeywordParameterDefaults(ext, thread);
+            }
+            if (auxVars != null)
+                bindAuxVars(ext, thread);
+            LispObject result = NIL;
+            LispObject prog = body;
+            try {
+                while (prog != NIL) {
+                    result = eval(prog.car(), ext, thread);
+                    prog = prog.cdr();
+                }
+            }
+            finally {
+                thread.lastSpecialBinding = lastSpecialBinding;
+            }
+            return result;
+        } else {
+            LispObject[] args = new LispObject[5];
+            args[0] = first;
+            args[1] = second;
+            args[2] = third;
+            args[3] = fourth;
+            args[4] = fifth;
+            return execute(args);
+        }
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth)
+        throws ConditionThrowable
+    {
+        if (minArgs == 6) {
+            final LispThread thread = LispThread.currentThread();
+            SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+            Environment ext = new Environment(environment);
+            if (specials != null) {
+                for (int i = 0; i < specials.length; i++)
+                    ext.declareSpecial(specials[i]);
+            }
+            bind(requiredParameters[0].var, first, ext);
+            bind(requiredParameters[1].var, second, ext);
+            bind(requiredParameters[2].var, third, ext);
+            bind(requiredParameters[3].var, fourth, ext);
+            bind(requiredParameters[4].var, fifth, ext);
+            bind(requiredParameters[5].var, sixth, ext);
+            if (arity != 6) {
+                if (optionalParameters != null)
+                    bindOptionalParameterDefaults(ext, thread);
+                if (restVar != null)
+                    bind(restVar, NIL, ext);
+                if (keywordParameters != null)
+                    bindKeywordParameterDefaults(ext, thread);
+            }
+            if (auxVars != null)
+                bindAuxVars(ext, thread);
+            LispObject result = NIL;
+            LispObject prog = body;
+            try {
+                while (prog != NIL) {
+                    result = eval(prog.car(), ext, thread);
+                    prog = prog.cdr();
+                }
+            }
+            finally {
+                thread.lastSpecialBinding = lastSpecialBinding;
+            }
+            return result;
+        } else {
+            LispObject[] args = new LispObject[6];
+            args[0] = first;
+            args[1] = second;
+            args[2] = third;
+            args[3] = fourth;
+            args[4] = fifth;
+            args[5] = sixth;
             return execute(args);
         }
     }

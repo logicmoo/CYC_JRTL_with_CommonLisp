@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialOperator.java,v 1.14 2005-02-27 20:09:23 piso Exp $
+ * $Id: SpecialOperator.java,v 1.15 2005-03-19 20:00:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,11 +46,6 @@ public class SpecialOperator extends Functional
         return name;
     }
 
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(getLambdaName()));
-    }
-
     public LispObject execute() throws ConditionThrowable
     {
         return signal(new UndefinedFunction(getLambdaName()));
@@ -77,6 +72,27 @@ public class SpecialOperator extends Functional
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth)
+        throws ConditionThrowable
+    {
+        return signal(new UndefinedFunction(getLambdaName()));
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         return signal(new UndefinedFunction(getLambdaName()));
     }

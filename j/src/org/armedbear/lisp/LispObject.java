@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.120 2005-02-28 00:55:20 piso Exp $
+ * $Id: LispObject.java,v 1.121 2005-03-19 20:00:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -508,11 +508,6 @@ public class LispObject extends Lisp
         return signal(new LispError());
     }
 
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
-    {
-        return signal(new TypeError(this, Symbol.FUNCTION));
-    }
-
     public LispObject execute() throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.FUNCTION));
@@ -543,16 +538,49 @@ public class LispObject extends Lisp
         return signal(new TypeError(this, Symbol.FUNCTION));
     }
 
-    public LispObject execute(LispObject[] args, LispObject[] context)
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth)
         throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.FUNCTION));
     }
 
-    public LispObject execute(LispObject[] args, LispObject[][] context)
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth)
         throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.FUNCTION));
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        return signal(new TypeError(this, Symbol.FUNCTION));
+    }
+
+    // Used by COMPILE-MULTIPLE-VALUE-CALL.
+    public LispObject dispatch(LispObject[] args) throws ConditionThrowable
+    {
+        switch (args.length) {
+            case 0:
+                return execute();
+            case 1:
+                return execute(args[0]);
+            case 2:
+                return execute(args[0], args[1]);
+            case 3:
+                return execute(args[0], args[1], args[2]);
+            case 4:
+                return execute(args[0], args[1], args[2], args[3]);
+            case 5:
+                return execute(args[0], args[1], args[2], args[3], args[4]);
+            case 6:
+                return execute(args[0], args[1], args[2], args[3], args[4],
+                               args[5]);
+            default:
+                return signal(new TypeError(this, Symbol.FUNCTION));
+        }
     }
 
     public LispObject incr() throws ConditionThrowable

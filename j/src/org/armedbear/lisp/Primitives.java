@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.743 2005-03-17 14:55:00 piso Exp $
+ * $Id: Primitives.java,v 1.744 2005-03-19 20:00:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2402,18 +2402,28 @@ public final class Primitives extends Lisp
             return LispThread.currentThread().execute(first, second, third,
                                                       fourth);
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth)
+            throws ConditionThrowable
+        {
+            return LispThread.currentThread().execute(first, second, third,
+                                                      fourth, fifth);
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth)
+            throws ConditionThrowable
+        {
+            return LispThread.currentThread().execute(first, second, third,
+                                                      fourth, fifth, sixth);
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            if (args.length == 5) {
-                return LispThread.currentThread().execute(args[0], args[1],
-                                                          args[2], args[3],
-                                                          args[4]);
-            } else {
-                final int length = args.length - 1; // Number of arguments.
-                LispObject[] newArgs = new LispObject[length];
-                System.arraycopy(args, 1, newArgs, 0, length);
-                return LispThread.currentThread().execute(args[0], newArgs);
-            }
+            final int length = args.length - 1; // Number of arguments.
+            LispObject[] newArgs = new LispObject[length];
+            System.arraycopy(args, 1, newArgs, 0, length);
+            return LispThread.currentThread().execute(args[0], newArgs);
         }
     };
 
@@ -2734,7 +2744,8 @@ public final class Primitives extends Lisp
 
     // ### find-package
     private static final Primitive FIND_PACKAGE =
-        new Primitive("find-package", "name") {
+        new Primitive("find-package", "name")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof Package)
@@ -3798,7 +3809,7 @@ public final class Primitives extends Lisp
             if (args.length() != 2)
                 signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
-            int n = Fixnum.getInt(eval(args.car(), env, thread));
+            int n = Fixnum.getValue(eval(args.car(), env, thread));
             if (n < 0)
                 n = 0;
             LispObject result = eval(args.cadr(), env, thread);
@@ -3912,24 +3923,22 @@ public final class Primitives extends Lisp
     private static final Primitive _READ_FROM_STRING =
         new Primitive("%read-from-string", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth)
+            throws ConditionThrowable
         {
-            if (args.length != 6)
-                signal(new WrongNumberOfArgumentsException(this));
-            String s = args[0].getStringValue();
-            boolean eofError = args[1] != NIL;
-            LispObject eofValue = args[2];
-            LispObject start = args[3];
-            LispObject end = args[4];
-            boolean preserveWhitespace = args[5] != NIL;
+            String s = first.getStringValue();
+            boolean eofError = (second != NIL);
+            boolean preserveWhitespace = (sixth != NIL);
             final int startIndex;
-            if (start != NIL)
-                startIndex = Fixnum.getValue(start);
+            if (fourth != NIL)
+                startIndex = Fixnum.getValue(fourth);
             else
                 startIndex = 0;
             final int endIndex;
-            if (end != NIL)
-                endIndex = Fixnum.getValue(end);
+            if (fifth != NIL)
+                endIndex = Fixnum.getValue(fifth);
             else
                 endIndex = s.length();
             StringInputStream in =
@@ -3937,10 +3946,10 @@ public final class Primitives extends Lisp
             final LispThread thread = LispThread.currentThread();
             LispObject result;
             if (preserveWhitespace)
-                result = in.readPreservingWhitespace(eofError, eofValue, false,
+                result = in.readPreservingWhitespace(eofError, third, false,
                                                      thread);
             else
-                result = in.read(eofError, eofValue, false);
+                result = in.read(eofError, third, false);
             return thread.setValues(result, new Fixnum(in.getOffset()));
         }
     };
@@ -4261,7 +4270,8 @@ public final class Primitives extends Lisp
     };
 
     // ### nreverse
-    public static final Primitive NREVERSE = new Primitive("nreverse", "sequence")
+    public static final Primitive NREVERSE =
+        new Primitive("nreverse", "sequence")
     {
         public LispObject execute (LispObject arg) throws ConditionThrowable
         {
@@ -4271,7 +4281,8 @@ public final class Primitives extends Lisp
 
     // ### nreconc
     // Adapted from CLISP.
-    private static final Primitive NRECONC = new Primitive("nreconc", "list tail")
+    private static final Primitive NRECONC =
+        new Primitive("nreconc", "list tail")
     {
         public LispObject execute(LispObject list, LispObject obj)
             throws ConditionThrowable
@@ -4411,22 +4422,24 @@ public final class Primitives extends Lisp
     // ### %member
     // %member item list key test test-not => tail
     private static final Primitive _MEMBER =
-        new Primitive("%member", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        new Primitive("%member", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth)
+            throws ConditionThrowable
         {
-            if (args.length != 5)
-                signal(new WrongNumberOfArgumentsException(this));
-            LispObject item = args[0];
-            LispObject tail = checkList(args[1]);
-            LispObject key = args[2];
+            LispObject item = first;
+            LispObject tail = checkList(second);
+            LispObject key = third;
             if (key != NIL) {
                 if (key instanceof Symbol)
                     key = key.getSymbolFunction();
                 if (!(key instanceof Function || key instanceof GenericFunction))
-                    signal(new UndefinedFunction(args[2]));
+                    signal(new UndefinedFunction(third));
             }
-            LispObject test = args[3];
-            LispObject testNot = args[4];
+            LispObject test = fourth;
+            LispObject testNot = fifth;
             if (test != NIL && testNot != NIL)
                 signal(new LispError("MEMBER: test and test-not both supplied"));
             if (test == NIL && testNot == NIL) {
@@ -4435,12 +4448,12 @@ public final class Primitives extends Lisp
                 if (test instanceof Symbol)
                     test = test.getSymbolFunction();
                 if (!(test instanceof Function || test instanceof GenericFunction))
-                    signal(new UndefinedFunction(args[3]));
+                    signal(new UndefinedFunction(fourth));
             } else if (testNot != NIL) {
                 if (testNot instanceof Symbol)
                     testNot = testNot.getSymbolFunction();
                 if (!(testNot instanceof Function || testNot instanceof GenericFunction))
-                    signal(new UndefinedFunction(args[3]));
+                    signal(new UndefinedFunction(fifth));
             }
             if (key == NIL && test == EQL) {
                 while (tail != NIL) {
