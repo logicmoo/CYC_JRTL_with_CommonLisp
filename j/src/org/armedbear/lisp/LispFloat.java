@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.61 2004-03-15 20:00:48 piso Exp $
+ * $Id: LispFloat.java,v 1.62 2004-06-02 21:18:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public final class LispFloat extends LispObject
     public static final LispFloat ONE  = new LispFloat(1);
     public static final LispFloat PI   = new LispFloat((double)3.141592653589793);
 
-    private final double value;
+    public final double value;
 
     public LispFloat(double value)
     {
@@ -478,7 +478,7 @@ public final class LispFloat extends LispObject
             return new LispFloat(((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(((Ratio)obj).floatValue());
-        signal(new TypeError(String.valueOf(obj) +
+        signal(new TypeError(obj.writeToString() +
                              " cannot be converted to type FLOAT."));
         // Not reached.
         return null;
@@ -516,6 +516,53 @@ public final class LispFloat extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof LispFloat ? T : NIL;
+        }
+    };
+
+    // ### double-float-high-bits
+    private static final Primitive1 DOUBLE_FLOAT_HIGH_BITS =
+        new Primitive1("double-float-high-bits", PACKAGE_SYS, false, "float")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispFloat) {
+                LispFloat f = (LispFloat) arg;
+                return number(Double.doubleToLongBits(f.value) >>> 32);
+            }
+            return signal(new TypeError(arg, Symbol.FLOAT));
+        }
+    };
+
+    // ### double-float-low-bits
+    private static final Primitive1 DOUBLE_FLOAT_LOW_BITS =
+        new Primitive1("double-float-low-bits", PACKAGE_SYS, false, "float")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispFloat) {
+                LispFloat f = (LispFloat) arg;
+                return number(Double.doubleToLongBits(f.value) & 0xffffffffL);
+            }
+            return signal(new TypeError(arg, Symbol.FLOAT));
+        }
+    };
+
+    // ### make-double-float bits => float
+    private static final Primitive MAKE_DOUBLE_FLOAT =
+        new Primitive("make-double-float", PACKAGE_SYS, false, "bits")
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            if (arg instanceof Fixnum) {
+                long bits = (long) ((Fixnum)arg).value;
+                return new LispFloat(Double.longBitsToDouble(bits));
+            }
+            if (arg instanceof Bignum) {
+                long bits = ((Bignum)arg).value.longValue();
+                return new LispFloat(Double.longBitsToDouble(bits));
+            }
+            return signal(new TypeError());
         }
     };
 }
