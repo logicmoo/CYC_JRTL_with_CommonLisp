@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.13 2003-06-02 18:27:48 piso Exp $
+ * $Id: Nil.java,v 1.14 2003-06-11 02:12:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,13 @@
 
 package org.armedbear.lisp;
 
-public final class Nil extends LispObject
+public final class Nil extends Symbol
 {
+    public Nil(Package pkg)
+    {
+        super("NIL", pkg);
+    }
+
     public int getType()
     {
         return TYPE_SYMBOL | TYPE_NULL;
@@ -51,9 +56,9 @@ public final class Nil extends LispObject
         return T;
     }
 
-    public String getName()
+    public final LispObject getSymbolValue()
     {
-        return "NIL";
+        return this;
     }
 
     public LispObject car()
