@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.2 2003-07-02 17:10:30 piso Exp $
+;;; $Id: autoloads.lisp,v 1.3 2003-07-06 01:19:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,3 +70,4 @@
           "find.lisp")
 (autoload '(count count-if count-if-not) "count.lisp")
 (autoload '(mismatch search))
+(autoload 'make-string)
