@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.43 2004-10-12 13:55:41 piso Exp $
+;;; $Id: pprint.lisp,v 1.44 2004-10-13 15:40:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -63,8 +63,7 @@
 
 #-(or :symbolics :lucid :franz-inc :cmu)(eval-when (eval load compile)
 (defun structure-type-p (x) (and (symbolp x) (get x 'structure-printer)))
-(defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
-(defun output-position  (&optional (s *standard-output*)) (declare (ignore s)) nil) )
+(defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil))
 
 (defvar *locating-circularities* nil
   "Integer if making a first pass over things to identify circularities.
@@ -270,7 +269,7 @@
   (setf (line-no xp) 1)
   (setf (depth-in-blocks xp) 0)
   (setf (block-stack-ptr xp) 0)
-  (setf (charpos xp) (cond ((output-position stream)) (T 0)))
+  (setf (charpos xp) (cond ((ext:charpos stream)) (t 0)))
   (setf (section-start xp) 0)
   (setf (buffer-ptr xp) 0)
   (setf (buffer-offset xp) (charpos xp))
@@ -336,9 +335,9 @@
 (defun pprint-tab+ (kind colnum colinc xp)
   (let ((indented? nil) (relative? nil))
     (case kind
-      (:section (setq indented? T))
-      (:line-relative (setq relative? T))
-      (:section-relative (setq indented? T relative? T)))
+      (:section (setq indented? t))
+      (:line-relative (setq relative? t))
+      (:section-relative (setq indented? t relative? t)))
     (let* ((current
 	     (if (not indented?) (LP<-BP xp)
 		 (- (TP<-BP xp) (section-start xp))))
@@ -821,7 +820,7 @@
          (setf stream-symbol '*standard-output*))
 	((eq stream-symbol t)
          (setf stream-symbol '*terminal-io*)))
-  (when (not (symbolp stream-symbol))
+  (unless (symbolp stream-symbol)
     (warn "STREAM-SYMBOL arg ~S to PPRINT-LOGICAL-BLOCK is not a bindable symbol."
 	  stream-symbol)
     (setf stream-symbol '*standard-output*))
@@ -1025,18 +1024,18 @@
       (write-char++ #\space stream)
       (pprint-newline+ :fill stream))))
 
-(defun pprint-tabular (s list &optional (colon? T) atsign? (tabsize nil))
-  (declare (ignore atsign?))
+(defun pprint-tabular (stream list &optional (colon-p T) at-sign-p (tabsize nil))
+  (declare (ignore at-sign-p))
   (when (null tabsize) (setq tabsize 16))
-  (pprint-logical-block (s list :prefix (if colon? "(" "")
-			        :suffix (if colon? ")" ""))
+  (pprint-logical-block (stream list :prefix (if colon-p "(" "")
+			        :suffix (if colon-p ")" ""))
     (pprint-exit-if-list-exhausted)
     (loop
-      (sys:output-object (pprint-pop) s)
+      (sys:output-object (pprint-pop) stream)
       (pprint-exit-if-list-exhausted)
-      (write-char++ #\space s)
-      (pprint-tab+ :section-relative 0 tabsize s)
-      (pprint-newline+ :fill s))))
+      (write-char++ #\space stream)
+      (pprint-tab+ :section-relative 0 tabsize stream)
+      (pprint-newline+ :fill stream))))
 
 (defun fn-call (xp list)
   (funcall (formatter "~:<~W~^ ~:I~@_~@{~W~^ ~_~}~:>") xp list))
