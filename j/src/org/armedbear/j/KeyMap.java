@@ -1,8 +1,8 @@
 /*
  * KeyMap.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: KeyMap.java,v 1.1.1.1 2002-09-24 16:09:22 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: KeyMap.java,v 1.2 2003-04-25 02:05:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -350,6 +350,7 @@ public final class KeyMap implements Constants
 
         mapKey(KeyEvent.VK_F10, 0, "splitWindow");
         mapKey(KeyEvent.VK_F10, SHIFT_MASK, "unsplitWindow");
+        mapKey(KeyEvent.VK_F10, CTRL_MASK | SHIFT_MASK, "killWindow");
         mapKey(KeyEvent.VK_O, ALT_MASK, "otherWindow");
 
         if (Editor.preferences().getBooleanProperty(Property.ENABLE_EXPERIMENTAL_FEATURES))
