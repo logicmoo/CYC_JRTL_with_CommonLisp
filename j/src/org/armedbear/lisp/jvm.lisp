@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.241 2004-07-25 23:45:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.242 2004-07-26 02:23:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,8 +35,11 @@
 
 (defstruct compiland
   name
+  lambda-expression
   parent
-  (children 0))
+  (children 0) ; Number of local functions defined with FLET or LABELS.
+  contains-lambda
+  )
 
 (defvar *current-compiland* nil)
 
@@ -182,12 +185,14 @@
   (list* (car form) (p1-let/let*-vars (cadr form)) (mapcar #'p1 (cddr form))))
 
 (defun p1-block (form)
-  (cond ((= (length form) 2) ; (block foo)
-         nil)
+  (cond
+;;    ((= (length form) 2) ; (block foo)
+;;          nil)
         (t
          (let ((*blocks* *blocks*)
                (block (make-block-node :name (cadr form))))
            (push block *blocks*)
+;;            (%format t "(cddr form) = ~S~%" (cddr form))
            (setf form (list* 'BLOCK (cadr form) (mapcar #'p1 (cddr form))))
 ;;            (make-block-node :form form :name (cadr form))
            (setf (block-form block) form)
@@ -222,6 +227,14 @@
       form))
 
 (defun p1-lambda (form)
+  (when (eq (car form) 'LAMBDA)
+    (when *current-compiland*
+      (unless (or (compiland-contains-lambda *current-compiland*)
+                  (eq form (compiland-lambda-expression *current-compiland*)))
+;;         (format t "P1-LAMBDA form = ~S~%" form)
+        (do ((compiland *current-compiland* (compiland-parent compiland)))
+            ((null compiland))
+          (setf (compiland-contains-lambda compiland) t)))))
   (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
 
 (defun p1-setq (form)
@@ -261,6 +274,14 @@
                         (if (neq new-form form)
                             (p1 new-form)
                             (p1-default form))))))
+              ((and (consp op) (eq (car op) 'LAMBDA))
+;;                (format t "P1 form = ~S~%" form)
+               (unless (and *current-compiland*
+                            (compiland-contains-lambda *current-compiland*))
+                 (do ((compiland *current-compiland* (compiland-parent compiland)))
+                     ((null compiland))
+                   (setf (compiland-contains-lambda compiland) t)))
+               form)
               (t
                form)))))
 
@@ -3555,18 +3576,18 @@
     (t (setq *using-arg-array* t)
        #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
-(defun contains-lambda (form)
-  (cond ((node-p form)
-         (contains-lambda (node-form form)))
-        ((atom form)
-         nil)
-        ((eq (car form) 'QUOTE)
-         nil)
-        ((eq (car form) 'LAMBDA)
-         t)
-        (t
-         (or (contains-lambda (car form))
-             (contains-lambda (cdr form))))))
+;; (defun contains-lambda (form)
+;;   (cond ((node-p form)
+;;          (contains-lambda (node-form form)))
+;;         ((atom form)
+;;          nil)
+;;         ((eq (car form) 'QUOTE)
+;;          nil)
+;;         ((eq (car form) 'LAMBDA)
+;;          t)
+;;         (t
+;;          (or (contains-lambda (car form))
+;;              (contains-lambda (cdr form))))))
 
 (defun compile-defun (name form environment &optional (classfile "out.class"))
   (unless (eq (car form) 'LAMBDA)
@@ -3575,9 +3596,11 @@
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (multiple-value-bind (precompiled-form obstacles) (precompile-form form t)
     (let ((*current-compiland* (make-compiland :name name
+                                               :lambda-expression precompiled-form
                                                :parent *current-compiland*)))
       ;; Pass 1.
       (setf precompiled-form (p1 precompiled-form))
+
 ;;       (format t "children = ~S~%" (compiland-children *current-compiland*))
       (let* ((*defun-name* name)
              (*speed* *speed*)
@@ -3602,10 +3625,19 @@
              (*child-p* (if *context* t nil))
 
              (*use-locals-vector*
-              (progn
-                (when obstacles
-                  (assert (> (compiland-children *current-compiland*) 0)))
-                (or obstacles (contains-lambda body))))
+;;               (progn
+;;                 (when obstacles
+;;                   (assert (> (compiland-children *current-compiland*) 0)))
+;;                 (%format t "compiland ~A contains-lambda = ~S~%"
+;;                          (compiland-name *current-compiland*)
+;;                          (compiland-contains-lambda *current-compiland*))
+;;                 (%format t "body = ~S~%" body)
+;;                 (assert (eq (contains-lambda body)
+;;                             (compiland-contains-lambda *current-compiland*)))
+;; ;;                 (or obstacles (contains-lambda body))))
+;;                 (or obstacles (compiland-contains-lambda *current-compiland*))))
+              (or (> (compiland-children *current-compiland*) 0)
+                  (compiland-contains-lambda *current-compiland*)))
 
              (descriptor (analyze-args args))
              (execute-method (make-method :name "execute"
