@@ -1,8 +1,8 @@
 /*
  * XmlMode.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.15 2003-11-14 13:34:13 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: XmlMode.java,v 1.16 2004-04-22 14:59:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -904,11 +904,32 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         InsertTagDialog d = new InsertTagDialog(editor);
         editor.centerDialog(d);
         d.show();
-        String tagName = d.getTagName();
-        if (tagName == null || tagName.length() == 0)
+        _xmlInsertTag(editor, d.getInput());
+    }
+
+    public static void xmlInsertTag(String input)
+    {
+        final Editor editor = Editor.currentEditor();
+        if (!editor.checkReadOnly())
             return;
-        // We always want the end tag in XML mode.
-        InsertTagDialog.insertTag(editor, tagName, d.getExtra(), true);
+        _xmlInsertTag(editor, input);
+    }
+
+    private static void _xmlInsertTag(Editor editor, String input)
+    {
+        if (input != null) {
+            final String tagName, extra;
+            int index = input.indexOf(' ');
+            if (index >= 0) {
+                tagName = input.substring(0, index);
+                extra = input.substring(index);
+            } else {
+                tagName = input;
+                extra = "";
+            }
+            // We always want the end tag in XML mode.
+            InsertTagDialog.insertTag(editor, tagName, extra, true);
+        }
     }
 
     public static void xmlInsertEmptyElementTag()
