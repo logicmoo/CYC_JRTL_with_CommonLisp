@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CTagger.java,v 1.3 2002-11-05 01:25:52 piso Exp $
+ * $Id: CTagger.java,v 1.4 2002-11-05 02:24:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,20 +111,27 @@ public final class CTagger extends JavaTagger
                 continue;
             }
             if (isIdentifierStart(c)) {
-                String s = gatherToken();
+                tokenStart = pos.copy();
+                String s = gatherToken(pos);
                 if (s.startsWith("ARGS") && lynxArgsMacroRE.isMatch(s)) {
                     // Lynx "ARGSnn" macro.
                     ;
                 } else if (s.equals("NOARGS")) {
                     // Lynx macro.
                     state = METHOD_NAME;
-                } else if (s.equals("DEFUN")) {
+                } else if (isDefunStart(s)) {
                     // Emacs macro.
-                    while (!isIdentifierStart(c = pos.getChar())) {
+                    while (true) {
+                        c = pos.getChar();
+                        if (c == '"') {
+                            pos.next();
+                            break;
+                        }
                         if (!pos.next())
                             break;
                     }
-                    gatherDefunName();
+                    tokenStart = pos.copy();
+                    token = gatherDefunName(pos);
                     tags.add(new CTag(token, tokenStart));
                     while ((c = pos.getChar()) != '{') {
                         if (!pos.next())
@@ -132,10 +139,8 @@ public final class CTagger extends JavaTagger
                     }
                     if (c == '{')
                         skipBrace();
-                } else {
-                    tokenStart = new Position(pos.getLine(), pos.getOffset() - s.length());
+                } else
                     token = s;
-                }
                 continue;
             }
             if (c == '(') {
@@ -148,7 +153,7 @@ public final class CTagger extends JavaTagger
         buffer.setTags(tags);
     }
 
-    private String gatherToken()
+    private String gatherToken(Position pos)
     {
         FastStringBuffer sb = new FastStringBuffer();
         char c;
@@ -159,18 +164,30 @@ public final class CTagger extends JavaTagger
         }
         return sb.toString();
     }
-
-    private void gatherDefunName()
+    
+    private static boolean isDefunStart(String s)
     {
-        tokenStart = new Position(pos);
+        if (s.length() < 5)
+            return false;
+        if (s.charAt(0) != 'D')
+            return false;
+        if (s.equals("DEFUN")) // Emacs, rep
+            return true;
+        if (s.equals("DEFUN_INT")) // rep
+            return true;
+        return false;
+    }
+
+    private static String gatherDefunName(Position pos)
+    {
         FastStringBuffer sb = new FastStringBuffer();
         char c;
-        while ((c = pos.getChar()) != '"') {
+        while ((c = pos.getChar()) != '"' && c != EOL) {
             sb.append(c);
             if (!pos.next())
                 break;
         }
-        token = sb.toString();
+        return sb.toString();
     }
 
     // Also used in CppTagger.java.
