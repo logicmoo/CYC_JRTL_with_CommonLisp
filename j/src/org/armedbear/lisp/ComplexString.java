@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.11 2004-02-25 17:29:17 piso Exp $
+ * $Id: ComplexString.java,v 1.12 2004-02-25 23:11:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -448,12 +448,8 @@ public final class ComplexString extends AbstractString
         }
     }
 
-    private int cachedHashCode;
-
     public int hashCode()
     {
-        if (cachedHashCode != 0)
-            return cachedHashCode;
         int hashCode = 0;
         try {
             final int limit = length();
@@ -464,6 +460,6 @@ public final class ComplexString extends AbstractString
             // Shouldn't happen.
             Debug.trace(t);
         }
-        return cachedHashCode = hashCode;
+        return hashCode;
     }
 }
