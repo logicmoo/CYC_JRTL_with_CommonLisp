@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.9 2003-12-17 18:38:38 piso Exp $
+;;; $Id: restart.lisp,v 1.10 2003-12-19 00:04:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -192,7 +192,9 @@
        ,@body)))
 
 (defun abort (&optional condition)
-  (invoke-restart 'abort))
+  (invoke-restart 'abort)
+  (error 'control-error
+         :format-control "ABORT restart failed to transfer control dynamically."))
 
 (defun continue (&optional condition)
   (invoke-restart 'continue))
