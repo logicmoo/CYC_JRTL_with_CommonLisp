@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.63 2004-06-04 16:17:09 piso Exp $
+ * $Id: LispFloat.java,v 1.64 2004-06-05 02:07:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -386,7 +386,33 @@ public final class LispFloat extends LispObject
             LispObject remainder = subtract(product);
             return thread.setValues(result, remainder);
         }
-        return signal(new LispError("LispFloat.truncate(): not implemented: " + obj.typeOf()));
+        return signal(new LispError("LispFloat.truncate(): not implemented: " +
+                                    obj.typeOf().writeToString()));
+    }
+
+    public LispObject ftruncate(LispObject obj) throws ConditionThrowable
+    {
+        final LispThread thread = LispThread.currentThread();
+        if (obj instanceof Fixnum) {
+            long divisor = ((Fixnum)obj).value;
+            double quotient = value / divisor;
+            double remainder = value % divisor;
+            if (quotient == 0)
+                return thread.setValues(new LispFloat(quotient),
+                                        new LispFloat(remainder));
+            else
+                return thread.setValues(new LispFloat(quotient - remainder),
+                                        new LispFloat(remainder));
+        }
+        if (obj instanceof LispFloat) {
+            double divisor = ((LispFloat)obj).value;
+            double quotient = value / divisor;
+            double remainder = value % divisor;
+            return thread.setValues(new LispFloat(quotient - remainder),
+                                    new LispFloat(remainder));
+        }
+        return signal(new LispError("LispFloat.ftruncate(): not implemented: " +
+                                    obj.typeOf().writeToString()));
     }
 
     public int hashCode()
