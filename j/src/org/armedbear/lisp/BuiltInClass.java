@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.13 2003-11-02 18:14:46 piso Exp $
+ * $Id: BuiltInClass.java,v 1.14 2003-11-02 18:36:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass INTEGER                          = addClass(Symbol.INTEGER);
     public static final BuiltInClass LIST                             = addClass(Symbol.LIST);
     public static final BuiltInClass LOGICAL_PATHNAME                 = addClass(Symbol.LOGICAL_PATHNAME);
-    public static final BuiltInClass METHOD                           = addClass(Symbol.METHOD);
+//     public static final BuiltInClass METHOD                           = addClass(Symbol.METHOD);
     public static final BuiltInClass METHOD_COMBINATION               = addClass(Symbol.METHOD_COMBINATION);
     public static final BuiltInClass NULL                             = addClass(Symbol.NULL);
     public static final BuiltInClass NUMBER                           = addClass(Symbol.NUMBER);
@@ -163,6 +163,12 @@ public class BuiltInClass extends LispClass
         new StandardClass(Symbol.GENERIC_FUNCTION, list1(FUNCTION));
     static {
         addClass(Symbol.GENERIC_FUNCTION, GENERIC_FUNCTION);
+    }
+
+    public static final StandardClass METHOD =
+        new StandardClass(Symbol.METHOD, list1(STANDARD_OBJECT));
+    static {
+        addClass(Symbol.METHOD, METHOD);
     }
 
     static {
@@ -245,8 +251,8 @@ public class BuiltInClass extends LispClass
         LIST.setCPL(LIST, SEQUENCE, CLASS_T);
         LOGICAL_PATHNAME.setDirectSuperclass(PATHNAME);
         LOGICAL_PATHNAME.setCPL(LOGICAL_PATHNAME, PATHNAME, CLASS_T);
-        METHOD.setDirectSuperclass(CLASS_T);
-        METHOD.setCPL(METHOD, CLASS_T);
+        METHOD.setDirectSuperclass(STANDARD_OBJECT);
+        METHOD.setCPL(METHOD, STANDARD_OBJECT, CLASS_T);
         METHOD_COMBINATION.setDirectSuperclass(CLASS_T);
         METHOD_COMBINATION.setCPL(METHOD_COMBINATION, CLASS_T);
         NULL.setDirectSuperclass(LIST);
