@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.32 2003-05-25 12:42:30 piso Exp $
+;;; $Id: sequences.lisp,v 1.33 2003-05-27 17:21:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -310,14 +310,7 @@
   (vector-reverse sequence (type-of sequence)))
 
 
-;;; NREVERSE (from CMUCL)
-
-(defun list-nreverse (list)
-  (do ((1st (cdr list) (if (atom 1st) 1st (cdr 1st)))
-       (2nd list 1st)
-       (3rd '() 2nd))
-      ((atom 2nd) 3rd)
-    (rplacd 2nd 3rd)))
+;;; NREVERSE
 
 (defun nreverse (sequence)
   (if (listp sequence)
