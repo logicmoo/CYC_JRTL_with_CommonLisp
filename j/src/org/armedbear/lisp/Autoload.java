@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.83 2003-10-07 17:23:21 piso Exp $
+ * $Id: Autoload.java,v 1.84 2003-10-10 14:21:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,8 +187,8 @@ public class Autoload extends Function
         autoload("coerce", "coerce");
         autoload("copy-structure", "StructureObject");
         autoload("delete-package", "PackageFunctions");
-        autoload("directory-namestring", "Pathname");
         autoload("describe", "describe");
+        autoload("directory-namestring", "Pathname");
         autoload("file-write-date", "Time");
         autoload("find-class", "LispClass");
         autoload("get-internal-real-time", "Time");
@@ -251,6 +251,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%open-input-file", "open");
         autoload(PACKAGE_SYS, "%open-output-file", "open");
+        autoload(PACKAGE_SYS, "%set-class-slots", "StandardClass");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
@@ -275,6 +276,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%structure-set-1", "StructureObject");
         autoload(PACKAGE_SYS, "%structure-set-2", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
+        autoload(PACKAGE_SYS, "class-slots", "StandardClass");
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTable");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
