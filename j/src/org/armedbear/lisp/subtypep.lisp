@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.36 2004-01-17 00:40:08 piso Exp $
+;;; $Id: subtypep.lisp,v 1.37 2004-01-17 00:46:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -265,9 +265,10 @@
     (cond ((eq t1 'atom)
            (return-from subtypep (values (eq t2 t) t)))
           ((eq t2 'atom)
-           (return-from subtypep (cond ((memq t1 '(cons list)) (values nil t))
-                                       ((known-type-p t1) (values t t))
-                                       (t (values nil nil)))))
+           (return-from subtypep (cond ((memq t1 '(cons list sequence))
+                                        (values nil t))
+                                       (t
+                                        (values t t)))))
           ((eq t1 'member)
            (dolist (e i1)
              (unless (typep e type2) (return-from subtypep (values nil t))))
