@@ -2,7 +2,7 @@
  * IntegerTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: IntegerTypeSpecifier.java,v 1.1 2003-09-11 14:54:27 piso Exp $
+ * $Id: IntegerTypeSpecifier.java,v 1.2 2003-09-11 16:19:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ public final class IntegerTypeSpecifier extends CompoundTypeSpecifier
     {
         if (ts instanceof AtomicTypeSpecifier) {
             AtomicTypeSpecifier ats = (AtomicTypeSpecifier) ts;
-            Type type = ats.getType();
+            Type type = ats.TYPE();
             if (type == Type.INTEGER)
                 return T;
             if (type == Type.FIXNUM) {
@@ -117,6 +117,6 @@ public final class IntegerTypeSpecifier extends CompoundTypeSpecifier
                 if (upperLimit.isLessThanOrEqualTo(its.upperLimit))
                     return values(T, T);
         }
-        return super.isSubtypeOf(ts);
+        return values(NIL, NIL);
     }
 }

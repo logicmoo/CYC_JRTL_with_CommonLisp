@@ -2,7 +2,7 @@
  * ClassTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ClassTypeSpecifier.java,v 1.1 2003-07-15 17:31:56 piso Exp $
+ * $Id: ClassTypeSpecifier.java,v 1.2 2003-09-11 16:18:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,13 +41,8 @@ public class ClassTypeSpecifier extends TypeSpecifier
             AtomicTypeSpecifier ats = (AtomicTypeSpecifier) ts;
             Type type = Type.findType(c);
             if (type != null)
-                return type.isSubtypeOf(ats.getType());
+                return type.isSubtypeOf(ats.TYPE());
         }
-
-        LispObject[] values = new LispObject[2];
-        values[0] = NIL;
-        values[1] = NIL;
-        LispThread.currentThread().setValues(values);
-        return NIL;
+        return values(NIL, NIL);
     }
 }

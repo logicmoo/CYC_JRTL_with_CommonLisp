@@ -2,7 +2,7 @@
  * CompoundTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompoundTypeSpecifier.java,v 1.5 2003-08-14 17:23:55 piso Exp $
+ * $Id: CompoundTypeSpecifier.java,v 1.6 2003-09-11 16:17:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,10 @@ public abstract class CompoundTypeSpecifier extends TypeSpecifier
             return new VectorTypeSpecifier(cons);
         if (car == Symbol.SIMPLE_VECTOR)
             return new SimpleVectorTypeSpecifier(cons);
+        if (car == Symbol.INTEGER)
+            return new IntegerTypeSpecifier(cons);
+        if (car == Symbol.MEMBER)
+            return new MemberTypeSpecifier(cons);
         throw new LispError("unsupported compound type specifier " + args);
     }
 }
