@@ -9,7 +9,7 @@
 
 #+windows
 (progn
-  (setf *jdk* "C:\\jdk1.5.0\\")
+  (setf *jdk* "C:\\j2sdk1.4.2_03\\")
   (setf *java-compiler* "C:\\jikes-1.21\\bin\\jikes.exe")
 ;;   (setf *java-compiler* "C:\\j2sdk1.5.0\\bin\\javac.exe")
   )
