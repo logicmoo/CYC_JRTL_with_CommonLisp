@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.8 2003-10-09 17:35:31 piso Exp $
+ * $Id: StringFunctions.java,v 1.9 2003-10-09 17:38:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,19 +313,29 @@ public final class StringFunctions extends Lisp
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
             int end2 = Fixnum.getInt(args[5]);
-            int i, j;
-            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+            int i = start1;
+            int j = start2;
+            while (true) {
+                if (i == end1) {
+                    // Reached end of string1.
+                    return NIL;
+                }
+                if (j == end2) {
+                    // Reached end of string2.
+                    return new Fixnum(i);
+                }
                 char c1 = Utilities.toUpperCase(array1[i]);
                 char c2 = Utilities.toUpperCase(array2[j]);
-                if (c1 == c2)
+                if (c1 == c2) {
+                    ++i;
+                    ++j;
                     continue;
+                }
                 if (c1 < c2)
                     return NIL;
                 if (c1 > c2)
                     return new Fixnum(i);
             }
-            // Strings are equal.
-            return NIL;
         }
     };
 
