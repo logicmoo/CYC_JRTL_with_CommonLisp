@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.7 2003-06-20 16:02:15 piso Exp $
+ * $Id: Autoload.java,v 1.8 2003-06-20 17:24:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,6 +138,7 @@ public final class Autoload extends Function
     };
 
     static {
+        autoload("coerce", "org.armedbear.lisp.coerce");
         autoload("room", "org.armedbear.lisp.room");
     }
 }
