@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StringOutputStream.java,v 1.10 2004-01-31 01:16:55 piso Exp $
+ * $Id: StringOutputStream.java,v 1.11 2004-02-15 18:45:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,12 @@ public final class StringOutputStream extends Stream
 
     public StringOutputStream()
     {
-        elementType = Symbol.CHARACTER;
+        this(Symbol.CHARACTER);
+    }
+
+    private StringOutputStream(LispObject elementType)
+    {
+        this.elementType = elementType;
         isInputStream = false;
         isOutputStream = true;
         isCharacterStream = true;
@@ -60,8 +65,36 @@ public final class StringOutputStream extends Stream
         return super.typep(type);
     }
 
-    public LispString getString()
+    public void _writeChar(char c) throws ConditionThrowable
     {
+        if (elementType == NIL)
+            writeError();
+        super._writeChar(c);
+    }
+
+    public void _writeString(String s) throws ConditionThrowable
+    {
+        if (elementType == NIL)
+            writeError();
+        super._writeString(s);
+    }
+
+    public void _writeLine(String s) throws ConditionThrowable
+    {
+        if (elementType == NIL)
+            writeError();
+        super._writeLine(s);
+    }
+
+    private void writeError() throws ConditionThrowable
+    {
+        signal(new TypeError("Attempt to write to a string output stream of element type NIL."));
+    }
+
+    public LispObject getString() throws ConditionThrowable
+    {
+        if (elementType == NIL)
+            return new NilVector(0);
         String s = stringWriter.toString();
         stringWriter.getBuffer().setLength(0);
         return new LispString(s);
@@ -72,17 +105,15 @@ public final class StringOutputStream extends Stream
         return unreadableString("STRING-OUTPUT-STREAM");
     }
 
-    // ### make-string-output-stream
-    // make-string-output-stream &key element-type => string-stream
-    private static final Primitive MAKE_STRING_OUTPUT_STREAM =
-        new Primitive("make-string-output-stream", "&key element-type")
+    // ### %make-string-output-stream
+    // %make-string-output-stream element-type => string-stream
+    private static final Primitive1 MAKE_STRING_OUTPUT_STREAM =
+        new Primitive1("%make-string-output-stream", PACKAGE_SYS, false,
+                       "element-type")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (args.length > 1)
-                return signal(new WrongNumberOfArgumentsException(this));
-            // FIXME Ignore arg for now.
-            return new StringOutputStream();
+            return new StringOutputStream(arg);
         }
     };
 
