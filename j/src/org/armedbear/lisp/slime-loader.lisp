@@ -1,7 +1,7 @@
 ;;; slime-loader.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime-loader.lisp,v 1.4 2004-09-16 18:34:47 piso Exp $
+;;; $Id: slime-loader.lisp,v 1.5 2004-09-16 19:18:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,11 +28,13 @@
           (t
            (let* ((source-file (merge-pathnames file *load-truename*))
                   (binary-file (compile-file-pathname source-file)))
-             (if (and (probe-file binary-file)
-                      (> (file-write-date binary-file)
-                         (file-write-date source-file)))
-                 (load-system-file (file-namestring binary-file))
-                 (load-system-file (file-namestring (compile-file source-file)))))))))
+             (unless (and (probe-file binary-file)
+                          (> (file-write-date binary-file)
+                             (file-write-date source-file)))
+               (j:status
+                (simple-format nil "Compiling ~A ..." (namestring source-file)))
+               (setf binary-file (compile-file source-file)))
+             (load-system-file (file-namestring binary-file)))))))
 
 #+j
 (unless (fboundp 'swank:start-server)
