@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.14 2003-01-16 17:02:13 piso Exp $
+ * $Id: Property.java,v 1.15 2003-02-20 19:47:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,6 +118,8 @@ public final class Property implements Comparable, Constants
         createProperty("enableExperimentalFeatures", false);
     public static final Property ENABLE_ITALICS =
         createProperty("enableItalics", true);
+    public static final Property ENABLE_KEY_PRESSED_HOOK =
+        createProperty("enableKeyPressedHook", false);
     public static final Property ENABLE_MAIL =
         createProperty("enableMail", false);
     public static final Property ENABLE_TOOL_TIPS =
