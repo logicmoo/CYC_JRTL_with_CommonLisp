@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.245 2003-06-20 18:15:17 piso Exp $
+ * $Id: Primitives.java,v 1.246 2003-06-20 19:15:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1689,71 +1689,6 @@ public final class Primitives extends Module
         }
     };
 
-    // ### do-external-symbols
-    // do-external-symbols (var [package [result-form]]) declaration* {tag | statement}*
-    // => result*
-    // Should be a macro.
-    private static final SpecialOperator DO_EXTERNAL_SYMBOLS =
-        new SpecialOperator("do-external-symbols") {
-        public LispObject execute(LispObject args, Environment env)
-            throws Condition
-        {
-            Block block = new Block(NIL, args.cdr());
-            args = args.car();
-            Symbol var = checkSymbol(args.car());
-            args = args.cdr();
-            final LispThread thread = LispThread.currentThread();
-            // Defaults.
-            Package pkg = getCurrentPackage();
-            LispObject resultForm = NIL;
-            if (args != NIL) {
-                pkg = coerceToPackage(eval(args.car(), env, thread));
-                args = args.cdr();
-                if (args != NIL)
-                    resultForm = args.car();
-            }
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            for (Iterator it = pkg.iterator(); it.hasNext();) {
-                Symbol symbol = (Symbol) it.next();
-                if (!symbol.isExternal())
-                    continue;
-                Environment ext = new Environment(env);
-                bind(var, symbol, ext);
-                LispObject body = block.getBody();
-                int depth = thread.getStackDepth();
-                try {
-                    while (body != NIL) {
-                        LispObject result = eval(body.car(), ext, thread);
-                        body = body.cdr();
-                    }
-                }
-                catch (Return ret) {
-                    if (ret.getName() == NIL) {
-                        thread.setStackDepth(depth);
-                        return ret.getResult();
-                    }
-                    throw ret;
-                }
-            }
-            Environment ext = new Environment(env);
-            bind(var, NIL, ext);
-            LispObject result = eval(resultForm, ext, thread);
-            thread.setDynamicEnvironment(oldDynEnv);
-            return result;
-        }
-    };
-
-    // ### package-symbols
-    // Internal.
-    private static final Primitive1 PACKAGE_SYMBOLS =
-        new Primitive1("package-symbols") {
-        public LispObject execute(LispObject arg) throws Condition
-        {
-            Package pkg = coerceToPackage(arg);
-            return pkg.getSymbols();
-        }
-    };
-
     // ### handler-bind
     private static final SpecialOperator HANDLER_BIND =
         new SpecialOperator("handler-bind") {
@@ -2503,30 +2438,6 @@ public final class Primitives extends Module
         }
     };
 
-    // ### use-package
-    // use-package packages-to-use &optional package => t
-    private static final Primitive USE_PACKAGE = new Primitive("use-package") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            if (args.length < 1 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
-            Package pkg;
-            if (args.length == 2)
-                pkg = coerceToPackage(args[1]);
-            else
-                pkg = getCurrentPackage();
-            if (args[0] instanceof Cons) {
-                LispObject list = args[0];
-                while (list != NIL) {
-                    pkg.usePackage(coerceToPackage(list.car()));
-                    list = list.cdr();
-                }
-            } else
-                pkg.usePackage(coerceToPackage(args[0]));
-            return T;
-        }
-    };
-
     // ### intern
     // intern string &optional package => symbol, status
     // status is one of :INHERITED, :EXTERNAL, :INTERNAL or NIL.
@@ -2564,50 +2475,6 @@ public final class Primitives extends Module
             else
                 pkg = getCurrentPackage();
             return unintern(symbol, pkg);
-        }
-    };
-
-    // Returns package or throws exception.
-    private static final Package coerceToPackage(LispObject obj)
-        throws LispError
-    {
-        if (obj instanceof Package)
-            return (Package) obj;
-
-        String packageName = null;
-        if (obj instanceof Symbol)
-            packageName = obj.getName();
-        else if (obj instanceof LispString)
-            packageName = ((LispString)obj).getValue();
-        else if (obj instanceof LispCharacter)
-            packageName = new LispString((LispCharacter)obj).getValue();
-        Package pkg = null;
-        if (packageName != null) {
-            pkg = Packages.findPackage(packageName);
-            if (pkg != null)
-                return pkg;
-        }
-        throw new LispError(obj + " is not the name of a package");
-    }
-
-    // ### shadow
-    // shadow symbol-names &optional package => t
-    private static final Primitive SHADOW = new Primitive("shadow") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            if (args.length == 0 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
-            LispObject symbols = args[0];
-            Package pkg =
-                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
-            if (symbols.listp()) {
-                while (symbols != NIL) {
-                    pkg.shadow(javaString(symbols.car()));
-                    symbols = symbols.cdr();
-                }
-            } else
-                pkg.shadow(javaString(symbols));
-            return T;
         }
     };
 
@@ -2704,15 +2571,6 @@ public final class Primitives extends Module
         }
     };
 
-    // ### delete-package
-    private static final Primitive1 DELETE_PACKAGE =
-        new Primitive1("delete-package") {
-        public LispObject execute(LispObject arg) throws LispError
-        {
-            return coerceToPackage(arg).delete() ? T : NIL;
-        }
-    };
-
     // ### in-package
     private static final SpecialOperator IN_PACKAGE =
         new SpecialOperator("in-package") {
@@ -2741,33 +2599,92 @@ public final class Primitives extends Module
         }
     };
 
-    // ### package-nicknames
-    // package-nicknames package => nicknames
-    private static final Primitive1 PACKAGE_NICKNAMES =
-        new Primitive1("package-nicknames") {
-        public LispObject execute(LispObject arg) throws LispError
+    // ### use-package
+    // use-package packages-to-use &optional package => t
+    private static final Primitive USE_PACKAGE = new Primitive("use-package") {
+        public LispObject execute(LispObject[] args) throws LispError
         {
-            return coerceToPackage(arg).packageNicknames();
+            if (args.length < 1 || args.length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            Package pkg;
+            if (args.length == 2)
+                pkg = coerceToPackage(args[1]);
+            else
+                pkg = getCurrentPackage();
+            if (args[0] instanceof Cons) {
+                LispObject list = args[0];
+                while (list != NIL) {
+                    pkg.usePackage(coerceToPackage(list.car()));
+                    list = list.cdr();
+                }
+            } else
+                pkg.usePackage(coerceToPackage(args[0]));
+            return T;
         }
     };
 
-    // ### package-use-list
-    // package-use-list package => use-list
-    private static final Primitive1 PACKAGE_USE_LIST =
-        new Primitive1("package-use-list") {
-        public LispObject execute(LispObject arg) throws LispError
+    // ### do-external-symbols
+    // do-external-symbols (var [package [result-form]]) declaration* {tag | statement}*
+    // => result*
+    // Should be a macro.
+    private static final SpecialOperator DO_EXTERNAL_SYMBOLS =
+        new SpecialOperator("do-external-symbols") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
         {
-            return coerceToPackage(arg).getUseList();
+            Block block = new Block(NIL, args.cdr());
+            args = args.car();
+            Symbol var = checkSymbol(args.car());
+            args = args.cdr();
+            final LispThread thread = LispThread.currentThread();
+            // Defaults.
+            Package pkg = getCurrentPackage();
+            LispObject resultForm = NIL;
+            if (args != NIL) {
+                pkg = coerceToPackage(eval(args.car(), env, thread));
+                args = args.cdr();
+                if (args != NIL)
+                    resultForm = args.car();
+            }
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            for (Iterator it = pkg.iterator(); it.hasNext();) {
+                Symbol symbol = (Symbol) it.next();
+                if (!symbol.isExternal())
+                    continue;
+                Environment ext = new Environment(env);
+                bind(var, symbol, ext);
+                LispObject body = block.getBody();
+                int depth = thread.getStackDepth();
+                try {
+                    while (body != NIL) {
+                        LispObject result = eval(body.car(), ext, thread);
+                        body = body.cdr();
+                    }
+                }
+                catch (Return ret) {
+                    if (ret.getName() == NIL) {
+                        thread.setStackDepth(depth);
+                        return ret.getResult();
+                    }
+                    throw ret;
+                }
+            }
+            Environment ext = new Environment(env);
+            bind(var, NIL, ext);
+            LispObject result = eval(resultForm, ext, thread);
+            thread.setDynamicEnvironment(oldDynEnv);
+            return result;
         }
     };
 
-    // ### package-used-by-list
-    // package-used-by-list package => used-by-list
-    private static final Primitive1 PACKAGE_USED_BY_LIST =
-        new Primitive1("package-used-by-list") {
-        public LispObject execute(LispObject arg) throws LispError
+    // ### package-symbols
+    // Internal.
+    private static final Primitive1 PACKAGE_SYMBOLS =
+        new Primitive1("package-symbols") {
+        public LispObject execute(LispObject arg) throws Condition
         {
-            return coerceToPackage(arg).getUsedByList();
+            Package pkg = coerceToPackage(arg);
+            return pkg.getSymbols();
         }
     };
 
