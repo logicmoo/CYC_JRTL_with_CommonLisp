@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.425 2003-09-23 12:42:27 piso Exp $
+ * $Id: Primitives.java,v 1.426 2003-09-23 13:02:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,77 +30,73 @@ import java.util.Random;
 public final class Primitives extends Module
 {
     // SpecialOperator
-    private static final int DO                         = 1;
-    private static final int DO_                        = 2;
-    private static final int FLET                       = 3;
-    private static final int LABELS                     = 4;
-    private static final int PROGN                      = 5;
+    private static final int FLET                       = 1;
+    private static final int LABELS                     = 2;
+    private static final int PROGN                      = 3;
 
     // Primitive
-    private static final int DIVIDE                     = 6;
-    private static final int EXIT                       = 7;
-    private static final int MAX                        = 8;
-    private static final int MIN                        = 9;
-    private static final int MULTIPLY                   = 10;
-    private static final int VALUES                     = 11;
+    private static final int DIVIDE                     = 4;
+    private static final int EXIT                       = 5;
+    private static final int MAX                        = 6;
+    private static final int MIN                        = 7;
+    private static final int MULTIPLY                   = 8;
+    private static final int VALUES                     = 9;
 
     // Primitive1
-    private static final int ABS                        = 12;
-    private static final int ARRAYP                     = 13;
-    private static final int ARRAY_HAS_FILL_POINTER_P   = 14;
-    private static final int BIT_VECTOR_P               = 15;
-    private static final int BOTH_CASE_P                = 16;
-    private static final int CHARACTERP                 = 17;
-    private static final int CHAR_CODE                  = 18;
-    private static final int CHAR_DOWNCASE              = 19;
-    private static final int CHAR_INT                   = 20;
-    private static final int CHAR_UPCASE                = 21;
-    private static final int CODE_CHAR                  = 22;
-    private static final int COMPILED_FUNCTION_P        = 23;
-    private static final int CONSP                      = 24;
-    private static final int EVAL                       = 25;
-    private static final int EVENP                      = 26;
-    private static final int FBOUNDP                    = 27;
-    private static final int FMAKUNBOUND                = 28;
-    private static final int FOURTH                     = 29;
-    private static final int FUNCTIONP                  = 30;
-    private static final int IDENTITY                   = 31;
-    private static final int KEYWORDP                   = 32;
-    private static final int LENGTH                     = 33;
-    private static final int LISTP                      = 34;
-    private static final int LOWER_CASE_P               = 35;
-    private static final int MAKE_SYMBOL                = 36;
-    private static final int MAKUNBOUND                 = 37;
-    private static final int NUMBERP                    = 38;
-    private static final int ODDP                       = 39;
-    private static final int PREDECESSOR                = 40;
-    private static final int SECOND                     = 41;
-    private static final int SIMPLE_BIT_VECTOR_P        = 42;
-    private static final int SIMPLE_STRING_P            = 43;
-    private static final int SIMPLE_VECTOR_P            = 44;
-    private static final int SPECIAL_OPERATOR_P         = 45;
-    private static final int STRINGP                    = 46;
-    private static final int SUCCESSOR                  = 47;
-    private static final int SYMBOL_FUNCTION            = 48;
-    private static final int SYMBOL_NAME                = 49;
-    private static final int SYMBOL_PACKAGE             = 50;
-    private static final int SYMBOL_PLIST               = 51;
-    private static final int SYMBOL_VALUE               = 52;
-    private static final int THIRD                      = 53;
-    private static final int UPPER_CASE_P               = 54;
-    private static final int VALUES_LIST                = 55;
-    private static final int VECTORP                    = 56;
+    private static final int ABS                        = 10;
+    private static final int ARRAYP                     = 11;
+    private static final int ARRAY_HAS_FILL_POINTER_P   = 12;
+    private static final int BIT_VECTOR_P               = 13;
+    private static final int BOTH_CASE_P                = 14;
+    private static final int CHARACTERP                 = 15;
+    private static final int CHAR_CODE                  = 16;
+    private static final int CHAR_DOWNCASE              = 17;
+    private static final int CHAR_INT                   = 18;
+    private static final int CHAR_UPCASE                = 19;
+    private static final int CODE_CHAR                  = 20;
+    private static final int COMPILED_FUNCTION_P        = 21;
+    private static final int CONSP                      = 22;
+    private static final int EVAL                       = 23;
+    private static final int EVENP                      = 24;
+    private static final int FBOUNDP                    = 25;
+    private static final int FMAKUNBOUND                = 26;
+    private static final int FOURTH                     = 27;
+    private static final int FUNCTIONP                  = 28;
+    private static final int IDENTITY                   = 29;
+    private static final int KEYWORDP                   = 30;
+    private static final int LENGTH                     = 31;
+    private static final int LISTP                      = 32;
+    private static final int LOWER_CASE_P               = 33;
+    private static final int MAKE_SYMBOL                = 34;
+    private static final int MAKUNBOUND                 = 35;
+    private static final int NUMBERP                    = 36;
+    private static final int ODDP                       = 37;
+    private static final int PREDECESSOR                = 38;
+    private static final int SECOND                     = 39;
+    private static final int SIMPLE_BIT_VECTOR_P        = 40;
+    private static final int SIMPLE_STRING_P            = 41;
+    private static final int SIMPLE_VECTOR_P            = 42;
+    private static final int SPECIAL_OPERATOR_P         = 43;
+    private static final int STRINGP                    = 44;
+    private static final int SUCCESSOR                  = 45;
+    private static final int SYMBOL_FUNCTION            = 46;
+    private static final int SYMBOL_NAME                = 47;
+    private static final int SYMBOL_PACKAGE             = 48;
+    private static final int SYMBOL_PLIST               = 49;
+    private static final int SYMBOL_VALUE               = 50;
+    private static final int THIRD                      = 51;
+    private static final int UPPER_CASE_P               = 52;
+    private static final int VALUES_LIST                = 53;
+    private static final int VECTORP                    = 54;
 
     // Primitive2
-    private static final int MEMBER                     = 57;
-    private static final int RPLACA                     = 58;
-    private static final int RPLACD                     = 59;
-    private static final int SET                        = 60;
+    private static final int MEMBER                     = 55;
+    private static final int RPLACA                     = 56;
+    private static final int RPLACD                     = 57;
+    private static final int SET                        = 58;
 
     private Primitives()
     {
-        defineSpecialOperator("do", DO);
-        defineSpecialOperator("do*", DO_);
         defineSpecialOperator("flet", FLET);
         defineSpecialOperator("labels", LABELS);
         defineSpecialOperator("progn", PROGN);
@@ -169,10 +165,6 @@ public final class Primitives extends Module
         throws ConditionThrowable
     {
         switch (index) {
-            case DO:
-                return _do(args, env, false);
-            case DO_:
-                return _do(args, env, true);
             case FLET:                          // ### flet
                 return _flet(args, env, false);
             case LABELS:                        // ### labels
@@ -1533,147 +1525,6 @@ public final class Primitives extends Module
             throw new ConditionThrowable(new TypeError("ECASE: no match for " + key));
         }
     };
-
-    private static final LispObject _do(LispObject args, Environment env,
-                                        boolean sequential)
-        throws ConditionThrowable
-    {
-        // Process variable specifications.
-        LispObject first = args.car();
-        args = args.cdr();
-        int length = first.length();
-        Symbol[] variables = new Symbol[length];
-        LispObject[] initials = new LispObject[length];
-        LispObject[] updates = new LispObject[length];
-        for (int i = 0; i < length; i++) {
-            LispObject obj = first.car();
-            if (obj instanceof Cons) {
-                variables[i] = checkSymbol(obj.car());
-                initials[i] = obj.cadr();
-                // Is there a step form?
-                if (obj.cdr().cdr() != NIL)
-                    updates[i] = obj.cdr().cdr().car();
-            } else {
-                // Not a cons, must be a symbol.
-                variables[i] = checkSymbol(obj);
-                initials[i] = NIL;
-            }
-            first = first.cdr();
-        }
-        final LispThread thread = LispThread.currentThread();
-        Environment oldDynEnv = thread.getDynamicEnvironment();
-        Environment ext = new Environment(env);
-        for (int i = 0; i < length; i++) {
-            Symbol symbol = variables[i];
-            LispObject value =
-                eval(initials[i], (sequential ? ext : env), thread);
-            bind(symbol, value, ext);
-        }
-        LispObject second = args.car();
-        LispObject test = second.car();
-        LispObject resultForms = second.cdr();
-        LispObject body = args.cdr();
-        final int depth = thread.getStackDepth();
-        // Look for tags.
-        Binding tags = null;
-        LispObject remaining = args;
-        while (remaining != NIL) {
-            LispObject current = remaining.car();
-            remaining = remaining.cdr();
-            if (current instanceof Cons)
-                continue;
-            // It's a tag.
-            tags = new Binding(current, remaining, tags);
-        }
-        try {
-            // Implicit block.
-            while (true) {
-                // Execute body.
-                // Test for termination.
-                if (eval(test, ext, thread) != NIL)
-                    break;
-                remaining = body;
-                while (remaining != NIL) {
-                    LispObject current = remaining.car();
-                    if (current instanceof Cons) {
-                        try {
-                            // Handle GO inline if possible.
-                            if (current.car() == Symbol.GO) {
-                                LispObject code = null;
-                                LispObject tag = current.cadr();
-                                for (Binding binding = tags; binding != null; binding = binding.next) {
-                                    if (binding.symbol.eql(tag)) {
-                                        code = binding.value;
-                                        break;
-                                    }
-                                }
-                                if (code != null) {
-                                    remaining = code;
-                                    continue;
-                                }
-                                throw new Go(tag);
-                            }
-                            eval(current, ext, thread);
-                        }
-                        catch (Go go) {
-                            LispObject code = null;
-                            LispObject tag = go.getTag();
-                            for (Binding binding = tags; binding != null; binding = binding.next) {
-                                if (binding.symbol.eql(tag)) {
-                                    code = binding.value;
-                                    break;
-                                }
-                            }
-                            if (code != null) {
-                                remaining = code;
-                                thread.setStackDepth(depth);
-                                continue;
-                            }
-                            throw go;
-                        }
-                    }
-                    remaining = remaining.cdr();
-                }
-                // Update variables.
-                if (sequential) {
-                    for (int i = 0; i < length; i++) {
-                        LispObject update = updates[i];
-                        if (update != null)
-                            rebind(variables[i], eval(update, ext, thread), ext);
-                    }
-                } else {
-                    // Evaluate step forms.
-                    LispObject results[] = new LispObject[length];
-                    for (int i = 0; i < length; i++) {
-                        LispObject update = updates[i];
-                        if (update != null) {
-                            LispObject result = eval(update, ext, thread);
-                            results[i] = result;
-                        }
-                    }
-                    // Update variables.
-                    for (int i = 0; i < length; i++) {
-                        if (results[i] != null) {
-                            Symbol symbol = variables[i];
-                            rebind(symbol, results[i], ext);
-                        }
-                    }
-                }
-            }
-            LispObject result = progn(resultForms, ext, thread);
-            return result;
-        }
-        catch (Return ret) {
-            if (ret.getTag() == NIL) {
-                thread.setStackDepth(depth);
-                return ret.getResult();
-            }
-            throw ret;
-        }
-        finally {
-            thread.setDynamicEnvironment(oldDynEnv);
-        }
-    }
 
     // ### dolist
     private static final SpecialOperator DOLIST = new SpecialOperator("dolist") {
