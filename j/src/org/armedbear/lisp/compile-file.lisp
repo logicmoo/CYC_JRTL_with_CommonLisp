@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.35 2004-08-25 00:59:54 piso Exp $
+;;; $Id: compile-file.lisp,v 1.36 2004-08-25 17:44:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -98,7 +98,9 @@
                         (%format t ";  ~A => ~A.cls~%" name
                                  (pathname-name (pathname classfile-name)))
                         (setf form
-                              `(fset ',name (load-compiled-function ,classfile) ,*source-position*))
+                              `(fset ',name
+                                     (load-compiled-function ,(enough-namestring classfile))
+                                     ,*source-position*))
                         (when compile-time-too
                           (fset name compiled-function)))
                       (progn
@@ -134,10 +136,11 @@
                             (if (special-operator-p name)
                                 `(%put ',name 'macroexpand-macro
                                        (make-macro (load-compiled-function
-                                                    ,classfile)))
+                                                    ,(enough-namestring classfile))))
                                 `(fset ',name
                                        (make-macro (load-compiled-function
-                                                    ,classfile)) ,*source-position*))))
+                                                    ,(enough-namestring classfile)))
+                                       ,*source-position*))))
                     (%format t ";  Unable to compile macro ~A~%" name)))))
            (DEFTYPE
             (eval form))
