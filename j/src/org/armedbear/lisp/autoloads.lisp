@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.163 2004-09-29 00:48:24 piso Exp $
+;;; $Id: autoloads.lisp,v 1.164 2004-09-29 19:06:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -149,7 +149,7 @@
 (autoload 'compile-file)
 (autoload 'compile-file-pathname)
 
-(autoload '(pprint pprint-newline copy-pprint-dispatch) "pprint")
+(autoload '(pprint pprint-newline) "pprint")
 (autoload-macro 'pprint-logical-block "pprint")
 (autoload 'format "format")
 (autoload-macro 'formatter "format")
