@@ -1,8 +1,8 @@
 /*
  * CVS.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CVS.java,v 1.1.1.1 2002-09-24 16:07:49 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: CVS.java,v 1.2 2003-04-21 01:37:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,10 +75,15 @@ public final class CVS implements Constants
         new Thread(commandRunnable).start();
     }
 
-    private static void cvsCompleted(Editor editor, Buffer buffer, String cmd, String output)
+    private static void cvsCompleted(Editor editor, Buffer buffer, String cmd,
+        String output)
     {
         if (output != null && output.length() > 0) {
-            OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
+            Buffer buf;
+            if (cmd.startsWith("cvs diff"))
+                buf = new DiffOutputBuffer(buffer, output, VC_CVS);
+            else
+                buf = OutputBuffer.getOutputBuffer(output);
             buf.setTitle(cmd);
             editor.makeNext(buf);
             editor.activateInOtherWindow(buf);
