@@ -63,8 +63,24 @@ public final class FindTagTextFieldHandler extends DefaultTextFieldHandler
         List tags = findMatchingTags(buffer, pattern);
         if (tags != null) {
             if (tags.size() > 1) {
+                // Can we get a unique match if we just consider methods and
+                // explicit tags?
+                ArrayList shortList = new ArrayList();
+                for (Iterator it = tags.iterator(); it.hasNext();) {
+                    Tag tag = (Tag) it.next();
+                    if (tag instanceof LocalTag) {
+                        int type = ((LocalTag)tag).getType();
+                        if (type == TAG_METHOD || type == TAG_EXPLICIT)
+                            shortList.add(tag);
+                    }
+                }
+                if (shortList.size() == 1)
+                    tags = shortList;
+            }
+            if (tags.size() > 1) {
                 editor.setDefaultCursor();
-                ListTagsBuffer buf = new ListTagsBuffer(editor, "findTag", pattern, tags);
+                ListTagsBuffer buf =
+                    new ListTagsBuffer(editor, "findTag", pattern, tags);
                 editor.makeNext(buf);
                 Editor ed = editor.activateInOtherWindow(buf);
                 ed.setDot(buf.getInitialDotPos());
