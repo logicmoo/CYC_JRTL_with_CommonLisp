@@ -75,6 +75,7 @@ char-code
 char-downcase
 char-equal
 char-greaterp
+char-int
 char-lessp
 char-not-equal
 char-not-greaterp
