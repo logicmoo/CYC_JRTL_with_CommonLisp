@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.20 2003-10-12 18:21:17 piso Exp $
+ * $Id: LispThread.java,v 1.21 2003-11-12 21:31:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -316,6 +316,18 @@ public final class LispThread extends LispObject
             }
         }
         return Primitives.NREVERSE.execute(result);
+    }
+
+    public void incrementCallCounts()
+    {
+        for (int i = stack.size(); i-- > 0;) {
+            StackFrame frame = (StackFrame) stack.get(i);
+            if (frame != null) {
+                LispObject functional = frame.getFunctional();
+                if (functional != null)
+                    functional.incrementCallCount();
+            }
+        }
     }
 
     private static void pprint(LispObject obj, int indentBy,
