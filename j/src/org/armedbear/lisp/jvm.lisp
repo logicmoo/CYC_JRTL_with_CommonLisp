@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.375 2005-01-28 03:38:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.376 2005-01-29 16:24:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2624,7 +2624,8 @@
     (unless (symbolp op)
       (error "COMPILE-FUNCTION-CALL ~S is not a symbol" op))
     (when (find-local-function op)
-      (return-from compile-function-call (compile-local-function-call form target)))
+      (return-from compile-function-call
+                   (compile-local-function-call form target representation)))
     (let ((numargs (length args)))
       (case (length args)
         (1
@@ -2719,7 +2720,7 @@
       (emit 'aload register)
       (emit 'aastore))))
 
-(defun compile-local-function-call (form target)
+(defun compile-local-function-call (form target representation)
   (let* ((compiland *current-compiland*)
          (op (car form))
          (args (cdr form))
@@ -2795,15 +2796,9 @@
                (result-type +lisp-object+))
           (emit-invokevirtual +lisp-object-class+ "execute" arg-types result-type)))
 
-    (cond ((null target)
-           (emit 'pop)
-           (maybe-emit-clear-values form))
-          ((eq target :stack))
-          ((fixnump target)
-           (emit 'astore target))
-          (t
-           (%format t "line 1876~%")
-           (aver nil)))
+    (when (eq representation :unboxed-fixnum)
+      (emit-unbox-fixnum))
+    (emit-move-from-stack target representation)
     (when saved-vars
       (restore-variables saved-vars))))
 
