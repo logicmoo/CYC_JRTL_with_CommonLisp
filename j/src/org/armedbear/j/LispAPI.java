@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.33 2004-04-12 17:31:57 piso Exp $
+ * $Id: LispAPI.java,v 1.34 2004-04-12 23:02:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,7 +88,9 @@ public final class LispAPI extends Lisp
             return (Editor) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "editor"));
+            signal(new TypeError("The value " + obj + " is not an editor."));
+            // Not reached.
+            return null;
         }
     }
 
@@ -101,7 +103,9 @@ public final class LispAPI extends Lisp
             return (Buffer) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "buffer"));
+            signal(new TypeError("The value " + obj + " is not a buffer."));
+            // Not reached.
+            return null;
         }
     }
 
@@ -114,7 +118,9 @@ public final class LispAPI extends Lisp
             return (Position) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "marker"));
+            signal(new TypeError("The value " + obj + " is not a marker."));
+            // Not reached.
+            return null;
         }
     }
 
@@ -127,7 +133,9 @@ public final class LispAPI extends Lisp
             return (Line) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "line"));
+            signal(new TypeError("The value " + obj + " is not a line."));
+            // Not reached.
+            return null;
         }
     }
 
@@ -802,6 +810,16 @@ public final class LispAPI extends Lisp
             else
                 editor.unmark();
             return arg;
+        }
+    };
+
+    private static final Primitive0 UNDO =
+        new Primitive0("undo", PACKAGE_J, true)
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            Editor.currentEditor().undo();
+            return NIL;
         }
     };
 
