@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.546 2003-12-27 17:01:38 piso Exp $
+ * $Id: Primitives.java,v 1.547 2004-01-01 01:34:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3294,7 +3294,9 @@ public final class Primitives extends Lisp
 
     // ### close
     // close stream &key abort => result
-    private static final Primitive CLOSE = new Primitive("close","stream &key abort") {
+    private static final Primitive CLOSE =
+        new Primitive("close", "stream &key abort")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
@@ -3310,8 +3312,8 @@ public final class Primitives extends Lisp
                 if (args[1] == Keyword.ABORT)
                     abort = args[2];
                 else
-                    signal(new LispError(
-                        "CLOSE: unrecognized keyword argument: " + args[1]));
+                    signal(new ProgramError("Unrecognized keyword argument " +
+                                            args[1] + "."));
             }
             return stream.close(abort);
         }
