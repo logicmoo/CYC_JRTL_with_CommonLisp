@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.569 2004-02-15 17:54:27 piso Exp $
+ * $Id: Primitives.java,v 1.570 2004-02-16 01:12:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1692,6 +1692,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### adjustable-array-p
     private static final Primitive1 ADJUSTABLE_ARRAY_P =
         new Primitive1("adjustable-array-p", "array")
     {
