@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.432 2003-09-23 15:43:08 piso Exp $
+ * $Id: Primitives.java,v 1.433 2003-09-23 16:25:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3970,7 +3970,7 @@ public final class Primitives extends Module
                 if (count.signum() > 0)
                     throw new ConditionThrowable(new LispError("can't represent result of left shift"));
                 if (count.signum() < 0)
-                    return Fixnum.ZERO;
+                    return n.signum() >= 0 ? Fixnum.ZERO : new Fixnum(-1);
                 Debug.bug(); // Shouldn't happen.
             }
             throw new ConditionThrowable(new TypeError(second, "integer"));
