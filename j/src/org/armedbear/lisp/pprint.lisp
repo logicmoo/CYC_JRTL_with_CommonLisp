@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.35 2004-10-04 15:40:13 piso Exp $
+;;; $Id: pprint.lisp,v 1.36 2004-10-04 16:33:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -51,22 +51,12 @@
 (defvar *print-shared* nil)
 (export '(*print-shared*))
 
-(defvar *print-pprint-dispatch* t ;see initialization at end of file.
-  "controls pretty printing of output")
-(defvar *print-right-margin* nil
-  "+#/nil the right margin for pretty printing")
-(defvar *print-miser-width* 40.
-  "+#/nil miser format starts when there is less than this width left")
-(defvar *print-lines* nil
-  "+#/nil truncates printing after # lines")
 (defvar *default-right-margin* 70.
   "controls default line length; must be a non-negative integer")
 (defvar *last-abbreviated-printing*
 	#'(lambda (&optional stream) (declare (ignore stream)) nil)
   "funcalling this redoes the last xp printing that was abbreviated.")
 
-(defvar *ipd* nil ;see initialization at end of file.
-  "initial print dispatch table.")
 (defvar *current-level* 0
   "current depth in logical blocks.")
 (defvar *current-length* 0
@@ -112,13 +102,13 @@
   (defvar suffix-min-size 256.))
 
 (defstruct (xp-structure (:conc-name nil) #+nil (:print-function describe-xp))
-  (BASE-STREAM nil) ;;The stream io eventually goes to.
-  LINEL ;;The line length to use for formatting.
-  LINE-LIMIT ;;If non-NIL the max number of lines to print.
-  LINE-NO ;;number of next line to be printed.
-  CHAR-MODE ;;NIL :UP :DOWN :CAP0 :CAP1 :CAPW
-  CHAR-MODE-COUNTER ;depth of nesting of ~(...~)
-  DEPTH-IN-BLOCKS
+  (base-stream nil) ;;The stream io eventually goes to.
+  line-length ;;The line length to use for formatting.
+  line-limit ;;If non-NIL the max number of lines to print.
+  line-no ;;number of next line to be printed.
+  char-mode ;;NIL :UP :DOWN :CAP0 :CAP1 :CAPW
+  char-mode-counter ;depth of nesting of ~(...~)
+  depth-in-blocks
    ;;Number of logical blocks at QRIGHT that are started but not ended.
   (BLOCK-STACK (make-array #.block-stack-min-size)) BLOCK-STACK-PTR
    ;;This stack is pushed and popped in accordance with the way blocks are
@@ -281,67 +271,6 @@
 
 (defmacro Qnext (index) `(+ ,index #.queue-entry-size))
 
-#+nil
-(defvar *describe-xp-streams-fully* nil "Set to T to see more info.")
-
-#+nil
-(defun describe-xp (xp s depth)
-    (declare (ignore depth))
-  (cl:format s "#<XP stream ")
-  (if (not (base-stream xp))
-      (cl:format s "not currently in use")
-      (cl:format s "outputting to ~S" (base-stream xp)))
-  (when (base-stream xp)
-    (cl:format s "~&buffer= ~S" (subseq (buffer xp) 0 (max (buffer-ptr xp) 0)))
-    (when (not *describe-xp-streams-fully*) (cl:princ " ..." s))
-    (when *describe-xp-streams-fully*
-      (cl:format s "~&   pos   _123456789_123456789_123456789_123456789")
-      (cl:format s "~&depth-in-blocks= ~D linel= ~D line-no= ~D line-limit= ~D"
-		   (depth-in-blocks xp) (linel xp) (line-no xp) (line-limit xp))
-      (when (or (char-mode xp) (not (zerop (char-mode-counter xp))))
-	(cl:format s "~&char-mode= ~S char-mode-counter= ~D"
-		     (char-mode xp) (char-mode-counter xp)))
-      (unless (minusp (block-stack-ptr xp))
-	(cl:format s "~&section-start")
-	(do ((save (block-stack-ptr xp)))
-	    ((minusp (block-stack-ptr xp)) (setf (block-stack-ptr xp) save))
-	  (cl:format s " ~D" (section-start xp))
-	  (pop-block-stack xp)))
-      (cl:format s "~&linel= ~D charpos= ~D buffer-ptr= ~D buffer-offset= ~D"
-		   (linel xp) (charpos xp) (buffer-ptr xp) (buffer-offset xp))
-      (unless (minusp (prefix-stack-ptr xp))
-	(cl:format s "~&prefix= ~S"
-		     (subseq (prefix xp) 0 (max (prefix-ptr xp) 0)))
-	(cl:format s "~&suffix= ~S"
-		     (subseq (suffix xp) 0 (max (suffix-ptr xp) 0))))
-      (unless (> (Qleft xp) (Qright xp))
-	(cl:format s "~&ptr type         kind           pos depth end offset arg")
-	(do ((p (Qleft xp) (Qnext p))) ((> p (Qright xp)))
-	  (cl:format s "~&~4A~13A~15A~4A~6A~4A~7A~A"
-	    (/ (- p (Qleft xp)) #.queue-entry-size)
-	    (Qtype xp p)
-	    (if (member (Qtype xp p) '(:newline :ind)) (Qkind xp p) "")
-	    (BP<-TP xp (Qpos xp p))
-	    (Qdepth xp p)
-	    (if (not (member (Qtype xp p) '(:newline :start-block))) ""
-		(and (Qend xp p)
-		     (/ (- (+ p (Qend xp p)) (Qleft xp)) #.queue-entry-size)))
-	    (if (not (eq (Qtype xp p) :start-block)) ""
-		(and (Qoffset xp p)
-		     (/ (- (+ p (Qoffset xp p)) (Qleft xp)) #.queue-entry-size)))
-	    (if (not (member (Qtype xp p) '(:ind :start-block :end-block))) ""
-		(Qarg xp p)))))
-      (unless (minusp (prefix-stack-ptr xp))
-	(cl:format s "~&initial-prefix-ptr prefix-ptr suffix-ptr non-blank start-line")
-	(do ((save (prefix-stack-ptr xp)))
-	    ((minusp (prefix-stack-ptr xp)) (setf (prefix-stack-ptr xp) save))
-	  (cl:format s "~& ~19A~11A~11A~10A~A"
-		       (initial-prefix-ptr xp) (prefix-ptr xp) (suffix-ptr xp)
-		       (non-blank-prefix-ptr xp) (section-start-line xp))
-	  (pop-prefix-stack xp)))))
-    (cl:princ ">" s)
-    (values))
-
 ;This maintains a list of XP structures.  We save them
 ;so that we don't have to create new ones all of the time.
 ;We have separate objects so that many can be in use at once.
@@ -366,9 +295,9 @@
 
 (defun initialize-xp (xp stream)
   (setf (base-stream xp) stream)
-  (setf (linel xp) (max 0 (cond (*print-right-margin*)
-				((output-width stream))
-				(T *default-right-margin*))))
+  (setf (line-length xp) (max 0 (cond (*print-right-margin*)
+                                      ((output-width stream))
+                                      (t *default-right-margin*))))
   (setf (line-limit xp) *print-lines*)
   (setf (line-no xp) 1)
   (setf (char-mode xp) nil)
@@ -442,13 +371,13 @@
 	  (when (null next-newline) (return nil))
 	  (pprint-newline+ :unconditional xp)
 	  (setq start (1+ sub-end)))))
-
-;note this checks (> BUFFER-PTR LINEL) instead of (> (LP<-BP) LINEL)
+
+;note this checks (> BUFFER-PTR LINE-LENGTH) instead of (> (LP<-BP) LINE-LENGTH)
 ;this is important so that when things are longer than a line they
-;end up getting printed in chunks of size LINEL.
+;end up getting printed in chunks of size LINE-LENGTH.
 
 (defun write-char++ (char xp)
-  (when (> (buffer-ptr xp) (linel xp))
+  (when (> (buffer-ptr xp) (line-length xp))
     (force-some-output xp))
   (let ((new-buffer-end (1+ (buffer-ptr xp))))
     (check-size xp buffer new-buffer-end)
@@ -458,11 +387,11 @@
 
 (defun force-some-output (xp)
   (attempt-to-output xp nil nil)
-  (when (> (buffer-ptr xp) (linel xp)) ;only if printing off end of line
+  (when (> (buffer-ptr xp) (line-length xp)) ;only if printing off end of line
     (attempt-to-output xp T T)))
 
 (defun write-string++ (string xp start end)
-  (when (> (buffer-ptr xp) (linel xp))
+  (when (> (buffer-ptr xp) (line-length xp))
     (force-some-output xp))
   (write-string+++ string xp start end))
 
@@ -557,7 +486,7 @@
 ;a place where it cannot make a decision yet.
 
 (defmacro maybe-too-large (xp Qentry)
-  `(let ((limit (linel ,xp)))
+  `(let ((limit (line-length ,xp)))
      (when (eql (line-limit ,xp) (line-no ,xp)) ;prevents suffix overflow
        (decf limit 2) ;3 for " .." minus 1 for space (heuristic)
        (when (not (minusp (prefix-stack-ptr ,xp)))
@@ -569,7 +498,7 @@
 
 (defmacro misering? (xp)
   `(and *print-miser-width*
-	(<= (- (linel ,xp) (initial-prefix-ptr ,xp)) *print-miser-width*)))
+	(<= (- (line-length ,xp) (initial-prefix-ptr ,xp)) *print-miser-width*)))
 
 ;If flush-out? is T and force-newlines? is NIL then the buffer,
 ;prefix-stack, and queue will be in an inconsistent state after the call.
@@ -953,7 +882,8 @@
 
 (defun princ-to-string (object)
   (with-output-to-string (stream)
-    (let ((*print-escape* nil))
+    (let ((*print-escape* nil)
+          (*print-readably* nil))
       (basic-write object stream))))
 
 (defun write-char (char &optional (stream *standard-output*))

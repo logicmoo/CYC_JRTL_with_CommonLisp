@@ -1,7 +1,7 @@
 ;;; pprint-dispatch.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint-dispatch.lisp,v 1.1 2004-09-29 18:59:30 piso Exp $
+;;; $Id: pprint-dispatch.lisp,v 1.2 2004-10-04 16:33:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,6 +45,9 @@
 
 (in-package #:xp)
 
+(defvar *ipd* nil ;see initialization at end of file.
+  "initial print dispatch table.")
+
 (defstruct (pprint-dispatch-table (:conc-name nil) (:copier nil))
   (conses-with-cars (make-hash-table :test #'eq) :type hash-table)
   (structures (make-hash-table :test #'eq) :type hash-table)
@@ -60,7 +63,8 @@
   (full-spec nil))  ;list of priority and type specifier
 
 (defun copy-pprint-dispatch (&optional (table *print-pprint-dispatch*))
-  (when (null table) (setf table *IPD*))
+  (unless table
+    (setf table *ipd*))
   (let* ((new-conses-with-cars
           (make-hash-table :test #'eq
                            :size (max (hash-table-count (conses-with-cars table)) 32)))
@@ -151,7 +155,7 @@
 
 (defun pprint-dispatch (object &optional (table *print-pprint-dispatch*))
   (unless table
-    (setf table *IPD*))
+    (setf table *ipd*))
   (let ((fn (get-printer object table)))
     (values (or fn #'non-pretty-print) (not (null fn)))))
 
@@ -230,69 +234,69 @@
 
 
 
-(setq *IPD* (make-pprint-dispatch-table))
+(setq *ipd* (make-pprint-dispatch-table))
 
-(set-pprint-dispatch+ '(satisfies function-call-p) 'fn-call '(-5) *IPD*)
-(set-pprint-dispatch+ 'cons 'pprint-fill '(-10) *IPD*)
+(set-pprint-dispatch+ '(satisfies function-call-p) 'fn-call '(-5) *ipd*)
+(set-pprint-dispatch+ 'cons 'pprint-fill '(-10) *ipd*)
 
-(set-pprint-dispatch+ '(cons (member block)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member case)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member catch)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member ccase)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member compiler-let)) 'let-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member cond)) 'cond-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member ctypecase)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member defconstant)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member define-setf-method)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member defmacro)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member define-modify-macro)) 'dmm-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member defparameter)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member defsetf)) 'defsetf-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member define-setf-method)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member defstruct)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member deftype)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member defun)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member defvar)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member do)) 'do-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member do*)) 'do-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member do-all-symbols)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member do-external-symbols)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member do-symbols)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member dolist)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member dotimes)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member ecase)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member etypecase)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member eval-when)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member flet)) 'flet-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member function)) 'function-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member labels)) 'flet-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member lambda)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member let)) 'let-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member let*)) 'let-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member locally)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member loop)) 'pretty-loop '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member macrolet)) 'flet-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member multiple-value-bind)) 'mvb-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member multiple-value-setq)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member prog)) 'prog-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member prog*)) 'prog-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member progv)) 'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member psetf)) 'setq-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member psetq)) 'setq-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member quote)) 'quote-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member return-from)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member setf)) 'setq-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member setq)) 'setq-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member tagbody)) 'tagbody-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member throw)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member typecase)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member unless)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member unwind-protect)) 'up-print '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member when)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member with-input-from-string)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member with-open-file)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member with-open-stream)) 'block-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member with-output-to-string)) 'block-like '(0) *IPD*)
+(set-pprint-dispatch+ '(cons (member block)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member case)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member catch)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member ccase)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member compiler-let)) 'let-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member cond)) 'cond-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member ctypecase)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member defconstant)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member define-setf-method)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member defmacro)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member define-modify-macro)) 'dmm-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member defparameter)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member defsetf)) 'defsetf-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member define-setf-method)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member defstruct)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member deftype)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member defun)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member defvar)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member do)) 'do-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member do*)) 'do-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member do-all-symbols)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member do-external-symbols)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member do-symbols)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member dolist)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member dotimes)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member ecase)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member etypecase)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member eval-when)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member flet)) 'flet-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member function)) 'function-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member labels)) 'flet-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member lambda)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member let)) 'let-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member let*)) 'let-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member locally)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member loop)) 'pretty-loop '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member macrolet)) 'flet-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member multiple-value-bind)) 'mvb-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member multiple-value-setq)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member prog)) 'prog-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member prog*)) 'prog-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member progv)) 'defun-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member psetf)) 'setq-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member psetq)) 'setq-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member quote)) 'quote-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member return-from)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member setf)) 'setq-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member setq)) 'setq-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member tagbody)) 'tagbody-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member throw)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member typecase)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member unless)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member unwind-protect)) 'up-print '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member when)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member with-input-from-string)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member with-open-file)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member with-open-stream)) 'block-like '(0) *ipd*)
+(set-pprint-dispatch+ '(cons (member with-output-to-string)) 'block-like '(0) *ipd*)
 
 (defun pprint-dispatch-print (xp table)
   (let ((stuff (copy-list (others table))))
@@ -313,6 +317,6 @@
 
 (setf (get 'pprint-dispatch-table 'structure-printer) #'pprint-dispatch-print)
 
-(set-pprint-dispatch+ 'pprint-dispatch-table #'pprint-dispatch-print '(0) *IPD*)
+(set-pprint-dispatch+ 'pprint-dispatch-table #'pprint-dispatch-print '(0) *ipd*)
 
 (setf *print-pprint-dispatch* (copy-pprint-dispatch nil))
