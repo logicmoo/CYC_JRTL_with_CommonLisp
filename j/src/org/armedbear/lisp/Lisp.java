@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.107 2003-07-27 15:58:35 piso Exp $
+ * $Id: Lisp.java,v 1.108 2003-07-27 18:47:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +29,6 @@ public abstract class Lisp
     // Packages.
     public static final Package PACKAGE_CL =
         Packages.createPackage("COMMON-LISP", 1024);
-    static {
-        PACKAGE_CL.addInitialExports(Exports.COMMON_LISP_SYMBOL_NAMES);
-    }
     public static final Package PACKAGE_CL_USER =
         Packages.createPackage("COMMON-LISP-USER", 1024);
     public static final Package PACKAGE_SYS =
@@ -59,11 +56,15 @@ public abstract class Lisp
     public static final Package PACKAGE_KEYWORD =
         Packages.createPackage("KEYWORD", 1024);
 
+    static {
+        PACKAGE_CL.addInitialExports(Exports.COMMON_LISP_SYMBOL_NAMES);
+    }
+
     // ### nil
     public static final LispObject NIL = new Nil(PACKAGE_CL);
 
     // End-of-file marker.
-    /*package*/ static final LispObject EOF = new LispObject();
+    public static final LispObject EOF = new LispObject();
 
     // Types.
     static final int TYPE_SYMBOL            = 0x00000001;
@@ -728,6 +729,14 @@ public abstract class Lisp
                                        LispObject defaultValue)
         throws LispError
     {
+        LispObject result = get(symbol, indicator);
+        return result != null ? result : defaultValue;
+    }
+
+    // Returns null if there is no property with the specified indicator.
+    public static final LispObject get(Symbol symbol, LispObject indicator)
+        throws LispError
+    {
         LispObject list = checkList(symbol.getPropertyList());
         while (list != NIL) {
             LispObject obj = list.car();
@@ -735,7 +744,7 @@ public abstract class Lisp
                 return list.cadr();
             list = list.cddr();
         }
-        return defaultValue;
+        return null;
     }
 
     public static final LispObject put(Symbol symbol, LispObject indicator,
