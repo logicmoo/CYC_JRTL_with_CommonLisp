@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.134 2005-01-24 19:15:06 piso Exp $
+;;; $Id: clos.lisp,v 1.135 2005-01-31 17:27:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -902,7 +902,9 @@
                      #'std-compute-discriminating-function
                      #'compute-discriminating-function)
                  gf))
-  (setf (fdefinition (generic-function-name gf)) gf)
+  ;; FIXME Do we need to warn on redefinition somewhere else?
+  (let ((*warn-on-redefinition* nil))
+    (setf (fdefinition (generic-function-name gf)) gf))
   (clrhash (classes-to-emf-table gf))
   (values))
 
