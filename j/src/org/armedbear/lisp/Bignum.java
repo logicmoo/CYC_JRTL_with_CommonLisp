@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.23 2003-08-15 17:18:02 piso Exp $
+ * $Id: Bignum.java,v 1.24 2003-08-16 18:22:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,7 @@ public final class Bignum extends LispObject
         else if (obj instanceof Fixnum)
             divisor = ((Fixnum)obj).getBigInteger();
         else
-            throw new LispError("not implemented");
+            throw new LispError("Bignum.truncate(): not implemented: " + obj.typeOf());
 
         BigInteger[] results = value.divideAndRemainder(divisor);
         BigInteger quotient = results[0];
