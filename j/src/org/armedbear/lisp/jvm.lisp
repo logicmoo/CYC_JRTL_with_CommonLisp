@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.110 2004-04-16 05:57:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.111 2004-04-16 20:06:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -381,16 +381,6 @@
 
 (defun pool-name (name)
   (pool-get (list 1 (length name) name)))
-
-;; "org.armedbear.lisp.LispObject" => "Lorg/armedbear/lisp/LispObject;"
-;; (defun type-descriptor (type)
-;;   (unless (find #\. type)
-;;     (setq type (concatenate 'string "org.armedbear.lisp." type)))
-;;   (let ((res (concatenate 'string "L" type ";")))
-;;     (dotimes (i (length res))
-;;       (when (eql (char res i) #\.)
-;;         (setf (char res i) #\/)))
-;;     res))
 
 (defun pool-name-and-type (name type)
   (let* ((name-index (pool-name name))
@@ -1622,6 +1612,13 @@
 
 (defvar *toplevel-defuns* nil)
 
+(defun process-args (args)
+  (dolist (arg args)
+    (compile-form arg)
+    (unless (remove-store-value)
+      (emit-push-value))
+    (maybe-emit-clear-values arg)))
+
 (defun compile-function-call (fun args &optional for-effect)
 ;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
   (unless (symbolp fun)
@@ -1638,11 +1635,6 @@
             ((= numargs 3)
              (when (compile-function-call-3 fun args)
                (return-from compile-function-call)))))
-
-    ;; FIXME This shouldn't go here! Do this in the constructor of the
-    ;; compiled function!
-;;     (resolve fun)
-
     (cond
      ((setf local-function
             (find fun *local-functions* :key #'local-function-name))
@@ -1656,7 +1648,7 @@
         (emit 'getstatic
               *this-class*
               g
-              "Lorg/armedbear/lisp/LispObject;")))
+              +lisp-object+)))
      ((eq fun *defun-name*)
       (emit 'aload 0)) ; this
      ((or (sys::built-in-function-p fun) (memq fun *toplevel-defuns*))
@@ -1664,14 +1656,7 @@
         (emit 'getstatic
               *this-class*
               f
-              "Lorg/armedbear/lisp/LispObject;")))
-;;      ((memq fun *toplevel-defuns*)
-;;       (format t "Recognized toplevel-defun ~S~%" fun)
-;;       (let ((f (declare-function fun)))
-;;         (emit 'getstatic
-;;               *this-class*
-;;               f
-;;               "Lorg/armedbear/lisp/LispObject;")))
+              +lisp-object+)))
      (t
       (let ((g (declare-symbol fun)))
         (emit 'getstatic
@@ -1689,61 +1674,25 @@
                            "()Lorg/armedbear/lisp/LispObject;"
                            0))
       (1
-       (compile-form (first args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (first args))
+       (process-args args)
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                            -1))
       (2
-       (compile-form (first args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (first args))
-       (compile-form (second args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (second args))
+       (process-args args)
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                            -2))
       (3
-       (compile-form (first args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (first args))
-       (compile-form (second args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (second args))
-       (compile-form (third args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (third args))
+       (process-args args)
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                            -3))
       (4
-       (compile-form (first args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (first args))
-       (compile-form (second args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (second args))
-       (compile-form (third args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (third args))
-       (compile-form (fourth args))
-       (unless (remove-store-value)
-         (emit-push-value))
-       (maybe-emit-clear-values (fourth args))
+       (process-args args)
        (emit-invokevirtual +lisp-object-class+
                            "execute"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
