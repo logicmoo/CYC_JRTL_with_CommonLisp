@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.61 2005-02-26 02:51:00 piso Exp $
+;;; $Id: compile-file.lisp,v 1.62 2005-03-13 15:07:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -282,7 +282,10 @@
            (t
             (when (and (symbolp (car form))
                        (macro-function (car form)))
-              (process-toplevel-form (macroexpand form) stream compile-time-too)
+              ;; Note that we want MACROEXPAND-1 and not MACROEXPAND here, in
+              ;; case the form being expanded expands into something that needs
+              ;; special handling by PROCESS-TOPLEVEL-FORM (e.g. DEFMACRO).
+              (process-toplevel-form (macroexpand-1 form) stream compile-time-too)
               (return-from process-toplevel-form))
             (when compile-time-too
               (eval form))))))
