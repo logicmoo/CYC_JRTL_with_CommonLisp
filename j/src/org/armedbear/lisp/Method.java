@@ -2,7 +2,7 @@
  * Method.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Method.java,v 1.3 2004-10-11 23:13:46 piso Exp $
+ * $Id: Method.java,v 1.4 2004-10-24 00:38:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,37 @@ public final class Method extends StandardObject
     public void setSpecializers(LispObject specializers)
     {
         this.specializers = specializers;
+    }
+
+    public String writeToString() throws ConditionThrowable
+    {
+        if (genericFunction instanceof GenericFunction) {
+            LispObject name =
+                ((GenericFunction)genericFunction).getGenericFunctionName();
+            if (name != null) {
+                StringBuffer sb = new StringBuffer("#<");
+                sb.append(getLispClass().getSymbol().writeToString());
+                sb.append(' ');
+                sb.append(name.writeToString());
+                if (specializers != null) {
+                    LispObject specs = specializers;
+                    LispObject names = NIL;
+                    while (specs != NIL) {
+                        LispObject spec = specs.car();
+                        if (spec instanceof LispClass)
+                            names = names.push(((LispClass)spec).getSymbol());
+                        else
+                            names = names.push(spec);
+                        specs = specs.cdr();
+                    }
+                    sb.append(' ');
+                    sb.append(names.nreverse().writeToString());
+                }
+                sb.append('>');
+                return sb.toString();
+            }
+        }
+        return super.writeToString();
     }
 
     private static final Primitive1 _METHOD_GENERIC_FUNCTION =
