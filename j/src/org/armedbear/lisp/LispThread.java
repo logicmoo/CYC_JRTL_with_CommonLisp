@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.35 2004-05-09 14:15:31 piso Exp $
+ * $Id: LispThread.java,v 1.36 2004-05-10 00:19:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -404,7 +404,7 @@ public final class LispThread extends LispObject
                 sb.append(' ');
             stream._writeString(sb.toString());
         }
-        String raw = String.valueOf(obj);
+        String raw = obj.writeToString();
         if (stream.getCharPos() + raw.length() < 80) {
             // It fits.
             stream._writeString(raw);
