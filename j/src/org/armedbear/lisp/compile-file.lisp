@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.38 2004-08-27 16:17:16 piso Exp $
+;;; $Id: compile-file.lisp,v 1.39 2004-08-27 19:24:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@
 
 (defun verify-load (classfile)
   (and classfile
-       (let ((*default-pathname-defaults* *compile-file-pathname*))
+       (let ((*default-pathname-defaults* *output-file-pathname*))
          (report-error
           (load-compiled-function classfile)))))
 
