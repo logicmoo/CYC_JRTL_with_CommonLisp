@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.40 2003-10-01 21:46:37 piso Exp $
+;;; $Id: compiler.lisp,v 1.41 2003-10-02 14:37:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -111,7 +111,9 @@
        (cons first
              (mapcar #'compile-sexp (cdr form))))
       (FUNCTION
-       (cons 'function (list (compile-sexp (cadr form)))))
+       (if (and (consp (cadr form)) (eq (caadr form) 'setf))
+           form
+           (cons 'function (list (compile-sexp (cadr form))))))
       (WHEN
        (cons 'when (mapcar #'compile-sexp (cdr form))))
       ((LET LET*)
