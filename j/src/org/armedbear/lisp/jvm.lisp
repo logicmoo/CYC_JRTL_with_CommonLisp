@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.260 2004-08-01 15:16:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.261 2004-08-01 15:17:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2321,7 +2321,6 @@
     (emit-move-from-stack target)))
 
 (defun compile-multiple-value-call (form &key (target *val*))
-  (%format t "COMPILE-MULTIPLE-VALUE-CALL~%")
   (case (length form)
     (2
      (compile-form (second form) :target :stack)
