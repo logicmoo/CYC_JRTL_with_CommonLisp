@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.62 2004-05-17 22:20:21 piso Exp $
+ * $Id: Pathname.java,v 1.63 2004-05-21 12:31:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -286,6 +286,16 @@ public class Pathname extends LispObject
     public boolean equalp(LispObject obj) throws ConditionThrowable
     {
         return equal(obj);
+    }
+
+    public int hashCode()
+    {
+        return (host.hashCode() ^
+                device.hashCode() ^
+                directory.hashCode() ^
+                name.hashCode() ^
+                type.hashCode() ^
+                version.hashCode());
     }
 
     private boolean matches(Pathname wildcard) throws ConditionThrowable
