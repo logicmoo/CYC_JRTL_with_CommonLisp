@@ -1,8 +1,8 @@
 /*
  * make_array.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.26 2005-03-23 18:30:55 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: make_array.java,v 1.27 2005-03-24 14:28:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,13 +73,17 @@ public final class make_array extends Primitive
                 displacement = 0;
             if (rank == 1) {
                 AbstractVector v;
-                if (array.getElementType() == Symbol.CHARACTER) {
+                LispObject arrayElementType = array.getElementType();
+                if (arrayElementType == Symbol.CHARACTER)
                     v = new ComplexString(dimv[0], array, displacement);
-                } else if (array.getElementType() == Symbol.BIT) {
+                else if (arrayElementType == Symbol.BIT)
                     v = new ComplexBitVector(dimv[0], array, displacement);
-                } else {
+                else if (arrayElementType.equal(UNSIGNED_BYTE_8))
+                    v = new ComplexVector_UnsignedByte8(dimv[0], array, displacement);
+                else if (arrayElementType.equal(UNSIGNED_BYTE_32))
+                    v = new ComplexVector_UnsignedByte32(dimv[0], array, displacement);
+                else
                     v = new ComplexVector(dimv[0], array, displacement);
-                }
                 if (fillPointer != NIL)
                     v.setFillPointer(fillPointer);
                 return v;
