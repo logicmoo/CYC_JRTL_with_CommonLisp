@@ -2,7 +2,7 @@
  * Menu.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Menu.java,v 1.5 2003-06-12 23:45:55 piso Exp $
+ * $Id: Menu.java,v 1.6 2003-06-13 00:56:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,10 @@ public final class Menu extends JMenu implements Constants
     public MenuItem add(Editor editor, String label, char mnemonic,
         String command, boolean enabled)
     {
-        KeyMapping mapping = editor.getKeyMapping(command);
+        Object[] values = editor.getKeyMapping(command);
+        Debug.assertTrue(values != null);
+        Debug.assertTrue(values.length == 2);
+        KeyMapping mapping = (KeyMapping) values[0];
         String keyText = mapping != null ? mapping.getKeyText() : "";
         if (keyText.length() == 3) {
             if (keyText.charAt(0) == '\'' && keyText.charAt(2) == '\'')
