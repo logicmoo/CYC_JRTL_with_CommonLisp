@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.65 2003-09-04 14:40:48 piso Exp $
+ * $Id: Symbol.java,v 1.66 2003-09-08 13:33:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,6 +108,7 @@ public class Symbol extends LispObject
     public static final Symbol ERROR                = PACKAGE_CL.addExternalSymbol("ERROR");
     public static final Symbol CONTROL_ERROR        = PACKAGE_CL.addExternalSymbol("CONTROL-ERROR");
     public static final Symbol PACKAGE_ERROR        = PACKAGE_CL.addExternalSymbol("PACKAGE-ERROR");
+    public static final Symbol PARSE_ERROR          = PACKAGE_CL.addExternalSymbol("PARSE-ERROR");
     public static final Symbol PROGRAM_ERROR        = PACKAGE_CL.addExternalSymbol("PROGRAM-ERROR");
     public static final Symbol SIMPLE_ERROR         = PACKAGE_CL.addExternalSymbol("SIMPLE-ERROR");
     public static final Symbol STREAM_ERROR         = PACKAGE_CL.addExternalSymbol("STREAM-ERROR");
