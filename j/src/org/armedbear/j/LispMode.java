@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.42 2003-05-07 01:32:13 piso Exp $
+ * $Id: LispMode.java,v 1.43 2003-05-25 12:19:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
         km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
         km.mapKey(KeyEvent.VK_PERIOD, ALT_MASK, "findTagAtDot");
+        km.mapKey(KeyEvent.VK_PERIOD, CTRL_MASK | ALT_MASK, "findTagAtDotOtherWindow");
         km.mapKey(KeyEvent.VK_L, CTRL_MASK | SHIFT_MASK, "listTags");
         km.mapKey(')', "closeParen");
         km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
