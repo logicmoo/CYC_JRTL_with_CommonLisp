@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.2 2004-02-26 02:12:25 piso Exp $
+ * $Id: SimpleArray.java,v 1.3 2004-02-26 19:50:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,15 +25,16 @@ public final class SimpleArray extends AbstractArray
 {
     private final int[] dimv;
     private final LispObject elementType;
+    private final int totalSize;
     private final LispObject[] data;
 
     public SimpleArray(int[] dimv, LispObject elementType)
     {
         this.dimv = dimv;
         this.elementType = elementType;
-        int size = computeTotalSize(dimv);
-        data = new LispObject[size];
-        for (int i = 0; i < size; i++)
+        totalSize = computeTotalSize(dimv);
+        data = new LispObject[totalSize];
+        for (int i = totalSize; i-- > 0;)
             data[i] = NIL;
     }
 
@@ -50,8 +51,8 @@ public final class SimpleArray extends AbstractArray
             dimv[i] = rest.length();
             rest = rest.elt(0);
         }
-        int size = computeTotalSize(dimv);
-        data = new LispObject[size];
+        totalSize = computeTotalSize(dimv);
+        data = new LispObject[totalSize];
         setInitialContents(0, dimv, initialContents, 0);
     }
 
@@ -68,8 +69,8 @@ public final class SimpleArray extends AbstractArray
                 break;
             rest = rest.elt(0);
         }
-        int size = computeTotalSize(dimv);
-        data = new LispObject[size];
+        totalSize = computeTotalSize(dimv);
+        data = new LispObject[totalSize];
         setInitialContents(0, dimv, initialContents, 0);
     }
 
@@ -163,7 +164,12 @@ public final class SimpleArray extends AbstractArray
 
     public int getTotalSize()
     {
-        return data.length;
+        return totalSize;
+    }
+
+    public boolean isAdjustable()
+    {
+        return false;
     }
 
     public LispObject getRowMajor(int index) throws ConditionThrowable
@@ -188,7 +194,7 @@ public final class SimpleArray extends AbstractArray
 
     public void fill(LispObject obj)
     {
-        for (int i = data.length; i-- > 0;)
+        for (int i = totalSize; i-- > 0;)
             data[i] = obj;
     }
 
@@ -200,6 +206,52 @@ public final class SimpleArray extends AbstractArray
         sb.append('A');
         appendContents(dimv, 0, sb);
         return sb.toString();
+    }
+
+    public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
+                                     LispObject initialContents)
+        throws ConditionThrowable
+    {
+        if (initialContents != NIL)
+            return new SimpleArray(dimv, elementType, initialContents);
+        for (int i = 0; i < dimv.length; i++) {
+            if (dimv[i] != this.dimv[i]) {
+                SimpleArray newArray = new SimpleArray(dimv, elementType);
+                newArray.fill(initialElement);
+                copyArray(this, newArray);
+                return newArray;
+            }
+        }
+        // New dimensions are identical to old dimensions.
+        return this;
+    }
+
+    // Copy a1 to a2 for index tuples that are valid for both arrays.
+    private static void copyArray(AbstractArray a1, AbstractArray a2)
+        throws ConditionThrowable
+    {
+        Debug.assertTrue(a1.getRank() == a2.getRank());
+        int[] subscripts = new int[a1.getRank()];
+        int axis = 0;
+        copySubArray(a1, a2, subscripts, axis);
+    }
+
+    private static void copySubArray(AbstractArray a1, AbstractArray a2,
+                                     int[] subscripts, int axis)
+        throws ConditionThrowable
+    {
+        if (axis < subscripts.length) {
+            final int limit =
+                Math.min(a1.getDimension(axis), a2.getDimension(axis));
+            for (int i = 0; i < limit; i++) {
+                subscripts[axis] = i;
+                copySubArray(a1, a2, subscripts, axis + 1);
+            }
+        } else {
+            int i1 = a1.getRowMajorIndex(subscripts);
+            int i2 = a2.getRowMajorIndex(subscripts);
+            a2.setRowMajor(i2, a1.getRowMajor(i1));
+        }
     }
 
     public AbstractArray adjustArray(int[] dimv, AbstractArray displacedTo,
