@@ -2,7 +2,7 @@
  * DirectoryCache.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: DirectoryCache.java,v 1.3 2002-11-30 18:37:40 piso Exp $
+ * $Id: DirectoryCache.java,v 1.4 2003-02-11 17:28:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,8 +70,10 @@ public final class DirectoryCache
                 break;
             }
         }
-        entries.add(new DirectoryCacheEntry(file, listing,
-            System.currentTimeMillis()));
+        if (listing != null && listing.length() > 0) {
+            entries.add(new DirectoryCacheEntry(file, listing,
+                System.currentTimeMillis()));
+        }
     }
 
     public synchronized void purge(String hostname)
@@ -96,7 +98,7 @@ public final class DirectoryCache
             }
         }
     }
-    
+
     private static class PruneDirectoryCacheTask extends IdleThreadTask
     {
         private static PruneDirectoryCacheTask instance;
