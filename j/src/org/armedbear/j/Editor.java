@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.110 2003-08-07 17:55:31 piso Exp $
+ * $Id: Editor.java,v 1.111 2003-08-08 13:46:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1579,6 +1579,8 @@ public final class Editor extends JPanel implements Constants,
             final Line dotLine = getDotLine();
             int indent;
             if (mode.canIndent()) {
+                if (buffer.needsRenumbering())
+                    buffer.renumber();
                 getFormatter().parseBuffer();
                 indent = mode.getCorrectIndentation(dotLine, buffer);
             } else {
