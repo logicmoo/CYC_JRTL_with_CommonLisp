@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.169 2005-01-31 12:35:27 piso Exp $
+ * $Id: Symbol.java,v 1.170 2005-01-31 16:31:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,6 +187,8 @@ public class Symbol extends LispObject
 
     public static final Symbol DOUBLE_FLOAT_POSITIVE_INFINITY     = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-POSITIVE-INFINITY");
     public static final Symbol DOUBLE_FLOAT_NEGATIVE_INFINITY     = PACKAGE_EXT.addExternalSymbol("DOUBLE-FLOAT-NEGATIVE-INFINITY");
+
+    public static final Symbol STYLE_WARN                         = PACKAGE_EXT.addExternalSymbol("STYLE-WARN");
 
     // Bit flags.
     private static final int FLAG_SPECIAL           = 0x0001;
