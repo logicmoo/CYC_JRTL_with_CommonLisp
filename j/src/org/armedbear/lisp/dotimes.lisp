@@ -1,7 +1,7 @@
 ;;; dotimes.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: dotimes.lisp,v 1.2 2004-07-07 15:17:10 piso Exp $
+;;; $Id: dotimes.lisp,v 1.3 2004-12-11 18:16:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,30 +19,38 @@
 
 (in-package "SYSTEM")
 
-(defmacro dotimes ((var count &optional (result nil)) &body decls-and-code)
-  (multiple-value-bind (code decls) (parse-body decls-and-code nil)
+(defmacro dotimes ((var count &optional (result nil)) &body body)
+  (multiple-value-bind (forms decls) (parse-body body nil)
     (if (numberp count)
-        (let ((tag (gensym)))
+        (let ((top (gensym "TOP-"))
+              (test (gensym "TEST-")))
           `(block nil
              (let ((,var 0))
                ,@decls
                (tagbody
-                ,tag
-                (if (>= ,var ,count)
-                    (return-from nil (progn ,result)))
-                ,@code
+                (go ,test)
+                ,top
+                ,@forms
                 (setq ,var (1+ ,var))
-                (go ,tag)))))
-        (let ((limit (gensym))
-              (tag (gensym)))
+                ,test
+                (when (< ,var ,count)
+                  (go ,top))
+                (return-from nil (progn ,result))
+                ))))
+        (let ((limit (gensym "LIMIT-"))
+              (top (gensym "TOP-"))
+              (test (gensym "TEST-")))
           `(block nil
              (let ((,limit ,count)
                    (,var 0))
                ,@decls
                (tagbody
-                ,tag
-                (if (>= ,var ,limit)
-                    (return-from nil (progn ,result)))
-                ,@code
+                (go ,test)
+                ,top
+                ,@forms
                 (setq ,var (1+ ,var))
-                (go ,tag))))))))
+                ,test
+                (when (< ,var ,limit)
+                  (go ,top))
+                (return-from nil (progn ,result))
+                )))))))
