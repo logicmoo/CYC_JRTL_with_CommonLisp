@@ -1,8 +1,8 @@
 /*
  * MessageDialog.java
  *
- * Copyright (C) 1999-2002 Peter Graves
- * $Id: MessageDialog.java,v 1.1.1.1 2002-09-24 16:09:26 piso Exp $
+ * Copyright (C) 1999-2003 Peter Graves
+ * $Id: MessageDialog.java,v 1.2 2003-06-13 15:35:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JTextArea;
@@ -90,5 +91,10 @@ public class MessageDialog extends AbstractDialog
                     break;
             }
         }
+    }
+
+    public void windowActivated(WindowEvent e)
+    {
+        requestFocus();
     }
 }
