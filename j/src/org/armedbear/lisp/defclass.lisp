@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.16 2003-10-12 16:15:30 piso Exp $
+;;; $Id: defclass.lisp,v 1.17 2003-10-12 18:23:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -680,7 +680,8 @@
                      #'compute-discriminating-function)
                  gf))
   (setf (fdefinition (generic-function-name gf))
-        (generic-function-discriminating-function gf))
+;;         (generic-function-discriminating-function gf))
+        gf)
   (clrhash (classes-to-emf-table gf))
   (values))
 
