@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.135 2005-01-31 17:27:18 piso Exp $
+;;; $Id: clos.lisp,v 1.136 2005-02-02 16:50:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -135,10 +135,13 @@
                       name))
              (setf documentation (cadr olist))) ;; FIXME documentation is ignored
             (:reader
+             (maybe-note-name-defined (cadr olist))
              (push-on-end (cadr olist) readers))
             (:writer
+             (maybe-note-name-defined (cadr olist))
              (push-on-end (cadr olist) writers))
             (:accessor
+             (maybe-note-name-defined (cadr olist))
              (push-on-end (cadr olist) readers)
              (push-on-end `(setf ,(cadr olist)) writers))
             (t
@@ -154,6 +157,10 @@
           ,@(when readers `(:readers ',readers))
           ,@(when writers `(:writers ',writers))
           ,@other-options))))
+
+(defun maybe-note-name-defined (name)
+  (when (fboundp 'jvm::note-name-defined)
+    (jvm::note-name-defined name)))
 
 (defun canonicalize-direct-superclasses (direct-superclasses)
   (let ((classes '()))
