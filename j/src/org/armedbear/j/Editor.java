@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.12 2002-10-30 18:47:25 piso Exp $
+ * $Id: Editor.java,v 1.13 2002-10-30 20:37:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2384,6 +2384,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                     Debug.assertTrue(macro != null);
                     if (!command.equals("recordMacro") && !command.equals("playbackMacro"))
                         macro.record(command);
+                }
+                if (command.length() > 0 && command.charAt(0) == '(') {
+                    // Lisp form.
+                    executeCommand(command);
+                    return true;
                 }
                 String[] array = parseCommand(command);
                 if (array != null) {
