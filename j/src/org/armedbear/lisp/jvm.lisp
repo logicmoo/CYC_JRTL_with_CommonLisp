@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.234 2004-07-23 00:37:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.235 2004-07-23 19:27:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -63,7 +63,11 @@
 
 (defvar *handlers* ())
 
-(defstruct handler from to code catch-type)
+(defstruct handler
+  from
+  to
+  code
+  catch-type)
 
 ;; Variables visible at the current point of compilation.
 (defvar *visible-variables* ())
@@ -964,6 +968,8 @@
 (defvar *enable-optimization* t)
 
 (defun optimize-code ()
+  (unless *enable-optimization*
+    (format t "optimizations are disabled~%"))
   (when *enable-optimization*
     (when *debug*
       (%format t "----- before optimization -----~%")
@@ -2397,6 +2403,8 @@
          (*blocks* *blocks*)
          (*register* *register*)
          env-register)
+;;     (format t "entering COMPILE-BLOCK ~S *support-non-local-returns* is T~%" name)
+;;     (format t "compiland = ~S~%" (compiland-name *current-compiland*))
     (push block *blocks*)
     (when (contains-return body)
       ;; Save current dynamic environment.
@@ -2407,7 +2415,74 @@
 
     (cond (*support-non-local-returns*
            (setf (block-catch-tag block) (gensym))
-           (compile-form (list* 'CATCH `',(block-catch-tag block) body) :target target))
+
+;;            (compile-form (list* 'CATCH `',(block-catch-tag block) body) :target target)
+;;            (setf form (list* 'CATCH `',(block-catch-tag block) body))
+
+           (if (= (length form) 2) ; (block foo)
+               (when target
+                 (emit-push-nil)
+                 (emit-move-from-stack target))
+               (let* ((*register* *register*)
+                      (tag-register (allocate-register))
+                      (label1 (gensym))
+                      (label2 (gensym))
+                      (label3 (gensym))
+                      (label4 (gensym))
+                      (label5 (gensym)))
+;;                  (format t "tag-register = ~S~%" tag-register)
+                 (compile-form `',(block-catch-tag block) :target tag-register) ; Tag.
+;;                  (emit-push-current-thread)
+;;                  (emit 'aload tag-register)
+;;                  (emit-invokevirtual +lisp-thread-class+
+;;                                      "pushCatchTag"
+;;                                      "(Lorg/armedbear/lisp/LispObject;)V"
+;;                                      -2) ; Stack depth is 0.
+                 (emit 'label label1) ; Start of protected range.
+                 ;; Implicit PROGN.
+                 (do ((forms body (cdr forms)))
+                     ((null forms))
+                   (compile-form (car forms) :target (if (cdr forms) nil target))
+                   (when (cdr forms)
+                     (maybe-emit-clear-values (car forms))))
+                 (emit 'label label2) ; End of protected range.
+                 (emit 'goto label5) ; Jump over handlers.
+
+                 ; Start of handler for Return.
+                 (emit 'label label3)
+                 ;; The Return object is on the runtime stack. Stack depth is 1.
+                 (emit 'dup) ; Stack depth is 2.
+                 (emit 'getfield "org/armedbear/lisp/Return" "tag" +lisp-object+) ; Still 2.
+                 (emit 'aload tag-register) ; Stack depth is 3.
+                 ;; If it's not the tag we're looking for, we branch to the start of the
+                 ;; catch-all handler, which will do a re-throw.
+                 (emit 'if_acmpne label4) ; Stack depth is 1.
+                 (emit 'getfield "org/armedbear/lisp/Return" "result" +lisp-object+)
+                 (emit-move-from-stack target) ; Stack depth is 0.
+                 (emit 'goto label5)
+
+                 ; Start of catch-all handler.
+                 (emit 'label label4)
+                 ;; A Throwable object is on the runtime stack here. Stack depth is 1.
+                 (emit 'athrow) ; And we're gone.
+                 (emit 'label label5)
+                 ;; Finally...
+                 (let ((handler1 (make-handler :from label1
+                                               :to label2
+                                               :code label3
+                                               :catch-type (pool-class "org/armedbear/lisp/Return")))
+;;                        (handler2 (make-handler :from label1
+;;                                                :to label2
+;;                                                :code label4
+;;                                                :catch-type 0))
+                       )
+;;                    (when *debug*
+;;                      (%format t "handler1 from ~S to ~S code at ~S~%" label1 label2 label3)
+;;                      (%format t "handler2 from ~S to ~S code at ~S~%" label1 label2 label4))
+                   (push handler1 *handlers*)
+;;                    (push handler2 *handlers*)
+                   )))
+           )
           (t
            ;; Compile subforms.
            (do ((subforms body (cdr subforms)))
@@ -2424,7 +2499,38 @@
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
       (emit 'aload env-register)
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))
+;;     (format t "leaving COMPILE-BLOCK ~S~%" name)
+    )
+  )
+
+;; (defun rewrite-throw (form)
+;;   (let ((args (cdr form)))
+;;     (if (unsafe-p args)
+;;         (let ((syms ())
+;;               (lets ())
+;;               (wrap-result-form nil))
+;;           ;; Tag.
+;;           (let ((arg (first args)))
+;;             (if (constantp arg)
+;;                 (push arg syms)
+;;                 (let ((sym (gensym)))
+;;                   (push sym syms)
+;;                   (push (list sym arg) lets))))
+;;           ;; Result. "If the result-form produces multiple values, then all the
+;;           ;; values are saved."
+;;           (let ((arg (second args)))
+;;             (if (constantp arg)
+;;                 (push arg syms)
+;;                 (let ((sym (gensym)))
+;;                   (cond ((single-valued-p arg)
+;;                          (push sym syms)
+;;                          (push (list sym arg) lets))
+;;                         (t
+;;                          (push (list 'VALUES-LIST sym) syms)
+;;                          (push (list sym (list 'MULTIPLE-VALUE-LIST arg)) lets))))))
+;;           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
+;;         form)))
 
 (defun compile-return-from (form &key (target *val*))
   (let* ((name (second form))
@@ -2437,8 +2543,26 @@
       (compile-form result-form :target (block-target block))
       (emit 'goto (block-exit block)))
      (*support-non-local-returns*
-      (%format t "COMPILE-RETURN-FROM: block not local: ~S~%" name)
-      (compile-form (list 'THROW `',(block-catch-tag block) result-form) :target target))
+;;       (%format t "COMPILE-RETURN-FROM: block not local: ~S~%" name)
+;;       (compile-form (list 'THROW `',(block-catch-tag block) result-form) :target target)
+;;       (emit-push-current-thread)
+      (emit 'new "org.armedbear.lisp.Return")
+      (emit 'dup)
+      (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+      (compile-form (third form) :target :stack) ; Result.
+;;       (emit-invokevirtual +lisp-thread-class+
+;;                           "throwReturn"
+;;                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+;;                           -3)
+      (emit-invokespecial "org.armedbear.lisp.Return"
+                          "<init>"
+                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                          -3)
+      (emit 'athrow)
+      ;; Following code will not be reached.
+      (when target
+        (emit-push-nil)
+        (emit-move-from-stack target)))
      (t
       (error "COMPILE-RETURN-FROM: block not local: ~S" name)))))
 
@@ -3562,9 +3686,25 @@
 
       (finalize-code)
       (optimize-code)
+
+;;       (dolist (handler *handlers*)
+;;         (format t "from = ~S (~S) to = ~S (~S)~%"
+;;                 (handler-from handler)
+;;                 (symbol-value (handler-from handler))
+;;                 (handler-to handler)
+;;                 (symbol-value (handler-to handler))))
+
       (setf *code* (resolve-opcodes *code*))
       (setf (method-max-stack execute-method) (analyze-stack))
       (setf (method-code execute-method) (code-bytes *code*))
+
+;;       (format t "before: (length *handlers*) = ~S~%" (length *handlers*))
+      ;; Remove handlers if the protected range is empty.
+      (delete-if (lambda (handler) (eql (symbol-value (handler-from handler))
+                                        (symbol-value (handler-to handler))))
+                 *handlers*)
+;;       (format t "after:  (length *handlers*) = ~S~%" (length *handlers*))
+
       (setf (method-max-locals execute-method) *registers-allocated*)
       (setf (method-handlers execute-method) (nreverse *handlers*))
       (write-class-file args body execute-method classfile))))
