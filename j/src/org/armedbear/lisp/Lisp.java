@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.321 2005-02-18 14:31:11 piso Exp $
+ * $Id: Lisp.java,v 1.322 2005-02-26 17:31:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,7 +225,7 @@ public abstract class Lisp
         public LispObject execute(LispObject object) throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            Symbol.MINUS.setSymbolValue(object);
+            thread.setSpecialVariable(Symbol.MINUS, object);
             LispObject result;
             try {
                 result = thread.execute(Symbol.EVAL.getSymbolFunction(), object);
@@ -234,6 +234,8 @@ public abstract class Lisp
                 return signal(new LispError("Out of memory."));
             }
             catch (StackOverflowError e) {
+                thread.setSpecialVariable(_SAVED_BACKTRACE_,
+                                          thread.backtraceAsList(0));
                 return signal(new StorageCondition("Stack overflow."));
             }
             catch (ConditionThrowable t) {
@@ -241,28 +243,34 @@ public abstract class Lisp
             }
             catch (Throwable t) {
                 Debug.trace(t);
-                thread.bindSpecial(_SAVED_BACKTRACE_,
-                                   thread.backtraceAsList(0));
+                thread.setSpecialVariable(_SAVED_BACKTRACE_,
+                                          thread.backtraceAsList(0));
                 return signal(new LispError("Caught " + t + "."));
             }
             Debug.assertTrue(result != null);
-            Symbol.STAR_STAR_STAR.setSymbolValue(Symbol.STAR_STAR.getSymbolValue());
-            Symbol.STAR_STAR.setSymbolValue(Symbol.STAR.getSymbolValue());
-            Symbol.STAR.setSymbolValue(result);
-            Symbol.PLUS_PLUS_PLUS.setSymbolValue(Symbol.PLUS_PLUS.getSymbolValue());
-            Symbol.PLUS_PLUS.setSymbolValue(Symbol.PLUS.getSymbolValue());
-            Symbol.PLUS.setSymbolValue(Symbol.MINUS.getSymbolValue());
+            thread.setSpecialVariable(Symbol.STAR_STAR_STAR,
+                                      thread.safeSymbolValue(Symbol.STAR_STAR));
+            thread.setSpecialVariable(Symbol.STAR_STAR,
+                                      thread.safeSymbolValue(Symbol.STAR));
+            thread.setSpecialVariable(Symbol.STAR, result);
+            thread.setSpecialVariable(Symbol.PLUS_PLUS_PLUS,
+                                      thread.safeSymbolValue(Symbol.PLUS_PLUS));
+            thread.setSpecialVariable(Symbol.PLUS_PLUS,
+                                      thread.safeSymbolValue(Symbol.PLUS));
+            thread.setSpecialVariable(Symbol.PLUS,
+                                      thread.safeSymbolValue(Symbol.MINUS));
             LispObject[] values = thread.getValues();
-            Symbol.SLASH_SLASH_SLASH.setSymbolValue(Symbol.SLASH_SLASH.getSymbolValue());
-            Symbol.SLASH_SLASH.setSymbolValue(Symbol.SLASH.getSymbolValue());
+            thread.setSpecialVariable(Symbol.SLASH_SLASH_SLASH,
+                                      thread.safeSymbolValue(Symbol.SLASH_SLASH));
+            thread.setSpecialVariable(Symbol.SLASH_SLASH,
+                                      thread.safeSymbolValue(Symbol.SLASH));
             if (values != null) {
                 LispObject slash = NIL;
                 for (int i = values.length; i-- > 0;)
                     slash = new Cons(values[i], slash);
-                Symbol.SLASH.setSymbolValue(slash);
-            } else {
-                Symbol.SLASH.setSymbolValue(new Cons(result));
-            }
+                thread.setSpecialVariable(Symbol.SLASH, slash);
+            } else
+                thread.setSpecialVariable(Symbol.SLASH, new Cons(result));
             return result;
         }
     };
@@ -838,15 +846,28 @@ public abstract class Lisp
     }
 
     public static final LispObject getUpgradedArrayElementType(LispObject type)
+        throws ConditionThrowable
     {
-        if (type == Symbol.CHARACTER || type == Symbol.BASE_CHAR || type == Symbol.STANDARD_CHAR)
-            return Symbol.CHARACTER;
+        if (type instanceof Symbol) {
+            if (type == Symbol.CHARACTER ||
+                type == Symbol.BASE_CHAR ||
+                type == Symbol.STANDARD_CHAR)
+                return Symbol.CHARACTER;
+            if (type == Symbol.BIT)
+                return Symbol.BIT;
+            if (type == NIL)
+                return NIL;
+        }
         if (type == BuiltInClass.CHARACTER)
             return Symbol.CHARACTER;
-        if (type == Symbol.BIT)
-            return Symbol.BIT;
-        if (type == NIL)
-            return NIL;
+        if (type instanceof Cons) {
+            if (type.car() == Symbol.INTEGER) {
+                if (type.cadr().eql(Fixnum.ZERO)) {
+                    if (type.cdr().cadr().eql(Fixnum.ONE))
+                        return Symbol.BIT;
+                }
+            }
+        }
         return T;
     }
 
@@ -859,7 +880,7 @@ public abstract class Lisp
             return (LispCharacter) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "character"));
+            signal(new TypeError(obj, Symbol.CHARACTER));
             // Not reached.
             return null;
         }
@@ -874,7 +895,7 @@ public abstract class Lisp
             return (Package) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "package"));
+            signal(new TypeError(obj, Symbol.PACKAGE));
             // Not reached.
             return null;
         }
