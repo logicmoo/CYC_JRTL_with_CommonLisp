@@ -1,0 +1,70 @@
+;;; fdefinition.lisp
+;;;
+;;; Copyright (C) 2005 Peter Graves
+;;; $Id: fdefinition.lisp,v 1.1 2005-02-11 19:34:01 piso Exp $
+;;;
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License
+;;; as published by the Free Software Foundation; either version 2
+;;; of the License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+(in-package #:system)
+
+(defun check-redefinition (name)
+  (when (and *warn-on-redefinition* (fboundp name))
+    (cond ((symbolp name)
+           (let ((old-definition (symbol-function name))
+                 (old-source (source-pathname name))
+                 (current-source (or *fasl-source* *load-truename* :top-level)))
+             (unless (equal old-source current-source)
+               (if (eq current-source :top-level)
+                   (style-warn "redefining ~S at top level" name)
+                   (let ((*package* +cl-package+))
+                     (style-warn "redefining ~S in ~S" name current-source)))))))))
+
+(defun record-source-information (name &optional source-pathname source-position)
+  (unless source-pathname
+    (setf source-pathname (or *fasl-source* *load-truename* :top-level)))
+  (let ((source (if source-position
+                    (cons source-pathname source-position)
+                    source-pathname)))
+    (cond ((symbolp name)
+           (%put name '%source source)))))
+
+(defun fset (name function &optional source-position arglist)
+  (cond ((symbolp name)
+         (check-redefinition name)
+         (record-source-information name nil source-position)
+         (when arglist
+           (%set-arglist function arglist))
+         (%set-symbol-function name function))
+        ((and (consp name) (eq (car name) 'SETF))
+         (check-redefinition name)
+         (record-source-information name nil source-position)
+         ;; FIXME arglist
+         (setf (get (cadr name) '%SETF-FUNCTION) function))
+        (t
+         (error 'type-error "~S is not a valid function name." name))))
+
+(defun fdefinition (name)
+  (cond ((symbolp name)
+         (symbol-function name))
+        ((and (consp name) (eq (car name) 'SETF))
+         (or (get (cadr name) '%setf-function)
+             (error 'undefined-function :name name)))
+        (t
+         (error 'type-error "~S is not a valid function name." name))))
+
+(defun %set-fdefinition (name function)
+  (fset name function))
+
+(defsetf fdefinition %set-fdefinition)
