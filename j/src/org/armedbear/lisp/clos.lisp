@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.106 2004-06-17 11:50:44 piso Exp $
+;;; $Id: clos.lisp,v 1.107 2004-06-24 12:17:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -950,6 +950,8 @@
   (make-closure lambda-expr env))
 
 (defmacro defmethod (&rest args &environment env)
+  (when (and env (empty-environment-p env))
+    (setf env nil))
   (multiple-value-bind
     (function-name qualifiers lambda-list specializers documentation declarations body)
     (parse-defmethod args)
@@ -971,7 +973,8 @@
                         :specializers ,specializers-form
                         :documentation ,documentation
                         :declarations ',declarations
-                        :body ',body)))))
+                        :body ',body
+                        :environment ,env)))))
 
 (defun canonicalize-specializers (specializers)
   (mapcar #'canonicalize-specializer specializers))
