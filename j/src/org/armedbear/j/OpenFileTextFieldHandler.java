@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.2 2002-11-27 17:37:45 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.3 2002-11-29 16:41:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -372,17 +372,17 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
         if (entry.startsWith("http:") || entry.startsWith("https:") ||
             entry.startsWith("ftp:"))
             return;
-        String completion = null;
         File dir = editor.getCurrentDirectory();
-        if (dir != null) {
-            if (dir.isLocal() && Utilities.isFilenameAbsolute(entry) ||
-                entry.startsWith("..")) {
-                File file = File.getInstance(dir, entry);
-                if (file != null)
-                    completion = getCompletion(file.canonicalPath());
-            } else
-                completion = getCompletion(entry);
-        }
+        if (dir == null)
+            return;
+        String completion = null;
+        if (dir.isLocal() &&
+            (Utilities.isFilenameAbsolute(entry) || entry.startsWith(".."))) {
+            File file = File.getInstance(dir, entry);
+            if (file != null)
+                completion = getCompletion(file.canonicalPath());
+        } else
+            completion = getCompletion(entry);
         if (completion != null && !completion.equals(entry)) {
             textField.setText(completion);
             textField.setCaretPosition(completion.length());
