@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.63 2003-09-15 15:48:48 piso Exp $
+ * $Id: Autoload.java,v 1.64 2003-09-16 13:30:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,8 @@ public final class Autoload extends Function
     }
 
     private static final Primitive AUTOLOAD =
-        new Primitive("autoload", PACKAGE_SYS, true) {
+        new Primitive("autoload", PACKAGE_SYS, true)
+    {
         public LispObject execute(LispObject first) throws LispError
         {
             if (first instanceof Symbol) {
@@ -149,6 +150,24 @@ public final class Autoload extends Function
                 return T;
             }
             throw new TypeError(first);
+        }
+    };
+
+    // ### resolve
+    // Force autoload to be resolved.
+    private static final Primitive1 RESOLVE =
+        new Primitive1("resolve", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws Condition
+        {
+            Symbol symbol = checkSymbol(arg);
+            LispObject fun = symbol.getSymbolFunction();
+            if (fun instanceof Autoload) {
+                Autoload autoload = (Autoload) fun;
+                autoload.load();
+                return autoload.getSymbol().getSymbolFunction();
+            }
+            return fun;
         }
     };
 
