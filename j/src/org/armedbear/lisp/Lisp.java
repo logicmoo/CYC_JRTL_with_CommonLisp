@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.143 2003-09-21 17:43:00 piso Exp $
+ * $Id: Lisp.java,v 1.144 2003-09-21 19:32:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -426,40 +426,66 @@ public abstract class Lisp
         return value;
     }
 
-    public static final Cons list1(LispObject first)
+    public static final Cons list1(LispObject obj1)
     {
-        return new Cons(first);
+        return new Cons(obj1);
     }
 
-    public static final Cons list2(LispObject first, LispObject second)
+    public static final Cons list2(LispObject obj1, LispObject obj2)
     {
-        return new Cons(first, new Cons(second));
+        return new Cons(obj1, new Cons(obj2));
     }
 
-    public static final Cons list3(LispObject first, LispObject second,
-                                   LispObject third)
+    public static final Cons list3(LispObject obj1, LispObject obj2,
+                                   LispObject obj3)
     {
-        return new Cons(first, new Cons(second, new Cons(third)));
+        return new Cons(obj1, new Cons(obj2, new Cons(obj3)));
     }
 
-    public static final Cons list4(LispObject first, LispObject second,
-                                   LispObject third, LispObject fourth)
+    public static final Cons list4(LispObject obj1, LispObject obj2,
+                                   LispObject obj3, LispObject obj4)
     {
-        return new Cons(first,
-                        new Cons(second,
-                                 new Cons(third,
-                                          new Cons(fourth))));
+        return new Cons(obj1,
+                        new Cons(obj2,
+                                 new Cons(obj3,
+                                          new Cons(obj4))));
     }
 
-    public static final Cons list5(LispObject first, LispObject second,
-                                   LispObject third, LispObject fourth,
-                                   LispObject fifth)
+    public static final Cons list5(LispObject obj1, LispObject obj2,
+                                   LispObject obj3, LispObject obj4,
+                                   LispObject obj5)
     {
-        return new Cons(first,
-                        new Cons(second,
-                                 new Cons(third,
-                                          new Cons(fourth,
-                                                   new Cons(fifth)))));
+        return new Cons(obj1,
+                        new Cons(obj2,
+                                 new Cons(obj3,
+                                          new Cons(obj4,
+                                                   new Cons(obj5)))));
+    }
+
+    public static final Cons list6(LispObject obj1, LispObject obj2,
+                                   LispObject obj3, LispObject obj4,
+                                   LispObject obj5, LispObject obj6)
+    {
+        return new Cons(obj1,
+                        new Cons(obj2,
+                                 new Cons(obj3,
+                                          new Cons(obj4,
+                                                   new Cons(obj5,
+                                                            new Cons(obj6))))));
+    }
+
+    public static final Cons list7(LispObject obj1, LispObject obj2,
+                                   LispObject obj3, LispObject obj4,
+                                   LispObject obj5, LispObject obj6,
+                                   LispObject obj7)
+    {
+        return new Cons(obj1,
+                        new Cons(obj2,
+                                 new Cons(obj3,
+                                          new Cons(obj4,
+                                                   new Cons(obj5,
+                                                            new Cons(obj6,
+                                                                     new Cons(obj7)))))));
     }
 
     // Used by jvm compiler.
