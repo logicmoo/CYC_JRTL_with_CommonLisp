@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.8 2002-10-11 18:32:13 piso Exp $
+ * $Id: Editor.java,v 1.9 2002-10-12 00:06:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,8 +149,28 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     Hashtable views = new Hashtable();
 
     // BUG! This stuff should be factored somehow...
-    int thisCommand = COMMAND_NOTHING;
-    int lastCommand = COMMAND_NOTHING;
+    private int currentCommand = COMMAND_NOTHING;
+    private int lastCommand = COMMAND_NOTHING;
+
+    public final int getCurrentCommand()
+    {
+        return currentCommand;
+    }
+
+    public final void setCurrentCommand(int command)
+    {
+        currentCommand = command;
+    }
+
+    public final int getLastCommand()
+    {
+        return lastCommand;
+    }
+
+    public final void setLastCommand(int command)
+    {
+        lastCommand = command;
+    }
 
     static Marker[] bookmarks = new Marker[10];
 
@@ -2430,15 +2450,17 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public void recordMacro()
     {
-        if (isRecordingMacro)
+        if (isRecordingMacro) {
             isRecordingMacro = false;
-        else {
+            Log.debug("----- recordMacro end -----");
+        } else {
             if (macro != null && !macro.isEmpty())
                 if (!confirm("Record Macro", "Overwrite existing keyboard macro?"))
                     return;
 
             macro = new Macro();
             isRecordingMacro = true;
+            Log.debug("----- recordMacro -----");
         }
     }
 
@@ -2469,7 +2491,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             endCompoundEdit(compoundEdit);
         } else
             pageDownInternal();
-        thisCommand = COMMAND_PAGE_DOWN;
+        setCurrentCommand(COMMAND_PAGE_DOWN);
     }
 
     public void selectPageDown()
@@ -2485,7 +2507,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             endCompoundEdit(compoundEdit);
         } else
             pageDownInternal();
-        thisCommand = COMMAND_PAGE_DOWN;
+        setCurrentCommand(COMMAND_PAGE_DOWN);
     }
 
     public void pageUp()
@@ -2502,7 +2524,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             endCompoundEdit(compoundEdit);
         } else
             pageUpInternal();
-        thisCommand = COMMAND_PAGE_UP;
+        setCurrentCommand(COMMAND_PAGE_UP);
     }
 
     public void selectPageUp()
@@ -2518,7 +2540,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             endCompoundEdit(compoundEdit);
         } else
             pageUpInternal();
-        thisCommand = COMMAND_PAGE_UP;
+        setCurrentCommand(COMMAND_PAGE_UP);
     }
 
     private void pageDownInternal()
@@ -2652,7 +2674,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 // Caret is at end of line.
                 if (getDotLine().next() != null) {
                     moveDotTo(getDotLine().next(), 0);
-                    thisCommand = COMMAND_RIGHT;
+                    setCurrentCommand(COMMAND_RIGHT);
                 }
                 return;
             }
@@ -2668,7 +2690,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             ++display.caretCol;
         }
         updateDotLine();
-        thisCommand = COMMAND_RIGHT;
+        setCurrentCommand(COMMAND_RIGHT);
         setUpdateFlag(REFRAME);
     }
 
@@ -2703,7 +2725,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             }
         }
         updateDotLine();
-        thisCommand = COMMAND_RIGHT;
+        setCurrentCommand(COMMAND_RIGHT);
         setUpdateFlag(REFRAME);
     }
 
@@ -2740,7 +2762,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             }
         }
         updateDotLine();
-        thisCommand = COMMAND_LEFT;
+        setCurrentCommand(COMMAND_LEFT);
         setUpdateFlag(REFRAME);
     }
 
@@ -2779,7 +2801,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             Debug.assertTrue(false);
         }
         updateDotLine();
-        thisCommand = COMMAND_LEFT;
+        setCurrentCommand(COMMAND_LEFT);
         setUpdateFlag(REFRAME);
     }
 
@@ -2819,14 +2841,14 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         maybeResetGoalColumn();
         display.down(false);
-        thisCommand = COMMAND_DOWN;
+        setCurrentCommand(COMMAND_DOWN);
     }
 
     public void selectDown()
     {
         maybeResetGoalColumn();
         display.down(true);
-        thisCommand = COMMAND_DOWN;
+        setCurrentCommand(COMMAND_DOWN);
     }
 
     // Move caret up one line, keeping it in the same column if possible.
@@ -2835,14 +2857,14 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         maybeResetGoalColumn();
         display.up(false);
-        thisCommand = COMMAND_UP;
+        setCurrentCommand(COMMAND_UP);
     }
 
     public void selectUp()
     {
         maybeResetGoalColumn();
         display.up(true);
-        thisCommand = COMMAND_UP;
+        setCurrentCommand(COMMAND_UP);
     }
 
     private void maybeResetGoalColumn()
@@ -2928,7 +2950,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         if (mark != null || !pos.equals(dot) ||
             buffer.getCol(pos) != display.getAbsoluteCaretCol()) {
             moveDotTo(pos);
-            thisCommand = COMMAND_HOME;
+            setCurrentCommand(COMMAND_HOME);
             return;
         }
         // Reaching here, caret is already in column 0.
@@ -2937,7 +2959,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         if (System.currentTimeMillis() - dispatcher.getLastEventMillis() > 1000) {
             // Timed out.
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_HOME;
+            setCurrentCommand(COMMAND_HOME);
             return;
         }
         if (lastCommand == COMMAND_HOME_HOME)
@@ -2945,10 +2967,10 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         else if (lastCommand == COMMAND_HOME) {
             pos = new Position(getTopLine(), 0);
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_HOME_HOME;
+            setCurrentCommand(COMMAND_HOME_HOME);
         } else {
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_HOME;
+            setCurrentCommand(COMMAND_HOME);
             return;
         }
         if (!pos.equals(dot) ||
@@ -2984,7 +3006,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             buffer.getCol(pos) != display.getAbsoluteCaretCol()) {
             selectToPosition(pos);
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_SELECT_HOME;
+            setCurrentCommand(COMMAND_SELECT_HOME);
             return;
         }
         // Reaching here, caret is already in column 0.
@@ -2993,7 +3015,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         if (System.currentTimeMillis() - dispatcher.getLastEventMillis() > 1000) {
             // Timed out.
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_SELECT_HOME;
+            setCurrentCommand(COMMAND_SELECT_HOME);
             return;
         }
         if (lastCommand == COMMAND_SELECT_HOME_HOME)
@@ -3001,10 +3023,10 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         else if (lastCommand == COMMAND_SELECT_HOME) {
             pos = new Position(getTopLine(), 0);
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_SELECT_HOME_HOME;
+            setCurrentCommand(COMMAND_SELECT_HOME_HOME);
         } else {
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_SELECT_HOME;
+            setCurrentCommand(COMMAND_SELECT_HOME);
             return;
         }
         if (!pos.equals(dot) ||
@@ -3035,7 +3057,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             buffer.getCol(pos) != display.getAbsoluteCaretCol()) {
             moveDotTo(pos);
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_END;
+            setCurrentCommand(COMMAND_END);
             return;
         }
         // Reaching here, caret is already at end of line.
@@ -3044,7 +3066,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         if (System.currentTimeMillis() - dispatcher.getLastEventMillis() > 1000) {
             // Timed out.
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_END;
+            setCurrentCommand(COMMAND_END);
             return;
         }
         if (lastCommand == COMMAND_END_END)
@@ -3056,10 +3078,10 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             else
                 pos = getEob();
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_END_END;
+            setCurrentCommand(COMMAND_END_END);
         } else {
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_END;
+            setCurrentCommand(COMMAND_END);
             return;
         }
         if (!pos.equals(dot) ||
@@ -3081,7 +3103,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             buffer.getCol(pos) != display.getAbsoluteCaretCol()) {
             selectToPosition(pos);
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_END;
+            setCurrentCommand(COMMAND_END);
             return;
         }
         // Reaching here, caret is already at end of line.
@@ -3090,7 +3112,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         if (System.currentTimeMillis() - dispatcher.getLastEventMillis() > 1000) {
             // Timed out.
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_END;
+            setCurrentCommand(COMMAND_END);
             return;
         }
         if (lastCommand == COMMAND_END_END)
@@ -3102,9 +3124,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             else
                 pos = getEob();
             setUpdateFlag(REFRAME);
-            thisCommand = COMMAND_END_END;
+            setCurrentCommand(COMMAND_END_END);
         } else {
-            thisCommand = COMMAND_END;
+            setCurrentCommand(COMMAND_END);
             return;
         }
         if (!pos.equals(dot) ||
@@ -5090,7 +5112,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                     buffer.repaint();
                 else
                     updateInAllEditors(getDotLine());
-                thisCommand = COMMAND_KILL;
+                setCurrentCommand(COMMAND_KILL);
             }
             setMark(null);
         } else {
@@ -5104,7 +5126,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 dot.setOffset(0);
                 killLine();
                 endCompoundEdit(compoundEdit);
-                thisCommand = COMMAND_KILL;
+                setCurrentCommand(COMMAND_KILL);
                 return;
             }
 
@@ -5135,7 +5157,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             endCompoundEdit(compoundEdit);
             moveCaretToDotCol();
             buffer.repaint();
-            thisCommand = COMMAND_KILL;
+            setCurrentCommand(COMMAND_KILL);
         }
     }
 
@@ -5145,7 +5167,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             notSupportedForColumnSelections();
             return;
         }
-        lastCommand = COMMAND_KILL; // Force append.
+        setLastCommand(COMMAND_KILL); // Force append.
         killRegion();
     }
 
@@ -5307,7 +5329,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
         if (toBeInserted != null) {
             paste(toBeInserted);
-            thisCommand = COMMAND_PASTE;
+            setCurrentCommand(COMMAND_PASTE);
         }
         setDefaultCursor();
     }
@@ -5338,7 +5360,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             endCompoundEdit(compoundEdit);
         } else
             paste(s);
-        thisCommand = COMMAND_PASTE;
+        setCurrentCommand(COMMAND_PASTE);
     }
 
     public final void updateSystemSelection()
@@ -5355,7 +5377,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             if (s != null) {
                 undo();
                 paste(s);
-                thisCommand = COMMAND_PASTE;
+                setCurrentCommand(COMMAND_PASTE);
             }
             setDefaultCursor();
         } else
@@ -6033,7 +6055,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         try {
             buffer.undo();
             checkDotInOtherFrames();
-            thisCommand = COMMAND_UNDO;
+            setCurrentCommand(COMMAND_UNDO);
         }
         catch (Throwable t) {
             Log.error(t);

@@ -2,7 +2,7 @@
  * Expansion.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Expansion.java,v 1.1.1.1 2002-09-24 16:09:26 piso Exp $
+ * $Id: Expansion.java,v 1.2 2002-10-12 00:06:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -233,7 +233,7 @@ public class Expansion implements Constants
     public static void expand()
     {
         final Editor editor = Editor.currentEditor();
-        if (editor.lastCommand == COMMAND_EXPAND)
+        if (editor.getLastCommand() == COMMAND_EXPAND)
             expand(editor, Expansion.getLastExpansion(), true);
         else {
             Expansion e = editor.getBuffer().getExpansion(editor.getDot());
@@ -277,7 +277,7 @@ public class Expansion implements Constants
             editor.moveCaretToDotCol();
             buffer.endCompoundEdit(compoundEdit);
             Editor.updateInAllEditors(line);
-            editor.thisCommand = COMMAND_EXPAND;
+            editor.setCurrentCommand(COMMAND_EXPAND);
         }
         finally {
             buffer.unlockWrite();

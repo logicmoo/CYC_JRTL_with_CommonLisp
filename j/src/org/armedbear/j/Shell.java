@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.5 2002-10-11 13:54:37 piso Exp $
+ * $Id: Shell.java,v 1.6 2002-10-12 00:06:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,7 +292,7 @@ public class Shell extends Buffer implements Constants
             editor.status("Not at command line");
             return;
         }
-        if (editor.lastCommand != COMMAND_HISTORY)
+        if (editor.getLastCommand() != COMMAND_HISTORY)
             history.reset();
         String currentInput = dotLine.getText();
         REMatch prompt = promptRE.getMatch(currentInput);
@@ -323,7 +323,7 @@ public class Shell extends Buffer implements Constants
             editor.moveCaretToDotCol();
             endCompoundEdit(compoundEdit);
         }
-        editor.thisCommand = COMMAND_HISTORY;
+        editor.setCurrentCommand(COMMAND_HISTORY);
     }
 
     private void previousInput()

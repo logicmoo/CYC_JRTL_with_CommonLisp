@@ -2,7 +2,7 @@
  * Dispatcher.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Dispatcher.java,v 1.2 2002-10-02 16:32:12 piso Exp $
+ * $Id: Dispatcher.java,v 1.3 2002-10-12 00:06:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,12 +188,14 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
             }
         }
 
-        if (editor.lastCommand == COMMAND_PASTE && editor.thisCommand != COMMAND_PASTE)
-            if (editor.thisCommand != COMMAND_UNDO)
-                Editor.promoteLastPaste();
+        final int currentCommand = editor.getCurrentCommand();
+        if (editor.getLastCommand() == COMMAND_PASTE)
+            if (currentCommand != COMMAND_PASTE)
+                if (currentCommand != COMMAND_UNDO)
+                    Editor.promoteLastPaste();
 
-        editor.lastCommand = editor.thisCommand;
-        editor.thisCommand = COMMAND_NOTHING;
+        editor.setLastCommand(currentCommand);
+        editor.setCurrentCommand(COMMAND_NOTHING);
 
         editor.updateSystemSelection();
 

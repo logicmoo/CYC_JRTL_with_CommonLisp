@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Display.java,v 1.1.1.1 2002-09-24 16:08:37 piso Exp $
+ * $Id: Display.java,v 1.2 2002-10-12 00:06:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1222,7 +1222,7 @@ public final class Display extends JComponent implements Constants
         if (select) {
             if (editor.getMark() == null)
                 editor.addUndo(SimpleEdit.MOVE);
-            else if (editor.lastCommand != COMMAND_UP)
+            else if (editor.getLastCommand() != COMMAND_UP)
                 editor.addUndo(SimpleEdit.MOVE);
         } else {
             if (editor.getMark() != null) {
@@ -1233,7 +1233,7 @@ public final class Display extends JComponent implements Constants
                 editor.setGoalColumn(editor.getDotCol());
                 if (isLineBlock)
                     return;
-            } else if (editor.lastCommand != COMMAND_UP)
+            } else if (editor.getLastCommand() != COMMAND_UP)
                 editor.addUndo(SimpleEdit.MOVE);
         }
 
@@ -1284,7 +1284,7 @@ public final class Display extends JComponent implements Constants
         if (select) {
             if (editor.getMark() == null)
                 editor.addUndo(SimpleEdit.MOVE);
-            else if (editor.lastCommand != COMMAND_DOWN)
+            else if (editor.getLastCommand() != COMMAND_DOWN)
                 editor.addUndo(SimpleEdit.MOVE);
         } else {
             if (editor.getMark() != null) {
@@ -1296,8 +1296,13 @@ public final class Display extends JComponent implements Constants
                 if (isLineBlock)
                     return;
             }
-            else if (editor.lastCommand != COMMAND_DOWN)
-                editor.addUndo(SimpleEdit.MOVE);
+            else {
+                if (editor.getLastCommand() != COMMAND_DOWN) {
+                    Log.debug("down calling addUndo(MOVE)");
+                    editor.addUndo(SimpleEdit.MOVE);
+                } else
+                    Log.debug("down lastCommand was DOWN");
+            }
         }
         final Line dotLine = editor.getDotLine();
         final Line nextLine = dotLine.nextVisible();
