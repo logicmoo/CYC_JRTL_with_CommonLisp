@@ -1,8 +1,8 @@
 /*
  * ShellMode.java
  *
- * Copyright (C) 1999-2002 Peter Graves
- * $Id: ShellMode.java,v 1.1.1.1 2002-09-24 16:07:46 piso Exp $
+ * Copyright (C) 1999-2003 Peter Graves
+ * $Id: ShellMode.java,v 1.2 2003-12-04 15:16:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,8 @@ public final class ShellMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_ESCAPE, 0, "shellEscape");
         km.mapKey(KeyEvent.VK_P, CTRL_MASK, "shellPreviousInput");
         km.mapKey(KeyEvent.VK_N, CTRL_MASK, "shellNextInput");
+        km.mapKey(KeyEvent.VK_P, CTRL_MASK | ALT_MASK, "shellPreviousPrompt");
+        km.mapKey(KeyEvent.VK_N, CTRL_MASK | ALT_MASK, "shellNextPrompt");
         km.mapKey(KeyEvent.VK_ENTER, 0, "shellEnter");
         km.mapKey(KeyEvent.VK_TAB, 0, "shellTab");
         km.mapKey(KeyEvent.VK_C, CTRL_MASK | ALT_MASK, "shellInterrupt");
