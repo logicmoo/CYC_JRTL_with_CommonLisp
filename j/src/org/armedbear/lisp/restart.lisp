@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.10 2003-12-19 00:04:14 piso Exp $
+;;; $Id: restart.lisp,v 1.11 2003-12-19 01:24:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -90,7 +90,9 @@
 
 (defun invoke-restart (restart &rest values)
   (let ((real-restart (or (find-restart restart)
-                          (error "Restart ~s is not active." restart))))
+                          (error 'control-error
+                                 :format-control "Restart ~s is not active."
+                                 :format-arguments (list restart)))))
     (apply (restart-function real-restart) values)))
 
 (defun parse-keyword-pairs (list keys)
