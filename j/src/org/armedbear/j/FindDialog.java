@@ -2,7 +2,7 @@
  * FindDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindDialog.java,v 1.3 2003-07-26 17:51:20 piso Exp $
+ * $Id: FindDialog.java,v 1.4 2003-10-13 23:52:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,7 +219,7 @@ public final class FindDialog extends AbstractDialog implements ActionListener,
                 start = new Position(editor.getBuffer().getFirstLine(), 0);
             else
                 start = editor.getDot();
-            Position pos = search.find(editor.getMode(), start);
+            Position pos = search.find(editor.getBuffer(), start);
             editor.setDefaultCursor();
             if (pos != null) {
                 editor.moveDotTo(pos);
