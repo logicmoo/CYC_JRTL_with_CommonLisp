@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.7 2004-04-25 16:46:23 piso Exp $
+;;; $Id: pprint.lisp,v 1.8 2004-04-25 17:46:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1585,7 +1585,7 @@
 ;command.  This includes the matching end command for paired commands.
 
 (defmacro def-format-handler (char args &body body)
-  (let ((name (intern (cl:format nil "FORMAT-~A" char) (find-package "XP"))))
+  (let ((name (intern (sys::%format nil "FORMAT-~A" char) (find-package "XP"))))
     `(eval-when (eval load compile)
        (defun ,name ,args ,@ body)
        (setf (gethash (char-upcase ,char) *fn-table*) (function ,name))
