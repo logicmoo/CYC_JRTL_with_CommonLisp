@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: XmlMode.java,v 1.16 2004-04-22 14:59:15 piso Exp $
+ * $Id: XmlMode.java,v 1.17 2004-04-22 17:49:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,7 +215,9 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
             return indent < 0 ? 0 : indent;
         }
         final String modelText = model.trim();
-        if (modelText.startsWith("<") && !modelText.startsWith("</")) {
+        if (modelText.startsWith("<") && !modelText.startsWith("</") &&
+            !modelText.startsWith("<!"))
+        {
             String tag = getTag(modelText);
             if (isEmptyElementTag(tag))
                 return indent;
