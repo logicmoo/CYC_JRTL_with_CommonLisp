@@ -1,8 +1,8 @@
 /*
  * Pathname.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.72 2004-11-28 15:43:50 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Pathname.java,v 1.73 2005-03-15 16:08:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -300,6 +300,8 @@ public class Pathname extends LispObject
                     sb.append(part.getStringValue());
                 else if (part == Keyword.WILD)
                     sb.append("*");
+                else if (part == Keyword.UP)
+                    sb.append("..");
                 else
                     signal(new LispError("Unsupported directory component " +
                                          part.writeToString() + "."));
