@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.347 2003-08-24 18:36:12 piso Exp $
+ * $Id: Primitives.java,v 1.348 2003-08-24 19:16:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1431,24 +1431,13 @@ public final class Primitives extends Module
         }
     };
 
-    // ### defvar
-    private static final SpecialOperator DEFVAR = new SpecialOperator("defvar") {
-        public LispObject execute(LispObject args, Environment env)
-            throws Condition
+    // ### %defvar
+    private static final Primitive1 _DEFVAR =
+        new Primitive1("%defvar", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws LispError
         {
-            final int length = args.length();
-            if (length < 1 || length > 3)
-                throw new WrongNumberOfArgumentsException(this);
-            Symbol symbol = checkSymbol(args.car());
-            final LispThread thread = LispThread.currentThread();
-            LispObject rest = args.cdr();
-            if (rest != NIL) {
-                LispObject initialValue = eval(rest.car(), env, thread);
-                if (symbol.getSymbolValue() == null)
-                    symbol.setSymbolValue(initialValue);
-            }
+            Symbol symbol = checkSymbol(arg);
             symbol.setSpecial(true);
-            thread.clearValues();
             return symbol;
         }
     };
