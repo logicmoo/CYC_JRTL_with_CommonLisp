@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.64 2004-06-04 17:08:05 piso Exp $
+ * $Id: Pathname.java,v 1.65 2004-09-15 13:08:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.lisp;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.StringTokenizer;
 
 public class Pathname extends LispObject
@@ -46,79 +47,127 @@ public class Pathname extends LispObject
 
     public Pathname(String s) throws ConditionThrowable
     {
-        if (s != null) {
-            if (Utilities.isPlatformUnix()) {
-                if (s.equals("~"))
-                    s = System.getProperty("user.home").concat("/");
-                else if (s.startsWith("~/"))
-                    s = System.getProperty("user.home").concat(s.substring(1));
-            }
-            namestring = s;
-            if (s.equals(".") || s.equals("./")) {
-                directory = new Cons(Keyword.RELATIVE);
+        init(s);
+    }
+
+    public Pathname(URL url) throws ConditionThrowable
+    {
+        String protocol = url.getProtocol();
+        if ("jar".equals(protocol)) {
+            String s = url.getPath();
+            if (s.startsWith("file:")) {
+                int index = s.indexOf("!/");
+                String container = s.substring(5, index);
+                device = new Pathname(container);
+                s = s.substring(index + 1);
+                Pathname p = new Pathname(s);
+                directory = p.directory;
+                name = p.name;
+                type = p.type;
                 return;
             }
-            if (s.equals("..") || s.equals("../")) {
-                directory = list2(Keyword.RELATIVE, Keyword.BACK);
+        } else if ("file".equals(protocol)) {
+            String s = url.getPath();
+            if (s != null && s.startsWith("file:")) {
+                init(s.substring(5));
                 return;
             }
-            if (Utilities.isPlatformWindows()) {
-                if (s.length() >= 2 && s.charAt(1) == ':') {
-                    device = new SimpleString(s.charAt(0));
-                    s = s.substring(2);
+        }
+        signal(new LispError("Unsupported URL: \"" + url.toString() + '"'));
+    }
+
+    private final void init(String s) throws ConditionThrowable
+    {
+        if (s == null)
+            return;
+        // Jar file support.
+        int bang = s.indexOf("!/");
+        if (bang >= 0) {
+            Pathname container = new Pathname(s.substring(0, bang));
+            LispObject containerType = container.type;
+            if (containerType instanceof AbstractString) {
+                if (containerType.getStringValue().equalsIgnoreCase("jar")) {
+                    device = container;
+                    s = s.substring(bang + 1);
+                    Pathname p = new Pathname(s);
+                    directory = p.directory;
+                    name = p.name;
+                    type = p.type;
+                    return;
                 }
             }
-            String d = null;
-            // Find last file separator char.
-            if (Utilities.isPlatformWindows()) {
-                for (int i = s.length(); i-- > 0;) {
-                    char c = s.charAt(i);
-                    if (c == '/' || c == '\\') {
-                        d = s.substring(0, i + 1);
-                        s = s.substring(i + 1);
-                        break;
-                    }
+        }
+        if (Utilities.isPlatformUnix()) {
+            if (s.equals("~"))
+                s = System.getProperty("user.home").concat("/");
+            else if (s.startsWith("~/"))
+                s = System.getProperty("user.home").concat(s.substring(1));
+        }
+        namestring = s;
+        if (s.equals(".") || s.equals("./")) {
+            directory = new Cons(Keyword.RELATIVE);
+            return;
+        }
+        if (s.equals("..") || s.equals("../")) {
+            directory = list2(Keyword.RELATIVE, Keyword.BACK);
+            return;
+        }
+        if (Utilities.isPlatformWindows()) {
+            if (s.length() >= 2 && s.charAt(1) == ':') {
+                device = new SimpleString(s.charAt(0));
+                s = s.substring(2);
+            }
+        }
+        String d = null;
+        // Find last file separator char.
+        if (Utilities.isPlatformWindows()) {
+            for (int i = s.length(); i-- > 0;) {
+                char c = s.charAt(i);
+                if (c == '/' || c == '\\') {
+                    d = s.substring(0, i + 1);
+                    s = s.substring(i + 1);
+                    break;
                 }
-            } else {
-                for (int i = s.length(); i-- > 0;) {
-                    if (s.charAt(i) == '/') {
-                        d = s.substring(0, i + 1);
-                        s = s.substring(i + 1);
-                        break;
-                    }
+            }
+        } else {
+            for (int i = s.length(); i-- > 0;) {
+                if (s.charAt(i) == '/') {
+                    d = s.substring(0, i + 1);
+                    s = s.substring(i + 1);
+                    break;
                 }
             }
-            if (d != null) {
-                if (s.equals("..")) {
-                    d = d.concat(s);
-                    s = "";
-                }
-                directory = parseDirectory(d);
+        }
+        if (d != null) {
+            if (s.equals("..")) {
+                d = d.concat(s);
+                s = "";
             }
-            if (s.startsWith(".")) {
-                name = new SimpleString(s);
-                return;
-            }
-            int index = s.lastIndexOf('.');
-            String n = null;
-            String t = null;
-            if (index > 0) {
-                n = s.substring(0, index);
-                t = s.substring(index + 1);
-            } else if (s.length() > 0)
-                n = s;
-            if (n != null) {
-                if (n.equals("*"))
-                    name = Keyword.WILD;
-                else
-                    name = new SimpleString(n);
-            }
-            if (t != null) {
-                if (t.equals("*"))
-                    type = Keyword.WILD;
-                else
-                    type = new SimpleString(t);
-            }
+            directory = parseDirectory(d);
+        }
+        if (s.startsWith(".")) {
+            name = new SimpleString(s);
+            return;
+        }
+        int index = s.lastIndexOf('.');
+        String n = null;
+        String t = null;
+        if (index > 0) {
+            n = s.substring(0, index);
+            t = s.substring(index + 1);
+        } else if (s.length() > 0)
+            n = s;
+        if (n != null) {
+            if (n.equals("*"))
+                name = Keyword.WILD;
+            else
+                name = new SimpleString(n);
+        }
+        if (t != null) {
+            if (t.equals("*"))
+                type = Keyword.WILD;
+            else
+                type = new SimpleString(t);
         }
     }
 
@@ -199,24 +248,25 @@ public class Pathname extends LispObject
         return namestring = sb.toString();
     }
 
-    public String getDirectoryNamestring() throws ConditionThrowable
+    private String getDirectoryNamestring() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        if (Utilities.isPlatformWindows()) {
-            // "If a pathname is converted to a namestring, the symbols NIL and
-            // :UNSPECIFIC cause the field to be treated as if it were empty. That
-            // is, both NIL and :UNSPECIFIC cause the component not to appear in
-            // the namestring." 19.2.2.2.3.1
-            if (device == NIL)
-                ;
-            else if (device == Keyword.UNSPECIFIC)
-                ;
-            else if (device instanceof AbstractString) {
-                sb.append(device.getStringValue());
-                sb.append(':');
-            } else
-                Debug.assertTrue(false);
-        }
+        // "If a pathname is converted to a namestring, the symbols NIL and
+        // :UNSPECIFIC cause the field to be treated as if it were empty. That
+        // is, both NIL and :UNSPECIFIC cause the component not to appear in
+        // the namestring." 19.2.2.2.3.1
+        if (device == NIL)
+            ;
+        else if (device == Keyword.UNSPECIFIC)
+            ;
+        else if (device instanceof AbstractString) {
+            sb.append(device.getStringValue());
+            sb.append(':');
+        } else if (device instanceof Pathname) {
+            sb.append(((Pathname)device).getNamestring());
+            sb.append("!");
+        } else
+            Debug.assertTrue(false);
         if (directory != NIL) {
             LispObject temp = directory;
             LispObject part = temp.car();
