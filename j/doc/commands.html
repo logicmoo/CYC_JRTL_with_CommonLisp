@@ -158,6 +158,7 @@
     <li><a href="commands.html#insertTab">insertTab</a></li>
     <li><a href="commands.html#jdb">jdb</a></li>
     <li><a href="commands.html#jdkHelp">jdkHelp</a></li>
+    <li><a href="commands.html#jlisp">jlisp</a></li>
     <li><a href="commands.html#jmips">jmips</a></li>
     <li><a href="commands.html#jumpToColumn">jumpToColumn</a></li>
     <li><a href="commands.html#jumpToLine">jumpToLine</a></li>
@@ -171,6 +172,7 @@
     <li><a href="commands.html#killWordLeft">killWordLeft</a></li>
     <li><a href="commands.html#killWordRight">killWordRight</a></li>
     <li><a href="commands.html#left">left</a></li>
+    <li><a href="commands.html#lisp">lisp</a></li>
     <li><a href="commands.html#lispFindMatchingChar">lispFindMatchingChar</a></li>
     <li><a href="commands.html#lispSelectSyntax">lispSelectSyntax</a></li>
     <li><a href="commands.html#listBindings">listBindings</a></li>
@@ -2278,6 +2280,26 @@ JDK documentation:
 <br><br>
 </dl><!--<hr>-->
 
+<a name="jlisp">jlisp</a><dl><dd>
+<p>
+Runs Armed Bear Lisp embedded in the running instance of j, with interaction in
+a Lisp shell buffer.
+<p>
+Using this command to run Lisp lets you use the resulting Lisp shell to
+interact with the running instance of j.
+<p>
+If you don't need to interact with the running instance of j, you should use
+the <a href="#lisp">lisp</a> command instead of this one. The
+<a href="#lisp">lisp</a> command runs Lisp as a separate process, making it
+less likely that ensuing anomalies will have a detrimental impact on your
+editor session.
+<p>
+<b>Default key mapping:</b> None
+<p>
+<b>See also:</b> <a href="#lisp">lisp</a>
+<br><br>
+</dl><!--<hr>-->
+
 <a name="jmips">jmips</a><dl><dd>
 <p>
 Measures the performance of the underlying Java runtime system (which is, of
@@ -2424,6 +2446,23 @@ Deletes the word to the right of the caret, appending the deleted text to the
 Moves the caret one character to the left.
 <p>
 <b>Default key mapping:</b> Left arrow key
+<br><br>
+</dl><!--<hr>-->
+
+<a name="lisp">lisp</a><dl><dd>
+<p>
+Runs Lisp as a separate process, with interaction in a Lisp shell buffer.
+<p>
+By default, this command runs Armed Bear Lisp, which comes bundled with j.
+<p>
+If you have <a href="building.html#jpty">jpty</a> installed, you can run a
+different Lisp by supplying an argument to this command. For example, on a
+normal Debian system, you can run SBCL (if it's installed) with Alt X, "lisp
+/usr/bin/sbcl".
+<p>
+<b>Default key mapping:</b> None
+<p>
+<b>See also:</b> <a href="#jlisp">jlisp</a>
 <br><br>
 </dl><!--<hr>-->
 
