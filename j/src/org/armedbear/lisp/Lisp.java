@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.105 2003-07-18 15:46:35 piso Exp $
+ * $Id: Lisp.java,v 1.106 2003-07-18 15:50:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -688,7 +688,7 @@ public abstract class Lisp
     }
 
     public static final Function coerceToFunction(LispObject obj)
-        throws Condition
+        throws LispError
     {
         if (obj instanceof Function)
             return (Function) obj;
