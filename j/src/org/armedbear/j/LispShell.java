@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.20 2003-01-02 19:07:08 piso Exp $
+ * $Id: LispShell.java,v 1.21 2003-01-04 02:19:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,15 +291,28 @@ public final class LispShell extends Shell
 
     public static void lisp()
     {
-        lisp("lisp");
+        FastStringBuffer sb = new FastStringBuffer();
+        sb.append("java -server -cp ");
+        sb.append(System.getProperty("java.class.path"));
+        sb.append(" org.armedbear.lisp.Interpreter");
+        lisp(sb.toString(), false);
     }
-
+    
     public static void lisp(String shellCommand)
     {
-        if (!Utilities.haveJpty()) {
+        // Require jpty on Unix platforms.
+        lisp(shellCommand, Platform.isPlatformUnix());
+    }
+
+    private static void lisp(String shellCommand, boolean requireJpty)
+    {
+        if (requireJpty && !Utilities.haveJpty()) {
             MessageDialog.showMessageDialog(JPTY_NOT_FOUND, "Error");
             return;
         }
+        if (Platform.isPlatformWindows())
+            if (!Platform.isPlatformWindows5())
+                return;
         // Look for an existing LispShell buffer with the same shell command.
         Buffer buf = findLisp(shellCommand);
         if (buf != null) {
