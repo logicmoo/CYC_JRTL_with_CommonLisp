@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.47 2004-02-03 02:03:50 piso Exp $
+ * $Id: Pathname.java,v 1.48 2004-02-03 17:20:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -792,6 +792,8 @@ public class Pathname extends LispObject
                                                 LispObject defaultVersion)
         throws ConditionThrowable
     {
+        if (pathname instanceof LogicalPathname)
+            signal(new LispError("Bad place for a logical pathname."));
         Pathname p = new Pathname();
         if (pathname.host != NIL)
             p.host = pathname.host;
