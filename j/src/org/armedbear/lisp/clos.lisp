@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.89 2004-02-19 18:17:51 piso Exp $
+;;; $Id: clos.lisp,v 1.90 2004-02-19 18:29:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1286,10 +1286,15 @@
              (make-closure `(lambda (&rest args)
                               (slow-method-lookup ,gf args nil))
                            nil)
-             (let ((emf-table (classes-to-emf-table gf)))
+             (let ((emf-table (classes-to-emf-table gf))
+                   (number-required (length (gf-required-args gf))))
                (make-closure
                 `(lambda (&rest args)
-                   (let* ((classes (mapcar #'class-of (required-portion ,gf args)))
+                   (when (< (length args) ,number-required)
+                     (error 'program-error
+                            :format-control "Not enough arguments for generic function ~S."
+                            :format-arguments (list ,gf)))
+                   (let* ((classes (mapcar #'class-of (subseq args 0 ,number-required)))
                           (emfun (gethash classes ,emf-table)))
                      (if emfun
                          (funcall emfun args)
