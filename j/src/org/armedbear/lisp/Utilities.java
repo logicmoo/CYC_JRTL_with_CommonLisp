@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Utilities.java,v 1.7 2004-01-05 16:31:12 piso Exp $
+ * $Id: Utilities.java,v 1.8 2004-01-26 00:30:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,7 +80,12 @@ public final class Utilities extends Lisp
             Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
         Pathname merged =
             Pathname.mergePathnames(pathname, defaultPathname, NIL);
-        return new File(merged.getNamestring());
+        String namestring = merged.getNamestring();
+        if (namestring != null)
+            return new File(namestring);
+        signal(new SimpleError("Pathname has no namestring: " + merged));
+        // Not reached.
+        return null;
     }
 
     public static Pathname getDirectoryPathname(File file)
