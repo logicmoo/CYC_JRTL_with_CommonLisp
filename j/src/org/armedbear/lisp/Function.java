@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.37 2004-05-05 18:32:47 piso Exp $
+ * $Id: Function.java,v 1.38 2004-07-09 17:38:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,11 @@ public abstract class Function extends Functional
         return super.typep(typeSpecifier);
     }
 
+    public Symbol getSymbol()
+    {
+        return symbol;
+    }
+
     public final String getName()
     {
         return symbol != null ? symbol.getName() : null;
@@ -170,14 +175,17 @@ public abstract class Function extends Functional
 
     public String writeToString() throws ConditionThrowable
     {
-        if (symbol != null) {
+        LispObject name = getLambdaName();
+        if (name == null)
+            name = getSymbol();
+        if (name != null) {
             StringBuffer sb = new StringBuffer("#<FUNCTION");
             sb.append(' ');
-            sb.append(symbol.writeToString());
+            sb.append(name.writeToString());
             sb.append('>');
             return sb.toString();
-        }
-        return unreadableString("FUNCTION");
+        } else
+            return unreadableString("FUNCTION");
     }
 
     // Profiling.
