@@ -1,7 +1,7 @@
 ;;; print-unreadable-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: print-unreadable-object.lisp,v 1.2 2004-04-03 22:57:15 piso Exp $
+;;; $Id: print-unreadable-object.lisp,v 1.3 2004-05-22 17:23:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
   (when identity
     (when body
       (%format stream " "))
-    (%format stream "@ #x~A" (hashcode-to-string object)))
+    (%format stream "@ #x~X" (identity-hash-code object)))
   (%format stream ">")
   nil)
 
