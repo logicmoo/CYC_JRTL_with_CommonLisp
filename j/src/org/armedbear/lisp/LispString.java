@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispString.java,v 1.83 2004-02-22 15:57:34 piso Exp $
+ * $Id: LispString.java,v 1.84 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,30 +21,13 @@
 
 package org.armedbear.lisp;
 
-public final class LispString extends AbstractVector
+public final class LispString extends AbstractString
 {
     private char[] chars;
-
-    public LispString(LispCharacter c)
-    {
-        chars = new char[1];
-        chars[0] = c.getValue();
-    }
-
-    public LispString(char c)
-    {
-        chars = new char[1];
-        chars[0] = c;
-    }
 
     public LispString(int length)
     {
         chars = new char[length];
-    }
-
-    public LispString(String s)
-    {
-        chars = s.toCharArray();
     }
 
     public char[] chars()
@@ -52,16 +35,11 @@ public final class LispString extends AbstractVector
         return chars;
     }
 
-    // Used by jvm compiler.
-    public static LispString getInstance(String s)
-    {
-        return new LispString(s);
-    }
-
     public LispObject typeOf()
     {
-        return list2(fillPointer < 0 ? Symbol.SIMPLE_STRING : Symbol.STRING,
-                     number(chars.length));
+        return list2(/*fillPointer < 0 ? Symbol.SIMPLE_STRING :*/
+                     Symbol.STRING,
+                     number(capacity()));
     }
 
     public LispClass classOf()
@@ -76,50 +54,22 @@ public final class LispString extends AbstractVector
                 return T;
             if (type == Symbol.BASE_STRING)
                 return T;
-            if (type == Symbol.SIMPLE_STRING ||
-                type == Symbol.SIMPLE_BASE_STRING)
-                return fillPointer < 0 ? T : NIL;
         }
         if (type == BuiltInClass.STRING)
             return T;
         return super.typep(type);
     }
 
-    public LispObject STRINGP()
-    {
-        return T;
-    }
-
-    public boolean stringp()
-    {
-        return true;
-    }
-
-    public LispObject SIMPLE_STRING_P()
-    {
-        return fillPointer < 0 ? T : NIL;
-    }
-
-    public LispObject getElementType()
-    {
-        return Symbol.CHARACTER;
-    }
-
-    public boolean isSimpleVector()
-    {
-        return false;
-    }
-
     public boolean equal(LispObject obj) throws ConditionThrowable
     {
         if (this == obj)
             return true;
-        if (obj instanceof LispString) {
-            LispString string = (LispString) obj;
+        if (obj instanceof AbstractString) {
+            AbstractString string = (AbstractString) obj;
             if (string.length() != length())
                 return false;
             for (int i = length(); i-- > 0;)
-                if (string.chars[i] != chars[i])
+                if (string.getChar(i) != getChar(i))
                     return false;
             return true;
         }
@@ -132,13 +82,13 @@ public final class LispString extends AbstractVector
     {
         if (this == obj)
             return true;
-        if (obj instanceof LispString) {
-            LispString string = (LispString) obj;
+        if (obj instanceof AbstractString) {
+            AbstractString string = (AbstractString) obj;
             if (string.length() != length())
                 return false;
             for (int i = length(); i-- > 0;) {
-                if (string.chars[i] != chars[i]) {
-                    if (Utilities.toLowerCase(string.chars[i]) != Utilities.toLowerCase(chars[i]))
+                if (string.getChar(i) != getChar(i)) {
+                    if (Utilities.toLowerCase(string.getChar(i)) != Utilities.toLowerCase(getChar(i)))
                         return false;
                 }
             }
@@ -151,16 +101,11 @@ public final class LispString extends AbstractVector
 
     public LispObject subseq(int start, int end) throws ConditionThrowable
     {
-        LispString s = new LispString(end - start);
+        SimpleString s = new SimpleString(end - start);
         int i = start, j = 0;
-        try {
-            while (i < end)
-                s.chars[j++] = chars[i++];
-            return s;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Array index out of bounds: " + i + "."));
-        }
+        while (i < end)
+            s.setChar(j++, getChar(i++));
+        return s;
     }
 
     public void fill(LispObject obj) throws ConditionThrowable
@@ -170,8 +115,7 @@ public final class LispString extends AbstractVector
 
     public void fill(char c)
     {
-        final int limit = fillPointer >= 0 ? fillPointer : chars.length;
-        for (int i = limit; i-- > 0;)
+        for (int i = length(); i-- > 0;)
             chars[i] = c;
     }
 
@@ -191,10 +135,10 @@ public final class LispString extends AbstractVector
     public LispObject reverse() throws ConditionThrowable
     {
         int length = length();
-        LispString result = new LispString(length);
+        SimpleString result = new SimpleString(length);
         int i, j;
         for (i = 0, j = length - 1; i < length; i++, j--)
-            result.chars[i] = chars[j];
+            result.setChar(i, getChar(j));
         return result;
     }
 
@@ -203,9 +147,9 @@ public final class LispString extends AbstractVector
         int i = 0;
         int j = length() - 1;
         while (i < j) {
-            char temp = chars[i];
-            chars[i] = chars[j];
-            chars[j] = temp;
+            char temp = getChar(i);
+            setChar(i, getChar(j));
+            setChar(j, temp);
             ++i;
             --j;
         }
@@ -214,69 +158,43 @@ public final class LispString extends AbstractVector
 
     public LispObject getRowMajor(int index) throws ConditionThrowable
     {
-        try {
-            return LispCharacter.getInstance(chars[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, chars.length);
-            return NIL; // Not reached.
-        }
+        return LispCharacter.getInstance(getChar(index));
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
     {
-        try {
-            chars[index] = LispCharacter.getValue(newValue);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, chars.length);
-        }
+        setChar(index, LispCharacter.getValue(newValue));
     }
 
     public LispObject get(int index) throws ConditionThrowable
     {
-        try {
-            return LispCharacter.getInstance(chars[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, chars.length);
-            return NIL; // Not reached.
-        }
+        return LispCharacter.getInstance(getChar(index));
     }
 
     public void set(int index, LispObject newValue) throws ConditionThrowable
     {
+        setChar(index, LispCharacter.getValue(newValue));
+    }
+
+    public char getChar(int index) throws ConditionThrowable
+    {
         try {
-            chars[index] = LispCharacter.getValue(newValue);
+            return chars[index];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, chars.length);
+            return 0; // Not reached.
+        }
+    }
+
+    public void setChar(int index, char c) throws ConditionThrowable
+    {
+        try {
+            chars[index] = c;
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, chars.length);
         }
-    }
-
-    public void set(int index, char c)
-    {
-        chars[index] = c;
-    }
-
-    public static String getValue(LispObject obj) throws ConditionThrowable
-    {
-        try {
-            return ((LispString)obj).getValue();
-        }
-        catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.STRING));
-            // Not reached.
-            return null;
-        }
-    }
-
-    public final String getValue()
-    {
-        if (fillPointer >= 0)
-            return new String(chars, 0, fillPointer);
-        else
-            return new String(chars);
     }
 
     public String getStringValue()
@@ -357,19 +275,13 @@ public final class LispString extends AbstractVector
         int limit = fillPointer >= 0 ? fillPointer : chars.length;
         if (index < 0 || index >= limit)
             badIndex(index, limit);
-        return LispCharacter.getInstance(chars[index]);
+        return LispCharacter.getInstance(getChar(index));
     }
 
     // Ignores fill pointer.
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
-        try {
-            return LispCharacter.getInstance(chars[Fixnum.getValue(index)]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(Fixnum.getValue(index), chars.length);
-            return NIL; // Not reached.
-        }
+        return LispCharacter.getInstance(getChar(Fixnum.getValue(index)));
     }
 
     public LispObject vectorPushExtend(LispObject element)
@@ -412,36 +324,15 @@ public final class LispString extends AbstractVector
         if (cachedHashCode != 0)
             return cachedHashCode;
         int hashCode = 0;
-        final int limit = length();
-        for (int i = 0; i < limit; i++)
-            hashCode = hashCode * 31 + chars[i];
+        try {
+            final int limit = length();
+            for (int i = 0; i < limit; i++)
+                hashCode = hashCode * 31 + getChar(i);
+        }
+        catch (ConditionThrowable t) {
+            // Shouldn't happen.
+            Debug.trace(t);
+        }
         return cachedHashCode = hashCode;
-    }
-
-    public final String toString(int beginIndex, int endIndex)
-    {
-        if (beginIndex < 0)
-            beginIndex = 0;
-        final int limit = fillPointer >= 0 ? fillPointer : chars.length;
-        if (endIndex > limit)
-            endIndex = limit;
-        if (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL) {
-            StringBuffer sb = new StringBuffer();
-            sb.append('"');
-            for (int i = beginIndex; i < endIndex; i++) {
-                char c = chars[i];
-                if (c == '\"' || c == '\\')
-                    sb.append('\\');
-                sb.append(c);
-            }
-            sb.append('"');
-            return sb.toString();
-        } else
-            return getValue().substring(beginIndex, endIndex);
-    }
-
-    public final String toString()
-    {
-        return toString(0, chars.length);
     }
 }

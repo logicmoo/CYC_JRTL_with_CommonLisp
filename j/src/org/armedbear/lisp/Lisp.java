@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.207 2004-02-16 12:40:09 piso Exp $
+ * $Id: Lisp.java,v 1.208 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -711,9 +711,9 @@ public abstract class Lisp
         if (arg.stringp())
             return arg;
         if (arg instanceof Symbol)
-            return new LispString(arg.getName());
+            return new SimpleString(arg.getName());
         if (arg instanceof LispCharacter)
-            return new LispString(((LispCharacter)arg).getValue());
+            return new SimpleString(((LispCharacter)arg).getValue());
         signal(new TypeError(String.valueOf(arg) + " cannot be coerced to a string."));
         // Not reached.
         return null;
@@ -1180,7 +1180,7 @@ public abstract class Lisp
         throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
-        String control = LispString.getValue(formatControl);
+        String control = formatControl.getStringValue();
         LispObject[] args = formatArguments.copyToArray();
         StringBuffer sb = new StringBuffer();
         final int limit = control.length();
@@ -1262,23 +1262,23 @@ public abstract class Lisp
     // The jvm compiler's object table.
     private static final Hashtable objectTable = new Hashtable();
 
-    public static final LispObject recall(LispString key)
+    public static final LispObject recall(SimpleString key)
     {
-        return (LispObject) objectTable.get(((LispString)key).getValue());
+        return (LispObject) objectTable.get(key.getStringValue());
     }
 
-    public static final void forget(LispString key)
+    public static final void forget(SimpleString key)
     {
-        objectTable.remove(((LispString)key).getValue());
+        objectTable.remove(key.getStringValue());
     }
 
     public static final Primitive2 REMEMBER =
         new Primitive2("remember", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject key, LispObject value)
             throws ConditionThrowable
         {
-            objectTable.put(LispString.getValue(first), second);
+            objectTable.put(key.getStringValue(), value);
             return NIL;
         }
     };
@@ -1343,7 +1343,7 @@ public abstract class Lisp
                 userDir = userDir.concat(File.separator);
         }
         // This string will be converted to a pathname when Pathname.java is loaded.
-        _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(new LispString(userDir));
+        _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(new SimpleString(userDir));
         _DEFAULT_PATHNAME_DEFAULTS_.setSpecial(true);
     }
 
@@ -1513,7 +1513,7 @@ public abstract class Lisp
     // "The upper exclusive bound on the value returned by the function CHAR-CODE."
     public static final int CHAR_MAX = 256;
     public static final Symbol CHAR_CODE_LIMIT =
-        exportSpecial("CHAR-CODE-LIMIT", PACKAGE_CL, new Fixnum(CHAR_MAX));
+        exportConstant("CHAR-CODE-LIMIT", PACKAGE_CL, new Fixnum(CHAR_MAX));
 
     // Printer control variables.
     public static final Symbol _PRINT_ARRAY_ =

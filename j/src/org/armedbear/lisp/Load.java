@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.33 2004-02-11 00:22:57 piso Exp $
+ * $Id: Load.java,v 1.34 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -285,8 +285,8 @@ public final class Load extends Lisp
                 return signal(new WrongNumberOfArgumentsException(this));
             // FIXME Need to support streams as well as pathname designators.
             String filename;
-            if (args[0] instanceof LispString)
-                filename = ((LispString)args[0]).getValue();
+            if (args[0] instanceof AbstractString)
+                filename = args[0].getStringValue();
             else if (args[0] instanceof Pathname)
                 filename = ((Pathname)args[0]).getNamestring();
             else
@@ -305,7 +305,7 @@ public final class Load extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return _load(LispString.getValue(arg),
+            return _load(arg.getStringValue(),
                          _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
                          _LOAD_PRINT_.symbolValueNoThrow() != NIL,
                          false);

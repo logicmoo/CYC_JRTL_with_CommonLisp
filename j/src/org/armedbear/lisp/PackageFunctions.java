@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: PackageFunctions.java,v 1.25 2004-02-23 00:08:00 piso Exp $
+ * $Id: PackageFunctions.java,v 1.26 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String name = coerceToPackage(arg).getName();
-            return name != null ? new LispString(name) : NIL;
+            return name != null ? new SimpleString(name) : NIL;
         }
     };
 

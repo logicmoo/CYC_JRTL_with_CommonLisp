@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.50 2004-02-14 00:21:15 piso Exp $
+ * $Id: Pathname.java,v 1.51 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ public class Pathname extends LispObject
             }
             if (Utilities.isPlatformWindows()) {
                 if (s.length() >= 2 && s.charAt(1) == ':') {
-                    device = new LispString(s.charAt(0));
+                    device = new SimpleString(s.charAt(0));
                     s = s.substring(2);
                 }
             }
@@ -96,7 +96,7 @@ public class Pathname extends LispObject
                 directory = parseDirectory(d);
             }
             if (s.startsWith(".")) {
-                name = new LispString(s);
+                name = new SimpleString(s);
                 return;
             }
             int index = s.lastIndexOf('.');
@@ -111,13 +111,13 @@ public class Pathname extends LispObject
                 if (n.equals("*"))
                     name = Keyword.WILD;
                 else
-                    name = new LispString(n);
+                    name = new SimpleString(n);
             }
             if (t != null) {
                 if (t.equals("*"))
                     type = Keyword.WILD;
                 else
-                    type = new LispString(t);
+                    type = new SimpleString(t);
             }
         }
     }
@@ -141,13 +141,13 @@ public class Pathname extends LispObject
             else if (token.equals("**"))
                 obj = Keyword.WILD_INFERIORS;
             else if (token.equals("..")) {
-                if (result.car() instanceof LispString) {
+                if (result.car() instanceof AbstractString) {
                     result = result.cdr();
                     continue;
                 }
                 obj= Keyword.UP;
             } else
-                obj = new LispString(token);
+                obj = new SimpleString(token);
             result = new Cons(obj, result);
         }
         return result.nreverse();
@@ -182,23 +182,23 @@ public class Pathname extends LispObject
         }
         StringBuffer sb = new StringBuffer();
         if (Utilities.isPlatformWindows() && device != NIL) {
-            if (device instanceof LispString)
-                sb.append(((LispString)device).getValue());
+            if (device instanceof AbstractString)
+                sb.append(device.getStringValue());
             else
                 Debug.assertTrue(false);
             sb.append(':');
         }
-        if (directory instanceof LispString)
+        if (directory instanceof AbstractString)
             Debug.assertTrue(false);
         sb.append(getDirectoryNamestring());
-        if (name instanceof LispString)
-            sb.append(((LispString)name).getValue());
+        if (name instanceof AbstractString)
+            sb.append(name.getStringValue());
         else if (name == Keyword.WILD)
             sb.append('*');
         if (type != NIL) {
             sb.append('.');
-            if (type instanceof LispString)
-                sb.append(((LispString)type).getValue());
+            if (type instanceof AbstractString)
+                sb.append(type.getStringValue());
             else if (type == Keyword.WILD)
                 sb.append('*');
             else
@@ -222,8 +222,8 @@ public class Pathname extends LispObject
             temp = temp.cdr();
             while (temp != NIL) {
                 part = temp.car();
-                if (part instanceof LispString)
-                    sb.append(((LispString)part).getValue());
+                if (part instanceof AbstractString)
+                    sb.append(part.getStringValue());
                 else if (part == Keyword.WILD)
                     sb.append("*");
                 else
@@ -406,8 +406,8 @@ public class Pathname extends LispObject
     {
         if (arg instanceof Pathname)
             return (Pathname) arg;
-        if (arg instanceof LispString)
-            return new Pathname(((LispString)arg).getValue());
+        if (arg instanceof AbstractString)
+            return new Pathname(arg.getStringValue());
         if (arg instanceof FileStream)
             return ((FileStream)arg).getPathname();
         signal(new TypeError(String.valueOf(arg) + " cannot be converted to a pathname."));
@@ -499,7 +499,7 @@ public class Pathname extends LispObject
             if (namestring == null)
                 signal(new SimpleError("Pathname has no namestring: " +
                                        pathname + "."));
-            return new LispString(namestring);
+            return new SimpleString(namestring);
         }
     };
 
@@ -511,7 +511,7 @@ public class Pathname extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new LispString(coerceToPathname(arg).getDirectoryNamestring());
+            return new SimpleString(coerceToPathname(arg).getDirectoryNamestring());
         }
     };
 
@@ -561,7 +561,7 @@ public class Pathname extends LispObject
             } else if (key == Keyword.DEVICE) {
                 p.device = value;
             } else if (key == Keyword.DIRECTORY) {
-                if (value instanceof LispString)
+                if (value instanceof AbstractString)
                     p.directory = list2(Keyword.ABSOLUTE, value);
                 else if (value == Keyword.WILD)
                     p.directory = list2(Keyword.ABSOLUTE, Keyword.WILD);
@@ -819,7 +819,7 @@ public class Pathname extends LispObject
             p.type = defaultPathname.type;
         if (pathname.version != NIL)
             p.version = pathname.version;
-        else if (pathname.name instanceof LispString)
+        else if (pathname.name instanceof AbstractString)
             p.version = defaultVersion;
         else if (defaultPathname.version != NIL)
             p.version = defaultPathname.version;
@@ -848,7 +848,7 @@ public class Pathname extends LispObject
             LispObject[] array = result.copyToArray();
             for (int i = 0; i < array.length - 1; i++) {
                 if (array[i] == Keyword.BACK) {
-                    if (array[i+1] instanceof LispString || array[i+1] == Keyword.WILD) {
+                    if (array[i+1] instanceof AbstractString || array[i+1] == Keyword.WILD) {
                         array[i] = null;
                         array[i+1] = null;
                     }

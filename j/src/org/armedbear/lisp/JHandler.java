@@ -2,7 +2,7 @@
  * JHandler.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JHandler.java,v 1.6 2003-12-24 16:06:28 piso Exp $
+ * $Id: JHandler.java,v 1.7 2004-02-23 14:24:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,9 +57,9 @@ public final class JHandler extends Lisp
                     lispAi[i] = new Fixnum(ai[i]);
                 }
                 LispObject lispAiVector = new Vector(lispAi);
-                LispString[] lispAs = new LispString[as.length];
+                SimpleString[] lispAs = new SimpleString[as.length];
                 for (int i = 0; i < as.length; i++) {
-                    lispAs[i] = new LispString(as[i]);
+                    lispAs[i] = new SimpleString(as[i]);
                 }
                 LispObject lispAsVector = new Vector(lispAs);
                 LispObject[] args = new LispObject[] //FIXME: count -> seq_num
@@ -98,7 +98,7 @@ public final class JHandler extends Lisp
             return T;
         }
     };
-    
+
     private static class Entry
     {
         Function handler;
@@ -106,7 +106,7 @@ public final class JHandler extends Lisp
         int count = -1;
         Map entryTable;
         String event;
-        
+
         public Entry (Function handler, LispObject data, String event, Map entryTable)
         {
             this.entryTable = entryTable;

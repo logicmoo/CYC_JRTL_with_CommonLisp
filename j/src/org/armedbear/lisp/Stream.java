@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.23 2004-02-16 02:33:35 piso Exp $
+ * $Id: Stream.java,v 1.24 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,16 +307,16 @@ public class Stream extends LispObject
         return sb.toString();
     }
 
-    private LispString readString() throws ConditionThrowable
+    private SimpleString readString() throws ConditionThrowable
     {
-        return new LispString(_readString());
+        return new SimpleString(_readString());
     }
 
     private LispObject readPathname() throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, false);
-        if (obj instanceof LispString)
-            return new Pathname(((LispString)obj).getValue());
+        if (obj instanceof AbstractString)
+            return new Pathname(obj.getStringValue());
         if (obj.listp())
             return Pathname.makePathname(obj);
         return signal(new TypeError("#p requires a string or list argument."));
@@ -1025,10 +1025,10 @@ public class Stream extends LispObject
                         return signal(new EndOfFile());
                     return thread.setValues(eofValue, T);
                 }
-                return thread.setValues(new LispString(sb.toString()), T);
+                return thread.setValues(new SimpleString(sb.toString()), T);
             }
             if (n == '\n')
-                return thread.setValues(new LispString(sb.toString()), NIL);
+                return thread.setValues(new SimpleString(sb.toString()), NIL);
             else
                 sb.append((char)n);
         }
@@ -1176,7 +1176,7 @@ public class Stream extends LispObject
     {
         if (arg instanceof LispCharacter)
             return Fixnum.ONE;
-        else if (arg instanceof LispString)
+        else if (arg instanceof AbstractString)
             return number(arg.length());
         else
             return signal(new TypeError(String.valueOf(arg) +

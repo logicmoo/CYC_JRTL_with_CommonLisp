@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: arglist.java,v 1.8 2004-02-16 13:13:11 piso Exp $
+ * $Id: arglist.java,v 1.9 2004-02-23 14:24:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,8 +62,8 @@ public final class arglist extends Lisp
             if (functional != null)
                 arglist = functional.getArglist();
             final LispObject value1, value2;
-            if (arglist instanceof LispString) {
-                String s = ((LispString)arglist).getValue();
+            if (arglist instanceof AbstractString) {
+                String s = arglist.getStringValue();
                 // Give the string list syntax.
                 s = "(" + s + ")";
                 // Bind *PACKAGE* so we use the EXT package if we need

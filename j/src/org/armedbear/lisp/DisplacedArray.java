@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.23 2004-02-14 18:52:50 piso Exp $
+ * $Id: DisplacedArray.java,v 1.24 2004-02-23 14:24:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ public final class DisplacedArray extends AbstractArray
     public LispObject typeOf()
     {
         if (dimv.length == 1) {
-            if (array instanceof LispString)
+            if (array instanceof AbstractString)
                 return Symbol.STRING;
             if (array instanceof BitVector)
                 return Symbol.BIT_VECTOR;
@@ -225,8 +225,8 @@ public final class DisplacedArray extends AbstractArray
 
     public String toString()
     {
-        if (array instanceof LispString) {
-            LispString s = (LispString) array;
+        if (array instanceof AbstractString) {
+            AbstractString s = (AbstractString) array;
             return s.toString(offset, offset + size);
         }
         StringBuffer sb = new StringBuffer();

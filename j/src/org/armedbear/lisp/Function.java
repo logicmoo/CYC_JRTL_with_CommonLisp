@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.31 2004-01-10 15:57:38 piso Exp $
+ * $Id: Function.java,v 1.32 2004-02-23 14:24:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public abstract class Function extends Functional
     public Function(String name, String arglist)
     {
         this(name);
-        setArglist(new LispString(arglist));
+        setArglist(new SimpleString(arglist));
     }
 
     public Function(String name, Package pkg)
@@ -70,7 +70,7 @@ public abstract class Function extends Functional
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
         if (arglist instanceof String)
-            setArglist(new LispString(arglist));
+            setArglist(new SimpleString(arglist));
         if (name != null) {
             Symbol symbol = pkg.intern(this.name);
             symbol.setSymbolFunction(this);

@@ -2,7 +2,7 @@
  * lisp_implementation_version.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: lisp_implementation_version.java,v 1.3 2003-12-10 08:12:43 asimon Exp $
+ * $Id: lisp_implementation_version.java,v 1.4 2004-02-23 14:24:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class lisp_implementation_version extends Primitive0
 
     public LispObject execute()
     {
-        return new LispString(Version.getVersion());
+        return new SimpleString(Version.getVersion());
     }
 
     private static final lisp_implementation_version LISP_IMPLEMENTATION_VERSION =

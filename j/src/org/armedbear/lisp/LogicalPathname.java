@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LogicalPathname.java,v 1.2 2004-02-03 02:46:24 piso Exp $
+ * $Id: LogicalPathname.java,v 1.3 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ public final class LogicalPathname extends Pathname
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            String host = LispString.getValue(first).toUpperCase();
+            String host = first.getStringValue().toUpperCase();
             map.put(host, NIL); // FIXME
             return NIL;
         }
@@ -84,7 +84,7 @@ public final class LogicalPathname extends Pathname
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String host = LispString.getValue(arg).toUpperCase();
+            String host = arg.getStringValue().toUpperCase();
             if (map.get(host) != null)
                 return NIL;
             return signal(new LispError("LOAD-LOGICAL-PATHNAME-TRANSLATIONS is not implemented."));
@@ -99,13 +99,13 @@ public final class LogicalPathname extends Pathname
         {
             if (arg instanceof LogicalPathname)
                 return arg;
-            if (arg instanceof LispString) {
-                String s = ((LispString)arg).getValue();
+            if (arg instanceof AbstractString) {
+                String s = arg.getStringValue();
                 int index = s.indexOf(':');
                 if (index >= 0) {
                     String host = s.substring(0, index).toUpperCase();
                     LogicalPathname p = new LogicalPathname();
-                    p.host = new LispString(host);
+                    p.host = new SimpleString(host);
                     return p;
                 }
                 return NIL;

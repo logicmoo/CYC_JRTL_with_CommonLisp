@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.4 2004-02-14 18:51:08 piso Exp $
+ * $Id: NilVector.java,v 1.5 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ public final class NilVector extends AbstractVector
             }
             return true;
         }
-        if (obj instanceof LispString) {
+        if (obj instanceof AbstractString) {
             if (capacity != obj.length())
                 return false;
             if (capacity != 0) {

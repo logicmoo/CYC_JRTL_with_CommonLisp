@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.107 2004-02-23 00:12:37 piso Exp $
+ * $Id: Symbol.java,v 1.108 2004-02-23 14:24:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -388,7 +388,7 @@ public class Symbol extends LispObject
     public final void setFunctionDocumentation(String docstring)
         throws ConditionThrowable
     {
-        put(this, _FUNCTION_DOCUMENTATION, new LispString(docstring));
+        put(this, _FUNCTION_DOCUMENTATION, new SimpleString(docstring));
     }
 
     public final void setFunctionDocumentation(LispObject documentation)
@@ -487,10 +487,10 @@ public class Symbol extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                return new LispString(((Symbol)arg).name);
+                return new SimpleString(((Symbol)arg).name);
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, Symbol.SYMBOL));
             }
         }
     };

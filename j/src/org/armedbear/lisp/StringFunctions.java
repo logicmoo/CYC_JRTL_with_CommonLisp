@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.17 2004-02-22 15:58:27 piso Exp $
+ * $Id: StringFunctions.java,v 1.18 2004-02-23 14:24:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -531,7 +531,7 @@ public final class StringFunctions extends Lisp
                 sb.append(Utilities.toUpperCase(array[i]));
             for (i = end; i < length; i++)
                 sb.append(array[i]);
-            return new LispString(sb.toString());
+            return new SimpleString(sb.toString());
         }
     };
 
@@ -565,7 +565,7 @@ public final class StringFunctions extends Lisp
                 sb.append(Utilities.toLowerCase(array[i]));
             for (i = end; i < length; i++)
                 sb.append(array[i]);
-            return new LispString(sb.toString());
+            return new SimpleString(sb.toString());
         }
     };
 
@@ -611,7 +611,7 @@ public final class StringFunctions extends Lisp
             }
             for (i = end; i < length; i++)
                 sb.append(array[i]);
-            return new LispString(sb.toString());
+            return new SimpleString(sb.toString());
         }
     };
 
@@ -754,7 +754,7 @@ public final class StringFunctions extends Lisp
         }
     };
 
-    // ### string-p
+    // ### stringp
     public static final Primitive1 STRINGP = new Primitive1("stringp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -788,19 +788,19 @@ public final class StringFunctions extends Lisp
                 Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
             if (n < 0 || n >= limit) {
                 StringBuffer sb = new StringBuffer();
-                sb.append("the size specified for this string (");
+                sb.append("The size specified for this string (");
                 sb.append(n);
                 sb.append(')');
                 if (n >= limit) {
                     sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
                     sb.append(limit);
-                    sb.append(')');
+                    sb.append(").");
                 } else
-                    sb.append(" is negative");
+                    sb.append(" is negative.");
                 return signal(new LispError(sb.toString()));
             }
             // Ignore elementType.
-            LispString string = new LispString(n);
+            SimpleString string = new SimpleString(n);
             if (initialElement != NIL) {
                 // Initial element was specified.
                 char c = checkCharacter(initialElement).getValue();
@@ -844,7 +844,15 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return checkString(first).get(Fixnum.getInt(second));
+            try {
+                return ((SimpleString)first).get(((Fixnum)second).value);
+            }
+            catch (ClassCastException e) {
+                if (first instanceof SimpleString)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
+            }
         }
     };
 
@@ -855,8 +863,16 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third) throws ConditionThrowable
         {
-            checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
-            return third;
+            try {
+                ((SimpleString)first).set(((Fixnum)second).value, third);
+                return third;
+            }
+            catch (ClassCastException e) {
+                if (first instanceof SimpleString)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.SIMPLE_STRING));
+            }
         }
     };
 
@@ -888,7 +904,8 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            int index = LispString.getValue(second).indexOf(LispString.getValue(first));
+            // FIXME Don't call getStringValue() here! (Just look at the chars.)
+            int index = second.getStringValue().indexOf(first.getStringValue());
             return index >= 0 ? new Fixnum(index) : NIL;
         }
     };
@@ -900,8 +917,14 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            checkString(first).fill(LispCharacter.getValue(second));
-            return first;
+            try {
+                AbstractString s = (AbstractString) first;
+                s.fill(LispCharacter.getValue(second));
+                return first;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.SIMPLE_STRING));
+            }
         }
     };
 }

@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.74 2004-02-19 18:16:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.75 2004-02-23 14:24:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -500,7 +500,7 @@
 (defconstant +lisp-class+ "org/armedbear/lisp/Lisp")
 (defconstant +lisp-object-class+ "org/armedbear/lisp/LispObject")
 (defconstant +lisp-object+ "Lorg/armedbear/lisp/LispObject;")
-(defconstant +lisp-string+ "Lorg/armedbear/lisp/LispString;")
+(defconstant +lisp-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
 (defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
@@ -1213,7 +1213,7 @@
       (emit 'dup)
       (emit-invokestatic +lisp-class+
                          "recall"
-                         "(Lorg/armedbear/lisp/LispString;)Lorg/armedbear/lisp/LispObject;"
+                         "(Lorg/armedbear/lisp/SimpleString;)Lorg/armedbear/lisp/LispObject;"
                          0)
       (emit 'putstatic
             *this-class*
@@ -1221,7 +1221,7 @@
             +lisp-object+)
       (emit-invokestatic +lisp-class+
                          "forget"
-                         "(Lorg/armedbear/lisp/LispString;)V"
+                         "(Lorg/armedbear/lisp/SimpleString;)V"
                          -1)
       (setq *static-code* *code*)
       g2)))
@@ -1229,12 +1229,12 @@
 (defun declare-string (string)
   (let ((g (symbol-name (gensym)))
         (*code* *static-code*))
-    (declare-field g "Lorg/armedbear/lisp/LispString;")
+    (declare-field g "Lorg/armedbear/lisp/SimpleString;")
     (emit 'ldc
           (pool-string string))
-    (emit-invokestatic "org/armedbear/lisp/LispString"
+    (emit-invokestatic "org/armedbear/lisp/SimpleString"
                        "getInstance"
-                       "(Ljava/lang/String;)Lorg/armedbear/lisp/LispString;"
+                       "(Ljava/lang/String;)Lorg/armedbear/lisp/SimpleString;"
                        0)
     (emit 'putstatic
           *this-class*
@@ -1284,7 +1284,7 @@
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/LispString;")
+            "Lorg/armedbear/lisp/SimpleString;")
       (emit-store-value)))
    ((vectorp form)
     (let ((g (declare-object-as-string form)))

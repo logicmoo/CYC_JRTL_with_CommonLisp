@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.39 2004-01-24 22:56:00 asimon Exp $
+ * $Id: Java.java,v 1.40 2004-02-23 14:24:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String className = LispString.getValue(arg);
+            String className = arg.getStringValue();
             try {
                 return new JavaObject(classForName(className));
             }
@@ -103,13 +103,13 @@ public final class Java extends Lisp
             Class fieldType;
             Object instance = null;
             try {
-                if (args[1] instanceof LispString) {
+                if (args[1] instanceof AbstractString) {
                     // Cases 1-5.
-                    fieldName = LispString.getValue(args[1]);
+                    fieldName = args[1].getStringValue();
                     c = forClassRef(args[0]);
                 } else {
                     // Cases 6 and 7.
-                    fieldName = LispString.getValue(args[0]);
+                    fieldName = args[0].getStringValue();
                     instance = JavaObject.getObject(args[1]);
                     c = instance.getClass();
                 }
@@ -220,14 +220,15 @@ public final class Java extends Lisp
 
     // ### jmethod
     // jmethod class-ref name &rest parameter-class-refs
-    private static final Primitive JMETHOD = new Primitive("jmethod", PACKAGE_JAVA, true,
-                                                           "class-ref name &rest parameter-class-refs")
+    private static final Primitive JMETHOD =
+        new Primitive("jmethod", PACKAGE_JAVA, true,
+                      "class-ref name &rest parameter-class-refs")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
-            String methodName = LispString.getValue(args[1]);
+            String methodName = args[1].getStringValue();
             try {
                 final Class c = forClassRef(args[0]);
                 int argCount = 0;
@@ -296,10 +297,10 @@ public final class Java extends Lisp
                     Object obj = ((JavaObject)methodRef).getObject();
                     if (obj instanceof Method)
                         m = (Method) obj;
-                } else if (methodRef instanceof LispString) {
+                } else if (methodRef instanceof AbstractString) {
                     Class c = forClassRef(args[1]);
                     if (c != null) {
-                        String methodName = LispString.getValue(methodRef);
+                        String methodName = methodRef.getStringValue();
                         Method[] methods = c.getMethods();
                         for (int i = 0; i < methods.length; i++) {
                             Method method = methods[i];
@@ -321,7 +322,7 @@ public final class Java extends Lisp
                     LispObject arg = args[i];
                     if (arg == NIL)
                         methodArgs[i-2] = null;
-                    else 
+                    else
                         methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
                 }
                 Object result = m.invoke(null, methodArgs);
@@ -477,8 +478,8 @@ public final class Java extends Lisp
                 Method method = (Method) JavaObject.getObject(args[0]);
                 Class[] argTypes = method.getParameterTypes();
                 Object instance;
-                if (args[1] instanceof LispString)
-                    instance = LispString.getValue(args[1]);
+                if (args[1] instanceof AbstractString)
+                    instance = args[1].getStringValue();
                 else
                     instance = JavaObject.getObject(args[1]);
                 Object[] methodArgs = new Object[args.length-2];
@@ -486,7 +487,7 @@ public final class Java extends Lisp
                     LispObject arg = args[i];
                     if (arg == NIL)
                         methodArgs[i-2] = null;
-                    else 
+                    else
                         methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
                 }
                 Object result = method.invoke(instance, methodArgs);
@@ -522,7 +523,7 @@ public final class Java extends Lisp
                     if (type == Keyword.REF) {
                         if (object == NIL)
                             return new JavaObject(null);
-                        else 
+                        else
                             throw new Error();
                     }
                     // other special cases come here
@@ -570,8 +571,8 @@ public final class Java extends Lisp
     // Supports Java primitive types too.
     private static Class forClassRef(LispObject classRef) throws ClassNotFoundException, ConditionThrowable
     {
-        if (classRef instanceof LispString) {
-            String className = LispString.getValue(classRef);
+        if (classRef instanceof AbstractString) {
+            String className = classRef.getStringValue();
             if (className.equals("boolean"))
                 return Boolean.TYPE;
             if (className.equals("byte"))
@@ -606,7 +607,7 @@ public final class Java extends Lisp
 
     private static final LispObject makeLispObject(Object obj) throws ConditionThrowable
     {
-        if (obj == null)         
+        if (obj == null)
             return NIL;
         if (obj instanceof Boolean)
             return ((Boolean)obj).booleanValue() ? T : NIL;
@@ -617,7 +618,7 @@ public final class Java extends Lisp
         if (obj instanceof Double || obj instanceof Float)
             return new LispFloat(((Number)obj).doubleValue());
         if (obj instanceof String)
-            return new LispString((String)obj);
+            return new SimpleString((String)obj);
         if (obj instanceof Character)
             return LispCharacter.getInstance(((Character)obj).charValue());
         if (obj instanceof Object[]) {

@@ -2,7 +2,7 @@
  * lisp_implementation_type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: lisp_implementation_type.java,v 1.2 2003-12-10 08:12:43 asimon Exp $
+ * $Id: lisp_implementation_type.java,v 1.3 2004-02-23 14:24:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class lisp_implementation_type extends Primitive0
 
     public LispObject execute()
     {
-        return new LispString("Armed Bear Lisp");
+        return new SimpleString("Armed Bear Lisp");
     }
 
     private static final lisp_implementation_type LISP_IMPLEMENTATION_TYPE =

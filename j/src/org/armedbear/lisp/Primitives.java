@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.574 2004-02-19 01:35:12 piso Exp $
+ * $Id: Primitives.java,v 1.575 2004-02-23 14:24:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -363,7 +363,12 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return first.elt(Fixnum.getValue(second));
+            try {
+                return first.elt(((Fixnum)second).value);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.FIXNUM));
+            }
         }
     };
 
@@ -660,7 +665,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new LispString(String.valueOf(arg));
+            return new SimpleString(String.valueOf(arg));
         }
     };
 
@@ -689,7 +694,7 @@ public final class Primitives extends Lisp
             LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-            LispString string = new LispString(String.valueOf(arg));
+            SimpleString string = new SimpleString(String.valueOf(arg));
             thread.setDynamicEnvironment(oldDynEnv);
             return string;
         }
@@ -715,10 +720,11 @@ public final class Primitives extends Lisp
 
     // ### prin1-to-string
     private static final Primitive1 PRIN1_TO_STRING =
-        new Primitive1("prin1-to-string","object") {
+        new Primitive1("prin1-to-string", "object")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new LispString(String.valueOf(arg));
+            return new SimpleString(String.valueOf(arg));
         }
     };
 
@@ -726,7 +732,9 @@ public final class Primitives extends Lisp
     // print object &optional output-stream => object
     // PRINT is just like PRIN1 except that the printed representation of
     // object is preceded by a newline and followed by a space.
-    private static final Primitive1 PRINT = new Primitive1("print","object &optional output-stream") {
+    private static final Primitive1 PRINT =
+        new Primitive1("print", "object &optional output-stream")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Stream out =
@@ -1297,7 +1305,7 @@ public final class Primitives extends Lisp
                 return NIL;
             }
             if (destination == NIL)
-                return new LispString(s);
+                return new SimpleString(s);
             if (destination instanceof TwoWayStream) {
                 Stream out = ((TwoWayStream)destination).getOutputStream();
                 if (out instanceof Stream) {
@@ -1371,7 +1379,7 @@ public final class Primitives extends Lisp
                 return signal(new TypeError(first, "valid function name"));
             LispObject arglist = checkList(second);
             LispObject body = checkList(third);
-            if (body.car() instanceof LispString && body.cdr() != NIL) {
+            if (body.car() instanceof AbstractString && body.cdr() != NIL) {
                 // Documentation.
                 if (first instanceof Symbol)
                     symbol.setFunctionDocumentation(body.car());
@@ -1480,7 +1488,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(first);
-            if (third instanceof LispString)
+            if (third instanceof AbstractString)
                 symbol.setVariableDocumentation(third);
             else if (third != NIL)
                 signal(new TypeError(third, "string"));
@@ -1510,7 +1518,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(first);
-            if (third instanceof LispString)
+            if (third instanceof AbstractString)
                 symbol.setVariableDocumentation(third);
             else if (third != NIL)
                 signal(new TypeError(third, "string"));
@@ -2051,7 +2059,7 @@ public final class Primitives extends Lisp
             final LispObject value1, value2;
             Function function = checkFunction(arg);
             String name = function.getName();
-            final LispObject value3 = name != null ? new LispString(name) : NIL;
+            final LispObject value3 = name != null ? new SimpleString(name) : NIL;
             if (function instanceof Closure) {
                 Closure closure = (Closure) function;
                 LispObject expr = closure.getBody();
@@ -2359,8 +2367,8 @@ public final class Primitives extends Lisp
                 sb.append(n.toString());
                 return new Symbol(sb.toString());
             }
-            if (arg instanceof LispString)
-                prefix = ((LispString)arg).getValue();
+            if (arg instanceof AbstractString)
+                prefix = arg.getStringValue();
             else
                 signal(new TypeError(arg, "string or non-negative integer"));
             return gensym(prefix);
@@ -2402,19 +2410,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String s;
-            try {
-                s = ((LispString)arg).getValue();
-            }
-            catch (ClassCastException e) {
-                if (arg instanceof NilVector) {
-                    if (arg.length() == 0)
-                        s = "";
-                    else
-                        return ((NilVector)arg).accessError();
-                } else
-                    return signal(new TypeError(arg, Symbol.STRING));
-            }
+            String s = arg.getStringValue();
             final LispThread thread = LispThread.currentThread();
             Package pkg =
                 (Package) _PACKAGE_.symbolValueNoThrow(thread);
@@ -2423,19 +2419,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            String s;
-            try {
-                s = ((LispString)first).getValue();
-            }
-            catch (ClassCastException e) {
-                if (first instanceof NilVector) {
-                    if (first.length() == 0)
-                        s = "";
-                    else
-                        return ((NilVector)first).accessError();
-                } else
-                    return signal(new TypeError(first, Symbol.STRING));
-            }
+            String s = first.getStringValue();
             Package pkg = coerceToPackage(second);
             return pkg.intern(s, LispThread.currentThread());
         }
@@ -2462,14 +2446,14 @@ public final class Primitives extends Lisp
 
     // ### find-package
     private static final Primitive1 FIND_PACKAGE =
-        new Primitive1("find-package","name") {
+        new Primitive1("find-package", "name") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof Package)
                 return arg;
-            if (arg instanceof LispString) {
+            if (arg instanceof AbstractString) {
                 Package pkg =
-                    Packages.findPackage(((LispString)arg).getValue());
+                    Packages.findPackage(arg.getStringValue());
                 return pkg != null ? pkg : NIL;
             }
             if (arg instanceof Symbol) {
@@ -2679,7 +2663,7 @@ public final class Primitives extends Lisp
         {
             if (args.length == 0 || args.length > 2)
                 signal(new WrongNumberOfArgumentsException(this));
-            String name = LispString.getValue(args[0]);
+            String name = args[0].getStringValue();
             Package pkg;
             if (args.length == 2)
                 pkg = coerceToPackage(args[1]);
@@ -3544,7 +3528,7 @@ public final class Primitives extends Lisp
         {
             if (args.length < 6)
                 signal(new WrongNumberOfArgumentsException(this));
-            String s = LispString.getValue(args[0]);
+            String s = args[0].getStringValue();
             boolean eofError = args[1] != NIL;
             LispObject eofValue = args[2];
             LispObject start = args[3];
@@ -3603,7 +3587,7 @@ public final class Primitives extends Lisp
     private static final Primitive1 NAME_CHAR = new Primitive1("name-char","name") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String s = LispString.getValue(string(arg));
+            String s = string(arg).getStringValue();
             int n = nameToChar(s);
             return n >= 0 ? LispCharacter.getInstance((char)n) : NIL;
         }
@@ -3637,7 +3621,7 @@ public final class Primitives extends Lisp
                 default:
                     break;
             }
-            return name != null ? new LispString(name) : NIL;
+            return name != null ? new SimpleString(name) : NIL;
         }
     };
 
@@ -4081,7 +4065,7 @@ public final class Primitives extends Lisp
                     ++i;
                 }
             }
-            signal(new TypeError(first, "sequence"));
+            signal(new TypeError(first, Symbol.SEQUENCE));
             return NIL;
         }
     };
@@ -4415,7 +4399,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new LispString(Integer.toHexString(System.identityHashCode(arg)));
+            return new SimpleString(Integer.toHexString(System.identityHashCode(arg)));
         }
     };
 
@@ -4425,8 +4409,8 @@ public final class Primitives extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof LispString)
-                return new File(((LispString)arg).getValue()).mkdir() ? T : NIL;
+            if (arg instanceof AbstractString)
+                return new File(arg.getStringValue()).mkdir() ? T : NIL;
             else
                 return signal(new TypeError(arg, Symbol.STRING));
         }
