@@ -2,7 +2,7 @@
  * describe.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: describe.java,v 1.7 2003-10-06 17:13:28 piso Exp $
+ * $Id: describe.java,v 1.8 2003-10-19 18:50:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ public final class describe extends Lisp
                         sb.append("its value is ");
                         sb.append(value);
                     } else
-                        sb.append("no current value");
+                        sb.append("it is unbound");
                     sb.append(".\n");
                 }
                 LispObject function = symbol.getSymbolFunction();
