@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.324 2004-12-28 02:10:52 piso Exp $
+;;; $Id: jvm.lisp,v 1.325 2004-12-28 02:21:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4352,28 +4352,31 @@
   (emit-move-from-stack target))
 
 (defun compile-values (form &key (target *val*) representation)
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-values (compile-form new-form :target target))))
+;;   (let ((new-form (rewrite-function-call form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-values (compile-form new-form :target target))))
   (let ((args (cdr form)))
     (case (length args)
       (1
-       (compile-form (car args) :target target)
-       (unless (single-valued-p (car args))
-         (emit-clear-values)))
+       (let ((arg (first args)))
+         (compile-form arg :target target)
+         (unless (single-valued-p arg)
+           (emit-clear-values))))
       (2
        (emit-push-current-thread)
-       (cond ((and (eq (car args) t)
-                   (eq (cadr args) t))
-              (emit-push-t)
-              (emit 'dup))
-             ((and (eq (car args) nil)
-                   (eq (cadr args) nil))
-              (emit-push-nil)
-              (emit 'dup))
-             (t
-              (compile-form (car args) :target :stack)
-              (compile-form (cadr args) :target :stack)))
+       (let ((arg1 (first args))
+             (arg2 (second args)))
+         (cond ((and (eq arg1 t)
+                     (eq arg2 t))
+                (emit-push-t)
+                (emit 'dup))
+               ((and (eq arg1 nil)
+                     (eq arg2 nil))
+                (emit-push-nil)
+                (emit 'dup))
+               (t
+                (compile-form arg1 :target :stack)
+                (compile-form arg2 :target :stack))))
        (emit-invokevirtual +lisp-thread-class+
                            "setValues"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
