@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.15 2003-07-07 19:39:32 piso Exp $
+ * $Id: PackageFunctions.java,v 1.16 2003-07-08 01:52:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -247,13 +247,21 @@ public final class PackageFunctions extends Lisp
             LispObject docString = args[9];
 
             Package pkg = Packages.findPackage(packageName);
-            if (pkg != null) {
-                Debug.trace("package " + packageName + " already exists");
+            if (pkg != null)
                 return pkg;
+
+            if (nicknames != NIL) {
+                LispObject list = nicknames;
+                while (list != NIL) {
+                    String nick = javaString(list.car());
+                    if (Packages.findPackage(nick) != null) {
+                        throw new PackageError("a package named " + nick +
+                                            " already exists");
+                    }
+                    list = list.cdr();
+                }
             }
 
-            // FIXME Don't create the package until we're sure there won't be
-            // an error!
             pkg = Packages.createPackage(packageName);
 
             while (nicknames != NIL) {
