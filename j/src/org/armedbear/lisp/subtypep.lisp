@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.3 2003-09-13 18:34:23 piso Exp $
+;;; $Id: subtypep.lisp,v 1.4 2003-09-13 18:43:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -173,19 +173,19 @@
                (values nil (known-type-p t2))))
           (t
            (cond ((eq t1 'float)
-                  (if (eq t2 'float)
+                  (if (memq t2 '(float real number))
                       (values (sub-interval-p i1 i2) t)
                       (values nil (known-type-p t2))))
                  ((eq t1 'integer)
-                  (if (member t2 '(integer rational real number))
+                  (if (memq t2 '(integer rational real number))
                       (values (sub-interval-p i1 i2) t)
                       (values nil (known-type-p t2))))
                  ((eq t1 'rational)
-                  (if (member t2 '(rational real))
+                  (if (memq t2 '(rational real number))
                       (values (sub-interval-p i1 i2) t)
                       (values nil (known-type-p t2))))
                  ((eq t1 'real)
-                  (if (eq t2 'real)
+                  (if (memq t2 '(real number))
                       (values (sub-interval-p i1 i2) t)
                       (values nil (known-type-p t2))))
                  ((memq t1 '(string simple-string base-string
