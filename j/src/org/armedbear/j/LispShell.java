@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.66 2004-09-12 01:47:37 piso Exp $
+ * $Id: LispShell.java,v 1.67 2004-09-12 02:07:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,11 +223,12 @@ public class LispShell extends Shell
     public void resetLisp()
     {
         if (resetCommand != null) {
-            Line line = Editor.currentEditor().getDotLine();
-            if (line.flags() != STATE_PROMPT)
-                line.setFlags(STATE_INPUT);
-            appendString(resetCommand.concat("\n"));
-            Editor.currentEditor().eob();
+            Position pos = getEnd();
+            insertString(pos, resetCommand.concat("\n"));
+            if (needsRenumbering())
+                renumber();
+            enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
+            posEndOfInput = pos.copy();
             send(resetCommand);
         }
     }
