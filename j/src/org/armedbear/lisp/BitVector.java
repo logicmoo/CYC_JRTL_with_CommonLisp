@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.7 2003-03-03 17:56:45 piso Exp $
+ * $Id: BitVector.java,v 1.8 2003-03-03 20:12:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,14 @@ package org.armedbear.lisp;
 
 public final class BitVector extends Vector
 {
-    public BitVector(int length)
+    public BitVector(int length) throws LispError
     {
         super(length);
         for (int i = length; i-- > 0;)
             set(i, new Fixnum(0));
     }
 
-    public BitVector(String s)
+    public BitVector(String s) throws LispError
     {
         super(s.length());
         for (int i = s.length(); i-- > 0;) {
@@ -79,6 +79,15 @@ public final class BitVector extends Vector
     public boolean isSimpleVector()
     {
         return fillPointer < 0;
+    }
+
+    public void set(int index, LispObject newValue) throws LispError
+    {
+        long n = Fixnum.getValue(newValue);
+        if (n == 0 || n == 1)
+            super.set(index, newValue);
+        else
+            throw new TypeError(newValue, "bit");
     }
 
     public void fill(LispObject obj) throws LispError
