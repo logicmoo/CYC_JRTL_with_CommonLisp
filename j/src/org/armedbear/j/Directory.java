@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.14 2003-02-13 00:29:54 piso Exp $
+ * $Id: Directory.java,v 1.15 2003-03-20 00:26:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.Icon;
@@ -405,7 +407,10 @@ public final class Directory extends Buffer
 
     private synchronized void sort()
     {
-        Debug.assertTrue(!usingNativeFormat);
+        if (usingNativeFormat) {
+            Debug.bug();
+            return;
+        }
         if (sortBy == SORT_BY_NAME)
             sortByName();
         else if (sortBy == SORT_BY_DATE)
@@ -418,71 +423,52 @@ public final class Directory extends Buffer
     private void sortByName()
     {
         Debug.assertTrue(!usingNativeFormat);
-        boolean changed;
-        final int limit = entries.size()-1;
-        do {
-            changed = false;
-            for (int i = 0; i < limit; i++) {
-                DirectoryEntry de1 = (DirectoryEntry) entries.get(i);
-                DirectoryEntry de2 = (DirectoryEntry) entries.get(i+1);
-                if (de1.getName().compareToIgnoreCase(de2.getName()) > 0) {
-                    DirectoryEntry temp = de1;
-                    de1 = de2;
-                    de2 = temp;
-                    entries.set(i, de1);
-                    entries.set(i+1, de2);
-                    changed = true;
-                }
+        Comparator comparator = new Comparator() {
+            public int compare(Object o1, Object o2)
+            {
+                String name1 = ((DirectoryEntry)o1).getName();
+                String name2 = ((DirectoryEntry)o2).getName();
+                return name1.compareToIgnoreCase(name2);
             }
-        }
-        while (changed);
+        };
+        Collections.sort(entries, comparator);
     }
 
     // Called only from sort().
     private void sortByDate() {
-        Debug.assertTrue(!usingNativeFormat);
-        boolean changed;
-        int limit = entries.size()-1;
-        do {
-            changed = false;
-            for (int i = 0; i < limit; i++) {
-                DirectoryEntry de1 = (DirectoryEntry) entries.get(i);
-                DirectoryEntry de2 = (DirectoryEntry) entries.get(i+1);
-                if (de1.getDate() < de2.getDate()) {
-                    DirectoryEntry temp = de1;
-                    de1 = de2;
-                    de2 = temp;
-                    entries.set(i, de1);
-                    entries.set(i+1, de2);
-                    changed = true;
-                }
+        Comparator comparator = new Comparator() {
+            public int compare(Object o1, Object o2)
+            {
+                // Most recent dates first.
+                long date1 = ((DirectoryEntry)o1).getDate();
+                long date2 = ((DirectoryEntry)o2).getDate();
+                if (date1 > date2)
+                    return -1;
+                if (date1 < date2)
+                    return 1;
+                return 0;
             }
-        }
-        while (changed);
+        };
+        Collections.sort(entries, comparator);
     }
 
     // Called only from sort().
     private void sortBySize()
     {
-        Debug.assertTrue(!usingNativeFormat);
-        boolean changed;
-        int limit = entries.size()-1;
-        do {
-            changed = false;
-            for (int i = 0; i < limit; i++) {
-                DirectoryEntry de1 = (DirectoryEntry) entries.get(i);
-                DirectoryEntry de2 = (DirectoryEntry) entries.get(i+1);
-                if (de1.getSize() < de2.getSize()) {
-                    DirectoryEntry temp = de1;
-                    de1 = de2;
-                    de2 = temp;
-                    entries.set(i, de1);
-                    entries.set(i+1, de2);
-                    changed = true;
-                }
+        Comparator comparator = new Comparator() {
+            public int compare(Object o1, Object o2)
+            {
+                // Biggest files first.
+                long size1 = ((DirectoryEntry)o1).getSize();
+                long size2 = ((DirectoryEntry)o2).getSize();
+                if (size1 > size2)
+                    return -1;
+                if (size1 < size2)
+                    return 1;
+                return 0;
             }
-        }
-        while (changed);
+        };
+        Collections.sort(entries, comparator);
     }
 
     // Called only from synchronized methods.
