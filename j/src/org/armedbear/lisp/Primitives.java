@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.134 2003-03-16 19:26:56 piso Exp $
+ * $Id: Primitives.java,v 1.135 2003-03-16 19:54:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -403,6 +403,8 @@ public final class Primitives extends Module
             case CONSTANTP:                     // ### constantp
                 return arg.constantp();
             case KEYWORDP:                      // ### keywordp
+                if (arg == NIL)
+                    return NIL;
                 return checkSymbol(arg).getPackage() == PACKAGE_KEYWORD ? T : NIL;
             case SPECIAL_OPERATOR_P:            // ### special-operator-p
                 return arg.getSymbolFunction() instanceof SpecialOperator ? T : NIL;
