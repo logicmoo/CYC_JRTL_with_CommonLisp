@@ -1,8 +1,8 @@
 /*
  * EventHandler.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: EventHandler.java,v 1.1.1.1 2002-09-24 16:09:40 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: EventHandler.java,v 1.2 2003-05-15 01:20:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,11 +47,16 @@ import com.sun.jdi.event.VMDeathEvent;
 import com.sun.jdi.event.VMDisconnectEvent;
 import com.sun.jdi.event.VMStartEvent;
 import com.sun.jdi.event.WatchpointEvent;
+import com.sun.jdi.request.BreakpointRequest;
+import com.sun.jdi.request.EventRequest;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.SwingUtilities;
+import org.armedbear.j.Buffer;
 import org.armedbear.j.Editor;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
 import org.armedbear.j.Log;
 
 public final class EventHandler implements Runnable
@@ -210,6 +215,28 @@ public final class EventHandler implements Runnable
         jdb.printCurrentLocation(evt);
         jdb.setLocation(evt.location());
         jdb.source();
+        // If breakpoint is temporary, delete it.
+        EventRequest er = evt.request();
+        if (er instanceof BreakpointRequest) {
+            BreakpointRequest br = (BreakpointRequest) er;
+            for (Iterator it = jdb.getBreakpoints().iterator(); it.hasNext();) {
+                ResolvableBreakpoint bp = (ResolvableBreakpoint) it.next();
+                if (bp.getEventRequest() == br) {
+                    if (bp.isTemporary()) {
+                        jdb.deleteBreakpoint(bp);
+                        File file = bp.getFile();
+                        if (file != null) {
+                            Buffer buffer =
+                                Editor.getBufferList().findBuffer(file);
+                            if (buffer != null)
+                                buffer.repaint();
+                        }
+                        jdb.fireBreakpointChanged();
+                    }
+                    break;
+                }
+            }
+        }
         Runnable r = new Runnable() {
             public void run()
             {
