@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.66 2003-11-21 22:19:19 asimon Exp $
+;;; $Id: autoloads.lisp,v 1.67 2003-11-22 18:58:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -127,6 +127,7 @@
 (autoload 'print-object)
 (autoload-macro '(prog prog*) "prog.lisp")
 (autoload 'concatenate)
+(autoload 'parse-lambda-list)
 
 ;; Java interface.
 (in-package "JAVA")
@@ -162,8 +163,6 @@
 (autoload 'jmember-static-p "java.lisp")
 (export 'jmember-public-p "JAVA")
 (autoload 'jmember-public-p "java.lisp")
-
-
 
 ;; Profiler.
 (in-package "PROFILER")
