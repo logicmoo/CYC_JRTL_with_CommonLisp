@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: arrays.lisp,v 1.1 2003-03-17 18:20:08 piso Exp $
+;;; $Id: arrays.lisp,v 1.2 2003-03-18 04:04:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,9 +20,8 @@
 (in-package "COMMON-LISP")
 
 (export '(make-array
-          array-total-size
-          array-row-major-index))
-
+          array-row-major-index
+          aref))
 
 (defun make-array (dimensions &key
                               (element-type t)
@@ -33,18 +32,10 @@
                initial-contents adjustable fill-pointer displaced-to
                displaced-index-offset))
 
-
-(defun array-total-size (array)
-  (apply #'* (array-dimensions array)))
-
-
-;;; ARRAY-ROW-MAJOR-INDEX (from OpenMCL)
-
-(defun array-row-major-index (array &rest subscripts)
+(defun %array-row-major-index (array subscripts)
   (let ((rank  (array-rank array))
         (nsubs (length subscripts))
         (sum 0))
-    (declare (fixnum sum rank))
     (unless (eql rank nsubs)
       (error 'program-error))
     (if (eql 0 rank)
@@ -54,11 +45,27 @@
               (last-size 1 size)
               (size dim (* dim size)))
           (nil)
-          (declare (fixnum i last-size size))
           (let ((s (elt subscripts i)))
-            (unless (fixnump s)
-              (setq s (require-type s 'fixnum)))
+            (require-type s 'fixnum)
             (when (or (< s 0) (>= s dim))
               (error 'program-error))
-            (incf sum (the fixnum (* s last-size)))
+            (incf sum (* s last-size))
             (when (eql i 0) (return sum)))))))
+
+(defun array-row-major-index (array &rest subscripts)
+  (%array-row-major-index array subscripts))
+
+(defun aref (array &rest subscripts)
+  (if (= (length subscripts) 1)
+      (row-major-aref array (car subscripts))
+      (row-major-aref array (%array-row-major-index array subscripts))))
+
+(defun %aset (array &rest stuff)
+  (if (= (length stuff) 2)
+      (%set-row-major-aref array (car stuff) (cadr stuff))
+      (let ((subscripts (butlast stuff))
+            (new-value (car (last stuff))))
+        (%set-row-major-aref array (%array-row-major-index array subscripts)
+                             new-value))))
+
+(defsetf aref %aset)
