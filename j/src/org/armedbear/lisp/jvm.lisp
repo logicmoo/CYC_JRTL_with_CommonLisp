@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.224 2004-07-20 14:48:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.225 2004-07-20 15:19:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -997,7 +997,7 @@
 
 (defun write-u1 (n)
   (declare (optimize speed (safety 0)))
-  (sys::write-8-bits (logand n #xFF) *stream*))
+  (sys::write-8-bits n *stream*))
 
 (defun write-u2 (n)
   (declare (optimize speed (safety 0)))
