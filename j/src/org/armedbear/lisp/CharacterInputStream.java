@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.40 2003-07-13 14:40:22 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.41 2003-07-17 00:10:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -315,7 +315,7 @@ public class CharacterInputStream extends LispStream
             switch (c) {
                 case '\'':
                     return new Cons(Symbol.FUNCTION,
-                        new Cons(read(true, NIL, true), NIL));
+                                    new Cons(read(true, NIL, true)));
                 case '(':
                     return new Vector(readList());
                 case '\\':
