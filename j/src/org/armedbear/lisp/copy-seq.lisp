@@ -1,7 +1,7 @@
 ;;; copy-seq.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: copy-seq.lisp,v 1.2 2003-07-02 17:55:16 piso Exp $
+;;; $Id: copy-seq.lisp,v 1.3 2003-10-08 13:52:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,13 +38,7 @@
                        (rplacd splice x))
             result)))))
 
-(defun list-copy-seq* (sequence)
-  (list-copy-seq sequence))
-
-(defun vector-copy-seq* (sequence)
-  (vector-copy-seq sequence (type-of sequence)))
-
 (defun copy-seq (sequence)
   (if (listp sequence)
-      (list-copy-seq* sequence)
-      (vector-copy-seq* sequence)))
+      (list-copy-seq sequence)
+      (vector-copy-seq sequence (type-of sequence))))
