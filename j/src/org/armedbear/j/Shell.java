@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.10 2002-10-15 01:02:55 piso Exp $
+ * $Id: Shell.java,v 1.11 2002-10-15 01:23:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -437,6 +437,7 @@ public class Shell extends Buffer implements Constants
             dotLine.setFlags(STATE_INPUT);
         editor.eol();
         editor.insertLineSeparator();
+        editor.getDotLine().setFlags(0);
         if (needsRenumbering)
             renumber();
         editor.moveCaretToDotCol();
