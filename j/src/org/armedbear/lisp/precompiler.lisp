@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.66 2004-05-27 16:42:19 piso Exp $
+;;; $Id: precompiler.lisp,v 1.67 2004-06-14 17:29:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -119,6 +119,12 @@
       (let ((size (second bytespec))
             (position (third bytespec)))
         `(sys::%ldb ,size ,position ,integer))
+      form))
+
+(define-compiler-macro catch (&whole form tag &rest args)
+  (if (and (null (cdr args))
+           (constantp (car args)))
+      (car args)
       form))
 
 (in-package "EXTENSIONS")
@@ -743,7 +749,7 @@
 (install-handler 'defun                'precompile-identity)
 (install-handler 'go                   'precompile-identity)
 (install-handler 'quote                'precompile-identity)
-(install-handler 'throw                'precompile-identity)
+(install-handler 'throw                'precompile-cons)
 
 (in-package "SYSTEM")
 
