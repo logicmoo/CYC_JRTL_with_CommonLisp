@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.59 2005-01-27 12:42:40 piso Exp $
+;;; $Id: defstruct.lisp,v 1.60 2005-02-01 15:22:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@
 (defvar *dd-slots*)
 
 (defun keywordify (symbol)
-  (intern (symbol-name symbol) *keyword-package*))
+  (intern (symbol-name symbol) +keyword-package+))
 
 (defun define-keyword-constructor (constructor)
   (let* ((constructor-name (intern (car constructor)))

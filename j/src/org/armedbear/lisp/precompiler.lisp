@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.87 2005-01-31 17:25:39 piso Exp $
+;;; $Id: precompiler.lisp,v 1.88 2005-02-01 15:20:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -385,7 +385,7 @@
                     ((eq var special)
                      (if keyp
                          ;; "&key x" => "&key ((:x x) nil)"
-                         (push (list (list (intern (symbol-name var) sys:*keyword-package*)
+                         (push (list (list (intern (symbol-name var) sys:+keyword-package+)
                                            sym)
                                      nil)
                                res)

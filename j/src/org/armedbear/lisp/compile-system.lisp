@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.39 2005-02-01 14:20:49 piso Exp $
+;;; $Id: compile-system.lisp,v 1.40 2005-02-01 15:21:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@
                         (symbol (find-symbol name system-package)))
                    (when symbol
                      ;; Force the symbol's package prefix to be written out.
-                     (let ((*package* *keyword-package*))
+                     (let ((*package* +keyword-package+))
                        (format out "~S ~S ~S~%" symbol file line-number))))))
           (incf line-number))))))
 
