@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.24 2003-11-11 18:05:44 piso Exp $
+;;; $Id: subtypep.lisp,v 1.25 2003-11-11 18:18:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -116,7 +116,13 @@
        (return-from subtypep-normalize-type
                     '(integer #.most-negative-fixnum #.most-positive-fixnum)))
       (BASE-CHAR
-       (return-from subtypep-normalize-type 'character))))
+       (return-from subtypep-normalize-type 'character))
+      ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
+       (return-from subtypep-normalize-type 'float))
+      (t
+       (unless (get type 'deftype-definition)
+         (return-from subtypep-normalize-type type)))))
+  ;; Fall through...
   (let (tp i)
     (loop
       (if (consp type)
