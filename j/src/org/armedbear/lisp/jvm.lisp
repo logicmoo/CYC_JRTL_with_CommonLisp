@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.334 2005-01-01 06:07:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.335 2005-01-01 16:38:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -332,29 +332,29 @@
       (dolist (variable vars)
         (when (special-variable-p (variable-name variable))
           (setf (variable-special-p variable) t)))
+      ;; Process declarations.
+      (dolist (subform body)
+        (unless (and (consp subform) (eq (car subform) 'DECLARE))
+          (return))
+        (let ((decls (cdr subform)))
+          (dolist (decl decls)
+            (case (car decl)
+              (SPECIAL
+               (dolist (sym (cdr decl))
+                 (dolist (variable vars)
+                   (when (eq sym (variable-name variable))
+                     (setf (variable-special-p variable) t)))))
+              (TYPE
+               (dolist (sym (cddr decl))
+                 (dolist (variable vars)
+                   (when (eq sym (variable-name variable))
+                     (setf (variable-declared-type variable) (cadr decl))))))))))
       (setf (block-vars block) vars))
     (setf body (mapcar #'p1 body))
     (setf (block-form block) (list* op varlist body))
-    ;; Process declarations.
-    (dolist (subform body)
-      (unless (and (consp subform) (eq (car subform) 'DECLARE))
-        (return))
-      (let ((decls (cdr subform)))
-        (dolist (decl decls)
-          (case (car decl)
-            (SPECIAL
-             (dolist (sym (cdr decl))
-               (dolist (variable (block-vars block))
-                 (when (eq sym (variable-name variable))
-                   (setf (variable-special-p variable) t)))))
-            (TYPE
-             (dolist (sym (cddr decl))
-               (dolist (variable (block-vars block))
-                 (when (eq sym (variable-name variable))
-                   (setf (variable-declared-type variable) (cadr decl))))))))))
     block))
 
-(defun p1-multiple-value-bind (form)
+(defun p1-m-v-b (form)
 ;;   (dformat t "p1-multiple-value-bind~%")
   (let* ((*visible-variables* *visible-variables*)
          (block (make-block-node :name '(MULTIPLE-VALUE-BIND)))
@@ -373,6 +373,10 @@
         (let ((var (make-variable :name symbol)))
           (push var vars)
           (push var *visible-variables*)))
+      ;; Check for globally declared specials.
+      (dolist (variable vars)
+        (when (special-variable-p (variable-name variable))
+          (setf (variable-special-p variable) t)))
       ;; Process declarations.
       (dolist (subform body)
         (unless (and (consp subform) (eq (car subform) 'DECLARE))
@@ -389,7 +393,8 @@
                (dolist (sym (cddr decl))
                  (dolist (variable vars)
                    (when (eq sym (variable-name variable))
-                     (setf (variable-declared-type variable) (cadr decl)))))))))))
+                     (setf (variable-declared-type variable) (cadr decl))))))))))
+      (setf (block-vars block) (nreverse vars)))
     (setf body (mapcar #'p1 body))
     (setf (block-form block) (list* 'MULTIPLE-VALUE-BIND varlist values-form body))
     block))
@@ -606,7 +611,7 @@
 (install-p1-handler 'let*                 'p1-let/let*)
 (install-p1-handler 'load-time-value      'identity)
 (install-p1-handler 'locally              'p1-default)
-(install-p1-handler 'multiple-value-bind  'p1-multiple-value-bind)
+(install-p1-handler 'multiple-value-bind  'p1-m-v-b)
 (install-p1-handler 'multiple-value-call  'p1-default)
 (install-p1-handler 'multiple-value-list  'p1-default)
 (install-p1-handler 'multiple-value-prog1 'p1-default)
@@ -3161,38 +3166,45 @@
         (t
          (aver nil))))
 
-;; (defun compile-multiple-value-bind (form &key (target *val*) representation)
-(defun compile-multiple-value-bind-node (block target)
-  (let* (;;(block (make-block-node :name '(MULTIPLE-VALUE-BIND)))
-         (*blocks* (cons block *blocks*))
+(defun p2-m-v-b-node (block target)
+  (let* ((*blocks* (cons block *blocks*))
          (*register* *register*)
          (form (block-form block))
          (*visible-variables* *visible-variables*)
          (specials ())
          (vars (second form))
          (bind-special-p nil)
-         (variables ()))
+         (variables (block-vars block)))
     ;; Process declarations.
-    (dolist (f (cdddr form))
-      (unless (and (consp f) (eq (car f) 'declare))
-        (return))
-      (let ((decls (cdr f)))
-        (dolist (decl decls)
-          (when (eq (car decl) 'special)
-            (setf specials (append (cdr decl) specials))))))
+;;     (dolist (f (cdddr form))
+;;       (unless (and (consp f) (eq (car f) 'declare))
+;;         (return))
+;;       (let ((decls (cdr f)))
+;;         (dolist (decl decls)
+;;           (when (eq (car decl) 'special)
+;;             (setf specials (append (cdr decl) specials))))))
     ;; Process variables and allocate registers for them.
-    (dolist (var vars)
-      (let* ((special-p (if (or (memq var specials) (special-variable-p var)) t nil))
-             (variable
-              (make-variable :name var
-                             :special-p special-p
-                             :index (if special-p nil (length (context-vars *context*)))
-                             :register (if (or special-p *use-locals-vector*) nil (allocate-register)))))
-        (if special-p
-            (setf bind-special-p t)
-            (add-variable-to-context variable))
-        (push variable variables)))
-    (setf variables (nreverse variables))
+;;     (dolist (var vars)
+;;       (let* ((special-p (if (or (memq var specials) (special-variable-p var)) t nil))
+;;              (variable
+;;               (make-variable :name var
+;;                              :special-p special-p
+;;                              :index (if special-p nil (length (context-vars *context*)))
+;;                              :register (if (or special-p *use-locals-vector*) nil (allocate-register)))))
+;;         (if special-p
+;;             (setf bind-special-p t)
+;;             (add-variable-to-context variable))
+;;         (push variable variables)))
+;;     (setf variables (nreverse variables))
+    (dolist (variable variables)
+      (let ((special-p (variable-special-p variable)))
+        (cond (special-p
+               (setf bind-special-p t))
+              (t
+               (setf (variable-index variable) (length (context-vars *context*)))
+               (unless *use-locals-vector*
+                 (setf (variable-register variable) (allocate-register)))
+               (add-variable-to-context variable)))))
     ;; If we're going to bind any special variables...
     (when bind-special-p
       ;; Save current dynamic environment.
@@ -3268,7 +3280,7 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
-(defun compile-let/let*-node (block target)
+(defun p2-let/let*-node (block target)
   (let* ((*blocks* (cons block *blocks*))
          (*register* *register*)
          (form (block-form block))
@@ -3289,7 +3301,7 @@
       (emit 'astore (block-environment-register block)))
     (ecase (car form)
       (LET
-       (compile-let-bindings block))
+       (p2-let-bindings block))
       (LET*
        (compile-let*-bindings block)))
     ;; Body of LET/LET*.
@@ -3300,7 +3312,7 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+))))
 
-(defun compile-let-bindings (block)
+(defun p2-let-bindings (block)
   (dolist (variable (block-vars block))
     (unless (variable-special-p variable)
       (setf (variable-index variable) (length (context-vars *context*)))
@@ -3324,14 +3336,14 @@
                       (variable-register variable)
                       (variable-declared-type variable)
                       (subtypep (variable-declared-type variable) 'FIXNUM))
-                 (dformat t "compile-let-bindings declared fixnum case: ~S~%"
+                 (dformat t "p2-let-bindings declared fixnum case: ~S~%"
                           (variable-name variable))
                  (setf (variable-representation variable) :unboxed-fixnum)
                  (compile-form initform :target :stack :representation :unboxed-fixnum))
                 ((and (variable-register variable)
                       (eql (variable-writes variable) 0)
                       (subtypep (derive-type initform) 'FIXNUM))
-                 (dformat t "compile-let-bindings read-only fixnum case: ~S~%"
+                 (dformat t "p2-let-bindings read-only fixnum case: ~S~%"
                           (variable-name variable))
                  (setf (variable-representation variable) :unboxed-fixnum)
                  (compile-form initform :target :stack :representation :unboxed-fixnum))
@@ -4975,9 +4987,9 @@
          (cond ((equal (block-name form) '(TAGBODY))
                 (compile-tagbody-node form target))
                ((equal (block-name form) '(LET))
-                (compile-let/let*-node form target))
+                (p2-let/let*-node form target))
                ((equal (block-name form) '(MULTIPLE-VALUE-BIND))
-                (compile-multiple-value-bind-node form target))
+                (p2-m-v-b-node form target))
                (t
                 (compile-block-node form target))))
         ((constantp form)
