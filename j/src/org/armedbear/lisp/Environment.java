@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Environment.java,v 1.18 2004-11-04 18:35:41 piso Exp $
+ * $Id: Environment.java,v 1.19 2005-02-27 20:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public final class Environment extends LispObject
 {
     private Binding vars;
-    private Binding functions;
+    private FunctionBinding lastFunctionBinding;
     private Binding blocks;
     private Binding tags;
 
@@ -34,7 +34,7 @@ public final class Environment extends LispObject
     {
         if (parent != null) {
             vars = parent.vars;
-            functions = parent.functions;
+            lastFunctionBinding = parent.lastFunctionBinding;
             blocks = parent.blocks;
             tags = parent.tags;
         }
@@ -46,7 +46,7 @@ public final class Environment extends LispObject
     {
         if (parent != null) {
             vars = parent.vars;
-            functions = parent.functions;
+            lastFunctionBinding = parent.lastFunctionBinding;
             blocks = parent.blocks;
             tags = parent.tags;
         }
@@ -55,7 +55,7 @@ public final class Environment extends LispObject
 
     public boolean isEmpty()
     {
-        if (functions != null)
+        if (lastFunctionBinding != null)
             return false;
         if (vars != null) {
             for (Binding binding = vars; binding != null; binding = binding.next)
@@ -98,19 +98,20 @@ public final class Environment extends LispObject
         return null;
     }
 
-    // Functional bindings.
-    public void bindFunctional(LispObject name, LispObject value)
+    // Function bindings.
+    public void addFunctionBinding(LispObject name, LispObject value)
     {
-        functions = new Binding(name, value, functions);
+        lastFunctionBinding =
+            new FunctionBinding(name, value, lastFunctionBinding);
     }
 
-    public LispObject lookupFunctional(LispObject name)
+    public LispObject lookupFunction(LispObject name)
         throws ConditionThrowable
     {
-        Binding binding = functions;
+        FunctionBinding binding = lastFunctionBinding;
         if (name instanceof Symbol) {
             while (binding != null) {
-                if (binding.symbol == name)
+                if (binding.name == name)
                     return binding.value;
                 binding = binding.next;
             }
@@ -119,7 +120,7 @@ public final class Environment extends LispObject
         }
         if (name instanceof Cons) {
             while (binding != null) {
-                if (binding.symbol.equal(name))
+                if (binding.name.equal(name))
                     return binding.value;
                 binding = binding.next;
             }
