@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.609 2004-03-16 03:12:19 piso Exp $
+ * $Id: Primitives.java,v 1.610 2004-03-16 20:00:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1442,7 +1442,6 @@ public final class Primitives extends Lisp
                     get((Symbol)arg, Symbol.MACROEXPAND_MACRO, NIL);
                 if (macroObject instanceof MacroObject)
                     return ((MacroObject)macroObject).getExpander();
-                return NIL;
             }
             return NIL;
         }
