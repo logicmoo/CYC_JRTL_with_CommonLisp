@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.37 2003-05-19 14:39:38 piso Exp $
+ * $Id: Buffer.java,v 1.38 2003-06-06 15:43:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,8 +92,6 @@ public class Buffer extends SystemBuffer
     private boolean backedUp = false; // Ignored for local buffers.
 
     private int fileType = FILETYPE_UNKNOWN;
-
-    Exception exception; // XML parser exception.
 
     String entryName; // ZipEntry name.
     String source; // String describing source of zip entry (e.g. "from /home/peter/j.zip").
