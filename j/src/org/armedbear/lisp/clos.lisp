@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.67 2004-02-07 19:50:45 piso Exp $
+;;; $Id: clos.lisp,v 1.68 2004-02-07 20:12:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -653,6 +653,8 @@
   ((name :initarg :name)      ; :accessor generic-function-name
    (lambda-list               ; :accessor generic-function-lambda-list
     :initarg :lambda-list)
+   (documentation
+    :initarg :documentation)  ; :accessor generic-function-documentation
    (methods :initform ())     ; :accessor generic-function-methods
    (method-class              ; :accessor generic-function-method-class
     :initarg :method-class)
@@ -682,6 +684,11 @@
   (slot-value gf 'lambda-list))
 (defun (setf generic-function-lambda-list) (new-value gf)
   (setf (slot-value gf 'lambda-list) new-value))
+
+(defun generic-function-documentation (gf)
+  (slot-value gf 'documentation))
+(defun (setf generic-function-documentation) (new-value gf)
+  (setf (slot-value gf 'documentation) new-value))
 
 (defun generic-function-methods (gf)
   (slot-value gf 'methods))
@@ -772,7 +779,8 @@
     (dolist (item options-and-method-descriptions)
       (case (car item)
         (declare) ; FIXME
-        (:documentation) ; FIXME
+        (:documentation
+         (push item options))
         (:method
          (push `(defmethod ,function-name ,@(cdr item)) methods))
         (t
@@ -1457,6 +1465,12 @@
      (setf (get x '%variable-documentation) docstring))
     (STRUCTURE
      (setf (get x '%structure-documentation) docstring))))
+
+(defmethod documentation ((x standard-generic-function) (doc-type (eql 't)))
+  (generic-function-documentation x))
+
+(defmethod (setf documentation) (new-value (x standard-generic-function) (doc-type (eql 't)))
+  (setf (generic-function-documentation x) new-value))
 
 (defmethod documentation ((x standard-method) (doc-type (eql 't)))
   (method-documentation x))
