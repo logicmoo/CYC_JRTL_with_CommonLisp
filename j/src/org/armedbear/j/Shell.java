@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.7 2002-10-13 14:02:55 piso Exp $
+ * $Id: Shell.java,v 1.8 2002-10-13 17:00:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,9 @@ import javax.swing.undo.CompoundEdit;
 
 public class Shell extends Buffer implements Constants
 {
+    protected static final String JPTY_NOT_FOUND =
+        "Unable to start shell process (jpty not found in PATH)";
+
     private RE promptRE = new UncheckedRE(DEFAULT_SHELL_PROMPT_PATTERN);
 
     protected String shellCommand;
@@ -74,7 +77,7 @@ public class Shell extends Buffer implements Constants
         setInitialized(true);
     }
 
-    private Shell(String shellCommand)
+    protected Shell(String shellCommand)
     {
         this();
         this.shellCommand = shellCommand;
@@ -121,7 +124,7 @@ public class Shell extends Buffer implements Constants
     // Derived classes override this method.
     protected void initializeHistory()
     {
-        history = new History("shell.history");
+        history = new History("shell.history", 30);
     }
 
     private static Shell createShell(String shellCommand)
@@ -134,7 +137,7 @@ public class Shell extends Buffer implements Constants
             if (Utilities.haveJpty())
                 message = "Unable to start shell process \"" + shell.shellCommand + "\"";
             else
-                message = "Unable to start shell process (jpty not found in PATH)";
+                message = JPTY_NOT_FOUND;
             MessageDialog.showMessageDialog(message, "Error");
             return null;
         }
@@ -142,7 +145,7 @@ public class Shell extends Buffer implements Constants
         return shell;
     }
 
-    private void startProcess()
+    protected void startProcess()
     {
         // Only set initialDir the first time we run, so that if we restart
         // this shell, it will start up in the same directory each time.

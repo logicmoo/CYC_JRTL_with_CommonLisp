@@ -2,7 +2,7 @@
  * RemoteShell.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: RemoteShell.java,v 1.3 2002-10-11 13:58:54 piso Exp $
+ * $Id: RemoteShell.java,v 1.4 2002-10-13 17:02:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public class RemoteShell extends Shell
         history = new History("remoteShell.history");
     }
 
-    private void startProcess()
+    protected void startProcess()
     {
         Process process = null;
         try {
