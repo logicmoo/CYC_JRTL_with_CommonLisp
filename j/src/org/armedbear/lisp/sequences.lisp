@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.28 2003-03-15 19:07:32 piso Exp $
+;;; $Id: sequences.lisp,v 1.29 2003-03-25 01:02:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -183,7 +183,7 @@
     (setf (aref copy new-index) (aref sequence old-index))))
 
 (defun list-subseq* (sequence start &optional end)
-  (if (and end (>= start (the fixnum end)))
+  (if (and end (>= start end))
       ()
       (let* ((groveled (nthcdr start sequence))
 	     (result (list (car groveled))))
@@ -191,7 +191,7 @@
 	    (do ((list (cdr groveled) (cdr list))
 		 (splice result (cdr (rplacd splice (list (car list)))))
 		 (index (1+ start) (1+ index)))
-              ((or (atom list) (and end (= index (the fixnum end))))
+              ((or (atom list) (and end (= index end)))
                result))
 	    ()))))
 
@@ -204,7 +204,7 @@
 ;; COPY-SEQ (from CMUCL)
 
 (defmacro vector-copy-seq (sequence type)
-  `(let ((length (length (the vector ,sequence))))
+  `(let ((length (length ,sequence)))
      (do ((index 0 (1+ index))
 	  (copy (make-sequence-of-type ,type length)))
        ((= index length) copy)
@@ -236,13 +236,13 @@
 
 (defmacro vector-fill (sequence item start end)
   `(do ((index ,start (1+ index)))
-     ((= index (the fixnum ,end)) ,sequence)
+     ((= index ,end) ,sequence)
      (setf (aref ,sequence index) ,item)))
 
 (defmacro list-fill (sequence item start end)
   `(do ((current (nthcdr ,start ,sequence) (cdr current))
         (index ,start (1+ index)))
-     ((or (atom current) (and end (= index (the fixnum ,end))))
+     ((or (atom current) (and end (= index ,end)))
       sequence)
      (rplaca current ,item)))
 
@@ -419,10 +419,10 @@
   `(do ((index start (1+ index))
         (jndex start)
         (number-zapped 0))
-     ((or (= index (the fixnum end)) (= number-zapped (the fixnum count)))
+     ((or (= index end) (= number-zapped count))
       (do ((index index (1+ index))		; copy the rest of the vector
            (jndex jndex (1+ jndex)))
-        ((= index (the fixnum length))
+        ((= index length)
          (shrink-vector sequence jndex))
         (setf (aref sequence jndex) (aref sequence index))))
      (setf (aref sequence jndex) (aref sequence index))
@@ -431,23 +431,23 @@
          (setq jndex (1+ jndex)))))
 
 (defmacro mumble-delete-from-end (pred)
-  `(do ((index (1- (the fixnum end)) (1- index)) ; find the losers
+  `(do ((index (1- end) (1- index)) ; find the losers
         (number-zapped 0)
         (losers ())
         this-element
         (terminus (1- start)))
-     ((or (= index terminus) (= number-zapped (the fixnum count)))
+     ((or (= index terminus) (= number-zapped count))
       (do ((losers losers)			 ; delete the losers
            (index start (1+ index))
            (jndex start))
-        ((or (null losers) (= index (the fixnum end)))
+        ((or (null losers) (= index end))
          (do ((index index (1+ index))	 ; copy the rest of the vector
               (jndex jndex (1+ jndex)))
-           ((= index (the fixnum length))
+           ((= index length)
             (shrink-vector sequence jndex))
            (setf (aref sequence jndex) (aref sequence index))))
         (setf (aref sequence jndex) (aref sequence index))
-        (if (= index (the fixnum (car losers)))
+        (if (= index (car losers))
             (pop losers)
             (setq jndex (1+ jndex)))))
      (setq this-element (aref sequence index))
@@ -473,7 +473,7 @@
           (previous (nthcdr start handle))
           (index start (1+ index))
           (number-zapped 0))
-       ((or (= index (the fixnum end)) (= number-zapped (the fixnum count)))
+       ((or (= index end) (= number-zapped count))
         (cdr handle))
        (cond (,pred
               (rplacd previous (cdr current))
@@ -482,14 +482,14 @@
               (setq previous (cdr previous)))))))
 
 (defmacro list-delete-from-end (pred)
-  `(let* ((reverse (nreverse (the list sequence)))
+  `(let* ((reverse (nreverse sequence))
           (handle (cons nil reverse)))
-     (do ((current (nthcdr (- (the fixnum length) (the fixnum end)) reverse)
+     (do ((current (nthcdr (- length end) reverse)
                    (cdr current))
-          (previous (nthcdr (- (the fixnum length) (the fixnum end)) handle))
+          (previous (nthcdr (- length end) handle))
           (index start (1+ index))
           (number-zapped 0))
-       ((or (= index (the fixnum end)) (= number-zapped (the fixnum count)))
+       ((or (= index end) (= number-zapped count))
         (nreverse (cdr handle)))
        (cond (,pred
               (rplacd previous (cdr current))
@@ -594,15 +594,15 @@
         (result
          (do ((index ,left (,bump index))
               (result (make-sequence-like sequence length)))
-           ((= index (the fixnum ,begin)) result)
+           ((= index ,begin) result)
            (setf (aref result index) (aref sequence index))))
         (new-index ,begin)
         (number-zapped 0)
         (this-element))
-     ((or (= index (the fixnum ,finish)) (= number-zapped (the fixnum count)))
+     ((or (= index ,finish) (= number-zapped count))
       (do ((index index (,bump index))
            (new-index new-index (,bump new-index)))
-        ((= index (the fixnum ,right)) (shrink-vector result new-index))
+        ((= index ,right) (shrink-vector result new-index))
         (setf (aref result new-index) (aref sequence index))))
      (setq this-element (aref sequence index))
      (cond (,pred (setq number-zapped (1+ number-zapped)))
@@ -645,24 +645,24 @@
 ;;; the predicate.
 (defmacro list-remove-macro (pred reverse-p)
   `(let* ((sequence ,(if reverse-p
-                         '(reverse (the list sequence))
+                         '(reverse sequence)
                          'sequence))
           (%start ,(if reverse-p '(- length end) 'start))
           (%end ,(if reverse-p '(- length start) 'end))
           (splice (list nil))
           (results (do ((index 0 (1+ index))
                         (before-start splice))
-                     ((= index (the fixnum %start)) before-start)
+                     ((= index %start) before-start)
                      (setq splice
                            (cdr (rplacd splice (list (pop sequence))))))))
      (do ((index %start (1+ index))
           (this-element)
           (number-zapped 0))
-       ((or (= index (the fixnum %end)) (= number-zapped (the fixnum count)))
+       ((or (= index %end) (= number-zapped count))
         (do ((index index (1+ index)))
           ((null sequence)
            ,(if reverse-p
-                '(nreverse (the list (cdr results)))
+                '(nreverse (cdr results))
                 '(cdr results)))
           (setq splice (cdr (rplacd splice (list (pop sequence)))))))
        (setq this-element (pop sequence))
@@ -754,7 +754,7 @@
       (setq splice (cdr (rplacd splice (list (car current)))))
       (setq current (cdr current)))
     (do ((index 0 (1+ index)))
-      ((or (and end (= index (the fixnum end)))
+      ((or (and end (= index end))
            (atom current)))
       (if (or (and from-end
 		   (not (member (apply-key key (car current))
@@ -766,7 +766,7 @@
 		   (not (do ((it (apply-key key (car current)))
 			     (l (cdr current) (cdr l))
 			     (i (1+ index) (1+ i)))
-                          ((or (atom l) (and end (= i (the fixnum end))))
+                          ((or (atom l) (and end (= i end)))
                            ())
 			  (if (if test-not
 				  (not (funcall test-not it (apply-key key (car l))))
@@ -826,7 +826,7 @@
     (do ((current (nthcdr start list) (cdr current))
 	 (previous (nthcdr start handle))
 	 (index start (1+ index)))
-      ((or (and end (= index (the fixnum end))) (null current))
+      ((or (and end (= index end)) (null current))
        (cdr handle))
       (if (do ((x (if from-end
 		      (nthcdr (1+ start) handle)
@@ -834,7 +834,7 @@
 		  (cdr x))
 	       (i (1+ index) (1+ i)))
             ((or (null x)
-                 (and (not from-end) end (= i (the fixnum end)))
+                 (and (not from-end) end (= i end))
                  (eq x current))
              nil)
 	    (if (if test-not
@@ -946,15 +946,15 @@
   `(if (listp sequence)
        (if from-end
            (nreverse (list-substitute* ,pred new (reverse sequence)
-                                       (- (the fixnum length) (the fixnum end))
-                                       (- (the fixnum length) (the fixnum start))
+                                       (- length end)
+                                       (- length start)
                                        count key test test-not old))
            (list-substitute* ,pred new sequence start end count key test test-not
                              old))
        (if from-end
-           (vector-substitute* ,pred new sequence -1 (1- (the fixnum length))
-                               -1 length (1- (the fixnum end))
-                               (1- (the fixnum start)) count key test test-not old)
+           (vector-substitute* ,pred new sequence -1 (1- length)
+                               -1 length (1- end)
+                               (1- start) count key test test-not old)
            (vector-substitute* ,pred new sequence 1 0 length length
                                start end count key test test-not old))))
 
@@ -1002,7 +1002,7 @@
 	(if from-end
 	    (let ((length (length sequence)))
 	      (nreverse (nlist-substitute*
-			 new old (nreverse (the list sequence))
+			 new old (nreverse sequence)
 			 test test-not (- length end) (- length start) count key)))
 	    (nlist-substitute* new old sequence
 			       test test-not start end count key))
@@ -1042,7 +1042,7 @@
 	(if from-end
 	    (let ((length (length sequence)))
 	      (nreverse (nlist-substitute-if*
-			 new test (nreverse (the list sequence))
+			 new test (nreverse sequence)
 			 (- length end) (- length start) count key)))
 	    (nlist-substitute-if* new test sequence
 				  start end count key))
@@ -1079,7 +1079,7 @@
 	(if from-end
 	    (let ((length (length sequence)))
 	      (nreverse (nlist-substitute-if-not*
-			 new test (nreverse (the list sequence))
+			 new test (nreverse sequence)
 			 (- length end) (- length start) count key)))
 	    (nlist-substitute-if-not* new test sequence
 				      start end count key))
@@ -1108,8 +1108,8 @@
 
 (defmacro vector-locater-macro (sequence body-form return-type)
   `(let ((incrementer (if from-end -1 1))
-	 (start (if from-end (1- (the fixnum end)) start))
-	 (end (if from-end (1- (the fixnum start)) end)))
+	 (start (if from-end (1- end) start))
+	 (end (if from-end (1- start) end)))
      (do ((index start (+ index incrementer))
 	  ,@(case return-type (:position nil) (:element '(current))))
        ((= index end) ())
@@ -1181,7 +1181,7 @@
        (do ((sequence (nthcdr start ,sequence))
 	    (index start (1+ index))
 	    ,@(case return-type (:position nil) (:element '(current))))
-         ((or (= index (the fixnum end)) (null sequence)) ())
+         ((or (= index end) (null sequence)) ())
 	 ,@(case return-type
 	     (:position nil)
 	     (:element `((setf current (pop ,sequence)))))
@@ -1300,7 +1300,7 @@
            (%end ,(if from-end-p '(1- start) 'end)))
        (do ((index %start ,next-index)
             (count 0))
-         ((= index (the fixnum %end)) count)
+         ((= index %end) count)
          (,(if not-p 'unless 'when) ,pred
            (setq count (1+ count)))))))
 
@@ -1312,7 +1312,7 @@
        (do ((sequence (nthcdr %start ,sequence))
             (index %start (1+ index))
             (count 0))
-         ((or (= index (the fixnum %end)) (null sequence)) count)
+         ((or (= index %end) (null sequence)) count)
          (,(if not-p 'unless 'when) ,pred
            (setq count (1+ count)))))))
 
@@ -1436,7 +1436,7 @@
   `(do ((main ,main (cdr main))
         (jndex start1 (1+ jndex))
         (sub (nthcdr start1 ,sub) (cdr sub)))
-     ((or (null main) (null sub) (= (the fixnum end1) jndex))
+     ((or (null main) (null sub) (= end1 jndex))
       t)
      (compare-elements (car main) (car sub))))
 
@@ -1444,7 +1444,7 @@
 (defmacro search-compare-list-vector (main sub)
   `(do ((main ,main (cdr main))
         (index start1 (1+ index)))
-     ((or (null main) (= index (the fixnum end1))) t)
+     ((or (null main) (= index end1)) t)
      (compare-elements (car main) (aref ,sub index))))
 
 
@@ -1452,14 +1452,14 @@
   `(do ((sub (nthcdr start1 ,sub) (cdr sub))
         (jndex start1 (1+ jndex))
         (index ,index (1+ index)))
-     ((or (= (the fixnum end1) jndex) (null sub)) t)
+     ((or (= end1 jndex) (null sub)) t)
      (compare-elements (aref ,main index) (car sub))))
 
 
 (defmacro search-compare-vector-vector (main sub index)
   `(do ((index ,index (1+ index))
         (sub-index start1 (1+ sub-index)))
-     ((= sub-index (the fixnum end1)) t)
+     ((= sub-index end1) t)
      (compare-elements (aref ,main index) (aref ,sub sub-index))))
 
 
@@ -1476,9 +1476,7 @@
 (defmacro list-search (main sub)
   `(do ((main (nthcdr start2 ,main) (cdr main))
         (index2 start2 (1+ index2))
-        (terminus (- (the fixnum end2)
-                     (the fixnum (- (the fixnum end1)
-                                    (the fixnum start1)))))
+        (terminus (- end2 (- end1 start1)))
         (last-match ()))
      ((> index2 terminus) last-match)
      (if (search-compare list main ,sub index2)
@@ -1489,9 +1487,7 @@
 
 (defmacro vector-search (main sub)
   `(do ((index2 start2 (1+ index2))
-        (terminus (- (the fixnum end2)
-                     (the fixnum (- (the fixnum end1)
-                                    (the fixnum start1)))))
+        (terminus (- end2 (- end1 start1)))
         (last-match ()))
      ((> index2 terminus) last-match)
      (if (search-compare vector ,main ,sub index2)
