@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.48 2003-11-16 18:24:54 piso Exp $
+ * $Id: Bignum.java,v 1.49 2003-12-03 01:51:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,8 +176,9 @@ public final class Bignum extends LispObject
     {
         double d = value.doubleValue();
         if (Double.isInfinite(d))
-            throw new ConditionThrowable(new TypeError(toString()) +
-                                " is too large to be converted to a float");
+            throw new ConditionThrowable(
+                new TypeError(toString() +
+                              " is too large to be converted to a float"));
         return d;
     }
 
