@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.156 2004-05-07 23:15:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.157 2004-05-08 00:31:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,13 +46,16 @@
 
 ;; Returns index of allocated slot.
 (defun allocate-local (symbol)
-  (let ((index (vector-push symbol *locals*)))
-    (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
+  (let ((index (length *locals*)))
+    (push symbol *locals*)
+    (when (< *max-locals* (1+ index))
+      (setf *max-locals* (1+ index)))
     index))
 
 ;; Returns index of allocated slot.
 (defun local-index (symbol)
-  (position symbol *locals* :from-end t))
+  (let ((tail (memq symbol *locals*)))
+    (and tail (1- (length tail)))))
 
 (defvar *variables* ())
 
@@ -1584,9 +1587,9 @@
   (emit-store-value))
 
 (defun compile-let/let* (form for-effect)
-  (let* ((*variables* *variables*)
+  (let* ((*locals* *locals*)
+         (*variables* *variables*)
          (specials ())
-         (saved-fp (fill-pointer *locals*))
          (varlist (cadr form))
          (specialp nil)
          env-var)
@@ -1628,10 +1631,7 @@
       ;; FIXME This code also needs to run when we RETURN-FROM an enclosing block!
       (emit 'aload *thread*)
       (emit 'aload env-var)
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))
-    ;; Restore fill pointer to its saved value so the slots used by these
-    ;; bindings will again be available.
-    (setf (fill-pointer *locals*) saved-fp)))
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-let-vars (varlist specials)
   ;; Generate code to evaluate the initforms and leave the resulting values
@@ -1658,10 +1658,9 @@
   ;; Add local variables to local variables vector.
   (dolist (varspec varlist)
     (let* ((var (if (consp varspec) (car varspec) varspec))
-           (specialp (if (or (memq var specials) (special-variable-p var)) t nil))
-           index)
+           (specialp (if (or (memq var specials) (special-variable-p var)) t nil)))
       (unless specialp
-        (setf index (allocate-local var)))
+        (allocate-local var))
       (push-variable var specialp)))
   ;; At this point the initial values are on the stack. Now generate code to
   ;; pop them off one by one and store each one in the corresponding local or
@@ -1688,7 +1687,7 @@
             (t
              (let ((index (local-index var)))
                (unless index
-                 (error "COMPILE-LET-VARS can't find local variable"))
+                 (error "COMPILE-LET-VARS: can't find local variable ~S." var))
                (emit 'astore index)))))))
 
 (defun compile-let*-vars (varlist specials)
@@ -1815,7 +1814,7 @@
          (block-label (car rest))
          (block-exit (gensym))
          (*blocks* (acons block-label block-exit *blocks*))
-         (saved-fp (fill-pointer *locals*))
+         (*locals* *locals*)
          env-var)
     ;; Save current dynamic environment.
     (setf env-var (allocate-local nil))
@@ -1835,10 +1834,7 @@
     ;; Restore dynamic environment.
     (emit 'aload *thread*)
     (emit 'aload env-var)
-    (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-    ;; Restore fill pointer to its saved value so the slots used by these
-    ;; bindings will again be available.
-    (setf (fill-pointer *locals*) saved-fp)))
+    (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)))
 
 (defun compile-return-from (form for-effect)
   (let* ((rest (cdr form))
@@ -2343,7 +2339,6 @@
               (when (eql (char name i) #\-)
                 (setf (char name i) #\_)))
             name))
-;;          (*this-class* "org/armedbear/lisp/out")
          (*this-class*
           (concatenate 'string "org/armedbear/lisp/" class-name))
          (args (cadr form))
@@ -2359,7 +2354,7 @@
          (*blocks* ())
          (*tags* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
          (*args* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
-         (*locals* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
+         (*locals* ())
          (*max-locals* 0)
          (*env* environment)
          (*closure-vars* (if environment (sys::environment-vars environment) nil))
