@@ -2,7 +2,7 @@
  * SidebarPanel.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: SidebarPanel.java,v 1.3 2003-07-23 00:26:37 piso Exp $
+ * $Id: SidebarPanel.java,v 1.4 2003-07-24 19:40:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,7 @@ public final class SidebarPanel extends JPanel implements MouseListener
         private Label()
         {
             super();
-            super.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+            setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
         }
 
         public void paintComponent(Graphics g)
