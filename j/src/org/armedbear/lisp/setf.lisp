@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.52 2005-03-24 01:20:00 piso Exp $
+;;; $Id: setf.lisp,v 1.53 2005-03-31 11:01:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@
                                     ,(list (car store-vars) value-form))
                                ,setter)))))))))
      ((oddp count)
-      (error "odd number of args to SETF"))
+      (error "Odd number of args to SETF"))
      (t
       (do ((a args (cddr a)) (l nil))
           ((null a) `(progn ,@(nreverse l)))
