@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.21 2004-10-18 19:13:06 piso Exp $
+ * $Id: FileStream.java,v 1.22 2004-10-19 00:14:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -423,14 +423,14 @@ public final class FileStream extends Stream
         }
     }
 
-    private byte readByteFromBuffer() throws ConditionThrowable
+    private int readByteFromBuffer() throws ConditionThrowable
     {
         if (inputBufferOffset >= inputBufferCount) {
             fillInputBuffer();
             if (inputBufferCount < 0)
                 return -1;
         }
-        return inputBuffer[inputBufferOffset++];
+        return inputBuffer[inputBufferOffset++] & 0xff;
     }
 
     private void fillInputBuffer() throws ConditionThrowable
