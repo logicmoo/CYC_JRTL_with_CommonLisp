@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.61 2005-03-03 14:01:41 piso Exp $
+ * $Id: LispAPI.java,v 1.62 2005-03-05 04:05:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -993,14 +993,20 @@ public final class LispAPI extends Lisp
 
     // ### define-key keymap key definition => generalized-boolean
     private static final Primitive DEFINE_KEY =
-        new Primitive("define-key", PACKAGE_J, true, "keymap key definition")
+        new Primitive("define-key", PACKAGE_J, true,
+                      "keymap key-designator definition")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 	    throws ConditionThrowable
         {
             KeyMap keymap = checkKeymap(first);
-            String keyText = second.getStringValue();
+            if (!(second instanceof LispCharacter ||
+                  second instanceof AbstractString))
+                return signal(new TypeError(second,
+                                            list2(Symbol.OR,
+                                                  list2(Symbol.CHARACTER,
+                                                        Symbol.STRING))));
             Object command;
             if (third instanceof AbstractString) {
                 command = third.getStringValue();
@@ -1011,7 +1017,11 @@ public final class LispAPI extends Lisp
                 coerceToFunction(third);
                 command = third;
             }
-            return keymap.mapKey(keyText, command) ? T : NIL;
+            if (second instanceof LispCharacter)
+                keymap.mapKey(((LispCharacter)second).value, command);
+            else
+                keymap.mapKey(second.getStringValue(), command);
+            return T;
         }
     };
 
