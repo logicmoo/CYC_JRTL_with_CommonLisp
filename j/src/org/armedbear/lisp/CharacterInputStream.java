@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.54 2003-10-17 13:11:52 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.55 2003-10-17 17:35:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@ public class CharacterInputStream extends LispInputStream
         }
     }
 
-    private LispString readString() throws ConditionThrowable
+    private String _readString() throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -159,11 +159,33 @@ public class CharacterInputStream extends LispInputStream
                 // Default.
                 sb.append(c);
             }
-            return new LispString(sb.toString());
+            return sb.toString();
         }
         catch (IOException e) {
             throw new ConditionThrowable(new StreamError(e));
         }
+    }
+
+    private LispString readString() throws ConditionThrowable
+    {
+        return new LispString(_readString());
+    }
+
+    private LispObject readPathname() throws ConditionThrowable
+    {
+        int n;
+        try {
+            n = read();
+        }
+        catch (IOException e) {
+            throw new ConditionThrowable(new StreamError(e));
+        }
+        if (n < 0)
+            throw new ConditionThrowable(new EndOfFileException());
+        char nextChar = (char) n;
+        if (nextChar == '"')
+            return Pathname.parseNamestring(_readString());
+        throw new ConditionThrowable(new TypeError("#p requires a string argument"));
     }
 
     private LispObject readQuote() throws ConditionThrowable
@@ -343,6 +365,9 @@ public class CharacterInputStream extends LispInputStream
                 case 'c':
                 case 'C':
                     return readComplex();
+                case 'p':
+                case 'P':
+                    return readPathname();
                 case 'x':
                 case 'X':
                     return readHex();
