@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.75 2004-09-20 15:16:20 piso Exp $
+ * $Id: LispShell.java,v 1.76 2004-09-20 18:14:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -521,14 +521,31 @@ public class LispShell extends Shell
 
     public static void slime()
     {
-        lisp(getDefaultLispShellCommand(), "slime abcl", false, true);
+        _slime(getDefaultLispShellCommand(), "slime abcl", false);
     }
 
     public static void slime(String shellCommand)
     {
-        // Require jpty on Unix platforms.
-        lisp(shellCommand, "slime ".concat(shellCommand),
-             Platform.isPlatformUnix(), true);
+        _slime(shellCommand, "slime ".concat(shellCommand),
+               // Require jpty on Unix platforms.
+               Platform.isPlatformUnix());
+    }
+
+    private static final void _slime(String shellCommand, String title,
+                                     boolean requireJpty)
+    {
+        Buffer buffer = findSlime();
+        if (buffer != null) {
+            final Editor editor = Editor.currentEditor();
+            editor.makeNext(buffer);
+            Buffer b = editor.getBuffer();
+            if (b != null && b.isPaired())
+                editor.switchToBuffer(buffer);
+            else
+                editor.activate(buffer);
+            return;
+        }
+        lisp(shellCommand, title, requireJpty, true);
     }
 
     public static void lisp()
@@ -569,7 +586,7 @@ public class LispShell extends Shell
             if (b != null && b.isPaired())
                 editor.switchToBuffer(buf);
             else
-                editor.activateInOtherWindow(buf);
+                editor.activate(buf);
             if (startSlime)
                 startSlime(buf);
         }
@@ -667,6 +684,22 @@ public class LispShell extends Shell
                 CommandInterpreter comint = (CommandInterpreter) b;
                 if (comint.isLisp()) {
                     if (title == null || title.equals(comint.getTitle()))
+                        return comint;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static final CommandInterpreter findSlime()
+    {
+        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+            Buffer b = it.nextBuffer();
+            if (b instanceof CommandInterpreter) {
+                CommandInterpreter comint = (CommandInterpreter) b;
+                if (comint.isLisp()) {
+                    String title = comint.getTitle();
+                    if (title != null && title.startsWith("slime"))
                         return comint;
                 }
             }
