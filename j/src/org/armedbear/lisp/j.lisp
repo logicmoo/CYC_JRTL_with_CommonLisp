@@ -34,6 +34,8 @@
   (jstatic "mapKeyForMode" "org.armedbear.j.API" key mode))
 
 (defun %set-global-property (key value)
+  (when (integerp value)
+    (setq value (format nil "~D" value)))
   (jstatic "setGlobalProperty" "org.armedbear.j.Editor" key value))
 
 (defun set-global-property (&rest args)
