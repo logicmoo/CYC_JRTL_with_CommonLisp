@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.133 2004-03-31 00:23:00 piso Exp $
+;;; $Id: autoloads.lisp,v 1.134 2004-03-31 03:07:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -150,6 +150,13 @@
 (autoload 'dribble)
 (autoload-macro 'step)
 (autoload 'load)
+
+(autoload-macro '(case ccase ecase typecase ctypecase etypecase) "case")
+(autoload-macro '(and cond dolist dotimes
+                  do-symbols do-external-symbols
+                  multiple-value-bind multiple-value-list multiple-value-setq
+                  nth-value
+                  or))
 
 ;; Java interface.
 (in-package "JAVA")

@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.156 2004-03-24 15:41:51 piso Exp $
+;;; $Id: boot.lisp,v 1.157 2004-03-31 03:05:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -190,130 +190,8 @@
 (defconstant boole-orc1  14)
 (defconstant boole-orc2  15)
 
-
-;; AND, OR (from CMUCL)
-
-(defmacro and (&rest forms)
-  (cond ((endp forms) t)
-	((endp (rest forms)) (first forms))
-	(t
-	 `(if ,(first forms)
-	      (and ,@(rest forms))
-	      nil))))
-
-(defmacro or (&rest forms)
-  (cond ((endp forms) nil)
-	((endp (rest forms)) (first forms))
-	(t
-	 (let ((n-result (gensym)))
-	   `(let ((,n-result ,(first forms)))
-	      (if ,n-result
-		  ,n-result
-		  (or ,@(rest forms))))))))
-
-(sys::load-system-file "case")
-
-(defmacro cond (&rest clauses)
-  (if (endp clauses)
-      nil
-      (let ((clause (first clauses)))
-	(when (atom clause)
-	  (error "COND clause is not a list: ~S" clause))
-	(let ((test (first clause))
-	      (forms (rest clause)))
-	  (if (endp forms)
-	      (let ((n-result (gensym)))
-		`(let ((,n-result ,test))
-		   (if ,n-result
-		       ,n-result
-		       (cond ,@(rest clauses)))))
-	      `(if ,test
-		   (progn ,@forms)
-		   (cond ,@(rest clauses))))))))
-
-(defmacro dotimes ((var count &optional (result nil)) &body body)
-  (if (numberp count)
-      (let ((tag (gensym)))
-        `(block nil
-           (let ((,var 0))
-             (tagbody
-              ,tag
-              (if (>= ,var ,count)
-                  (return-from nil (progn ,result)))
-              ,@body
-              (setq ,var (1+ ,var))
-              (go ,tag)))))
-      (let ((limit (gensym))
-            (tag (gensym)))
-        `(block nil
-           (let ((,limit ,count)
-                 (,var 0))
-             (tagbody
-              ,tag
-              (if (>= ,var ,limit)
-                  (return-from nil (progn ,result)))
-              ,@body
-              (setq ,var (1+ ,var))
-              (go ,tag)))))))
-
-;;; DOLIST (from CMUCL)
-
-;;; We repeatedly bind the var instead of setting it so that we never give the
-;;; var a random value such as NIL (which might conflict with a declaration).
-;;; If there is a result form, we introduce a gratitous binding of the variable
-;;; to NIL w/o the declarations, then evaluate the result form in that
-;;; environment.  We spuriously reference the gratuitous variable, since we
-;;; don't want to use IGNORABLE on what might be a special var.
-;;;
-(defmacro dolist ((var list &optional (result nil)) &body body)
-  (multiple-value-bind (forms decls) (sys::parse-body body nil)
-    (let ((n-list (gensym)))
-      `(do* ((,n-list ,list (cdr ,n-list)))
-	    ((endp ,n-list)
-	     ,@(if (constantp result)
-		   `(,result)
-		   `((let ((,var nil))
-		       ,@decls
-		       ,var
-		       ,result))))
-         (let ((,var (car ,n-list)))
-           ,@decls
-           (tagbody
-            ,@forms))))))
-
-(defmacro do-symbols ((var &optional (package '*package*) (result nil)) &body body)
-  `(dolist (,var
-            (append (sys::package-symbols ,package)
-                    (sys::package-inherited-symbols ,package))
-            ,result)
-     ,@body))
-
-(defmacro do-external-symbols ((var &optional (package '*package*) (result nil)) &body body)
-  `(dolist (,var (sys::package-external-symbols ,package) ,result) ,@body))
-
-;;; MULTIPLE-VALUE-BIND (from CLISP)
-(defmacro multiple-value-bind (varlist form &body body)
-  (let ((g (gensym))
-        (poplist nil))
-    (dolist (var varlist) (setq poplist (cons `(,var (pop ,g)) poplist)))
-    `(let* ((,g (multiple-value-list ,form)) ,@(nreverse poplist))
-       ,@body)))
-
-(sys::load-system-file "late-setf")
-
-;; MULTIPLE-VALUE-SETQ (from CMUCL)
-(defmacro multiple-value-setq (varlist value-form)
-  (unless (and (listp varlist) (every #'symbolp varlist))
-    (error "~S is not a list of symbols" varlist))
-  `(values (setf (values ,@varlist) ,value-form)))
-
-(defmacro nth-value (n form)
-  `(nth ,n (multiple-value-list ,form)))
-
-(defmacro multiple-value-list (form)
-  `(multiple-value-call #'list ,form))
-
 (sys::load-system-file "restart")
+(sys::load-system-file "late-setf")
 (sys::load-system-file "debug")
 
 (format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000)))
