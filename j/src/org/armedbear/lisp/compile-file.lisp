@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.51 2005-01-05 00:38:00 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: compile-file.lisp,v 1.52 2005-01-31 05:54:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,10 +38,16 @@
 
 (defmacro report-error (&rest forms)
   `(handler-case (progn ,@forms)
+     (compiler-unsupported-feature-error (condition)
+       (fresh-line)
+       (%format t "; UNSUPPORTED-FEATURE: ~A~%" condition)
+       (values nil condition))
+     #+nil
      (error (condition)
-            (fresh-line)
-            (%format t "~A Note: ~A~%" (jvm::load-verbose-prefix) condition)
-            (values nil condition))))
+       (fresh-line)
+       (%format t "~A Note: ~A~%" (jvm::load-verbose-prefix) condition)
+       (values nil condition))
+     ))
 
 ;; Dummy function. Should never be called.
 (defun dummy (&rest ignored)

@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.378 2005-01-30 12:46:41 piso Exp $
+;;; $Id: jvm.lisp,v 1.379 2005-01-31 05:53:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -543,19 +543,22 @@
   (let ((*current-compiland* *current-compiland*)
         (compilands '()))
     (dolist (definition (cadr form))
-      (let* ((name (car definition))
-             (lambda-list (cadr definition))
-             (body (cddr definition))
-             (compiland (make-compiland :name name
-                                        :parent *current-compiland*)))
-        (multiple-value-bind (body decls)
+      (let ((name (car definition)))
+        ;; FIXME
+        (when (and (consp name) (eq (car name) 'SETF))
+          (compiler-unsupported "P1-FLET: can't handle ~S." name))
+        (let* ((lambda-list (cadr definition))
+               (body (cddr definition))
+               (compiland (make-compiland :name name
+                                          :parent *current-compiland*)))
+          (multiple-value-bind (body decls)
             (sys::parse-body body)
-          (setf (compiland-lambda-expression compiland)
-                `(lambda ,lambda-list ,@decls (block ,name ,@body)))
-          (let ((*visible-variables* *visible-variables*)
-                (*current-compiland* compiland))
-            (p1-compiland compiland)))
-        (push compiland compilands)))
+            (setf (compiland-lambda-expression compiland)
+                  `(lambda ,lambda-list ,@decls (block ,name ,@body)))
+            (let ((*visible-variables* *visible-variables*)
+                  (*current-compiland* compiland))
+              (p1-compiland compiland)))
+          (push compiland compilands))))
   (list* (car form) (nreverse compilands) (mapcar #'p1 (cddr form)))))
 
 (defun p1-labels (form)
@@ -565,21 +568,24 @@
         (*current-compiland* *current-compiland*)
         (local-functions ()))
     (dolist (definition (cadr form))
-      (let* ((name (car definition))
-             (lambda-list (cadr definition))
-             (body (cddr definition))
-             (compiland (make-compiland :name name
-                                        :parent *current-compiland*))
-             (variable (make-variable :name (copy-symbol name)))
-             (local-function (make-local-function :name name
-                                                  :compiland compiland
-                                                  :variable variable)))
-        (multiple-value-bind (body decls)
-          (sys::parse-body body)
-          (setf (compiland-lambda-expression compiland)
-                `(lambda ,lambda-list ,@decls (block ,name ,@body))))
-        (push variable *all-variables*)
-        (push local-function local-functions)))
+      (let ((name (car definition)))
+        ;; FIXME
+        (when (and (consp name) (eq (car name) 'SETF))
+          (compiler-unsupported "P1-LABELS: can't handle ~S." name))
+        (let* ((lambda-list (cadr definition))
+               (body (cddr definition))
+               (compiland (make-compiland :name name
+                                          :parent *current-compiland*))
+               (variable (make-variable :name (copy-symbol name)))
+               (local-function (make-local-function :name name
+                                                    :compiland compiland
+                                                    :variable variable)))
+          (multiple-value-bind (body decls)
+            (sys::parse-body body)
+            (setf (compiland-lambda-expression compiland)
+                  `(lambda ,lambda-list ,@decls (block ,name ,@body))))
+          (push variable *all-variables*)
+          (push local-function local-functions))))
     (setf local-functions (nreverse local-functions))
     ;; Make the local functions visible.
     (dolist (local-function local-functions)
@@ -737,7 +743,7 @@
                         ((macro-function op)
                          (p1 (macroexpand form)))
                         ((special-operator-p op)
-                         (error "P1: unsupported special operator ~S" op))
+                         (compiler-unsupported "P1: unsupported special operator ~S" op))
                         (t
                          ;; Function call.
                          (let ((new-form (rewrite-function-call form)))
@@ -1231,6 +1237,11 @@
   (warn 'warning
         :format-control format-control
         :format-arguments format-arguments))
+
+(defun compiler-unsupported (format-control &rest format-arguments)
+  (error 'compiler-unsupported-feature-error
+         :format-control format-control
+         :format-arguments format-arguments))
 
 (defun check-args (form n)
   (declare (type fixnum n))
@@ -2443,7 +2454,7 @@
 
 (defun p2-eql (form &key (target :stack) representation)
   (unless (= (length form) 3)
-    (error "Wrong number of arguments for EQL."))
+    (error 'program-error "Wrong number of arguments for EQL."))
   (let ((arg1 (second form))
         (arg2 (third form)))
     (cond ((and (fixnum-or-unboxed-variable-p arg1)
@@ -3559,7 +3570,7 @@
 
 (defun compile-atom (form &key (target :stack) representation)
   (unless (= (length form) 2)
-    (error "Wrong number of arguments for ATOM."))
+    (error 'program-error "Wrong number of arguments for ATOM."))
   (compile-form (cadr form) :target :stack)
   (maybe-emit-clear-values (cadr form))
   (emit 'instanceof +lisp-cons-class+)
@@ -3572,21 +3583,6 @@
     (emit-push-t)
     (label LABEL2)
     (emit-move-from-stack target)))
-
-;; (defun contains-return (form)
-;;   (if (atom form)
-;;       (if (node-p form)
-;;           (contains-return (node-form form))
-;;           nil)
-;;       (case (car form)
-;;         (QUOTE
-;;          nil)
-;;         (RETURN-FROM
-;;          t)
-;;         (t
-;;          (dolist (subform form)
-;;            (when (contains-return subform)
-;;              (return t)))))))
 
 (defun compile-block (form &key (target :stack) representation)
 ;;   (format t "compile-block ~S~%" (cadr form))
@@ -3762,12 +3758,12 @@
            ((constantp obj)
             (compile-constant obj :target target))
            (t
-            (error "COMPILE-QUOTE: unsupported case: ~S" form)))))
+            (compiler-unsupported "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
 (defun compile-rplacd (form &key (target :stack) representation)
   (let ((args (cdr form)))
     (unless (= (length args) 2)
-      (error "wrong number of arguments for RPLACD"))
+      (error 'program-error "Wrong number of arguments for RPLACD."))
     (compile-form (first args) :target :stack)
     (when target
       (emit 'dup))
@@ -3795,7 +3791,7 @@
                 ((memq state '(&optional &key))
                  (when (and (consp arg)
                             (not (constantp (second arg))))
-                   (error "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
+                   (compiler-unsupported "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
     (let* ((name (compiland-name compiland))
            form
            function
@@ -3861,8 +3857,7 @@
       (let ((variable (local-function-variable local-function)))
         (aver (null (variable-register variable)))
         (unless (variable-closure-index variable)
-          (setf (variable-register variable) (allocate-register)))
-        (setf (variable-index variable) nil)))
+          (setf (variable-register variable) (allocate-register)))))
     (dolist (local-function local-functions)
       (p2-local-function (local-function-compiland local-function) local-function))
     (do ((forms body (cdr forms)))
@@ -3880,7 +3875,8 @@
                 ((memq state '(&optional &key))
                  (when (and (consp arg)
                             (not (constantp (second arg))))
-                   (error "P2-LAMBDA: can't handle optional argument with non-constant initform.")))))))
+                   (compiler-unsupported
+                    "P2-LAMBDA: can't handle optional argument with non-constant initform.")))))))
     (aver (null (compiland-class-file compiland)))
     (setf (compiland-class-file compiland)
           (make-class-file :pathname (if *compile-file-truename*
@@ -3974,7 +3970,7 @@
           ((compiland-p name)
            (p2-lambda name target))
           (t
-           (error "p2-function: unsupported case: ~S" form)))))
+           (compiler-unsupported "p2-function: unsupported case: ~S" form)))))
 
 (defun p2-ash (form &key (target :stack) representation)
   (dformat t "p2-ash form = ~S representation = ~S~%" form representation)
@@ -4509,9 +4505,10 @@
                     (emit 'iload (variable-register variable))
                     (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
            (emit-move-from-stack target representation))
-          (t (dformat t "compile-variable-reference ~S closure index = ~S~%"
-                      name (variable-closure-index variable))
-             (emit 'var-ref variable target representation)))))
+          (t
+           (dformat t "compile-variable-reference ~S closure index = ~S~%"
+                    name (variable-closure-index variable))
+           (emit 'var-ref variable target representation)))))
 
 (defun rewrite-setq (form)
   (let ((expr (third form)))
@@ -4765,7 +4762,8 @@
                                        :representation representation))
                         ((special-operator-p op)
                          (dformat t "form = ~S~%" form)
-                         (error "COMPILE-FORM: unsupported special operator ~S" op))
+                         (compiler-unsupported
+                          "COMPILE-FORM: unsupported special operator ~S" op))
                         (t
                          (compile-function-call form target representation))))
                  ((and (consp op) (eq (car op) 'LAMBDA))
@@ -4775,7 +4773,7 @@
                                   :target target
                                   :representation representation)))
                  (t
-                  (error "COMPILE-FORM unhandled case ~S" form)))))
+                  (compiler-unsupported "COMPILE-FORM unhandled case ~S" form)))))
         ((symbolp form)
          (cond ((null form)
                 (emit-push-nil)
@@ -4791,7 +4789,9 @@
                 (let ((expansion (macroexpand form)))
                   (if (eq expansion form)
                       (compile-variable-reference form target representation)
-                      (compile-form expansion :target target :representation representation))))))
+                      (compile-form expansion
+                                    :target target
+                                    :representation representation))))))
         ((block-node-p form)
          (cond ((equal (block-name form) '(TAGBODY))
                 (p2-tagbody-node form target))
@@ -4806,7 +4806,7 @@
         ((constantp form)
          (compile-constant form :target target :representation representation))
         (t
-         (error "COMPILE-FORM unhandled case ~S" form))))
+         (compiler-unsupported "COMPILE-FORM unhandled case ~S" form))))
 
 ;; Returns descriptor.
 (defun analyze-args (compiland)
@@ -5122,7 +5122,8 @@
                  (aver (null (variable-register variable)))
                  (setf (variable-register variable) (if *using-arg-array* nil register))
                  (aver (null (variable-index variable)))
-                 (setf (variable-index variable) index)
+                 (if *using-arg-array*
+                     (setf (variable-index variable) index))
                  (push variable parameters)
                  (incf register)
                  (incf index))))))
@@ -5281,15 +5282,30 @@
                                    +lisp-object-array+)))
         (emit 'astore (compiland-argument-register compiland)))
 
-      (cond ((and (not *child-p*) (not *using-arg-array*))
-             (dolist (variable (reverse *visible-variables*))
-               (when (eq (variable-representation variable) :unboxed-fixnum)
-                 (emit 'aload (variable-register variable))
-                 (emit-unbox-fixnum)
-                 (emit 'istore (variable-register variable))))))
+      (unless (or *child-p* *using-arg-array*)
+;;         (dolist (variable (reverse *visible-variables*))
+        (dolist (variable (compiland-arg-vars compiland))
+          (when (eq (variable-representation variable) :unboxed-fixnum)
+            (emit 'aload (variable-register variable))
+            (emit-unbox-fixnum)
+            (emit 'istore (variable-register variable)))))
 
       (maybe-initialize-thread-var)
       (setf *code* (append code *code*)))
+
+;;     (let ((prologue *code*))
+;;       (setf *code* ())
+;;       (compile-progn-body body :stack)
+;;       (unless *code*
+;;         (emit-push-nil))
+;;       (emit 'areturn)
+;;       (let ((body-code *code*))
+;;         (setf *code* prologue)
+;;         (maybe-initialize-thread-var)
+;;         (setf prologue *code*)
+;;         (setf *code* (append body-code prologue))))
+
+;;     (resolve-variables)
 
     (finalize-code)
     (optimize-code)
@@ -5367,7 +5383,7 @@
 (defun compile-defun (name form environment &optional (filespec "out.class"))
   (aver (eq (car form) 'LAMBDA))
   (unless (or (null environment) (sys::empty-environment-p environment))
-    (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
+    (compiler-unsupported "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (aver (null *current-compiland*))
   (handler-bind ((warning #'handle-warning))
     (compile-1 (make-compiland :name name
@@ -5471,13 +5487,23 @@
       (let ((prefix (load-verbose-prefix)))
         (handler-case
             (%jvm-compile name definition)
+          (compiler-unsupported-feature-error
+           (c)
+           (fresh-line)
+           (%format t "; UNSUPPORTED FEATURE: ~A~%" c)
+           (if name
+               (%format t "~A Unable to compile ~S.~%" prefix name)
+               (%format t "~A Unable to compile top-level form.~%" prefix))
+           (precompiler::precompile name definition))
+          #+nil
           (error (c)
                  (fresh-line)
                  (%format t "~A Note: ~A~%" prefix c)
                  (if name
                      (%format t "~A Unable to compile ~S.~%" prefix name)
                      (%format t "~A Unable to compile top-level form.~%" prefix))
-                 (precompiler::precompile name definition))))
+                 (precompiler::precompile name definition))
+          ))
       (%jvm-compile name definition)))
 
 (defun jvm-compile-package (package-designator)
