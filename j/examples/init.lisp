@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id
+;;; $Id: init.lisp,v 1.2 2003-03-29 20:04:12 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
