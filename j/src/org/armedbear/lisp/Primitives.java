@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.636 2004-05-05 19:34:45 piso Exp $
+ * $Id: Primitives.java,v 1.637 2004-05-09 16:37:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -655,8 +655,7 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %output-object
-    // %output-object object stream => object
+    // ### %output-object object stream => object
     private static final Primitive2 _OUTPUT_OBJECT =
         new Primitive2("%output-object", PACKAGE_SYS, false)
     {
@@ -665,6 +664,16 @@ public final class Primitives extends Lisp
         {
             outSynonymOf(second)._writeString(first.writeToString());
             return first;
+        }
+    };
+
+    // ### %write-to-string object => string
+    private static final Primitive1 _WRITE_TO_STRING =
+        new Primitive1("%write-to-string", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return new SimpleString(arg.writeToString());
         }
     };
 
@@ -3530,7 +3539,7 @@ public final class Primitives extends Lisp
                     abort = args[2];
                 else
                     signal(new ProgramError("Unrecognized keyword argument " +
-                                            args[1] + "."));
+                                            args[1].writeToString() + "."));
             }
             return stream.close(abort);
         }
