@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.204 2005-02-10 12:54:34 piso Exp $
+;;; $Id: boot.lisp,v 1.205 2005-02-11 19:38:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,11 +73,12 @@
   (sys::%format t "~A~%" condition)
   (ext:quit))
 
-(sys:load-system-file "autoloads")
-(sys:load-system-file "early-defuns")
-(sys:load-system-file "backquote")
-(sys:load-system-file "setf")
-(sys:load-system-file "documentation")
+(load-system-file "autoloads")
+(load-system-file "early-defuns")
+(load-system-file "backquote")
+(load-system-file "setf")
+(load-system-file "fdefinition")
+(load-system-file "documentation")
 
 (defmacro defvar (var &optional (val nil valp) (doc nil docp))
   `(progn
