@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.226 2004-04-08 14:48:22 piso Exp $
+ * $Id: Lisp.java,v 1.227 2004-04-14 14:31:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,8 +272,14 @@ public abstract class Lisp
                     autoload.load();
                     obj = autoload.getSymbol().getSymbolFunction();
                 }
-                if (obj instanceof SpecialOperator)
+                if (obj instanceof SpecialOperator) {
                     obj = get((Symbol)car, Symbol.MACROEXPAND_MACRO);
+                    if (obj instanceof Autoload) {
+                        Autoload autoload = (Autoload) obj;
+                        autoload.load();
+                        obj = get((Symbol)car, Symbol.MACROEXPAND_MACRO);
+                    }
+                }
                 if (obj instanceof MacroObject) {
                     LispObject expander = ((MacroObject)obj).getExpander();
                     if (profiling)
