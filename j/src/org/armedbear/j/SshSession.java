@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SshSession.java,v 1.10 2003-05-19 14:41:58 piso Exp $
+ * $Id: SshSession.java,v 1.11 2003-05-19 14:58:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -865,6 +865,8 @@ public final class SshSession implements Constants
         return s;
     }
 
+    private static final RE totalRE = new UncheckedRE("\\n?[^0-9]+ [0-9]+");
+
     private synchronized String lsla()
     {
         boolean valid = false;
@@ -883,17 +885,14 @@ public final class SshSession implements Constants
                 return null;
             }
             s = output.toString();
-            int index = 0;
-            if (!s.startsWith("total "))
-                index = s.indexOf("\ntotal ");
-            if (index < 0) {
-                // Shouldn't happen.
+            REMatch match = totalRE.getMatch(s);
+            Log.debug("match = |" + match + "|");
+            if (match == null) {
                 Log.error("lsla no \"total\" line");
-                Log.error("s = |" + s + "|");
                 continue;
             }
-            s = s.substring(index + 6);
-            index = s.indexOf('\n');
+            s = s.substring(match.getEndIndex());
+            int index = s.indexOf('\n');
             if (index < 0) {
                 // Shouldn't happen.
                 Log.error("lsla no '\\n'");
