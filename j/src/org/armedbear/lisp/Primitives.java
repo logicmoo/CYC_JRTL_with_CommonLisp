@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.235 2003-06-11 17:39:57 piso Exp $
+ * $Id: Primitives.java,v 1.236 2003-06-18 16:50:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2311,8 +2311,8 @@ public final class Primitives extends Module
                 sb.append(function);
                 sb.append(".\n");
                 LispObject documentation =
-                    Interpreter.evaluate("(documentation '" +
-                        symbol.getName() + " 'function)");
+                    eval(list(Symbol.DOCUMENTATION, symbol, Symbol.FUNCTION),
+                        new Environment(), LispThread.currentThread());
                 if (documentation instanceof LispString) {
                     sb.append("Function documentation:\n  ");
                     sb.append(((LispString)documentation).getValue());
