@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.118 2003-09-08 13:36:10 piso Exp $
+;;; $Id: rt.lisp,v 1.119 2003-09-08 13:36:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -358,6 +358,7 @@
                               "psetq"
                               "push"
                               "pushnew"
+                              "random"
                               "rassoc"
                               "rassoc-if"
                               "rassoc-if-not"
