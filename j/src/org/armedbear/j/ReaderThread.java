@@ -35,6 +35,7 @@ public class ReaderThread extends Thread
 
     public ReaderThread(InputStream inputStream)
     {
+        super("reader thread");
         this.inputStream = inputStream;
         reader = new BufferedReader(new InputStreamReader(inputStream));
     }
