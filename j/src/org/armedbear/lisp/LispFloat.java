@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.56 2004-02-06 11:43:48 piso Exp $
+ * $Id: LispFloat.java,v 1.57 2004-02-10 14:04:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -200,7 +200,7 @@ public final class LispFloat extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        return signal(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -218,7 +218,7 @@ public final class LispFloat extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        ZERO.subtract(c.getImaginaryPart()));
         }
-        return signal(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -231,7 +231,12 @@ public final class LispFloat extends LispObject
             return new LispFloat(value * ((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(value * ((Ratio)obj).floatValue());
-        return signal(new TypeError(obj, "number"));
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(multiplyBy(c.getRealPart()),
+                                       multiplyBy(c.getImaginaryPart()));
+        }
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -246,7 +251,17 @@ public final class LispFloat extends LispObject
             return new LispFloat(value / ((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(value / ((Ratio)obj).floatValue());
-        return signal(new TypeError(obj, "number"));
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            LispObject re = c.getRealPart();
+            LispObject im = c.getImaginaryPart();
+            LispObject denom = re.multiplyBy(re).add(im.multiplyBy(im));
+            LispObject resX = multiplyBy(re).divideBy(denom);
+            LispObject resY =
+                multiplyBy(Fixnum.MINUS_ONE).multiplyBy(im).divideBy(denom);
+            return Complex.getInstance(resX, resY);
+        }
+        return signal(new TypeError(obj, Symbol.NUMBER));
     }
 
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
@@ -261,7 +276,7 @@ public final class LispFloat extends LispObject
             return value == ((Ratio)obj).floatValue();
         if (obj instanceof Complex)
             return obj.isEqualTo(this);
-        signal(new TypeError(obj, "number"));
+        signal(new TypeError(obj, Symbol.NUMBER));
         // Not reached.
         return false;
     }
