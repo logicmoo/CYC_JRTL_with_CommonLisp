@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.17 2003-03-14 20:08:09 piso Exp $
+ * $Id: Fixnum.java,v 1.18 2003-03-14 20:51:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,9 @@ import java.math.BigInteger;
 
 public final class Fixnum extends LispObject
 {
+    public static final Fixnum ZERO = new Fixnum(0);
+    public static final Fixnum ONE  = new Fixnum(1);
+
     private final int value;
 
     public Fixnum(int value)
