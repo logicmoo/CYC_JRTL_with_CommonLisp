@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.292 2004-10-10 17:15:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.293 2004-10-13 00:23:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1863,6 +1863,7 @@
 (define-unary-operator 'CDDR            "cddr")
 (define-unary-operator 'CDR             "cdr")
 (define-unary-operator 'CHARACTERP      "CHARACTERP")
+(define-unary-operator 'CLASS-OF        "classOf")
 (define-unary-operator 'COMPLEXP        "COMPLEXP")
 (define-unary-operator 'CONSTANTP       "CONSTANTP")
 (define-unary-operator 'DENOMINATOR     "DENOMINATOR")
