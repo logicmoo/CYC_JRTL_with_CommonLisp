@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.10 2004-10-08 14:21:27 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: print.lisp,v 1.11 2005-02-20 15:11:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -120,6 +120,8 @@
               (not (stringp object))
               (not (bit-vector-p object)))
          (output-vector object stream))
+        ((structure-object-p object)
+         (print-object object stream))
         ((xp::xp-structure-p stream)
          (let ((s (sys::%write-to-string object)))
            (xp::write-string++ s stream 0 (length s))))
