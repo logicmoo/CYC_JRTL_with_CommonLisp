@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.136 2005-03-01 20:27:39 piso Exp $
+ * $Id: Editor.java,v 1.137 2005-03-01 21:20:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1845,6 +1845,8 @@ public final class Editor extends JPanel implements Constants,
         String commentEnd = buffer.getCommentEnd();
         Position savedDot = new Position(dot);
         Line beginLine, endLine;
+        if (mark == null)
+            mark = buffer.getMark();
         if (mark != null) {
             Region r = new Region(buffer, dot, mark);
             beginLine = r.getBeginLine();
