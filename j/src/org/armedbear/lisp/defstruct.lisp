@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.29 2003-11-18 01:06:58 piso Exp $
+;;; $Id: defstruct.lisp,v 1.30 2003-11-18 01:23:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,10 +64,11 @@
       `((defun ,pred (object)
           (typep object ',*ds-name*))))))
 
-
 (defun get-slot-accessor (slot)
   (case *ds-type*
     (LIST
+     (when *ds-named*
+       (incf slot))
      `(lambda (instance) (elt instance ,slot)))
     (t
      (case slot
@@ -80,6 +81,8 @@
 (defun get-slot-mutator (slot)
   (case *ds-type*
     (LIST
+     (when *ds-named*
+       (incf slot))
      `(lambda (instance value) (%set-elt instance ,slot value)))
     (t
      (case slot
