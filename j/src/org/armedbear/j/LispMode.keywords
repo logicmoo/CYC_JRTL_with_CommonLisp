@@ -309,6 +309,8 @@ maplist
 mask-field
 max
 member
+member-if
+member-if-not
 merge-pathnames
 min
 minusp
