@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.33 2004-03-05 16:10:22 piso Exp $
+ * $Id: Stream.java,v 1.34 2004-03-06 04:50:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -794,10 +794,6 @@ public class Stream extends LispObject
             if (number != null)
                 return number;
         }
-        if (token.equals("T"))
-            return T;
-        if (token.equals("NIL"))
-            return NIL;
         if (firstChar == ':')
             return PACKAGE_KEYWORD.intern(token.substring(1));
         int index = token.indexOf("::");
