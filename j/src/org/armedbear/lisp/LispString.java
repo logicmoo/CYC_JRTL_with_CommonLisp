@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.1 2003-01-17 19:43:21 piso Exp $
+ * $Id: LispString.java,v 1.2 2003-02-09 18:45:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class LispString extends LispObject implements SequenceType,
+public final class LispString extends AbstractVector implements SequenceType,
     VectorType
 {
     private char[] array;
@@ -124,6 +124,13 @@ public final class LispString extends LispObject implements SequenceType,
             array = newArray;
         } else if (obj != NIL)
             throw new WrongTypeException(obj, "sequence");
+    }
+
+    public LispObject get(int index) throws LispException
+    {
+        if (index < 0 || index >= array.length)
+            badIndex(index);
+        return new LispCharacter(array[index]);
     }
 
     public void set(int index, LispObject newValue) throws LispException
