@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.35 2005-02-28 17:20:00 piso Exp $
+ * $Id: SpecialOperators.java,v 1.36 2005-03-21 17:18:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,7 +288,9 @@ public final class SpecialOperators extends Lisp
         }
     };
 
-    private static final SpecialOperator FLET = new SpecialOperator("flet", "definitions &body body")
+    // ### flet
+    private static final SpecialOperator FLET =
+        new SpecialOperator("flet", "definitions &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -297,7 +299,9 @@ public final class SpecialOperators extends Lisp
         }
     };
 
-    private static final SpecialOperator LABELS = new SpecialOperator("labels", "definitions &body body")
+    // ### labels
+    private static final SpecialOperator LABELS =
+        new SpecialOperator("labels", "definitions &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
