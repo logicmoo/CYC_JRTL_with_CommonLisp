@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.9 2003-10-11 17:35:48 piso Exp $
+;;; $Id: defclass.lisp,v 1.10 2003-10-11 18:49:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -563,15 +563,14 @@
 ;;; Method metaobjects and standard-method
 ;;;
 
-(defparameter the-defclass-standard-method
-  '(defclass standard-method ()
-    ((lambda-list :initarg :lambda-list)     ; :accessor method-lambda-list
-     (qualifiers :initarg :qualifiers)       ; :accessor method-qualifiers
-     (specializers :initarg :specializers)   ; :accessor method-specializers
-     (body :initarg :body)                   ; :accessor method-body
-     (environment :initarg :environment)     ; :accessor method-environment
-     (generic-function :initform nil)        ; :accessor method-generic-function
-     (function))))                           ; :accessor method-function
+(defclass standard-method ()
+  ((lambda-list :initarg :lambda-list)     ; :accessor method-lambda-list
+   (qualifiers :initarg :qualifiers)       ; :accessor method-qualifiers
+   (specializers :initarg :specializers)   ; :accessor method-specializers
+   (body :initarg :body)                   ; :accessor method-body
+   (environment :initarg :environment)     ; :accessor method-environment
+   (generic-function :initform nil)        ; :accessor method-generic-function
+   (function)))                            ; :accessor method-function
 
 (defvar the-class-standard-method (find-class 'standard-method))
 
@@ -648,7 +647,7 @@
 (defun find-generic-function (symbol &optional (errorp t))
   (let ((gf (gethash symbol generic-function-table nil)))
     (if (and (null gf) errorp)
-        (error "No generic function named ~S." symbol)
+        (error "no generic function named ~S" symbol)
         gf)))
 
 (defun (setf find-generic-function) (new-value symbol)
@@ -663,20 +662,24 @@
    (method-class the-class-standard-method)
    &allow-other-keys)
   (format t "ensure-generic-function function-name = ~S~%" function-name)
-  (when (fboundp function-name)
-    (error "~A already names an ordinary function, macro, or special operator"
-           function-name))
+;;   (when (fboundp function-name)
+;;     (error "~A already names an ordinary function, macro, or special operator"
+;;            function-name))
   (if (find-generic-function function-name nil)
       (find-generic-function function-name)
-      (let ((gf (apply (if (eq generic-function-class the-class-standard-gf)
-                           #'make-instance-standard-generic-function
-                           #'make-instance)
-                       generic-function-class
-                       :name function-name
-                       :method-class method-class
-                       all-keys)))
-        (setf (find-generic-function function-name) gf)
-        gf)))
+      (progn
+        (when (fboundp function-name)
+          (error "~A already names an ordinary function, macro, or special operator"
+                 function-name))
+        (let ((gf (apply (if (eq generic-function-class the-class-standard-gf)
+                             #'make-instance-standard-generic-function
+                             #'make-instance)
+                         generic-function-class
+                         :name function-name
+                         :method-class method-class
+                         all-keys)))
+          (setf (find-generic-function function-name) gf)
+          gf))))
 
 ;;; finalize-generic-function
 
@@ -712,24 +715,42 @@
     (finalize-generic-function gf)
     gf))
 
+;;; Run-time environment hacking (Common Lisp ain't got 'em).
+
+(defun top-level-environment ()
+  nil) ; Bogus top level lexical environment
+
+(defvar compile-methods nil)      ; by default, run everything interpreted
+
+(defun compile-in-lexical-environment (env lambda-expr)
+  (declare (ignore env))
+  (if compile-methods
+      (compile nil lambda-expr)
+      (eval `(function ,lambda-expr))))
+
 ;;; defmethod
 
-;; (defmacro defmethod (&rest args)
-;;   (multiple-value-bind (function-name qualifiers
-;;                                       lambda-list specializers body)
-;;     (parse-defmethod args)
-;;     `(ensure-method (find-generic-function ',function-name)
-;;                     :lambda-list ',lambda-list
-;;                     :qualifiers ',qualifiers
-;;                     :specializers ,(canonicalize-specializers specializers)
-;;                     :body ',body
-;;                     :environment (top-level-environment))))
+(defmacro defmethod (&rest args)
+  (multiple-value-bind (function-name qualifiers lambda-list specializers
+                                      body)
+    (parse-defmethod args)
+    `(progn
+      (ensure-generic-function
+       ',function-name
+       :lambda-list ',lambda-list)
+      (ensure-method (find-generic-function ',function-name)
+                     :lambda-list ',lambda-list
+                     :qualifiers ',qualifiers
+                     :specializers ,(canonicalize-specializers specializers)
+                     :body ',body
+                     :environment (top-level-environment)))))
 
 (defun canonicalize-specializers (specializers)
   `(list ,@(mapcar #'canonicalize-specializer specializers)))
 
 (defun canonicalize-specializer (specializer)
-  `(find-class ',specializer))
+  ;; FIXME (EQL specializers)
+  `(if (atom ',specializer) (find-class ',specializer) (find-class 't)))
 
 (defun parse-defmethod (args)
   (let ((fn-spec (car args))
@@ -900,6 +921,7 @@
   (setf (generic-function-methods gf)
         (remove method (generic-function-methods gf)))
   (setf (method-generic-function method) nil)
+  (format t "remove-method method-specializers = ~S~%" (method-specializers method))
   (dolist (class (method-specializers method))
     (setf (class-direct-methods class)
           (remove method (class-direct-methods class))))
@@ -942,6 +964,15 @@
                 new-value)
    :environment (top-level-environment))
   (values))
+
+;;; subclassp and sub-specializer-p
+
+(defun subclassp (c1 c2)
+  (not (null (find c2 (class-precedence-list c1)))))
+
+(defun sub-specializer-p (c1 c2 c-arg)
+  (let ((cpl (class-precedence-list c-arg)))
+    (not (null (find c2 (cdr (member c1 cpl)))))))
 
 ;;;
 ;;; Generic function invocation
@@ -1099,9 +1130,11 @@
 
 ;;; Slot access
 
+(defun setf-slot-value-using-class (new-value class instance slot-name)
+  (setf (std-slot-value instance slot-name) new-value))
+
 (defgeneric slot-value-using-class (class instance slot-name))
-(defmethod slot-value-using-class
-  ((class standard-class) instance slot-name)
+(defmethod slot-value-using-class ((class standard-class) instance slot-name)
   (std-slot-value instance slot-name))
 
 (defgeneric (setf slot-value-using-class) (new-value class instance slot-name))
@@ -1109,8 +1142,8 @@
   (new-value (class standard-class) instance slot-name)
   (setf (std-slot-value instance slot-name) new-value))
 ;;; N.B. To avoid making a forward reference to a (setf xxx) generic function:
-(defun setf-slot-value-using-class (new-value class object slot-name)
-  (setf (slot-value-using-class class object slot-name) new-value))
+;; (defun setf-slot-value-using-class (new-value class object slot-name)
+;;   (setf (slot-value-using-class class object slot-name) new-value))
 
 (defgeneric slot-exists-p-using-class (class instance slot-name))
 (defmethod slot-exists-p-using-class
@@ -1168,3 +1201,39 @@
               (setf (slot-value instance slot-name)
                     (funcall (slot-definition-initfunction slot))))))))
   instance)
+
+;;; change-class
+
+(defgeneric change-class (instance new-class &key))
+(defmethod change-class
+  ((old-instance standard-object)
+   (new-class standard-class)
+   &rest initargs)
+  (let ((new-instance (allocate-instance new-class)))
+    (dolist (slot-name (mapcar #'slot-definition-name
+                               (class-slots new-class)))
+      (when (and (slot-exists-p old-instance slot-name)
+                 (slot-boundp old-instance slot-name))
+        (setf (slot-value new-instance slot-name)
+              (slot-value old-instance slot-name))))
+    (rotatef (std-instance-slots new-instance)
+             (std-instance-slots old-instance))
+    (rotatef (std-instance-class new-instance)
+             (std-instance-class old-instance))
+    (apply #'update-instance-for-different-class
+           new-instance old-instance initargs)
+    old-instance))
+
+(defmethod change-class
+  ((instance standard-object) (new-class symbol) &rest initargs)
+  (apply #'change-class instance (find-class new-class) initargs))
+
+(defgeneric update-instance-for-different-class (old new &key))
+(defmethod update-instance-for-different-class
+  ((old standard-object) (new standard-object) &rest initargs)
+  (let ((added-slots
+         (remove-if #'(lambda (slot-name)
+                       (slot-exists-p old slot-name))
+                    (mapcar #'slot-definition-name
+                            (class-slots (class-of new))))))
+    (apply #'shared-initialize new added-slots initargs)))

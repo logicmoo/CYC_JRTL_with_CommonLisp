@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.8 2003-10-11 17:29:53 piso Exp $
+ * $Id: BuiltInClass.java,v 1.9 2003-10-11 18:47:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,9 +119,9 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SIMPLE_ERROR                     = addClass(Symbol.SIMPLE_ERROR);
     public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
     public static final BuiltInClass SIMPLE_WARNING                   = addClass(Symbol.SIMPLE_WARNING);
-    public static final BuiltInClass STANDARD_CLASS                   = addClass(Symbol.STANDARD_CLASS);
+//     public static final BuiltInClass STANDARD_CLASS                   = addClass(Symbol.STANDARD_CLASS);
 //     public static final BuiltInClass STANDARD_GENERIC_FUNCTION        = addClass(Symbol.STANDARD_GENERIC_FUNCTION);
-    public static final BuiltInClass STANDARD_METHOD                  = addClass(Symbol.STANDARD_METHOD);
+//     public static final BuiltInClass STANDARD_METHOD                  = addClass(Symbol.STANDARD_METHOD);
 //     public static final BuiltInClass STANDARD_OBJECT                  = addClass(Symbol.STANDARD_OBJECT);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
@@ -140,6 +140,13 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass UNDEFINED_FUNCTION               = addClass(Symbol.UNDEFINED_FUNCTION);
     public static final BuiltInClass VECTOR                           = addClass(Symbol.VECTOR);
     public static final BuiltInClass WARNING                          = addClass(Symbol.WARNING);
+
+    public static final StandardClass STANDARD_CLASS =
+        new StandardClass(Symbol.STANDARD_CLASS,
+                          list1(CLASS_T));
+    static {
+        addClass(Symbol.STANDARD_CLASS, STANDARD_CLASS);
+    }
 
     public static final StandardClass STANDARD_OBJECT =
         new StandardClass(Symbol.STANDARD_OBJECT,
@@ -288,9 +295,9 @@ public class BuiltInClass extends LispClass
 //         STANDARD_GENERIC_FUNCTION.setDirectSuperclass(GENERIC_FUNCTION);
 //         STANDARD_GENERIC_FUNCTION.setCPL(STANDARD_GENERIC_FUNCTION,
 //                                          GENERIC_FUNCTION, FUNCTION, CLASS_T);
-        STANDARD_METHOD.setDirectSuperclass(list2(METHOD, STANDARD_OBJECT));
-        STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
-                               CLASS_T);
+//         STANDARD_METHOD.setDirectSuperclass(list2(METHOD, STANDARD_OBJECT));
+//         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
+//                                CLASS_T);
 //         STANDARD_OBJECT.setDirectSuperclass(CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
         STORAGE_CONDITION.setDirectSuperclass(SERIOUS_CONDITION);
