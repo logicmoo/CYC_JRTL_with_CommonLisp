@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Session.java,v 1.5 2003-02-03 01:24:35 piso Exp $
+ * $Id: Session.java,v 1.6 2003-02-03 01:33:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,7 +219,7 @@ public final class Session extends HandlerBase implements Constants
             SessionBufferEntry entry = (SessionBufferEntry) iter.next();
             if (entry != null) {
                 File file = File.getInstance(entry.getPath());
-                if (file.isLocal()) {
+                if (file != null && file.isLocal()) {
                     Buffer buf = null;
                     if (file.isDirectory())
                         buf = new Directory(file);
@@ -237,8 +237,10 @@ public final class Session extends HandlerBase implements Constants
                             lastActivated = entry.getLastActivated();
                         }
                     }
-                } else
+                } else {
+                    Log.error("Session.createBuffers file = " + file);
                     Debug.bug();
+                }
             }
         }
         if (toBeActivated == null)
