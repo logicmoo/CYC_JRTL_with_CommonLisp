@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.50 2004-03-12 17:31:43 piso Exp $
+ * $Id: Stream.java,v 1.51 2004-03-16 14:23:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -418,9 +418,6 @@ public class Stream extends LispObject
                 return new SimpleVector(readList());
             case '\\':
                 return readCharacterLiteral();
-            case '+':
-            case '-':
-                return handleFeature(c);
             case ':':
                 // An uninterned symbol.
                 return new Symbol(readToken());
@@ -495,27 +492,6 @@ public class Stream extends LispObject
         if (n >= 0)
             return LispCharacter.getInstance((char)n);
         return signal(new LispError("Unrecognized character name: \"" + token + '"'));
-    }
-
-    // FIXME
-    private LispObject handleFeature(char c) throws ConditionThrowable
-    {
-        LispObject feature = read(true, NIL, true);
-        LispObject form = read(true, NIL, true);
-        if (feature instanceof Symbol) {
-            if (((Symbol)feature).getName().equalsIgnoreCase("armedbear")) {
-                if (c == '+')
-                    return form;
-                else
-                    return null;
-            } else {
-                if (c == '+')
-                    return null;
-                else
-                    return form;
-            }
-        }
-        return null;
     }
 
     private void skipBalancedComment() throws ConditionThrowable
