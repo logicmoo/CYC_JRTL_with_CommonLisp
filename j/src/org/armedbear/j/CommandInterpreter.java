@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.7 2002-11-24 05:05:30 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.8 2002-11-25 02:07:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,7 +325,6 @@ public class CommandInterpreter extends Buffer
         }
         try {
             Position pos = getEnd();
-            final Line line = pos.getLine();
             insertString(pos, s);
             if (needsRenumbering())
                 renumber();
