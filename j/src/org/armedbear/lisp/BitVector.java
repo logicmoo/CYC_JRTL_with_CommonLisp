@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.14 2003-05-28 00:13:53 piso Exp $
+ * $Id: BitVector.java,v 1.15 2003-05-31 20:21:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class BitVector extends AbstractVector implements SequenceType,
-    VectorType
+public final class BitVector extends AbstractVector
 {
     private static final int LONG_MASK = 0x3f;
 
@@ -52,6 +51,11 @@ public final class BitVector extends AbstractVector implements SequenceType,
             else
                 Debug.assertTrue(false);
         }
+    }
+
+    public int getType()
+    {
+        return TYPE_BIT_VECTOR | TYPE_VECTOR;
     }
 
     public LispObject typeOf()
