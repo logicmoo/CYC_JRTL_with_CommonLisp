@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.40 2003-03-08 16:09:13 piso Exp $
+;;; $Id: rt.lisp,v 1.41 2003-03-08 17:07:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -487,6 +487,12 @@
                               "let"
                               "loop"
                               "loop1"
+                              "loop2"
+                              "loop3"
+                              "loop4"
+                              "loop5"
+                              "loop8"
+                              "loop9"
                               "make-sequence"
                               "make-string"
                               "multiple-value-bind"
