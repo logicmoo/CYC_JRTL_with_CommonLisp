@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: BroadcastStream.java,v 1.1 2004-01-31 02:50:34 piso Exp $
+ * $Id: BroadcastStream.java,v 1.2 2004-01-31 19:06:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,21 @@ public final class BroadcastStream extends Stream
         if (typeSpecifier == BuiltInClass.BROADCAST_STREAM)
             return T;
         return super.typep(typeSpecifier);
+    }
+
+    public LispObject listen() throws ConditionThrowable
+    {
+        notSupported();
+        // Not reached.
+        return NIL;
+    }
+
+    public LispObject fileLength() throws ConditionThrowable
+    {
+        if (streams.length > 0)
+            return streams[streams.length - 1].fileLength();
+        else
+            return Fixnum.ZERO;
     }
 
     // Returns -1 at end of file.
