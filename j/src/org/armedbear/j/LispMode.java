@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.19 2002-12-15 02:54:43 piso Exp $
+ * $Id: LispMode.java,v 1.20 2002-12-17 17:17:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,10 +252,14 @@ public class LispMode extends AbstractMode implements Constants, Mode
                     ++parenCount;
                     break;
                 case '(':
-                    if (parenCount == 0)
-                        return it.getPosition(); // Found unmatched '('.
-                    if (it.getPosition().getOffset() == 0)
+                    if (parenCount == 0) {
+                        // Found unmatched '('.
+                        return it.getPosition();
+                    }
+                    if (it.getPosition().getOffset() == 0) {
+                        // Found '(' in column 0.
                         return null;
+                    }
                     --parenCount;
                     break;
                 case SyntaxIterator.DONE:
