@@ -2,7 +2,7 @@
  * Dispatcher.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Dispatcher.java,v 1.6 2003-05-26 13:36:22 piso Exp $
+ * $Id: Dispatcher.java,v 1.7 2003-06-12 16:43:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,7 @@ import java.awt.event.MouseMotionListener;
 import java.net.URL;
 import java.util.List;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.undo.CompoundEdit;
 
@@ -643,9 +644,15 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
         }
     }
 
-    public void actionPerformed(ActionEvent e)
+    public void actionPerformed(final ActionEvent e)
     {
-        dispatch(e);
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                dispatch(e);
+            }
+        };
+        SwingUtilities.invokeLater(r);
     }
 
     public void dragEnter(DropTargetDragEvent event)
