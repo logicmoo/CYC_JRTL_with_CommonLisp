@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.107 2003-09-02 16:16:55 piso Exp $
+;;; $Id: rt.lisp,v 1.108 2003-09-03 23:27:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -130,7 +130,8 @@
 (defun do-tests (&rest args)
   (let ((rt::*passed* 0) (rt::*failed* 0)
         (suffix ".lsp")
-        (tests (or args (list "acons"
+        (tests (or args (list "abs"
+                              "acons"
                               "adjoin"
                               "and"
                               "append"
@@ -197,6 +198,7 @@
                               "ecase"
                               "elt"
                               "endp"
+                              "epsilons"
                               "eql"
                               "equal"
                               "equalp"
@@ -205,6 +207,7 @@
                               "eval"
                               "evenp"
                               "every"
+                              "expt"
                               "fboundp"
                               "fceiling"
                               "fdefinition"
@@ -224,6 +227,7 @@
                               "function"
                               "function-lambda-expression"
                               "functionp"
+                              "gcd"
                               "gensym"
                               "get-properties"
                               "getf"
@@ -277,10 +281,14 @@
                               "mapcon"
                               "mapl"
                               "maplist"
+                              "max"
                               "member"
                               "member-if"
                               "member-if-not"
                               "merge"
+                              "min"
+                              "minus"
+                              "minusp"
                               "mismatch"
                               "multiple-value-bind"
                               "multiple-value-call"
@@ -314,10 +322,14 @@
                               "number-comparison"
                               "nunion"
                               "oddp"
+                              "oneminus"
+                              "oneplus"
                               "or"
                               "packages"
                               "pairlis"
                               "places"
+                              "plus"
+                              "plusp"
                               "pop"
                               "position"
                               "position-if"
@@ -334,6 +346,8 @@
                               "rassoc"
                               "rassoc-if"
                               "rassoc-if-not"
+                              "rational"
+                              "rationalize"
                               "reduce"
                               "remf"
                               "remove"
@@ -387,6 +401,7 @@
                               "t"
                               "tagbody"
                               "tailp"
+                              "times"
                               "tree-equal"
                               "truncate"
                               "typecase"
