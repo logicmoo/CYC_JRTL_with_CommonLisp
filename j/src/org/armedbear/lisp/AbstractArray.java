@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AbstractArray.java,v 1.12 2003-12-13 00:58:50 piso Exp $
+ * $Id: AbstractArray.java,v 1.13 2004-02-19 01:33:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,5 +100,10 @@ public abstract class AbstractArray extends LispObject
         catch (ConditionThrowable t) {
             Debug.trace(t);
         }
+    }
+
+    public final LispObject noFillPointer() throws ConditionThrowable
+    {
+        return signal(new TypeError("Array does not have a fill pointer."));
     }
 }
