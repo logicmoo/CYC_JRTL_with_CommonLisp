@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.72 2004-06-10 12:03:10 piso Exp $
+ * $Id: Stream.java,v 1.73 2004-06-10 12:16:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -564,9 +564,9 @@ public class Stream extends LispObject
             return NIL;
         final String token = sb.toString();
         final int length = token.length();
-        if (!escaped) {
-            if (length > 0) {
-                final char firstChar = token.charAt(0);
+        if (length > 0) {
+            final char firstChar = token.charAt(0);
+            if (!escaped) {
                 if (firstChar == '.') {
                     // Section 2.3.3: "If a token consists solely of dots (with
                     // no escape characters), then an error of type READER-
@@ -590,21 +590,18 @@ public class Stream extends LispObject
                         return signal(new ReaderError(message));
                     }
                 }
+                final int radix = getReadBase(thread);
                 if ("-+0123456789".indexOf(firstChar) >= 0) {
-                    LispObject number = makeNumber(token, length, getReadBase(thread));
+                    LispObject number = makeNumber(token, length, radix);
                     if (number != null)
                         return number;
-                }
-                final int radix = getReadBase(thread);
-                if (Character.digit(firstChar, radix) >= 0) {
+                } else if (Character.digit(firstChar, radix) >= 0) {
                     LispObject number = makeNumber(token, length, radix);
                     if (number != null)
                         return number;
                 }
             }
-        }
-        if (length > 0) {
-            if (token.charAt(0) == ':')
+            if (firstChar == ':')
                 return PACKAGE_KEYWORD.intern(token.substring(1));
             int index = token.indexOf("::");
             if (index > 0) {
