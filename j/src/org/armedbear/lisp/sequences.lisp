@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.54 2003-12-20 17:02:49 piso Exp $
+;;; $Id: sequences.lisp,v 1.55 2004-02-12 01:18:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
     ((bit-vector simple-bit-vector) (make-array length :element-type 'bit))
     (string (make-string length))
     (vector (make-array length))
+    (nil-vector (make-array length :element-type nil))
     (t
      (error 'type-error))))
 
