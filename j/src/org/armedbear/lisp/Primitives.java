@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.215 2003-06-01 17:43:38 piso Exp $
+ * $Id: Primitives.java,v 1.216 2003-06-01 18:33:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3347,7 +3347,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject args, Environment env)
             throws Condition
         {
-            LispObject[] vars = args.car().copyToArray();
+            LispObject vars = args.car();
             args = args.cdr();
             LispObject valuesForm = args.car();
             final LispThread thread = LispThread.currentThread();
@@ -3360,14 +3360,24 @@ public final class Primitives extends Module
             }
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(env);
-            for (int i = 0; i < vars.length; i++) {
-                Symbol symbol = checkSymbol(vars[i]);
+            int i = 0;
+            LispObject var = vars.car();
+            while (var != NIL) {
+                Symbol symbol = checkSymbol(var);
                 if (i < values.length)
                     bind(symbol, values[i], ext);
                 else
                     bind(symbol, NIL, ext);
+                vars = vars.cdr();
+                var = vars.car();
+                ++i;
             }
-            LispObject result = progn(args.cdr(), ext, thread);
+            LispObject result = NIL;
+            LispObject body = args.cdr();
+            while (body != NIL) {
+                result = eval(body.car(), ext, thread);
+                body = body.cdr();
+            }
             thread.setDynamicEnvironment(oldDynEnv);
             return result;
         }
