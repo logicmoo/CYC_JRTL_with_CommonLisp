@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.36 2004-02-23 14:51:22 piso Exp $
+ * $Id: Cons.java,v 1.37 2004-02-27 14:32:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -246,7 +246,7 @@ public final class Cons extends LispObject
             final LispObject printLength = _PRINT_LENGTH_.symbolValue();
             final int limit;
             if (printLength instanceof Fixnum)
-                limit = ((Fixnum)printLength).getValue();
+                limit = ((Fixnum)printLength).value;
             else
                 limit = Integer.MAX_VALUE;
             StringBuffer sb = new StringBuffer();
