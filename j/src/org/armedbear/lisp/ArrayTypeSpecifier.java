@@ -2,7 +2,7 @@
  * ArrayTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ArrayTypeSpecifier.java,v 1.2 2003-07-15 15:40:01 piso Exp $
+ * $Id: ArrayTypeSpecifier.java,v 1.3 2003-07-15 16:29:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,26 +85,17 @@ public final class ArrayTypeSpecifier extends CompoundTypeSpecifier
         return NIL;
     }
 
-    public LispObject isSubtypeOf(LispObject obj) throws LispError
+    public LispObject isSubtypeOf(TypeSpecifier ts) throws LispError
     {
-        final boolean b = _isSubtypeOf(obj);
-        LispObject subtypep = b ? Symbol.T : NIL;
-        LispObject validp = Symbol.T; // For now.
-        LispObject[] values = new LispObject[2];
-        values[0] = subtypep;
-        values[1] = validp;
-        LispThread.currentThread().setValues(values);
-        return subtypep;
-    }
+        if (ts instanceof AtomicTypeSpecifier) {
+            AtomicTypeSpecifier ats = (AtomicTypeSpecifier) ts;
+            return type.isSubtypeOf(ats.getType());
+        }
 
-    private boolean _isSubtypeOf(LispObject obj) throws LispError
-    {
-        if (obj instanceof Cons) {
-            return false;
-        }
-        if (obj instanceof Symbol) {
-            return type._isSubtypeOf(Type.getInstance(obj));
-        }
-        throw new LispError("bad type specifier: " + obj);
+        LispObject[] values = new LispObject[2];
+        values[0] = NIL;
+        values[1] = NIL;
+        LispThread.currentThread().setValues(values);
+        return NIL;
     }
 }
