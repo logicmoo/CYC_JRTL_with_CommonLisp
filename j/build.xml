@@ -1,7 +1,7 @@
 <project name="j" default="compile" basedir="./src">
 
   <!-- Set global properties for this build -->
-  <property name="version" value="0.18.0.4"/>
+  <property name="version" value="0.18.0.4+"/>
   <property name="topdir" value="${basedir}/.."/>
   <property name="distdir" value="/tmp/j-${version}"/>
   <property file="${topdir}/build.properties"/>
@@ -98,14 +98,6 @@
       includes="org/armedbear/lisp/*"
       debug="${debug}"
     />
-    <echo message="junit=${junit}" />
-    <junit printsummary="yes" haltonfailure="yes">
-      <formatter type="plain" />
-      <classpath>
-        <pathelement path="${basedir}:${jdk}/jre/lib/rt.jar:${junit}" />
-      </classpath>
-      <test name="org.armedbear.lisp.Tests"/>
-    </junit>
     <echo message="${build}&#10;" file="${basedir}/org/armedbear/lisp/build"/>
   </target>
 
@@ -146,8 +138,8 @@
       jarfile="../j.jar"
       manifest="manifest"
       basedir="${basedir}"
-      excludes="pg.class, SampleExtension.class, org/armedbear/j/JLisp*.class, org/armedbear/lisp/**/*"
-      includes="**/*.class, **/*.keywords, **/*.bsh, org/armedbear/j/version, org/armedbear/j/build, org/armedbear/j/snapshot, org/armedbear/j/images/*.gif, org/armedbear/j/images/*.png, gnu/regexp/MessagesBundle.properties"
+      excludes="pg.class, SampleExtension.class, org/armedbear/lisp/Tests.class"
+      includes="**/*.class, **/*.keywords, **/*.bsh, **/*.lisp, org/armedbear/j/version, org/armedbear/j/build, org/armedbear/j/snapshot, org/armedbear/j/images/*.gif, org/armedbear/j/images/*.png, gnu/regexp/MessagesBundle.properties"
     />
   </target>
 
@@ -302,7 +294,7 @@
     <zip
       zipfile="${topdir}/j.zip"
       basedir="${topdir}"
-      excludes="src/TEST-*.txt, src/org/armedbear/lisp/**, **/*.class, **/*.jar, **/*.zip, src/test/**, **/Makefile.in, **/Makefile,
+      excludes="src/TEST-*.txt, **/*.class, **/*.jar, **/*.zip, src/test/**, **/Makefile.in, **/Makefile,
         **/configure.in, **/configure, **/config.status, **/config.cache, **/config.log,
         **/install-sh, **/mkinstalldirs, **/classes.stamp, **/build, **/version,
         **/j, **/j.bat, **/jpty, **/ChangeLog"
