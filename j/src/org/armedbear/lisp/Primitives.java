@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.419 2003-09-20 17:02:05 piso Exp $
+ * $Id: Primitives.java,v 1.420 2003-09-21 01:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1825,6 +1825,8 @@ public final class Primitives extends Module
             return c.getCondition() instanceof ControlError;
         if (type == Symbol.SIMPLE_ERROR)
             return c.getCondition() instanceof SimpleError;
+        if (type == Symbol.CELL_ERROR)
+            return c.getCondition() instanceof CellError;
         if (type == Symbol.ERROR || type == BuiltInClass.ERROR) {
             Condition condition = c.getCondition();
             if (condition.typep(Symbol.ERROR) == T)
