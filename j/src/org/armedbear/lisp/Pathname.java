@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.60 2004-05-15 17:58:17 piso Exp $
+ * $Id: Pathname.java,v 1.61 2004-05-17 19:50:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,25 +180,9 @@ public class Pathname extends LispObject
             Debug.assertTrue(namestring == null);
             return null;
         }
-        StringBuffer sb = new StringBuffer();
-        // "If a pathname is converted to a namestring, the symbols NIL and
-        // :UNSPECIFIC cause the field to be treated as if it were empty. That
-        // is, both NIL and :UNSPECIFIC cause the component not to appear in
-        // the namestring." 19.2.2.2.3.1
-        if (device == NIL)
-            ;
-        else if (device == Keyword.UNSPECIFIC)
-            ;
-        else if (Utilities.isPlatformWindows()) {
-            if (device instanceof AbstractString)
-                sb.append(device.getStringValue());
-            else
-                Debug.assertTrue(false);
-            sb.append(':');
-        }
         if (directory instanceof AbstractString)
             Debug.assertTrue(false);
-        sb.append(getDirectoryNamestring());
+        StringBuffer sb = new StringBuffer(getDirectoryNamestring());
         if (name instanceof AbstractString)
             sb.append(name.getStringValue());
         else if (name == Keyword.WILD)
@@ -218,6 +202,21 @@ public class Pathname extends LispObject
     public String getDirectoryNamestring() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
+        if (Utilities.isPlatformWindows()) {
+            // "If a pathname is converted to a namestring, the symbols NIL and
+            // :UNSPECIFIC cause the field to be treated as if it were empty. That
+            // is, both NIL and :UNSPECIFIC cause the component not to appear in
+            // the namestring." 19.2.2.2.3.1
+            if (device == NIL)
+                ;
+            else if (device == Keyword.UNSPECIFIC)
+                ;
+            else if (device instanceof AbstractString)
+                sb.append(device.getStringValue());
+            else
+                Debug.assertTrue(false);
+            sb.append(':');
+        }
         if (directory != NIL) {
             LispObject temp = directory;
             LispObject part = temp.car();
