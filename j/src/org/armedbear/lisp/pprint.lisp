@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.27 2004-08-26 14:56:31 piso Exp $
+;;; $Id: pprint.lisp,v 1.28 2004-09-20 23:37:12 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -958,6 +958,8 @@
 	((null stream)
          *standard-output*)
 	(t stream)))
+
+(declaim (notinline decode-stream-arg))
 
 (defun do-xp-printing (fn stream args)
   (let ((xp (get-pretty-print-stream stream))
