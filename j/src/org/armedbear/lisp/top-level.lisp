@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.8 2003-10-06 15:20:46 piso Exp $
+;;; $Id: top-level.lisp,v 1.9 2003-10-06 17:14:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 ;;; Adapted from SB-ACLREPL (originally written by Kevin Rosenberg).
 
 ;;; A few things we're gonna be needing...
-(mapc #'sys::resolve '(sort position break write))
+(mapc #'sys::resolve '(sort position break write make-sequence))
 
 (in-package "EXTENSIONS")
 
