@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.13 2003-09-19 14:44:10 piso Exp $
+ * $Id: CompiledFunction.java,v 1.14 2003-10-25 17:20:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,16 +71,14 @@ public class CompiledFunction extends Closure
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer("#<COMPILED-FUNCTION @ ");
-        sb.append(Integer.toHexString(hashCode()));
-        sb.append(">");
-        return sb.toString();
+        return unreadableString("COMPILED-FUNCTION");
     }
 
     // ### make-compiled-function
     // make-compiled-function name lambda-list body => object
     private static final Primitive3 MAKE_COMPILED_FUNCTION =
-        new Primitive3("make-compiled-function", PACKAGE_SYS, false) {
+        new Primitive3("make-compiled-function", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -99,7 +97,8 @@ public class CompiledFunction extends Closure
 
     // ### load-compiled-function
     private static final Primitive1 LOAD_COMPILED_FUNCTION =
-        new Primitive1("load-compiled-function", PACKAGE_SYS, false) {
+        new Primitive1("load-compiled-function", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String className = ((LispString)arg).getValue();
@@ -130,7 +129,8 @@ public class CompiledFunction extends Closure
     };
 
     private static final Primitive1 VARLIST =
-        new Primitive1("varlist", PACKAGE_SYS, false) {
+        new Primitive1("varlist", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable {
             if (arg instanceof CompiledFunction)
                 return ((CompiledFunction)arg).getVariableList();
