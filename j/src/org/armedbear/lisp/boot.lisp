@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.87 2003-08-10 16:31:19 piso Exp $
+;;; $Id: boot.lisp,v 1.88 2003-08-10 17:48:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -308,3 +308,23 @@
 ;; FIXME
 (defun compile-file (&rest args)
   (values nil nil nil))
+
+
+;;; From CMUCL.
+
+(defmacro with-output-to-string ((var &optional string &key element-type)
+				 &body forms)
+  "If STRING is specified, it must be a string with a fill pointer;
+   the output is incrementally appended to the string (as if by use of
+   VECTOR-PUSH-EXTEND)."
+  (declare (ignore element-type))
+  (if string
+      `(let ((,var (sys::make-fill-pointer-output-stream ,string)))
+	 (unwind-protect
+          (progn ,@forms)
+          (close ,var)))
+      `(let ((,var (make-string-output-stream)))
+	 (unwind-protect
+          (progn ,@forms)
+          (close ,var))
+	 (get-output-stream-string ,var))))
