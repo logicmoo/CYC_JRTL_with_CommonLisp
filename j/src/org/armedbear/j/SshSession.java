@@ -2,7 +2,7 @@
  * SshSession.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.7 2002-12-24 17:59:40 piso Exp $
+ * $Id: SshSession.java,v 1.8 2003-01-07 18:05:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -608,7 +608,6 @@ public final class SshSession implements Constants
 
     private boolean _authenticate(String pass)
     {
-        Log.debug("authenticate pass = " + pass); // REMOVE THIS!!
         output.setLength(0);
         boolean oldEcho = echo;
         echo = true;
