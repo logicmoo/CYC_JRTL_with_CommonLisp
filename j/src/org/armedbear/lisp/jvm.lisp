@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.246 2004-07-27 01:22:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.247 2004-07-27 04:51:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -170,6 +170,10 @@
   return-p ; True if there is any RETURN from this block.
   non-local-return-p ; True if there is a non-local RETURN from this block.
   non-local-go-p ; True if a tag in this tagbody is the target of a non-local GO.
+
+  ;; If non-nil, number of register containing saved dynamic environment for
+  ;; this block.
+  environment-register
   )
 
 (defvar *blocks* ())
@@ -251,7 +255,8 @@
 
 (defun p1-flet/labels (form)
 ;;   (format t "P1-FLET/LABELS form = ~S~%" form)
-  (incf (compiland-children *current-compiland*) (length (cadr form)))
+  (when *current-compiland*
+    (incf (compiland-children *current-compiland*) (length (cadr form))))
   ;; Do pass 1 on the local definitions, discarding the result (we're just
   ;; checking for non-local RETURNs and GOs.)
   (let ((*current-compiland* nil))
@@ -2405,12 +2410,15 @@
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-let/let* (form &key (target *val*))
-  (let* ((*register* *register*)
+  (let* ((block (make-block-node :name '(LET)))
+         (*blocks* (cons block *blocks*))
+         (*register* *register*)
          (*visible-variables* *visible-variables*)
          (specials ())
          (varlist (cadr form))
          (specialp nil)
-         env-register)
+;;          env-register
+         )
     ;; Process declarations.
     (dolist (f (cddr form))
       (unless (and (consp f) (eq (car f) 'declare))
@@ -2428,10 +2436,10 @@
     ;; If so...
     (when specialp
       ;; Save current dynamic environment.
-      (setf env-register (allocate-register))
+      (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-      (emit 'astore env-register))
+      (emit 'astore (block-environment-register block)))
     (ecase (car form)
       (LET
        (compile-let-vars varlist specials))
@@ -2445,7 +2453,7 @@
     (when specialp
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
-      (emit 'aload env-register)
+      (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-let-vars (varlist specials)
@@ -2649,15 +2657,17 @@
     (assert (block-node-p block)))
   (let* ((*blocks* (cons block *blocks*))
          (*register* *register*)
-         env-register)
+;;          env-register
+         )
     (setf (block-target block) target)
 ;;     (push block *blocks*)
     (when (block-return-p block)
       ;; Save current dynamic environment.
-      (setf env-register (allocate-register))
+;;       (setf env-register (allocate-register))
+      (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-      (emit 'astore env-register))
+      (emit 'astore (block-environment-register block)))
     (setf (block-catch-tag block) (gensym))
     (let* ((*register* *register*)
            (BEGIN-BLOCK (gensym))
@@ -2696,10 +2706,10 @@
                               :catch-type (pool-class +lisp-return-class+))
                 *handlers*)))
       (label BLOCK-EXIT))
-    (when env-register
+    (when (block-environment-register block)
       ;; We saved the dynamic environment above. Restore it now.
       (emit 'aload *thread*)
-      (emit 'aload env-register)
+      (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-return-from (form &key (target *val*))
