@@ -1,8 +1,8 @@
 /*
  * ThreadLock.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: ThreadLock.java,v 1.1 2004-06-03 21:33:46 asimon Exp $
+ * Copyright (C) 2004 Peter Graves
+ * $Id: ThreadLock.java,v 1.2 2004-09-09 10:51:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,9 @@ package org.armedbear.lisp;
 
 public final class ThreadLock extends LispObject
 {
-
     private LispThread thread;
 
-    private void lock() throws ConditionThrowable 
+    private void lock() throws ConditionThrowable
     {
         LispThread currentThread = LispThread.currentThread();
         if (!currentThread.equals(thread)) {
@@ -40,17 +39,16 @@ public final class ThreadLock extends LispObject
                 }
             }
             thread = currentThread;
-        } 
+        }
     }
 
-
-    private void unlock() throws ConditionThrowable 
+    private void unlock() throws ConditionThrowable
     {
         if (thread.equals(LispThread.currentThread())) {
             synchronized(this) {
                 thread = null;
                 notifyAll();
-            } 
+            }
         }
     }
 
@@ -61,7 +59,6 @@ public final class ThreadLock extends LispObject
         sb.append(">");
         return sb.toString();
     }
-
 
     // ### make-thread-lock
     private static final Primitive0 MAKE_THREAD_LOCK =
