@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.38 2004-11-03 15:39:01 piso Exp $
+ * $Id: StructureObject.java,v 1.39 2004-11-04 11:25:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,7 +134,7 @@ public final class StructureObject extends LispObject
                 Symbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
                 LispObject fun = PRINT_RESTART.getSymbolFunction();
                 StringOutputStream stream = new StringOutputStream();
-                funcall2(fun, this, stream, thread);
+                thread.execute(fun, this, stream);
                 return stream.getString().getStringValue();
             }
             if (_PRINT_STRUCTURE_.symbolValue(thread) == NIL)
@@ -175,8 +175,8 @@ public final class StructureObject extends LispObject
                     sb.append(' ');
                     if (printCircle) {
                         StringOutputStream stream = new StringOutputStream();
-                        funcall2(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
-                                 slots[i], stream, thread);
+                        thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
+                                       slots[i], stream);
                         sb.append(stream.getString().getStringValue());
                     } else
                         sb.append(slots[i].writeToString());
