@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.111 2003-07-31 18:59:13 piso Exp $
+ * $Id: Lisp.java,v 1.112 2003-08-04 23:54:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -997,18 +997,55 @@ public abstract class Lisp
         T.setConstant(true);
     }
 
-    public static final Symbol _PRINT_ESCAPE_ =
-        exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
+    // Printer control variables.
+    public static final Symbol _PRINT_ARRAY_ =
+        exportSpecial("*PRINT-ARRAY*", PACKAGE_CL, T);
 
     public static final Symbol _PRINT_BASE_ =
         exportSpecial("*PRINT-BASE*", PACKAGE_CL, new Fixnum(10));
 
+    public static final Symbol _PRINT_CASE_ =
+        exportSpecial("*PRINT-CASE*", PACKAGE_CL, Keyword.UPCASE);
+
+    public static final Symbol _PRINT_CIRCLE_ =
+        exportSpecial("*PRINT-CIRCLE*", PACKAGE_CL, NIL);
+
+    public static final Symbol _PRINT_ESCAPE_ =
+        exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
+
+    public static final Symbol _PRINT_GENSYM_ =
+        exportSpecial("*PRINT-GENSYM*", PACKAGE_CL, T);
+
+    public static final Symbol _PRINT_LENGTH_ =
+        exportSpecial("*PRINT-LENGTH*", PACKAGE_CL, NIL);
+
+    public static final Symbol _PRINT_LEVEL_ =
+        exportSpecial("*PRINT-LEVEL*", PACKAGE_CL, NIL);
+
+    public static final Symbol _PRINT_LINES_ =
+        exportSpecial("*PRINT-LINES*", PACKAGE_CL, NIL);
+
+    public static final Symbol _PRINT_MISER_WIDTH_ =
+        exportSpecial("*PRINT-MISER-WIDTH*", PACKAGE_CL, NIL);
+
+    public static final Symbol _PRINT_PPRINT_DISPATCH_ =
+        exportSpecial("*PRINT-PPRINT-DISPATCH*", PACKAGE_CL, NIL); // FIXME
+
+    public static final Symbol _PRINT_PRETTY_ =
+        exportSpecial("*PRINT-PRETTY*", PACKAGE_CL, NIL);
+
     public static final Symbol _PRINT_RADIX_ =
         exportSpecial("*PRINT-RADIX*", PACKAGE_CL, NIL);
 
+    public static final Symbol _PRINT_READABLY_ =
+        exportSpecial("*PRINT-READABLY*", PACKAGE_CL, NIL);
+
+    public static final Symbol _PRINT_RIGHT_MARGIN_ =
+        exportSpecial("*PRINT-RIGHT-MARGIN*", PACKAGE_CL, NIL);
+
     public static final Symbol _RANDOM_STATE_ =
         exportSpecial("*RANDOM-STATE*", PACKAGE_CL,
-            new JavaObject(new Random()));
+                      new JavaObject(new Random()));
 
     public static final Symbol STAR = exportSpecial("*", PACKAGE_CL, NIL);
     public static final Symbol STAR_STAR =
