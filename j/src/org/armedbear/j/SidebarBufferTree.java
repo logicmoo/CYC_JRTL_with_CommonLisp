@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.6 2003-09-19 23:29:31 piso Exp $
+ * $Id: SidebarBufferTree.java,v 1.7 2003-11-30 00:03:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -412,8 +412,10 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
             case KeyEvent.VK_TAB:
                 e.consume();
                 if (modifiers == 0) {
-                    if (sidebar.getBottomComponent() != null)
+                    if (sidebar.getBottomComponent() != null) {
+                        sidebar.setBuffer();
                         editor.setFocus((JComponent)sidebar.getBottomComponent());
+                    }
                 }
                 return;
             case KeyEvent.VK_ESCAPE:
@@ -422,8 +424,7 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
                     popup.setVisible(false);
                     popup = null;
                 } else {
-                    editor.getSidebar().setBuffer();
-                    editor.getSidebar().updatePosition();
+                    sidebar.setBuffer();
                     editor.setFocusToDisplay();
                 }
                 return;
