@@ -1,6 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
+;;; $Id: java.lisp,v 1.6 2003-11-24 15:57:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,15 +35,15 @@
   (jcall (jmethod "java.lang.Object" "getClass") obj))
 
 (defun jclass-superclass (class)
-  "Returns the superclass of CLASS, or NIL if it has't got one"
+  "Returns the superclass of CLASS, or NIL if it hasn't got one"
   (jcall (jmethod "java.lang.Class" "getSuperclass") class))
 
 (defun jclass-interfaces (class)
   "Returns the vector of interfaces of CLASS"
   (jcall (jmethod "java.lang.Class" "getInterfaces") class))
 
-(defun jclass-is-interface (class)
-  "Returns T if CLASS is an inteface"
+(defun jclass-interface-p (class)
+  "Returns T if CLASS is an interface"
   (jcall (jmethod "java.lang.Class" "isInterface") class))
 
 (defun jclass-constructors (class)
