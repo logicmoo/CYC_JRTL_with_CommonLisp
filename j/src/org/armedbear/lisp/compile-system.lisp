@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.20 2004-08-18 18:39:47 piso Exp $
+;;; $Id: compile-system.lisp,v 1.21 2004-08-21 03:39:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
   (time
    (let ((*default-pathname-defaults* (pathname *lisp-home*)))
      (load (compile-file "precompiler.lisp"))
+     (load (compile-file "source-transform.lisp"))
      (load (compile-file "opcodes.lisp"))
      (load (compile-file "jvm.lisp"))
      ;; Order matters for these files.
