@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.25 2003-10-05 15:36:54 piso Exp $
+;;; $Id: defstruct.lisp,v 1.26 2003-10-05 18:27:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -89,8 +89,8 @@
     result))
 
 (defun define-copier ()
-  (let ((copier (intern (concatenate 'string "COPY-" (symbol-name *ds-name*)))))
-    `((setf (fdefinition ',copier) #'copy-structure))))
+  (when *ds-copier*
+    `((setf (fdefinition ',*ds-copier*) #'copy-structure))))
 
 (defun parse-1-option (option)
   (case (car option)
@@ -114,6 +114,11 @@
           (setf arglist nil)
           (push (list name arglist) *ds-constructors*))
          (2))))
+    (:copier
+     (let* ((args (cdr option))
+            (numargs (length args)))
+       (when (= numargs 1)
+          (setf *ds-copier* (cadr args)))))
     (:predicate
      (when (= (length option) 2)
        (if (null (cadr option))
@@ -123,6 +128,7 @@
 (defun parse-name-and-options (name-and-options)
   (setf *ds-name* (car name-and-options))
   (setf *ds-conc-name* (make-symbol (concatenate 'string (symbol-name *ds-name*) "-")))
+  (setf *ds-copier* (intern (concatenate 'string "COPY-" (symbol-name *ds-name*))))
   (setf *ds-predicate* (concatenate 'string (symbol-name *ds-name*) "-P"))
   (let ((options (cdr name-and-options)))
     (dolist (option options)
