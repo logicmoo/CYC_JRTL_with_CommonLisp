@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.47 2003-10-16 23:12:48 piso Exp $
+;;; $Id: compiler.lisp,v 1.48 2003-10-17 23:57:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -94,6 +94,17 @@
           (setq result (append result (list var)))))
     result))
 
+(defun compile-macrolet (form)
+  (let ((macros (cadr form))
+        (body (cddr form))
+        (res ()))
+    (dolist (macro macros)
+      (let ((name (car macro))
+            (lambda-list (cadr macro))
+            (forms (cddr macro)))
+        (push (list* name lambda-list (compile-progn forms)) res)))
+    (list* 'macrolet (reverse res) (compile-progn body))))
+
 (defun compile-special (form)
   (let ((first (car form)))
     (case first
@@ -162,6 +173,8 @@
       (THE
        (compile-sexp (caddr form)))
       (GO form)
+      (MACROLET
+       (compile-macrolet form))
       (t
 ;;        (format t "COMPILE-SPECIAL skipping ~S~%" first)
        form))))
