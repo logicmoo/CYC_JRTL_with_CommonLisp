@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.9 2003-04-06 16:01:20 piso Exp $
+ * $Id: Package.java,v 1.10 2003-04-06 18:37:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,7 +68,6 @@ public final class Package extends LispObject
     // Returns null if symbol is not accessible in this package.
     public synchronized Symbol findAccessibleSymbol(String name)
     {
-        name = name.intern();
         // Look in external and internal symbols of this package.
         Symbol symbol = (Symbol) map.get(name);
         if (symbol != null)
@@ -86,7 +85,6 @@ public final class Package extends LispObject
 
     public synchronized LispObject findSymbol(String name)
     {
-        name = name.intern();
         LispObject[] values = new LispObject[2];
         // Look in external and internal symbols of this package.
         Symbol symbol = (Symbol) map.get(name);
@@ -129,7 +127,6 @@ public final class Package extends LispObject
 
     public synchronized Symbol intern(String name)
     {
-        name = name.intern();
         LispObject[] values = new LispObject[2];
         // Look in external and internal symbols of this package.
         Symbol symbol = (Symbol) map.get(name);
