@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.121 2004-02-27 15:34:38 piso Exp $
+ * $Id: Editor.java,v 1.122 2004-04-22 15:14:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 import org.armedbear.j.mail.MailCommands;
 import org.armedbear.j.mail.MailboxURL;
+import org.armedbear.lisp.Condition;
+import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
@@ -6172,7 +6174,7 @@ public final class Editor extends JPanel implements Constants,
 
     public void executeCommand(String input, final boolean interactive)
     {
-        input = input.trim();
+        input = Utilities.trimLeading(input);
         if (input.length() == 0)
             return;
         if (input.charAt(0) == '(') {
@@ -6182,8 +6184,14 @@ public final class Editor extends JPanel implements Constants,
                 status(result);
             }
             catch (Throwable t) {
-                Log.debug(t);
-                String message = t.getMessage();
+                String message = null;
+                if (t instanceof ConditionThrowable) {
+                    LispObject obj = ((ConditionThrowable)t).getCondition();
+                    if (obj instanceof Condition)
+                        message = ((Condition)obj).getConditionReport();
+                }
+                if (message == null || message.length() == 0)
+                    message = t.getMessage();
                 if (message != null && message.length() > 0) {
                     FastStringBuffer sb = new FastStringBuffer(message);
                     sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
@@ -6281,7 +6289,7 @@ public final class Editor extends JPanel implements Constants,
             parameters = null;
         } else {
             methodName = command.substring(0, index);
-            parameters = command.substring(index).trim();
+            parameters = Utilities.trimLeading(command.substring(index));
             if (delimiter != '(') {
                 if (parameters.startsWith("("))
                     delimiter = '(';
