@@ -1,7 +1,7 @@
 ;;; delete.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: delete.lisp,v 1.2 2003-06-10 15:24:37 piso Exp $
+;;; $Id: delete.lisp,v 1.3 2003-06-24 18:32:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,8 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "COMMON-LISP")
-
-(export '(delete delete-if delete-if-not))
 
 ;;; From CMUCL.
 
@@ -72,14 +70,14 @@
 (defmacro normal-mumble-delete ()
   `(mumble-delete
     (if test-not
-        (not (funcall test-not item (apply-key key (aref sequence index))))
-        (funcall test item (apply-key key (aref sequence index))))))
+        (not (funcall test-not item (funcall-key key (aref sequence index))))
+        (funcall test item (funcall-key key (aref sequence index))))))
 
 (defmacro normal-mumble-delete-from-end ()
   `(mumble-delete-from-end
     (if test-not
-        (not (funcall test-not item (apply-key key this-element)))
-        (funcall test item (apply-key key this-element)))))
+        (not (funcall test-not item (funcall-key key this-element)))
+        (funcall test item (funcall-key key this-element)))))
 
 (defmacro list-delete (pred)
   `(let ((handle (cons nil sequence)))
@@ -114,17 +112,19 @@
 (defmacro normal-list-delete ()
   '(list-delete
     (if test-not
-        (not (funcall test-not item (apply-key key (car current))))
-        (funcall test item (apply-key key (car current))))))
+        (not (funcall test-not item (funcall-key key (car current))))
+        (funcall test item (funcall-key key (car current))))))
 
 (defmacro normal-list-delete-from-end ()
   '(list-delete-from-end
     (if test-not
-        (not (funcall test-not item (apply-key key (car current))))
-        (funcall test item (apply-key key (car current))))))
+        (not (funcall test-not item (funcall-key key (car current))))
+        (funcall test item (funcall-key key (car current))))))
 
 (defun delete (item sequence &key from-end (test #'eql) test-not (start 0)
                     end count key)
+  (when key
+    (setq key (coerce-to-function key)))
   (let* ((length (length sequence))
 	 (end (or end length))
 	 (count (real-count count)))
@@ -138,21 +138,23 @@
 
 (defmacro if-mumble-delete ()
   `(mumble-delete
-    (funcall predicate (apply-key key (aref sequence index)))))
+    (funcall predicate (funcall-key key (aref sequence index)))))
 
 (defmacro if-mumble-delete-from-end ()
   `(mumble-delete-from-end
-    (funcall predicate (apply-key key this-element))))
+    (funcall predicate (funcall-key key this-element))))
 
 (defmacro if-list-delete ()
   '(list-delete
-    (funcall predicate (apply-key key (car current)))))
+    (funcall predicate (funcall-key key (car current)))))
 
 (defmacro if-list-delete-from-end ()
   '(list-delete-from-end
-    (funcall predicate (apply-key key (car current)))))
+    (funcall predicate (funcall-key key (car current)))))
 
 (defun delete-if (predicate sequence &key from-end (start 0) key end count)
+  (when key
+    (setq key (coerce-to-function key)))
   (let* ((length (length sequence))
 	 (end (or end length))
 	 (count (real-count count)))
@@ -166,21 +168,23 @@
 
 (defmacro if-not-mumble-delete ()
   `(mumble-delete
-    (not (funcall predicate (apply-key key (aref sequence index))))))
+    (not (funcall predicate (funcall-key key (aref sequence index))))))
 
 (defmacro if-not-mumble-delete-from-end ()
   `(mumble-delete-from-end
-    (not (funcall predicate (apply-key key this-element)))))
+    (not (funcall predicate (funcall-key key this-element)))))
 
 (defmacro if-not-list-delete ()
   '(list-delete
-    (not (funcall predicate (apply-key key (car current))))))
+    (not (funcall predicate (funcall-key key (car current))))))
 
 (defmacro if-not-list-delete-from-end ()
   '(list-delete-from-end
-    (not (funcall predicate (apply-key key (car current))))))
+    (not (funcall predicate (funcall-key key (car current))))))
 
 (defun delete-if-not (predicate sequence &key from-end (start 0) end key count)
+  (when key
+    (setq key (coerce-to-function key)))
   (let* ((length (length sequence))
 	 (end (or end length))
 	 (count (real-count count)))
