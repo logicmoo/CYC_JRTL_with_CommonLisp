@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.269 2004-08-08 00:41:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.270 2004-08-08 16:49:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -670,6 +670,7 @@
                 union nunion
                 remove-duplicates delete-duplicates
                 read-byte
+                fresh-line terpri
                 lambda
                 ext:classp
                 ext:fixnump
