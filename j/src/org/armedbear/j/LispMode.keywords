@@ -151,6 +151,7 @@ ensure-directories-exist
 eq
 eql
 equal
+equalp
 error
 etypecase
 eval
