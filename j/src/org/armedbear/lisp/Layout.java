@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Layout.java,v 1.9 2004-11-06 18:50:06 piso Exp $
+ * $Id: Layout.java,v 1.10 2004-11-06 20:04:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +109,29 @@ public final class Layout extends LispObject
             }
         }
     };
+
+    public int getSlotIndex(LispObject slotName)
+    {
+        final int limit = slotNames.length;
+        for (int i = 0; i < limit; i++) {
+            if (slotNames[i] == slotName)
+                return i;
+        }
+        return -1;
+    }
+
+    public LispObject getClassSlotLocation(LispObject slotName)
+        throws ConditionThrowable
+    {
+        LispObject rest = classSlots;
+        while (rest != NIL) {
+            LispObject location = rest.car();
+            if (location.car() == slotName)
+                return location;
+            rest = rest.cdr();
+        }
+        return null;
+    }
 
     // ### layout-slot-index
     // layout-slot-index layout slot-name => index
