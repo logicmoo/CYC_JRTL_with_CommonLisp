@@ -2,7 +2,7 @@
  * coerce.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: coerce.java,v 1.9 2003-12-09 20:26:23 asimon Exp $
+ * $Id: coerce.java,v 1.10 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public final class coerce extends Lisp
                     if (name.length() == 1)
                         return LispCharacter.getInstance(name.charAt(0));
                 }
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT ||
                 second == Symbol.DOUBLE_FLOAT || second == Symbol.SHORT_FLOAT ||
@@ -55,7 +55,7 @@ public final class coerce extends Lisp
                         return Complex.getInstance(first, LispFloat.ZERO);
                     return first;
                 }
-                throw new ConditionThrowable(new TypeError(first, "number"));
+                return signal(new TypeError(first, "number"));
             }
             if (first instanceof AbstractVector) {
                 if (second == Symbol.BIT_VECTOR ||
@@ -125,12 +125,12 @@ public final class coerce extends Lisp
                     LispObject obj = first.getSymbolFunction();
                     if (obj instanceof Function) {
                         if (obj instanceof SpecialOperator)
-                            throw new ConditionThrowable(new TypeError());
+                            return signal(new TypeError());
                         return obj;
                     }
                 }
             }
-            throw new ConditionThrowable(new TypeError());
+            return signal(new TypeError());
         }
     };
 }

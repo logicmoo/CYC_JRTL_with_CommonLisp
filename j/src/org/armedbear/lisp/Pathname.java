@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.20 2003-12-09 20:26:22 asimon Exp $
+ * $Id: Pathname.java,v 1.21 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,7 @@ public final class Pathname extends LispObject
                 return arg;
             if (arg instanceof Pathname)
                 return new LispString(((Pathname)arg).getNamestring());
-            throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
+            return signal(new TypeError(arg, "pathname designator"));
         }
     };
 
@@ -127,7 +127,7 @@ public final class Pathname extends LispObject
             else if (arg instanceof Pathname)
                 namestring = ((Pathname)arg).getNamestring();
             else
-                throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
+                return signal(new TypeError(arg, "pathname designator"));
             if (namestring != null) {
                 for (int i = namestring.length(); i-- > 0;) {
                     char c = namestring.charAt(i);
@@ -150,7 +150,7 @@ public final class Pathname extends LispObject
                 return arg;
             if (arg instanceof LispString)
                 return new Pathname(((LispString)arg).getValue());
-            throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
+            return signal(new TypeError(arg, "pathname designator"));
         }
     };
 
@@ -164,7 +164,7 @@ public final class Pathname extends LispObject
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 8)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject host = args[0];
             LispObject device = args[1];
             LispObject directory = args[2];
@@ -175,7 +175,7 @@ public final class Pathname extends LispObject
             LispObject _case = args[7]; // Ignored.
             // FIXME
             if (host != NIL || device != NIL || directory != NIL)
-                throw new ConditionThrowable(new LispError("MAKE-PATHNAME: not implemented"));
+                return signal(new LispError("MAKE-PATHNAME: not implemented"));
             String d = ""; // directory
             String n = ""; // name
             String t = ""; // type
@@ -228,7 +228,7 @@ public final class Pathname extends LispObject
             else if (arg instanceof Pathname)
                 namestring = ((Pathname)arg).getNamestring();
             else
-                throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
+                return signal(new TypeError(arg, "pathname designator"));
             if (namestring != null) {
                 for (int i = namestring.length(); i-- > 0;) {
                     char c = namestring.charAt(i);
@@ -264,7 +264,7 @@ public final class Pathname extends LispObject
                 case 1:
                     return NIL;
                 default:
-                    throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                    return signal(new WrongNumberOfArgumentsException(this));
             }
         }
     };

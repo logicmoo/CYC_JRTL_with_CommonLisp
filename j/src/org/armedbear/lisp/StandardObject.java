@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.11 2003-12-11 19:15:23 piso Exp $
+ * $Id: StandardObject.java,v 1.12 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ public class StandardObject extends LispObject
         {
             if (arg instanceof StandardObject)
                 return ((StandardObject)arg).layout;
-            throw new ConditionThrowable(new TypeError(arg, "standard object"));
+            return signal(new TypeError(arg, "standard object"));
         }
     };
 
@@ -121,9 +121,9 @@ public class StandardObject extends LispObject
             }
             catch (ClassCastException e) {
                 if (!(first instanceof StandardObject))
-                    throw new ConditionThrowable(new TypeError(first, "standard object"));
+                    return signal(new TypeError(first, "standard object"));
                 if (!(second instanceof Layout))
-                    throw new ConditionThrowable(new TypeError(second, "layout"));
+                    return signal(new TypeError(second, "layout"));
                 // Not reached.
                 return NIL;
             }
@@ -138,7 +138,7 @@ public class StandardObject extends LispObject
         {
             if (arg instanceof StandardObject)
                 return ((StandardObject)arg).layout.getLispClass();
-            throw new ConditionThrowable(new TypeError(arg, "standard object"));
+            return signal(new TypeError(arg, "standard object"));
         }
     };
 
@@ -150,7 +150,7 @@ public class StandardObject extends LispObject
         {
             if (arg instanceof StandardObject)
                 return ((StandardObject)arg).slots;
-            throw new ConditionThrowable(new TypeError(arg, "standard object"));
+            return signal(new TypeError(arg, "standard object"));
         }
     };
 
@@ -165,7 +165,7 @@ public class StandardObject extends LispObject
                 ((StandardObject)first).slots = second;
                 return second;
             }
-            throw new ConditionThrowable(new TypeError(first, "standard object"));
+            return signal(new TypeError(first, "standard object"));
         }
     };
 
@@ -192,7 +192,7 @@ public class StandardObject extends LispObject
                 }
                 return new StandardObject((LispClass)first, second);
             }
-            throw new ConditionThrowable(new TypeError(first, "class"));
+            return signal(new TypeError(first, "class"));
         }
     };
 }

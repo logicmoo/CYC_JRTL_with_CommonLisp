@@ -2,7 +2,7 @@
  * BinaryInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryInputStream.java,v 1.6 2003-11-03 16:07:53 piso Exp $
+ * $Id: BinaryInputStream.java,v 1.7 2003-12-13 00:58:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,11 +43,11 @@ public final class BinaryInputStream extends LispInputStream
             n = in.read();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
         if (n < 0) {
             if (eofError)
-                throw new ConditionThrowable(new EndOfFile());
+                return signal(new EndOfFile());
             else
                 return eofValue;
         }
@@ -62,7 +62,7 @@ public final class BinaryInputStream extends LispInputStream
             return T;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 

@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.8 2003-10-17 17:32:10 piso Exp $
+ * $Id: open.java,v 1.9 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,14 +42,14 @@ public final class open extends Lisp
                 ;
             } else if (ifExists == Keyword.ERROR) {
                 if (file.exists())
-                    throw new ConditionThrowable(new LispError("file already exists: " + first));
+                    return signal(new LispError("file already exists: " + first));
             } else if (ifExists == NIL) {
                 if (file.exists())
                     return NIL;
             } else {
                 // FIXME
-                throw new ConditionThrowable(new LispError(String.valueOf(ifExists)) +
-                                             " is not a recognized value for :IF-EXISTS");
+                return signal(new LispError(String.valueOf(ifExists) +
+                                            " is not a recognized value for :IF-EXISTS"));
             }
             try {
                 if (binary)
@@ -58,7 +58,7 @@ public final class open extends Lisp
                     return new CharacterOutputStream(new FileOutputStream(file));
             }
             catch (FileNotFoundException e) {
-                throw new ConditionThrowable(new LispError("unable to create file: " + first));
+                return signal(new LispError("unable to create file: " + first));
             }
         }
     };
@@ -78,7 +78,7 @@ public final class open extends Lisp
                     return new CharacterInputStream(new FileInputStream(file));
             }
             catch (FileNotFoundException e) {
-                throw new ConditionThrowable(new LispError("file not found: " + first));
+                return signal(new LispError("file not found: " + first));
             }
         }
     };
@@ -100,7 +100,8 @@ public final class open extends Lisp
                 }
             }
         }
-        throw new ConditionThrowable(new LispError(String.valueOf(elementType) +
-                                                   " is not a valid stream element type"));
+        signal(new LispError(String.valueOf(elementType) + " is not a valid stream element type"));
+        // Not reached.
+        return false;
     }
 }

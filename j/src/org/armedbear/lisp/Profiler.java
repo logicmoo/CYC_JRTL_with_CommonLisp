@@ -2,7 +2,7 @@
  * Profiler.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Profiler.java,v 1.2 2003-11-14 17:55:17 piso Exp $
+ * $Id: Profiler.java,v 1.3 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ public class Profiler extends Lisp
                 else if (first == Keyword.COUNT_ONLY)
                     sampling = false;
                 else
-                    throw new ConditionThrowable(new LispError(
+                    return signal(new LispError(
                         "%START-PROFILER: argument must be either :TIME or :COUNT-ONLY"));
                 Package[] packages = Packages.getAllPackages();
                 for (int i = 0; i < packages.length; i++) {

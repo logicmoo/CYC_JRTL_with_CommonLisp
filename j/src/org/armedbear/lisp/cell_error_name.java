@@ -2,7 +2,7 @@
  * cell_error_name.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: cell_error_name.java,v 1.1 2003-09-21 02:00:21 piso Exp $
+ * $Id: cell_error_name.java,v 1.2 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class cell_error_name extends Primitive1
     {
         if (arg instanceof CellError)
             return ((CellError)arg).getCellName();
-        throw new ConditionThrowable(new TypeError(arg, "CELL-ERROR"));
+        return signal(new TypeError(arg, "CELL-ERROR"));
     }
 
     private static final cell_error_name CELL_ERROR_NAME =

@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleCondition.java,v 1.7 2003-12-12 16:15:42 piso Exp $
+ * $Id: SimpleCondition.java,v 1.8 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,7 @@ public class SimpleCondition extends Condition
         {
             if (arg instanceof Condition)
                 return ((Condition)arg).getFormatControl();
-            throw new ConditionThrowable(new TypeError(arg, Symbol.CONDITION));
+            return signal(new TypeError(arg, Symbol.CONDITION));
         }
     };
 
@@ -84,7 +84,7 @@ public class SimpleCondition extends Condition
         {
             if (arg instanceof Condition)
                 return ((Condition)arg).getFormatArguments();
-            throw new ConditionThrowable(new TypeError(arg, Symbol.CONDITION));
+            return signal(new TypeError(arg, Symbol.CONDITION));
         }
     };
 }

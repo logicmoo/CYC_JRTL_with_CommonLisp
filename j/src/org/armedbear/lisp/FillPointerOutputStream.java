@@ -2,7 +2,7 @@
  * FillPointerOutputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.3 2003-09-19 11:50:18 piso Exp $
+ * $Id: FillPointerOutputStream.java,v 1.4 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public final class FillPointerOutputStream extends CharacterOutputStream
         {
             LispString string = checkString(arg);
             if (string.getFillPointer() < 0)
-                throw new ConditionThrowable(new TypeError(arg, "string with a fill pointer"));
+                return signal(new TypeError(arg, "string with a fill pointer"));
             return new FillPointerOutputStream(string);
         }
     };

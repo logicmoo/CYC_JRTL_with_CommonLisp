@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dotimes.java,v 1.4 2003-11-19 17:33:04 piso Exp $
+ * $Id: dotimes.java,v 1.5 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,7 @@ public final class dotimes extends SpecialOperator
                 binding.value = i;
                 result = eval(resultForm, ext, thread);
             } else
-                throw new ConditionThrowable(new TypeError(limit, "integer"));
+                return signal(new TypeError(limit, "integer"));
             return result;
         }
         catch (Return ret) {

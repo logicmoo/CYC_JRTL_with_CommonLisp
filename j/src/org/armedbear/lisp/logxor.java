@@ -2,7 +2,7 @@
  * logxor.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logxor.java,v 1.3 2003-12-10 08:55:00 asimon Exp $
+ * $Id: logxor.java,v 1.4 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class logxor extends Primitive
             return arg;
         if (arg instanceof Bignum)
             return arg;
-        throw new ConditionThrowable(new TypeError(arg, "integer"));
+        return signal(new TypeError(arg, "integer"));
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -58,7 +58,7 @@ public final class logxor extends Primitive
             else if (arg instanceof Bignum)
                 n = ((Bignum)arg).getValue();
             else
-                throw new ConditionThrowable(new TypeError(arg, "integer"));
+                return signal(new TypeError(arg, "integer"));
             if (result == null)
                 result = n;
             else

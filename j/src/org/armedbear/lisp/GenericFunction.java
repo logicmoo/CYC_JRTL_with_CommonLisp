@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: GenericFunction.java,v 1.3 2003-11-01 19:11:27 piso Exp $
+ * $Id: GenericFunction.java,v 1.4 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,7 @@ public final class GenericFunction extends StandardObject
         {
             if (arg instanceof GenericFunction)
                 return ((GenericFunction)arg).getDiscriminatingFunction();
-            throw new ConditionThrowable(new TypeError(arg, "generic function"));
+            return signal(new TypeError(arg, "generic function"));
         }
     };
 
@@ -123,7 +123,7 @@ public final class GenericFunction extends StandardObject
                 ((GenericFunction)first).setDiscriminatingFunction(second);
                 return second;
             }
-            throw new ConditionThrowable(new TypeError(first, "generic function"));
+            return signal(new TypeError(first, "generic function"));
         }
     };
 }

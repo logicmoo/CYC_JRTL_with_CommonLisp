@@ -2,7 +2,7 @@
  * describe.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: describe.java,v 1.10 2003-12-09 20:26:23 asimon Exp $
+ * $Id: describe.java,v 1.11 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class describe extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 1)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject obj = args[0];
             StringBuffer sb = new StringBuffer(String.valueOf(obj));
             if (obj instanceof Symbol) {

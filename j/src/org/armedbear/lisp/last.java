@@ -2,7 +2,7 @@
  * last.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: last.java,v 1.4 2003-12-10 08:55:00 asimon Exp $
+ * $Id: last.java,v 1.5 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public final class last extends Primitive {
             }
             return result;
         }
-        throw new ConditionThrowable(new TypeError(second, "non-negative integer"));
+        return signal(new TypeError(second, "non-negative integer"));
     }
 
     private static final last LAST = new last("last","list &optional n");

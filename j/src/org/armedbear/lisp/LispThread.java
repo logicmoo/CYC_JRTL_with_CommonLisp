@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.26 2003-12-09 20:26:22 asimon Exp $
+ * $Id: LispThread.java,v 1.27 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -450,7 +450,7 @@ public final class LispThread extends LispObject
             double d =
                 ((LispFloat)arg.multiplyBy(new LispFloat(1000))).getValue();
             if (d < 0)
-                throw new ConditionThrowable(new TypeError(arg, "non-negative real"));
+                return signal(new TypeError(arg, "non-negative real"));
             long millis = d < Long.MAX_VALUE ? (long) d : Long.MAX_VALUE;
             try {
                 Thread.currentThread().sleep(millis);
@@ -490,7 +490,7 @@ public final class LispThread extends LispObject
                 thread.setDestroyed(true);
                 return T;
             } else
-                throw new ConditionThrowable(new TypeError(arg, "Lisp thread"));
+                return signal(new TypeError(arg, "Lisp thread"));
         }
     };
 
@@ -511,7 +511,7 @@ public final class LispThread extends LispObject
             throws ConditionThrowable
         {
             if (args.length > 1)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             int count = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
             LispThread thread = currentThread();
             thread.backtrace(count);
@@ -527,7 +527,7 @@ public final class LispThread extends LispObject
             throws ConditionThrowable
         {
             if (args.length > 1)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             int count = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
             LispThread thread = currentThread();
             return thread.backtraceAsList(count);

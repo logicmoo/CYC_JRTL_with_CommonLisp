@@ -2,7 +2,7 @@
  * JHandler.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: JHandler.java,v 1.4 2003-11-15 15:42:55 asimon Exp $
+ * $Id: JHandler.java,v 1.5 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public final class JHandler extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 5)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Map entryTable = null;
             Object object = args[0].javaInstance();
             String event = ((Symbol)args[1]).getName();
@@ -92,7 +92,8 @@ public final class JHandler extends Lisp
                 entryTable = (Map)table.get(object);
             }
             Entry entry = new Entry((Function) args[2], args[3], event, entryTable);
-            if (args[4] != NIL) entry.addCount(((Fixnum)args[4]).getValue());
+            if (args[4] != NIL)
+                entry.addCount(((Fixnum)args[4]).getValue());
             entryTable.put(event,entry);
             return T;
         }

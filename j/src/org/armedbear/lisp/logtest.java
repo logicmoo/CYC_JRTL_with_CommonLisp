@@ -2,7 +2,7 @@
  * logtest.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logtest.java,v 1.2 2003-12-10 08:12:43 asimon Exp $
+ * $Id: logtest.java,v 1.3 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,13 +45,13 @@ public final class logtest extends Primitive2
             else if (first instanceof Bignum)
                 n1 = ((Bignum)first).getValue();
             else
-                throw new ConditionThrowable(new TypeError(first, "integer"));
+                return signal(new TypeError(first, "integer"));
             if (second instanceof Fixnum)
                 n2 = ((Fixnum)second).getBigInteger();
             else if (second instanceof Bignum)
                 n2 = ((Bignum)second).getValue();
             else
-                throw new ConditionThrowable(new TypeError(second, "integer"));
+                return signal(new TypeError(second, "integer"));
             return n1.and(n2).signum() == 0 ? NIL : T;
         }
     }

@@ -2,7 +2,7 @@
  * BinaryOutputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryOutputStream.java,v 1.6 2003-10-17 13:11:52 piso Exp $
+ * $Id: BinaryOutputStream.java,v 1.7 2003-12-13 00:58:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class BinaryOutputStream extends LispOutputStream
             out.write(n);
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -50,7 +50,7 @@ public final class BinaryOutputStream extends LispOutputStream
             out.flush();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -62,7 +62,7 @@ public final class BinaryOutputStream extends LispOutputStream
             return T;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 

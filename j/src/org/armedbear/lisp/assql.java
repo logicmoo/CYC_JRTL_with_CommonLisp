@@ -2,7 +2,7 @@
  * assql.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: assql.java,v 1.1 2003-11-23 18:56:40 piso Exp $
+ * $Id: assql.java,v 1.2 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public final class assql extends Primitive2
                 if (cons.car().eql(item))
                     return cons;
             } else if (cons != NIL)
-                throw new ConditionThrowable(new TypeError(cons, "list"));
+                return signal(new TypeError(cons, "list"));
             alist = alist.cdr();
         }
         return NIL;

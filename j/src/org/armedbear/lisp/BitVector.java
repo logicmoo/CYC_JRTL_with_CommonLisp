@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.28 2003-11-30 06:14:39 piso Exp $
+ * $Id: BitVector.java,v 1.29 2003-12-13 00:58:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,7 +180,7 @@ public final class BitVector extends AbstractVector
             // None of the above...
         }
         catch (ConditionThrowable t) {}
-        throw new ConditionThrowable(new TypeError(newValue, "bit"));
+        signal(new TypeError(newValue, "bit"));
     }
 
     public void set(int index)
@@ -225,7 +225,7 @@ public final class BitVector extends AbstractVector
             // None of the above...
         }
         catch (ConditionThrowable t) {}
-        throw new ConditionThrowable(new TypeError(obj, "bit"));
+        signal(new TypeError(obj, "bit"));
     }
 
     public void shrink(int n) throws ConditionThrowable
@@ -244,7 +244,7 @@ public final class BitVector extends AbstractVector
         }
         if (n == capacity)
             return;
-        throw new ConditionThrowable(new LispError());
+        signal(new LispError());
     }
 
     public boolean isSimpleVector()

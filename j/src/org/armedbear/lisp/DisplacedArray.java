@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.17 2003-12-09 20:26:22 asimon Exp $
+ * $Id: DisplacedArray.java,v 1.18 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,14 +90,16 @@ public final class DisplacedArray extends AbstractArray
     {
         if (dimv.length == 1)
             return size;
-        throw new ConditionThrowable(new TypeError(this, "sequence"));
+        signal(new TypeError(this, "sequence"));
+        // Not reached.
+        return 0;
     }
 
     public LispObject elt(int index) throws ConditionThrowable
     {
         if (dimv.length == 1)
             return getRowMajor(index);
-        throw new ConditionThrowable(new TypeError(this, "sequence"));
+        return signal(new TypeError(this, "sequence"));
     }
 
     public LispObject AREF(LispObject index) throws ConditionThrowable
@@ -107,7 +109,7 @@ public final class DisplacedArray extends AbstractArray
         StringBuffer sb = new StringBuffer("AREF: ");
         sb.append("wrong number of subscripts (1) for array of rank ");
         sb.append(getRank());
-        throw new ConditionThrowable(new ProgramError(sb.toString()));
+        return signal(new ProgramError(sb.toString()));
     }
 
     public int getRank()
@@ -129,7 +131,9 @@ public final class DisplacedArray extends AbstractArray
             return dimv[n];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            throw new ConditionThrowable(new TypeError("bad array dimension"));
+            signal(new TypeError("bad array dimension"));
+            // Not reached.
+            return 0;
         }
     }
 
@@ -147,7 +151,7 @@ public final class DisplacedArray extends AbstractArray
     {
         if (index >= 0 && index < size)
             return array.getRowMajor(index + offset);
-        throw new ConditionThrowable(new TypeError("bad row major index " + index));
+        return signal(new TypeError("bad row major index " + index));
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
@@ -155,7 +159,7 @@ public final class DisplacedArray extends AbstractArray
         if (index >= 0 && index < size)
             array.setRowMajor(index + offset, newValue);
         else
-            throw new ConditionThrowable(new TypeError("bad row major index " + index));
+            signal(new TypeError("bad row major index " + index));
     }
 
     public String toString()

@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.16 2003-12-02 19:51:21 piso Exp $
+ * $Id: CompiledFunction.java,v 1.17 2003-12-13 00:58:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ public class CompiledFunction extends Closure
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        throw new ConditionThrowable(new LispError("not implemented"));
+        return signal(new LispError("not implemented"));
     }
 
     public String toString()
@@ -119,14 +119,14 @@ public class CompiledFunction extends Closure
                     }
                 }
                 catch (VerifyError e) {
-                    throw new ConditionThrowable(new LispError("class verification failed: " +
+                    return signal(new LispError("class verification failed: " +
                                                                e.getMessage()));
                 }
                 catch (Throwable t) {
                     Debug.trace(t);
                 }
             }
-            throw new ConditionThrowable(
+            return signal(
                 new LispError("unable to load ".concat(String.valueOf(arg))));
         }
     };
@@ -138,7 +138,7 @@ public class CompiledFunction extends Closure
         public LispObject execute(LispObject arg) throws ConditionThrowable {
             if (arg instanceof CompiledFunction)
                 return ((CompiledFunction)arg).getVariableList();
-            throw new ConditionThrowable(new TypeError(arg, "compiled function"));
+            return signal(new TypeError(arg, "compiled function"));
         }
     };
 }

@@ -2,7 +2,7 @@
  * ash.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ash.java,v 1.3 2003-12-10 08:12:43 asimon Exp $
+ * $Id: ash.java,v 1.4 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ public final class ash extends Primitive2
         else if (first instanceof Bignum)
             n = ((Bignum)first).getValue();
         else
-            throw new ConditionThrowable(new TypeError(first, "integer"));
+            return signal(new TypeError(first, "integer"));
         if (second instanceof Fixnum) {
             int count = Fixnum.getInt(second);
             if (count == 0)
@@ -69,12 +69,12 @@ public final class ash extends Primitive2
         if (second instanceof Bignum) {
             BigInteger count = ((Bignum)second).getValue();
             if (count.signum() > 0)
-                throw new ConditionThrowable(new LispError("can't represent result of left shift"));
+                return signal(new LispError("can't represent result of left shift"));
             if (count.signum() < 0)
                 return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
             Debug.bug(); // Shouldn't happen.
         }
-        throw new ConditionThrowable(new TypeError(second, "integer"));
+        return signal(new TypeError(second, "integer"));
     }
 
     private static final ash ASH = new ash();

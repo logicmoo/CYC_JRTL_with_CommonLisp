@@ -2,7 +2,7 @@
  * logandc2.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logandc2.java,v 1.5 2003-12-10 08:55:00 asimon Exp $
+ * $Id: logandc2.java,v 1.6 2003-12-13 00:58:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public final class logandc2 extends Primitive2
                 BigInteger n2 = ((Bignum)second).getValue();
                 return number(n1.and(n2.not()));
             }
-            throw new ConditionThrowable(new TypeError(second, "integer"));
+            return signal(new TypeError(second, "integer"));
         }
         if (first instanceof Bignum) {
             BigInteger n1 = ((Bignum)first).getValue();
@@ -57,9 +57,9 @@ public final class logandc2 extends Primitive2
                 BigInteger n2 = ((Bignum)second).getValue();
                 return number(n1.and(n2.not()));
             }
-            throw new ConditionThrowable(new TypeError(second, "integer"));
+            return signal(new TypeError(second, "integer"));
         }
-        throw new ConditionThrowable(new TypeError(first, "integer"));
+        return signal(new TypeError(first, "integer"));
     }
 
     private static final logandc2 LOGANDC2 = new logandc2("logandc2","integer-1 integer-2");
