@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.37 2003-03-06 23:50:39 piso Exp $
+;;; $Id: rt.lisp,v 1.38 2003-03-07 20:05:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
 
 (in-package :rt)
 (export '(deftest))
+
+(defvar *prefix* "/home/peter/gcl/ansi-tests/")
 
 (defvar *compile-tests* nil)
 
@@ -146,6 +148,15 @@
       (setf (aref a i) i))
     a))
 
+(defmacro catch-type-error (form)
+  "Evaluate form in safe mode, returning its value if there is no error.
+   If an error does occur, return type-error on TYPE-ERRORs, or the error
+   condition itself on other errors."
+  `(locally (declare (optimize (safety 3)))
+            (handler-case ,form
+                          (type-error () 'type-error)
+                          (error (c) c))))
+
 (defmacro classify-error* (form)
   "Evaluate form in safe mode, returning its value if there is no error.
    If an error does occur, return a symbol classify the error, or allow
@@ -199,6 +210,31 @@
 
 (defun is-eql-p (x) #'(lambda (y) (eqlt x y)))
 (defun is-not-eql-p (x) #'(lambda (y) (not (eqlt x y))))
+
+(defparameter +standard-chars+
+  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+|\\=-`{}[]:\";'<>?,./")
+
+(defparameter
+  +base-chars+ #.(concatenate 'string
+			      "abcdefghijklmnopqrstuvwxyz"
+			      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+			      "0123456789"
+			      "<,>.?/\"':;[{]}~`!@#$%^&*()_-+= \\|"))
+
+(defparameter +num-base-chars+ (length +base-chars+))
+
+(defparameter +alpha-chars+ (subseq +standard-chars+ 0 52))
+(defparameter +lower-case-chars+ (subseq +alpha-chars+ 0 26))
+(defparameter +upper-case-chars+ (subseq +alpha-chars+ 26 52))
+(defparameter +alphanumeric-chars+ (subseq +standard-chars+ 0 62))
+(defparameter +digit-chars+ "0123456789")
+(defparameter +extended-digit-chars+ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+(defparameter +code-chars+
+  (coerce (loop for i from 0 below 256
+            for c = (code-char i)
+            when c collect c)
+	  'string))
+(defparameter +rev-code-chars+ (reverse +code-chars+))
 
 (defun check-sublis (a al &key (key 'no-key) test test-not)
   "Apply sublis al a with various keys.  Check that
@@ -376,7 +412,7 @@
 (defun do-tests (&rest args)
   (let ((rt::*passed* 0) (rt::*failed* 0)
 ;;         (prefix "/usr/share/common-lisp/source/ansi-tests/")
-        (prefix "/home/peter/gcl/ansi-tests/")
+;;         (prefix "/home/peter/gcl/ansi-tests/")
         (suffix ".lsp")
         (tests (or args (list "and"
                               "apply"
@@ -388,6 +424,7 @@
                               "call-arguments-limit"
                               "case"
                               "catch"
+                              "character"
                               "concatenate"
                               "cond"
                               "cons-test-01"
@@ -477,6 +514,8 @@
                               "some"
                               "sort"
                               "string"
+                              "string-downcase"
+                              "string-upcase"
                               "substitute"
                               "substitute-if"
                               "substitute-if-not"
@@ -493,10 +532,13 @@
                               "vectorp"
                               "when"))))
     (dolist (test tests)
-             (load (concatenate 'string prefix test suffix)))
+             (load (concatenate 'string rt::*prefix* test suffix)))
     (format t "~A tests: ~A passed, ~A failed~%"
             (+ rt::*passed* rt::*failed*)
             rt::*passed*
             rt::*failed*)
     (format t "*compile-tests* was ~A~%" rt::*compile-tests*))
   (values))
+
+(load (concatenate 'string rt::*prefix* "char-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "cl-symbols-aux.lsp"))
