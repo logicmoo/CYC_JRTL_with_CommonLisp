@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.19 2003-05-13 17:12:47 piso Exp $
+ * $Id: Directory.java,v 1.20 2003-05-16 17:33:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -875,11 +875,12 @@ public final class Directory extends Buffer
             return;
         // FTP, SSH or local.
         Buffer buf = Editor.getBuffer(directory);
-        if (buf instanceof Directory) {
+        // buf may be a RemoteBuffer and not specifically a Directory.
+        if (buf != null) {
             File file = buffer.getFile();
             editor.makeNext(buf);
             editor.activate(buf);
-            if (file != null && file.isFile()) {
+            if (buf instanceof Directory && file != null) {
                 Directory dir = (Directory) buf;
                 Line line = dir.findName(file.getName());
                 if (line != null) {
