@@ -2,7 +2,7 @@
  * Return.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Return.java,v 1.4 2003-09-19 14:25:50 piso Exp $
+ * $Id: Return.java,v 1.5 2003-12-12 01:10:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class Return extends ConditionThrowable
         return result;
     }
 
-    public Condition getCondition()
+    public LispObject getCondition()
     {
         StringBuffer sb = new StringBuffer("no block named ");
         sb.append(tag.getName());

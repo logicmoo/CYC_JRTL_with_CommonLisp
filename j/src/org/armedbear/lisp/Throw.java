@@ -2,7 +2,7 @@
  * Throw.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Throw.java,v 1.7 2003-11-16 15:05:06 piso Exp $
+ * $Id: Throw.java,v 1.8 2003-12-12 01:10:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public final class Throw extends ConditionThrowable
         return result;
     }
 
-    public Condition getCondition()
+    public LispObject getCondition()
     {
         return new ControlError("attempt to throw to the non-existent tag " + tag);
     }

@@ -2,7 +2,7 @@
  * Go.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Go.java,v 1.2 2003-09-19 14:18:08 piso Exp $
+ * $Id: Go.java,v 1.3 2003-12-12 01:09:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class Go extends ConditionThrowable
         return tag;
     }
 
-    public Condition getCondition()
+    public LispObject getCondition()
     {
         StringBuffer sb = new StringBuffer("no tag named ");
         sb.append(tag);

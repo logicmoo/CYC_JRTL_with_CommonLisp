@@ -2,7 +2,7 @@
  * ConditionThrowable.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ConditionThrowable.java,v 1.6 2003-09-19 01:09:21 piso Exp $
+ * $Id: ConditionThrowable.java,v 1.7 2003-12-12 01:09:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class ConditionThrowable extends Throwable
         super(message);
     }
 
-    public Condition getCondition()
+    public LispObject getCondition()
     {
         return condition != null ? condition : new Condition();
     }
