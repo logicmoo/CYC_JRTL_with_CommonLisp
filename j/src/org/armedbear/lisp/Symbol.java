@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.39 2003-05-29 18:43:07 piso Exp $
+ * $Id: Symbol.java,v 1.40 2003-06-02 01:53:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,10 +103,13 @@ public class Symbol extends LispObject
     public static final Symbol UNDEFINED_FUNCTION   = export("UNDEFINED-FUNCTION");
 
     // Internal symbols.
-    public static final Symbol BACKQUOTE     = intern("BACKQUOTE", PACKAGE_CL);
-    public static final Symbol COMMA         = intern("COMMA", PACKAGE_CL);
-    public static final Symbol COMMA_ATSIGN  = intern("COMMA-ATSIGN", PACKAGE_CL);
-    public static final Symbol COMMA_DOT     = intern("COMMA-DOT", PACKAGE_CL);
+    public static final Symbol BACKQUOTE = intern("BACKQUOTE", PACKAGE_CL);
+    public static final Symbol COMMA = intern("COMMA", PACKAGE_CL);
+    public static final Symbol COMMA_ATSIGN =
+        intern("COMMA-ATSIGN", PACKAGE_CL);
+    public static final Symbol COMMA_DOT = intern("COMMA-DOT", PACKAGE_CL);
+    public static final Symbol MACROEXPAND_MACRO =
+        intern("MACROEXPAND-MACRO", PACKAGE_CL);
 
     public static final Symbol ARRAY_DIMENSION_LIMIT =
         export("ARRAY-DIMENSION-LIMIT");
