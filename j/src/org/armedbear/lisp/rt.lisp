@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.76 2003-04-24 15:56:47 piso Exp $
+;;; $Id: rt.lisp,v 1.77 2003-04-25 00:36:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -628,6 +628,7 @@
                               "assoc-if"
                               "assoc-if-not"
                               "atom"
+                              "bit"
                               "bit-vector"
                               "bit-vector-p"
                               "block"
@@ -777,6 +778,7 @@
                               "row-major-aref"
                               "rplaca"
                               "rplacd"
+                              "sbit"
                               "search-bitvector"
                               "search-list"
                               "search-string"
@@ -842,4 +844,5 @@
 (load (concatenate 'string rt::*prefix* "array-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "universe.lsp"))
 (load (concatenate 'string rt::*prefix* "subseq-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "cons-aux.lsp"))
 #+armedbear (debug)
