@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.76 2004-05-09 16:37:59 piso Exp $
+ * $Id: Closure.java,v 1.77 2004-05-10 15:44:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,8 @@ public class Closure extends Function
 
     private final Symbol[] variables;
     private final Symbol[] specials;
+
+    private boolean bindInitForms;
 
     public Closure(LispObject lambdaList, LispObject body, Environment env)
         throws ConditionThrowable
@@ -127,15 +129,13 @@ public class Closure extends Function
                         if (state == STATE_OPTIONAL) {
                             if (optional == null)
                                 optional = new ArrayList();
-                            optional.add(new Parameter((Symbol)obj, NIL,
-                                OPTIONAL));
+                            optional.add(new Parameter((Symbol)obj, NIL, OPTIONAL));
                             if (maxArgs >= 0)
                                 ++maxArgs;
                         } else if (state == STATE_KEYWORD) {
                             if (keywords == null)
                                 keywords = new ArrayList();
-                            keywords.add(new Parameter((Symbol)obj, NIL,
-                                KEYWORD));
+                            keywords.add(new Parameter((Symbol)obj, NIL, KEYWORD));
                             if (maxArgs >= 0)
                                 maxArgs += 2;
                         } else {
@@ -161,8 +161,7 @@ public class Closure extends Function
                         LispObject svar = obj.cdr().cdr().car();
                         if (optional == null)
                             optional = new ArrayList();
-                        optional.add(new Parameter(sym, initForm, svar,
-                            OPTIONAL));
+                        optional.add(new Parameter(sym, initForm, svar, OPTIONAL));
                         if (maxArgs >= 0)
                             ++maxArgs;
                     } else if (state == STATE_KEYWORD) {
@@ -188,8 +187,7 @@ public class Closure extends Function
                         }
                         if (keywords == null)
                             keywords = new ArrayList();
-                        keywords.add(new Parameter(keyword, var, initForm,
-                            svar));
+                        keywords.add(new Parameter(keyword, var, initForm, svar));
                         if (maxArgs >= 0)
                             maxArgs += 2;
                     } else
@@ -241,6 +239,7 @@ public class Closure extends Function
         specials = processDeclarations();
     }
 
+    // Also sets bindInitForms.
     private final Symbol[] processVariables()
     {
         ArrayList vars = new ArrayList();
@@ -253,6 +252,9 @@ public class Closure extends Function
                 vars.add(optionalParameters[i].var);
                 if (optionalParameters[i].svar != NIL)
                     vars.add(optionalParameters[i].svar);
+                if (!bindInitForms)
+                    if (!optionalParameters[i].initForm.constantp())
+                        bindInitForms = true;
             }
         }
         if (restVar != null) {
@@ -263,6 +265,9 @@ public class Closure extends Function
                 vars.add(keywordParameters[i].var);
                 if (keywordParameters[i].svar != NIL)
                     vars.add(keywordParameters[i].svar);
+                if (!bindInitForms)
+                    if (!keywordParameters[i].initForm.constantp())
+                        bindInitForms = true;
             }
         }
         Symbol[] array = new Symbol[vars.size()];
@@ -593,31 +598,34 @@ public class Closure extends Function
 
     protected LispObject[] processArgs(LispObject[] args) throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
+        final int argsLength = args.length;
         if (arity >= 0) {
             // Fixed arity.
-            if (args.length != arity)
+            if (argsLength != arity)
                 signal(new WrongNumberOfArgumentsException(this));
             return args;
         }
         // Not fixed arity.
-        if (args.length < minArgs)
+        if (argsLength < minArgs)
             signal(new WrongNumberOfArgumentsException(this));
-        // The bindings established here are lost when this function returns.
-        // They are used only in the evaluation of initforms for optional and
-        // keyword arguments.
+        final LispThread thread = LispThread.currentThread();
+        LispObject[] array = new LispObject[variables.length];
+        int index = 0;
+        // The bindings established here (if any) are lost when this function
+        // returns. They are used only in the evaluation of initforms for
+        // optional and keyword arguments.
         Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(environment);
         // Section 3.4.4: "...the &environment parameter is bound along with
         // &whole before any other variables in the lambda list..."
-        if (envVar != null)
-            bind(envVar, environment, ext);
-        LispObject[] array = new LispObject[variables.length];
-        int index = 0;
+        if (bindInitForms)
+            if (envVar != null)
+                bind(envVar, environment, ext);
         // Required parameters.
         if (requiredParameters != null) {
             for (int i = 0; i < minArgs; i++) {
-                bind(requiredParameters[i].var, args[i], ext);
+                if (bindInitForms)
+                    bind(requiredParameters[i].var, args[i], ext);
                 array[index++] = args[i];
             }
         }
@@ -627,24 +635,28 @@ public class Closure extends Function
         if (optionalParameters != null) {
             for (int j = 0; j < optionalParameters.length; j++) {
                 Parameter parameter = optionalParameters[j];
-                if (i < args.length) {
-                    bind(parameter.var, args[i], ext);
+                if (i < argsLength) {
+                    if (bindInitForms)
+                        bind(parameter.var, args[i], ext);
                     array[index++] = args[i];
                     ++argsUsed;
                     if (parameter.svar != NIL) {
-                        bind((Symbol)parameter.svar, T, ext);
+                        if (bindInitForms)
+                            bind((Symbol)parameter.svar, T, ext);
                         array[index++] = T;
                     }
                 } else {
                     // We've run out of arguments.
                     LispObject initForm = parameter.initForm;
                     LispObject value =
-                        initForm != null ? eval(initForm, ext, thread) : NIL;
-                    bind(parameter.var, value, ext);
+                        initForm != NIL ? eval(initForm, ext, thread) : NIL;
+                    if (bindInitForms)
+                        bind(parameter.var, value, ext);
                     array[index++] = value;
                     if (parameter.svar != NIL) {
-                         bind((Symbol)parameter.svar, NIL, ext);
-                         array[index++] = NIL;
+                        if (bindInitForms)
+                            bind((Symbol)parameter.svar, NIL, ext);
+                        array[index++] = NIL;
                     }
                 }
                 ++i;
@@ -653,14 +665,15 @@ public class Closure extends Function
         // &rest parameter.
         if (restVar != null) {
             LispObject rest = NIL;
-            for (int j = args.length; j-- > argsUsed;)
+            for (int j = argsLength; j-- > argsUsed;)
                 rest = new Cons(args[j], rest);
-            bind(restVar, rest, ext);
+            if (bindInitForms)
+                bind(restVar, rest, ext);
             array[index++] = rest;
         }
         // Keyword parameters.
         if (keywordParameters != null) {
-            int argsLeft = args.length - argsUsed;
+            int argsLeft = argsLength - argsUsed;
             if (argsLeft == 0) {
                 // No keyword arguments were supplied.
                 // Bind all keyword parameters to their defaults.
@@ -668,11 +681,13 @@ public class Closure extends Function
                     Parameter parameter = keywordParameters[k];
                     LispObject initForm = parameter.initForm;
                     LispObject value =
-                        initForm != null ? eval(initForm, ext, thread) : NIL;
-                    bind(parameter.var, value, ext);
+                        initForm != NIL ? eval(initForm, ext, thread) : NIL;
+                    if (bindInitForms)
+                        bind(parameter.var, value, ext);
                     array[index++] = value;
                     if (parameter.svar != NIL) {
-                        bind((Symbol)parameter.svar, NIL, ext);
+                        if (bindInitForms)
+                            bind((Symbol)parameter.svar, NIL, ext);
                         array[index++] = NIL;
                     }
                 }
@@ -685,12 +700,14 @@ public class Closure extends Function
                     Symbol keyword = parameter.keyword;
                     LispObject value = null;
                     boolean unbound = true;
-                    for (int j = argsUsed; j < args.length; j += 2) {
+                    for (int j = argsUsed; j < argsLength; j += 2) {
                         if (args[j] == keyword) {
-                            bind(parameter.var, args[j+1], ext);
+                            if (bindInitForms)
+                                bind(parameter.var, args[j+1], ext);
                             value = array[index++] = args[j+1];
                             if (parameter.svar != NIL) {
-                                bind((Symbol)parameter.svar, T, ext);
+                                if (bindInitForms)
+                                    bind((Symbol)parameter.svar, T, ext);
                                 array[index++] = T;
                             }
                             args[j] = null;
@@ -701,11 +718,13 @@ public class Closure extends Function
                     }
                     if (unbound) {
                         LispObject initForm = parameter.initForm;
-                        value = initForm != null ? eval(initForm, ext, thread) : NIL;
-                        bind(parameter.var, value, ext);
+                        value = initForm != NIL ? eval(initForm, ext, thread) : NIL;
+                        if (bindInitForms)
+                            bind(parameter.var, value, ext);
                         array[index++] = value;
                         if (parameter.svar != NIL) {
-                            bind((Symbol)parameter.svar, NIL, ext);
+                            if (bindInitForms)
+                                bind((Symbol)parameter.svar, NIL, ext);
                             array[index++] = NIL;
                         }
                     }
@@ -717,7 +736,7 @@ public class Closure extends Function
                 if (!allowOtherKeys) {
                     if (allowOtherKeysValue == null || allowOtherKeysValue == NIL) {
                         LispObject unrecognizedKeyword = null;
-                        for (int j = argsUsed; j < args.length; j += 2) {
+                        for (int j = argsUsed; j < argsLength; j += 2) {
                             LispObject keyword = args[j];
                             if (keyword == null)
                                 continue;
@@ -754,13 +773,13 @@ public class Closure extends Function
                     }
                 }
             }
-        } else if (argsUsed < args.length) {
+        } else if (argsUsed < argsLength) {
             // No keyword parameters.
-            if (argsUsed + 2 <= args.length) {
+            if (argsUsed + 2 <= argsLength) {
                 // Check for :ALLOW-OTHER-KEYS.
                 LispObject allowOtherKeysValue = NIL;
                 int n = argsUsed;
-                while (n < args.length) {
+                while (n < argsLength) {
                     LispObject keyword = args[n];
                     if (keyword == Keyword.ALLOW_OTHER_KEYS) {
                         allowOtherKeysValue = args[n+1];
@@ -770,7 +789,7 @@ public class Closure extends Function
                 }
                 if (allowOtherKeys || allowOtherKeysValue != NIL) {
                     // Skip keyword/value pairs.
-                    while (argsUsed + 2 <= args.length)
+                    while (argsUsed + 2 <= argsLength)
                         argsUsed += 2;
                 } else if (andKey) {
                     LispObject keyword = args[argsUsed];
@@ -783,7 +802,7 @@ public class Closure extends Function
                     }
                 }
             }
-            if (argsUsed < args.length) {
+            if (argsUsed < argsLength) {
                 if (restVar == null)
                     signal(new WrongNumberOfArgumentsException(this));
             }
