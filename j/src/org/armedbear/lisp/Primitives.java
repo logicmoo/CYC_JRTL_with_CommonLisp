@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.330 2003-08-15 16:40:40 piso Exp $
+ * $Id: Primitives.java,v 1.331 2003-08-15 16:45:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,48 +65,47 @@ public final class Primitives extends Module
     private static final int CODE_CHAR                  = 23;
     private static final int COMPILED_FUNCTION_P        = 24;
     private static final int CONSP                      = 25;
-    private static final int CONSTANTP                  = 26;
-    private static final int EVAL                       = 27;
-    private static final int EVENP                      = 28;
-    private static final int FBOUNDP                    = 29;
-    private static final int FMAKUNBOUND                = 30;
-    private static final int FOURTH                     = 31;
-    private static final int FUNCTIONP                  = 32;
-    private static final int IDENTITY                   = 33;
-    private static final int KEYWORDP                   = 34;
-    private static final int LENGTH                     = 35;
-    private static final int LISTP                      = 36;
-    private static final int LOWER_CASE_P               = 37;
-    private static final int MAKE_SYMBOL                = 38;
-    private static final int MAKUNBOUND                 = 39;
-    private static final int NUMBERP                    = 40;
-    private static final int ODDP                       = 41;
-    private static final int PREDECESSOR                = 42;
-    private static final int SECOND                     = 43;
-    private static final int SIMPLE_BIT_VECTOR_P        = 44;
-    private static final int SIMPLE_STRING_P            = 45;
-    private static final int SIMPLE_VECTOR_P            = 46;
-    private static final int SPECIAL_OPERATOR_P         = 47;
-    private static final int STRINGP                    = 48;
-    private static final int SUCCESSOR                  = 49;
-    private static final int SYMBOL_FUNCTION            = 50;
-    private static final int SYMBOL_NAME                = 51;
-    private static final int SYMBOL_PACKAGE             = 52;
-    private static final int SYMBOL_PLIST               = 53;
-    private static final int SYMBOL_VALUE               = 54;
-    private static final int THIRD                      = 55;
-    private static final int UPPER_CASE_P               = 56;
-    private static final int VALUES_LIST                = 57;
-    private static final int VECTORP                    = 58;
+    private static final int EVAL                       = 26;
+    private static final int EVENP                      = 27;
+    private static final int FBOUNDP                    = 28;
+    private static final int FMAKUNBOUND                = 29;
+    private static final int FOURTH                     = 30;
+    private static final int FUNCTIONP                  = 31;
+    private static final int IDENTITY                   = 32;
+    private static final int KEYWORDP                   = 33;
+    private static final int LENGTH                     = 34;
+    private static final int LISTP                      = 35;
+    private static final int LOWER_CASE_P               = 36;
+    private static final int MAKE_SYMBOL                = 37;
+    private static final int MAKUNBOUND                 = 38;
+    private static final int NUMBERP                    = 39;
+    private static final int ODDP                       = 40;
+    private static final int PREDECESSOR                = 41;
+    private static final int SECOND                     = 42;
+    private static final int SIMPLE_BIT_VECTOR_P        = 43;
+    private static final int SIMPLE_STRING_P            = 44;
+    private static final int SIMPLE_VECTOR_P            = 45;
+    private static final int SPECIAL_OPERATOR_P         = 46;
+    private static final int STRINGP                    = 47;
+    private static final int SUCCESSOR                  = 48;
+    private static final int SYMBOL_FUNCTION            = 49;
+    private static final int SYMBOL_NAME                = 50;
+    private static final int SYMBOL_PACKAGE             = 51;
+    private static final int SYMBOL_PLIST               = 52;
+    private static final int SYMBOL_VALUE               = 53;
+    private static final int THIRD                      = 54;
+    private static final int UPPER_CASE_P               = 55;
+    private static final int VALUES_LIST                = 56;
+    private static final int VECTORP                    = 57;
 
     // Primitive2
-    private static final int MEMBER                     = 59;
-    private static final int MOD                        = 60;
-    private static final int RPLACA                     = 61;
-    private static final int RPLACD                     = 62;
-    private static final int SET                        = 63;
-    private static final int _RPLACA                    = 64;
-    private static final int _RPLACD                    = 65;
+    private static final int MEMBER                     = 58;
+    private static final int MOD                        = 59;
+    private static final int RPLACA                     = 60;
+    private static final int RPLACD                     = 61;
+    private static final int SET                        = 62;
+    private static final int _RPLACA                    = 63;
+    private static final int _RPLACD                    = 64;
 
     private Primitives()
     {
@@ -139,7 +138,6 @@ public final class Primitives extends Module
         definePrimitive1("code-char", CODE_CHAR);
         definePrimitive1("compiled-function-p", COMPILED_FUNCTION_P);
         definePrimitive1("consp", CONSP);
-        definePrimitive1("constantp", CONSTANTP);
         definePrimitive1("eval", EVAL);
         definePrimitive1("evenp", EVENP);
         definePrimitive1("fboundp", FBOUNDP);
@@ -294,8 +292,6 @@ public final class Primitives extends Module
                 return arg instanceof Function ? T : NIL;
             case COMPILED_FUNCTION_P:           // ### compiled-function-p
                 return arg.typep(Symbol.COMPILED_FUNCTION);
-            case CONSTANTP:                     // ### constantp
-                return arg.CONSTANTP();
             case KEYWORDP:                      // ### keywordp
                 if (arg instanceof Symbol) {
                     if (((Symbol)arg).getPackage() == PACKAGE_KEYWORD)
@@ -529,6 +525,14 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws LispError
         {
             return arg instanceof Cons ? NIL : T;
+        }
+    };
+
+    // ### constantp
+    private static final Primitive1 CONSTANTP = new Primitive1("constantp") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg.CONSTANTP();
         }
     };
 
