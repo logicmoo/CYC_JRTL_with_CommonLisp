@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleCondition.java,v 1.5 2003-09-21 02:03:01 piso Exp $
+ * $Id: SimpleCondition.java,v 1.6 2003-09-21 23:04:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,9 +49,9 @@ public class SimpleCondition extends Condition
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type == Symbol.CONDITION)
+        if (type == Symbol.SIMPLE_CONDITION)
             return T;
-        if (type == BuiltInClass.CONDITION)
+        if (type == BuiltInClass.SIMPLE_CONDITION)
             return T;
         return super.typep(type);
     }
