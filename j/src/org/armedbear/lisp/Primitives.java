@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.382 2003-09-10 13:48:14 piso Exp $
+ * $Id: Primitives.java,v 1.383 2003-09-10 18:46:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4733,6 +4733,14 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg)
         {
             return arg instanceof LispStream ? T : NIL;
+        }
+    };
+
+    // ### integerp
+    private static final Primitive1 INTEGERP = new Primitive1("integerp") {
+        public LispObject execute(LispObject arg)
+        {
+            return arg.INTEGERP();
         }
     };
 
