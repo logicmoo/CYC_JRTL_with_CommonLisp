@@ -2,7 +2,7 @@
  * EventHandler.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: EventHandler.java,v 1.2 2003-05-15 01:20:06 piso Exp $
+ * $Id: EventHandler.java,v 1.3 2003-05-17 19:29:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,6 +100,7 @@ public final class EventHandler implements Runnable
                 if (resume)
                     eventSet.resume();
                 else {
+                    jdb.setSuspended(true);
                     // Set current thread and stack frame.
                     if (eventSet.size() > 0) {
                         Event event = (Event) eventSet.iterator().next();
@@ -323,6 +324,8 @@ public final class EventHandler implements Runnable
     private boolean handleVMStartEvent(Event event)
     {
         jdb.log("VM loaded");
+        if (jdb.isSuspended())
+            jdb.log("VM suspended");
         return true;
     }
 
