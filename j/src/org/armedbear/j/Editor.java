@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.10 2002-10-12 00:45:22 piso Exp $
+ * $Id: Editor.java,v 1.11 2002-10-13 16:56:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1583,12 +1583,10 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             notSupportedForColumnSelections();
             return;
         }
-
         if (buffer.getBooleanProperty(Property.TAB_ALWAYS_INDENT)) {
             indentLineOrRegion();
             return;
         }
-
         if (mark == null) {
             // No selection.
             if (dot.getOffset() <= dot.getLine().getIndentation())
@@ -1597,16 +1595,13 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 insertTab();
             return;
         }
-
         if (getMarkLine() != getDotLine()) {
             // Multi-line selection.
             indentRegion();
             return;
         }
-
         // Single-line selection.
         Region r = new Region(this);
-
         if (r.getBeginOffset() <= getDotLine().getIndentation())
             indentLine();
         else
@@ -5720,7 +5715,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         clearStatusText();
         if (buffer != null) {
             // Save information about buffer being deactivated.
-            buffer.autosave(false);
+            buffer.autosave();
             saveView();
             RecentFiles.getInstance().bufferDeactivated(buffer, dot);
         }
