@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.91 2005-02-24 00:42:38 piso Exp $
+ * $Id: LispMode.java,v 1.92 2005-03-02 01:14:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -314,8 +314,11 @@ public class LispMode extends AbstractMode implements Constants, Mode
 
     public boolean isInComment(Buffer buffer, Position pos)
     {
-        if (buffer.needsParsing())
-            buffer.getFormatter().parseBuffer();
+        if (buffer.needsParsing()) {
+            if (buffer.getFormatter().parseBuffer())
+                // Always call repaint() if parseBuffer() returns true!
+                buffer.repaint();
+        }
         final Line line = pos.getLine();
         final int offset = pos.getOffset();
         int state = line.flags();
