@@ -1,8 +1,8 @@
 /*
  * logeqv.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: logeqv.java,v 1.5 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: logeqv.java,v 1.6 2005-02-13 04:24:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class logeqv extends Primitive
 {
     private logeqv()
     {
-        super("logeqv","&rest integers");
+        super("logeqv", "&rest integers");
     }
 
     public LispObject execute()
@@ -44,7 +44,7 @@ public final class logeqv extends Primitive
             return arg;
         if (arg instanceof Bignum)
             return arg;
-        return signal(new TypeError(arg, "integer"));
+        return signal(new TypeError(arg, Symbol.INTEGER));
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -56,9 +56,9 @@ public final class logeqv extends Primitive
             if (arg instanceof Fixnum)
                 n = ((Fixnum)arg).getBigInteger();
             else if (arg instanceof Bignum)
-                n = ((Bignum)arg).getValue();
+                n = ((Bignum)arg).value;
             else
-                return signal(new TypeError(arg, "integer"));
+                return signal(new TypeError(arg, Symbol.INTEGER));
             if (result == null)
                 result = n;
             else
@@ -67,5 +67,5 @@ public final class logeqv extends Primitive
         return number(result);
     }
 
-    private static final logeqv LOGEQV = new logeqv();
+    private static final Primitive LOGEQV = new logeqv();
 }
