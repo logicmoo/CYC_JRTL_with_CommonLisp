@@ -81,7 +81,7 @@ public abstract class AbstractVector extends LispObject
     public void setFillPointer(LispObject obj) throws LispError
     {
         if (obj == T)
-            fillPointer = 0;
+            fillPointer = length();
         else {
             long n = Fixnum.getValue(obj);
             if (n > length()) {
