@@ -2,7 +2,7 @@
  * StatusBar.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: StatusBar.java,v 1.5 2004-09-16 18:32:37 piso Exp $
+ * $Id: StatusBar.java,v 1.6 2005-01-05 13:50:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,8 @@ public final class StatusBar extends JComponent implements PreferencesChangeList
                 buffer.getMode().getContextString(editor, displayContext > 1);
         }
         int x2 = textAreaWidth - RIGHT_MARGIN;
+        if (Platform.isPlatformMacOSX())
+            x2 -= 15; // Leave room for the Aqua window handle graphic.
         String statusText = getStatusText(editor);
         if (statusText != null)
             x2 -= fm.stringWidth(statusText);
