@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.181 2004-06-26 14:59:33 asimon Exp $
+# $Id: Makefile.in,v 1.182 2004-07-11 12:40:32 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,6 +42,8 @@ CLASSFILES =	AbstractArray.class \
 		CellError.class \
 		CharacterFunctions.class \
 		Closure.class \
+		ClosureTemplateFunction.class \
+		CompiledClosure.class \
 		CompiledFunction.class \
 		Complex.class \
 		ComplexArray.class \
