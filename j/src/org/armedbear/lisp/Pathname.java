@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.23 2004-01-01 00:40:35 piso Exp $
+ * $Id: Pathname.java,v 1.24 2004-01-01 01:32:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,59 +180,71 @@ public final class Pathname extends LispObject
         return null;
     }
 
-    // ### pathname-host
-    private static final Primitive PATHNAME_HOST =
-        new Primitive("pathname-host", "pathname &key case")
+    private static final void checkCaseArgument(LispObject arg)
+        throws ConditionThrowable
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        if (arg != Keyword.COMMON && arg != Keyword.LOCAL)
+            signal(new TypeError(arg, list3(Symbol.MEMBER, Keyword.COMMON,
+                                            Keyword.LOCAL)));
+    }
+
+    private static final Primitive2 _PATHNAME_HOST =
+        new Primitive2("%pathname-host", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            return coerceToPathname(arg).host;
+            checkCaseArgument(second);
+            return coerceToPathname(first).host;
         }
     };
 
-    // ### pathname-device
-    private static final Primitive PATHNAME_DEVICE =
-        new Primitive("pathname-device", "pathname &key case")
+    private static final Primitive2 _PATHNAME_DEVICE =
+        new Primitive2("%pathname-device", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            return coerceToPathname(arg).device;
+            checkCaseArgument(second);
+            return coerceToPathname(first).device;
         }
     };
 
-    // ### pathname-directory
-    private static final Primitive PATHNAME_DIRECTORY =
-        new Primitive("pathname-directory", "pathname &key case")
+    private static final Primitive2 _PATHNAME_DIRECTORY =
+        new Primitive2("%pathname-directory", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            return coerceToPathname(arg).directory;
+            checkCaseArgument(second);
+            return coerceToPathname(first).directory;
         }
     };
 
-    // ### pathname-name
-    private static final Primitive PATHNAME_NAME =
-        new Primitive("pathname-name", "pathname &key case")
+    private static final Primitive2 _PATHNAME_NAME =
+        new Primitive2("%pathname-name", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            return coerceToPathname(arg).name;
+            checkCaseArgument(second);
+            return coerceToPathname(first).name;
         }
     };
 
-    // ### pathname-type
-    private static final Primitive PATHNAME_TYPE =
-        new Primitive("pathname-type", "pathname &key case")
+    private static final Primitive2 _PATHNAME_TYPE =
+        new Primitive2("%pathname-type", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            return coerceToPathname(arg).type;
+            checkCaseArgument(second);
+            return coerceToPathname(first).host;
         }
     };
 
-    // ### pathname-version
-    private static final Primitive PATHNAME_VERSION =
-        new Primitive("pathname-version", "pathname &key case")
+    private static final Primitive1 PATHNAME_VERSION =
+        new Primitive1("pathname-version", "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -326,30 +338,6 @@ public final class Pathname extends LispObject
             return arg instanceof Pathname ? T : NIL;
         }
     };
-
-//     // ### pathname-type
-//     private static final Primitive1 PATHNAME_TYPE =
-//         new Primitive1("pathname-type", "pathname &key case")
-//     {
-//         public LispObject execute(LispObject arg) throws ConditionThrowable
-//         {
-//             String namestring;
-//             if (arg instanceof LispString)
-//                 namestring = ((LispString)arg).getValue();
-//             else if (arg instanceof Pathname)
-//                 namestring = ((Pathname)arg).getNamestring();
-//             else
-//                 return signal(new TypeError(arg, "pathname designator"));
-//             if (namestring != null) {
-//                 for (int i = namestring.length(); i-- > 0;) {
-//                     char c = namestring.charAt(i);
-//                     if (c == '.')
-//                         return new LispString(namestring.substring(i + 1));
-//                 }
-//             }
-//             return NIL;
-//         }
-//     };
 
     // ### user-homedir-pathname
     // user-homedir-pathname &optional host => pathname
