@@ -87,6 +87,7 @@ close
 code-char
 coerce
 compile-file
+compile-file-pathname
 compiler-macro-function
 concatenate
 cond
@@ -213,6 +214,7 @@ logand
 logandc1
 logandc2
 logeqv
+logical-pathname-translations
 logior
 lognand
 lognor
@@ -230,6 +232,7 @@ make-array
 make-condition
 make-hash-table
 make-package
+make-pathname
 make-sequence
 make-string
 make-string-input-stream
@@ -293,6 +296,8 @@ package-use-list
 package-used-by-list
 packagep
 parse-integer
+parse-namestring
+pathname
 pathname-device
 pathname-directory
 pathname-host
@@ -413,6 +418,7 @@ terpri
 the
 third
 time
+translate-logical-pathname
 truename
 type-of
 typecase
