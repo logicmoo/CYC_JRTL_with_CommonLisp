@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispFormatter.java,v 1.30 2003-06-16 13:46:41 piso Exp $
+ * $Id: LispFormatter.java,v 1.31 2003-07-17 00:47:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -294,6 +294,11 @@ public final class LispFormatter extends Formatter
                     continue;
                 }
                 if (c == '\'') {
+                    i += 2;
+                    continue;
+                }
+                if (c == ':') {
+                    // Uninterned symbol.
                     i += 2;
                     continue;
                 }
