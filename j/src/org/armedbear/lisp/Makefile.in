@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.170 2004-04-28 01:48:19 piso Exp $
+# $Id: Makefile.in,v 1.171 2004-04-30 01:52:27 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,7 +17,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+JDK = @JDK@
 JAVAC = @JAVAC@
+JAVAH = @JAVAH@
 JAVACFLAGS = @JAVACFLAGS@
 COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
 
@@ -46,6 +48,7 @@ CLASSFILES =	AbstractArray.class \
 		Condition.class \
 		ConditionThrowable.class \
 		Cons.class \
+		ControlC.class \
 		ControlError.class \
 		Debug.class \
 		DispatchMacroFunction.class \
@@ -250,3 +253,7 @@ Makefile: Makefile.in ../../../../config.status
 
 Site.java: Site.java.in ../../../../config.status
 	cd ../../../.. && $(SHELL) ./config.status
+
+libabcl.so: ControlC.class ControlC.c
+	cd ../../.. && $(JAVAH) -o org/armedbear/lisp/ControlC.h org.armedbear.lisp.ControlC
+	gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I$(JDK)/include -I$(JDK)/include/linux ControlC.c
