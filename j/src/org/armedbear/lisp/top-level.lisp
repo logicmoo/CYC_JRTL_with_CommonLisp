@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.13 2003-11-14 00:55:46 piso Exp $
+;;; $Id: top-level.lisp,v 1.14 2003-11-14 00:56:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,9 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Adapted from SB-ACLREPL (originally written by Kevin Rosenberg).
-
-;;; A few things we're gonna be needing...
-;;(mapc #'sys::resolve '(position break write make-sequence))
 
 (in-package "TOP-LEVEL")
 
