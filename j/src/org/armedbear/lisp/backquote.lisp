@@ -1,7 +1,7 @@
 ;;; backquote.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: backquote.lisp,v 1.4 2003-08-24 19:18:25 piso Exp $
+;;; $Id: backquote.lisp,v 1.5 2003-10-10 01:54:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,5 +92,5 @@
         ((and (eq (car x) *bq-list**)
               (consp (cddr x))
               (null (cdddr x)))
-         (cons 'cons (maptree #'bq-remove-tokens (cdr x))))
-        (t (maptree #'bq-remove-tokens x))))
+         (cons 'cons (sys::maptree #'bq-remove-tokens (cdr x))))
+        (t (sys::maptree #'bq-remove-tokens x))))
