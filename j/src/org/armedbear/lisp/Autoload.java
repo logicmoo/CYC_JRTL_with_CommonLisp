@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.164 2004-02-27 14:35:22 piso Exp $
+ * $Id: Autoload.java,v 1.165 2004-02-27 16:45:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -301,6 +301,8 @@ public class Autoload extends Function
         autoload("simple-string-p", "StringFunctions");
         autoload("sin", "MathFunctions");
         autoload("sinh", "MathFunctions");
+        autoload("software-type", "software_type");
+        autoload("software-version", "software_version");
         autoload("sqrt", "MathFunctions");
         autoload("stream-element-type", "stream_element_type");
         autoload("stream-external-format", "stream_external_format");
