@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.6 2004-06-17 11:31:57 piso Exp $
+;;; $Id: print.lisp,v 1.7 2004-06-20 16:35:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -106,7 +106,8 @@
                       (write-char #\space stream))
                     (punt-print-if-too-long i stream)
                     (output-object (aref vector i) stream))
-                  (write-string ")" stream)))))))
+                  (write-string ")" stream))))))
+  vector)
 
 (defun output-ugly-object (object stream)
   (cond ((consp object)
@@ -268,4 +269,5 @@
              (compound-object-p object))
          (%check-object object stream))
         (t
-         (%print-object object stream))))
+         (%print-object object stream)))
+  object)
