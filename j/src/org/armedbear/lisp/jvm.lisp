@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.304 2004-11-13 15:02:01 piso Exp $
+;;; $Id: jvm.lisp,v 1.305 2004-11-21 18:17:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -483,7 +483,8 @@
         (logand n #xff)))
 
 (locally (declare (optimize speed))
-  (defstruct instruction
+  (defstruct (instruction
+              (:constructor make-instruction (opcode args)))
     opcode
     args
     stack
@@ -502,7 +503,7 @@
                     (opcode-number instr))))
     (unless (listp args)
       (setf args (list args)))
-    (make-instruction :opcode opcode :args args :stack nil :depth nil)))
+    (make-instruction opcode args)))
 
 (defun emit (instr &rest args)
   (declare (optimize speed))
@@ -596,10 +597,6 @@
   (declare (optimize speed))
   (ensure-thread-var-initialized)
   (emit 'aload *thread*))
-
-(defun emit-clear-values ()
-  (ensure-thread-var-initialized)
-  (emit 'clear-values))
 
 (defun generate-interrupt-check ()
   (unless (> *speed* *safety*)
@@ -713,6 +710,10 @@
                 declare
                 go
                 sys::%structure-ref
+                inst
+                emit
+                label
+                maybe-emit-clear-values
                 ))
     (setf (gethash op single-valued-operators) t)))
 
@@ -744,7 +745,8 @@
 (defun maybe-emit-clear-values (form)
   (unless (single-valued-p form)
 ;;     (format t "Not single-valued: ~S~%" form)
-    (emit-clear-values)))
+    (ensure-thread-var-initialized)
+    (emit 'clear-values)))
 
 ;; Expects value on stack.
 (defun emit-invoke-method (method-name &key (target *val*))

@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.36 2004-11-21 05:38:23 piso Exp $
+;;; $Id: compile-system.lisp,v 1.37 2004-11-21 18:18:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,7 +92,9 @@
 ;;      (mapc #'maybe-compile-file '("pprint.lisp"
 ;;                                   "format.lisp"))
      (load (maybe-compile-file "backquote.lisp"))
+     (load (maybe-compile-file "early-defuns.lisp"))
      (load (maybe-compile-file "typep.lisp"))
+     (load (maybe-compile-file "find.lisp"))
      (load (maybe-compile-file "print.lisp"))
      (load (maybe-compile-file "pprint-dispatch.lisp"))
      (load (maybe-compile-file "pprint.lisp"))
@@ -152,14 +154,14 @@
                                   "dotimes.lisp"
                                   "dribble.lisp"
                                   "dump-class.lisp"
-                                  "early-defuns.lisp"
+                                  ;;"early-defuns.lisp"
                                   "ed.lisp"
                                   "enough-namestring.lisp"
                                   "ensure-directories-exist.lisp"
                                   "error.lisp"
                                   "fill.lisp"
                                   "find-all-symbols.lisp"
-                                  "find.lisp"
+                                  ;;"find.lisp"
                                   "fixme.lisp"
                                   "gentemp.lisp"
                                   "gray-streams.lisp"
