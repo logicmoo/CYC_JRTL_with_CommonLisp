@@ -2,7 +2,7 @@
  * WebMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebMode.java,v 1.1.1.1 2002-09-24 16:08:47 piso Exp $
+ * $Id: WebMode.java,v 1.2 2002-10-03 17:40:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@ public final class WebMode extends AbstractMode implements Constants, Mode
         return new WebFormatter(buffer);
     }
 
-    public ToolBar getToolBar(Frame frame)
+    protected ToolBar getDefaultToolBar(Frame frame)
     {
         return new WebModeToolBar(frame);
     }

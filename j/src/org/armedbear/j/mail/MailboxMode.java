@@ -2,7 +2,7 @@
  * MailboxMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: MailboxMode.java,v 1.1.1.1 2002-09-24 16:10:11 piso Exp $
+ * $Id: MailboxMode.java,v 1.2 2002-10-03 17:40:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,7 +140,7 @@ public final class MailboxMode extends AbstractMode implements Constants, Mode
             super.populateMenu(editor, menu);
     }
 
-    public ToolBar getToolBar(Frame frame)
+    protected ToolBar getDefaultToolBar(Frame frame)
     {
         return new MailboxModeToolBar(frame);
     }

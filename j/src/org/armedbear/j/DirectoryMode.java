@@ -2,7 +2,7 @@
  * DirectoryMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryMode.java,v 1.1.1.1 2002-09-24 16:09:00 piso Exp $
+ * $Id: DirectoryMode.java,v 1.2 2002-10-03 17:40:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,7 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
             super.populateMenu(editor, menu);
     }
 
-    public ToolBar getToolBar(Frame frame)
+    protected ToolBar getDefaultToolBar(Frame frame)
     {
         return new DirectoryModeToolBar(frame);
     }

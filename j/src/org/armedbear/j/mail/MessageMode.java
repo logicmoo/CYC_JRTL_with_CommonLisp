@@ -2,7 +2,7 @@
  * MessageMode.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageMode.java,v 1.1.1.1 2002-09-24 16:10:01 piso Exp $
+ * $Id: MessageMode.java,v 1.2 2002-10-03 17:40:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ public final class MessageMode extends AbstractMode implements Constants, Mode
         km.mapKey('b', "bounce");
     }
 
-    public final ToolBar getToolBar(Frame frame)
+    protected final ToolBar getDefaultToolBar(Frame frame)
     {
         return new MessageModeToolBar(frame);
     }
