@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.8 2004-01-18 02:01:33 piso Exp $
+;;; $Id: make-sequence.lisp,v 1.9 2004-01-20 15:39:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@
                    (size-mismatch-error type size)))
               (t
                (when (classp type)
-                 (setf type (class-name type)))
+                 (setf type (%class-name type)))
                (setq element-type
                      (cond ((memq type '(BIT-VECTOR SIMPLE-BIT-VECTOR)) 'BIT)
                            ((memq type '(VECTOR SIMPLE-VECTOR)) t)

@@ -1,8 +1,8 @@
 /*
  * LispClass.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.37 2003-12-13 00:02:47 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: LispClass.java,v 1.38 2004-01-20 15:37:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -246,8 +246,9 @@ public class LispClass extends StandardObject
         }
     };
 
-    // ### class-name
-    private static final Primitive1 CLASS_NAME = new Primitive1("class-name","class")
+    // ### %class-name
+    private static final Primitive1 _CLASS_NAME =
+        new Primitive1("%class-name", PACKAGE_SYS, false, "class")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
