@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.26 2004-06-15 02:41:01 piso Exp $
+;;; $Id: compile-file.lisp,v 1.27 2004-06-15 11:23:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@
 (defvar *class-number*)
 
 (defvar *output-file-pathname*)
+
+(defvar *source-position*)
 
 (defun next-classfile-name ()
   (let ((name (format nil "~A-~D"
@@ -83,14 +85,14 @@
                       (%format t ";  ~A => ~A.cls~%" name
                                (pathname-name (pathname classfile-name)))
                       (setf form
-                            `(fset ',name (load-compiled-function ,classfile)))
+                            `(fset ',name (load-compiled-function ,classfile) ,*source-position*))
                       (when compile-time-too
                         (fset name compiled-function)))
                     (progn
                       (%format t ";  Unable to compile function ~A~%" name)
                       (let ((precompiled-function (precompile-form expr nil)))
                         (setf form
-                              `(fset ',name ,precompiled-function)))
+                              `(fset ',name ,precompiled-function ,*source-position*)))
                       (when compile-time-too
                         (eval form))))
                 (push name jvm::*toplevel-defuns*)
@@ -224,7 +226,8 @@
             (write (list 'setq '*fasl-source* *compile-file-truename*) :stream out)
             (terpri out)
             (loop
-              (let ((form (read in nil in)))
+              (let* ((*source-position* (file-position in))
+                     (form (read in nil in)))
                 (when (eq form in)
                   (return))
                 (process-toplevel-form form out nil)))
