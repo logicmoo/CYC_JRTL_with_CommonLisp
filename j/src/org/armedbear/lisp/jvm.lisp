@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.414 2005-03-30 20:06:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.415 2005-03-31 00:18:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4214,13 +4214,7 @@
          (var1 (unboxed-fixnum-variable arg1))
          (var2 (unboxed-fixnum-variable arg2))
          (type1 t))
-    (cond ((symbolp arg1)
-           (let ((variable (find-visible-variable arg1)))
-             (when variable
-               (dformat t "found variable for ~S~%" arg1)
-               (setf type1 (variable-declared-type variable)))))
-          (t
-           nil))
+    (setf type1 (derive-type arg1))
     (dformat t "type1 = ~S~%" type1)
     (cond ((and (numberp arg1) (numberp arg2))
            (dformat t "p2-ash case 1~%")
@@ -4404,25 +4398,51 @@
 
 (defun derive-type (form)
   (cond ((fixnump form)
-         (return-from derive-type 'FIXNUM))
-        ((unboxed-fixnum-variable form)
-         (return-from derive-type 'FIXNUM))
+         (list 'INTEGER form form))
+        ((symbolp form)
+         (let ((variable (find-visible-variable form)))
+           (if variable
+               (variable-declared-type variable)
+               t)))
         ((consp form)
          (let ((op (first form)))
            (case op
              (ASH
-              (return-from derive-type (derive-type-ash (second form) (third form))))
+              (derive-type-ash (second form) (third form)))
              (-
-              (when (and (= (length form) 2)
-                         (or (fixnump (cadr form))
-                             (unboxed-fixnum-variable (cadr form))))
-                (return-from derive-type 'FIXNUM)))
+              (if (and (= (length form) 2)
+                       (or (fixnump (cadr form))
+                           (unboxed-fixnum-variable (cadr form))))
+                  'FIXNUM
+                  t))
+             (LOGAND
+              (derive-type-logand (cdr form)))
              (THE
-              (dformat t "derive-type THE case form = ~S~%" form)
-              (when (subtypep (second form) 'FIXNUM)
-                (dformat t "derive-type THE case form = ~S returning FIXNUM~%" form)
-                (return-from derive-type 'FIXNUM)))))))
-  t)
+              (second form))
+             (t
+              t))))
+        (t
+         t)))
+
+(defun derive-type-logand (args)
+  (let ((result-type 'INTEGER))
+    (dolist (arg args)
+      (let ((type (derive-type arg)))
+        (dformat t "derive-type-logand arg = ~S type = ~S~%" arg type)
+        (cond ((subtypep type '(UNSIGNED-BYTE 8))
+               (unless (subtypep result-type '(UNSIGNED-BYTE 8))
+                 (setf result-type '(UNSIGNED-BYTE 8))))
+              ((subtypep type '(UNSIGNED-BYTE 16))
+               (unless (subtypep result-type '(UNSIGNED-BYTE 16))
+                 (setf result-type '(UNSIGNED-BYTE 16))))
+              ((subtypep type '(UNSIGNED-BYTE 24))
+               (unless (subtypep result-type '(UNSIGNED-BYTE 24))
+                 (setf result-type '(UNSIGNED-BYTE 24))))
+              ((eq type 'T))
+              (t
+               (dformat t "derive-type-logand unsupported type ~S~%" type)))))
+    (dformat t "derive-type-logand returning ~S~%" result-type)
+    result-type))
 
 (defun derive-type-ash (arg1 arg2)
   (dformat t "derive-type-ash ~S ~S~%" arg1 arg2)
