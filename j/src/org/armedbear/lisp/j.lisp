@@ -2,8 +2,6 @@
 
 (in-package "J")
 
-(push :j *features*)
-
 (export '(set-global-property
           reset-display
           log-debug
