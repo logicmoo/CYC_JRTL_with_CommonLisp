@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.145 2004-01-29 01:51:50 piso Exp $
+ * $Id: Autoload.java,v 1.146 2004-01-31 02:51:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -210,6 +210,7 @@ public class Autoload extends Function
         autoload("array-displacement", "DisplacedArray");
         autoload("ash", "ash");
         autoload("atan", "atan");
+        autoload("broadcast-stream-streams", "BroadcastStream");
         autoload("cell-error-name", "cell_error_name");
         autoload("char-equal", "CharacterFunctions");
         autoload("char-greaterp", "CharacterFunctions");
@@ -264,6 +265,7 @@ public class Autoload extends Function
         autoload("logorc2", "logorc2");
         autoload("logtest", "logtest");
         autoload("logxor", "logxor");
+        autoload("make-broadcast-stream", "BroadcastStream");
         autoload("make-echo-stream", "EchoStream");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
