@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.122 2004-03-09 11:53:58 piso Exp $
+;;; $Id: autoloads.lisp,v 1.123 2004-03-09 19:00:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -151,6 +151,7 @@
 (autoload 'make-string-output-stream)
 (autoload 'find-all-symbols)
 (autoload 'dribble)
+(autoload-macro 'step)
 
 ;; Java interface.
 (in-package "JAVA")
