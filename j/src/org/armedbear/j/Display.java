@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Display.java,v 1.15 2003-08-01 17:35:11 piso Exp $
+ * $Id: Display.java,v 1.16 2003-08-07 11:43:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -452,7 +452,7 @@ public final class Display extends JComponent implements Constants,
                 char c = dot.getChar();
                 if (c == '{' || c == '[' || c == '(') {
                     posBracket = dot;
-                    posMatch = editor.findMatchInternal(dot, 100);
+                    posMatch = editor.findMatchInternal(dot, 200);
                 } else if (dot.getOffset() > 0) {
                     int end = editor.getBuffer().getCol(dot.getLine(),
                         dot.getLine().length());
@@ -461,7 +461,7 @@ public final class Display extends JComponent implements Constants,
                         c = dot.getChar();
                         if (c == '}' || c == ']' || c == ')') {
                             posBracket = dot;
-                            posMatch = editor.findMatchInternal(dot, 100);
+                            posMatch = editor.findMatchInternal(dot, 200);
                         }
                     }
                 }
