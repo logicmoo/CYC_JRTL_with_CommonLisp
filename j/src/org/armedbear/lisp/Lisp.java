@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.183 2003-12-03 20:32:39 piso Exp $
+ * $Id: Lisp.java,v 1.184 2003-12-06 01:26:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -496,7 +496,6 @@ public abstract class Lisp
     public static final void bindSpecialVariable(Symbol symbol,
                                                  LispObject value)
     {
-        Debug.assertTrue(symbol.isSpecialVariable());
         LispThread.currentThread().bindSpecial(symbol, value);
     }
 
