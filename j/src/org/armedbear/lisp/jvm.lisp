@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.295 2004-10-22 19:03:18 piso Exp $
+;;; $Id: jvm.lisp,v 1.296 2004-10-22 23:38:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2220,12 +2220,6 @@
       (return-from compile-funcall (compile-form new-form :target target))))
   (compile-form (cadr form) :target :stack)
   (maybe-emit-clear-values (cadr form))
-  (unless (and (consp (cadr form))
-               (eq (caadr form) 'FUNCTION))
-    (emit-invokestatic +lisp-class+
-                       "coerceToFunction"
-                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                       0))
   (compile-call (cddr form))
   (unless target
     (maybe-emit-clear-values form))
