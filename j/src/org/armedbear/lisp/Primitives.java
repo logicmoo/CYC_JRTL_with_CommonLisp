@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.436 2003-09-25 00:40:16 piso Exp $
+ * $Id: Primitives.java,v 1.437 2003-09-25 15:36:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3468,30 +3468,48 @@ public final class Primitives extends Module
 
     // ### finish-output
     // finish-output &optional output-stream => nil
-    private static final Primitive FINISH_OUTPUT =
-        new Primitive("finish-output") {
+    private static final Primitive FINISH_OUTPUT = new Primitive("finish-output") {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            CharacterOutputStream out = null;
-            if (args.length == 0)
-                out = getStandardOutput();
-            else {
-                LispObject streamArg = args[0];
-                if (streamArg instanceof CharacterOutputStream)
-                    out = (CharacterOutputStream) streamArg;
-                else if (streamArg instanceof TwoWayStream)
-                    out = ((TwoWayStream)streamArg).getOutputStream();
-                else if (streamArg == T || streamArg == NIL)
-                    out = getStandardOutput();
-                else
-                    throw new ConditionThrowable(new TypeError(args[1], "character output stream"));
-            }
-            out.finishOutput();
-            return NIL;
+            return flushOutput(args);
         }
     };
+
+    // ### force-output
+    // force-output &optional output-stream => nil
+    private static final Primitive FORCE_OUTPUT = new Primitive("force-output") {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length > 1)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            return flushOutput(args);
+        }
+    };
+
+    private static final LispObject flushOutput(LispObject[] args)
+        throws ConditionThrowable
+    {
+        CharacterOutputStream out = null;
+        if (args.length == 0)
+            out = getStandardOutput();
+        else {
+            LispObject streamArg = args[0];
+            if (streamArg == T)
+                streamArg = _TERMINAL_IO_.symbolValue();
+            else if (streamArg == NIL)
+                streamArg = _STANDARD_OUTPUT_.symbolValue();
+            if (streamArg instanceof CharacterOutputStream)
+                out = (CharacterOutputStream) streamArg;
+            else if (streamArg instanceof TwoWayStream)
+                out = ((TwoWayStream)streamArg).getOutputStream();
+            else
+                throw new ConditionThrowable(new TypeError(args[1], "character output stream"));
+        }
+        out.flushOutput();
+        return NIL;
+    }
 
     // ### close
     // close stream &key abort => result
