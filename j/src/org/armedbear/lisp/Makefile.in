@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.191 2004-11-08 18:20:46 piso Exp $
+# $Id: Makefile.in,v 1.192 2004-11-28 15:42:45 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -79,6 +79,7 @@ CLASSFILES =	AbstractArray.class \
 		GenericFunction.class \
 		Go.class \
 		HashTable.class \
+		HashTableFunctions.class \
 		Interpreter.class \
 		Java.class \
 		JavaClassLoader.class \
@@ -143,6 +144,7 @@ CLASSFILES =	AbstractArray.class \
 		SpecialOperators.class \
 		StandardClass.class \
 		StandardObject.class \
+		StandardObjectFunctions.class \
 		StorageCondition.class \
 		Stream.class \
 		StreamError.class \
@@ -153,6 +155,7 @@ CLASSFILES =	AbstractArray.class \
 		StructureObject.class \
 		StyleWarning.class \
 		Symbol.class \
+		SymbolHashTable.class \
 		SymbolMacro.class \
 		SynonymStream.class \
 		ThreadDestroyed.class \
@@ -223,6 +226,7 @@ CLASSFILES =	AbstractArray.class \
 		mod.class \
 		open_stream_p.class \
 		output_stream_p.class \
+		package_error_package.class \
 		peek_char.class \
 		probe_file.class \
 		read_char_no_hang.class \
@@ -255,7 +259,7 @@ SOURCEFILES = $(patsubst %.class,%.java,$(CLASSFILES))
 	date > build
 	touch ../../../../classes.stamp
 
-all: classes $(LIBABCL)
+all: Makefile classes $(LIBABCL)
 
 classes: Site.java $(CLASSFILES)
 
