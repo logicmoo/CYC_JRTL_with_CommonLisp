@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.159 2004-05-08 11:02:41 piso Exp $
+;;; $Id: jvm.lisp,v 1.160 2004-05-08 18:31:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -368,6 +368,7 @@
                 union nunion
                 remove-duplicates delete-duplicates
                 read-byte
+                lambda
                 ext:classp
                 ext:fixnump
                 ext:memql
@@ -1045,6 +1046,30 @@
                          -1)
       (setf *static-code* *code*)
       g2)))
+
+(defun declare-lambda (obj)
+  (let* ((g (symbol-name (gensym)))
+         (*print-level* nil)
+         (*print-length* nil)
+         (s (format nil "~S" obj))
+         (*code* *static-code*))
+    (declare-field g +lisp-object+)
+    (emit 'ldc
+          (pool-string s))
+    (emit-invokestatic +lisp-class+
+                       "readObjectFromString"
+                       "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
+                       0)
+    (emit-invokestatic +lisp-class+
+                       "coerceToFunction"
+                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+                       0)
+    (emit 'putstatic
+          *this-class*
+          g
+          +lisp-object+)
+    (setf *static-code* *code*)
+    g))
 
 (defun declare-string (string)
   (let ((g (gethash string *declared-strings*)))
@@ -2082,6 +2107,10 @@
           (compile-form (car forms) (cdr forms))))
       (error "COMPILE-FLET: unsupported case.")))
 
+(defun compile-funcall (form for-effect)
+;;   (format t "COMPILE-FUNCALL form = ~S~%" form)
+  (compile-function-call form for-effect))
+
 (defun compile-function (form for-effect)
    (let ((obj (second form)))
      (cond ((symbolp obj)
@@ -2102,22 +2131,38 @@
                                       "()Lorg/armedbear/lisp/LispObject;"
                                       0)
                   (emit-store-value))))
-           #+nil
            ((and (consp obj) (eq (car obj) 'LAMBDA))
-            ;; FIXME We need to construct a proper lexical environment here
-            ;; and pass it to coerceToFunction().
-            (let ((g (declare-object-as-string obj)))
-              (emit 'getstatic
-                    *this-class*
-                    g
-                    +lisp-object+)
-              (emit-invokestatic +lisp-class+
-                                 "coerceToFunction"
-                                 "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
-                                 0)
-              (emit-store-value)))
+            (let ((closure-vars (remove-duplicates (union (remove nil (coerce *locals* 'list))
+                                                          (remove nil (coerce *args* 'list)))))
+                  (lambda-body (cddr obj)))
+              (cond ((and (null closure-vars)
+                          (not (contains-return lambda-body)))
+                     (fresh-line)
+                     (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
+                     (let ((g (if *compile-file-truename*
+                                  (declare-lambda obj)
+                                  (declare-object (sys::coerce-to-function obj)))))
+                       (emit 'getstatic
+                             *this-class*
+                             g
+                             +lisp-object+)
+                       (emit-store-value)))
+                    (t
+                     (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
+;;             ;; FIXME We need to construct a proper lexical environment here
+;;             ;; and pass it to coerceToFunction().
+;;             (let ((g (declare-object-as-string obj)))
+;;               (emit 'getstatic
+;;                     *this-class*
+;;                     g
+;;                     +lisp-object+)
+;;               (emit-invokestatic +lisp-class+
+;;                                  "coerceToFunction"
+;;                                  "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+;;                                  0)
+;;               (emit-store-value)))
            (t
-            (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
+            (error "COMPILE-FUNCTION: unknown case: ~S" form)))))
 
 (defun compile-plus (form for-effect)
   (let ((new-form (rewrite-function-call form)))
@@ -2567,6 +2612,7 @@
                           cons
                           declare
                           flet
+                          funcall
                           function
                           go
                           if
