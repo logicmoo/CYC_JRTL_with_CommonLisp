@@ -54,6 +54,11 @@ public abstract class AbstractVector extends AbstractArray
         return super.typep(typeSpecifier);
     }
 
+    public final boolean vectorp()
+    {
+        return true;
+    }
+
     public boolean equalp(LispObject obj) throws LispError
     {
         if (obj instanceof AbstractVector) {
