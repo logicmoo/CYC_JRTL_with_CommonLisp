@@ -2,7 +2,7 @@
  * VectorTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: VectorTypeSpecifier.java,v 1.2 2003-08-14 01:52:50 piso Exp $
+ * $Id: VectorTypeSpecifier.java,v 1.3 2003-08-14 17:28:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,10 +53,10 @@ public final class VectorTypeSpecifier extends CompoundTypeSpecifier
             if (elementTypeSpecifier != UnspecifiedTypeSpecifier.getInstance()) {
                 TypeSpecifier ts = TypeSpecifier.getInstance(v.getElementType());
                 if (elementTypeSpecifier.isSubtypeOf(ts) == NIL) {
-                    LispThread.currentThread().setValues(null);
+                    LispThread.currentThread().clearValues();
                     return NIL;
                 }
-                LispThread.currentThread().setValues(null);
+                LispThread.currentThread().clearValues();
             }
             if (size == Symbol.UNSPECIFIED)
                 return T;
