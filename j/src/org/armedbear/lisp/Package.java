@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.7 2003-03-25 16:41:10 piso Exp $
+ * $Id: Package.java,v 1.8 2003-04-05 16:35:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ public final class Package extends LispObject
     private ArrayList nicknames = new ArrayList();
     private ArrayList useList = new ArrayList();
     private ArrayList usedByList = new ArrayList();
+    private ArrayList shadowingSymbols = new ArrayList();
 
     public Package(String name)
     {
@@ -113,6 +114,18 @@ public final class Package extends LispObject
         return NIL;
     }
 
+    private synchronized Symbol addSymbol(String name)
+    {
+        Symbol symbol = new Symbol(name, this);
+        map.put(name, symbol);
+        if (this == PACKAGE_KEYWORD) {
+            symbol.setSymbolValue(symbol);
+            symbol.setConstant(true);
+            symbol.setExternal(true);
+        }
+        return symbol;
+    }
+
     public synchronized Symbol intern(String name)
     {
         name = name.intern();
@@ -138,12 +151,7 @@ public final class Package extends LispObject
             }
         }
         // Not found.
-        map.put(name, symbol = new Symbol(name, this));
-        if (this == PACKAGE_KEYWORD) {
-            symbol.setSymbolValue(symbol);
-            symbol.setConstant(true);
-            symbol.setExternal(true);
-        }
+        symbol = addSymbol(name);
         values[0] = symbol;
         values[1] = NIL;
         setValues(values);
@@ -185,6 +193,15 @@ public final class Package extends LispObject
         }
         // No conflicts.
         symbol.setExternal(true);
+    }
+
+    public synchronized void shadow(String name) throws LispError
+    {
+        Symbol symbol = (Symbol) map.get(name);
+        if (symbol == null)
+            symbol = addSymbol(name);
+        if (!shadowingSymbols.contains(symbol))
+            shadowingSymbols.add(symbol);
     }
 
     // Adds pkg to the use list of this package.
