@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.50 2003-10-18 14:42:35 piso Exp $
+;;; $Id: compiler.lisp,v 1.51 2003-10-18 16:23:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -120,7 +120,12 @@
   (getf *local-macros* name))
 
 (defun expand-local-macro (form)
-  (funcall (local-macro-function (car form)) form nil))
+  (let ((expansion (funcall (local-macro-function (car form)) form nil)))
+    ;; If the expansion turns out to be a bare symbol, wrap it with PROGN so it
+    ;; won't be mistaken for a tag in an enclosing TAGBODY.
+    (if (symbolp expansion)
+        (list 'progn expansion)
+        expansion)))
 
 (defun compile-macrolet (form)
   (let ((*local-macros* *local-macros*)
@@ -171,7 +176,13 @@
       (PROGN
        (let ((body (cdr form)))
          (if (= (length body) 1)
-             (compile-sexp (car body))
+             (let ((res (compile-sexp (car body))))
+               ;; If the result turns out to be a bare symbol, leave it wrapped
+               ;; with PROGN so it won't be mistaken for a tag in an enclosing
+               ;; TAGBODY.
+               (if (symbolp res)
+                   (list 'progn res)
+                   res))
              (cons 'progn (mapcar #'compile-sexp body)))))
       (IF
        (unless (<= 2 (length (cdr form)) 3)
