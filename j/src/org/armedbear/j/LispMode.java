@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.86 2005-02-06 13:27:17 piso Exp $
+ * $Id: LispMode.java,v 1.87 2005-02-16 13:49:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,10 +177,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
 
     public boolean isInQuote(Buffer buffer, Position pos)
     {
-        // This implementation only considers the current line.
         final Line line = pos.getLine();
         final int offset = pos.getOffset();
-        boolean inQuote = false;
+        boolean inQuote = (line.flags() == STATE_QUOTE);
         for (int i = 0; i < offset; i++) {
             char c = line.charAt(i);
             if (c == '\\') {
@@ -213,6 +212,18 @@ public class LispMode extends AbstractMode implements Constants, Mode
         "while"
     };
 
+    private static int findLastUnescapedQuote(Line line)
+    {
+        int index = -1;
+        for (int i = line.length(); i-- > 0;) {
+            if (line.charAt(i) == '"') {
+                if (i == 0 || line.charAt(i - 1) != '\\')
+                    return i;
+            }
+        }
+        return -1;
+    }
+
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final Line model = findModel(line);
@@ -221,10 +232,16 @@ public class LispMode extends AbstractMode implements Constants, Mode
         final int modelIndent = buffer.getIndentation(model);
         final String modelTrim = model.trim();
         if (line.flags() == STATE_QUOTE) {
-            if (modelTrim.length() > 0 && modelTrim.charAt(0) == '"')
-                return modelIndent + 1;
-            else
-                return modelIndent;
+            if (buffer.getBooleanProperty(Property.INDENT_STRINGS) ||
+                modelTrim.endsWith("~"))
+            {
+                int index = findLastUnescapedQuote(model);
+                if (index < 0)
+                    return modelIndent;
+                else
+                    return buffer.getCol(model, index + 1);
+            } else
+                return 0;
         }
         if (modelTrim.length() == 0)
             return 0;
@@ -334,7 +351,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
     private static Line findModel(Line line)
     {
         Line model = line.previous();
-        if (line.flags() == STATE_COMMENT) {
+        if (line.flags() == STATE_COMMENT || line.flags() == STATE_QUOTE) {
             // Any non-blank line is an acceptable model.
             while (model != null && model.isBlank())
                 model = model.previous();
