@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.11 2003-10-17 14:07:45 piso Exp $
+ * $Id: Time.java,v 1.12 2003-11-23 18:58:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,12 +42,13 @@ public final class Time extends Lisp
             StringBuffer sb =
                 new StringBuffer(String.valueOf((float)elapsed/1000));
             sb.append(" seconds");
+            sb.append(System.getProperty("line.separator"));
             if (count > 0) {
-                sb.append(System.getProperty("line.separator"));
                 sb.append(count);
                 sb.append(" cons cell");
                 if (count > 1)
                     sb.append('s');
+                sb.append(System.getProperty("line.separator"));
             }
             out.writeString(sb.toString());
             out.flushOutput();
