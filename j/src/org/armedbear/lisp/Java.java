@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.12 2003-10-23 15:01:41 piso Exp $
+ * $Id: Java.java,v 1.13 2003-10-24 00:05:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,13 +24,14 @@ package org.armedbear.lisp;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public final class Java extends Module
 {
     // ### jclass
-    private static final Primitive1 JCLASS =
-        new Primitive1("jclass", PACKAGE_JAVA) {
+    private static final Primitive1 JCLASS = new Primitive1("jclass", PACKAGE_JAVA)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
@@ -45,10 +46,54 @@ public final class Java extends Module
         }
     };
 
+    // ### jfield
+    // jfield class-name field-name &optional instance
+    private static final Primitive JFIELD = new Primitive("jfield", PACKAGE_JAVA)
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 2 || args.length > 3)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            String className = LispString.getValue(args[0]);
+	    String fieldName = LispString.getValue(args[1]);
+	    Object instance = null;
+            try {
+                final Class c = Class.forName(className);
+		final Field f = c.getField(fieldName);
+		if (args.length == 3) {
+		  if (args[2] instanceof LispString)
+                    instance = LispString.getValue(args[2]);
+		  else
+                    instance = JavaObject.getObject(args[2]);
+                }
+		return makeLispObject(f.get(instance));
+            }
+            catch (ClassNotFoundException e) {
+                throw new ConditionThrowable(new LispError("class not found: " + className));
+            }
+            catch (NoSuchFieldException e) {
+                throw new ConditionThrowable(new LispError("no such field"));
+            }
+            catch (SecurityException e) {
+                throw new ConditionThrowable(new LispError("inaccessible field"));
+            }
+            catch (IllegalAccessException e) {
+                throw new ConditionThrowable(new LispError("illegal access"));
+            }
+            catch (IllegalArgumentException e) {
+                throw new ConditionThrowable(new LispError("illegal argument"));
+            }
+            catch (Throwable t) {
+                throw new ConditionThrowable(new LispError(getMessage(t)));
+            }
+        }
+    };
+
     // ### jconstructor
     // jconstructor class-name &rest parameter-class-names
     private static final Primitive JCONSTRUCTOR =
-        new Primitive("jconstructor", PACKAGE_JAVA) {
+        new Primitive("jconstructor", PACKAGE_JAVA)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
@@ -77,8 +122,8 @@ public final class Java extends Module
 
     // ### jmethod
     // jmethod class-ref name &rest parameter-class-names
-    private static final Primitive JMETHOD =
-        new Primitive("jmethod", PACKAGE_JAVA) {
+    private static final Primitive JMETHOD = new Primitive("jmethod", PACKAGE_JAVA)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
@@ -128,8 +173,8 @@ public final class Java extends Module
 
     // ### jstatic
     // jstatic method class &rest args
-    private static final Primitive JSTATIC =
-        new Primitive("jstatic", PACKAGE_JAVA) {
+    private static final Primitive JSTATIC = new Primitive("jstatic", PACKAGE_JAVA)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
@@ -207,6 +252,8 @@ public final class Java extends Module
                         initargs[i-1] = new Integer(((Fixnum)arg).getValue());
                     else if (arg instanceof LispFloat)
                         initargs[i-1] = new Double(((LispFloat)arg).getValue());
+                    else if (arg instanceof JavaObject)
+                        initargs[i-1] = ((JavaObject)arg).getObject();
                 }
                 return new JavaObject(constructor.newInstance(initargs));
             }
@@ -325,6 +372,7 @@ public final class Java extends Module
 
     static {
         export("JCLASS", PACKAGE_JAVA);
+        export("JFIELD", PACKAGE_JAVA);
         export("JCONSTRUCTOR", PACKAGE_JAVA);
         export("JMETHOD", PACKAGE_JAVA);
         export("JSTATIC", PACKAGE_JAVA);
