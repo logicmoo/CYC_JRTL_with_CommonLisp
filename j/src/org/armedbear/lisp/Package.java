@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.32 2003-07-07 14:15:30 piso Exp $
+ * $Id: Package.java,v 1.33 2003-07-07 16:42:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -342,11 +342,16 @@ public final class Package extends LispObject
                     Package pkg = (Package) it.next();
                     Symbol sym = pkg.findAccessibleSymbol(symbolName);
                     if (sym != null && sym != symbol) {
-                        StringBuffer sb = new StringBuffer("the symbol ");
-                        sb.append(sym.getQualifiedName());
-                        sb.append(" is already accessible in package ");
-                        sb.append(pkg.getName());
-                        throw new LispError(sb.toString());
+                        if (pkg.shadowingSymbols != null &&
+                            pkg.shadowingSymbols.contains(sym)) {
+                            ; // OK.
+                        } else {
+                            StringBuffer sb = new StringBuffer("the symbol ");
+                            sb.append(sym.getQualifiedName());
+                            sb.append(" is already accessible in package ");
+                            sb.append(pkg.getName());
+                            throw new LispError(sb.toString());
+                        }
                     }
                 }
             }
