@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.27 2003-08-23 01:36:55 piso Exp $
+ * $Id: LispFloat.java,v 1.28 2003-08-24 13:30:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -341,6 +341,18 @@ public final class LispFloat extends LispObject
         {
             if (arg instanceof LispFloat)
                 return Fixnum.TWO;
+            throw new TypeError(arg, "float");
+        }
+    };
+
+    // ### float-digits
+    // float-digits float => float-digits
+    private static final Primitive1 FLOAT_DIGITS =
+        new Primitive1("float-digits") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof LispFloat)
+                return new Fixnum(32);
             throw new TypeError(arg, "float");
         }
     };
