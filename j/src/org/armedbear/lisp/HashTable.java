@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.30 2004-01-01 02:04:12 piso Exp $
+ * $Id: HashTable.java,v 1.31 2004-01-01 17:10:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,9 @@ public final class HashTable extends LispObject
 
     private int test;
 
+    private final LispObject rehashSize;
+    private final LispObject rehashThreshold;
+
     // The rounded product of the capacity and the load factor. When the number
     // of elements exceeds the threshold, the implementation calls rehash().
     private int threshold;
@@ -56,7 +59,8 @@ public final class HashTable extends LispObject
             this.test = TEST_EQUALP;
         else
             signal(new LispError("MAKE-HASH-TABLE:  test " + test));
-        // Ignore rehashSize and rehashThreshold.
+        this.rehashSize = rehashSize;
+        this.rehashThreshold = rehashThreshold;
         buckets = new HashEntry[size];
         threshold = (int) (size * loadFactor);
     }
@@ -436,6 +440,28 @@ public final class HashTable extends LispObject
         {
             if (arg instanceof HashTable)
                 return new Fixnum(((HashTable)arg).buckets.length);
+            return signal(new TypeError(arg, Symbol.HASH_TABLE));
+        }
+    };
+
+    private static final Primitive1 HASH_TABLE_REHASH_SIZE =
+        new Primitive1("hash-table-rehash-size", "hash-table")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof HashTable)
+                return ((HashTable)arg).rehashSize;
+            return signal(new TypeError(arg, Symbol.HASH_TABLE));
+        }
+    };
+
+    private static final Primitive1 HASH_TABLE_REHASH_THRESHOLD =
+        new Primitive1("hash-table-rehash-threshold", "hash-table")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof HashTable)
+                return ((HashTable)arg).rehashThreshold;
             return signal(new TypeError(arg, Symbol.HASH_TABLE));
         }
     };
