@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.7 2003-08-12 17:00:12 piso Exp $
+ * $Id: Complex.java,v 1.8 2003-08-13 01:14:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,6 +144,13 @@ public final class Complex extends LispObject
     public boolean isNotEqualTo(LispObject obj) throws LispError
     {
         return !isEqualTo(obj);
+    }
+
+    public LispObject ABS() throws TypeError
+    {
+        float real = LispFloat.coerceToFloat(realpart).getValue();
+        float imag = LispFloat.coerceToFloat(imagpart).getValue();
+        return new LispFloat((float)Math.sqrt(real * real + imag * imag));
     }
 
     public LispObject ZEROP() throws TypeError
