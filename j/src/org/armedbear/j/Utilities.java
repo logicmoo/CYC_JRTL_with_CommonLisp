@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.3 2002-11-04 15:32:22 piso Exp $
+ * $Id: Utilities.java,v 1.4 2002-11-04 15:38:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -828,15 +828,15 @@ public final class Utilities implements Constants
     public static boolean copyFile(File source, File destination)
     {
         if (!source.isFile()) {
-            Log.error("copyFile error - source is not a file");
+            Log.error("copyFile error - source is not a file: " + source);
             return false;
         }
         if (destination.isDirectory()) {
-            Log.error("copyFile error - destination is a directory");
+            Log.error("copyFile error - destination is a directory: " + destination);
             return false;
         }
         if (destination.isFile() && !destination.canWrite()) {
-            Log.error("copyFile error - destination is read only");
+            Log.error("copyFile error - destination is read only: " + destination);
             return false;
         }
         boolean error = false;
@@ -889,7 +889,7 @@ public final class Utilities implements Constants
             destination.delete();
             if (destination.exists()) {
                 // Unable to delete existing destination file.
-                Log.error("copyFile error - unable to delete existing destination file");
+                Log.error("copyFile error - unable to delete existing destination file: " + destination);
                 tempFile.delete();
                 return false;
             }
