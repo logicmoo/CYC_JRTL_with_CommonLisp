@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.35 2004-01-09 18:21:49 piso Exp $
+;;; $Id: subtypep.lisp,v 1.36 2004-01-17 00:40:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@
              (ARRAY)
              (BASE-STRING SIMPLE-STRING)
              (BIGNUM INTEGER)
-             (BIT INTEGER)
              (BIT-VECTOR VECTOR)
              (BOOLEAN SYMBOL)
              (BUILT-IN-CLASS CLASS)
@@ -56,7 +55,7 @@
              (INTEGER RATIONAL)
              (KEYWORD SYMBOL)
              (LIST SEQUENCE)
-             (NULL SYMBOL LIST)
+             (NULL BOOLEAN LIST)
              (NUMBER)
              (PACKAGE)
              (PACKAGE-ERROR ERROR)
@@ -98,8 +97,7 @@
              (UNBOUND-VARIABLE CELL-ERROR)
              (UNDEFINED-FUNCTION CELL-ERROR)
              (VECTOR ARRAY SEQUENCE)
-             (WARNING CONDITION)
-             ))
+             (WARNING CONDITION)))
   (setf (gethash (car i) *known-types*) (cdr i)))
 
 (defun supertypes (type)
@@ -112,11 +110,17 @@
 (defun subtypep-normalize-type (type)
   (when (symbolp type)
     (case type
+      (BIT
+       (return-from subtypep-normalize-type '(integer 0 1)))
       (CONS
        (return-from subtypep-normalize-type '(cons t t)))
       (FIXNUM
        (return-from subtypep-normalize-type
                     '(integer #.most-negative-fixnum #.most-positive-fixnum)))
+      (SIGNED-BYTE
+       (return-from subtypep-normalize-type 'integer))
+      (UNSIGNED-BYTE
+       (return-from subtypep-normalize-type '(integer 0 *)))
       (BASE-CHAR
        (return-from subtypep-normalize-type 'character))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
