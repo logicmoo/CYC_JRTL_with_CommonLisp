@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaMode.java,v 1.10 2003-06-06 12:21:56 piso Exp $
+ * $Id: JavaMode.java,v 1.11 2003-06-12 16:42:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,6 +155,29 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             km.mapKey(0x68, CTRL_MASK | SHIFT_MASK, "insertParentheses");
             km.mapKey(0x69, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
             km.mapKey(0xbb, CTRL_MASK | SHIFT_MASK, "insertBraces");
+        }
+    }
+
+    public void populateModeMenu(Editor editor, Menu menu)
+    {
+        menu.add(editor, "Compile...", 'C', "compile");
+        menu.add(editor, "Recompile", 'R', "recompile");
+        boolean enabled = CompilationCommands.getCompilationBuffer() != null;
+        menu.addSeparator();
+        menu.add(editor, "Next Error", 'N', "nextError", enabled);
+        menu.add(editor, "Previous Error", 'P', "previousError", enabled);
+        menu.add(editor, "Show Error Message", 'M', "showMessage", enabled);
+        menu.addSeparator();
+        MenuItem jdbMenuItem = menu.add(editor, "Debug...", 'D', "jdb");
+        if (jdb != null)
+            jdbMenuItem.setEnabled(false);
+        else {
+            try {
+                Class.forName("com.sun.jdi.Bootstrap");
+            }
+            catch (ClassNotFoundException e) {
+                jdbMenuItem.setEnabled(false);
+            }
         }
     }
 

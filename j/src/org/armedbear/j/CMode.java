@@ -1,8 +1,8 @@
 /*
  * CMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CMode.java,v 1.1.1.1 2002-09-24 16:09:33 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: CMode.java,v 1.2 2003-06-12 16:39:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,17 @@ public class CMode extends JavaMode implements Constants, Mode
         km.mapKey('#', "electricPound");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK, "cppFindMatch");
         km.mapKey(KeyEvent.VK_F6, CTRL_MASK, "iList");
+    }
+
+    public void populateModeMenu(Editor editor, Menu menu)
+    {
+        menu.add(editor, "Compile...", 'C', "compile");
+        menu.add(editor, "Recompile", 'R', "recompile");
+        boolean enabled = CompilationCommands.getCompilationBuffer() != null;
+        menu.addSeparator();
+        menu.add(editor, "Next Error", 'N', "nextError", enabled);
+        menu.add(editor, "Previous Error", 'P', "previousError", enabled);
+        menu.add(editor, "Show Error Message", 'M', "showMessage", enabled);
     }
 
     public Tagger getTagger(SystemBuffer buffer)
