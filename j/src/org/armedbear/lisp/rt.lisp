@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.141 2003-11-17 15:24:08 piso Exp $
+;;; $Id: rt.lisp,v 1.142 2003-11-17 16:03:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -456,6 +456,7 @@
                               "subtypep-eql"
                               "subtypep-float"
                               "subtypep-integer"
+                              "subtypep-member"
                               "subtypep-rational"
                               "subtypep-real"
                               "svref"
