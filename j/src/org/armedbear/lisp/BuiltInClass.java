@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.15 2003-11-25 00:18:19 piso Exp $
+ * $Id: BuiltInClass.java,v 1.16 2003-12-11 20:01:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,13 +75,11 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass CLASS                            = addClass(Symbol.CLASS);
     public static final BuiltInClass COMPLEX                          = addClass(Symbol.COMPLEX);
     public static final BuiltInClass CONCATENATED_STREAM              = addClass(Symbol.CONCATENATED_STREAM);
-//     public static final BuiltInClass CONDITION                        = addClass(Symbol.CONDITION);
     public static final BuiltInClass CONS                             = addClass(Symbol.CONS);
     public static final BuiltInClass CONTROL_ERROR                    = addClass(Symbol.CONTROL_ERROR);
     public static final BuiltInClass DIVISION_BY_ZERO                 = addClass(Symbol.DIVISION_BY_ZERO);
     public static final BuiltInClass ECHO_STREAM                      = addClass(Symbol.ECHO_STREAM);
     public static final BuiltInClass END_OF_FILE                      = addClass(Symbol.END_OF_FILE);
-    public static final BuiltInClass ERROR                            = addClass(Symbol.ERROR);
     public static final BuiltInClass FILE_ERROR                       = addClass(Symbol.FILE_ERROR);
     public static final BuiltInClass FILE_STREAM                      = addClass(Symbol.FILE_STREAM);
     public static final BuiltInClass FIXNUM                           = addClass(Symbol.FIXNUM);
@@ -91,12 +89,10 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass FLOATING_POINT_OVERFLOW          = addClass(Symbol.FLOATING_POINT_OVERFLOW);
     public static final BuiltInClass FLOATING_POINT_UNDERFLOW         = addClass(Symbol.FLOATING_POINT_UNDERFLOW);
     public static final BuiltInClass FUNCTION                         = addClass(Symbol.FUNCTION);
-//     public static final BuiltInClass GENERIC_FUNCTION                 = addClass(Symbol.GENERIC_FUNCTION);
     public static final BuiltInClass HASH_TABLE                       = addClass(Symbol.HASH_TABLE);
     public static final BuiltInClass INTEGER                          = addClass(Symbol.INTEGER);
     public static final BuiltInClass LIST                             = addClass(Symbol.LIST);
     public static final BuiltInClass LOGICAL_PATHNAME                 = addClass(Symbol.LOGICAL_PATHNAME);
-//     public static final BuiltInClass METHOD                           = addClass(Symbol.METHOD);
     public static final BuiltInClass METHOD_COMBINATION               = addClass(Symbol.METHOD_COMBINATION);
     public static final BuiltInClass NULL                             = addClass(Symbol.NULL);
     public static final BuiltInClass NUMBER                           = addClass(Symbol.NUMBER);
@@ -114,15 +110,10 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass REAL                             = addClass(Symbol.REAL);
     public static final BuiltInClass RESTART                          = addClass(Symbol.RESTART);
     public static final BuiltInClass SEQUENCE                         = addClass(Symbol.SEQUENCE);
-    public static final BuiltInClass SERIOUS_CONDITION                = addClass(Symbol.SERIOUS_CONDITION);
     public static final BuiltInClass SIMPLE_CONDITION                 = addClass(Symbol.SIMPLE_CONDITION);
     public static final BuiltInClass SIMPLE_ERROR                     = addClass(Symbol.SIMPLE_ERROR);
     public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
     public static final BuiltInClass SIMPLE_WARNING                   = addClass(Symbol.SIMPLE_WARNING);
-//     public static final BuiltInClass STANDARD_CLASS                   = addClass(Symbol.STANDARD_CLASS);
-//     public static final BuiltInClass STANDARD_GENERIC_FUNCTION        = addClass(Symbol.STANDARD_GENERIC_FUNCTION);
-//     public static final BuiltInClass STANDARD_METHOD                  = addClass(Symbol.STANDARD_METHOD);
-//     public static final BuiltInClass STANDARD_OBJECT                  = addClass(Symbol.STANDARD_OBJECT);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
     public static final BuiltInClass STREAM_ERROR                     = addClass(Symbol.STREAM_ERROR);
@@ -157,6 +148,18 @@ public class BuiltInClass extends LispClass
         new StandardClass(Symbol.CONDITION, list1(STANDARD_OBJECT));
     static {
         addClass(Symbol.CONDITION, CONDITION);
+    }
+
+    public static final StandardClass SERIOUS_CONDITION =
+        new StandardClass(Symbol.SERIOUS_CONDITION, list1(CONDITION));
+    static {
+        addClass(Symbol.SERIOUS_CONDITION, SERIOUS_CONDITION);
+    }
+
+    public static final StandardClass ERROR =
+        new StandardClass(Symbol.ERROR, list1(SERIOUS_CONDITION));
+    static {
+        addClass(Symbol.ERROR, ERROR);
     }
 
     public static final StandardClass GENERIC_FUNCTION =
@@ -197,7 +200,6 @@ public class BuiltInClass extends LispClass
         COMPLEX.setCPL(COMPLEX, NUMBER, CLASS_T);
         CONCATENATED_STREAM.setDirectSuperclass(STREAM);
         CONCATENATED_STREAM.setCPL(CONCATENATED_STREAM, STREAM, CLASS_T);
-        CONDITION.setDirectSuperclass(STANDARD_OBJECT);
         CONDITION.setCPL(CONDITION, STANDARD_OBJECT, CLASS_T);
         CONS.setDirectSuperclass(LIST);
         CONS.setCPL(CONS, LIST, SEQUENCE, CLASS_T);
@@ -212,8 +214,7 @@ public class BuiltInClass extends LispClass
         END_OF_FILE.setDirectSuperclass(STREAM_ERROR);
         END_OF_FILE.setCPL(END_OF_FILE, STREAM_ERROR, ERROR, SERIOUS_CONDITION,
                            CONDITION, CLASS_T);
-        ERROR.setDirectSuperclass(SERIOUS_CONDITION);
-        ERROR.setCPL(ERROR, SERIOUS_CONDITION, CONDITION, CLASS_T);
+        ERROR.setCPL(ERROR, SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT, CLASS_T);
         FIXNUM.setDirectSuperclass(INTEGER);
         FIXNUM.setCPL(FIXNUM, INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
         FILE_ERROR.setDirectSuperclass(ERROR);
@@ -294,7 +295,8 @@ public class BuiltInClass extends LispClass
         SEQUENCE.setDirectSuperclass(CLASS_T);
         SEQUENCE.setCPL(SEQUENCE, CLASS_T);
         SERIOUS_CONDITION.setDirectSuperclass(CONDITION);
-        SERIOUS_CONDITION.setCPL(SERIOUS_CONDITION, CONDITION, CLASS_T);
+        SERIOUS_CONDITION.setCPL(SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                                 CLASS_T);
         SIMPLE_CONDITION.setDirectSuperclass(CONDITION);
         SIMPLE_CONDITION.setCPL(SIMPLE_CONDITION, CONDITION, CLASS_T);
         SIMPLE_ERROR.setDirectSuperclass(ERROR);
@@ -309,13 +311,6 @@ public class BuiltInClass extends LispClass
                               CONDITION, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
         STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS, STANDARD_OBJECT, CLASS_T);
-//         STANDARD_GENERIC_FUNCTION.setDirectSuperclass(GENERIC_FUNCTION);
-//         STANDARD_GENERIC_FUNCTION.setCPL(STANDARD_GENERIC_FUNCTION,
-//                                          GENERIC_FUNCTION, FUNCTION, CLASS_T);
-//         STANDARD_METHOD.setDirectSuperclass(list2(METHOD, STANDARD_OBJECT));
-//         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
-//                                CLASS_T);
-//         STANDARD_OBJECT.setDirectSuperclass(CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
         STORAGE_CONDITION.setDirectSuperclass(SERIOUS_CONDITION);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
