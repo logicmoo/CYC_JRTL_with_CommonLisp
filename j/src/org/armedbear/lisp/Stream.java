@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.52 2004-03-16 14:48:37 piso Exp $
+ * $Id: Stream.java,v 1.53 2004-03-16 16:12:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -396,6 +396,16 @@ public class Stream extends LispObject
         }
         LispObject fun =
             currentReadtable().getDispatchMacroCharacter('#', c);
+        if (fun instanceof DispatchMacroFunction) {
+            final LispThread thread = LispThread.currentThread();
+            LispObject result =
+                ((DispatchMacroFunction)fun).execute(this, c, numArg);
+            LispObject[] values = thread.getValues();
+            if (values != null && values.length == 0)
+                result = null;
+            thread.clearValues();
+            return result;
+        }
         if (fun != NIL) {
             final LispThread thread = LispThread.currentThread();
             LispObject result = funcall3(fun,
@@ -443,9 +453,6 @@ public class Stream extends LispObject
             case 'p':
             case 'P':
                 return readPathname();
-            case 'r':
-            case 'R':
-                return readRadix(numArg);
             case 's':
             case 'S':
                 return readStructure();
@@ -837,7 +844,7 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject readRadix(int radix) throws ConditionThrowable
+    public LispObject readRadix(int radix) throws ConditionThrowable
     {
         String s = readToken();
         if (s.indexOf('/') >= 0)
