@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.15 2003-08-07 17:59:31 piso Exp $
+ * $Id: KeyMap.java,v 1.16 2003-10-15 12:44:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,20 +181,19 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_F5, SHIFT_MASK, "popPosition");
 
         // Search menu.
-        mapKey(KeyEvent.VK_F3, ALT_MASK, "find");
-
         if (Editor.preferences().getBooleanProperty(Property.USE_INCREMENTAL_FIND))
             mapKey(KeyEvent.VK_F, CTRL_MASK, "incrementalFind");
         else
             mapKey(KeyEvent.VK_F, CTRL_MASK, "find");
+        mapKey(KeyEvent.VK_F3, ALT_MASK, "find");
 
         mapKey(KeyEvent.VK_L, ALT_MASK, "listOccurrences");
         mapKey(KeyEvent.VK_L, CTRL_MASK | ALT_MASK, "listOccurrencesOfPatternAtDot");
 
-        mapKey(KeyEvent.VK_G, CTRL_MASK, "findNext");
         mapKey(KeyEvent.VK_F3, 0, "findNext");
-        mapKey(KeyEvent.VK_H, CTRL_MASK, "findPrev");
+        mapKey(KeyEvent.VK_G, CTRL_MASK, "findNext");
         mapKey(KeyEvent.VK_F3, SHIFT_MASK, "findPrev");
+        mapKey(KeyEvent.VK_H, CTRL_MASK, "findPrev");
         mapKey(KeyEvent.VK_F6, 0, "findInFiles");
         mapKey(KeyEvent.VK_F, CTRL_MASK | SHIFT_MASK, "findInFiles");
         mapKey(KeyEvent.VK_L, CTRL_MASK, "listFiles");
