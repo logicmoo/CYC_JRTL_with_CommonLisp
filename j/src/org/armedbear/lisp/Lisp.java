@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.181 2003-11-19 02:40:01 piso Exp $
+ * $Id: Lisp.java,v 1.182 2003-11-19 14:37:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -965,6 +965,17 @@ public abstract class Lisp
         if (pkg != null)
             return pkg;
         throw new ConditionThrowable(new PackageError(obj + " is not the name of a package"));
+    }
+
+    public static final boolean memq(LispObject item, LispObject list)
+        throws ConditionThrowable
+    {
+        while (list instanceof Cons) {
+            if (item == list.car())
+                return true;
+            list = list.cdr();
+        }
+        return false;
     }
 
     // Property lists.
