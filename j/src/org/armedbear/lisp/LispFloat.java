@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.69 2004-06-13 18:42:11 piso Exp $
+ * $Id: LispFloat.java,v 1.70 2004-06-19 17:03:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,7 +290,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value == ((Fixnum)obj).value;
         if (obj instanceof Bignum)
-            return value == ((Bignum)obj).floatValue();
+            return rational().isEqualTo(obj);
         if (obj instanceof Ratio)
             return rational().isEqualTo(obj);
         if (obj instanceof Complex)
@@ -312,7 +312,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value < ((Fixnum)obj).value;
         if (obj instanceof Bignum)
-            return value < ((Bignum)obj).floatValue();
+            return rational().isLessThan(obj);
         if (obj instanceof Ratio)
             return rational().isLessThan(obj);
         signal(new TypeError(obj, Symbol.REAL));
@@ -327,7 +327,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value > ((Fixnum)obj).value;
         if (obj instanceof Bignum)
-            return value > ((Bignum)obj).floatValue();
+            return rational().isGreaterThan(obj);
         if (obj instanceof Ratio)
             return rational().isGreaterThan(obj);
         signal(new TypeError(obj, Symbol.REAL));
@@ -342,7 +342,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value <= ((Fixnum)obj).value;
         if (obj instanceof Bignum)
-            return value <= ((Bignum)obj).floatValue();
+            return rational().isLessThanOrEqualTo(obj);
         if (obj instanceof Ratio)
             return rational().isLessThanOrEqualTo(obj);
         signal(new TypeError(obj, Symbol.REAL));
@@ -357,7 +357,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value >= ((Fixnum)obj).value;
         if (obj instanceof Bignum)
-            return value >= ((Bignum)obj).floatValue();
+            return rational().isGreaterThanOrEqualTo(obj);
         if (obj instanceof Ratio)
             return rational().isGreaterThanOrEqualTo(obj);
         signal(new TypeError(obj, Symbol.REAL));
