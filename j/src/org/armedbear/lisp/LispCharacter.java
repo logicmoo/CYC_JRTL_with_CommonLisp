@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.52 2004-08-15 12:38:47 piso Exp $
+ * $Id: LispCharacter.java,v 1.53 2004-08-23 02:32:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -540,6 +540,8 @@ public final class LispCharacter extends LispObject
                 return "Page";
             case '\b':
                 return "Backspace";
+            case 0:
+                return "Null";
         }
         return null;
     }
