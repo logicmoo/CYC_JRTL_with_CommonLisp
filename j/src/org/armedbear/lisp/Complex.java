@@ -1,8 +1,8 @@
 /*
  * Complex.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Complex.java,v 1.31 2004-11-28 15:43:49 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Complex.java,v 1.32 2005-03-14 13:50:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public final class Complex extends LispObject
         else if (imagpart instanceof LispFloat)
             realpart = LispFloat.coerceToFloat(realpart);
         if (imagpart instanceof Fixnum) {
-            if (((Fixnum)imagpart).getValue() == 0)
+            if (((Fixnum)imagpart).value == 0)
                 return realpart;
         }
         return new Complex(realpart, imagpart);
@@ -112,7 +112,25 @@ public final class Complex extends LispObject
 
     public boolean equalp(LispObject obj) throws ConditionThrowable
     {
-        return isEqualTo(obj);
+        if (this == obj)
+            return true;
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return (realpart.isEqualTo(c.realpart) &&
+                    imagpart.isEqualTo(c.imagpart));
+        }
+        if (obj.numberp()) {
+            // obj is a number, but not complex.
+            if (imagpart instanceof LispFloat) {
+                if (((LispFloat)imagpart).value == 0) {
+                    if (obj instanceof Fixnum)
+                        return ((Fixnum)obj).value == ((LispFloat)realpart).value;
+                    if (obj instanceof LispFloat)
+                        return ((LispFloat)obj).value == ((LispFloat)realpart).value;
+                }
+            }
+        }
+        return false;
     }
 
     public final LispObject incr() throws ConditionThrowable
@@ -191,16 +209,16 @@ public final class Complex extends LispObject
         if (obj.numberp()) {
             // obj is a number, but not complex.
             if (imagpart instanceof LispFloat) {
-                if (((LispFloat)imagpart).getValue() == 0) {
+                if (((LispFloat)imagpart).value == 0) {
                     if (obj instanceof Fixnum)
-                        return ((Fixnum)obj).getValue() == ((LispFloat)realpart).getValue();
+                        return ((Fixnum)obj).value == ((LispFloat)realpart).value;
                     if (obj instanceof LispFloat)
-                        return ((LispFloat)obj).getValue() == ((LispFloat)realpart).getValue();
+                        return ((LispFloat)obj).value == ((LispFloat)realpart).value;
                 }
             }
             return false;
         }
-        signal(new TypeError(obj, "number"));
+        signal(new TypeError(obj, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -212,8 +230,8 @@ public final class Complex extends LispObject
 
     public LispObject ABS() throws ConditionThrowable
     {
-        double real = LispFloat.coerceToFloat(realpart).getValue();
-        double imag = LispFloat.coerceToFloat(imagpart).getValue();
+        double real = LispFloat.coerceToFloat(realpart).value;
+        double imag = LispFloat.coerceToFloat(imagpart).value;
         return new LispFloat(Math.sqrt(real * real + imag * imag));
     }
 
