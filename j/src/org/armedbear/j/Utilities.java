@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Utilities.java,v 1.39 2005-03-01 20:22:19 piso Exp $
+ * $Id: Utilities.java,v 1.40 2005-03-04 18:50:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1517,7 +1517,7 @@ public final class Utilities implements Constants
     public static String getKeyText(char keyChar, int keyCode, int modifiers)
     {
         FastStringBuffer sb = new FastStringBuffer();
-        if (keyChar != 0 && keyChar != 0xffff) {
+        if (keyChar >= ' ' && keyChar != 0xffff) {
             // Mapping is defined by character.
             if (keyChar >= 'A' && keyChar <= 'Z') {
                 sb.append("Shift ");
