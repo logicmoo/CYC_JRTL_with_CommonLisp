@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.13 2003-07-13 13:43:19 piso Exp $
+;;; $Id: defstruct.lisp,v 1.14 2003-07-13 18:09:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,13 +28,14 @@
 (defvar *ds-print-function*)
 
 (defun define-constructor (slots)
-  (let* ((constructor (intern (concatenate 'string "MAKE-" (symbol-name *ds-name*))))
-         (slot-names (mapcar #'(lambda (x) (if (atom x) x (car x))) slots))
-         (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
-         (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
-         (keys (cons '&key slot-descriptions)))
-    `((defun ,constructor ,keys
-        (%make-structure ',*ds-name* (list ,@slot-names))))))
+  (when *ds-constructor*
+    (let* ((constructor (intern *ds-constructor*))
+           (slot-names (mapcar #'(lambda (x) (if (atom x) x (car x))) slots))
+           (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
+           (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
+           (keys (cons '&key slot-descriptions)))
+      `((defun ,constructor ,keys
+          (%make-structure ',*ds-name* (list ,@slot-names)))))))
 
 (defun define-predicate ()
   (let ((pred (intern (concatenate 'string (symbol-name *ds-name*) "-P"))))
@@ -67,11 +68,18 @@
     (:conc-name
      (setf *ds-conc-name* (if (symbolp (cadr option))
                               (cadr option)
-                              (make-symbol (string (cadr option))))))))
+                              (make-symbol (string (cadr option))))))
+    (:constructor
+     (if (cdr option)
+         (if (null (cadr option))
+             (setf *ds-constructor* nil)
+             (setf *ds-constructor* (symbol-name (cadr option))))
+         (setf *ds-constructor* nil)))))
 
 (defun parse-name-and-options (name-and-options)
   (setf *ds-name* (car name-and-options))
   (setf *ds-conc-name* (make-symbol (concatenate 'string (symbol-name *ds-name*) "-")))
+  (setf *ds-constructor* (concatenate 'string "MAKE-" (symbol-name *ds-name*)))
   (let ((options (cdr name-and-options)))
     (dolist (option options)
       (cond ((consp option)
