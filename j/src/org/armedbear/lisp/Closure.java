@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.6 2003-02-25 16:37:49 piso Exp $
+ * $Id: Closure.java,v 1.7 2003-02-28 01:47:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,11 +288,15 @@ public class Closure extends Function
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer("#<CLOSURE ");
+        StringBuffer sb = new StringBuffer("#<CLOSURE LAMBDA ");
         sb.append(parameterList != NIL ? String.valueOf(parameterList) : "()");
-        sb.append(' ');
         try {
-            sb.append(body.car());
+            LispObject code = body;
+            while (code != NIL) {
+                sb.append(' ');
+                sb.append(code.car());
+                code = code.cdr();
+            }
         }
         catch (LispError e) {
             Debug.trace(e);
