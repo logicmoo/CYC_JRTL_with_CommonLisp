@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.74 2004-02-08 18:08:30 piso Exp $
+;;; $Id: clos.lisp,v 1.75 2004-02-08 18:24:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1180,16 +1180,17 @@
     (setf (method-function method) (std-compute-method-function method))
     method))
 
-(defun check-congruent (gf method)
-  (let* ((plist1 (analyze-lambda-list (generic-function-lambda-list gf)))
+(defun lambda-lists-congruent-p (lambda-list1 lambda-list2)
+  (let* ((plist1 (analyze-lambda-list lambda-list1))
          (args1 (getf plist1 :required-args))
-         (plist2 (analyze-lambda-list (method-lambda-list method)))
+         (plist2 (analyze-lambda-list lambda-list2))
          (args2 (getf plist2 :required-args)))
-    (unless (= (length args1) (length args2))
-      (error "lambda lists are not congruent"))))
+    (= (length args1) (length args2))))
 
 (defun add-method (gf method)
-  (check-congruent gf method)
+  (unless (lambda-lists-congruent-p (generic-function-lambda-list gf)
+                                    (method-lambda-list method))
+    (error 'program-error "ADD-METHOD: lambda list of method does not match lambda list of generic function."))
   ;; Remove existing method with same qualifiers and specializers (if any).
   (let ((old-method (find-method gf (method-qualifiers method)
                                  (method-specializers method) nil)))
