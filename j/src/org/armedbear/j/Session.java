@@ -1,8 +1,8 @@
 /*
  * Session.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Session.java,v 1.8 2003-03-20 00:30:39 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Session.java,v 1.9 2003-06-03 17:32:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,13 +28,14 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.xml.sax.AttributeList;
-import org.xml.sax.HandlerBase;
+import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
-import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
-public final class Session extends HandlerBase implements Constants
+public final class Session extends DefaultHandler implements Constants
 {
     private static File sessionDirectory;
 
@@ -299,21 +300,22 @@ public final class Session extends HandlerBase implements Constants
         }
         if (inputStream == null)
             return false;
-        Parser parser = null;
+        XMLReader xmlReader = null;
         try {
-            parser =
-                (Parser) Class.forName("org.armedbear.j.aelfred.SAXDriver").newInstance();
+            String defaultReader = "org.apache.crimson.parser.XMLReaderImpl";
+            xmlReader = XMLReaderFactory.createXMLReader(defaultReader);
+            Log.debug("Session.load xmlReader = " + xmlReader);
         }
         catch (Exception e) {
             Log.error(e);
             return false;
         }
-        if (parser == null)
+        if (xmlReader == null)
             return false;
-        parser.setDocumentHandler(this);
+        xmlReader.setContentHandler(this);
         try {
             InputSource inputSource = new InputSource(inputStream);
-            parser.parse(inputSource);
+            xmlReader.parse(inputSource);
         }
         catch (Exception e) {
             Log.error(e);
@@ -335,42 +337,41 @@ public final class Session extends HandlerBase implements Constants
         return false;
     }
 
-    public void startElement(String name, AttributeList attributes)
-        throws SAXException
+    public void startElement(String uri, String localName, String qName,
+        Attributes attributes) throws SAXException
     {
-        if (name.equals("buffer")) {
+        if (localName.equals("buffer")) {
             currentBufferEntry = new SessionBufferEntry();
-            int limit = attributes.getLength();
-            for (int i = 0; i < limit; i++) {
-                String attName = attributes.getName(i);
-                String attValue = attributes.getValue(i);
-                if (attName.equals("path"))
-                    currentBufferEntry.setPath(attValue);
-                else if (attName.equals("mode"))
-                    currentBufferEntry.setMode(attValue);
-                else if (attName.equals("dot")) {
-                    int index = attValue.indexOf(',');
-                    if (index >= 0) {
-                        String s1 = attValue.substring(0, index);
-                        String s2 = attValue.substring(index + 1);
-                        currentBufferEntry.setDotLineNumber(Integer.parseInt(s1));
-                        currentBufferEntry.setDotOffset(Integer.parseInt(s2));
-                    }
-                } else if (attName.equals("when")) {
-                    try {
-                        currentBufferEntry.setLastActivated(Long.parseLong(attValue));
-                    }
-                    catch (NumberFormatException e) {
-                        Log.error(e);
-                    }
+            String path = attributes.getValue("", "path");
+            currentBufferEntry.setPath(path);
+            String mode = attributes.getValue("", "mode");
+            currentBufferEntry.setMode(mode);
+            String dot = attributes.getValue("", "dot");
+            int index = dot.indexOf(',');
+            if (index >= 0) {
+                String s1 = dot.substring(0, index);
+                String s2 = dot.substring(index + 1);
+                try {
+                    currentBufferEntry.setDotLineNumber(Integer.parseInt(s1));
+                    currentBufferEntry.setDotOffset(Integer.parseInt(s2));
                 }
+                catch (NumberFormatException e) {
+                    Log.error(e);
+                }
+            }
+            String when = attributes.getValue("", "when");
+            try {
+                currentBufferEntry.setLastActivated(Long.parseLong(when));
+            }
+            catch (NumberFormatException e) {
+                Log.error(e);
             }
         }
     }
 
-    public void endElement(String name)
+    public void endElement(String uri, String localName, String qName)
     {
-        if (name.equals("buffer")) {
+        if (localName.equals("buffer")) {
             if (bufferEntries == null)
                 bufferEntries = new ArrayList();
             bufferEntries.add(currentBufferEntry);
