@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.1 2004-02-25 01:50:40 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.2 2004-02-25 03:08:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,14 @@ public final class ComplexBitVector extends AbstractBitVector
 {
     private int capacity;
     private int fillPointer = -1; // -1 indicates no fill pointer.
+    private boolean isDisplaced;
+
+    // For non-displaced bit-vectors.
     private long[] bits;
+
+    // For displaced bit-vectors.
+    private AbstractArray array;
+    private int displacement;
 
     public ComplexBitVector(int capacity) throws ConditionThrowable
     {
@@ -34,6 +41,14 @@ public final class ComplexBitVector extends AbstractBitVector
         if ((capacity & LONG_MASK) != 0)
             ++size;
         bits = new long[size];
+    }
+
+    public ComplexBitVector(int capacity, AbstractArray array, int displacement)
+    {
+        this.capacity = capacity;
+        this.array = array;
+        this.displacement = displacement;
+        isDisplaced = true;
     }
 
     public LispObject typeOf()
@@ -79,6 +94,13 @@ public final class ComplexBitVector extends AbstractBitVector
         }
     }
 
+    public LispObject arrayDisplacement()
+    {
+        if (array != null)
+            return LispThread.currentThread().setValues(array, new Fixnum(displacement));
+        return super.arrayDisplacement();
+    }
+
     public int capacity()
     {
         return capacity;
@@ -93,22 +115,27 @@ public final class ComplexBitVector extends AbstractBitVector
     {
         if (index < 0 || index >= length())
             badIndex(index, length());
-        int offset = index >> 6;
-        return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+        return get(index);
     }
 
     public LispObject get(int index) throws ConditionThrowable
     {
-        if (index >= capacity)
-            badIndex(index, capacity);
-        int offset = index >> 6;
-        return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+        if (bits != null) {
+            if (index >= capacity)
+                badIndex(index, capacity);
+            int offset = index >> 6;
+            return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+        } else
+            return array.getRowMajor(index + displacement);
     }
 
-    protected int getBit(int index)
+    protected int getBit(int index) throws ConditionThrowable
     {
-        int offset = index >> 6;
-        return (bits[offset] & (1L << index)) != 0 ? 1 : 0;
+        if (bits != null) {
+            int offset = index >> 6;
+            return (bits[offset] & (1L << index)) != 0 ? 1 : 0;
+        } else
+            return Fixnum.getValue(array.getRowMajor(index + displacement));
     }
 
     public void set(int index, LispObject newValue) throws ConditionThrowable
@@ -131,54 +158,81 @@ public final class ComplexBitVector extends AbstractBitVector
         signal(new TypeError(newValue, Symbol.BIT));
     }
 
-    protected void setBit(int index)
+    protected void setBit(int index) throws ConditionThrowable
     {
-        int offset = index >> 6;
-        bits[offset] |= 1L << index;
+        if (bits != null) {
+            int offset = index >> 6;
+            bits[offset] |= 1L << index;
+        } else
+            array.setRowMajor(index + displacement, Fixnum.ONE);
     }
 
-    protected void clearBit(int index)
+    protected void clearBit(int index) throws ConditionThrowable
     {
-        int offset = index >> 6;
-        bits[offset] &= ~(1L << index);
+        if (bits != null) {
+            int offset = index >> 6;
+            bits[offset] &= ~(1L << index);
+        } else
+            array.setRowMajor(index + displacement, Fixnum.ZERO);
     }
 
     public void fill(LispObject obj) throws ConditionThrowable
     {
-        try {
-            int n = Fixnum.getValue(obj);
-            if (n == 1) {
-                for (int i = bits.length; i-- > 0;)
-                    bits[i] = -1L;
-                return;
+        if (bits != null) {
+            try {
+                int n = Fixnum.getValue(obj);
+                if (n == 1) {
+                    for (int i = bits.length; i-- > 0;)
+                        bits[i] = -1L;
+                    return;
+                }
+                if (n == 0) {
+                    for (int i = bits.length; i-- > 0;)
+                        bits[i] = 0;
+                    return;
+                }
+                // None of the above...
             }
-            if (n == 0) {
-                for (int i = bits.length; i-- > 0;)
-                    bits[i] = 0;
-                return;
+            catch (ConditionThrowable t) {}
+            signal(new TypeError(obj, Symbol.BIT));
+        } else {
+            try {
+                int n = Fixnum.getValue(obj);
+                if (n == 1) {
+                    for (int i = capacity; i-- > 0;)
+                        setBit(i);
+                    return;
+                }
+                if (n == 0) {
+                    for (int i = capacity; i-- > 0;)
+                        clearBit(i);
+                    return;
+                }
+                // None of the above...
             }
-            // None of the above...
+            catch (ConditionThrowable t) {}
+            signal(new TypeError(obj, Symbol.BIT));
         }
-        catch (ConditionThrowable t) {}
-        signal(new TypeError(obj, "bit"));
     }
 
     public void shrink(int n) throws ConditionThrowable
     {
-        if (n < capacity) {
-            int size = n >>> 6;
-            if ((n & LONG_MASK) != 0)
-                ++size;
-            if (size < bits.length) {
-                long[] newbits = new long[size];
-                System.arraycopy(bits, 0, newbits, 0, size);
-                bits = newbits;
+        if (bits != null) {
+            if (n < capacity) {
+                int size = n >>> 6;
+                if ((n & LONG_MASK) != 0)
+                    ++size;
+                if (size < bits.length) {
+                    long[] newbits = new long[size];
+                    System.arraycopy(bits, 0, newbits, 0, size);
+                    bits = newbits;
+                }
+                capacity = n;
+                return;
             }
-            capacity = n;
-            return;
+            if (n == capacity)
+                return;
         }
-        if (n == capacity)
-            return;
         signal(new LispError());
     }
 
@@ -221,16 +275,33 @@ public final class ComplexBitVector extends AbstractBitVector
         return new Fixnum(fp);
     }
 
-    private final void ensureCapacity(int minCapacity)
+    private final void ensureCapacity(int minCapacity) throws ConditionThrowable
     {
-        if (capacity < minCapacity) {
-            int size = minCapacity >>> 6;
-            if ((minCapacity & LONG_MASK) != 0)
-                ++size;
-            long[] newBits = new long[size];
-            System.arraycopy(bits, 0, newBits, 0, bits.length);
-            bits = newBits;
-            capacity = minCapacity;
+        if (bits != null) {
+            if (capacity < minCapacity) {
+                int size = minCapacity >>> 6;
+                if ((minCapacity & LONG_MASK) != 0)
+                    ++size;
+                long[] newBits = new long[size];
+                System.arraycopy(bits, 0, newBits, 0, bits.length);
+                bits = newBits;
+                capacity = minCapacity;
+            }
+        } else {
+            Debug.assertTrue(array != null);
+            if (array.getTotalSize() - displacement < minCapacity) {
+                // Copy array.
+                int size = minCapacity >>> 6;
+                if ((minCapacity & LONG_MASK) != 0)
+                    ++size;
+                bits = new long[size];
+                for (int i = 0; i < capacity; i++)
+                    bits[i] = Fixnum.getValue(array.getRowMajor(displacement + i));
+                capacity = minCapacity;
+                array = null;
+                displacement = 0;
+                isDisplaced = false;
+            }
         }
     }
 }
