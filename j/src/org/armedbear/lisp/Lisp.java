@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.258 2004-06-23 01:46:03 piso Exp $
+ * $Id: Lisp.java,v 1.259 2004-06-23 01:51:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1486,12 +1486,7 @@ public abstract class Lisp
 
     public static final Stream getStandardOutput() throws ConditionThrowable
     {
-        return checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValueNoThrow());
-    }
-
-    public static final Stream getTraceOutput()
-    {
-        return (Stream) _TRACE_OUTPUT_.symbolValueNoThrow();
+        return checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
     }
 
     public static final Symbol _READTABLE_ =
