@@ -2,7 +2,7 @@
  * AtomicTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AtomicTypeSpecifier.java,v 1.4 2003-08-14 01:57:45 piso Exp $
+ * $Id: AtomicTypeSpecifier.java,v 1.5 2003-09-11 16:42:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,25 +30,21 @@ public class AtomicTypeSpecifier extends TypeSpecifier
         type = Type.getInstance(symbol);
     }
 
-    public final Type getType()
+    public final Type TYPE()
     {
         return type;
     }
 
     public LispObject test(LispObject obj) throws LispError
     {
-        throw new LispError(String.valueOf(getClass()) + ".test(): not implemented");
+        throw new LispError(String.valueOf(getClass()) +
+                            ".test(): not implemented");
     }
 
     public LispObject isSubtypeOf(TypeSpecifier ts) throws LispError
     {
-        if (ts instanceof UnspecifiedTypeSpecifier) {
-            LispObject[] values = new LispObject[2];
-            values[0] = T;
-            values[1] = T;
-            LispThread.currentThread().setValues(values);
-            return T;
-        }
+        if (ts instanceof UnspecifiedTypeSpecifier)
+            return values(NIL, NIL);
         if (ts instanceof AtomicTypeSpecifier) {
             AtomicTypeSpecifier ats = (AtomicTypeSpecifier) ts;
             return type.isSubtypeOf(ats.type);
@@ -59,10 +55,6 @@ public class AtomicTypeSpecifier extends TypeSpecifier
             if (otherType != null)
                 return type.isSubtypeOf(otherType);
         }
-        LispObject[] values = new LispObject[2];
-        values[0] = NIL;
-        values[1] = NIL;
-        LispThread.currentThread().setValues(values);
-        return NIL;
+        return values(NIL, NIL);
     }
 }
