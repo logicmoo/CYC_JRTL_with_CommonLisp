@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.102 2005-01-11 18:03:43 piso Exp $
+ * $Id: Stream.java,v 1.103 2005-01-13 12:31:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -493,8 +493,11 @@ public class Stream extends LispObject
                 return signal(new ReaderError("No dimensions argument to #A."));
             case 0:
                 return new ZeroRankArray(T, obj, false);
-            case 1:
-                return new SimpleVector(obj);
+            case 1: {
+                if (obj.listp() || obj instanceof AbstractVector)
+                    return new SimpleVector(obj);
+                return signal(new ReaderError(obj.writeToString() + " is not a sequence."));
+            }
             default:
                 return new SimpleArray(rank, obj);
         }
