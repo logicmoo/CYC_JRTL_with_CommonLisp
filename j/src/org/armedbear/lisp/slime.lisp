@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.22 2004-09-16 18:35:38 piso Exp $
+;;; $Id: slime.lisp,v 1.23 2004-09-17 00:46:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -93,12 +93,12 @@
       (status "Killed")
       (return))
     (when (probe-file (swank-protocol:port-file))
-      (with-open-file (s (swank-protocol:port-file)
-                         :direction :input)
-        (let ((port (read s)))
-          (when (connect "127.0.0.1" port)
-            (status "Slime connected!")
-            (return)))))
+      (let ((port (with-open-file (s (swank-protocol:port-file)
+                                     :direction :input)
+                    (read s))))
+        (when (connect "127.0.0.1" port)
+          (status "Slime connected!")
+          (return))))
     (sleep 1)))
 
 (defun slime ()
