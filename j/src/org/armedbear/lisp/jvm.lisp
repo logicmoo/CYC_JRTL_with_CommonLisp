@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.167 2004-05-24 17:28:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.168 2004-05-24 17:32:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1024,7 +1024,7 @@
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (format nil "(FIND-PACKAGE ~S)" (package-name obj)))
+         (s (format nil "#.(FIND-PACKAGE ~S)" (package-name obj)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc
