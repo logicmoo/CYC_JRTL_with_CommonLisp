@@ -2,7 +2,7 @@
  * Dispatcher.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Dispatcher.java,v 1.11 2004-04-12 17:33:00 piso Exp $
+ * $Id: Dispatcher.java,v 1.12 2004-06-27 14:14:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -929,7 +929,7 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
     }
 
     // Only used on Unix.
-    private static Cursor getCursorForAction(int action)
+    public static Cursor getCursorForAction(int action)
     {
         int index;
         if (action == DnDConstants.ACTION_COPY)
