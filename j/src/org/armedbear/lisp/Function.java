@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.40 2004-11-03 15:06:03 piso Exp $
+ * $Id: Function.java,v 1.41 2004-12-17 17:15:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,6 +180,12 @@ public abstract class Function extends Functional
             return sb.toString();
         } else
             return unreadableString("FUNCTION");
+    }
+
+    // Used by the JVM compiler.
+    public final void argCountError() throws ConditionThrowable
+    {
+        signal(new WrongNumberOfArgumentsException(this));
     }
 
     // Profiling.
