@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.138 2004-01-20 00:58:32 piso Exp $
+ * $Id: Autoload.java,v 1.139 2004-01-20 02:27:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,6 +223,8 @@ public class Autoload extends Function
         autoload("delete-file", "delete_file");
         autoload("delete-package", "PackageFunctions");
         autoload("describe", "describe");
+        autoload("echo-stream-input-stream", "EchoStream");
+        autoload("echo-stream-output-stream", "EchoStream");
         autoload("file-author", "file_author");
         autoload("file-error-pathname", "file_error_pathname");
         autoload("file-write-date", "file_write_date");
@@ -260,6 +262,7 @@ public class Autoload extends Function
         autoload("logorc2", "logorc2");
         autoload("logtest", "logtest");
         autoload("logxor", "logxor");
+        autoload("make-echo-stream", "EchoStream");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-string-output-stream", "StringOutputStream");
         autoload("open-stream-p", "open_stream_p");
