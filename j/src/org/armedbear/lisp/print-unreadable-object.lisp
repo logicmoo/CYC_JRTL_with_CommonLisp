@@ -1,7 +1,7 @@
 ;;; print-unreadable-object.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: print-unreadable-object.lisp,v 1.6 2004-11-21 16:02:45 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: print-unreadable-object.lisp,v 1.7 2005-02-22 05:51:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,17 +25,17 @@
   (setf stream (out-synonym-of stream))
   (when *print-readably*
     (error 'print-not-readable :object object))
-  (%format stream "#<")
+  (format stream "#<")
   (when type
-    (%format stream "~S" (type-of object))
-      (%format stream " "))
+    (format stream "~S" (type-of object))
+      (format stream " "))
   (when body
     (funcall body))
   (when identity
     (when (or body (not type))
-      (%format stream " "))
-    (%format stream "{~X}" (identity-hash-code object)))
-  (%format stream ">")
+      (format stream " "))
+    (format stream "{~X}" (identity-hash-code object)))
+  (format stream ">")
   nil)
 
 (defmacro print-unreadable-object ((object stream &key type identity) &body body)
