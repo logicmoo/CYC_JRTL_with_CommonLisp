@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.2 2003-08-10 00:34:49 piso Exp $
+ * $Id: Pathname.java,v 1.3 2003-08-10 00:43:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class Pathname extends LispObject
         namestring = sb.toString();
     }
 
-    private String getNamestring()
+    public String getNamestring()
     {
         return namestring;
     }
