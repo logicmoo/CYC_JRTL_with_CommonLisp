@@ -237,6 +237,7 @@ integer-length
 integerp
 intern
 intersection
+invoke-debugger
 invoke-restart
 keywordp
 labels
