@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.153 2004-02-10 15:54:12 piso Exp $
+ * $Id: Autoload.java,v 1.154 2004-02-12 10:27:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,7 +209,7 @@ public class Autoload extends Function
     static {
         autoload("array-displacement", "DisplacedArray");
         autoload("ash", "ash");
-        autoload("atan", "atan");
+        autoload("atan", "MathFunctions");
         autoload("broadcast-stream-streams", "BroadcastStream");
         autoload("cell-error-name", "cell_error_name");
         autoload("char-equal", "CharacterFunctions");
@@ -220,11 +220,13 @@ public class Autoload extends Function
         autoload("char=", "CharacterFunctions");
         autoload("clrhash", "HashTable");
         autoload("copy-structure", "StructureObject");
+        autoload("cos", "MathFunctions");
         autoload("delete-file", "delete_file");
         autoload("delete-package", "PackageFunctions");
         autoload("describe", "describe");
         autoload("echo-stream-input-stream", "EchoStream");
         autoload("echo-stream-output-stream", "EchoStream");
+        autoload("exp", "MathFunctions");
         autoload("file-author", "file_author");
         autoload("file-error-pathname", "file_error_pathname");
         autoload("file-length", "file_length");
@@ -251,6 +253,7 @@ public class Autoload extends Function
         autoload("list-all-packages", "PackageFunctions");
         autoload("listen", "listen");
         autoload("load-logical-pathname-translations", "LogicalPathname");
+        autoload("log", "MathFunctions");
         autoload("logand", "logand");
         autoload("logandc1", "logandc1");
         autoload("logandc2", "logandc2");
@@ -288,10 +291,13 @@ public class Autoload extends Function
         autoload("room", "room");
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
+        autoload("sin", "MathFunctions");
+        autoload("sqrt", "MathFunctions");
         autoload("stream-element-type", "stream_element_type");
         autoload("stream-external-format", "stream_external_format");
         autoload("sxhash", "HashTable");
         autoload("synonym-stream-symbol", "SynonymStream");
+        autoload("tan", "MathFunctions");
         autoload("truename", "probe_file");
         autoload("unbound-slot-instance", "unbound_slot_instance");
         autoload("unexport", "PackageFunctions");
