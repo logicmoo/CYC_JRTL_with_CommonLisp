@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.648 2004-06-03 18:53:12 piso Exp $
+ * $Id: Primitives.java,v 1.649 2004-06-04 00:35:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3101,9 +3101,9 @@ public final class Primitives extends Lisp
                 return result;
             }
             catch (Throw t) {
-                if (t.getTag() == tag) {
+                if (t.tag == tag) {
                     thread.setStackDepth(depth);
-                    return t.getResult();
+                    return t.getResult(thread);
                 }
                 throw t;
             }
@@ -3122,15 +3122,13 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
-            if (args.length() < 2)
+            if (args.length() != 2)
                 signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
-            LispObject tag = eval(args.car(), env, thread);
-            LispObject result = eval(args.cadr(), env, thread);
-            if (thread.isValidCatchTag(tag))
-                throw new Throw(tag, result);
-            else
-                return Throw.signalInvalidTag(tag);
+            thread.throwToTag(eval(args.car(), env, thread),
+                              eval(args.cadr(), env, thread));
+            // Not reached.
+            return NIL;
         }
     };
 
