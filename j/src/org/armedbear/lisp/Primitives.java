@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.630 2004-04-18 04:51:36 piso Exp $
+ * $Id: Primitives.java,v 1.631 2004-04-19 17:51:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3526,7 +3526,7 @@ public final class Primitives extends Lisp
             Stream stream = checkStream(args[0]);
             if (length > 1) {
                 if ((length - 1) % 2 != 0)
-                    signal(new ProgramError("odd number of keyword arguments"));
+                    signal(new ProgramError("Odd number of keyword arguments."));
                 if (length > 3)
                     signal(new WrongNumberOfArgumentsException(this));
                 if (args[1] == Keyword.ABORT)
