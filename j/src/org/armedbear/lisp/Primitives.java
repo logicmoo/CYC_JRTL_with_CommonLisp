@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.476 2003-10-16 00:32:26 piso Exp $
+ * $Id: Primitives.java,v 1.477 2003-10-16 19:40:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3174,12 +3174,13 @@ public final class Primitives extends Module
         }
     };
 
-    // ### multiple-value-seq
+    // ### multiple-value-setq
     // multiple-value-setq vars form => result
     // Result is the primary value returned by the form.
     // Should be a macro.
     private static final SpecialOperator MULTIPLE_VALUE_SETQ =
-        new SpecialOperator("multiple-value-setq") {
+        new SpecialOperator("multiple-value-setq")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3230,7 +3231,8 @@ public final class Primitives extends Module
 
     // ### multiple-value-prog1
     private static final SpecialOperator MULTIPLE_VALUE_PROG1 =
-        new SpecialOperator("multiple-value-prog1") {
+        new SpecialOperator("multiple-value-prog1")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3248,7 +3250,8 @@ public final class Primitives extends Module
 
     // ### multiple-value-call
     private static final SpecialOperator MULTIPLE_VALUE_CALL =
-        new SpecialOperator("multiple-value-call") {
+        new SpecialOperator("multiple-value-call")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
