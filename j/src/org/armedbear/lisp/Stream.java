@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.49 2004-03-12 01:59:00 piso Exp $
+ * $Id: Stream.java,v 1.50 2004-03-12 17:31:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,7 +216,7 @@ public class Stream extends LispObject
                 int n = _readChar();
                 if (n >= 0) {
                     char c = (char) n;
-                    if (!Character.isWhitespace(c))
+                    if (!currentReadtable().isWhitespace(c))
                         _unreadChar(c);
                 }
             }
@@ -232,6 +232,7 @@ public class Stream extends LispObject
                                                boolean recursive)
         throws ConditionThrowable
     {
+        final Readtable rt = currentReadtable();
         while (true) {
             int n = _readChar();
             if (n < 0) {
@@ -241,7 +242,7 @@ public class Stream extends LispObject
                     return eofValue;
             }
             char c = (char) n;
-            if (Character.isWhitespace(c))
+            if (rt.isWhitespace(c))
                 continue;
             LispObject result = processChar(c);
             if (result != null)
@@ -251,7 +252,7 @@ public class Stream extends LispObject
 
     private LispObject processChar(char c) throws ConditionThrowable
     {
-        LispObject handler = getCurrentReadtable().getReaderMacroFunction(c);
+        LispObject handler = currentReadtable().getReaderMacroFunction(c);
         if (handler instanceof ReaderMacroFunction)
             return ((ReaderMacroFunction)handler).execute(this, c);
         switch (c) {
@@ -354,7 +355,7 @@ public class Stream extends LispObject
             case '`':
                 return true;
             default:
-                return Character.isWhitespace(c);
+                return currentReadtable().isWhitespace(c);
         }
     }
 
@@ -394,7 +395,7 @@ public class Stream extends LispObject
             numArg = numArg * 10 + c - '0';
         }
         LispObject fun =
-            getCurrentReadtable().getDispatchMacroCharacter('#', c);
+            currentReadtable().getDispatchMacroCharacter('#', c);
         if (fun != NIL) {
             LispObject[] args = new LispObject[3];
             final LispThread thread = LispThread.currentThread();
@@ -471,12 +472,13 @@ public class Stream extends LispObject
         char c = (char) n;
         StringBuffer sb = new StringBuffer();
         sb.append(c);
+        Readtable rt = currentReadtable();
         while (true) {
             n = _readChar();
             if (n < 0)
                 break;
             c = (char) n;
-            if (Character.isWhitespace(c))
+            if (rt.isWhitespace(c))
                 break;
             if (c == '(' || c == ')') {
                 _unreadChar(c);
@@ -616,7 +618,7 @@ public class Stream extends LispObject
 
     private final String readToken(StringBuffer sb) throws ConditionThrowable
     {
-        LispObject readtableCase = getCurrentReadtable().getReadtableCase();
+        LispObject readtableCase = currentReadtable().getReadtableCase();
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
             char c = sb.charAt(0);
@@ -634,13 +636,14 @@ public class Stream extends LispObject
                 sb.setCharAt(0, Utilities.toLowerCase(c));
             }
         }
+        final Readtable rt = currentReadtable();
       loop:
         while (true) {
             int n = _readChar();
             if (n < 0)
                 break;
             char c = (char) n;
-            if (Character.isWhitespace(c))
+            if (rt.isWhitespace(c))
                 break;
             switch (c) {
                 case '(':
@@ -879,6 +882,7 @@ public class Stream extends LispObject
 
     private char flushWhitespace() throws ConditionThrowable
     {
+        final Readtable rt = currentReadtable();
         while (true) {
             int n = _readChar();
             if (n < 0) {
@@ -887,7 +891,7 @@ public class Stream extends LispObject
                 return 0;
             }
             char c = (char) n;
-            if (!Character.isWhitespace(c))
+            if (!rt.isWhitespace(c))
                 return c;
         }
     }

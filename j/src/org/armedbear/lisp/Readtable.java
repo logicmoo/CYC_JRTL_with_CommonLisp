@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.16 2004-03-12 02:36:54 piso Exp $
+ * $Id: Readtable.java,v 1.17 2004-03-12 17:31:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,9 @@ public final class Readtable extends LispObject
     private static final byte ATTR_WHITESPACE            = 1;
     private static final byte ATTR_TERMINATING_MACRO     = 2;
     private static final byte ATTR_NON_TERMINATING_MACRO = 3;
+    private static final byte ATTR_SINGLE_ESCAPE         = 4;
+    private static final byte ATTR_MULTIPLE_ESCAPE       = 5;
+    private static final byte ATTR_INVALID               = 6;
 
     private final byte[] attributes = new byte[CHAR_MAX];
     private final Function[] readerMacroFunctions = new Function[CHAR_MAX];
@@ -53,6 +56,9 @@ public final class Readtable extends LispObject
         attributes['`']  = ATTR_TERMINATING_MACRO;
 
         attributes['#']  = ATTR_NON_TERMINATING_MACRO;
+
+        attributes['\\'] = ATTR_SINGLE_ESCAPE;
+        attributes['|']  = ATTR_MULTIPLE_ESCAPE;
 
         readerMacroFunctions[';']  = LispReader.READ_COMMENT;
         readerMacroFunctions['"']  = LispReader.READ_STRING;
@@ -88,6 +94,42 @@ public final class Readtable extends LispObject
         to.readtableCase = from.readtableCase;
     }
 
+    public LispObject typeOf()
+    {
+        return Symbol.READTABLE;
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.READTABLE;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.READTABLE)
+            return T;
+        if (type == BuiltInClass.READTABLE)
+            return T;
+        return super.typep(type);
+    }
+
+    public String toString()
+    {
+        return unreadableString("READTABLE");
+    }
+
+    public LispObject getReadtableCase()
+    {
+        return readtableCase;
+    }
+
+    public boolean isWhitespace(char c)
+    {
+        if (c < CHAR_MAX)
+            return attributes[c] == ATTR_WHITESPACE;
+        return false;
+    }
+
     public LispObject getReaderMacroFunction(char c)
     {
         if (c < CHAR_MAX)
@@ -112,35 +154,6 @@ public final class Readtable extends LispObject
         }
         LispThread.currentThread().setValues(values);
         return values[0];
-    }
-
-    public LispObject getReadtableCase()
-    {
-        return readtableCase;
-    }
-
-    public LispObject typeOf()
-    {
-        return Symbol.READTABLE;
-    }
-
-    public LispClass classOf()
-    {
-        return BuiltInClass.READTABLE;
-    }
-
-    public LispObject typep(LispObject type) throws ConditionThrowable
-    {
-        if (type == Symbol.READTABLE)
-            return T;
-        if (type == BuiltInClass.READTABLE)
-            return T;
-        return super.typep(type);
-    }
-
-    public String toString()
-    {
-        return unreadableString("READTABLE");
     }
 
     public LispObject getDispatchMacroCharacter(char dispChar, char subChar)
@@ -202,7 +215,7 @@ public final class Readtable extends LispObject
     {
         public LispObject execute()
         {
-            return new Readtable(getCurrentReadtable());
+            return new Readtable(currentReadtable());
         }
 
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -233,7 +246,7 @@ public final class Readtable extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             char c = LispCharacter.getValue(arg);
-            Readtable rt = getCurrentReadtable();
+            Readtable rt = currentReadtable();
             return rt.getMacroCharacter(c);
         }
 
@@ -263,7 +276,7 @@ public final class Readtable extends LispObject
             if (args.length == 3)
                 readtable = checkReadtable(args[2]);
             else
-                readtable = getCurrentReadtable();
+                readtable = currentReadtable();
             return readtable.getDispatchMacroCharacter(dispChar, subChar);
         }
     };
@@ -286,7 +299,7 @@ public final class Readtable extends LispObject
             if (args.length == 4)
                 readtable = checkReadtable(args[3]);
             else
-                readtable = getCurrentReadtable();
+                readtable = currentReadtable();
             return readtable.setDispatchMacroCharacter(dispChar, subChar, function);
         }
     };
