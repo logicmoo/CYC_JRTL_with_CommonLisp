@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.29 2004-02-28 15:32:07 piso Exp $
+;;; $Id: precompiler.lisp,v 1.30 2004-02-28 18:41:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -111,6 +111,15 @@
 
 (define-compiler-macro byte-position (bytespec)
   `(cdr ,bytespec))
+
+(define-compiler-macro ldb (&whole form bytespec integer)
+  (if (and (consp bytespec)
+           (eq (car bytespec) 'byte)
+           (= (length bytespec) 3))
+      (let ((size (second bytespec))
+            (position (third bytespec)))
+        `(sys::%ldb ,size ,position ,integer))
+      form))
 
 (in-package "EXTENSIONS")
 
