@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.21 2003-07-29 18:47:50 piso Exp $
+ * $Id: LispObject.java,v 1.22 2003-08-01 02:04:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,6 +134,11 @@ public class LispObject extends Lisp
     }
 
     public LispObject getSymbolFunction() throws LispError
+    {
+        throw new TypeError(this, "symbol");
+    }
+
+    public LispObject getSymbolFunctionOrDie() throws LispError
     {
         throw new TypeError(this, "symbol");
     }
