@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.37 2003-04-09 16:44:41 piso Exp $
+;;; $Id: boot.lisp,v 1.38 2003-04-09 18:10:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -145,7 +145,7 @@
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
   (cond ((eq direction :input)
-         (%open-input-file filename))
+         (%open-input-file filename element-type))
         ((eq direction :output)
          (%open-output-file filename element-type if-exists))
         (t
