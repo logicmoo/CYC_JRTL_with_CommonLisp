@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.3 2002-10-13 17:11:51 piso Exp $
+ * $Id: CommandTable.java,v 1.4 2002-10-14 16:30:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,6 +297,7 @@ public class CommandTable
             addCommand("openFileInOtherFrame", "OpenFileDialog");
             addCommand("p4", "P4");
             addCommand("p4Add", "P4", "add");
+            addCommand("p4Change", "P4", "change");
             addCommand("p4Diff", "P4", "diff");
             addCommand("p4DiffDir", "P4", "diffDir");
             addCommand("p4Edit", "P4", "edit");
