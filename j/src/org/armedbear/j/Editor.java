@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.95 2003-07-18 16:32:59 piso Exp $
+ * $Id: Editor.java,v 1.96 2003-07-18 16:52:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3599,6 +3599,7 @@ public final class Editor extends JPanel implements Constants,
             sb.append(dotLine.substring(getDotOffset()));
             dotLine.setText(sb.toString());
             dot.moveRight();
+            moveCaretToDotCol();
             buffer.modified();
         }
         finally {
@@ -3616,10 +3617,9 @@ public final class Editor extends JPanel implements Constants,
             return;
         repaintNow();
         int c = parseNumericInput(input);
-        if (c >= 0 && c < 0xfffe) {
+        if (c >= 0 && c < 0xfffe)
             insertChar((char) c);
-            moveCaretToDotCol();
-        } else
+        else
             MessageDialog.showMessageDialog(this, "Invalid character", "Insert Character");
     }
 
@@ -3639,7 +3639,6 @@ public final class Editor extends JPanel implements Constants,
             try {
                 String s = new String(bytes, encoding);
                 insertChar(s.charAt(0));
-                moveCaretToDotCol();
             }
             catch (UnsupportedEncodingException e) {
                 Log.error(e);
