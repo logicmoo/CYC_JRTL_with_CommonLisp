@@ -1,8 +1,8 @@
 /*
  * Completion.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Completion.java,v 1.2 2003-01-04 17:47:47 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Completion.java,v 1.3 2003-04-10 18:54:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@ public final class Completion
                     if (toBeAdded.startsWith(parentDirName))
                         toBeAdded = parentPrefix + toBeAdded.substring(parentDirName.length());
                 }
-                toBeAdded = Utilities.escapeSpaces(toBeAdded);
+                toBeAdded = Utilities.escapeSpacesAndParens(toBeAdded);
                 if (file.isDirectory())
                     toBeAdded += separatorChar;
                 list.add(toBeAdded);
