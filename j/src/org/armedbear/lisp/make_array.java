@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.23 2004-03-04 02:01:45 piso Exp $
+ * $Id: make_array.java,v 1.24 2004-03-09 11:10:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,16 +98,14 @@ public final class make_array extends Primitive
         }
         if (rank == 1) {
             final int size = dimv[0];
-            int limit =
-                Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
-            if (size < 0 || size >= limit) {
+            if (size < 0 || size >= ARRAY_DIMENSION_MAX) {
                 StringBuffer sb = new StringBuffer();
                 sb.append("The size specified for this array (");
                 sb.append(size);
                 sb.append(')');
-                if (size >= limit) {
+                if (size >= ARRAY_DIMENSION_MAX) {
                     sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
-                    sb.append(limit);
+                    sb.append(ARRAY_DIMENSION_MAX);
                     sb.append(").");
                 } else
                     sb.append(" is negative.");
