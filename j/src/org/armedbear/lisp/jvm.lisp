@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.171 2004-05-29 20:51:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.172 2004-05-30 19:07:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -277,9 +277,7 @@
 
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
-  (emit 'aload *thread*)
-  (emit 'aconst_null)
-  (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;"))
+  (emit 'clear-values))
 
 (defun generate-interrupt-check ()
   (let ((label1 (gensym)))
@@ -558,7 +556,22 @@
 
 ;; CODE is a list of INSTRUCTIONs.
 (defun resolve-opcodes (code)
-  (map 'vector #'resolve-args code))
+;;   (map 'vector #'resolve-args code))
+  (let ((vector (make-array 512 :fill-pointer 0 :adjustable t)))
+    (dotimes (index (length code) vector)
+      (let ((instruction (svref code index)))
+        (case (instruction-opcode instruction)
+          (205 ; CLEAR-VALUES
+           (let ((instructions
+                  (list
+                   (inst 'aload *thread*)
+                   (inst 'aconst_null)
+                   (inst 'putfield (list +lisp-thread-class+ "_values"
+                                         "[Lorg/armedbear/lisp/LispObject;")))))
+             (dolist (instruction instructions)
+               (vector-push-extend (resolve-args instruction) vector))))
+          (t
+           (vector-push-extend (resolve-args instruction) vector)))))))
 
 (defun branch-opcode-p (opcode)
   (member opcode
@@ -573,7 +586,7 @@
   (do* ((i start-index (1+ i))
         (limit (length code)))
        ((>= i limit) depth)
-    (let ((instruction (svref code i)))
+    (let ((instruction (aref code i)))
       (when (instruction-depth instruction)
         (return-from walk-code))
       (setf (instruction-depth instruction) depth)
@@ -588,7 +601,7 @@
 (defun analyze-stack ()
   (sys::require-type *code* 'vector)
   (dotimes (i (length *code*))
-    (let* ((instruction (svref *code* i))
+    (let* ((instruction (aref *code* i))
            (opcode (instruction-opcode instruction)))
       (when (eql opcode 202)
         (let ((label (car (instruction-args instruction))))
@@ -598,7 +611,7 @@
   (walk-code *code* 0 0)
   (let ((max-stack 0))
     (dotimes (i (length *code*))
-      (let ((instruction (svref *code* i)))
+      (let ((instruction (aref *code* i)))
         (setf max-stack (max max-stack (instruction-depth instruction)))))
 ;;     (format t "max-stack = ~D~%" max-stack)
     max-stack))
@@ -627,81 +640,103 @@
     (print-code))
   (loop
     (let ((changed-p nil))
-      ;; Make a list of the labels that are actually branched to.
-      (let ((branch-targets ()))
+      (let ((locally-changed-p nil)
+            (branch-targets ()))
+        ;; Make a list of the labels that are actually branched to.
         (dotimes (i (length *code*))
           (let ((instruction (svref *code* i)))
             (when (branch-opcode-p (instruction-opcode instruction))
               (push (car (instruction-args instruction)) branch-targets))))
-;;         (format t "branch-targets = ~S~%" branch-targets)
         ;; Remove labels that are not used as branch targets.
         (dotimes (i (length *code*))
           (let ((instruction (svref *code* i)))
             (when (= (instruction-opcode instruction) 202) ; LABEL
               (let ((label (car (instruction-args instruction))))
-                (unless (member label branch-targets)
-                  (setf (instruction-opcode instruction) 0)'
-                  (setf changed-p t)))))))
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
-      (dotimes (i (length *code*))
-        (let ((instruction (svref *code* i)))
-          (when (and (< i (1- (length *code*)))
-                     (= (instruction-opcode instruction) 167) ; GOTO
-                     (let ((next-instruction (svref *code* (1+ i))))
-                       (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
-                                   (eq (car (instruction-args instruction))
-                                       (car (instruction-args next-instruction))))
-                              ;; GOTO next instruction.
-                              (setf (instruction-opcode instruction) 0)
-                              (setf changed-p t))
-                             ((= (instruction-opcode next-instruction) 167) ; GOTO
-                              ;; One GOTO right after another.
-                              (setf (instruction-opcode next-instruction) 0)
-                              (setf changed-p t))
-                              ))))))
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+                (unless (memq label branch-targets)
+                  (setf (instruction-opcode instruction) 0)
+                  (setf locally-changed-p t))))))
+        (when locally-changed-p
+          (setf *code* (delete 0 *code* :key #'instruction-opcode))
+          (setf changed-p t)))
+      (let ((locally-changed-p nil))
+        (dotimes (i (length *code*))
+          (let ((instruction (svref *code* i)))
+            (when (and (< i (1- (length *code*)))
+                       (= (instruction-opcode instruction) 167) ; GOTO
+                       (let ((next-instruction (svref *code* (1+ i))))
+                         (cond ((and (= (instruction-opcode next-instruction) 202) ; LABEL
+                                     (eq (car (instruction-args instruction))
+                                         (car (instruction-args next-instruction))))
+                                ;; GOTO next instruction.
+                                (setf (instruction-opcode instruction) 0)
+                                (setf locally-changed-p t))
+                               ((= (instruction-opcode next-instruction) 167) ; GOTO
+                                ;; One GOTO right after another.
+                                (setf (instruction-opcode next-instruction) 0)
+                                (setf locally-changed-p t))))))))
+        (when locally-changed-p
+          (setf *code* (delete 0 *code* :key #'instruction-opcode))
+          (setf changed-p t)))
       ;; Reduce GOTOs.
       (validate-labels)
-      (dotimes (i (length *code*))
-        (let ((instruction (svref *code* i)))
-          (when (eql (instruction-opcode instruction) 167) ; GOTO
-            (let* ((label (car (instruction-args instruction)))
-                   (target-index (1+ (symbol-value label)))
-                   (instr1 (svref *code* target-index))
-                   (instr2 (if (eql (instruction-opcode instr1) 203) ; PUSH-VALUE
-                               (svref *code* (1+ target-index))
-                               nil)))
-              (when (and instr2 (eql (instruction-opcode instr2) 176)) ; ARETURN
-                (let ((previous-instruction (svref *code* (1- i))))
-                  (when (eql (instruction-opcode previous-instruction) 204) ; STORE-VALUE
-                    (setf (instruction-opcode previous-instruction) 176) ; ARETURN
-                    (setf (instruction-opcode instruction) 0)
-                    (setf changed-p t))))))))
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      (let ((locally-changed-p nil))
+        (dotimes (i (length *code*))
+          (let ((instruction (svref *code* i)))
+            (when (eql (instruction-opcode instruction) 167) ; GOTO
+              (let* ((label (car (instruction-args instruction)))
+                     (target-index (1+ (symbol-value label)))
+                     (instr1 (svref *code* target-index))
+                     (instr2 (if (eql (instruction-opcode instr1) 203) ; PUSH-VALUE
+                                 (svref *code* (1+ target-index))
+                                 nil)))
+                (when (and instr2 (eql (instruction-opcode instr2) 176)) ; ARETURN
+                  (let ((previous-instruction (svref *code* (1- i))))
+                    (when (eql (instruction-opcode previous-instruction) 204) ; STORE-VALUE
+                      (setf (instruction-opcode previous-instruction) 176) ; ARETURN
+                      (setf (instruction-opcode instruction) 0)
+                      (setf locally-changed-p t))))))))
+        (when locally-changed-p
+          (setf *code* (delete 0 *code* :key #'instruction-opcode))
+          (setf changed-p t)))
       ;; Look for sequence STORE-VALUE LOAD-VALUE ARETURN.
-      (dotimes (i (- (length *code*) 2))
-        (let ((instr1 (svref *code* i))
-              (instr2 (svref *code* (+ i 1)))
-              (instr3 (svref *code* (+ i 2))))
-          (when (and (eql (instruction-opcode instr1) 204)
-                     (eql (instruction-opcode instr2) 203)
-                     (eql (instruction-opcode instr3) 176))
-            (setf (instruction-opcode instr1) 176)
-            (setf (instruction-opcode instr2) 0)
-            (setf (instruction-opcode instr3) 0)
-            (setf changed-p t))))
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+      (let ((locally-changed-p nil))
+        (dotimes (i (- (length *code*) 2))
+          (let ((instr1 (svref *code* i))
+                (instr2 (svref *code* (+ i 1)))
+                (instr3 (svref *code* (+ i 2))))
+            (when (and (eql (instruction-opcode instr1) 204)
+                       (eql (instruction-opcode instr2) 203)
+                       (eql (instruction-opcode instr3) 176))
+              (setf (instruction-opcode instr1) 176)
+              (setf (instruction-opcode instr2) 0)
+              (setf (instruction-opcode instr3) 0)
+              (setf locally-changed-p t))))
+        (when locally-changed-p
+          (setf *code* (delete 0 *code* :key #'instruction-opcode))
+          (setf changed-p t)))
+      ;; Don't do CLEAR-VALUES twice in a row.
+      (let ((locally-changed-p nil)
+            (previous-opcode nil))
+        (dotimes (i (length *code*))
+          (let ((instruction (svref *code* i)))
+            (when (eql (instruction-opcode instruction) 205) ; CLEAR-VALUES
+              (when (eql previous-opcode 205)
+                (setf (instruction-opcode instruction) 0)
+                (setf locally-changed-p t)))
+            (setf previous-opcode (instruction-opcode instruction))))
+        (when locally-changed-p
+          (setf *code* (delete 0 *code* :key #'instruction-opcode))
+          (setf changed-p t)))
       (unless changed-p
-          (return))))
+        (return))))
   (when *debug*
     (format t "----- after optimization -----~%")
     (print-code)))
 
 (defvar *max-stack*)
 
-;; CODE is a list of INSTRUCTIONs.
 (defun code-bytes (code)
-  (let ((code (resolve-opcodes code))
+  (let (;;(code (resolve-opcodes code))
         (length 0))
     ;; Pass 1: calculate label offsets and overall length.
     (dotimes (i (length code))
@@ -846,6 +881,7 @@
     (emit 'return)
     (finalize-code)
     (optimize-code)
+    (setf *code* (resolve-opcodes *code*))
     (setf (method-max-stack constructor) (analyze-stack))
     (setf (method-code constructor) (code-bytes *code*))
     constructor))
@@ -2613,6 +2649,7 @@
     (emit 'areturn)
     (finalize-code)
     (optimize-code)
+    (setf *code* (resolve-opcodes *code*))
     (setf (method-max-stack execute-method) (analyze-stack))
     (setf (method-code execute-method) (code-bytes *code*))
     (setf (method-max-locals execute-method) *max-locals*)
