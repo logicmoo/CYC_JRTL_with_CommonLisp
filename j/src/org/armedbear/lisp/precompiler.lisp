@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.88 2005-02-01 15:20:22 piso Exp $
+;;; $Id: precompiler.lisp,v 1.89 2005-02-28 19:06:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -839,9 +839,9 @@
       (values name nil nil)
       (precompile name definition)))
 
-;; Redefine EVAL to precompile its argument.
-(defun eval (form)
-  (%eval (precompile-form form nil)))
+;; ;; Redefine EVAL to precompile its argument.
+;; (defun eval (form)
+;;   (%eval (precompile-form form nil)))
 
 ;; Redefine DEFMACRO to precompile the expansion function on the fly.
 (defmacro defmacro (name lambda-list &rest body)
