@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.85 2004-11-03 15:38:52 piso Exp $
+ * $Id: Closure.java,v 1.86 2004-11-05 00:41:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -828,180 +828,25 @@ public class Closure extends Function
         // Not fixed arity, or extra != 0.
         if (argsLength < minArgs)
             signal(new WrongNumberOfArgumentsException(this));
-        final LispThread thread = LispThread.currentThread();
         final LispObject[] array = new LispObject[variables.length + extra];
         int index = 0;
-        // The bindings established here (if any) are lost when this function
-        // returns. They are used only in the evaluation of initforms for
-        // optional and keyword arguments.
-        Environment oldDynEnv = thread.getDynamicEnvironment();
-        Environment ext = new Environment(environment);
-//         // Section 3.4.4: "...the &environment parameter is bound along with
-//         // &whole before any other variables in the lambda list..."
-//         if (bindInitForms)
-//             if (envVar != null)
-//                 bind(envVar, environment, ext);
         // Required parameters.
         if (requiredParameters != null) {
             for (int i = 0; i < minArgs; i++) {
-//                 if (bindInitForms)
-//                     bind(requiredParameters[i].var, args[i], ext);
                 array[index++] = args[i];
             }
         }
         int i = minArgs;
         int argsUsed = minArgs;
-//         // Optional parameters.
-//         if (optionalParameters != null) {
-//             for (int j = 0; j < optionalParameters.length; j++) {
-//                 Parameter parameter = optionalParameters[j];
-//                 if (i < argsLength) {
-//                     if (bindInitForms)
-//                         bind(parameter.var, args[i], ext);
-//                     array[index++] = args[i];
-//                     ++argsUsed;
-//                     if (parameter.svar != NIL) {
-//                         if (bindInitForms)
-//                             bind((Symbol)parameter.svar, T, ext);
-//                         array[index++] = T;
-//                     }
-//                 } else {
-//                     // We've run out of arguments.
-//                     LispObject value;
-//                     if (parameter.initVal != null)
-//                         value = parameter.initVal;
-//                     else
-//                         value = eval(parameter.initForm, ext, thread);
-//                     if (bindInitForms)
-//                         bind(parameter.var, value, ext);
-//                     array[index++] = value;
-//                     if (parameter.svar != NIL) {
-//                         if (bindInitForms)
-//                             bind((Symbol)parameter.svar, NIL, ext);
-//                         array[index++] = NIL;
-//                     }
-//                 }
-//                 ++i;
-//             }
-//         }
         // &rest parameter.
         if (restVar != null) {
             LispObject rest = NIL;
             for (int j = argsLength; j-- > argsUsed;)
                 rest = new Cons(args[j], rest);
-//             if (bindInitForms)
-//                 bind(restVar, rest, ext);
             array[index++] = rest;
         }
-//         // Keyword parameters.
-//         if (keywordParameters != null) {
-//             int argsLeft = argsLength - argsUsed;
-//             if (argsLeft == 0) {
-//                 // No keyword arguments were supplied.
-//                 // Bind all keyword parameters to their defaults.
-//                 for (int k = 0; k < keywordParameters.length; k++) {
-//                     Parameter parameter = keywordParameters[k];
-//                     LispObject initForm = parameter.initForm;
-//                     LispObject value;
-//                     if (parameter.initVal != null)
-//                         value = parameter.initVal;
-//                     else
-//                         value = eval(parameter.initForm, ext, thread);
-//                     if (bindInitForms)
-//                         bind(parameter.var, value, ext);
-//                     array[index++] = value;
-//                     if (parameter.svar != NIL) {
-//                         if (bindInitForms)
-//                             bind((Symbol)parameter.svar, NIL, ext);
-//                         array[index++] = NIL;
-//                     }
-//                 }
-//             } else {
-//                 if ((argsLeft % 2) != 0)
-//                     signal(new ProgramError("Odd number of keyword arguments."));
-//                 LispObject allowOtherKeysValue = null;
-//                 for (int k = 0; k < keywordParameters.length; k++) {
-//                     Parameter parameter = keywordParameters[k];
-//                     Symbol keyword = parameter.keyword;
-//                     LispObject value = null;
-//                     boolean unbound = true;
-//                     for (int j = argsUsed; j < argsLength; j += 2) {
-//                         if (args[j] == keyword) {
-//                             if (bindInitForms)
-//                                 bind(parameter.var, args[j+1], ext);
-//                             value = array[index++] = args[j+1];
-//                             if (parameter.svar != NIL) {
-//                                 if (bindInitForms)
-//                                     bind((Symbol)parameter.svar, T, ext);
-//                                 array[index++] = T;
-//                             }
-//                             args[j] = null;
-//                             args[j+1] = null;
-//                             unbound = false;
-//                             break;
-//                         }
-//                     }
-//                     if (unbound) {
-//                         if (parameter.initVal != null)
-//                             value = parameter.initVal;
-//                         else
-//                             value = eval(parameter.initForm, ext, thread);
-//                         if (bindInitForms)
-//                             bind(parameter.var, value, ext);
-//                         array[index++] = value;
-//                         if (parameter.svar != NIL) {
-//                             if (bindInitForms)
-//                                 bind((Symbol)parameter.svar, NIL, ext);
-//                             array[index++] = NIL;
-//                         }
-//                     }
-//                     if (keyword == Keyword.ALLOW_OTHER_KEYS) {
-//                         if (allowOtherKeysValue == null)
-//                             allowOtherKeysValue = value;
-//                     }
-//                 }
-//                 if (!allowOtherKeys) {
-//                     if (allowOtherKeysValue == null || allowOtherKeysValue == NIL) {
-//                         LispObject unrecognizedKeyword = null;
-//                         for (int j = argsUsed; j < argsLength; j += 2) {
-//                             LispObject keyword = args[j];
-//                             if (keyword == null)
-//                                 continue;
-//                             if (keyword == Keyword.ALLOW_OTHER_KEYS) {
-//                                 if (allowOtherKeysValue == null) {
-//                                     allowOtherKeysValue = args[j+1];
-//                                     if (allowOtherKeysValue != NIL)
-//                                         break;
-//                                 }
-//                                 continue;
-//                             }
-//                             // Unused keyword argument.
-//                             boolean ok = false;
-//                             for (int k = keywordParameters.length; k-- > 0;) {
-//                                 if (keywordParameters[k].keyword == keyword) {
-//                                     // Found it!
-//                                     ok = true;
-//                                     break;
-//                                 }
-//                             }
-//                             if (ok)
-//                                 continue;
-//                             // Unrecognized keyword argument.
-//                             if (unrecognizedKeyword == null)
-//                                 unrecognizedKeyword = keyword;
-//                         }
-//                         if (unrecognizedKeyword != null) {
-//                             if (!allowOtherKeys &&
-//                                 (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
-//                                 signal(new ProgramError("Unrecognized keyword argument " +
-//                                                         unrecognizedKeyword.writeToString() +
-//                                                         "."));
-//                         }
-//                     }
-//                 }
-//             }
-//         } else
-            if (argsUsed < argsLength) {
+        else // added Nov 4 2004 3:48 PM
+        if (argsUsed < argsLength) {
             // No keyword parameters.
             if (argsUsed + 2 <= argsLength) {
                 // Check for :ALLOW-OTHER-KEYS.
@@ -1035,7 +880,6 @@ public class Closure extends Function
                     signal(new WrongNumberOfArgumentsException(this));
             }
         }
-        thread.setDynamicEnvironment(oldDynEnv);
         return array;
     }
 
