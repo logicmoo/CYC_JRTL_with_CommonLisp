@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.11 2002-11-27 23:58:41 piso Exp $
+ * $Id: MessageBuffer.java,v 1.12 2003-04-18 16:54:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,8 @@ public class MessageBuffer extends Buffer
     protected String mimeBody;
     protected MimePart selectedPart;
     protected int headerLineCount;
+
+    private boolean wrap = true;
 
     protected MessageBuffer()
     {
@@ -732,18 +734,7 @@ public class MessageBuffer extends Buffer
         showRawText = !showRawText;
         if (mailbox != null)
             mailbox.showRawText = showRawText;
-        setText();
-        formatter.parseBuffer();
-        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-            Editor ed = it.nextEditor();
-            if (ed.getBuffer() == this) {
-                ed.setDot(getFirstLine(), 0);
-                ed.moveCaretToDotCol();
-                ed.setMark(null);
-                ed.setTopLine(getFirstLine());
-                ed.repaintDisplay();
-            }
-        }
+        reloadInternal();
         FastStringBuffer sb = new FastStringBuffer("Raw mode ");
         sb.append(showRawText ? "on" : "off");
         Editor.currentEditor().status(sb.toString());
@@ -753,6 +744,20 @@ public class MessageBuffer extends Buffer
     {
         if (mailbox != null)
             mailbox.showFullHeaders = showFullHeaders = !showFullHeaders;
+        reloadInternal();
+    }
+
+    public void toggleWrap()
+    {
+        wrap = !wrap;
+        reloadInternal();
+        FastStringBuffer sb = new FastStringBuffer("Wrap ");
+        sb.append(showRawText ? "on" : "off");
+        Editor.currentEditor().status(sb.toString());
+    }
+
+    private void reloadInternal()
+    {
         setText();
         formatter.parseBuffer();
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -761,7 +766,7 @@ public class MessageBuffer extends Buffer
                 ed.setDot(getFirstLine(), 0);
                 ed.moveCaretToDotCol();
                 ed.setMark(null);
-                ed.setTopLine(ed.getDotLine());
+                ed.setTopLine(getFirstLine());
                 ed.repaintDisplay();
             }
         }
@@ -966,8 +971,9 @@ public class MessageBuffer extends Buffer
             if (!(formatter instanceof WebFormatter))
                 setFormatter(new WebFormatter(this));
         } else {
-            body = Utilities.wrap(body,
-                Editor.currentEditor().getDisplay().getColumns(), 8);
+            if (wrap)
+                body = Utilities.wrap(body,
+                    Editor.currentEditor().getDisplay().getColumns(), 8);
             appendLine("");
             append(body);
             if (!(formatter instanceof MessageFormatter))
@@ -1088,13 +1094,13 @@ public class MessageBuffer extends Buffer
             mailbox.setPreviewBuffer(null);
         flushImages();
     }
-    
+
     public void empty()
     {
         flushImages();
         super.empty();
     }
-    
+
     private void flushImages()
     {
         for (Line line = getFirstLine(); line != null; line = line.next()) {
