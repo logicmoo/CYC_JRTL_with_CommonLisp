@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.218 2004-03-16 18:33:50 piso Exp $
+ * $Id: Lisp.java,v 1.219 2004-03-17 16:25:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -993,7 +993,7 @@ public abstract class Lisp
             return (Readtable) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "readtable"));
+            signal(new TypeError(obj, Symbol.READTABLE));
             // Not reached.
             return null;
         }
