@@ -99,6 +99,8 @@
     <li><a href="commands.html#eob">eob</a></li>
     <li><a href="commands.html#escape">escape</a></li>
     <li><a href="commands.html#evalBuffer">evalBuffer</a></li>
+    <li><a href="commands.html#evalDefunLisp">evalDefunLisp</a></li>
+    <li><a href="commands.html#evalRegionLisp">evalRegionLisp</a></li>
     <li><a href="commands.html#executeCommand">executeCommand</a></li>
     <li><a href="commands.html#expand">expand</a></li>
     <li><a href="commands.html#find">find</a></li>
@@ -1283,9 +1285,9 @@ behavior is not triggered.
 Replaces spaces with tab characters in the selected region, based on the tab
 width of the buffer. Buffer-specific settings such as <code>tabWidth</code> may
 be inspected and modified in the Properties dialog (see <a href="#properties">properties</a>).
-<br><br>
+<p>
 <b>Default key mapping:</b> None
-<br><br>
+<p>
 <b>See also:</b> <a href="#detabRegion">detabRegion</a>
 <br><br>
 </dl><!--<hr>-->
@@ -1312,6 +1314,28 @@ Executes the <a href="http://www.beanshell.org">BeanShell</a> script in the
 current buffer.
 <p>
 <b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="evalDefunLisp">evalDefunLisp</a><dl><dd>
+<p>
+Sends the definition at the location of the caret in a Lisp source buffer to
+the active Lisp shell for evaluation.
+<p>
+<b>Default key mapping:</b> Ctrl Alt E in Lisp mode
+<p>
+<b>See also:</b> <a href="#evalRegionLisp">evalRegionLisp</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="evalRegionLisp">evalRegionLisp</a><dl><dd>
+<p>
+Sends the selected region in a Lisp source buffer to the active Lisp shell for
+evaluation.
+<p>
+<b>Default key mapping:</b> Ctrl Alt R in Lisp mode
+<p>
+<b>See also:</b> <a href="#evalDefunLisp">evalDefunLisp</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -3531,9 +3555,11 @@ Resets and repaints all edit windows.
 
 <a name="resetLisp">resetLisp</a><dl><dd>
 <p>
-Resets the current Lisp shell so that it returns to the outermost
-read-eval-print loop. This command works with Lisp shells running CMUCL, SBCL,
-CLISP, or Allegro Common Lisp.
+Resets the current Lisp shell so that it returns to the outermost read-eval-
+print loop.
+<p>
+This command works with Lisp shells running CMUCL, SBCL, CLISP, Allegro Common
+Lisp, or j's built-in Lisp.
 <p>
 <b>Default key mapping:</b> Ctrl R in Lisp Shell mode
 <br><br>
