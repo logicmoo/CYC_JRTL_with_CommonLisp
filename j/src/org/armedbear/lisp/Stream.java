@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.81 2004-08-31 15:32:30 piso Exp $
+ * $Id: Stream.java,v 1.82 2004-09-18 20:27:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public class Stream extends LispObject
     private Writer writer;
 
     // The number of characters on the current line of output (-1 if unknown).
-    private int charPos;
+    protected int charPos;
 
     // Binary input.
     private BufferedInputStream in;
