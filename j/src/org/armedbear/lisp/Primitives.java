@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.455 2003-10-01 14:28:33 piso Exp $
+ * $Id: Primitives.java,v 1.456 2003-10-01 21:29:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1241,27 +1241,53 @@ public final class Primitives extends Module
                                   LispObject third)
             throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(first);
-            if (symbol.getSymbolFunction() instanceof SpecialOperator) {
-                String message =
-                    symbol.getName() + " is a special operator and may not be redefined";
-                throw new ConditionThrowable(new ProgramError(message));
+            if (first instanceof Symbol) {
+                Symbol symbol = checkSymbol(first);
+                if (symbol.getSymbolFunction() instanceof SpecialOperator) {
+                    String message =
+                        symbol.getName() + " is a special operator and may not be redefined";
+                    throw new ConditionThrowable(new ProgramError(message));
+                }
+                LispObject arglist = checkList(second);
+                LispObject body = checkList(third);
+                if (body.car() instanceof LispString && body.cdr() != NIL) {
+                    // Documentation.
+                    symbol.setFunctionDocumentation(body.car());
+                    body = body.cdr();
+                }
+                body = new Cons(symbol, body);
+                body = new Cons(Symbol.BLOCK, body);
+                body = new Cons(body, NIL);
+                Closure closure = new Closure(symbol.getName(), arglist, body,
+                                              new Environment());
+                closure.setArglist(arglist);
+                symbol.setSymbolFunction(closure);
+                return symbol;
             }
-            LispObject arglist = checkList(second);
-            LispObject body = checkList(third);
-            if (body.car() instanceof LispString && body.cdr() != NIL) {
-                // Documentation.
-                symbol.setFunctionDocumentation(body.car());
-                body = body.cdr();
+            if (first instanceof Cons && first.car() == Symbol.SETF) {
+                Symbol symbol = checkSymbol(first.cadr());
+//                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
+//                     String message =
+//                         symbol.getName() + " is a special operator and may not be redefined";
+//                     throw new ConditionThrowable(new ProgramError(message));
+//                 }
+                LispObject arglist = checkList(second);
+                LispObject body = checkList(third);
+                if (body.car() instanceof LispString && body.cdr() != NIL) {
+                    // Documentation.
+//                     symbol.setFunctionDocumentation(body.car());
+                    body = body.cdr();
+                }
+                body = new Cons(symbol, body);
+                body = new Cons(Symbol.BLOCK, body);
+                body = new Cons(body, NIL);
+                Closure closure = new Closure(arglist, body, new Environment());
+                closure.setArglist(arglist);
+//                 symbol.setSymbolFunction(closure);
+                put(symbol, PACKAGE_SYS.intern("SETF-FUNCTION"), closure);
+                return symbol;
             }
-            body = new Cons(symbol, body);
-            body = new Cons(Symbol.BLOCK, body);
-            body = new Cons(body, NIL);
-            Closure closure = new Closure(symbol.getName(), arglist, body,
-                                          new Environment());
-            closure.setArglist(arglist);
-            symbol.setSymbolFunction(closure);
-            return symbol;
+            throw new ConditionThrowable(new TypeError(first, "valid function name"));
         }
     };
 
