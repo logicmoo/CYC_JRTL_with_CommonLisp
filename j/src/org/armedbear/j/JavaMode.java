@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: JavaMode.java,v 1.15 2004-01-04 01:41:28 piso Exp $
+ * $Id: JavaMode.java,v 1.16 2004-09-08 00:48:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,11 +271,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         }
 
         Position paren = findEnclosingParen(new Position(line, 0));
-        if (paren != null) {
-            if (textFirstChar == ')')
-                return buffer.getIndentation(paren.getLine());
+        if (paren != null)
             return indentInParen(paren, buffer);
-        }
 
         final Line model = findModel(line);
         if (model == null)
