@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.24 2003-01-16 19:42:26 piso Exp $
+ * $Id: LispShell.java,v 1.25 2003-02-12 15:34:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,9 +44,10 @@ public final class LispShell extends Shell
     private String resetCommand = null;
     private String exitCommand = "(exit)";
 
-    private LispShell(String shellCommand)
+    private LispShell(String shellCommand, String title)
     {
         super(shellCommand, LispShellMode.getMode());
+        this.title = title;
         formatter = mode.getFormatter(this);
     }
 
@@ -65,9 +66,9 @@ public final class LispShell extends Shell
         exitCommand = s;
     }
 
-    private static Shell createLispShell(String shellCommand)
+    private static Shell createLispShell(String shellCommand, String title)
     {
-        LispShell shell = new LispShell(shellCommand);
+        LispShell shell = new LispShell(shellCommand, title);
         shell.startProcess();
         if (shell.getProcess() == null) {
             Editor.getBufferList().remove(shell);
@@ -293,7 +294,12 @@ public final class LispShell extends Shell
 
     public String getTitle()
     {
-        return shellCommand;
+        return title;
+    }
+
+    public String toString()
+    {
+        return title;
     }
 
     public static void lisp()
@@ -341,16 +347,17 @@ public final class LispShell extends Shell
             sb.append(" org.armedbear.lisp.Main");
             shellCommand = sb.toString();
         }
-        lisp(shellCommand, false);
+        lisp(shellCommand, "lisp", false);
     }
 
     public static void lisp(String shellCommand)
     {
         // Require jpty on Unix platforms.
-        lisp(shellCommand, Platform.isPlatformUnix());
+        lisp(shellCommand, shellCommand, Platform.isPlatformUnix());
     }
 
-    private static void lisp(String shellCommand, boolean requireJpty)
+    private static void lisp(String shellCommand, String title,
+        boolean requireJpty)
     {
         if (requireJpty && !Utilities.haveJpty()) {
             MessageDialog.showMessageDialog(JPTY_NOT_FOUND, "Error");
@@ -366,7 +373,7 @@ public final class LispShell extends Shell
             if (shell.getProcess() == null)
                 shell.startProcess();
         } else
-            buf = createLispShell(shellCommand);
+            buf = createLispShell(shellCommand, title);
         if (buf != null) {
             final Editor editor = Editor.currentEditor();
             editor.makeNext(buf);
