@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.128 2003-11-15 00:50:46 piso Exp $
+;;; $Id: boot.lisp,v 1.129 2003-11-28 05:57:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@
               (read stream t nil t))))
     (labels ((eval-feature (form)
                            (cond ((atom form)
-                                  (member form *features*))
+                                  (ext:memql form *features*))
                                  ((eq (car form) :not)
                                   (not (eval-feature (cadr form))))
                                  ((eq (car form) :and)
