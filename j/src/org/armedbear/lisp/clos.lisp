@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.47 2003-12-19 19:42:55 piso Exp $
+;;; $Id: clos.lisp,v 1.48 2003-12-19 20:26:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -436,7 +436,7 @@
       (std-slot-value object slot-name)
       (slot-value-using-class (class-of object) object slot-name)))
 
-(defun (setf std-slot-value) (new-value instance slot-name)
+(defun %set-std-slot-value (instance slot-name new-value)
   (let ((location (slot-location (class-of instance) slot-name)))
     (cond ((fixnump location)
            (setf (instance-ref instance location) new-value))
@@ -445,6 +445,8 @@
           (t
            (slot-missing (class-of instance) instance slot-name 'setf new-value))))
   new-value)
+
+(defsetf std-slot-value %set-std-slot-value)
 
 (defun (setf slot-value) (new-value object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
@@ -1452,10 +1454,7 @@
   ((instance standard-object) &rest initargs)
   (apply #'shared-initialize instance () initargs))
 
-(defgeneric shared-initialize (instance slot-names &key))
-
-(defmethod shared-initialize ((instance standard-object)
-                              slot-names &rest all-keys)
+(defun std-shared-initialize (instance slot-names all-keys)
   (dolist (slot (class-slots (class-of instance)))
     (let ((slot-name (slot-definition-name slot)))
       (multiple-value-bind (init-key init-value foundp)
@@ -1469,6 +1468,12 @@
               (setf (std-slot-value instance slot-name)
                     (funcall (slot-definition-initfunction slot))))))))
   instance)
+
+(defgeneric shared-initialize (instance slot-names &key))
+
+(defmethod shared-initialize ((instance standard-object)
+                              slot-names &rest all-keys)
+  (std-shared-initialize instance slot-names all-keys))
 
 ;;; change-class
 
