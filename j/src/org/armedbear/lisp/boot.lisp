@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.24 2003-03-11 13:51:53 piso Exp $
+;;; $Id: boot.lisp,v 1.25 2003-03-13 03:06:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,6 +16,8 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+(nodebug)
 
 (in-package "COMMON-LISP")
 
@@ -165,3 +167,5 @@
     `(prog1
       (cl::%defun ',name ',parameters ',body ,env)
       (compile ',name))))
+
+(debug)
