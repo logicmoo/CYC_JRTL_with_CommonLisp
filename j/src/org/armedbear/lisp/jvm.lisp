@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.52 2003-12-06 01:27:54 piso Exp $
+;;; $Id: jvm.lisp,v 1.53 2003-12-06 02:44:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1838,6 +1838,31 @@
                (incf i))))))
   (setq *max-locals* (max *max-locals* (fill-pointer *locals*))))
 
+;; Returns list of declared specials.
+(defun process-special-declarations (forms)
+  (let ((specials ()))
+    (dolist (form forms)
+      (unless (and (consp form) (eq (car form) 'declare))
+        (return))
+      (let ((decls (cdr form)))
+        (dolist (decl decls)
+          (when (eq (car decl) 'special)
+            (setf specials (append (cdr decl) specials))))))
+    specials))
+
+(defun compile-locally (form for-effect)
+  (let ((*variables* *variables*)
+        (specials (process-special-declarations (cdr form))))
+    (dolist (var specials)
+      (push-variable var t nil))
+    (cond ((null (cdr form))
+           (emit-push-nil)
+           (emit-store-value))
+          (t
+           (do ((forms (cdr form) (cdr forms)))
+               ((null forms))
+             (compile-form (car forms) (cdr forms)))))))
+
 (defvar *tags* ())
 
 (defstruct tag name label)
@@ -2436,6 +2461,7 @@
                           function
                           go
                           if
+                          locally
                           multiple-value-list
                           progn
                           quote
