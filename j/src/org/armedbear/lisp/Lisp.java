@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.208 2004-02-23 14:24:47 piso Exp $
+ * $Id: Lisp.java,v 1.209 2004-02-23 14:55:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -686,21 +686,6 @@ public abstract class Lisp
         }
         catch (ClassCastException e) {
             signal(new TypeError(obj, Symbol.VECTOR));
-            // Not reached.
-            return null;
-        }
-    }
-
-    public static final LispString checkString(LispObject obj)
-        throws ConditionThrowable
-    {
-        if (obj == null)
-            throw new NullPointerException();
-        try {
-            return (LispString) obj;
-        }
-        catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.STRING));
             // Not reached.
             return null;
         }
