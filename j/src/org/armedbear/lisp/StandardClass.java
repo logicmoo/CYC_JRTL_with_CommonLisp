@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardClass.java,v 1.4 2003-09-21 16:58:41 piso Exp $
+ * $Id: StandardClass.java,v 1.5 2003-09-28 18:32:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,4 +54,16 @@ public class StandardClass extends LispClass
         sb.append('>');
         return sb.toString();
     }
+
+    private static final Primitive MAKE_INSTANCE_STANDARD_CLASS =
+        new Primitive("make-instance-standard-class", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 1)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            Symbol symbol = checkSymbol(args[0]);
+            return new StandardClass(symbol, NIL);
+        }
+    };
 }
