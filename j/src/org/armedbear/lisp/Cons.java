@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.47 2004-10-13 00:22:17 piso Exp $
+ * $Id: Cons.java,v 1.48 2004-10-22 17:03:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,6 +297,77 @@ public final class Cons extends LispObject
             rest = rest.cdr();
         }
         return array;
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new Closure(cdr.car(), cdr.cdr(),
+                                          new Environment());
+            return closure.execute(args);
+        }
+        return signal(new TypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
+                                                Symbol.SYMBOL)));
+    }
+
+    public LispObject execute() throws ConditionThrowable
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new Closure(cdr.car(), cdr.cdr(),
+                                          new Environment());
+            return closure.execute();
+        }
+        return signal(new TypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
+                                                Symbol.SYMBOL)));
+    }
+
+    public LispObject execute(LispObject arg) throws ConditionThrowable
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new Closure(cdr.car(), cdr.cdr(),
+                                          new Environment());
+            return closure.execute(arg);
+        }
+        return signal(new TypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
+                                                Symbol.SYMBOL)));
+    }
+
+    public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new Closure(cdr.car(), cdr.cdr(),
+                                          new Environment());
+            return closure.execute(first, second);
+        }
+        return signal(new TypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
+                                                Symbol.SYMBOL)));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
+        throws ConditionThrowable
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new Closure(cdr.car(), cdr.cdr(),
+                                          new Environment());
+            return closure.execute(first, second, third);
+        }
+        return signal(new TypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
+                                                Symbol.SYMBOL)));
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
+        throws ConditionThrowable
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new Closure(cdr.car(), cdr.cdr(),
+                                          new Environment());
+            return closure.execute(first, second, third, fourth);
+        }
+        return signal(new TypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
+                                                Symbol.SYMBOL)));
     }
 
     public String writeToString() throws ConditionThrowable
