@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.33 2004-08-10 03:25:27 piso Exp $
+;;; $Id: compile-file.lisp,v 1.34 2004-08-17 20:14:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,6 +152,14 @@
                       (new-compile-time-too
                        (eval `(progn ,@body)))))
               (%format t "; Finished processing EVAL-WHEN ~S~%" (cadr form))
+              (return-from process-toplevel-form)))
+           (LOCALLY
+            ;; FIXME Need to handle special declarations too!
+            (let ((jvm::*speed* jvm::*speed*)
+                  (jvm::*safety* jvm::*safety*)
+                  (jvm::*debug* jvm::*debug*))
+              (jvm::process-optimization-declarations (cdr form))
+              (process-toplevel-progn (cdr form) stream compile-time-too)
               (return-from process-toplevel-form)))
            (PROGN
             (process-toplevel-progn (cdr form) stream compile-time-too)
