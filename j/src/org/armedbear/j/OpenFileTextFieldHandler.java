@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.30 2002-12-26 16:54:55 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.31 2002-12-26 17:13:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -963,7 +963,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             textField.getCaret().setVisible(true);
             return;
         }
-        if (c >= ' ') {
+        if (c >= ' ' && c != 127) {
             if (popup != null) {
                 popup.setVisible(false);
                 popup = null;
