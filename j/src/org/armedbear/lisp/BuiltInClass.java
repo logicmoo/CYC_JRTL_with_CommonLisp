@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.4 2003-09-21 13:01:06 piso Exp $
+ * $Id: BuiltInClass.java,v 1.5 2003-09-21 15:05:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,11 +58,10 @@ public class BuiltInClass extends LispClass
     private static BuiltInClass addClass(Symbol symbol)
     {
         BuiltInClass c = new BuiltInClass(symbol);
-        map.put(symbol, c);
+        addClass(symbol, c);
         return c;
     }
 
-    // We can't call this class T!
     public static final BuiltInClass CLASS_T            = addClass(T);
 
     public static final BuiltInClass ARITHMETIC_ERROR   = addClass(Symbol.ARITHMETIC_ERROR);
@@ -96,6 +95,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass RATIONAL           = addClass(Symbol.RATIONAL);
     public static final BuiltInClass REAL               = addClass(Symbol.REAL);
     public static final BuiltInClass SEQUENCE           = addClass(Symbol.SEQUENCE);
+    public static final BuiltInClass SERIOUS_CONDITION  = addClass(Symbol.SERIOUS_CONDITION);
     public static final BuiltInClass SIMPLE_CONDITION   = addClass(Symbol.SIMPLE_CONDITION);
     public static final BuiltInClass SIMPLE_ERROR       = addClass(Symbol.SIMPLE_ERROR);
     public static final BuiltInClass STANDARD_CLASS     = addClass(Symbol.STANDARD_CLASS);
@@ -113,4 +113,56 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass UNBOUND_VARIABLE   = addClass(Symbol.UNBOUND_VARIABLE);
     public static final BuiltInClass UNDEFINED_FUNCTION = addClass(Symbol.UNDEFINED_FUNCTION);
     public static final BuiltInClass VECTOR             = addClass(Symbol.VECTOR);
+
+    static {
+        ARITHMETIC_ERROR.setDirectSuperclass(ERROR);
+        ARRAY.setDirectSuperclass(CLASS_T);
+        BIGNUM.setDirectSuperclass(INTEGER);
+        BIT_VECTOR.setDirectSuperclass(VECTOR);
+        BUILT_IN_CLASS.setDirectSuperclass(CLASS);
+        CELL_ERROR.setDirectSuperclass(ERROR);
+        CHARACTER.setDirectSuperclass(CLASS_T);
+        CLASS.setDirectSuperclass(CLASS_T);
+        COMPLEX.setDirectSuperclass(NUMBER);
+        CONDITION.setDirectSuperclass(STANDARD_OBJECT);
+        CONS.setDirectSuperclass(LIST);
+        CONTROL_ERROR.setDirectSuperclass(ERROR);
+        ERROR.setDirectSuperclass(SERIOUS_CONDITION);
+        FIXNUM.setDirectSuperclass(INTEGER);
+        FLOAT.setDirectSuperclass(REAL);
+        FUNCTION.setDirectSuperclass(CLASS_T);
+        HASH_TABLE.setDirectSuperclass(CLASS_T);
+        INTEGER.setDirectSuperclass(RATIONAL);
+        LIST.setDirectSuperclass(SEQUENCE);
+        NULL.setDirectSuperclass(LIST);
+        NUMBER.setDirectSuperclass(CLASS_T);
+        PACKAGE.setDirectSuperclass(CLASS_T);
+        PACKAGE_ERROR.setDirectSuperclass(ERROR);
+        PARSE_ERROR.setDirectSuperclass(ERROR);
+        PATHNAME.setDirectSuperclass(CLASS_T);
+        PROGRAM_ERROR.setDirectSuperclass(ERROR);
+        RANDOM_STATE.setDirectSuperclass(CLASS_T);
+        RATIO.setDirectSuperclass(RATIONAL);
+        RATIONAL.setDirectSuperclass(REAL);
+        REAL.setDirectSuperclass(NUMBER);
+        SEQUENCE.setDirectSuperclass(CLASS_T);
+        SERIOUS_CONDITION.setDirectSuperclass(CONDITION);
+        SIMPLE_CONDITION.setDirectSuperclass(CONDITION);
+        SIMPLE_ERROR.setDirectSuperclass(ERROR);
+        STANDARD_CLASS.setDirectSuperclass(CLASS);
+        STANDARD_OBJECT.setDirectSuperclass(CLASS_T);
+        STREAM.setDirectSuperclass(CLASS_T);
+        STREAM_ERROR.setDirectSuperclass(ERROR);
+        STRING.setDirectSuperclass(VECTOR);
+        STRING_STREAM.setDirectSuperclass(STREAM);
+        STRUCTURE_CLASS.setDirectSuperclass(CLASS);
+        STRUCTURE_OBJECT.setDirectSuperclass(CLASS_T);
+        SYMBOL.setDirectSuperclass(CLASS_T);
+        TWO_WAY_STREAM.setDirectSuperclass(STREAM);
+        TYPE_ERROR.setDirectSuperclass(ERROR);
+        UNBOUND_SLOT.setDirectSuperclass(CELL_ERROR);
+        UNBOUND_VARIABLE.setDirectSuperclass(CELL_ERROR);
+        UNDEFINED_FUNCTION.setDirectSuperclass(CELL_ERROR);
+        VECTOR.setDirectSuperclasses(list2(ARRAY, SEQUENCE));
+    }
 }
