@@ -1,8 +1,8 @@
 /*
  * Dispatcher.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Dispatcher.java,v 1.10 2003-08-01 17:53:47 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Dispatcher.java,v 1.11 2004-04-12 17:33:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,6 +199,9 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
 
         editor.setLastCommand(currentCommand);
         editor.setCurrentCommand(COMMAND_NOTHING);
+
+        if (Editor.isLispInitialized())
+            LispAPI.eventHandled();
 
         SystemSelection.updateSystemSelection(editor);
 
