@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.195 2005-02-12 03:25:29 piso Exp $
+# $Id: Makefile.in,v 1.196 2005-02-14 19:08:50 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -55,7 +55,6 @@ CLASSFILES =	AbstractArray.class \
 		Condition.class \
 		ConditionThrowable.class \
 		Cons.class \
-		ControlC.class \
 		ControlError.class \
 		Debug.class \
 		DispatchMacroFunction.class \
@@ -110,6 +109,7 @@ CLASSFILES =	AbstractArray.class \
 		MathFunctions.class \
 		Method.class \
 		Mutex.class \
+		Native.class \
 		Nil.class \
 		NilVector.class \
 		Package.class \
@@ -282,6 +282,6 @@ clean:
 Makefile: Makefile.in ../../../../config.status
 	cd ../../../.. && $(SHELL) ./config.status
 
-libabcl.so: ControlC.class ControlC.c
-	cd ../../.. && $(JAVAH) -o org/armedbear/lisp/ControlC.h org.armedbear.lisp.ControlC
-	gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I$(JDK)/include -I$(JDK)/include/linux ControlC.c
+libabcl.so: Native.class native.c
+	cd ../../.. && $(JAVAH) -o org/armedbear/lisp/native.h org.armedbear.lisp.Native
+	gcc -shared -o libabcl.so -O -D_REENTRANT -fpic -I$(JDK)/include -I$(JDK)/include/linux native.c
