@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.25 2004-09-28 15:33:59 piso Exp $
+ * $Id: LispReader.java,v 1.26 2004-10-01 17:17:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -179,10 +179,40 @@ public final class LispReader extends Lisp
         new DispatchMacroFunction("sharp-star", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
-        public LispObject execute(Stream stream, char c, int n)
+        public LispObject execute(Stream stream, char ignored, int n)
             throws ConditionThrowable
         {
-            return stream.readBitVector();
+            StringBuffer sb = new StringBuffer();
+            while (true) {
+                int ch = stream._readChar();
+                if (ch < 0)
+                    break;
+                char c = (char) ch;
+                if (c == '0' || c == '1')
+                    sb.append(c);
+                else {
+                    stream._unreadChar(c);
+                    break;
+                }
+            }
+            if (n >= 0) {
+                // n was supplied.
+                final int length = sb.length();
+                if (n > length) {
+                    final char c;
+                    if (length > 0)
+                        c = sb.charAt(length - 1);
+                    else
+                        c = '0';
+                    for (int i = length; i < n; i++)
+                        sb.append(c);
+                } else if (n < length) {
+                    return signal(new ReaderError("Bit vector is longer than specified length: #" +
+                                                  n + '*' + sb.toString()));
+                }
+            }
+            String s = sb.toString();
+            return new SimpleBitVector(s);
         }
     };
 
