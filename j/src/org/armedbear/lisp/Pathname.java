@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.57 2004-05-11 14:31:42 piso Exp $
+ * $Id: Pathname.java,v 1.58 2004-05-12 17:16:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,7 +181,15 @@ public class Pathname extends LispObject
             return null;
         }
         StringBuffer sb = new StringBuffer();
-        if (Utilities.isPlatformWindows() && device != NIL) {
+        // "If a pathname is converted to a namestring, the symbols NIL and
+        // :UNSPECIFIC cause the field to be treated as if it were empty. That
+        // is, both NIL and :UNSPECIFIC cause the component not to appear in
+        // the namestring." 19.2.2.2.3.1
+        if (device == NIL)
+            ;
+        else if (device == Keyword.UNSPECIFIC)
+            ;
+        else if (Utilities.isPlatformWindows()) {
             if (device instanceof AbstractString)
                 sb.append(device.getStringValue());
             else
@@ -218,7 +226,8 @@ public class Pathname extends LispObject
             else if (part == Keyword.RELATIVE)
                 ;
             else
-                signal(new LispError("Unsupported directory component " + part + "."));
+                signal(new LispError("Unsupported directory component " +
+                                     part.writeToString() + "."));
             temp = temp.cdr();
             while (temp != NIL) {
                 part = temp.car();
@@ -227,7 +236,8 @@ public class Pathname extends LispObject
                 else if (part == Keyword.WILD)
                     sb.append("*");
                 else
-                    signal(new LispError("Unsupported directory component " + part + "."));
+                    signal(new LispError("Unsupported directory component " +
+                                         part.writeToString() + "."));
                 sb.append(File.separatorChar);
                 temp = temp.cdr();
             }
@@ -320,7 +330,7 @@ public class Pathname extends LispObject
     {
         try {
             StringBuffer sb = new StringBuffer("#P");
-            boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
+//             boolean printReadably = (_PRINT_READABLY_.symbolValue() != NIL);
             boolean useNamestring = false;
             String s = getNamestring();
             if (s != null) {
@@ -410,7 +420,8 @@ public class Pathname extends LispObject
             return new Pathname(arg.getStringValue());
         if (arg instanceof FileStream)
             return ((FileStream)arg).getPathname();
-        signal(new TypeError(arg.writeToString() + " cannot be converted to a pathname."));
+        signal(new TypeError(arg.writeToString() +
+                             " cannot be converted to a pathname."));
         // Not reached.
         return null;
     }
@@ -489,8 +500,8 @@ public class Pathname extends LispObject
 
     // ### namestring
     // namestring pathname => namestring
-    // FIXME arg can be a stream, too...
-    private static final Primitive1 NAMESTRING = new Primitive1("namestring", "pathname")
+    private static final Primitive1 NAMESTRING =
+        new Primitive1("namestring", "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -498,14 +509,13 @@ public class Pathname extends LispObject
             String namestring = pathname.getNamestring();
             if (namestring == null)
                 signal(new SimpleError("Pathname has no namestring: " +
-                                       pathname + "."));
+                                       pathname.writeToString() + "."));
             return new SimpleString(namestring);
         }
     };
 
     // ### directory-namestring
     // directory-namestring pathname => namestring
-    // FIXME arg can be a stream, too...
     private static final Primitive1 DIRECTORY_NAMESTRING =
         new Primitive1("directory-namestring", "pathname")
     {
@@ -517,7 +527,6 @@ public class Pathname extends LispObject
 
     // ### pathname
     // pathname pathspec => pathname
-    // FIXME pathspec can be a stream, too...
     private static final Primitive1 PATHNAME =
         new Primitive1("pathname", "pathspec")
     {
@@ -529,7 +538,8 @@ public class Pathname extends LispObject
 
     // ### make-pathname
     private static final Primitive MAKE_PATHNAME =
-        new Primitive("make-pathname", "&key host device directory name type version defaults case")
+        new Primitive("make-pathname",
+                      "&key host device directory name type version defaults case")
     {
         public LispObject execute(LispObject[] args)
             throws ConditionThrowable
@@ -551,6 +561,7 @@ public class Pathname extends LispObject
             signal(new ProgramError("Odd number of keyword arguments."));
         Pathname p = new Pathname();
         Pathname defaults = null;
+        boolean deviceSupplied = false;
         boolean nameSupplied = false;
         boolean typeSupplied = false;
         for (int i = 0; i < args.length; i += 2) {
@@ -560,6 +571,7 @@ public class Pathname extends LispObject
                 p.host = value;
             } else if (key == Keyword.DEVICE) {
                 p.device = value;
+                deviceSupplied = true;
             } else if (key == Keyword.DIRECTORY) {
                 if (value instanceof AbstractString)
                     p.directory = list2(Keyword.ABSOLUTE, value);
@@ -582,8 +594,10 @@ public class Pathname extends LispObject
             }
         }
         if (defaults != null) {
-            // Ignore host and device. FIXME Windows!
+            // Ignore host.
             p.directory = mergeDirectories(p.directory, defaults.directory);
+            if (!deviceSupplied)
+                p.device = defaults.device;
             if (!nameSupplied)
                 p.name = defaults.name;
             if (!typeSupplied)
@@ -603,9 +617,9 @@ public class Pathname extends LispObject
                 LispObject second = temp.car();
                 if (second == Keyword.UP || second == Keyword.BACK) {
                     StringBuffer sb = new StringBuffer();
-                    sb.append(first);
+                    sb.append(first.writeToString());
                     sb.append(" may not be followed immediately by ");
-                    sb.append(second);
+                    sb.append(second.writeToString());
                     sb.append('.');
                     return signal(new FileError(sb.toString()));
                 }
@@ -636,13 +650,9 @@ public class Pathname extends LispObject
                     String s = System.getProperty("user.home");
                     // For compatibility with SBCL and ACL (and maybe other
                     // Lisps), we want the namestring of a directory to end
-                    // with a '/' on Unix.
-                    // FIXME Do we need to do something similar on Windows?
-                    if (s.startsWith("/")) {
-                        // Unix.
-                        if (!s.endsWith("/"))
-                            s = s.concat("/");
-                    }
+                    // with a file separator character.
+                    if (!s.endsWith(File.separator))
+                        s = s.concat(File.separator);
                     return new Pathname(s);
                 }
                 case 1:
@@ -692,7 +702,7 @@ public class Pathname extends LispObject
                     }
                     catch (IOException e) {
                         return signal(new FileError("Unable to list directory " +
-                                                    pathname + "."));
+                                                    pathname.writeToString() + "."));
                     }
                 }
             }
@@ -886,7 +896,7 @@ public class Pathname extends LispObject
         }
         if (errorIfDoesNotExist) {
             StringBuffer sb = new StringBuffer("The file ");
-            sb.append(pathname);
+            sb.append(pathname.writeToString());
             sb.append(" does not exist.");
             return signal(new FileError(sb.toString(), pathname));
         }
