@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.24 2003-03-26 21:49:33 piso Exp $
+ * $Id: Fixnum.java,v 1.25 2003-03-27 07:06:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -404,9 +404,22 @@ public final class Fixnum extends LispObject
                     result = new Fixnum(1);
                 else
                     result = new LispFloat((float)1);
-                for (int i = Fixnum.getInt(power); i-- > 0;)
-                    result = result.multiplyBy(n);
+                int count = Fixnum.getInt(power);
+                if (count > 0) {
+                    for (int i = count; i-- > 0;)
+                        result = result.multiplyBy(n);
+                } else if (count < 0) {
+                    for (int i = -count; i-- > 0;)
+                        result = result.divideBy(n);
+                }
                 return result;
+            }
+            if (power instanceof LispFloat) {
+                if (n instanceof Fixnum) {
+                    double d = Math.pow(((Fixnum)n).getValue(),
+                        ((LispFloat)power).getValue());
+                    return new LispFloat(new Float(d).floatValue());
+                }
             }
             throw new LispError("EXPT: unsupported case");
         }
