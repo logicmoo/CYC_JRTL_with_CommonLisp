@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: fixme.lisp,v 1.21 2004-03-17 23:39:41 piso Exp $
+;;; $Id: fixme.lisp,v 1.22 2004-06-24 16:37:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,18 +24,29 @@
   form)
 
 (defmacro declaim (&rest decls)
-  (let ((res ()))
-    (dolist (decl decls)
-      (when (eq (car decl) 'special)
-        (dolist (var (cdr decl))
-          (push `(defvar ,var) res))))
-    (when res
-      `(progn ,@(nreverse res)))))
+`(eval-when (:compile-toplevel :load-toplevel :execute)
+   ,@(mapcar (lambda (decl) `(proclaim ',decl))
+             decls)))
 
 (defun proclaim (declaration-specifier)
-  (when (eq (car declaration-specifier) 'special)
-    (dolist (var (cdr declaration-specifier))
-      (%defvar var))))
+  (case (car declaration-specifier)
+    (SPECIAL
+     (dolist (var (cdr declaration-specifier))
+       (%defvar var)))
+    (OPTIMIZE
+     (dolist (spec (cdr declaration-specifier))
+       (let ((val 3)
+             (quantity spec))
+         (when (consp spec)
+           (setf quantity (car spec)
+                 val (cadr spec)))
+         (when (and (fixnump val)
+                    (<= 0 val 3))
+           (case quantity
+             (SPEED
+              (setf jvm::*speed* val))
+             (SAFETY
+              (setf jvm::*safety* val)))))))))
 
 (defun disassemble (fn)
   (%format t "; DISASSEMBLE is not implemented.")
