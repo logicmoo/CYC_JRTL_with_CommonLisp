@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Nil.java,v 1.38 2004-10-13 00:22:19 piso Exp $
+ * $Id: Nil.java,v 1.39 2004-12-21 18:04:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,6 +113,33 @@ public final class Nil extends Symbol
     public LispObject push(LispObject obj)
     {
         return new Cons(obj);
+    }
+
+    public LispObject NTH(int index) throws ConditionThrowable
+    {
+        if (index < 0)
+            signal(new TypeError(String.valueOf(index) +
+                                 " is not of type UNSIGNED-BYTE."));
+        return NIL;
+    }
+
+    public LispObject NTH(LispObject arg) throws ConditionThrowable
+    {
+        int index;
+        try {
+            index = ((Fixnum)arg).value;
+        }
+        catch (ClassCastException e) {
+            if (arg instanceof Bignum) {
+                if (arg.minusp())
+                    return signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+                return NIL;
+            }
+            return signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+        }
+        if (index < 0)
+            signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+        return NIL;
     }
 
     public LispObject elt(int index) throws ConditionThrowable

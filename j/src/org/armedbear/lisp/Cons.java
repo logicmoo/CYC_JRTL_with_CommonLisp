@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.52 2004-11-28 15:43:49 piso Exp $
+ * $Id: Cons.java,v 1.53 2004-12-21 18:04:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,6 +231,52 @@ public final class Cons extends LispObject
             signal(new TypeError(obj, Symbol.LIST));
         }
         return length;
+    }
+
+    public LispObject NTH(int index) throws ConditionThrowable
+    {
+        if (index < 0)
+            signal(new TypeError(String.valueOf(index) +
+                                 " is not of type UNSIGNED-BYTE."));
+        int i = 0;
+        LispObject obj = this;
+        while (true) {
+            if (i == index)
+                return obj.car();
+            obj = obj.cdr();
+            if (obj == NIL)
+                return NIL;
+            ++i;
+        }
+    }
+
+    public LispObject NTH(LispObject arg) throws ConditionThrowable
+    {
+        int index;
+        try {
+            index = ((Fixnum)arg).value;
+        }
+        catch (ClassCastException e) {
+            if (arg instanceof Bignum) {
+                // FIXME (when machines have enough memory for it to matter)
+                if (arg.minusp())
+                    return signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+                return NIL;
+            }
+            return signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+        }
+        if (index < 0)
+            signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+        int i = 0;
+        LispObject obj = this;
+        while (true) {
+            if (i == index)
+                return obj.car();
+            obj = obj.cdr();
+            if (obj == NIL)
+                return NIL;
+            ++i;
+        }
     }
 
     public LispObject elt(int index) throws ConditionThrowable
