@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.19 2003-05-19 00:45:48 piso Exp $
+ * $Id: Jdb.java,v 1.20 2003-05-19 02:06:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,8 @@ import org.armedbear.j.Utilities;
 
 public final class Jdb extends Buffer implements JdbConstants
 {
+    private static int catchMode = CATCH_UNCAUGHT;
+
     private JdbSession session;
     private VirtualMachine vm;
     private ThreadReference currentThread;
@@ -352,6 +354,10 @@ public final class Jdb extends Buffer implements JdbConstants
             case JDB_BREAK:
                 logCommand("break", args);
                 doBreak(args, false);
+                break;
+            case JDB_CATCH:
+                logCommand("catch", args);
+                doCatch(args);
                 break;
             case JDB_CLEAR:
                 logCommand("clear", args);
@@ -728,9 +734,12 @@ public final class Jdb extends Buffer implements JdbConstants
             vm = connection.open(this);
             if (vm != null) {
                 EventRequestManager mgr = vm.eventRequestManager();
-                ExceptionRequest exceptionRequest =
-                    mgr.createExceptionRequest(null, false, true);
-                exceptionRequest.enable();
+                if (catchMode != CATCH_NONE) {
+                    ExceptionRequest exceptionRequest =
+                        mgr.createExceptionRequest(null,
+                            catchMode == CATCH_ALL, true);
+                    exceptionRequest.enable();
+                }
                 ThreadStartRequest tsr = mgr.createThreadStartRequest();
                 tsr.enable();
                 ThreadDeathRequest tdr = mgr.createThreadDeathRequest();
@@ -1011,6 +1020,8 @@ public final class Jdb extends Buffer implements JdbConstants
 
     private void doBreak(String arg, boolean temporary)
     {
+        if (vm == null)
+            return;
         if (arg == null) {
             log("No location specified");
             return;
@@ -1067,7 +1078,7 @@ public final class Jdb extends Buffer implements JdbConstants
                 if (eventRequest != null) {
                     eventRequest.enable();
                 } else {
-                    EventRequestManager mgr = getVM().eventRequestManager();
+                    EventRequestManager mgr = vm.eventRequestManager();
                     ClassPrepareRequest cpr = mgr.createClassPrepareRequest();
                     String classFilter = className;
                     cpr.addClassFilter(classFilter);
@@ -1152,7 +1163,7 @@ public final class Jdb extends Buffer implements JdbConstants
             if (eventRequest != null) {
                 eventRequest.enable();
             } else {
-                EventRequestManager mgr = getVM().eventRequestManager();
+                EventRequestManager mgr = vm.eventRequestManager();
                 ClassPrepareRequest cpr = mgr.createClassPrepareRequest();
                 cpr.addClassFilter(className);
                 cpr.enable();
@@ -1225,6 +1236,39 @@ public final class Jdb extends Buffer implements JdbConstants
             if (ed.getModeId() == JAVA_MODE)
                 ed.repaint();
         }
+    }
+
+    private synchronized void doCatch(String arg)
+    {
+        Log.debug("doCatch");
+        if (vm == null)
+            return;
+        int newCatchMode = -1;
+        if (arg.equals("none"))
+            newCatchMode = CATCH_NONE;
+        else if (arg.equals("uncaught"))
+            newCatchMode = CATCH_UNCAUGHT;
+        else if (arg.equals("all"))
+            newCatchMode = CATCH_ALL;
+        else {
+            log("Invalid argument");
+            return;
+        }
+        if (newCatchMode == catchMode)
+            return; // No change.
+        EventRequestManager mgr = vm.eventRequestManager();
+        if (catchMode != CATCH_NONE) {
+            List list = mgr.exceptionRequests();
+            Log.debug("exception request count = " + list.size());
+            mgr.deleteEventRequests(list);
+        }
+        if (newCatchMode != CATCH_NONE) {
+            ExceptionRequest exceptionRequest =
+                mgr.createExceptionRequest(null,
+                    newCatchMode == CATCH_ALL, true);
+            exceptionRequest.enable();
+        }
+        catchMode = newCatchMode;
     }
 
     private void doNext(String args)
