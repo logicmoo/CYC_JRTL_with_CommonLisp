@@ -150,14 +150,7 @@
       <include name="gnu/regexp/MessagesBundle.properties"/>
       <include name="org/armedbear/lisp/build"/>
       <!-- Lisp source files (boot.lisp and friends) -->
-      <include name="org/armedbear/lisp/boot.lisp"/>
-      <include name="org/armedbear/lisp/documentation.lisp"/>
-      <include name="org/armedbear/lisp/backquote.lisp"/>
-      <include name="org/armedbear/lisp/setf.lisp"/>
-      <include name="org/armedbear/lisp/macros.lisp"/>
-      <include name="org/armedbear/lisp/list.lisp"/>
-      <include name="org/armedbear/lisp/symbol.lisp"/>
-      <include name="org/armedbear/lisp/j.lisp"/>
+      <include name="org/armedbear/lisp/*.lisp"/>
     </jar>
   </target>
 
