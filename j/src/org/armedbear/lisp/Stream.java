@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.60 2004-03-17 16:22:01 piso Exp $
+ * $Id: Stream.java,v 1.61 2004-03-24 02:48:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -597,11 +597,11 @@ public class Stream extends LispObject
             char c = (char) n;
             if (rt.isWhitespace(c))
                 break;
+            if (rt.getAttribute(c) == Readtable.ATTR_TERMINATING_MACRO) {
+                _unreadChar(c);
+                break;
+            }
             switch (c) {
-                case '(':
-                case ')':
-                    _unreadChar(c);
-                    break loop;
                 case '\\':
                     n = _readChar();
                     if (n < 0)
