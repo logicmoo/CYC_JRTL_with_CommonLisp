@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.126 2003-03-15 03:56:02 piso Exp $
+ * $Id: Primitives.java,v 1.127 2003-03-15 17:41:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -965,9 +965,8 @@ public final class Primitives extends Module
                 chars[i] = LispCharacter.getValue(array[i]);
             final char c1 = chars[0];
             for (int i = 1; i < length; i++) {
-                if (c1 == chars[i])
-                    continue;
-                return NIL;
+                if (c1 != chars[i])
+                    return NIL;
             }
             return T;
         }
@@ -983,9 +982,9 @@ public final class Primitives extends Module
                 char c2 = LispCharacter.getValue(array[1]);
                 if (c1 == c2)
                     return T;
-                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
-                    return T;
                 if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                    return T;
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
                     return T;
                 return NIL;
             }
@@ -1000,9 +999,9 @@ public final class Primitives extends Module
                 char c2 = chars[i];
                 if (c1 == c2)
                     continue;
-                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
-                    continue;
                 if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                    return T;
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
                     continue;
                 return NIL;
             }
@@ -1027,7 +1026,7 @@ public final class Primitives extends Module
                 }
                 default: {
                     final int length = array.length;
-                    long[] chars = new long[length];
+                    char[] chars = new char[length];
                     for (int i = 0; i < length; i++)
                         chars[i] = Character.toUpperCase(LispCharacter.getValue(array[i]));
                     for (int i = 1; i < length; i++) {
@@ -1057,7 +1056,7 @@ public final class Primitives extends Module
                 }
                 default: {
                     final int length = array.length;
-                    long[] chars = new long[length];
+                    char[] chars = new char[length];
                     for (int i = 0; i < length; i++)
                         chars[i] = Character.toUpperCase(LispCharacter.getValue(array[i]));
                     for (int i = 1; i < length; i++) {
@@ -1069,6 +1068,7 @@ public final class Primitives extends Module
             }
         }
     };
+
     // ### assoc
     // assoc item alist &key key test test-not => entry
     // This is the bootstrap version (needed for %set-documentation).
