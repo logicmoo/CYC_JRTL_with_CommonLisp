@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.107 2005-02-05 20:49:47 piso Exp $
+ * $Id: Stream.java,v 1.108 2005-02-06 00:40:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -541,8 +541,11 @@ public class Stream extends LispObject
         StringBuffer sb = new StringBuffer();
         while (true) {
             int n = _readChar();
-            if (n < 0)
-                break;
+            if (n < 0) {
+                signal(new EndOfFile(this));
+                // Not reached.
+                return null;
+            }
             char c = (char) n;
             byte attr = rt.getAttribute(c);
             if (attr == Readtable.ATTR_SINGLE_ESCAPE) {
