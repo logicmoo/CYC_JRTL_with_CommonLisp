@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.236 2004-07-24 01:53:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.237 2004-07-24 03:01:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,9 +28,6 @@
 (shadow '(method variable))
 
 (defvar *use-locals-vector* nil)
-
-;; FIXME Get rid of this!
-(defvar *support-non-local-returns* t)
 
 ;; FIXME
 ;; This controls compiler debugging output, not debuggability of compiled code!
@@ -289,6 +286,7 @@
 (defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
 (defconstant +lisp-environment+ "Lorg/armedbear/lisp/Environment;")
 (defconstant +lisp-throw-class+ "org/armedbear/lisp/Throw")
+(defconstant +lisp-return-class+ "org/armedbear/lisp/Return")
 
 (defun emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
@@ -1737,14 +1735,8 @@
       (case (car args)
         (QUOTE
          nil)
-        ((RETURN-FROM GO CATCH THROW UNWIND-PROTECT)
+        ((RETURN-FROM GO CATCH THROW UNWIND-PROTECT BLOCK)
          t)
-        (BLOCK
-         (if *support-non-local-returns*
-             t
-             (dolist (arg (cdr args))
-               (when (unsafe-p arg)
-                 (return t)))))
         (t
          (dolist (arg args)
            (when (unsafe-p arg)
@@ -2408,6 +2400,11 @@
   )
 
 (defun compile-block (form &key (target *val*))
+  (when (= (length form) 2) ; (block foo)
+    (when target
+      (emit-push-nil)
+      (emit-move-from-stack target))
+    (return-from compile-block))
   (let* ((name (cadr form))
          (body (cddr form))
          (block-exit (gensym))
@@ -2417,8 +2414,6 @@
          (*blocks* *blocks*)
          (*register* *register*)
          env-register)
-;;     (format t "entering COMPILE-BLOCK ~S *support-non-local-returns* is T~%" name)
-;;     (format t "compiland = ~S~%" (compiland-name *current-compiland*))
     (push block *blocks*)
     (when (contains-return body)
       ;; Save current dynamic environment.
@@ -2426,144 +2421,77 @@
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
       (emit 'astore env-register))
-
-    (cond (*support-non-local-returns*
-           (setf (block-catch-tag block) (gensym))
-
-;;            (compile-form (list* 'CATCH `',(block-catch-tag block) body) :target target)
-;;            (setf form (list* 'CATCH `',(block-catch-tag block) body))
-
-           (if (= (length form) 2) ; (block foo)
-               (when target
-                 (emit-push-nil)
-                 (emit-move-from-stack target))
-               (let* ((*register* *register*)
-                      (tag-register (allocate-register))
-                      (BEGIN-BLOCK (gensym))
-                      (END-BLOCK (gensym))
-                      (BEGIN-HANDLER (gensym))
-                      (END-HANDLER (gensym))
-                      (RETHROW (gensym)))
-;;                  (format t "tag-register = ~S~%" tag-register)
-;;                  (compile-form `',(block-catch-tag block) :target tag-register) ; Tag.
-                 (label BEGIN-BLOCK) ; Start of protected range.
-                 ;; Implicit PROGN.
-                 (do ((forms body (cdr forms)))
-                     ((null forms))
-                   (compile-form (car forms) :target (if (cdr forms) nil target))
-                   (when (cdr forms)
-                     (maybe-emit-clear-values (car forms))))
-                 (label END-BLOCK) ; End of protected range.
-                 (emit 'goto END-HANDLER) ; Jump over handlers.
-
-;;                  (format t "block-non-local-return-p = ~S~%"
-;;                          (block-non-local-return-p block))
-
-                 (when (block-non-local-return-p block)
-                   ; Start of handler for Return.
-                   (label BEGIN-HANDLER)
-                   ;; The Return object is on the runtime stack. Stack depth is 1.
-                   (emit 'dup) ; Stack depth is 2.
-                   (emit 'getfield "org/armedbear/lisp/Return" "tag" +lisp-object+) ; Still 2.
-
-;;                    (emit 'aload tag-register) ; Stack depth is 3.
-                   (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
-
-                   ;; If it's not the tag we're looking for, we branch to the start of the
-                   ;; catch-all handler, which will do a re-throw.
-                   (emit 'if_acmpne RETHROW) ; Stack depth is 1.
-                   (emit 'getfield "org/armedbear/lisp/Return" "result" +lisp-object+)
-                   (emit-move-from-stack target) ; Stack depth is 0.
-                   (emit 'goto END-HANDLER)
-                   (label RETHROW)
-                   ;; A Throwable object is on the runtime stack here. Stack depth is 1.
-                   (emit 'athrow) ; And we're gone.
-;;                    (label END-HANDLER)
-                   ;; Finally...
-                   (push (make-handler :from BEGIN-BLOCK
-                                       :to END-BLOCK
-                                       :code BEGIN-HANDLER
-                                       :catch-type (pool-class "org/armedbear/lisp/Return"))
-                         *handlers*))
-
-                 (label END-HANDLER))))
-          (t
-           ;; Compile subforms.
-           (do ((subforms body (cdr subforms)))
-               ((null subforms))
-             (let* ((subform (car subforms))
-                    (last-subform-p (null (cdr subforms)))
-                    (real-target (if last-subform-p target nil)))
-               (compile-form subform :target real-target)
-               (unless last-subform-p
-                 (maybe-emit-clear-values subform))))))
-
+    (setf (block-catch-tag block) (gensym))
+    (let* ((*register* *register*)
+           (tag-register (allocate-register))
+           (BEGIN-BLOCK (gensym))
+           (END-BLOCK (gensym))
+           (BEGIN-HANDLER (gensym))
+           (END-HANDLER (gensym))
+           (RETHROW (gensym)))
+      (label BEGIN-BLOCK) ; Start of protected range.
+      ;; Implicit PROGN.
+      (do ((forms body (cdr forms)))
+          ((null forms))
+        (compile-form (car forms) :target (if (cdr forms) nil target))
+        (when (cdr forms)
+          (maybe-emit-clear-values (car forms))))
+      (label END-BLOCK) ; End of protected range.
+      (emit 'goto END-HANDLER) ; Jump over handler (if any).
+      (when (block-non-local-return-p block)
+        ; Start of handler for Return.
+        (label BEGIN-HANDLER)
+        ;; The Return object is on the runtime stack. Stack depth is 1.
+        (emit 'dup) ; Stack depth is 2.
+        (emit 'getfield +lisp-return-class+ "tag" +lisp-object+) ; Still 2.
+        (compile-form `',(block-catch-tag block) :target :stack) ; Tag. Stack depth is 3.
+        ;; If it's not the tag we're looking for...
+        (emit 'if_acmpne RETHROW) ; Stack depth is 1.
+        (emit 'getfield +lisp-return-class+ "result" +lisp-object+)
+        (emit-move-from-stack target) ; Stack depth is 0.
+        (emit 'goto END-HANDLER)
+        (label RETHROW)
+        ;; Not the tag we're looking for.
+        (emit 'athrow)
+        ;; Finally...
+        (push (make-handler :from BEGIN-BLOCK
+                            :to END-BLOCK
+                            :code BEGIN-HANDLER
+                            :catch-type (pool-class +lisp-return-class+))
+              *handlers*))
+      (label END-HANDLER))
     (label block-exit)
     (when env-register
-      ;; Restore dynamic environment.
+      ;; We saved the dynamic environment above. Restore it now.
       (emit 'aload *thread*)
       (emit 'aload env-register)
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))
-;;     (format t "leaving COMPILE-BLOCK ~S~%" name)
-    )
-  )
-
-;; (defun rewrite-throw (form)
-;;   (let ((args (cdr form)))
-;;     (if (unsafe-p args)
-;;         (let ((syms ())
-;;               (lets ())
-;;               (wrap-result-form nil))
-;;           ;; Tag.
-;;           (let ((arg (first args)))
-;;             (if (constantp arg)
-;;                 (push arg syms)
-;;                 (let ((sym (gensym)))
-;;                   (push sym syms)
-;;                   (push (list sym arg) lets))))
-;;           ;; Result. "If the result-form produces multiple values, then all the
-;;           ;; values are saved."
-;;           (let ((arg (second args)))
-;;             (if (constantp arg)
-;;                 (push arg syms)
-;;                 (let ((sym (gensym)))
-;;                   (cond ((single-valued-p arg)
-;;                          (push sym syms)
-;;                          (push (list sym arg) lets))
-;;                         (t
-;;                          (push (list 'VALUES-LIST sym) syms)
-;;                          (push (list sym (list 'MULTIPLE-VALUE-LIST arg)) lets))))))
-;;           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
-;;         form)))
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-return-from (form &key (target *val*))
   (let* ((name (second form))
          (result-form (third form))
          (block (find name *blocks* :key #'block-name)))
-    (unless block
-      (error "No block named ~S is currently visible." name))
-    (cond
-     ((eq (block-compiland block) *current-compiland*)
-      (compile-form result-form :target (block-target block))
-      (emit 'goto (block-exit block)))
-     (*support-non-local-returns*
-      (setf (block-non-local-return-p block) t)
-      (emit 'new "org.armedbear.lisp.Return")
-      (emit 'dup)
-      (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
-      (compile-form (third form) :target :stack) ; Result.
-      (emit-invokespecial "org.armedbear.lisp.Return"
-                          "<init>"
-                          "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
-                          -3)
-      (emit 'athrow)
-      ;; Following code will not be reached, but is needed for JVM stack
-      ;; consistency.
-      (when target
-        (emit-push-nil)
-        (emit-move-from-stack target)))
-     (t
-      (error "COMPILE-RETURN-FROM: block not local: ~S" name)))))
+    (cond ((null block)
+           (error "No block named ~S is currently visible." name))
+          ((eq (block-compiland block) *current-compiland*)
+           (compile-form result-form :target (block-target block))
+           (emit 'goto (block-exit block)))
+          (t
+           (setf (block-non-local-return-p block) t)
+           (emit 'new +lisp-return-class+)
+           (emit 'dup)
+           (compile-form `',(block-catch-tag block) :target :stack) ; Tag.
+           (compile-form (third form) :target :stack) ; Result.
+           (emit-invokespecial +lisp-return-class+
+                               "<init>"
+                               "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
+                               -3)
+           (emit 'athrow)
+           ;; Following code will not be reached, but is needed for JVM stack
+           ;; consistency.
+           (when target
+             (emit-push-nil)
+             (emit-move-from-stack target))))))
 
 (defun compile-cons (form &key (target *val*))
   (unless (= (length form) 3)
