@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.156 2003-04-01 19:25:39 piso Exp $
+ * $Id: Primitives.java,v 1.157 2003-04-04 02:18:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2425,29 +2425,44 @@ public final class Primitives extends Module
         {
             if (args.length > 1)
                 throw new WrongNumberOfArgumentsException(this);
-            int old = Fixnum.getInt(_GENSYM_COUNTER_.getSymbolValue());
-            String prefix ="G";
-            int n = -1;
+            String prefix = "G";
             if (args.length == 1) {
                 LispObject arg = args[0];
                 if (arg instanceof Fixnum) {
-                    n = ((Fixnum)arg).getValue();
+                    int n = ((Fixnum)arg).getValue();
                     if (n < 0)
                         throw new TypeError(arg,
                             "non-negative integer");
-                } else if (arg instanceof LispString) {
-                    prefix = ((LispString)arg).getValue();
-                } else {
-                    throw new TypeError(arg,
-                        "string or non-negative integer");
+                    StringBuffer sb = new StringBuffer(prefix);
+                    sb.append(n);
+                    return new Symbol(sb.toString());
                 }
+                if (arg instanceof Bignum) {
+                    BigInteger n = ((Bignum)arg).getValue();
+                    if (n.signum() < 0)
+                        throw new TypeError(arg,
+                            "non-negative integer");
+                    StringBuffer sb = new StringBuffer(prefix);
+                    sb.append(n.toString());
+                    return new Symbol(sb.toString());
+                }
+                if (arg instanceof LispString)
+                    prefix = ((LispString)arg).getValue();
+                else
+                    throw new TypeError(arg, "string or non-negative integer");
             }
-            if (n < 0) {
-                n = old + 1;
-                _GENSYM_COUNTER_.setSymbolValue(new Fixnum(n));
+            LispObject oldValue;
+            Binding binding =
+                (dynEnv == null) ? null : dynEnv.getBinding(_GENSYM_COUNTER_);
+            if (binding != null) {
+                oldValue = binding.value;
+                binding.value = oldValue.incr();
+            } else {
+                oldValue = _GENSYM_COUNTER_.getSymbolValue();
+                _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
             }
             StringBuffer sb = new StringBuffer(prefix);
-            sb.append(n);
+            sb.append(String.valueOf(oldValue));
             return new Symbol(sb.toString());
         }
     };
