@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.9 2003-10-11 18:47:27 piso Exp $
+ * $Id: BuiltInClass.java,v 1.10 2003-10-11 20:40:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass FLOATING_POINT_OVERFLOW          = addClass(Symbol.FLOATING_POINT_OVERFLOW);
     public static final BuiltInClass FLOATING_POINT_UNDERFLOW         = addClass(Symbol.FLOATING_POINT_UNDERFLOW);
     public static final BuiltInClass FUNCTION                         = addClass(Symbol.FUNCTION);
-    public static final BuiltInClass GENERIC_FUNCTION                 = addClass(Symbol.GENERIC_FUNCTION);
+//     public static final BuiltInClass GENERIC_FUNCTION                 = addClass(Symbol.GENERIC_FUNCTION);
     public static final BuiltInClass HASH_TABLE                       = addClass(Symbol.HASH_TABLE);
     public static final BuiltInClass INTEGER                          = addClass(Symbol.INTEGER);
     public static final BuiltInClass LIST                             = addClass(Symbol.LIST);
@@ -153,6 +153,13 @@ public class BuiltInClass extends LispClass
                           list1(CLASS_T));
     static {
         addClass(Symbol.STANDARD_OBJECT, STANDARD_OBJECT);
+    }
+
+    public static final StandardClass GENERIC_FUNCTION =
+        new StandardClass(Symbol.GENERIC_FUNCTION,
+                          list1(FUNCTION));
+    static {
+        addClass(Symbol.GENERIC_FUNCTION, GENERIC_FUNCTION);
     }
 
     static {
