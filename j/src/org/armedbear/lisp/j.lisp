@@ -16,7 +16,8 @@
           key-pressed-hook
           variable-value
           with-editor
-          with-other-editor))
+          with-other-editor
+          with-single-undo))
 
 (defun set-global-property (&rest args)
   (let ((count (length args)) key value)
@@ -122,14 +123,20 @@
     `(let ((,old-editor (current-editor))
            (,other-editor (other-editor)))
        (unless ,other-editor
-         (
-          error "there is no other editor"))
+         (error "there is no other editor"))
        (unwind-protect
         (progn
           (setf (current-editor) ,other-editor)
           ,@forms)
         (update-display ,other-editor)
         (setf (current-editor) ,old-editor)))))
+
+(defmacro with-single-undo (&rest forms)
+  (let ((info (gensym)))
+    `(let ((,info (begin-compound-edit)))
+       (unwind-protect
+        (progn ,@forms)
+        (end-compound-edit ,info)))))
 
 (in-package "COMMON-LISP-USER")
 (use-package "J")
