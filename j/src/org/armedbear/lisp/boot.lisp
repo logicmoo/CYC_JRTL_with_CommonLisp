@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.193 2004-10-01 00:28:17 piso Exp $
+;;; $Id: boot.lisp,v 1.194 2004-10-01 15:18:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -186,23 +186,23 @@
         ((null (gethash tree *sharp-equal-circle-table*))
          (setf (gethash tree *sharp-equal-circle-table*) t)
          (cond
-          ;;                ((typep tree '(or structure-object standard-object))
-          ;;                 (do ((i 1 (1+ i))
-          ;;                      (end (%instance-length tree)))
-          ;;                     ((= i end))
-          ;;                   (let* ((old (%instance-ref tree i))
-          ;;                          (new (circle-subst old-new-alist old)))
-          ;;                     (unless (eq old new)
-          ;;                       (setf (%instance-ref tree i) new)))))
+          ((typep tree 'structure-object)
+           (do ((i 0 (1+ i))
+                (end (structure-length tree)))
+               ((= i end))
+             (let* ((old (%structure-ref tree i))
+                    (new (circle-subst old-new-alist old)))
+               (unless (eq old new)
+                 (%structure-set tree i new)))))
+;;           ((typep tree 'standard-object)
+;;            (do ((i 1 (1+ i))
+;;                 (end (%instance-length tree)))
+;;                ((= i end))
+;;              (let* ((old (%instance-ref tree i))
+;;                     (new (circle-subst old-new-alist old)))
+;;                (unless (eq old new)
+;;                  (setf (%instance-ref tree i) new)))))
           ((arrayp tree)
-           ;;                 (with-array-data ((data tree) (start) (end))
-           ;;                   (declare (fixnum start end))
-           ;;                   (do ((i start (1+ i)))
-           ;;                       ((>= i end))
-           ;;                     (let* ((old (aref data i))
-           ;;                            (new (circle-subst old-new-alist old)))
-           ;;                       (unless (eq old new)
-           ;;                         (setf (aref data i) new))))))
            (do ((i 0 (1+ i))
                 (end (array-total-size tree)))
                ((>= i end))
