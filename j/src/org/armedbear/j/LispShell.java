@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShell.java,v 1.49 2003-12-04 14:57:28 piso Exp $
+ * $Id: LispShell.java,v 1.50 2003-12-08 02:55:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -391,11 +391,7 @@ public class LispShell extends Shell
                 return;
         // Look for an existing LispShell buffer with the same shell command.
         Buffer buf = findLisp(shellCommand);
-        if (buf != null) {
-            Shell shell = (Shell) buf;
-            if (shell.getProcess() == null)
-                shell.startProcess();
-        } else
+        if (buf == null)
             buf = createLispShell(shellCommand, title);
         if (buf != null) {
             final Editor editor = Editor.currentEditor();
