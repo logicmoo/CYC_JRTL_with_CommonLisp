@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.12 2004-06-07 01:52:07 piso Exp $
+;;; $Id: pprint.lisp,v 1.13 2004-06-07 02:10:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@
           #-armedbear write-to-string
           #-armedbear princ-to-string
 	  #-armedbear prin1-to-string
-          write-line
+          #-armedbear write-line
           #-armedbear write-string
           #-armedbear write-char
           #-armedbear terpri
@@ -989,8 +989,8 @@
       (throw 'line-limit-abbreviation-exit T))
     (incf (line-no xp))
     (unless *locating-circularities*
-      (cl:write-line
-          (buffer xp) (base-stream xp) :end end))))
+      (sys::%write-string string stream 0 end)
+      (sys::%terpri stream))))
 
 (defun setup-for-next-line (xp Qentry)
   (let* ((out-point (BP<-TP xp (Qpos xp Qentry)))
@@ -1370,10 +1370,9 @@
 
 (defun write-string (string &optional (stream *standard-output*)
                             &key (start 0) (end (length string)))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (if (xp-structure-p stream)
       (write-string+ string stream start end)
-;;       (cl:write-string string stream :start start :end end))
       (progn
         (unless start
           (setf start 0))
@@ -1383,16 +1382,16 @@
         (sys::%write-string string stream start end)))
   string)
 
-#-armedbear
 (defun write-line (string &optional (stream *standard-output*)
 		   &key (start 0) (end (length string)))
-  (setq stream (decode-stream-arg stream))
-  (if (xp-structure-p stream)
-      (progn (write-string+ string stream start end)
-	     (pprint-newline+ :unconditional stream))
-      (cl:write-line string stream :start start :end end))
+  (setf stream (decode-stream-arg stream))
+  (cond ((xp-structure-p stream)
+         (write-string+ string stream start end)
+         (pprint-newline+ :unconditional stream))
+        (t (sys::%write-string string stream start end)
+           (sys::%terpri stream)))
   string)
-
+
 (defun terpri (&optional (stream *standard-output*))
   (setf stream (decode-stream-arg stream))
   (if (xp-structure-p stream)
@@ -1404,7 +1403,7 @@
 ;stuff, in order to find out the right info to return as the result.
 
 (defun fresh-line (&optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (cond ((xp-structure-p stream)
 	 (attempt-to-output stream t t) ;ok because we want newline
 	 (when (not (zerop (LP<-BP stream)))
