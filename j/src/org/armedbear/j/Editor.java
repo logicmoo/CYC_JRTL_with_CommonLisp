@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.103 2003-07-26 17:49:03 piso Exp $
+ * $Id: Editor.java,v 1.104 2003-08-01 17:33:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2826,6 +2826,8 @@ public final class Editor extends JPanel implements Constants,
             case COMMAND_DOWN:
             case COMMAND_PAGE_UP:
             case COMMAND_PAGE_DOWN:
+            case COMMAND_WINDOW_UP:
+            case COMMAND_WINDOW_DOWN:
                 return;
             default:
                 goalColumn = getAbsoluteCaretCol();
@@ -2835,12 +2837,48 @@ public final class Editor extends JPanel implements Constants,
 
     public void windowUp()
     {
+        maybeResetGoalColumn();
         display.windowUp();
+        maybeScrollCaret();
+        setCurrentCommand(COMMAND_WINDOW_UP);
     }
 
     public void windowDown()
     {
+        maybeResetGoalColumn();
         display.windowDown();
+        maybeScrollCaret();
+        setCurrentCommand(COMMAND_WINDOW_DOWN);
+    }
+
+    public void maybeScrollCaret()
+    {
+        if (dot == null)
+            return;
+        // Don't scroll the caret if a region is selected!
+        if (mark != null)
+            return;
+        final int dotLineNumber = dot.lineNumber();
+        final Line topLine = display.getTopLine();
+        if (dotLineNumber < topLine.lineNumber()) {
+            // Caret is above window.
+            addUndo(SimpleEdit.SCROLL_CARET);
+            dot.moveTo(topLine, 0);
+            updateDotLine();
+            moveCaretToDotCol();
+            goalColumn = 0;
+            return;
+        }
+        final Line bottomLine = display.getBottomLine();
+        if (dotLineNumber > bottomLine.lineNumber()) {
+            // Caret is below window.
+            addUndo(SimpleEdit.SCROLL_CARET);
+            updateDotLine();
+            dot.moveTo(bottomLine, 0);
+            updateDotLine();
+            moveCaretToDotCol();
+            goalColumn = 0;
+        }
     }
 
     public void toCenter()
