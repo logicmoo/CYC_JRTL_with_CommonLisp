@@ -1,8 +1,8 @@
 /*
  * JdbDialog.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: JdbDialog.java,v 1.1.1.1 2002-09-24 16:09:43 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: JdbDialog.java,v 1.2 2003-05-15 01:18:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,11 +168,11 @@ public final class JdbDialog extends AbstractDialog
             classPath = System.getProperty("class.path");
         classPathTextField.setText(classPath);
         String javaHome = session.getJavaHome();
-        if (javaHome == null || javaHome.length() < 1)
+        if (javaHome == null || javaHome.length() == 0)
             javaHome = System.getProperty("java.home");
         javaHomeTextField.setText(javaHome);
         String javaExecutable = session.getJavaExecutable();
-        if (javaExecutable == null || javaExecutable.length() < 1)
+        if (javaExecutable == null || javaExecutable.length() == 0)
             javaExecutable = "java";
         javaExecutableTextField.setText(javaExecutable);
         vmArgsTextField.setText(session.getVMArgs());
