@@ -2,7 +2,7 @@
  * input_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: input_stream_p.java,v 1.3 2004-01-24 19:50:53 piso Exp $
+ * $Id: input_stream_p.java,v 1.4 2004-01-31 20:11:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,11 +31,12 @@ public final class input_stream_p extends Primitive1
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof TwoWayStream)
-            return T;
-        if (arg instanceof Stream)
+        try {
             return ((Stream)arg).isInputStream() ? T : NIL;
-        return signal(new TypeError(arg, Symbol.STREAM));
+        }
+        catch (ClassCastException e) {
+            return signal(new TypeError(arg, Symbol.STREAM));
+        }
     }
 
     private static final Primitive1 INPUT_STREAM_P = new input_stream_p();
