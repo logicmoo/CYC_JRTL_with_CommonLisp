@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.3 2003-07-12 15:44:02 piso Exp $
+ * $Id: StructureObject.java,v 1.4 2003-07-14 13:20:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,14 @@ public final class StructureObject extends LispObject
     {
         this.name = name;
         slots = list.copyToArray();
+    }
+
+    public StructureObject(StructureObject obj)
+    {
+        this.name = obj.name;
+        slots = new LispObject[obj.slots.length];
+        for (int i = slots.length; i-- > 0;)
+            slots[i] = obj.slots[i];
     }
 
     public LispObject typeOf()
@@ -126,6 +134,21 @@ public final class StructureObject extends LispObject
             throws LispError
         {
             return new StructureObject(checkSymbol(first), checkList(second));
+        }
+    };
+
+    // ### copy-structure
+    // copy-structure structure => copy
+    private static final Primitive1 COPY_STRUCTURE =
+        new Primitive1("copy-structure") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            try {
+                return new StructureObject((StructureObject)arg);
+            }
+            catch (ClassCastException e) {
+                throw new TypeError(arg, "STRUCTURE-OBJECT");
+            }
         }
     };
 }
