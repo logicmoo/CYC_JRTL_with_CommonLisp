@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.31 2003-06-28 00:51:10 piso Exp $
+ * $Id: CommandTable.java,v 1.32 2003-06-28 00:56:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,7 +177,6 @@ public class CommandTable
             addCommand("selectWordLeft");
             addCommand("selectWordRight");
             addCommand("setEncoding");
-            addCommand("showMessage");
             addCommand("sidebarListBuffers");
             addCommand("sidebarListTags");
             addCommand("slideIn");
@@ -344,6 +343,7 @@ public class CommandTable
             addCommand("shellNextInput", "CommandInterpreter");
             addCommand("shellPreviousInput", "CommandInterpreter");
             addCommand("shellTab", "Shell");
+            addCommand("showMessage", "CompilationCommands");
             addCommand("sortLines", "Sort");
             addCommand("source", "JDKHelp");
             addCommand("ssh", "RemoteShell");

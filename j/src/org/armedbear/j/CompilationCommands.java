@@ -2,7 +2,7 @@
  * ErrorCommands.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationCommands.java,v 1.5 2003-06-12 00:52:36 piso Exp $
+ * $Id: CompilationCommands.java,v 1.6 2003-06-28 00:56:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,5 +307,34 @@ public final class CompilationCommands implements Constants
                 return null;
         }
         return Editor.getBuffer(file);
+    }
+
+    public static void showMessage()
+    {
+        final Editor editor = Editor.currentEditor();
+        CompilationErrorBuffer errorBuffer;
+        if (editor.getModeId() == XML_MODE)
+            errorBuffer = XmlMode.getErrorBuffer();
+        else
+            errorBuffer = lastCompilationBuffer;
+        if (errorBuffer != null) {
+            CompilationError error = errorBuffer.getCurrentError();
+            if (error != null) {
+                String message = error.getMessage();
+                if (message != null) {
+                    int lineNumber = error.getLineNumber();
+                    int columnNumber = -1;
+                    int offset = error.getOffset();
+                    if (offset >= 0)
+                        columnNumber = offset + 1;
+                    String title = "Line " + lineNumber;
+                    if (columnNumber > 0)
+                        title += "   Col " + columnNumber;
+                    if (message.length() > 65)
+                        message = Utilities.wrap(message, 65, 8);
+                    MessageDialog.showMessageDialog(editor, message, title);
+                }
+            }
+        }
     }
 }
