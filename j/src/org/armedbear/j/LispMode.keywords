@@ -179,7 +179,9 @@ eval
 eval-when
 evenp
 every
+exp
 export
+expt
 fboundp
 fceiling
 fdefinition
@@ -214,6 +216,7 @@ funcall
 function
 function-lambda-expression
 functionp
+gcd
 gensym
 get
 getf
@@ -240,6 +243,7 @@ intern
 intersection
 invoke-debugger
 invoke-restart
+isqrt
 keywordp
 labels
 lambda
@@ -455,6 +459,7 @@ some
 sort
 special
 special-operator-p
+sqrt
 stable-sort
 standard-char-p
 store-value
