@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.6 2004-01-26 14:50:58 piso Exp $
+;;; $Id: open.lisp,v 1.7 2004-01-26 15:26:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,7 +34,8 @@
        (make-file-input-stream pathname element-type))
       (:probe
        (let ((stream (make-file-input-stream pathname element-type)))
-         (close stream)
+         (when stream
+           (close stream))
          stream))
       ((:output :io)
        (unless if-exists-given
