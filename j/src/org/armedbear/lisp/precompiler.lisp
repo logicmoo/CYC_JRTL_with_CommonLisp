@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.22 2003-12-15 01:39:28 asimon Exp $
+;;; $Id: precompiler.lisp,v 1.23 2003-12-22 17:18:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -294,11 +294,17 @@
 
 (defun precompile-local-functions (defs)
   (let ((result nil))
-    (dolist (def defs)
-      (setq result (append result (list (precompile-local-function-def def)))))
-    result))
+    (dolist (def defs (nreverse result))
+      (push (precompile-local-function-def def) result))))
 
-(defun precompile-flet/labels (form)
+(defun precompile-flet (form)
+  (let ((locals (cadr form))
+        (body (cddr form)))
+    (list* (car form)
+           (precompile-local-functions locals)
+           (mapcar #'precompile1 body))))
+
+(defun precompile-labels (form)
   (let ((locals (cadr form))
         (body (cddr form)))
     (list* (car form)
@@ -483,8 +489,8 @@
 (install-handler 'do                   'precompile-do/do*)
 (install-handler 'do*                  'precompile-do/do*)
 
-(install-handler 'flet                 'precompile-flet/labels)
-(install-handler 'labels               'precompile-flet/labels)
+(install-handler 'flet                 'precompile-flet)
+(install-handler 'labels               'precompile-labels)
 
 (install-handler 'do-symbols           'precompile-do-symbols)
 (install-handler 'do-external-symbols  'precompile-do-symbols)
@@ -532,7 +538,7 @@
           (let ((mac (make-macro result)))
             (%set-arglist mac (arglist (symbol-function name)))
             (setf (fdefinition name) mac))
-          (progn 
+          (progn
             (setf (fdefinition name) result)
             (%set-arglist result (arglist definition)))))
     (values (or name result) nil nil)))
