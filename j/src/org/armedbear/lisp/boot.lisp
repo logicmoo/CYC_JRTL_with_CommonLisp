@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.15 2003-03-07 03:16:28 piso Exp $
+;;; $Id: boot.lisp,v 1.16 2003-03-07 18:34:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,19 +17,19 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;; (let ((*load-verbose* nil))
-  (dolist (name '("documentation"
-                  "backquote"
-                  "setf"
-                  "macros"
-                  "list"
-                  "sequences"
-                  "symbol"
-                  "error"
-                  "defstruct"
-                  "sort"
-                  "compiler"))
-    (cl::%load (concatenate 'string name ".lisp")))
+(dolist (name '("documentation.lisp"
+                "backquote.lisp"
+                "setf.lisp"
+                "macros.lisp"
+                "list.lisp"
+                "sequences.lisp"
+                "symbol.lisp"
+                "error.lisp"
+                "defstruct.lisp"
+                "chars.lisp"
+                "sort.lisp"
+                "compiler.lisp"))
+  (cl::%load name))
 
 
 ;; Miscellany.
