@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.129 2003-11-28 05:57:25 piso Exp $
+;;; $Id: boot.lisp,v 1.130 2003-11-29 06:03:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -316,17 +316,30 @@
 		   (progn ,@forms)
 		   (cond ,@(rest clauses))))))))
 
-;;; DOTIMES (from CMUCL)
 (defmacro dotimes ((var count &optional (result nil)) &body body)
-  (cond ((numberp count)
-         `(do ((,var 0 (1+ ,var)))
-              ((>= ,var ,count) ,result)
-            ,@body))
-        (t (let ((v1 (gensym)))
-             `(do ((,var 0 (1+ ,var)) (,v1 ,count))
-                  ((>= ,var ,v1) ,result)
-                ,@body)))))
-
+  (if (numberp count)
+      (let ((tag (gensym)))
+        `(let ((,var 0))
+           (block nil
+             (tagbody
+              ,tag
+              (if (>= ,var ,count)
+                  (return-from nil (progn ,result)))
+              ,@body
+              (setq ,var (1+ ,var))
+              (go ,tag)))))
+      (let ((limit (gensym))
+            (tag (gensym)))
+        `(let ((,limit ,count)
+               (,var 0))
+           (block nil
+             (tagbody
+              ,tag
+              (if (>= ,var ,limit)
+                  (return-from nil (progn ,result)))
+              ,@body
+              (setq ,var (1+ ,var))
+              (go ,tag)))))))
 
 ;;; DOLIST (from CMUCL)
 
