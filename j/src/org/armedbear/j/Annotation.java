@@ -1,8 +1,8 @@
 /*
  * Annotation.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: Annotation.java,v 1.1.1.1 2002-09-24 16:08:46 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Annotation.java,v 1.2 2004-01-07 18:17:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,26 +24,41 @@ package org.armedbear.j;
 public class Annotation
 {
     private final Object userObject;
+    private final int integerValue;
     private final char gutterChar;
 
     public Annotation(Object obj)
     {
         userObject = obj;
+        integerValue = 0;
         gutterChar = 0;
     }
 
     public Annotation(Object obj, char c)
     {
         userObject = obj;
+        integerValue = 0;
         gutterChar = c;
     }
 
-    public Object getUserObject()
+    public Annotation(int n)
+    {
+        userObject = null;
+        integerValue = n;
+        gutterChar = 0;
+    }
+
+    public final Object getUserObject()
     {
         return userObject;
     }
 
-    public char getGutterChar()
+    public final int getIntegerValue()
+    {
+        return integerValue;
+    }
+
+    public final char getGutterChar()
     {
         return gutterChar;
     }
