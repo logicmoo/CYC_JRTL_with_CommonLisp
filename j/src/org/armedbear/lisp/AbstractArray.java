@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.28 2004-09-29 18:56:58 piso Exp $
+ * $Id: AbstractArray.java,v 1.29 2004-09-29 18:57:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,7 +167,7 @@ public abstract class AbstractArray extends LispObject
 
     public abstract void fill(LispObject obj) throws ConditionThrowable;
 
-    // Helper for toString().
+    // Helper for writeToString().
     protected void appendContents(int[] dimensions, int index, StringBuffer sb)
         throws ConditionThrowable
     {
