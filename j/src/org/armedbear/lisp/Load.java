@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.2 2003-01-25 17:04:59 piso Exp $
+ * $Id: Load.java,v 1.3 2003-02-14 19:34:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,53 +113,19 @@ public final class Load extends Lisp
     /*package*/ static final LispObject _load(final String filename,
         boolean verbose, boolean print) throws LispException
     {
-        String truename = filename;
-        InputStream in = null;
-        File file = new File(filename);
-        boolean isFile = file.isFile();
-        if (isFile) {
+        URL url = Lisp.class.getResource(filename);
+        if (url != null) {
+            InputStream in;
             try {
-                in = new FileInputStream(file);
-                truename = file.getCanonicalPath();
+                in = url.openStream();
             }
             catch (IOException e) {
-                throw new LispException(e.getMessage());
+                in = null;
             }
-        } else {
-            String extension = getExtension(filename);
-            if (extension == null) {
-                // No extension specified. Try appending ".lisp".
-                file = new File(filename.concat(".lisp"));
-                isFile = file.isFile();
-            }
-            if (isFile) {
-                try {
-                    in = new FileInputStream(file);
-                    truename = file.getCanonicalPath();
-                }
-                catch (IOException e) {
-                    throw new LispException(e.getMessage());
-                }
-            } else {
-                URL url = Lisp.class.getResource(filename);
-                if (url != null) {
-                    in = Lisp.class.getResourceAsStream(filename);
-                    if (in != null)
-                        truename = url.getPath();
-                } else if (extension == null) {
-                    String s = filename.concat(".lisp");
-                    url = Lisp.class.getResource(s);
-                    if (url != null) {
-                        in = Lisp.class.getResourceAsStream(s);
-                        if (in != null)
-                            truename = url.getPath();
-                    }
-                }
-            }
+            if (in != null)
+                return loadFileFromStream(url.getPath(), in, verbose, print);
         }
-        if (in == null)
-            throw new LispException("file not found: " + filename);
-        return loadFileFromStream(truename, in, verbose, print);
+        throw new LispException("file not found: " + filename);
     }
 
     private static final LispObject loadFileFromStream(String truename,
