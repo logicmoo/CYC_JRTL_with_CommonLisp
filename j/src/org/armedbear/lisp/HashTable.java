@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.33 2004-02-27 02:24:12 piso Exp $
+ * $Id: HashTable.java,v 1.34 2004-06-04 16:29:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,29 +21,40 @@
 
 package org.armedbear.lisp;
 
-public final class HashTable extends LispObject
+public abstract class HashTable extends LispObject
 {
-    private static final int TEST_EQ     = 0;
-    private static final int TEST_EQL    = 1;
-    private static final int TEST_EQUAL  = 2;
-    private static final int TEST_EQUALP = 3;
+    protected static final int TEST_EQ     = 0;
+    protected static final int TEST_EQL    = 1;
+    protected static final int TEST_EQUAL  = 2;
+    protected static final int TEST_EQUALP = 3;
 
-    private int test;
+    protected int test;
 
-    private final LispObject rehashSize;
-    private final LispObject rehashThreshold;
+    protected final LispObject rehashSize;
+    protected final LispObject rehashThreshold;
 
     // The rounded product of the capacity and the load factor. When the number
     // of elements exceeds the threshold, the implementation calls rehash().
-    private int threshold;
+    protected int threshold;
 
     private final float loadFactor = 0.75f;
 
     // Array containing the actual key-value mappings.
-    private HashEntry[] buckets;
+    protected HashEntry[] buckets;
 
     // The number of key-value pairs.
     private int count;
+
+    protected HashTable(int test, int size, LispObject rehashSize,
+                        LispObject rehashThreshold)
+        throws ConditionThrowable
+    {
+        this.test = test;
+        this.rehashSize = rehashSize;
+        this.rehashThreshold = rehashThreshold;
+        buckets = new HashEntry[size];
+        threshold = (int) (size * loadFactor);
+    }
 
     private HashTable(LispObject test, int size, LispObject rehashSize,
                       LispObject rehashThreshold)
@@ -125,7 +136,7 @@ public final class HashTable extends LispObject
         return remove(key) != null ? T : NIL;
     }
 
-    public String toString()
+    public String writeToString()
     {
         StringBuffer sb = new StringBuffer("#<");
         switch (test) {
@@ -209,27 +220,13 @@ public final class HashTable extends LispObject
         return null;
     }
 
-    private final int hash(LispObject key) throws ConditionThrowable
+    protected int hash(LispObject key) throws ConditionThrowable
     {
-        return key == null ? 0 : (key.sxhash().value % buckets.length);
+        return key == null ? 0 : (key.sxhash() % buckets.length);
     }
 
-    private final boolean equals(LispObject o1, LispObject o2) throws ConditionThrowable
-    {
-        switch (test) {
-            case TEST_EQ:
-                return o1 == o2;
-            case TEST_EQL:
-                return o1.eql(o2);
-            case TEST_EQUAL:
-                return o1.equal(o2);
-            case TEST_EQUALP:
-                return o1.equalp(o2);
-            default:
-                Debug.bug();
-                return false;
-        }
-    }
+    protected abstract boolean equals(LispObject o1, LispObject o2)
+        throws ConditionThrowable;
 
     private void rehash() throws ConditionThrowable
     {
@@ -269,7 +266,7 @@ public final class HashTable extends LispObject
         return list;
     }
 
-    private static class HashEntry
+    protected static class HashEntry
     {
         LispObject key;
         LispObject value;
@@ -284,7 +281,8 @@ public final class HashTable extends LispObject
 
     // ### %make-hash-table
     private static final Primitive _MAKE_HASH_TABLE =
-        new Primitive("%make-hash-table", PACKAGE_SYS, false) {
+        new Primitive("%make-hash-table", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 4)
@@ -293,7 +291,17 @@ public final class HashTable extends LispObject
             int size = Fixnum.getValue(args[1]);
             LispObject rehashSize = args[2];
             LispObject rehashThreshold = args[3];
-            return new HashTable(test, size, rehashSize, rehashThreshold);
+            if (test == Symbol.EQL.getSymbolFunction() || test == NIL)
+                return new EqlHashTable(size, rehashSize, rehashThreshold);
+            else if (test == Symbol.EQ.getSymbolFunction())
+                return new EqHashTable(size, rehashSize, rehashThreshold);
+            else if (test == Symbol.EQUAL.getSymbolFunction())
+                return new EqualHashTable(size, rehashSize, rehashThreshold);
+            else if (test == Symbol.EQUALP.getSymbolFunction())
+                return new EqualpHashTable(size, rehashSize, rehashThreshold);
+            else
+                return signal(new LispError("Unknown test for MAKE-HASH-TABLE: " +
+                                            test.writeToString()));
         }
     };
 
@@ -390,11 +398,33 @@ public final class HashTable extends LispObject
 
     // ### sxhash
     // sxhash object => hash-code
-    private static final Primitive1 SXHASH = new Primitive1("sxhash","object")
+    private static final Primitive1 SXHASH = new Primitive1("sxhash", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return arg.sxhash();
+            return new Fixnum(arg.sxhash());
+        }
+    };
+
+    // ### psxhash
+    // psxhash object => hash-code
+    // For EQUALP hash tables.
+    private static final Primitive1 PSXHASH =
+        new Primitive1("psxhash", PACKAGE_SYS, false, "object")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return new Fixnum(arg.psxhash());
+        }
+    };
+
+    private static final Primitive2 MIX =
+        new Primitive2("mix", PACKAGE_SYS, false, "x y")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return number(mix(Fixnum.getValue(first), Fixnum.getValue(second)));
         }
     };
 
