@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.1 2003-11-16 11:35:10 asimon Exp $
+# $Id: Makefile.in,v 1.2 2003-11-16 16:01:20 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,16 +30,12 @@ SOURCEFILES = $(patsubst %.class,%.java,$(CLASSFILES))
 
 %.class : %.java
 	$(JAVAC) -classpath "$(COMPILER_CLASSPATH)" $(JAVACFLAGS) $<
-	date > build
 	touch ../../../../../../classes.stamp
 
 classes: $(CLASSFILES)
 
-lisp: $(CLASSFILES)
-	gcj -O2 $(SOURCEFILES) --main=org.armedbear.lisp.Main -o lisp
-
 clean:
-	-rm -f *.class build
+	-rm -f *.class
 
 Makefile: Makefile.in ../../../../../../config.status
 	cd ../../../../../.. && $(SHELL) ./config.status
