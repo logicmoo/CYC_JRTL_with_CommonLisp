@@ -2,7 +2,7 @@
  * DirectoryTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DirectoryTree.java,v 1.3 2003-05-11 15:52:07 piso Exp $
+ * $Id: DirectoryTree.java,v 1.4 2003-05-12 03:25:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +46,6 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
     TreeSelectionListener, TreeExpansionListener, MouseListener,
     MouseMotionListener, KeyListener
 {
-    private static DirectoryTree localDirectoryTree;
-
     private Editor editor;
     private DirectoryTreeModel treeModel;
 
@@ -68,9 +66,9 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
     public static DirectoryTree getDirectoryTree(Editor editor)
     {
         if (editor.getCurrentDirectory().isLocal()) {
-            if (localDirectoryTree == null)
-                localDirectoryTree = new DirectoryTree(editor, null);
-            return localDirectoryTree;
+            if (editor.localDirectoryTree == null)
+                editor.localDirectoryTree = new DirectoryTree(editor, null);
+            return editor.localDirectoryTree;
         }
         return new DirectoryTree(editor, null);
     }
