@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.1 2003-02-23 01:34:27 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.2 2003-02-23 02:09:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,18 +88,17 @@ public class CharacterInputStream extends LispStream
             LispObject obj = readChar(eofError, EOF);
             if (obj == EOF)
                 return eofValue;
-            LispCharacter c = (LispCharacter) obj;
-            if (c.isWhitespace())
+            LispCharacter character = (LispCharacter) obj;
+            if (character.isWhitespace())
                 continue;
-            LispObject result = processChar(c);
+            LispObject result = processChar(character.getValue());
             if (result != null)
                 return result;
         }
     }
 
-    private LispObject processChar(LispCharacter character) throws LispError
+    private LispObject processChar(char c) throws LispError
     {
-        char c = character.getValue();
         switch (c) {
             case '"':
                 return readString();
@@ -182,8 +181,11 @@ public class CharacterInputStream extends LispStream
                         unread(nextChar);
                     }
                 }
-                unread(c);
-                LispObject obj = read(true, NIL, true);
+                LispObject obj = processChar(c);
+                if (obj == null) {
+                    // A comment.
+                    continue;
+                }
                 if (first == null) {
                     first = new Cons(obj, NIL);
                     last = first;
