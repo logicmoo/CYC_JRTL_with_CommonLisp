@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.198 2004-07-03 18:39:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.199 2004-07-03 23:34:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,9 +72,6 @@
   (setf (variable-context var) *context*)
   (push var (context-vars *context*)))
 
-(defun find-variable-in-context (var)
-  (find var (context-vars *context*) :key 'variable-name))
-
 
 (defun push-variable (var special-p)
   (let* ((index (if special-p nil (length (context-vars *context*))))
@@ -85,17 +82,17 @@
       (add-variable-to-context variable)
       )))
 
-(defun find-variable (var)
-;;   (find var *variables* :key 'variable-name))
-  (let ((context *context*))
-    (loop
-      (let ((v (find var (context-vars context) :key 'variable-name)))
-        (cond (v
-               (return v))
-              (t
-               (setf context (context-parent context))
-               (when (null context)
-                 (return nil))))))))
+(defun find-variable (name)
+  (find name *variables* :key 'variable-name))
+;;   (let ((context *context*))
+;;     (loop
+;;       (let ((v (find name (context-vars context) :key 'variable-name)))
+;;         (cond (v
+;;                (return v))
+;;               (t
+;;                (setf context (context-parent context))
+;;                (when (null context)
+;;                  (return nil))))))))
 
 ;; Returns index of allocated slot.
 (defun allocate-local (symbol)
@@ -2359,6 +2356,9 @@
           (compile-form (car forms) (cdr forms))))
       (error "COMPILE-FLET: unsupported case.")))
 
+(defun compile-labels (form for-effect)
+  (error "COMPILE-LABELS: unsupported case."))
+
 (defun compile-funcall (form for-effect)
 ;;   (format t "COMPILE-FUNCALL form = ~S~%" form)
   (compile-function-call form for-effect))
@@ -3165,6 +3165,7 @@
                           function
                           go
                           if
+                          labels
                           locally
                           multiple-value-bind
                           multiple-value-list
