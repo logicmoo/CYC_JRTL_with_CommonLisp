@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.89 2003-10-14 12:48:48 piso Exp $
+ * $Id: Autoload.java,v 1.90 2003-10-14 16:02:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -238,6 +238,7 @@ public class Autoload extends Function
         autoload("unuse-package", "PackageFunctions");
         autoload("user-homedir-pathname", "Pathname");
         autoload(PACKAGE_EXT, "add-class", "LispClass");
+        autoload(PACKAGE_EXT, "assq", "assq");
         autoload(PACKAGE_EXT, "classp", "LispClass");
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file");
         autoload(PACKAGE_EXT, "gc", "gc");
