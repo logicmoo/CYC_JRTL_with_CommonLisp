@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.7 2004-09-05 20:05:51 piso Exp $
+;;; $Id: slime.lisp,v 1.8 2004-09-06 00:54:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,24 +64,22 @@
         (swank-protocol:decode-message *stream*))
     (stream-error () (disconnect))))
 
-(defun slime-read-port-and-connect (retries)
+(defun read-port-and-connect (retries)
   (status "Slime polling for connection...")
-  (dotimes (i retries)
+  (dotimes (i retries (status "Slime timed out"))
     (when (probe-file (swank-protocol:port-file))
       (with-open-file (s (swank-protocol:port-file)
                          :direction :input)
         (let ((port (read s)))
-          (when (connect "localhost" port)
+          (when (connect "127.0.0.1" port)
+            (status "Slime connected!")
             (return)))))
     (sleep 1)))
 
 (defun slime ()
   (when *stream*
     (disconnect))
-  (make-thread #'(lambda ()
-                  (progn
-                    (slime-read-port-and-connect 20)
-                    (status "Slime connected!")))))
+  (make-thread #'(lambda () (read-port-and-connect 60))))
 
 (defvar *prefix* nil)
 (defvar *completions* ())
@@ -264,6 +262,9 @@
   (j::%execute-command "findTagAtDot"))
 
 (defun edit-definition (&optional function-name package-name)
+  (unless (slime-connected-p)
+    (find-tag-at-point)
+    (return-from edit-definition))
   (let ((pathname (buffer-pathname (current-buffer))))
     (when (and pathname
                (string-equal (pathname-type pathname) "el"))
@@ -283,7 +284,7 @@
 
 (map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
 (map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
-(map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
 (map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
-(map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp")
+(map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
 (map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp Shell")
+(map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp")
