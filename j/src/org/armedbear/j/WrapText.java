@@ -2,7 +2,7 @@
  * WrapText.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: WrapText.java,v 1.10 2004-09-19 23:40:44 piso Exp $
+ * $Id: WrapText.java,v 1.11 2004-09-20 00:13:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,10 +59,19 @@ public final class WrapText implements Constants
         if (dot != null && mark != null) {
             r = new Region(buffer, dot, mark);
         } else {
-            final Line firstLine = buffer.getFirstLine();
-            if (firstLine == null)
+            Line line = buffer.getFirstLine();
+            if (buffer instanceof SendMail) {
+                // Skip headers and header separator line.
+                while (line != null) {
+                    String s = line.trim();
+                    line = line.next();
+                    if (s.equals(SendMail.getHeaderSeparator()))
+                        break;
+                }
+            }
+            if (line == null)
                 return;
-            r = new Region(buffer, new Position(firstLine, 0), buffer.getEnd());
+            r = new Region(buffer, new Position(line, 0), buffer.getEnd());
         }
         Position savedDot = dot.copy();
         boolean seenDot = false;
