@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.278 2004-09-04 00:54:01 piso Exp $
+ * $Id: Lisp.java,v 1.279 2004-09-15 13:15:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,13 @@
 package org.armedbear.lisp;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
+import java.net.URL;
 import java.util.Hashtable;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public abstract class Lisp
 {
@@ -789,7 +794,8 @@ public abstract class Lisp
     public static final LispObject loadCompiledFunction(String namestring)
         throws ConditionThrowable
     {
-        File file = Utilities.getFile(new Pathname(namestring));
+        Pathname pathname = new Pathname(namestring);
+        File file = Utilities.getFile(pathname);
         if (file != null && file.isFile()) {
             try {
                 JavaClassLoader loader = new JavaClassLoader();
@@ -798,16 +804,89 @@ public abstract class Lisp
                     Class[] parameterTypes = new Class[0];
                     java.lang.reflect.Constructor constructor =
                         c.getConstructor(parameterTypes);
-                    LispObject obj = (LispObject) constructor.newInstance(null);
+                    Object[] initargs = new Object[0];
+                    LispObject obj =
+                        (LispObject) constructor.newInstance(initargs);
                     return obj;
                 }
+            }
+            catch (VerifyError e) {
+                return signal(new LispError("Class verification failed: " +
+                                            e.getMessage()));
             }
             catch (Throwable t) {
                 Debug.trace(t);
             }
+            return signal(new LispError("Unable to load " +
+                                        pathname.writeToString()));
+        } else {
+            // No such file. Look in j.jar.
+            URL url = Lisp.class.getResource(namestring);
+            if (url != null) {
+                try {
+                    String s = url.toString();
+                    String zipFileName;
+                    String entryName;
+                    if (s.startsWith("jar:file:")) {
+                        s = s.substring(9);
+                        int index = s.lastIndexOf('!');
+                        if (index >= 0) {
+                            zipFileName = s.substring(0, index);
+                            entryName = s.substring(index + 1);
+                            if (entryName.startsWith("/"))
+                                entryName = entryName.substring(1);
+                            ZipFile zipFile = new ZipFile(zipFileName);
+                            ZipEntry entry = zipFile.getEntry(entryName);
+                            if (entry != null) {
+                                long size = entry.getSize();
+                                InputStream in = zipFile.getInputStream(entry);
+                                byte[] bytes = new byte[(int)size];
+                                int bytesRemaining = (int) size;
+                                int bytesRead = 0;
+                                while (bytesRemaining > 0) {
+                                    int n;
+                                    if (bytesRemaining >= 4096)
+                                        n = in.read(bytes, bytesRead, 4096);
+                                    else
+                                        n = in.read(bytes, bytesRead, bytesRemaining);
+                                    if (n < 0)
+                                        break;
+                                    bytesRead += n;
+                                    bytesRemaining -= n;
+                                }
+                                in.close();
+                                if (bytesRemaining > 0)
+                                    Debug.trace("bytesRemaining = " + bytesRemaining);
+                                JavaClassLoader loader = new JavaClassLoader();
+                                Class c =
+                                    loader.loadClassFromByteArray(null, bytes, 0, bytes.length);
+                                if (c != null) {
+                                    Class[] parameterTypes = new Class[0];
+                                    java.lang.reflect.Constructor constructor =
+                                        c.getConstructor(parameterTypes);
+                                    Object[] initargs = new Object[0];
+                                    LispObject obj =
+                                        (LispObject) constructor.newInstance(initargs);
+                                    return obj;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (VerifyError e) {
+                    return signal(new LispError("Class verification failed: " +
+                                                e.getMessage()));
+                }
+                catch (IOException e) {
+                    Debug.trace(e);
+                }
+                catch (Throwable t) {
+                    Debug.trace(t);
+                }
+            }
         }
-        return signal(new LispError("Unable to load \"" + namestring + "\"."));
-    }
+        return signal(new LispError("Unable to load " + namestring));
+     }
 
     public static final LispObject makeCompiledClosure(LispObject ctf,
                                                        LispObject[][] context)
