@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.6 2004-01-27 01:30:02 piso Exp $
+ * $Id: Stream.java,v 1.7 2004-01-27 01:40:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1201,11 +1201,6 @@ public class Stream extends LispObject
         return T;
     }
 
-    public void print(LispObject obj) throws ConditionThrowable
-    {
-        writeString(String.valueOf(obj));
-    }
-
     public void print(char c) throws ConditionThrowable
     {
         writeChar(c);
@@ -1223,17 +1218,7 @@ public class Stream extends LispObject
         thread.bindSpecial(_PRINT_ESCAPE_, NIL);
         String s = String.valueOf(obj);
         thread.setDynamicEnvironment(oldDynEnv);
-        try {
-            writer.write(s);
-            int index = s.lastIndexOf('\n');
-            if (index < 0)
-                charPos += s.length();
-            else
-                charPos = s.length() - (index + 1);
-        }
-        catch (IOException e) {
-            signal(new StreamError(e));
-        }
+        writeString(s);
     }
 
     // PRIN1 produces output suitable for input to READ.
