@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.22 2003-11-11 19:20:54 piso Exp $
+;;; $Id: jvm.lisp,v 1.23 2003-11-11 19:32:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1713,14 +1713,15 @@
           (block-label (car rest))
           (block-exit (gensym))
           (*blocks* (acons block-label block-exit *blocks*)))
-     (do* ((forms (cdr rest) (cdr forms)))
-          ((null forms))
+     (do ((forms (cdr rest) (cdr forms)))
+         ((null forms))
        (compile-form (car forms) (cdr forms)))
      (emit 'label `,block-exit)))
 
 (defun compile-progn (form)
-  (dolist (form (cdr form))
-    (compile-form form)))
+  (do ((forms (cdr form) (cdr forms)))
+      ((null forms))
+    (compile-form (car forms) (cdr forms))))
 
 (defun compile-setq (form)
   (unless (= (length form) 3)
