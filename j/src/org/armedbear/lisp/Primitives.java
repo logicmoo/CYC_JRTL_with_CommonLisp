@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.488 2003-10-28 02:41:16 piso Exp $
+ * $Id: Primitives.java,v 1.489 2003-10-28 16:02:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1612,6 +1612,7 @@ public final class Primitives extends Module
     };
 
     // ### handler-case
+    // Should be a macro.
     private static final SpecialOperator HANDLER_CASE =
         new SpecialOperator("handler-case")
     {
@@ -1625,6 +1626,9 @@ public final class Primitives extends Module
             LispObject result;
             try {
                 result = eval(form, env, thread);
+            }
+            catch (Return ret) {
+                throw ret;
             }
             catch (ConditionThrowable throwable) {
                 if (throwable instanceof Throw) {
