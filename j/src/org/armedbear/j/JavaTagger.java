@@ -2,7 +2,7 @@
  * JavaTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaTagger.java,v 1.5 2002-12-21 15:19:43 piso Exp $
+ * $Id: JavaTagger.java,v 1.6 2003-12-30 19:24:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -476,6 +476,22 @@ public class JavaTagger extends Tagger implements Constants
                 break;
             } else
                 pos.next();
+        }
+    }
+
+    // Used by the C, C++ and Objective C taggers.
+    protected static final void skipPreprocessor(Position pos)
+    {
+        while (true) {
+            Line line = pos.getLine();
+            Line nextLine = line.next();
+            if (nextLine == null) {
+                pos.setOffset(line.length());
+                return;
+            }
+            pos.moveTo(nextLine, 0);
+            if (line.length() == 0 || line.charAt(line.length()-1) != '\\')
+                return;
         }
     }
 }
