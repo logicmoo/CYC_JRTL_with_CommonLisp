@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: ModeList.java,v 1.6 2002-12-14 20:03:27 piso Exp $
+ * $Id: ModeList.java,v 1.7 2003-04-04 14:04:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public final class ModeList implements Constants
         addEntry(CPP_MODE, CPP_MODE_NAME, "CppMode", true, "(.+\\.cpp)|(.+\\.cxx)|(.+\\.cc)|(.+\\.hpp)|(.+\\.hxx)|(.+\\.h)");
         addEntry(CSS_MODE, CSS_MODE_NAME, "CSSMode", true, ".+\\.css");
         addEntry(C_MODE, C_MODE_NAME, "CMode", true, ".+\\.c");
-        addEntry(DIFF_MODE, DIFF_MODE_NAME, "DiffMode", false, null);
+        addEntry(DIFF_MODE, DIFF_MODE_NAME, "DiffMode", true, ".+\\.diff");
         addEntry(DIRECTORY_MODE, DIRECTORY_MODE_NAME, "DirectoryMode", false, null);
         addEntry(HTML_MODE, HTML_MODE_NAME, "HtmlMode", true, ".+\\.html?");
         addEntry(IMAGE_MODE, IMAGE_MODE_NAME, "ImageMode", false, ".+\\.gif|.+\\.jpe?g|.+\\.png");
@@ -104,7 +104,7 @@ public final class ModeList implements Constants
     public synchronized Mode getModeFromModeName(String modeName)
     {
         if (modeName != null) {
-            for (int i = list.size()-1; i >= 0; i--) {
+            for (int i = list.size(); i-- > 0;) {
                 ModeListEntry entry = (ModeListEntry) list.get(i);
                 if (modeName.equalsIgnoreCase(entry.getDisplayName()))
                     return entry.getMode(true);
@@ -116,7 +116,7 @@ public final class ModeList implements Constants
     public synchronized int getModeIdFromModeName(String modeName)
     {
         if (modeName != null) {
-            for (int i = list.size()-1; i >= 0; i--) {
+            for (int i = list.size(); i-- > 0;) {
                 ModeListEntry entry = (ModeListEntry) list.get(i);
                 if (modeName.equalsIgnoreCase(entry.getDisplayName()))
                     return entry.getId();
@@ -128,7 +128,7 @@ public final class ModeList implements Constants
     public synchronized Mode getModeForFileName(String fileName)
     {
         if (fileName != null) {
-            for (int i = list.size()-1; i >= 0; i--) {
+            for (int i = list.size(); i-- > 0;) {
                 ModeListEntry entry = (ModeListEntry) list.get(i);
                 if (entry.accepts(fileName))
                     return entry.getMode(true);
@@ -154,7 +154,7 @@ public final class ModeList implements Constants
 
     public synchronized void resetModes()
     {
-        for (int i = list.size()-1; i >= 0; i--) {
+        for (int i = list.size(); i-- > 0;) {
             ModeListEntry entry = (ModeListEntry) list.get(i);
             Mode mode = entry.getMode(false);
             if (mode != null)
@@ -171,7 +171,7 @@ public final class ModeList implements Constants
 
     private final ModeListEntry getEntry(int id)
     {
-        for (int i = list.size()-1; i >= 0; i--) {
+        for (int i = list.size(); i-- > 0;) {
             ModeListEntry entry = (ModeListEntry) list.get(i);
             if (entry.getId() == id) {
                 // Found entry.
