@@ -1,8 +1,8 @@
 /*
  * Frame.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Frame.java,v 1.13 2003-07-25 16:30:36 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: Frame.java,v 1.14 2005-04-05 01:04:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -371,7 +371,10 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
     {
         final Mode mode = currentEditor.getMode();
         final MenuBar oldMenuBar = (MenuBar) getJMenuBar();
-        if (oldMenuBar == null || oldMenuBar.getMenuName() != mode.getMenuName()) {
+        if (oldMenuBar == null ||
+            Platform.isPlatformMacOSX() ||
+            oldMenuBar.getMenuName() != mode.getMenuName())
+        {
             setJMenuBar(mode.createMenuBar(this));
             validate();
         }
