@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.155 2004-02-12 12:44:24 piso Exp $
+ * $Id: Autoload.java,v 1.156 2004-02-12 13:03:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,6 +223,7 @@ public class Autoload extends Function
         autoload("clrhash", "HashTable");
         autoload("copy-structure", "StructureObject");
         autoload("cos", "MathFunctions");
+        autoload("cosh", "MathFunctions");
         autoload("delete-file", "delete_file");
         autoload("delete-package", "PackageFunctions");
         autoload("describe", "describe");
@@ -294,12 +295,14 @@ public class Autoload extends Function
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
         autoload("sin", "MathFunctions");
+        autoload("sinh", "MathFunctions");
         autoload("sqrt", "MathFunctions");
         autoload("stream-element-type", "stream_element_type");
         autoload("stream-external-format", "stream_external_format");
         autoload("sxhash", "HashTable");
         autoload("synonym-stream-symbol", "SynonymStream");
         autoload("tan", "MathFunctions");
+        autoload("tanh", "MathFunctions");
         autoload("truename", "probe_file");
         autoload("unbound-slot-instance", "unbound_slot_instance");
         autoload("unexport", "PackageFunctions");

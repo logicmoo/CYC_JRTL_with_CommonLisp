@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.3 2004-02-12 12:43:55 piso Exp $
+ * $Id: MathFunctions.java,v 1.4 2004-02-12 13:03:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,80 @@ public final class MathFunctions extends Lisp
             return result;
         }
         return new LispFloat(Math.atan(LispFloat.coerceToFloat(arg).getValue()));
+    }
+
+    // ### sinh
+    private static final Primitive1 SINH = new Primitive1("sinh", "number")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return sinh(arg);
+        }
+    };
+
+    private static LispObject sinh(LispObject arg) throws ConditionThrowable
+    {
+        if (arg instanceof Complex) {
+            LispObject im = ((Complex)arg).getImaginaryPart();
+            if (im.zerop())
+                return Complex.getInstance(sinh(((Complex)arg).getRealPart()),
+                                           im);
+        }
+        LispObject result = exp(arg);
+        result = result.subtract(exp(arg.multiplyBy(Fixnum.MINUS_ONE)));
+        result = result.divideBy(Fixnum.TWO);
+        if (result instanceof Complex) {
+            if (arg instanceof Complex)
+                return result;
+            LispObject im = ((Complex)result).getImaginaryPart();
+            if (im.zerop())
+                return ((Complex)result).getRealPart();
+        }
+        return result;
+    }
+
+    // ### cosh
+    private static final Primitive1 COSH = new Primitive1("cosh", "number")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return cosh(arg);
+        }
+    };
+
+    private static LispObject cosh(LispObject arg) throws ConditionThrowable
+    {
+        if (arg instanceof Complex) {
+            LispObject im = ((Complex)arg).getImaginaryPart();
+            if (im.zerop())
+                return Complex.getInstance(cosh(((Complex)arg).getRealPart()),
+                                           im);
+        }
+        LispObject result = exp(arg);
+        result = result.add(exp(arg.multiplyBy(Fixnum.MINUS_ONE)));
+        result = result.divideBy(Fixnum.TWO);
+        if (result instanceof Complex) {
+            if (arg instanceof Complex)
+                return result;
+            LispObject im = ((Complex)result).getImaginaryPart();
+            if (im.zerop())
+                return ((Complex)result).getRealPart();
+        }
+        return result;
+    }
+
+    // ### tanh
+    private static final Primitive1 TANH = new Primitive1("tanh", "number")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return tanh(arg);
+        }
+    };
+
+    private static LispObject tanh(LispObject arg) throws ConditionThrowable
+    {
+        return sinh(arg).divideBy(cosh(arg));
     }
 
     // ### exp
