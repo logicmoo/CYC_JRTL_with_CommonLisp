@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: trace.lisp,v 1.5 2004-06-20 16:33:26 piso Exp $
+;;; $Id: trace.lisp,v 1.6 2004-07-25 23:43:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,12 +21,15 @@
 
 (defconstant *untraced-function* (make-symbol "untraced-function"))
 
-(defparameter *traced-functions* nil)
+(defvar *traced-functions* nil)
+
+(defvar *trace-depth* 0)
 
 (defun list-traced-functions ()
   *traced-functions*)
 
 (defmacro trace (&rest args)
+  (setf *trace-depth* 0)
   (if args
       (expand-trace args)
       '(list-traced-functions)))
@@ -38,18 +41,16 @@
           (push arg results)))
     `',results))
 
-(defparameter *trace-depth* 0)
-
 (defun trace-1 (symbol)
   (unless (fboundp symbol)
     (error "~S is not the name of a function" symbol))
   (if (member symbol *traced-functions*)
-    (%format t "~S is already being traced." symbol)
-    (let* ((untraced-function (symbol-function symbol))
-            (trace-function
+      (%format t "~S is already being traced." symbol)
+      (let* ((untraced-function (symbol-function symbol))
+             (trace-function
               (lambda (&rest args)
                 (%format t (indent "~D: ~S~%") *trace-depth*
-                  (append (list symbol) args))
+                         (append (list symbol) args))
                 (incf *trace-depth*)
                 (let ((r (multiple-value-list (apply untraced-function args))))
                   (decf *trace-depth*)
@@ -58,10 +59,10 @@
                     (%format t " ~S" val))
                   (%format t "~%")
                   (values-list r)))))
-      (setf (symbol-function symbol) trace-function)
-      (setf (get symbol *untraced-function*) untraced-function)
-      (push symbol *traced-functions*)
-      symbol)))
+        (setf (symbol-function symbol) trace-function)
+        (setf (get symbol *untraced-function*) untraced-function)
+        (push symbol *traced-functions*)
+        symbol)))
 
 (defun indent (string)
   (concatenate 'string
@@ -69,6 +70,7 @@
                string))
 
 (defmacro untrace (&rest args)
+  (setf *trace-depth* 0)
   (if (null args)
       (untrace-all)
       (dolist (arg args)
