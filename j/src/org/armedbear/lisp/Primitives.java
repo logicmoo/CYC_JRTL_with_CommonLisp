@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.201 2003-05-28 00:57:05 piso Exp $
+ * $Id: Primitives.java,v 1.202 2003-05-28 01:46:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -734,6 +734,24 @@ public final class Primitives extends Module
 
     // ### append
     private static final Primitive APPEND = new Primitive("append") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            if (first == NIL)
+                return second;
+            // APPEND is required to copy its first argument.
+            Cons result = new Cons(first.car());
+            Cons splice = result;
+            first = first.cdr();
+            while (first != NIL) {
+                Cons temp = new Cons(first.car());
+                splice.setCdr(temp);
+                splice = temp;
+                first = first.cdr();
+            }
+            splice.setCdr(second);
+            return result;
+        }
         public LispObject execute(LispObject[] args) throws LispError
         {
             switch (args.length) {
