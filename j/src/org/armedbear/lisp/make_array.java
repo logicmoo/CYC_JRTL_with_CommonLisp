@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.19 2004-02-25 03:10:51 piso Exp $
+ * $Id: make_array.java,v 1.20 2004-02-25 18:36:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public final class make_array extends Primitive
         LispObject displacedIndexOffset = args[8];
         if (initialElementProvided != NIL && initialContents != NIL) {
             return signal(new LispError("MAKE-ARRAY: cannot specify both " +
-                                        ":INITIAL-ELEMENT AND :INITIAL-CONTENTS"));
+                                        "initial element and initial contents."));
         }
         final int rank = dimensions.listp() ? dimensions.length() : 1;
         int[] dimv = new int[rank];
@@ -63,9 +63,9 @@ public final class make_array extends Primitive
             // displaced-to array.
             final AbstractArray array = checkArray(displacedTo);
             if (initialElementProvided != NIL)
-                return signal(new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO"));
+                return signal(new LispError("Initial element must not be specified for a displaced array."));
             if (initialContents != NIL)
-                return signal(new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO"));
+                return signal(new LispError("Initial contents must not be specified for a displaced array."));
             final int displacement;
             if (displacedIndexOffset != NIL)
                 displacement = Fixnum.getValue(displacedIndexOffset);
@@ -93,6 +93,15 @@ public final class make_array extends Primitive
             if (rank == 1 && fillPointer != NIL)
                 displacedArray.setFillPointer(fillPointer);
             return displacedArray;
+        }
+        if (rank == 0) {
+            LispObject data;
+            if (initialElementProvided != NIL)
+                data = initialElement;
+            else
+                data = initialContents;
+            return new ZeroRankArray(getUpgradedArrayElementType(elementType),
+                                     data, adjustable != NIL);
         }
         if (rank == 1) {
             final int size = dimv[0];
