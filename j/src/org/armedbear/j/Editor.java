@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.113 2003-08-13 15:12:15 piso Exp $
+ * $Id: Editor.java,v 1.114 2003-09-15 16:20:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5917,6 +5917,9 @@ public final class Editor extends JPanel implements Constants,
         }
 
         Sidebar.setUpdateFlagInAllFrames(SIDEBAR_ALL);
+
+        if (firstTime && isLispInitialized())
+            LispAPI.invokeOpenFileHook(buffer);
     }
 
     private void bufferPending()
