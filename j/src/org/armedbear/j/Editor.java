@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.89 2003-07-04 15:53:42 piso Exp $
+ * $Id: Editor.java,v 1.90 2003-07-04 17:27:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6371,24 +6371,6 @@ public final class Editor extends JPanel implements Constants,
     {
         if (buffer instanceof Directory)
             ((Directory) buffer).upDir();
-    }
-
-    public void dirLimit()
-    {
-        if (buffer instanceof Directory) {
-            Directory d = (Directory) buffer;
-            String pattern = InputDialog.showInputDialog(this, "Pattern:",
-                "Limit", d.getLimitPattern());
-            // A null pattern means the user cancelled the input dialog.
-            if (pattern != null)
-                d.limit(pattern);
-        }
-    }
-
-    public void dirUnlimit()
-    {
-        if (buffer instanceof Directory)
-            ((Directory) buffer).limit(null);
     }
 
     public void setFocusToTextField()
