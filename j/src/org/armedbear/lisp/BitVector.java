@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.15 2003-05-31 20:21:34 piso Exp $
+ * $Id: BitVector.java,v 1.16 2003-06-01 20:51:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,10 +107,10 @@ public final class BitVector extends AbstractVector
 
     public LispObject elt(int index) throws LispError
     {
-        final int limit = length();
-        if (index < 0 || index >= limit)
-            badIndex(index, limit);
-        return get(index);
+        if (index < 0 || index >= length())
+            badIndex(index, length());
+        int offset = index >> 6;
+        return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
     public LispObject reverse() throws LispError
