@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.16 2004-12-12 18:32:03 piso Exp $
+ * $Id: ComplexVector.java,v 1.17 2004-12-20 01:52:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,6 +144,21 @@ public final class ComplexVector extends AbstractVector
         if (index < 0 || index >= limit)
             badIndex(index, limit);
         return getRowMajor(index);
+    }
+
+    // Ignores fill pointer.
+    public LispObject AREF(int index) throws ConditionThrowable
+    {
+        if (elements != null) {
+            try {
+                return elements[index];
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                badIndex(index, elements.length);
+                return NIL; // Not reached.
+            }
+        } else
+            return array.getRowMajor(index + displacement);
     }
 
     // Ignores fill pointer.

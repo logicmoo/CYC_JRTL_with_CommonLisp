@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.17 2004-11-03 15:27:23 piso Exp $
+ * $Id: SimpleVector.java,v 1.18 2004-12-20 01:52:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,6 +117,18 @@ public final class SimpleVector extends AbstractVector
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
+            return NIL; // Not reached.
+        }
+    }
+
+    // Ignores fill pointer.
+    public LispObject AREF(int index) throws ConditionThrowable
+    {
+        try {
+            return elements[index];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
             return NIL; // Not reached.
         }
     }
