@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.1 2003-03-25 17:17:18 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.2 2003-05-23 18:27:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -145,10 +145,9 @@
 		      (defmacro-error "&WHOLE" name))))
 	      ((eq var '&environment)
 	       (cond (env-illegal
-		      (error "&Environment not valid with ~S." error-kind))
+		      (error "&ENVIRONMENT not valid with ~S" error-kind))
 		     ((not top-level)
-		      (error "&Environment only valid at top level of ~
-		      lambda-list.")))
+		      (error "&ENVIRONMENT only valid at top level of lambda list")))
 	       (cond ((and (cdr rest-of-args) (symbolp (cadr rest-of-args)))
 		      (setf rest-of-args (cdr rest-of-args))
 		      (push-let-binding (car rest-of-args) env-arg-name nil)
