@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.215 2004-07-12 17:11:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.216 2004-07-13 00:56:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1571,6 +1571,21 @@
 
 (defvar *toplevel-defuns* nil)
 
+(defun notinline-p (name)
+  (declare (optimize (speed 3) (safety 0)))
+  (eq (get name '%inline) 'NOTINLINE))
+
+(defun inline-ok (name)
+  (declare (optimize (speed 3) (safety 0)))
+  (cond ((notinline-p name)
+         nil)
+        ((sys::built-in-function-p name)
+         t)
+        ((memq name *toplevel-defuns*)
+         t)
+        (t
+         nil)))
+
 (defun unsafe-p (args)
   (if (atom args)
       nil
@@ -1631,7 +1646,7 @@
       (cond
        ((eq fun *defun-name*)
         (emit 'aload 0)) ; this
-       ((or (sys::built-in-function-p fun) (memq fun *toplevel-defuns*))
+       ((inline-ok fun)
         (let ((f (declare-function fun)))
           (emit 'getstatic
                 *this-class*
@@ -2374,7 +2389,7 @@
                                         "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
                                         -1) ; Stack: compiled-closure
                      (emit-store-value)))
-                  ((or (sys::built-in-function-p name) (memq name *toplevel-defuns*))
+                  ((inline-ok name)
                    (let ((g (declare-function name)))
                      (emit 'getstatic
                            *this-class*
@@ -2393,6 +2408,7 @@
                                          0)
                      (emit-store-value)))))
            ((and (consp name) (eq (car name) 'SETF))
+            ; FIXME Need to check for NOTINLINE declaration!
             (if (member name *toplevel-defuns* :test #'equal)
                 (let ((g (declare-setf-function name)))
                   (emit 'getstatic
