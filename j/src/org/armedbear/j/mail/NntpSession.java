@@ -2,7 +2,7 @@
  * NntpSession.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NntpSession.java,v 1.3 2002-10-02 18:00:46 piso Exp $
+ * $Id: NntpSession.java,v 1.4 2002-11-11 18:17:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.StringTokenizer;
 import org.armedbear.j.Debug;
 import org.armedbear.j.Editor;
@@ -98,6 +99,35 @@ public final class NntpSession
 
     public String getArticle(int articleNumber, ProgressNotifier progressNotifier)
     {
+        if (socket == null)
+            return _getArticle(articleNumber, progressNotifier);
+
+        // Existing connection.
+        int timeout =
+            Editor.preferences().getIntegerProperty(Property.NNTP_READ_TIMEOUT);
+        try {
+            socket.setSoTimeout(timeout);
+        }
+        catch (SocketException e) {
+            Log.error(e);
+        }
+        String s = _getArticle(articleNumber, progressNotifier);
+        if (s != null)
+            return s;
+        if (progressNotifier != null && progressNotifier.cancelled())
+            return null;
+
+        if (timeout > 0) {
+            Log.debug("reconnecting ...");
+            disconnect();
+            return _getArticle(articleNumber, progressNotifier);
+        }
+
+        return null;
+    }
+
+    private String _getArticle(int articleNumber, ProgressNotifier progressNotifier)
+    {
         writeLine("ARTICLE ".concat(String.valueOf(articleNumber)));
         String response = readLine();
         if (response == null)
@@ -162,13 +192,14 @@ public final class NntpSession
 
     public void disconnect()
     {
-        Log.debug("disconnecting...");
-        writeLine("QUIT");
-        readLine();
+        if (socket != null) {
+            writeLine("QUIT");
+            readLine();
+        }
         abort();
     }
 
-    private void abort()
+    public void abort()
     {
         if (socket != null) {
             try {
@@ -196,11 +227,8 @@ public final class NntpSession
         String token = st.nextToken();
         Debug.assertTrue(token.equals("211"));
         count = Integer.parseInt(st.nextToken());
-        Log.debug("count = " + count);
         first = Integer.parseInt(st.nextToken());
-        Log.debug("first = " + first);
         last = Integer.parseInt(st.nextToken());
-        Log.debug("last = " + last);
         return true;
     }
 
