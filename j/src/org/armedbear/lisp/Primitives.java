@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.36 2003-02-19 03:40:26 piso Exp $
+ * $Id: Primitives.java,v 1.37 2003-02-19 03:47:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2015,12 +2015,15 @@ public final class Primitives extends Module
             LispObject fun = args[0];
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
-
-            final int length = args.length - 1; // Fixnum of arguments.
-
-            LispObject[] funArgs = new LispObject[length];
-            System.arraycopy(args, 1, funArgs, 0, length);
-            return funcall(fun, funArgs);
+            if (fun instanceof Function) {
+                if (!(fun instanceof Macro)) {
+                    final int length = args.length - 1; // Number of arguments.
+                    LispObject[] funArgs = new LispObject[length];
+                    System.arraycopy(args, 1, funArgs, 0, length);
+                    return funcall(fun, funArgs);
+                }
+            }
+            throw new TypeError(fun, "function");
         }
     };
 
