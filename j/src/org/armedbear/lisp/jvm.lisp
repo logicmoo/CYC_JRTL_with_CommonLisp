@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.401 2005-02-20 15:19:31 piso Exp $
+;;; $Id: jvm.lisp,v 1.402 2005-02-21 18:26:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2245,6 +2245,26 @@
     (setf *static-code* *code*)
     g))
 
+(defun declare-structure (obj)
+  (aver (not (null *compile-file-truename*)))
+  (aver (sys::structure-object-p obj))
+  (multiple-value-bind (creation-form initialization-form)
+      (make-load-form obj)
+    (let* ((g (symbol-name (gensym)))
+           (*print-level* nil)
+           (*print-length* nil)
+           (s (%format nil "~S" creation-form))
+           (*code* *static-code*))
+      (declare-field g +lisp-object+)
+      (emit 'ldc (pool-string s))
+      (emit-invokestatic +lisp-class+ "readObjectFromString"
+                         (list +java-string+) +lisp-object+)
+      (emit-invokestatic +lisp-class+ "loadTimeValue"
+                         (list +lisp-object+) +lisp-object+)
+      (emit 'putstatic *this-class* g +lisp-object+)
+      (setf *static-code* *code*)
+      g)))
+
 (defun declare-package (obj)
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
@@ -2367,6 +2387,11 @@
         ((packagep form)
          (let ((g (if *compile-file-truename*
                       (declare-package form)
+                      (declare-object form))))
+           (emit 'getstatic *this-class* g +lisp-object+)))
+        ((sys::structure-object-p form)
+         (let ((g (if *compile-file-truename*
+                      (declare-structure form)
                       (declare-object form))))
            (emit 'getstatic *this-class* g +lisp-object+)))
         (t
