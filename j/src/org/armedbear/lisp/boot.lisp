@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.47 2003-05-29 19:27:20 piso Exp $
+;;; $Id: boot.lisp,v 1.48 2003-05-30 16:17:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -95,6 +95,7 @@
   (%make-hash-table test size rehash-size rehash-threshold))
 
 (dolist (name '("documentation.lisp"
+                "early-defuns.lisp"
                 "backquote.lisp"
                 "setf.lisp"
                 "macros.lisp"
