@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.12 2004-04-28 18:53:07 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.13 2004-06-17 10:50:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,10 +83,6 @@
 	 documentation
 	 minimum
 	 maximum)))))
-
-(defun make-keyword (symbol)
-  "Takes a non-keyword symbol, symbol, and returns the corresponding keyword."
-  (intern (symbol-name symbol) (find-package "KEYWORD")))
 
 (defun defmacro-error (problem name)
   (error 'type-error "~S is not of type ~S~%" problem name))
