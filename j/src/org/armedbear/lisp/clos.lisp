@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.71 2004-02-08 16:12:04 piso Exp $
+;;; $Id: clos.lisp,v 1.72 2004-02-08 17:15:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1536,6 +1536,14 @@
 
 (defmethod (setf documentation) (new-value (x standard-method) (doc-type (eql 't)))
   (setf (method-documentation x) new-value))
+
+;; FIXME
+(defmethod documentation ((x package) (doc-type (eql 't)))
+  nil)
+
+;; FIXME
+(defmethod (setf documentation) (new-value (x package) (doc-type (eql 't)))
+  new-value)
 
 ;;; Slot access
 
