@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.125 2004-04-24 12:45:23 piso Exp $
+ * $Id: Symbol.java,v 1.126 2004-04-24 15:50:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -528,10 +528,19 @@ public class Symbol extends LispObject
                 }
             }
             if (!escape) {
-                if (!seenNonDigit)
+                if (!seenNonDigit) {
                     escape = true;
-                else if (name.equals("."))
-                    escape = true;
+                } else if (name.length() > 0 && name.charAt(0) == '.') {
+                    boolean allDots = true;
+                    for (int i = name.length(); i-- > 1;) {
+                        if (name.charAt(i) != '.') {
+                            allDots = false;
+                            break;
+                        }
+                    }
+                    if (allDots)
+                        escape = true;
+                }
             }
         }
         String s = escape ? multipleEscape(name) : name;
