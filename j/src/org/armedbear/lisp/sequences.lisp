@@ -2,13 +2,13 @@
 
 (in-package "COMMON-LISP")
 
-(export '(some every notany notevery position position-if position-if-not))
+(export '(some every notany notevery nreverse
+          position position-if position-if-not))
 
 (defun signal-index-too-large-error (sequence index)
   (error 'type-error))
 
 (defun %setelt (sequence index newval)
-  "Store NEWVAL as the element of SEQUENCE specified by INDEX."
   (cond ((listp sequence)
          (do ((count index (1- count))
               (seq sequence))
@@ -49,23 +49,19 @@
 (defun notevery (predicate sequence &rest more-sequences)
   (not (apply #'every predicate sequence more-sequences)))
 
-;;; APPLY-KEY saves us a function call sometimes.
-;;;    This is not in and (eval-when (compile eval) ...
-;;;    because this is used in seq.lisp and sort.lisp.
-;;;
 (defmacro apply-key (key element)
   `(if ,key
        (funcall ,key ,element)
        ,element))
-
-;;; Seq-Dispatch does an efficient type-dispatch on the given Sequence.
 
 (defmacro seq-dispatch (sequence list-form array-form)
   `(if (listp ,sequence)
        ,list-form
        ,array-form))
 
-;;; Locater macros used by FIND and POSITION.
+;; FIXME
+(defun nreverse (sequence)
+  (reverse sequence))
 
 (defmacro vector-locater-macro (sequence body-form return-type)
   `(let ((incrementer (if from-end -1 1))
@@ -169,8 +165,6 @@
 (defmacro list-locater-if-not (test sequence return-type)
   `(list-locater-if-macro ,test ,sequence ,return-type nil))
 
-;;; Position:
-
 (defmacro vector-position (item sequence)
   `(vector-locater ,item ,sequence :position))
 
@@ -178,22 +172,12 @@
   `(list-locater ,item ,sequence :position))
 
 
-;;; POSITION cannot default end to the length of sequence since it is not
-;;; an error to supply nil for its value.  We must test for end being nil
-;;; in the body of the function, and this is actually done in the support
-;;; routines for other reasons (see below).
 (defun position (item sequence &key from-end (test #'eql) test-not (start 0)
                       end key)
-  "Returns the zero-origin index of the first element in SEQUENCE
-   satisfying the test (default is EQL) with the given ITEM"
   (seq-dispatch sequence
                 (list-position* item sequence from-end test test-not start end key)
                 (vector-position* item sequence from-end test test-not start end key)))
 
-
-;;; The support routines for SUBSEQ are used by compiler transforms, so we
-;;; worry about dealing with end being supplied as or defaulting to nil
-;;; at this level.
 
 (defun list-position* (item sequence from-end test test-not start end key)
   (declare (fixnum start))
@@ -205,9 +189,6 @@
   (when (null end) (setf end (length sequence)))
   (vector-position item sequence))
 
-
-;;; Position-if:
-
 (defmacro vector-position-if (test sequence)
   `(vector-locater-if ,test ,sequence :position))
 
@@ -215,16 +196,12 @@
   `(list-locater-if ,test ,sequence :position))
 
 (defun position-if (test sequence &key from-end (start 0) key end)
-  "Returns the zero-origin index of the first element satisfying test(el)"
   (declare (fixnum start))
   (let ((end (or end (length sequence))))
     (declare (type index end))
     (seq-dispatch sequence
 		  (list-position-if test sequence)
 		  (vector-position-if test sequence))))
-
-
-;;; Position-if-not:
 
 (defmacro vector-position-if-not (test sequence)
   `(vector-locater-if-not ,test ,sequence :position))
@@ -233,7 +210,6 @@
   `(list-locater-if-not ,test ,sequence :position))
 
 (defun position-if-not (test sequence &key from-end (start 0) key end)
-  "Returns the zero-origin index of the first element not satisfying test(el)"
   (declare (fixnum start))
   (let ((end (or end (length sequence))))
     (declare (type index end))
