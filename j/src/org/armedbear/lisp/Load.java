@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.35 2004-03-04 01:16:58 piso Exp $
+ * $Id: Load.java,v 1.36 2004-03-18 01:09:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,8 +182,9 @@ public final class Load extends Lisp
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));
         final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
-            thread.bindSpecial(_LOAD_TRUENAME_,
-                               Pathname.parseNamestring(truename));
+            Pathname p = Pathname.parseNamestring(truename);
+            thread.bindSpecial(_LOAD_PATHNAME_, p);
+            thread.bindSpecial(_LOAD_TRUENAME_, p);
             if (verbose) {
                 Stream out = getStandardOutput();
                 out.freshLine();
