@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.275 2003-07-02 18:11:57 piso Exp $
+ * $Id: Primitives.java,v 1.276 2003-07-02 18:59:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1271,7 +1271,8 @@ public final class Primitives extends Module
 
     // ### %defun
     // %defun name parameters body => name
-    private static final Primitive3 _DEFUN = new Primitive3("%defun") {
+    private static final Primitive3 _DEFUN =
+        new Primitive3("%defun", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -1791,7 +1792,8 @@ public final class Primitives extends Module
 
     // ### %make-array dimensions element-type initial-element initial-contents
     // adjustable fill-pointer displaced-to displaced-index-offset
-    private static final Primitive _MAKE_ARRAY = new Primitive("%make-array") {
+    private static final Primitive _MAKE_ARRAY =
+        new Primitive("%make-array", PACKAGE_SYS, false) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 9)
@@ -1975,7 +1977,7 @@ public final class Primitives extends Module
     // ### %array-row-major-index
     // %array-row-major-index array subscripts => index
     private static final Primitive2 _ARRAY_ROW_MAJOR_INDEX =
-        new Primitive2("%array-row-major-index") {
+        new Primitive2("%array-row-major-index", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
@@ -2070,7 +2072,7 @@ public final class Primitives extends Module
     // ### %set-row-major-aref
     // %set-row-major-aref array index new-value => new-value
     private static final Primitive3 _SET_ROW_MAJOR_AREF =
-        new Primitive3("%set-row-major-aref") {
+        new Primitive3("%set-row-major-aref", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -2102,7 +2104,8 @@ public final class Primitives extends Module
 
     // ### %svset
     // %svset simple-vector index new-value
-    private static final Primitive3 _SVSET = new Primitive3("%svset") {
+    private static final Primitive3 _SVSET =
+        new Primitive3("%svset", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
