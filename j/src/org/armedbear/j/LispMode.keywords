@@ -191,6 +191,7 @@ find-class
 find-if
 find-if-not
 find-package
+find-restart
 find-symbol
 finish-output
 first
