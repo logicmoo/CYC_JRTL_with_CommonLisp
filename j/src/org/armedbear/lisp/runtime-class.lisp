@@ -407,7 +407,7 @@
 	(visit-var-insn-2 cv
                           (load-instruction (nth (1- arg-number) arg-types))
                           (reduce #'+ arg-types :end (1- arg-number) :key #'size :initial-value 1))
-	(write-string (arg-type-for-make-lisp-object (nth (1- arg-number) arg-types)) super-arg-types)
+	(write-string (decorated-type-name (nth (1- arg-number) arg-types)) super-arg-types)
 	finally
 	(visit-method-insn-4 cv constants.invokespecial
                              (type-name (car super-invocation)) "<init>"
