@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.22 2003-04-27 17:17:19 piso Exp $
+ * $Id: Interpreter.java,v 1.23 2003-05-27 02:12:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,7 +173,7 @@ public final class Interpreter extends Lisp
                     addHistory(commandNumber, object);
                     out.setCharPos(0);
                     Symbol.MINUS.setSymbolValue(object);
-                    LispObject result = eval(object, environment);
+                    LispObject result = eval(object, environment, thread);
                     Debug.assertTrue(result != null);
                     Symbol.STAR_STAR_STAR.setSymbolValue(Symbol.STAR_STAR.getSymbolValue());
                     Symbol.STAR_STAR.setSymbolValue(Symbol.STAR.getSymbolValue());
@@ -484,7 +484,7 @@ public final class Interpreter extends Lisp
         LispObject obj = stream.read(false, EOF, false);
         if (obj == EOF)
             throw new EndOfFileException();
-        return eval(obj, new Environment());
+        return eval(obj, new Environment(), LispThread.currentThread());
     }
 
     // Used only by the JUnit test suite (Tests.java).
@@ -500,8 +500,9 @@ public final class Interpreter extends Lisp
                 LispObject obj = stream.read(false, EOF, false);
                 if (obj == EOF)
                     break;
-                LispObject result = eval(obj, new Environment());
-                LispObject[] values = LispThread.currentThread().getValues();
+                final LispThread thread = LispThread.currentThread();
+                LispObject result = eval(obj, new Environment(), thread);
+                LispObject[] values = thread.getValues();
                 if (values != null) {
                     for (int i = 0; i < values.length; i++) {
                         if (i > 0)

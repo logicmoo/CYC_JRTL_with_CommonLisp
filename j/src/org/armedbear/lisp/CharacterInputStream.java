@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.32 2003-05-24 15:08:10 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.33 2003-05-27 02:12:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,8 +291,9 @@ public class CharacterInputStream extends LispStream
                 args[0] = this;
                 args[1] = new LispCharacter(c);
                 args[2] = new Fixnum(numArg);
-                LispObject result = funcall(fun, args);
-                LispObject[] values = LispThread.currentThread().getValues();
+                final LispThread thread = LispThread.currentThread();
+                LispObject result = funcall(fun, args, thread);
+                LispObject[] values = thread.getValues();
                 if (values != null && values.length == 0)
                     return null; // Function returned no values.
                 return result;
@@ -314,7 +315,8 @@ public class CharacterInputStream extends LispStream
                     skipBalancedComment();
                     return null;
                 case '.':
-                    return eval(read(true, NIL, true), new Environment());
+                    return eval(read(true, NIL, true), new Environment(),
+                        LispThread.currentThread());
                 case '*':
                     return readBitVector();
                 case 'a':

@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.19 2003-05-26 00:27:37 piso Exp $
+ * $Id: Closure.java,v 1.20 2003-05-27 02:12:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -365,7 +365,7 @@ public class Closure extends Function
                     // We've run out of arguments.
                     LispObject initForm = parameter.initForm;
                     bind(symbol,
-                         initForm != null? eval(initForm, ext) : NIL,
+                         initForm != null? eval(initForm, ext, thread) : NIL,
                          ext);
                     if (parameter.svar != NIL) {
                         Symbol svar = checkSymbol(parameter.svar);
@@ -437,7 +437,7 @@ public class Closure extends Function
                         Parameter parameter = keywordParameterArray[n];
                         LispObject initForm = parameter.initForm;
                         LispObject value =
-                            initForm != null ? eval(initForm, ext) : NIL;
+                            initForm != null ? eval(initForm, ext, thread) : NIL;
                         bind(parameter.var, value, ext);
                         if (parameter.svar != NIL) {
                             Symbol svar = checkSymbol(parameter.svar);
@@ -462,7 +462,8 @@ public class Closure extends Function
                 Parameter parameter = auxVarArray[i];
                 Symbol symbol = parameter.var;
                 LispObject initForm = parameter.initForm;
-                LispObject value = initForm == NIL ? NIL : eval(initForm, ext);
+                LispObject value =
+                    initForm == NIL ? NIL : eval(initForm, ext, thread);
                 bind(symbol, value, ext);
             }
         }

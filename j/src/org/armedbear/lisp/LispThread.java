@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.5 2003-05-10 14:57:25 piso Exp $
+ * $Id: LispThread.java,v 1.6 2003-05-27 02:12:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ public final class LispThread extends LispObject
             public void run()
             {
                 try {
-                    funcall(fun, null);
+                    funcall(fun, null, LispThread.this);
                 }
                 catch (Throwable t) {
                     t.printStackTrace();
@@ -356,13 +356,13 @@ public final class LispThread extends LispObject
         public LispObject execute(LispObject arg) throws Condition
         {
             Function fun = checkFunction(arg);
+            final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
             Iterator it = map.values().iterator();
             while (it.hasNext()) {
-                LispThread thread = (LispThread) it.next();
                 LispObject[] args = new LispObject[1];
-                args[0] = thread;
-                result = new Cons(funcall(fun, args), result);
+                args[0] = (LispThread) it.next();
+                result = new Cons(funcall(fun, args, thread), result);
             }
             return result;
         }

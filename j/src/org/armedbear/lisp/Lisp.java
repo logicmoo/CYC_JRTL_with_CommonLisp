@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.67 2003-05-25 02:59:41 piso Exp $
+ * $Id: Lisp.java,v 1.68 2003-05-27 02:12:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,10 +46,9 @@ public abstract class Lisp
     /*package*/ static final int TYPE_CONS              = 11;
     /*package*/ static final int TYPE_MACRO_OBJECT      = 12;
 
-    public static final LispObject funcall(LispObject fun, LispObject[] argv)
-        throws Condition
+    public static final LispObject funcall(LispObject fun, LispObject[] argv,
+        LispThread thread) throws Condition
     {
-        final LispThread thread = LispThread.currentThread();
         if (debug)
             thread.pushStackFrame(fun, argv);
         thread.clearValues();
@@ -135,12 +134,6 @@ public abstract class Lisp
 
     private static boolean debug = true;
 
-    public static final LispObject eval(LispObject obj, Environment env)
-        throws Condition
-    {
-        return eval(obj, env, LispThread.currentThread());
-    }
-
     public static final LispObject eval(LispObject obj, Environment env,
         LispThread thread) throws Condition
     {
@@ -180,7 +173,8 @@ public abstract class Lisp
                         return eval(macroexpand(obj, env, thread), env, thread);
                     default: {
                         if (debug)
-                            return funcall(fun, evalList(obj.cdr(), env, thread));
+                            return funcall(fun,
+                                evalList(obj.cdr(), env, thread), thread);
                         if (profiling)
                             fun.incrementCallCount();
                         switch (obj.cdr().length()) {
@@ -235,10 +229,9 @@ public abstract class Lisp
         return results;
     }
 
-    public static final LispObject progn(LispObject body, Environment env)
-        throws Condition
+    public static final LispObject progn(LispObject body, Environment env,
+        LispThread thread) throws Condition
     {
-        final LispThread thread = LispThread.currentThread();
         LispObject result = NIL;
         while (body != NIL) {
             result = eval(body.car(), env, thread);
@@ -256,7 +249,8 @@ public abstract class Lisp
             env.bind(symbol, value);
     }
 
-    public static final void rebind(Symbol symbol, LispObject value, Environment env)
+    public static final void rebind(Symbol symbol, LispObject value,
+        Environment env)
     {
         if (symbol.isSpecialVariable()) {
             Environment dynEnv =
