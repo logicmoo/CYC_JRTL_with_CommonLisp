@@ -1,8 +1,8 @@
 /*
  * DirectoryTreeModel.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: DirectoryTreeModel.java,v 1.2 2003-03-19 12:23:24 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: DirectoryTreeModel.java,v 1.3 2003-05-20 00:37:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.j;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -29,6 +30,8 @@ import javax.swing.tree.TreeNode;
 
 public class DirectoryTreeModel extends DefaultTreeModel
 {
+    private static final boolean ignoreCase = Platform.isPlatformWindows();
+
     private static DirectoryTreeModel localTreeModel;
     private static Vector remoteModels;
 
@@ -125,7 +128,8 @@ public class DirectoryTreeModel extends DefaultTreeModel
         File[] list = parent.listFiles();
         if (list == null)
             return;
-        Arrays.sort(list);
+        Arrays.sort(list,
+            ignoreCase ? ciFileNameComparator : csFileNameComparator);
         for (int i = 0; i < list.length; i++) {
             File f = list[i];
             if (f.isDirectory() && !f.isLink()) {
@@ -189,7 +193,8 @@ public class DirectoryTreeModel extends DefaultTreeModel
             File[] list = file.listFiles();
             if (list == null)
                 return;
-            Arrays.sort(list);
+            Arrays.sort(list,
+                ignoreCase ? ciFileNameComparator : csFileNameComparator);
             for (int i = 0; i < list.length; i++) {
                 File f = list[i];
                 if (f.isLink())
@@ -202,4 +207,24 @@ public class DirectoryTreeModel extends DefaultTreeModel
             }
         }
     }
+
+    // Case-sensitive filename comparator (Unix).
+    private final static Comparator csFileNameComparator = new Comparator() {
+        public int compare(Object o1, Object o2)
+        {
+            String name1 = ((File)o1).getName();
+            String name2 = ((File)o2).getName();
+            return name1.compareTo(name2);
+        }
+    };
+
+    // Case-insensitive filename comparator (Windows).
+    private final static Comparator ciFileNameComparator = new Comparator() {
+        public int compare(Object o1, Object o2)
+        {
+            String name1 = ((File)o1).getName();
+            String name2 = ((File)o2).getName();
+            return name1.compareToIgnoreCase(name2);
+        }
+    };
 }
