@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.543 2003-12-27 05:37:10 piso Exp $
+ * $Id: Primitives.java,v 1.544 2003-12-27 07:47:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3716,59 +3716,6 @@ public final class Primitives extends Lisp
         }
         return result.nreverse();
     }
-
-    // ### random
-    // random limit &optional random-state => random-number
-    private static final Primitive RANDOM =
-        new Primitive("random", "limit &optional random-state")
-    {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            int length = args.length;
-            if (length < 1 || length > 2) {
-                signal(new WrongNumberOfArgumentsException(this));
-                return NIL;
-            }
-            Random random;
-            if (length == 2)
-                random = (Random) JavaObject.getObject(args[1]);
-            else
-                random = (Random) JavaObject.getObject(_RANDOM_STATE_.symbolValueNoThrow());
-            if (args[0] instanceof Fixnum) {
-                int limit = ((Fixnum)args[0]).getValue();
-                if (limit > 0) {
-                    int n = random.nextInt((int)limit);
-                    return new Fixnum(n);
-                }
-            } else if (args[0] instanceof Bignum) {
-                BigInteger limit = ((Bignum)args[0]).getValue();
-                if (limit.signum() > 0) {
-                    int bitLength = limit.bitLength();
-                    BigInteger rand = new BigInteger(bitLength + 1, random);
-                    BigInteger remainder = rand.remainder(limit);
-                    return number(remainder);
-                }
-            } else if (args[0] instanceof LispFloat) {
-                double limit = ((LispFloat)args[0]).getValue();
-                if (limit > 0) {
-                    double rand = random.nextDouble();
-                    return new LispFloat(rand * limit);
-                }
-            }
-            signal(new TypeError(args[0], "positive integer or positive float"));
-            return NIL;
-        }
-    };
-
-    // ### make-random-state
-    private static final Primitive MAKE_RANDOM_STATE =
-        new Primitive("make-random-state","&optional state") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            // FIXME Ignore arguments (or lack thereof).
-            return new JavaObject(new Random());
-        }
-    };
 
     // ### truncate
     private static final Primitive TRUNCATE = new Primitive("truncate","number &optional divisor") {
