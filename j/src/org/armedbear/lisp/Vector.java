@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.1 2003-01-17 19:43:34 piso Exp $
+ * $Id: Vector.java,v 1.2 2003-02-09 18:02:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class Vector extends LispObject implements SequenceType,
+public final class Vector extends AbstractVector implements SequenceType,
     VectorType
 {
     private final LispObject[] elements;
@@ -139,20 +139,6 @@ public final class Vector extends LispObject implements SequenceType,
         if (i < 0 || i >= length)
             badIndex(i);
         return (int) i;
-    }
-
-    private void badIndex(long index) throws LispException
-    {
-        StringBuffer sb = new StringBuffer("invalid array index ");
-        sb.append(index);
-        sb.append(" for ");
-        sb.append(toString());
-        if (length() > 0) {
-            sb.append(" (should be >= 0 and < ");
-            sb.append(length);
-            sb.append(')');
-        }
-        throw new LispException(sb.toString());
     }
 
     public String toString()
