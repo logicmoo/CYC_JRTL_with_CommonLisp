@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.41 2003-11-22 02:49:10 piso Exp $
+;;; $Id: defstruct.lisp,v 1.42 2003-11-22 16:32:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -99,7 +99,7 @@
 (defvar *dd-direct-slots*)
 (defvar *dd-slots*)
 
-(defun define-constructor (constructor)
+(defun define-keyword-constructor (constructor)
   (let* ((constructor-name (intern (car constructor)))
          (keys ())
          (elements ()))
@@ -130,6 +130,9 @@
            `((defun ,constructor-name ,keys
                (%make-structure ',*dd-name* (list ,@elements))))))))
 
+(defun define-boa-constructor (constructor)
+  )
+
 (defun default-constructor-name ()
   (concatenate 'string "MAKE-" (symbol-name *dd-name*)))
 
@@ -138,9 +141,12 @@
       (let ((results ()))
         (dolist (constructor *dd-constructors*)
           (when (car constructor)
-            (setf results (nconc results (define-constructor constructor)))))
+            (setf results (nconc results
+                                 (if (cadr constructor)
+                                     (define-boa-constructor constructor)
+                                     (define-keyword-constructor constructor))))))
         results)
-      (define-constructor (cons (default-constructor-name) nil))))
+      (define-keyword-constructor (cons (default-constructor-name) nil))))
 
 (defun name-index ()
   (dolist (dsd *dd-slots*)
