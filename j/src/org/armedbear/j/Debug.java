@@ -2,7 +2,7 @@
  * Debug.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Debug.java,v 1.5 2003-01-09 18:07:34 piso Exp $
+ * $Id: Debug.java,v 1.6 2003-02-12 15:09:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,6 +105,7 @@ public final class Debug
         for (int i = 0; i < threadCount; i++) {
             Thread thread = threads[i];
             sb.setText(thread.getName());
+            sb.append(' '); // Follow with at least one space.
             while (sb.length() < 24)
                 sb.append(' ');
             sb.append(thread.getPriority());
