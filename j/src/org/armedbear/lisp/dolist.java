@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: dolist.java,v 1.6 2004-03-16 02:41:58 piso Exp $
+ * $Id: dolist.java,v 1.7 2004-05-29 18:40:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,6 +122,8 @@ public final class dolist extends SpecialOperator
                     body = body.cdr();
                 }
                 list = list.cdr();
+                if (interrupted)
+                    handleInterrupt();
             }
             binding.value = NIL;
             LispObject result = eval(resultForm, ext, thread);
