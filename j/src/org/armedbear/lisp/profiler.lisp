@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.1 2003-03-05 19:54:41 piso Exp $
+;;; $Id: profiler.lisp,v 1.2 2003-03-13 18:27:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (defun show-call-counts ()
   (let ((syms (list-calls)))
-    (sort syms #'< :key #'(lambda (x) (function-call-count (fdefinition x))))
+    (sort syms #'< :key #'(lambda (x) (%call-count (fdefinition x))))
     (dolist (sym syms)
       (show-call-count-for-symbol sym)))
   (values))
@@ -30,10 +30,10 @@
     (dolist (sym (package-symbols :cl))
       (when (fboundp sym)
         (let* ((f (fdefinition sym))
-               (n (function-call-count f)))
+               (n (%call-count f)))
           (unless (zerop n)
             (setq result (cons sym result))))))
     result))
 
 (defun show-call-count-for-symbol (sym)
-  (format t "~A ~A~%" sym (function-call-count (fdefinition sym))))
+  (format t "~A ~A~%" sym (%call-count (fdefinition sym))))
