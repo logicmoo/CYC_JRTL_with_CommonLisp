@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.53 2003-10-18 17:28:19 piso Exp $
+;;; $Id: compiler.lisp,v 1.54 2003-10-18 22:33:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -144,10 +144,10 @@
 ;;     (format t "body          = ~S~%" body)
     (setf compiled-body (compile-progn body))
 ;;     (format t "compiled-body = ~S~%" compiled-body)
-    (setf res (list* 'macrolet (reverse res) compiled-body))
-    res))
-;;     (setf res (list* 'progn compiled-body))
+;;     (setf res (list* 'macrolet (reverse res) compiled-body))
 ;;     res))
+    (setf res (list* 'progn compiled-body))
+    res))
 
 (defun compile-special (form)
   (let ((first (car form)))
@@ -209,9 +209,14 @@
        (let ((body (cdr form)))
          (cons 'tagbody (compile-tagbody body))))
       (LABELS
-       (let ((locals (cadr form))
-             (body (cddr form)))
-          (append '(labels) (list (compile-locals locals)) (compile-progn body))))
+;;        (format t "LABELS *local-macros* = ~S~%" *local-macros*)
+       (let* ((locals (cadr form))
+              (body (cddr form))
+              (compiled-locals (compile-locals locals))
+              (compiled-body (compile-progn body)))
+;;          (format t "body          = ~S~%" body)
+;;          (format t "compiled-body = ~S~%" compiled-body)
+         (append '(labels) (list compiled-locals) compiled-body)))
       (RETURN
        (if (cdr form)
            (cons 'return (list (compile-sexp (cadr form))))
@@ -261,14 +266,14 @@
           (let ((expansion (expand-local-macro form)))
 ;;             (format t "expansion = ~S~%" expansion)
             (return-from compile-sexp expansion)))
-        (unless (and (symbolp first) (fboundp first))
-          (return-from compile-sexp form))
+;;         (unless (and (symbolp first) (fboundp first))
+;;           (return-from compile-sexp form))
         (cond ((eq first 'LAMBDA)
                (list* 'LAMBDA (second form)
                       (mapcar #'compile-sexp (cddr form))))
-              ((special-operator-p first)
+              ((and (symbolp first) (special-operator-p first))
                (compile-special form))
-              ((macro-function first)
+              ((and (symbolp first) (macro-function first))
                (compile-sexp (expand-macro form)))
               (t
                (let ((args (mapcar #'compile-sexp (cdr form))))
