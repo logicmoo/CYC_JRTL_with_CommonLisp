@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.215 2004-03-09 11:07:48 piso Exp $
+ * $Id: Lisp.java,v 1.216 2004-03-10 01:59:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1011,6 +1011,21 @@ public abstract class Lisp
             signal(new TypeError(obj, "environment"));
             // Not reached.
             return null;
+        }
+    }
+
+    public static final void checkBounds(int start, int end, int length)
+        throws ConditionThrowable
+    {
+        if (start < 0 || end < 0 || start > end || end > length) {
+            StringBuffer sb = new StringBuffer("The bounding indices ");
+            sb.append(start);
+            sb.append(" and ");
+            sb.append(end);
+            sb.append(" are bad for a sequence of length ");
+            sb.append(length);
+            sb.append('.');
+            signal(new TypeError(sb.toString()));
         }
     }
 
