@@ -1,7 +1,7 @@
 ;;; strings.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: strings.lisp,v 1.6 2003-08-11 16:31:37 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: strings.lisp,v 1.7 2004-08-15 11:25:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,11 +38,7 @@
   (%nstring-capitalize string start end))
 
 (defun string= (string1 string2 &key (start1 0) end1 (start2 0) end2)
-  (let* ((string1 (string string1))
-         (string2 (string string2))
-         (end1 (or end1 (length string1)))
-         (end2 (or end2 (length string2))))
-    (%string= string1 string2 start1 end1 start2 end2)))
+  (%string= string1 string2 start1 end1 start2 end2))
 
 (defun string/= (string1 string2 &key (start1 0) end1 (start2 0) end2)
   (let* ((string1 (string string1))
