@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.50 2003-02-27 15:54:36 piso Exp $
+ * $Id: Primitives.java,v 1.51 2003-02-27 17:57:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1748,13 +1748,8 @@ public final class Primitives extends Module
         {
             if (args.length < 2)
                 throw new WrongNumberOfArgumentsException(this);
-            if (args[0] instanceof LispString) {
-                LispString string = (LispString) args[0];
-                int i = string.checkIndex(args[1]);
-                return string.get(i);
-            }
-            if (args[0] instanceof Vector) {
-                Vector v = (Vector) args[0];
+            if (args[0] instanceof AbstractVector) {
+                AbstractVector v = (AbstractVector) args[0];
                 int i = v.checkIndex(args[1]);
                 return v.get(i);
             }
