@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.24 2003-05-25 02:09:24 piso Exp $
+ * $Id: Jdb.java,v 1.25 2003-05-25 02:27:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1163,7 +1163,6 @@ public final class Jdb extends Buffer implements JdbConstants
             return null;
         }
         // Filename is not absolute.
-        Log.debug("mainClass = |" + mainClass + "|");
         File mainFile = JavaSource.findSource(mainClass, sourcePath);
         if (mainFile != null && mainFile.isFile()) {
             File dir = mainFile.getParentFile();
@@ -1210,6 +1209,23 @@ public final class Jdb extends Buffer implements JdbConstants
     private void doBreakAtMethod(String className, String methodName,
         boolean temporary)
     {
+        if (className.indexOf(".") < 0) {
+            // No package prefix.
+            String fileName = className.concat(".java");
+            File file = findSourceFile(fileName);
+            if (file != null) {
+                Buffer buffer = Editor.getBuffer(file);
+                if (buffer != null) {
+                    if (!buffer.initialized())
+                        buffer.initialize();
+                    if (!buffer.isLoaded())
+                        buffer.load();
+                    String packageName = JavaSource.getPackageName(buffer);
+                    if (packageName != null)
+                        className = packageName.concat(".").concat(className);
+                }
+            }
+        }
         MethodBreakpoint bp = new MethodBreakpoint(this, className, methodName);
         if (temporary)
             bp.setTemporary();
@@ -1312,7 +1328,6 @@ public final class Jdb extends Buffer implements JdbConstants
             className = null;
             methodName = arg;
         }
-
         for (Iterator it = breakpoints.iterator(); it.hasNext();) {
             Object obj = it.next();
             if (obj instanceof MethodBreakpoint) {
