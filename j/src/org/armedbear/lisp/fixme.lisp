@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.4 2003-08-16 13:24:35 piso Exp $
+;;; $Id: fixme.lisp,v 1.5 2003-09-22 17:20:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,6 +16,8 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+(in-package "SYSTEM")
 
 ;; Should be a special operator.
 (defmacro the (type form)
@@ -43,9 +45,6 @@
   nil)
 
 (defun restart-name (restart)
-  nil)
-
-(defmacro check-type (place typespec &optional string)
   nil)
 
 (defun warn (&rest args)
