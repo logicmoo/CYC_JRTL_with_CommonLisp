@@ -2,7 +2,7 @@
  * EqualpHashTable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EqualpHashTable.java,v 1.2 2004-06-04 17:08:55 piso Exp $
+ * $Id: EqualpHashTable.java,v 1.3 2004-06-04 17:48:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public class EqualpHashTable extends HashTable
 {
     public EqualpHashTable(int size, LispObject rehashSize,
-                        LispObject rehashThreshold)
+                           LispObject rehashThreshold)
         throws ConditionThrowable
     {
         super(TEST_EQUALP, size, rehashSize, rehashThreshold);

@@ -2,7 +2,7 @@
  * EqHashTable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EqHashTable.java,v 1.1 2004-06-04 16:25:15 piso Exp $
+ * $Id: EqHashTable.java,v 1.2 2004-06-04 17:49:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public class EqHashTable extends HashTable
 {
     public EqHashTable(int size, LispObject rehashSize,
-                        LispObject rehashThreshold)
+                       LispObject rehashThreshold)
         throws ConditionThrowable
     {
         super(TEST_EQ, size, rehashSize, rehashThreshold);
