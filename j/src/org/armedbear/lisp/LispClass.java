@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.28 2003-09-28 18:32:49 piso Exp $
+ * $Id: LispClass.java,v 1.29 2003-10-10 14:16:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,9 +41,13 @@ public class LispClass extends StandardObject
         }
     }
 
-    protected final Symbol symbol;
+    protected Symbol symbol;
     private LispObject directSuperclasses;
     private LispObject classPrecedenceList = NIL;
+
+    protected LispClass()
+    {
+    }
 
     protected LispClass(Symbol symbol)
     {
@@ -206,7 +210,8 @@ public class LispClass extends StandardObject
     };
 
     // ### class-name
-    private static final Primitive1 CLASS_NAME = new Primitive1("class-name") {
+    private static final Primitive1 CLASS_NAME = new Primitive1("class-name")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
@@ -214,6 +219,23 @@ public class LispClass extends StandardObject
             }
             catch (ClassCastException e) {
                 throw new ConditionThrowable(new TypeError(arg, "class"));
+            }
+        }
+    };
+
+    // ### %set-class-name
+    private static final Primitive2 _SET_CLASS_NAME =
+        new Primitive2("%set-class-name", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((LispClass)first).symbol = checkSymbol(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                throw new ConditionThrowable(new TypeError(first, "class"));
             }
         }
     };
