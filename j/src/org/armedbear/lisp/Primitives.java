@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.106 2003-03-10 19:38:17 piso Exp $
+ * $Id: Primitives.java,v 1.107 2003-03-10 20:24:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2826,11 +2826,13 @@ public final class Primitives extends Module
                     initialElement = value;
                 else {
                     String s = "MAKE-STRING: unsupported keyword " + keyword;
-                    throw new LispError(s);
+                    throw new ProgramError(s);
                 }
             }
-            if (elementType != Symbol.CHARACTER)
-                throw new LispError(String.valueOf(elementType) +
+            if (elementType != Symbol.CHARACTER &&
+                elementType != Symbol.BASE_CHAR &&
+                elementType != Symbol.STANDARD_CHAR)
+                throw new TypeError(String.valueOf(elementType) +
                     " is an invalid element-type");
             LispString string = new LispString(size);
             if (initialElement != null) {
