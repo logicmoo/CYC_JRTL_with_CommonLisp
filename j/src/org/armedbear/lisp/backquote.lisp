@@ -1,7 +1,7 @@
 ;;; backquote.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: backquote.lisp,v 1.6 2004-10-24 18:06:20 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: backquote.lisp,v 1.7 2005-02-06 02:01:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,7 +83,7 @@
   (unless (> *backquote-count* 0)
     (when *read-suppress*
       (return-from comma-macro nil))
-    (%reader-error stream "comma not inside a backquote"))
+    (%reader-error stream "Comma not inside a backquote."))
   (let ((c (read-char stream))
 	(*backquote-count* (1- *backquote-count*)))
     (cond ((char= c #\@)
