@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.5 2002-10-17 14:12:36 piso Exp $
+ * $Id: Directory.java,v 1.6 2002-11-17 15:32:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,13 +56,10 @@ public final class Directory extends Buffer
 
     private int numMarked = 0;
 
-    // The offset on the line where the filename starts.
-    private int nameOffset = -1;
-
     private DirectoryHistory history = new DirectoryHistory();
 
-    static private RE nativeMoveToFilenameRegExp;
-    static private RE internalMoveToFilenameRegExp;
+    private static RE nativeMoveToFilenameRegExp;
+    private static RE internalMoveToFilenameRegExp;
 
     private long totalSize;
 
@@ -96,11 +93,23 @@ public final class Directory extends Buffer
         try {
             RESyntax syntax = new RESyntax(RESyntax.RE_SYNTAX_PERL5);
             syntax.set(RESyntax.RE_CHAR_CLASSES);
-            nativeMoveToFilenameRegExp = new RE("[0-9]+" + s + monthAndDay +
-                s + timeOrYear + s, 0, syntax);
+
+            String normal = "[0-9]+" + s + monthAndDay + s + timeOrYear + s;
+
+            // --time-style=long-iso
+            // -rw-r--r--    1 peter    peter         147 2002-11-13 13:10 notes
+            // --time-style=iso
+            // -rw-r--r--    1 peter    peter       69016 11-16 18:29 Directory.java
+            // -rw-r--r--    1 peter    peter       13274 2001-09-08  thinbox.tar.gz
+            String iso = "[0-9]+" + s + "[0-9\\-]+" + s + "(" + HHMM + ")? *";
+
+            nativeMoveToFilenameRegExp =
+                new RE("(" + normal + ")|(" + iso + ")", 0, syntax);
             internalMoveToFilenameRegExp = new RE(":[0-5][0-9]" + s);
         }
-        catch (REException e) {}
+        catch (REException e) {
+            Log.error(e);
+        }
     }
 
     public static final RE getNativeMoveToFilenameRegExp()
@@ -577,6 +586,13 @@ public final class Directory extends Buffer
                     flags = "-lat";
                 else if (sortBy == SORT_BY_SIZE)
                     flags = "-laS";
+                String extraOptions =
+                    getStringProperty(Property.LS_EXTRA_OPTIONS);
+                if (extraOptions != null) {
+                    flags += " ";
+                    flags += extraOptions;
+                    Log.debug("Directory.loadInternal flags = " + flags);
+                }
                 BufferedReader reader = null;
                 if (getListing() != null) {
                     reader = new BufferedReader(new StringReader(getListing()));
@@ -667,12 +683,22 @@ public final class Directory extends Buffer
             }
             try {
                 addEntriesToBuffer();
-                setNameOffset(); // We may have changed formats.
                 if (totalSize != 0) {
+                    int end;
+                    if (usingNativeFormat) {
+                        end = getFileSizeEndOffset();
+                        if (end <= 0)
+                            end = 45;
+                    } else {
+                        int nameOffset = getNameOffset();
+                        end = nameOffset - 19;
+                        if (end <= 0)
+                            end = 13;
+                    }
                     String s = String.valueOf(totalSize);
-                    int end =
-                        usingNativeFormat ? nameOffset - 14 : nameOffset - 19;
                     int begin = end - s.length();
+                    if (begin < 0)
+                        begin = 0;
                     FastStringBuffer sb =  new FastStringBuffer(80);
                     sb.append(Utilities.spaces(begin));
                     for (int i = s.length(); i > 0; i--)
@@ -1850,40 +1876,39 @@ public final class Directory extends Buffer
     private int getNameOffset(Line line)
     {
         if (line != null) {
-            try {
-                REMatch match;
-                if (usingNativeFormat)
-                    match = nativeMoveToFilenameRegExp.getMatch(line.getText());
-                else
-                    match = internalMoveToFilenameRegExp.getMatch(line.getText());
-                if (match != null)
-                    return match.getEndIndex();
-            }
-            catch (Exception e) {
-                Log.error(e);
-            }
+            REMatch match;
+            if (usingNativeFormat)
+                match = nativeMoveToFilenameRegExp.getMatch(line.getText());
+            else
+                match = internalMoveToFilenameRegExp.getMatch(line.getText());
+            if (match != null)
+                return match.getEndIndex();
         }
         return 0;
     }
 
-    private void setNameOffset()
+    private int getNameOffset()
     {
-        nameOffset = 0;
+        return getNameOffset(getFirstLine());
+    }
+
+    private int getFileSizeEndOffset()
+    {
         Line line = getFirstLine();
         if (line != null) {
-            try {
-                REMatch match;
-                if (usingNativeFormat)
-                    match = nativeMoveToFilenameRegExp.getMatch(line.getText());
-                else
-                    match = internalMoveToFilenameRegExp.getMatch(line.getText());
-                if (match != null)
-                    nameOffset = match.getEndIndex();
-            }
-            catch (Exception e) {
-                Log.error(e);
+            final String text = line.getText();
+            REMatch match;
+            if (usingNativeFormat)
+                match = nativeMoveToFilenameRegExp.getMatch(text);
+            else
+                match = internalMoveToFilenameRegExp.getMatch(text);
+            if (match != null) {
+                int start = match.getStartIndex();
+                // The file size is followed by a single space.
+                return text.indexOf(' ', start);
             }
         }
+        return -1; // Error!
     }
 
     private Line findName(String name)
