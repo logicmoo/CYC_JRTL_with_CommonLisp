@@ -1,7 +1,7 @@
 ;;; with-package-iterator.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: with-package-iterator.lisp,v 1.1 2003-09-09 13:30:52 piso Exp $
+;;; $Id: with-package-iterator.lisp,v 1.2 2003-09-14 16:04:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
 (in-package "SYSTEM")
 
 (defun package-iterator-function (package-list symbol-types)
+  (unless (consp package-list)
+    (setq package-list (list package-list)))
   (let ((results ()))
     (dolist (pkg package-list)
       (unless (packagep pkg)
