@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureClass.java,v 1.8 2004-04-16 13:27:31 piso Exp $
+ * $Id: StructureClass.java,v 1.9 2004-05-16 11:56:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,10 +52,10 @@ public class StructureClass extends SlotClass
         return super.typep(type);
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("#<STRUCTURE-CLASS ");
-        sb.append(symbol.getName());
+        sb.append(symbol.writeToString());
         sb.append('>');
         return sb.toString();
     }
