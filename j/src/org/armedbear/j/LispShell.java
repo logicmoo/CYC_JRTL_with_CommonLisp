@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.63 2004-09-06 00:20:09 piso Exp $
+ * $Id: LispShell.java,v 1.64 2004-09-07 20:24:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,6 +126,7 @@ public class LispShell extends Shell
             Log.debug("starting slime...");
             try {
                 JLisp.runLispCommand("(sys:load-system-file \"slime-loader.lisp\")");
+                JLisp.runLispCommand("(setq slime::*repl-buffer-name* \"" + title + "\")");
             }
             catch (Throwable t) {
                 Log.debug(t);
