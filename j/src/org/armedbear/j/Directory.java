@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.9 2002-12-08 01:27:22 piso Exp $
+ * $Id: Directory.java,v 1.10 2002-12-09 03:43:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1947,11 +1947,6 @@ public final class Directory extends Buffer
     public final Icon getIcon()
     {
         return Utilities.getIconFromFile("directory.png");
-    }
-
-    public String getFileNameForDisplay()
-    {
-        return getFile().netPath();
     }
 }
 
