@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.139 2003-12-17 01:21:20 piso Exp $
+;;; $Id: boot.lisp,v 1.140 2003-12-17 01:48:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,12 +79,14 @@
 
 (defun read-conditional (stream subchar int)
   (cond (*read-suppress*
-         (read stream t nil t))
+         (read stream t nil t)
+         (values))
         ((eql subchar (read-feature stream))
          (read stream t nil t))
         (t
          (let* ((*read-suppress* t))
-           (read stream t nil t)))))
+           (read stream t nil t)
+           (values)))))
 
 (defun read-feature (stream)
   (let* ((f (let* ((*package* *keyword-package*))
