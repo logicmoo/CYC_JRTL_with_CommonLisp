@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.60 2003-09-20 17:02:04 piso Exp $
+ * $Id: LispObject.java,v 1.61 2003-10-17 13:10:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -342,6 +342,16 @@ public class LispObject extends Lisp
     public String toString()
     {
         return super.toString();
+    }
+
+    public String unreadableString(String s)
+    {
+        StringBuffer sb = new StringBuffer("#<");
+        sb.append(s);
+        sb.append(" @ #x");
+        sb.append(Integer.toHexString(System.identityHashCode(this)));
+        sb.append(">");
+        return sb.toString();
     }
 
     // Special operator
