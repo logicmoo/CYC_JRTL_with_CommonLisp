@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.452 2003-09-29 12:58:33 piso Exp $
+ * $Id: Primitives.java,v 1.453 2003-09-29 14:25:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3427,7 +3427,8 @@ public final class Primitives extends Module
     // Evaluates form and creates a list of the multiple values it returns.
     // Should be a macro.
     private static final SpecialOperator MULTIPLE_VALUE_LIST =
-        new SpecialOperator("multiple-value-list") {
+        new SpecialOperator("multiple-value-list")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3452,7 +3453,8 @@ public final class Primitives extends Module
     // NIL if n >= number of values returned.
     // Should be a macro.
     private static final SpecialOperator NTH_VALUE =
-        new SpecialOperator("nth-value") {
+        new SpecialOperator("nth-value")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3477,47 +3479,41 @@ public final class Primitives extends Module
 
     // ### write-byte
     // write-byte byte stream => byte
-    private static final Primitive2 WRITE_BYTE =
-        new Primitive2("write-byte") {
+    private static final Primitive2 WRITE_BYTE = new Primitive2("write-byte")
+    {
         public LispObject execute (LispObject first, LispObject second)
             throws ConditionThrowable
         {
             int n = Fixnum.getValue(first);
             if (n < 0 || n > 255)
                 throw new ConditionThrowable(new TypeError(first, "unsigned byte"));
-            if (second instanceof BinaryOutputStream) {
-                ((BinaryOutputStream)second).writeByte(n);
-                return first;
-            }
-            throw new ConditionThrowable(new TypeError(second, "binary output stream"));
+            final BinaryOutputStream out = checkBinaryOutputStream(second);
+            out.writeByte(n);
+            return first;
         }
     };
 
     // ### read-byte
     // read-byte stream &optional eof-error-p eof-value => byte
-    private static final Primitive READ_BYTE =
-        new Primitive("read-byte") {
+    private static final Primitive READ_BYTE = new Primitive("read-byte")
+    {
         public LispObject execute (LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
             if (length < 1 || length > 3)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            BinaryInputStream stream;
-            if (args[0] instanceof BinaryInputStream)
-                stream = (BinaryInputStream) args[0];
-            else
-                throw new ConditionThrowable(new TypeError(args[0], "binary input stream"));
+            final BinaryInputStream in = checkBinaryInputStream(args[0]);
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
-            return stream.readByte(eofError, eofValue);
+            return in.readByte(eofError, eofValue);
         }
     };
 
     // ### read-line
     // read-line &optional input-stream eof-error-p eof-value recursive-p
     // => line, missing-newline-p
-    private static final Primitive READ_LINE =
-        new Primitive("read-line") {
+    private static final Primitive READ_LINE = new Primitive("read-line")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
@@ -3582,7 +3578,8 @@ public final class Primitives extends Module
     };
 
     private static final Primitive1 STANDARD_CHAR_P =
-        new Primitive1("standard-char-p") {
+        new Primitive1("standard-char-p")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return checkCharacter(arg).isStandardChar();
@@ -3590,7 +3587,8 @@ public final class Primitives extends Module
     };
 
     private static final Primitive1 GRAPHIC_CHAR_P =
-        new Primitive1("graphic-char-p") {
+        new Primitive1("graphic-char-p")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             char c = LispCharacter.getValue(arg);
@@ -3599,7 +3597,8 @@ public final class Primitives extends Module
     };
 
     private static final Primitive1 ALPHA_CHAR_P =
-        new Primitive1("alpha-char-p") {
+        new Primitive1("alpha-char-p")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             char c = LispCharacter.getValue(arg);
