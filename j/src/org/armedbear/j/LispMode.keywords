@@ -352,6 +352,7 @@ remhash
 remove
 remove-if
 remove-if-not
+remprop
 rename-package
 replace
 require
