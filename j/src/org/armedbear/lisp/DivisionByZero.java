@@ -2,7 +2,7 @@
  * DivisionByZero.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DivisionByZero.java,v 1.2 2003-09-22 11:07:33 piso Exp $
+ * $Id: DivisionByZero.java,v 1.3 2003-11-02 13:57:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,10 @@ package org.armedbear.lisp;
 public class DivisionByZero extends ArithmeticError
 {
     public DivisionByZero()
+    {
+    }
+
+    public DivisionByZero(LispObject initArgs)
     {
     }
 
