@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.54 2003-03-10 20:54:38 piso Exp $
+;;; $Id: rt.lisp,v 1.55 2003-03-11 13:50:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@
 
 ;;; Adapted from rt.lsp and ansi-aux.lsp in the GCL ANSI test suite.
 
-(unless (find-package :rt)
-  (make-package :rt)
+(unless (find-package :regression-test)
+  (make-package :regression-test :nicknames '(:rt))
   (use-package "COMMON-LISP" :rt))
 
 (in-package :rt)
@@ -198,6 +198,13 @@
 	(and
 	 (check-scaffold-copy (car x) (scaffold-car xcopy))
 	 (check-scaffold-copy (cdr x) (scaffold-cdr xcopy))))))
+
+(defun create-c*r-test (n)
+  (cond
+   ((<= n 0) 'none)
+   (t
+    (cons (create-c*r-test (1- n))
+	  (create-c*r-test (1- n))))))
 
 ;;;
 ;;; The function SUBTYPEP should return two generalized booleans.
@@ -630,6 +637,7 @@
                               "count-if-not"
                               "defparameter"
                               "defvar"
+                              "elt"
                               "equal"
                               "equalp"
                               "eql"
