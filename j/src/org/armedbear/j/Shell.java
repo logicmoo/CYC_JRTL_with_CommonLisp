@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.8 2002-10-13 17:00:14 piso Exp $
+ * $Id: Shell.java,v 1.9 2002-10-14 23:38:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,17 @@ public class Shell extends Buffer implements Constants
         this.shellCommand = shellCommand;
         if (shellCommand.indexOf("tcsh") >= 0)
             promptIsStderr = false;
+    }
+    
+    protected Shell(String shellCommand, Mode mode)
+    {
+        initializeUndo();
+        type = TYPE_SHELL;
+        this.shellCommand = shellCommand;
+        this.mode = mode;
+        formatter = mode.getFormatter(this);
+        initializeHistory();
+        setInitialized(true);
     }
 
     protected synchronized Process getProcess()
