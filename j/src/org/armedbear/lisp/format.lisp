@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.20 2004-11-29 01:17:21 piso Exp $
+;;; $Id: format.lisp,v 1.21 2004-11-29 01:51:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1201,18 +1201,15 @@
   (when (and colonp (not *up-up-and-out-allowed*))
     (error 'format-error
 	   :complaint "attempt to use ~~:^ outside a ~~:{...~~} construct"))
-  `(when ,(case (length params)
-	    (0 (if colonp
-		   '(null outside-args)
-		   (progn
-		     (setf *only-simple-args* nil)
-		     '(null args))))
-	    (1 (expand-bind-defaults ((count 0)) params
-                                     `(zerop ,count)))
-	    (2 (expand-bind-defaults ((arg1 0) (arg2 0)) params
-                                     `(= ,arg1 ,arg2)))
-	    (t (expand-bind-defaults ((arg1 0) (arg2 0) (arg3 0)) params
-                                     `(<= ,arg1 ,arg2 ,arg3))))
+  `(when ,(expand-bind-defaults ((arg1 nil) (arg2 nil) (arg3 nil)) params
+                                `(cond (,arg3 (<= ,arg1 ,arg2 ,arg3))
+                                       (,arg2 (eql ,arg1 ,arg2))
+                                       (,arg1 (eql ,arg1 0))
+                                       (t ,(if colonp
+                                               '(null outside-args)
+                                               (progn
+                                                 (setf *only-simple-args* nil)
+                                                 '(null args))))))
      ,(if colonp
 	  '(return-from outside-loop nil)
 	  '(return))))
