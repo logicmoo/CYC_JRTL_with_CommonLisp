@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.372 2003-09-04 14:41:45 piso Exp $
+ * $Id: Primitives.java,v 1.373 2003-09-06 17:15:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4329,6 +4329,29 @@ public final class Primitives extends Module
     // ### logand
     // logand &rest integers => result-integer
     private static final Primitive LOGAND = new Primitive("logand") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            if (first instanceof Fixnum && second instanceof Fixnum) {
+                return new Fixnum(((Fixnum)first).getValue() &
+                                  ((Fixnum)second).getValue());
+            } else {
+                BigInteger n1, n2;
+                if (first instanceof Fixnum)
+                    n1 = ((Fixnum)first).getBigInteger();
+                else if (first instanceof Bignum)
+                    n1 = ((Bignum)first).getValue();
+                else
+                    throw new TypeError(first, "integer");
+                if (second instanceof Fixnum)
+                    n2 = ((Fixnum)second).getBigInteger();
+                else if (second instanceof Bignum)
+                    n2 = ((Bignum)second).getValue();
+                else
+                    throw new TypeError(second, "integer");
+                return number(n1.and(n2));
+            }
+        }
         public LispObject execute(LispObject[] args) throws LispError
         {
             BigInteger result = BigInteger.valueOf(-1);
