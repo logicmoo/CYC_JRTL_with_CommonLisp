@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.29 2003-07-06 16:28:43 piso Exp $
+;;; $Id: compiler.lisp,v 1.30 2003-07-07 01:14:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -187,7 +187,7 @@
 
 
 (defun compile-package (pkg &key verbose)
-  (dolist (sym (package-symbols pkg))
+  (dolist (sym (sys::package-symbols pkg))
     (when (fboundp sym)
 ;;       (unless (or (special-operator-p sym) (macro-function sym))
       (unless (special-operator-p sym)
@@ -228,6 +228,7 @@
     (values (or name result) nil nil)))
 
 (compile-package :compiler)
+(compile-package :sys)
 (compile-package :cl)
 
 (in-package :cl)
