@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.35 2004-03-08 02:56:08 piso Exp $
+ * $Id: Stream.java,v 1.36 2004-03-08 16:36:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -759,6 +759,28 @@ public class Stream extends LispObject
 
     private final String readToken(StringBuffer sb) throws ConditionThrowable
     {
+        LispObject readtableCase = getCurrentReadtable().getReadtableCase();
+        if (readtableCase == Keyword.INVERT) {
+          loop:
+            while (true) {
+                int n = _readChar();
+                if (n < 0)
+                    break;
+                char c = (char) n;
+                if (Character.isWhitespace(c))
+                    break;
+                switch (c) {
+                    case '(':
+                    case ')':
+                        _unreadChar(c);
+                        break loop;
+                    default:
+                        sb.append(c);
+                }
+            }
+            return invert(sb.toString());
+        }
+        // Not :INVERT.
       loop:
         while (true) {
             int n = _readChar();
@@ -776,13 +798,10 @@ public class Stream extends LispObject
                     sb.append(c);
             }
         }
-        LispObject readtableCase = getCurrentReadtable().getReadtableCase();
         if (readtableCase == Keyword.UPCASE)
             return sb.toString().toUpperCase();
         if (readtableCase == Keyword.DOWNCASE)
             return sb.toString().toLowerCase();
-        if (readtableCase == Keyword.INVERT)
-            return invert(sb.toString());
         // PRESERVE
         return sb.toString();
     }
