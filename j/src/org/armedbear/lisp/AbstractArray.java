@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.31 2004-09-30 01:00:41 piso Exp $
+ * $Id: AbstractArray.java,v 1.32 2004-09-30 19:12:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,7 +205,7 @@ public abstract class AbstractArray extends LispObject
             sb.append('#');
             sb.append(dimv.length);
             sb.append('A');
-            appendContents(dimv, 0, sb);
+            appendContents(dimv, 0, sb, thread);
             return sb.toString();
         }
         sb.append("(SIMPLE-ARRAY T (");
@@ -219,63 +219,65 @@ public abstract class AbstractArray extends LispObject
     }
 
     // Helper for writeToString().
-    protected void appendContents(int[] dimensions, int index, StringBuffer sb)
+    private void appendContents(int[] dimensions, int index, StringBuffer sb,
+                                LispThread thread)
         throws ConditionThrowable
     {
-        try {
-            if (dimensions.length == 0) {
+        if (dimensions.length == 0) {
+            if (_PRINT_CIRCLE_.symbolValue(thread) != NIL) {
+                StringOutputStream stream = new StringOutputStream();
+                funcall2(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
+                         getRowMajor(index), stream,
+                         LispThread.currentThread());
+                sb.append(stream.getString().getStringValue());
+            } else
                 sb.append(getRowMajor(index).writeToString());
-            } else {
-                final LispThread thread = LispThread.currentThread();
-                final LispObject printReadably =
-                    _PRINT_READABLY_.symbolValue(thread);
-                int maxLength = Integer.MAX_VALUE;
-                int maxLevel = Integer.MAX_VALUE;
-                if (printReadably == NIL) {
-                    final LispObject printLength =
-                        _PRINT_LENGTH_.symbolValue(thread);
-                    if (printLength instanceof Fixnum)
-                        maxLength = ((Fixnum)printLength).value;
-                    final LispObject printLevel =
-                        _PRINT_LEVEL_.symbolValue(thread);
-                    if (printLevel instanceof Fixnum)
-                        maxLevel = ((Fixnum)printLevel).value;
-                }
-                LispObject currentPrintLevel =
-                    _CURRENT_PRINT_LEVEL_.symbolValue(thread);
-                int currentLevel = Fixnum.getValue(currentPrintLevel);
-                if (currentLevel < maxLevel) {
-                    Environment oldDynEnv = thread.getDynamicEnvironment();
-                    thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
-                    try {
-                        sb.append('(');
-                        int[] dims = new int[dimensions.length - 1];
-                        for (int i = 1; i < dimensions.length; i++)
-                            dims[i-1] = dimensions[i];
-                        int count = 1;
-                        for (int i = 0; i < dims.length; i++)
-                            count *= dims[i];
-                        final int length = dimensions[0];
-                        final int limit = Math.min(length, maxLength);
-                        for (int i = 0; i < limit; i++) {
-                            appendContents(dims, index, sb);
-                            if (i < limit - 1 || limit < length)
-                                sb.append(' ');
-                            index += count;
-                        }
-                        if (limit < length)
-                            sb.append("...");
-                        sb.append(')');
-                    }
-                    finally {
-                        thread.setDynamicEnvironment(oldDynEnv);
-                    }
-                } else
-                    sb.append('#');
+        } else {
+            final LispObject printReadably =
+                _PRINT_READABLY_.symbolValue(thread);
+            int maxLength = Integer.MAX_VALUE;
+            int maxLevel = Integer.MAX_VALUE;
+            if (printReadably == NIL) {
+                final LispObject printLength =
+                    _PRINT_LENGTH_.symbolValue(thread);
+                if (printLength instanceof Fixnum)
+                    maxLength = ((Fixnum)printLength).value;
+                final LispObject printLevel =
+                    _PRINT_LEVEL_.symbolValue(thread);
+                if (printLevel instanceof Fixnum)
+                    maxLevel = ((Fixnum)printLevel).value;
             }
-        }
-        catch (ConditionThrowable t) {
-            Debug.trace(t);
+            LispObject currentPrintLevel =
+                _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+            int currentLevel = Fixnum.getValue(currentPrintLevel);
+            if (currentLevel < maxLevel) {
+                Environment oldDynEnv = thread.getDynamicEnvironment();
+                thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
+                try {
+                    sb.append('(');
+                    int[] dims = new int[dimensions.length - 1];
+                    for (int i = 1; i < dimensions.length; i++)
+                        dims[i-1] = dimensions[i];
+                    int count = 1;
+                    for (int i = 0; i < dims.length; i++)
+                        count *= dims[i];
+                    final int length = dimensions[0];
+                    final int limit = Math.min(length, maxLength);
+                    for (int i = 0; i < limit; i++) {
+                        appendContents(dims, index, sb, thread);
+                        if (i < limit - 1 || limit < length)
+                            sb.append(' ');
+                        index += count;
+                    }
+                    if (limit < length)
+                        sb.append("...");
+                    sb.append(')');
+                }
+                finally {
+                    thread.setDynamicEnvironment(oldDynEnv);
+                }
+            } else
+                sb.append('#');
         }
     }
 }
