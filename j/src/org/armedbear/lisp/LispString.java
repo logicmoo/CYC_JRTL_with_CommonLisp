@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.44 2003-07-14 13:21:22 piso Exp $
+ * $Id: LispString.java,v 1.45 2003-07-20 18:16:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -357,6 +357,24 @@ public final class LispString extends AbstractVector
         {
             checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
             return third;
+        }
+    };
+
+    private static final Primitive3 STRING_POSITION =
+        new Primitive3("string-position", PACKAGE_EXT, true) {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws LispError
+        {
+            char c = LispCharacter.getValue(first);
+            LispString string = checkString(second);
+            int start = Fixnum.getValue(third);
+            char[] chars = string.chars();
+            for (int i = start, limit = chars.length; i < limit; i++) {
+                if (chars[i] == c)
+                    return number(i);
+            }
+            return NIL;
         }
     };
 }
