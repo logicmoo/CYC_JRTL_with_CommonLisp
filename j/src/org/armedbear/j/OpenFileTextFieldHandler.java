@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.16 2002-12-08 18:47:01 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.17 2002-12-11 03:30:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,10 @@
 package org.armedbear.j;
 
 import java.awt.Component;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -693,7 +695,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         super.reset();
     }
 
-    private class CompletionsList extends JScrollPane implements MenuElement
+    private class CompletionsList extends JScrollPane implements MenuElement,
+        MouseListener
     {
         public CompletionsList(String[] completions)
         {
@@ -704,6 +707,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             if (Platform.isJava14())
                 Utilities.setFocusTraversalKeysEnabled(listbox, false);
             listbox.setSelectedIndex(0);
+            listbox.addMouseListener(this);
         }
 
         public void processMouseEvent(MouseEvent e, MenuElement[] path,
@@ -793,6 +797,28 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         {
             return this;
         }
+
+        public void mouseClicked(MouseEvent e)
+        {
+            enterPopup();
+        }
+
+        public void mousePressed(MouseEvent e)
+        {
+            // Mask off the bits we don't care about (Java 1.4).
+            int modifiers = e.getModifiers() & 0x1f;
+            if (modifiers == InputEvent.BUTTON1_MASK || modifiers == InputEvent.BUTTON2_MASK) {
+                listbox.setSelectedIndex(listbox.locationToIndex(e.getPoint()));
+                String s = (String) listbox.getSelectedValue();
+                textField.setText(s);
+            }
+        }
+
+        public void mouseReleased(MouseEvent e) {}
+
+        public void mouseEntered(MouseEvent e) {}
+
+        public void mouseExited(MouseEvent e) {}
     }
 
     public void keyPressed(KeyEvent e)
