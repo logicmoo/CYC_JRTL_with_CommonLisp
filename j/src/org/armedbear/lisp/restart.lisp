@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: restart.lisp,v 1.17 2004-09-07 15:39:02 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: restart.lisp,v 1.18 2005-01-31 17:17:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -269,6 +269,11 @@
       (fresh-line *error-output*)
       (simple-format *error-output* "~S: ~A~%" badness condition)))
   nil)
+
+(defun style-warn (format-control &rest format-arguments)
+  (warn 'style-warning
+        :format-control format-control
+        :format-arguments format-arguments))
 
 (defun cerror (continue-string datum &rest arguments)
   (with-simple-restart (continue "~A" (apply #'simple-format nil continue-string arguments))
