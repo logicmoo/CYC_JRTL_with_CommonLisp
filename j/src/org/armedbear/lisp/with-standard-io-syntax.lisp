@@ -1,7 +1,7 @@
 ;;; with-standard-io-syntax.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: with-standard-io-syntax.lisp,v 1.1 2003-09-29 18:10:36 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: with-standard-io-syntax.lisp,v 1.2 2004-04-03 00:20:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; From CMUCL.
+
+(in-package "SYSTEM")
 
 (defun %with-standard-io-syntax (function)
   (let ((*package* (find-package "CL-USER"))
