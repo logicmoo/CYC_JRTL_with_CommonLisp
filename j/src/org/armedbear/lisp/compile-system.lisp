@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.33 2004-10-17 13:23:52 piso Exp $
+;;; $Id: compile-system.lisp,v 1.34 2004-10-17 13:31:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,15 @@
 (require '#:collect)
 (require '#:jvm)
 
+(defun check-lisp-home ()
+  (loop
+    (cond ((and *lisp-home*
+                (probe-directory (pathname *lisp-home*)))
+           (return))
+          (t
+           (cerror "Continue"
+                   "*LISP-HOME* is NIL or invalid.~%  Please set *LISP-HOME* to the full pathname of the directory containing the Lisp system files.")))))
+
 (defun grovel-java-definitions-in-file (file out)
   (with-open-file (in file)
     (let ((line-number 1))
@@ -37,6 +46,7 @@
           (incf line-number))))))
 
 (defun grovel-java-definitions ()
+  (check-lisp-home)
   (time
    (let ((files (directory (merge-pathnames "*.java" *lisp-home*))))
      (with-open-file (stream (merge-pathnames "tags" *lisp-home*)
@@ -57,13 +67,7 @@
             target-file))))
 
 (defun compile-system ()
-  (loop
-    (cond ((and *lisp-home*
-                (probe-directory (pathname *lisp-home*)))
-           (return))
-          (t
-           (cerror "Continue"
-                   "*LISP-HOME* is NIL or invalid.~%  Please set *LISP-HOME* to the full pathname of the directory containing the Lisp system files."))))
+  (check-lisp-home)
   (time
    (let ((*default-pathname-defaults* (pathname *lisp-home*)))
      (load (maybe-compile-file "precompiler.lisp"))
