@@ -2,7 +2,7 @@
  * describe.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: describe.java,v 1.8 2003-10-19 18:50:37 piso Exp $
+ * $Id: describe.java,v 1.9 2003-10-31 17:46:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,16 +49,20 @@ public final class describe extends Lisp
                     sb.append(" package");
                 }
                 sb.append(".\n");
+                LispObject value = symbol.getSymbolValue();
                 if (symbol.isSpecialVariable()) {
                     sb.append("It is a ");
                     sb.append(symbol.isConstant() ? "constant" : "special variable");
                     sb.append("; ");
-                    LispObject value = symbol.getSymbolValue();
                     if (value != null) {
                         sb.append("its value is ");
                         sb.append(value);
                     } else
                         sb.append("it is unbound");
+                    sb.append(".\n");
+                } else if (value != null) {
+                    sb.append("It is an undefined variable; its value is ");
+                    sb.append(value);
                     sb.append(".\n");
                 }
                 LispObject function = symbol.getSymbolFunction();
@@ -94,12 +98,10 @@ public final class describe extends Lisp
                     sb.append("Its property list has these indicator/value pairs:\n");
                     LispObject[] array = plist.copyToArray();
                     for (int i = 0; i < array.length; i += 2) {
-                        LispObject indicator = array[i];
-                        LispObject value = array[i+1];
                         sb.append("  ");
-                        sb.append(indicator);
+                        sb.append(array[i]);
                         sb.append(' ');
-                        sb.append(value);
+                        sb.append(array[i+1]);
                         sb.append('\n');
                     }
                 }
