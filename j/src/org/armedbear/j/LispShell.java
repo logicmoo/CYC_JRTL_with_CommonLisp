@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.27 2003-02-17 01:09:54 piso Exp $
+ * $Id: LispShell.java,v 1.28 2003-03-03 20:25:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,9 @@ public final class LispShell extends Shell
 
     private static final String ALLEGRO_PROMPT_PATTERN =
         "^(\\[[0-9+][i]?\\] )?[-a-zA-z]+\\([0-9]+\\): ";
+
+    private static final String ARMEDBEAR_PROMPT_PATTERN =
+        "^[^>\\*\\]]+\\([0-9]+\\)>";
 
     private static final String CLISP_PROMPT_PATTERN =
         "^[^>\\*\\]]*\\[[0-9]+\\]> ";
@@ -94,6 +97,8 @@ public final class LispShell extends Shell
         } else if (shellCommand.equals("sbcl") || shellCommand.equals("/usr/bin/sbcl")) {
             shell.setPromptRE(CMUCL_PROMPT_PATTERN);
             shell.setResetCommand(":r toplevel");
+        } else if (shellCommand.indexOf("org.armedbear.lisp") >= 0) {
+            shell.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
         } else {
             shell.setPromptRE(DEFAULT_PROMPT_PATTERN);
             if (shellCommand.equals("rep") || shellCommand.equals("/usr/bin/rep"))
