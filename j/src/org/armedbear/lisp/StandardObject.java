@@ -1,8 +1,8 @@
 /*
  * StandardObject.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.16 2003-12-20 03:06:33 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: StandardObject.java,v 1.17 2004-02-12 20:17:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,14 @@ public class StandardObject extends LispObject
 
     public LispObject typeOf()
     {
-        return layout.getLispClass().getSymbol();
+        // "For objects of metaclass structure-class or standard-class, and for
+        // conditions, type-of returns the proper name of the class returned by
+        // class-of if it has a proper name, and otherwise returns the class
+        // itself."
+        Symbol symbol = layout.getLispClass().getSymbol();
+        if (symbol != NIL)
+            return symbol;
+        return layout.getLispClass();
     }
 
     public LispClass classOf()
