@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.78 2005-02-01 03:25:05 piso Exp $
+ * $Id: Interpreter.java,v 1.79 2005-02-14 19:07:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -230,7 +230,7 @@ public final class Interpreter extends Lisp
             if (Utilities.isPlatformUnix()) {
                 try {
                     System.loadLibrary("abcl");
-                    Class c = Class.forName("org.armedbear.lisp.ControlC");
+                    Class c = Class.forName("org.armedbear.lisp.Native");
                     Method m = c.getMethod("initialize", null);
                     m.invoke(null, null);
                     out._writeString("Control-C handler installed.\n");
