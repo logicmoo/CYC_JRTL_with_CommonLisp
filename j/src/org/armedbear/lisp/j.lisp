@@ -49,6 +49,11 @@
 (defun reset-display ()
   (jstatic "resetDisplay" "org.armedbear.j.Editor"))
 
+(defmacro log.debug (&rest args)
+  (when args
+    `(let ((method (jmethod "org.armedbear.j.Log" "debug" "java.lang.String")))
+       (jstatic method nil (format nil ,@args)))))
+
 (defun add-hook (hook function)
   (when (symbolp hook)
     (let ((hook-functions (symbol-value hook)))
