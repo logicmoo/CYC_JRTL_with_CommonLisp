@@ -2,7 +2,7 @@
  * ClosureTemplateFunction.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ClosureTemplateFunction.java,v 1.1 2004-07-11 11:45:18 piso Exp $
+ * $Id: ClosureTemplateFunction.java,v 1.2 2004-07-11 12:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,52 +29,42 @@ public abstract class ClosureTemplateFunction extends Closure
         super(lambdaList, NIL, null);
     }
 
-    public LispObject execute() throws ConditionThrowable
+    public final LispObject execute() throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[0];
-        return execute(args);
+        return notImplemented();
     }
 
-    public LispObject execute(LispObject arg) throws ConditionThrowable
+    public final LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[1];
-        args[0] = arg;
-        return execute(args);
+        return notImplemented();
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    public final LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        return execute(args);
+        return notImplemented();
     }
 
-    public LispObject execute(LispObject first, LispObject second,
+    public final LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[3];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        return execute(args);
+        return notImplemented();
     }
 
-    public LispObject execute(LispObject first, LispObject second,
+    public final LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[4];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        return execute(args);
+        return notImplemented();
     }
 
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    public final LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        return notImplemented();
+    }
+
+    private static final LispObject notImplemented() throws ConditionThrowable
     {
         return signal(new LispError("ClosureTemplateFunction.execute(): not implemented"));
     }
