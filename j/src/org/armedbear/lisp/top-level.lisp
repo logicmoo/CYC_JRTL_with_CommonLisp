@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.25 2004-02-11 00:24:33 piso Exp $
+;;; $Id: top-level.lisp,v 1.26 2004-02-18 15:32:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -93,7 +93,9 @@
     (inspect obj)))
 
 (defun macroexpand-command (args)
-  (format t "~S~%" (macroexpand (read-from-string args)))
+  (let ((s (with-output-to-string (stream)
+             (pprint (macroexpand (read-from-string args)) stream))))
+    (write-string (string-left-trim '(#\return #\linefeed) s)))
   (values))
 
 (defvar *old-package* nil)
