@@ -145,16 +145,16 @@ public abstract class AbstractVector extends AbstractArray
         else {
             int n = Fixnum.getValue(obj);
             if (n > capacity()) {
-                StringBuffer sb = new StringBuffer("the new fill pointer (");
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
                 sb.append(n);
                 sb.append(") exceeds the capacity of the vector (");
                 sb.append(capacity());
-                sb.append(")");
+                sb.append(").");
                 signal(new LispError(sb.toString()));
             } else if (n < 0) {
-                StringBuffer sb = new StringBuffer("the new fill pointer (");
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
                 sb.append(n);
-                sb.append(") is negative");
+                sb.append(") is negative.");
                 signal(new LispError(sb.toString()));
             } else
                 fillPointer = n;
