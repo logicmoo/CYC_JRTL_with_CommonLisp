@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.3 2002-11-11 18:20:49 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.4 2002-11-15 17:20:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -351,6 +351,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
 
     protected void setText()
     {
+        empty();
         if (showRawText) {
             super.setText();
             return;
@@ -371,9 +372,22 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                     headers = getBeautifiedHeaders();
                 else
                     headers = defaultHeaders;
-                setText(headers);
-                headerLineCount = Utilities.countLines(headers);
-                appendBody(message.getRawBody());
+                try {
+                    lockWrite();
+                }
+                catch (InterruptedException e) {
+                    Log.debug(e);
+                    return;
+                }
+                try {
+                    appendHeaderLines(headers);
+                    headerLineCount = Utilities.countLines(headers);
+                    appendHeaderLine("");
+                    appendBody(message.getRawBody());
+                }
+                finally {
+                    unlockWrite();
+                }
             }
         }
     }
