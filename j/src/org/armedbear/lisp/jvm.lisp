@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.385 2005-02-02 21:42:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.386 2005-02-03 02:28:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -420,6 +420,11 @@
 
 (defun p1-m-v-b (form)
 ;;   (dformat t "p1-multiple-value-bind~%")
+  (when (= (length (cadr form)) 1)
+    (let ((new-form `(let ((,(caadr form) ,(caddr form))) ,@(cdddr form))))
+      (dformat t "old form = ~S~%" form)
+      (dformat t "new-form = ~S~%" new-form)
+      (return-from p1-m-v-b (p1-let/let* new-form))))
   (let* ((*visible-variables* *visible-variables*)
          (block (make-block-node :name '(MULTIPLE-VALUE-BIND)))
          (*blocks* (cons block *blocks*))
@@ -1295,6 +1300,8 @@
              6 ; ICONST_3
              7 ; ICONST_4
              8 ; ICONST_5
+             9 ; LCONST_0
+             10 ; LCONST_1
              42 ; ALOAD_0
              43 ; ALOAD_1
              44 ; ALOAD_2
@@ -2477,6 +2484,21 @@
         (if variable
             (emit 'iload (variable-register variable))
             (aver nil)))))
+
+(defun emit-push-long (arg)
+  (cond ((eql arg 0)
+         (emit 'lconst_0))
+        ((eql arg 1)
+         (emit 'lconst_1))
+        ((fixnump arg)
+         (emit-push-constant-int arg)
+         (emit 'i2l))
+        (t
+         (let ((variable (unboxed-fixnum-variable arg)))
+           (aver (not (null variable)))
+           (aver (not (null (variable-register variable))))
+           (emit 'iload (variable-register variable))
+           (emit 'i2l)))))
 
 (defun p2-eql (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
@@ -4233,10 +4255,12 @@
                        (emit-push-int arg2)
                        (emit 'iadd))
                       (t
-                       (emit 'iload (variable-register var1))
-                       (emit 'i2l)
-                       (emit 'iload (variable-register var2))
-                       (emit 'i2l)
+;;                        (emit 'iload (variable-register var1))
+;;                        (emit 'i2l)
+                       (emit-push-long var1)
+;;                        (emit 'iload (variable-register var2))
+;;                        (emit 'i2l)
+                       (emit-push-long var2)
                        (emit 'ladd)
                        (emit-box-long)))
                 (emit-move-from-stack target representation)))
@@ -4248,10 +4272,12 @@
                      (emit-push-int arg2)
                      (emit 'iadd))
                     (t
-                     (emit-push-int var1)
-                     (emit 'i2l)
-                     (emit-push-int arg2)
-                     (emit 'i2l)
+;;                      (emit-push-int var1)
+;;                      (emit 'i2l)
+                     (emit-push-long var1)
+;;                      (emit-push-int arg2)
+;;                      (emit 'i2l)
+                     (emit-push-long arg2)
                      (emit 'ladd)
                      (emit-box-long)))
               (emit-move-from-stack target representation))
@@ -4263,10 +4289,12 @@
                      (emit-push-int var2)
                      (emit 'iadd))
                     (t
-                     (emit-push-int arg1)
-                     (emit 'i2l)
-                     (emit-push-int var2)
-                     (emit 'i2l)
+;;                      (emit-push-int arg1)
+;;                      (emit 'i2l)
+                     (emit-push-long arg1)
+;;                      (emit-push-int var2)
+;;                      (emit 'i2l)
+                     (emit-push-long var2)
                      (emit 'ladd)
                      (emit-box-long)))
               (emit-move-from-stack target representation))
@@ -4277,9 +4305,17 @@
               (emit-invoke-method "incr" target representation))
              ((eql arg2 1)
               (dformat t "p2-plus case 5~%")
-              (compile-form arg1 :target :stack)
-              (maybe-emit-clear-values arg1)
-              (emit-invoke-method "incr" target representation))
+              (cond ((and (eq representation :unboxed-fixnum)
+                          (subtypep (derive-type arg1) 'FIXNUM))
+                     (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+                     (maybe-emit-clear-values arg1)
+                     (emit-push-int 1)
+                     (emit 'iadd)
+                     (emit-move-from-stack target representation))
+                    (t
+                     (compile-form arg1 :target :stack)
+                     (maybe-emit-clear-values arg1)
+                     (emit-invoke-method "incr" target representation))))
              ((arg-is-fixnum-p arg1)
               (dformat t "p2-plus case 6~%")
               (emit-push-int arg1)
@@ -4363,10 +4399,12 @@
                   (emit 'iload (variable-register var2))
                   (emit 'isub))
                  (t
-                  (emit 'iload (variable-register var1))
-                  (emit 'i2l)
-                  (emit 'iload (variable-register var2))
-                  (emit 'i2l)
+;;                   (emit 'iload (variable-register var1))
+;;                   (emit 'i2l)
+                  (emit-push-long var1)
+;;                   (emit 'iload (variable-register var2))
+;;                   (emit 'i2l)
+                  (emit-push-long var2)
                   (emit 'lsub)
                   (emit-box-long)))
                 (emit-move-from-stack target representation)))
@@ -4380,10 +4418,8 @@
                      (emit 'isub))
                     (t
                      (dformat t "p2-minus case 2 LSUB~%")
-                     (emit-push-int var1)
-                     (emit 'i2l)
-                     (emit-push-int arg2)
-                     (emit 'i2l)
+                     (emit-push-long var1)
+                     (emit-push-long arg2)
                      (emit 'lsub)
                      (emit-box-long)))
               (emit-move-from-stack target representation))
@@ -4395,18 +4431,24 @@
                      (emit-push-int var2)
                      (emit 'isub))
                     (t
-                     (emit-push-int arg1)
-                     (emit 'i2l)
-                     (emit-push-int var2)
-                     (emit 'i2l)
+                     (emit-push-long arg1)
+                     (emit-push-long var2)
                      (emit 'lsub)
                      (emit-box-long)))
               (emit-move-from-stack target representation))
              ((eql arg2 1)
-              (dformat t "p2-minus case 5~%")
-              (compile-form arg1 :target :stack)
-              (maybe-emit-clear-values arg2)
-              (emit-invoke-method "decr" target representation))
+              (dformat t "p2-minus case 5 ~S~%" form)
+              (cond ((and (eq representation :unboxed-fixnum)
+                          (subtypep (derive-type arg1) 'FIXNUM))
+                     (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+                     (maybe-emit-clear-values arg1)
+                     (emit-push-int 1)
+                     (emit 'isub)
+                     (emit-move-from-stack target representation))
+                    (t
+                     (compile-form arg1 :target :stack)
+                     (maybe-emit-clear-values arg1)
+                     (emit-invoke-method "decr" target representation))))
              ((arg-is-fixnum-p arg2)
               (dformat t "p2-minus case 7~%")
               (compile-form arg1 :target :stack)
@@ -4649,15 +4691,18 @@
 (defun p2-the (form &key (target :stack) representation)
 ;;   (compile-form (third form) :target target :representation representation)
   (dformat t "p2-the ~S ~S ~S~%" form target representation)
-  (cond ((subtypep (second form) 'FIXNUM)
-         (dformat t "p2-the fixnum case~%")
-         (unless (eq representation :unboxed-fixnum)
-           (emit 'new +lisp-fixnum-class+)
-           (emit 'dup))
+  (cond ((and (eq representation :unboxed-fixnum) (subtypep (second form) 'FIXNUM))
          (compile-form (third form) :target :stack :representation :unboxed-fixnum)
-         (unless (eq representation :unboxed-fixnum)
-           (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
          (emit-move-from-stack target representation))
+;;         ((subtypep (second form) 'FIXNUM)
+;;          (dformat t "p2-the fixnum case~%")
+;;          (unless (eq representation :unboxed-fixnum)
+;;            (emit 'new +lisp-fixnum-class+)
+;;            (emit 'dup))
+;;          (compile-form (third form) :target :stack :representation :unboxed-fixnum)
+;;          (unless (eq representation :unboxed-fixnum)
+;;            (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+;;          (emit-move-from-stack target representation))
         (t
          (compile-form (third form) :target target :representation representation))))
 
