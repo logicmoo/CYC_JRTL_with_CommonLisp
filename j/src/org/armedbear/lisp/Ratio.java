@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.15 2003-08-12 13:13:31 piso Exp $
+ * $Id: Ratio.java,v 1.16 2003-08-12 17:00:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,6 +134,10 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return new LispFloat(floatValue() + ((LispFloat)obj).getValue());
         }
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
+        }
         throw new TypeError(obj, "number");
     }
 
@@ -160,6 +164,11 @@ public final class Ratio extends LispObject
         }
         if (obj instanceof LispFloat) {
             return new LispFloat(floatValue() - ((LispFloat)obj).getValue());
+        }
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(subtract(c.getRealPart()),
+                                       Fixnum.ZERO.subtract(c.getImaginaryPart()));
         }
         throw new TypeError(obj, "number");
     }

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.17 2003-08-12 15:34:39 piso Exp $
+ * $Id: LispFloat.java,v 1.18 2003-08-12 17:00:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,6 +131,10 @@ public final class LispFloat extends LispObject
             return new LispFloat(value + ((Bignum)obj).getValue().floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(value + ((Ratio)obj).floatValue());
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
+        }
         throw new TypeError(obj, "number");
     }
 
@@ -144,6 +148,11 @@ public final class LispFloat extends LispObject
             return new LispFloat(value - ((Bignum)obj).getValue().floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(value - ((Ratio)obj).floatValue());
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(subtract(c.getRealPart()),
+                                       ZERO.subtract(c.getImaginaryPart()));
+        }
         throw new TypeError(obj, "number");
     }
 

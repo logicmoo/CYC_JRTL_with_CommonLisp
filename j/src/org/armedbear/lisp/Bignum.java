@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.19 2003-08-12 13:14:43 piso Exp $
+ * $Id: Bignum.java,v 1.20 2003-08-12 17:00:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,6 +144,10 @@ public final class Bignum extends LispObject
         }
         if (obj instanceof LispFloat)
             return new LispFloat(value.floatValue() + ((LispFloat)obj).getValue());
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
+        }
         throw new TypeError(obj, "number");
     }
 
@@ -161,6 +165,11 @@ public final class Bignum extends LispObject
         }
         if (obj instanceof LispFloat)
             return new LispFloat(value.floatValue() - ((LispFloat)obj).getValue());
+        if (obj instanceof Complex) {
+            Complex c = (Complex) obj;
+            return Complex.getInstance(subtract(c.getRealPart()),
+                                       Fixnum.ZERO.subtract(c.getImaginaryPart()));
+        }
         throw new TypeError(obj, "number");
     }
 
