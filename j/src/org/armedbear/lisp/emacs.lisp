@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.9 2005-03-06 19:40:52 piso Exp $
+;;; $Id: emacs.lisp,v 1.10 2005-03-06 21:28:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,48 +45,47 @@
 (define-key *global-map* "Ctrl H" *help-map*)
 
 ;; // File menu.
-;; mapKey(KeyEvent.VK_O, CTRL_MASK, "openFile");
 (define-key *control-x-map* "Ctrl F" "openFile")
 ;; mapKey(KeyEvent.VK_O, CTRL_MASK | ALT_MASK, "openFileInOtherWindow");
 ;; mapKey(KeyEvent.VK_O, CTRL_MASK | SHIFT_MASK, "openFileInOtherFrame");
 ;; mapKey(KeyEvent.VK_N, CTRL_MASK, "newBuffer");
 ;; mapKey(KeyEvent.VK_R, ALT_MASK, "recentFiles");
-;; mapKey(KeyEvent.VK_S, CTRL_MASK, "save");
 (define-key *control-x-map* "Ctrl S" "save")
 ;; mapKey(KeyEvent.VK_S, CTRL_MASK | SHIFT_MASK, "saveAs");
 ;; mapKey(KeyEvent.VK_S, CTRL_MASK | ALT_MASK, "saveCopy");
 ;; mapKey(KeyEvent.VK_F2, 0, "saveAll");
-;; mapKey(KeyEvent.VK_F4, CTRL_MASK, "killBuffer");
-;; mapKey(KeyEvent.VK_W, CTRL_MASK, "killBuffer");
+
+;; j's killBuffer is really kill-this-buffer
 (define-key *control-x-map* "k" "killBuffer")
+
 ;; mapKey(KeyEvent.VK_P, ALT_MASK, "properties");
 ;; mapKey(KeyEvent.VK_N, CTRL_MASK | SHIFT_MASK, "newFrame");
-;; mapKey(KeyEvent.VK_X, ALT_MASK, "executeCommand");
 (define-key *global-map* "Alt X" "executeCommand")
 (define-key *esc-map* #\x "executecommand")
 ;; mapKey(KeyEvent.VK_P, CTRL_MASK, "print");
 ;; mapKey(KeyEvent.VK_Q, CTRL_MASK | SHIFT_MASK, "saveAllExit");
 (define-key *control-x-map* "Ctrl C" "saveAllExit")
-;; mapKey(KeyEvent.VK_Q, CTRL_MASK, "quit");
+
+(define-key *global-map* "Ctrl Space" #'set-mark-command)
+(define-key *global-map* "Ctrl Shift 2" #'set-mark-command) ; C-@
 
 ;; // Edit menu.
-(define-key *global-map* "Ctrl Space" #'set-mark-command)
-;; mapKey(KeyEvent.VK_BACK_SPACE, ALT_MASK, "undo");
-;; mapKey(KeyEvent.VK_Z, CTRL_MASK, "undo");
+(define-keys *global-map*
+  `(("Ctrl /"                   "undo")
+    ("Ctrl Shift 0x2d"          "undo") ; C-_
+    ("Shift Alt 0x2d"           "redo") ; M-_
+    ("Ctrl W"                   "killRegion")
+    ("Shift Delete"             "killRegion")
+    ("Alt W"                    "copyRegion")
+    ("Ctrl NumPad Insert"       "copyRegion")
+    ("Ctrl Y"                   "paste")
+    ("Shift NumPad Insert"      "paste")
+    ("Alt Y"                    "cyclePaste")))
+
 (define-key *control-x-map* "u" "undo")
-;; mapKey(KeyEvent.VK_Y, CTRL_MASK, "redo");
-;; mapKey(KeyEvent.VK_DELETE, SHIFT_MASK, "killRegion");
-;; mapKey(KeyEvent.VK_X, CTRL_MASK, "killRegion");
-(define-key *global-map* "Ctrl W" "killRegion")
-;; mapKey(KeyEvent.VK_X, CTRL_MASK | SHIFT_MASK, "killAppend");
-;; mapKey(KeyEvent.VK_C, CTRL_MASK, "copyRegion");
-(define-key *global-map* "Alt W" "copyRegion")
-;; mapKey(KeyEvent.VK_C, CTRL_MASK | SHIFT_MASK, "copyAppend");
-;; mapKey(KeyEvent.VK_V, CTRL_MASK, "paste");
-(define-key *global-map* "Ctrl Y" "paste")
-;; mapKey(KeyEvent.VK_V, CTRL_MASK | SHIFT_MASK, "cyclePaste");
-(define-key *global-map* "Alt Y" "cyclePaste")
 (define-key *esc-map* #\y "cyclePaste")
+;; mapKey(KeyEvent.VK_X, CTRL_MASK | SHIFT_MASK, "killAppend");
+;; mapKey(KeyEvent.VK_C, CTRL_MASK | SHIFT_MASK, "copyAppend");
 ;; mapKey(KeyEvent.VK_T, ALT_MASK, "cycleTabWidth");
 
 ;; // Goto menu.
@@ -94,45 +93,36 @@
 ;; mapKey(KeyEvent.VK_J, CTRL_MASK | SHIFT_MASK, "jumpToColumn");
 ;; mapKey(KeyEvent.VK_M, CTRL_MASK, "findMatchingChar");
 ;; mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "selectSyntax");
-;; mapKey(KeyEvent.VK_UP, CTRL_MASK | ALT_MASK, "findFirstOccurrence");
-(define-key *global-map* "Ctrl Alt Up" "findFirstOccurrence")
-;; mapKey(KeyEvent.VK_KP_UP, CTRL_MASK | ALT_MASK, "findFirstOccurrence");
-(define-key *global-map* "Ctrl Alt NumPad Up" "findFirstOccurrence")
-;; mapKey(KeyEvent.VK_UP, ALT_MASK, "findPrevWord");
-(define-key *global-map* "Alt Up" "findPrevWord")
-;; mapKey(KeyEvent.VK_KP_UP, ALT_MASK, "findPrevWord");
-(define-key *global-map* "Alt NumPad Up" "findPrevWord")
-;; mapKey(KeyEvent.VK_DOWN, ALT_MASK, "findNextWord");
-(define-key *global-map* "Alt Down" "findNextWord")
-;; mapKey(KeyEvent.VK_KP_DOWN, ALT_MASK, "findNextWord");
-(define-key *global-map* "Alt NumPad Down" "findNextWord")
+
+(define-keys *global-map*
+  '(("Ctrl Alt Up"              "findFirstOccurrence")
+    ("Ctrl Alt NumPad Up"       "findFirstOccurrence")
+    ("Alt Up"                   "findPrevWord")
+    ("Alt NumPad Up"            "findPrevWord")
+    ("Alt Down"                 "findNextWord")
+    ("Alt NumPad Down"          "findNextWord")))
+
 ;; mapKey(KeyEvent.VK_N, CTRL_MASK | ALT_MASK, "nextChange");
 ;; mapKey(KeyEvent.VK_P, CTRL_MASK | ALT_MASK, "previousChange");
-;; mapKey(KeyEvent.VK_F5, 0, "pushPosition");
 (define-key *global-map* "F5" "pushPosition")
-;; mapKey(KeyEvent.VK_F5, SHIFT_MASK, "popPosition");
 (define-key *global-map* "Shift F5" "popPosition")
 
 ;; // Search menu.
-;; if (Editor.preferences().getBooleanProperty(Property.USE_INCREMENTAL_FIND))
-;; mapKey(KeyEvent.VK_F, CTRL_MASK, "incrementalFind");
-(define-key *global-map* "Ctrl S" "incrementalFind")
-;; else
-;; mapKey(KeyEvent.VK_F, CTRL_MASK, "find");
-(define-key *global-map* "Alt F3" "find")
+(define-keys *global-map*
+  '(("Ctrl S"                   "incrementalFind")
+    ("Alt F3"                   "find")
+    ("F3"                       "findNext")
+    ("Shift F3"                 "findPrev")
+    ("F6"                       "findInFiles")
+    ("Ctrl Shift F"             "findInFiles")
+    ("Ctrl F3"                  "listOccurrences")
+    ("Ctrl Shift L"             "listFiles")
+    ("Shift Alt 5"              "replace") ; M-%
+    ("Ctrl Shift R"             "replaceInFiles")))
 
 ;; Emacs uses Ctrl Alt L for reposition-window
 ;; XEmacs uses Ctrl Alt L for switch-to-other-buffer
 (define-key *global-map* "Ctrl Alt L" "listOccurrencesOfPatternAtDot")
-
-(define-key *global-map* "F3" "findNext")
-(define-key *global-map* "Shift F3" "findPrev")
-(define-key *global-map* "F6" "findInFiles")
-(define-key *global-map* "Ctrl Shift F" "findInFiles")
-(define-key *global-map* "Ctrl F3" "listOccurrences")
-(define-key *global-map* "Ctrl Shift L" "listFiles")
-(define-key *global-map* "Shift Alt 5" "replace") ; M-%
-(define-key *global-map* "Ctrl Shift R" "replaceInFiles")
 
 ;; mapKey(KeyEvent.VK_K, CTRL_MASK, "killLine");
 (define-key *global-map* "Ctrl K" "killLine")
@@ -185,29 +175,29 @@
     ("Page Down"                "pageDown")))
 
 (define-keys *esc-map*
-  '((#\< "bob")
-    (#\> "eob")
-    (#\. "findTagAtDot")
-    (#\% "replace")
+  '((#\<                        "bob")
+    (#\>                        "eob")
+    (#\.                        "findTagAtDot")
+    (#\%                        "replace")
     ))
 
 ;; Emacs uses Ctrl Up for backward-paragraph, which j doesn't have.
 (define-keys *global-map*
-  '(("Ctrl Up"          "windowUp")
-    ("Ctrl NumPad Up"   "windowUp")))
+  '(("Ctrl Up"                  "windowUp")
+    ("Ctrl NumPad Up"           "windowUp")))
 ;; Emacs uses Ctrl Down for forward-paragraph, which j doesn't have.
 (define-keys *global-map*
-  '(("Ctrl Down"        "windowDown")
-    ("Ctrl NumPad Down" "windowDown")))
+  '(("Ctrl Down"                "windowDown")
+    ("Ctrl NumPad Down"         "windowDown")))
 
 ;; Emacs uses Alt Left for backward-word, which is also on Alt B and Ctrl Left.
 (define-keys *global-map*
-  '(("Alt Left" "prevBuffer")
-    ("Alt NumPad Left" "prevBuffer")))
+  '(("Alt Left"                 "prevBuffer")
+    ("Alt NumPad Left"          "prevBuffer")))
 ;; Emacs uses Alt Right for forward-word, which is also on Alt F and Ctrl Right.
 (define-keys *global-map*
-  '(("Alt Right" "nextBuffer")
-    ("Alt NumPad Right" "nextBuffer")))
+  '(("Alt Right"                "nextBuffer")
+    ("Alt NumPad Right"         "nextBuffer")))
 
 ;; mapKey(KeyEvent.VK_PAGE_UP, ALT_MASK, "pageUpOtherWindow");
 ;; mapKey(KeyEvent.VK_PAGE_UP, SHIFT_MASK, "selectPageUp");
@@ -216,20 +206,17 @@
 ;; mapKey(KeyEvent.VK_PAGE_UP, CTRL_MASK, "top");
 ;; mapKey(KeyEvent.VK_PAGE_DOWN, CTRL_MASK, "bottom");
 ;; mapKey(KeyEvent.VK_DELETE, 0, "delete");
-(define-key *global-map* "Delete" "delete")
-(define-key *global-map* "Ctrl D" "delete")
-;; mapKey(KeyEvent.VK_BACK_SPACE, 0, "backspace");
-(define-key *global-map* "Backspace" "backspace")
-;; mapKey(KeyEvent.VK_BACK_SPACE, SHIFT_MASK, "backspace");
-(define-key *global-map* "Shift Backspace" "backspace")
-;; mapKey(KeyEvent.VK_BACK_SPACE, CTRL_MASK, "deleteWordLeft");
-(define-key *global-map* "Ctrl Backspace" "deleteWordLeft")
-;; mapKey(KeyEvent.VK_ENTER, 0, "newline");
-(define-key *global-map* "Enter" "newline")
-(define-key *global-map* "Ctrl M" "newline")
-(define-key *global-map* "Ctrl J" "newlineAndIndent")
+(define-keys *global-map*
+  '(("Delete"                   "delete")
+    ("Ctrl D"                   "delete")
+    ("Backspace"                "backspace")
+    ("Shift Backspace"          "backspace")
+    ("Ctrl Backspace"           "deleteWordLeft")
+    ("Enter"                    "newline")
+    ("Ctrl M"                   "newline")
+    ("Ctrl J"                   "newlineAndIndent")))
 
-;; mapKey(KeyEvent.VK_ESCAPE, 0, "escape");
+;; keyboard-quit
 (define-key *global-map* "Ctrl G" "escape")
 
 ;; mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "gotoFile");
@@ -329,14 +316,11 @@
 ;; mapKey(KeyEvent.VK_B, ALT_MASK, "sidebarListBuffers");
 ;; mapKey(KeyEvent.VK_T, CTRL_MASK | SHIFT_MASK, "sidebarListTags");
 
-;; mapKey(KeyEvent.VK_F10, 0, "splitWindow");
-(define-key *control-x-map* "2" "splitWindow")
-;; mapKey(KeyEvent.VK_F10, SHIFT_MASK, "unsplitWindow");
-(define-key *control-x-map*  "1" "unsplitwindow")
-;; mapKey(KeyEvent.VK_F10, CTRL_MASK | SHIFT_MASK, "killWindow");
-(define-key *control-x-map* "0" "killWindow")
-;; mapKey(KeyEvent.VK_O, ALT_MASK, "otherWindow");
-(define-key *control-x-map*  "o" "otherwindow")
+(define-keys *control-x-map*
+  '(("2"                        "splitWindow")
+    ("1"                        "unsplitwindow")
+    ("0"                        "killWindow")
+    ("o"                        "otherwindow")))
 
 ;; if (Editor.preferences().getBooleanProperty(Property.ENABLE_EXPERIMENTAL_FEATURES))
 ;; mapKey(KeyEvent.VK_F9, ALT_MASK, "shell");
