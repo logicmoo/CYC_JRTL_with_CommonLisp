@@ -1,8 +1,8 @@
 /*
  * SimpleBitVector.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: SimpleBitVector.java,v 1.10 2004-10-13 00:22:19 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: SimpleBitVector.java,v 1.11 2005-02-12 20:56:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,10 +26,12 @@ package org.armedbear.lisp;
 // BIT-VECTOR."
 public final class SimpleBitVector extends AbstractBitVector
 {
-    public SimpleBitVector(int capacity) // throws ConditionThrowable
+    public SimpleBitVector(int capacity)
     {
         this.capacity = capacity;
-        int size = capacity >>> 6;
+        int size = capacity >>> 6; // 64 bits in a long
+        // If the capacity is not an integral multiple of 64, we'll need one
+        // more long.
         if ((capacity & LONG_MASK) != 0)
             ++size;
         bits = new long[size];
@@ -96,8 +98,8 @@ public final class SimpleBitVector extends AbstractBitVector
     {
         if (index < 0 || index >= length())
             badIndex(index, length());
-        int offset = index >> 6;
-        return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+        int offset = index >> 6; // Divide by 64.
+        return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
     public LispObject getRowMajor(int index) throws ConditionThrowable
@@ -105,7 +107,7 @@ public final class SimpleBitVector extends AbstractBitVector
         if (index < 0 || index >= capacity)
             badIndex(index, capacity);
         int offset = index >> 6;
-        return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+        return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
     public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
@@ -116,10 +118,10 @@ public final class SimpleBitVector extends AbstractBitVector
         try {
             switch (((Fixnum)newValue).value) {
                 case 0:
-                    bits[offset] &= ~(1L << index);
+                    bits[offset] &= ~(1L << (index & LONG_MASK));
                     return;
                 case 1:
-                    bits[offset] |= 1L << index;
+                    bits[offset] |= 1L << (index & LONG_MASK);
                     return;
             }
         }
@@ -132,19 +134,19 @@ public final class SimpleBitVector extends AbstractBitVector
     protected int getBit(int index)
     {
         int offset = index >> 6;
-        return (bits[offset] & (1L << index)) != 0 ? 1 : 0;
+        return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? 1 : 0;
     }
 
     protected void setBit(int index)
     {
         int offset = index >> 6;
-        bits[offset] |= 1L << index;
+        bits[offset] |= 1L << (index & LONG_MASK);
     }
 
     protected void clearBit(int index)
     {
         int offset = index >> 6;
-        bits[offset] &= ~(1L << index);
+        bits[offset] &= ~(1L << (index & LONG_MASK));
     }
 
     public void shrink(int n) throws ConditionThrowable
@@ -217,4 +219,98 @@ public final class SimpleBitVector extends AbstractBitVector
     {
         return new ComplexBitVector(newCapacity, displacedTo, displacement);
     }
+
+    public SimpleBitVector and(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = bits[i] & v.bits[i];
+        return result;
+    }
+
+    public SimpleBitVector ior(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = bits[i] | v.bits[i];
+        return result;
+    }
+
+    public SimpleBitVector xor(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = bits[i] ^ v.bits[i];
+        return result;
+    }
+
+    public SimpleBitVector nand(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = ~(bits[i] & v.bits[i]);
+        return result;
+    }
+
+    // ### %simple-bit-vector-bit-and
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_AND =
+        new Primitive("%simple-bit-vector-bit-and", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).and((SimpleBitVector)second,
+                                                ((SimpleBitVector)third));
+        }
+    };
+
+    // ### %simple-bit-vector-bit-ior
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_IOR =
+        new Primitive("%simple-bit-vector-bit-ior", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).ior((SimpleBitVector)second,
+                                                (SimpleBitVector)third);
+
+        }
+    };
+
+    // ### %simple-bit-vector-bit-xor
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_XOR =
+        new Primitive("%simple-bit-vector-bit-xor", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).xor((SimpleBitVector)second,
+                                                (SimpleBitVector)third);
+
+        }
+    };
+
+    // ### %simple-bit-vector-bit-nand
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_NAND =
+        new Primitive("%simple-bit-vector-bit-nand", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).nand((SimpleBitVector)second,
+                                                 (SimpleBitVector)third);
+        }
+    };
 }
