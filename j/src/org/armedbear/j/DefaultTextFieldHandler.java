@@ -2,7 +2,7 @@
  * DefaultTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DefaultTextFieldHandler.java,v 1.3 2003-07-03 01:24:06 piso Exp $
+ * $Id: DefaultTextFieldHandler.java,v 1.4 2003-07-18 15:23:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,7 +268,7 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         }
         KeyMapping mapping = editor.getKeyMapping(keyChar, keyCode, modifiers);
         if (mapping != null) {
-            String command = mapping.getCommand();
+            Object command = mapping.getCommand();
             if (command == "killLine")
                 killLine();
             else if (command == "expand") {

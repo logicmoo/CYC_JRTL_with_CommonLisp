@@ -2,7 +2,7 @@
  * IncrementalFindTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: IncrementalFindTextFieldHandler.java,v 1.3 2003-07-03 01:26:05 piso Exp $
+ * $Id: IncrementalFindTextFieldHandler.java,v 1.4 2003-07-18 15:26:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,7 +149,7 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         }
         KeyMapping mapping = keyMap.lookup(keyChar, keyCode, modifiers);
         if (mapping != null) {
-            String command = mapping.getCommand();
+            Object command = mapping.getCommand();
             if (command == "incrementalFind" || command == "findNext") {
                 e.consume();
                 findNext();
