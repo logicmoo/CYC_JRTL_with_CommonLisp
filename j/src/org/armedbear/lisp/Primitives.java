@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.265 2003-06-24 20:00:36 piso Exp $
+ * $Id: Primitives.java,v 1.266 2003-06-24 20:12:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2294,13 +2294,22 @@ public final class Primitives extends Module
                 fun = fun.getSymbolFunction();
             if (fun instanceof Function) {
                 final int numFunArgs = spread.length();
-                final LispObject[] funArgs = new LispObject[numFunArgs];
-                int j = 0;
-                while (spread != NIL) {
-                    funArgs[j++] = spread.car();
-                    spread = spread.cdr();
+                final LispThread thread = LispThread.currentThread();
+                switch (numFunArgs) {
+                    case 1:
+                        return funcall1(fun, spread.car(), thread);
+                    case 2:
+                        return funcall2(fun, spread.car(), spread.cadr(), thread);
+                    default: {
+                        final LispObject[] funArgs = new LispObject[numFunArgs];
+                        int j = 0;
+                        while (spread != NIL) {
+                            funArgs[j++] = spread.car();
+                            spread = spread.cdr();
+                        }
+                        return funcall(fun, funArgs, thread);
+                    }
                 }
-                return funcall(fun, funArgs, LispThread.currentThread());
             }
             throw new TypeError(fun, "function");
         }
