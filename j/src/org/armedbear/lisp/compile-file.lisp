@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.31 2004-07-11 16:54:36 piso Exp $
+;;; $Id: compile-file.lisp,v 1.32 2004-07-28 23:13:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -221,12 +221,12 @@
          (temp-file (merge-pathnames (make-pathname :type (concatenate 'string type "-tmp"))
                                      output-file)))
     (with-open-file (in input-file :direction :input)
-      (let ((*compile-file-pathname* (pathname in))
-            (*compile-file-truename* (truename in))
-            (*class-number* 0)
-            (namestring (namestring *compile-file-truename*))
-            (start (get-internal-real-time))
-            elapsed)
+      (let* ((*compile-file-pathname* (pathname in))
+             (*compile-file-truename* (truename in))
+             (*class-number* 0)
+             (namestring (namestring *compile-file-truename*))
+             (start (get-internal-real-time))
+             elapsed)
         (%format t "; Compiling ~A ...~%" namestring)
         (with-open-file (out temp-file :direction :output :if-exists :supersede)
           (let ((*readtable* *readtable*)
