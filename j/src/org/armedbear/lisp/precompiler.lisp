@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.3 2003-11-14 00:06:05 piso Exp $
+;;; $Id: precompiler.lisp,v 1.4 2003-11-15 01:07:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -297,34 +297,32 @@
       (multiple-value-setq (new win) (compiler-macroexpand-1 new env)))))
 
 (defun precompile1 (form)
-  (when (atom form)
-    (return-from precompile1 form))
-  ;; Form is a cons.
-  (let ((op (car form)))
-    (when (symbolp op)
-      (cond ((local-macro-function op)
-             (let ((result (expand-local-macro form)))
-               (if (equal result form)
-                   (return-from precompile1 result)
-                   (return-from precompile1 (precompile1 result)))))
-            ((compiler-macro-function op)
-             (let ((result (compiler-macroexpand form)))
-               (if (equal result form)
-                   (return-from precompile1 result)
-                   (return-from precompile1 (precompile1 result)))))
-            ((and (not (eq op 'LAMBDA))
-                  (macro-function op))
-             ;; It's a macro...
-             (unless (and (special-operator-p op) (not *in-jvm-compile*))
-               (let ((result (expand-macro form)))
-                 (return-from precompile1 (precompile1 result))))))
-    (let ((handler (get op 'precompile-handler)))
-      (when handler
-        (return-from precompile1 (funcall handler form)))))
-    (when (and (symbolp op) (fboundp op))
-      (when (special-operator-p op)
-        (format t "PRECOMPILE1: unsupported special operator ~S~%" op))))
-  (precompile-cons form))
+  (if (atom form)
+      form
+      (let ((op (car form)))
+        (when (symbolp op)
+          (cond ((local-macro-function op)
+                 (let ((result (expand-local-macro form)))
+                   (if (equal result form)
+                       (return-from precompile1 result)
+                       (return-from precompile1 (precompile1 result)))))
+                ((compiler-macro-function op)
+                 (let ((result (compiler-macroexpand form)))
+                   (if (equal result form)
+                       (return-from precompile1 result)
+                       (return-from precompile1 (precompile1 result)))))
+                ((and (not (eq op 'LAMBDA))
+                      (macro-function op))
+                 ;; It's a macro...
+                 (unless (and (special-operator-p op) (not *in-jvm-compile*))
+                   (let ((result (expand-macro form)))
+                     (return-from precompile1 (precompile1 result))))))
+          (let ((handler (get op 'precompile-handler)))
+            (when handler
+              (return-from precompile1 (funcall handler form)))))
+        (when (and (symbolp op) (special-operator-p op))
+          (format t "PRECOMPILE1: unsupported special operator ~S~%" op))
+        (precompile-cons form))))
 
 (defun precompile-form (form in-jvm-compile)
   (let ((*in-jvm-compile* in-jvm-compile))
