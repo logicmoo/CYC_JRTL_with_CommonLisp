@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.118 2004-04-24 14:27:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.119 2004-04-24 15:18:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2674,7 +2674,7 @@
                   (%format t "~A Compiled top-level form~%" prefix)))
             (values (or name compiled-definition) nil nil)))
       (error (c)
-             (%format t "Note: ~A~%" c)
+             (%format t "~A Note: ~A~%" prefix c)
              (when name
                (%format t "~A Unable to compile ~S~%" prefix name))
              (values (or name (sys::coerce-to-function definition)) nil t)))))
