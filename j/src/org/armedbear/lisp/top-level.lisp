@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.1 2003-09-25 18:19:04 piso Exp $
+;;; $Id: top-level.lisp,v 1.2 2003-09-26 19:19:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,22 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 ;;; Adapted from SB-ACLREPL (originally written by Kevin Rosenberg).
+
+(in-package "EXTENSIONS")
+
+(export '(*saved-backtrace* bt))
+
+(defvar *saved-backtrace* nil)
+
+(defun bt (&optional count)
+  (let ((count (if (fixnump count) count 7))
+        (n 0))
+    (dolist (frame *saved-backtrace*)
+      (format t "  ~D: ~A~%" n frame)
+      (incf n)
+      (when (>= n count)
+        (return))))
+  (values))
 
 (in-package "TOP-LEVEL")
 
@@ -101,6 +117,21 @@
                      (setf *default-pathname-defaults* dir)
                      (format *standard-output* "~A" (namestring *default-pathname-defaults*)))
                    (format *standard-output* "Error: no such directory (~S).~%" args))))
+            ((string= cmd "bt")
+             (let ((count (or (and args (ignore-errors (parse-integer args))) 7)))
+               (bt count)))
+            ((string= cmd "pa")
+             (cond ((null args)
+                    (format *standard-output* "The ~A package is current.~%"
+                            (package-name *package*)))
+                   (t
+                    (when (and (plusp (length args)) (eql (char args 0) #\:))
+                      (setf args (subseq args 1)))
+                    (setf args (nstring-upcase args))
+                    (let ((pkg (find-package args)))
+                      (if pkg
+                          (setf *package* pkg)
+                          (format *standard-output* "Unknown package ~A.~%" args))))))
             ((string= cmd "ex")
              (format t "Bye!~%")
              (exit))
@@ -125,8 +156,7 @@
 
 (defun interactive-eval (form)
   (setf - form)
-  (let ((results
-	 (multiple-value-list (eval form))))
+  (let ((results (multiple-value-list (eval form))))
     (setf /// //
 	  // /
 	  / results
@@ -158,4 +188,4 @@
     (catch 'top-level
       (handler-case
           (repl-fun)
-        (error (c) (format t "Error: ~S.~%" c) (throw 'top-level nil))))))
+        (error (c) (format t "Error: ~S.~%" c) (break) (throw 'top-level nil))))))
