@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.97 2004-11-26 14:52:33 piso Exp $
+ * $Id: Stream.java,v 1.98 2004-11-30 04:25:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -592,10 +592,15 @@ public class Stream extends LispObject
         final LispObject readtableCase = rt.getReadtableCase();
         final String token;
         if (readtableCase == Keyword.INVERT) {
-            if (flags == null)
+            if (flags == null) {
                 token = invert(sb.toString());
-            else
+            } else {
+                // Section 23.1.2: "When the readtable case is :INVERT, then if
+                // all of the unescaped letters in the extended token are of
+                // the same case, those (unescaped) letters are converted to
+                // the opposite case."
                 token = sb.toString(); // FIXME
+            }
         } else
             token = sb.toString();
         final int length = token.length();
