@@ -185,6 +185,7 @@ function
 functionp
 gensym
 get
+get-dispatch-macro-character
 get-output-stream-string
 get-setf-expansion
 gethash
@@ -374,6 +375,7 @@ search
 second
 set
 set-difference
+set-dispatch-macro-character
 setf
 setq
 seventh
