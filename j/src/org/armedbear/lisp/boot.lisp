@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.97 2003-08-25 13:23:58 piso Exp $
+;;; $Id: boot.lisp,v 1.98 2003-08-25 14:56:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -369,3 +369,20 @@
           (progn ,@forms)
           (close ,var))
 	 (get-output-stream-string ,var))))
+
+
+(defmacro print-unreadable-object ((object stream &key type identity) &body body)
+  `(let ((s ,stream)
+         (obj ,object))
+     (format s "#<")
+     ,(when type
+        '(format s "~S" (type-of obj)))
+     ,(when (and type (or body identity))
+        '(format s " "))
+     ,@body
+     ,(when (and identity body)
+        '(format s " "))
+     ,(when identity
+        '(format s "@ ~A" (sys::hashcode-to-string obj)))
+     (format s ">")
+     nil))
