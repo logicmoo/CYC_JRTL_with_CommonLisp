@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.28 2003-08-24 13:30:14 piso Exp $
+ * $Id: LispFloat.java,v 1.29 2003-08-24 16:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,11 @@ public final class LispFloat extends LispObject
     public LispObject typeOf()
     {
         return Symbol.SINGLE_FLOAT;
+    }
+
+    public LispClass classOf()
+    {
+        return LispClass.findClass(Symbol.SINGLE_FLOAT);
     }
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
