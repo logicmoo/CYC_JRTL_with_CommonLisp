@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.18 2003-06-02 18:13:55 piso Exp $
+;;; $Id: compiler.lisp,v 1.19 2003-06-02 19:25:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -98,38 +98,40 @@
 (defun compile-special (form)
   (let ((first (car form)))
     (case first
-      (SETQ
-       (compile-setq (cdr form)))
       (BLOCK
        (unless (>= (length form) 2)
          (error "wrong number of arguments for BLOCK"))
        (unless (symbolp (cadr form))
          (error 'type-error))
        (nconc (list 'block (cadr form))
-               (mapcar #'compile-sexp (cddr form))))
-      (PROGN
-       (append '(progn) (mapcar #'compile-sexp (cdr form))))
-      (IF
-       (let ((len (length (cdr form))))
-         (unless (<= 2 len 3)
-           (error "wrong number of arguments for IF"))
-         (append '(if) (mapcar #'compile-sexp (cdr form)))))
+              (mapcar #'compile-sexp (cddr form))))
       (COND
-       (append '(cond) (compile-cond (cdr form))))
-      (CASE
-       (append '(case) (compile-case (cadr form) (cddr form))))
-      ((AND OR)
-       (append (list first)
-               (mapcar #'compile-sexp (cdr form))))
+       (cons 'cond (compile-cond (cdr form))))
       (QUOTE
-       (append '(quote) (list (cadr form))))
+       form)
+      ((AND OR)
+       (cons first
+             (mapcar #'compile-sexp (cdr form))))
       (FUNCTION
-       (append '(function) (list (compile-sexp (cadr form)))))
+       (cons 'function (list (compile-sexp (cadr form)))))
+      (WHEN
+       (cons 'when (mapcar #'compile-sexp (cdr form))))
       ((LET LET*)
        (let ((vars (cadr form))
              (body (cddr form)))
          (append (list first)
                  (list (compile-let-vars vars)) (compile-progn body))))
+      (SETQ
+       (compile-setq (cdr form)))
+      (PROGN
+       (cons 'progn (mapcar #'compile-sexp (cdr form))))
+      (IF
+       (let ((len (length (cdr form))))
+         (unless (<= 2 len 3)
+           (error "wrong number of arguments for IF"))
+         (cons 'if (mapcar #'compile-sexp (cdr form)))))
+      ('CASE
+       (cons 'case (compile-case (cadr form) (cddr form))))
       (DOLIST
        (let ((args (cadr form))
              (body (cddr form)))
@@ -145,19 +147,17 @@
          (append (list first args) (compile-progn body))))
       (TAGBODY
        (let ((body (cdr form)))
-         (append '(tagbody) (compile-tagbody body))))
+         (cons 'tagbody (compile-tagbody body))))
       (LABELS
        (let ((locals (cadr form))
              (body (cddr form)))
           (append '(labels) (list (compile-locals locals)) (compile-progn body))))
       (RETURN
        (if (cdr form)
-           (append '(return) (list (compile-sexp (cadr form))))
-           (append '(return))))
+           (cons 'return (list (compile-sexp (cadr form))))
+           form))
       (UNLESS
-       (append '(unless) (mapcar #'compile-sexp (cdr form))))
-      (WHEN
-       (append '(when) (mapcar #'compile-sexp (cdr form))))
+       (cons 'unless (mapcar #'compile-sexp (cdr form))))
       (t
 ;;        (format t "    skipping ~S~%" first)
        form))))
@@ -166,7 +166,7 @@
 (defun compile-sexp (form)
   (if (atom form) form
       (let ((first (car form)))
-        (unless (and first (symbolp first) (fboundp first))
+        (unless (and (symbolp first) (fboundp first))
           (return-from compile-sexp form))
         (cond ((eq first 'LAMBDA)
                (append (list 'LAMBDA (second form))
@@ -177,7 +177,7 @@
                (compile-sexp (macroexpand form)))
               (t
                (let ((args (mapcar #'compile-sexp (cdr form))))
-                 (append (list first) args)))))))
+                 (cons first args)))))))
 
 
 (defun compile-package (pkg &key verbose)
