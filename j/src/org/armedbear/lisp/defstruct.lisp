@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.43 2003-11-22 18:57:34 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: defstruct.lisp,v 1.44 2004-02-07 19:52:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -421,7 +421,7 @@
                                 (list name-and-options)
                                 name-and-options))
     (when (stringp (car slots))
-      (setf (documentation *dd-name* 'structure) (pop slots)))
+      (%set-documentation *dd-name* 'structure (pop slots)))
     (dolist (slot slots)
       (let* ((name (if (atom slot) slot (car slot)))
              (reader (if *dd-conc-name*
