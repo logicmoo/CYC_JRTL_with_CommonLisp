@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.16 2003-07-06 15:14:27 piso Exp $
+ * $Id: Bignum.java,v 1.17 2003-08-11 18:03:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,7 +275,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public LispObject floor(LispObject obj) throws LispError
+    public LispObject truncate(LispObject obj) throws LispError
     {
         BigInteger divisor;
         if (obj instanceof Bignum)
@@ -290,20 +290,8 @@ public final class Bignum extends LispObject
         BigInteger remainder = results[1];
         final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
-        if (remainder.signum() == 0) {
-            values[0] = number(quotient);
-            values[1] = Fixnum.ZERO;
-            thread.setValues(values);
-            return values[0];
-        }
-
-        if (value.signum() != divisor.signum())
-            quotient = quotient.subtract(BigInteger.ONE);
-
-        LispObject q = number(quotient);
-        values[0] = q;
-        values[1] = subtract(q.multiplyBy(obj));
-
+        values[0] = number(quotient);
+        values[1] = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
         thread.setValues(values);
         return values[0];
     }

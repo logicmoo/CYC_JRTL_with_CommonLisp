@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.13 2003-08-11 14:33:42 piso Exp $
+ * $Id: LispFloat.java,v 1.14 2003-08-11 18:03:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -236,9 +236,9 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public LispObject floor(LispObject obj) throws LispError
+    public LispObject truncate(LispObject obj) throws LispError
     {
-        throw new LispError("FLOOR is not yet implemented for floats");
+        throw new LispError("TRUNCATE is not yet implemented for floats");
     }
 
     public int hashCode()

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.320 2003-08-11 16:11:25 piso Exp $
+ * $Id: Primitives.java,v 1.321 2003-08-11 18:03:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -571,6 +571,8 @@ public final class Primitives extends Module
             catch (ClassCastException e) {
                 if (arg instanceof LispFloat)
                     return ((LispFloat)arg).getValue() == 0 ? T : NIL;
+                if (arg instanceof Bignum)
+                    return NIL;
                 throw new TypeError(arg, "number");
             }
         }
@@ -4181,7 +4183,7 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive FLOOR = new Primitive("floor") {
+    private static final Primitive TRUNCATE = new Primitive("truncate") {
         public LispObject execute(LispObject[] args) throws Condition
         {
             final int length = args.length;
@@ -4190,13 +4192,13 @@ public final class Primitives extends Module
             LispObject n = args[0];
             LispObject d = length == 1 ? Fixnum.ONE : args[1];
             if (n instanceof Fixnum)
-                return ((Fixnum)n).floor(d);
+                return ((Fixnum)n).truncate(d);
             if (n instanceof Bignum)
-                return ((Bignum)n).floor(d);
+                return ((Bignum)n).truncate(d);
             if (n instanceof Ratio)
-                return ((Ratio)n).floor(d);
+                return ((Ratio)n).truncate(d);
             if (n instanceof LispFloat)
-                return ((LispFloat)n).floor(d);
+                return ((LispFloat)n).truncate(d);
             throw new TypeError(n, "number");
         }
     };

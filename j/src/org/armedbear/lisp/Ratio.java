@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.11 2003-06-23 11:11:16 piso Exp $
+ * $Id: Ratio.java,v 1.12 2003-08-11 18:03:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,7 +304,7 @@ public final class Ratio extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public LispObject floor(LispObject obj) throws LispError
+    public LispObject truncate(LispObject obj) throws LispError
     {
         BigInteger n, d;
         if (obj instanceof Fixnum) {
@@ -330,21 +330,8 @@ public final class Ratio extends LispObject
         BigInteger remainder = results[1];
         final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
-        if (remainder.signum() == 0) {
-            values[0] = number(quotient);
-            values[1] = Fixnum.ZERO;
-            thread.setValues(values);
-            return values[0];
-        }
-
-        // Remainder is non-zero.
-        if (num.signum() != den.signum())
-            quotient = quotient.subtract(BigInteger.ONE);
-
-        LispObject q = number(quotient);
-        values[0] = q;
-        values[1] = subtract(q.multiplyBy(obj));
-
+        values[0] = number(quotient);
+        values[1] = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
         thread.setValues(values);
         return values[0];
     }
