@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.16 2003-11-19 13:51:21 piso Exp $
+ * $Id: SpecialOperators.java,v 1.17 2003-11-19 14:59:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,9 +88,8 @@ public final class SpecialOperators extends Lisp
             LispObject varList = checkList(args.car());
             LispObject body = args.cdr();
             Environment ext = new Environment(env);
-            // FIXME An ArrayList is probably not the most efficient data
-            // structure for this.
-            ArrayList specials = null;
+            LispObject specials = NIL;
+            // Process declarations.
             while (body != NIL) {
                 LispObject obj = body.car();
                 if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
@@ -100,10 +99,7 @@ public final class SpecialOperators extends Lisp
                         if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
                             LispObject vars = decl.cdr();
                             while (vars != NIL) {
-                                Symbol var = checkSymbol(vars.car());
-                                if (specials == null)
-                                    specials = new ArrayList();
-                                specials.add(var);
+                                specials = new Cons(vars.car(), specials);
                                 vars = vars.cdr();
                             }
                         }
@@ -115,28 +111,24 @@ public final class SpecialOperators extends Lisp
             }
             Environment evalEnv = sequential ? ext : env;
             while (varList != NIL) {
+                Symbol symbol;
+                LispObject value;
                 LispObject obj = varList.car();
-                varList = varList.cdr();
                 if (obj instanceof Cons) {
-                    Symbol symbol = checkSymbol(obj.car());
-                    LispObject value = eval(obj.cadr(), evalEnv, thread);
-                    if (specials != null && specials.contains(symbol)) {
-                        thread.bindSpecial(symbol, value);
-                        ext.declareSpecial(symbol);
-                    }  else if (symbol.isSpecialVariable())
-                        thread.bindSpecial(symbol, value);
-                    else
-                        ext.bind(symbol, value);
+                    symbol = checkSymbol(obj.car());
+                    value = eval(obj.cadr(), evalEnv, thread);
                 } else {
-                    Symbol symbol = checkSymbol(obj);
-                    if (specials != null && specials.contains(symbol)) {
-                        thread.bindSpecial(symbol, NIL);
-                        ext.declareSpecial(symbol);
-                    } else if (symbol.isSpecialVariable())
-                        thread.bindSpecial(symbol, NIL);
-                    else
-                        ext.bind(symbol, NIL);
+                    symbol = checkSymbol(obj);
+                    value = NIL;
                 }
+                if (specials != NIL && memq(symbol, specials)) {
+                    thread.bindSpecial(symbol, value);
+                    ext.declareSpecial(symbol);
+                } else if (symbol.isSpecialVariable()) {
+                    thread.bindSpecial(symbol, value);
+                } else
+                    ext.bind(symbol, value);
+                varList = varList.cdr();
             }
             while (body != NIL) {
                 result = eval(body.car(), ext, thread);
