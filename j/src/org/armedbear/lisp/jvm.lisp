@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.64 2004-02-01 17:12:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.65 2004-02-09 03:46:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1299,6 +1299,13 @@
               g
               "Lorg/armedbear/lisp/LispObject;")
         (emit-store-value))))
+   ((classp form)
+    (let ((g (declare-object form)))
+      (emit 'getstatic
+            *this-class*
+            g
+            "Lorg/armedbear/lisp/LispObject;")
+      (emit-store-value)))
    (t
     (error "COMPILE-CONSTANT unhandled case ~S" form))))
 
