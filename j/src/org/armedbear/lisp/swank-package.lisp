@@ -1,7 +1,7 @@
 ;;; swank-package.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-package.lisp,v 1.7 2004-09-11 18:49:53 piso Exp $
+;;; $Id: swank-package.lisp,v 1.8 2004-09-12 17:52:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,4 +25,5 @@
            #:find-definitions-for-function-name
            #:eval-region
            #:eval-string-async
-           #:swank-compile-file))
+           #:swank-compile-file
+           #:swank-compile-string))
