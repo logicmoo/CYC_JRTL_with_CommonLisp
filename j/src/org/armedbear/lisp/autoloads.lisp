@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.77 2003-12-16 14:51:22 piso Exp $
+;;; $Id: autoloads.lisp,v 1.78 2003-12-19 03:04:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -127,6 +127,7 @@
 (autoload-macro '(prog prog*) "prog.lisp")
 (autoload 'concatenate)
 (autoload 'parse-lambda-list)
+(autoload-macro 'assert)
 
 ;; Java interface.
 (in-package "JAVA")
