@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.26 2003-06-01 15:32:38 piso Exp $
+;;; $Id: list.lisp,v 1.27 2003-06-01 20:09:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -60,11 +60,7 @@
   (cadr (cddddr (cddddr list))))
 
 (defun make-list (size &key initial-element)
-  (when (minusp size)
-    (error 'type-error "~A is not a valid list length" size))
-  (do ((count size (1- count))
-       (result '() (cons initial-element result)))
-      ((zerop count) result)))
+  (%make-list size initial-element))
 
 (defun copy-list (list)
   (if (atom list)
