@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.37 2004-11-21 18:18:18 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: compile-system.lisp,v 1.38 2005-01-31 17:28:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,7 +77,8 @@
 (defun compile-system ()
   (check-lisp-home)
   (time
-   (let ((*default-pathname-defaults* (pathname *lisp-home*)))
+   (let ((*default-pathname-defaults* (pathname *lisp-home*))
+         (*warn-on-redefinition* nil))
      (load (maybe-compile-file "precompiler.lisp"))
      (load (maybe-compile-file "source-transform.lisp"))
      (load (maybe-compile-file "opcodes.lisp"))
@@ -89,8 +90,6 @@
      (mapc #'maybe-compile-file '("collect.lisp"
                                   "macros.lisp"
                                   "loop.lisp"))
-;;      (mapc #'maybe-compile-file '("pprint.lisp"
-;;                                   "format.lisp"))
      (load (maybe-compile-file "backquote.lisp"))
      (load (maybe-compile-file "early-defuns.lisp"))
      (load (maybe-compile-file "typep.lisp"))
