@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.15 2003-06-20 16:41:33 piso Exp $
+;;; $Id: setf.lisp,v 1.16 2003-06-21 19:55:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,8 +88,6 @@
 (defmacro defsetf (access-function update-function)
   `(%put ',access-function *setf-expander* ',update-function))
 
-(defun %rplaca (x v) (rplaca x v) v)
-(defun %rplacd (x v) (rplacd x v) v)
 (defun %set-caar (x v) (%rplaca (car x) v))
 (defun %set-cadr (x v) (%rplaca (cdr x) v))
 (defun %set-cdar (x v) (%rplacd (car x) v))
