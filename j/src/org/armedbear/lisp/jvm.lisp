@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.126 2004-04-26 02:01:21 piso Exp $
+;;; $Id: jvm.lisp,v 1.127 2004-04-26 14:59:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2785,7 +2785,35 @@
     alist))
 
 (defun compile (name &optional definition)
-  (jvm-compile name definition))
+  (when (consp name)
+    (return-from compile (values name nil nil)))
+  (when (and name
+             (fboundp name)
+             (sys::%typep (symbol-function name) 'generic-function))
+    (return-from compile (values name nil nil)))
+  (unless definition
+    (setq definition (or (and (symbolp name) (macro-function name))
+                         (fdefinition name))))
+  (when (compiled-function-p definition)
+    (return-from compile (values name nil nil)))
+  (let ((expr (get-lambda-to-compile definition))
+        (speed nil))
+    (when (eq (car expr) 'lambda)
+      (let ((decls (process-optimization-declarations (cddr expr))))
+        (setf speed (cdr (assoc 'speed decls)))))
+    (if (or (eql speed 3)
+            (and (null speed) *auto-compile*))
+        (progn
+          (precompile name definition)
+          (jvm-compile name definition))
+        (progn
+          (precompile name definition)))))
+
+(defmacro defun (name lambda-list &rest body &environment environment)
+  `(progn
+     (sys::%defun ',name ',lambda-list ',body ,environment)
+     (ignore-errors (compile ',name))
+     ',name))
 
 (eval-when (:execute)
   (let ((*auto-compile* nil))
