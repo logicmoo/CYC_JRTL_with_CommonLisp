@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.14 2003-10-26 14:54:32 piso Exp $
+ * $Id: Java.java,v 1.15 2003-10-29 09:24:49 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,19 +50,19 @@ public final class Java extends Module
     /*
      * Supported argument patterns:
      *
-     *   Case 1: class-name  field-name:
+     *   Case 1: class-ref  field-name:
      *               to retrieve the value of a static field.
      *
-     *   Case 2: class-name  field-name  instance-ref:
+     *   Case 2: class-ref  field-name  instance-ref:
      *               to retrieve the value of a class field of the instance.
      *
-     *   Case 3: class-name  field-name  primitive-value:
+     *   Case 3: class-ref  field-name  primitive-value:
      *               to store primitive-value in a static field.
      *
-     *   Case 4: class-name  field-name  instance-ref  value:
+     *   Case 4: class-ref  field-name  instance-ref  value:
      *               to store value in a class field of the instance.
      *
-     *   Case 5: class-name  field-name  nil  value:
+     *   Case 5: class-ref  field-name  nil  value:
      *               to store value in a static field (when value may be
      *               confused with an instance-ref).
      *
@@ -88,8 +88,14 @@ public final class Java extends Module
                 if (args[1] instanceof LispString) {
                     // Cases 1-5.
                     fieldName = LispString.getValue(args[1]);
-                    className = LispString.getValue(args[0]);
-                    c = Class.forName(className);
+		    if (args[0] instanceof LispString) {
+		      className = LispString.getValue(args[0]);
+		      c = Class.forName(className);
+		    }
+		    else {
+		      c = (Class)JavaObject.getObject(args[0]);
+		      className = c.getName();
+		    }
                 } else {
                     // Cases 6 and 7.
                     fieldName = LispString.getValue(args[0]);
