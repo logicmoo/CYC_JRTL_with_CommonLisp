@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.227 2003-06-02 16:32:00 piso Exp $
+ * $Id: Primitives.java,v 1.228 2003-06-02 16:56:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1199,20 +1199,45 @@ public final class Primitives extends Module
     };
 
     // ### nth
+    // nth n list => object
     private static final Primitive2 NTH = new Primitive2("nth") {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
-            long index = Fixnum.getValue(first);
+            int index = Fixnum.getValue(first);
             if (index < 0)
                 throw new LispError("bad index to NTH: " + index);
-            long i = 0;
+            int i = 0;
             while (true) {
                 if (i == index)
                     return second.car();
                 second = second.cdr();
                 if (second == NIL)
                     return NIL;
+                ++i;
+            }
+        }
+    };
+
+    // ### %setnth
+    // %setnth n list new-object => new-object
+    private static final Primitive3 _SETNTH = new Primitive3("%setnth") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            int index = Fixnum.getValue(first);
+            if (index < 0)
+                throw new LispError("bad index to NTH: " + index);
+            int i = 0;
+            while (true) {
+                if (i == index) {
+                    second.setCar(third);
+                    return third;
+                }
+                second = second.cdr();
+                if (second == NIL)
+                    throw new LispError(String.valueOf(index) +
+                        "is too large an index for SETF of NTH");
                 ++i;
             }
         }
