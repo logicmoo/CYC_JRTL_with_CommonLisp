@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.27 2003-06-06 15:02:28 piso Exp $
+ * $Id: CommandTable.java,v 1.28 2003-06-09 17:11:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -319,6 +319,7 @@ public class CommandTable
             addCommand("phpHelp", "PHPMode");
             addCommand("previousChange", "ChangeMarks");
             addCommand("previousComment", "CheckinBuffer");
+            addCommand("previousError", "CompilationCommands");
             addCommand("previousTag", "TagCommands");
             addCommand("print", "PrintCommands");
             addCommand("printBuffer", "PrintCommands");
