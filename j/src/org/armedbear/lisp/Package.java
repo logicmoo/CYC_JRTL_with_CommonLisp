@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.23 2003-06-22 18:35:05 piso Exp $
+ * $Id: Package.java,v 1.24 2003-07-06 14:04:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -319,6 +319,42 @@ public final class Package extends LispObject
             symbol = addSymbol(name);
         if (!shadowingSymbols.contains(symbol))
             shadowingSymbols.add(symbol);
+    }
+
+    public synchronized void shadowingImport(Symbol symbol) throws LispError
+    {
+        LispObject where = NIL;
+        final String name = symbol.getName();
+        Symbol sym = (Symbol) externalSymbols.get(name);
+        if (sym != null) {
+            where = Keyword.EXTERNAL;
+        } else {
+            sym = (Symbol) internalSymbols.get(name);
+            if (sym != null) {
+                where = Keyword.INTERNAL;
+            } else {
+                // Look in external syms of used packages.
+                for (Iterator it = useList.iterator(); it.hasNext();) {
+                    Package pkg = (Package) it.next();
+                    sym = pkg.findExternalSymbol(name);
+                    if (sym != null) {
+                        where = Keyword.INHERITED;
+                        break;
+                    }
+                }
+            }
+        }
+        if (sym != null) {
+            if (where == Keyword.INTERNAL || where == Keyword.EXTERNAL) {
+                if (sym != symbol) {
+                    shadowingSymbols.remove(sym);
+                    unintern(sym);
+                }
+            }
+        }
+        internalSymbols.put(name, symbol);
+        Debug.assertTrue(!shadowingSymbols.contains(symbol));
+        shadowingSymbols.add(symbol);
     }
 
     // Adds pkg to the use list of this package.
