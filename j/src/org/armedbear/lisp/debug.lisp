@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.5 2003-10-04 10:53:35 piso Exp $
+;;; $Id: debug.lisp,v 1.6 2003-10-17 15:02:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
           (*debugger-hook* nil))
       (funcall hook-function condition hook-function)))
   (catch 'tpl::continue-catcher
+    (clear-input)
     (debug-loop)))
 
 (defun break (&optional format-control &rest format-arguments)
