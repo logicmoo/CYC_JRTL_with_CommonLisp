@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.55 2004-01-24 22:51:00 asimon Exp $
+ * $Id: LispFloat.java,v 1.56 2004-02-06 11:43:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -326,7 +326,7 @@ public final class LispFloat extends LispObject
             return value >= ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
             return value >= ((Ratio)obj).floatValue();
-        signal(new TypeError(obj, "real"));
+        signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -388,7 +388,7 @@ public final class LispFloat extends LispObject
     // ### integer-decode-float
     // integer-decode-float float => significand, exponent, integer-sign
     private static final Primitive1 INTEGER_DECODE_FLOAT =
-        new Primitive1("integer-decode-float","float")
+        new Primitive1("integer-decode-float", "float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -410,31 +410,33 @@ public final class LispFloat extends LispObject
                                                             exponent,
                                                             sign);
             }
-            return signal(new TypeError(arg, "float"));
+            return signal(new TypeError(arg, Symbol.FLOAT));
         }
     };
 
     // ### float-radix
     // float-radix float => float-radix
     private static final Primitive1 FLOAT_RADIX =
-        new Primitive1("float-radix","float") {
+        new Primitive1("float-radix", "float")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat)
                 return Fixnum.TWO;
-            return signal(new TypeError(arg, "float"));
+            return signal(new TypeError(arg, Symbol.FLOAT));
         }
     };
 
     // ### float-digits
     // float-digits float => float-digits
     private static final Primitive1 FLOAT_DIGITS =
-        new Primitive1("float-digits","float") {
+        new Primitive1("float-digits", "float")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat)
                 return new Fixnum(52);
-            return signal(new TypeError(arg, "float"));
+            return signal(new TypeError(arg, Symbol.FLOAT));
         }
     };
 
@@ -465,7 +467,9 @@ public final class LispFloat extends LispObject
 
     // ### float
     // float number &optional prototype => float
-    private static final Primitive FLOAT = new Primitive("float","number &optional prototype") {
+    private static final Primitive FLOAT =
+        new Primitive("float", "number &optional prototype")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
@@ -478,7 +482,8 @@ public final class LispFloat extends LispObject
 
     // ### floatp
     // floatp object => generalized-boolean
-    private static final Primitive1 FLOATP = new Primitive1("floatp","object") {
+    private static final Primitive1 FLOATP = new Primitive1("floatp", "object")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.FLOATP();
