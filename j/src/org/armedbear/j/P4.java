@@ -1,8 +1,8 @@
 /*
  * P4.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: P4.java,v 1.6 2003-01-31 02:10:29 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: P4.java,v 1.7 2003-03-28 04:17:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,12 +69,7 @@ public class P4 implements Constants
                 if (file != null)
                     arg = file.canonicalPath();
             }
-            if (arg.indexOf(' ') >= 0) {
-                sb.append('"');
-                sb.append(arg);
-                sb.append('"');
-            } else
-                sb.append(arg);
+            sb.append(maybeQuote(arg));
             sb.append(' ');
         }
         final String cmd = sb.toString().trim();
@@ -116,15 +111,11 @@ public class P4 implements Constants
         editor.setWaitCursor();
         final String name = buffer.getFile().getName();
         FastStringBuffer sb = new FastStringBuffer("p4 add ");
-        // Enclose filename in double quotes in case it contains embedded
-        // spaces.
-        sb.append('"');
-        sb.append(name);
-        sb.append('"');
+        sb.append(maybeQuote(name));
         final String cmd = sb.toString();
         final String output = command(cmd, buffer.getCurrentDirectory());
         OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
-        buf.setTitle(cmd + name);
+        buf.setTitle(cmd);
         editor.makeNext(buf);
         editor.activateInOtherWindow(buf);
         editor.setDefaultCursor();
@@ -141,13 +132,8 @@ public class P4 implements Constants
             return;
         buffer.setBusy(true);
         editor.setWaitCursor();
-        final String canonicalPath = file.canonicalPath();
         FastStringBuffer sb = new FastStringBuffer("p4 edit ");
-        // Enclose filename in double quotes in case it contains an embedded
-        // space.
-        sb.append('"');
-        sb.append(canonicalPath);
-        sb.append('"');
+        sb.append(maybeQuote(file.canonicalPath()));
         final String cmd = sb.toString();
         Runnable commandRunnable = new Runnable() {
             public void run()
@@ -173,7 +159,7 @@ public class P4 implements Constants
             editor.status("File opened for edit");
         } else {
             OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
-            buf.setTitle(cmd + buffer.getFile().getName());
+            buf.setTitle(cmd);
             editor.makeNext(buf);
             editor.activateInOtherWindow(buf);
         }
@@ -199,7 +185,9 @@ public class P4 implements Constants
         String output = _autoEdit(file);
         if (output == null)
             return false;
-        editCompleted(editor, buffer, "p4 edit " + file.canonicalPath(), output);
+        FastStringBuffer sb = new FastStringBuffer("p4 edit ");
+        sb.append(maybeQuote(file.canonicalPath()));
+        editCompleted(editor, buffer, sb.toString(), output);
         return !buffer.isReadOnly();
     }
 
@@ -221,7 +209,9 @@ public class P4 implements Constants
             return null;
         if (!haveP4())
             return null;
-        return command("p4 edit " + file.canonicalPath(), null);
+        FastStringBuffer sb = new FastStringBuffer("p4 edit ");
+        sb.append(maybeQuote(file.canonicalPath()));
+        return command(sb.toString(), null);
     }
 
     public static void revert()
@@ -234,17 +224,18 @@ public class P4 implements Constants
         if (file == null)
             return;
         if (buffer.isModified()) {
-            String prompt = "Discard changes to " + file.canonicalPath() + "?";
+            String prompt =
+                "Discard changes to " + maybeQuote(file.getName()) + "?";
             if (!editor.confirm("Revert Buffer", prompt))
                 return;
         }
-        final String cmd = "p4 revert " + file.canonicalPath();
+        final String cmd = "p4 revert " + maybeQuote(file.canonicalPath());
         String output = command(cmd, null);
         if (output.trim().endsWith(" - was edit, reverted")) {
             editor.status("File reverted");
         } else {
             OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
-            buf.setTitle(cmd + file.getName());
+            buf.setTitle(cmd);
             editor.makeNext(buf);
             editor.activateInOtherWindow(buf);
         }
@@ -267,7 +258,7 @@ public class P4 implements Constants
             return;
         final String baseCmd = "p4 diff -du ";
         final String name = file.getName();
-        final String title = baseCmd + name;
+        final String title = baseCmd + maybeQuote(name);
         boolean save = false;
         if (parentBuffer.isModified()) {
             int response =  ConfirmDialog.showConfirmDialogWithCancelButton(
@@ -295,7 +286,7 @@ public class P4 implements Constants
                     }
                 }
             }
-            final String cmd = baseCmd + file.canonicalPath();
+            final String cmd = baseCmd + maybeQuote(file.canonicalPath());
             final String output = command(cmd, null);
             DiffOutputBuffer buf = new DiffOutputBuffer(parentBuffer, output, VC_P4);
             buf.setTitle(title);
@@ -830,7 +821,6 @@ public class P4 implements Constants
                 sb.append(" && ");
             }
             sb.append(cmd);
-            Log.debug("P4Command.run |" + sb.toString() + "|");
             shellCommand = new ShellCommand(sb.toString());
             shellCommand.run();
         }
@@ -869,5 +859,16 @@ public class P4 implements Constants
             return true;
         }
         return false;
+    }
+
+    // Enclose string in quotes if it contains any embedded spaces.
+    private static String maybeQuote(String s)
+    {
+        if (s.indexOf(' ') < 0)
+            return s;
+        FastStringBuffer sb = new FastStringBuffer('"');
+        sb.append(s);
+        sb.append('"');
+        return sb.toString();
     }
 }
