@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.12 2005-03-07 20:23:56 piso Exp $
+;;; $Id: emacs.lisp,v 1.13 2005-03-08 02:22:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 (export '(emacs-mode
           java-mode-map
           lisp-mode-map
+          lisp-shell-mode-map
           directory-mode-map))
 
 (defpackage #:emacs
@@ -353,7 +354,7 @@
 
 ;;; Java mode.
 
-(define-key *java-mode-map*
+(define-keys *java-mode-map*
   '(("{"                        "electricOpenBrace")
     ("}"                        "electricCloseBrace")
     ("Tab"                      "tab")
@@ -376,7 +377,9 @@
 
 (defparameter *lisp-mode-map* (make-keymap))
 (defparameter *lisp-mode-control-c-map* (make-keymap))
+(defparameter *lisp-mode-control-x-map* (make-keymap))
 (define-key *lisp-mode-map* "Ctrl C" *lisp-mode-control-c-map*)
+(define-key *lisp-mode-map* "Ctrl X" *lisp-mode-control-x-map*)
 
 (define-keys *lisp-mode-map*
   '(("Tab"                      "tab")
@@ -398,7 +401,65 @@
 (defun lisp-mode-map ()
   *lisp-mode-map*)
 
-;;; Directory mode.
+;;; Lisp shell mode
+
+(defparameter *lisp-shell-mode-map* (make-keymap))
+(defparameter *lisp-shell-mode-esc-map* (make-keymap))
+(defparameter *lisp-shell-mode-control-c-map* (make-keymap))
+(define-key *lisp-shell-mode-map* "Escape" *lisp-shell-mode-esc-map*)
+(define-key *lisp-shell-mode-map* "Ctrl C" *lisp-shell-mode-control-c-map*)
+
+(define-keys *lisp-shell-mode-map*
+  '(("Home"                     "shellHome")
+    ("Ctrl A"                   "shellHome")
+    ("Backspace"                "shellbackspace")
+    ("Alt P"                    "shellPreviousInput")
+    ("Alt N"                    "shellNextInput")
+    ("Enter"                    "LispShellMode.enter")
+    ("Alt Enter"                "newlineandindent")
+    ("Ctrl R"                   "resetLisp")
+    ("Tab"                      "indentLineOrRegion")
+    ("Alt F1"                   "hyperspec")))
+
+(define-keys *lisp-shell-mode-esc-map*
+  '((#\p                        "shellPreviousInput")
+    (#\n                        "shellNextInput")))
+
+(define-keys *lisp-shell-mode-control-c-map*
+  '(("Ctrl C"                   "shellInterrupt")
+    ("Ctrl P"                   "shellPreviousPrompt")
+    ("Ctrl N"                   "shellNextPrompt")))
+
+(defun lisp-shell-mode-map ()
+  *lisp-shell-mode-map*)
+
+;;; Slime
+
+(defun define-keys-for-slime ()
+  (define-keys *lisp-mode-map*
+    '(("Space"                  "(slime:slime-space)")
+      ("Alt ."                  "(slime:slime-edit-definition)")
+      ("Ctrl Alt I"             "(slime:slime-complete-symbol)")
+      ("Ctrl Alt X"             "(slime:slime-eval-defun)")))
+  (define-keys *lisp-mode-control-c-map*
+    '(("Tab"                    "(slime:slime-complete-symbol)")
+      ("Ctrl C"                 "(slime:slime-compile-defun)")
+      ("Ctrl I"                 "(slime:slime-complete-symbol)")
+      ("Ctrl K"                 "(slime:slime-compile-and-load-file)")
+      ("Ctrl R"                 "(slime:slime-eval-region)")))
+  (define-keys *lisp-mode-control-x-map*
+    '(("Ctrl E"                 "(slime:slime-eval-last-expression)")))
+  (define-keys *lisp-shell-mode-map*
+    '(("Tab"                    "(slime:slime-complete-symbol)")
+      ("Space"                  "(slime:slime-space)")
+      ("Alt ."                  "(slime:slime-edit-definition)")
+      ("Ctrl Alt I"             "(slime:slime-complete-symbol)")))
+  (define-keys *lisp-shell-mode-esc-map*
+    '(("Tab"                    "(slime:slime-complete-symbol)")))
+  (define-keys *lisp-shell-mode-control-c-map*
+    '(("Tab"                    "(slime:slime-complete-symbol)"))))
+
+;;; Directory mode
 
 (defparameter *directory-mode-map* (make-keymap))
 
