@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.36 2004-10-04 16:33:20 piso Exp $
+;;; $Id: pprint.lisp,v 1.37 2004-10-04 16:55:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -325,27 +325,27 @@
 ;each mode specifies what should happen to every letter.  Therefore, inner
 ;nested modes never have any effect.  You can just ignore them.
 
-(defun push-char-mode (xp new-mode)
-  (if (zerop (char-mode-counter xp))
-      (setf (char-mode xp) new-mode))
-  (incf (char-mode-counter xp)))
+;; (defun push-char-mode (xp new-mode)
+;;   (if (zerop (char-mode-counter xp))
+;;       (setf (char-mode xp) new-mode))
+;;   (incf (char-mode-counter xp)))
 
-(defun pop-char-mode (xp)
-  (decf (char-mode-counter xp))
-  (if (zerop (char-mode-counter xp))
-      (setf (char-mode xp) nil)))
+;; (defun pop-char-mode (xp)
+;;   (decf (char-mode-counter xp))
+;;   (if (zerop (char-mode-counter xp))
+;;       (setf (char-mode xp) nil)))
 
-;Assumes is only called when char-mode is non-nil
-(defun handle-char-mode (xp char)
-  (case (char-mode xp)
-    (:CAP0 (cond ((not (alphanumericp char)) char)
-		 (T (setf (char-mode xp) :DOWN) (char-upcase char))))
-    (:CAP1 (cond ((not (alphanumericp char)) char)
-		 (T (setf (char-mode xp) :CAPW) (char-upcase char))))
-    (:CAPW (cond ((alphanumericp char) (char-downcase char))
-		 (T (setf (char-mode xp) :CAP1) char)))
-    (:UP (char-upcase char))
-    (T (char-downcase char)))) ;:DOWN
+;; ;Assumes is only called when char-mode is non-nil
+;; (defun handle-char-mode (xp char)
+;;   (case (char-mode xp)
+;;     (:CAP0 (cond ((not (alphanumericp char)) char)
+;; 		 (T (setf (char-mode xp) :DOWN) (char-upcase char))))
+;;     (:CAP1 (cond ((not (alphanumericp char)) char)
+;; 		 (T (setf (char-mode xp) :CAPW) (char-upcase char))))
+;;     (:CAPW (cond ((alphanumericp char) (char-downcase char))
+;; 		 (T (setf (char-mode xp) :CAP1) char)))
+;;     (:UP (char-upcase char))
+;;     (T (char-downcase char)))) ;:DOWN
 
 ;All characters output are passed through the handler above.  However, it must
 ;be noted that on-each-line prefixes are only processed in the context of the
@@ -381,7 +381,7 @@
     (force-some-output xp))
   (let ((new-buffer-end (1+ (buffer-ptr xp))))
     (check-size xp buffer new-buffer-end)
-    (if (char-mode xp) (setq char (handle-char-mode xp char)))
+;;     (if (char-mode xp) (setq char (handle-char-mode xp char)))
     (setf (char (buffer xp) (buffer-ptr xp)) char)
     (setf (buffer-ptr xp) new-buffer-end)))
 
@@ -405,7 +405,7 @@
 	 (j start (1+ j)))
 	((= j end))
       (let ((char (char string j)))
-	(if (char-mode xp) (setq char (handle-char-mode xp char)))
+;;  	(if (char-mode xp) (setq char (handle-char-mode xp char)))
 	(setf (char buffer i) char)))
     (setf (buffer-ptr xp) new-buffer-end)))
 
@@ -429,7 +429,7 @@
 				(floor (+ current (- colnum) colinc) colinc)))))))
 	   (length (- new current)))
       (when (plusp length)
-	(if (char-mode xp) (handle-char-mode xp #\space))
+;; 	(if (char-mode xp) (handle-char-mode xp #\space))
 	(let ((end (+ (buffer-ptr xp) length)))
 	  (check-size xp buffer end)
 	  (fill (buffer xp) #\space :start (buffer-ptr xp) :end end)
@@ -447,8 +447,8 @@
 	       (member (Qtype xp ptr) '(:newline :start-block)))
       (setf (Qend xp ptr) (- (Qright xp) ptr))))
   (setf (section-start xp) (TP<-BP xp))
-  (when (and (member kind '(:fresh :unconditional)) (char-mode xp))
-    (handle-char-mode xp #\newline))
+;;   (when (and (member kind '(:fresh :unconditional)) (char-mode xp))
+;;     (handle-char-mode xp #\newline))
   (when (member kind '(:fresh :unconditional :mandatory))
     (attempt-to-output xp T nil)))
 
