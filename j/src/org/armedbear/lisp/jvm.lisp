@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.399 2005-02-18 14:30:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.400 2005-02-18 18:22:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5234,7 +5234,10 @@
         (setf body (list (append (list 'LET* (cdr auxvars)) body))))
 
 
-      (when (and *magic* (null (compiland-parent compiland)))
+      (when (and *magic*
+                 (null (compiland-parent compiland))
+                 ;; FIXME support SETF functions!
+                 (symbolp (compiland-name compiland)))
         (when (memq '&OPTIONAL lambda-list)
           (unless (or (memq '&KEY lambda-list) (memq '&REST lambda-list))
             (let ((required-args (subseq lambda-list 0 (position '&OPTIONAL lambda-list)))
