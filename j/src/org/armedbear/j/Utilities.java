@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.15 2003-01-30 17:45:29 piso Exp $
+ * $Id: Utilities.java,v 1.16 2003-02-02 17:55:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -707,6 +707,7 @@ public final class Utilities implements Constants
     // Returns FILETYPE_UNKNOWN if file does not exist.
     public static int getFileType(File file)
     {
+        long start = System.currentTimeMillis();
         int fileType = FILETYPE_UNKNOWN;
         try {
             InputStream in = file.getInputStream();
@@ -790,6 +791,8 @@ public final class Utilities implements Constants
             }
         }
         catch (Exception e) {}
+        long elapsed = System.currentTimeMillis() - start;
+        Log.debug("getFileType " + elapsed + " ms " + file.canonicalPath());
         return fileType;
     }
 
