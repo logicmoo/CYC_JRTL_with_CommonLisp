@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.126 2003-09-11 16:33:08 piso Exp $
+;;; $Id: rt.lisp,v 1.127 2003-09-12 13:51:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -165,6 +165,7 @@
                               "boole"
                               "boundp"
                               "butlast"
+                              "byte"
                               "call-arguments-limit"
                               "case"
                               "catch"
@@ -229,6 +230,8 @@
                               "find-if"
                               "find-if-not"
                               "flet"
+                              "float"
+                              "floatp"
                               "floor"
                               "fmakunbound"
                               "fround"
@@ -259,6 +262,7 @@
                               "lambda-parameters-limit"
                               "last"
                               "lcm"
+                              "ldb"
                               "ldiff"
                               "length"
                               "let"
