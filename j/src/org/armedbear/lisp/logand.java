@@ -2,7 +2,7 @@
  * logand.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logand.java,v 1.1 2003-09-10 16:56:26 piso Exp $
+ * $Id: logand.java,v 1.2 2003-09-10 16:57:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@ import java.math.BigInteger;
 
 // ### logand
 // logand &rest integers => result-integer
-// exclusive or
 public final class logand extends Primitive
 {
     private logand(String name)
