@@ -181,17 +181,26 @@ public final class FindTagTextFieldHandler extends DefaultTextFieldHandler
             Editor.getTagFileManager().getTags(editor.getCurrentDirectory(),
                 mode);
         if (tags != null) {
-            boolean isQualified = mode.isQualifiedName(prefix);
+            boolean prefixIsQualified = mode.isQualifiedName(prefix);
             boolean ignoreCase = Utilities.isLowerCase(prefix);
             int prefixLength = prefix.length();
             for (int i = 0; i < tags.size(); i++) {
                 GlobalTag tag = (GlobalTag) tags.get(i);
                 if (tag.getName().regionMatches(ignoreCase, 0, prefix, 0, prefixLength)) {
-                    maybeAdd(list, isQualified ? tag.getName() : tag.getClassName());
+                    String toBeAdded;
+                    if (prefixIsQualified)
+                        toBeAdded = tag.getName();
+                    else {
+                        toBeAdded = tag.getClassName();
+                        if (toBeAdded == null)
+                            toBeAdded = tag.getName();
+                    }
+                    maybeAdd(list, toBeAdded);
                     continue;
                 }
-                if (!isQualified && mode.hasQualifiedNames()) {
+                if (!prefixIsQualified && mode.hasQualifiedNames()) {
                     // The name we're looking for does not have a class prefix.
+                    // Look for a match on the method name of the tag.
                     String methodName = tag.getMethodName();
                     if (methodName != null) {
                         if (methodName.regionMatches(ignoreCase, 0, prefix, 0, prefixLength))
@@ -223,8 +232,8 @@ public final class FindTagTextFieldHandler extends DefaultTextFieldHandler
     private void maybeAdd(List list, String name)
     {
         if (name != null) {
-            for (int i = list.size()-1; i >= 0; i--)
-                if (name.equals((String)list.get(i)))
+            for (int i = list.size(); i-- > 0;)
+                if (name.equals(list.get(i)))
                     return; // It's already there.
             list.add(name);
         }
