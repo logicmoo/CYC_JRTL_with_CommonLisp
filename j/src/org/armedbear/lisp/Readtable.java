@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Readtable.java,v 1.2 2003-12-16 00:35:00 piso Exp $
+ * $Id: Readtable.java,v 1.3 2003-12-16 02:22:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public final class Readtable extends LispObject
             }
             // Not found.
             table.add(new Entry(dispChar, subChar, function));
-                return T;
+            return T;
         }
     }
 
@@ -132,7 +132,7 @@ public final class Readtable extends LispObject
                 signal(new WrongNumberOfArgumentsException(this));
             char dispChar = LispCharacter.getValue(args[0]);
             char subChar = LispCharacter.getValue(args[1]);
-            LispObject function = args[2];
+            LispObject function = coerceToFunction(args[2]);
             Readtable readtable;
             if (args.length == 4)
                 readtable = checkReadtable(args[3]);
