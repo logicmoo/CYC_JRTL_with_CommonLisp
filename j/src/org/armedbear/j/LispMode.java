@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.44 2003-05-26 01:09:25 piso Exp $
+ * $Id: LispMode.java,v 1.45 2003-06-21 23:58:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -703,18 +703,29 @@ public class LispMode extends AbstractMode implements Constants, Mode
             editor.status("No entry for \"" + s + '"');
             return;
         }
+        String rootPath = rootDir.canonicalPath();
         File dataDir = File.getInstance(rootDir, "Data");
         File file = File.getInstance(dataDir, filename);
-        Buffer buf = null;
+        WebBuffer buf = null;
         // Look for existing buffer.
-        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-            Buffer b = it.nextBuffer();
-            if (b instanceof WebBuffer && b.getFile().equals(file)) {
-                buf = b;
-                break;
-            }
+        if (buffer instanceof WebBuffer) {
+            if (buffer.getFile().canonicalPath().startsWith(rootPath))
+                buf = (WebBuffer) buffer;
         }
         if (buf == null) {
+            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                Buffer b = it.nextBuffer();
+                if (b instanceof WebBuffer) {
+                    if (b.getFile().canonicalPath().startsWith(rootPath)) {
+                        buf = (WebBuffer) b;
+                        break;
+                    }
+                }
+            }
+        }
+        if (buf != null)
+            buf.go(file, 0, "text/html");
+        else {
             buf = WebBuffer.createWebBuffer(file, null, null);
             buf.setTransient(true);
         }
