@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.30 2003-11-18 01:23:16 piso Exp $
+;;; $Id: defstruct.lisp,v 1.31 2003-11-18 01:29:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -61,8 +61,13 @@
   (when (and *ds-predicate*
              (or *ds-named* (null *ds-type*)))
     (let ((pred (intern *ds-predicate*)))
-      `((defun ,pred (object)
-          (typep object ',*ds-name*))))))
+      (case *ds-type*
+        (LIST
+         `((defun ,pred (object)
+             (and (consp object) (eq (car object) ',*ds-name*)))))
+        (t
+         `((defun ,pred (object)
+             (typep object ',*ds-name*))))))))
 
 (defun get-slot-accessor (slot)
   (case *ds-type*
