@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.16 2003-11-15 15:26:36 piso Exp $
+ * $Id: Extensions.java,v 1.17 2003-11-22 18:58:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,16 @@ import java.net.Socket;
 
 public final class Extensions extends Lisp
 {
+    // ### neq
+    private static final Primitive2 NEQ = new Primitive2("neq")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return first != second ? T : NIL;
+        }
+    };
+
     // memq item list => tail
     private static final Primitive2 MEMQ =
         new Primitive2("memq", PACKAGE_EXT, true)
