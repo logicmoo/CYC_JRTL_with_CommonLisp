@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.25 2003-03-06 02:21:09 piso Exp $
+ * $Id: Lisp.java,v 1.26 2003-03-07 03:02:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -583,6 +583,25 @@ public abstract class Lisp
             return new LispString(((LispCharacter)arg).getValue());
         throw new LispError(String.valueOf(arg) +
                                 " cannot be coerced to a string");
+    }
+
+    public static final int nameToChar(String s)
+    {
+        String lower = s.toLowerCase();
+        if (lower.equals("space"))
+            return ' ';
+        if (lower.equals("tab"))
+            return '\t';
+        if (lower.equals("newline"))
+            return'\n';
+        if (lower.equals("linefeed"))
+            return '\n';
+        if (lower.equals("return"))
+            return '\r';
+        if (lower.equals("page"))
+            return '\f';
+        // Unknown.
+        return -1;
     }
 
     public static final LispCharacter checkCharacter(LispObject obj)
