@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.61 2003-06-20 16:57:00 piso Exp $
+;;; $Id: boot.lisp,v 1.62 2003-06-20 17:14:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@
           defun
           *features*
           plusp minusp integerp
-          character
           read-from-string
           call-arguments-limit
           lambda-parameters-limit
@@ -134,9 +133,6 @@
 
 (defun fixnump (n)
   (typep n 'fixnum))
-
-(defun character (x)
-  (coerce x 'character))
 
 (defun read-from-string (string &optional eof-error-p eof-value
 				&key (start 0) end preserve-whitespace)
