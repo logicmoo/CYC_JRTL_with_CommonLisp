@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AbstractArray.java,v 1.7 2003-08-15 17:18:02 piso Exp $
+ * $Id: AbstractArray.java,v 1.8 2003-09-17 17:59:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,15 @@ package org.armedbear.lisp;
 
 public abstract class AbstractArray extends LispObject
 {
+    public LispObject typep(LispObject type) throws LispError
+    {
+        if (type == Symbol.ARRAY)
+            return T;
+        if (type == LispClass.ARRAY)
+            return T;
+        return super.typep(type);
+    }
+
     public boolean equalp(LispObject obj) throws LispError
     {
         if (obj instanceof AbstractArray) {

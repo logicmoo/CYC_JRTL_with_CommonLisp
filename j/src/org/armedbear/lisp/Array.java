@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.10 2003-09-17 14:55:59 piso Exp $
+ * $Id: Array.java,v 1.11 2003-09-17 18:00:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,11 +130,7 @@ public final class Array extends AbstractArray
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
-        if (typeSpecifier == Symbol.ARRAY)
-            return T;
         if (typeSpecifier == Symbol.SIMPLE_ARRAY)
-            return T;
-        if (typeSpecifier == LispClass.ARRAY)
             return T;
         return super.typep(typeSpecifier);
     }

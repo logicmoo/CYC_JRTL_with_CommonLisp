@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.9 2003-09-16 19:01:07 piso Exp $
+ * $Id: DisplacedArray.java,v 1.10 2003-09-17 18:01:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,22 +56,15 @@ public final class DisplacedArray extends AbstractArray
         return list3(Symbol.ARRAY, T, getDimensions());
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject type) throws LispError
     {
-        if (typeSpecifier == Symbol.ARRAY)
-            return T;
-        if (typeSpecifier == Symbol.VECTOR)
+        if (type == Symbol.VECTOR || type == LispClass.VECTOR)
             return VECTORP();
-        if (typeSpecifier == Symbol.BIT_VECTOR)
+        if (type == Symbol.BIT_VECTOR || type == LispClass.BIT_VECTOR)
             return BIT_VECTOR_P();
-        if (typeSpecifier == Symbol.SEQUENCE)
+        if (type == Symbol.SEQUENCE || type == LispClass.SEQUENCE)
             return VECTORP();
-        if (typeSpecifier instanceof LispClass) {
-            final String name = typeSpecifier.getName();
-            if (name.equals("ARRAY"))
-                return T;
-        }
-        return super.typep(typeSpecifier);
+        return super.typep(type);
     }
 
     public LispObject BIT_VECTOR_P()

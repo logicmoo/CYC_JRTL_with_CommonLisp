@@ -24,27 +24,21 @@ public abstract class AbstractVector extends AbstractArray
 {
     protected int fillPointer = -1; // -1 indicates no fill pointer.
 
-    public LispObject typep(LispObject typeSpecifier) throws LispError
+    public LispObject typep(LispObject type) throws LispError
     {
-        if (typeSpecifier instanceof Symbol) {
-            if (typeSpecifier == Symbol.VECTOR)
-                return T;
-            if (typeSpecifier == Symbol.ARRAY)
-                return T;
-            if (typeSpecifier == Symbol.SEQUENCE)
-                return T;
-            if (typeSpecifier == Symbol.SIMPLE_VECTOR)
-                return isSimpleVector() ? T : NIL;
-            if (typeSpecifier == Symbol.SIMPLE_ARRAY)
-                return fillPointer < 0 ? T : NIL;
-        } else if (typeSpecifier instanceof LispClass) {
-            final String name = typeSpecifier.getName();
-            if (name.equals("VECTOR"))
-                return T;
-            if (name.equals("ARRAY"))
-                return T;
-        }
-        return super.typep(typeSpecifier);
+        if (type == Symbol.VECTOR)
+            return T;
+        if (type == LispClass.VECTOR)
+            return T;
+        if (type == Symbol.SEQUENCE)
+            return T;
+        if (type == LispClass.SEQUENCE)
+            return T;
+        if (type == Symbol.SIMPLE_VECTOR)
+            return isSimpleVector() ? T : NIL;
+        if (type == Symbol.SIMPLE_ARRAY)
+            return fillPointer < 0 ? T : NIL;
+        return super.typep(type);
     }
 
     public final boolean vectorp()
