@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.7 2003-05-12 13:34:01 piso Exp $
+ * $Id: Jdb.java,v 1.8 2003-05-12 13:40:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -380,7 +380,7 @@ public final class Jdb extends Buffer
         log(s, true);
     }
 
-    public void log(final String s, final boolean forceNewLine)
+    private void log(final String s, final boolean forceNewLine)
     {
         Runnable r = new Runnable() {
             public void run()
