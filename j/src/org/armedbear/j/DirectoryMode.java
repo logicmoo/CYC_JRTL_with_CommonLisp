@@ -2,7 +2,7 @@
  * DirectoryMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DirectoryMode.java,v 1.7 2003-07-04 17:50:28 piso Exp $
+ * $Id: DirectoryMode.java,v 1.8 2003-10-15 14:53:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,16 +117,7 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
             menu.add(editor, "Copy", 'C', "copyRegion");
             menu.add(editor, "Copy Append", 'D', "copyAppend");
         } else if (text == "Search") {
-            menu.add(editor, "Find...", 'F', "find");
-            menu.add(editor, "Find Next", 'T', "findNext");
-            menu.add(editor, "Find Previous", 'R', "findPrev");
-            menu.addSeparator();
-            menu.add(editor, "Find in Files...", 'I', "findInFiles");
-            menu.add(editor, "List Files...", 'L', "listFiles");
-            menu.addSeparator();
-            menu.add(editor, "Replace in Files...", 'E', "replaceInFiles");
-            menu.addSeparator();
-            menu.add(editor, "Find Tag...", 'A', "findTag");
+            populateSearchMenu(editor, menu);
         } else if (text == "Go") {
             menu.add(editor, "Go Back", 'B', "dirBack");
             menu.add(editor, "Go Forward", 'F', "dirForward");
