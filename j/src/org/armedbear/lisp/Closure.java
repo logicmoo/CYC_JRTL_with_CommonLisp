@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.41 2003-06-08 19:21:38 piso Exp $
+ * $Id: Closure.java,v 1.42 2003-06-09 00:34:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,9 +381,7 @@ public class Closure extends Function
                 throw new WrongNumberOfArgumentsException(this);
             Environment oldDynEnv = thread.getDynamicEnvironment();
             Environment ext = new Environment(env);
-
             if (requiredParameters != null) {
-                Debug.assertTrue(arity == requiredParameters.length);
                 for (int i = 0; i < arity; i++)
                     bind(requiredParameters[i].var, args[i], ext);
             }
@@ -405,11 +403,8 @@ public class Closure extends Function
         Environment ext = new Environment(env);
         // Required parameters.
         if (requiredParameters != null) {
-            for (int i = 0; i < minArgs; i++) {
-                Parameter parameter = requiredParameters[i];
-                Symbol symbol = parameter.var;
-                bind(symbol, args[i], ext);
-            }
+            for (int i = 0; i < minArgs; i++)
+                bind(requiredParameters[i].var, args[i], ext);
         }
         int i = minArgs;
         int argsUsed = minArgs;
@@ -417,9 +412,8 @@ public class Closure extends Function
         if (optionalParameters != null) {
             for (int j = 0; j < optionalParameters.length; j++) {
                 Parameter parameter = optionalParameters[j];
-                Symbol symbol = parameter.var;
                 if (i < args.length) {
-                    bind(symbol, args[i], ext);
+                    bind(parameter.var, args[i], ext);
                     ++argsUsed;
                     if (parameter.svar != NIL) {
                         Symbol svar = checkSymbol(parameter.svar);
@@ -428,8 +422,8 @@ public class Closure extends Function
                 } else {
                     // We've run out of arguments.
                     LispObject initForm = parameter.initForm;
-                    bind(symbol,
-                        initForm != null? eval(initForm, ext, thread) : NIL,
+                    bind(parameter.var,
+                        initForm != null ? eval(initForm, ext, thread) : NIL,
                         ext);
                     if (parameter.svar != NIL) {
                         Symbol svar = checkSymbol(parameter.svar);
@@ -441,7 +435,6 @@ public class Closure extends Function
         }
         // &rest parameter.
         if (restVar != null) {
-            Debug.assertTrue(argsUsed == i || i > args.length);
             LispObject rest = NIL;
             for (int j = args.length; j-- > argsUsed;)
                 rest = new Cons(args[j], rest);
