@@ -1,8 +1,8 @@
 /*
  * cell_error_name.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: cell_error_name.java,v 1.2 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: cell_error_name.java,v 1.3 2004-01-02 01:23:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,22 +21,20 @@
 
 package org.armedbear.lisp;
 
-import java.math.BigInteger;
-
+// ### cell-error-name
 public final class cell_error_name extends Primitive1
 {
-    private cell_error_name(String name)
+    private cell_error_name()
     {
-        super(name);
+        super("cell-error-name");
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         if (arg instanceof CellError)
             return ((CellError)arg).getCellName();
-        return signal(new TypeError(arg, "CELL-ERROR"));
+        return signal(new TypeError(arg, Symbol.CELL_ERROR));
     }
 
-    private static final cell_error_name CELL_ERROR_NAME =
-        new cell_error_name("cell-error-name");
+    private static final cell_error_name CELL_ERROR_NAME = new cell_error_name();
 }
