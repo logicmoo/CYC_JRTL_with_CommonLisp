@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.103 2005-01-13 12:31:34 piso Exp $
+ * $Id: Stream.java,v 1.104 2005-02-05 18:39:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -488,6 +488,8 @@ public class Stream extends LispObject
     public LispObject readArray(int rank) throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
+        if (_READ_SUPPRESS_.symbolValue() != NIL)
+            return NIL;
         switch (rank) {
             case -1:
                 return signal(new ReaderError("No dimensions argument to #A."));
@@ -929,9 +931,12 @@ public class Stream extends LispObject
     public LispObject readRadix(int radix) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
+        final LispThread thread = LispThread.currentThread();
         final Readtable rt =
-            (Readtable) _READTABLE_.symbolValue(LispThread.currentThread());
+            (Readtable) _READTABLE_.symbolValue(thread);
         boolean escaped = (_readToken(sb, rt) != null);
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
+            return NIL;
         if (escaped)
             return signal(new ReaderError("Illegal syntax for number."));
         String s = sb.toString();
