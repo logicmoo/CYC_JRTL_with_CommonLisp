@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.52 2003-04-08 14:13:42 piso Exp $
+ * $Id: Lisp.java,v 1.53 2003-04-09 17:54:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1047,6 +1047,12 @@ public abstract class Lisp
 
     public static final Symbol _PRINT_ESCAPE_ =
         exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
+
+    public static final Symbol _PRINT_BASE_ =
+        exportSpecial("*PRINT-BASE*", PACKAGE_CL, new Fixnum(10));
+
+    public static final Symbol _PRINT_RADIX_ =
+        exportSpecial("*PRINT-RADIX*", PACKAGE_CL, NIL);
 
     public static final Symbol _RANDOM_STATE_ =
         exportSpecial("*RANDOM-STATE*", PACKAGE_CL,
