@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.91 2004-10-24 18:05:50 piso Exp $
+ * $Id: Stream.java,v 1.92 2004-10-24 19:24:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -394,7 +394,7 @@ public class Stream extends LispObject
         }
     }
 
-    public LispObject readDispatchChar(char ignored) throws ConditionThrowable
+    public LispObject readDispatchChar(char dispChar) throws ConditionThrowable
     {
         int numArg = -1;
         char c;
@@ -410,7 +410,7 @@ public class Stream extends LispObject
             numArg = numArg * 10 + c - '0';
         }
         LispObject fun =
-            currentReadtable().getDispatchMacroCharacter('#', c);
+            currentReadtable().getDispatchMacroCharacter(dispChar, c);
         if (fun instanceof DispatchMacroFunction)
             return ((DispatchMacroFunction)fun).execute(this, c, numArg);
         if (fun != NIL) {
@@ -426,7 +426,8 @@ public class Stream extends LispObject
             thread.clearValues();
             return result;
         }
-        return null;
+        return signal(new ReaderError("No dispatch function defined for #\\" +
+                                      c));
     }
 
     public LispObject readCharacterLiteral() throws ConditionThrowable
