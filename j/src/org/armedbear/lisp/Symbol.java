@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.27 2003-03-11 19:22:48 piso Exp $
+ * $Id: Symbol.java,v 1.28 2003-03-12 18:36:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,6 +36,7 @@ public class Symbol extends LispObject
     public static final Symbol EQL                  = export("EQL");
     public static final Symbol EQUAL                = export("EQUAL");
     public static final Symbol EQUALP               = export("EQUALP");
+    public static final Symbol FLET                 = export("FLET");
     public static final Symbol GO                   = export("GO");
     public static final Symbol LAMBDA               = export("LAMBDA");
     public static final Symbol LET                  = export("LET");
@@ -105,14 +106,11 @@ public class Symbol extends LispObject
     private static final int CONSTANT = 0x0002;
     private static final int EXTERNAL = 0x0004;
 
-    public static final void addFunction(String name, LispObject obj)
+    public static final Symbol addFunction(String name, LispObject obj)
     {
-        export(name, PACKAGE_CL).setSymbolFunction(obj);
-    }
-
-    public static final void addFunction(Function function)
-    {
-        export(function.getName(), PACKAGE_CL).setSymbolFunction(function);
+        Symbol symbol = export(name, PACKAGE_CL);
+        symbol.setSymbolFunction(obj);
+        return symbol;
     }
 
     private final String name;
