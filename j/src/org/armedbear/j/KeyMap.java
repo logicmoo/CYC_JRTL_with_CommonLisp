@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.5 2003-06-12 18:34:44 piso Exp $
+ * $Id: KeyMap.java,v 1.6 2003-06-13 00:06:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,6 +381,8 @@ public final class KeyMap implements Constants
     public synchronized final KeyMapping lookup(char keyChar, int keyCode,
         int modifiers)
     {
+        // Mask off the bits we don't care about (Java 1.4).
+        modifiers &= 0x0f;
         if (keyCode == 0 && modifiers == 0) {
             // This is the keyTyped() case. Ignore keyCode and modifiers;
             // keyChar must match the mapping.
