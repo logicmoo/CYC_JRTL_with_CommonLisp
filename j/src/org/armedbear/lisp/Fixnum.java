@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Fixnum.java,v 1.108 2005-02-10 01:55:30 piso Exp $
+ * $Id: Fixnum.java,v 1.109 2005-02-14 04:04:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -307,16 +307,20 @@ public final class Fixnum extends LispObject
 
     public LispObject add(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof Fixnum)
-            return number((long) value + ((Fixnum)obj).value);
+        if (obj instanceof Fixnum) {
+            long result = (long) value + ((Fixnum)obj).value;
+            if (result >= Integer.MIN_VALUE && result <= Integer.MAX_VALUE)
+                return new Fixnum((int)result);
+            else
+                return new Bignum(result);
+        }
         if (obj instanceof Bignum)
-            return number(getBigInteger().add(Bignum.getValue(obj)));
+            return number(getBigInteger().add(((Bignum)obj).value));
         if (obj instanceof Ratio) {
             BigInteger numerator = ((Ratio)obj).numerator();
             BigInteger denominator = ((Ratio)obj).denominator();
-            return number(
-                getBigInteger().multiply(denominator).add(numerator),
-                denominator);
+            return number(getBigInteger().multiply(denominator).add(numerator),
+                          denominator);
         }
         if (obj instanceof LispFloat)
             return new LispFloat(value + LispFloat.getValue(obj));
@@ -359,10 +363,24 @@ public final class Fixnum extends LispObject
         return signal(new TypeError(obj, "number"));
     }
 
+    public LispObject multiplyBy(int n)
+    {
+        long result = (long) value * n;
+        if (result >= Integer.MIN_VALUE && result <= Integer.MAX_VALUE)
+            return new Fixnum((int)result);
+        else
+            return new Bignum(result);
+    }
+
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof Fixnum)
-            return number((long) value * ((Fixnum)obj).value);
+        if (obj instanceof Fixnum) {
+            long result = (long) value * ((Fixnum)obj).value;
+            if (result >= Integer.MIN_VALUE && result <= Integer.MAX_VALUE)
+                return new Fixnum((int)result);
+            else
+                return new Bignum(result);
+        }
         if (obj instanceof Bignum)
             return number(getBigInteger().multiply(((Bignum)obj).value));
         if (obj instanceof Ratio) {
