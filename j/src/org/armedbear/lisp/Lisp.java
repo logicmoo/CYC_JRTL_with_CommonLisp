@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.272 2004-08-18 17:15:41 piso Exp $
+ * $Id: Lisp.java,v 1.273 2004-08-21 01:20:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -797,9 +797,7 @@ public abstract class Lisp
                     Class[] parameterTypes = new Class[0];
                     java.lang.reflect.Constructor constructor =
                         c.getConstructor(parameterTypes);
-                    Object[] initargs = new Object[0];
-                    LispObject obj =
-                        (LispObject) constructor.newInstance(initargs);
+                    LispObject obj = (LispObject) constructor.newInstance(null);
                     return obj;
                 }
             }
