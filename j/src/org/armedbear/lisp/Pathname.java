@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.41 2004-01-08 17:40:28 piso Exp $
+ * $Id: Pathname.java,v 1.42 2004-01-08 18:07:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -834,6 +834,28 @@ public final class Pathname extends LispObject
         }
         return NIL;
     }
+
+    public static final Primitive2 RENAME_FILE =
+        new Primitive2("rename-file", "pathspec new-name")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            final Pathname filespec = (Pathname) truename(first, true);
+            Pathname newName = coerceToPathname(second);
+            if (newName.isWild())
+                signal(new FileError("Bad place for a wild pathname."));
+            newName = mergePathnames(newName, filespec, NIL);
+            File source = new File(filespec.getNamestring());
+            File destination = new File(newName.getNamestring());
+            if (!source.renameTo(destination))
+                return signal(new FileError("Unable to rename " + filespec +
+                                            " to " + newName + "."));
+            LispThread.currentThread().setValues(newName, filespec,
+                                                 truename(newName, true));
+            return newName;
+        }
+    };
 
     static {
         try {
