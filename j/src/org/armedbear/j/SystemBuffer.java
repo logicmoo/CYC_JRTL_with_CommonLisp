@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.1.1.1 2002-09-24 16:08:24 piso Exp $
+ * $Id: SystemBuffer.java,v 1.2 2002-10-01 19:03:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,21 +25,38 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 // System buffers are NOT linked into the normal buffer ring.
-public class SystemBuffer extends AbstractBuffer implements Constants
+public class SystemBuffer implements Constants
 {
+    public static final int TYPE_SYSTEM           =  0;
+    public static final int TYPE_NORMAL           =  1;
+    public static final int TYPE_ARCHIVE          =  2;
+    public static final int TYPE_DIRECTORY        =  3;
+    public static final int TYPE_SHELL            =  4;
+    public static final int TYPE_COMPILATION      =  5;
+    public static final int TYPE_MAN              =  6;
+    public static final int TYPE_OUTPUT           =  7;
+    public static final int TYPE_IMAGE            =  8;
+    public static final int TYPE_MAILBOX          =  9;
+    public static final int TYPE_TELNET           = 10;
+    public static final int TYPE_SSH              = 11;
+    public static final int TYPE_LIST_OCCURRENCES = 12;
+
+    protected int type = TYPE_SYSTEM;
     protected boolean isLoaded;
     protected boolean readOnly;
+    protected boolean forceReadOnly;
     protected Mode mode;
     protected String lineSeparator;
     protected int lineCount;
 
-    boolean forceReadOnly;
-
+    private Line firstLine;
+    private Line lastLine;
     private File file;
     private String loadEncoding;
-    private Line lastLine;
+    private List tags;
     private View lastView;
 
     protected SystemBuffer()
@@ -49,6 +66,31 @@ public class SystemBuffer extends AbstractBuffer implements Constants
     public SystemBuffer(File file)
     {
         this.file = file;
+    }
+
+    public final int getType()
+    {
+        return type;
+    }
+
+    public final Line getFirstLine()
+    {
+        return firstLine;
+    }
+
+    public final void setFirstLine(Line line)
+    {
+        firstLine = line;
+    }
+
+    public final Position getEnd()
+    {
+        Line line = firstLine;
+        if (line == null)
+            return null;
+        while (line.next() != null)
+            line = line.next();
+        return new Position(line, line.length());
     }
 
     public final File getFile()
@@ -84,6 +126,21 @@ public class SystemBuffer extends AbstractBuffer implements Constants
     public final String getModeName()
     {
         return mode == null ? null : mode.toString();
+    }
+
+    public final List getTags()
+    {
+        return tags;
+    }
+
+    public final void setTags(List tags)
+    {
+        this.tags = tags;
+    }
+
+    public final void setForceReadOnly(boolean b)
+    {
+        forceReadOnly = b;
     }
 
     public String getLineSeparator()
