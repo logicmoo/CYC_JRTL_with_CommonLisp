@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.4 2003-09-13 23:40:54 piso Exp $
+ * $Id: DisplacedArray.java,v 1.5 2003-09-14 12:28:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,8 @@ public final class DisplacedArray extends AbstractArray
             return T;
         if (typeSpecifier == Symbol.VECTOR)
             return getRank() == 1 ? T : NIL;
+        if (typeSpecifier == Symbol.BIT_VECTOR)
+            return BIT_VECTOR_P();
         if (typeSpecifier instanceof LispClass) {
             final String name = typeSpecifier.getName();
             if (name.equals("ARRAY"))
@@ -68,6 +70,13 @@ public final class DisplacedArray extends AbstractArray
         if (typeSpecifier instanceof Cons)
             return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
         return super.typep(typeSpecifier);
+    }
+
+    public LispObject BIT_VECTOR_P()
+    {
+        if (getRank() == 1)
+            return array.BIT_VECTOR_P();
+        return NIL;
     }
 
     public int length() throws LispError
