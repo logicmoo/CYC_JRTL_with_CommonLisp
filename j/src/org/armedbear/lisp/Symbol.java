@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.99 2003-12-13 00:28:08 piso Exp $
+ * $Id: Symbol.java,v 1.100 2003-12-14 17:40:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -397,10 +397,19 @@ public class Symbol extends LispObject
 
     public String toString()
     {
-        if (pkg == PACKAGE_KEYWORD)
-            return ":".concat(name);
-        if (_PRINT_ESCAPE_.symbolValueNoThrow() == NIL)
-            return name;
+        LispObject printCase = _PRINT_CASE_.symbolValueNoThrow();
+        if (pkg == PACKAGE_KEYWORD) {
+            if (printCase == Keyword.DOWNCASE)
+                return ":".concat(name.toLowerCase());
+            else
+                return ":".concat(name);
+        }
+        if (_PRINT_ESCAPE_.symbolValueNoThrow() == NIL) {
+            if (printCase == Keyword.DOWNCASE)
+                return name.toLowerCase();
+            else
+                return name;
+        }
         boolean escape = false;
         for (int i = name.length(); i-- > 0;) {
             char c = name.charAt(i);
@@ -417,7 +426,11 @@ public class Symbol extends LispObject
                 break;
             }
         }
-        final String s = escape ? ("|" + name + "|") : name;
+        String s = escape ? ("|" + name + "|") : name;
+        if (!escape) {
+            if (printCase == Keyword.DOWNCASE)
+                s = s.toLowerCase();
+        }
         if (pkg == null || pkg == NIL) {
             if (_PRINT_GENSYM_.symbolValueNoThrow() != NIL)
                 return "#:".concat(s);
@@ -433,7 +446,10 @@ public class Symbol extends LispObject
                 return s;
         }
         // Package prefix is necessary.
-        StringBuffer sb = new StringBuffer(pkg.getName());
+        String packageName = pkg.getName();
+        if (printCase == Keyword.DOWNCASE)
+            packageName = packageName.toLowerCase();
+        StringBuffer sb = new StringBuffer(packageName);
         if (((Package)pkg).findExternalSymbol(name) != null)
             sb.append(':');
         else
