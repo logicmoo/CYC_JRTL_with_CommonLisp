@@ -2,7 +2,7 @@
  * ArithmeticError.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ArithmeticError.java,v 1.9 2004-02-02 18:34:17 piso Exp $
+ * $Id: ArithmeticError.java,v 1.10 2004-03-18 01:41:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,40 @@ package org.armedbear.lisp;
 
 public class ArithmeticError extends LispError
 {
+    private final LispObject operation;
+    private final LispObject operands;
+
     public ArithmeticError()
     {
+        operation = NIL;
+        operands = NIL;
     }
 
     public ArithmeticError(LispObject initArgs) throws ConditionThrowable
     {
         super(initArgs);
+        LispObject operation = NIL;
+        LispObject operands = NIL;
+        LispObject first, second;
+        while (initArgs != NIL) {
+            first = initArgs.car();
+            initArgs = initArgs.cdr();
+            second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.OPERATION)
+                operation = second;
+            else if (first == Keyword.OPERANDS)
+                operands = second;
+        }
+        this.operation = operation;
+        this.operands = operands;
     }
 
     public ArithmeticError(String message)
     {
         super(message);
+        operation = NIL;
+        operands = NIL;
     }
 
     public LispObject typeOf()
@@ -55,4 +77,33 @@ public class ArithmeticError extends LispError
             return T;
         return super.typep(type);
     }
+
+    // ### arithmetic-error-operation
+    private static final Primitive1 ARITHMETIC_ERROR_OPERATION =
+        new Primitive1("arithmetic-error-operation", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((ArithmeticError)arg).operation;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.ARITHMETIC_ERROR));
+            }
+        }
+    };
+    // ### arithmetic-error-operands
+    private static final Primitive1 ARITHMETIC_ERROR_OPERANDS =
+        new Primitive1("arithmetic-error-operands", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((ArithmeticError)arg).operands;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.ARITHMETIC_ERROR));
+            }
+        }
+    };
 }
