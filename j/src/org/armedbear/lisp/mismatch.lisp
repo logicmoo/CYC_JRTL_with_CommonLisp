@@ -1,7 +1,7 @@
 ;;; mismatch.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: mismatch.lisp,v 1.1 2003-06-10 16:22:45 piso Exp $
+;;; $Id: mismatch.lisp,v 1.2 2003-06-10 18:57:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,32 @@
 (export 'mismatch)
 
 ;;; From ECL.
+
+(defun bad-seq-limit (x &optional y)
+  (error "bad sequence limit ~a" (if y (list x y) x)))
+
+(defun the-end (x y)
+  (cond ((fixnump x)
+	 (unless (<= x (length y))
+	   (bad-seq-limit x))
+	 x)
+	((null x)
+	 (length y))
+	(t (bad-seq-limit x))))
+
+(defun the-start (x)
+  (cond ((fixnump x)
+	 (unless (>= x 0)
+           (bad-seq-limit x))
+	 x)
+	((null x) 0)
+	(t (bad-seq-limit x))))
+
+(defmacro with-start-end (start end seq &body body)
+  `(let* ((,start (if ,start (the-start ,start) 0))
+          (,end (the-end ,end ,seq)))
+     (unless (<= ,start ,end) (bad-seq-limit ,start ,end))
+     ,@ body))
 
 (defun call-test (test test-not item keyx)
   (cond (test (funcall test item keyx))
