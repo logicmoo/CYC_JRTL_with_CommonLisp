@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.84 2003-06-11 02:19:11 piso Exp $
+ * $Id: Lisp.java,v 1.85 2003-06-20 15:00:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +101,7 @@ public abstract class Lisp
     {
         if (fun instanceof Autoload) {
             Autoload autoload = (Autoload) fun;
-            Load._load(autoload.getFileName(), true, false);
+            autoload.load();
             fun = autoload.getSymbol().getSymbolFunction();
         }
         if (debug)
@@ -213,7 +213,7 @@ public abstract class Lisp
                         return eval(macroexpand(obj, env, thread), env, thread);
                     case FTYPE_AUTOLOAD: {
                         Autoload autoload = (Autoload) fun;
-                        Load._load(autoload.getFileName(), true, false);
+                        autoload.load();
                         return eval(obj, env, thread);
                     }
                     default: {

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.239 2003-06-20 14:32:50 piso Exp $
+ * $Id: Primitives.java,v 1.240 2003-06-20 15:01:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3373,7 +3373,7 @@ public final class Primitives extends Module
                 LispObject functional = env.lookupFunctional(arg);
                 if (functional instanceof Autoload) {
                     Autoload autoload = (Autoload) functional;
-                    Load._load(autoload.getFileName(), true, false);
+                    autoload.load();
                     functional = autoload.getSymbol().getSymbolFunction();
                 }
                 if (functional instanceof Function)
