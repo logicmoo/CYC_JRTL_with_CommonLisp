@@ -1,7 +1,7 @@
 ;;; sets.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sets.lisp,v 1.3 2003-08-25 19:18:00 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: sets.lisp,v 1.4 2004-05-03 01:33:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 
 (defun union (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
-    (error "test and test-not both supplied"))
+    (error "Both :TEST and :TEST-NOT were supplied."))
   (when key
     (setq key (coerce-to-function key)))
   (let ((res list2))
@@ -44,7 +44,7 @@
 
 (defun nunion (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
-    (error "test and test-not both supplied"))
+    (error "Both :TEST and :TEST-NOT were supplied."))
   (when key
     (setq key (coerce-to-function key)))
   (let ((res list2)
@@ -57,10 +57,9 @@
     res))
 
 
-(defun intersection (list1 list2 &key key
-			   (test #'eql testp) (test-not nil notp))
+(defun intersection (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
-    (error "test and test-not both supplied"))
+    (error "Both :TEST and :TEST-NOT were supplied."))
   (when key
     (setq key (coerce-to-function key)))
   (let ((res nil))
@@ -69,10 +68,9 @@
 	  (push elt res)))
     res))
 
-(defun nintersection (list1 list2 &key key
-			    (test #'eql testp) (test-not nil notp))
+(defun nintersection (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
-    (error "test and test-not both supplied"))
+    (error "Both :TEST and :TEST-NOT were supplied."))
   (when key
     (setq key (coerce-to-function key)))
   (let ((res nil)
@@ -83,10 +81,9 @@
 	  (setq list1 (cdr list1))))
     res))
 
-(defun set-difference (list1 list2 &key key
-			     (test #'eql testp) (test-not nil notp))
+(defun set-difference (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
-    (error "test and test-not both supplied"))
+    (error "Both :TEST and :TEST-NOT were supplied."))
   (when key
     (setq key (coerce-to-function key)))
   (if (null list2)
@@ -98,10 +95,9 @@
 	res)))
 
 
-(defun nset-difference (list1 list2 &key key
-			      (test #'eql testp) (test-not nil notp))
+(defun nset-difference (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
-    (error "test and test-not both supplied"))
+    (error "Both :TEST and :TEST-NOT were supplied."))
   (when key
     (setq key (coerce-to-function key)))
   (let ((res nil)
@@ -113,10 +109,9 @@
     res))
 
 
-(defun set-exclusive-or (list1 list2 &key key
-                               (test #'eql testp) (test-not nil notp))
+(defun set-exclusive-or (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
-    (error "test and test-not both supplied"))
+    (error "Both :TEST and :TEST-NOT were supplied."))
   (when key
     (setq key (coerce-to-function key)))
   (let ((result nil)
@@ -137,43 +132,68 @@
           (setq result (cons elt result)))))
     result))
 
+;;; Adapted from SBCL.
+(defun nset-exclusive-or (list1 list2 &key key (test #'eql testp) (test-not #'eql notp))
+  (when (and testp notp)
+    (error "Both :TEST and :TEST-NOT were supplied."))
+  (let ((key (and key (coerce-to-function key)))
+        (test (if testp (coerce-to-function test) test))
+        (test-not (if notp (coerce-to-function test-not) test-not)))
+    ;; The outer loop examines LIST1 while the inner loop examines
+    ;; LIST2. If an element is found in LIST2 "equal" to the element
+    ;; in LIST1, both are spliced out. When the end of LIST1 is
+    ;; reached, what is left of LIST2 is tacked onto what is left of
+    ;; LIST1. The splicing operation ensures that the correct
+    ;; operation is performed depending on whether splice is at the
+    ;; top of the list or not.
+    (do ((list1 list1)
+         (list2 list2)
+         (x list1 (cdr x))
+         (splicex ())
+         (deleted-y ())
+         ;; elements of LIST2, which are "equal" to some processed
+         ;; earlier elements of LIST1
+         )
+        ((endp x)
+         (if (null splicex)
+             (setq list1 list2)
+             (rplacd splicex list2))
+         list1)
+      (let ((key-val-x (apply-key key (car x)))
+            (found-duplicate nil))
 
-(defun nset-exclusive-or (list1 list2 &key (test #'eql) (test-not nil notp)
-				key)
-  (when key
-    (setq key (coerce-to-function key)))
-  (do ((list1 list1)
-       (list2 list2)
-       (x list1 (cdr x))
-       (splicex ()))
-      ((endp x)
-       (if (null splicex)
-           (setq list1 list2)
-           (rplacd splicex list2))
-       list1)
-    (do ((y list2 (cdr y))
-	 (splicey ()))
-        ((endp y) (setq splicex x))
-      (cond ((let ((key-val-x (funcall-key key (car x)))
-		   (key-val-y (funcall-key key (car y))))
-	       (if notp
-		   (not (funcall test-not key-val-x key-val-y))
-		   (funcall test key-val-x key-val-y)))
-	     (if (null splicex)
-		 (setq list1 (cdr x))
-		 (rplacd splicex (cdr x)))
-	     (if (null splicey)
-		 (setq list2 (cdr y))
-		 (rplacd splicey (cdr y)))
-	     (return ()))
-	    (t (setq splicey y))))))
+        ;; Move all elements from LIST2, which are "equal" to (CAR X),
+        ;; to DELETED-Y.
+        (do* ((y list2 next-y)
+              (next-y (cdr y) (cdr y))
+              (splicey ()))
+             ((endp y))
+          (cond ((let ((key-val-y (apply-key key (car y))))
+                   (if notp
+                       (not (funcall test-not key-val-x key-val-y))
+                       (funcall test key-val-x key-val-y)))
+                 (if (null splicey)
+                     (setq list2 (cdr y))
+                     (rplacd splicey (cdr y)))
+                 (setq deleted-y (rplacd y deleted-y))
+                 (setq found-duplicate t))
+                (t (setq splicey y))))
 
+        (unless found-duplicate
+          (setq found-duplicate (with-set-keys (member key-val-x deleted-y))))
+
+        (if found-duplicate
+            (if (null splicex)
+                (setq list1 (cdr x))
+                (rplacd splicex (cdr x)))
+            (setq splicex x))))))
+
+;;; Adapted from SBCL.
 (defun subsetp (list1 list2 &key key (test #'eql testp) (test-not nil notp))
   (when (and testp notp)
-    (error "test and test-not both supplied"))
-  (when key
-    (setq key (coerce-to-function key)))
-  (dolist (elt list1)
-    (unless (with-set-keys (member (funcall-key key elt) list2))
-      (return-from subsetp nil)))
-  T)
+    (error "Both :TEST and :TEST-NOT were supplied."))
+  (let ((key (and key (coerce-to-function key))))
+    (dolist (elt list1)
+      (unless (with-set-keys (member (funcall-key key elt) list2))
+        (return-from subsetp nil)))
+    t))
