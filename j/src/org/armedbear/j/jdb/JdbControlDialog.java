@@ -2,7 +2,7 @@
  * JdbControlDialog.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbControlDialog.java,v 1.6 2003-05-18 17:03:48 piso Exp $
+ * $Id: JdbControlDialog.java,v 1.7 2003-05-20 15:35:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,6 +85,7 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
         suspendButton = addButton("Suspend", null, "jdbSuspend");
         continueButton = addButton("Continue", null, "jdbContinue");
         addSeparator();
+        addButton("Restart", null, "jdbRestart");
         addButton("Quit", null, "jdbQuit");
         getContentPane().add(toolBar, "North");
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -146,8 +147,8 @@ public final class JdbControlDialog extends JDialog implements JdbConstants,
 
     public void show()
     {
-        int width = sessionProperties.getIntegerProperty("jdb.width", 350);
-        int height = sessionProperties.getIntegerProperty("jdb.height", 200);
+        int width = sessionProperties.getIntegerProperty("jdb.width", 425);
+        int height = sessionProperties.getIntegerProperty("jdb.height", 250);
         setSize(width, height);
         int x = sessionProperties.getIntegerProperty("jdb.x", -1);
         int y = sessionProperties.getIntegerProperty("jdb.y", -1);
