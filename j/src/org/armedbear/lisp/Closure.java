@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.59 2003-09-26 16:54:25 piso Exp $
+ * $Id: Closure.java,v 1.60 2003-11-27 04:32:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -609,7 +609,9 @@ public class Closure extends Function
                     allowOtherKeysValue = args[argsUsed + 1];
                     argsUsed += 2;
                 }
-                if (allowOtherKeysValue != null && allowOtherKeysValue != NIL) {
+                if (allowOtherKeys ||
+                    (allowOtherKeysValue != null && allowOtherKeysValue != NIL))
+                {
                     // Skip keyword/value pairs.
                     while (argsUsed + 2 <= args.length)
                         argsUsed += 2;
