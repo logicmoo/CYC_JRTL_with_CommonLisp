@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.11 2003-03-09 18:08:16 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.12 2003-03-12 01:39:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,6 +509,9 @@ public class CharacterInputStream extends LispStream
 
     private LispObject makeObject(String token) throws LispError
     {
+        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+            return NIL;
+
         char c = token.charAt(0);
         if (c == '-' || Character.isDigit(token.charAt(0))) {
             try {
