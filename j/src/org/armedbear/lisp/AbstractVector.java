@@ -33,6 +33,8 @@ public abstract class AbstractVector extends LispObject
         return super.typep(typeSpecifier);
     }
 
+    public abstract int capacity();
+
     public abstract LispObject get(int index) throws LispError;
 
     public abstract void set(int index, LispObject newValue) throws LispError;
@@ -81,14 +83,14 @@ public abstract class AbstractVector extends LispObject
     public void setFillPointer(LispObject obj) throws LispError
     {
         if (obj == T)
-            fillPointer = length();
+            fillPointer = capacity();
         else {
             long n = Fixnum.getValue(obj);
-            if (n > length()) {
+            if (n > capacity()) {
                 StringBuffer sb = new StringBuffer("the new fill pointer (");
                 sb.append(n);
-                sb.append(") exceeds the length of the vector (");
-                sb.append(length());
+                sb.append(") exceeds the capacity of the vector (");
+                sb.append(capacity());
                 sb.append(")");
                 throw new LispError(sb.toString());
             }

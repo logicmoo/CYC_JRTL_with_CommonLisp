@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.10 2003-02-27 19:11:18 piso Exp $
+ * $Id: LispString.java,v 1.11 2003-02-28 17:01:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,9 +145,14 @@ public final class LispString extends AbstractVector implements SequenceType,
         return new String(array);
     }
 
-    public final int length()
+    public final int capacity()
     {
         return array.length;
+    }
+
+    public final int length()
+    {
+        return fillPointer >= 0 ? fillPointer : array.length;
     }
 
     public LispObject elt(long index) throws LispError

@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.8 2003-02-27 18:32:04 piso Exp $
+ * $Id: Vector.java,v 1.9 2003-02-28 17:00:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,31 +24,31 @@ package org.armedbear.lisp;
 public class Vector extends AbstractVector implements SequenceType, VectorType
 {
     private final LispObject[] elements;
-    private final int length;
+    private final int capacity;
 
-    public Vector(int length)
+    public Vector(int capacity)
     {
-        elements = new LispObject[length];
-        for (int i = length; i-- > 0;)
+        elements = new LispObject[capacity];
+        for (int i = capacity; i-- > 0;)
             elements[i] = NIL;
-        this.length = length;
+        this.capacity = capacity;
     }
 
     public Vector(LispObject list) throws LispError
     {
         elements = list.copyToArray();
-        length = elements.length;
+        capacity = elements.length;
     }
 
     public Vector(LispObject[] array)
     {
         elements = array;
-        length = array.length;
+        capacity = array.length;
     }
 
     public LispObject typeOf()
     {
-        return list(Symbol.VECTOR, T, new Fixnum(length));
+        return list(Symbol.VECTOR, T, new Fixnum(capacity));
     }
 
     public boolean isSimpleVector()
@@ -56,14 +56,19 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
         return fillPointer < 0;
     }
 
+    public int capacity()
+    {
+        return capacity;
+    }
+
     public int length()
     {
-        return fillPointer >= 0 ? fillPointer : length;
+        return fillPointer >= 0 ? fillPointer : capacity;
     }
 
     public LispObject elt(long index) throws LispError
     {
-        long limit = fillPointer >= 0 ? fillPointer : length;
+        long limit = length();
         if (index < 0 || index >= limit)
             badIndex(index);
         return elements[(int)index];
@@ -86,14 +91,14 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
 
     public void fill(LispObject obj) throws LispError
     {
-        for (int i = length; i-- > 0;)
+        for (int i = capacity; i-- > 0;)
             elements[i] = obj;
     }
 
     public String toString()
     {
         StringBuffer sb = new StringBuffer("#(");
-        // FIXME The limit should actually be the value of *PRINT-LENGTH*.
+        // FIXME The limit should be based on the value of *PRINT-LENGTH*.
         final int limit = Math.min(length(), 10);
         for (int i = 0; i < limit; i++) {
             if (i > 0)
