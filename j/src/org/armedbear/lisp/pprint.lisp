@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.45 2004-10-13 17:52:39 piso Exp $
+;;; $Id: pprint.lisp,v 1.46 2004-10-13 18:15:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -873,7 +873,9 @@
 (defun pprint-newline (kind &optional (stream *standard-output*))
   (setq stream (sys:decode-stream-arg stream))
   (when (not (member kind '(:linear :miser :fill :mandatory)))
-    (error "Invalid KIND argument ~A to PPRINT-NEWLINE." kind))
+    (error 'simple-type-error
+           :format-control "Invalid KIND argument ~A to PPRINT-NEWLINE."
+           :format-arguments (list kind)))
   (when (and (xp-structure-p stream) *print-pretty*)
     (pprint-newline+ kind stream))
   nil)
