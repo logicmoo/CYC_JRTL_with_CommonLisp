@@ -2,7 +2,7 @@
  * TextLine.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: TextLine.java,v 1.1.1.1 2002-09-24 16:09:14 piso Exp $
+ * $Id: TextLine.java,v 1.2 2002-10-03 14:59:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public class TextLine extends AbstractLine implements Line
         this.flags = flags;
     }
 
-    public String getText()
+    public final String getText()
     {
         return text != null ? text : "";
     }
