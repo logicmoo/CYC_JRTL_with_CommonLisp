@@ -1,7 +1,7 @@
 ;;; substitute.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: substitute.lisp,v 1.1 2003-06-10 01:18:36 piso Exp $
+;;; $Id: substitute.lisp,v 1.2 2003-06-10 15:23:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,12 @@
 (export '(substitute substitute-if substitute-if-not))
 
 ;;; From CMUCL.
+
+(defmacro real-count (count)
+  `(cond ((null ,count) most-positive-fixnum)
+         ((fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
+         (t ,count)))
 
 (defun list-substitute* (pred new list start end count key test test-not old)
   (let* ((result (list nil))

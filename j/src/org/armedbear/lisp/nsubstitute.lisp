@@ -1,7 +1,7 @@
 ;;; nsubstitute.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: nsubstitute.lisp,v 1.1 2003-06-10 01:24:04 piso Exp $
+;;; $Id: nsubstitute.lisp,v 1.2 2003-06-10 15:23:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,12 @@
 (export '(nsubstitute nsubstitute-if nsubstitute-if-not))
 
 ;;; From CMUCL.
+
+(defmacro real-count (count)
+  `(cond ((null ,count) most-positive-fixnum)
+         ((fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
+         (t ,count)))
 
 (defun nlist-substitute* (new old sequence test test-not start end count key)
   (do ((list (nthcdr start sequence) (cdr list))

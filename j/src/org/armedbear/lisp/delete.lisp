@@ -1,7 +1,7 @@
 ;;; delete.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: delete.lisp,v 1.1 2003-06-10 00:47:26 piso Exp $
+;;; $Id: delete.lisp,v 1.2 2003-06-10 15:24:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,13 @@
 
 (export '(delete delete-if delete-if-not))
 
-;;; DELETE, DELETE-IF, DELETE-IF-NOT (from CMUCL)
+;;; From CMUCL.
+
+(defmacro real-count (count)
+  `(cond ((null ,count) most-positive-fixnum)
+         ((fixnump ,count) (if (minusp ,count) 0 ,count))
+         ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
+         (t ,count)))
 
 (defmacro mumble-delete (pred)
   `(do ((index start (1+ index))
