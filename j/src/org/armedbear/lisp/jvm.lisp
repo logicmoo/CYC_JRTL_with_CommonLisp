@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.105 2004-04-14 16:40:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.106 2004-04-14 16:54:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -502,6 +502,8 @@
 (defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
 (defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
+(defconstant +lisp-simple-string-class+ "org/armedbear/lisp/SimpleString")
+(defconstant +lisp-simple-string+ "Lorg/armedbear/lisp/SimpleString;")
 (defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
 
 (defun emit-push-nil ()
@@ -1371,24 +1373,25 @@
                          "forget"
                          "(Lorg/armedbear/lisp/SimpleString;)V"
                          -1)
-      (setq *static-code* *code*)
+      (setf *static-code* *code*)
       g2)))
 
 (defun declare-string (string)
   (let ((g (symbol-name (gensym)))
         (*code* *static-code*))
-    (declare-field g "Lorg/armedbear/lisp/SimpleString;")
-    (emit 'ldc
-          (pool-string string))
-    (emit-invokestatic "org/armedbear/lisp/SimpleString"
-                       "getInstance"
-                       "(Ljava/lang/String;)Lorg/armedbear/lisp/SimpleString;"
-                       0)
+    (declare-field g +lisp-simple-string+)
+    (emit 'new +lisp-simple-string-class+)
+    (emit 'dup)
+    (emit 'ldc (pool-string string))
+    (emit-invokespecial +lisp-simple-string-class+
+                        "<init>"
+                        "(Ljava/lang/String;)V"
+                        -2)
     (emit 'putstatic
           *this-class*
           g
-          +lisp-string+)
-    (setq *static-code* *code*)
+          +lisp-simple-string+)
+    (setf *static-code* *code*)
     g))
 
 (defun compile-constant (form)
