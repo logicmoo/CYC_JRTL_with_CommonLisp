@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.22 2004-03-09 02:06:46 piso Exp $
+ * $Id: Extensions.java,v 1.23 2004-03-13 17:53:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public final class Extensions extends Lisp
         }
     };
 
-    // memq item list => tail
+    // ### memq item list => tail
     private static final Primitive2 MEMQ =
         new Primitive2("memq", PACKAGE_EXT, true)
     {
@@ -53,7 +53,7 @@ public final class Extensions extends Lisp
         }
     };
 
-    // memql item list => tail
+    // ### memql item list => tail
     private static final Primitive2 MEMQL =
         new Primitive2("memql", PACKAGE_EXT, true)
     {
