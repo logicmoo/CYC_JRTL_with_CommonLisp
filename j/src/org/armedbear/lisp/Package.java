@@ -1,8 +1,8 @@
 /*
  * Package.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.50 2004-02-23 14:24:47 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Package.java,v 1.51 2004-03-17 12:59:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -319,29 +319,32 @@ public final class Package extends LispObject
     public synchronized void export(Symbol symbol) throws ConditionThrowable
     {
         final String symbolName = symbol.getName();
+        boolean added = false;
         if (symbol.getPackage() != this) {
             Symbol sym = findAccessibleSymbol(symbolName);
             if (sym == null) {
-                StringBuffer sb = new StringBuffer("the symbol ");
+                StringBuffer sb = new StringBuffer("The symbol ");
                 sb.append(symbol.getQualifiedName());
                 sb.append(" is not accessible in package ");
                 sb.append(name);
+                sb.append('.');
                 signal(new PackageError(sb.toString()));
                 return;
             }
             if (sym != symbol) {
                 // Conflict.
-                StringBuffer sb = new StringBuffer("the symbol ");
+                StringBuffer sb = new StringBuffer("The symbol ");
                 sb.append(sym.getQualifiedName());
                 sb.append(" is already accessible in package ");
                 sb.append(name);
+                sb.append('.');
                 signal(new PackageError(sb.toString()));
                 return;
             }
             internalSymbols.put(symbolName, symbol);
+            added = true;
         }
-        if (internalSymbols.get(symbolName) == symbol) {
-            // Found existing internal symbol in this package.
+        if (added || internalSymbols.get(symbolName) == symbol) {
             if (usedByList != null) {
                 for (Iterator it = usedByList.iterator(); it.hasNext();) {
                     Package pkg = (Package) it.next();
@@ -351,10 +354,11 @@ public final class Package extends LispObject
                             pkg.shadowingSymbols.get(symbolName) == sym) {
                             ; // OK.
                         } else {
-                            StringBuffer sb = new StringBuffer("the symbol ");
+                            StringBuffer sb = new StringBuffer("The symbol ");
                             sb.append(sym.getQualifiedName());
                             sb.append(" is already accessible in package ");
                             sb.append(pkg.getName());
+                            sb.append('.');
                             signal(new LispError(sb.toString()));
                             return;
                         }
@@ -370,10 +374,11 @@ public final class Package extends LispObject
             // Symbol is already exported; there's nothing to do.
             return;
         }
-        StringBuffer sb = new StringBuffer("the symbol ");
+        StringBuffer sb = new StringBuffer("The symbol ");
         sb.append(symbol.getQualifiedName());
         sb.append(" is not accessible in package ");
         sb.append(name);
+        sb.append('.');
         signal(new PackageError(sb.toString()));
     }
 
