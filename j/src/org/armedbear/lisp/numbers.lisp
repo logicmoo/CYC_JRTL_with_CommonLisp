@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.31 2004-06-13 01:22:05 piso Exp $
+;;; $Id: numbers.lisp,v 1.32 2004-06-13 18:42:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,24 +88,6 @@
   (multiple-value-bind (res rem)
     (round number divisor)
     (values (float res (if (floatp rem) rem 1.0)) rem)))
-
-(defun rational (number)
-  "RATIONAL produces a rational number for any real numeric argument.  This is
-   more efficient than RATIONALIZE, but it assumes that floating-point is
-   completely accurate, giving a result that isn't as pretty."
-  (etypecase number
-    (float
-     (multiple-value-bind (bits exp)
-       (integer-decode-float number)
-       (if (eql bits 0)
-           0
-           (let* ((int (if (minusp number) (- bits) bits))
-                  (digits (float-digits number))
-                  (ex (+ exp digits)))
-             (if (minusp ex)
-                 (/ int (ash 1 (+ digits (- ex))))
-                 (/ (ash int ex) (ash 1 digits)))))))
-    (rational number)))
 
 ;;; FIXME
 (defun rationalize (number)
