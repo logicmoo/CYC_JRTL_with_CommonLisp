@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.6 2003-02-14 19:59:33 piso Exp $
+ * $Id: Tests.java,v 1.7 2003-02-17 15:25:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -456,6 +456,11 @@ public class Tests extends TestCase
         verify("(equal \"FOO\" \"foo\")", "NIL");
         verify("(equal \"This-string\" \"This-string\")", "T");
         verify("(equal \"This-string\" \"this-string\")", "NIL");
+
+        // string
+        verify("(string \"already a string\")", "\"already a string\"");
+        verify("(string 'elm)", "\"ELM\"");
+        verify("(string #\\c)", "\"c\"");
 
         // string= (case sensitive)
         verify("(string= \"foo\" \"foo\")", "T");
