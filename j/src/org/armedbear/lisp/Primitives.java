@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.668 2004-08-02 14:31:25 piso Exp $
+ * $Id: Primitives.java,v 1.669 2004-08-09 18:45:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2876,7 +2876,7 @@ public final class Primitives extends Lisp
                 localTags = new Cons(current, localTags);
             }
             final LispThread thread = LispThread.currentThread();
-            final int depth = thread.getStackDepth();
+            final LispObject stack = thread.getStack();
             LispObject remaining = args;
             while (remaining != NIL) {
                 LispObject current = remaining.car();
@@ -2904,7 +2904,7 @@ public final class Primitives extends Lisp
                             Binding binding = ext.getTagBinding(tag);
                             if (binding != null && binding.value != null) {
                                 remaining = binding.value;
-                                thread.setStackDepth(depth);
+                                thread.setStack(stack);
                                 continue;
                             }
                         }
@@ -2956,7 +2956,7 @@ public final class Primitives extends Lisp
             ext.addBlock(tag, block);
             LispObject result = NIL;
             final LispThread thread = LispThread.currentThread();
-            final int depth = thread.getStackDepth();
+            final LispObject stack = thread.getStack();
             try {
                 while (body != NIL) {
                     result = eval(body.car(), ext, thread);
@@ -2966,7 +2966,7 @@ public final class Primitives extends Lisp
             }
             catch (Return ret) {
                 if (ret.getBlock() == block) {
-                    thread.setStackDepth(depth);
+                    thread.setStack(stack);
                     return ret.getResult();
                 }
                 throw ret;
@@ -3020,7 +3020,7 @@ public final class Primitives extends Lisp
             thread.pushCatchTag(tag);
             LispObject body = args.cdr();
             LispObject result = NIL;
-            final int depth = thread.getStackDepth();
+            final LispObject stack = thread.getStack();
             try {
                 while (body != NIL) {
                     result = eval(body.car(), env, thread);
@@ -3030,7 +3030,7 @@ public final class Primitives extends Lisp
             }
             catch (Throw t) {
                 if (t.tag == tag) {
-                    thread.setStackDepth(depth);
+                    thread.setStack(stack);
                     return t.getResult(thread);
                 }
                 throw t;

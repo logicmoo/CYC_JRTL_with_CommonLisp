@@ -1,8 +1,8 @@
 /*
  * Do.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Do.java,v 1.8 2004-07-23 15:29:38 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Do.java,v 1.9 2004-08-09 18:45:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ public final class Do extends Lisp
             } else
                 ext.bind(symbol, value);
         }
-        final int depth = thread.getStackDepth();
+        final LispObject stack = thread.getStack();
         // Look for tags.
         LispObject remaining = body;
         while (remaining != NIL) {
@@ -149,7 +149,7 @@ public final class Do extends Lisp
                             Binding binding = ext.getTagBinding(tag);
                             if (binding != null && binding.value != null) {
                                 remaining = binding.value;
-                                thread.setStackDepth(depth);
+                                thread.setStack(stack);
                                 continue;
                             }
                             throw go;
@@ -204,7 +204,7 @@ public final class Do extends Lisp
         }
         catch (Return ret) {
             if (ret.getTag() == NIL) {
-                thread.setStackDepth(depth);
+                thread.setStack(stack);
                 return ret.getResult();
             }
             throw ret;

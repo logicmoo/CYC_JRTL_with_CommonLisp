@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.50 2004-08-01 19:12:11 piso Exp $
+ * $Id: LispThread.java,v 1.51 2004-08-09 18:45:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -315,7 +315,7 @@ public final class LispThread extends LispObject
                                 tag.writeToString() + "."));
     }
 
-    private static class StackFrame
+    private static class StackFrame extends LispObject
     {
         private final LispObject functional;
         private final LispObject[] argv;
@@ -344,39 +344,120 @@ public final class LispThread extends LispObject
         }
     }
 
-    private final Stack stack = new Stack();
+    private LispObject stack = NIL;
+
+    public LispObject getStack()
+    {
+        return stack;
+    }
+
+    public void setStack(LispObject stack)
+    {
+        this.stack = stack;
+    }
 
     public void pushStackFrame(LispObject fun, LispObject[] args)
     {
-        stack.push(new StackFrame(fun, args));
-    }
-
-    public void popStackFrame()
-    {
-        if (!stack.empty())
-            stack.pop();
-    }
-
-    public int getStackDepth()
-    {
-        return stack.size();
-    }
-
-    public void setStackDepth(int depth)
-    {
-        stack.setSize(depth);
+        stack = new Cons((new StackFrame(fun, args)), stack);
     }
 
     public void resetStack()
     {
-        stack.clear();
+        stack = NIL;
     }
 
-    public void checkStack() throws ConditionThrowable
+    public LispObject execute(LispObject function) throws ConditionThrowable
     {
-        if (stack.size() > 0) {
-            getStandardOutput()._writeLine("stack depth = " + stack.size());
-            backtrace();
+        LispObject oldStack = stack;
+        pushStackFrame(function, new LispObject[0]);
+        try {
+            return function.execute();
+        }
+        finally {
+            stack = oldStack;
+        }
+    }
+
+    public LispObject execute(LispObject function, LispObject arg)
+        throws ConditionThrowable
+    {
+        LispObject oldStack = stack;
+        LispObject[] args = new LispObject[1];
+        args[0] = arg;
+        pushStackFrame(function, args);
+        try {
+            return function.execute(arg);
+        }
+        finally {
+            stack = oldStack;
+        }
+    }
+
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second)
+        throws ConditionThrowable
+    {
+        LispObject oldStack = stack;
+        LispObject[] args = new LispObject[2];
+        args[0] = first;
+        args[1] = second;
+        pushStackFrame(function, args);
+        try {
+            return function.execute(first, second);
+        }
+        finally {
+            stack = oldStack;
+        }
+    }
+
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third)
+        throws ConditionThrowable
+    {
+        LispObject oldStack = stack;
+        LispObject[] args = new LispObject[3];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        pushStackFrame(function, args);
+        try {
+            return function.execute(first, second, third);
+        }
+        finally {
+            stack = oldStack;
+        }
+    }
+
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth)
+        throws ConditionThrowable
+    {
+        LispObject oldStack = stack;
+        LispObject[] args = new LispObject[4];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        pushStackFrame(function, args);
+        try {
+            return function.execute(first, second, third, fourth);
+        }
+        finally {
+            stack = oldStack;
+        }
+    }
+
+    public LispObject execute(LispObject function, LispObject[] args)
+        throws ConditionThrowable
+    {
+        LispObject oldStack = stack;
+        pushStackFrame(function, args);
+        try {
+            return function.execute(args);
+        }
+        finally {
+            stack = oldStack;
         }
     }
 
@@ -387,18 +468,19 @@ public final class LispThread extends LispObject
 
     public void backtrace(int limit)
     {
-        if (stack.size() > 0) {
+        if (stack != NIL) {
             try {
                 int count = 0;
                 Stream out =
                     checkCharacterOutputStream(_TRACE_OUTPUT_.symbolValue());
                 out._writeLine("Evaluation stack:");
                 out._finishOutput();
-                for (int i = stack.size(); i-- > 0;) {
+                while (stack != NIL) {
                     out._writeString("  ");
-                    out._writeString(String.valueOf(stack.size() - 1 - i));
+                    out._writeString(String.valueOf(count));
                     out._writeString(": ");
-                    StackFrame frame = (StackFrame) stack.get(i);
+                    StackFrame frame = (StackFrame) stack.car();
+                    stack = stack.cdr();
                     LispObject obj = NIL;
                     LispObject[] argv = frame.getArgumentVector();
                     for (int j = argv.length; j-- > 0;)
@@ -425,11 +507,12 @@ public final class LispThread extends LispObject
     public LispObject backtraceAsList(int limit) throws ConditionThrowable
     {
         LispObject result = NIL;
-        if (stack.size() > 0) {
+        if (stack != NIL) {
             int count = 0;
             try {
-                for (int i = stack.size(); i-- > 0;) {
-                    StackFrame frame = (StackFrame) stack.get(i);
+                LispObject s = stack;
+                while (s != NIL) {
+                    StackFrame frame = (StackFrame) s.car();
                     if (frame != null) {
                         LispObject obj = NIL;
                         LispObject[] argv = frame.getArgumentVector();
@@ -447,6 +530,7 @@ public final class LispThread extends LispObject
                         if (limit > 0 && ++count == limit)
                             break;
                     }
+                    s = s.cdr();
                 }
             }
             catch (Throwable t) {
@@ -456,20 +540,17 @@ public final class LispThread extends LispObject
         return result.nreverse();
     }
 
-    public void saveBacktrace() throws ConditionThrowable
+    public void incrementCallCounts() throws ConditionThrowable
     {
-        _SAVED_BACKTRACE_.setSymbolValue(backtraceAsList(0));
-    }
-
-    public void incrementCallCounts()
-    {
-        for (int i = stack.size(); i-- > 0;) {
-            StackFrame frame = (StackFrame) stack.get(i);
+        LispObject s = stack;
+        while (s != NIL) {
+            StackFrame frame = (StackFrame) s.car();
             if (frame != null) {
                 LispObject functional = frame.getFunctional();
                 if (functional != null)
                     functional.incrementCallCount();
             }
+            s = s.cdr();
         }
     }
 
@@ -532,7 +613,7 @@ public final class LispThread extends LispObject
         }
     }
 
-    public String toString()
+    public String writeToString()
     {
         StringBuffer sb = new StringBuffer("#<THREAD @ #x");
         sb.append(Integer.toHexString(hashCode()));
@@ -709,9 +790,8 @@ public final class LispThread extends LispObject
         {
             if (args.length > 1)
                 return signal(new WrongNumberOfArgumentsException(this));
-            int count = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
-            LispThread thread = currentThread();
-            return thread.backtraceAsList(count);
+            int limit = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
+            return currentThread().backtraceAsList(limit);
         }
     };
 }

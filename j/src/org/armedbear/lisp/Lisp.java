@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.266 2004-08-01 15:16:17 piso Exp $
+ * $Id: Lisp.java,v 1.267 2004-08-09 18:45:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,7 +92,7 @@ public abstract class Lisp
     static final int FTYPE_MACRO            = 2;
     static final int FTYPE_AUTOLOAD         = 3;
 
-    public static boolean debug = true;
+    private static boolean debug = true;
 
     public static boolean profiling;
 
@@ -110,35 +110,38 @@ public abstract class Lisp
             autoload.load();
             fun = autoload.getSymbol().getSymbolFunction();
         }
-        if (debug)
-            thread.pushStackFrame(fun, argv);
+        LispObject stack = thread.getStack();
+        thread.pushStackFrame(fun, argv);
         thread.clearValues();
         LispObject result;
         if (profiling)
             if (!sampling)
                 fun.incrementCallCount();
-        switch (argv.length) {
-            case 0:
-                result = fun.execute();
-                break;
-            case 1:
-                result = fun.execute(argv[0]);
-                break;
-            case 2:
-                result = fun.execute(argv[0], argv[1]);
-                break;
-            case 3:
-                result = fun.execute(argv[0], argv[1], argv[2]);
-                break;
-            case 4:
-                result = fun.execute(argv[0], argv[1], argv[2], argv[3]);
-                break;
-            default:
-                result = fun.execute(argv);
-                break;
+        try {
+            switch (argv.length) {
+                case 0:
+                    result = fun.execute();
+                    break;
+                case 1:
+                    result = fun.execute(argv[0]);
+                    break;
+                case 2:
+                    result = fun.execute(argv[0], argv[1]);
+                    break;
+                case 3:
+                    result = fun.execute(argv[0], argv[1], argv[2]);
+                    break;
+                case 4:
+                    result = fun.execute(argv[0], argv[1], argv[2], argv[3]);
+                    break;
+                default:
+                    result = fun.execute(argv);
+                    break;
+            }
         }
-        if (debug)
-            thread.popStackFrame();
+        finally {
+            thread.setStack(stack);
+        }
         return result;
     }
 
@@ -150,18 +153,20 @@ public abstract class Lisp
             autoload.load();
             fun = autoload.getSymbol().getSymbolFunction();
         }
-        if (debug) {
-            LispObject[] argv = new LispObject[0];
-            thread.pushStackFrame(fun, argv);
-        }
+        LispObject stack = thread.getStack();
+        LispObject[] argv = new LispObject[0];
+        thread.pushStackFrame(fun, argv);
         thread.clearValues();
         LispObject result;
         if (profiling)
             if (!sampling)
                 fun.incrementCallCount();
-        result = fun.execute();
-        if (debug)
-            thread.popStackFrame();
+        try {
+            result = fun.execute();
+        }
+        finally {
+            thread.setStack(stack);
+        }
         return result;
     }
 
@@ -174,19 +179,21 @@ public abstract class Lisp
             autoload.load();
             fun = autoload.getSymbol().getSymbolFunction();
         }
-        if (debug) {
-            LispObject[] argv = new LispObject[1];
-            argv[0] = arg;
-            thread.pushStackFrame(fun, argv);
-        }
+        LispObject stack = thread.getStack();
+        LispObject[] argv = new LispObject[1];
+        argv[0] = arg;
+        thread.pushStackFrame(fun, argv);
         thread.clearValues();
         LispObject result;
         if (profiling)
             if (!sampling)
                 fun.incrementCallCount();
-        result = fun.execute(arg);
-        if (debug)
-            thread.popStackFrame();
+        try {
+            result = fun.execute(arg);
+        }
+        finally {
+            thread.setStack(stack);
+        }
         return result;
     }
 
@@ -199,20 +206,22 @@ public abstract class Lisp
             autoload.load();
             fun = autoload.getSymbol().getSymbolFunction();
         }
-        if (debug) {
-            LispObject[] argv = new LispObject[2];
-            argv[0] = first;
-            argv[1] = second;
-            thread.pushStackFrame(fun, argv);
-        }
+        LispObject stack = thread.getStack();
+        LispObject[] argv = new LispObject[2];
+        argv[0] = first;
+        argv[1] = second;
+        thread.pushStackFrame(fun, argv);
         thread.clearValues();
         LispObject result;
         if (profiling)
             if (!sampling)
                 fun.incrementCallCount();
-        result = fun.execute(first, second);
-        if (debug)
-            thread.popStackFrame();
+        try {
+            result = fun.execute(first, second);
+        }
+        finally {
+            thread.setStack(stack);
+        }
         return result;
     }
 
@@ -226,21 +235,23 @@ public abstract class Lisp
             autoload.load();
             fun = autoload.getSymbol().getSymbolFunction();
         }
-        if (debug) {
-            LispObject[] argv = new LispObject[3];
-            argv[0] = first;
-            argv[1] = second;
-            argv[2] = third;
-            thread.pushStackFrame(fun, argv);
-        }
+        LispObject stack = thread.getStack();
+        LispObject[] argv = new LispObject[3];
+        argv[0] = first;
+        argv[1] = second;
+        argv[2] = third;
+        thread.pushStackFrame(fun, argv);
         thread.clearValues();
         LispObject result;
         if (profiling)
             if (!sampling)
                 fun.incrementCallCount();
-        result = fun.execute(first, second, third);
-        if (debug)
-            thread.popStackFrame();
+        try {
+            result = fun.execute(first, second, third);
+        }
+        finally {
+            thread.setStack(stack);
+        }
         return result;
     }
 
@@ -329,14 +340,12 @@ public abstract class Lisp
                 return signal(new StorageCondition("Stack overflow."));
             }
             catch (ConditionThrowable t) {
-                if (debug)
-                    thread.saveBacktrace();
                 throw t;
             }
             catch (Throwable t) {
                 Debug.trace(t);
-                if (debug)
-                    thread.saveBacktrace();
+                thread.bindSpecial(_SAVED_BACKTRACE_,
+                                   thread.backtraceAsList(0));
                 return signal(new LispError("Caught " + t + "."));
             }
             Debug.assertTrue(result != null);
@@ -434,51 +443,9 @@ public abstract class Lisp
                         return eval(obj, env, thread);
                     }
                     default: {
-                        if (debug)
-                            return funcall(fun,
-                                           evalList(obj.cdr(), env, thread),
-                                           thread);
-                        if (profiling)
-                            if (!sampling)
-                                fun.incrementCallCount();
-                        LispObject args = obj.cdr();
-                        if (args == NIL)
-                            return fun.execute();
-                        LispObject arg1 = args.car();
-                        args = args.cdr();
-                        if (args == NIL)
-                            return fun.execute(thread.value(eval(arg1, env, thread)));
-                        LispObject arg2 = args.car();
-                        args = args.cdr();
-                        if (args == NIL)
-                            return fun.execute(eval(arg1, env, thread),
-                                               thread.value(eval(arg2, env, thread)));
-                        LispObject arg3 = args.car();
-                        args = args.cdr();
-                        if (args == NIL)
-                            return fun.execute(eval(arg1, env, thread),
-                                               eval(arg2, env, thread),
-                                               thread.value(eval(arg3, env, thread)));
-                        LispObject arg4 = args.car();
-                        args = args.cdr();
-                        if (args == NIL)
-                            return fun.execute(eval(arg1, env, thread),
-                                               eval(arg2, env, thread),
-                                               eval(arg3, env, thread),
-                                               thread.value(eval(arg4, env, thread)));
-                        // More than 4 arguments.
-                        final int length = args.length() + 4;
-                        LispObject[] results = new LispObject[length];
-                        results[0] = eval(arg1, env, thread);
-                        results[1] = eval(arg2, env, thread);
-                        results[2] = eval(arg3, env, thread);
-                        results[3] = eval(arg4, env, thread);
-                        for (int i = 4; i < length; i++) {
-                            results[i] = eval(args.car(), env, thread);
-                            args = args.cdr();
-                        }
-                        thread.clearValues();
-                        return fun.execute(results);
+                        return funcall(fun,
+                                       evalList(obj.cdr(), env, thread),
+                                       thread);
                     }
                 }
             } else {
@@ -1568,34 +1535,6 @@ public abstract class Lisp
             interpreter.kill();
     }
 
-    public static final Primitive0 DEBUG =
-        new Primitive0("%debug", PACKAGE_SYS, false)
-    {
-        public LispObject execute() throws ConditionThrowable
-        {
-            final LispThread thread = LispThread.currentThread();
-            if (!debug) {
-                debug = true;
-                thread.resetStack();
-            }
-            return thread.nothing();
-        }
-    };
-
-    public static final Primitive0 NODEBUG =
-        new Primitive0("%nodebug", PACKAGE_SYS, false)
-    {
-        public LispObject execute() throws ConditionThrowable
-        {
-            final LispThread thread = LispThread.currentThread();
-            if (debug) {
-                debug = false;
-                thread.resetStack();
-            }
-            return thread.nothing();
-        }
-    };
-
     // ### t
     // We can't use exportConstant() here since we need to set T's value to
     // itself.
@@ -1987,6 +1926,10 @@ public abstract class Lisp
     // ### *safety* compiler policy
     public static final Symbol _SAFETY_ =
         internSpecial("*SAFETY*", PACKAGE_JVM, Fixnum.ONE);
+
+    // ### *debug* compiler policy
+    public static final Symbol _DEBUG_ =
+        internSpecial("*DEBUG*", PACKAGE_JVM, Fixnum.ONE);
 
     public static final LispObject UNBOUND = new LispObject()
     {

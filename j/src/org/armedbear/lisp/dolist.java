@@ -1,8 +1,8 @@
 /*
  * dolist.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: dolist.java,v 1.8 2004-07-23 15:30:02 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: dolist.java,v 1.9 2004-08-09 18:45:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public final class dolist extends SpecialOperator
         final LispThread thread = LispThread.currentThread();
         LispObject resultForm = args.cdr().cdr().car();
         Environment oldDynEnv = thread.getDynamicEnvironment();
-        int depth = thread.getStackDepth();
+        final LispObject stack = thread.getStack();
         // Process declarations.
         LispObject specials = NIL;
         while (bodyForm != NIL) {
@@ -113,7 +113,7 @@ public final class dolist extends SpecialOperator
                             Binding b = ext.getTagBinding(tag);
                             if (b != null && b.value != null) {
                                 body = b.value;
-                                thread.setStackDepth(depth);
+                                thread.setStack(stack);
                                 continue;
                             }
                             throw go;
@@ -131,7 +131,7 @@ public final class dolist extends SpecialOperator
         }
         catch (Return ret) {
             if (ret.getTag() == NIL) {
-                thread.setStackDepth(depth);
+                thread.setStack(stack);
                 return ret.getResult();
             }
             throw ret;

@@ -2,7 +2,7 @@
  * Profiler.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Profiler.java,v 1.5 2004-01-28 20:19:22 piso Exp $
+ * $Id: Profiler.java,v 1.6 2004-08-09 18:45:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ public class Profiler extends Lisp
     private static int sleep = 1;
 
     public static final void sample(LispThread thread)
+        throws ConditionThrowable
     {
         sampleNow = false;
         thread.incrementCallCounts();
@@ -54,6 +55,7 @@ public class Profiler extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
+            final LispThread thread = LispThread.currentThread();
             Stream out = getStandardOutput();
             out.freshLine();
             if (profiling) {
@@ -79,10 +81,7 @@ public class Profiler extends Lisp
                 }
                 if (sampling) {
                     sleep = Fixnum.getValue(second);
-                    if (!debug) {
-                        debug = true;
-                        LispThread.currentThread().resetStack();
-                    }
+                    thread.resetStack();
                     Thread t = new Thread(profilerRunnable);
                     int priority =
                         Math.min(Thread.currentThread().getPriority() + 1,
@@ -93,7 +92,7 @@ public class Profiler extends Lisp
                 out._writeLine("; Profiler started.");
                 profiling = true;
             }
-            return LispThread.currentThread().nothing();
+            return thread.nothing();
         }
     };
 
