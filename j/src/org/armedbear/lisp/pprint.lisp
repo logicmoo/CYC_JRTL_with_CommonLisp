@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.34 2004-10-01 00:28:55 piso Exp $
+;;; $Id: pprint.lisp,v 1.35 2004-10-04 15:40:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -93,19 +93,6 @@
 ;If a duplicate is found, a positive integer tag is assigned.
 ;After the first time the object is printed out, the tag is negated.
 
-(defvar *free-circularity-hash-tables* nil
-  "free list of circularity hash tables") ; never bound
-
-(defun get-circularity-hash-table ()
-  (let ((table (pop *free-circularity-hash-tables*)))
-    (if table table (make-hash-table :test 'eq))))
-
-;If you call this, then the table gets efficiently recycled.
-
-(defun free-circularity-hash-table (table)
-  (clrhash table)
-  (pushnew table *free-circularity-hash-tables*))
-
 ;               ---- XP STRUCTURES, AND THE INTERNAL ALGORITHM ----
 
 (eval-when (eval load compile) ;not used at run time.
@@ -124,7 +111,7 @@
   (defvar prefix-min-size 256.)
   (defvar suffix-min-size 256.))
 
-(defstruct (xp-structure (:conc-name nil) (:print-function describe-xp))
+(defstruct (xp-structure (:conc-name nil) #+nil (:print-function describe-xp))
   (BASE-STREAM nil) ;;The stream io eventually goes to.
   LINEL ;;The line length to use for formatting.
   LINE-LIMIT ;;If non-NIL the max number of lines to print.
@@ -293,9 +280,11 @@
   (setf (Qarg xp (Qright xp)) arg))
 
 (defmacro Qnext (index) `(+ ,index #.queue-entry-size))
-
+
+#+nil
 (defvar *describe-xp-streams-fully* nil "Set to T to see more info.")
 
+#+nil
 (defun describe-xp (xp s depth)
     (declare (ignore depth))
   (cl:format s "#<XP stream ")
@@ -752,12 +741,10 @@
       (let ((*abbreviation-happened* nil)
 	    (*locating-circularities* (if *print-circle* 0 nil))
 	    (*circularity-hash-table*
-	      (if *print-circle* (get-circularity-hash-table) nil))
+	      (if *print-circle* (make-hash-table :test 'eq) nil))
 	    (*parents* (when (not *print-shared*) (list nil)))
 	    (*result* nil))
 	(xp-print fn (sys:decode-stream-arg stream) args)
-	(if *circularity-hash-table*
-	    (free-circularity-hash-table *circularity-hash-table*))
 	(when *abbreviation-happened*
 	  (setq *last-abbreviated-printing*
 		(eval
