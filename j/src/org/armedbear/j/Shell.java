@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.23 2003-01-04 15:12:45 piso Exp $
+ * $Id: Shell.java,v 1.24 2003-01-04 17:48:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ public class Shell extends CommandInterpreter implements Constants
     private File oldDir;
     private File currentDir;
     private File initialDir;
+    private boolean cygnify;
 
     protected Shell()
     {
@@ -107,6 +108,10 @@ public class Shell extends CommandInterpreter implements Constants
 
     protected void startProcess()
     {
+        if (Platform.isPlatformWindows())
+            if (shellCommand.toLowerCase().indexOf("cmd.exe") < 0)
+                cygnify = true;
+
         // Only set initialDir the first time we run, so that if we restart
         // this shell, it will start up in the same directory each time.
         if (initialDir == null) {
@@ -298,7 +303,8 @@ public class Shell extends CommandInterpreter implements Constants
         if (prefix == null)
             return; // Nothing to complete.
         final String toBeCompleted = unescape(prefix);
-        final Completion completion = new Completion(currentDir, toBeCompleted);
+        final Completion completion =
+            new Completion(currentDir, toBeCompleted, shellCommand);
         final String toBeInserted = completion.toString();
         if (!toBeInserted.equals(prefix)) {
             CompoundEdit compoundEdit = beginCompoundEdit();
@@ -329,11 +335,13 @@ public class Shell extends CommandInterpreter implements Constants
                     if (index >= 0)
                         s = s.substring(index+1);
                     editor.insertStringInternal(s);
+                    editor.getDotLine().setFlags(STATE_OUTPUT);
                     editor.insertLineSeparator();
                 }
                 if (prompt != null)
                     editor.insertStringInternal(prompt);
                 editor.insertStringInternal(userInput);
+                editor.getDotLine().setFlags(STATE_INPUT);
                 editor.eob();
                 editor.getDisplay().setReframe(-2);
                 resetUndo();
@@ -378,7 +386,7 @@ public class Shell extends CommandInterpreter implements Constants
                 }
             } else
                 s = Utilities.getUserHome();
-            if (Platform.isPlatformWindows()) {
+            if (cygnify) {
                 if (!s.startsWith(".."))
                     s = Utilities.uncygnify(s);
             }
@@ -395,8 +403,11 @@ public class Shell extends CommandInterpreter implements Constants
         }
     }
 
-    private static String unescape(String s)
+    private String unescape(String s)
     {
+        // Is '\' an escape character?
+        boolean backslashIsEscape = Platform.isPlatformUnix() || cygnify;
+
         FastStringBuffer sb = new FastStringBuffer(s.length());
         char quoteChar = 0;
         final int limit = s.length();
@@ -409,7 +420,7 @@ public class Shell extends CommandInterpreter implements Constants
                     sb.append(c);
             } else if (c == '\'' || c == '"') {
                 quoteChar = c;
-            } else if (c == '\\') {
+            } else if (backslashIsEscape && c == '\\') {
                 if (i < limit - 1)
                     sb.append(s.charAt(++i));
             } else

@@ -2,7 +2,7 @@
  * Completion.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Completion.java,v 1.1.1.1 2002-09-24 16:07:58 piso Exp $
+ * $Id: Completion.java,v 1.2 2003-01-04 17:47:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,30 +22,43 @@
 package org.armedbear.j;
 
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public final class Completion
 {
     private String input;
     private String toBeCompleted;
     private boolean ignoreCase;
+    private boolean cygnify;
 
-    private Vector v = new Vector();
+    private ArrayList list = new ArrayList();
 
-    public Completion(File dir, String input)
+    public Completion(File dir, String input, String shellCommand)
     {
+        if (Platform.isPlatformWindows())
+            if (shellCommand.toLowerCase().indexOf("cmd.exe") < 0)
+                cygnify = true;
+        final char separatorChar = getSeparatorChar();
         this.input = input;
         toBeCompleted = input;
         if (Platform.isPlatformWindows()) {
-            if (toBeCompleted.startsWith("~/")) {
-                String home = Utilities.getUserHome();
-                if (!home.startsWith("/"))
-                    home = Utilities.cygnify(home);
-                toBeCompleted = Utilities.uncygnify(home + toBeCompleted.substring(1));
-            } else if (toBeCompleted.startsWith("../"))
-                toBeCompleted = File.normalize(toBeCompleted);
-            else
-                toBeCompleted = Utilities.uncygnify(toBeCompleted);
+            if (cygnify) {
+                if (toBeCompleted.startsWith("~/")) {
+                    String home = Utilities.getUserHome();
+                    if (!home.startsWith("/"))
+                        home = Utilities.cygnify(home);
+                    toBeCompleted = Utilities.uncygnify(home + toBeCompleted.substring(1));
+                } else if (toBeCompleted.startsWith("../"))
+                    toBeCompleted = File.normalize(toBeCompleted);
+                else
+                    toBeCompleted = Utilities.uncygnify(toBeCompleted);
+            } else {
+                if (toBeCompleted.startsWith("~/")) {
+                    String home = Utilities.getUserHome();
+                    toBeCompleted = home + toBeCompleted.substring(1);
+                } else
+                    toBeCompleted = File.normalize(toBeCompleted);
+            }
             ignoreCase = true;
         }
         FilenameCompletion c = new FilenameCompletion(dir, toBeCompleted, null,
@@ -67,23 +80,23 @@ public final class Completion
                             toBeAdded = "./" + toBeAdded;
                     }
                 }
-                if (Platform.isPlatformWindows())
+                if (cygnify)
                     toBeAdded = Utilities.cygnify(toBeAdded);
                 if (input.startsWith("~/")) {
                     if (toBeAdded.startsWith(home)) {
                         toBeAdded = "~/" + toBeAdded.substring(home.length());
                     }
                 } else if (input.startsWith("..")) {
-                    String  remaining    = input;
-                    File parentDir    = dir;
-                    String  parentPrefix = "";
+                    String remaining = input;
+                    File parentDir = dir;
+                    String parentPrefix = "";
                     while (remaining.startsWith("../")) {
                         parentDir = parentDir.getParentFile();
                         parentPrefix += "../";
                         remaining = remaining.substring(3);
                     }
                     String parentDirName = parentDir.canonicalPath();
-                    if (Platform.isPlatformWindows())
+                    if (cygnify)
                         parentDirName = Utilities.cygnify(parentDirName);
                     if (!parentDirName.endsWith("/"))
                         parentDirName += "/";
@@ -92,39 +105,46 @@ public final class Completion
                 }
                 toBeAdded = Utilities.escapeSpaces(toBeAdded);
                 if (file.isDirectory())
-                    toBeAdded += "/";
-                v.add(toBeAdded);
+                    toBeAdded += separatorChar;
+                list.add(toBeAdded);
             }
         }
     }
 
+    private final char getSeparatorChar()
+    {
+        if (Platform.isPlatformWindows() && !cygnify)
+            return '\\';
+        return '/';
+    }
+
     public final List getCompletions()
     {
-        return v;
+        return list;
     }
 
     private boolean isUnique()
     {
-        return v.size() == 1;
+        return list.size() == 1;
     }
 
     private String getLongestCommonPrefix()
     {
         String s = input;
-        if (v.size() != 0) {
-            if (v.size() == 1) {
-                s = (String) v.get(0);
+        if (list.size() != 0) {
+            if (list.size() == 1) {
+                s = (String) list.get(0);
             } else {
-                String first = (String) v.get(0);
+                String first = (String) list.get(0);
                 int length = toBeCompleted.length() + 1;
                 while (true) {
                     if (length > first.length())
                         return s;
                     String maybe = first.substring(0, length);
-                    for (int i = 1; i < v.size(); i++) {
-                        String toBeChecked = (String) v.get(i);
+                    for (int i = 1; i < list.size(); i++) {
+                        String toBeChecked = (String) list.get(i);
                         if (!maybe.regionMatches(ignoreCase, 0, toBeChecked, 0, length)) {
-                            if (Platform.isPlatformWindows())
+                            if (cygnify)
                                 s = Utilities.cygnify(s);
                             return s;
                         }
@@ -134,7 +154,7 @@ public final class Completion
                 }
             }
         }
-        if (Platform.isPlatformWindows())
+        if (cygnify)
             s = Utilities.cygnify(s);
         return s;
     }
@@ -142,9 +162,9 @@ public final class Completion
     public String toString()
     {
         if (isUnique()) {
-            String s = (String) v.get(0);
+            String s = (String) list.get(0);
             // Directories have file separator already appended.
-            if (!s.endsWith("/"))
+            if (!s.endsWith("/") && !s.endsWith("\\"))
                 s += ' ';
             return s;
         }
