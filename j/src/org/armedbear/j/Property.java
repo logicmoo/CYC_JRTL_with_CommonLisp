@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Property.java,v 1.21 2003-06-14 17:48:26 piso Exp $
+ * $Id: Property.java,v 1.22 2003-06-18 15:13:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,6 +92,8 @@ public final class Property implements Comparable, Constants
         createProperty("autoIndent", true);
     public static final Property AUTO_NEWLINE =
         createProperty("autoNewline", false);
+    public static final Property AUTO_RELOAD_KEY_MAPS =
+        createProperty("autoReloadKeyMaps", false);
     public static final Property AUTO_SELECT_LINE =
         createProperty("autoSelectLine", true);
     public static final Property BEAUTIFY_HEADERS =
