@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.72 2004-02-08 17:15:52 piso Exp $
+;;; $Id: clos.lisp,v 1.73 2004-02-08 17:50:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -911,10 +911,11 @@
     (let* ((plist (analyze-lambda-list (generic-function-lambda-list gf)))
            (required-args (getf plist ':required-args)))
       (setf (slot-value gf 'required-args) required-args)
-      (when argument-precedence-order
-        (setf (slot-value gf 'argument-precedence-order)
-              (canonicalize-argument-precedence-order argument-precedence-order
-                                                      required-args))))
+      (setf (slot-value gf 'argument-precedence-order)
+            (if argument-precedence-order
+                (canonicalize-argument-precedence-order argument-precedence-order
+                                                        required-args)
+                nil)))
     (finalize-generic-function gf)
     gf))
 
@@ -1292,7 +1293,8 @@
     (sort methods
           (if (eq (class-of gf) the-class-standard-gf)
               #'(lambda (m1 m2)
-                 (std-method-more-specific-p m1 m2 required-classes))
+                 (std-method-more-specific-p m1 m2 required-classes
+                                             (generic-function-argument-precedence-order gf)))
               #'(lambda (m1 m2)
                  (method-more-specific-p gf m1 m2 required-classes))))))
 
@@ -1312,36 +1314,34 @@
 (defun sub-specializer-p (c1 c2 c-arg)
   (find c2 (cdr (memq c1 (class-precedence-list c-arg)))))
 
-#+nil
-(defun std-method-more-specific-p (method1 method2 required-classes)
-  (mapc #'(lambda (spec1 spec2 arg-class)
-           (unless (eq spec1 spec2)
-             (cond ((eql-specializer-p spec1)
-                    (return-from std-method-more-specific-p t))
-                   ((eql-specializer-p spec2)
-                    (return-from std-method-more-specific-p nil))
-                   (t
-                    (return-from std-method-more-specific-p
-                                 (sub-specializer-p spec1 spec2 arg-class))))))
-        (method-specializers method1)
-        (method-specializers method2)
-        required-classes)
-  nil)
-
-(defun std-method-more-specific-p (method1 method2 required-classes)
-  (do ((specializers-1 (method-specializers method1) (cdr specializers-1))
-       (specializers-2 (method-specializers method2) (cdr specializers-2))
-       (classes required-classes (cdr classes)))
-      ((null specializers-1) nil)
-    (let ((spec1 (car specializers-1))
-          (spec2 (car specializers-2)))
-      (unless (eq spec1 spec2)
-        (cond ((eql-specializer-p spec1)
-               (return t))
-              ((eql-specializer-p spec2)
-               (return nil))
-              (t
-               (return (sub-specializer-p spec1 spec2 (car classes)))))))))
+(defun std-method-more-specific-p (method1 method2 required-classes argument-precedence-order)
+  (if argument-precedence-order
+      (let ((specializers-1 (method-specializers method1))
+            (specializers-2 (method-specializers method2)))
+        (dolist (index argument-precedence-order)
+          (let ((spec1 (nth index specializers-1))
+                (spec2 (nth index specializers-2)))
+            (unless (eq spec1 spec2)
+              (cond ((eql-specializer-p spec1)
+                     (return t))
+                    ((eql-specializer-p spec2)
+                     (return nil))
+                    (t
+                     (return (sub-specializer-p spec1 spec2
+                                                (nth index required-classes)))))))))
+      (do ((specializers-1 (method-specializers method1) (cdr specializers-1))
+           (specializers-2 (method-specializers method2) (cdr specializers-2))
+           (classes required-classes (cdr classes)))
+          ((null specializers-1) nil)
+        (let ((spec1 (car specializers-1))
+              (spec2 (car specializers-2)))
+          (unless (eq spec1 spec2)
+            (cond ((eql-specializer-p spec1)
+                   (return t))
+                  ((eql-specializer-p spec2)
+                   (return nil))
+                  (t
+                   (return (sub-specializer-p spec1 spec2 (car classes))))))))))
 
 (defun primary-method-p (method)
   (null (intersection '(:before :after :around) (method-qualifiers method))))
@@ -1745,7 +1745,8 @@
 
 (defmethod method-more-specific-p ((gf standard-generic-function)
                                    method1 method2 required-classes)
-  (std-method-more-specific-p method1 method2 required-classes))
+  (std-method-more-specific-p method1 method2 required-classes
+                              (generic-function-argument-precedence-order gf)))
 
 (defgeneric compute-effective-method-function (gf methods))
 (defmethod compute-effective-method-function ((gf standard-generic-function) methods)
