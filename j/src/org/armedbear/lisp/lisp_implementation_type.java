@@ -1,8 +1,8 @@
 /*
  * lisp_implementation_type.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: lisp_implementation_type.java,v 1.3 2004-02-23 14:24:48 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: lisp_implementation_type.java,v 1.4 2004-03-19 01:01:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,20 +21,17 @@
 
 package org.armedbear.lisp;
 
-import java.math.BigInteger;
-
-// ### lisp_implementation_type
-// lisp_implementation_type <no arguments> => description
+// ### lisp-implementation-type <no arguments> => description
 public final class lisp_implementation_type extends Primitive0
 {
     private lisp_implementation_type()
     {
-        super("lisp-implementation-type","");
+        super("lisp-implementation-type", "");
     }
 
     public LispObject execute()
     {
-        return new SimpleString("Armed Bear Lisp");
+        return new SimpleString("Armed Bear Common Lisp");
     }
 
     private static final lisp_implementation_type LISP_IMPLEMENTATION_TYPE =
