@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: Constants.java,v 1.1.1.1 2002-09-24 16:09:16 piso Exp $
+ * $Id: Constants.java,v 1.2 2002-10-14 23:41:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,31 +136,32 @@ public interface Constants
     int JAVA_MODE               = 15;   String JAVA_MODE_NAME = "Java";
     int JDB_MODE                = 16;   String JDB_MODE_NAME = "JDB";
     int LISP_MODE               = 17;   String LISP_MODE_NAME = "Lisp";
-    int LIST_OCCURRENCES_MODE   = 18;   String LIST_OCCURRENCES_MODE_NAME = "List Occurrences";
-    int LIST_REGISTERS_MODE     = 19;   String LIST_REGISTERS_MODE_NAME = "List Registers";
-    int LIST_TAGS_MODE          = 20;   String LIST_TAGS_MODE_NAME = "List Tags";
-    int MAILBOX_MODE            = 21;   String MAILBOX_MODE_NAME = "Mailbox";
-    int MAKEFILE_MODE           = 22;   String MAKEFILE_MODE_NAME = "Makefile";
-    int MAN_MODE                = 23;   String MAN_MODE_NAME = "Man";
-    int MESSAGE_MODE            = 24;   String MESSAGE_MODE_NAME = "Message";
-    int NEWS_GROUPS_MODE        = 25;   String NEWS_GROUPS_MODE_NAME = "Groups";
-    int NEWS_GROUP_SUMMARY_MODE = 26;   String NEWS_GROUP_SUMMARY_MODE_NAME = "Summary";
-    int PERL_MODE               = 27;   String PERL_MODE_NAME = "Perl";
-    int PHP_MODE                = 28;   String PHP_MODE_NAME = "PHP";
-    int PLAIN_TEXT_MODE         = 29;   String PLAIN_TEXT_MODE_NAME = "Plain Text";
-    int PROPERTIES_MODE         = 30;   String PROPERTIES_MODE_NAME = "Properties";
-    int PYTHON_MODE             = 31;   String PYTHON_MODE_NAME = "Python";
-    int RUBY_MODE               = 32;   String RUBY_MODE_NAME = "Ruby";
-    int SCHEME_MODE             = 33;   String SCHEME_MODE_NAME = "Scheme";
-    int SEND_MAIL_MODE          = 34;   String SEND_MAIL_MODE_NAME = "Send Mail";
-    int SHELL_MODE              = 35;   String SHELL_MODE_NAME = "Shell";
-    int SHELL_SCRIPT_MODE       = 36;   String SHELL_SCRIPT_MODE_NAME = "Shell-script";
-    int TCL_MODE                = 37;   String TCL_MODE_NAME = "Tcl";
-    int VERILOG_MODE            = 38;   String VERILOG_MODE_NAME = "Verilog";
-    int VHDL_MODE               = 39;   String VHDL_MODE_NAME = "VHDL";
-    int WEB_MODE                = 40;   String WEB_MODE_NAME = "Web";
-    int WORD_MODE               = 41;   String WORD_MODE_NAME = "Word";
-    int XML_MODE                = 42;   String XML_MODE_NAME = "XML";
+    int LISP_SHELL_MODE         = 18;   String LISP_SHELL_MODE_NAME = "Lisp Shell";
+    int LIST_OCCURRENCES_MODE   = 19;   String LIST_OCCURRENCES_MODE_NAME = "List Occurrences";
+    int LIST_REGISTERS_MODE     = 20;   String LIST_REGISTERS_MODE_NAME = "List Registers";
+    int LIST_TAGS_MODE          = 21;   String LIST_TAGS_MODE_NAME = "List Tags";
+    int MAILBOX_MODE            = 22;   String MAILBOX_MODE_NAME = "Mailbox";
+    int MAKEFILE_MODE           = 23;   String MAKEFILE_MODE_NAME = "Makefile";
+    int MAN_MODE                = 24;   String MAN_MODE_NAME = "Man";
+    int MESSAGE_MODE            = 25;   String MESSAGE_MODE_NAME = "Message";
+    int NEWS_GROUPS_MODE        = 26;   String NEWS_GROUPS_MODE_NAME = "Groups";
+    int NEWS_GROUP_SUMMARY_MODE = 27;   String NEWS_GROUP_SUMMARY_MODE_NAME = "Summary";
+    int PERL_MODE               = 28;   String PERL_MODE_NAME = "Perl";
+    int PHP_MODE                = 29;   String PHP_MODE_NAME = "PHP";
+    int PLAIN_TEXT_MODE         = 30;   String PLAIN_TEXT_MODE_NAME = "Plain Text";
+    int PROPERTIES_MODE         = 31;   String PROPERTIES_MODE_NAME = "Properties";
+    int PYTHON_MODE             = 32;   String PYTHON_MODE_NAME = "Python";
+    int RUBY_MODE               = 33;   String RUBY_MODE_NAME = "Ruby";
+    int SCHEME_MODE             = 34;   String SCHEME_MODE_NAME = "Scheme";
+    int SEND_MAIL_MODE          = 35;   String SEND_MAIL_MODE_NAME = "Send Mail";
+    int SHELL_MODE              = 36;   String SHELL_MODE_NAME = "Shell";
+    int SHELL_SCRIPT_MODE       = 37;   String SHELL_SCRIPT_MODE_NAME = "Shell-script";
+    int TCL_MODE                = 38;   String TCL_MODE_NAME = "Tcl";
+    int VERILOG_MODE            = 39;   String VERILOG_MODE_NAME = "Verilog";
+    int VHDL_MODE               = 40;   String VHDL_MODE_NAME = "VHDL";
+    int WEB_MODE                = 41;   String WEB_MODE_NAME = "Web";
+    int WORD_MODE               = 42;   String WORD_MODE_NAME = "Word";
+    int XML_MODE                = 43;   String XML_MODE_NAME = "XML";
 
     int SUCCESS    =  0;
     int ERROR      = -1;
