@@ -2,7 +2,7 @@
  * Packages.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Packages.java,v 1.5 2003-04-06 16:01:54 piso Exp $
+ * $Id: Packages.java,v 1.6 2003-05-24 17:04:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.lisp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public final class Packages extends Lisp
 {
@@ -72,6 +73,23 @@ public final class Packages extends Lisp
             throw new LispError("a package named " + nickname +
                 " already exists");
         map.put(nickname, pkg);
+    }
+
+    // Removes name and nicknames from map, removes pkg from packages.
+    public static final synchronized boolean deletePackage(Package pkg)
+    {
+        String name = pkg.getName();
+        if (name != null) {
+            map.remove(name);
+            List nicknames = pkg.getNicknames();
+            for (Iterator it = nicknames.iterator(); it.hasNext();) {
+                String nickname = (String) it.next();
+                map.remove(nickname);
+            }
+            packages.remove(pkg);
+            return true;
+        }
+        return false;
     }
 
     public static final synchronized LispObject listAllPackages()
