@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.23 2004-01-17 01:06:43 piso Exp $
+ * $Id: BuiltInClass.java,v 1.24 2004-01-31 01:14:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,6 +107,8 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
     public static final BuiltInClass STRING                           = addClass(Symbol.STRING);
+    public static final BuiltInClass STRING_INPUT_STREAM              = addClass(Symbol.STRING_INPUT_STREAM);
+    public static final BuiltInClass STRING_OUTPUT_STREAM             = addClass(Symbol.STRING_OUTPUT_STREAM);
     public static final BuiltInClass STRING_STREAM                    = addClass(Symbol.STRING_STREAM);
     public static final BuiltInClass STRUCTURE_CLASS                  = addClass(Symbol.STRUCTURE_CLASS);
     public static final BuiltInClass STYLE_WARNING                    = addClass(Symbol.STYLE_WARNING);
@@ -401,6 +403,12 @@ public class BuiltInClass extends LispClass
                             STANDARD_OBJECT, CLASS_T);
         STRING.setDirectSuperclass(VECTOR);
         STRING.setCPL(STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
+        STRING_INPUT_STREAM.setDirectSuperclass(STRING_STREAM);
+        STRING_INPUT_STREAM.setCPL(STRING_INPUT_STREAM, STRING_STREAM, STREAM,
+                                   CLASS_T);
+        STRING_OUTPUT_STREAM.setDirectSuperclass(STRING_STREAM);
+        STRING_OUTPUT_STREAM.setCPL(STRING_OUTPUT_STREAM, STRING_STREAM, STREAM,
+                                    CLASS_T);
         STRING_STREAM.setDirectSuperclass(STREAM);
         STRING_STREAM.setCPL(STRING_STREAM, STREAM, CLASS_T);
         STRUCTURE_CLASS.setDirectSuperclass(CLASS);
