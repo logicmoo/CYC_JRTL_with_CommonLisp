@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.200 2004-07-04 02:31:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.201 2004-07-04 15:31:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -54,11 +54,17 @@
 
 (defstruct handler from to code catch-type)
 
+;; Variables visible at the current point of compilation.
 (defvar *variables* ())
+
+;; All variables seen so far.
+(defvar *all-variables* ())
 
 (defstruct variable
   name
+  (kind 'LOCAL) ; ARG or LOCAL
   special-p
+  register ; register number or NIL
   context
   index)
 
@@ -82,7 +88,7 @@
       (add-variable-to-context variable)
       )))
 
-(defun find-variable (name)
+(defun find-visible-variable (name)
   (find name *variables* :key 'variable-name))
 ;;   (let ((context *context*))
 ;;     (loop
@@ -105,7 +111,7 @@
 ;; Returns index of allocated slot.
 (defun local-index (symbol)
   (if *use-locals-vector*
-      (let ((var (find-variable symbol)))
+      (let ((var (find-visible-variable symbol)))
         (and var (variable-index var)))
       (let ((tail (memq symbol *locals*)))
         (and tail (1- (length tail))))))
@@ -118,7 +124,8 @@
   function
   classfile)
 
-(defvar *args* nil)
+(defvar *args* ())
+
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
 
@@ -2406,38 +2413,38 @@
                 (progn
                   (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
            ((and (consp name) (eq (car name) 'LAMBDA))
-            (let ((closure-vars
-                   (remove-duplicates (union (remove nil (coerce *all-locals* 'list))
-                                             (remove nil (coerce *args* 'list)))))
-                  (lambda-body (cddr name)))
-              (cond (closure-vars
-                     (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))
-                    ((contains-return lambda-body)
-                     (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
-                    (t
-                     (fresh-line)
-                     (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
-                     (let ((g (if *compile-file-truename*
-                                  (declare-lambda name)
-                                  (declare-object (sys::coerce-to-function name)))))
-                       (emit 'getstatic
-                             *this-class*
-                             g
-                             +lisp-object+)
-                       (emit-store-value))))))
-;;             ;; FIXME We need to construct a proper lexical environment here
-;;             ;; and pass it to coerceToFunction().
-;;             (let ((g (declare-object-as-string name)))
-;;               (emit 'getstatic
-;;                     *this-class*
-;;                     g
-;;                     +lisp-object+)
-;;               (emit-invokestatic +lisp-class+
-;;                                  "coerceToFunction"
-;;                                  "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
-;;                                  0)
-;;               (emit-store-value)))
-           (t
+;;             (let ((closure-vars
+;;                    (remove-duplicates (union (remove nil (coerce *all-locals* 'list))
+;;                                              (remove nil (coerce *args* 'list)))))
+;;                   (lambda-body (cddr name)))
+;;               (cond (closure-vars
+;;                      (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))
+;;                     ((contains-return lambda-body)
+;;                      (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
+;;                     (t
+;;                      (fresh-line)
+;;                      (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
+;;                      (let ((g (if *compile-file-truename*
+;;                                   (declare-lambda name)
+;;                                   (declare-object (sys::coerce-to-function name)))))
+;;                        (emit 'getstatic
+;;                              *this-class*
+;;                              g
+;;                              +lisp-object+)
+;;                        (emit-store-value))))))
+           ;;             ;; FIXME We need to construct a proper lexical environment here
+           ;;             ;; and pass it to coerceToFunction().
+           ;;             (let ((g (declare-object-as-string name)))
+           ;;               (emit 'getstatic
+           ;;                     *this-class*
+           ;;                     g
+           ;;                     +lisp-object+)
+           ;;               (emit-invokestatic +lisp-class+
+           ;;                                  "coerceToFunction"
+           ;;                                  "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+           ;;                                  0)
+           ;;               (emit-store-value)))
+;;            (t
             (error "COMPILE-FUNCTION: unknown case: ~S" form)))))
 
 (defun compile-plus (form for-effect)
@@ -2570,7 +2577,7 @@
              (setf parent (context-parent parent)))))))
 
 (defun compile-variable-reference (var)
-  (let ((v (find-variable var)))
+  (let ((v (find-visible-variable var)))
     (unless (and v (variable-special-p v))
       (let ((index (local-index var)))
         (when index
@@ -2598,16 +2605,18 @@
                  (emit-store-value)
                  (return-from compile-variable-reference)))))
       ;; Not found in locals; look in args.
-      (let ((index (position var *args*)))
-        (when index
+;;       (let ((index (position var *args*)))
+;;         (when index
+      (let ((vv (find var *args* :key 'variable-name)))
+        (when vv
           (cond (*using-arg-array*
                  (emit 'aload 1)
-                 (emit 'bipush index)
+                 (emit 'bipush (variable-index vv))
                  (emit 'aaload)
                  (emit-store-value)
                  (return-from compile-variable-reference))
                 (t
-                 (emit 'aload (1+ index))
+                 (emit 'aload (variable-register vv))
                  (emit-store-value)
                  (return-from compile-variable-reference)))))))
   ;; Otherwise it must be a global variable.
@@ -2634,7 +2643,7 @@
                                             for-effect)))
   (let* ((rest (cdr form))
          (sym (car rest))
-         (v (find-variable sym))
+         (v (find-visible-variable sym))
          (index (local-index sym))) ; FIXME Inefficient!
     (when index
       (compile-form (cadr rest))
@@ -2668,32 +2677,34 @@
         (emit-store-value))
       (return-from compile-setq))
     ;; index is NIL, look in *args* ...
-    (setq index (position sym *args*))
-    (when index
-      (cond (*using-arg-array*
-             (emit 'aload 1)
-             (emit 'bipush index)
-             (compile-form (cadr rest))
-             (unless (remove-store-value)
-               (emit-push-value))
-             (cond (for-effect
-                    (emit 'aastore))
-                   (t
-                    (emit 'dup)
-                    (emit-store-value)
-                    (emit 'aastore))))
-            (t
-             (compile-form (cadr rest))
-             (unless (remove-store-value)
-               (emit-push-value))
-             (cond (for-effect
-                    (emit 'astore (1+ index)))
-                   (t
-                    (emit 'dup)
-                    (emit 'astore (1+ index))
-                    (emit-store-value)))))
-      (maybe-emit-clear-values (cadr rest))
-      (return-from compile-setq))
+    (let ((vv (find sym *args* :key 'variable-name)))
+;;       (setq index (position sym *args*))
+;;       (when index
+      (when vv
+        (cond (*using-arg-array*
+               (emit 'aload 1)
+               (emit 'bipush (variable-index vv))
+               (compile-form (cadr rest))
+               (unless (remove-store-value)
+                 (emit-push-value))
+               (cond (for-effect
+                      (emit 'aastore))
+                     (t
+                      (emit 'dup)
+                      (emit-store-value)
+                      (emit 'aastore))))
+              (t
+               (compile-form (cadr rest))
+               (unless (remove-store-value)
+                 (emit-push-value))
+               (cond (for-effect
+                      (emit 'astore (variable-register vv)))
+                     (t
+                      (emit 'dup)
+                      (emit 'astore (variable-register vv))
+                      (emit-store-value)))))
+        (maybe-emit-clear-values (cadr rest))
+        (return-from compile-setq)))
     ;; still not found
     ;; must be a global variable
     (let ((new-form (rewrite-setq form)))
@@ -2929,7 +2940,7 @@
          (*fields* ())
          (*blocks* ())
          (*tags* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
-         (*args* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
+         (*args* ())
          (*locals* ())
          (*max-locals* 0)
          (*all-locals* ())
@@ -2953,16 +2964,26 @@
                (vars (sys::varlist fun)))
           (dolist (var vars)
             (push var *all-locals*)
-            (add-variable-to-context (make-variable :name var
-                                                    :special-p nil ;; FIXME
-                                                    :index (length (context-vars *context*))))
-            (vector-push var *args*)))
-        (dolist (arg args)
-          (push arg *all-locals*)
-          (add-variable-to-context (make-variable :name arg
-                                                  :special-p nil ;; FIXME
-                                                  :index (length (context-vars *context*))))
-          (vector-push arg *args*)))
+            (let ((v (make-variable :name var
+                                    :kind 'ARG
+                                    :special-p nil ;; FIXME
+                                    :register nil
+                                    :index (length (context-vars *context*)))))
+              (push v *all-variables*)
+              (push v *args*)
+              (add-variable-to-context v))))
+        (let ((register 1))
+          (dolist (arg args)
+            (push arg *all-locals*)
+            (let ((v (make-variable :name arg
+                                    :kind 'ARG
+                                    :special-p nil ;; FIXME
+                                    :register register
+                                    :index (length (context-vars *context*)))))
+              (push v *all-variables*)
+              (push v *args*)
+              (add-variable-to-context v)
+              (incf register)))))
     (allocate-local nil) ;; "this" pointer
     (if *using-arg-array*
         (allocate-local nil) ;; One slot for arg array.
@@ -2987,7 +3008,7 @@
       (when (or *hairy-arglist-p* *use-locals-vector*)
         (emit 'aload_0)
         (emit 'aload_1)
-        ; Reserve slots for locals (if applicable).
+        ; Reserve extra slots for locals if applicable.
         (assert (= (length *all-locals*) (length (context-vars *context*))))
         (if *use-locals-vector*
             (emit 'sipush (- (length *all-locals*) (length *args*)))
