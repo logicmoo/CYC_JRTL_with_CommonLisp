@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.416 2003-09-20 00:12:37 piso Exp $
+ * $Id: Primitives.java,v 1.417 2003-09-20 00:39:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1169,7 +1169,7 @@ public final class Primitives extends Module
         {
             if (args.length < 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            throw new SimpleCondition();
+            throw new ConditionThrowable(new SimpleCondition());
         }
     };
 
@@ -1829,8 +1829,10 @@ public final class Primitives extends Module
                 return true;
             return false;
         }
+        if (type == Symbol.CONDITION)
+            return true;
         if (type == Symbol.SIMPLE_CONDITION)
-            return c instanceof SimpleCondition;
+            return c.getCondition() instanceof SimpleCondition;
         if (type == Symbol.DIVISION_BY_ZERO)
             return c.getCondition() instanceof DivisionByZero;
         if (type == Symbol.ARITHMETIC_ERROR)
