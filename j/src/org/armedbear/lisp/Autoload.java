@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.170 2004-03-07 01:08:20 piso Exp $
+ * $Id: Autoload.java,v 1.171 2004-03-09 02:03:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -346,6 +346,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
+        autoload(PACKAGE_SYS, "%make-socket", "make_socket");
         autoload(PACKAGE_SYS, "%make-string", "StringFunctions");
         autoload(PACKAGE_SYS, "%make-string-output-stream", "StringOutputStream");
         autoload(PACKAGE_SYS, "%make-structure", "StructureObject");
