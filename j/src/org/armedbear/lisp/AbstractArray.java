@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.33 2004-10-07 14:57:57 piso Exp $
+ * $Id: AbstractArray.java,v 1.34 2004-11-04 11:25:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,9 +229,8 @@ public abstract class AbstractArray extends LispObject
         if (dimensions.length == 0) {
             if (_PRINT_CIRCLE_.symbolValue(thread) != NIL) {
                 StringOutputStream stream = new StringOutputStream();
-                funcall2(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
-                         getRowMajor(index), stream,
-                         LispThread.currentThread());
+                thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
+                               getRowMajor(index), stream);
                 sb.append(stream.getString().getStringValue());
             } else
                 sb.append(getRowMajor(index).writeToString());
