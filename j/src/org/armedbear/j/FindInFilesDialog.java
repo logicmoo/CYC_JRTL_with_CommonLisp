@@ -2,7 +2,7 @@
  * FindInFilesDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFilesDialog.java,v 1.3 2003-07-23 04:58:29 piso Exp $
+ * $Id: FindInFilesDialog.java,v 1.4 2003-07-26 17:03:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,23 @@ package org.armedbear.j;
 
 import gnu.regexp.RE;
 import gnu.regexp.REException;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.TextEvent;
 import java.awt.event.TextListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.StringTokenizer;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
-public class FindInFilesDialog extends AbstractDialog implements TextListener
+public class FindInFilesDialog extends AbstractDialog implements Constants,
+    ActionListener, FocusListener, TextListener
 {
     private static final String patternKey             = "find.pattern";
     private static final String replacementKey         = "replace.replacement";
@@ -40,7 +53,7 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
     private final SessionProperties sessionProperties =
         Editor.getSessionProperties();
 
-    FindInFiles findInFiles;
+    private FindInFiles findInFiles;
 
     private final Editor editor;
     private final boolean replace;
@@ -60,6 +73,11 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
     private CheckBox includeSubdirsCheckBox;
     private CheckBox searchFilesInMemoryCheckBox;
     private CheckBox listOccurrencesCheckBox;
+
+    private Label modeLabel;
+    private JComboBox modeComboBox;
+
+    private ModeListEntry[] permissibleModes;
 
     public FindInFilesDialog(Editor editor, boolean replace)
     {
@@ -111,6 +129,8 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
         label.setDisplayedMnemonic('F');
         addLabelAndTextField(label, filesControl);
 
+        filesControl.addFocusListener(this);
+
         addVerticalStrut();
 
         ignoreCaseCheckBox = new CheckBox("Ignore case");
@@ -121,7 +141,28 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
         wholeWordsOnlyCheckBox = new CheckBox("Whole words only",
             sessionProperties.getBooleanProperty(wholeWordsOnlyKey, false));
         wholeWordsOnlyCheckBox.setMnemonic('W');
+        wholeWordsOnlyCheckBox.addActionListener(this);
         addCheckBox(wholeWordsOnlyCheckBox);
+
+        // Mode combo box.
+        modeComboBox = new JComboBox(getPermissibleModes());
+        Dimension dim = modeComboBox.getPreferredSize();
+        modeComboBox.setMinimumSize(dim);
+        modeComboBox.setMaximumSize(dim);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panel.setAlignmentX(LEFT_ALIGNMENT);
+        panel.add(Box.createHorizontalStrut(22));
+        modeLabel = new Label("Mode:");
+        panel.add(modeLabel);
+        modeLabel.setDisplayedMnemonic('M');
+        modeLabel.setLabelFor(modeComboBox);
+        panel.add(Box.createHorizontalStrut(5));
+        panel.add(modeComboBox);
+        updateModeControl();
+        mainPanel.add(panel);
+
 
         regExpCheckBox = new CheckBox(
             replace ? "Regular expressions" : "Regular expression",
@@ -162,6 +203,30 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
         pack();
 
         patternControl.requestFocus();
+    }
+
+    private ModeListEntry[] getPermissibleModes()
+    {
+        if (permissibleModes == null) {
+            ModeList modeList = Editor.getModeList();
+            ArrayList list = new ArrayList();
+            synchronized (modeList) {
+                Iterator it = modeList.iterator();
+                while (it.hasNext()) {
+                    ModeListEntry entry = (ModeListEntry) it.next();
+                    if (entry.isSelectable() && entry.getId() != BINARY_MODE)
+                        list.add(entry);
+                }
+            }
+            permissibleModes =
+                (ModeListEntry[]) list.toArray(new ModeListEntry[list.size()]);
+        }
+        return permissibleModes;
+    }
+
+    public FindInFiles getFindInFiles()
+    {
+        return findInFiles;
     }
 
     protected void ok()
@@ -239,12 +304,61 @@ public class FindInFilesDialog extends AbstractDialog implements TextListener
         filesHistory.append(files);
         filesHistory.save();
 
+        if (modeComboBox != null) {
+            ModeListEntry entry =
+                (ModeListEntry) modeComboBox.getSelectedItem();
+            findInFiles.setMode(entry.getMode(true));
+        }
+
         dispose();
     }
 
     public void textValueChanged(TextEvent e)
     {
         setIgnoreCaseDefault();
+    }
+
+    public void actionPerformed(ActionEvent e)
+    {
+        String cmd = e.getActionCommand();
+        if (cmd != null && cmd.equals(wholeWordsOnlyCheckBox.getText()))
+            updateModeControl();
+        else
+            super.actionPerformed(e);
+    }
+
+    public void focusGained(FocusEvent e) {}
+
+    public void focusLost(FocusEvent e)
+    {
+        if (e.getComponent() == filesControl)
+            updateModeControl();
+    }
+
+    private void updateModeControl()
+    {
+        if (modeComboBox != null) {
+            String files = filesControl.getText();
+            StringTokenizer st = new StringTokenizer(files, ";");
+            if (st.hasMoreTokens()) {
+                String token = st.nextToken().trim();
+                if (token.length() > 0) {
+                    int id = Editor.getModeList().getModeIdForFileName(token);
+                    if (id >= 0) {
+                        ModeListEntry[] modes = getPermissibleModes();
+                        for (int i = modes.length; i-- > 0;) {
+                            if (modes[i].getId() == id) {
+                                modeComboBox.setSelectedItem(modes[i]);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            boolean b = wholeWordsOnlyCheckBox.isSelected();
+            modeComboBox.setEnabled(b);
+            modeLabel.setEnabled(b);
+        }
     }
 
     private void setIgnoreCaseDefault()
