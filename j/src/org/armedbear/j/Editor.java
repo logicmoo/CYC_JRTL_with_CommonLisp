@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.85 2003-07-01 13:34:13 piso Exp $
+ * $Id: Editor.java,v 1.86 2003-07-01 18:41:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6671,10 +6671,12 @@ public final class Editor extends JPanel implements Constants,
     {
         boolean readOnly = buffer.isReadOnly();
         if (readOnly && buffer.getBooleanProperty(Property.P4_AUTO_EDIT)) {
-            File file = buffer.getFile();
-            if (file != null && file.isLocal() && file.isFile())
-                if (P4.autoEdit(this))
-                    readOnly = buffer.isReadOnly();
+            if (buffer.getType() == Buffer.TYPE_NORMAL) {
+                File file = buffer.getFile();
+                if (file != null && file.isLocal() && file.isFile())
+                    if (P4.autoEdit(this))
+                        readOnly = buffer.isReadOnly();
+            }
         }
         if (readOnly) {
             status("Buffer is read only");
