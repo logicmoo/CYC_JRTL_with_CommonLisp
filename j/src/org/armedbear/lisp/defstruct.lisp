@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.26 2003-10-05 18:27:56 piso Exp $
+;;; $Id: defstruct.lisp,v 1.27 2003-10-05 18:37:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -118,7 +118,7 @@
      (let* ((args (cdr option))
             (numargs (length args)))
        (when (= numargs 1)
-          (setf *ds-copier* (cadr args)))))
+          (setf *ds-copier* (car args)))))
     (:predicate
      (when (= (length option) 2)
        (if (null (cadr option))
