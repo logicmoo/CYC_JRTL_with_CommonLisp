@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.31 2003-12-07 19:13:42 piso Exp $
+ * $Id: LispCharacter.java,v 1.32 2003-12-09 20:26:22 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,7 +175,7 @@ public final class LispCharacter extends LispObject
         return sb.toString();
     }
 
-    private static final Primitive1 CHARACTER = new Primitive1("character") {
+    private static final Primitive1 CHARACTER = new Primitive1("character","character") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
@@ -203,7 +203,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### char-code
-    private static final Primitive1 CHAR_CODE = new Primitive1("char-code")
+    private static final Primitive1 CHAR_CODE = new Primitive1("char-code","character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -212,7 +212,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### char-int
-    private static final Primitive1 CHAR_INT = new Primitive1("char-int")
+    private static final Primitive1 CHAR_INT = new Primitive1("char-int","character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -221,7 +221,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### code-char
-    private static final Primitive1 CODE_CHAR = new Primitive1("code-char")
+    private static final Primitive1 CODE_CHAR = new Primitive1("code-char","code")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -235,7 +235,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### characterp
-    private static final Primitive1 CHARACTERP = new Primitive1("characterp")
+    private static final Primitive1 CHARACTERP = new Primitive1("characterp","object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -244,7 +244,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### both-case-p
-    private static final Primitive1 BOTH_CASE_P = new Primitive1("both-case-p")
+    private static final Primitive1 BOTH_CASE_P = new Primitive1("both-case-p","character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -256,7 +256,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### lower-case-p
-    private static final Primitive1 LOWER_CASE_P = new Primitive1("lower-case-p")
+    private static final Primitive1 LOWER_CASE_P = new Primitive1("lower-case-p","character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -265,7 +265,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### upper-case-p
-    private static final Primitive1 UPPER_CASE_P = new Primitive1("upper-case-p")
+    private static final Primitive1 UPPER_CASE_P = new Primitive1("upper-case-p","character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -274,7 +274,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### char-downcase
-    private static final Primitive1 CHAR_DOWNCASE = new Primitive1("char-downcase")
+    private static final Primitive1 CHAR_DOWNCASE = new Primitive1("char-downcase","character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -283,7 +283,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### char-upcase
-    private static final Primitive1 CHAR_UPCASE = new Primitive1("char-upcase")
+    private static final Primitive1 CHAR_UPCASE = new Primitive1("char-upcase","character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

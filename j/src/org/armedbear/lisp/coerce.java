@@ -2,7 +2,7 @@
  * coerce.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: coerce.java,v 1.8 2003-09-19 11:50:19 piso Exp $
+ * $Id: coerce.java,v 1.9 2003-12-09 20:26:23 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class coerce extends Lisp
 {
     // ### coerce
     // coerce object result-type => result
-    private static final Primitive2 COERCE = new Primitive2("coerce") {
+    private static final Primitive2 COERCE = new Primitive2("coerce","object result-type") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {

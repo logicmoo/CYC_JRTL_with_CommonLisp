@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.51 2003-11-16 18:30:38 piso Exp $
+ * $Id: LispFloat.java,v 1.52 2003-12-09 20:26:22 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -368,7 +368,7 @@ public final class LispFloat extends LispObject
     // ### integer-decode-float
     // integer-decode-float float => significand, exponent, integer-sign
     private static final Primitive1 INTEGER_DECODE_FLOAT =
-        new Primitive1("integer-decode-float")
+        new Primitive1("integer-decode-float","float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -397,7 +397,7 @@ public final class LispFloat extends LispObject
     // ### float-radix
     // float-radix float => float-radix
     private static final Primitive1 FLOAT_RADIX =
-        new Primitive1("float-radix") {
+        new Primitive1("float-radix","float") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat)
@@ -409,7 +409,7 @@ public final class LispFloat extends LispObject
     // ### float-digits
     // float-digits float => float-digits
     private static final Primitive1 FLOAT_DIGITS =
-        new Primitive1("float-digits") {
+        new Primitive1("float-digits","float") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat)
@@ -433,7 +433,7 @@ public final class LispFloat extends LispObject
 
     // ### float
     // float number &optional prototype => float
-    private static final Primitive FLOAT = new Primitive("float") {
+    private static final Primitive FLOAT = new Primitive("float","number &optional prototype") {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
@@ -446,7 +446,7 @@ public final class LispFloat extends LispObject
 
     // ### floatp
     // floatp object => generalized-boolean
-    private static final Primitive1 FLOATP = new Primitive1("floatp") {
+    private static final Primitive1 FLOATP = new Primitive1("floatp","object") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.FLOATP();

@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.15 2003-09-21 15:07:43 piso Exp $
+ * $Id: StructureObject.java,v 1.16 2003-12-09 20:26:23 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,7 +244,7 @@ public final class StructureObject extends LispObject
     // ### copy-structure
     // copy-structure structure => copy
     private static final Primitive1 COPY_STRUCTURE =
-        new Primitive1("copy-structure") {
+        new Primitive1("copy-structure","structure") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {

@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.13 2003-11-25 15:04:07 piso Exp $
+ * $Id: Time.java,v 1.14 2003-12-09 20:26:23 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ public final class Time extends Lisp
 
     // ### get-internal-real-time
     private static final Primitive0 GET_INTERNAL_REAL_TIME =
-        new Primitive0("get-internal-real-time") {
+        new Primitive0("get-internal-real-time","()") {
         public LispObject execute() throws ConditionThrowable
         {
             return number(System.currentTimeMillis());
@@ -68,7 +68,7 @@ public final class Time extends Lisp
 
     // ### get-internal-run-time
     private static final Primitive0 GET_INTERNAL_RUN_TIME =
-        new Primitive0("get-internal-run-time") {
+        new Primitive0("get-internal-run-time","()") {
         public LispObject execute() throws ConditionThrowable
         {
             return number(System.currentTimeMillis()); // FIXME
@@ -77,7 +77,7 @@ public final class Time extends Lisp
 
     // ### get-universal-time
     private static final Primitive0 GET_UNIVERSAL_TIME =
-        new Primitive0("get-universal-time") {
+        new Primitive0("get-universal-time","()") {
         public LispObject execute()
         {
             return number(System.currentTimeMillis() / 1000 + 2208988800L);
@@ -86,7 +86,7 @@ public final class Time extends Lisp
 
     // ### file-write-date
     private static final Primitive1 FILE_WRITE_DATE =
-        new Primitive1("file-write-date") {
+        new Primitive1("file-write-date","pathspec") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String namestring;

@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.26 2003-11-30 18:18:59 piso Exp $
+ * $Id: HashTable.java,v 1.27 2003-12-09 20:26:22 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,7 @@ public final class HashTable extends LispObject
 
     // ### gethash
     // gethash key hash-table &optional default => value, present-p
-    private static final Primitive GETHASH = new Primitive("gethash") {
+    private static final Primitive GETHASH = new Primitive("gethash","key hash-table &optional default") {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
@@ -338,7 +338,7 @@ public final class HashTable extends LispObject
     };
 
     // remhash key hash-table => generalized-boolean
-    private static final Primitive2 REMHASH = new Primitive2("remhash") {
+    private static final Primitive2 REMHASH = new Primitive2("remhash","key hash-table") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -353,7 +353,7 @@ public final class HashTable extends LispObject
 
     // ### clrhash
     // clrhash hash-table => hash-table
-    private static final Primitive1 CLRHASH = new Primitive1("clrhash") {
+    private static final Primitive1 CLRHASH = new Primitive1("clrhash","hash-table") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof HashTable) {
@@ -366,7 +366,7 @@ public final class HashTable extends LispObject
 
     // ### hash-table-count
     private static final Primitive1 HASH_TABLE_COUNT =
-        new Primitive1("hash-table-count") {
+        new Primitive1("hash-table-count","hash-table") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof HashTable)
@@ -377,7 +377,7 @@ public final class HashTable extends LispObject
 
     // ### sxhash
     // sxhash object => hash-code
-    private static final Primitive1 SXHASH = new Primitive1("sxhash")
+    private static final Primitive1 SXHASH = new Primitive1("sxhash","object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -387,7 +387,7 @@ public final class HashTable extends LispObject
 
     // ### hash-table-p
     private static final Primitive1 HASH_TABLE_P =
-        new Primitive1("hash-table-p") {
+        new Primitive1("hash-table-p","object") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof HashTable ? T : NIL;

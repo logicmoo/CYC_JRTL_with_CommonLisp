@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.26 2003-11-30 17:27:19 piso Exp $
+ * $Id: Load.java,v 1.27 2003-12-09 20:26:22 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,7 +291,7 @@ public final class Load extends Lisp
     // ### load
     // Need to support keyword args.
     // load filespec &key verbose print if-does-not-exist external-format
-    public static final Primitive LOAD = new Primitive("load") {
+    public static final Primitive LOAD = new Primitive("load","filespec &key verbose print if-does-not-exist external-format") {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0)

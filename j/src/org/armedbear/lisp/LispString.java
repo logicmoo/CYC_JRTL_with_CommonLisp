@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.69 2003-12-07 18:31:07 piso Exp $
+ * $Id: LispString.java,v 1.70 2003-12-09 20:26:22 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -344,7 +344,7 @@ public final class LispString extends AbstractVector
             return getValue();
     }
 
-    public static final Primitive1 STRINGP = new Primitive1("stringp")
+    public static final Primitive1 STRINGP = new Primitive1("stringp","object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -353,7 +353,7 @@ public final class LispString extends AbstractVector
         }
     };
 
-    public static final Primitive1 SIMPLE_STRING_P = new Primitive1("simple-string-p")
+    public static final Primitive1 SIMPLE_STRING_P = new Primitive1("simple-string-p","object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -401,7 +401,7 @@ public final class LispString extends AbstractVector
         }
     };
 
-    private static final Primitive2 CHAR = new Primitive2("char")
+    private static final Primitive2 CHAR = new Primitive2("char","string index")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -420,7 +420,7 @@ public final class LispString extends AbstractVector
         }
     };
 
-    private static final Primitive2 SCHAR = new Primitive2("schar") {
+    private static final Primitive2 SCHAR = new Primitive2("schar","string index") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {

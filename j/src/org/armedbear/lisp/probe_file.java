@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: probe_file.java,v 1.7 2003-10-17 17:31:38 piso Exp $
+ * $Id: probe_file.java,v 1.8 2003-12-09 20:26:23 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public final class probe_file extends Lisp
 {
     // ### probe-file
     // probe-file pathspec => truename
-    private static final Primitive1 PROBE_FILE = new Primitive1("probe-file")
+    private static final Primitive1 PROBE_FILE = new Primitive1("probe-file","pathspec")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

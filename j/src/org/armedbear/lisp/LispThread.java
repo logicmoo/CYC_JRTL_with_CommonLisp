@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.25 2003-11-19 02:00:48 piso Exp $
+ * $Id: LispThread.java,v 1.26 2003-12-09 20:26:22 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -444,7 +444,7 @@ public final class LispThread extends LispObject
     };
 
     // ### sleep
-    private static final Primitive1 SLEEP = new Primitive1("sleep") {
+    private static final Primitive1 SLEEP = new Primitive1("sleep","seconds") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             double d =

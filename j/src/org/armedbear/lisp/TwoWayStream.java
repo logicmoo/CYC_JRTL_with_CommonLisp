@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: TwoWayStream.java,v 1.7 2003-11-02 19:58:17 piso Exp $
+ * $Id: TwoWayStream.java,v 1.8 2003-12-09 20:26:23 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public final class TwoWayStream extends LispStream
     // ### make-two-way-stream
     // input-stream output-stream => two-way-stream
     private static final Primitive2 MAKE_TWO_WAY_STREAM =
-        new Primitive2("make-two-way-stream") {
+        new Primitive2("make-two-way-stream","input-stream output-stream") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -87,7 +87,7 @@ public final class TwoWayStream extends LispStream
     // ### two-way-stream-input-stream
     // two-way-stream => input-stream
     private static final Primitive1 TWO_WAY_STREAM_INPUT_STREAM =
-        new Primitive1("two-way-stream-input-stream") {
+        new Primitive1("two-way-stream-input-stream","two-way-stream") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof TwoWayStream)
@@ -99,7 +99,7 @@ public final class TwoWayStream extends LispStream
     // ### two-way-stream-output-stream
     // two-way-stream => output-stream
     private static final Primitive1 TWO_WAY_STREAM_OUTPUT_STREAM =
-        new Primitive1("two-way-stream-output-stream") {
+        new Primitive1("two-way-stream-output-stream","two-way-stream") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof TwoWayStream)

@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterFunctions.java,v 1.5 2003-09-28 16:24:37 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.6 2003-12-09 20:26:22 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public final class CharacterFunctions extends Lisp
 {
     // ### char=
-    private static final Primitive CHAR_EQUALS = new Primitive("char=") {
+    private static final Primitive CHAR_EQUALS = new Primitive("char=","&rest characters") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -47,7 +47,7 @@ public final class CharacterFunctions extends Lisp
     };
 
     // ### char-equal
-    private static final Primitive CHAR_EQUAL = new Primitive("char-equal") {
+    private static final Primitive CHAR_EQUAL = new Primitive("char-equal","&rest characters") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -85,7 +85,7 @@ public final class CharacterFunctions extends Lisp
 
     // ### char-greaterp
     private static final Primitive CHAR_GREATERP =
-        new Primitive("char-greaterp") {
+        new Primitive("char-greaterp","&rest characters") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -113,7 +113,7 @@ public final class CharacterFunctions extends Lisp
 
     // ### char-not-greaterp
     private static final Primitive CHAR_NOT_GREATERP =
-        new Primitive("char-not-greaterp") {
+        new Primitive("char-not-greaterp","&rest characters") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -141,7 +141,7 @@ public final class CharacterFunctions extends Lisp
 
     // ### char-lessp
     private static final Primitive CHAR_LESSP =
-        new Primitive("char-lessp") {
+        new Primitive("char-lessp","&rest characters") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -169,7 +169,7 @@ public final class CharacterFunctions extends Lisp
 
     // ### char-not-lessp
     private static final Primitive CHAR_NOT_LESSP =
-        new Primitive("char-not-lessp") {
+        new Primitive("char-not-lessp","&rest characters") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * atan.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: atan.java,v 1.2 2003-09-19 01:46:42 piso Exp $
+ * $Id: atan.java,v 1.3 2003-12-09 20:26:23 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public final class atan extends Lisp
 {
     // ### atan
-    private static final Primitive ATAN = new Primitive("atan") {
+    private static final Primitive ATAN = new Primitive("atan","number1 &optional number2") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispFloat n = LispFloat.coerceToFloat(arg);
