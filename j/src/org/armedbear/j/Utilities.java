@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Utilities.java,v 1.38 2005-02-16 21:41:19 piso Exp $
+ * $Id: Utilities.java,v 1.39 2005-03-01 20:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1465,6 +1465,8 @@ public final class Utilities implements Constants
                 return null;
             return KeyStroke.getKeyStroke(keyText.charAt(1));
         }
+        if (keyText.length() == 1)
+            return KeyStroke.getKeyStroke(keyText.charAt(0));
         int modifiers = 0;
         while (true) {
             if (keyText.startsWith("Ctrl ") || keyText.startsWith("Ctrl\t")) {
