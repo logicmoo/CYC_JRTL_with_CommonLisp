@@ -1,8 +1,8 @@
 /*
  * MessageMode.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageMode.java,v 1.4 2003-04-18 16:55:45 piso Exp $
+ * Copyright (C) 2000-2005 Peter Graves
+ * $Id: MessageMode.java,v 1.5 2005-03-03 19:54:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,6 +94,7 @@ public final class MessageMode extends AbstractMode implements Constants, Mode
         km.mapKey('s', "messageSaveAttachment");
         km.mapKey('b', "bounce");
         km.mapKey(KeyEvent.VK_F12, CTRL_MASK, "messageToggleWrap");
+        km.mapKey('q', "tempBufferQuit");
     }
 
     protected final ToolBar getDefaultToolBar(Frame frame)
