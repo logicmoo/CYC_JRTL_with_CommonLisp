@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.7 2003-09-28 19:53:31 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.8 2003-10-17 13:11:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,5 +242,10 @@ public class CharacterOutputStream extends LispOutputStream
         catch (IOException e) {
             throw new ConditionThrowable(new StreamError(e));
         }
+    }
+
+    public String toString()
+    {
+        return unreadableString("STREAM [character output]");
     }
 }

@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.53 2003-09-28 19:53:02 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.54 2003-10-17 13:11:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -957,5 +957,10 @@ public class CharacterInputStream extends LispInputStream
     protected boolean ready() throws IOException
     {
         return reader.ready();
+    }
+
+    public String toString()
+    {
+        return unreadableString("STREAM [character input]");
     }
 }

@@ -2,7 +2,7 @@
  * BinaryInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryInputStream.java,v 1.4 2003-09-28 19:52:32 piso Exp $
+ * $Id: BinaryInputStream.java,v 1.5 2003-10-17 13:11:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,5 +64,10 @@ public final class BinaryInputStream extends LispInputStream
         catch (IOException e) {
             throw new ConditionThrowable(new StreamError(e));
         }
+    }
+
+    public String toString()
+    {
+        return unreadableString("STREAM [binary input]");
     }
 }
