@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.2 2004-01-24 19:12:20 piso Exp $
+ * $Id: EchoStream.java,v 1.3 2004-02-12 14:12:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
 
 package org.armedbear.lisp;
 
-// FIXME Need to add echo functionality!
 public final class EchoStream extends Stream
 {
     private final Stream in;
@@ -76,6 +75,84 @@ public final class EchoStream extends Stream
         if (type == BuiltInClass.ECHO_STREAM)
             return T;
         return super.typep(type);
+    }
+
+    public boolean isInputStream()
+    {
+        return true;
+    }
+
+    public boolean isOutputStream()
+    {
+        return true;
+    }
+
+    public boolean isCharacterStream() throws ConditionThrowable
+    {
+        return in.isCharacterStream();
+    }
+
+    public boolean isBinaryStream() throws ConditionThrowable
+    {
+        return in.isBinaryStream();
+    }
+
+    // Returns -1 at end of file.
+    protected int _readChar() throws ConditionThrowable
+    {
+        int n = in._readChar();
+        if (n >= 0)
+            out._writeChar((char)n);
+        return n;
+    }
+
+    protected void _unreadChar(int n) throws ConditionThrowable
+    {
+        in._unreadChar(n);
+    }
+
+    protected boolean _charReady() throws ConditionThrowable
+    {
+        return in._charReady();
+    }
+
+    public void _writeChar(char c) throws ConditionThrowable
+    {
+        out._writeChar(c);
+    }
+
+    public void _writeString(String s) throws ConditionThrowable
+    {
+        out._writeString(s);
+    }
+
+    public void _writeLine(String s) throws ConditionThrowable
+    {
+        out._writeLine(s);
+    }
+
+    // Reads an 8-bit byte.
+    public int _readByte() throws ConditionThrowable
+    {
+        int n = in._readByte();
+        out._writeByte(n);
+        return n;
+    }
+
+    // Writes an 8-bit byte.
+    public void _writeByte(int n) throws ConditionThrowable
+    {
+        out._writeByte(n);
+    }
+
+    public void _finishOutput() throws ConditionThrowable
+    {
+        out._finishOutput();
+    }
+
+    public void _clearInput() throws ConditionThrowable
+    {
+        in._clearInput();
     }
 
     public LispObject close(LispObject abort) throws ConditionThrowable
