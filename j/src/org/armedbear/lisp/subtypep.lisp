@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.54 2005-02-06 02:47:32 piso Exp $
+;;; $Id: subtypep.lisp,v 1.55 2005-02-06 12:48:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -220,10 +220,12 @@
            (case tp
              ((ARRAY VECTOR STRING SIMPLE-ARRAY SIMPLE-STRING BASE-STRING
                SIMPLE-BASE-STRING BIT-VECTOR SIMPLE-BIT-VECTOR NIL-VECTOR)
-              (make-ctype 'array type))
-             ((NUMBER INTEGER FIXNUM BIGNUM RATIO FLOAT SINGLE-FLOAT
-               DOUBLE-FLOAT SHORT-FLOAT LONG-FLOAT)
-              (make-ctype 'number type)))))))
+              (make-ctype 'ARRAY type))
+             ((REAL INTEGER BIT FIXNUM UNSIGNED-BYTE BIGNUM RATIO
+               FLOAT SINGLE-FLOAT DOUBLE-FLOAT SHORT-FLOAT LONG-FLOAT)
+              (make-ctype 'REAL type))
+             (COMPLEX
+              (make-ctype 'COMPLEX type)))))))
 
 (defun csubtypep-array (ct1 ct2)
   (let ((type1 (normalize-type (ctype-type ct1)))
@@ -557,8 +559,6 @@
            (if (memq t2 '(real number))
                (values (sub-interval-p i1 i2) t)
                (values nil (known-type-p t2))))
-          ((eq t1 'complex)
-           (values (eq t2 'number) t))
           ((and (eq t1 (find-class 'array)) (eq t2 'array))
            (values (equal i2 '(* *)) t))
           ((and (memq t1 '(array simple-array)) (eq t2 'array))
