@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.13 2003-03-01 01:19:42 piso Exp $
+ * $Id: LispString.java,v 1.14 2003-03-01 20:40:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,19 +184,8 @@ public final class LispString extends AbstractVector implements SequenceType,
     public static LispObject equals(LispObject first, LispObject second)
         throws LispError
     {
-        char[] array1, array2;
-        try {
-            array1 = ((LispString)first).array;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(first, "string");
-        }
-        try {
-            array2 = ((LispString)second).array;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(second, "string");
-        }
+        char[] array1 = string(first).array;
+        char[] array2 = string(second).array;
         if (array1.length != array2.length)
             return NIL;
         for (int i = array1.length; i-- > 0;) {
@@ -209,19 +198,8 @@ public final class LispString extends AbstractVector implements SequenceType,
     public static LispObject equalsIgnoreCase(LispObject first,
         LispObject second) throws LispError
     {
-        char[] array1, array2;
-        try {
-            array1 = ((LispString)first).array;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(first, "string");
-        }
-        try {
-            array2 = ((LispString)second).array;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(second, "string");
-        }
+        char[] array1 = string(first).array;
+        char[] array2 = string(second).array;
         if (array1.length != array2.length)
             return NIL;
         for (int i = array1.length; i-- > 0;) {
