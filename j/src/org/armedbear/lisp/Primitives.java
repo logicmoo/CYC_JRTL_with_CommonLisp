@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.681 2004-09-21 18:14:45 piso Exp $
+ * $Id: Primitives.java,v 1.682 2004-09-27 01:06:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3885,32 +3885,34 @@ public final class Primitives extends Lisp
                 }
                 return result;
             }
-            if (power instanceof LispFloat) {
-                if (base instanceof Fixnum) {
-                    double d = Math.pow(((Fixnum)base).value,
-                                        ((LispFloat)power).value);
-                    return new LispFloat(d);
-                }
-                if (base instanceof LispFloat) {
-                    double d = Math.pow(((LispFloat)base).value,
-                                        ((LispFloat)power).value);
-                    return new LispFloat(d);
-                }
+            final double pi = 3.141592653589793;
+            final double x; // base
+            final double y; // power
+            if (base instanceof Fixnum)
+                x = ((Fixnum)base).value;
+            else if (base instanceof Ratio)
+                x = ((Ratio)base).floatValue();
+            else if (base instanceof LispFloat)
+                x = ((LispFloat)base).value;
+            else
+                return signal(new LispError("EXPT: unsupported case"));
+            if (power instanceof Ratio)
+                y = ((Ratio)power).floatValue();
+            else if (power instanceof LispFloat)
+                y = ((LispFloat)power).value;
+            else
+                return signal(new LispError("EXPT: unsupported case"));
+            double r = Math.pow(x, y);
+            if (!Double.isNaN(r))
+                return new LispFloat(r);
+            if (x < 0) {
+                r = Math.pow(-x, y);
+                double realPart = r * Math.cos(y * pi);
+                double imagPart = r * Math.sin(y * pi);
+                return Complex.getInstance(new LispFloat(realPart),
+                                           new LispFloat(imagPart));
             }
-            if (power instanceof Ratio) {
-                if (base instanceof Fixnum) {
-                    double d = Math.pow(((Fixnum)base).getValue(),
-                                        ((Ratio)power).floatValue());
-                    return new LispFloat(d);
-                }
-                if (base instanceof LispFloat) {
-                    double d = Math.pow(((LispFloat)base).value,
-                                        ((Ratio)power).floatValue());
-                    return new LispFloat(d);
-                }
-            }
-            signal(new LispError("EXPT: unsupported case"));
-            return NIL;
+            return signal(new LispError("EXPT: unsupported case"));
         }
     };
 
