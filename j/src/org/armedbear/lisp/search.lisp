@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: search.lisp,v 1.2 2003-06-20 02:32:23 piso Exp $
+;;; $Id: search.lisp,v 1.3 2003-06-22 20:20:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@
        (if (funcall test-not (apply-key key ,elt1) (apply-key key ,elt2))
            (return nil)
            t)
-       (if (not (funcall test (apply-key key ,elt1) (apply-key key ,elt2)))
-           (return nil)
-           t)))
+       (if (funcall test (apply-key key ,elt1) (apply-key key ,elt2))
+           t
+           (return nil))))
 
 
 (defmacro search-compare-list-list (main sub)
