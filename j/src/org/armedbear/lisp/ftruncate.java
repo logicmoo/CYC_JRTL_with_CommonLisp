@@ -2,7 +2,7 @@
  * ftruncate.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ftruncate.java,v 1.1 2004-03-07 01:07:26 piso Exp $
+ * $Id: ftruncate.java,v 1.2 2004-03-07 02:01:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,23 +34,25 @@ public final class ftruncate extends Primitive
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
-        arg.truncate(Fixnum.ONE);
-        LispObject[] values = thread.getValues();
-        values[0] = LispFloat.coerceToFloat(values[0]);
-        thread.setValues(values);
-        return values[0];
+        LispObject q = arg.truncate(Fixnum.ONE); // an integer
+        if (q instanceof Fixnum)
+            q = new LispFloat(((Fixnum)q).value);
+        else
+            q = new LispFloat(((Bignum)q).floatValue());
+        LispThread.currentThread()._values[0] = q;
+        return q;
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
-        first.truncate(second);
-        LispObject[] values = thread.getValues();
-        values[0] = LispFloat.coerceToFloat(values[0]);
-        thread.setValues(values);
-        return values[0];
+        LispObject q = first.truncate(second); // an integer
+        if (q instanceof Fixnum)
+            q = new LispFloat(((Fixnum)q).value);
+        else
+            q = new LispFloat(((Bignum)q).floatValue());
+        LispThread.currentThread()._values[0] = q;
+        return q;
     }
 
     private static final Primitive FTRUNCATE = new ftruncate();
