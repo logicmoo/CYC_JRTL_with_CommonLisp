@@ -1,7 +1,7 @@
 ;;; concatenate.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: concatenate.lisp,v 1.1 2003-11-10 00:07:13 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: concatenate.lisp,v 1.2 2004-02-22 18:47:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; From GCL.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
 (defun concatenate (result-type &rest sequences)
   (do ((x (make-sequence result-type
