@@ -2,7 +2,7 @@
  * Completion.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Completion.java,v 1.4 2003-04-10 23:29:34 piso Exp $
+ * $Id: Completion.java,v 1.5 2003-09-16 00:29:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,9 +35,10 @@ public final class Completion
 
     public Completion(File dir, String input, String shellCommand)
     {
-        if (Platform.isPlatformWindows())
-            if (shellCommand.toLowerCase().indexOf("cmd.exe") < 0)
+        if (Platform.isPlatformWindows()) {
+            if (shellCommand != null && shellCommand.toLowerCase().indexOf("cmd.exe") < 0)
                 cygnify = true;
+        }
         final char separatorChar = getSeparatorChar();
         this.input = input;
         toBeCompleted = input;
