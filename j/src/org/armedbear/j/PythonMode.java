@@ -1,8 +1,8 @@
 /*
  * PythonMode.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: PythonMode.java,v 1.1.1.1 2002-09-24 16:08:24 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: PythonMode.java,v 1.2 2003-07-03 23:06:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,11 @@ public final class PythonMode extends AbstractMode implements Constants, Mode
     public boolean canIndent()
     {
         return true;
+    }
+
+    public boolean canIndentPaste()
+    {
+        return false;
     }
 
     public final SyntaxIterator getSyntaxIterator(Position pos)
