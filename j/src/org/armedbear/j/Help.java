@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Help.java,v 1.2 2003-01-07 17:51:40 piso Exp $
+ * $Id: Help.java,v 1.3 2003-02-13 00:50:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,7 +140,8 @@ public final class Help
         frame.setWaitCursor();
         try {
             File file = getBindingsFile();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(file.getOutputStream()));
+            BufferedWriter writer =
+                new BufferedWriter(new OutputStreamWriter(file.getOutputStream()));
             writer.write("<html>\n<head>\n<title>Keyboard Bindings</title>\n</head>\n<body>\n");
             File docDir = getDocumentationDirectory();
             writer.write("<b>");
@@ -148,7 +149,8 @@ public final class Help
             writer.write(editor.getMode().toString());
             writer.write(" mode)");
             writer.write("</b><br><br>");
-            addBindingsFromKeyMap(editor.getBuffer().getKeyMapForMode(), docDir, writer);
+            addBindingsFromKeyMap(editor.getBuffer().getKeyMapForMode(), docDir,
+                writer);
             writer.write("<br>");
             writer.write("<b>");
             writer.write("Global Bindings");
@@ -158,7 +160,7 @@ public final class Help
             writer.flush();
             writer.close();
             if (isListBindingsBuffer(editor.getBuffer())) {
-                ((WebBuffer) editor.getBuffer()).go(file, 0, "text/html");
+                ((WebBuffer)editor.getBuffer()).go(file, 0, "text/html");
             } else {
                 Buffer buf = null;
                 for (BufferIterator it = new BufferIterator(); it.hasNext();) {
@@ -169,10 +171,17 @@ public final class Help
                     }
                 }
                 if (buf != null)
-                    ((WebBuffer) buf).go(file, 0, "text/html");
+                    ((WebBuffer)buf).go(file, 0, "text/html");
                 else
                     buf = WebBuffer.createWebBuffer(file, null, null);
-                editor.makeNext(buf);
+                Editor otherEditor = editor.getOtherEditor();
+                if (otherEditor != null) {
+                    buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
+                    otherEditor.makeNext(buf);
+                } else {
+                    buf.setUnsplitOnClose(true);
+                    editor.makeNext(buf);
+                }
                 editor.activateInOtherWindow(buf);
             }
         }
