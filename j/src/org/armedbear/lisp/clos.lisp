@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.4 2003-11-02 19:11:41 piso Exp $
+;;; $Id: clos.lisp,v 1.5 2003-11-03 02:53:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1407,13 +1407,6 @@
 
 ;;;  Methods having to do with class metaobjects.
 
-(defmethod print-object ((class standard-class) stream)
-  (print-unreadable-object (class stream :identity t)
-                           (format stream "~:(~S~) ~S"
-                                   (class-name (class-of class))
-                                   (class-name class)))
-  class)
-
 (defmethod initialize-instance :after ((class standard-class) &rest args)
   (apply #'std-after-initialization-for-classes class args))
 
@@ -1443,28 +1436,10 @@
 
 ;;; Methods having to do with generic function metaobjects.
 
-(defmethod print-object ((gf standard-generic-function) stream)
-  (print-unreadable-object (gf stream :identity t)
-                           (format stream "~:(~S~) ~S"
-                                   (class-name (class-of gf))
-                                   (generic-function-name gf)))
-  gf)
-
 (defmethod initialize-instance :after ((gf standard-generic-function) &key)
   (finalize-generic-function gf))
 
 ;;; Methods having to do with method metaobjects.
-
-(defmethod print-object ((method standard-method) stream)
-  (print-unreadable-object (method stream :identity t)
-                           (format stream "~:(~S~) ~S~{ ~S~} ~S"
-                                   (class-name (class-of method))
-                                   (generic-function-name
-                                    (method-generic-function method))
-                                   (method-qualifiers method)
-                                   (mapcar #'class-name
-                                           (method-specializers method))))
-  method)
 
 (defmethod initialize-instance :after ((method standard-method) &key)
   (setf (method-function method) (compute-method-function method)))
