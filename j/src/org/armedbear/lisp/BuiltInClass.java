@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.33 2004-10-13 00:22:17 piso Exp $
+ * $Id: BuiltInClass.java,v 1.34 2004-10-20 01:16:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,6 +71,7 @@ public class BuiltInClass extends LispClass
 
     public static final BuiltInClass ARRAY                            = addClass(Symbol.ARRAY);
     public static final BuiltInClass BIGNUM                           = addClass(Symbol.BIGNUM);
+    public static final BuiltInClass BASE_STRING                      = addClass(Symbol.BASE_STRING);
     public static final BuiltInClass BIT_VECTOR                       = addClass(Symbol.BIT_VECTOR);
     public static final BuiltInClass BROADCAST_STREAM                 = addClass(Symbol.BROADCAST_STREAM);
     public static final BuiltInClass BUILT_IN_CLASS                   = addClass(Symbol.BUILT_IN_CLASS);
@@ -110,13 +111,14 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass RESTART                          = addClass(Symbol.RESTART);
     public static final BuiltInClass SEQUENCE                         = addClass(Symbol.SEQUENCE);
     public static final BuiltInClass SIMPLE_ARRAY                     = addClass(Symbol.SIMPLE_ARRAY);
+    public static final BuiltInClass SIMPLE_BASE_STRING               = addClass(Symbol.SIMPLE_BASE_STRING);
     public static final BuiltInClass SIMPLE_BIT_VECTOR                = addClass(Symbol.SIMPLE_BIT_VECTOR);
     public static final BuiltInClass SIMPLE_ERROR                     = addClass(Symbol.SIMPLE_ERROR);
     public static final BuiltInClass SIMPLE_STRING                    = addClass(Symbol.SIMPLE_STRING);
     public static final BuiltInClass SIMPLE_VECTOR                    = addClass(Symbol.SIMPLE_VECTOR);
     public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
-    public static final BuiltInClass SLIME_INPUT_STREAM              = addClass(Symbol.SLIME_INPUT_STREAM);
-    public static final BuiltInClass SLIME_OUTPUT_STREAM             = addClass(Symbol.SLIME_OUTPUT_STREAM);
+    public static final BuiltInClass SLIME_INPUT_STREAM               = addClass(Symbol.SLIME_INPUT_STREAM);
+    public static final BuiltInClass SLIME_OUTPUT_STREAM              = addClass(Symbol.SLIME_OUTPUT_STREAM);
     public static final BuiltInClass SOCKET_STREAM                    = addClass(Symbol.SOCKET_STREAM);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
@@ -280,6 +282,8 @@ public class BuiltInClass extends LispClass
                                 CONDITION, STANDARD_OBJECT, CLASS_T);
         ARRAY.setDirectSuperclass(CLASS_T);
         ARRAY.setCPL(ARRAY, CLASS_T);
+        BASE_STRING.setDirectSuperclass(STRING);
+        BASE_STRING.setCPL(BASE_STRING, STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
         BIGNUM.setDirectSuperclass(INTEGER);
         BIGNUM.setCPL(BIGNUM, INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
         BIT_VECTOR.setDirectSuperclass(VECTOR);
@@ -399,6 +403,10 @@ public class BuiltInClass extends LispClass
                                  CLASS_T);
         SIMPLE_ARRAY.setDirectSuperclass(ARRAY);
         SIMPLE_ARRAY.setCPL(SIMPLE_ARRAY, ARRAY, CLASS_T);
+        SIMPLE_BASE_STRING.setDirectSuperclasses(list2(BASE_STRING, SIMPLE_STRING));
+        SIMPLE_BASE_STRING.setCPL(SIMPLE_BASE_STRING, BASE_STRING, SIMPLE_STRING,
+                                  STRING, VECTOR, SIMPLE_ARRAY, ARRAY, SEQUENCE,
+                                  CLASS_T);
         SIMPLE_BIT_VECTOR.setDirectSuperclasses(list2(BIT_VECTOR, SIMPLE_ARRAY));
         SIMPLE_BIT_VECTOR.setCPL(SIMPLE_BIT_VECTOR, BIT_VECTOR, VECTOR,
                                  SIMPLE_ARRAY, ARRAY, SEQUENCE, CLASS_T);
