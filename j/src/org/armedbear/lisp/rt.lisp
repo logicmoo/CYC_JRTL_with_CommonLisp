@@ -432,6 +432,7 @@
                               "prog1"
                               "prog2"
                               "progn"
+                              "reduce"
                               "reverse"
                               "simple-bit-vector"
                               "simple-bit-vector-p"
