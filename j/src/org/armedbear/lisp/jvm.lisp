@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.262 2004-08-01 19:12:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.263 2004-08-02 02:07:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -743,14 +743,22 @@
              95 ; SWAP
              153 ; IFEQ
              154 ; IFNE
-             166 ; IF_ACMPNE
+             159 ; IF_ICMPEQ
+             160 ; IF_ICMPNE
+             161 ; IF_ICMPLT
+             162 ; IF_ICMPGE
+             163 ; IF_ICMPGT
+             164 ; IF_ICMPLE
              165 ; IF_ACMPEQ
+             166 ; IF_ACMPNE
              167 ; GOTO
              168 ; JSR
              169 ; RET
              176 ; ARETURN
              177 ; RETURN
+             190 ; ARRAYLENGTH
              191 ; ATHROW
+             198 ; IFNULL
              202 ; LABEL
              ))
   (setf (gethash n *resolvers*) nil))
@@ -877,10 +885,17 @@
   (member opcode
     '(153 ; IFEQ
       154 ; IFNE
+      159 ; IF_ICMPEQ
+      160 ; IF_ICMPNE
+      161 ; IF_ICMPLT
+      162 ; IF_ICMPGE
+      163 ; IF_ICMPGT
+      164 ; IF_ICMPLE
       165 ; IF_ACMPEQ
       166 ; IF_ACMPNE
       167 ; GOTO
       168 ; JSR
+      198 ; IFNULL
       )))
 
 (defun walk-code (code start-index depth)
@@ -2411,7 +2426,8 @@
          (*visible-variables* *visible-variables*)
          (specials ())
          (vars (second form))
-         (specialp nil))
+         (bind-special-p nil)
+         (variables ()))
     ;; Process declarations.
     (dolist (f (cdddr form))
       (unless (and (consp f) (eq (car f) 'declare))
@@ -2420,48 +2436,88 @@
         (dolist (decl decls)
           (when (eq (car decl) 'special)
             (setf specials (append (cdr decl) specials))))))
-    ;; Are we going to bind any special variables?
+    ;; Process variables and allocate registers for them.
     (dolist (var vars)
-      (when (or (memq var specials) (special-variable-p var))
-        (setf specialp t)
-        (return)))
-    ;; If so...
-    (when specialp
+      (let* ((special-p (if (or (memq var specials) (special-variable-p var)) t nil))
+             (variable
+              (make-variable :name var
+                             :special-p special-p
+                             :index (if special-p nil (length (context-vars *context*)))
+                             :register (if (or special-p *use-locals-vector*) nil (allocate-register)))))
+        (if special-p
+            (setf bind-special-p t)
+            (add-variable-to-context variable))
+        (push variable variables)))
+    (setf variables (nreverse variables))
+    ;; If we're going to bind any special variables...
+    (when bind-special-p
       ;; Save current dynamic environment.
       (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
       (emit 'astore (block-environment-register block)))
-    (compile-form (third form) :target :stack) ;; Values form.
-    (emit-push-current-thread)
-    (emit 'swap)
-    (emit 'bipush (length vars))
-    (emit-invokevirtual +lisp-thread-class+
-                        "getValues"
-                        "(Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                        -2)
-    ;; Values array is now on the stack at runtime.
-    (let ((index 0))
-      (dolist (var vars)
-        (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
-        (let ((variable (push-variable var specialp)))
-          (unless (or specialp *use-locals-vector*)
-            (setf (variable-register variable) (allocate-register)))
-          (when (< index (1- (length vars)))
-            (emit 'dup))
-          (emit 'bipush index)
-          (incf index)
-          (emit 'aaload)
-          ;; Value is on the runtime stack at this point.
-          (compile-binding variable))))
-    (emit-clear-values)
+    ;; Bind the variables.
+    (aver (= (length vars) (length variables)))
+    (cond ((= (length vars) 1)
+           (compile-form (third form) :target :stack)
+           (maybe-emit-clear-values (third form))
+           (compile-binding (car variables)))
+          (t
+           (let* ((*register* *register*)
+                  (result-register (allocate-register))
+                  (values-register (allocate-register))
+                  (LABEL1 (gensym))
+                  (LABEL2 (gensym)))
+             ;; Store primary value from values form in result register.
+             (compile-form (third form) :target result-register)
+             ;; Store values from values form in values register.
+             (emit-push-current-thread)
+             (emit 'getfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+             (emit-move-from-stack values-register)
+             ;; Did we get just one value?
+             (emit 'aload values-register)
+             (emit 'ifnull LABEL1)
+             ;; Reaching here, we have multiple values (or no values at all). We need
+             ;; the slow path if we have more variables than values.
+             (emit 'aload values-register)
+             (emit 'arraylength)
+             (emit 'bipush (length vars))
+             (emit 'if_icmplt LABEL1)
+             ;; Reaching here, we have enough values for all the variables. We can use
+             ;; the values we have. This is the fast path.
+             (emit 'aload values-register)
+             (emit 'goto LABEL2)
+             (label LABEL1)
+             (emit-push-current-thread)
+             (emit 'aload result-register)
+             (emit 'bipush (length vars))
+             (emit-invokevirtual +lisp-thread-class+
+                                 "getValues"
+                                 "(Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
+                                 -2)
+             ;; Values array is now on the stack at runtime.
+             (label LABEL2)
+             (let ((index 0))
+               (dolist (variable variables)
+                 (when (< index (1- (length vars)))
+                   (emit 'dup))
+                 (emit 'bipush index)
+                 (incf index)
+                 (emit 'aaload)
+                 ;; Value is on the runtime stack at this point.
+                 (compile-binding variable)))
+             (maybe-emit-clear-values (third form)))))
+    ;; Make the variables visible for the body forms.
+    (dolist (variable variables)
+      (push variable *visible-variables*)
+      (push variable *all-variables*))
     ;; Body.
     (do ((body (cdddr form) (cdr body)))
         ((null (cdr body))
          (compile-form (car body) :target target))
       (compile-form (car body) :target nil)
       (maybe-emit-clear-values (car body)))
-    (when specialp
+    (when bind-special-p
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
       (emit 'aload (block-environment-register block))
@@ -2615,8 +2671,6 @@
          (END-BLOCK (gensym))
          (EXIT (gensym))
          environment-register)
-;;     (format t "COMPILE-TAGBODY-NODE non-local-go-p = ~S~%"
-;;             (block-non-local-go-p block))
     ;; Scan for tags.
     (dolist (subform body)
       (when (or (symbolp subform) (integerp subform))
