@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.82 2003-09-21 02:01:46 piso Exp $
+ * $Id: Symbol.java,v 1.83 2003-09-21 13:00:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,6 +124,7 @@ public class Symbol extends LispObject
     public static final Symbol SIMPLE_ERROR         = PACKAGE_CL.addExternalSymbol("SIMPLE-ERROR");
     public static final Symbol STREAM_ERROR         = PACKAGE_CL.addExternalSymbol("STREAM-ERROR");
     public static final Symbol TYPE_ERROR           = PACKAGE_CL.addExternalSymbol("TYPE-ERROR");
+    public static final Symbol UNBOUND_SLOT         = PACKAGE_CL.addExternalSymbol("UNBOUND-SLOT");
     public static final Symbol UNBOUND_VARIABLE     = PACKAGE_CL.addExternalSymbol("UNBOUND-VARIABLE");
     public static final Symbol UNDEFINED_FUNCTION   = PACKAGE_CL.addExternalSymbol("UNDEFINED-FUNCTION");
 
