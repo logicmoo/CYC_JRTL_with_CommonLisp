@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.6 2003-09-20 00:52:48 piso Exp $
+;;; $Id: typep.lisp,v 1.7 2003-09-22 17:18:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,6 +70,7 @@
            (return-from typep t)))
        nil)
       (NOT (not (typep object (car i))))
+      (MEMBER (member object i))
       (INTEGER
        (and (integerp object) (in-interval-p object i)))
       (SIMPLE-BIT-VECTOR
