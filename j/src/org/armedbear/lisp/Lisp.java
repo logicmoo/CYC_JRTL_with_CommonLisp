@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.281 2004-09-26 18:20:38 piso Exp $
+ * $Id: Lisp.java,v 1.282 2004-09-28 17:34:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1778,7 +1778,7 @@ public abstract class Lisp
         exportSpecial("*PRINT-MISER-WIDTH*", PACKAGE_CL, NIL);
 
     public static final Symbol _PRINT_PPRINT_DISPATCH_ =
-        exportSpecial("*PRINT-PPRINT-DISPATCH*", PACKAGE_CL, T);
+        exportSpecial("*PRINT-PPRINT-DISPATCH*", PACKAGE_CL, NIL);
 
     public static final Symbol _PRINT_PRETTY_ =
         exportSpecial("*PRINT-PRETTY*", PACKAGE_CL, NIL);
@@ -1792,8 +1792,12 @@ public abstract class Lisp
     public static final Symbol _PRINT_RIGHT_MARGIN_ =
         exportSpecial("*PRINT-RIGHT-MARGIN*", PACKAGE_CL, NIL);
 
+    // ### *current-print-level*
+    public static final Symbol _CURRENT_PRINT_LEVEL_ =
+        internSpecial("*CURRENT-PRINT-LEVEL*", PACKAGE_SYS, Fixnum.ZERO);
+
     public static final Symbol _PRINT_FASL_ =
-        internConstant("*PRINT-FASL*", PACKAGE_SYS, NIL);
+        internSpecial("*PRINT-FASL*", PACKAGE_SYS, NIL);
 
     public static final Symbol _RANDOM_STATE_ =
         exportSpecial("*RANDOM-STATE*", PACKAGE_CL, new RandomState());
