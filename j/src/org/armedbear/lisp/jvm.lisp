@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.65 2004-02-09 03:46:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.66 2004-02-09 13:06:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1328,6 +1328,7 @@
 
 (setf (gethash '1+              unary-operators) "incr")
 (setf (gethash '1-              unary-operators) "decr")
+(setf (gethash 'ABS             unary-operators) "ABS")
 (setf (gethash 'ATOM            unary-operators) "ATOM")
 (setf (gethash 'BIT-VECTOR-P    unary-operators) "BIT_VECTOR_P")
 (setf (gethash 'CADR            unary-operators) "cadr")
