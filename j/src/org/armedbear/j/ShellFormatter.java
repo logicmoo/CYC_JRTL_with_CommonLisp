@@ -2,7 +2,7 @@
  * ShellFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: ShellFormatter.java,v 1.4 2003-01-04 17:47:25 piso Exp $
+ * $Id: ShellFormatter.java,v 1.5 2003-12-04 15:17:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,13 @@ public final class ShellFormatter extends Formatter
         }
         final String text = getDetabbedText(line);
         if (line.flags() == STATE_PROMPT) {
-            addSegment(text, SHELL_FORMAT_PROMPT);
+            REMatch match = promptRE.getMatch(text);
+            if (match != null) {
+                final int end = match.getEndIndex();
+                addSegment(text, 0, end, SHELL_FORMAT_PROMPT);
+                addSegment(text, end, SHELL_FORMAT_INPUT);
+            } else
+                addSegment(text, SHELL_FORMAT_PROMPT);
             return segmentList;
         }
         if (line.flags() == STATE_PASSWORD_PROMPT) {
@@ -77,6 +83,7 @@ public final class ShellFormatter extends Formatter
                 // Last line of buffer. Check for prompt.
                 REMatch match = promptRE.getMatch(text);
                 if (match != null) {
+                    line.setFlags(STATE_PROMPT);
                     final int end = match.getEndIndex();
                     addSegment(text, 0, end, SHELL_FORMAT_PROMPT);
                     addSegment(text, end, SHELL_FORMAT_INPUT);
