@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.186 2003-12-11 20:37:22 piso Exp $
+ * $Id: Lisp.java,v 1.187 2003-12-12 17:28:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1093,6 +1093,74 @@ public abstract class Lisp
         }
         // Not found.
         return NIL;
+    }
+
+    public static final String format(LispObject formatControl, LispObject formatArguments)
+        throws ConditionThrowable
+    {
+        final LispThread thread = LispThread.currentThread();
+        String control = LispString.getValue(formatControl);
+        LispObject[] args = formatArguments.copyToArray();
+        StringBuffer sb = new StringBuffer();
+        final int limit = control.length();
+        int j = 0;
+        final int NEUTRAL = 0;
+        final int TILDE = 1;
+        int state = NEUTRAL;
+        for (int i = 0; i < limit; i++) {
+            char c = control.charAt(i);
+            if (state == NEUTRAL) {
+                if (c == '~')
+                    state = TILDE;
+                else
+                    sb.append(c);
+            } else if (state == TILDE) {
+                if (c == 'A' || c == 'a') {
+                    if (j < args.length) {
+                        LispObject obj = args[j++];
+                        Environment oldDynEnv = thread.getDynamicEnvironment();
+                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                        sb.append(String.valueOf(obj));
+                        thread.setDynamicEnvironment(oldDynEnv);
+                    }
+                } else if (c == 'S' || c == 's') {
+                    if (j < args.length) {
+                        LispObject obj = args[j++];
+                        Environment oldDynEnv = thread.getDynamicEnvironment();
+                        thread.bindSpecial(_PRINT_ESCAPE_, T);
+                        sb.append(String.valueOf(obj));
+                        thread.setDynamicEnvironment(oldDynEnv);
+                    }
+                } else if (c == 'D' || c == 'd') {
+                    if (j < args.length) {
+                        LispObject obj = args[j++];
+                        Environment oldDynEnv = thread.getDynamicEnvironment();
+                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                        thread.bindSpecial(_PRINT_RADIX_, NIL);
+                        thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
+                        sb.append(String.valueOf(obj));
+                        thread.setDynamicEnvironment(oldDynEnv);
+                    }
+                } else if (c == 'X' || c == 'x') {
+                    if (j < args.length) {
+                        LispObject obj = args[j++];
+                        Environment oldDynEnv = thread.getDynamicEnvironment();
+                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+                        thread.bindSpecial(_PRINT_RADIX_, NIL);
+                        thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
+                        sb.append(String.valueOf(obj));
+                        thread.setDynamicEnvironment(oldDynEnv);
+                    }
+                } else if (c == '%') {
+                    sb.append(System.getProperty("line.separator"));
+                }
+                state = NEUTRAL;
+            } else {
+                // There are no other valid states.
+                Debug.assertTrue(false);
+            }
+        }
+        return sb.toString();
     }
 
     public static final Symbol intern(String name, Package pkg)
