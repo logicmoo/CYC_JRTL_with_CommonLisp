@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.36 2003-02-17 02:40:38 piso Exp $
+ * $Id: Editor.java,v 1.37 2003-02-20 19:47:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,8 +381,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
         currentEditor.getFrame().updateControls();
 
-        if (!Platform.isJava14())
-            FocusManager.setCurrentManager(new CustomFocusManager());
+        // With Java 1.4, we only need to do this to support the key-pressed
+        // hook.
+        FocusManager.setCurrentManager(new CustomFocusManager());
 
         currentEditor.getFrame().placeWindow();
 
@@ -6213,8 +6214,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             }
             catch (Throwable t) {
                 Log.debug(t);
-                return;
             }
+            return;
         }
         int index = input.indexOf('=');
         if (index >= 0) {
@@ -6227,17 +6228,28 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
         String[] array = parseCommand(input);
         if (array != null) {
-            String command = array[0];
-            String parameters = array[1];
-            try {
-                execute(command, parameters);
-            }
-            catch (NoSuchMethodException e) {
-                FastStringBuffer sb = new FastStringBuffer("Unknown command \"");
-                sb.append(command);
-                sb.append('"');
-                MessageDialog.showMessageDialog(this, sb.toString(), "Error");
-            }
+            final String command = array[0];
+            final String parameters = array[1];
+            Runnable r = new Runnable() {
+                public void run()
+                {
+                    try {
+                        execute(command, parameters);
+                    }
+                    catch (NoSuchMethodException e) {
+                        FastStringBuffer sb =
+                            new FastStringBuffer("Unknown command \"");
+                        sb.append(command);
+                        sb.append('"');
+                        MessageDialog.showMessageDialog(Editor.this,
+                            sb.toString(), "Error");
+                    }
+                }
+            };
+            if (SwingUtilities.isEventDispatchThread())
+                r.run();
+            else
+                SwingUtilities.invokeLater(r);
         }
     }
 
@@ -7125,21 +7137,24 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
     }
 
+    private static Method runLispCommandMethod;
+
     public static void runLispCommand(String command)
     {
-        Log.debug("runLispCommand |" + command + "|");
         try {
-            Class c = Class.forName("org.armedbear.j.JLisp");
-            if (c != null) {
-                Class[] parameterTypes = new Class[1];
-                parameterTypes[0] = String.class;
-                Method method =
-                    c.getMethod("runLispCommand", parameterTypes);
-                if (method != null) {
-                    Object[] args = new Object[1];
-                    args[0] = command;
-                    method.invoke(null, args);
+            if (runLispCommandMethod == null) {
+                Class c = Class.forName("org.armedbear.j.JLisp");
+                if (c != null) {
+                    Class[] parameterTypes = new Class[1];
+                    parameterTypes[0] = String.class;
+                    runLispCommandMethod =
+                        c.getMethod("runLispCommand", parameterTypes);
                 }
+            }
+            if (runLispCommandMethod != null) {
+                Object[] args = new Object[1];
+                args[0] = command;
+                runLispCommandMethod.invoke(null, args);
             }
         }
         catch (ClassNotFoundException e) {
@@ -7154,6 +7169,18 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         catch (Throwable t) {
             Log.error(t);
         }
+    }
+
+    public static void runHooks(String hook, String args)
+    {
+        FastStringBuffer sb = new FastStringBuffer("(run-hooks '");
+        sb.append(hook);
+        if (args != null && args.length() > 0) {
+            sb.append(' ');
+            sb.append(args);
+        }
+        sb.append(')');
+        runLispCommand(sb.toString());
     }
 
     public void defaultMode()
