@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaMode.java,v 1.11 2003-06-12 16:42:19 piso Exp $
+ * $Id: JavaMode.java,v 1.12 2003-07-26 19:00:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ import javax.swing.undo.CompoundEdit;
 
 public class JavaMode extends AbstractMode implements Constants, Mode
 {
-    protected static final String[] javaConditionals = {
+    private static final String[] javaConditionals = {
         "if",
         "else",
         "do",
