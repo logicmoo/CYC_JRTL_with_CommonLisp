@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.80 2003-06-29 00:19:34 piso Exp $
+ * $Id: Editor.java,v 1.81 2003-06-29 00:34:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -79,7 +81,8 @@ import org.armedbear.j.mail.MailCommands;
 import org.armedbear.j.mail.MailboxURL;
 import org.xml.sax.SAXParseException;
 
-public final class Editor extends JPanel implements Constants, ComponentListener
+public final class Editor extends JPanel implements Constants,
+    ComponentListener, MouseWheelListener
 {
     private static final long startTimeMillis = System.currentTimeMillis();
 
@@ -503,22 +506,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         display.addMouseListener(dispatcher);
         display.addMouseMotionListener(dispatcher);
 
-        if (Platform.isJava14()) {
-            try {
-                Class c = Class.forName("org.armedbear.j.MouseWheelListener");
-                Class[] parameterTypes = new Class[1];
-                parameterTypes[0] = Editor.class;
-                Method method = c.getMethod("addListener", parameterTypes);
-                Object[] parameters = new Object[1];
-                parameters[0] = this;
-                method.invoke(null, parameters);
-            }
-            catch (ClassNotFoundException e) {}
-            catch (Exception e) {
-                Log.error(e);
-            }
-        }
-
+        addMouseWheelListener(this);
         addComponentListener(this);
     }
 
@@ -3986,6 +3974,20 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public void componentShown(ComponentEvent e)
     {
+    }
+
+    public void mouseWheelMoved(MouseWheelEvent e)
+    {
+        // Without this, focus ends up in the location bar textfield if you use
+        // the mouse wheel in the edit window after using the openFile
+        // completion list to open a file (Blackdown 1.4.1-01).
+        // See also mouseMoveDotToPoint(MouseEvent).
+        setFocusToDisplay();
+
+        if (e.getWheelRotation() < 0)
+            display.windowUp(5);
+        else
+            display.windowDown(5);
     }
 
     public void ensureActive()
