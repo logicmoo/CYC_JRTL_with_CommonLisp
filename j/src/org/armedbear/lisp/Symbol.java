@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.45 2003-06-18 16:49:18 piso Exp $
+ * $Id: Symbol.java,v 1.46 2003-06-20 03:01:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -324,7 +324,7 @@ public class Symbol extends LispObject
             }
         }
         final String s = escape ? ("|" + name + "|") : name;
-        if (pkg == NIL)
+        if (pkg == null || pkg == NIL)
             return "#:".concat(s);
         if (pkg == PACKAGE_KEYWORD)
             return ":".concat(s);
