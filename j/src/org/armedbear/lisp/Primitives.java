@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.714 2004-12-07 01:47:06 piso Exp $
+ * $Id: Primitives.java,v 1.715 2004-12-07 02:07:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -782,7 +782,9 @@ public final class Primitives extends Lisp
     };
 
     // ### append
-    public static final Primitive APPEND = new Primitive("append","&rest lists") {
+    public static final Primitive APPEND =
+        new Primitive("append", "&rest lists")
+    {
         public LispObject execute()
         {
             return NIL;
@@ -847,7 +849,7 @@ public final class Primitives extends Lisp
     };
 
     // ### nconc
-    private static final Primitive NCONC = new Primitive("nconc","&rest lists")
+    private static final Primitive NCONC = new Primitive("nconc", "&rest lists")
     {
         public LispObject execute()
         {
@@ -3668,11 +3670,21 @@ public final class Primitives extends Lisp
     };
 
     // ### read
-    // read &optional input-stream eof-error-p eof-value recursive-p => object
+    // &optional input-stream eof-error-p eof-value recursive-p => object
     private static final Primitive READ =
         new Primitive("read",
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
+            Stream stream = checkCharacterInputStream(first);
+            boolean eofError = (second != NIL);
+            LispObject eofValue = third;
+            boolean recursive = (fourth != NIL);
+            return stream.read(eofError, eofValue, recursive);
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
@@ -3688,7 +3700,7 @@ public final class Primitives extends Lisp
     };
 
     // ### read-preserving-whitespace
-    // read &optional input-stream eof-error-p eof-value recursive-p => object
+    // &optional input-stream eof-error-p eof-value recursive-p => object
     private static final Primitive READ_PRESERVING_WHITESPACE =
         new Primitive("read-preserving-whitespace",
                       "&optional input-stream eof-error-p eof-value recursive-p")
@@ -3874,9 +3886,19 @@ public final class Primitives extends Lisp
             return new Cons(first, new Cons(second));
         }
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             return new Cons(first, new Cons(second, new Cons(third)));
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
+            return new Cons(first,
+                            new Cons(second,
+                                     new Cons(third,
+                                              new Cons(fourth))));
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -3888,7 +3910,8 @@ public final class Primitives extends Lisp
     };
 
     // ### list*
-    private static final Primitive LIST_ = new Primitive("list*", "&rest objects")
+    private static final Primitive LIST_ =
+        new Primitive("list*", "&rest objects")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -3905,9 +3928,18 @@ public final class Primitives extends Lisp
             return new Cons(first, second);
         }
         public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             return new Cons(first, new Cons(second, third));
+        }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
+            return new Cons(first,
+                            new Cons(second,
+                                     new Cons(third, fourth)));
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
