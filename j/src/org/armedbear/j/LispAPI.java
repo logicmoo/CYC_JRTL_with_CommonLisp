@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.3 2003-07-03 00:32:52 piso Exp $
+ * $Id: LispAPI.java,v 1.4 2003-07-03 01:57:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,6 +275,15 @@ public final class LispAPI extends Lisp
                 return newValue;
             }
             throw new LispError("bad keyword argument: " + kind);
+        }
+    };
+
+    private static final Primitive0 KILL_THEME =
+        new Primitive0("kill-theme", PACKAGE_J, true) {
+        public LispObject execute()
+        {
+            preferences.killTheme();
+            return T;
         }
     };
 
