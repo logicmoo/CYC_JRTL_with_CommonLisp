@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.15 2003-03-07 20:04:34 piso Exp $
+;;; $Id: list.lisp,v 1.16 2003-03-08 18:42:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -183,21 +183,10 @@
                 (arg0-p (funcall function arg0))
                 (t (funcall function))))))
 
-(defun constantly (value &optional (val1 nil val1-p) (val2 nil val2-p)
-			 &rest more-values)
-  (cond (more-values
-	 (let ((list (list* value val1 val2 more-values)))
-	   #'(lambda ()
-              (values-list list))))
-	(val2-p
-	 #'(lambda ()
-            (values value val1 val2)))
-	(val1-p
-	 #'(lambda ()
-            (values value val1)))
-	(t
-	 #'(lambda ()
-            value))))
+
+(defun constantly (x)
+  #'(lambda (&rest args) x))
+
 
 (defmacro satisfies-the-test (item elt)
   (let ((key-tmp (gensym)))
