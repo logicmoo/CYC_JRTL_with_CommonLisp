@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.159 2003-04-06 16:02:51 piso Exp $
+ * $Id: Primitives.java,v 1.160 2003-04-06 19:57:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4057,6 +4057,17 @@ public final class Primitives extends Module
         {
             checkVector(first).shrink(Fixnum.getInt(second));
             return first;
+        }
+    };
+
+    private static final Primitive3 VECTOR_SUBSEQ =
+        new Primitive3("vector-subseq") {
+        public LispObject execute(LispObject vector, LispObject start,
+            LispObject end) throws LispError
+        {
+            AbstractVector v = checkVector(vector);
+            return v.subseq(Fixnum.getValue(start),
+                end == NIL ? v.length() : Fixnum.getValue(end));
         }
     };
 
