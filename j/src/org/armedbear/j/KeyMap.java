@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.3 2003-06-09 17:12:28 piso Exp $
+ * $Id: KeyMap.java,v 1.4 2003-06-12 14:01:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -359,7 +359,7 @@ public final class KeyMap implements Constants
         // Map these globally so they're available in the compilation buffer too.
         mapKey(KeyEvent.VK_F4, 0, "nextError");
         mapKey(KeyEvent.VK_F4, SHIFT_MASK, "previousError");
-        mapKey(KeyEvent.VK_M, ALT_MASK, "showMessage");
+        mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "showMessage");
 
         // Windows VM seems to need this mapping for the tab key to work properly.
         // There's also code in Dispatcher.dispatchKeyTyped to handle the tab key.
