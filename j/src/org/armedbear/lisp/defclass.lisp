@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.8 2003-10-11 17:31:00 piso Exp $
+;;; $Id: defclass.lisp,v 1.9 2003-10-11 17:35:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1096,3 +1096,75 @@
                (not (member '&key lambda-list)))
           (append lambda-list '(&key &allow-other-keys))
           lambda-list)))
+
+;;; Slot access
+
+(defgeneric slot-value-using-class (class instance slot-name))
+(defmethod slot-value-using-class
+  ((class standard-class) instance slot-name)
+  (std-slot-value instance slot-name))
+
+(defgeneric (setf slot-value-using-class) (new-value class instance slot-name))
+(defmethod (setf slot-value-using-class)
+  (new-value (class standard-class) instance slot-name)
+  (setf (std-slot-value instance slot-name) new-value))
+;;; N.B. To avoid making a forward reference to a (setf xxx) generic function:
+(defun setf-slot-value-using-class (new-value class object slot-name)
+  (setf (slot-value-using-class class object slot-name) new-value))
+
+(defgeneric slot-exists-p-using-class (class instance slot-name))
+(defmethod slot-exists-p-using-class
+  ((class standard-class) instance slot-name)
+  (std-slot-exists-p instance slot-name))
+
+(defgeneric slot-boundp-using-class (class instance slot-name))
+(defmethod slot-boundp-using-class
+  ((class standard-class) instance slot-name)
+  (std-slot-boundp instance slot-name))
+
+(defgeneric slot-makunbound-using-class (class instance slot-name))
+(defmethod slot-makunbound-using-class
+  ((class standard-class) instance slot-name)
+  (std-slot-makunbound instance slot-name))
+
+;;; Instance creation and initialization
+
+;; (defgeneric allocate-instance (class))
+;; (defmethod allocate-instance ((class standard-class))
+;;   (std-allocate-instance class))
+
+(defgeneric make-instance (class &key))
+(defmethod make-instance ((class standard-class) &rest initargs)
+  (let ((instance (allocate-instance class)))
+    (apply #'initialize-instance instance initargs)
+    instance))
+(defmethod make-instance ((class symbol) &rest initargs)
+  (apply #'make-instance (find-class class) initargs))
+
+(defgeneric initialize-instance (instance &key))
+(defmethod initialize-instance ((instance standard-object) &rest initargs)
+  (apply #'shared-initialize instance t initargs))
+
+(defgeneric reinitialize-instance (instance &key))
+(defmethod reinitialize-instance
+  ((instance standard-object) &rest initargs)
+  (apply #'shared-initialize instance () initargs))
+
+(defgeneric shared-initialize (instance slot-names &key))
+(defmethod shared-initialize ((instance standard-object)
+                              slot-names &rest all-keys)
+  (dolist (slot (class-slots (class-of instance)))
+    (let ((slot-name (slot-definition-name slot)))
+      (multiple-value-bind (init-key init-value foundp)
+        (get-properties
+         all-keys (slot-definition-initargs slot))
+        (declare (ignore init-key))
+        (if foundp
+            (setf (slot-value instance slot-name) init-value)
+            (when (and (not (slot-boundp instance slot-name))
+                       (not (null (slot-definition-initfunction slot)))
+                       (or (eq slot-names t)
+                           (member slot-name slot-names)))
+              (setf (slot-value instance slot-name)
+                    (funcall (slot-definition-initfunction slot))))))))
+  instance)
