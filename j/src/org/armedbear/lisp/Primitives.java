@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.385 2003-09-13 17:22:29 piso Exp $
+ * $Id: Primitives.java,v 1.386 2003-09-13 23:41:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1869,7 +1869,13 @@ public final class Primitives extends Module
                     throw new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO");
                 if (initialContents != NIL)
                     throw new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO");
-                return new DisplacedArray(array, offset);
+                int[] dimv = new int[rank];
+                for (int i = 0; i < rank; i++) {
+                    LispObject dim = dimensions.car();
+                    dimv[i] = Fixnum.getValue(dim);
+                    dimensions = dimensions.cdr();
+                }
+                return new DisplacedArray(dimv, array, offset);
             }
             if (rank == 1) {
                 final int size;
