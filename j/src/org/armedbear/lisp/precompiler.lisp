@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.48 2004-04-28 18:51:02 piso Exp $
+;;; $Id: precompiler.lisp,v 1.49 2004-04-29 02:15:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -201,10 +201,14 @@
         (list* 'BLOCK (car args) (mapcar #'precompile1 (cdr args))))))
 
 (defun precompile-dolist (form)
-  (cons 'DOLIST (cons (cadr form) (mapcar #'precompile1 (cddr form)))))
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (cons 'DOLIST (cons (cadr form) (mapcar #'precompile1 (cddr form))))))
 
 (defun precompile-dotimes (form)
-  (cons 'DOTIMES (cons (cadr form) (mapcar #'precompile1 (cddr form)))))
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (cons 'DOTIMES (cons (cadr form) (mapcar #'precompile1 (cddr form))))))
 
 (defun precompile-do/do*-vars (varlist)
   (let ((result nil))
@@ -237,10 +241,12 @@
     (list* end-test-form (mapcar #'precompile1 result-forms))))
 
 (defun precompile-do/do* (form)
-  (list* (car form)
-         (precompile-do/do*-vars (cadr form))
-         (precompile-do/do*-end-form (caddr form))
-         (mapcar #'precompile1 (cdddr form))))
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (list* (car form)
+             (precompile-do/do*-vars (cadr form))
+             (precompile-do/do*-end-form (caddr form))
+             (mapcar #'precompile1 (cdddr form)))))
 
 (defun precompile-do-symbols (form)
   (list* (car form) (cadr form) (mapcar #'precompile1 (cddr form))))
@@ -280,7 +286,7 @@
           (push 'PROGN result)
           result))))
 
-(defun precompile-lambda (form)
+(defun maybe-rewrite-lambda (form)
   (let* ((args (cdr form))
          (lambda-list (car args))
          (body (cdr args))
@@ -313,6 +319,9 @@
               (setf lambda-list (nreverse res)))
             (setf body (list (append (list 'LET* (list (list special sym))) body)))))))
     (list* 'LAMBDA lambda-list (mapcar #'precompile1 body))))
+
+(defun precompile-lambda (form)
+  (maybe-rewrite-lambda form))
 
 (defun define-local-macro (name lambda-list body)
   (let* ((form (gensym))
@@ -453,7 +462,7 @@
 
 (defun precompile-function (form)
   (if (and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
-      (list 'FUNCTION (precompile-lambda (cadr form)))
+      (list 'FUNCTION (maybe-rewrite-lambda (cadr form)))
       form))
 
 (defun precompile-if (form)
@@ -483,21 +492,50 @@
       (t
        (error "wrong number of arguments for IF")))))
 
+(defun precompile-when (form)
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (precompile-cons form)))
+
+(defun precompile-unless (form)
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (precompile-cons form)))
+
+(defun precompile-and (form)
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (precompile-cons form)))
+
+(defun precompile-or (form)
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (precompile-cons form)))
+
 (defun precompile-multiple-value-bind (form)
-  (let ((vars (cadr form))
-        (values-form (caddr form))
-        (body (cdddr form)))
-    (list* 'MULTIPLE-VALUE-BIND
-           vars
-           (precompile1 values-form)
-           (mapcar #'precompile1 body))))
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (let ((vars (cadr form))
+            (values-form (caddr form))
+            (body (cdddr form)))
+        (list* 'MULTIPLE-VALUE-BIND
+               vars
+               (precompile1 values-form)
+               (mapcar #'precompile1 body)))))
 
 ;; MULTIPLE-VALUE-LIST is handled explicitly by the JVM compiler.
 (defun precompile-multiple-value-list (form)
   (list 'MULTIPLE-VALUE-LIST (precompile1 (cadr form))))
 
+(defun precompile-nth-value (form)
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      form))
+
 (defun precompile-return (form)
-  (list 'RETURN (precompile1 (cadr form))))
+  (if *in-jvm-compile*
+      (precompile1 (macroexpand form))
+      (list 'RETURN (precompile1 (cadr form)))))
 
 (defun precompile-return-from (form)
   (list 'RETURN-FROM (cadr form) (precompile1 (caddr form))))
@@ -545,7 +583,8 @@
       (error "No handler for ~S." fun))
     (setf (get fun 'precompile-handler) handler)))
 
-(mapcar #'install-handler '(block
+(mapcar #'install-handler '(and
+                            block
                             case
                             cond
                             dolist
@@ -556,6 +595,8 @@
                             macrolet
                             multiple-value-bind
                             multiple-value-list
+                            nth-value
+                            or
                             progn
                             progv
                             return
@@ -564,27 +605,22 @@
                             symbol-macrolet
                             tagbody
                             the
-                            unwind-protect))
+                            unwind-protect
+                            unless
+                            when))
 
 (install-handler 'ecase                'precompile-case)
 
-(install-handler 'and                  'precompile-cons)
 (install-handler 'catch                'precompile-cons)
 (install-handler 'locally              'precompile-cons)
 (install-handler 'multiple-value-call  'precompile-cons)
 (install-handler 'multiple-value-prog1 'precompile-cons)
-(install-handler 'or                   'precompile-cons)
-(install-handler 'unless               'precompile-cons)
-(install-handler 'when                 'precompile-cons)
 
 (install-handler 'do                   'precompile-do/do*)
 (install-handler 'do*                  'precompile-do/do*)
 
 (install-handler 'flet                 'precompile-flet/labels)
 (install-handler 'labels               'precompile-flet/labels)
-
-(install-handler 'do-symbols           'precompile-do-symbols)
-(install-handler 'do-external-symbols  'precompile-do-symbols)
 
 (install-handler 'let                  'precompile-let)
 (install-handler 'let*                 'precompile-let*)
@@ -593,9 +629,6 @@
 
 (install-handler 'declare              'precompile-identity)
 (install-handler 'go                   'precompile-identity)
-(install-handler 'handler-bind         'precompile-identity)
-(install-handler 'handler-case         'precompile-identity)
-(install-handler 'nth-value            'precompile-identity)
 (install-handler 'quote                'precompile-identity)
 (install-handler 'throw                'precompile-identity)
 
