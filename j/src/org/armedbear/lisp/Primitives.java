@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.740 2005-02-28 02:50:03 piso Exp $
+ * $Id: Primitives.java,v 1.741 2005-03-14 17:50:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public final class Primitives extends Lisp
         {
             if (arg.numberp())
                 return arg;
-            signal(new TypeError(arg, "number"));
+            signal(new TypeError(arg, Symbol.NUMBER));
             return NIL;
         }
         public LispObject execute(LispObject first, LispObject second)
@@ -787,7 +787,8 @@ public final class Primitives extends Lisp
             } else if (arg instanceof Cons && arg.car() == Symbol.SETF) {
                 remprop(checkSymbol(arg.cadr()), Symbol._SETF_FUNCTION);
             } else
-                signal(new TypeError(arg, "valid function name"));
+                signal(new TypeError("The value " + arg.writeToString() +
+                                     " is not a valid function name."));
             return arg;
         }
     };
@@ -1428,7 +1429,9 @@ public final class Primitives extends Lisp
                     ((Stream)out)._writeString(s);
                     return NIL;
                 }
-                signal(new TypeError(destination, "character output stream"));
+                signal(new TypeError("The value " +
+                                     destination.writeToString() +
+                                     " is not a character output stream."));
             }
             if (destination instanceof Stream) {
                 ((Stream)destination)._writeString(s);
@@ -1514,7 +1517,8 @@ public final class Primitives extends Lisp
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
                 symbol = checkSymbol(first.cadr());
             } else
-                return signal(new TypeError(first.writeToString() +
+                return signal(new TypeError("The value " +
+                                            first.writeToString() +
                                             " is not a valid function name."));
             LispObject arglist = checkList(second);
             LispObject body = checkList(third);
@@ -1627,7 +1631,7 @@ public final class Primitives extends Lisp
             if (third instanceof AbstractString)
                 symbol.setVariableDocumentation(third);
             else if (third != NIL)
-                signal(new TypeError(third, "string"));
+                signal(new TypeError(third, Symbol.STRING));
             symbol.setSymbolValue(second);
             symbol.setSpecial(true);
             return symbol;
@@ -1928,7 +1932,7 @@ public final class Primitives extends Lisp
                 } else if (arg instanceof Bignum) {
                     return NIL;
                 } else
-                    signal(new TypeError(arg, "integer"));
+                    signal(new TypeError(arg, Symbol.INTEGER));
             }
             return T;
         }
@@ -2050,7 +2054,9 @@ public final class Primitives extends Lisp
                 array = (ZeroRankArray) first;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(first + " is not an array of rank 0."));
+                return signal(new TypeError("The value " +
+                                            first.writeToString() +
+                                            " is not an array of rank 0."));
             }
             array.setRowMajor(0, second);
             return second;
@@ -2510,7 +2516,8 @@ public final class Primitives extends Lisp
             thread.clearValues();
             return result;
         }
-        public LispObject execute(final LispObject[] args) throws ConditionThrowable
+        public LispObject execute(final LispObject[] args)
+            throws ConditionThrowable
         {
             final int numArgs = args.length;
             if (numArgs < 2)
@@ -2518,7 +2525,7 @@ public final class Primitives extends Lisp
             int commonLength = -1;
             for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
-                    signal(new TypeError(args[i], "list"));
+                    signal(new TypeError(args[i], Symbol.LIST));
                 int len = args[i].length();
                 if (commonLength < 0)
                     commonLength = len;
@@ -2973,7 +2980,8 @@ public final class Primitives extends Lisp
                 Symbol symbol = checkSymbol(first.cadr());
                 put(symbol, Symbol._SETF_FUNCTION, second);
             } else
-                return signal(new TypeError(first.writeToString() +
+                return signal(new TypeError("The value " +
+                                            first.writeToString() +
                                             " is not a valid function name."));
             if (second instanceof Functional) {
                 ((Functional)second).setLambdaName(first);
@@ -3078,18 +3086,10 @@ public final class Primitives extends Lisp
                 while (defs != NIL) {
                     LispObject def = checkList(defs.car());
                     Symbol symbol = checkSymbol(def.car());
-                    LispObject lambdaList = def.cadr();
-                    LispObject body = def.cddr();
-                    LispObject block =
-                        new Cons(Symbol.BLOCK, new Cons(symbol, body));
-                    LispObject toBeApplied =
-                        list3(Symbol.LAMBDA, lambdaList, block);
-                    LispObject formArg = gensym("FORM-");
-                    LispObject envArg = gensym("ENV-"); // Ignored.
+                    Symbol make_expander_for_macrolet =
+                        PACKAGE_SYS.intern("MAKE-EXPANDER-FOR-MACROLET");
                     LispObject expander =
-                        list3(Symbol.LAMBDA, list2(formArg, envArg),
-                              list3(Symbol.APPLY, toBeApplied,
-                                    list2(Symbol.CDR, formArg)));
+                        make_expander_for_macrolet.execute(def);
                     Closure expansionFunction =
                         new Closure(expander.cadr(), expander.cddr(), env);
                     MacroObject macroObject =
@@ -3101,6 +3101,30 @@ public final class Primitives extends Lisp
             } else
                 result = progn(args.cdr(), env, thread);
             return result;
+        }
+    };
+
+    private static final Primitive MAKE_EXPANDER_FOR_MACROLET =
+        new Primitive("make-expander-for-macrolet", PACKAGE_SYS, true,
+                      "definition")
+    {
+        public LispObject execute(LispObject definition)
+            throws ConditionThrowable
+        {
+            Symbol symbol = checkSymbol(definition.car());
+            LispObject lambdaList = definition.cadr();
+            LispObject body = definition.cddr();
+            LispObject block =
+                new Cons(Symbol.BLOCK, new Cons(symbol, body));
+            LispObject toBeApplied =
+                list3(Symbol.LAMBDA, lambdaList, block);
+            LispObject formArg = gensym("WHOLE-");
+            LispObject envArg = gensym("ENVIRONMENT-"); // Ignored.
+            LispObject expander =
+                list3(Symbol.LAMBDA, list2(formArg, envArg),
+                      list3(Symbol.APPLY, toBeApplied,
+                            list2(Symbol.CDR, formArg)));
+            return expander;
         }
     };
 
@@ -3628,7 +3652,8 @@ public final class Primitives extends Lisp
                 out = stream;
         }
         if (out == null)
-            signal(new TypeError(arg, "output stream"));
+            signal(new TypeError("The value " + arg.writeToString() +
+                                 " is not an output stream."));
         return out.finishOutput();
     }
 
@@ -4256,7 +4281,8 @@ public final class Primitives extends Lisp
     };
 
     // ### reverse
-    private static final Primitive REVERSE = new Primitive("reverse", "sequence")
+    private static final Primitive REVERSE =
+        new Primitive("reverse", "sequence")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4272,8 +4298,8 @@ public final class Primitives extends Lisp
             }
             if (arg == NIL)
                 return NIL;
-            signal(new TypeError(arg, "proper sequence"));
-            return NIL;
+            return signal(new TypeError(arg.writeToString() +
+                                        " is not a proper sequence."));
         }
     };
 
@@ -4307,8 +4333,7 @@ public final class Primitives extends Lisp
                     ++i;
                 }
             }
-            signal(new TypeError(first, Symbol.SEQUENCE));
-            return NIL;
+            return signal(new TypeError(first, Symbol.SEQUENCE));
         }
     };
 
@@ -4349,7 +4374,7 @@ public final class Primitives extends Lisp
         {
             int size = Fixnum.getValue(first);
             if (size < 0)
-                signal(new TypeError(String.valueOf(size) +
+                signal(new TypeError("The value " + first.writeToString() +
                                      " is not a valid list length."));
             LispObject result = NIL;
             for (int i = size; i-- > 0;)
@@ -4456,7 +4481,7 @@ public final class Primitives extends Lisp
                     env = checkEnvironment(second);
                 return new Closure(first.cadr(), first.cddr(), env);
             }
-            return signal(new TypeError("Argument to MAKE-CLOSURE is not a lambda form."));
+            return signal(new TypeError("The argument to MAKE-CLOSURE is not a lambda form."));
         }
     };
 
@@ -4523,14 +4548,16 @@ public final class Primitives extends Lisp
     };
 
     // ### complex
-    private static final Primitive COMPLEX = new Primitive("complex","realpart &optional imagpart") {
+    private static final Primitive COMPLEX =
+        new Primitive("complex", "realpart &optional imagpart")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat)
                 return Complex.getInstance(arg, LispFloat.ZERO);
             if (arg.realp())
                 return arg;
-            signal(new TypeError(arg, "real number"));
+            signal(new TypeError(arg, Symbol.REAL));
             return NIL;
         }
         public LispObject execute(LispObject first, LispObject second)
@@ -4541,7 +4568,9 @@ public final class Primitives extends Lisp
     };
 
     // ### complexp
-    private static final Primitive COMPLEXP = new Primitive("complexp","object") {
+    private static final Primitive COMPLEXP =
+        new Primitive("complexp", "object")
+    {
         public LispObject execute(LispObject arg)
         {
             return arg.COMPLEXP();
@@ -4549,7 +4578,9 @@ public final class Primitives extends Lisp
     };
 
     // ### numerator
-    private static final Primitive NUMERATOR = new Primitive("numerator","rational") {
+    private static final Primitive NUMERATOR =
+        new Primitive("numerator", "rational")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.NUMERATOR();
@@ -4557,7 +4588,8 @@ public final class Primitives extends Lisp
     };
 
     // ### denominator
-    private static final Primitive DENOMINATOR = new Primitive("denominator","rational")
+    private static final Primitive DENOMINATOR =
+        new Primitive("denominator", "rational")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4566,7 +4598,8 @@ public final class Primitives extends Lisp
     };
 
     // ### realpart
-    private static final Primitive REALPART = new Primitive("realpart","number")
+    private static final Primitive REALPART =
+        new Primitive("realpart", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4574,13 +4607,14 @@ public final class Primitives extends Lisp
                 return ((Complex)arg).getRealPart();
             if (arg.numberp())
                 return arg;
-            signal(new TypeError(arg, "number"));
+            signal(new TypeError(arg, Symbol.NUMBER));
             return NIL;
         }
     };
 
     // ### imagpart
-    private static final Primitive IMAGPART = new Primitive("imagpart", "number")
+    private static final Primitive IMAGPART =
+        new Primitive("imagpart", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -4609,7 +4643,7 @@ public final class Primitives extends Lisp
             }
             if (arg instanceof Bignum)
                 return new Fixnum(((Bignum)arg).value.bitLength());
-            return signal(new TypeError(arg, "integer"));
+            return signal(new TypeError(arg, Symbol.INTEGER));
         }
     };
 
@@ -4626,7 +4660,7 @@ public final class Primitives extends Lisp
             else if (first instanceof Bignum)
                 n1 = ((Bignum)first).getValue();
             else {
-                signal(new TypeError(first, "integer"));
+                signal(new TypeError(first, Symbol.INTEGER));
                 return NIL;
             }
             if (second instanceof Fixnum)
@@ -4634,7 +4668,7 @@ public final class Primitives extends Lisp
             else if (second instanceof Bignum)
                 n2 = ((Bignum)second).getValue();
             else {
-                signal(new TypeError(second, "integer"));
+                signal(new TypeError(second, Symbol.INTEGER));
                 return NIL;
             }
             return number(n1.gcd(n2));
