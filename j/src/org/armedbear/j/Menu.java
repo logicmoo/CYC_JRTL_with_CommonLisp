@@ -2,7 +2,7 @@
  * Menu.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Menu.java,v 1.3 2003-06-12 17:37:21 piso Exp $
+ * $Id: Menu.java,v 1.4 2003-06-12 18:43:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,22 +54,27 @@ public final class Menu extends JMenu implements Constants
         String command, boolean enabled)
     {
         // Look in buffer-local keymap first.
-        KeyStroke keyStroke =
-            editor.getBuffer().getKeyMapForMode().getKeyStroke(command);
+        KeyMapping mapping =
+            editor.getBuffer().getKeyMapForMode().getKeyMapping(command);
         // If not found there, try global keymap.
-        if (keyStroke == null) {
-            keyStroke = KeyMap.getGlobalKeyMap().getKeyStroke(command);
-
+        if (mapping == null) {
+            mapping = KeyMap.getGlobalKeyMap().getKeyMapping(command);
             // Don't let a global mapping hide a different mapping of the same
             // keystroke in the buffer-local keymap!
-            if (keyStroke != null &&
-                editor.getBuffer().getKeyMapForMode().lookup(keyStroke) != null)
-                keyStroke = null;
+            if (mapping != null) {
+                KeyStroke keyStroke =
+                    KeyStroke.getKeyStroke(mapping.getKeyCode(),
+                        mapping.getModifiers());
+                if (editor.getBuffer().getKeyMapForMode().lookup(keyStroke) != null)
+                    keyStroke = null;
+            }
         }
-        // Construct accelerator text.
-        final String acceleratorText =
-            keyStroke != null ? Utilities.getKeyText(keyStroke) : "";
-        MenuItem menuItem = new MenuItem(label, acceleratorText);
+        String keyText = mapping != null ? mapping.getKeyText() : "";
+        if (keyText.length() == 3) {
+            if (keyText.charAt(0) == '\'' && keyText.charAt(2) == '\'')
+                keyText = keyText.substring(1, 2).toUpperCase(); // 'a' => A
+        }
+        MenuItem menuItem = new MenuItem(label, keyText);
         if (mnemonic != '\0')
             menuItem.setMnemonic(mnemonic);
         menuItem.setActionCommand(command);
