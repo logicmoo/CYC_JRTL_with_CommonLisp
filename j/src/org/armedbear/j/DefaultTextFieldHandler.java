@@ -1,8 +1,8 @@
 /*
  * DefaultTextFieldHandler.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: DefaultTextFieldHandler.java,v 1.2 2002-12-01 16:51:34 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: DefaultTextFieldHandler.java,v 1.3 2003-07-03 01:24:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
 
     protected List completions;
     protected int index;
-    
+
     private Expansion expansion;
     private String savedText;
     private String head;
@@ -74,9 +74,9 @@ public class DefaultTextFieldHandler implements Constants, TextFieldHandler
         // Text field is not in a dialog box. We must be dealing with the
         // location bar.
         Debug.assertTrue(editor != null);
-        editor.updateLocation();
         editor.ensureActive();
         editor.setFocusToDisplay();
+        editor.updateLocation();
     }
 
     public boolean wantTab()
