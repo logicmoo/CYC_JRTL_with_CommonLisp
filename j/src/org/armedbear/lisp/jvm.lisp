@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.115 2004-04-20 15:14:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.116 2004-04-20 23:58:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -190,7 +190,7 @@
 (defun read-attribute (index stream)
   (let* ((name-index (read-u2 stream))
          (length (read-u4 stream))
-         (*indent (+ *indent* 2)))
+         (*indent* (+ *indent* 2)))
     (setq name (lookup-utf8 name-index))
     (out "Attribute ~D: Name index: ~D (~S)~%" index name-index name)
     (out "Attribute ~D: Length: ~D~%" index length)
@@ -1918,16 +1918,19 @@
     (let* ((var (if (consp varspec) (car varspec) varspec))
            (v (find-variable var)))
       (cond ((or (memq var specials) (special-variable-p var))
+             (ensure-thread-var-initialized)
+             (emit 'aload *thread*)
+             (emit 'swap)
              (let ((g (declare-symbol var)))
                (emit 'getstatic
                      *this-class*
                      g
                      "Lorg/armedbear/lisp/Symbol;")
                (emit 'swap)
-               (emit-invokestatic +lisp-class+
-                                  "bindSpecialVariable"
-                                  "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                  -2)))
+               (emit-invokevirtual +lisp-thread-class+
+                                   "bindSpecial"
+                                   "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                   -2)))
             (t
              (let ((index (position var *locals* :from-end t)))
                (unless index
@@ -1948,6 +1951,9 @@
                   initform nil))
         (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
         (push-variable var specialp i)
+        (when specialp
+          (ensure-thread-var-initialized)
+          (emit 'aload *thread*))
         (cond (initform
                (compile-form initform)
                (unless (remove-store-value)
@@ -1962,10 +1968,10 @@
                        g
                        "Lorg/armedbear/lisp/Symbol;")
                  (emit 'swap)
-                 (emit-invokestatic +lisp-class+
-                                    "bindSpecialVariable"
-                                    "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                    -2)))
+                 (emit-invokevirtual +lisp-thread-class+
+                                     "bindSpecial"
+                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                     -2)))
               (t
                (emit 'astore i)
                (vector-push var *locals*)
