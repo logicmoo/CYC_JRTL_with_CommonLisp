@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.8 2003-03-07 03:09:29 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.9 2003-03-07 19:03:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -535,7 +535,7 @@ public class CharacterInputStream extends LispStream
             if (pkg == null)
                 throw new LispError("package \"" + packageName +
                     "\" not found");
-            Symbol symbol = pkg.findSymbol(symbolName);
+            Symbol symbol = pkg.findSymbolInPackage(symbolName);
             if (symbol == null)
                 throw new LispError("symbol \"" + symbolName +
                     "\" not found in package " + packageName);
