@@ -2,7 +2,7 @@
  * BinaryInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryInputStream.java,v 1.3 2003-09-19 12:32:13 piso Exp $
+ * $Id: BinaryInputStream.java,v 1.4 2003-09-28 19:52:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public final class BinaryInputStream extends LispStream
+public final class BinaryInputStream extends LispInputStream
 {
     private final BufferedInputStream in;
 
