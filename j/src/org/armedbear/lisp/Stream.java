@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.70 2004-06-10 11:08:06 piso Exp $
+ * $Id: Stream.java,v 1.71 2004-06-10 11:38:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -736,13 +736,14 @@ public class Stream extends LispObject
     {
         if (token.indexOf('/') >= 0)
             return makeRatio(token, radix);
-        if (token.endsWith(".")) {
+        int length = token.length();
+        if (length > 0 && token.charAt(length - 1) == '.') {
             radix = 10;
-            token = token.substring(0, token.length()-1);
+            token = token.substring(0, --length);
         }
         boolean numeric = true;
         if (radix == 10) {
-            for (int i = token.length(); i-- > 0;) {
+            for (int i = length; i-- > 0;) {
                 char c = token.charAt(i);
                 if (c < '0' || c > '9') {
                     if (i > 0 || (c != '-' && c != '+')) {
@@ -752,7 +753,7 @@ public class Stream extends LispObject
                 }
             }
         } else {
-            for (int i = token.length(); i-- > 0;) {
+            for (int i = length; i-- > 0;) {
                 char c = token.charAt(i);
                 if (Character.digit(c, radix) < 0) {
                     if (i > 0 || (c != '-' && c != '+')) {
@@ -763,7 +764,7 @@ public class Stream extends LispObject
             }
         }
         if (!numeric) // Can't be an integer.
-            return makeFloat(token);
+            return makeFloat(token, length);
         try {
             return new Fixnum(Integer.parseInt(token, radix));
         }
@@ -794,9 +795,10 @@ public class Stream extends LispObject
         return null;
     }
 
-    private static LispObject makeFloat(String token) throws ConditionThrowable
+    private static final LispObject makeFloat(final String token,
+                                              final int length)
+        throws ConditionThrowable
     {
-        final int length = token.length();
         if (length == 0)
             return null;
         StringBuffer sb = new StringBuffer();
