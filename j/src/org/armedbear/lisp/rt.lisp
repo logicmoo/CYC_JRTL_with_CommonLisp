@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.52 2003-03-10 20:13:16 piso Exp $
+;;; $Id: rt.lisp,v 1.53 2003-03-10 20:45:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -392,6 +392,39 @@
        (check-copy-list-copy x y)
        y))))
 
+(defun nintersection-with-check (x y &key test)
+  (let ((ycopy (make-scaffold-copy y)))
+    (let ((result (if test
+		      (nintersection x y :test test)
+                      (nintersection x y))))
+      (if (check-scaffold-copy y ycopy)
+	  result
+          'failed))))
+
+(defun union-with-check (x y &key test test-not)
+  (let ((xcopy (make-scaffold-copy x))
+	(ycopy (make-scaffold-copy y)))
+    (let ((result (cond
+		   (test (union x y :test test))
+		   (test-not (union x y :test-not test-not))
+		   (t (union x y)))))
+      (if (and (check-scaffold-copy x xcopy)
+	       (check-scaffold-copy y ycopy))
+	  result
+          'failed))))
+
+(defun union-with-check-and-key (x y key &key test test-not)
+  (let ((xcopy (make-scaffold-copy x))
+	(ycopy (make-scaffold-copy y)))
+    (let ((result  (cond
+                    (test (union x y :key key :test test))
+                    (test-not (union x y :key key :test-not test-not))
+                    (t (union x y :key key)))))
+      (if (and (check-scaffold-copy x xcopy)
+	       (check-scaffold-copy y ycopy))
+	  result
+          'failed))))
+
 (defun check-union (x y z)
   (and (listp x)
        (listp y)
@@ -417,6 +450,94 @@
    (test-not (nunion x y :key key :test-not test-not))
    (t (nunion x y :key key))))
 
+(defun nset-difference-with-check (x y &key (key 'no-key)
+				     test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (apply #'nset-difference
+	 x y
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
+	     ,@(when test `(:test ,test))
+	     ,@(when test-not `(:test-not ,test-not)))))
+
+(defun check-nset-difference (x y z &key (key #'identity)
+				(test #'eql))
+  (and
+   (listp x)
+   (listp y)
+   (listp z)
+   (loop for e in z always (member e x :key key :test test))
+   (loop for e in x always (or (member e y :key key :test test)
+			       (member e z :key key :test test)))
+   (loop for e in y never  (member e z :key key :test test))
+   t))
+
+(defun do-random-nset-differences (size niters &optional (maxelem (* 2 size)))
+  (let ((state (make-random-state)))
+    (loop
+      for i from 1 to niters do
+      (let ((x (shuffle (loop for j from 1 to size collect
+                          (random maxelem state))))
+            (y (shuffle (loop for j from 1 to size collect
+                          (random maxelem state)))))
+        (let ((z (nset-difference-with-check x y)))
+          (let ((is-good (check-nset-difference x y z)))
+            (unless is-good (return (values x y z)))))))
+    nil))
+
+(defun set-difference-with-check (x y &key (key 'no-key)
+                                    test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (let ((xcopy (make-scaffold-copy x))
+	(ycopy (make-scaffold-copy y)))
+    (let ((result (apply #'set-difference
+			 x y
+			 `(,@(unless (eqt key 'no-key) `(:key ,key))
+                             ,@(when test `(:test ,test))
+                             ,@(when test-not `(:test-not ,test-not))))))
+      (cond
+       ((and (check-scaffold-copy x xcopy)
+	     (check-scaffold-copy y ycopy))
+	result)
+       (t
+	'failed)))))
+
+(defun check-set-difference (x y z &key (key #'identity)
+                               (test #'eql))
+  (and
+   ;; (not (eqt 'failed z))
+   (listp x)
+   (listp y)
+   (listp z)
+   (loop for e in z always (member e x :key key :test test))
+   (loop for e in x always (or (member e y :key key :test test)
+			       (member e z :key key :test test)))
+   (loop for e in y never  (member e z :key key :test test))
+   t))
+
+(defun nset-difference-with-check (x y &key (key 'no-key)
+				     test test-not)
+  (setf x (copy-list x))
+  (setf y (copy-list y))
+  (apply #'nset-difference
+	 x y
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
+	     ,@(when test `(:test ,test))
+	     ,@(when test-not `(:test-not ,test-not)))))
+
+(defun check-nset-difference (x y z &key (key #'identity)
+				(test #'eql))
+  (and
+   (listp x)
+   (listp y)
+   (listp z)
+   (loop for e in z always (member e x :key key :test test))
+   (loop for e in x always (or (member e y :key key :test test)
+			       (member e z :key key :test test)))
+   (loop for e in y never  (member e z :key key :test test))
+   t))
+
 (defun set-exclusive-or-with-check (x y &key (key 'no-key)
 				      test test-not)
   (setf x (copy-list x))
@@ -434,6 +555,23 @@
 	result)
        (t
 	'failed)))))
+
+(defun check-set-exclusive-or (x y z &key (key #'identity)
+				 (test #'eql))
+  (and
+   ;; (not (eqt 'failed z))
+   (listp x)
+   (listp y)
+   (listp z)
+   (loop for e in z always (or (member e x :key key :test test)
+			       (member e y :key key :test test)))
+   (loop for e in x always (if (member e y :key key :test test)
+			       (not (member e z :key key :test test))
+                               (member e z :key key :test test)))
+   (loop for e in y always (if (member e x :key key :test test)
+			       (not (member e z :key key :test test))
+                               (member e z :key key :test test)))
+   t))
 
 (defun nset-exclusive-or-with-check (x y &key (key 'no-key)
 				       test test-not)
