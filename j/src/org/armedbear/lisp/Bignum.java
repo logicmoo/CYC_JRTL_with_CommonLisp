@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.5 2003-03-24 19:23:19 piso Exp $
+ * $Id: Bignum.java,v 1.6 2003-03-26 21:50:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,8 @@ public final class Bignum extends LispObject
         if (typeSpecifier == Symbol.BIGNUM)
             return T;
         if (typeSpecifier == Symbol.INTEGER)
+            return T;
+        if (typeSpecifier == Symbol.NUMBER)
             return T;
         return super.typep(typeSpecifier);
     }
@@ -117,9 +119,9 @@ public final class Bignum extends LispObject
     public LispObject subtract(LispObject obj) throws LispError
     {
         if (obj instanceof Bignum)
-            return new Bignum(value.subtract(((Bignum)obj).value));
+            return number(value.subtract(((Bignum)obj).value));
         if (obj instanceof Fixnum)
-            return new Bignum(value.subtract(Fixnum.getBigInteger(obj)));
+            return number(value.subtract(Fixnum.getBigInteger(obj)));
         if (obj instanceof LispFloat)
             return new LispFloat(value.floatValue() - ((LispFloat)obj).getValue());
         throw new TypeError(obj, "number");
@@ -131,6 +133,10 @@ public final class Bignum extends LispObject
             return new Bignum(value.multiply(((Bignum)obj).value));
         if (obj instanceof Fixnum)
             return new Bignum(value.multiply(Fixnum.getBigInteger(obj)));
+        if (obj instanceof Ratio) {
+            BigInteger n = ((Ratio)obj).numerator();
+            return number(n.multiply(value), ((Ratio)obj).denominator());
+        }
         if (obj instanceof LispFloat)
             return new LispFloat(value.floatValue() * ((LispFloat)obj).getValue());
         throw new TypeError(obj, "number");
@@ -139,9 +145,13 @@ public final class Bignum extends LispObject
     public LispObject divideBy(LispObject obj) throws LispError
     {
         if (obj instanceof Bignum)
-            return new Bignum(value.divide(((Bignum)obj).value));
+            return number(value, ((Bignum)obj).value);
         if (obj instanceof Fixnum)
             return new Bignum(value.divide(Fixnum.getBigInteger(obj)));
+        if (obj instanceof Ratio) {
+            BigInteger d = ((Ratio)obj).denominator();
+            return number(d.multiply(value), ((Ratio)obj).numerator());
+        }
         if (obj instanceof LispFloat)
             return new LispFloat(value.floatValue() / ((LispFloat)obj).getValue());
         throw new TypeError(obj, "number");
@@ -211,6 +221,38 @@ public final class Bignum extends LispObject
         if (obj instanceof LispFloat)
             return value.floatValue() >= ((LispFloat)obj).getValue();
         throw new TypeError(obj, "number");
+    }
+
+    public LispObject floor(LispObject obj) throws LispError
+    {
+        BigInteger divisor;
+        if (obj instanceof Bignum)
+            divisor = ((Bignum)obj).getValue();
+        else if (obj instanceof Fixnum)
+            divisor = ((Fixnum)obj).getBigInteger();
+        else
+            throw new LispError("not implemented");
+
+        BigInteger[] results = value.divideAndRemainder(divisor);
+        BigInteger quotient = results[0];
+        BigInteger remainder = results[1];
+        LispObject[] values = new LispObject[2];
+        if (remainder.signum() == 0) {
+            values[0] = number(quotient);
+            values[1] = Fixnum.ZERO;
+            setValues(values);
+            return values[0];
+        }
+
+        if (value.signum() != divisor.signum())
+            quotient = quotient.subtract(BigInteger.ONE);
+
+        LispObject q = number(quotient);
+        values[0] = q;
+        values[1] = subtract(q.multiplyBy(obj));
+
+        setValues(values);
+        return values[0];
     }
 
     public int hashCode()
