@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.40 2003-06-08 17:51:10 piso Exp $
+ * $Id: Closure.java,v 1.41 2003-06-08 19:21:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,10 +273,8 @@ public class Closure extends Function
                 prog = prog.cdr();
             }
             return result;
-        } else {
-            LispObject[] args = new LispObject[0];
-            return execute(args, environment);
-        }
+        } else
+            return execute(new LispObject[0], environment);
     }
 
     public LispObject execute(LispObject arg) throws Condition
@@ -419,10 +417,6 @@ public class Closure extends Function
         if (optionalParameters != null) {
             for (int j = 0; j < optionalParameters.length; j++) {
                 Parameter parameter = optionalParameters[j];
-                if (parameter.type != OPTIONAL) {
-                    Debug.assertTrue(false);
-                    break;
-                }
                 Symbol symbol = parameter.var;
                 if (i < args.length) {
                     bind(symbol, args[i], ext);
@@ -447,15 +441,15 @@ public class Closure extends Function
         }
         // &rest parameter.
         if (restVar != null) {
+            Debug.assertTrue(argsUsed == i || i > args.length);
             LispObject rest = NIL;
-            for (int j = args.length; j-- > i;)
+            for (int j = args.length; j-- > argsUsed;)
                 rest = new Cons(args[j], rest);
             bind(restVar, rest, ext);
         }
         // Keyword parameters.
         if (keywordParameters != null) {
-            int argsLeft = args.length - argsUsed;
-            if ((argsLeft % 2) != 0)
+            if (((args.length - argsUsed) % 2) != 0)
                 throw new ProgramError("odd number of keyword arguments");
             boolean[] boundpArray = new boolean[keywordParameters.length];
             LispObject allowOtherKeysValue = null;
