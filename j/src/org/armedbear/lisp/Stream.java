@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.44 2004-03-11 20:04:06 piso Exp $
+ * $Id: Stream.java,v 1.45 2004-03-12 00:28:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,8 +261,8 @@ public class Stream extends LispObject
                 return readQuote();
             case '(':
                 return readList();
-            case ')':
-                return readRightParen();
+//             case ')':
+//                 return readRightParen();
 //             case ';':
 //                 return LispReader.READ_COMMENT.execute(this, c);
             case ',':
@@ -377,11 +377,6 @@ public class Stream extends LispObject
             default:
                 return Character.isWhitespace(c);
         }
-    }
-
-    private LispObject readRightParen() throws ConditionThrowable
-    {
-        return signal(new LispError("Unmatched right parenthesis."));
     }
 
     private LispObject readComma() throws ConditionThrowable
