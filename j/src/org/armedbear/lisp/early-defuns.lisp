@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.13 2004-02-13 00:28:17 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.14 2004-02-13 02:15:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,9 +52,9 @@
            (SIMPLE-VECTOR
             (return-from normalize-type '(simple-array t (*))))
            (BIT-VECTOR
-            (return-from normalize-type '(array bit (*))))
+            (return-from normalize-type '(bit-vector *)))
            (SIMPLE-BIT-VECTOR
-            (return-from normalize-type '(simple-array bit (*))))
+            (return-from normalize-type '(simple-bit-vector *)))
            (BASE-STRING
             (return-from normalize-type '(array base-char (*))))
            (SIMPLE-BASE-STRING
@@ -126,17 +126,17 @@
       (BIT-VECTOR
        (case (length i)
          (0
-          (return-from normalize-type '(array bit (*))))
+          (return-from normalize-type '(bit-vector *)))
          (1
-          (return-from normalize-type (list 'array 'bit (list (car i)))))
+          (return-from normalize-type (list 'bit-vector (car i))))
          (t
           (error "Invalid type specifier ~S." type))))
       (SIMPLE-BIT-VECTOR
        (case (length i)
          (0
-          (return-from normalize-type '(simple-array bit (*))))
+          (return-from normalize-type '(simple-bit-vector *)))
          (1
-          (return-from normalize-type (list 'simple-array 'bit (list (car i)))))
+          (return-from normalize-type (list 'simple-bit-vector (car i))))
          (t
           (error "Invalid type specifier ~S." type))))
       (BASE-STRING
