@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.558 2004-02-04 15:17:29 piso Exp $
+ * $Id: Primitives.java,v 1.559 2004-02-04 17:18:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2686,7 +2686,8 @@ public final class Primitives extends Lisp
 
     // ### %set-symbol-plist
     private static final Primitive2 _SET_SYMBOL_PLIST =
-        new Primitive2("%set-symbol-plist", PACKAGE_SYS, false) {
+        new Primitive2("%set-symbol-plist", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -2697,7 +2698,8 @@ public final class Primitives extends Lisp
 
     // ### getf
     // getf plist indicator &optional default => value
-    private static final Primitive GETF = new Primitive("getf","plist indicator &optional default")
+    private static final Primitive GETF =
+        new Primitive("getf", "plist indicator &optional default")
     {
         public LispObject execute(LispObject plist, LispObject indicator)
             throws ConditionThrowable
@@ -2714,7 +2716,8 @@ public final class Primitives extends Lisp
 
     // ### get
     // get symbol indicator &optional default => value
-    private static final Primitive GET = new Primitive("get","symbol indicator &optional default")
+    private static final Primitive GET =
+        new Primitive("get", "symbol indicator &optional default")
     {
         public LispObject execute(LispObject symbol, LispObject indicator)
             throws ConditionThrowable
@@ -3467,7 +3470,8 @@ public final class Primitives extends Lisp
     // ### read-8-bits
     // read-8-bits stream &optional eof-error-p eof-value => byte
     private static final Primitive READ_8_BITS =
-        new Primitive("read-8-bits", "stream &optional eof-error-p eof-value")
+        new Primitive("read-8-bits", PACKAGE_SYS, false,
+                      "stream &optional eof-error-p eof-value")
     {
         public LispObject execute (LispObject[] args) throws ConditionThrowable
         {
