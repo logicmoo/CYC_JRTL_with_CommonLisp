@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.176 2004-05-31 19:19:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.177 2004-05-31 20:00:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2339,17 +2339,17 @@
                                       "()Lorg/armedbear/lisp/LispObject;"
                                       0)
                   (emit-store-value))))
-           ((and (consp name) (eq (car name) 'SETF))
-            (if (member name *toplevel-defuns* :test #'equal)
-                (let ((g (declare-setf-function name)))
-                  (emit 'getstatic
-                        *this-class*
-                        g
-                        +lisp-object+)
-                  (emit-store-value))
-                (progn
-                  (format t "*toplevel-defuns* = ~S~%" *toplevel-defuns*)
-                  (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
+;;            ((and (consp name) (eq (car name) 'SETF))
+;;             (if (member name *toplevel-defuns* :test #'equal)
+;;                 (let ((g (declare-setf-function name)))
+;;                   (emit 'getstatic
+;;                         *this-class*
+;;                         g
+;;                         +lisp-object+)
+;;                   (emit-store-value))
+;;                 (progn
+;;                   (format t "*toplevel-defuns* = ~S~%" *toplevel-defuns*)
+;;                   (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
            ((and (consp name) (eq (car name) 'LAMBDA))
             (let ((closure-vars (remove-duplicates (union (remove nil (coerce *locals* 'list))
                                                           (remove nil (coerce *args* 'list)))))
