@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.45 2003-10-16 00:33:05 piso Exp $
+;;; $Id: compiler.lisp,v 1.46 2003-10-16 20:31:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,10 +152,18 @@
        (if (cdr form)
            (cons 'return (list (compile-sexp (cadr form))))
            form))
+      (RETURN-FROM form)
       (UNLESS
        (cons 'unless (mapcar #'compile-sexp (cdr form))))
+      (UNWIND-PROTECT
+       (list* 'unwind-protect (compile-sexp (cadr form)) (mapcar #'compile-sexp (cddr form))))
+      (MULTIPLE-VALUE-PROG1
+       (list* 'unwind-protect (compile-sexp (cadr form)) (mapcar #'compile-sexp (cddr form))))
+      (THE
+       (caddr form))
+      (GO form)
       (t
-;;        (format t "    skipping ~S~%" first)
+;;        (format t "COMPILE-SPECIAL skipping ~S~%" first)
        form))))
 
 ;; EXPAND-MACRO is like MACROEXPAND, but EXPAND-MACRO quits if it encounters a
