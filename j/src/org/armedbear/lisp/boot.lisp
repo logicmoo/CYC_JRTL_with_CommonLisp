@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.73 2003-07-07 16:21:59 piso Exp $
+;;; $Id: boot.lisp,v 1.74 2003-07-07 18:59:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,20 +19,11 @@
 
 (sys::%nodebug)
 
-(in-package "COMMON-LISP")
+(sys::%in-package "COMMON-LISP")
 
-(export '(when unless
-          lambda
-          defun
-          *features*
-          plusp minusp integerp
-          read-from-string
-          call-arguments-limit
-          lambda-parameters-limit
-          multiple-values-limit
-          char-code-limit
-          internal-time-units-per-second
-          proclaim))
+
+(defmacro in-package (name)
+  (list 'sys::%in-package (string name)))
 
 
 (defmacro when (pred &rest body)
