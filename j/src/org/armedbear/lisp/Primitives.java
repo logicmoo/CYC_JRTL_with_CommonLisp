@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.380 2003-09-09 13:34:13 piso Exp $
+ * $Id: Primitives.java,v 1.381 2003-09-10 00:58:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4450,9 +4450,48 @@ public final class Primitives extends Module
         }
     };
 
-    static {
-        new Primitives();
-    }
+    // ### lognot
+    private static final Primitive1 LOGNOT = new Primitive1("lognot") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof Fixnum)
+                return number(~((Fixnum)arg).getValue());
+            if (arg instanceof Bignum)
+                return number(((Bignum)arg).getValue().not());
+            throw new TypeError(arg, "integer");
+        }
+    };
+
+    // ### logbitp
+    // logbitp index integer => generalized-boolean
+    private static final Primitive2 LOGBITP = new Primitive2("logbitp") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            int index = -1;
+            if (first instanceof Fixnum) {
+                index = ((Fixnum)first).getValue();
+            } else if (first instanceof Bignum) {
+                // FIXME If the number is really that big, we're not checking
+                // the right bit...
+                if (((Bignum)first).getValue().signum() > 0)
+                    index = Integer.MAX_VALUE;
+            }
+            if (index < 0)
+                throw new TypeError(first, "non-negative integer");
+            BigInteger n;
+            if (second instanceof Fixnum)
+                n = ((Fixnum)second).getBigInteger();
+            else if (second instanceof Bignum)
+                n = ((Bignum)second).getValue();
+            else
+                throw new TypeError(second, "integer");
+            // FIXME See above.
+            if (index == Integer.MAX_VALUE)
+                return n.signum() < 0 ? T : NIL;
+            return n.testBit(index) ? T : NIL;
+        }
+    };
 
     // ### list
     private static final Primitive LIST = new Primitive("list") {
@@ -4982,4 +5021,8 @@ public final class Primitives extends Module
             return new LispString(Integer.toHexString(arg.hashCode()));
         }
     };
+
+    static {
+        new Primitives();
+    }
 }
