@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: make_condition.java,v 1.17 2005-01-31 05:53:15 piso Exp $
+ * $Id: make_condition.java,v 1.18 2005-01-31 12:37:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,6 +94,8 @@ public final class make_condition extends Primitive
         if (type == Symbol.WARNING)
             return new Warning(initArgs);
 
+        if (type == Symbol.COMPILER_ERROR)
+            return new CompilerError(initArgs);
         if (type == Symbol.COMPILER_UNSUPPORTED_FEATURE_ERROR)
             return new CompilerUnsupportedFeatureError(initArgs);
 
