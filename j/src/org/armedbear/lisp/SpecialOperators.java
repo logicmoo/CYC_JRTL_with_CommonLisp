@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SpecialOperators.java,v 1.26 2004-04-28 17:59:41 piso Exp $
+ * $Id: SpecialOperators.java,v 1.27 2004-05-19 17:30:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -316,8 +316,12 @@ public final class SpecialOperators extends Lisp
                 ext.bindFunctional(name, closure);
                 defs = defs.cdr();
             }
-            result = progn(args.cdr(), ext, thread);
-            thread.setDynamicEnvironment(oldDynEnv);
+            try {
+                result = progn(args.cdr(), ext, thread);
+            }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
         } else
             result = progn(args.cdr(), env, thread);
         return result;
