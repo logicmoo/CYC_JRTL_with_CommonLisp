@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.11 2004-01-28 20:19:22 piso Exp $
+;;; $Id: open.lisp,v 1.12 2004-01-29 00:48:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,6 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+;;; Adapted from SBCL.
+
 (in-package "SYSTEM")
 
 (defun open (filename
@@ -27,20 +29,49 @@
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
   (let ((pathname (merge-pathnames filename)))
+    (when (memq direction '(:output :io))
+      (unless if-exists-given
+        (setf if-exists
+              (if (eq (pathname-version pathname) :newest)
+                  :new-version
+                  :error))))
+    (unless if-does-not-exist-given
+      (setf if-does-not-exist
+            (cond ((eq direction :input) :error)
+                  ((and (memq direction '(:output :io))
+                        (memq if-exists '(:overwrite :append)))
+                   :error)
+                  ((eq direction :probe)
+                   nil)
+                  (t
+                   :create))))
     (case direction
       (:input
+       (case if-does-not-exist
+         (:error
+          (unless (probe-file pathname)
+            (error 'file-error
+                   :format-control "The file ~S does not exist."
+                   :format-arguments (list (namestring pathname))))))
        (make-file-stream pathname element-type :input nil))
       (:probe
+       (case if-does-not-exist
+         (:error
+          (unless (probe-file pathname)
+            (error 'file-error
+                   :format-control "The file ~S does not exist."
+                   :format-arguments (list (namestring pathname))))))
        (let ((stream (make-file-stream pathname element-type :input nil)))
          (when stream
            (close stream))
          stream))
       ((:output :io)
-       (unless if-exists-given
-         (setf if-exists
-               (if (eq (pathname-version pathname) :newest)
-                   :new-version
-                   :error)))
+       (case if-does-not-exist
+         (:error
+          (unless (probe-file pathname)
+            (error 'file-error
+                   :format-control "The file ~S does not exist."
+                   :format-arguments (list (namestring pathname))))))
        (case if-exists
          (:error
           (when (probe-file pathname)
