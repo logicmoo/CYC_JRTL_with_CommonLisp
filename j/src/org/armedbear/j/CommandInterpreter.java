@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.4 2002-10-19 14:52:09 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.5 2002-10-30 19:15:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,8 +214,11 @@ public class CommandInterpreter extends Buffer
         if (match == null)
             return;
         String prompt = match.toString();
-        if (text.equals(prompt) && editor.getDotOffset() == prompt.length())
+        if (text.equals(prompt) && editor.getDotOffset() == prompt.length()) {
+            if (isTransient())
+                editor.escape();
             return; // Nothing to do.
+        }
         CompoundEdit compoundEdit = beginCompoundEdit();
         if (!text.equals(prompt)) {
             editor.addUndo(SimpleEdit.LINE_EDIT);
