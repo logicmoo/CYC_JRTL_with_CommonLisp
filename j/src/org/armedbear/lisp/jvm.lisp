@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.278 2004-08-17 06:14:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.279 2004-08-17 12:14:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -703,6 +703,8 @@
          (single-valued-p (car (last (cddr form)))))
         ((memq (car form) '(AND OR))
          (every #'single-valued-p (cdr form)))
+        ((eq (first form) 'RETURN-FROM)
+         (single-valued-p (third form)))
         (t
          (values (gethash (car form) single-valued-operators)))))
 
