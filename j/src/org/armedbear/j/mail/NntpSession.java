@@ -2,7 +2,7 @@
  * NntpSession.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: NntpSession.java,v 1.7 2003-05-26 15:23:54 piso Exp $
+ * $Id: NntpSession.java,v 1.8 2003-06-25 18:37:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j.mail;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -184,6 +185,10 @@ public final class NntpSession
                 new OutputStreamWriter(socket.getOutputStream(), "ISO-8859-1");
             readLine();
             return true;
+        }
+        catch (ConnectException e) {
+            setErrorText("Connection refused");
+            return false;
         }
         catch (UnknownHostException e) {
             setErrorText("Unknown host " + host);
