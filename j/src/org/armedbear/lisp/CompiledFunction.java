@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.21 2004-04-16 05:55:22 piso Exp $
+ * $Id: CompiledFunction.java,v 1.22 2004-05-05 19:03:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +25,11 @@ import java.io.File;
 
 public class CompiledFunction extends Closure
 {
-    public CompiledFunction(String name, LispObject lambdaList,
+    public CompiledFunction(Symbol symbol, LispObject lambdaList,
                             LispObject body, Environment env)
         throws ConditionThrowable
     {
-        super(name, lambdaList, body, env);
+        super(null, lambdaList, body, env);
     }
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
@@ -97,14 +97,14 @@ public class CompiledFunction extends Closure
                                   LispObject third)
             throws ConditionThrowable
         {
-            String name;
+            Symbol symbol;
             if (first == NIL)
-                name = null;
+                symbol = null;
             else
-                name = first.getStringValue();
+                symbol = checkSymbol(first);
             LispObject lambdaList = second;
             LispObject body = third;
-            return new CompiledFunction(name, lambdaList, body,
+            return new CompiledFunction(symbol, lambdaList, body,
                                         new Environment());
         }
     };
