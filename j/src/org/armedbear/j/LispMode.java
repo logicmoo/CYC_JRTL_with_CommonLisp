@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.13 2002-11-03 20:30:36 piso Exp $
+ * $Id: LispMode.java,v 1.14 2002-11-09 19:19:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,11 +122,15 @@ public class LispMode extends AbstractMode implements Constants, Mode
         "case", "ecase", "do", "do*", "dolist", "dotimes", "flet", "lambda",
         "let", "let*", "loop", "progn", "typecase", "unless", "when"
     };
-    
+
+    private final String[] elispSpecials = new String[] {
+        "while"
+    };
+
     private final String[] hemlockSpecials = new String[] {
         "frob", "with-mark"
     };
-    
+
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
         final Line model = findModel(line);
@@ -162,6 +166,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 if (token.startsWith("def"))
                     return buffer.getCol(pos) + indentSize;
                 if (Utilities.isOneOf(token, specials))
+                    return buffer.getCol(pos) + indentSize;
+                if (Utilities.isOneOf(token, elispSpecials))
                     return buffer.getCol(pos) + indentSize;
                 if (Utilities.isOneOf(token, hemlockSpecials))
                     return buffer.getCol(pos) + indentSize;
