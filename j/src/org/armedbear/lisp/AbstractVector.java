@@ -152,7 +152,8 @@ public abstract class AbstractVector extends AbstractArray
 
     public String writeToString() throws ConditionThrowable
     {
-        if (_PRINT_READABLY_.symbolValue() != NIL) {
+        final LispThread thread = LispThread.currentThread();
+        if (_PRINT_READABLY_.symbolValue(thread) != NIL) {
             StringBuffer sb = new StringBuffer("#(");
             final int limit = length();
             for (int i = 0; i < limit; i++) {
@@ -162,23 +163,42 @@ public abstract class AbstractVector extends AbstractArray
             }
             sb.append(')');
             return sb.toString();
-        } else if (_PRINT_ARRAY_.symbolValue() != NIL) {
-            StringBuffer sb = new StringBuffer("#(");
-            final LispObject printLength = _PRINT_LENGTH_.symbolValue();
-            final int limit;
-            if (printLength instanceof Fixnum)
-                limit = Math.min(length(), ((Fixnum)printLength).value);
-            else
-                limit = length();
-            for (int i = 0; i < limit; i++) {
-                if (i > 0)
-                    sb.append(' ');
-                sb.append(getRowMajor(i).writeToString());
-            }
-            if (limit < length())
-                sb.append(limit > 0 ? " ..." : "...");
-            sb.append(')');
-            return sb.toString();
+        } else if (_PRINT_ARRAY_.symbolValue(thread) != NIL) {
+            int maxLevel = Integer.MAX_VALUE;
+            final LispObject printLevel =
+                _PRINT_LEVEL_.symbolValue(thread);
+            if (printLevel instanceof Fixnum)
+                maxLevel = ((Fixnum)printLevel).value;
+            LispObject currentPrintLevel =
+                _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+            int currentLevel = Fixnum.getValue(currentPrintLevel);
+            if (currentLevel < maxLevel) {
+                StringBuffer sb = new StringBuffer("#(");
+                int maxLength = Integer.MAX_VALUE;
+                final LispObject printLength =
+                    _PRINT_LENGTH_.symbolValue(thread);
+                if (printLength instanceof Fixnum)
+                    maxLength = ((Fixnum)printLength).value;
+                final int length = length();
+                final int limit = Math.min(length, maxLength);
+                Environment oldDynEnv = thread.getDynamicEnvironment();
+                thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
+                try {
+                    for (int i = 0; i < limit; i++) {
+                        if (i > 0)
+                            sb.append(' ');
+                        sb.append(getRowMajor(i).writeToString());
+                    }
+                }
+                finally {
+                    thread.setDynamicEnvironment(oldDynEnv);
+                }
+                if (limit < length)
+                    sb.append(limit > 0 ? " ..." : "...");
+                sb.append(')');
+                return sb.toString();
+            } else
+                return "#";
         } else {
             StringBuffer sb = new StringBuffer();
             sb.append(isSimpleVector() ? "SIMPLE-VECTOR " : "VECTOR ");
