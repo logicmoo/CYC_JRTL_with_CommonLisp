@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: P4.java,v 1.4 2003-01-08 14:19:21 piso Exp $
+ * $Id: P4.java,v 1.5 2003-01-16 18:06:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -455,11 +455,8 @@ public class P4 implements Constants
             return;
         final Editor editor = Editor.currentEditor();
         Buffer parentBuffer = editor.getBuffer();
-        if (parentBuffer instanceof DiffOutputBuffer) {
-            Log.debug("parentBuffer is DiffOutputBuffer");
+        if (parentBuffer instanceof DiffOutputBuffer)
             parentBuffer = parentBuffer.getParentBuffer();
-            Log.debug("==> parentBuffer is " + parentBuffer);
-        }
         if (parentBuffer == null)
             return;
         if (parentBuffer.getFile() == null)
@@ -524,7 +521,7 @@ public class P4 implements Constants
                 }
             }
             editor.makeNext(checkinBuffer);
-            editor.activateInOtherWindow(checkinBuffer);
+            editor.activate(checkinBuffer);
         }
     }
 
