@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.1 2003-09-20 16:53:40 piso Exp $
+ * $Id: BuiltInClass.java,v 1.2 2003-09-20 18:21:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,33 @@ public class BuiltInClass extends LispClass
     private BuiltInClass(Symbol symbol)
     {
         super(symbol);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.BUILT_IN_CLASS;
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.BUILT_IN_CLASS;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.BUILT_IN_CLASS)
+            return T;
+        if (type == BuiltInClass.BUILT_IN_CLASS)
+            return T;
+        return super.typep(type);
+    }
+
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer("#<BUILT-IN-CLASS ");
+        sb.append(symbol.getName());
+        sb.append('>');
+        return sb.toString();
     }
 
     private static BuiltInClass addClass(Symbol symbol)
