@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.3 2003-08-13 17:00:14 piso Exp $
+ * $Id: SidebarBufferTree.java,v 1.4 2003-08-13 17:43:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,10 +152,7 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         Buffer buffer = sidebar.getEditor().getBuffer();
         if (buffer != getSelectedBuffer())
             setSelectedBuffer(buffer);
-        // Scroll active buffer to center of list.
-        int[] rows = getSelectionRows();
-        if (rows.length > 0 && rows[0] >= 0)
-            scrollRowToCenter(rows[0]);
+        scrollPathToVisible(getSelectionPath());
         boolean repaint = (updateFlag & SIDEBAR_REPAINT_BUFFER_LIST) != 0;
         updateFlag = 0;
         if (repaint) {
@@ -223,6 +220,7 @@ public final class SidebarBufferTree extends SidebarTree implements Constants,
         if (node != null) {
             TreePath path = new TreePath(node.getPath());
             setSelectionPath(path);
+            scrollPathToVisible(path);
         }
     }
 
