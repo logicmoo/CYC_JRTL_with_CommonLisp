@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.55 2004-08-18 17:12:16 piso Exp $
+ * $Id: LispThread.java,v 1.56 2004-08-19 18:15:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -278,8 +278,7 @@ public final class LispThread extends LispObject
 
     public final void bindSpecial(Symbol symbol, LispObject value)
     {
-        dynEnv = new Environment(dynEnv);
-        dynEnv.bind(symbol, value);
+        dynEnv = new Environment(dynEnv, symbol, value);
     }
 
     public final LispObject lookupSpecial(LispObject symbol)
