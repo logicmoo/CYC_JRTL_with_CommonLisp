@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.10 2003-03-04 13:01:54 piso Exp $
+;;; $Id: boot.lisp,v 1.11 2003-03-05 17:46:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,8 +26,12 @@
                   "sequences"
                   "symbol"
                   "error"
-                  "defstruct"))
+                  "defstruct"
+                  "compiler"))
     (cl::%load (concatenate 'string name ".lisp"))))
+
+
+;; Miscellany.
 
 (in-package "COMMON-LISP")
 
@@ -50,3 +54,15 @@
 (defconstant lambda-parameters-limit 50)
 
 (defconstant multiple-values-limit 20)
+
+
+;; Compile the world.
+(dolist (sym (package-symbols :cl))
+  (unless (eq sym 'compile))
+  (when (fboundp sym)
+    (unless (or (special-operator-p sym) (macro-function sym))
+      (let ((f (fdefinition sym)))
+        (unless (compiled-function-p f)
+;;           (format t "compiling ~S~%" sym)
+;;           (finish-output)
+          (compile sym))))))
