@@ -2,7 +2,7 @@
  * XmlErrorBuffer.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: XmlErrorBuffer.java,v 1.1 2003-06-06 15:01:37 piso Exp $
+ * $Id: XmlErrorBuffer.java,v 1.2 2003-06-12 13:48:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,23 @@ package org.armedbear.j;
 
 public final class XmlErrorBuffer extends CompilationErrorBuffer
 {
-    public XmlErrorBuffer(String text)
+    private final File file;
+
+    public XmlErrorBuffer(File file, String text)
     {
         super();
+        this.file = file;
         setText(text);
+    }
+
+    public String toString()
+    {
+        if (file != null) {
+            FastStringBuffer sb = new FastStringBuffer();
+            sb.append(file.getName());
+            sb.append(" (errors)");
+            return sb.toString();
+        }
+        return "Errors";
     }
 }
