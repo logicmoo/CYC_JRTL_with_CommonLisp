@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.76 2004-09-05 00:17:52 piso Exp $
+ * $Id: LispMode.java,v 1.77 2004-09-07 02:23:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -765,7 +765,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return null;
     }
 
-    private static String getCurrentDefun(Editor editor)
+    public static String getCurrentDefun(Editor editor)
     {
         Position begin = findStartOfDefun(editor.getDot());
         if (begin != null && begin.lookingAt("(def")) {
