@@ -1,7 +1,7 @@
 ;;; sort.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sort.lisp,v 1.1 2003-03-05 19:52:35 piso Exp $
+;;; $Id: sort.lisp,v 1.2 2003-03-08 18:55:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,11 +19,11 @@
 
 (in-package "COMMON-LISP")
 
-(export '(sort))
+(export '(sort merge))
 
-;; From CMUCL.
+;;; SORT (from CMUCL)
 
-;; FIXME Only lists are supported for now.
+;;; FIXME Only lists are supported for now.
 (defun sort (sequence predicate &key key)
   (when (listp sequence)
     (sort-list sequence predicate key)))
@@ -121,3 +121,35 @@
         ;; into one list.  This may waste one outer iteration to realize.
         (if (eq list-1 (cdr head))
             (return list-1))))))
+
+
+;;; MERGE (from ECL)
+
+(defun merge (result-type sequence1 sequence2 predicate
+                          &key (key #'identity)
+                          &aux (l1 (length sequence1)) (l2 (length sequence2)))
+  (do ((newseq (make-sequence result-type (+ l1 l2)))
+       (j 0 (1+ j))
+       (i1 0)
+       (i2 0))
+    ((and (= i1 l1) (= i2 l2)) newseq)
+    (cond ((and (< i1 l1) (< i2 l2))
+	   (cond ((funcall predicate
+			   (funcall key (elt sequence1 i1))
+			   (funcall key (elt sequence2 i2)))
+		  (setf (elt newseq j) (elt sequence1 i1))
+		  (incf i1))
+		 ((funcall predicate
+			   (funcall key (elt sequence2 i2))
+			   (funcall key (elt sequence1 i1)))
+		  (setf (elt newseq j) (elt sequence2 i2))
+		  (incf i2))
+		 (t
+		  (setf (elt newseq j) (elt sequence1 i1))
+		  (incf i1))))
+          ((< i1 l1)
+	   (setf (elt newseq j) (elt sequence1 i1))
+	   (incf i1))
+	  (t
+	   (setf (elt newseq j) (elt sequence2 i2))
+	   (incf i2)))))

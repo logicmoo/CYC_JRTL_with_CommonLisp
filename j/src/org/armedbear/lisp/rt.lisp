@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.45 2003-03-08 18:45:26 piso Exp $
+;;; $Id: rt.lisp,v 1.46 2003-03-08 18:56:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -504,6 +504,7 @@
                               "make-sequence"
                               "make-string"
                               "map"
+                              "merge"
                               "multiple-value-bind"
                               "multiple-value-call"
                               "multiple-value-list"
