@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.704 2004-11-13 15:01:59 piso Exp $
+ * $Id: Primitives.java,v 1.705 2004-11-21 06:03:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3256,12 +3256,17 @@ public final class Primitives extends Lisp
     // %write-char character output-stream => character
     private static final Primitive _WRITE_CHAR =
         new Primitive("%write-char", PACKAGE_SYS, false,
-                       "character output-stream")
+                      "character output-stream")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            outSynonymOf(second)._writeChar(LispCharacter.getValue(first));
+            try {
+                outSynonymOf(second)._writeChar(((LispCharacter)first).value);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.CHARACTER));
+            }
             return first;
         }
     };
