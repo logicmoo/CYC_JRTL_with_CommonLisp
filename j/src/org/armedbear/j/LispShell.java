@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.78 2004-09-21 16:10:32 piso Exp $
+ * $Id: LispShell.java,v 1.79 2004-10-05 14:18:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,7 +128,9 @@ public class LispShell extends Shell
             // clisp -I
             lisp.setPromptRE(CLISP_PROMPT_PATTERN);
             lisp.setResetCommand("(sys::debug-unwind)");
-        } else if (shellCommand.equals("/usr/bin/lisp")) {
+        } else if (shellCommand.equals("/usr/bin/lisp") ||
+                   shellCommand.equals("/usr/local/bin/lisp"))
+        {
             lisp.setPromptRE(CMUCL_PROMPT_PATTERN);
             lisp.setResetCommand(":q");
             lisp.setExitCommand("(quit)");
