@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.64 2003-03-19 00:47:10 piso Exp $
+;;; $Id: rt.lisp,v 1.65 2003-03-19 01:26:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -609,6 +609,18 @@
         (tests (or args (list "and"
                               "apply"
                               "aref"
+                              "array"
+                              "array-as-class"
+                              "array-dimension"
+                              "array-dimensions"
+                              "array-displacement"
+                              "array-in-bounds-p"
+                              "array-misc"
+                              "array-rank"
+                              "array-row-major-index"
+                              "array-t"
+                              "array-total-size"
+                              "arrayp"
                               "bit-vector"
                               "bit-vector-p"
                               "block"
