@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.3 2003-09-08 18:28:06 piso Exp $
+ * $Id: DisplacedArray.java,v 1.4 2003-09-13 23:40:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,19 +23,43 @@ package org.armedbear.lisp;
 
 public final class DisplacedArray extends AbstractArray
 {
+    private final int[] dimv;
+    private final int size;
     private final AbstractArray array;
     private final int offset;
 
-    public DisplacedArray(AbstractArray array, int offset)
+    public DisplacedArray(int[] dimv, AbstractArray array, int offset)
     {
+        this.dimv = dimv;
+        size = computeTotalSize(dimv);
         this.array = array;
         this.offset = offset;
+    }
+
+    private static int computeTotalSize(int[] dimensions)
+    {
+        int size = 1;
+        for (int i = dimensions.length; i-- > 0;)
+            size *= dimensions[i];
+        return size;
+    }
+
+    public LispObject typeOf()
+    {
+        if (getRank() == 1) {
+            if (array instanceof LispString)
+                return Symbol.STRING;
+            return list3(Symbol.VECTOR, T, new Fixnum(size));
+        }
+        return list3(Symbol.ARRAY, T, getDimensions());
     }
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
         if (typeSpecifier == Symbol.ARRAY)
             return T;
+        if (typeSpecifier == Symbol.VECTOR)
+            return getRank() == 1 ? T : NIL;
         if (typeSpecifier instanceof LispClass) {
             final String name = typeSpecifier.getName();
             if (name.equals("ARRAY"))
@@ -49,7 +73,7 @@ public final class DisplacedArray extends AbstractArray
     public int length() throws LispError
     {
         if (getRank() == 1)
-            return array.getDimension(0) - offset;
+            return size;
         throw new TypeError(this, "sequence");
     }
 
@@ -65,17 +89,25 @@ public final class DisplacedArray extends AbstractArray
 
     public int getRank()
     {
-        return array.getRank();
+        return dimv.length;
     }
 
     public LispObject getDimensions()
     {
-        return array.getDimensions();
+        LispObject result = NIL;
+        for (int i = dimv.length; i-- > 0;)
+            result = new Cons(new Fixnum(dimv[i]), result);
+        return result;
     }
 
     public int getDimension(int n) throws LispError
     {
-        return array.getDimension(n);
+        try {
+            return dimv[n];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            throw new TypeError("bad array dimension");
+        }
     }
 
     public LispObject getElementType()
@@ -85,17 +117,21 @@ public final class DisplacedArray extends AbstractArray
 
     public int getTotalSize()
     {
-        return array.getTotalSize() - offset;
+        return size;
     }
 
     public LispObject getRowMajor(int index) throws LispError
     {
-        return array.getRowMajor(index + offset);
+        if (index >= 0 && index < size)
+            return array.getRowMajor(index + offset);
+        throw new TypeError("bad row major index " + index);
     }
 
     public void setRowMajor(int index, LispObject newValue) throws LispError
     {
-        array.setRowMajor(index + offset, newValue);
+        if (index >= 0 && index < size)
+            array.setRowMajor(index + offset, newValue);
+        throw new TypeError("bad row major index " + index);
     }
 
     // ### array-displacement
