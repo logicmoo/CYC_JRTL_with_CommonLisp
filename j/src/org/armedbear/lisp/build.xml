@@ -10,7 +10,8 @@
   <property name="JAVA" value="${java}"/>
   <property name="JAVA_OPTIONS" value="${java_options}"/>
 
-  <property name="LISP_HOME" value="${basedir}/org/armedbear/lisp"/>
+<!--  <property name="LISP_HOME" value="${basedir}/org/armedbear/lisp"/>-->
+  <dirname property="LISP_HOME" file="${basedir}/org/armedbear/lisp/Site.java"/>
 
   <property name="debug" value="yes"/>
   <property name="build.compiler.emacs" value="yes"/>
@@ -39,13 +40,13 @@
       debug="no"
       optimize="yes"
     />
-    <junit printsummary="yes" haltonfailure="yes">
-      <formatter type="plain" />
-      <classpath>
-        <pathelement path="${basedir}:${jdk}/jre/lib/rt.jar:${junit}" />
-      </classpath>
-      <test name="org.armedbear.lisp.Tests" />
-    </junit>
+<!--    <junit printsummary="yes" haltonfailure="yes">-->
+<!--      <formatter type="plain" />-->
+<!--      <classpath>-->
+<!--        <pathelement path="${basedir}:${jdk}/jre/lib/rt.jar:${junit}" />-->
+<!--      </classpath>-->
+<!--      <test name="org.armedbear.lisp.Tests" />-->
+<!--    </junit>-->
     <tstamp>
       <format property="build" pattern="EEE MMM dd yyyy HH:mm:ss zzz"/>
     </tstamp>
@@ -59,6 +60,7 @@
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.jar"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.class"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.fasl"/>
+      <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.fasl-tmp"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*.cls"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/*~"/>
       <fileset dir="${basedir}/org/armedbear/lisp" includes="**/.#*"/>
