@@ -446,6 +446,7 @@ special-operator-p
 stable-sort
 standard-char-p
 store-value
+streamp
 string
 string-capitalize
 string-downcase
