@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispFloat.java,v 1.83 2005-03-12 15:57:01 piso Exp $
+ * $Id: LispFloat.java,v 1.84 2005-03-12 17:08:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -406,6 +406,12 @@ public final class LispFloat extends LispObject
             LispObject product = result.multiplyBy(obj);
             LispObject remainder = subtract(product);
             return thread.setValues(result, remainder);
+        }
+        if (obj instanceof Ratio) {
+            // "When rationals and floats are combined by a numerical function,
+            // the rational is first converted to a float of the same format."
+            // 12.1.4.1
+            return truncate(new LispFloat(((Ratio)obj).floatValue()));
         }
         return signal(new LispError("LispFloat.truncate(): not implemented: " +
                                     obj.typeOf().writeToString()));
