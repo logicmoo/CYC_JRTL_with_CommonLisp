@@ -2,7 +2,7 @@
  * ErrorCommands.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationCommands.java,v 1.4 2003-06-09 17:11:16 piso Exp $
+ * $Id: CompilationCommands.java,v 1.5 2003-06-12 00:52:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,10 +134,12 @@ public final class CompilationCommands implements Constants
         CompilationError error =
             CompilationError.parseLineAsErrorMessage(editor.getDotLine());
         if (error != null) {
+            final Buffer buffer = editor.getBuffer();
+            if (buffer instanceof CompilationErrorBuffer)
+                ((CompilationErrorBuffer)buffer).setCurrentError(error);
             String errorFileName = error.getFileName();
             int errorLineNumber = error.getLineNumber();
             if (errorFileName != null && errorLineNumber != 0) {
-                final Buffer buffer = editor.getBuffer();
                 Buffer buf =
                     getSourceBuffer(buffer.getCurrentDirectory(),
                         errorFileName);
