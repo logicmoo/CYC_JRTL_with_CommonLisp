@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.9 2003-03-17 18:27:01 piso Exp $
+# $Id: Makefile.in,v 1.10 2003-03-18 03:47:09 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
 
 CLASSFILES =	AbstractArray.class \
 		AbstractVector.class \
+		Array.class \
 		ArrayType.class \
 		Bignum.class \
 		Binding.class \
