@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.10 2003-12-20 22:40:02 asimon Exp $
+;;; $Id: java.lisp,v 1.11 2003-12-21 14:05:49 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -66,6 +66,26 @@
 (defun (setf jarray-ref) (new-value java-array &rest indices)
   (apply #'jarray-set java-array new-value indices))
 
+(defun jnew-array-from-array (element-type array)
+  "Returns a new Java array with base type ELEMENT-TYPE (a string or a class-ref)
+   initialized from ARRAY"
+  (flet 
+    ((row-major-to-index (dimensions n)
+                         (loop for dims on dimensions
+                           for dim = (car dims)
+                           with indices
+                           do
+                           (multiple-value-bind (m r) (floor n (apply #'* (cdr dims)))
+                             (push m indices)
+                             (setq n r))
+                           finally (return (nreverse indices)))))
+    (let* ((dimensions (array-dimensions array))
+           (jarray (apply #'jnew-array element-type dimensions)))
+      (dotimes (i (array-total-size array) jarray)
+	#+maybe_one_day
+	(setf (apply #'jarray-ref jarray (row-major-to-index dimensions i)) (row-major-aref array i))
+	(apply #'(setf jarray-ref) (row-major-aref array i) jarray (row-major-to-index dimensions i))))))
+
 (defun jclass-constructors (class)
   "Returns a vector of constructors for CLASS"
   (jcall (jmethod "java.lang.Class" "getConstructors") (ensure-jclass class)))
@@ -114,11 +134,13 @@
 (defun jmember-static-p (member)
   "MEMBER is a static member of its declaring class"
   (jstatic (jmethod "java.lang.reflect.Modifier" "isStatic" "int")
-    "java.lang.reflect.Modifier"
-    (jcall (jmethod "java.lang.reflect.Member" "getModifiers") member)))
+           "java.lang.reflect.Modifier"
+           (jcall (jmethod "java.lang.reflect.Member" "getModifiers") member)))
 
 (defun jmember-public-p (member)
   "MEMBER is a public member of its declaring class"
   (jstatic (jmethod "java.lang.reflect.Modifier" "isPublic" "int")
-    "java.lang.reflect.Modifier"
-    (jcall (jmethod "java.lang.reflect.Member" "getModifiers") member)))
+           "java.lang.reflect.Modifier"
+           (jcall (jmethod "java.lang.reflect.Member" "getModifiers") member)))
+
+(provide :java-extensions)
