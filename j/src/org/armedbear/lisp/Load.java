@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.15 2003-08-11 15:22:24 piso Exp $
+ * $Id: Load.java,v 1.16 2003-08-16 13:23:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,17 +49,19 @@ public final class Load extends Lisp
     // ### *load-depth*
     // internal symbol
     private static final Symbol _LOAD_DEPTH_ =
-        internSpecial("*LOAD-DEPTH*", PACKAGE_CL, new Fixnum(0));
+        internSpecial("*LOAD-DEPTH*", PACKAGE_SYS, new Fixnum(0));
 
     /*package*/ static final LispObject load(String filename)
         throws Condition
     {
-        return load(filename, _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-            _LOAD_PRINT_.symbolValueNoThrow() != NIL);
+        return load(filename,
+                    _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
+                    _LOAD_PRINT_.symbolValueNoThrow() != NIL);
     }
 
     private static final LispObject load(final String filename,
-        boolean verbose, boolean print) throws Condition
+                                         boolean verbose, boolean print)
+        throws Condition
     {
         File file = null;
         boolean isFile = false;
@@ -118,7 +120,8 @@ public final class Load extends Lisp
     }
 
     /*package*/ static final LispObject _load(final String filename,
-        boolean verbose, boolean print) throws Condition
+                                              boolean verbose, boolean print)
+        throws Condition
     {
         InputStream in = null;
         String truename = null;
@@ -279,6 +282,8 @@ public final class Load extends Lisp
             // For now we require a string, but we should also support streams
             // and pathnames.
             String filename = LispString.getValue(args[0]);
+            if (filename.endsWith(".compiled"))
+                filename = filename.substring(0, filename.length() - 9);
             return load(filename,
                         _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
                         _LOAD_PRINT_.symbolValueNoThrow() != NIL);
@@ -287,7 +292,8 @@ public final class Load extends Lisp
 
     // ### %load
     // FIXME This function should not be exported from COMMON-LISP!
-    public static final Primitive1 _LOAD = new Primitive1("%load") {
+    public static final Primitive1 _LOAD =
+        new Primitive1("%load", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws Condition
         {
             return _load(LispString.getValue(arg),
