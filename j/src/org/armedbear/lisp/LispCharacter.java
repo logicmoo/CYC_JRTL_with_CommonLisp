@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.33 2003-12-13 00:28:08 piso Exp $
+ * $Id: LispCharacter.java,v 1.34 2004-01-24 22:51:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,7 +132,12 @@ public final class LispCharacter extends LispObject
 
     public Object javaInstance()
     {
-      return new Character(c);
+        return new Character(c);
+    }
+
+    public Object javaInstance(Class c)
+    {
+        return javaInstance();
     }
 
     public int hashCode()

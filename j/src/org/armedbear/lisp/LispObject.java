@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.68 2004-01-03 18:10:09 asimon Exp $
+ * $Id: LispObject.java,v 1.69 2004-01-24 22:51:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,6 +75,11 @@ public class LispObject extends Lisp
     }
 
     public Object javaInstance() throws ConditionThrowable
+    {
+        return signal(new TypeError(this, "primitive type"));
+    }
+
+    public Object javaInstance(Class c) throws ConditionThrowable
     {
         return signal(new TypeError(this, "primitive type"));
     }
@@ -417,7 +422,7 @@ public class LispObject extends Lisp
 
     // Primitive3
     public LispObject execute(LispObject first, LispObject second,
-        LispObject third) throws ConditionThrowable
+                              LispObject third) throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.FUNCTION));
     }

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.54 2004-01-14 02:03:21 piso Exp $
+ * $Id: LispFloat.java,v 1.55 2004-01-24 22:51:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,6 +166,14 @@ public final class LispFloat extends LispObject
     public Object javaInstance()
     {
         return new Double(value);
+    }
+
+    public Object javaInstance(Class c)
+    {
+        String cn = c.getName();
+        if (cn.equals("java.lang.Float") || cn.equals("float"))
+            return new Float(value);
+        return javaInstance();
     }
 
     public final LispObject incr()
