@@ -2,16 +2,19 @@
 
 (in-package "COMMON-LISP")
 
-(export '(push prog1 pop loop the declare declaim locally time))
+(export '(prog1 prog2 push pop loop the declare declaim locally time))
 
-(defmacro push (x place)
-  `(setf ,place (cons ,x ,place)))
+(defmacro prog1 (first-form &rest forms)
+  (let ((result (gensym)))
+    `(let ((,result ,first-form))
+       ,@forms
+       ,result)))
 
-(defmacro prog1 (result &rest body)
-  (let ((n-result (gensym)))
-    `(let ((,n-result ,result))
-       ,@body
-       ,n-result)))
+(defmacro prog2 (first-form second-form &rest forms)
+  `(prog1 (progn ,first-form ,second-form) ,@forms))
+
+(defmacro push (item place)
+  `(setf ,place (cons ,item ,place)))
 
 (defmacro pop (place)
   `(prog1 (car ,place) (setf ,place (cdr ,place))))
@@ -27,7 +30,7 @@
 (defmacro declare (&rest ignored) nil) ; FIXME
 (defmacro declaim (&rest ignored) nil) ; FIXME
 
-(defmacro locally (&rest forms) ; FIXME
+(defmacro locally (&rest forms) ; FIXME Should be a special operator.
   `(progn ,@forms))
 
 (defmacro time (form)

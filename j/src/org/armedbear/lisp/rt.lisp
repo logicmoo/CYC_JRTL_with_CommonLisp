@@ -417,6 +417,7 @@
                               "position-if"
                               "position-if-not"
                               "prog1"
+                              "prog2"
                               "progn"
                               "reverse"
                               "simple-bit-vector"
