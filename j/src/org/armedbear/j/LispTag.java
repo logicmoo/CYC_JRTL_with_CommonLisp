@@ -2,7 +2,7 @@
  * LispTag.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispTag.java,v 1.2 2003-05-07 01:26:55 piso Exp $
+ * $Id: LispTag.java,v 1.3 2003-10-11 00:12:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,10 @@ public final class LispTag extends LocalTag
             }
         }
         String d = s.substring(0, end);
+
+        if (d.equals("defgeneric") || d.equals("defmethod"))
+            return signature;
+
         s = s.substring(end).trim();
         end = s.length();
         FastStringBuffer sb = new FastStringBuffer('(');
