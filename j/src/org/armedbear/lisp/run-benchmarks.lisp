@@ -80,8 +80,8 @@
     (terpri)
     (force-output)
     (let (before-real after-real before-user after-user)
-      (setf before-user (get-internal-run-time))
       (setf before-real (get-internal-real-time))
+      (setf before-user (get-internal-run-time))
       (dotimes (i times)
         (apply function args))
       (setf after-user (get-internal-run-time))
@@ -106,6 +106,7 @@
         (get-decoded-time)
         (format *benchmark-output* "~d-~2,'0d-~2,'0d ~2,'0d:~2,'0d~%"
                 year month date hour minute))
+      (format *benchmark-output* "~a~%" (short-site-name))
       (force-output *benchmark-output*)
       (bench-gc)
       ;; The benchmarks.
@@ -199,8 +200,12 @@
       (run-benchmark 'cl-bench.clos:methodcalls/simple)
       (run-benchmark 'cl-bench.clos:methodcalls/simple+after)
       (run-benchmark 'cl-bench.clos:methodcalls/complex)
-      (run-benchmark 'cl-bench.clos:run-eql-fib))))
+      #+nil
+      (run-benchmark 'cl-bench.clos:run-eql-fib)
+      (run-benchmark 'cl-bench.clos::eql-fib '(16)))))
 
 (in-package "CL-USER")
+
 (import '(cl-bench:run-benchmark cl-bench:run-benchmarks))
+
 (export '(run-benchmark run-benchmarks))
