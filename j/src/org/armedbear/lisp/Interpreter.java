@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.70 2004-09-01 14:19:35 piso Exp $
+ * $Id: Interpreter.java,v 1.71 2004-09-12 01:43:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,7 +124,6 @@ public final class Interpreter extends Lisp
                     Autoload autoload = (Autoload) tplFun;
                     autoload.load();
                 }
-                _LOAD_VERBOSE_.setSymbolValue(T);
                 do {
                     String userHome = System.getProperty("user.home");
                     File file = new File(userHome, ".abclrc");
@@ -164,9 +163,53 @@ public final class Interpreter extends Lisp
         }
     }
 
-    private boolean done = false;
+    private void processCommandLineArguments(String[] args)
+    {
+        if (args.length > 0) {
+            for (int i = 0; i < args.length; ++i) {
+                if (args[i].equals("--eval")) {
+                    if (i+1 < args.length) {
+                        LispObject result = null;
+                        try {
+                            result = evaluate(args[i+1]);
+                        }
+                        catch (ConditionThrowable c) {
+                            System.err.println("Caught condition: " +
+                                               c.getCondition().toString() +
+                                               " while evaluating: " +
+                                               args[i+1]);
+                            System.exit(2);
+                        }
+                        ++i;
+                    } else {
+                        System.err.println("No argument supplied to --eval");
+                        System.exit(1);
+                    }
+                } else if (args[i].equals("--load")) {
+                    if (i+1 < args.length) {
+                        LispObject result = null;
+                        try {
+                            // String loadStr = "(load \"" + String.valueOf(args[i+1]) + "\")";
+                            result = Load.load(args[i+1], false, false, true);
+                        }
+                        catch (ConditionThrowable c) {
+                            System.err.println("Caught condition: " +
+                                               c.getCondition().toString() +
+                                               " while loading: " +
+                                               args[i+1]);
+                            System.exit(2);
+                        }
+                        ++i;
+                    } else {
+                        System.err.println("No argument supplied to --load");
+                        System.exit(1);
+                    }
+                }
+            }
+        }
+    }
 
-    public void run()
+    public void run(String[] args)
     {
         LispThread thread = null;
         try {
@@ -176,7 +219,6 @@ public final class Interpreter extends Lisp
             return;
         }
         commandNumber = 0;
-        done = false;
         try {
             Stream out = getStandardOutput();
             out._writeString(banner());
@@ -198,6 +240,8 @@ public final class Interpreter extends Lisp
             }
             initializeLisp(jlisp);
             initializeTopLevel();
+            if (args != null)
+                processCommandLineArguments(args);
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
             LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
             if (tplFun instanceof Function) {
@@ -225,8 +269,6 @@ public final class Interpreter extends Lisp
                     Symbol.PLUS_PLUS_PLUS.setSymbolValue(Symbol.PLUS_PLUS.getSymbolValue());
                     Symbol.PLUS_PLUS.setSymbolValue(Symbol.PLUS.getSymbolValue());
                     Symbol.PLUS.setSymbolValue(Symbol.MINUS.getSymbolValue());
-                    if (done)
-                        return;
                     out = getStandardOutput();
                     out.freshLine();
                     LispObject[] values = thread.getValues();
