@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.4 2002-11-30 16:00:19 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.5 2002-12-02 15:50:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,21 @@
 
 package org.armedbear.j;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.SwingUtilities;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.MenuElement;
+import javax.swing.MenuSelectionManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler implements Constants
+public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
+    implements Constants
 {
     private String title = "Open File";
 
@@ -41,6 +50,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
 
     private Object returned;
     private String encoding;
+    
+    private JPopupMenu popup;
 
     public OpenFileTextFieldHandler(Editor editor, HistoryTextField textField)
     {
@@ -97,8 +108,12 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
         }
         File currentDir = null;
         File file = buffer.getFile();
-        if (file != null)
-            currentDir = file.getParentFile();
+        if (file != null) {
+            if (file.canonicalPath().equals("/"))
+                currentDir = file;
+            else
+                currentDir = file.getParentFile();
+        }
         if (currentDir == null)
             currentDir = Directories.getUserHomeDirectory();
         Debug.assertTrue(currentDir != null);
@@ -122,7 +137,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
         }
         File candidate = null;
         if (Utilities.isFilenameAbsolute(entry)) {
-            candidate = File.getInstance(entry);
+            candidate = File.getInstance(currentDir, entry);
             if (candidate == null) {
                 error("Invalid path");
                 return;
@@ -353,6 +368,10 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
 
     public void escape()
     {
+        if (popup != null) {
+            popup.setVisible(false);
+            popup = null;
+        }
         Object owner = textField.getOwner();
         if (owner instanceof OpenFileDialog) {
             OpenFileDialog dialog = (OpenFileDialog) owner;
@@ -372,67 +391,89 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
 
     public void tab()
     {
-        editor.setWaitCursor();
-        String entry = textField.getText();
+        final String entry = textField.getText();
         if (entry.startsWith("http:") || entry.startsWith("https:") ||
             entry.startsWith("ftp:"))
             return;
         File dir = editor.getCurrentDirectory();
         if (dir == null)
             return;
-        String completion = null;
+        String prefix = null;
         if (dir.isLocal() &&
             (Utilities.isFilenameAbsolute(entry) || entry.startsWith(".."))) {
             File file = File.getInstance(dir, entry);
             if (file != null)
-                completion = getCompletion(file.canonicalPath());
+                prefix = file.canonicalPath();
         } else
-            completion = getCompletion(entry);
-        if (completion != null && !completion.equals(entry)) {
-            textField.setText(completion);
-            textField.setCaretPosition(completion.length());
+            prefix = entry;
+        if (prefix == null)
+            return;
+        editor.setWaitCursor();
+        if (Editor.preferences().getBooleanProperty(Property.SHOW_COMPLETION_LIST)) {
+            if (popup == null) {
+                completions = getCompletions(prefix);
+                index = 0;
+                if (completions.size() == 1) {
+                    String completion = (String) completions.get(0);
+                    textField.setText(completion);
+                    textField.setCaretPosition(completion.length());
+                } else if (completions.size() > 1)
+                    showCompletionsPopup();
+            } else
+                tabPopup();
+        } else {
+            // No completion list.
+            String s = getCompletion(prefix);
+            if (s != null && !s.equals(entry)) {
+                textField.setText(s);
+                textField.setCaretPosition(s.length());
+            }
         }
         editor.setDefaultCursor();
     }
 
     public List getCompletions(String prefix)
     {
-        ArrayList completions = new ArrayList();
         File currentDirectory = null;
         Buffer buffer = editor.getBuffer();
         if (buffer != null) {
             File file = buffer.getFile();
-            if (file != null && (file.isLocal() || file instanceof SshFile))
-                currentDirectory = file.getParentFile();
+            if (file != null && (file.isLocal() || file instanceof SshFile)) {
+                if (file.canonicalPath().equals("/"))
+                    currentDirectory = file;
+                else
+                    currentDirectory = file.getParentFile();
+            }
         }
-        if (currentDirectory != null) {
-            final String sourcePath = checkSourcePath ? getSourcePath() : null;
-            prefix = File.normalize(prefix);
-            FilenameCompletion completion =
-                new FilenameCompletion(currentDirectory, prefix, sourcePath,
-                    completionsIgnoreCase);
-            List files = completion.listFiles();
-            if (files != null) {
-                final int limit = files.size();
-                for (int i = 0; i < limit; i++) {
-                    File file = (File) files.get(i);
-                    // We don't want the file we're currently looking at.
-                    if (file.equals(editor.getBuffer().getFile()))
-                        continue;
-                    String name;
-                    if (currentDirectory.equals(file.getParentFile()))
-                        name = file.getName();
-                    else
-                        name = file.canonicalPath();
-                    if (file.isDirectory()) {
-                        addCompletion(completions,
-                            name.concat(LocalFile.getSeparator()));
-                        continue;
-                    }
-                    if (isExcluded(name))
-                        continue;
-                    addCompletion(completions, name);
+        if (currentDirectory == null)
+            return null;
+        ArrayList completions = new ArrayList();
+        final String sourcePath = checkSourcePath ? getSourcePath() : null;
+        prefix = File.normalize(prefix);
+        FilenameCompletion completion =
+            new FilenameCompletion(currentDirectory, prefix, sourcePath,
+                completionsIgnoreCase);
+        List files = completion.listFiles();
+        if (files != null) {
+            final int limit = files.size();
+            for (int i = 0; i < limit; i++) {
+                File file = (File) files.get(i);
+                // We don't want the file we're currently looking at.
+                if (file.equals(editor.getBuffer().getFile()))
+                    continue;
+                String name;
+                if (currentDirectory.equals(file.getParentFile()))
+                    name = file.getName();
+                else
+                    name = file.canonicalPath();
+                if (file.isDirectory()) {
+                    addCompletion(completions,
+                        name.concat(LocalFile.getSeparator()));
+                    continue;
                 }
+                if (isExcluded(name))
+                    continue;
+                addCompletion(completions, name);
             }
         }
         if (checkBuffers && !Utilities.isFilenameAbsolute(prefix) &&
@@ -527,5 +568,120 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
     {
         MessageDialog.showMessageDialog(editor, message, title);
         editor.updateLocation();
+    }
+    
+    private void showCompletionsPopup()
+    {
+        for (int i = 0; i < completions.size(); i++) {
+            String s = (String) completions.get(i);
+            if (popup == null) {
+                popup = new JPopupMenu();
+                MenuSelectionManager.defaultManager().addChangeListener(
+                    popupChangeListener);
+            }
+            PopupMenuItem menuItem = new PopupMenuItem();
+            menuItem.setText(s);
+            menuItem.setActionCommand(s);
+            menuItem.addActionListener(popupActionListener);
+            popup.add(menuItem);
+        }
+        if (popup != null)
+            popup.show(textField, 0, textField.getHeight());
+    }
+    
+    private void tabPopup()
+    {
+        int count = popup.getComponentCount();
+        if (count == 0) {
+            Debug.bug();
+            return;
+        }
+        int i = popup.getSelectionModel().getSelectedIndex();
+        if (++i >= count)
+            i = 0;
+        if (popup.getSubElements().length == count) {
+            MenuElement me[] = new MenuElement[2];
+            me[0] = popup;
+            me[1] = popup.getSubElements()[i];
+            MenuSelectionManager.defaultManager().setSelectedPath(me);
+            popup.getSelectionModel().setSelectedIndex(i);
+        } else {
+            Debug.bug();
+            return;
+        }
+        PopupMenuItem menuItem =
+            (PopupMenuItem) popup.getComponent(i);
+        String s = menuItem.getText();
+        textField.setText(s);        
+    }
+    
+    protected void reset()
+    {
+        if (popup != null) {
+            popup.setVisible(false);
+            popup = null;
+        }
+        super.reset();
+    }
+    
+    private void updateTextField()
+    {
+        MenuElement[] path =
+            MenuSelectionManager.defaultManager().getSelectedPath();
+        if (path != null && path.length > 0) {
+            MenuElement me = path[path.length-1];
+            if (me instanceof PopupMenuItem) {
+                String s = ((PopupMenuItem)me).getText();
+                textField.setText(s);
+            }
+        }
+    }
+    
+    private ActionListener popupActionListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e)
+        {
+            textField.setText(e.getActionCommand());
+            enter();
+        }
+    };
+    
+    private ChangeListener popupChangeListener = new ChangeListener() {
+        public void stateChanged(ChangeEvent e)
+        {
+            updateTextField();
+        }
+    };
+    
+    private class PopupMenuItem extends JMenuItem
+    {
+        public void processKeyEvent(KeyEvent e, MenuElement[] path,
+            MenuSelectionManager manager)
+        {
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_TAB:
+                        tabPopup();
+                        e.consume();
+                        return;
+                    case KeyEvent.VK_ESCAPE:
+                        escape();
+                        e.consume();
+                        return;
+                    case KeyEvent.VK_UP:
+                    case KeyEvent.VK_DOWN:
+                        break;
+                    case KeyEvent.VK_RIGHT:
+                        reset();
+                        textField.setCaretPosition(textField.getText().length());
+                        textField.requestFocus();
+                        e.consume();
+                        return;
+                    default:
+                        reset();
+                        return;
+                }
+            }
+            super.processKeyEvent(e, path, manager);
+        }
     }
 }
