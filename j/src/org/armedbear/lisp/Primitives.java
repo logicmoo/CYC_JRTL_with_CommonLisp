@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.732 2005-02-09 18:37:12 piso Exp $
+ * $Id: Primitives.java,v 1.733 2005-02-10 12:58:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1444,12 +1444,39 @@ public final class Primitives extends Lisp
     private static void checkRedefinition(LispObject arg)
         throws ConditionThrowable
     {
-        if (_WARN_ON_REDEFINITION_.symbolValue() != NIL) {
+        final LispThread thread = LispThread.currentThread();
+        if (_WARN_ON_REDEFINITION_.symbolValue(thread) != NIL) {
             if (arg instanceof Symbol) {
                 LispObject oldDefinition = arg.getSymbolFunction();
-                if (oldDefinition != null && !(oldDefinition instanceof Autoload))
-                    Symbol.STYLE_WARN.execute(new SimpleString("redefining ~S"),
-                                              arg);
+                if (oldDefinition != null && !(oldDefinition instanceof Autoload)) {
+                    LispObject oldSource =
+                        Extensions.SOURCE_PATHNAME.execute(arg);
+                    LispObject currentSource =
+                        Load._FASL_SOURCE_.symbolValue(thread);
+                    if (currentSource == NIL)
+                        currentSource = _LOAD_TRUENAME_.symbolValue(thread);
+                    if (currentSource == NIL)
+                        currentSource = Keyword.TOP_LEVEL;
+                    if (oldSource != NIL) {
+                        if (currentSource.equal(oldSource))
+                            return; // OK
+                    }
+                    if (currentSource == Keyword.TOP_LEVEL) {
+                        Symbol.STYLE_WARN.execute(new SimpleString("redefining ~S at top level"),
+                                                  arg);
+
+                    } else {
+                        Binding lastSpecialBinding = thread.lastSpecialBinding;
+                        thread.bindSpecial(_PACKAGE_, PACKAGE_CL);
+                        try {
+                            Symbol.STYLE_WARN.execute(new SimpleString("redefining ~S in ~S"),
+                                                      arg, currentSource);
+                        }
+                        finally {
+                            thread.lastSpecialBinding = lastSpecialBinding;
+                        }
+                    }
+                }
             }
         }
     }
@@ -1489,7 +1516,6 @@ public final class Primitives extends Lisp
             } else
                 return signal(new TypeError(first.writeToString() +
                                             " is not a valid function name."));
-            checkRedefinition(first);
             LispObject arglist = checkList(second);
             LispObject body = checkList(third);
             if (body.car() instanceof AbstractString && body.cdr() != NIL) {
@@ -1514,13 +1540,7 @@ public final class Primitives extends Lisp
             }
             Closure closure = new Closure(first instanceof Symbol ? symbol : null,
                                           arglist, body, env);
-            closure.setArglist(arglist);
-            if (first instanceof Symbol) {
-                symbol.setSymbolFunction(closure);
-            } else {
-                // SETF function
-                put(symbol, Symbol._SETF_FUNCTION, closure);
-            }
+            FSET.execute(first, closure, NIL, arglist);
             // Clear function table entry (if any).
             if (FUNCTION_TABLE != null) {
                 FUNCTION_TABLE.remhash(first);
@@ -2912,13 +2932,16 @@ public final class Primitives extends Lisp
                 checkRedefinition(first);
                 Symbol symbol = (Symbol) first;
                 symbol.setSymbolFunction(second);
-                LispObject source = Load._FASL_SOURCE_.symbolValue();
-                if (source != NIL) {
-                    if (third != NIL)
-                        put(symbol, Symbol._SOURCE, new Cons(source, third));
-                    else
-                        put(symbol, Symbol._SOURCE, source);
-                }
+                final LispThread thread = LispThread.currentThread();
+                LispObject source = Load._FASL_SOURCE_.symbolValue(thread);
+                if (source == NIL)
+                    source = _LOAD_TRUENAME_.symbolValue(thread);
+                if (source == NIL)
+                    source = Keyword.TOP_LEVEL;
+                if (source != Keyword.TOP_LEVEL && third != NIL)
+                    put(symbol, Symbol._SOURCE, new Cons(source, third));
+                else
+                    put(symbol, Symbol._SOURCE, source);
             } else if (first instanceof Cons && first.car() == Symbol.SETF) {
                 // SETF function
                 checkRedefinition(first);
