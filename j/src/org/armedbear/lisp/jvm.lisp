@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.208 2004-07-08 18:01:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.209 2004-07-09 17:58:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2627,7 +2627,7 @@
                 (emit 'swap) ; array index value
                 (emit 'aastore))
                (t
-                (assert false) ; FIXME!
+                (assert nil) ; FIXME!
                 (emit 'astore (variable-register variable))))
          (unless for-effect
            (emit-store-value))
@@ -2660,7 +2660,7 @@
                   (emit-store-value))
                 (emit 'aastore))
                (t
-                (assert false) ; FIXME!
+                (assert nil) ; FIXME!
                 (compile-form (cadr rest))
                 (unless (remove-store-value)
                   (emit-push-value))
@@ -2932,8 +2932,8 @@
     (setf (method-descriptor-index execute-method)
           (pool-name (method-descriptor execute-method)))
     (if *hairy-arglist-p*
-        (let* ((fun (sys::make-compiled-function nil args body))
-               (vars (sys::varlist fun))
+        (let* ((closure (sys::make-closure form nil))
+               (vars (sys::varlist closure))
                (arg-index 0))
           (dolist (var vars)
             (let ((variable (make-variable :name var
