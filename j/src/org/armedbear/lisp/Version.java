@@ -2,7 +2,7 @@
  * Version.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Version.java,v 1.75 2003-06-25 12:47:13 piso Exp $
+ * $Id: Version.java,v 1.76 2003-06-25 13:53:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,6 @@ public final class Version
 
     public static String getVersion()
     {
-        return "0.0.1";
+        return "0.0.0.42+";
     }
 }
