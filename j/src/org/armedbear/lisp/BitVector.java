@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.11 2003-03-18 04:00:11 piso Exp $
+ * $Id: BitVector.java,v 1.12 2003-03-19 21:53:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,24 +21,34 @@
 
 package org.armedbear.lisp;
 
-public final class BitVector extends Vector
+public final class BitVector extends AbstractVector implements SequenceType,
+    VectorType
 {
+    private static final int LONG_MASK = 0x3f;
+
+    private int capacity;
+    private long[] bits;
+
     public BitVector(int length) throws LispError
     {
-        super(length);
-        for (int i = length; i-- > 0;)
-            set(i, new Fixnum(0));
+        if (length < 0)
+            throw new NegativeArraySizeException();
+        capacity = length;
+        int size = length >>> 6;
+        if ((length & LONG_MASK) != 0)
+            ++size;
+        bits = new long[size];
     }
 
     public BitVector(String s) throws LispError
     {
-        super(s.length());
+        this(s.length());
         for (int i = s.length(); i-- > 0;) {
             char c = s.charAt(i);
             if (c == '0')
-                set(i, new Fixnum(0));
+                ;
             else if (c == '1')
-                set(i, new Fixnum(1));
+                set(i);
             else
                 Debug.assertTrue(false);
         }
@@ -76,6 +86,124 @@ public final class BitVector extends Vector
         return super.typep(typeSpecifier);
     }
 
+    public LispObject getElementType()
+    {
+        return Symbol.BIT;
+    }
+
+    public int capacity()
+    {
+        return capacity;
+    }
+
+    public int length()
+    {
+        return fillPointer >= 0 ? fillPointer : capacity;
+    }
+
+    public LispObject elt(int index) throws LispError
+    {
+        final int limit = length();
+        if (index < 0 || index >= limit)
+            badIndex(index, limit);
+        return get(index);
+    }
+
+    public LispObject getRowMajor(int index) throws LispError
+    {
+        return get(index);
+    }
+
+    public void setRowMajor(int index, LispObject newValue) throws LispError
+    {
+        set(index, newValue);
+    }
+
+    public LispObject get(int index) throws LispError
+    {
+        if (index >= capacity)
+            badIndex(index, capacity);
+        int offset = index >> 6;
+        return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+    }
+
+    private int _get(int index)
+    {
+        int offset = index >> 6;
+        return (bits[offset] & (1L << index)) != 0 ? 1 : 0;
+    }
+
+    public void set(int index, LispObject newValue) throws LispError
+    {
+        if (index >= capacity)
+            badIndex(index, capacity);
+        try {
+            int n = Fixnum.getValue(newValue);
+            if (n == 1) {
+                set(index);
+                return;
+            }
+            if (n == 0) {
+                clear(index);
+                return;
+            }
+            // None of the above...
+        }
+        catch (TypeError e) {}
+        throw new TypeError(newValue, "bit");
+    }
+
+    public void set(int index)
+    {
+        int offset = index >> 6;
+        bits[offset] |= 1L << index;
+    }
+
+    public void clear(int index)
+    {
+        int offset = index >> 6;
+        bits[offset] &= ~(1L << index);
+    }
+
+    public void fill(LispObject obj) throws LispError
+    {
+        try {
+            int n = Fixnum.getValue(obj);
+            if (n == 1) {
+                for (int i = bits.length; i-- > 0;)
+                    bits[i] = -1L;
+                return;
+            }
+            if (n == 0) {
+                for (int i = bits.length; i-- > 0;)
+                    bits[i] = 0;
+                return;
+            }
+            // None of the above...
+        }
+        catch (TypeError e) {}
+        throw new TypeError(obj, "bit");
+    }
+
+    public void shrink(int n) throws LispError
+    {
+        if (n < capacity) {
+            int size = n >>> 6;
+            if ((n & LONG_MASK) != 0)
+                ++size;
+            if (size < bits.length) {
+                long[] newbits = new long[size];
+                System.arraycopy(bits, 0, newbits, 0, size);
+                bits = newbits;
+            }
+            capacity = n;
+            return;
+        }
+        if (n == capacity)
+            return;
+        throw new LispError();
+    }
+
     public boolean isSimpleVector()
     {
         return fillPointer < 0;
@@ -101,35 +229,13 @@ public final class BitVector extends Vector
         return false;
     }
 
-    public void set(int index, LispObject newValue) throws LispError
-    {
-        long n = Fixnum.getValue(newValue);
-        if (n == 0 || n == 1)
-            super.set(index, newValue);
-        else
-            throw new TypeError(newValue, "bit");
-    }
-
-    public void fill(LispObject obj) throws LispError
-    {
-        int n = Fixnum.getInt(obj);
-        if (n == 0 || n == 1) {
-            for (int i = length(); i-- > 0;)
-                set(i, new Fixnum(n));
-        } else
-            throw new TypeError(obj, "bit");
-    }
-
     public String toString()
     {
-        StringBuffer sb = new StringBuffer("#*");
         final int limit = length();
-        for (int i = 0; i < limit; i++) {
-            try {
-                sb.append(get(i));
-            }
-            catch (LispError e) {}
-        }
+        StringBuffer sb = new StringBuffer(limit + 2);
+        sb.append("#*");
+        for (int i = 0; i < limit; i++)
+            sb.append(_get(i) == 1 ? '1' : '0');
         return sb.toString();
     }
 }
