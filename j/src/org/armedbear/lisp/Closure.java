@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.30 2003-06-08 15:32:45 piso Exp $
+ * $Id: Closure.java,v 1.31 2003-06-08 15:57:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,7 @@ public class Closure extends Function
 
     private final LispObject lambdaList;
     private final Parameter[] requiredParameters;
+    private final Parameter[] optionalParameters;
     private final Parameter[] parameterArray;
     private final Parameter[] keywordParameterArray;
     private final Parameter[] auxVarArray;
@@ -79,6 +80,7 @@ public class Closure extends Function
             ArrayList auxVars = null;
 
             ArrayList requiredParameters = new ArrayList();
+            ArrayList optionalParameters = new ArrayList();
 
             boolean optional = false;
             boolean key = false;
@@ -125,8 +127,11 @@ public class Closure extends Function
                         aux = true;
                     } else {
                         if (optional) {
+                            Debug.assertTrue(state == STATE_OPTIONAL);
                             arrayList.add(new Parameter((Symbol)obj, NIL,
                                 OPTIONAL));
+                            optionalParameters.add(new Parameter((Symbol)obj,
+                                NIL, OPTIONAL));
                             if (maxArgs >= 0)
                                 ++maxArgs;
                         } else if (key) {
@@ -199,6 +204,8 @@ public class Closure extends Function
             arrayList.toArray(parameterArray);
             this.requiredParameters = new Parameter[requiredParameters.size()];
             requiredParameters.toArray(this.requiredParameters);
+            this.optionalParameters = new Parameter[optionalParameters.size()];
+            optionalParameters.toArray(this.optionalParameters);
             Debug.assertTrue(keywordParameterCount == keywordParameters.size());
             if (keywordParameterCount > 0) {
                 keywordParameterArray = new Parameter[keywordParameterCount];
@@ -214,6 +221,7 @@ public class Closure extends Function
             Debug.assertTrue(lambdaList == NIL);
             parameterArray = new Parameter[0];
             requiredParameters = null;
+            optionalParameters = null;
             keywordParameterArray = null;
             auxVarArray = null;
             arity = 0;
@@ -425,11 +433,16 @@ public class Closure extends Function
         }
         // Required parameters.
         int i;
-        for (i = 0; i < required; i++) {
-            Parameter parameter = parameterArray[i];
-            Symbol symbol = parameter.var;
-            bind(symbol, args[i], ext);
-        }
+        if (requiredParameters != null) {
+            Debug.assertTrue(requiredParameters.length == required);
+            for (i = 0; i < required; i++) {
+                Parameter parameter = requiredParameters[i];
+                Symbol symbol = parameter.var;
+                bind(symbol, args[i], ext);
+            }
+        } else
+            Debug.assertTrue(required == 0);
+        i = required;
         int argsUsed = required;
         // Optional parameters.
         while (i < parameterArray.length) {
@@ -459,18 +472,10 @@ public class Closure extends Function
         }
         // &rest parameter.
         if (restp) {
-            if (i < parameterArray.length) {
-                Parameter parameter = parameterArray[i];
-                if (parameter.type == REST) {
-                    Symbol symbol = parameter.var;
-                    Debug.assertTrue(symbol == restVar);
-                    LispObject rest = NIL;
-                    for (int j = args.length; j-- > i;)
-                        rest = new Cons(args[j], rest);
-                    bind(symbol, rest, ext);
-                    ++i;
-                }
-            }
+            LispObject rest = NIL;
+            for (int j = args.length; j-- > i;)
+                rest = new Cons(args[j], rest);
+            bind(restVar, rest, ext);
         }
         // Keyword parameters.
         if (keywordParameterCount > 0) {
