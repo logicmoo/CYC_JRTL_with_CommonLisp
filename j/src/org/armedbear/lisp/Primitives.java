@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.378 2003-09-08 18:18:29 piso Exp $
+ * $Id: Primitives.java,v 1.379 2003-09-08 18:28:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -342,9 +342,13 @@ public final class Primitives extends Module
             case ABS:                           // ### abs
                 return arg.ABS();
             case ARRAYP:                        // ### arrayp
-                return arg.typep(Symbol.ARRAY);
+                return arg instanceof AbstractArray ? T : NIL;
             case ARRAY_HAS_FILL_POINTER_P:      // ### array-has-fill-pointer-p
-                return checkVector(arg).getFillPointer() >= 0 ? T : NIL;
+                if (arg instanceof AbstractVector)
+                    return ((AbstractVector)arg).getFillPointer() >= 0 ? T : NIL;
+                if (arg instanceof AbstractArray)
+                    return NIL;
+                throw new TypeError(arg, "array");
             case VECTORP:                       // ### vectorp
                 return (arg.getType() & TYPE_VECTOR) != 0 ? T : NIL;
             case SIMPLE_VECTOR_P:               // ### simple-vector-p
