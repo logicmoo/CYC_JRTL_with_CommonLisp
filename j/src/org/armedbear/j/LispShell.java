@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.61 2004-09-03 19:30:12 piso Exp $
+ * $Id: LispShell.java,v 1.62 2004-09-06 00:13:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,6 +133,8 @@ public class LispShell extends Shell
             FastStringBuffer sb =
                 new FastStringBuffer("(load (merge-pathnames \"swank-loader.lisp\" \"");
             sb.append(Site.getLispHome());
+            if (!sb.toString().endsWith(LocalFile.getSeparator()))
+                sb.append(LocalFile.getSeparator());
             sb.append("\"))");
             shell.send(sb.toString());
         }
