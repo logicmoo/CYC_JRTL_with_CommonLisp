@@ -2,7 +2,7 @@
  * Primitive4.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Primitive4.java,v 1.1 2004-04-16 00:58:02 piso Exp $
+ * $Id: Primitive4.java,v 1.2 2004-10-20 00:14:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,5 +51,10 @@ public class Primitive4 extends Function
                       String arglist)
     {
         super(name, pkg, exported, arglist);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.COMPILED_FUNCTION;
     }
 }

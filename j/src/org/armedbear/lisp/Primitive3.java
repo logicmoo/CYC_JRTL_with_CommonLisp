@@ -2,7 +2,7 @@
  * Primitive3.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitive3.java,v 1.13 2004-04-16 00:23:38 piso Exp $
+ * $Id: Primitive3.java,v 1.14 2004-10-20 00:14:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,5 +51,10 @@ public class Primitive3 extends Function
                       String arglist)
     {
         super(name, pkg, exported, arglist);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.COMPILED_FUNCTION;
     }
 }

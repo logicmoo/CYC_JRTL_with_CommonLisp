@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.57 2004-10-19 02:10:52 piso Exp $
+ * $Id: LispCharacter.java,v 1.58 2004-10-20 00:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,8 @@ public final class LispCharacter extends LispObject
 
     public LispObject typeOf()
     {
+        if (isStandardChar())
+            return Symbol.STANDARD_CHAR;
         return Symbol.CHARACTER;
     }
 
@@ -75,7 +77,7 @@ public final class LispCharacter extends LispObject
         if (type == Symbol.BASE_CHAR)
             return T;
         if (type == Symbol.STANDARD_CHAR)
-            return isStandardChar();
+            return isStandardChar() ? T : NIL;
         return super.typep(type);
     }
 
@@ -94,13 +96,13 @@ public final class LispCharacter extends LispObject
         return new SimpleString(value);
     }
 
-    public LispObject isStandardChar()
+    private boolean isStandardChar()
     {
         if (value >= ' ' && value < 127)
-            return T;
+            return true;
         if (value == '\n')
-            return T;
-        return NIL;
+            return true;
+        return false;
     }
 
     public boolean eql(LispObject obj)
@@ -143,7 +145,7 @@ public final class LispCharacter extends LispObject
             return ((LispCharacter)obj).getValue();
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "character"));
+            signal(new TypeError(obj, Symbol.CHARACTER));
             // Not reached.
             return 0;
         }
@@ -456,7 +458,12 @@ public final class LispCharacter extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return checkCharacter(arg).isStandardChar();
+            try {
+                return ((LispCharacter)arg).isStandardChar() ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CHARACTER));
+            }
         }
     };
 

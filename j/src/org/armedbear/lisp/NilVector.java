@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.13 2004-10-13 00:22:19 piso Exp $
+ * $Id: NilVector.java,v 1.14 2004-10-20 00:12:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public final class NilVector extends AbstractString
 
     public LispObject typeOf()
     {
-        return Symbol.NIL_VECTOR;
+        return list2(Symbol.NIL_VECTOR, new Fixnum(capacity));
     }
 
     public LispObject classOf()
