@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.176 2003-04-24 18:55:44 piso Exp $
+ * $Id: Primitives.java,v 1.177 2003-04-25 00:34:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2525,15 +2525,14 @@ public final class Primitives extends Module
     private static final Primitive INTERN = new Primitive("intern") {
         public LispObject execute(LispObject[] args) throws LispError
         {
-            if (args.length == 0 || args.length > 2)
-                throw new WrongNumberOfArgumentsException(this);
-            String s = LispString.getValue(args[0]);
-            Package pkg;
-            if (args.length == 2)
-                pkg = coerceToPackage(args[1]);
-            else
-                pkg = getCurrentPackage();
-            return intern(s, pkg);
+            switch (args.length) {
+                case 1:
+                    return getCurrentPackage().intern(LispString.getValue(args[0]));
+                case 2:
+                    return coerceToPackage(args[1]).intern(LispString.getValue(args[0]));
+                default:
+                    throw new WrongNumberOfArgumentsException(this);
+            }
         }
     };
 
