@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.8 2003-03-03 03:04:50 piso Exp $
+ * $Id: Closure.java,v 1.9 2003-03-05 15:52:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,6 +155,13 @@ public class Closure extends Function
     public int getType()
     {
         return TYPE_CLOSURE;
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws LispError
+    {
+        if (typeSpecifier == Symbol.COMPILED_FUNCTION)
+            return NIL;
+        return super.typep(typeSpecifier);
     }
 
     public final LispObject getParameterList()
