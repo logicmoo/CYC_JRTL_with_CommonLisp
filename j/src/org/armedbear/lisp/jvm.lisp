@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.336 2005-01-01 18:31:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.337 2005-01-01 19:26:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5065,6 +5065,31 @@
       ;; attributes count
       (write-u2 0 stream))))
 
+(defun p1-compiland (compiland)
+  (let ((precompiled-form (compiland-lambda-expression compiland)))
+    (aver (eq (car precompiled-form) 'LAMBDA))
+    (process-optimization-declarations (cddr precompiled-form))
+    (let ((lambda-list (cadr precompiled-form))
+          syms vars)
+      (multiple-value-bind (required optional restp rest keyp keys allowp auxp aux)
+        (sys::parse-lambda-list lambda-list)
+        (setf syms required)
+        (when optional
+          (setf syms (append syms optional)))
+        (when restp
+          (setf syms (append syms (list rest))))
+        (when keyp
+          (setf syms (append syms keys)))
+        (dformat t "syms = ~S~%" syms))
+      (dolist (sym syms)
+        (push (make-variable :name sym) vars))
+      (setf (compiland-arg-vars compiland) (nreverse vars)))
+    ;; Pass 1.
+    (let ((*visible-variables* *visible-variables*))
+      (setf *visible-variables*
+            (append *visible-variables* (compiland-arg-vars compiland)))
+      (setf (compiland-p1-result compiland) (p1 precompiled-form)))))
+
 (defun p2-compiland (compiland)
   (let* ((p1-result (compiland-p1-result compiland))
          (*declared-symbols* (make-hash-table :test 'eq))
@@ -5245,8 +5270,6 @@
                                      -3)
                  (setf (variable-index variable) nil)))))
 
-;;       (process-optimization-declarations body)
-
       (compile-progn-body body :stack)
 
       (unless *code*
@@ -5308,32 +5331,11 @@
 (defun compile-1 (compiland)
   (dformat t "compile-1 ~S~%" (compiland-name compiland))
   (let ((*current-compiland* compiland)
-        (precompiled-form (compiland-lambda-expression compiland))
         (*speed* *speed*)
         (*safety* *safety*)
         (*debug* *debug*))
-    (process-optimization-declarations (cddr precompiled-form))
-    (aver (eq (car precompiled-form) 'LAMBDA))
-    (let ((lambda-list (cadr precompiled-form))
-          syms vars)
-      (multiple-value-bind (required optional restp rest keyp keys allowp auxp aux)
-          (sys::parse-lambda-list lambda-list)
-        (setf syms required)
-        (when optional
-          (setf syms (append syms optional)))
-        (when restp
-          (setf syms (append syms (list rest))))
-        (when keyp
-          (setf syms (append syms keys)))
-        (dformat t "syms = ~S~%" syms))
-      (dolist (sym syms)
-        (push (make-variable :name sym) vars))
-      (setf (compiland-arg-vars compiland) (nreverse vars)))
     ;; Pass 1.
-    (let ((*visible-variables* *visible-variables*))
-      (setf *visible-variables*
-            (append *visible-variables* (compiland-arg-vars compiland)))
-      (setf (compiland-p1-result compiland) (p1 precompiled-form)))
+    (p1-compiland compiland)
     ;; Pass 2.
     (p2-compiland compiland)))
 
