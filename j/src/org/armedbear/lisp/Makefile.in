@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2005 Peter Graves
-# $Id: Makefile.in,v 1.198 2005-02-28 03:57:00 piso Exp $
+# $Id: Makefile.in,v 1.199 2005-03-15 17:33:22 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -76,6 +76,7 @@ CLASSFILES =	AbstractArray.class \
 		FileStream.class \
 		FillPointerOutputStream.class \
 		Fixnum.class \
+		FloatFunctions.class \
 		FloatingPointInexact.class \
 		FloatingPointInvalidOperation.class \
 		FloatingPointOverflow.class \
