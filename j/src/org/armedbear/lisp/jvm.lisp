@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.294 2004-10-22 15:54:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.295 2004-10-22 19:03:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2181,21 +2181,15 @@
        ((eq fun (compiland-name *current-compiland*)) ; recursive call
         (emit 'aload 0)) ; this
        ((inline-ok fun)
-        (let ((f (declare-function fun)))
           (emit 'getstatic
                 *this-class*
-                f
-                +lisp-object+)))
+                (declare-function fun)
+                +lisp-object+))
        (t
-        (let ((g (declare-symbol fun)))
-          (emit 'getstatic
-                *this-class*
-                g
-                +lisp-symbol+))
-        (emit-invokevirtual +lisp-symbol-class+
-                            "getSymbolFunctionOrDie"
-                            "()Lorg/armedbear/lisp/LispObject;"
-                            0)))
+        (emit 'getstatic
+              *this-class*
+              (declare-symbol fun)
+              +lisp-symbol+)))
       ;; Stack: function
       (compile-call args)
       (unless target
