@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: trace.lisp,v 1.2 2003-11-17 15:22:50 piso Exp $
+;;; $Id: trace.lisp,v 1.3 2003-11-18 01:15:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,21 +38,22 @@
           (push arg results)))
     `',results))
 
+(defparameter *trace-depth* 0)
+
 (defun trace-1 (symbol)
   (unless (fboundp symbol)
     (error "~S is not the name of a function" symbol))
   (when (member symbol *traced-functions*)
     (format t "~S is already being traced." symbol))
-  (let* ((depth 0)
-         (untraced-function (symbol-function symbol))
+  (let* ((untraced-function (symbol-function symbol))
          (trace-function
           (lambda (&rest args)
-            (format t (indent "~D: ~S~%" depth) depth
+            (format t (indent "~D: ~S~%") *trace-depth*
                     (append (list symbol) args))
-            (incf depth)
+            (incf *trace-depth*)
             (let ((r (multiple-value-list (apply untraced-function args))))
-              (decf depth)
-              (format t (indent "~D: ~A returned" depth) depth symbol)
+              (decf *trace-depth*)
+              (format t (indent "~D: ~A returned") *trace-depth* symbol)
               (dolist (val r)
                 (format t " ~S" val))
               (format t "~%")
@@ -62,9 +63,9 @@
     (push symbol *traced-functions*)
     symbol))
 
-(defun indent (string depth)
+(defun indent (string)
   (concatenate 'string
-               (make-string (* (1+ depth) 2) :initial-element #\space)
+               (make-string (* (1+ *trace-depth*) 2) :initial-element #\space)
                string))
 
 (defmacro untrace (&rest args)
