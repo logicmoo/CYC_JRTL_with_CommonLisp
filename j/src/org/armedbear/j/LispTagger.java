@@ -1,7 +1,8 @@
 /*
  * LispTagger.java
  *
- * Copyright (C) 1998-2002 Peter Graves
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: LispTagger.java,v 1.9 2003-05-07 01:36:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,20 +28,23 @@ public final class LispTagger extends Tagger
     // States.
     private static final int NEUTRAL    = 0;
     private static final int OPEN_PAREN = 1;
-    private static final int DEFUN      = 2;
+    private static final int DEFINITION = 2;
 
     private static final Mode mode = LispMode.getMode();
+
+    private ArrayList tags;
 
     public LispTagger(SystemBuffer buffer)
     {
         super(buffer);
     }
 
-    public void run()
+    public synchronized void run()
     {
-        ArrayList tags = new ArrayList();
+        tags = new ArrayList();
         Position pos = new Position(buffer.getFirstLine(), 0);
         int state = NEUTRAL;
+        String definer = null;
         while (!pos.atEnd()) {
             char c = pos.getChar();
             if (Character.isWhitespace(c)) {
@@ -82,12 +86,12 @@ public final class LispTagger extends Tagger
                 continue;
             }
             if (mode.isIdentifierStart(c)) {
-                if (state == DEFUN) {
+                if (state == DEFINITION) {
                     Position tokenStart = pos.copy();
                     String token = gatherToken(pos);
-                    LocalTag tag = new LispTag(token, tokenStart);
-                    tags.add(tag);
+                    addTag(token, tokenStart, definer);
                     state = NEUTRAL;
+                    definer = null;
                     continue;
                 }
                 if (state == OPEN_PAREN) {
@@ -97,9 +101,11 @@ public final class LispTagger extends Tagger
                         state = NEUTRAL;
                         continue;
                     }
-                    if (LispMode.isDefiner(gatherToken(pos)))
-                        state = DEFUN;
-                    else
+                    String token = gatherToken(pos);
+                    if (LispMode.isDefiner(token)) {
+                        state = DEFINITION;
+                        definer = token;
+                    } else
                         state = NEUTRAL;
                     continue;
                 }
@@ -110,6 +116,34 @@ public final class LispTagger extends Tagger
             pos.next();
         }
         buffer.setTags(tags);
+    }
+
+    private void addTag(String name, Position pos, String definer)
+    {
+        int type = -1;
+        if (definer.equals("defclass"))
+            type = TAG_CLASS;
+        else if (definer.equals("defconstant"))
+            type = TAG_CONSTANT;
+        else if (definer.equals("define-condition"))
+            type = TAG_CONDITION;
+        else if (definer.equals("defmacro"))
+            type = TAG_MACRO;
+        else if (definer.equals("defmethod"))
+            type = TAG_METHOD;
+        else if (definer.equals("defparameter"))
+            type = TAG_PARAMETER;
+        else if (definer.equals("defstruct"))
+            type = TAG_STRUCT;
+        else if (definer.equals("deftype"))
+            type = TAG_TYPE;
+        else if (definer.equals("defun"))
+            type = TAG_DEFUN;
+        else if (definer.equals("defvar"))
+            type = TAG_VAR;
+        else
+            Debug.bug();
+        tags.add(new LispTag(name, pos, type));
     }
 
     // Advances pos past token.
