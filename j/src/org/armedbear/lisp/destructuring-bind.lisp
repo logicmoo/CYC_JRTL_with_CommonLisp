@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.11 2004-02-01 16:46:48 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.12 2004-04-28 18:53:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,6 +155,15 @@
 	       (cond ((and (cdr rest-of-args) (symbolp (cadr rest-of-args)))
 		      (setf rest-of-args (cdr rest-of-args))
 		      (push-let-binding (car rest-of-args) arg-list-name nil))
+		     ((and (cdr rest-of-args) (consp (cadr rest-of-args)))
+		      (pop rest-of-args)
+		      (let* ((destructuring-lambda-list (car rest-of-args))
+			     (sub (gensym "WHOLE-SUBLIST")))
+			(push-sub-list-binding
+			 sub arg-list-name destructuring-lambda-list
+			 name error-kind error-fun)
+			(parse-defmacro-lambda-list
+			 destructuring-lambda-list sub name error-kind error-fun)))
 		     (t
 		      (defmacro-error "&WHOLE" name))))
 	      ((eq var '&environment)
@@ -173,6 +182,15 @@
 		      (setf rest-of-args (cdr rest-of-args))
 		      (setf restp t)
 		      (push-let-binding (car rest-of-args) path nil))
+		     ((and (cdr rest-of-args) (consp (cadr rest-of-args)))
+		      (pop rest-of-args)
+		      (setf restp t)
+		      (let* ((destructuring-lambda-list (car rest-of-args))
+			     (sub (gensym "REST-SUBLIST")))
+			(push-sub-list-binding sub path destructuring-lambda-list
+                                               name error-kind error-fun)
+			(parse-defmacro-lambda-list
+			 destructuring-lambda-list sub name error-kind error-fun)))
 		     (t
 		      (defmacro-error (symbol-name var) error-kind name))))
 	      ((eq var '&optional)
