@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.43 2004-09-18 17:50:27 piso Exp $
+;;; $Id: compile-file.lisp,v 1.44 2004-09-18 19:19:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -153,7 +153,6 @@
             (eval form))
            (EVAL-WHEN
             (multiple-value-bind (ct lt e) (parse-eval-when-situations (cadr form))
-              (%format t "; Processing EVAL-WHEN ~S~%" (cadr form))
               (let ((new-compile-time-too (or ct
                                               (and compile-time-too e)))
                     (body (cddr form)))
@@ -161,7 +160,6 @@
                        (process-toplevel-progn body stream new-compile-time-too))
                       (new-compile-time-too
                        (eval `(progn ,@body)))))
-              (%format t "; Finished processing EVAL-WHEN ~S~%" (cadr form))
               (return-from process-toplevel-form)))
            (LOCALLY
             ;; FIXME Need to handle special declarations too!
