@@ -1,8 +1,8 @@
 /*
  * ObjCTag.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: ObjCTag.java,v 1.1 2003-12-30 17:32:12 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: ObjCTag.java,v 1.2 2004-01-04 01:38:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +29,25 @@ public final class ObjCTag extends LocalTag
         canonicalSignature = parseCanonicalSignatureForMethod();
     }
 
+    public String getMethodName()
+    {
+        int index = name.indexOf(':');
+        return index >= 0 ? name.substring(0, index) : name;
+    }
+
     public String getLongName()
     {
         return canonicalSignature;
+    }
+
+    public String toString()
+    {
+        return name;
+    }
+
+    public String getSidebarText()
+    {
+        return name;
     }
 
     private String parseCanonicalSignatureForMethod()
