@@ -1,8 +1,8 @@
 /*
  * CompilationBuffer.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: CompilationBuffer.java,v 1.17 2003-09-30 21:35:21 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: CompilationBuffer.java,v 1.18 2004-05-21 22:44:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,41 +111,57 @@ public final class CompilationBuffer extends CompilationErrorBuffer
     public void run()
     {
         long start = System.currentTimeMillis();
-        startProcess();
-        if (process != null) {
-            CompilationBufferReaderThread stdoutThread =
-                new CompilationBufferReaderThread(process.getInputStream());
-            stdoutThread.start();
-            CompilationBufferReaderThread stderrThread =
-                new CompilationBufferReaderThread(process.getErrorStream());
-            stderrThread.start();
+        if (expandedCommand.startsWith("(")) {
+            // Lisp.
+            FastStringBuffer sb = new FastStringBuffer();
+            sb.append("(with-output-to-string (s) ");
+            sb.append("(let ((*standard-output* s)) ");
+            sb.append(expandedCommand);
+            sb.append(" ))");
             try {
-                exitValue = process.waitFor();
-                if (exitValueFile != null && exitValueFile.isFile()) {
-                    exitValue = getExitValueFromFile(exitValueFile);
-                    exitValueFile.delete();
-                    exitValueFile = null;
+                org.armedbear.lisp.LispObject result =
+                    JLisp.runLispCommand(sb.toString());
+                appendLater(result.getStringValue());
+            }
+            catch (Throwable t) {
+                Log.debug(t);
+            }
+        } else {
+            startProcess();
+            if (process != null) {
+                CompilationBufferReaderThread stdoutThread =
+                    new CompilationBufferReaderThread(process.getInputStream());
+                stdoutThread.start();
+                CompilationBufferReaderThread stderrThread =
+                    new CompilationBufferReaderThread(process.getErrorStream());
+                stderrThread.start();
+                try {
+                    exitValue = process.waitFor();
+                    if (exitValueFile != null && exitValueFile.isFile()) {
+                        exitValue = getExitValueFromFile(exitValueFile);
+                        exitValueFile.delete();
+                        exitValueFile = null;
+                    }
+                    stdoutThread.join();
+                    stderrThread.join();
+                    long elapsed = System.currentTimeMillis() - start;
+                    FastStringBuffer sb = new FastStringBuffer();
+                    sb.append("\nCompilation ");
+                    if (exitValue == 0) {
+                        sb.append("finished (");
+                        sb.append(String.valueOf(elapsed));
+                        sb.append(" milliseconds)");
+                    } else
+                        sb.append("exited abnormally");
+                    sb.append("\n");
+                    appendLater(sb.toString());
                 }
-                stdoutThread.join();
-                stderrThread.join();
-                long elapsed = System.currentTimeMillis() - start;
-                FastStringBuffer sb = new FastStringBuffer();
-                sb.append("\nCompilation ");
-                if (exitValue == 0) {
-                    sb.append("finished (");
-                    sb.append(String.valueOf(elapsed));
-                    sb.append(" milliseconds)");
-                } else
-                    sb.append("exited abnormally");
-                sb.append("\n");
-                appendLater(sb.toString());
-            }
-            catch (InterruptedException e) {
-                Log.error(e);
-            }
-        } else
-            appendLater("Unable to start compilation process\n");
-
+                catch (InterruptedException e) {
+                    Log.error(e);
+                }
+            } else
+                appendLater("Unable to start compilation process\n");
+        }
         Editor.getTagFileManager().setEnabled(true);
     }
 
