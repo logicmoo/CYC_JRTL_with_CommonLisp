@@ -2,7 +2,7 @@
  * Macro.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Macro.java,v 1.4 2003-03-12 01:31:32 piso Exp $
+ * $Id: Macro.java,v 1.5 2003-03-26 01:43:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public final class Macro extends Closure
     public LispObject execute(LispObject args, Environment env)
         throws Condition
     {
-        LispObject[] argArray = args.copyToArray();
+        LispObject[] argArray = args.cdr().copyToArray();
         if (envVar != NIL && envVar instanceof Symbol) {
             Environment ext = new Environment(env);
             bind((Symbol)envVar, env, ext);

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.45 2003-03-25 16:24:29 piso Exp $
+ * $Id: Lisp.java,v 1.46 2003-03-26 01:43:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -169,7 +169,7 @@ public abstract class Lisp
         if (macro instanceof Macro) {
             if (profiling)
                 macro.incrementCallCount();
-            results[0] = macro.execute(form.cdr(), env);
+            results[0] = macro.execute(form, env);
             results[1] = T;
             setValues(results);
             return results[0];
