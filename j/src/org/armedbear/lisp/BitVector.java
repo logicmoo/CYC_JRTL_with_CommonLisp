@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BitVector.java,v 1.32 2004-02-24 16:33:14 piso Exp $
+ * $Id: BitVector.java,v 1.33 2004-02-24 22:23:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,67 +21,24 @@
 
 package org.armedbear.lisp;
 
-public final class BitVector extends AbstractVector
+public final class BitVector extends AbstractBitVector
 {
-    private static final int LONG_MASK = 0x3f;
-
     private int capacity;
     private int fillPointer = -1; // -1 indicates no fill pointer.
     private long[] bits;
 
-    public BitVector(int length) throws ConditionThrowable
+    public BitVector(int capacity) throws ConditionThrowable
     {
-        if (length < 0)
-            throw new NegativeArraySizeException();
-        capacity = length;
-        int size = length >>> 6;
-        if ((length & LONG_MASK) != 0)
+        this.capacity = capacity;
+        int size = capacity >>> 6;
+        if ((capacity & LONG_MASK) != 0)
             ++size;
         bits = new long[size];
     }
 
-    public BitVector(String s) throws ConditionThrowable
-    {
-        this(s.length());
-        for (int i = s.length(); i-- > 0;) {
-            char c = s.charAt(i);
-            if (c == '0')
-                ;
-            else if (c == '1')
-                set(i);
-            else
-                Debug.assertTrue(false);
-        }
-    }
-
     public LispObject typeOf()
     {
-        if (isSimpleVector())
-            return list2(Symbol.SIMPLE_BIT_VECTOR, new Fixnum(length()));
         return list2(Symbol.BIT_VECTOR, new Fixnum(length()));
-    }
-
-    public LispClass classOf()
-    {
-        return BuiltInClass.BIT_VECTOR;
-    }
-
-    public LispObject typep(LispObject type) throws ConditionThrowable
-    {
-        if (type == Symbol.BIT_VECTOR)
-            return T;
-        if (type == Symbol.SIMPLE_BIT_VECTOR)
-            return isSimpleVector() ? T : NIL;
-        if (type == BuiltInClass.BIT_VECTOR)
-            return T;
-        if (type == Symbol.SIMPLE_ARRAY)
-            return fillPointer < 0 ? T : NIL; // FIXME displaced, adjustable
-        return super.typep(type);
-    }
-
-    public LispObject BIT_VECTOR_P()
-    {
-        return T;
     }
 
     public boolean hasFillPointer()
@@ -122,11 +79,6 @@ public final class BitVector extends AbstractVector
         }
     }
 
-    public LispObject getElementType()
-    {
-        return Symbol.BIT;
-    }
-
     public int capacity()
     {
         return capacity;
@@ -145,36 +97,6 @@ public final class BitVector extends AbstractVector
         return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
-    // Ignores fill pointer.
-    public LispObject AREF(LispObject index) throws ConditionThrowable
-    {
-        return get(Fixnum.getValue(index));
-    }
-
-    public LispObject reverse() throws ConditionThrowable
-    {
-        int length = length();
-        BitVector result = new BitVector(length);
-        int i, j;
-        for (i = 0, j = length - 1; i < length; i++, j--) {
-            if (_get(j) == 1)
-                result.set(i);
-            else
-                result.clear(i);
-        }
-        return result;
-    }
-
-    public LispObject getRowMajor(int index) throws ConditionThrowable
-    {
-        return get(index);
-    }
-
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
-    {
-        set(index, newValue);
-    }
-
     public LispObject get(int index) throws ConditionThrowable
     {
         if (index >= capacity)
@@ -183,7 +105,7 @@ public final class BitVector extends AbstractVector
         return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }
 
-    private int _get(int index)
+    protected int getBit(int index)
     {
         int offset = index >> 6;
         return (bits[offset] & (1L << index)) != 0 ? 1 : 0;
@@ -196,47 +118,29 @@ public final class BitVector extends AbstractVector
         try {
             int n = Fixnum.getValue(newValue);
             if (n == 1) {
-                set(index);
+                setBit(index);
                 return;
             }
             if (n == 0) {
-                clear(index);
+                clearBit(index);
                 return;
             }
             // None of the above...
         }
         catch (ConditionThrowable t) {}
-        signal(new TypeError(newValue, "bit"));
+        signal(new TypeError(newValue, Symbol.BIT));
     }
 
-    public void set(int index)
+    protected void setBit(int index)
     {
         int offset = index >> 6;
         bits[offset] |= 1L << index;
     }
 
-    public void clear(int index)
+    protected void clearBit(int index)
     {
         int offset = index >> 6;
         bits[offset] &= ~(1L << index);
-    }
-
-    public LispObject subseq(int start, int end) throws ConditionThrowable
-    {
-        BitVector v = new BitVector(end - start);
-        int i = start, j = 0;
-        try {
-            while (i < end) {
-                if (_get(i++) == 0)
-                    v.clear(j++);
-                else
-                    v.set(j++);
-            }
-            return v;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Array index out of bounds: " + i + "."));
-        }
     }
 
     public void fill(LispObject obj) throws ConditionThrowable
@@ -280,53 +184,7 @@ public final class BitVector extends AbstractVector
 
     public boolean isSimpleVector()
     {
-        return fillPointer < 0;
-    }
-
-    public boolean equal(LispObject obj) throws ConditionThrowable
-    {
-        if (this == obj)
-            return true;
-        if (obj instanceof BitVector) {
-            BitVector v = (BitVector) obj;
-            if (length() != v.length())
-                return false;
-            for (int i = length(); i-- > 0;) {
-                if (_get(i) != v._get(i))
-                    return false;
-            }
-            return true;
-        }
         return false;
-    }
-
-    public boolean equalp(LispObject obj) throws ConditionThrowable
-    {
-        if (this == obj)
-            return true;
-        if (obj instanceof BitVector) {
-            BitVector v = (BitVector) obj;
-            if (length() != v.length())
-                return false;
-            for (int i = length(); i-- > 0;) {
-                if (_get(i) != v._get(i))
-                    return false;
-            }
-            return true;
-        }
-        if (obj instanceof AbstractVector)
-            return ((AbstractVector)obj).equalp(this);
-        return false;
-    }
-
-    public int hashCode()
-    {
-        int hashCode = 1;
-        // Consider first 64 bits only.
-        final int limit = Math.min(length(), 64);
-        for (int i = 0; i < limit; i++)
-            hashCode = hashCode * 31 + _get(i);
-        return hashCode;
     }
 
     // FIXME
@@ -374,15 +232,5 @@ public final class BitVector extends AbstractVector
             bits = newBits;
             capacity = minCapacity;
         }
-    }
-
-    public String toString()
-    {
-        final int limit = length();
-        StringBuffer sb = new StringBuffer(limit + 2);
-        sb.append("#*");
-        for (int i = 0; i < limit; i++)
-            sb.append(_get(i) == 1 ? '1' : '0');
-        return sb.toString();
     }
 }
