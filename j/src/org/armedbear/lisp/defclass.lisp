@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.27 2003-10-19 20:26:05 piso Exp $
+;;; $Id: defclass.lisp,v 1.28 2003-10-20 13:15:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1114,6 +1114,12 @@
                  (funcall (method-function (car primaries)) args next-emfun)
                  (dolist (after reverse-afters)
                    (funcall (method-function after) args nil))))))
+          (LIST
+             #'(lambda (args)
+                (let ((result ()))
+                  (dolist (primary primaries)
+                    (push (funcall (method-function primary) args nil) result))
+                  (reverse result))))
           (t
            (error "unsupported method combination type ~S~"
                   (generic-function-method-combination gf)))))))
