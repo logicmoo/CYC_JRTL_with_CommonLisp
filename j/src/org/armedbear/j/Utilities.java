@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.31 2003-07-24 16:45:14 piso Exp $
+ * $Id: Utilities.java,v 1.32 2003-07-26 17:05:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,15 +117,12 @@ public final class Utilities implements Constants
     {
         if (mode == null)
             return isDelimited(pos, length);
-
         final int before = pos.getOffset() - 1;
         if (before >= 0 && mode.isIdentifierPart(pos.getLine().charAt(before)))
             return false;
-
         final int after = pos.getOffset() + length;
         if (after < pos.getLineLength() && mode.isIdentifierPart(pos.getLine().charAt(after)))
             return false;
-
         return true;
     }
 
@@ -134,11 +131,9 @@ public final class Utilities implements Constants
         final int before = pos.getOffset() - 1;
         if (before >= 0 && Character.isJavaIdentifierPart(pos.getLine().charAt(before)))
             return false;
-
         final int after = pos.getOffset() + length;
         if (after < pos.getLineLength() && Character.isJavaIdentifierPart(pos.getLine().charAt(after)))
             return false;
-
         return true;
     }
 
@@ -147,11 +142,20 @@ public final class Utilities implements Constants
         final int before = index - 1;
         if (before >= 0 && Character.isJavaIdentifierPart(s.charAt(before)))
             return false;
-
         final int after = index + length;
         if (after < s.length() && Character.isJavaIdentifierPart(s.charAt(after)))
             return false;
+        return true;
+    }
 
+    public static boolean isDelimited(String s, int index, int length, Mode mode)
+    {
+        final int before = index - 1;
+        if (before >= 0 && mode.isIdentifierPart(s.charAt(before)))
+            return false;
+        final int after = index + length;
+        if (after < s.length() && mode.isIdentifierPart(s.charAt(after)))
+            return false;
         return true;
     }
 
@@ -163,7 +167,6 @@ public final class Utilities implements Constants
             return false;
         if (endIndex < s.length() && mode.isIdentifierPart(s.charAt(endIndex)))
             return false;
-
         return true;
     }
 
