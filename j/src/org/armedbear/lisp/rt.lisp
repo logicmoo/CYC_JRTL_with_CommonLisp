@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.124 2003-09-11 01:45:03 piso Exp $
+;;; $Id: rt.lisp,v 1.125 2003-09-11 16:04:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -486,6 +486,8 @@
 (load (concatenate 'string rt::*prefix* "cons-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "numbers-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "string-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "random-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "remove-aux.lsp"))
 
 #+armedbear
 (when (and (find-package "JVM")
