@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.14 2003-11-06 17:12:33 piso Exp $
+ * $Id: SpecialOperators.java,v 1.15 2003-11-19 02:44:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
  */
 
 package org.armedbear.lisp;
+
+import java.util.ArrayList;
 
 public final class SpecialOperators extends Lisp
 {
@@ -56,7 +58,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### let
-    private static final SpecialOperator LET = new SpecialOperator("let") {
+    private static final SpecialOperator LET = new SpecialOperator("let")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -65,7 +68,8 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### let*
-    private static final SpecialOperator LETX = new SpecialOperator("let*") {
+    private static final SpecialOperator LETX = new SpecialOperator("let*")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -77,39 +81,70 @@ public final class SpecialOperators extends Lisp
                                          boolean sequential)
         throws ConditionThrowable
     {
-        LispObject varList = checkList(args.car());
-        final LispThread thread = LispThread.currentThread();
         LispObject result = NIL;
-        if (varList != NIL) {
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            try {
-                Environment ext = new Environment(env);
-                Environment evalEnv = sequential ? ext : env;
-                for (int i = varList.length(); i-- > 0;) {
-                    LispObject obj = varList.car();
-                    varList = varList.cdr();
-                    if (obj instanceof Cons) {
-                        bind(checkSymbol(obj.car()),
-                             eval(obj.cadr(), evalEnv, thread),
-                             ext);
-                    } else
-                        bind(checkSymbol(obj), NIL, ext);
-                }
-                LispObject body = args.cdr();
-                while (body != NIL) {
-                    result = eval(body.car(), ext, thread);
-                    body = body.cdr();
-                }
-            }
-            finally {
-                thread.setDynamicEnvironment(oldDynEnv);
-            }
-        } else {
+        final LispThread thread = LispThread.currentThread();
+        final Environment oldDynEnv = thread.getDynamicEnvironment();
+        try {
+            LispObject varList = checkList(args.car());
             LispObject body = args.cdr();
+            Environment ext = new Environment(env);
+            // FIXME An ArrayList is probably not the most efficient data
+            // structure for this.
+            ArrayList specials = null;
             while (body != NIL) {
-                result = eval(body.car(), env, thread);
+                LispObject obj = body.car();
+                if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
+                    LispObject decls = obj.cdr();
+                    while (decls != NIL) {
+                        LispObject decl = decls.car();
+                        if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
+                            LispObject vars = decl.cdr();
+                            while (vars != NIL) {
+                                Symbol var = checkSymbol(vars.car());
+                                if (specials == null)
+                                    specials = new ArrayList();
+                                specials.add(var);
+                                vars = vars.cdr();
+                            }
+                        }
+                        decls = decls.cdr();
+                    }
+                    body = body.cdr();
+                } else
+                    break;
+            }
+            Environment evalEnv = sequential ? ext : env;
+            while (varList != NIL) {
+                LispObject obj = varList.car();
+                varList = varList.cdr();
+                if (obj instanceof Cons) {
+                    Symbol symbol = checkSymbol(obj.car());
+                    LispObject value = eval(obj.cadr(), evalEnv, thread);
+                    if (specials != null && specials.contains(symbol)) {
+                        thread.bindSpecial(symbol, value);
+                        ext.declareSpecial(symbol);
+                    }  else if (symbol.isSpecialVariable())
+                        thread.bindSpecial(symbol, value);
+                    else
+                        ext.bind(symbol, value);
+                } else {
+                    Symbol symbol = checkSymbol(obj);
+                    if (specials != null && specials.contains(symbol)) {
+                        thread.bindSpecial(symbol, NIL);
+                        ext.declareSpecial(symbol);
+                    } else if (symbol.isSpecialVariable())
+                        thread.bindSpecial(symbol, NIL);
+                    else
+                        ext.bind(symbol, NIL);
+                }
+            }
+            while (body != NIL) {
+                result = eval(body.car(), ext, thread);
                 body = body.cdr();
             }
+        }
+        finally {
+            thread.setDynamicEnvironment(oldDynEnv);
         }
         return result;
     }
@@ -181,24 +216,17 @@ public final class SpecialOperators extends Lisp
     };
 
     // ### locally
-    private static final SpecialOperator LOCALLY =
-        new SpecialOperator("locally")
+    private static final SpecialOperator LOCALLY = new SpecialOperator("locally")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
-            LispThread thread = LispThread.currentThread();
-            while (args != NIL) {
-                LispObject obj = args.car();
-                if (obj instanceof Cons && obj.car() == Symbol.DECLARE)
-                    ; // FIXME
-                else
-                    break;
-                args = args.cdr();
-            }
+            final LispThread thread = LispThread.currentThread();
+            final Environment ext = new Environment(env);
+            args = ext.processDeclarations(args);
             LispObject result = NIL;
             while (args != NIL) {
-                result = eval(args.car(), env, thread);
+                result = eval(args.car(), ext, thread);
                 args = args.cdr();
             }
             return result;
@@ -346,7 +374,20 @@ public final class SpecialOperators extends Lisp
     private static final SpecialOperator DECLARE = new SpecialOperator("declare")
     {
         public LispObject execute(LispObject args, Environment env)
+            throws ConditionThrowable
         {
+            while (args != NIL) {
+                LispObject decl = args.car();
+                args = args.cdr();
+                if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
+                    LispObject vars = decl.cdr();
+                    while (vars != NIL) {
+                        Symbol var = checkSymbol(vars.car());
+                        env.declareSpecial(var);
+                        vars = vars.cdr();
+                    }
+                }
+            }
             return NIL;
         }
     };
@@ -397,7 +438,7 @@ public final class SpecialOperators extends Lisp
                 Symbol symbol = checkSymbol(args.car());
                 args = args.cdr();
                 Binding binding = null;
-                if (symbol.isSpecialVariable()) {
+                if (env.isDeclaredSpecial(symbol) || symbol.isSpecialVariable()) {
                     Environment dynEnv = thread.getDynamicEnvironment();
                     if (dynEnv != null)
                         binding = dynEnv.getBinding(symbol);

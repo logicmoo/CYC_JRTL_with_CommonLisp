@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.180 2003-11-16 15:33:44 piso Exp $
+ * $Id: Lisp.java,v 1.181 2003-11-19 02:40:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -352,9 +352,9 @@ public abstract class Lisp
             throw new ThreadDestroyed();
         if (obj instanceof Symbol) {
             LispObject result = null;
-            if (obj.isSpecialVariable()) {
+            if (env.isDeclaredSpecial((Symbol)obj) || obj.isSpecialVariable())
                 result = thread.lookupSpecial(obj);
-            } else
+            else
                 result = env.lookup(obj);
             if (result == null) {
                 result = obj.getSymbolValue();
@@ -474,7 +474,7 @@ public abstract class Lisp
     public static final void bind(Symbol symbol, LispObject value,
                                   Environment env)
     {
-        if (symbol.isSpecialVariable())
+        if (env.isDeclaredSpecial(symbol) || symbol.isSpecialVariable())
             LispThread.currentThread().bindSpecial(symbol, value);
         else
             env.bind(symbol, value);
@@ -483,7 +483,7 @@ public abstract class Lisp
     public static final void rebind(Symbol symbol, LispObject value,
                                     Environment env)
     {
-        if (symbol.isSpecialVariable()) {
+        if (env.isDeclaredSpecial(symbol) || symbol.isSpecialVariable()) {
             Environment dynEnv =
                 LispThread.currentThread().getDynamicEnvironment();
             Debug.assertTrue(dynEnv != null);
