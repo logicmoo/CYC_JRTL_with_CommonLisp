@@ -1,7 +1,7 @@
 ;;; assoc.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: assoc.lisp,v 1.2 2003-06-11 00:04:27 piso Exp $
+;;; $Id: assoc.lisp,v 1.3 2003-06-11 00:33:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -90,3 +90,25 @@
     (if (or (endp x) (endp y))
 	(error "the lists of keys and data are of unequal length"))
     (setq alist (acons (car x) (car y) alist))))
+
+(defun copy-alist (alist)
+  (if (atom alist)
+      alist
+      (let ((result
+	     (cons (if (atom (car alist))
+		       (car alist)
+		       (cons (caar alist) (cdar alist)) )
+		   nil)))
+	(do ((x (cdr alist) (cdr x))
+	     (splice result
+		     (cdr (rplacd splice
+				  (cons
+				   (if (atom (car x))
+				       (car x)
+				       (cons (caar x) (cdar x)))
+				   nil)))))
+            ;; Non-null terminated alist done here.
+            ((atom x)
+             (unless (null x)
+               (rplacd splice x))))
+	result)))
