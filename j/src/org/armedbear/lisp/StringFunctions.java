@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.28 2004-09-21 00:39:47 piso Exp $
+ * $Id: StringFunctions.java,v 1.29 2004-11-03 14:47:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -553,8 +553,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### %string-upcase
-    private static final Primitive3 _STRING_UPCASE =
-        new Primitive3("%string-upcase", PACKAGE_SYS, true)
+    private static final Primitive _STRING_UPCASE =
+        new Primitive("%string-upcase", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
@@ -587,8 +587,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### %string-downcase
-    private static final Primitive3 _STRING_DOWNCASE =
-        new Primitive3("%string-downcase", PACKAGE_SYS, true)
+    private static final Primitive _STRING_DOWNCASE =
+        new Primitive("%string-downcase", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
@@ -621,8 +621,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### %string-capitalize
-    private static final Primitive3 _STRING_CAPITALIZE=
-        new Primitive3("%string-capitalize", PACKAGE_SYS, true)
+    private static final Primitive _STRING_CAPITALIZE=
+        new Primitive("%string-capitalize", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
@@ -667,8 +667,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### %nstring-upcase
-    private static final Primitive3 _NSTRING_UPCASE =
-        new Primitive3("%nstring-upcase", PACKAGE_SYS, true)
+    private static final Primitive _NSTRING_UPCASE =
+        new Primitive("%nstring-upcase", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
@@ -700,8 +700,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### %nstring-downcase
-    private static final Primitive3 _NSTRING_DOWNCASE =
-        new Primitive3("%nstring-downcase", PACKAGE_SYS, true)
+    private static final Primitive _NSTRING_DOWNCASE =
+        new Primitive("%nstring-downcase", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
@@ -733,8 +733,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### %nstring-capitalize
-    private static final Primitive3 _NSTRING_CAPITALIZE =
-        new Primitive3("%nstring-capitalize", PACKAGE_SYS, true)
+    private static final Primitive _NSTRING_CAPITALIZE =
+        new Primitive("%nstring-capitalize", PACKAGE_SYS, true)
     {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
@@ -799,8 +799,8 @@ public final class StringFunctions extends Lisp
     // ### %make-string
     // %make-string size initial-element element-type => string
     // Returns a simple string.
-    private static final Primitive3 _MAKE_STRING =
-        new Primitive3("%make-string", PACKAGE_SYS, false)
+    private static final Primitive _MAKE_STRING =
+        new Primitive("%make-string", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject size, LispObject initialElement,
                                   LispObject elementType)
@@ -856,8 +856,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### %set-char
-    private static final Primitive3 _SET_CHAR =
-        new Primitive3("%set-char", PACKAGE_SYS, false)
+    private static final Primitive _SET_CHAR =
+        new Primitive("%set-char", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -880,8 +880,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### string-position
-    private static final Primitive3 STRING_POSITION =
-        new Primitive3("string-position", PACKAGE_EXT, true)
+    private static final Primitive STRING_POSITION =
+        new Primitive("string-position", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
