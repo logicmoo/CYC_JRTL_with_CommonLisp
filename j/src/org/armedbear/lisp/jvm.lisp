@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.31 2003-11-15 19:18:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.32 2003-11-15 20:06:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -470,6 +470,7 @@
 (defconstant +lisp-string+ "Lorg/armedbear/lisp/LispString;")
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
+(defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
 
 (defun emit-push-nil ()
   (emit 'getstatic
@@ -685,6 +686,7 @@
     (193 ; INSTANCEOF
      0)
     ((153 ; IFEQ
+      154 ; IFNE
       )
      -1)
     ((165 ; IF_ACMPEQ
@@ -1507,9 +1509,20 @@
              (emit-push-value))
            (emit 'instanceof +lisp-symbol-class+)
            (return-from compile-test 'ifeq))
+         (when (eq (car form) 'CONSP)
+           (compile-form (second form))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (emit 'instanceof +lisp-cons-class+)
+           (return-from compile-test 'ifeq))
+         (when (eq (car form) 'ATOM)
+           (compile-form (second form))
+           (unless (remove-store-value)
+             (emit-push-value))
+           (emit 'instanceof +lisp-cons-class+)
+           (return-from compile-test 'ifne))
          (let ((s (cdr (assq (car form)
-                             '((ATOM      . "atom")
-                               (EVENP     . "evenp")
+                             '((EVENP     . "evenp")
                                (FLOATP    . "floatp")
                                (INTEGERP  . "integerp")
                                (MINUSP    . "minusp")
