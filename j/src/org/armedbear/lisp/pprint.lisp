@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.25 2004-06-20 16:32:44 piso Exp $
+;;; $Id: pprint.lisp,v 1.26 2004-08-07 17:40:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2252,7 +2252,7 @@
 	      (write-char++ #\space xp)
 	      (pprint-newline+ :fill xp))))))
 
-(proclaim '(special *prefix*))
+(declaim (special *prefix*))
 
 (defun pretty-non-vector (xp array)
   (let* ((bottom (1- (array-rank array)))
