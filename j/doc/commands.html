@@ -127,6 +127,7 @@
     <li><a href="commands.html#htmlInsertTag">htmlInsertTag</a></li>
     <li><a href="commands.html#htmlStartTag">htmlStartTag</a></li>
     <li><a href="commands.html#httpShowHeaders">httpShowHeaders</a></li>
+    <li><a href="commands.html#hyperspec">hyperspec</a></li>
     <li><a href="commands.html#iList">iList</a></li>
     <li><a href="commands.html#imageCycleBackground">imageCycleBackground</a></li>
     <li><a href="commands.html#imageFit">imageFit</a></li>
@@ -1794,6 +1795,34 @@ Inserts an empty HTML start tag, with the caret positioned after the opening ang
 Displays the request and response headers for the current HTTP buffer.
 <p>
 <b>Default key mapping:</b> None
+<br><br>
+</dl><!--<hr>-->
+
+<a name="hyperspec">hyperspec</a><dl><dd>
+<p>
+Displays the Common Lisp HyperSpec documentation for the Common Lisp function
+at the current location of the caret.
+<p>
+The documentation is displayed in another window, splitting the current window
+if necessary. This transient window can be dismissed using
+<a href="#escape">escape</a>, mapped by default to Escape.
+<p>
+You can also invoke the hyperspec command with the function name as an argument
+(e.g. Alt X, "hyperspec mapcar", or Alt X, "hs mapcar").
+<p>
+The Common Lisp HyperSpec is available here:
+<pre>
+        http://www.lispworks.com/reference/HyperSpec/index.html</pre>
+<p>
+For this command to work, you need to add a line to your
+<a href="preferences.html">preferences</a> file specifying the location of the
+HyperSpec root directory on your system:
+<pre>
+        clhsRoot = /usr/share/doc/hyperspec</pre>
+<p>
+<b>Default key mapping:</b> Alt F1 in Lisp mode
+<p>
+<b>Abbreviation:</b> hs
 <br><br>
 </dl><!--<hr>-->
 
