@@ -2,7 +2,7 @@
  * Preferences.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Preferences.java,v 1.3 2003-06-29 00:19:34 piso Exp $
+ * $Id: Preferences.java,v 1.4 2003-06-30 17:01:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -191,6 +191,11 @@ public final class Preferences
             }
         }
         return null;
+    }
+
+    public synchronized void setProperty(Property property, String value)
+    {
+        properties.setProperty(property.key(), value);
     }
 
     public synchronized void setProperty(String key, String value)
