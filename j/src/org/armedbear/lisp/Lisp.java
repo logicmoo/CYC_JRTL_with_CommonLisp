@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.224 2004-04-02 14:57:12 piso Exp $
+ * $Id: Lisp.java,v 1.225 2004-04-05 01:01:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,8 @@ import java.util.Random;
 
 public abstract class Lisp
 {
+    public static boolean cold = true;
+
     // Packages.
     public static final Package PACKAGE_CL =
         Packages.createPackage("COMMON-LISP", 1024);
@@ -1891,5 +1893,7 @@ public abstract class Lisp
         loadClass("org.armedbear.lisp.Pathname");
         loadClass("org.armedbear.lisp.LispClass");
         loadClass("org.armedbear.lisp.BuiltInClass");
+
+        cold = false;
     }
 }
