@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.62 2005-02-20 19:13:29 piso Exp $
+;;; $Id: defstruct.lisp,v 1.63 2005-02-25 04:20:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -478,6 +478,8 @@
                    :format-control "Class ~S is undefined."
                    :format-arguments (list (car *dd-include*))))
           (dolist (dsd (dd-slots dd))
+            ;; MUST COPY SLOT DESCRIPTION!
+            (setf dsd (copy-seq dsd))
             (setf (dsd-index dsd) index)
             (push dsd *dd-slots*)
             (incf index)))
