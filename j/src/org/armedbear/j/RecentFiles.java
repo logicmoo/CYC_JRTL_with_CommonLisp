@@ -2,7 +2,7 @@
  * RecentFiles.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: RecentFiles.java,v 1.1.1.1 2002-09-24 16:08:07 piso Exp $
+ * $Id: RecentFiles.java,v 1.2 2002-12-24 17:25:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,6 +75,8 @@ public final class RecentFiles implements Constants
 
     private static boolean excluded(Buffer buffer)
     {
+        if (buffer.isTransient())
+            return true;
         if (buffer instanceof Directory)
             return true;
         if (buffer instanceof RemoteBuffer)
