@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.599 2004-03-11 10:18:00 piso Exp $
+ * $Id: Primitives.java,v 1.600 2004-03-11 10:28:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3743,57 +3743,6 @@ public final class Primitives extends Lisp
                     break;
             }
             return name != null ? new SimpleString(name) : NIL;
-        }
-    };
-
-    // ### digit-char
-    private static final Primitive DIGIT_CHAR =
-        new Primitive("digit-char", "weight &optional radix")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            int weight;
-            try {
-                weight = ((Fixnum)arg).value;
-            }
-            catch (ClassCastException e) {
-                if (arg instanceof Bignum)
-                    return NIL;
-                return signal(new TypeError(arg, Symbol.INTEGER));
-            }
-            if (weight < 10)
-                return LispCharacter.getInstance((char)('0' + weight));
-            return NIL;
-        }
-
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            int radix;
-            try {
-                radix = ((Fixnum)second).value;
-            }
-            catch (ClassCastException e) {
-                radix = -1;
-            }
-            if (radix < 2 || radix > 36)
-                return signal(new TypeError(second,
-                                            list3(Symbol.INTEGER, Fixnum.TWO,
-                                                  new Fixnum(36))));
-            int weight;
-            try {
-                weight = ((Fixnum)first).value;
-            }
-            catch (ClassCastException e) {
-                if (first instanceof Bignum)
-                    return NIL;
-                return signal(new TypeError(first, Symbol.INTEGER));
-            }
-            if (weight >= radix)
-                return NIL;
-            if (weight < 10)
-                return LispCharacter.getInstance((char)('0' + weight));
-            return LispCharacter.getInstance((char)('A' + weight - 10));
         }
     };
 
