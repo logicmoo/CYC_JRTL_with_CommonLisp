@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.15 2004-06-07 18:08:36 piso Exp $
+;;; $Id: pprint.lisp,v 1.16 2004-06-07 23:16:17 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -990,8 +990,9 @@
       (throw 'line-limit-abbreviation-exit T))
     (incf (line-no xp))
     (unless *locating-circularities*
-      (sys::%write-string string stream 0 end)
-      (sys::%terpri stream))))
+      (let ((stream (base-stream xp)))
+	(sys::%write-string (buffer xp) stream 0 end)
+	(sys::%terpri stream)))))
 
 (defun setup-for-next-line (xp Qentry)
   (let* ((out-point (BP<-TP xp (Qpos xp Qentry)))
