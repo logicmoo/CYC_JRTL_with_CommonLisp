@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.36 2003-04-09 13:43:08 piso Exp $
+;;; $Id: boot.lisp,v 1.37 2003-04-09 16:44:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -147,7 +147,7 @@
   (cond ((eq direction :input)
          (%open-input-file filename))
         ((eq direction :output)
-         (%open-output-file filename element-type))
+         (%open-output-file filename element-type if-exists))
         (t
          (error "operation not supported"))))
 
