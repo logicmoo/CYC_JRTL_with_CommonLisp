@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.38 2004-01-08 14:40:35 piso Exp $
+ * $Id: Pathname.java,v 1.39 2004-01-08 15:59:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -752,10 +752,8 @@ public final class Pathname extends LispObject
             p.device = pathname.device;
         else
             p.device = defaultPathname.device;
-        if (pathname.directory != NIL)
-            p.directory = pathname.directory;
-        else
-            p.directory = defaultPathname.directory;
+        p.directory =
+            mergeDirectories(pathname.directory, defaultPathname.directory);
         if (pathname.name != NIL)
             p.name = pathname.name;
         else
@@ -773,6 +771,42 @@ public final class Pathname extends LispObject
         else
             p.version = defaultVersion;
         return p;
+    }
+
+    private static final LispObject mergeDirectories(LispObject dir,
+                                                     LispObject defaultDir)
+        throws ConditionThrowable
+    {
+        if (dir == NIL)
+            return defaultDir;
+        if (dir.car() == Keyword.RELATIVE && defaultDir != NIL) {
+            LispObject result = NIL;
+            while (defaultDir != NIL) {
+                result = new Cons(defaultDir.car(), result);
+                defaultDir = defaultDir.cdr();
+            }
+            dir = dir.cdr(); // Skip :RELATIVE.
+            while (dir != NIL) {
+                result = new Cons(dir.car(), result);
+                dir = dir.cdr();
+            }
+            LispObject[] array = result.copyToArray();
+            for (int i = 0; i < array.length - 1; i++) {
+                if (array[i] == Keyword.BACK) {
+                    if (array[i+1] instanceof LispString || array[i+1] == Keyword.WILD) {
+                        array[i] = null;
+                        array[i+1] = null;
+                    }
+                }
+            }
+            result = NIL;
+            for (int i = 0; i < array.length; i++) {
+                if (array[i] != null)
+                    result = new Cons(array[i], result);
+            }
+            return result;
+        }
+        return dir;
     }
 
     static {
