@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.49 2004-03-24 01:16:32 piso Exp $
+;;; $Id: subtypep.lisp,v 1.50 2004-05-16 14:46:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -227,7 +227,9 @@
     (if (atom type2)
         (setf t2 type2 i2 nil)
         (setf t2 (car type2) i2 (cdr type2)))
-    (cond ((eq t1 'atom)
+    (cond ((null t1)
+           (return-from %subtypep (values t t)))
+          ((eq t1 'atom)
            (return-from %subtypep (values (eq t2 t) t)))
           ((eq t2 'atom)
            (return-from %subtypep (cond ((memq t1 '(cons list sequence))
