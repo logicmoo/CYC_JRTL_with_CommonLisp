@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.43 2003-06-10 15:49:45 piso Exp $
+;;; $Id: sequences.lisp,v 1.44 2003-06-10 16:07:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,11 +19,10 @@
 
 (in-package "COMMON-LISP")
 
-(export '(subseq copy-seq fill
+(export '(subseq
           replace
           concatenate
           map map-into
-          reduce
           position position-if position-if-not
           find find-if find-if-not
           count count-if count-if-not
@@ -73,62 +72,8 @@
 		(vector-subseq sequence start end)))
 
 
-;; COPY-SEQ (from CMUCL)
-
-(defmacro vector-copy-seq (sequence type)
-  `(let ((length (length ,sequence)))
-     (do ((index 0 (1+ index))
-	  (copy (make-sequence-of-type ,type length)))
-       ((= index length) copy)
-       (setf (aref copy index) (aref ,sequence index)))))
-
-(defmacro list-copy-seq (list)
-  `(if (atom ,list) '()
-       (let ((result (cons (car ,list) '()) ))
-	 (do ((x (cdr ,list) (cdr x))
-	      (splice result
-		      (cdr (rplacd splice (cons (car x) '() ))) ))
-           ((atom x) (unless (null x)
-                       (rplacd splice x))
-            result)))))
-
-(defun copy-seq (sequence)
-  (seq-dispatch sequence
-		(list-copy-seq* sequence)
-		(vector-copy-seq* sequence)))
-
-(defun list-copy-seq* (sequence)
-  (list-copy-seq sequence))
-
-(defun vector-copy-seq* (sequence)
-  (vector-copy-seq sequence (type-of sequence)))
-
-
-;;; FILL (from CMUCL)
-
-(defmacro vector-fill (sequence item start end)
-  `(do ((index ,start (1+ index)))
-     ((= index ,end) ,sequence)
-     (setf (aref ,sequence index) ,item)))
-
-(defmacro list-fill (sequence item start end)
-  `(do ((current (nthcdr ,start ,sequence) (cdr current))
-        (index ,start (1+ index)))
-     ((or (atom current) (and end (= index ,end)))
-      sequence)
-     (rplaca current ,item)))
-
-(defun list-fill* (sequence item start end)
-  (list-fill sequence item start end))
-
-(defun vector-fill* (sequence item start end)
-  (when (null end) (setq end (length sequence)))
-  (vector-fill sequence item start end))
-
-(defun fill (sequence item &key (start 0) end)
-  (seq-dispatch sequence
-		(list-fill* sequence item start end)
-		(vector-fill* sequence item start end)))
+(autoload 'copy-seq "copy-seq.lisp")
+(autoload 'fill "fill.lisp")
 
 
 ;;; REPLACE (from ECL)
@@ -217,57 +162,7 @@
 			   sequences)))))
   result-sequence)
 
-;;; REDUCE (from OpenMCL)
-
-(defmacro list-reduce (function sequence start end initial-value ivp key)
-  (let ((what `(if ,key (funcall ,key (car sequence)) (car sequence))))
-    `(let ((sequence (nthcdr ,start ,sequence)))
-       (do ((count (if ,ivp ,start (1+ ,start)) (1+ count))
-            (sequence (if ,ivp sequence (cdr sequence))
-                      (cdr sequence))
-            (value (if ,ivp ,initial-value ,what)
-                   (funcall ,function value ,what)))
-         ((= count ,end) value)))))
-
-
-(defmacro list-reduce-from-end (function sequence start end
-                                         initial-value ivp key)
-  (let ((what `(if ,key (funcall ,key (car sequence)) (car sequence))))
-    `(let ((sequence (nthcdr (- (length ,sequence) ,end) (reverse ,sequence))))
-       (do ((count (if ,ivp ,start (1+ ,start)) (1+ count))
-            (sequence (if ,ivp sequence (cdr sequence))
-                      (cdr sequence))
-            (value (if ,ivp ,initial-value ,what)
-                   (funcall ,function ,what value)))
-         ((= count ,end) value)))))
-
-
-(defun reduce (function sequence &key from-end (start 0)
-                        end (initial-value nil ivp) key)
-  (unless end (setq end (length sequence)))
-  (if (= end start)
-      (if ivp initial-value (funcall function))
-      (seq-dispatch
-       sequence
-       (if from-end
-           (list-reduce-from-end  function sequence start end initial-value ivp key)
-           (list-reduce function sequence start end initial-value ivp key))
-       (let* ((disp (if from-end -1 1))
-              (index (if from-end (1- end) start))
-              (terminus (if from-end (1- start) end))
-              (value (if ivp initial-value
-                         (let ((elt (aref sequence index)))
-                           (setq index (+ index disp))
-                           (if key (funcall key elt) elt))))
-              (element nil))
-         (do* ()
-           ((= index terminus) value)
-           (setq element (aref sequence index)
-                 index (+ index disp)
-                 element (if key (funcall key element) element)
-                 value (funcall function (if from-end element value) (if from-end value element))))))))
-
-
+(autoload 'reduce "reduce.lisp")
 (autoload 'delete "delete.lisp")
 (autoload 'delete-if "delete.lisp")
 (autoload 'delete-if-not "delete.lisp")
@@ -507,13 +402,13 @@
 		       (not (funcall test-not item x)))
 		     (lambda (x)
 		       (funcall test item x)))))
-      (seq-dispatch sequence
-		    (if from-end
-			(list-count-if nil t %test sequence)
-			(list-count-if nil nil %test sequence))
-		    (if from-end
-			(vector-count-if nil t %test sequence)
-			(vector-count-if nil nil %test sequence))))))
+      (if (listp sequence)
+          (if from-end
+              (list-count-if nil t %test sequence)
+              (list-count-if nil nil %test sequence))
+          (if from-end
+              (vector-count-if nil t %test sequence)
+              (vector-count-if nil nil %test sequence))))))
 
 (defun count-if (test sequence &key from-end (start 0) end key)
   (let* ((length (length sequence))
