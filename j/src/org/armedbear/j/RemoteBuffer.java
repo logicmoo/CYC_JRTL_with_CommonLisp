@@ -1,8 +1,8 @@
 /*
  * RemoteBuffer.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: RemoteBuffer.java,v 1.3 2003-01-08 13:56:58 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: RemoteBuffer.java,v 1.4 2003-05-19 12:21:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -222,6 +222,7 @@ public final class RemoteBuffer extends Buffer implements Constants
                 else
                     setBusy(false);
             }
+            SshSession.cleanup();
             if (sshLoadProcess.cancelled()) {
                 for (EditorIterator it = new EditorIterator(); it.hasNext();)
                     it.nextEditor().updateDisplay();
