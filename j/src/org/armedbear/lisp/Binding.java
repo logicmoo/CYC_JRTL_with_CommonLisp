@@ -2,7 +2,7 @@
  * Binding.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Binding.java,v 1.1 2003-01-17 19:43:09 piso Exp $
+ * $Id: Binding.java,v 1.2 2003-11-19 01:58:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,20 @@
 
 package org.armedbear.lisp;
 
-/*package*/ final class Binding
+// Package accessibility.
+final class Binding
 {
-    /*package*/ LispObject symbol;
-    /*package*/ LispObject value;
-    /*package*/ final Binding next;
+    LispObject symbol;
+    LispObject value;
+    boolean specialp;
+    final Binding next;
 
-    /*package*/ Binding()
+    Binding()
     {
         next = null;
     }
 
-    /*package*/ Binding(LispObject symbol, LispObject value, Binding next)
+    Binding(LispObject symbol, LispObject value, Binding next)
     {
         this.symbol = symbol;
         this.value = value;
