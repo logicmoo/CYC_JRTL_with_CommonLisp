@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.19 2003-03-13 14:48:52 piso Exp $
+ * $Id: LispString.java,v 1.20 2003-03-13 15:33:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -550,6 +550,40 @@ public final class LispString extends AbstractVector implements SequenceType,
             }
             // Strings are equal.
             return new Fixnum(i);
+        }
+    };
+
+    private static final Primitive2 CHAR = new Primitive2("char") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return checkString(first).get(Fixnum.getInt(second));
+        }
+    };
+
+    private static final Primitive3 _SET_CHAR = new Primitive3("%set-char") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
+            return third;
+        }
+    };
+
+    private static final Primitive2 SCHAR = new Primitive2("schar") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return checkString(first).get(Fixnum.getInt(second));
+        }
+    };
+
+    private static final Primitive3 _SET_SCHAR = new Primitive3("%set-schar") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
+            return third;
         }
     };
 }
