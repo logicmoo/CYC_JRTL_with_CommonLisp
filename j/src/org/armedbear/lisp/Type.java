@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.1 2003-03-08 21:26:45 piso Exp $
+ * $Id: Type.java,v 1.2 2003-03-17 18:28:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,6 +90,8 @@ public class Type extends Lisp
 
     private final boolean _subtypep(Type otherType)
     {
+        if (otherType == this)
+            return true;
         for (int i = 0; i < superTypes.size(); i++) {
             if (superTypes.get(i) == otherType)
                 return true;
@@ -155,5 +157,6 @@ public class Type extends Lisp
 
     // Subtypes of NUMBER
     public static final Type INTEGER   = new Type(Symbol.INTEGER, NUMBER);
+    public static final Type BIT       = new Type(Symbol.BIT, INTEGER);
     public static final Type FIXNUM    = new Type(Symbol.FIXNUM, INTEGER);
 }
