@@ -1,8 +1,8 @@
 /*
  * Editor.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.46 2003-04-09 16:48:19 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Editor.java,v 1.47 2003-05-10 16:14:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6328,9 +6328,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public static void setGlobalProperty(String key, String value)
     {
         if (value == null || value.length() == 0)
-            prefs.removeOverride(key);
+            prefs.removeProperty(key);
         else
-            prefs.setOverride(key, value);
+            prefs.setProperty(key, value);
     }
 
     private void invalidPropertyValue(Property property, String value)
