@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Session.java,v 1.3 2002-11-14 15:36:35 piso Exp $
+ * $Id: Session.java,v 1.4 2003-02-02 02:34:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,7 +153,8 @@ public final class Session extends HandlerBase implements Constants
         Session session = new Session(file);
         if (!session.load()) {
             Log.error("unable to load session from " + file);
-            MessageDialog.showMessageDialog("Unable to load session from " + file,
+            MessageDialog.showMessageDialog(
+                "Unable to load session from " + file,
                 "Load Session");
             return;
         }
@@ -210,6 +211,7 @@ public final class Session extends HandlerBase implements Constants
 
     private Buffer createBuffers()
     {
+        long start = System.currentTimeMillis();
         Buffer toBeActivated = null;
         long lastActivated = 0;
         Iterator iter = bufferEntries.iterator();
@@ -233,7 +235,8 @@ public final class Session extends HandlerBase implements Constants
                 }
                 if (buf != null) {
                     buf.setLastView(new View(entry));
-                    if (toBeActivated == null || entry.getLastActivated() > lastActivated) {
+                    if (toBeActivated == null ||
+                        entry.getLastActivated() > lastActivated) {
                         toBeActivated = buf;
                         lastActivated = entry.getLastActivated();
                     }
@@ -242,6 +245,9 @@ public final class Session extends HandlerBase implements Constants
         }
         if (toBeActivated == null)
             toBeActivated = Editor.getBufferList().getFirstBuffer();
+        long elapsed = System.currentTimeMillis() - start;
+        Log.debug("createBuffers " + Editor.getBufferList().size() +
+            " buffers " + elapsed + " ms");
         return toBeActivated;
     }
 
@@ -250,7 +256,8 @@ public final class Session extends HandlerBase implements Constants
         try {
             File tempFile = Utilities.getTempFile();
             BufferedWriter writer =
-                new BufferedWriter(new OutputStreamWriter(tempFile.getOutputStream()));
+                new BufferedWriter(new OutputStreamWriter(
+                    tempFile.getOutputStream()));
             writer.write("<?xml version=\"1.0\"?>");
             writer.newLine();
             writer.write("<session version=\"" + getVersion() + "\">");
@@ -332,7 +339,8 @@ public final class Session extends HandlerBase implements Constants
         return false;
     }
 
-    public void startElement(String name, AttributeList attributes) throws SAXException
+    public void startElement(String name, AttributeList attributes)
+        throws SAXException
     {
         if (name.equals("buffer")) {
             currentBufferEntry = new SessionBufferEntry();
