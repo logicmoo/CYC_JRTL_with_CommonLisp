@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.114 2003-09-08 01:46:09 piso Exp $
+;;; $Id: rt.lisp,v 1.115 2003-09-08 01:49:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -242,7 +242,9 @@
                               "hash-table"
                               "identity"
                               "if"
+                              "imagpart"
                               "integer-length"
+                              "integerp"
                               "intersection"
                               "iteration"
                               "keywordp"
@@ -327,6 +329,7 @@
                               "nth-value"
                               "nthcdr"
                               "number-comparison"
+                              "numerator-denominator"
                               "nunion"
                               "oddp"
                               "oneminus"
@@ -356,6 +359,9 @@
                               "rassoc-if-not"
                               "rational"
                               "rationalize"
+                              "rationalp"
+                              "realp"
+                              "realpart"
                               "reduce"
                               "remf"
                               "remove"
