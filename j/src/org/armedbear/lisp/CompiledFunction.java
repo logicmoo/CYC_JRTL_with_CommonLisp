@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.5 2003-08-07 16:16:16 piso Exp $
+ * $Id: CompiledFunction.java,v 1.6 2003-08-07 16:30:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,7 +76,10 @@ public class CompiledFunction extends Closure
 
     public String toString()
     {
-        return "#<COMPILED-FUNCTION>";
+        StringBuffer sb = new StringBuffer("#<COMPILED-FUNCTION @ ");
+        sb.append(Integer.toHexString(hashCode()));
+        sb.append(">");
+        return sb.toString();
     }
 
     // ### make-compiled-function
