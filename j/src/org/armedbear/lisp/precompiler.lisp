@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.86 2004-12-30 18:29:23 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: precompiler.lisp,v 1.87 2005-01-31 17:25:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -812,13 +812,14 @@
     (when (and name (functionp result))
       (%set-lambda-name result name)
       (set-call-count result (call-count definition))
-      (if (and (symbolp name) (macro-function name))
-          (let ((mac (make-macro name result)))
-            (%set-arglist mac (arglist (symbol-function name)))
-            (setf (fdefinition name) mac))
-          (progn
-            (setf (fdefinition name) result)
-            (%set-arglist result (arglist definition)))))
+      (let ((*warn-on-redefinition* nil))
+        (if (and (symbolp name) (macro-function name))
+            (let ((mac (make-macro name result)))
+              (%set-arglist mac (arglist (symbol-function name)))
+              (setf (fdefinition name) mac))
+            (progn
+              (setf (fdefinition name) result)
+              (%set-arglist result (arglist definition))))))
     (values (or name result) nil nil)))
 
 (defun precompile-package (pkg &key verbose)
