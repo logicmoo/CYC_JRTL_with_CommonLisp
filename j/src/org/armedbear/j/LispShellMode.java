@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShellMode.java,v 1.1 2002-10-14 23:37:17 piso Exp $
+ * $Id: LispShellMode.java,v 1.2 2002-10-15 01:32:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.j;
 
 import java.awt.event.KeyEvent;
 
-public final class LispShellMode extends AbstractMode implements Constants, Mode
+public final class LispShellMode extends LispMode implements Constants, Mode
 {
     private static final LispShellMode mode = new LispShellMode();
 
@@ -33,11 +33,17 @@ public final class LispShellMode extends AbstractMode implements Constants, Mode
         setProperty(Property.VERTICAL_RULE, 0);
         setProperty(Property.SHOW_LINE_NUMBERS, false);
         setProperty(Property.SHOW_CHANGE_MARKS, false);
+        setProperty(Property.HIGHLIGHT_BRACKETS, true);
     }
 
-    public static final LispShellMode getMode()
+    public static final Mode getMode()
     {
         return mode;
+    }
+
+    public Formatter getFormatter(Buffer buffer)
+    {
+        return new ShellFormatter(buffer);
     }
 
     protected void setKeyMapDefaults(KeyMap km)
@@ -53,10 +59,5 @@ public final class LispShellMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
         km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
         km.mapKey(')', "closeParen");
-    }
-
-    public Formatter getFormatter(Buffer buffer)
-    {
-        return new ShellFormatter(buffer);
     }
 }
