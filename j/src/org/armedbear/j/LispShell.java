@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.10 2002-11-24 05:05:30 piso Exp $
+ * $Id: LispShell.java,v 1.11 2002-11-25 20:04:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,6 +117,11 @@ public final class LispShell extends Shell
             indentLineAtDot(editor);
     }
 
+    public void eval(String input)
+    {
+        send(input);
+    }
+
     private void indentLineAtDot(Editor editor)
     {
         final Line dotLine = editor.getDotLine();
@@ -182,17 +187,8 @@ public final class LispShell extends Shell
             MessageDialog.showMessageDialog(JPTY_NOT_FOUND, "Error");
             return;
         }
-        // Look for existing LispShell buffer.
-        Buffer buf = null;
-        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-            Buffer b = it.nextBuffer();
-            if (b instanceof LispShell) {
-                if (((LispShell)b).shellCommand.equals(shellCommand)) {
-                    buf = b;
-                    break;
-                }
-            }
-        }
+        // Look for an existing LispShell buffer with the same shell command.
+        Buffer buf = findLispShell(shellCommand);
         if (buf != null) {
             Shell shell = (Shell) buf;
             if (shell.getProcess() == null)
@@ -204,5 +200,18 @@ public final class LispShell extends Shell
             editor.makeNext(buf);
             editor.activateInOtherWindow(buf);
         }
+    }
+
+    public static LispShell findLispShell(String shellCommand)
+    {
+        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+            Buffer b = it.nextBuffer();
+            if (b instanceof LispShell) {
+                if (shellCommand == null ||
+                    shellCommand.equals(((LispShell)b).shellCommand))
+                    return (LispShell) b;
+            }
+        }
+        return null;
     }
 }
