@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.90 2003-06-22 16:15:14 piso Exp $
+ * $Id: Lisp.java,v 1.91 2003-06-22 16:35:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -724,11 +724,6 @@ public abstract class Lisp
         symbol.setConstant(true);
         symbol.setSymbolValue(value);
         return symbol;
-    }
-
-    public static final LispObject unintern(Symbol symbol, Package pkg)
-    {
-        return pkg.unintern(symbol);
     }
 
     public static Symbol _DEFAULT_PATHNAME_DEFAULTS_ =
