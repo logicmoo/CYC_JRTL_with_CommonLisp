@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.30 2003-08-26 14:38:16 piso Exp $
+ * $Id: LispFloat.java,v 1.31 2003-08-26 16:17:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,6 +136,16 @@ public final class LispFloat extends LispObject
     public final float getValue()
     {
         return value;
+    }
+
+    public final LispObject incr()
+    {
+        return new LispFloat(value + 1);
+    }
+
+    public final LispObject decr()
+    {
+        return new LispFloat(value - 1);
     }
 
     public LispObject add(LispObject obj) throws LispError

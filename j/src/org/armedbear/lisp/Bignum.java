@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.26 2003-08-26 14:38:16 piso Exp $
+ * $Id: Bignum.java,v 1.27 2003-08-26 16:18:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,12 +142,12 @@ public final class Bignum extends LispObject
 
     public final LispObject incr()
     {
-        return new Bignum(value.add(BigInteger.ONE));
+        return number(value.add(BigInteger.ONE));
     }
 
     public final LispObject decr()
     {
-        return new Bignum(value.subtract(BigInteger.ONE));
+        return number(value.subtract(BigInteger.ONE));
     }
 
     public LispObject add(LispObject obj) throws LispError
