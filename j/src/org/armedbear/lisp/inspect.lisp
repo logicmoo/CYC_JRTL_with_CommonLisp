@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: inspect.lisp,v 1.6 2004-05-23 02:49:51 piso Exp $
+;;; $Id: inspect.lisp,v 1.7 2004-05-23 15:18:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,15 +44,17 @@
       (return (values nil :circular)))))
 
 (defun display-object (obj display-parts-p)
-  (cond ((typep obj 'standard-object)
-         (format t "~A at #x~X~%" (inspected-description obj) (identity-hash-code obj))
-         (do ((slots (class-slots (class-of obj)) (cdr slots))
-              (i 0 (1+ i)))
-             ((null slots))
-           (let* ((slot (car slots))
-                  (name (slot-definition-name slot)))
-             (format t "~4D ~A -> ~S~%" i name
-                     (if (slot-boundp obj name) (slot-value obj name) +slot-unbound+)))))
+  (cond
+;;    ((typep obj 'standard-object)
+;;          (format t "standard-object case~%")
+;;          (format t "~A at #x~X~%" (inspected-description obj) (identity-hash-code obj))
+;;          (do ((slots (class-slots (class-of obj)) (cdr slots))
+;;               (i 0 (1+ i)))
+;;              ((null slots))
+;;            (let* ((slot (car slots))
+;;                   (name (slot-definition-name slot)))
+;;              (format t "~4D ~A -> ~S~%" i name
+;;                      (if (slot-boundp obj name) (slot-value obj name) +slot-unbound+)))))
         ((vectorp obj)
          (format t "~A at #x~X~%" (inspected-description obj) (identity-hash-code obj))
          (let ((limit (min (length obj) 25)))
@@ -99,7 +101,7 @@
          (let ((parts (inspected-parts obj))
                (i 0))
            (dolist (part parts)
-             (let ((name (car part))
+             (let ((name (string (car part)))
                    (value (cdr part)))
                (format t "~4D ~A ~A ~A~%" i
                        name
