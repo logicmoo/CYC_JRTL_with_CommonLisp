@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.23 2003-11-11 11:11:38 asimon Exp $
+ * $Id: Java.java,v 1.24 2003-11-17 20:43:58 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,7 +116,7 @@ public final class Java extends Module
                             }
                         } else {
                             // Case 7.
-                            f.set(instance,JavaObject.getObject(args[2]));
+                            f.set(instance,args[2].javaInstance());
                             return args[2];
                         }
                     case 4:
@@ -125,7 +125,7 @@ public final class Java extends Module
                             // Case 4.
                             instance = JavaObject.getObject(args[2]);
                         }
-                        f.set(instance,JavaObject.getObject(args[3]));
+                        f.set(instance,args[3].javaInstance());
                         return args[3];
                 }
                 return makeLispObject(f.get(instance));
