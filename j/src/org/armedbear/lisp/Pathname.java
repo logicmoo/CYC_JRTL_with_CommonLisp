@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.7 2003-08-15 15:09:44 piso Exp $
+ * $Id: Pathname.java,v 1.8 2003-08-15 15:52:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,8 +135,10 @@ public final class Pathname extends LispObject
                 d = file.getParent();
                 n = file.getName();
                 int index = n.lastIndexOf('.');
-                if (index >= 0)
+                if (index >= 0) {
                     t = n.substring(index + 1);
+                    n = n.substring(0, index);
+                }
             }
             if (name == Keyword.WILD)
                 n = "*";
