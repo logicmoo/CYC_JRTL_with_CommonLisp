@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.113 2005-02-20 19:13:03 piso Exp $
+ * $Id: Stream.java,v 1.114 2005-02-24 00:36:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,25 +320,42 @@ public class Stream extends LispObject
 
     public LispObject readStructure() throws ConditionThrowable
     {
+        final LispThread thread = LispThread.currentThread();
         LispObject obj = read(true, NIL, false);
-        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+        if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         if (obj.listp()) {
             Symbol structure = checkSymbol(obj.car());
             LispClass c = LispClass.findClass(structure);
-            if (!(c instanceof StructureClass)) {
+            if (!(c instanceof StructureClass))
                 return signal(new ReaderError(structure.getName() +
                                               " is not a defined structure type."));
-            }
             LispObject args = obj.cdr();
             Symbol DEFSTRUCT_DEFAULT_CONSTRUCTOR =
                 PACKAGE_SYS.intern("DEFSTRUCT-DEFAULT-CONSTRUCTOR");
             LispObject constructor =
                 DEFSTRUCT_DEFAULT_CONSTRUCTOR.getSymbolFunctionOrDie().execute(structure);
-            return funcall(constructor.getSymbolFunctionOrDie(),
-                           args.copyToArray(), LispThread.currentThread());
+            final int length = args.length();
+            if ((length % 2) != 0)
+                return signal(new ReaderError("Odd number of keyword arguments following #S: " +
+                                              obj.writeToString()));
+            LispObject[] array = new LispObject[length];
+            LispObject rest = args;
+            for (int i = 0; i < length; i += 2) {
+                LispObject key = rest.car();
+                if (key instanceof Symbol && ((Symbol)key).getPackage() == PACKAGE_KEYWORD) {
+                    array[i] = key;
+                } else {
+                    array[i] = PACKAGE_KEYWORD.intern(javaString(key));
+                }
+                array[i + 1] = rest.cadr();
+                rest = rest.cddr();
+            }
+            return funcall(constructor.getSymbolFunctionOrDie(), array,
+                           thread);
         }
-        return signal(new ReaderError("Non-list following #S: " + obj));
+        return signal(new ReaderError("Non-list following #S: " +
+                                      obj.writeToString()));
     }
 
     public LispObject readList(boolean requireProper) throws ConditionThrowable
