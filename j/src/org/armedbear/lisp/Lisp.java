@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.247 2004-05-29 18:09:31 piso Exp $
+ * $Id: Lisp.java,v 1.248 2004-06-02 21:20:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1584,24 +1584,28 @@ public abstract class Lisp
         _FEATURES_.setSpecial(true);
         String osName = System.getProperty("os.name");
         if (osName.startsWith("Linux")) {
-            _FEATURES_.setSymbolValue(list5(Keyword.ARMEDBEAR,
+            _FEATURES_.setSymbolValue(list6(Keyword.ARMEDBEAR,
+                                            Keyword.ABCL,
                                             Keyword.COMMON_LISP,
                                             Keyword.ANSI_CL,
                                             Keyword.UNIX,
                                             Keyword.LINUX));
         } else if (osName.startsWith("Mac OS X")) {
-            _FEATURES_.setSymbolValue(list5(Keyword.ARMEDBEAR,
+            _FEATURES_.setSymbolValue(list6(Keyword.ARMEDBEAR,
+                                            Keyword.ABCL,
                                             Keyword.COMMON_LISP,
                                             Keyword.ANSI_CL,
                                             Keyword.UNIX,
                                             Keyword.DARWIN));
         } else if (osName.startsWith("Windows")) {
-            _FEATURES_.setSymbolValue(list4(Keyword.ARMEDBEAR,
+            _FEATURES_.setSymbolValue(list5(Keyword.ARMEDBEAR,
+                                            Keyword.ABCL,
                                             Keyword.COMMON_LISP,
                                             Keyword.ANSI_CL,
                                             Keyword.WINDOWS));
         } else {
-            _FEATURES_.setSymbolValue(list3(Keyword.ARMEDBEAR,
+            _FEATURES_.setSymbolValue(list4(Keyword.ARMEDBEAR,
+                                            Keyword.ABCL,
                                             Keyword.COMMON_LISP,
                                             Keyword.ANSI_CL));
         }
