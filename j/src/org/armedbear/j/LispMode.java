@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.24 2003-02-20 18:54:03 piso Exp $
+ * $Id: LispMode.java,v 1.25 2003-02-20 18:58:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,7 +106,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
 
     public static final boolean isDefiner(String s)
     {
-        if (s.startsWith("def"))
+        if (s.length() >= 5 && s.startsWith("def"))
             if (Utilities.isOneOf(s, definers))
                 return true;
 
