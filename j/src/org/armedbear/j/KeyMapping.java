@@ -1,8 +1,8 @@
 /*
  * KeyMapping.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: KeyMapping.java,v 1.1.1.1 2002-09-24 16:09:18 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: KeyMapping.java,v 1.2 2003-07-18 15:16:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,27 +28,31 @@ public class KeyMapping implements Constants
     private final char keyChar;
     private final int keyCode;
     private final int modifiers;
-    private String command;
+    private Object command;
 
-    public KeyMapping(int keyCode, int modifiers, String command)
+    public KeyMapping(int keyCode, int modifiers, Object command)
     {
         this.keyChar = 0;
         this.keyCode = keyCode;
         this.modifiers = modifiers;
-        if (command != null)
-            this.command = command.intern();
+        if (command instanceof String)
+            this.command = ((String)command).intern();
+        else
+            this.command = command;
     }
 
-    public KeyMapping(char keyChar, String command)
+    public KeyMapping(char keyChar, Object command)
     {
         this.keyChar = keyChar;
         this.keyCode = 0;
         this.modifiers = 0;
-        if (command != null)
-            this.command = command.intern();
+        if (command instanceof String)
+            this.command = ((String)command).intern();
+        else
+            this.command = command;
     }
 
-    public KeyMapping(KeyStroke keyStroke, String command)
+    private KeyMapping(KeyStroke keyStroke, String command)
     {
         char c = keyStroke.getKeyChar();
         keyChar = c == 0xffff ?  0 : c;
@@ -57,11 +61,6 @@ public class KeyMapping implements Constants
         modifiers = keyStroke.getModifiers() & 0x0f;
         if (command != null)
             this.command = command.intern();
-    }
-
-    private final void setCommand(String command)
-    {
-        this.command = command != null ? command.intern() : null;
     }
 
     // Returns null if string can't be parsed.
@@ -84,7 +83,7 @@ public class KeyMapping implements Constants
         return createKeyMapping(keyText, command);
     }
 
-    public static KeyMapping createKeyMapping(String keyText, String command)
+    private static KeyMapping createKeyMapping(String keyText, String command)
     {
         KeyStroke keyStroke = Utilities.getKeyStroke(keyText);
         if (keyStroke == null)
@@ -109,7 +108,7 @@ public class KeyMapping implements Constants
         return modifiers;
     }
 
-    public final String getCommand()
+    public final Object getCommand()
     {
         return command;
     }
