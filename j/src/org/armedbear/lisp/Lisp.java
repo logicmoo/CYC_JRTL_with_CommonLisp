@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.233 2004-04-30 01:47:00 piso Exp $
+ * $Id: Lisp.java,v 1.234 2004-05-03 02:04:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -317,11 +317,10 @@ public abstract class Lisp
         public LispObject execute(LispObject object) throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            final Environment environment = new Environment();
             Symbol.MINUS.setSymbolValue(object);
             LispObject result;
             try {
-                result = eval(object, environment, thread);
+                result = funcall1(Symbol.EVAL.getSymbolFunction(), object, thread);
             }
             catch (OutOfMemoryError e) {
                 return signal(new LispError("Out of memory."));
