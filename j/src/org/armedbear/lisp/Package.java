@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.21 2003-06-22 16:15:14 piso Exp $
+ * $Id: Package.java,v 1.22 2003-06-22 16:33:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -248,17 +248,15 @@ public final class Package extends LispObject
         final String symbolName = symbol.getName();
         if (internalSymbols.get(symbolName) == symbol) {
             internalSymbols.remove(symbolName);
-            if (symbol.getPackage() == this)
-                symbol.setPackage(NIL);
-            return T;
-        }
-        if (externalSymbols.get(symbolName) == symbol) {
+        } else if (externalSymbols.get(symbolName) == symbol) {
             externalSymbols.remove(symbolName);
-            if (symbol.getPackage() == this)
-                symbol.setPackage(NIL);
-            return T;
+        } else {
+            // Not found.
+            return NIL;
         }
-        return NIL;
+        if (symbol.getPackage() == this)
+            symbol.setPackage(NIL);
+        return T;
     }
 
     public void export(Symbol symbol) throws LispError
