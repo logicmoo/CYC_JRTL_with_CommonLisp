@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaMode.java,v 1.13 2003-10-15 15:09:18 piso Exp $
+ * $Id: JavaMode.java,v 1.14 2003-10-15 20:15:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -551,7 +551,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
 
     private static final boolean isAcceptableModel(Line line)
     {
-        if (line.flags() == STATE_COMMENT)
+        int flags = line.flags();
+        if (flags == STATE_COMMENT || flags == STATE_QUOTE)
             return false;
         if (line.isBlank())
             return false;
