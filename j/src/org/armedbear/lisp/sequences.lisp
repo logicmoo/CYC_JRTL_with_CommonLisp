@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.26 2003-03-14 20:05:32 piso Exp $
+;;; $Id: sequences.lisp,v 1.27 2003-03-15 18:30:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 (export '(make-sequence
           some every notany notevery subseq copy-seq fill reverse nreverse
           concatenate
-          map
+          map map-into
           reduce
           delete delete-if delete-if-not
           remove remove-if remove-if-not
@@ -337,6 +337,29 @@
             (setf (elt x i)
                   (apply function (mapcar #'(lambda (z) (elt z i))
                                           more-sequences))))))))
+
+
+;;; MAP-INTO (from CMUCL)
+
+(defun map-into (result-sequence function &rest sequences)
+  (let* ((fp-result
+	  (and (arrayp result-sequence)
+	       (array-has-fill-pointer-p result-sequence)))
+	 (len (apply #'min
+		     (if fp-result
+			 (array-dimension result-sequence 0)
+			 (length result-sequence))
+		     (mapcar #'length sequences))))
+
+    (when fp-result
+      (setf (fill-pointer result-sequence) len))
+
+    (dotimes (index len)
+      (setf (elt result-sequence index)
+	    (apply function
+		   (mapcar #'(lambda (seq) (elt seq index))
+			   sequences)))))
+  result-sequence)
 
 ;;; REDUCE (from OpenMCL)
 
