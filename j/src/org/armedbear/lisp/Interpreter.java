@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.39 2003-09-25 18:22:11 piso Exp $
+ * $Id: Interpreter.java,v 1.40 2003-10-04 10:48:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,8 @@ public final class Interpreter extends Lisp
     private static int commandNumber;
 
     private final boolean jlisp;
+    private final InputStream inputStream;
+    private final OutputStream outputStream;
 
     public static synchronized Interpreter getInstance()
     {
@@ -71,14 +73,18 @@ public final class Interpreter extends Lisp
     private Interpreter()
     {
         jlisp = false;
+        inputStream = null;
+        outputStream = null;
     }
 
     private Interpreter(InputStream inputStream, OutputStream outputStream,
                         String initialDirectory)
     {
+        jlisp = true;
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
         resetIO(new CharacterInputStream(inputStream),
                 new CharacterOutputStream(outputStream));
-        jlisp = true;
     }
 
     public static synchronized void initialize(boolean jlisp)
@@ -116,9 +122,9 @@ public final class Interpreter extends Lisp
             out.writeString(banner());
             initialize(jlisp);
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
-            LispObject replFun = TOP_LEVEL_LOOP.getSymbolFunction();
-            if (replFun instanceof Function) {
-                replFun.execute();
+            LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
+            if (tplFun instanceof Function) {
+                funcall0(tplFun, thread);
                 return;
             }
             while (true) {
@@ -502,7 +508,21 @@ public final class Interpreter extends Lisp
 
     public void kill()
     {
-        done = true;
+        if (jlisp) {
+            try {
+                inputStream.close();
+            }
+            catch (IOException e) {
+                Debug.trace(e);
+            }
+            try {
+                outputStream.close();
+            }
+            catch (IOException e) {
+                Debug.trace(e);
+            }
+        } else
+            System.exit(0);
     }
 
     public synchronized void dispose()
