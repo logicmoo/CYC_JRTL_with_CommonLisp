@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: JavaClassLoader.java,v 1.7 2004-08-08 15:30:17 piso Exp $
+ * $Id: JavaClassLoader.java,v 1.8 2004-08-11 11:04:08 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,8 +41,10 @@ public class JavaClassLoader extends ClassLoader
 
     public static JavaClassLoader getPersistentInstance()
     {
-        if (persistentInstance == null)
+        if (persistentInstance == null) {
             persistentInstance = new JavaClassLoader();
+	    persistentInstance.definePackage("lisp","","1.0","","","1.0","",null);
+        }
         return persistentInstance;
     }
 
