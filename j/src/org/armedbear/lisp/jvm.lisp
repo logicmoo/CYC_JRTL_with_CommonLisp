@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.133 2004-04-27 12:38:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.134 2004-04-27 15:35:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1387,12 +1387,19 @@
             "Lorg/armedbear/lisp/LispObject;")
       (emit-store-value)))
    ((stringp form)
-    (let ((g (declare-string form)))
-      (emit 'getstatic
-            *this-class*
-            g
-            "Lorg/armedbear/lisp/SimpleString;")
-      (emit-store-value)))
+    (if *compile-file-truename*
+        (let ((g (declare-string form)))
+          (emit 'getstatic
+                *this-class*
+                g
+                "Lorg/armedbear/lisp/SimpleString;")
+          (emit-store-value))
+        (let ((g (declare-object form)))
+          (emit 'getstatic
+                *this-class*
+                g
+                +lisp-object+)
+          (emit-store-value))))
    ((vectorp form)
     (let ((g (declare-object-as-string form)))
       (emit 'getstatic
@@ -2723,6 +2730,7 @@
         (handler-case
             (%jvm-compile name definition)
           (error (c)
+                 (fresh-line)
                  (%format t "~A Note: ~A~%" prefix c)
                  (when name
                    (%format t "~A Unabled to compile ~S~%" prefix name))
