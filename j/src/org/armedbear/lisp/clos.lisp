@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.83 2004-02-10 14:10:02 piso Exp $
+;;; $Id: clos.lisp,v 1.84 2004-02-13 16:26:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -517,12 +517,14 @@
 (defun make-instance-standard-class (metaclass
                                      &key name direct-superclasses direct-slots
                                      direct-default-initargs
+                                     documentation
                                      &allow-other-keys)
   (declare (ignore metaclass))
   (let ((class (std-allocate-instance (find-class 'standard-class))))
     (%set-class-name class name)
     (setf (class-direct-subclasses class) ())
     (setf (class-direct-methods class) ())
+    (%set-class-documentation class documentation)
     (std-after-initialization-for-classes class
                                           :direct-superclasses direct-superclasses
                                           :direct-slots direct-slots
@@ -1539,6 +1541,18 @@
      (setf (get x '%variable-documentation) docstring))
     (STRUCTURE
      (setf (get x '%structure-documentation) docstring))))
+
+(defmethod documentation ((x standard-class) (doc-type (eql 't)))
+  (class-documentation x))
+
+(defmethod documentation ((x standard-class) (doc-type (eql 'type)))
+  (class-documentation x))
+
+(defmethod (setf documentation) (new-value (x standard-class) (doc-type (eql 't)))
+  (%set-class-documentation x new-value))
+
+(defmethod (setf documentation) (new-value (x standard-class) (doc-type (eql 'type)))
+  (%set-class-documentation x new-value))
 
 (defmethod documentation ((x standard-generic-function) (doc-type (eql 't)))
   (generic-function-documentation x))
