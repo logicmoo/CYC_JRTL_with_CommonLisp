@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.20 2004-06-12 16:08:02 piso Exp $
+;;; $Id: pprint.lisp,v 1.21 2004-06-12 17:58:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -952,7 +952,9 @@
 	 (end (cond ((member (Qkind xp Qentry) '(:fresh :unconditional)) out-point)
 		    (last-non-blank (1+ last-non-blank))
 		    (T 0)))
-	 (line-limit-exit (and (line-limit xp) (not (> (line-limit xp) (line-no xp))))))
+	 (line-limit-exit (and (line-limit xp)
+                               (not *print-readably*)
+                               (not (> (line-limit xp) (line-no xp))))))
     (when line-limit-exit
       (setf (buffer-ptr xp) end)          ;truncate pending output.
       (write-string+++ " .." xp 0 3)
@@ -1553,6 +1555,7 @@
 	 (write+ args xp)
 	 T)
 	((and *print-length* ;must supersede circle check
+              (not *print-readably*)
 	      (not (< *current-length* *print-length*)))
 	 (write-string++ "..." xp 0 3)
 	 (setq *abbreviation-happened* T)
@@ -1576,6 +1579,7 @@
 	 (write+ args xp)
 	 T)
 	((and *print-length* ;must supersede circle check
+              (not *print-readably*)
 	      (not (< *current-length* *print-length*)))
 	 (write-string++ "..." xp 0 3)
 	 (setq *abbreviation-happened* T)
@@ -2181,14 +2185,19 @@
 			     (*outer-end* 'logical-block))
 			 (compile-format (car chunks)
 					 (directive-start (cadr chunks)))))))))))))
-
+
 (defun check-block-abbreviation (xp args circle-check?)
-  (cond ((not (listp args)) (write+ args xp) T)
-	((and *print-level* (> *current-level* *print-level*))
+  (cond ((not (listp args))
+         (write+ args xp) T)
+	((and *print-level*
+              (not *print-readably*)
+              (> *current-level* *print-level*))
 	 (write-char++ #\# XP) (setq *abbreviation-happened* T) T)
-	((and *circularity-hash-table* circle-check?
+	((and *circularity-hash-table*
+              circle-check?
 	      (eq (circularity-process xp args nil) :subsequent)) T)
-	(T nil)))
+	(t
+         nil)))
 
 (defun fill-transform (doit? body)
   (if (not doit?) body
