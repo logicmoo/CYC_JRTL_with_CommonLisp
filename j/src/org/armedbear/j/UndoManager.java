@@ -2,7 +2,7 @@
  * UndoManager.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndoManager.java,v 1.2 2003-06-11 15:10:21 piso Exp $
+ * $Id: UndoManager.java,v 1.3 2003-08-01 16:06:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class UndoManager extends javax.swing.undo.UndoManager
     {
         UndoableEdit edit = editToBeUndone();
         super.undo();
-        if (edit instanceof UndoSave)
+        if (edit instanceof UndoBoundary)
             super.undo();
     }
 
@@ -38,7 +38,7 @@ public final class UndoManager extends javax.swing.undo.UndoManager
     {
         UndoableEdit edit = editToBeRedone();
         super.redo();
-        if (edit instanceof UndoSave)
+        if (edit instanceof UndoBoundary)
             super.redo();
     }
 
