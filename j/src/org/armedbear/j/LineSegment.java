@@ -2,7 +2,7 @@
  * LineSegment.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LineSegment.java,v 1.3 2004-04-01 18:51:53 piso Exp $
+ * $Id: LineSegment.java,v 1.4 2004-04-02 03:31:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,18 +28,7 @@ public class LineSegment
     private int end;
     private int format;
 
-    public static final LineSegment getLineSegment(String text, int format)
-    {
-        return new LineSegment(text, format);
-    }
-
-    public static final LineSegment getLineSegment(String text, int begin, int end, int format)
-    {
-        return new LineSegment(text, begin, end, format);
-    }
-
-    // For the HtmlLineSegment constructor.
-    protected LineSegment(String text, int format)
+    public LineSegment(String text, int format)
     {
         this.text = text;
         begin = 0;
@@ -47,7 +36,7 @@ public class LineSegment
         this.format = format;
     }
 
-    private LineSegment(String text, int begin, int end, int format)
+    public LineSegment(String text, int begin, int end, int format)
     {
         this.text = text;
         this.begin = begin;
