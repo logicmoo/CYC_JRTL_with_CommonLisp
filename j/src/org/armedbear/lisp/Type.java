@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.16 2003-09-08 15:19:29 piso Exp $
+ * $Id: Type.java,v 1.17 2003-09-08 17:15:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,9 @@ public class Type extends Lisp
         }
         for (int i = 0; i < supertypes.size(); i++) {
             Type supertype = (Type) supertypes.get(i);
+            // Avoid loops!
+            if (supertype._isSubtypeOf(this))
+                continue;
             if (supertype._isSubtypeOf(otherType))
                 return true;
         }
@@ -134,8 +137,8 @@ public class Type extends Lisp
 
     public static final Type TYPE_T    = new Type(Symbol.T);
 
-    public static final Type ATOM      = new Type(Symbol.ATOM);
-    public static final Type SYMBOL    = new Type(Symbol.SYMBOL, ATOM);
+    public static final Type ATOM      = new Type(Symbol.ATOM, TYPE_T);
+    public static final Type SYMBOL    = new Type(Symbol.SYMBOL, TYPE_T);
     public static final Type SEQUENCE  = new Type(Symbol.SEQUENCE, TYPE_T);
     public static final Type ARRAY     = new Type(Symbol.ARRAY, TYPE_T);
     public static final Type CHARACTER = new Type(Symbol.CHARACTER, TYPE_T);
@@ -143,7 +146,8 @@ public class Type extends Lisp
     public static final Type STREAM    = new Type(Symbol.STREAM, TYPE_T);
     public static final Type CONDITION = new Type(Symbol.CONDITION, TYPE_T);
 
-    // Subtype of SYMBOL
+    // Subtypes of SYMBOL
+    public static final Type BOOLEAN   = new Type(Symbol.BOOLEAN, SYMBOL);
     public static final Type KEYWORD   = new Type(Symbol.KEYWORD, SYMBOL);
 
     // Subtypes of SEQUENCE
