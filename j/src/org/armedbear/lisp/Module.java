@@ -2,7 +2,7 @@
  * Module.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Module.java,v 1.6 2003-09-19 14:44:10 piso Exp $
+ * $Id: Module.java,v 1.7 2003-09-28 01:17:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public abstract class Module extends Lisp
 {
     protected Module() {}
 
-    public LispObject dispatch(LispObject args, Environment env, int index)
+    public final LispObject dispatch(LispObject args, Environment env, int index)
         throws ConditionThrowable
     {
         throw new ConditionThrowable(new LispError());
