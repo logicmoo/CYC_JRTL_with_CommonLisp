@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.16 2003-03-14 10:58:40 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.17 2003-03-14 18:47:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PushbackReader;
 import java.io.StringReader;
+import java.math.BigInteger;
 
 public class CharacterInputStream extends LispStream
 {
@@ -537,14 +538,20 @@ public class CharacterInputStream extends LispStream
         char c = token.charAt(0);
         if (c == '-' || Character.isDigit(token.charAt(0))) {
             if (token.indexOf('.') >= 0) {
+                // FIXME If '.' is last char in token, it's an integer rather
+                // than a float.
                 try {
-                    float f = Float.parseFloat(token);
-                    return new LispFloat(f);
+                    return new LispFloat(Float.parseFloat(token));
                 }
                 catch (NumberFormatException e) {}
             } else {
                 try {
-                    return new Fixnum(Long.parseLong(token));
+                    return new Fixnum(Integer.parseInt(token));
+                }
+                catch (NumberFormatException e) {}
+                // parseInt() failed.
+                try {
+                    return new Bignum(new BigInteger(token));
                 }
                 catch (NumberFormatException e) {}
             }
