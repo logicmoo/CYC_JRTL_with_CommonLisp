@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.69 2003-06-13 17:04:18 piso Exp $
+ * $Id: Editor.java,v 1.70 2003-06-16 15:28:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6478,7 +6478,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         Region r = new Region(buffer, mark, dot);
         // BUG! We should pass the contents of the region line by line in case
         // it's big.
-        ShellCommand shellCommand = new ShellCommand(command, r.toString());
+        ShellCommand shellCommand =
+            new ShellCommand(command, null, r.toString());
         shellCommand.run();
         String output = shellCommand.getOutput();
         if (output != null && output.length() > 0) {
