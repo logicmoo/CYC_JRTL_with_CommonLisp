@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Help.java,v 1.16 2005-03-06 04:37:53 piso Exp $
+ * $Id: Help.java,v 1.17 2005-03-06 04:43:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,7 +156,7 @@ public final class Help
         return File.getInstance(Directories.getTempDirectory(), "bindings.html");
     }
 
-    public static void listBindings()
+    public static void describeBindings()
     {
         final Editor editor = Editor.currentEditor();
         final Frame frame = editor.getFrame();
