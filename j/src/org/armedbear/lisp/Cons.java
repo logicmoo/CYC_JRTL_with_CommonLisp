@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.24 2003-09-14 17:36:11 piso Exp $
+ * $Id: Cons.java,v 1.25 2003-09-15 05:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,14 +47,14 @@ public final class Cons extends LispObject
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
-        if (typeSpecifier instanceof Cons)
-            return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
         if (typeSpecifier == Symbol.LIST)
             return T;
         if (typeSpecifier == Symbol.CONS)
             return T;
         if (typeSpecifier == Symbol.SEQUENCE)
             return T;
+        if (typeSpecifier == Symbol.ATOM)
+            return NIL;
         return super.typep(typeSpecifier);
     }
 
