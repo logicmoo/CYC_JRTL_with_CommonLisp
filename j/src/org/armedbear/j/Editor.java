@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.86 2003-07-01 18:41:46 piso Exp $
+ * $Id: Editor.java,v 1.87 2003-07-03 01:04:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -556,9 +556,11 @@ public final class Editor extends JPanel implements Constants,
 
     public void updateLocation()
     {
-        if (locationBar != null)
-            locationBar.update();
-        else
+        if (locationBar != null) {
+            HistoryTextField textField = locationBar.getTextField();
+            if (textField == null || textField != frame.getFocusedComponent())
+                locationBar.update();
+        } else
             Debug.bug();
     }
 
