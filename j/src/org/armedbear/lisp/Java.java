@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.37 2004-01-12 23:50:54 asimon Exp $
+ * $Id: Java.java,v 1.38 2004-01-18 11:47:28 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -601,6 +601,8 @@ public final class Java extends Lisp
 
     private static final LispObject makeLispObject(Object obj) throws ConditionThrowable
     {
+        if (obj == null) 	 
+             return NIL;
         if (obj instanceof Boolean)
             return ((Boolean)obj).booleanValue() ? T : NIL;
         if (obj instanceof Integer)
