@@ -2,7 +2,7 @@
  * logand.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: logand.java,v 1.8 2004-01-31 13:42:28 piso Exp $
+ * $Id: logand.java,v 1.9 2004-02-28 14:45:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class logand extends Primitive
 {
     private logand()
     {
-        super("logand","&rest integers");
+        super("logand", "&rest integers");
     }
 
     public LispObject execute()
@@ -41,8 +41,8 @@ public final class logand extends Primitive
         throws ConditionThrowable
     {
         if (first instanceof Fixnum && second instanceof Fixnum) {
-            return new Fixnum(((Fixnum)first).getValue() &
-                              ((Fixnum)second).getValue());
+            return new Fixnum(((Fixnum)first).value &
+                              ((Fixnum)second).value);
         } else {
             BigInteger n1, n2;
             if (first instanceof Fixnum)
@@ -50,13 +50,13 @@ public final class logand extends Primitive
             else if (first instanceof Bignum)
                 n1 = ((Bignum)first).getValue();
             else
-                return signal(new TypeError(first, "integer"));
+                return signal(new TypeError(first, Symbol.INTEGER));
             if (second instanceof Fixnum)
                 n2 = ((Fixnum)second).getBigInteger();
             else if (second instanceof Bignum)
                 n2 = ((Bignum)second).getValue();
             else
-                return signal(new TypeError(second, "integer"));
+                return signal(new TypeError(second, Symbol.INTEGER));
             return number(n1.and(n2));
         }
     }
@@ -71,7 +71,7 @@ public final class logand extends Primitive
             else if (args[i] instanceof Bignum)
                 n = ((Bignum)args[i]).getValue();
             else
-                return signal(new TypeError(args[i], "integer"));
+                return signal(new TypeError(args[i], Symbol.INTEGER));
             result = result.and(n);
         }
         return number(result);
