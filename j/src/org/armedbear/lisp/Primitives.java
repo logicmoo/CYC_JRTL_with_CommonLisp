@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.674 2004-08-22 23:17:36 piso Exp $
+ * $Id: Primitives.java,v 1.675 2004-09-07 15:36:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1227,7 +1227,8 @@ public final class Primitives extends Lisp
 
     // ### %format
     private static final Primitive _FORMAT =
-        new Primitive("%format", PACKAGE_SYS, false)
+        new Primitive("%format", PACKAGE_SYS, false,
+                      "destination control-string &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -1284,9 +1285,14 @@ public final class Primitives extends Lisp
         return format(formatControl, formatArguments);
     }
 
+    private static final Symbol _SIMPLE_FORMAT_FUNCTION_ =
+        internSpecial("*SIMPLE-FORMAT-FUNCTION*", PACKAGE_SYS, _FORMAT);
+
     // ### %defun
     // %defun name arglist body &optional environment => name
-    private static final Primitive _DEFUN = new Primitive("%defun", PACKAGE_SYS, false)
+    private static final Primitive _DEFUN =
+        new Primitive("%defun", PACKAGE_SYS, false,
+                      "function-name lambda-list body &optional environment")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
