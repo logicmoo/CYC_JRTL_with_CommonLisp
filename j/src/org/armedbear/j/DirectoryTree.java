@@ -2,7 +2,7 @@
  * DirectoryTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DirectoryTree.java,v 1.4 2003-05-12 03:25:18 piso Exp $
+ * $Id: DirectoryTree.java,v 1.5 2003-05-16 17:03:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,7 +150,7 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
 
     private DefaultMutableTreeNode getNode(File file)
     {
-        if (treeModel == null || file != null)
+        if (treeModel == null || file == null)
             return null;
         return treeModel.getNode(file);
     }
