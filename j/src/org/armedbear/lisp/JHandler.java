@@ -1,8 +1,8 @@
 /*
  * JHandler.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: JHandler.java,v 1.7 2004-02-23 14:24:46 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: JHandler.java,v 1.8 2004-02-24 01:54:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,11 +29,13 @@ public final class JHandler extends Lisp
 {
     private static final Map table = new WeakHashMap();
 
-    public static void callLisp (String s, Object o) {
+    public static void callLisp (String s, Object o)
+    {
         callLisp(s, o, "");
     }
 
-    public static void callLisp (String s, Object o, String s1) {
+    public static void callLisp (String s, Object o, String s1)
+    {
         callLisp(s, o, s1, new int[] {});
     }
 
@@ -41,11 +43,13 @@ public final class JHandler extends Lisp
         callLisp(s, o, new String[] { s1 }, ai);
     }
 
-    public static void callLisp (String s, Object o, String as[]) {
+    public static void callLisp (String s, Object o, String as[])
+    {
         callLisp(s, o, as, new int[] {});
     }
 
-    public static void callLisp (String s, Object o, String as[], int ai[]) {
+    public static void callLisp (String s, Object o, String as[], int ai[])
+    {
         if (table.containsKey(o)) {
             Map entryTable =  (Map)table.get(o);
             if (entryTable.containsKey(s)) {
@@ -56,12 +60,12 @@ public final class JHandler extends Lisp
                 for (int i = 0; i < ai.length; i++) {
                     lispAi[i] = new Fixnum(ai[i]);
                 }
-                LispObject lispAiVector = new Vector(lispAi);
+                LispObject lispAiVector = new SimpleVector(lispAi);
                 SimpleString[] lispAs = new SimpleString[as.length];
                 for (int i = 0; i < as.length; i++) {
                     lispAs[i] = new SimpleString(as[i]);
                 }
-                LispObject lispAsVector = new Vector(lispAs);
+                LispObject lispAsVector = new SimpleVector(lispAs);
                 LispObject[] args = new LispObject[] //FIXME: count -> seq_num
                 { data, new JavaObject(o), lispAiVector, lispAsVector, Keyword.internKeyword(s), count };
                 try {

@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.40 2004-02-23 14:24:46 piso Exp $
+ * $Id: Java.java,v 1.41 2004-02-24 01:54:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -623,7 +623,7 @@ public final class Java extends Lisp
             return LispCharacter.getInstance(((Character)obj).charValue());
         if (obj instanceof Object[]) {
             Object[] array = (Object[]) obj;
-            Vector v = new Vector(array.length);
+            SimpleVector v = new SimpleVector(array.length);
             for (int i = array.length; i-- > 0;)
                 v.set(i, new JavaObject(array[i]));
             return v;

@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.13 2004-02-23 19:56:58 piso Exp $
+ * $Id: make_array.java,v 1.14 2004-02-24 01:54:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,8 +109,12 @@ public final class make_array extends Primitive
                 v = new BitVector(size);
             else if (upgradedType == NIL)
                 v = new NilVector(size);
-            else
-                v = new Vector(size);
+            else {
+                if (fillPointer != NIL || adjustable != NIL)
+                    v = new Vector(size);
+                else
+                    v = new SimpleVector(size);
+            }
             if (initialElementProvided != NIL) {
                 // Initial element was specified.
                 v.fill(initialElement);

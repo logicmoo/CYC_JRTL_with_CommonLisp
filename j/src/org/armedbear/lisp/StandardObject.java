@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.17 2004-02-12 20:17:11 piso Exp $
+ * $Id: StandardObject.java,v 1.18 2004-02-24 01:54:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,14 +24,14 @@ package org.armedbear.lisp;
 public class StandardObject extends LispObject
 {
     private Layout layout;
-    private Vector slots;
+    private SimpleVector slots;
 
     protected StandardObject()
     {
         layout = new Layout(BuiltInClass.STANDARD_OBJECT, Fixnum.ZERO, NIL);
     }
 
-    protected StandardObject(LispClass cls, Vector slots)
+    protected StandardObject(LispClass cls, SimpleVector slots)
     {
         layout = cls.getLayout();
         Debug.assertTrue(layout != null);
@@ -169,11 +169,11 @@ public class StandardObject extends LispObject
             throws ConditionThrowable
         {
             if (first instanceof StandardObject) {
-                if (second instanceof Vector) {
-                    ((StandardObject)first).slots = (Vector) second;
+                if (second instanceof SimpleVector) {
+                    ((StandardObject)first).slots = (SimpleVector) second;
                     return second;
                 }
-                return signal(new TypeError(second, Symbol.VECTOR));
+                return signal(new TypeError(second, Symbol.SIMPLE_VECTOR));
             }
             return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
         }
@@ -224,9 +224,14 @@ public class StandardObject extends LispObject
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            Vector v = new Vector(Fixnum.getValue(first));
-            v.fill(second);
-            return v;
+            try {
+                SimpleVector v = new SimpleVector(((Fixnum)first).value);
+                v.fill(second);
+                return v;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.FIXNUM));
+            }
         }
     };
 
@@ -241,9 +246,9 @@ public class StandardObject extends LispObject
             if (first == BuiltInClass.STANDARD_CLASS)
                 return new StandardClass();
             if (first instanceof LispClass) {
-                if (second instanceof Vector) {
+                if (second instanceof SimpleVector) {
                     Symbol symbol = ((LispClass)first).getSymbol();
-                    Vector slots = (Vector) second;
+                    SimpleVector slots = (SimpleVector) second;
                     if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
                         return new GenericFunction((LispClass)first, slots);
                     LispObject cpl = ((LispClass)first).getCPL();
@@ -255,7 +260,7 @@ public class StandardObject extends LispObject
                     }
                     return new StandardObject((LispClass)first, slots);
                 }
-                return signal(new TypeError(second, Symbol.VECTOR));
+                return signal(new TypeError(second, Symbol.SIMPLE_VECTOR));
             }
             return signal(new TypeError(first, Symbol.CLASS));
         }

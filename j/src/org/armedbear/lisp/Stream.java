@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.24 2004-02-23 14:24:47 piso Exp $
+ * $Id: Stream.java,v 1.25 2004-02-24 01:54:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -486,7 +486,7 @@ public class Stream extends LispObject
                 return new Cons(Symbol.FUNCTION,
                                 new Cons(read(true, NIL, true)));
             case '(':
-                return new Vector(readList());
+                return new SimpleVector(readList());
             case '\\':
                 return readCharacterLiteral();
             case '+':
@@ -692,7 +692,7 @@ public class Stream extends LispObject
     {
         LispObject obj = read(true, NIL, true);
         if (rank == 1)
-            return new Vector(obj);
+            return new SimpleVector(obj);
         return new Array(rank, obj);
     }
 

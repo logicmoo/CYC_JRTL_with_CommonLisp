@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: GenericFunction.java,v 1.6 2003-12-19 20:26:26 piso Exp $
+ * $Id: GenericFunction.java,v 1.7 2004-02-24 01:54:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class GenericFunction extends StandardObject
 {
     private LispObject discriminatingFunction;
 
-    public GenericFunction(LispClass cls, Vector slots)
+    public GenericFunction(LispClass cls, SimpleVector slots)
     {
         super(cls, slots);
     }

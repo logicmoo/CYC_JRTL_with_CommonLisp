@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Vector.java,v 1.33 2004-02-23 19:56:58 piso Exp $
+ * $Id: Vector.java,v 1.34 2004-02-24 01:54:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,11 +182,11 @@ public class Vector extends AbstractVector
 
     public LispObject subseq(int start, int end) throws ConditionThrowable
     {
-        Vector v = new Vector(end - start);
+        SimpleVector v = new SimpleVector(end - start);
         int i = start, j = 0;
         try {
             while (i < end)
-                v.elements[j++] = elements[i++];
+                v.set(j++, get(i++));
             return v;
         }
         catch (ArrayIndexOutOfBoundsException e) {
@@ -217,10 +217,10 @@ public class Vector extends AbstractVector
     public LispObject reverse() throws ConditionThrowable
     {
         int length = length();
-        Vector result = new Vector(length);
+        SimpleVector result = new SimpleVector(length);
         int i, j;
         for (i = 0, j = length - 1; i < length; i++, j--)
-            result.elements[i] = elements[j];
+            result.set(i, get(j));
         return result;
     }
 
