@@ -1,8 +1,8 @@
 /*
  * Interpreter.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.47 2003-12-13 00:02:47 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Interpreter.java,v 1.48 2004-01-05 02:09:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,6 @@ public final class Interpreter extends Lisp
                     autoload.load();
                 }
                 _LOAD_VERBOSE_.setSymbolValue(T);
-                _AUTOLOAD_VERBOSE_.setSymbolValue(T);
                 String userHome = System.getProperty("user.home");
                 File file = new File(userHome, ".ablrc");
                 if (file.isFile())
