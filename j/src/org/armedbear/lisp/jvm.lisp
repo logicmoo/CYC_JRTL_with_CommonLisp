@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.372 2005-01-25 20:15:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.373 2005-01-27 02:17:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,6 +77,11 @@
 (defvar *fields* ())
 (defvar *static-code* ())
 
+(defvar *declared-symbols* nil)
+(defvar *declared-functions* nil)
+(defvar *declared-strings* nil)
+(defvar *declared-fixnums* nil)
+
 (defstruct (class-file (:constructor %make-class-file))
   pathname ; pathname of output file
   class
@@ -87,7 +92,12 @@
   (pool-entries (make-hash-table :test #'equal))
   fields
   methods
-  static-code)
+  static-code
+  (symbols (make-hash-table :test 'eq))
+  (functions (make-hash-table :test 'equal))
+  (strings (make-hash-table :test 'eq))
+  (fixnums (make-hash-table :test 'eql))
+  )
 
 (defun class-name-from-filespec (filespec)
   (let* ((name (pathname-name filespec)))
@@ -106,23 +116,33 @@
 (defmacro with-class-file (class-file &body body)
   (let ((var (gensym)))
     `(let* ((,var ,class-file)
-            (*pool* (class-file-pool ,var))
-            (*pool-count* (class-file-pool-count ,var))
-            (*pool-entries* (class-file-pool-entries ,var))
-            (*fields* (class-file-fields ,var))
-            (*static-code* (class-file-static-code ,var)))
+            (*pool*               (class-file-pool ,var))
+            (*pool-count*         (class-file-pool-count ,var))
+            (*pool-entries*       (class-file-pool-entries ,var))
+            (*fields*             (class-file-fields ,var))
+            (*static-code*        (class-file-static-code ,var))
+            (*declared-symbols*   (class-file-symbols ,var))
+            (*declared-functions* (class-file-functions ,var))
+            (*declared-strings*   (class-file-strings ,var))
+            (*declared-fixnums*   (class-file-fixnums ,var)))
        (progn ,@body)
-       (setf (class-file-pool ,var) *pool*
-             (class-file-pool-count ,var) *pool-count*
+       (setf (class-file-pool ,var)         *pool*
+             (class-file-pool-count ,var)   *pool-count*
              (class-file-pool-entries ,var) *pool-entries*
-             (class-file-fields ,var) *fields*
-             (class-file-static-code ,var) *static-code*
+             (class-file-fields ,var)       *fields*
+             (class-file-static-code ,var)  *static-code*
+             (class-file-symbols ,var)      *declared-symbols*
+             (class-file-functions ,var)    *declared-functions*
+             (class-file-strings ,var)      *declared-strings*
+             (class-file-fixnums ,var)      *declared-fixnums*
              ))))
 
 (defstruct compiland
   name
+  (kind :external) ; :INTERNAL or :EXTERNAL
   lambda-expression
   arg-vars
+  arity ; NIL if the number of args can vary.
   p1-result
   parent
   (children 0) ; Number of local functions defined with FLET or LABELS.
@@ -258,7 +278,6 @@
 
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
-(defvar *arity* nil)
 
 (defvar *val* nil) ; index of value register
 
@@ -868,6 +887,7 @@
           (instruction-depth instruction)))
 
 (defun inst (instr &optional args)
+  (declare (optimize speed))
   (let ((opcode (if (numberp instr)
                     instr
                     (opcode-number instr))))
@@ -988,19 +1008,18 @@
   (ensure-thread-var-initialized)
   (emit 'aload *thread*))
 
-(defun maybe-generate-arg-count-check ()
-  (when *arity*
-    (let ((label1 (gensym)))
-      (aver (fixnump *arity*))
-      (aver (not (minusp *arity*)))
-      (aver (not (null (compiland-argument-register *current-compiland*))))
-      (emit 'aload (compiland-argument-register *current-compiland*))
-      (emit 'arraylength)
-      (emit 'bipush *arity*)
-      (emit 'if_icmpeq `,label1)
-      (emit 'aload 0) ; this
-      (emit-invokevirtual *this-class* "argCountError" nil nil)
-      (emit 'label `,label1))))
+(defun generate-arg-count-check (arity)
+  (aver (fixnump arity))
+  (aver (not (minusp arity)))
+  (aver (not (null (compiland-argument-register *current-compiland*))))
+  (let ((label1 (gensym)))
+    (emit 'aload (compiland-argument-register *current-compiland*))
+    (emit 'arraylength)
+    (emit 'bipush arity)
+    (emit 'if_icmpeq `,label1)
+    (emit 'aload 0) ; this
+    (emit-invokevirtual *this-class* "argCountError" nil nil)
+    (emit 'label `,label1)))
 
 (defun maybe-generate-interrupt-check ()
   (unless (> *speed* *safety*)
@@ -1866,9 +1885,7 @@
     (setf (method-name-index constructor) (pool-name (method-name constructor)))
     (setf (method-descriptor-index constructor) (pool-name (method-descriptor constructor)))
     (setf (method-max-locals constructor) 1)
-    (cond (;;*hairy-arglist-p*
-           (equal super +lisp-compiled-function-class+)
-
+    (cond ((equal super +lisp-compiled-function-class+)
            (emit 'aload_0) ;; this
            (emit 'aconst_null) ;; name
            (let* ((*print-level* nil)
@@ -1885,22 +1902,6 @@
           ((equal super +lisp-primitive-class+)
            (emit 'aload_0)
            (emit-invokespecial-init super nil))
-;;           (*child-p*
-;;            (cond ((null *closure-variables*)
-;;                   (emit 'aload_0)
-;;                   (emit-invokespecial-init super nil))
-;;                  (t
-;;                   (emit 'aload_0) ;; this
-;;                   (let* ((*print-level* nil)
-;;                          (*print-length* nil)
-;;                          (s (%format nil "~S" args)))
-;;                     (emit 'ldc (pool-string s))
-;;                     (emit-invokestatic +lisp-class+ "readObjectFromString"
-;;                                        (list +java-string+) +lisp-object+))
-;;                   (emit-invokespecial-init super (list +lisp-object+)))))
-;;           (t
-;;            (emit 'aload_0)
-;;            (emit-invokespecial-init super nil)))
           ((equal super +lisp-ctf-class+)
            (emit 'aload_0) ;; this
            (let* ((*print-level* nil)
@@ -1912,7 +1913,6 @@
            (emit-invokespecial-init super (list +lisp-object+)))
           (t
            (aver nil)))
-
     (setf *code* (append *static-code* *code*))
     (emit 'return)
     (finalize-code)
@@ -1988,11 +1988,6 @@
                (vector-push #\_ output)))))
     (when (plusp (length output))
       output)))
-
-(defvar *declared-symbols* nil)
-(defvar *declared-functions* nil)
-(defvar *declared-strings* nil)
-(defvar *declared-fixnums* nil)
 
 (defun declare-symbol (symbol)
   (let ((g (gethash symbol *declared-symbols*)))
@@ -4759,9 +4754,11 @@
          (error "COMPILE-FORM unhandled case ~S" form))))
 
 ;; Returns descriptor.
-(defun analyze-args (args)
-  (aver (not (memq '&AUX args)))
-  (let ((arg-count (length args)))
+(defun analyze-args (compiland)
+  (let* ((args (cadr (compiland-p1-result compiland)))
+         (arg-count (length args)))
+    (dformat t "analyze-args args = ~S~%" args)
+    (aver (not (memq '&AUX args)))
 
     (when *child-p*
       (when (or (memq '&KEY args)
@@ -4782,7 +4779,7 @@
                                                         (make-list arg-count :initial-element +lisp-object+))
                                                  +lisp-object+))
                                 (t (setf *using-arg-array* t)
-                                   (setf *arity* arg-count)
+                                   (setf (compiland-arity compiland) arg-count)
                                    (get-descriptor (list +lisp-object-array+ +lisp-object-array+)
                                                    +lisp-object+)))))
             (t
@@ -4791,7 +4788,7 @@
                                  (get-descriptor (make-list arg-count :initial-element +lisp-object+)
                                                  +lisp-object+))
                                 (t (setf *using-arg-array* t)
-                                   (setf *arity* arg-count)
+                                   (setf (compiland-arity compiland) arg-count)
                                    (get-descriptor (list +lisp-object-array+)
                                                    +lisp-object+)))))))
     (when (or (memq '&KEY args)
@@ -4806,7 +4803,7 @@
                             +lisp-object+))
           (t
            (setf *using-arg-array* t)
-           (setf *arity* arg-count)
+           (setf (compiland-arity compiland) arg-count)
            (get-descriptor (list +lisp-object-array+) +lisp-object+)))))
 
 (defun write-class-file (class-file)
@@ -4838,15 +4835,48 @@
       (dolist (field *fields*)
         (write-field field stream))
       ;; methods count
-      (write-u2 2 stream)
+      (write-u2 (1+ (length (class-file-methods class-file))) stream)
       ;; methods
-      (aver (= (length (class-file-methods class-file)) 1))
-      (let ((execute-method (car (class-file-methods class-file))))
-        (write-method execute-method stream)
-        )
+;;       (aver (= (length (class-file-methods class-file)) 1))
+;;       (let ((execute-method (car (class-file-methods class-file))))
+;;         (write-method execute-method stream))
+      (dolist (method (class-file-methods class-file))
+        (write-method method stream))
       (write-method constructor stream)
       ;; attributes count
       (write-u2 0 stream))))
+
+(defvar *magic* t)
+
+(defun compile-xep (xep)
+  (declare (type compiland xep))
+  (let ((*all-variables* ())
+        (*closure-variables* ())
+        (*current-compiland* xep)
+        (*child-count* 0)
+        (*speed* 3)
+        (*safety* 0)
+        (*debug* 0))
+    ;; Pass 1.
+    (p1-compiland xep)
+;;     (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
+    (setf *closure-variables*
+          (remove-if-not #'variable-used-non-locally-p *all-variables*))
+    (setf *closure-variables*
+          (remove-if #'variable-special-p *closure-variables*))
+;;     (dformat t "*closure-variables* = ~S~%" (mapcar #'variable-name *closure-variables*))
+
+    (when *closure-variables*
+      (let ((i 0))
+        (dolist (var (reverse *closure-variables*))
+          (setf (variable-closure-index var) i)
+          (dformat t "var = ~S closure index = ~S~%" (variable-name var)
+                   (variable-closure-index var))
+          (incf i))))
+
+    ;; Pass 2.
+    (with-class-file (compiland-class-file xep)
+      (p2-compiland xep))))
 
 (defun p1-compiland (compiland)
   (let ((form (compiland-lambda-expression compiland)))
@@ -4861,27 +4891,66 @@
         (setf body (list (append (list 'LET* (cdr auxvars)) body))))
 
 
-      #+nil
-      (unless (or (memq '&KEY lambda-list) (memq '&REST lambda-list))
-        (let ((optionals (memq '&OPTIONAL lambda-list)))
-          (dformat t "optionals = ~S~%" optionals)
-          (when (= (length optionals) 2)
-            (let* ((optional-arg (second optionals))
-                   (name (if (consp optional-arg) (car optional-arg) optional-arg))
-                   (initform (if (consp optional-arg) (cadr optional-arg) nil))
-                   (wrapper-args (subseq lambda-list 0 (position '&OPTIONAL lambda-list)))
-                   (converted-args (append wrapper-args (list name))))
-              (dformat t "optional-arg = ~S~%" optional-arg)
-              (dformat t "wrapper-args = ~S~%" wrapper-args)
-              (dformat t "converted-args = ~S~%" converted-args)
-              (let ((wrapper-form
-                     `(lambda ,wrapper-args
-                        (let ((,name ,initform))
-                          (,(compiland-name compiland) ,@converted-args)))))
-                (dformat t "wrapper-form = ~S~%" wrapper-form)
+      (when *magic*
+        (when (memq '&OPTIONAL lambda-list)
+          (unless (or (memq '&KEY lambda-list) (memq '&REST lambda-list))
+            (let ((required-args (subseq lambda-list 0 (position '&OPTIONAL lambda-list)))
+                  (optional-args (cdr (memq '&OPTIONAL lambda-list)))
+;;                   (*enable-dformat* t)
                 )
-              ))))
-
+            (dformat t "optional-args = ~S~%" optional-args)
+            (when (= (length optional-args) 1)
+;;               (%format t "~%magic case~%")
+              (let* ((optional-arg (car optional-args))
+                     (name (if (consp optional-arg) (car optional-arg) optional-arg))
+                     (initform (if (consp optional-arg) (cadr optional-arg) nil))
+                     (supplied-p-var (and (consp optional-arg)
+                                          (= (length optional-arg) 3)
+                                          (third optional-arg)))
+                     (all-args
+                      (append required-args (list name)
+                              (when supplied-p-var (list supplied-p-var)))))
+                (when (<= (length all-args) 4)
+                  (dformat t "optional-arg = ~S~%" optional-arg)
+                  (dformat t "supplied-p-var = ~S~%" supplied-p-var)
+                  (dformat t "required-args = ~S~%" required-args)
+                  (dformat t "all-args = ~S~%" all-args)
+                  (cond (supplied-p-var
+                         (let ((xep-lambda-expression
+                                `(lambda ,required-args
+                                   (let* ((,name ,initform)
+                                          (,supplied-p-var nil))
+                                     (%call-internal ,@all-args)))))
+                           (dformat t "xep-lambda-expression = ~S~%" xep-lambda-expression)
+                           (let ((xep-compiland
+                                  (make-compiland :lambda-expression (precompile-form xep-lambda-expression t)
+                                                  :class-file (compiland-class-file compiland))))
+                             (compile-xep xep-compiland))
+                           )
+                         (let ((xep-lambda-expression
+                                `(lambda ,(append required-args (list name))
+                                   (let* ((,supplied-p-var t))
+                                     (%call-internal ,@all-args)))))
+                           (dformat t "xep-lambda-expression = ~S~%" xep-lambda-expression)
+                           (let ((xep-compiland
+                                  (make-compiland :lambda-expression (precompile-form xep-lambda-expression t)
+                                                  :class-file (compiland-class-file compiland))))
+                             (compile-xep xep-compiland))
+                           )
+                         (setf lambda-list all-args)
+                         (setf (compiland-kind compiland) :internal)
+                         )
+                        (t
+                         (let ((xep-lambda-expression
+                                `(lambda ,required-args
+                                   (let* ((,name ,initform))
+                                     (,(compiland-name compiland) ,@all-args)))))
+                           (dformat t "xep-lambda-expression = ~S~%" xep-lambda-expression)
+                           (let ((xep-compiland
+                                  (make-compiland :lambda-expression (precompile-form xep-lambda-expression t)
+                                                  :class-file (compiland-class-file compiland))))
+                             (compile-xep xep-compiland)))
+                         (setf lambda-list all-args))))))))))
 
       (let* ((closure (sys::make-closure `(lambda ,lambda-list nil) nil))
              (syms (sys::varlist closure))
@@ -4902,30 +4971,44 @@
           (setf (compiland-p1-result compiland)
                 (list* 'LAMBDA lambda-list (mapcar #'p1 body))))))))
 
+(defun p2-%call-internal (form &key (target *val*) representation)
+  (dformat t "p2-%call-internal~%")
+  (emit 'aload_0) ; this
+  (let ((args (cdr form))
+        (must-clear-values nil))
+    (dformat t "args = ~S~%" args)
+    (dolist (arg args)
+      (compile-form arg :target :stack :representation nil)
+      (unless must-clear-values
+        (unless (single-valued-p arg)
+          (setf must-clear-values t))))
+    (let ((arg-types (make-list (length args) :initial-element +lisp-object+))
+          (return-type +lisp-object+))
+      (emit-invokevirtual *this-class* "_execute" arg-types return-type))
+    (emit-move-from-stack target representation)))
+
 (defun p2-compiland (compiland)
   (dformat t "p2-compiland ~S~%" (compiland-name compiland))
   (let* ((p1-result (compiland-p1-result compiland))
-         (*declared-symbols* (make-hash-table :test 'eq))
-         (*declared-functions* (make-hash-table :test 'equal))
-         (*declared-strings* (make-hash-table :test 'eq))
-         (*declared-fixnums* (make-hash-table :test 'eql))
+;;          (*declared-symbols* (make-hash-table :test 'eq))
+;;          (*declared-functions* (make-hash-table :test 'equal))
+;;          (*declared-strings* (make-hash-table :test 'eq))
+;;          (*declared-fixnums* (make-hash-table :test 'eql))
          (class-file (compiland-class-file compiland))
-;;          (*this-class* (class-name-from-filespec (class-file-pathname class-file)))
          (*this-class* (class-file-class class-file))
          (args (cadr p1-result))
          (body (cddr p1-result))
          (*using-arg-array* nil)
          (*hairy-arglist-p* nil)
-         (*arity* nil)
 
          (*child-p* (not (null (compiland-parent compiland))))
 
-         (descriptor (analyze-args args))
-         (execute-method (make-method :name "execute"
+         (descriptor (analyze-args compiland))
+         (execute-method-name (if (eq (compiland-kind compiland) :external)
+                                  "execute" "_execute"))
+         (execute-method (make-method :name execute-method-name
                                       :descriptor descriptor))
          (*code* ())
-;;          (*static-code* ())
-;;          (*fields* ())
          (*register* 0)
          (*registers-allocated* 0)
          (*handlers* ())
@@ -4934,9 +5017,6 @@
 
          (parameters ())
 
-;;          (*pool* ())
-;;          (*pool-count* 1)
-;;          (*pool-entries* (make-hash-table :test #'equal))
          (*val* nil)
          (*thread* nil)
          (*initialize-thread-var* nil))
@@ -4962,7 +5042,6 @@
            (let* ((closure (sys::make-closure p1-result nil))
                   (vars (sys::varlist closure))
                   (index 0))
-             (dformat t "*hairy-arglist-p* = t vars = ~S~%" vars)
              (dolist (var vars)
                (let ((variable (find-visible-variable var)))
                  (when (null variable)
@@ -4974,7 +5053,6 @@
                  (push variable parameters)
                  (incf index)))))
           (t
-           (dformat t "*hairy-arglist-p* = nil~%")
            (let ((register (if (and *closure-variables* *child-p*)
                                2 ; Reg 1 is reserved for closure variables array.
                                1))
@@ -5128,7 +5206,9 @@
     ;; Go back and fill in prologue.
     (let ((code *code*))
       (setf *code* ())
-      (maybe-generate-arg-count-check)
+      (let ((arity (compiland-arity compiland)))
+        (when arity
+          (generate-arg-count-check arity)))
       (maybe-generate-interrupt-check)
 
       (when *hairy-arglist-p*
@@ -5189,7 +5269,8 @@
     (push execute-method (class-file-methods class-file))
 
 ;;     (write-class-file (compiland-class-file compiland))
-    (dformat t "leaving p2-compiland ~S~%" (compiland-name compiland))))
+    (dformat t "leaving p2-compiland ~S~%" (compiland-name compiland))
+    (values)))
 
 (defun compile-1 (compiland)
   (dformat t "compile-1 ~S~%" (compiland-name compiland))
@@ -5238,7 +5319,8 @@
                                :lambda-expression (precompile-form form t)
                                :class-file (make-class-file :pathname filespec
                                                             :lambda-list (cadr form))
-                               :parent *current-compiland*))))
+;;                                :parent *current-compiland*
+                               ))))
 
 (defun handle-warning (condition)
   (fresh-line)
@@ -5406,6 +5488,8 @@
 (install-p2-handler 'return-from    'p2-return-from)
 (install-p2-handler 'the            'p2-the)
 ;; (install-p2-handler 'unwind-protect 'p2-unwind-protect)
+
+(install-p2-handler '%call-internal 'p2-%call-internal)
 
 (defun process-optimization-declarations (forms)
   (let (alist ())
