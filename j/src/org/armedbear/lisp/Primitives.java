@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.203 2003-05-29 14:01:40 piso Exp $
+ * $Id: Primitives.java,v 1.204 2003-05-29 19:26:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1335,6 +1335,16 @@ public final class Primitives extends Module
         return symbol;
     }
 
+    // ### lambda
+    private static final SpecialOperator LAMBDA =
+        new SpecialOperator("lambda") {
+        public LispObject execute(LispObject args, Environment env)
+            throws LispError
+        {
+            return new Closure(args.car(), args.cdr(), env);
+        }
+    };
+
     // ### defmacro
     private static final SpecialOperator DEFMACRO =
         new SpecialOperator("defmacro") {
@@ -1342,13 +1352,19 @@ public final class Primitives extends Module
             throws LispError
         {
             Symbol symbol = checkSymbol(args.car());
-            LispObject rest = args.cdr();
-            LispObject parameters = rest.car();
-            LispObject body = rest.cdr();
-            body = new Cons(symbol, body);
-            body = new Cons(Symbol.BLOCK, body);
-            body = new Cons(body, NIL);
-            symbol.setSymbolFunction(new Macro(parameters, body, env));
+            LispObject lambdaList = checkList(args.cadr());
+            LispObject body = args.cddr();
+            LispObject block = new Cons(Symbol.BLOCK, new Cons(symbol, body));
+            LispObject toBeApplied = list(Symbol.LAMBDA, lambdaList, block);
+            LispObject formArg = gensym("FORM-");
+            LispObject envArg = gensym("ENV-"); // Ignored.
+            LispObject expander =
+                list(Symbol.LAMBDA, list(formArg, envArg),
+                    list(Symbol.APPLY, toBeApplied,
+                        list(Symbol.CDR, formArg)));
+            Closure expansionFunction =
+                new Closure(expander.cadr(), expander.cddr(), env);
+            symbol.setSymbolFunction(new MacroObject(expansionFunction));
             LispThread.currentThread().clearValues();
             return symbol;
         }
@@ -2475,23 +2491,33 @@ public final class Primitives extends Module
                 else
                     throw new TypeError(arg, "string or non-negative integer");
             }
-            LispObject oldValue;
-            LispThread thread = LispThread.currentThread();
-            Environment dynEnv = thread.getDynamicEnvironment();
-            Binding binding =
-                (dynEnv == null) ? null : dynEnv.getBinding(_GENSYM_COUNTER_);
-            if (binding != null) {
-                oldValue = binding.value;
-                binding.value = oldValue.incr();
-            } else {
-                oldValue = _GENSYM_COUNTER_.getSymbolValue();
-                _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
-            }
-            StringBuffer sb = new StringBuffer(prefix);
-            sb.append(String.valueOf(oldValue));
-            return new Symbol(sb.toString());
+            return gensym(prefix);
         }
     };
+
+    private static final Symbol gensym() throws LispError
+    {
+        return gensym("G");
+    }
+
+    private static final Symbol gensym(String prefix) throws LispError
+    {
+        LispObject oldValue;
+        LispThread thread = LispThread.currentThread();
+        Environment dynEnv = thread.getDynamicEnvironment();
+        Binding binding =
+            (dynEnv == null) ? null : dynEnv.getBinding(_GENSYM_COUNTER_);
+        if (binding != null) {
+            oldValue = binding.value;
+            binding.value = oldValue.incr();
+        } else {
+            oldValue = _GENSYM_COUNTER_.getSymbolValue();
+            _GENSYM_COUNTER_.setSymbolValue(oldValue.incr());
+        }
+        StringBuffer sb = new StringBuffer(prefix);
+        sb.append(String.valueOf(oldValue));
+        return new Symbol(sb.toString());
+    }
 
     // ### string
     private static final Primitive1 STRING = new Primitive1("string") {
