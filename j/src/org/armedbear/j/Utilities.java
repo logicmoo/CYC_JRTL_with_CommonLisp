@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.17 2003-02-04 15:32:50 piso Exp $
+ * $Id: Utilities.java,v 1.18 2003-02-05 15:31:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1347,7 +1347,8 @@ public final class Utilities implements Constants
         if (lower.equals("unknown-8bit") ||
             lower.equals("x-unknown") ||
             lower.equals("us-ascii") ||
-            lower.equals("default_charset"))
+            lower.equals("default_charset") ||
+            lower.equals("latin-iso8859-1"))
             return "iso-8859-1";
         return charset;
     }
