@@ -2,7 +2,7 @@
  * get_properties.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: get_properties.java,v 1.2 2004-03-17 17:58:29 piso Exp $
+ * $Id: get_properties.java,v 1.3 2004-03-17 18:06:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +37,15 @@ public final class get_properties extends Primitive2
         while (plist != NIL) {
             if (plist.cdr().atom())
                 return signal(new TypeError("Malformed property list: " + first + "."));
-            if (memq(plist.car(), second))
-                return thread.setValues(plist.car(), plist.cadr(), plist);
+            LispObject indicator = plist.car();
+            LispObject indicators = second;
+            while (indicators instanceof Cons) {
+                if (indicator == indicators.car())
+                    return thread.setValues(indicator, plist.cadr(), plist);
+                indicators = indicators.cdr();
+            }
+            if (indicators != NIL)
+                signal(new TypeError(String.valueOf(second) + " is not a proper list."));
             plist = plist.cddr();
         }
         return thread.setValues(NIL, NIL, NIL);
