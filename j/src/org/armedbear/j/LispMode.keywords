@@ -106,6 +106,7 @@ compile-file-pathname
 compiled-function-p
 compiler-macro-function
 complement
+complex
 complexp
 compute-restarts
 concatenate
