@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.377 2005-01-29 17:17:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.378 2005-01-30 12:46:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3440,15 +3440,11 @@
         (let* ((tag (make-tag :name subform :label (gensym) :block block)))
           (push tag local-tags)
           (push tag *visible-tags*))))
-
-    ;; FIXME Pass 1 doesn't detect all non-local GOs! (HANDLER-CASE.17)
-    ;; So we do this unconditionally for now...
-    (when (or t (block-non-local-go-p block))
+    (when (block-non-local-go-p block)
       (setf environment-register (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-binding+)
       (emit 'astore environment-register))
-
     (label BEGIN-BLOCK)
     (do* ((rest body (cdr rest))
           (subform (car rest) (car rest)))
