@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.117 2003-10-13 23:56:03 piso Exp $
+ * $Id: Editor.java,v 1.118 2003-11-14 13:32:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7260,6 +7260,7 @@ public final class Editor extends JPanel implements Constants,
         while (next != null && next.isBlank())
             next = next.next();
         if (next != null) {
+            final String trim = line.trim();
             switch (getModeId()) {
                 case JAVA_MODE:
                 case JAVASCRIPT_MODE:
@@ -7267,13 +7268,13 @@ public final class Editor extends JPanel implements Constants,
                 case CPP_MODE:
                 case PERL_MODE:
                 case PHP_MODE:
-                    if (line.trim().endsWith("{")) {
+                    if (trim.endsWith("{")) {
                         if (!next.isHidden()) {
                             fold(next);
                             return;
                         }
                     }
-                    if (line.trim().startsWith("}")) {
+                    if (trim.startsWith("}")) {
                         // We're at the end of a code block. Find the start of
                         // the block and fold from there.
                         Position end =
@@ -7303,6 +7304,32 @@ public final class Editor extends JPanel implements Constants,
                         }
                     }
                     break;
+                case XML_MODE: {
+                    if (trim.startsWith("/>") || trim.startsWith("</")) {
+                        Line prev = line.previous();
+                        while (prev != null && prev.isBlank())
+                            prev = prev.previous();
+                        if (prev != null) {
+                            int indent =
+                                buffer.getCol(line, line.getIndentation());
+                            int prevIndent =
+                                buffer.getCol(prev, prev.getIndentation());
+                            if (indent < prevIndent) {
+                                fold(prev);
+                                return;
+                            }
+                        }
+                    } else if (trim.startsWith("<")) {
+                        int indent =
+                            buffer.getCol(line, line.getIndentation());
+                        int nextIndent =
+                            buffer.getCol(next, next.getIndentation());
+                        if (indent < nextIndent) {
+                            fold(next);
+                            return;
+                        }
+                    }
+                }
                 default:
                     break;
             }
