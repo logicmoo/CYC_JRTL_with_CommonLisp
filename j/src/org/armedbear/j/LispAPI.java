@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.19 2003-07-20 10:57:53 piso Exp $
+ * $Id: LispAPI.java,v 1.20 2003-07-20 11:23:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,6 +219,48 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### point-min
+    private static final Primitive0 POINT_MIN =
+        new Primitive0("point-min", PACKAGE_J, true) {
+        public LispObject execute()
+        {
+            final Line line = Editor.currentBuffer().getFirstLine();
+            if (line == null)
+                return NIL;
+            return new JavaObject(new Position(line, 0));
+        }
+    };
+
+    // ### point-max
+    private static final Primitive0 POINT_MAX =
+        new Primitive0("point-max", PACKAGE_J, true) {
+        public LispObject execute()
+        {
+            Position pos = Editor.currentBuffer().getEnd();
+            if (pos == null)
+                return NIL;
+            return new JavaObject(pos);
+        }
+    };
+
+    // ### marker-line
+    private static final Primitive1 MARKER_LINE =
+        new Primitive1("marker-line", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return new JavaObject(checkMarker(arg).getLine());
+        }
+    };
+
+    // ### marker-charpos
+    private static final Primitive1 MARKER_CHARPOS =
+        new Primitive1("marker-charpos", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return number(checkMarker(arg).getOffset());
+        }
+    };
+
     // ### current-line
     private static final Primitive0 CURRENT_LINE =
         new Primitive0("current-line", PACKAGE_J, true) {
@@ -229,6 +271,16 @@ public final class LispAPI extends Lisp
             if (dot != null)
                 return new JavaObject(dot.getLine());
             return NIL;
+        }
+    };
+
+    // ### line-chars
+    private static final Primitive1 LINE_CHARS =
+        new Primitive1("line-chars", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            String s = checkLine(arg).getText();
+            return s != null ? new LispString(s) : NIL;
         }
     };
 
