@@ -1,8 +1,8 @@
 /*
  * ListOccurrences.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: ListOccurrences.java,v 1.3 2002-10-11 01:42:37 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: ListOccurrences.java,v 1.4 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,7 +140,7 @@ public class ListOccurrences extends Buffer
         if (sourceBuffer != null)
             return sourceBuffer.getCurrentDirectory();
         else
-            return Editor.getUserHomeDirectory();
+            return Directories.getUserHomeDirectory();
     }
 
     public void findOccurrenceAtDot(Editor editor)

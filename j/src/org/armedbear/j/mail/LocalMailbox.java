@@ -2,7 +2,7 @@
  * LocalMailbox.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: LocalMailbox.java,v 1.3 2003-05-30 14:34:38 piso Exp $
+ * $Id: LocalMailbox.java,v 1.4 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.BufferIterator;
 import org.armedbear.j.Debug;
+import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
 import org.armedbear.j.File;
@@ -606,7 +607,7 @@ public class LocalMailbox extends Mailbox
     private boolean isOwned()
     {
         if (localPrefix == null)
-            localPrefix = Editor.getMailDirectory().canonicalPath().concat(LocalFile.getSeparator());
+            localPrefix = Directories.getMailDirectory().canonicalPath().concat(LocalFile.getSeparator());
         return mailboxFile.canonicalPath().startsWith(localPrefix);
     }
 

@@ -2,7 +2,7 @@
  * RemoteShell.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: RemoteShell.java,v 1.5 2002-11-23 19:22:07 piso Exp $
+ * $Id: RemoteShell.java,v 1.6 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -248,7 +248,7 @@ public class RemoteShell extends Shell
 
     public final File getCurrentDirectory()
     {
-        return Editor.getUserHomeDirectory();
+        return Directories.getUserHomeDirectory();
     }
 
     // For the buffer list.

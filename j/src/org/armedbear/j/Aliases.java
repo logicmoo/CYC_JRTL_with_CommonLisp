@@ -1,8 +1,8 @@
 /*
  * Aliases.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Aliases.java,v 1.2 2002-12-14 15:14:17 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Aliases.java,v 1.3 2003-06-29 00:19:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public final class Aliases implements PreferencesChangeListener
 
     public Aliases()
     {
-        file = File.getInstance(Editor.getEditorDirectory(), "aliases");
+        file = File.getInstance(Directories.getEditorDirectory(), "aliases");
         // Set up system aliases.
         if (systemAliases == null) {
             systemAliases = new Properties();

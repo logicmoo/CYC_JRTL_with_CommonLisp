@@ -2,7 +2,7 @@
  * FileHistory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FileHistory.java,v 1.4 2003-06-25 18:22:51 piso Exp $
+ * $Id: FileHistory.java,v 1.5 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public final class FileHistory extends DefaultHandler implements ContentHandler
 
     private FileHistory()
     {
-        file = File.getInstance(Editor.getEditorDirectory(), "files.xml");
+        file = File.getInstance(Directories.getEditorDirectory(), "files.xml");
         if (file.isFile())
             load();
     }

@@ -2,7 +2,7 @@
  * ListOccurrencesInFiles.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: ListOccurrencesInFiles.java,v 1.4 2003-05-14 22:34:05 piso Exp $
+ * $Id: ListOccurrencesInFiles.java,v 1.5 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public final class ListOccurrencesInFiles extends ListOccurrences
 
     public final File getCurrentDirectory()
     {
-        return Editor.getUserHomeDirectory();
+        return Directories.getUserHomeDirectory();
     }
 
     public void findOccurrenceAtDot(Editor editor)

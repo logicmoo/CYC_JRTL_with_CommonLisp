@@ -1,8 +1,8 @@
 /*
  * MimePart.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: MimePart.java,v 1.1.1.1 2002-09-24 16:09:53 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: MimePart.java,v 1.2 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
 import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
@@ -360,7 +361,7 @@ public class MimePart
             }
         }
         File cache =
-            Utilities.getTempFile(Editor.getTempDirectory(), extension);
+            Utilities.getTempFile(Directories.getTempDirectory(), extension);
         if (cache != null && saveDecoded(cache))
             return cache;
         else

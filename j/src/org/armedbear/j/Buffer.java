@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.42 2003-06-28 16:00:43 piso Exp $
+ * $Id: Buffer.java,v 1.43 2003-06-29 00:19:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -179,7 +179,7 @@ public class Buffer extends SystemBuffer
         String name = "Untitled-" + untitledCount;
         File directory = Editor.currentEditor().getCurrentDirectory();
         if (directory == null || directory.isRemote())
-            directory = Editor.getUserHomeDirectory();
+            directory = Directories.getUserHomeDirectory();
         setFile(File.getInstance(directory, name));
         autosaveEnabled = true;
         lineSeparator = System.getProperty("line.separator");
@@ -1260,7 +1260,7 @@ public class Buffer extends SystemBuffer
     {
         if (lineSeparator == null)
             lineSeparator = System.getProperty("line.separator");
-        final File tempFile = Utilities.getTempFile(Editor.getTempDirectory());
+        final File tempFile = Utilities.getTempFile();
         if (tempFile != null) {
             File file = getFile();
             if (file != null)

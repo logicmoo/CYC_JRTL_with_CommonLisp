@@ -2,7 +2,7 @@
  * News.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: News.java,v 1.4 2003-05-26 15:24:37 piso Exp $
+ * $Id: News.java,v 1.5 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import javax.swing.SwingUtilities;
 import org.armedbear.j.Buffer;
+import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
 import org.armedbear.j.File;
@@ -39,7 +40,7 @@ import org.armedbear.j.StatusBarProgressNotifier;
 public final class News extends Buffer
 {
     private static final File newsDir =
-        File.getInstance(Editor.getEditorDirectory(), "news");
+        File.getInstance(Directories.getEditorDirectory(), "news");
 
     private final NntpSession session;
     private boolean error;

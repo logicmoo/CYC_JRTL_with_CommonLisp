@@ -1,8 +1,8 @@
 /*
  * Mail.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: Mail.java,v 1.1.1.1 2002-09-24 16:10:01 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: Mail.java,v 1.2 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
 import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
@@ -51,7 +52,8 @@ public final class Mail
             return null;
 
         if (sentMessagesFile == null) {
-            File local = File.getInstance(Editor.getMailDirectory(), "local");
+            File local =
+                File.getInstance(Directories.getMailDirectory(), "local");
             File sent = File.getInstance(local, "sent");
             if (!sent.isDirectory())
                 sent.mkdirs();

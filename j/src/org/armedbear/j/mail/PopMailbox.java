@@ -1,8 +1,8 @@
 /*
  * PopMailbox.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: PopMailbox.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: PopMailbox.java,v 1.3 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ import javax.swing.SwingUtilities;
 import org.armedbear.j.BackgroundProcess;
 import org.armedbear.j.Debug;
 import org.armedbear.j.Editor;
+import org.armedbear.j.Directories;
 import org.armedbear.j.EditorIterator;
 import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
@@ -876,7 +877,7 @@ public final class PopMailbox extends LocalMailbox
     {
         if (localStore != null)
             return localStore;
-        File popDir = File.getInstance(Editor.getMailDirectory(), "pop");
+        File popDir = File.getInstance(Directories.getMailDirectory(), "pop");
         if (!popDir.isDirectory()) {
             popDir.mkdirs();
             if (!popDir.isDirectory()) {

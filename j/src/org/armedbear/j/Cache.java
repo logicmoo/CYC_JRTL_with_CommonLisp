@@ -1,8 +1,8 @@
 /*
  * Cache.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: Cache.java,v 1.1.1.1 2002-09-24 16:09:31 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: Cache.java,v 1.2 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ import java.util.Vector;
 public final class Cache
 {
     private static final File cacheDir =
-        File.getInstance(Editor.getEditorDirectory(), "cache");
+        File.getInstance(Directories.getEditorDirectory(), "cache");
 
     private static Cache cache;
 

@@ -1,8 +1,8 @@
 /*
  * AddressBook.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: AddressBook.java,v 1.1.1.1 2002-09-24 16:09:54 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: AddressBook.java,v 1.2 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.Vector;
+import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
 import org.armedbear.j.File;
 import org.armedbear.j.Log;
@@ -52,9 +53,9 @@ public final class AddressBook
     public static AddressBook getGlobalAddressBook()
     {
         if (addressBook == null) {
-            file = File.getInstance(Editor.getEditorDirectory(), "addresses");
+            file = File.getInstance(Directories.getEditorDirectory(), "addresses");
             backupFile =
-                File.getInstance(Editor.getEditorDirectory(), "addresses~");
+                File.getInstance(Directories.getEditorDirectory(), "addresses~");
             addressBook = new AddressBook();
             InputStream inputStream = null;
             try {

@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.46 2003-06-26 00:43:48 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.47 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,7 +216,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         }
         // We failed. Use current directory.
         if (currentDir.isRemote())
-            currentDir = Editor.getUserHomeDirectory();
+            currentDir = Directories.getUserHomeDirectory();
         candidate = File.getInstance(currentDir, entry);
         if (candidate == null) {
             error("Invalid path");

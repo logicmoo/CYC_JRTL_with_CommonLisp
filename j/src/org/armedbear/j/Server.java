@@ -1,8 +1,8 @@
 /*
  * Server.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Server.java,v 1.1.1.1 2002-09-24 16:07:43 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Server.java,v 1.2 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,6 @@ public class Server implements Runnable
             server = new Server();
             server.socket = new ServerSocket(0);
             int port = server.socket.getLocalPort();
-            if (!Editor.getEditorDirectory().isDirectory())
-                Editor.getEditorDirectory().mkdirs();
             OutputStream out = Editor.portfile.getOutputStream();
             out.write(String.valueOf(port).getBytes());
             out.close();

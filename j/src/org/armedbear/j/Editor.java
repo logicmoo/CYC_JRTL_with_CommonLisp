@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.79 2003-06-28 19:10:50 piso Exp $
+ * $Id: Editor.java,v 1.80 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,7 +325,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         Directories.initialize(userHomeDir);
 
         boolean alreadyRunning = false;
-        portfile = File.getInstance(getEditorDirectory(), "port");
+        portfile = File.getInstance(Directories.getEditorDirectory(), "port");
         if (portfile.exists()) {
             try {
                 BufferedReader in = new BufferedReader(new InputStreamReader(portfile.getInputStream()));
@@ -472,26 +472,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         usage();
         fatal("Unknown option \"" + arg + "\"");
-    }
-
-    public static final File getEditorDirectory()
-    {
-        return Directories.getEditorDirectory();
-    }
-
-    public static final File getTempDirectory()
-    {
-        return Directories.getTempDirectory();
-    }
-
-    public static final File getMailDirectory()
-    {
-        return Directories.getMailDirectory();
-    }
-
-    public static final File getUserHomeDirectory()
-    {
-        return Directories.getUserHomeDirectory();
     }
 
     public Editor(Frame f)
@@ -6902,7 +6882,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     private static void runStartupScript(String className, String fileName)
     {
-        File file = File.getInstance(getEditorDirectory(), fileName);
+        File file =
+            File.getInstance(Directories.getEditorDirectory(), fileName);
         if (file != null && file.isFile()) {
             try {
                 long start = System.currentTimeMillis();

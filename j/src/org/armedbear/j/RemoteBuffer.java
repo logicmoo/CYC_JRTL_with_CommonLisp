@@ -2,7 +2,7 @@
  * RemoteBuffer.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: RemoteBuffer.java,v 1.5 2003-05-19 14:40:45 piso Exp $
+ * $Id: RemoteBuffer.java,v 1.6 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,6 +251,6 @@ public final class RemoteBuffer extends Buffer implements Constants
 
     public File getCurrentDirectory()
     {
-        return Editor.getUserHomeDirectory();
+        return Directories.getUserHomeDirectory();
     }
 }

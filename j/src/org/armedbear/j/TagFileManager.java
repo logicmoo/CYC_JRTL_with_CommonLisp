@@ -1,8 +1,8 @@
 /*
  * TagFileManager.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: TagFileManager.java,v 1.2 2002-10-11 15:54:05 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: TagFileManager.java,v 1.3 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,8 @@ public final class TagFileManager extends Thread
         super("tag file manager");
         setPriority(Thread.MIN_PRIORITY);
         setDaemon(true);
-        tagFileDir = File.getInstance(Editor.getEditorDirectory(), "tagfiles");
+        tagFileDir =
+            File.getInstance(Directories.getEditorDirectory(), "tagfiles");
         catalog = new TagFileCatalog(tagFileDir);
         if (initialize())
             start();

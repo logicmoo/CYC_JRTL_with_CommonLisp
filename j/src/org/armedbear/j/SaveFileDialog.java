@@ -2,7 +2,7 @@
  * SaveFileDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: SaveFileDialog.java,v 1.3 2003-06-28 00:50:37 piso Exp $
+ * $Id: SaveFileDialog.java,v 1.4 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,7 @@ public class SaveFileDialog extends JDialog implements FocusListener, KeyListene
         if (defaultName != null && defaultName.length() > 0) {
             File directory = editor.getCurrentDirectory();
             if (directory == null || directory.isRemote())
-                directory = Editor.getUserHomeDirectory();
+                directory = Directories.getUserHomeDirectory();
             File file = File.getInstance(directory, defaultName);
             if (file != null)
                 textField.setText(file.canonicalPath());
@@ -209,7 +209,7 @@ public class SaveFileDialog extends JDialog implements FocusListener, KeyListene
         } else {
             File directory = editor.getCurrentDirectory();
             if (directory == null || directory.isRemote())
-                directory = Editor.getUserHomeDirectory();
+                directory = Directories.getUserHomeDirectory();
             file = File.getInstance(directory, entry);
         }
         if (file == null) {

@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Shell.java,v 1.26 2003-05-16 17:42:00 piso Exp $
+ * $Id: Shell.java,v 1.27 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,7 @@ public class Shell extends CommandInterpreter implements Constants
         if (initialDir == null) {
             initialDir = Editor.currentEditor().getCurrentDirectory();
             if (initialDir == null || initialDir.isRemote())
-                initialDir = Editor.getUserHomeDirectory();
+                initialDir = Directories.getUserHomeDirectory();
         }
 
         // Shell command may contain a space (e.g. "bash -i").

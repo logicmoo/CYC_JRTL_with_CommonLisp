@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.25 2003-06-28 19:12:05 piso Exp $
+ * $Id: Utilities.java,v 1.26 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,7 +192,7 @@ public final class Utilities implements Constants
 
     public static final File getTempFile()
     {
-        return getTempFile(Editor.getTempDirectory());
+        return getTempFile(Directories.getTempDirectory());
     }
 
     public static final File getTempFile(File dir)

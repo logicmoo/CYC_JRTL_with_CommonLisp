@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.11 2003-05-26 17:09:51 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.12 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -258,9 +258,11 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                     }
                     String extension = Utilities.getExtension(trim);
                     File encoded =
-                        Utilities.getTempFile(Editor.getTempDirectory(), ".encoded");
+                        Utilities.getTempFile(Directories.getTempDirectory(),
+                                              ".encoded");
                     File decoded =
-                        Utilities.getTempFile(Editor.getTempDirectory(), extension);
+                        Utilities.getTempFile(Directories.getTempDirectory(),
+                                              extension);
                     FastStringBuffer sb = new FastStringBuffer("begin 644 ");
                     sb.append(decoded.getName());
                     BufferedWriter writer = new BufferedWriter(
@@ -292,9 +294,11 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                     String name = s.substring(index);
                     String extension = Utilities.getExtension(name);
                     File encoded =
-                        Utilities.getTempFile(Editor.getTempDirectory(), ".encoded");
+                        Utilities.getTempFile(Directories.getTempDirectory(),
+                                              ".encoded");
                     File decoded =
-                        Utilities.getTempFile(Editor.getTempDirectory(), extension);
+                        Utilities.getTempFile(Directories.getTempDirectory(),
+                                              extension);
                     BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(encoded.getOutputStream(),
                             "ISO-8859-1"));
@@ -410,7 +414,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
             if (s.startsWith("Inline: ")) {
                 String filename = s.substring(8);
                 File f =
-                    File.getInstance(Editor.getTempDirectory(), filename);
+                    File.getInstance(Directories.getTempDirectory(), filename);
                 if (f.isFile()) {
                     Editor editor = Editor.currentEditor();
                     Buffer buf = editor.openFile(f);

@@ -1,8 +1,8 @@
 /*
  * FolderTreeModel.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: FolderTreeModel.java,v 1.2 2003-03-18 23:07:23 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: FolderTreeModel.java,v 1.3 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public final class FolderTreeModel extends DefaultTreeModel
             // Root will not be visible.
             DefaultMutableTreeNode root = new DefaultMutableTreeNode();
             File local =
-                File.getInstance(Editor.getMailDirectory(), "local");
+                File.getInstance(Directories.getMailDirectory(), "local");
             if (local.isDirectory()) {
                 DefaultMutableTreeNode localFolders =
                     new DefaultMutableTreeNode("Local Folders");

@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Session.java,v 1.10 2003-06-25 18:17:59 piso Exp $
+ * $Id: Session.java,v 1.11 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public final class Session extends DefaultHandler implements Constants
 
     private Session()
     {
-        file = File.getInstance(Editor.getEditorDirectory(), "session.xml");
+        file = File.getInstance(Directories.getEditorDirectory(), "session.xml");
     }
 
     private Session(File file)
@@ -58,7 +58,7 @@ public final class Session extends DefaultHandler implements Constants
     {
         if (sessionDirectory == null) {
             sessionDirectory =
-                File.getInstance(Editor.getEditorDirectory(), "sessions");
+                File.getInstance(Directories.getEditorDirectory(), "sessions");
             if (!sessionDirectory.isDirectory()) {
                 sessionDirectory.mkdirs();
                 if (!sessionDirectory.isDirectory())

@@ -1,8 +1,8 @@
 /*
  * SessionProperties.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: SessionProperties.java,v 1.2 2002-11-14 15:35:42 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: SessionProperties.java,v 1.3 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,8 @@ public final class SessionProperties
     public SessionProperties()
     {
         properties = new Properties();
-        file = File.getInstance(Editor.getEditorDirectory(), "props");
-        backupFile = File.getInstance(Editor.getEditorDirectory(), "props~");
+        file = File.getInstance(Directories.getEditorDirectory(), "props");
+        backupFile = File.getInstance(Directories.getEditorDirectory(), "props~");
         try {
             InputStream in = null;
             if (file != null && file.isFile()) {

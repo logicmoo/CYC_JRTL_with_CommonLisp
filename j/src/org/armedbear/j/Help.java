@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.10 2003-06-19 15:51:10 piso Exp $
+ * $Id: Help.java,v 1.11 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,7 +150,7 @@ public final class Help
 
     public static final File getBindingsFile()
     {
-        return File.getInstance(Editor.getTempDirectory(), "bindings.html");
+        return File.getInstance(Directories.getTempDirectory(), "bindings.html");
     }
 
     public static void listBindings()
@@ -412,7 +412,7 @@ public final class Help
 
     private static final File getAproposFile()
     {
-        return File.getInstance(Editor.getTempDirectory(), "apropos.html");
+        return File.getInstance(Directories.getTempDirectory(), "apropos.html");
     }
 
     public static File getDocumentationDirectory()

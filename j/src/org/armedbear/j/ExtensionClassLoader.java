@@ -2,7 +2,7 @@
  * ExtensionClassLoader.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: ExtensionClassLoader.java,v 1.1.1.1 2002-09-24 16:09:33 piso Exp $
+ * $Id: ExtensionClassLoader.java,v 1.2 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class ExtensionClassLoader extends ClassLoader
             if (s.endsWith(".class")) {
                 // String passed in is a file name, not a class name.
                 // By default, extension classes are in ~/.j
-                file = File.getInstance(Editor.getEditorDirectory(), s);
+                file = File.getInstance(Directories.getEditorDirectory(), s);
             } else {
                 // Must be class name.
                 classname = s;
@@ -50,7 +50,8 @@ public final class ExtensionClassLoader extends ClassLoader
                 if (c == null) {
                     // We did not find it.  Look for a .class file in ~/.j
                     Debug.assertTrue(file == null);
-                    file = File.getInstance(Editor.getEditorDirectory(), classname.concat(".class"));
+                    file = File.getInstance(Directories.getEditorDirectory(),
+                                            classname.concat(".class"));
                 }
             }
             if (c == null) {

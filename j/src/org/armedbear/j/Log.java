@@ -1,8 +1,8 @@
 /*
  * Log.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Log.java,v 1.1.1.1 2002-09-24 16:08:24 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Log.java,v 1.2 2003-06-29 00:19:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,12 +209,12 @@ public final class Log
 
     private static final File getLogFile()
     {
-        return File.getInstance(Editor.getEditorDirectory(), "log");
+        return File.getInstance(Directories.getEditorDirectory(), "log");
     }
 
     private static final File getBackupLogFile(int index)
     {
-        return File.getInstance(Editor.getEditorDirectory(),
+        return File.getInstance(Directories.getEditorDirectory(),
             "log.".concat(String.valueOf(index)));
     }
 
