@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardClass.java,v 1.9 2003-10-10 18:56:34 piso Exp $
+ * $Id: StandardClass.java,v 1.10 2003-10-11 02:06:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,9 @@ package org.armedbear.lisp;
 
 public class StandardClass extends LispClass
 {
-    private LispObject directSlots;
-    private LispObject effectiveSlots;
-    private LispObject directMethods;
+    private LispObject directSlots = NIL;
+    private LispObject effectiveSlots = NIL;
+    private LispObject directMethods = NIL;
 
     public StandardClass()
     {
