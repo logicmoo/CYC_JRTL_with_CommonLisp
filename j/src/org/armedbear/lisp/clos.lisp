@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.65 2004-02-06 13:00:08 piso Exp $
+;;; $Id: clos.lisp,v 1.66 2004-02-07 18:05:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -639,6 +639,16 @@
 (define-method-combination or     :identity-with-one-argument t)
 (define-method-combination progn  :identity-with-one-argument t)
 
+(defstruct eql-specializer
+  object)
+
+(defparameter *eql-specializer-table* (make-hash-table :test 'eql))
+
+(defun intern-eql-specializer (object)
+  (or (gethash object *eql-specializer-table*)
+      (setf (gethash object *eql-specializer-table*)
+	    (make-eql-specializer :object object))))
+
 (defclass standard-generic-function (generic-function)
   ((name :initarg :name)      ; :accessor generic-function-name
    (lambda-list               ; :accessor generic-function-lambda-list
@@ -881,21 +891,35 @@
       (ensure-method (find-generic-function ',function-name)
                      :lambda-list ',lambda-list
                      :qualifiers ',qualifiers
-                     :specializers ,(canonicalize-specializers specializers)
+                     :specializers ',specializers
                      :body ',body
                      :environment (top-level-environment)))))
 
 (defun canonicalize-specializers (specializers)
-  `(list ,@(mapcar #'canonicalize-specializer specializers)))
+  (mapcar #'canonicalize-specializer specializers))
 
 (defun canonicalize-specializer (specializer)
-  ;; FIXME (EQL specializers)
-  `(if (atom ',specializer) (find-class ',specializer) (find-class 't)))
+  (cond ((classp specializer)
+         specializer)
+        ((eql-specializer-p specializer)
+         specializer)
+        ((symbolp specializer)
+         (find-class specializer))
+        ((and (consp specializer)
+              (eq (car specializer) 'eql))
+         (let ((object (cadr specializer)))
+           (when (and (consp object)
+                      (eq (car object) 'quote))
+             (setf object (cadr object)))
+           (intern-eql-specializer object)))
+        (t
+         (error "Unknown specializer: ~S~%." specializer))))
 
 (defun parse-defmethod (args)
-  (let ((fn-spec (car args))
+  (let ((function-name (car args))
         (qualifiers ())
-        (specialized-lambda-list nil)
+        (specialized-lambda-list ())
+        (specializers ())
         (body ())
         (parse-state :qualifiers))
     (dolist (arg (cdr args))
@@ -903,17 +927,19 @@
         (:qualifiers
          (if (and (atom arg) (not (null arg)))
              (push-on-end arg qualifiers)
-             (progn (setq specialized-lambda-list arg)
-               (setq parse-state :body))))
+             (progn (setf specialized-lambda-list arg)
+               (setf parse-state :body))))
         (:body (push-on-end arg body))))
-    (values fn-spec
+    (setf specializers
+          (canonicalize-specializers (extract-specializers specialized-lambda-list)))
+    (values function-name
             qualifiers
             (extract-lambda-list specialized-lambda-list)
-            (extract-specializers specialized-lambda-list)
+            specializers
             (list* 'block
-                   (if (consp fn-spec)
-                       (cadr fn-spec)
-                       fn-spec)
+                   (if (consp function-name)
+                       (cadr function-name)
+                       function-name)
                    body))))
 
 ;;; Several tedious functions for analyzing lambda lists
@@ -1113,7 +1139,8 @@
   (setf (method-generic-function method) gf)
   (push method (generic-function-methods gf))
   (dolist (specializer (method-specializers method))
-    (pushnew method (class-direct-methods specializer)))
+    (when (typep specializer 'class) ;; FIXME What about EQL specializer objects?
+      (pushnew method (class-direct-methods specializer))))
   (finalize-generic-function gf)
   gf)
 
@@ -1121,22 +1148,24 @@
   (setf (generic-function-methods gf)
         (remove method (generic-function-methods gf)))
   (setf (method-generic-function method) nil)
-  (dolist (class (method-specializers method))
-    (setf (class-direct-methods class)
-          (remove method (class-direct-methods class))))
+  (dolist (specializer (method-specializers method))
+    (when (typep specializer 'class) ;; FIXME What about EQL specializer objects?
+      (setf (class-direct-methods specializer)
+            (remove method (class-direct-methods specializer)))))
   (finalize-generic-function gf)
   gf)
 
 (defun find-method (gf qualifiers specializers &optional (errorp t))
-  (let ((method
-         (find-if #'(lambda (method)
-                     (and (equal qualifiers
-                                 (method-qualifiers method))
-                          (equal specializers
-                                 (method-specializers method))))
-                  (generic-function-methods gf))))
+  (let* ((canonical-specializers (canonicalize-specializers specializers))
+         (method
+          (find-if #'(lambda (method)
+                      (and (equal qualifiers
+                                  (method-qualifiers method))
+                           (equal canonical-specializers
+                                  (method-specializers method))))
+                   (generic-function-methods gf))))
     (if (and (null method) errorp)
-        (error "no such method for ~S" (generic-function-name gf))
+        (error "No such method for ~S." (generic-function-name gf))
         method)))
 
 ;;; Reader and writer methods
@@ -1166,26 +1195,57 @@
 (defun subclassp (c1 c2)
   (not (null (find c2 (class-precedence-list c1)))))
 
+(defun methods-contain-eql-specializer-p (methods)
+  (dolist (method methods nil)
+    (when (dolist (spec (method-specializers method) nil)
+            (when (eql-specializer-p spec) (return t)))
+      (return t))))
+
 (defun std-compute-discriminating-function (gf)
-  #'(lambda (&rest args)
-     (let* ((classes (mapcar #'class-of
-                             (required-portion gf args)))
-            (emfun (gethash classes (classes-to-emf-table gf) nil)))
-       (if emfun
-           (funcall emfun args)
-           (slow-method-lookup gf args classes)))))
+  (if (methods-contain-eql-specializer-p (generic-function-methods gf))
+      #'(lambda (&rest args)
+         (slow-method-lookup gf args nil))
+      #'(lambda (&rest args)
+         (let* ((classes (mapcar #'class-of
+                                 (required-portion gf args)))
+                (emfun (gethash classes (classes-to-emf-table gf) nil)))
+           (if emfun
+               (funcall emfun args)
+               (slow-method-lookup gf args classes))))))
+
+(defun method-applicable-p (method args)
+  (do* ((specializers (method-specializers method) (cdr specializers))
+        (args args (cdr args)))
+       ((null specializers) t)
+    (let ((specializer (car specializers)))
+      (if (typep specializer 'eql-specializer)
+          (unless (eql (car args) (eql-specializer-object specializer))
+            (return nil))
+          (unless (subclassp (class-of (car args)) specializer)
+            (return nil))))))
+
+(defun %compute-applicable-methods (gf args)
+  (let ((required-classes (mapcar #'class-of (required-portion gf args)))
+        (methods ()))
+    (dolist (method (generic-function-methods gf))
+      (when (method-applicable-p method args)
+        (push method methods)))
+    (sort methods
+          (if (eq (class-of gf) the-class-standard-gf)
+              #'(lambda (m1 m2)
+                 (std-method-more-specific-p m1 m2 required-classes))
+              #'(lambda (m1 m2)
+                 (method-more-specific-p gf m1 m2 required-classes))))))
 
 (defun slow-method-lookup (gf args classes)
-  (let ((applicable-methods
-         (compute-applicable-methods-using-classes gf classes)))
+  (let ((applicable-methods (%compute-applicable-methods gf args)))
     (if applicable-methods
-        (let ((emfun
-               (funcall
-                (if (eq (class-of gf) the-class-standard-gf)
-                    #'std-compute-effective-method-function
-                    #'compute-effective-method-function)
-                gf applicable-methods)))
-          (setf (gethash classes (classes-to-emf-table gf)) emfun)
+        (let ((emfun (funcall (if (eq (class-of gf) the-class-standard-gf)
+                                  #'std-compute-effective-method-function
+                                  #'compute-effective-method-function)
+                              gf applicable-methods)))
+          (when classes
+            (setf (gethash classes (classes-to-emf-table gf)) emfun))
           (funcall emfun args))
         (error "No applicable methods for generic function ~A with arguments ~S of classes ~S."
                (generic-function-name gf) args classes))))
@@ -1196,24 +1256,17 @@
 (defun std-method-more-specific-p (method1 method2 required-classes)
   (mapc #'(lambda (spec1 spec2 arg-class)
            (unless (eq spec1 spec2)
-             (return-from std-method-more-specific-p
-                          (sub-specializer-p spec1 spec2 arg-class))))
+             (cond ((eql-specializer-p spec1)
+                    (return-from std-method-more-specific-p t))
+                   ((eql-specializer-p spec2)
+                    (return-from std-method-more-specific-p nil))
+                   (t
+                    (return-from std-method-more-specific-p
+                                 (sub-specializer-p spec1 spec2 arg-class))))))
         (method-specializers method1)
         (method-specializers method2)
         required-classes)
   nil)
-
-(defun compute-applicable-methods-using-classes (gf required-classes)
-  (let ((methods ()))
-    (dolist (method (generic-function-methods gf))
-      (when (every #'subclassp required-classes (method-specializers method))
-        (push method methods)))
-    (sort methods
-          (if (eq (class-of gf) the-class-standard-gf)
-              #'(lambda (m1 m2)
-                 (std-method-more-specific-p m1 m2 required-classes))
-              #'(lambda (m1 m2)
-                 (method-more-specific-p gf m1 m2 required-classes))))))
 
 (defun primary-method-p (method)
   (null (intersection '(:before :after :around) (method-qualifiers method))))
@@ -1579,7 +1632,7 @@
 
 (defgeneric compute-applicable-methods (gf args))
 (defmethod compute-applicable-methods ((gf standard-generic-function) args)
-  (compute-applicable-methods-using-classes gf (mapcar #'class-of args)))
+  (%compute-applicable-methods gf args))
 
 ;;; Conditions.
 
