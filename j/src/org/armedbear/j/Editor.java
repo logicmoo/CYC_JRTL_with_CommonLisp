@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.58 2003-05-21 18:23:18 piso Exp $
+ * $Id: Editor.java,v 1.59 2003-05-23 17:37:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7381,10 +7381,14 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public void foldNearLine(Line line)
     {
+        while (line != null && line.isBlank())
+            line = line.previous();
         if (line == null)
             return;
         setWaitCursor();
         Line next = line.next();
+        while (next != null && next.isBlank())
+            next = next.next();
         if (next != null) {
             switch (getModeId()) {
                 case JAVA_MODE:
@@ -7410,8 +7414,19 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                             return;
                         }
                     }
-                    if (next.trim().endsWith("{")) {
+                    if (next.trim().startsWith("}")) {
+                        // Fold block containing current line.
+                        Position end =
+                            new Position(next, next.getText().indexOf('}'));
+                        Position start = findMatchInternal(end, 0);
+                        if (start != null) {
+                            foldNearLine(start.getLine());
+                            return;
+                        }
+                    } else if (next.trim().endsWith("{")) {
                         Line nextNext = next.next();
+                        while (nextNext != null && nextNext.isBlank())
+                            nextNext = nextNext.next();
                         if (nextNext != null && !nextNext.isHidden()) {
                             fold(nextNext);
                             return;
