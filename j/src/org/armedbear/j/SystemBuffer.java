@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.3 2002-10-05 00:11:31 piso Exp $
+ * $Id: SystemBuffer.java,v 1.4 2002-10-05 14:06:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -569,22 +569,10 @@ public class SystemBuffer implements Constants
         return bytes;
     }
 
-    protected void empty()
+    public void empty()
     {
-        Line line = getFirstLine();
-        while (line != null) {
-            Line nextLine = line.next();
-            line.setPrevious(null);
-            line.setNext(null);
-            line = nextLine;
-        }
-
-        setFirstLine(null);
-        lastLine = null;
-        isLoaded = false;
-
+        _empty();
         setTags(null);
-
         // Invalidate any stored views that are referencing the old contents
         // of this buffer.
         if (lastView != null)
@@ -600,6 +588,20 @@ public class SystemBuffer implements Constants
                 ed.setTopLine(null);
             }
         }
+    }
+
+    /*package*/ void _empty()
+    {
+        Line line = getFirstLine();
+        while (line != null) {
+            Line nextLine = line.next();
+            line.setPrevious(null);
+            line.setNext(null);
+            line = nextLine;
+        }
+        setFirstLine(null);
+        lastLine = null;
+        isLoaded = false;
     }
 
     protected void loadProgress(int totalBytesRead)
