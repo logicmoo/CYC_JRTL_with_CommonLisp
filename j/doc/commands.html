@@ -2214,11 +2214,13 @@ If a region is selected, inserts parentheses around the selected region.
 Otherwise, inserts an opening parenthesis followed by a closing parenthesis,
 leaving the caret positioned between them.
 <br><br>
-If <b>parensRequireSpaces</b> is <b>true</b>, single space characters are
-added after the opening parenthesis and before the closing parenthesis.
-<br><br>
-<b>Default key mapping:</b> Ctrl Shift ( in Java, JavaScript, C, C++, and Perl modes
-<br><br>
+If <a href="preferences.html#parensRequireSpaces">parensRequireSpaces</a> is
+true, single space characters are added after the opening parenthesis
+and before the closing parenthesis.
+<p>
+<b>Default key mapping:</b> Ctrl Shift ( in Java, JavaScript, C, C++, Lisp and
+Perl modes
+<p>
 <b>See also:</b> <a href="#movePastCloseAndReindent">movePastCloseAndReindent</a>
 <br><br>
 </dl><!--<hr>-->
@@ -3196,7 +3198,7 @@ Displays the context menu (if any) for the current buffer.
 Moves the caret past the next unmatched closing parenthesis to the right of its
 current location, inserts a line separator, and indents according to context.
 <br><br>
-<b>Default key mapping:</b> Ctrl Shift ) in Java, JavaScript, C and C++ modes
+<b>Default key mapping:</b> Ctrl Shift ) in Java, JavaScript, C, C++ and Lisp modes
 <br><br>
 <b>See also:</b> <a href="#insertParentheses">insertParentheses</a>
 <br><br>
