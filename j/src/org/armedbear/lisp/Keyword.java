@@ -1,8 +1,8 @@
 /*
  * Keyword.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Keyword.java,v 1.16 2004-01-01 20:34:13 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Keyword.java,v 1.17 2004-01-02 01:22:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,7 @@ public final class Keyword extends Lisp
         INHERITED           = internKeyword("INHERITED"),
         INITIAL_CONTENTS    = internKeyword("INITIAL-CONTENTS"),
         INITIAL_ELEMENT     = internKeyword("INITIAL-ELEMENT"),
+        INSTANCE            = internKeyword("INSTANCE"),
         INTERNAL            = internKeyword("INTERNAL"),
         LOCAL               = internKeyword("LOCAL"),
         NAME                = internKeyword("NAME"),
