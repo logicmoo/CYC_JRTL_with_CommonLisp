@@ -1,8 +1,8 @@
 /*
  * Ratio.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.39 2003-12-13 00:02:47 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Ratio.java,v 1.40 2004-01-15 02:15:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,7 +153,20 @@ public final class Ratio extends LispObject
 
     public double floatValue()
     {
-        return numerator.doubleValue() / denominator.doubleValue();
+        double result = numerator.doubleValue() / denominator.doubleValue();
+        if (!Double.isNaN(result))
+            return result;
+        boolean negative = numerator.signum() < 0;
+        BigInteger n = negative ? numerator.negate() : numerator;
+        BigInteger d = denominator;
+        int numLen = n.bitLength();
+        int denLen = d.bitLength();
+        int maxLength = Math.max(numLen, denLen);
+        int shift = maxLength - 52;
+        n = n.shiftRight(shift);
+        d = d.shiftRight(shift);
+        result = n.doubleValue() / d.doubleValue();
+        return negative ? -result : result;
     }
 
     public final LispObject incr() throws ConditionThrowable
