@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.63 2003-06-12 23:44:19 piso Exp $
+ * $Id: Editor.java,v 1.64 2003-06-13 00:35:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6176,6 +6176,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public void executeCommand(String input)
     {
+        executeCommand(input, false);
+    }
+
+    public void executeCommand(String input, final boolean interactive)
+    {
         input = input.trim();
         if (input.length() == 0)
             return;
@@ -6216,7 +6221,27 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 public void run()
                 {
                     try {
+                        StatusBar statusBar = getStatusBar();
+                        statusBar.setText("");
                         execute(command, parameters);
+                        if (interactive && parameters == null) {
+                            // Suggest key binding if one is available.
+                            KeyMapping mapping = getKeyMapping(command);
+                            if (mapping != null) {
+                                String statusText = statusBar.getText();
+                                boolean append =
+                                    statusText != null && statusText.length() > 0;
+                                FastStringBuffer sb = new FastStringBuffer();
+                                if (append) {
+                                    sb.append(statusText);
+                                    sb.append("      ");
+                                }
+                                sb.append(command);
+                                sb.append(" is mapped to ");
+                                sb.append(mapping.getKeyText());
+                                status(sb.toString());
+                            }
+                        }
                     }
                     catch (NoSuchMethodException e) {
                         FastStringBuffer sb =
