@@ -2,7 +2,7 @@
  * NewsGroupSummaryMode.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummaryMode.java,v 1.1.1.1 2002-09-24 16:10:14 piso Exp $
+ * $Id: NewsGroupSummaryMode.java,v 1.2 2002-11-15 17:35:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,9 +25,12 @@ import java.awt.event.KeyEvent;
 import org.armedbear.j.AbstractMode;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Constants;
+import org.armedbear.j.Editor;
 import org.armedbear.j.Formatter;
 import org.armedbear.j.KeyMap;
+import org.armedbear.j.Line;
 import org.armedbear.j.Mode;
+import org.armedbear.j.Position;
 import org.armedbear.j.Property;
 
 public final class NewsGroupSummaryMode extends AbstractMode
@@ -56,5 +59,19 @@ public final class NewsGroupSummaryMode extends AbstractMode
     protected final void setKeyMapDefaults(KeyMap km)
     {
         km.mapKey(KeyEvent.VK_ENTER, 0, "readArticle");
+    }
+
+    public String getContextString(Editor editor, boolean verbose)
+    {
+        Position dot = editor.getDot();
+        if (dot != null) {
+            final Line dotLine = dot.getLine();
+            if (dotLine instanceof MailboxLine) {
+                MailboxEntry entry = ((MailboxLine)dotLine).getMailboxEntry();
+                if (entry != null)
+                    return entry.getSubject();
+            }
+        }
+        return null;
     }
 }
