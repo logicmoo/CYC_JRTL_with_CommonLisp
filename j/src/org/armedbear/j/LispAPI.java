@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.39 2004-09-02 00:49:06 piso Exp $
+ * $Id: LispAPI.java,v 1.40 2004-09-02 21:24:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1045,6 +1045,37 @@ public final class LispAPI extends Lisp
             editor.makeNext(buffer);
             editor.activateInOtherWindow(buffer);
             return arg;
+        }
+    };
+
+    // ### send-to-lisp string &optional buffer => generalized-boolean
+    private static final Primitive SEND_TO_LISP =
+        new Primitive("send-to-lisp", PACKAGE_J, true,
+                      "string &optional buffer")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            CommandInterpreter comint = LispShell.findLisp(null);
+            if (comint != null) {
+                comint.send(arg.getStringValue());
+                return T;
+            }
+            return NIL;
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            String s = first.getStringValue();
+            Buffer buf = checkBuffer(second);
+            if (buf instanceof CommandInterpreter) {
+                CommandInterpreter comint = (CommandInterpreter) buf;
+                if (comint.isLisp()) {
+                    comint.send(s);
+                    return T;
+                }
+            }
+            return NIL;
         }
     };
 
