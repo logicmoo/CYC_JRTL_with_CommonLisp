@@ -1,8 +1,8 @@
 /*
  * StatusBar.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: StatusBar.java,v 1.6 2005-01-05 13:50:17 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: StatusBar.java,v 1.7 2005-03-07 03:33:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-public final class StatusBar extends JComponent implements PreferencesChangeListener
+public final class StatusBar extends JComponent
+    implements PreferencesChangeListener
 {
     private static final Font font = new Font("SansSerif", Font.PLAIN, 12);
     private static final int LEFT_MARGIN = 2;
@@ -79,14 +80,17 @@ public final class StatusBar extends JComponent implements PreferencesChangeList
         return messageText;
     }
 
-    private FastStringBuffer sb = new FastStringBuffer(48);
-
     private String getStatusText(Editor editor)
     {
         final Buffer buffer = editor.getBuffer();
         if (buffer == null)
              return "";
-        sb.setLength(0);
+        FastStringBuffer sb = new FastStringBuffer();
+        String emulation = buffer.getStringProperty(Property.EMULATION);
+        if (emulation != null && emulation.length() > 0) {
+            sb.append(emulation);
+            sb.append("   ");
+        }
         String modeName = buffer.getMode().getDisplayName();
         if (modeName != null)
             sb.append(modeName);
