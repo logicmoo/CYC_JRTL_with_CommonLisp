@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.37 2004-05-26 20:59:10 piso Exp $
+ * $Id: LispThread.java,v 1.38 2004-05-27 20:27:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class LispThread extends LispObject
     private static HashMap map = new HashMap();
     private static Object lock = new Object();
 
-    public static final LispThread currentThread()
+    public static final LispThread currentThread() throws ConditionThrowable
     {
         Thread currentJavaThread = Thread.currentThread();
         LispThread lispThread = get(currentJavaThread);
