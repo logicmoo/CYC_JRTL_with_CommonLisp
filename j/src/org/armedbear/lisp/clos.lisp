@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.61 2004-02-04 17:23:35 piso Exp $
+;;; $Id: clos.lisp,v 1.62 2004-02-05 00:58:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -597,9 +597,12 @@
                  ,(canonicalize-direct-slots direct-slots)
                  ,@(canonicalize-defclass-options options)))
 
-;;; Generic function metaobjects and standard-generic-function
+;; The method-combination slot of a standard generic function contains either
+;; the name of the method combination type or a list whose car is the name of
+;; the method combination type and whose cdr is a list of options (for example
+;; :MOST-SPECIFIC-FIRST or :MOST-SPECIFIC-LAST).
 
-(defun method-combination-type (method-combination)
+(defun method-combination-name (method-combination)
   (if (atom method-combination)
       method-combination
       (car method-combination)))
@@ -742,11 +745,11 @@
 (defun canonicalize-defgeneric-option (option)
   (case (car option)
     (:generic-function-class
-     (list ':generic-function-class `(find-class ',(cadr option))))
+     (list :generic-function-class `(find-class ',(cadr option))))
     (:method-class
-     (list ':method-class `(find-class ',(cadr option))))
+     (list :method-class `(find-class ',(cadr option))))
     (:method-combination
-     (list `',(car option) `',(cdr option)))
+     (list :method-combination `',(cdr option)))
     (t
      (list `',(car option) `',(cadr option)))))
 
@@ -1032,8 +1035,6 @@
                (length (getf method-plist :optional-args)))
       (error "The method has the wrong number of optional arguments for the generic function."))
     (unless (eq (or gf-restp gf-keysp) (or method-restp method-keysp))
-      (format t "gf-restp = ~S~% gf-keysp = ~S~% method-restp = ~S~% method-keysp = ~S~%"
-              gf-restp gf-keysp method-restp method-keysp)
       (error "The method and the generic function differ in whether they accept &REST or &KEY arguments."))
     (when (consp gf-keywords)
       (unless (or (and method-restp (not method-keysp))
@@ -1198,7 +1199,7 @@
 
 (defun std-compute-effective-method-function (gf methods)
   (let* ((mc (generic-function-method-combination gf))
-         (type (method-combination-type mc))
+         (mc-name (method-combination-name mc))
          (options (method-combination-options mc))
          (order (car options))
          (primaries ())
@@ -1207,18 +1208,18 @@
     (dolist (m methods)
       (let ((qualifiers (method-qualifiers m)))
         (cond ((null qualifiers)
-               (if (eq type 'standard)
+               (if (eq mc-name 'standard)
                    (push m primaries)
-                   (error "method combination type mismatch")))
+                   (error "Method combination type mismatch.")))
               ((cdr qualifiers)
-               (error "invalid method qualifiers"))
+               (error "Invalid method qualifiers."))
               ((eq (car qualifiers) :around)
                (push m arounds))
-              ((eq (car qualifiers) type)
+              ((eq (car qualifiers) mc-name)
                (push m primaries))
               ((memq (car qualifiers) '(:before :after)))
               (t
-               (error "invalid method qualifiers")))))
+               (error "Invalid method qualifiers.")))))
     (unless (eq order :most-specific-last)
       (setq primaries (nreverse primaries)))
     (setq arounds (nreverse arounds))
@@ -1234,7 +1235,7 @@
                 gf (remove around methods))))
           #'(lambda (args)
              (funcall (method-function around) args next-emfun)))
-        (case type
+        (case mc-name
           (STANDARD
            (let ((next-emfun (compute-primary-emfun (cdr primaries)))
                  (befores (remove-if-not #'before-method-p methods))
@@ -1308,7 +1309,7 @@
                   (push (funcall (method-function primary) args nil) result))
                 (apply #'min result))))
           (t
-           (error "unsupported method combination type ~S" type))))))
+           (error "Unsupported method combination type ~S." mc-name))))))
 
 ;;; compute an effective method function from a list of primary methods:
 
