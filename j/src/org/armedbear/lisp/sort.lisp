@@ -1,7 +1,7 @@
 ;;; sort.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sort.lisp,v 1.4 2003-09-18 18:07:00 piso Exp $
+;;; $Id: sort.lisp,v 1.5 2003-10-29 13:45:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,12 +21,12 @@
 
 (export '(sort merge))
 
-;;; SORT (from CMUCL)
-
-;;; FIXME Only lists are supported for now.
 (defun sort (sequence predicate &key key)
-  (when (listp sequence)
-    (sort-list sequence predicate key)))
+  (if (listp sequence)
+      (sort-list sequence predicate key)
+      (quick-sort sequence 0 (length sequence) predicate key)))
+
+;;; From CMUCL.
 
 ;;; Stable Sorting Lists
 
@@ -120,9 +120,30 @@
         (if (eq list-1 (cdr head))
             (return list-1))))))
 
+;;; From ECL.
+(defun quick-sort (seq start end pred key)
+  (unless key (setq key #'identity))
+  (if (<= end (1+ start))
+      seq
+      (let* ((j start) (k end) (d (elt seq start)) (kd (funcall key d)))
+        (block outer-loop
+          (loop (loop (decf k)
+                  (unless (< j k) (return-from outer-loop))
+                  (when (funcall pred (funcall key (elt seq k)) kd)
+                    (return)))
+            (loop (incf j)
+              (unless (< j k) (return-from outer-loop))
+              (unless (funcall pred (funcall key (elt seq j)) kd)
+                (return)))
+            (let ((temp (elt seq j)))
+              (setf (elt seq j) (elt seq k)
+                    (elt seq k) temp))))
+        (setf (elt seq start) (elt seq j)
+              (elt seq j) d)
+        (quick-sort seq start j pred key)
+        (quick-sort seq (1+ j) end pred key))))
 
-;;; MERGE (from ECL)
-
+;;; From ECL.
 (defun merge (result-type sequence1 sequence2 predicate
                           &key key
                           &aux (l1 (length sequence1)) (l2 (length sequence2)))
