@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Environment.java,v 1.12 2004-02-17 01:38:32 piso Exp $
+ * $Id: Environment.java,v 1.13 2004-05-01 23:45:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,7 +178,7 @@ public final class Environment extends LispObject
         return binding != null ? binding.specialp : false;
     }
 
-    public String toString()
+    public String writeToString()
     {
         return unreadableString("ENVIRONMENT");
     }
@@ -193,7 +193,8 @@ public final class Environment extends LispObject
                 return ((Environment)arg).isEmpty() ? T : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(String.valueOf(arg) + " is not an environment."));
+                return signal(new TypeError(arg.writeToString() +
+                                            " is not an environment."));
             }
         }
     };
@@ -213,7 +214,8 @@ public final class Environment extends LispObject
                 return result;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(String.valueOf(arg) + " is not an environment."));
+                return signal(new TypeError(arg.writeToString() +
+                                            " is not an environment."));
             }
         }
     };

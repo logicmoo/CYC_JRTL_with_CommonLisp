@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.54 2004-04-16 20:03:42 piso Exp $
+ * $Id: Pathname.java,v 1.55 2004-05-01 23:41:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -316,7 +316,7 @@ public class Pathname extends LispObject
         return true;
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer("#P");
@@ -341,32 +341,32 @@ public class Pathname extends LispObject
                 sb.append('(');
                 if (host != NIL) {
                     sb.append(":HOST ");
-                    sb.append(host);
+                    sb.append(host.writeToString());
                     sb.append(' ');
                 }
                 if (device != NIL) {
                     sb.append(":DEVICE ");
-                    sb.append(device);
+                    sb.append(device.writeToString());
                     sb.append(' ');
                 }
                 if (directory != NIL) {
                     sb.append(":DIRECTORY ");
-                    sb.append(directory);
+                    sb.append(directory.writeToString());
                     sb.append(" ");
                 }
                 if (name != NIL) {
                     sb.append(":NAME ");
-                    sb.append(name);
+                    sb.append(name.writeToString());
                     sb.append(' ');
                 }
                 if (type != NIL) {
                     sb.append(":TYPE ");
-                    sb.append(type);
+                    sb.append(type.writeToString());
                     sb.append(' ');
                 }
                 if (version != NIL) {
                     sb.append(":VERSION ");
-                    sb.append(version);
+                    sb.append(version.writeToString());
                     sb.append(' ');
                 }
                 if (sb.charAt(sb.length() - 1) == ' ')
