@@ -2,7 +2,7 @@
  * SidebarTagList.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarTagList.java,v 1.3 2002-12-24 17:02:57 piso Exp $
+ * $Id: SidebarTagList.java,v 1.4 2003-11-30 00:06:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,14 +225,16 @@ public class SidebarTagList extends SidebarList implements Constants,
             case KeyEvent.VK_TAB:
                 e.consume();
                 if (modifiers == 0) {
-                    if (sidebar.getBufferList() != null)
-                        sidebar.getFrame().setFocus(sidebar.getBufferList());
+                    if (sidebar.getBufferList() != null) {
+                        updatePosition();
+                        editor.setFocus(sidebar.getBufferList());
+                    }
                 }
                 return;
             case KeyEvent.VK_ESCAPE:
                 e.consume();
-                editor.getSidebar().setBuffer();
-                editor.getSidebar().updatePosition();
+                sidebar.setBuffer();
+                updatePosition();
                 editor.setFocusToDisplay();
                 return;
         }

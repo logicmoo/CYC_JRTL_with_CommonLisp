@@ -2,7 +2,7 @@
  * JavaTree.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaTree.java,v 1.4 2003-07-23 00:18:49 piso Exp $
+ * $Id: JavaTree.java,v 1.5 2003-11-30 00:05:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -404,14 +404,17 @@ public final class JavaTree extends SidebarTree implements Constants,
             case KeyEvent.VK_TAB:
                 e.consume();
                 if (modifiers == 0) {
-                    if (editor.getSidebar().getBufferList() != null)
-                        editor.setFocus(editor.getSidebar().getBufferList());
+                    final Sidebar sidebar = editor.getSidebar();
+                    if (sidebar.getBufferList() != null) {
+                        updatePosition();
+                        editor.setFocus(sidebar.getBufferList());
+                    }
                 }
                 return;
             case KeyEvent.VK_ESCAPE:
                 e.consume();
                 editor.getSidebar().setBuffer();
-                editor.getSidebar().updatePosition();
+                updatePosition();
                 editor.setFocusToDisplay();
                 return;
         }
