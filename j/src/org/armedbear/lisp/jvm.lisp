@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.174 2004-05-31 03:04:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.175 2004-05-31 17:35:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -410,6 +410,14 @@
 
 (defparameter *resolvers* (make-hash-table :test #'eql))
 
+(defun unsupported-opcode (instruction)
+  (error "Unsupported opcode ~D."
+         (instruction-opcode instruction)))
+
+(dotimes (n (1+ *last-opcode*))
+  (setf (gethash n *resolvers*) #'unsupported-opcode))
+
+;; The following opcodes resolve to themselves.
 (dolist (n '(1 ; ACONST_NULL
              2 ; ICONST_M1
              3 ; ICONST_0
@@ -441,49 +449,37 @@
              177 ; RETURN
              202 ; LABEL
              ))
-  (setf (gethash n *resolvers*) #'identity))
+  (setf (gethash n *resolvers*) nil))
 
-(defmacro assign-resolver (opcodes resolver)
-  (if (listp opcodes)
-      `(dolist (op ',opcodes)
-         (setf (gethash op *resolvers*) ,resolver))
-      `(setf (gethash ',opcodes *resolvers*) ,resolver)))
-
-;; (defmacro define-resolver (opcodes args &body body)
-;;   (unless (listp opcodes)
-;;     (setf opcodes (list opcodes)))
-;;   `(dolist (op ',opcodes)
-;;      (setf (gethash op *resolvers*) #'(lambda ,args ,@body))))
 (defmacro define-resolver (opcodes args &body body)
-  (unless (listp opcodes)
-    (setf opcodes (list opcodes)))
-  `(let ((resolver #'(lambda ,args ,@body)))
-     (dolist (op ',opcodes)
-       (setf (gethash op *resolvers*) resolver))))
+  (let ((name (gensym)))
+    (if (listp opcodes)
+        `(progn
+           (defun ,name ,args ,@body)
+           (eval-when (:load-toplevel :execute)
+             (dolist (op ',opcodes)
+               (setf (gethash op *resolvers*) (symbol-function ',name)))))
+        `(progn
+           (defun ,name ,args ,@body)
+           (eval-when (:load-toplevel :execute)
+             (setf (gethash ,opcodes *resolvers*) (symbol-function ',name)))))))
 
 ;; PUSH-VALUE
-;; (define-resolver 203 (instruction)
-(defun resolve-push-value (instruction)
+(define-resolver 203 (instruction)
   (let ((val *val*))
     (if (<= 0 val 3)
         (inst (+ val 42))
         (inst 25 val))))
-;; (setf (gethash 203 *resolvers*) #'resolve-push-value)
-(assign-resolver 203 #'resolve-push-value)
 
 ;; STORE-VALUE
-;; (define-resolver 204 (instruction)
-(defun resolve-store-value (instruction)
+(define-resolver 204 (instruction)
   (let ((val *val*))
   (if (<= 0 val 3)
       (inst (+ val 75))
       (inst 58 val))))
-;; (setf (gethash 204 *resolvers*) #'resolve-store-value)
-(assign-resolver 204 #'resolve-store-value)
 
 ;; ALOAD
-;; (define-resolver 25 (instruction)
-(defun resolve-aload (instruction)
+(define-resolver 25 (instruction)
  (let* ((args (instruction-args instruction))
         (index (car args)))
    (cond ((<= 0 index 3)
@@ -492,12 +488,9 @@
           (inst 25 index))
          (t
           (error "ALOAD unsupported case")))))
-;; (setf (gethash 25 *resolvers*) #'resolve-aload)
-(assign-resolver 25 #'resolve-aload)
 
 ;; ASTORE
-;; (define-resolver 58 (instruction)
-(defun resolve-astore (instruction)
+(define-resolver 58 (instruction)
   (let* ((args (instruction-args instruction))
          (index (car args)))
     (cond ((<= 0 index 3)
@@ -506,8 +499,6 @@
            (inst 58 index))
           (t
            (error "ASTORE unsupported case")))))
-;; (setf (gethash 58 *resolvers*) #'resolve-astore)
-(assign-resolver 58 #'resolve-astore)
 
 ;; GETSTATIC, PUTSTATIC
 (define-resolver (178 179) (instruction)
@@ -519,31 +510,19 @@
 (define-resolver (16 17) (instruction)
   (let* ((args (instruction-args instruction))
          (n (first args)))
-   (cond ((= n 0)
-          (inst 3)) ; ICONST_0
-         ((= n 1)
-          (inst 4)) ; ICONST_1
-         ((= n 2)
-          (inst 5)) ; ICONST_2
-         ((= n 3)
-          (inst 6)) ; ICONST_3
-         ((= n 4)
-          (inst 7)) ; ICONST_4
-         ((= n 5)
-          (inst 8)) ; ICONST_5
-         ((<= -128 n 127)
-          (inst 16 (logand n #xff))) ; BIPUSH
-         (t ; SIPUSH
-          (inst 17 (u2 n))))))
+    (cond ((<= 0 n 5)
+           (inst (+ n 3)))
+          ((<= -128 n 127)
+           (inst 16 (logand n #xff))) ; BIPUSH
+          (t ; SIPUSH
+           (inst 17 (u2 n))))))
 
 ;; INVOKEVIRTUAL, INVOKESPECIAL, INVOKESTATIC class-name method-name descriptor
-;; (define-resolver (182 183 184) (instruction)
-(defun resolve-invoke* (instruction)
+(define-resolver (182 183 184) (instruction)
   (let* ((args (instruction-args instruction))
          (index (pool-method (first args) (second args) (third args))))
     (setf (instruction-args instruction) (u2 index))
     instruction))
-(assign-resolver (182 183 184) #'resolve-invoke*)
 
 ;; LDC
 (define-resolver 18 (instruction)
@@ -570,10 +549,9 @@
   (let ((resolver (gethash (instruction-opcode instruction) *resolvers*)))
     (if resolver
         (funcall resolver instruction)
-        (error "RESOLVE-ARGS: unsupported opcode ~D." (instruction-opcode instruction)))))
+        instruction)))
 
 (defun resolve-opcodes (code)
-;;   (map 'vector #'resolve-args code))
   (let ((vector (make-array 512 :fill-pointer 0 :adjustable t)))
     (dotimes (index (length code) vector)
       (let ((instruction (svref code index)))
@@ -610,9 +588,7 @@
       (setf depth (+ depth (instruction-stack instruction)))
       (if (branch-opcode-p (instruction-opcode instruction))
           (let ((label (car (instruction-args instruction))))
-;;             (format t "target = ~S~%" target)
-            (walk-code code (symbol-value label) depth)
-            )
+            (walk-code code (symbol-value label) depth))
           ()))))
 
 (defun analyze-stack ()
@@ -630,7 +606,6 @@
     (dotimes (i (length *code*))
       (let ((instruction (aref *code* i)))
         (setf max-stack (max max-stack (instruction-depth instruction)))))
-;;     (format t "max-stack = ~D~%" max-stack)
     max-stack))
 
 (defun finalize-code ()
@@ -2865,17 +2840,19 @@
 (defun compile (name &optional definition)
   (jvm-compile name definition))
 
-(eval-when (:execute)
-  (mapc #'jvm-compile '(pool-add
-                        pool-find-entry
-                        pool-name
-                        pool-get
-                        compile-form)))
+;; (eval-when (:execute)
+;;   (mapc #'jvm-compile '(pool-add
+;;                         pool-find-entry
+;;                         pool-name
+;;                         pool-get
+;;                         compile-form)))
 
-(eval-when (:load-toplevel :execute)
-  (dotimes (n 256)
-    (let ((resolver (gethash n *resolvers*)))
-      (when (and resolver (not (compiled-function-p resolver)))
-        (setf (gethash n *resolvers*) (compile nil resolver))))))
+;; (eval-when (:load-toplevel :execute)
+;;   (dotimes (n (1+ *last-opcode*))
+;;     (let ((resolver (gethash n *resolvers*)))
+;;       (when (and resolver
+;;                  (neq resolver #'unsupported-opcode)
+;;                  (not (compiled-function-p resolver)))
+;;         (setf (gethash n *resolvers*) (compile nil resolver))))))
 
 (provide 'jvm)
