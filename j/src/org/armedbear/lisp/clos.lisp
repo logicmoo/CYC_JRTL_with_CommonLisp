@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.32 2003-12-10 18:10:22 piso Exp $
+;;; $Id: clos.lisp,v 1.33 2003-12-10 18:20:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1399,6 +1399,12 @@
 
 (defmethod slot-exists-p-using-class ((class standard-class) instance slot-name)
   (std-slot-exists-p instance slot-name))
+
+(defmethod slot-exists-p-using-class ((class structure-class) instance slot-name)
+  (dolist (dsd (class-slots class))
+    (when (eq (dsd-name dsd) slot-name)
+      (return-from slot-exists-p-using-class t)))
+  nil)
 
 (defgeneric slot-boundp-using-class (class instance slot-name))
 (defmethod slot-boundp-using-class
