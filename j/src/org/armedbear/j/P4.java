@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: P4.java,v 1.3 2002-11-05 15:22:13 piso Exp $
+ * $Id: P4.java,v 1.4 2003-01-08 14:19:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,32 +189,39 @@ public class P4 implements Constants
         }
     }
 
+    // For Editor.checkReadOnly(). Displays output buffer if necessary.
     public static boolean autoEdit(Editor editor)
     {
         if (editor == null)
             return false;
         final Buffer buffer = editor.getBuffer();
-        if (autoEdit(buffer.getFile())) {
-            editor.status("File opened for edit");
-            // Update read-only status.
-            if (editor.reactivate(buffer))
-                Sidebar.repaintBufferListInAllFrames();
-            return true;
-        }
-        return false;
+        final File file = buffer.getFile();
+        String output = _autoEdit(file);
+        if (output == null)
+            return false;
+        editCompleted(editor, buffer, "p4 edit " + file.canonicalPath(), output);
+        return !buffer.isReadOnly();
     }
 
+    // For replaceInFiles(). Returns false if there are any complications.
     public static boolean autoEdit(File file)
     {
-        if (file == null)
+        final String output = _autoEdit(file);
+        if (output == null)
             return false;
-        if (file.isRemote())
-            return false;
-        if (!haveP4())
-            return false;
-        final String cmd = "p4 edit " + file.canonicalPath();
-        final String output = command(cmd, null);
         return output.trim().endsWith(" - opened for edit");
+    }
+
+    // Returns output from "p4 edit" command or null if error.
+    private static String _autoEdit(File file)
+    {
+        if (file == null)
+            return null;
+        if (file.isRemote())
+            return null;
+        if (!haveP4())
+            return null;
+        return command("p4 edit " + file.canonicalPath(), null);
     }
 
     public static void revert()
@@ -520,7 +527,7 @@ public class P4 implements Constants
             editor.activateInOtherWindow(checkinBuffer);
         }
     }
-    
+
     private static List getModifiedBuffers()
     {
         ArrayList list = null;
@@ -567,7 +574,7 @@ public class P4 implements Constants
         editor.status("");
         return false;
     }
-    
+
     public static void replaceComment(final Editor editor, final String comment)
     {
         if (!(editor.getBuffer() instanceof CheckinBuffer)) {
