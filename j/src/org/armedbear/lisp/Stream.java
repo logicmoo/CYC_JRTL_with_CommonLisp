@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.11 2004-01-27 14:46:53 piso Exp $
+ * $Id: Stream.java,v 1.12 2004-01-27 16:41:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -329,7 +329,6 @@ public class Stream extends LispObject
             return NIL;
         if (obj.listp()) {
             Symbol structure = checkSymbol(obj.car());
-            Debug.trace("readStructure structure = " + structure);
             LispClass c = LispClass.findClass(structure);
             if (!(c instanceof StructureClass)) {
                 return signal(new ReaderError(structure.getName() +
@@ -337,8 +336,7 @@ public class Stream extends LispObject
             }
             LispObject args = obj.cdr();
             Package pkg = checkPackage(structure.getPackage());
-            Symbol constructor =
-                pkg.intern("MAKE-" + structure.getName());
+            Symbol constructor = pkg.intern("MAKE-" + structure.getName());
             return funcall(constructor.getSymbolFunctionOrDie(),
                            args.copyToArray(), LispThread.currentThread());
         }
