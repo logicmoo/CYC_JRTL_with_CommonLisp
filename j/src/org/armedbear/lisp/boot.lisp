@@ -13,7 +13,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(open call-arguments-limit))
+(export '(open call-arguments-limit lambda-parameters-limit))
 
 (defun open (filename
 	     &key
@@ -27,3 +27,5 @@
       (error "operation not supported")))
 
 (defconstant call-arguments-limit 50)
+
+(defconstant lambda-parameters-limit 50)
