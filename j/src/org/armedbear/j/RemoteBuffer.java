@@ -2,7 +2,7 @@
  * RemoteBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: RemoteBuffer.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * $Id: RemoteBuffer.java,v 1.3 2003-01-08 13:56:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,8 +205,11 @@ public final class RemoteBuffer extends Buffer implements Constants
     private Runnable replaceBufferRunnable = new Runnable() {
         public void run()
         {
-            buffer.setInitialDotPos(initialLineNumber, initialOffset);
-            Editor.getBufferList().replace(RemoteBuffer.this, buffer);
+            if (Editor.getBufferList().contains(RemoteBuffer.this)) {
+                buffer.setInitialDotPos(initialLineNumber, initialOffset);
+                Editor.getBufferList().replace(RemoteBuffer.this, buffer);
+            } else
+                buffer.kill();
         }
     };
 
