@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.12 2003-03-12 19:55:10 piso Exp $
+ * $Id: Vector.java,v 1.13 2003-03-17 18:28:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,11 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
     public LispObject typeOf()
     {
         return list(Symbol.VECTOR, T, new Fixnum(capacity));
+    }
+
+    public LispObject getElementType()
+    {
+        return T;
     }
 
     public boolean isSimpleVector()

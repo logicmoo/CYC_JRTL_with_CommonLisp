@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.24 2003-03-15 17:37:52 piso Exp $
+ * $Id: LispString.java,v 1.25 2003-03-17 18:24:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,11 @@ public final class LispString extends AbstractVector implements SequenceType,
             typeSpecifier == Symbol.SIMPLE_BASE_STRING)
             return fillPointer == -1 ? T : NIL;
         return super.typep(typeSpecifier);
+    }
+
+    public LispObject getElementType()
+    {
+        return Symbol.BASE_CHAR;
     }
 
     public boolean equal(LispObject obj)
