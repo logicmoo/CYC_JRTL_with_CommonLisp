@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.76 2004-02-25 23:52:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.77 2004-03-09 18:59:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2001,7 +2001,8 @@
 
 (defun compile-setq (form for-effect)
   (unless (= (length form) 3)
-    (error "COMPILE-SETQ too many args for SETQ"))
+    (return-from compile-setq (compile-form (precompiler::precompile-setq form)
+                                            for-effect)))
   (let* ((rest (cdr form))
          (sym (car rest))
          (index (position sym *locals* :from-end t)))
