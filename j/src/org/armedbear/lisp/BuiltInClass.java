@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.11 2003-10-29 18:51:37 piso Exp $
+ * $Id: BuiltInClass.java,v 1.12 2003-11-01 20:26:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -191,7 +191,7 @@ public class BuiltInClass extends LispClass
         CONCATENATED_STREAM.setDirectSuperclass(STREAM);
         CONCATENATED_STREAM.setCPL(CONCATENATED_STREAM, STREAM, CLASS_T);
         CONDITION.setDirectSuperclass(STANDARD_OBJECT);
-        CONDITION.setCPL(CONDITION, CLASS_T);
+        CONDITION.setCPL(CONDITION, STANDARD_OBJECT, CLASS_T);
         CONS.setDirectSuperclass(LIST);
         CONS.setCPL(CONS, LIST, SEQUENCE, CLASS_T);
         CONTROL_ERROR.setDirectSuperclass(ERROR);
