@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.20 2004-05-27 16:43:33 piso Exp $
+;;; $Id: compile-file.lisp,v 1.21 2004-06-08 20:37:03 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,12 +25,14 @@
 
 (defvar *class-number*)
 
+(defvar *output-file-pathname*)
+
 (defun next-classfile-name ()
   (let ((name (format nil "~A-~D"
                       (pathname-name *compile-file-pathname*)
                       (incf *class-number*))))
     (namestring (merge-pathnames (make-pathname :name name :type "cls")
-                                 *compile-file-pathname*))))
+                                 *output-file-pathname*))))
 
 (defmacro report-error (&rest forms)
   `(handler-case (progn ,@forms)
@@ -200,7 +202,8 @@
         (setf input-file pathname))))
   (unless output-file
     (setf output-file (compile-file-pathname input-file)))
-  (let* ((type (pathname-type output-file))
+  (let* ((*output-file-pathname* output-file)
+         (type (pathname-type output-file))
          (temp-file (merge-pathnames (make-pathname :type (concatenate 'string type "-tmp"))
                                      output-file)))
     (with-open-file (in input-file :direction :input)
