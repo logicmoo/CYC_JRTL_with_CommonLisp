@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.20 2003-07-20 11:23:12 piso Exp $
+ * $Id: LispAPI.java,v 1.21 2003-07-20 17:34:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,6 +171,15 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### buffer-string
+    private static final Primitive1 BUFFER_STRING =
+        new Primitive1("buffer-string", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return new LispString(checkBuffer(arg).getText());
+        }
+    };
+
     // ### copy-marker
     private static final Primitive1 COPY_MARK =
         new Primitive1("copy-marker", PACKAGE_J, true) {
@@ -243,6 +252,18 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### make-marker
+    private static final Primitive1 MAKE_MARKER =
+        new Primitive1("make-marker", PACKAGE_J, true) {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            Line line = checkLine(first);
+            int offset = Fixnum.getValue(second);
+            return new JavaObject(new Position(line, offset));
+        }
+    };
+
     // ### marker-line
     private static final Primitive1 MARKER_LINE =
         new Primitive1("marker-line", PACKAGE_J, true) {
@@ -271,6 +292,26 @@ public final class LispAPI extends Lisp
             if (dot != null)
                 return new JavaObject(dot.getLine());
             return NIL;
+        }
+    };
+
+    // ### line-next
+    private static final Primitive1 LINE_NEXT =
+        new Primitive1("line-next", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            Line next = checkLine(arg).next();
+            return next != null ? new JavaObject(next) : NIL;
+        }
+    };
+
+    // ### line-previous
+    private static final Primitive1 LINE_PREVIOUS =
+        new Primitive1("line-previous", PACKAGE_J, true) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            Line prev = checkLine(arg).previous();
+            return prev != null ? new JavaObject(prev) : NIL;
         }
     };
 
