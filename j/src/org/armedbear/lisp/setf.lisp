@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.26 2003-09-26 00:44:30 piso Exp $
+;;; $Id: setf.lisp,v 1.27 2003-10-01 01:27:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,20 +19,18 @@
 
 (in-package "SYSTEM")
 
-(defconstant *setf-expander* (make-symbol "SETF-EXPANDER"))
-
 (defun get-setf-expansion (form &optional environment)
   (cond ((symbolp form)
          (let ((new-var (gensym)))
            (values nil nil (list new-var)
                    `(setq ,form ,new-var) form)))
-	((get (car form) *setf-expander*)
+	((get (car form) 'setf-inverse)
 	 (let ((vars (mapcar #'(lambda (x) (gensym)) (cdr form)))
 	       (store (gensym)))
 	   (values vars
                    (cdr form)
                    (list store)
-                   `(,(get (car form) *setf-expander*)
+                   `(,(get (car form) 'setf-inverse)
                       ,@vars ,store)
 		   (cons (car form) vars))))
         (t
@@ -75,13 +73,13 @@
          ((consp place)
           (when (macro-function (car place))
             (setq place (macroexpand place)))
-          (let ((expander (get (car place) *setf-expander*)))
-            (cond ((null expander)
+          (let ((inverse (get (car place) 'setf-inverse)))
+            (cond ((null inverse)
                    (error "no SETF expansion for ~A" place))
-                  ((symbolp expander)
-                   `(,expander ,@(cdr place) ,value))
-                  ((functionp expander)
-                   `(funcall ,expander ,@(cdr place) ,value))
+                  ((symbolp inverse)
+                   `(,inverse ,@(cdr place) ,value))
+                  ((functionp inverse)
+                   `(funcall ,inverse ,@(cdr place) ,value))
                   (t
                    (error "SETF: unhandled case")))))
          (t nil))))
@@ -102,14 +100,14 @@
   (cond ((symbolp name)
          (symbol-function name))
         ((and (consp name) (eq (car name) 'setf))
-         (or (get *setf-expander* (cadr name)) (error 'undefined-function)))
+         (or (get 'setf-inverse (cadr name)) (error 'undefined-function)))
         (t (error 'type-error))))
 
 (defun %set-fdefinition (name function)
   (cond ((symbolp name)
          (fset name function))
         ((and (consp name) (eq (car name) 'setf))
-         (%put (cadr name) *setf-expander* function))
+         (%put (cadr name) 'setf-inverse function))
         (t (error 'type-error))))
 
 ;; (defsetf subseq (sequence start &optional (end nil)) (v)
@@ -128,7 +126,7 @@
       v)))
 
 (defmacro defsetf (access-function update-function)
-  `(%put ',access-function *setf-expander* ',update-function))
+  `(%put ',access-function 'setf-inverse ',update-function))
 
 (defun %set-caar (x v) (%rplaca (car x) v))
 (defun %set-cadr (x v) (%rplaca (cdr x) v))
