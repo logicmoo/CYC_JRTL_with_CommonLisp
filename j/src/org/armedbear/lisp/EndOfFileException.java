@@ -2,7 +2,7 @@
  * EndOfFileException.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: EndOfFileException.java,v 1.2 2003-02-15 16:48:16 piso Exp $
+ * $Id: EndOfFileException.java,v 1.3 2003-04-09 23:55:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,19 @@
 
 package org.armedbear.lisp;
 
-public final class EndOfFileException extends LispError
+public final class EndOfFileException extends StreamError
 {
     public EndOfFileException()
     {
         super("end of file");
+    }
+
+    public String toString()
+    {
+        StringBuffer sb = new StringBuffer("#<");
+        sb.append("END-OF-FILE @ #x");
+        sb.append(Integer.toHexString(hashCode()));
+        sb.append(">");
+        return sb.toString();
     }
 }
