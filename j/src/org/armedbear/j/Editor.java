@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.14 2002-11-02 23:12:32 piso Exp $
+ * $Id: Editor.java,v 1.15 2002-11-03 20:30:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5651,13 +5651,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 Editor p = frame.getPrimaryEditor();
                 Editor s = frame.getSecondaryEditor();
                 boolean unsplit = false;
-                if (p.getDisplay().getTopLine() == s.getDisplay().getTopLine()) {
-                    if (p.getDot() != null && p.getDot().equals(s.getDot())) {
-                        if (p.getMark() == null && s.getMark() == null)
-                            unsplit = true;
-                        else if (p.getMark() != null && p.getMark().equals(s.getMark()))
-                            unsplit = true;
-                    }
+                if (p.getDot() != null && p.getDot().equals(s.getDot())) {
+                    if (p.getMark() == null && s.getMark() == null)
+                        unsplit = true;
+                    else if (p.getMark() != null && p.getMark().equals(s.getMark()))
+                        unsplit = true;
                 }
                 if (unsplit)
                     unsplitWindow();
