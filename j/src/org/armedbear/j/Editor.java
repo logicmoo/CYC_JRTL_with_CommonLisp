@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.34 2003-01-18 15:40:42 piso Exp $
+ * $Id: Editor.java,v 1.35 2003-02-03 00:44:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7151,7 +7151,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public void defaultMode()
     {
         Mode mode = buffer.getDefaultMode();
-        if (mode != buffer.getMode()) {
+        if (mode != null && mode != buffer.getMode()) {
             if (buffer.isModified()) {
                 FastStringBuffer sb =
                     new FastStringBuffer("Buffer will be reloaded in ");
