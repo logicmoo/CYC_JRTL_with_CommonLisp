@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.11 2003-07-23 05:01:40 piso Exp $
+;;; $Id: init.lisp,v 1.12 2003-09-15 19:05:17 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -26,10 +26,33 @@
 (defun java-version ()
   (jstatic "getProperty" "java.lang.System" "java.version"))
 
-(when (member (subseq (java-version) 0 5) '("1.4.0" "1.4.1" "1.4.2") :test #'string=)
-  (set-global-property "adjustAscent" -2)
-  (set-global-property "adjustLeading" -2)
-  (reset-display))
+(defun adjust-appearance ()
+  (when (member (subseq (java-version) 0 5) '("1.4.0" "1.4.1" "1.4.2") :test #'string=)
+    (set-global-property "adjustAscent" -2)
+    (set-global-property "adjustLeading" -2)
+    (reset-display)))
+
+;; Do it now!
+(adjust-appearance)
+
+;; Turn off the remove-trailing-whitespace preference for files in the
+;; directory ~/gcl/ansi-tests.
+(defun my-open-file-hook (buf)
+  (let ((filename (buffer-pathname buf)))
+    (when (and filename
+               (string= (directory-namestring filename)
+                        "/home/peter/gcl/ansi-tests/"))
+      (setf (variable-value 'remove-trailing-whitespace :buffer) nil))))
+
+(add-hook 'open-file-hook 'my-open-file-hook)
+
+;; Call ADJUST-APPEARANCE after saving ~/.j/prefs.
+(defun my-after-save-hook (buf)
+  (let ((filename (buffer-pathname buf)))
+    (when (string= filename "/home/peter/.j/prefs")
+      (adjust-appearance))))
+
+(add-hook 'after-save-hook 'my-after-save-hook)
 
 (defun reset-incoming-filters ()
   (jstatic "resetIncomingFilters" "org.armedbear.j.mail.IncomingFilter"))
