@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.30 2004-09-20 16:32:24 piso Exp $
+ * $Id: StructureObject.java,v 1.31 2004-09-30 11:24:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,6 +135,16 @@ public final class StructureObject extends LispObject
             funcall2(fun, this, stream, LispThread.currentThread());
             return stream.getString().getStringValue();
         }
+        final LispThread thread = LispThread.currentThread();
+        int maxLevel = Integer.MAX_VALUE;
+        LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+        if (printLevel instanceof Fixnum)
+            maxLevel = ((Fixnum)printLevel).value;
+        LispObject currentPrintLevel =
+            _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+        int currentLevel = Fixnum.getValue(currentPrintLevel);
+        if (currentLevel >= maxLevel)
+            return "#";
         StringBuffer sb = new StringBuffer("#S(");
         try {
             LispObject effectiveSlots = structureClass.getEffectiveSlots();
