@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.40 2005-02-01 15:21:09 piso Exp $
+;;; $Id: compile-system.lisp,v 1.41 2005-02-05 17:49:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -134,7 +134,7 @@
                                   "define-modify-macro.lisp"
                                   "define-symbol-macro.lisp"
                                   "defpackage.lisp"
-                                  ;;"defsetf.lisp"
+                                  "defsetf.lisp"
                                   "defstruct.lisp"
                                   "deftype.lisp"
                                   "delete-duplicates.lisp"
