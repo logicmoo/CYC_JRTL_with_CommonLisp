@@ -2,7 +2,7 @@
  * Marker.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Marker.java,v 1.2 2003-03-15 16:20:24 piso Exp $
+ * $Id: Marker.java,v 1.3 2003-03-20 15:38:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,9 @@
  */
 
 package org.armedbear.j;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class Marker implements Constants
 {
@@ -57,12 +60,6 @@ public final class Marker implements Constants
     public Line getLine()
     {
         return pos != null ? pos.getLine() : null;
-    }
-
-    public void bufferClosed(Buffer buf)
-    {
-        if (buf == buffer)
-            invalidate();
     }
 
     public void invalidate()
@@ -142,5 +139,40 @@ public final class Marker implements Constants
                     return true;
         }
         return false;
+    }
+
+    public static void invalidateAllMarkers()
+    {
+        List markers = getAllMarkers();
+        for (int i = markers.size(); i-- > 0;) {
+            Marker m = (Marker) markers.get(i);
+            if (m != null)
+                m.invalidate();
+        }
+    }
+
+    public static void invalidateMarkers(Buffer buf)
+    {
+        List markers = getAllMarkers();
+        for (int i = markers.size(); i-- > 0;) {
+            Marker m = (Marker) markers.get(i);
+            if (m != null && m.getBuffer() == buf)
+                m.invalidate();
+        }
+    }
+
+    public static List getAllMarkers()
+    {
+        Marker[] bookmarks = Editor.getBookmarks();
+        List positionStack = Editor.getPositionStack();
+        ArrayList list = new ArrayList(bookmarks.length + positionStack.size());
+        for (int i = bookmarks.length; i-- > 0;) {
+            Marker m = bookmarks[i];
+            if (m != null)
+                list.add(m);
+        }
+        for (int i = positionStack.size(); i-- > 0;)
+            list.add(positionStack.get(i));
+        return list;
     }
 }
