@@ -445,6 +445,7 @@ name-char
 namestring
 nbutlast
 nconc
+next-method-p
 nintersection
 ninth
 no-applicable-method
