@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaMode.java,v 1.9 2003-05-17 19:25:54 piso Exp $
+ * $Id: JavaMode.java,v 1.10 2003-06-06 12:21:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,7 +262,9 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         final int indentSize = buffer.getIndentSize();
 
         final String firstIdentifier = getFirstIdentifier(text);
-        if (firstIdentifier.equals("throws")) {
+        if (firstIdentifier.equals("throws") ||
+            firstIdentifier.equals("implements"))
+        {
             Position pos = findBeginningOfStatement(new Position(model, 0));
             return buffer.getIndentation(pos.getLine()) + indentSize;
         }
