@@ -2,7 +2,7 @@
  * CompiledClosure.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CompiledClosure.java,v 1.1 2004-07-11 12:39:57 piso Exp $
+ * $Id: CompiledClosure.java,v 1.2 2004-07-21 18:10:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +24,9 @@ package org.armedbear.lisp;
 public class CompiledClosure extends Function
 {
     private final ClosureTemplateFunction ctf;
-    private final LispObject[] context;
+    private final LispObject[][] context;
 
-    public CompiledClosure(ClosureTemplateFunction ctf, LispObject[] context)
+    public CompiledClosure(ClosureTemplateFunction ctf, LispObject[][] context)
     {
         this.ctf = ctf;
         this.context = context;
