@@ -2,7 +2,7 @@
  * SidebarBufferList.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarBufferList.java,v 1.1.1.1 2002-09-24 16:07:46 piso Exp $
+ * $Id: SidebarBufferList.java,v 1.2 2002-10-02 02:11:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,11 +146,11 @@ public final class SidebarBufferList extends SidebarList implements Constants,
         Object obj = getSelectedValue();
         if (obj != null) {
             Editor editor = sidebar.getEditor();
+            if (Editor.preferences().getIntegerProperty(Property.REORDER_BUFFERS) > 1)
+                editor.makeNext((Buffer)obj);
             editor.switchToBuffer((Buffer)obj);
-//             editor.setFocusToDisplay();
             Editor.currentEditor().setFocusToDisplay();
             editor.updateDisplay();
-//             sidebar.setUpdateFlag(SIDEBAR_ALL);
         }
     }
 
