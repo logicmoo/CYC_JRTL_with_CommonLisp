@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.577 2004-02-24 00:31:45 piso Exp $
+ * $Id: Primitives.java,v 1.578 2004-02-24 00:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,23 +198,21 @@ public final class Primitives extends Lisp
 
     // ### array-has-fill-pointer-p
     private static final Primitive1 ARRAY_HAS_FILL_POINTER_P =
-        new Primitive1("array-has-fill-pointer-p","array")
+        new Primitive1("array-has-fill-pointer-p", "array")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof AbstractVector)
-                return ((AbstractVector)arg).getFillPointer() >= 0 ? T : NIL;
-            if (arg instanceof DisplacedArray)
-                return ((DisplacedArray)arg).getFillPointer() >= 0 ? T : NIL;
-            if (arg instanceof AbstractArray)
-                return NIL;
-            signal(new TypeError(arg, "array"));
-            return NIL;
+            try {
+                return ((AbstractArray)arg).hasFillPointer() ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.ARRAY));
+            }
         }
     };
 
     // ### vectorp
-    private static final Primitive1 VECTORP = new Primitive1("vectorp","object")
+    private static final Primitive1 VECTORP = new Primitive1("vectorp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -224,7 +222,7 @@ public final class Primitives extends Lisp
 
     // ### simple-vector-p
     private static final Primitive1 SIMPLE_VECTOR_P =
-        new Primitive1("simple-vector-p","object")
+        new Primitive1("simple-vector-p", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -234,7 +232,7 @@ public final class Primitives extends Lisp
 
     // ### bit-vector-p
     private static final Primitive1 BIT_VECTOR_P =
-        new Primitive1("bit-vector-p","object")
+        new Primitive1("bit-vector-p", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -244,7 +242,7 @@ public final class Primitives extends Lisp
 
     // ### simple-bit-vector-p
     private static final Primitive1 SIMPLE_BIT_VECTOR_P =
-        new Primitive1("simple-bit-vector-p","object")
+        new Primitive1("simple-bit-vector-p", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -253,7 +251,7 @@ public final class Primitives extends Lisp
     };
 
     // ### eval
-    private static final Primitive1 EVAL = new Primitive1("eval","form")
+    private static final Primitive1 EVAL = new Primitive1("eval", "form")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -262,7 +260,7 @@ public final class Primitives extends Lisp
     };
 
     // ### eq
-    private static final Primitive2 EQ = new Primitive2("eq","x y")
+    private static final Primitive2 EQ = new Primitive2("eq", "x y")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -272,7 +270,7 @@ public final class Primitives extends Lisp
     };
 
     // ### eql
-    private static final Primitive2 EQL = new Primitive2("eql","x y")
+    private static final Primitive2 EQL = new Primitive2("eql", "x y")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -282,7 +280,7 @@ public final class Primitives extends Lisp
     };
 
     // ### equal
-    private static final Primitive2 EQUAL = new Primitive2("equal","x y")
+    private static final Primitive2 EQUAL = new Primitive2("equal", "x y")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -292,7 +290,7 @@ public final class Primitives extends Lisp
     };
 
     // ### equalp
-    private static final Primitive2 EQUALP = new Primitive2("equalp","x y")
+    private static final Primitive2 EQUALP = new Primitive2("equalp", "x y")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -302,7 +300,7 @@ public final class Primitives extends Lisp
     };
 
     // ### values
-    private static final Primitive VALUES = new Primitive("values","&rest object")
+    private static final Primitive VALUES = new Primitive("values", "&rest object")
     {
         public LispObject execute()
         {
@@ -330,7 +328,8 @@ public final class Primitives extends Lisp
     // ### values-list
     // values-list list => element*
     // Returns the elements of the list as multiple values.
-    private static final Primitive1 VALUES_LIST = new Primitive1("values-list","list")
+    private static final Primitive1 VALUES_LIST =
+        new Primitive1("values-list", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
