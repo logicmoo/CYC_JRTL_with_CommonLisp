@@ -2,7 +2,7 @@
  * LispShellFormatter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShellFormatter.java,v 1.12 2004-03-11 19:04:55 piso Exp $
+ * $Id: LispShellFormatter.java,v 1.13 2004-09-08 19:34:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,25 +110,6 @@ public final class LispShellFormatter extends Formatter
         if (match != null)
             return match.getEndIndex();
         return 0;
-    }
-
-    public boolean parseBuffer()
-    {
-        boolean changed = false;
-        if (buffer instanceof LispShell) {
-            Position pos = ((LispShell)buffer).getEndOfOutput();
-            if (pos != null) {
-                // Any lines beyond end of output must be input.
-                for (Line line = pos.getLine().next(); line != null; line = line.next()) {
-                    if (line.flags() != STATE_INPUT) {
-                        line.setFlags(STATE_INPUT);
-                        changed = true;
-                    }
-                }
-            }
-        }
-        buffer.setNeedsParsing(false);
-        return changed;
     }
 
     public FormatTable getFormatTable()
