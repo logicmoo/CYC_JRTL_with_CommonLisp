@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.12 2003-08-11 18:03:15 piso Exp $
+ * $Id: Ratio.java,v 1.13 2003-08-11 18:40:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -324,14 +324,18 @@ public final class Ratio extends LispObject
         // Invert and multiply.
         BigInteger num = numerator.multiply(d);
         BigInteger den = denominator.multiply(n);
+        BigInteger quotient = num.divide(den);
 
-        BigInteger[] results = num.divideAndRemainder(den);
-        BigInteger quotient = results[0];
-        BigInteger remainder = results[1];
+        // Multiply quotient by divisor.
+        LispObject product = number(quotient.multiply(n), d);
+
+        // Subtract to get remainder.
+        LispObject remainder = subtract(product);
+
         final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];
         values[0] = number(quotient);
-        values[1] = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
+        values[1] = remainder;
         thread.setValues(values);
         return values[0];
     }
