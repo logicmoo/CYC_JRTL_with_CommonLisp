@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Frame.java,v 1.1.1.1 2002-09-24 16:09:36 piso Exp $
+ * $Id: Frame.java,v 1.2 2002-10-13 16:56:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -514,7 +514,7 @@ public final class Frame extends JFrame implements Constants, WindowListener,
                 // going to close.
                 final Buffer b = kill.getBuffer();
                 if (b != null) {
-                    b.autosave(false);
+                    b.autosave();
                     kill.saveView();
                     RecentFiles.getInstance().bufferDeactivated(b,
                         kill.getDot());

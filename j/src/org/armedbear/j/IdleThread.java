@@ -2,7 +2,7 @@
  * IdleThread.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: IdleThread.java,v 1.1.1.1 2002-09-24 16:08:44 piso Exp $
+ * $Id: IdleThread.java,v 1.2 2002-10-13 16:55:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -200,8 +200,8 @@ public class IdleThread extends Thread
             if (editor == null)
                 return;
             Buffer buffer = editor.getBuffer();
-            if (buffer != null && buffer.needsAutosave())
-                buffer.autosave(true);
+            if (buffer != null)
+                buffer.autosave();
         }
     };
 
