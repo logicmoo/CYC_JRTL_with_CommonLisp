@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.7 2003-06-19 01:52:08 piso Exp $
+ * $Id: Help.java,v 1.8 2003-06-19 14:16:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,13 +255,18 @@ public final class Help
 
     public static void apropos()
     {
-        String arg = InputDialog.showInputDialog(Editor.currentEditor(),
-            "Apropos:", "Apropos");
-        if (arg != null) {
-            arg = arg.trim();
-            if (arg.length() > 0)
-                apropos(arg);
-        }
+        final Editor editor = Editor.currentEditor();
+        InputDialog d = new InputDialog(editor, "Apropos:", "Apropos", null);
+        d.setHistory(new History("apropos"));
+        editor.centerDialog(d);
+        d.show();
+        String arg = d.getInput();
+        if (arg == null)
+            return;
+        arg = arg.trim();
+        if (arg.length() == 0)
+            return;
+        apropos(arg);
     }
 
     public static void apropos(String arg)
