@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardClass.java,v 1.18 2004-10-20 21:07:03 piso Exp $
+ * $Id: StandardClass.java,v 1.19 2004-11-06 18:52:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,13 +25,13 @@ public class StandardClass extends SlotClass
 {
     public StandardClass()
     {
-        setLayout(new Layout(this, Fixnum.ZERO, NIL));
+        setLayout(new Layout(this, NIL, NIL));
     }
 
     public StandardClass(Symbol symbol, LispObject directSuperclasses)
     {
         super(symbol, directSuperclasses);
-        setLayout(new Layout(this, Fixnum.ZERO, NIL));
+        setLayout(new Layout(this, NIL, NIL));
     }
 
     public LispObject typeOf()
