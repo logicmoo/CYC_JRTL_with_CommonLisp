@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Do.java,v 1.9 2004-08-09 18:45:35 piso Exp $
+ * $Id: Do.java,v 1.10 2004-09-19 17:12:01 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public final class Do extends Lisp
 {
     // ### do
-    private static final SpecialOperator DO = new SpecialOperator("do")
+    private static final SpecialOperator DO = new SpecialOperator("do", "varlist endlist &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -34,7 +34,7 @@ public final class Do extends Lisp
     };
 
     // ### do*
-    private static final SpecialOperator DO_ = new SpecialOperator("do*")
+    private static final SpecialOperator DO_ = new SpecialOperator("do*", "varlist endlist &body body")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
