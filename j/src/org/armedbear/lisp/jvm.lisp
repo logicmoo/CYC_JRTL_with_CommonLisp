@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.322 2004-12-27 17:43:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.323 2004-12-27 18:14:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2488,37 +2488,45 @@
 ;;   (let ((new-form (rewrite-function-call form)))
 ;;     (when (neq new-form form)
 ;;       (return-from compile-function-call (compile-form new-form :target target))))
-  (let ((fun (car form))
+  (let ((op (car form))
         (args (cdr form)))
-    (unless (symbolp fun)
-      (error "COMPILE-FUNCTION-CALL ~S is not a symbol" fun))
-    (when (find-local-function fun)
+    (unless (symbolp op)
+      (error "COMPILE-FUNCTION-CALL ~S is not a symbol" op))
+    (when (find-local-function op)
       (return-from compile-function-call (compile-local-function-call form target)))
     (let ((numargs (length args)))
       (case (length args)
         (1
-         (when (compile-function-call-1 fun args target representation)
+         (when (compile-function-call-1 op args target representation)
            (return-from compile-function-call)))
         (2
-         (when (compile-function-call-2 fun args target representation)
+         (when (compile-function-call-2 op args target representation)
            (return-from compile-function-call)))
         (3
-         (when (compile-function-call-3 fun args target)
+         (when (compile-function-call-3 op args target)
            (return-from compile-function-call))))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
       (cond
-       ((eq fun (compiland-name *current-compiland*)) ; recursive call
+       ((eq op (compiland-name *current-compiland*)) ; recursive call
         (emit 'aload 0)) ; this
-       ((inline-ok fun)
+       ((inline-ok op)
         (emit 'getstatic
               *this-class*
-              (declare-function fun)
+              (declare-function op)
               +lisp-object+))
+       ((null (symbol-package op))
+        (let ((g (if *compile-file-truename*
+                     (declare-object-as-string op)
+                     (declare-object op))))
+          (emit 'getstatic
+                *this-class*
+                g
+                +lisp-object+)))
        (t
         (emit 'getstatic
               *this-class*
-              (declare-symbol fun)
+              (declare-symbol op)
               +lisp-symbol+)))
       (process-args args)
       (if (> *speed* *debug*)
