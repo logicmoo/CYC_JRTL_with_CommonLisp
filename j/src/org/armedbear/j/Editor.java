@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.76 2003-06-28 01:48:25 piso Exp $
+ * $Id: Editor.java,v 1.77 2003-06-28 15:58:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,6 +115,18 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public static final Preferences preferences()
     {
         return prefs;
+    }
+
+    private static boolean isRecordingMacro;
+
+    public static synchronized boolean isRecordingMacro()
+    {
+        return isRecordingMacro;
+    }
+
+    public static synchronized void setRecordingMacro(boolean b)
+    {
+        isRecordingMacro = b;
     }
 
     static String lookAndFeel;
@@ -2366,10 +2378,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         if (mapping != null) {
             String command = mapping.getCommand();
             if (command != null) {
-                if (isRecordingMacro) {
-                    Debug.assertTrue(macro != null);
+                if (isRecordingMacro()) {
                     if (!command.equals("recordMacro") && !command.equals("playbackMacro"))
-                        macro.record(command);
+                        Macro.record(this, command);
                 }
                 if (command.length() > 0 && command.charAt(0) == '(') {
                     // Lisp form.
@@ -2426,49 +2437,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         values[0] = mapping;
         values[1] = mode;
         return values;
-    }
-
-    private Macro macro;
-
-    public final Macro getMacro()
-    {
-        return macro;
-    }
-
-    private boolean isRecordingMacro = false;
-
-    public final boolean isRecordingMacro()
-    {
-        return isRecordingMacro;
-    }
-
-    public void recordMacro()
-    {
-        if (isRecordingMacro)
-            isRecordingMacro = false;
-        else {
-            if (macro != null && !macro.isEmpty())
-                if (!confirm("Record Macro",
-                    "Overwrite existing keyboard macro?"))
-                    return;
-            macro = new Macro();
-            isRecordingMacro = true;
-        }
-    }
-
-    public void playbackMacro()
-    {
-        if (isRecordingMacro) {
-            MessageDialog.showMessageDialog(this,
-                "Command ignored (playbackMacro is not allowed while recording a macro)",
-                "Record Macro");
-            return;
-        }
-        if (macro == null || macro.isEmpty()){
-            status("No keyboard macro defined");
-            return;
-        }
-        macro.playback();
     }
 
     public void pageDown()

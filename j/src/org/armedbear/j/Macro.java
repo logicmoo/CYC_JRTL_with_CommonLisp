@@ -1,8 +1,8 @@
 /*
  * Macro.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Macro.java,v 1.3 2002-10-12 00:26:54 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Macro.java,v 1.4 2003-06-28 16:00:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,28 +26,81 @@ import javax.swing.undo.CompoundEdit;
 
 public final class Macro implements Constants
 {
-    private ArrayList list = new ArrayList();
+    private static Macro macro;
 
-    public Macro()
+    public static synchronized void recordMacro()
     {
+        if (Editor.isRecordingMacro())
+            Editor.setRecordingMacro(false);
+        else {
+            final Editor editor = Editor.currentEditor();
+            if (macro != null && !macro.isEmpty()) {
+                if (!editor.confirm("Record Macro",
+                                    "Overwrite existing keyboard macro?"))
+                    return;
+            }
+            macro = new Macro(editor);
+            Editor.setRecordingMacro(true);
+        }
     }
 
-    public synchronized boolean isEmpty()
+    public static synchronized void playbackMacro()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (Editor.isRecordingMacro()) {
+            MessageDialog.showMessageDialog(editor,
+                                            "Command ignored (playbackMacro is not allowed while recording a macro)",
+                                            "Record Macro");
+            return;
+        }
+        if (macro == null || macro.isEmpty()){
+            editor.status("No keyboard macro defined");
+            return;
+        }
+        macro.playback();
+    }
+
+    private final Editor editor;
+    private ArrayList list = new ArrayList();
+
+    private Macro(Editor editor)
+    {
+        this.editor = editor;
+    }
+
+    public Editor getEditor()
+    {
+        return editor;
+    }
+
+    private synchronized boolean isEmpty()
     {
         return list.isEmpty();
     }
 
-    public synchronized void record(String command)
+    public static synchronized void record(Editor editor, String command)
+    {
+        if (macro != null && macro.getEditor() == editor)
+            macro.record(command);
+    }
+
+    public static synchronized void record(Editor editor, char c)
+    {
+        if (macro != null && macro.getEditor() == editor)
+            macro.record(c);
+    }
+
+    private synchronized void record(String command)
     {
         list.add(command);
     }
 
-    public synchronized void record(char c)
+    private synchronized void record(char c)
     {
         list.add(new Character(c));
     }
 
-    public synchronized void playback()
+    private synchronized void playback()
     {
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();

@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.34 2003-06-28 01:50:24 piso Exp $
+ * $Id: CommandTable.java,v 1.35 2003-06-28 15:58:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,12 +146,10 @@ public class CommandTable
             addCommand("pageUp");
             addCommand("paste");
             addCommand("pasteColumn");
-            addCommand("playbackMacro");
             addCommand("popPosition");
             addCommand("prevBuffer");
             addCommand("pushPosition");
             addCommand("quit");
-            addCommand("recordMacro");
             addCommand("redo");
             addCommand("resetDisplay");
             addCommand("revertBuffer");
@@ -317,6 +315,7 @@ public class CommandTable
             addCommand("p4Submit", "P4", "submit");
             addCommand("pastePrimarySelection", "SystemSelection");
             addCommand("phpHelp", "PHPMode");
+            addCommand("playbackMacro", "Macro");
             addCommand("previousChange", "ChangeMarks");
             addCommand("previousComment", "CheckinBuffer");
             addCommand("previousError", "CompilationCommands");
@@ -327,6 +326,7 @@ public class CommandTable
             addCommand("properties", "PropertiesDialog");
             addCommand("recentFiles", "RecentFilesDialog");
             addCommand("recompile", "CompilationCommands");
+            addCommand("recordMacro", "Macro");
             addCommand("reloadKeyMaps", "KeyMap");
             addCommand("renumberRegion", "RegionCommands");
             addCommand("replace", "ReplaceDialog");

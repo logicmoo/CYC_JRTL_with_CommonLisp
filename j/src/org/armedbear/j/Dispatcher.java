@@ -2,7 +2,7 @@
  * Dispatcher.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Dispatcher.java,v 1.8 2003-06-28 01:50:01 piso Exp $
+ * $Id: Dispatcher.java,v 1.9 2003-06-28 15:59:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,12 +280,12 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
 
         if (!handled && !buffer.isBusy() && c != 0x1b && c != 0x08 && c != charToBeIgnored) {
             if (c == '\t') {
-                if (editor.isRecordingMacro())
-                    editor.getMacro().record("insertTab");
+                if (Editor.isRecordingMacro())
+                    Macro.record(editor, "insertTab");
                 editor.insertTab();
             } else if (!Character.isISOControl(c)) {
-                if (editor.isRecordingMacro())
-                    editor.getMacro().record(c);
+                if (Editor.isRecordingMacro())
+                    Macro.record(editor, c);
                 editor.insertNormalChar(c);
             }
             handled = true;
