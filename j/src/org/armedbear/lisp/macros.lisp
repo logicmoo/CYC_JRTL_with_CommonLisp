@@ -2,7 +2,9 @@
 
 (in-package "COMMON-LISP")
 
-(export '(prog1 prog2 push pop loop the declare declaim locally time))
+(export '(prog1 prog2 push pop loop
+          the declare declaim locally eval-when
+          time))
 
 (defmacro prog1 (first-form &rest forms)
   (let ((result (gensym)))
@@ -27,10 +29,20 @@
 
 (defmacro the (type form) form)
 
-(defmacro declare (&rest ignored) nil) ; FIXME
-(defmacro declaim (&rest ignored) nil) ; FIXME
+;; FIXME
+(defmacro declare (&rest ignored)
+  nil)
 
-(defmacro locally (&rest forms) ; FIXME Should be a special operator.
+;; FIXME
+(defmacro declaim (&rest ignored)
+  nil)
+
+;; FIXME Should be a special operator.
+(defmacro locally (&rest forms)
+  `(progn ,@forms))
+
+;; FIXME
+(defmacro eval-when (situation &rest forms)
   `(progn ,@forms))
 
 (defmacro time (form)
