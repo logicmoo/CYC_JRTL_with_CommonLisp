@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.20 2003-08-15 13:44:52 piso Exp $
+ * $Id: LispFloat.java,v 1.21 2003-08-15 16:40:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ public final class LispFloat extends LispObject
         return super.typep(typeSpecifier);
     }
 
-    public LispObject constantp()
+    public LispObject CONSTANTP()
     {
         return T;
     }

@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.11 2003-08-03 04:39:05 piso Exp $
+ * $Id: HashTable.java,v 1.12 2003-08-15 16:40:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public final class HashTable extends LispObject
         threshold = (int) (size * loadFactor);
     }
 
-    public LispObject constantp()
+    public LispObject CONSTANTP()
     {
         return T;
     }

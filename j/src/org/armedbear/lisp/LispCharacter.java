@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.18 2003-08-02 20:33:54 piso Exp $
+ * $Id: LispCharacter.java,v 1.19 2003-08-15 16:40:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public final class LispCharacter extends LispObject
         return NIL;
     }
 
-    public LispObject constantp()
+    public LispObject CONSTANTP()
     {
         return T;
     }
