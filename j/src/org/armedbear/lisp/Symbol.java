@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.134 2004-05-31 19:21:22 piso Exp $
+ * $Id: Symbol.java,v 1.135 2004-06-02 11:43:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -341,7 +341,7 @@ public class Symbol extends LispObject
             return val;
         if (value != null)
             return value;
-        return signal(new LispError(toString().concat(" has no dynamic value.")));
+        return signal(new LispError(writeToString().concat(" has no dynamic value.")));
     }
 
     public final LispObject symbolValue(LispThread thread) throws ConditionThrowable
@@ -351,7 +351,7 @@ public class Symbol extends LispObject
             return val;
         if (value != null)
             return value;
-        return signal(new LispError(toString().concat(" has no dynamic value.")));
+        return signal(new LispError(writeToString().concat(" has no dynamic value.")));
     }
 
     public final LispObject symbolValueNoThrow()
