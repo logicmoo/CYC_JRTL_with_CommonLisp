@@ -2,7 +2,7 @@
  * JdbCommands.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbCommands.java,v 1.3 2003-05-15 01:23:41 piso Exp $
+ * $Id: JdbCommands.java,v 1.4 2003-05-16 02:48:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,10 @@ public final class JdbCommands
     public static String findCommand(String cmd)
     {
         // Single-letter abbreviations for the most common commands.
+        if (cmd.equals("b"))
+            return "stop";
+        if (cmd.equals("c"))
+            return "resume";
         if (cmd.equals("n"))
             return "next";
         if (cmd.equals("s"))
@@ -37,6 +41,8 @@ public final class JdbCommands
             return "stop";
         if ("clear".startsWith(cmd))
             return "clear";
+        if ("continue".startsWith(cmd))
+            return "resume";
         if ("finish".startsWith(cmd))
             return "finish";
         if ("go".startsWith(cmd))
