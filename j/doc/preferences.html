@@ -1074,7 +1074,6 @@ If true, lines that start with '{' are indented, like this:
 <code><a name="indentLineFixWhitespace">indentLineFixWhitespace</a></code>
 <dl>
 <dd>
-
 If true, the indentation commands
 <a href="commands.html#indentLine">indentLine</a>,
 <a href="commands.html#indentRegion">indentRegion</a> and
@@ -1094,6 +1093,41 @@ line or lines in question does not already start in the correct column.
 <dd>
 <p>
 <b>Default value:</b> 4
+</dl>
+
+<code><a name="indentStrings">indentStrings</a></code>
+<dl>
+<dd>
+This property is used to control the indentation of multiline strings in Lisp
+mode.
+<p>
+By default, the second and subsequent lines of multiline strings are not
+indented at all and begin at the left margin, like this:
+<pre>
+        (defun foo ()
+          (format t "pretend that this is a
+        very long string"))
+</pre>
+There is one exception. If any line of the string ends with '~', the next line
+is indented to line up with the beginning of the string:
+<pre>
+        (defun foo ()
+          (format t "pretend that this is a ~
+                     very long string"))
+</pre>
+If <a href="#indentStrings">indentStrings</a> is true, the second and
+subsequent lines of multiline strings are always indented to line up with the
+beginning of the string:
+<pre>
+        (defun foo ()
+          (format nil "pretend that this is a
+                       very long string"))
+</pre>
+In general, this is probably not what you want, since it inserts an arbitrary
+amount of whitespace in the middle of the string, but if you can live with that
+you do end up with better-looking code.
+<p>
+<b>Default value:</b> false
 </dl>
 
 <code><a name="jdkDocPath">jdkDocPath</a></code>
