@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.211 2004-07-11 14:13:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.212 2004-07-11 16:55:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -660,8 +660,55 @@
         (setf max-stack (max max-stack (instruction-depth instruction)))))
     max-stack))
 
+(defun resolve-variables ()
+  (assert (listp *code*))
+  (let ((code (nreverse (coerce *code* 'vector))))
+    (setf *code* nil)
+    (dotimes (i (length code))
+      (let ((instruction (svref code i)))
+        (case (instruction-opcode instruction)
+          (206 ; var-ref
+           (let ((variable (car (instruction-args instruction))))
+             (assert (variable-p variable))
+             (cond ((variable-register variable)
+                    (emit 'aload (variable-register variable))
+                    (emit-store-value))
+                   ((variable-special-p variable)
+                    (compile-special-reference (variable-name variable)))
+                   (*child-p*
+                    (emit 'aload *context-register*)
+                    (emit 'bipush (variable-index variable))
+                    (emit 'aaload)
+                    (emit-store-value))
+                   (t
+                    (emit 'aload 1)
+                    (emit 'bipush (variable-index variable))
+                    (emit 'aaload)
+                    (emit-store-value)))))
+          (207 ; var-set
+           (let ((variable (car (instruction-args instruction))))
+             (assert (variable-p variable))
+             (cond ((variable-register variable)
+                    (emit 'astore (variable-register variable)))
+                   (*child-p*
+                    (emit 'aload *context-register*) ; Stack: value context
+                    (emit 'swap) ; context value
+                    (emit 'bipush (variable-index variable)) ; context value index
+                    (emit 'swap) ; context index value
+                    (emit 'aastore))
+                   (t
+                    (emit 'aload 1) ; Stack: value array
+                    (emit 'swap) ; array value
+                    (emit 'bipush (variable-index variable)) ; array value index
+                    (emit 'swap) ; array index value
+                    (emit 'aastore)))
+           ))
+          (t
+           (push instruction *code*)))))
+    (setf *code* (nreverse (coerce *code* 'vector)))))
+
 (defun finalize-code ()
-  (setf *code* (nreverse (coerce *code* 'vector))))
+  (resolve-variables))
 
 (defun print-code()
   (dotimes (i (length *code*))
@@ -785,8 +832,7 @@
 (defvar *max-stack*)
 
 (defun code-bytes (code)
-  (let (;;(code (resolve-opcodes code))
-        (length 0))
+  (let ((length 0))
     ;; Pass 1: calculate label offsets and overall length.
     (dotimes (i (length code))
       (let* ((instruction (aref code i))
@@ -2572,32 +2618,8 @@
              ;; FIXME This should be a warning!
              (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) name))
            (compile-special-reference name))
-          ((variable-register variable)
-           (emit 'aload (variable-register variable))
-           (emit-store-value))
-          ((variable-special-p variable)
-           (compile-special-reference name))
           (t
-            (ecase (variable-kind variable)
-              (LOCAL
-               (cond (*child-p*
-                      (emit 'aload *context-register*)
-                      (emit 'bipush (variable-index variable))
-                      (emit 'aaload))
-                     (*use-locals-vector*
-                      (emit 'aload 1)
-                      (emit 'bipush (variable-index variable))
-                      (emit 'aaload))))
-              (ARG
-               (cond (*child-p*
-                      (emit 'aload *context-register*)
-                      (emit 'bipush (variable-index variable))
-                      (emit 'aaload))
-                     (t
-                      (emit 'aload 1)
-                      (emit 'bipush (variable-index variable))
-                      (emit 'aaload)))))
-            (emit-store-value)))))
+           (emit 'var-ref variable)))))
 
 (defun compile-setq (form for-effect)
 ;;   (format t "compile-setq form = ~S~%" form)
@@ -2616,7 +2638,7 @@
         (unless for-effect
           (emit 'dup)
           (emit-store-value))
-        (emit 'astore (variable-register variable))
+        (emit 'var-set variable)
         (return-from compile-setq))
       (ecase (variable-kind variable)
         (LOCAL
@@ -2626,28 +2648,11 @@
          (maybe-emit-clear-values (cadr rest))
          (unless for-effect
            (emit 'dup)) ; Stack: value value
-         (cond (*child-p*
-                (emit 'aload *context-register*) ; Stack: value context
-                (emit 'swap) ; context value
-                (emit 'bipush (variable-index variable)) ; context value index
-                (emit 'swap) ; context index value
-                (emit 'aastore)
-                )
-               (*use-locals-vector*
-                (emit 'aload 1) ; Stack: value array
-                (emit 'swap) ; array value
-                (emit 'bipush (variable-index variable)) ; array value index
-                (emit 'swap) ; array index value
-                (emit 'aastore))
-               (t
-                (format t "line 2673~%")
-                (assert nil) ; FIXME!
-                (emit 'astore (variable-register variable))))
+         (emit 'var-set variable)
          (unless for-effect
            (emit-store-value))
          )
         (ARG
-;;          (format t "ARG case (cadr rest) = ~S~%" (cadr rest))
          (compile-form (cadr rest))
          (unless (remove-store-value)
            (emit-push-value))
@@ -2655,61 +2660,37 @@
          (unless for-effect
            (emit 'dup)) ; Stack: value value
          (cond (*child-p*
-                (format t "compile-setq *child-p* case~%")
-                (emit 'aload *context-register*) ; Stack: value context
-                (emit 'swap) ; context value
-                (emit 'bipush (variable-index variable)) ; context value index
-                (emit 'swap) ; context index value
-                (emit 'aastore)
+                (emit 'var-set variable)
                 (unless for-effect
-                  (emit-store-value))
-                )
+                  (emit-store-value)))
                (*using-arg-array*
-;;                 (format t "compile-setq *using-arg-array* case~%")
-                (emit 'aload 1)
-                (emit 'swap)
-                (emit 'bipush (variable-index variable))
-                (emit 'swap)
-                (emit 'aastore)
+                (emit 'var-set variable)
                 (unless for-effect
-                  (emit-store-value))
-                )
-               (t
-                (format t "line 2725~%")
-                (assert nil) ; FIXME!
-                (compile-form (cadr rest))
-                (unless (remove-store-value)
-                  (emit-push-value))
-                (maybe-emit-clear-values (cadr rest))
-                (unless for-effect
-                  (emit 'dup)
-                  (emit-store-value))
-                (emit 'astore (variable-register variable))))
-         )
-        )
-      (return-from compile-setq)
-      )
+                  (emit-store-value))))))
+      (return-from compile-setq))
+
     ;; still not found
     ;; must be a global variable
     ;; Why do we call REWRITE-SETQ in this case only?
     (let ((new-form (rewrite-setq form)))
       (when (neq new-form form)
         (return-from compile-setq (compile-form new-form))))
-    (let ((g (declare-symbol name)))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-symbol+)
-      (compile-form (cadr rest))
-      (unless (remove-store-value)
-        (emit-push-value))
-      (maybe-emit-clear-values (cadr rest))
-      (emit-push-current-thread)
-      (emit-invokestatic +lisp-class+
-                         "setSpecialVariable"
-                         "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
-                         -1)
-      (emit-store-value))))
+
+    (emit 'getstatic
+          *this-class*
+          (declare-symbol name)
+          +lisp-symbol+)
+    (compile-form (cadr rest))
+    (unless (remove-store-value)
+      (emit-push-value))
+    (maybe-emit-clear-values (cadr rest))
+
+    (emit-push-current-thread)
+    (emit-invokestatic +lisp-class+
+                       "setSpecialVariable"
+                       "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
+                       -1)
+    (emit-store-value)))
 
 (defun compile-catch (form &optional for-effect)
   (when (= (length form) 2) ; (catch 'foo)
