@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.114 2003-08-07 01:36:08 piso Exp $
+ * $Id: Lisp.java,v 1.115 2003-08-11 14:34:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1099,6 +1099,9 @@ public abstract class Lisp
         exportSpecial("//", PACKAGE_CL, NIL);
     public static final Symbol SLASH_SLASH_SLASH =
         exportSpecial("///", PACKAGE_CL, NIL);
+
+    public static final Symbol PI =
+        exportConstant("PI", PACKAGE_CL, new LispFloat((float)3.141592653589793));
 
     static {
         loadClass("org.armedbear.lisp.Primitives");

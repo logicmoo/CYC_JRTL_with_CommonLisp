@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.12 2003-06-23 11:11:16 piso Exp $
+ * $Id: LispFloat.java,v 1.13 2003-08-11 14:33:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -296,7 +296,4 @@ public final class LispFloat extends LispObject
             return coerceToFloat(args[0]);
         }
     };
-
-    public static final Symbol PI =
-        exportConstant("PI", PACKAGE_CL, new LispFloat((float)3.141592653589793));
 }
