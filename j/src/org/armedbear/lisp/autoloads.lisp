@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.109 2004-02-11 00:23:52 piso Exp $
+;;; $Id: autoloads.lisp,v 1.110 2004-02-15 18:47:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -146,6 +146,7 @@
 (autoload-macro 'with-open-file)
 (autoload 'translate-logical-pathname)
 (autoload 'parse-namestring)
+(autoload 'make-string-output-stream)
 
 ;; Java interface.
 (in-package "JAVA")
