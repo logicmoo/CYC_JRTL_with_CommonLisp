@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.18 2003-09-10 01:23:30 piso Exp $
+;;; $Id: autoloads.lisp,v 1.19 2003-09-10 18:02:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -75,3 +75,4 @@
 (autoload '(signum floor ceiling round rem mod ftruncate ffloor fceiling fround
             rational rationalize gcd isqrt float-sign phase)
           "numbers.lisp")
+(autoload 'boole)
