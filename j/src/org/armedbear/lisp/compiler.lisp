@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.32 2003-07-27 19:13:59 piso Exp $
+;;; $Id: compiler.lisp,v 1.33 2003-08-24 19:28:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -224,7 +224,7 @@
       (sys::%set-arglist result (sys::arglist definition))
 ;;       (setf (fdefinition name) result))
       (if (macro-function name)
-          (setf (fdefinition name) (make-macro result))
+          (setf (fdefinition name) (sys::make-macro result))
           (setf (fdefinition name) result)))
     (values (or name result) nil nil)))
 
@@ -248,8 +248,8 @@
                                :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(if (special-operator-p ',name)
-         (%put ',name 'macroexpand-macro (make-macro (compile nil ,expander)))
-         (fset ',name (make-macro (compile nil ,expander))))))
+         (%put ',name 'macroexpand-macro (sys::make-macro (compile nil ,expander)))
+         (fset ',name (sys::make-macro (compile nil ,expander))))))
 
 ;; Make an exception just this one time...
 (fset 'defmacro (get 'defmacro 'macroexpand-macro))

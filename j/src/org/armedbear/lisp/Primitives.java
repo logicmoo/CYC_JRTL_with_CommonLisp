@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.348 2003-08-24 19:16:42 piso Exp $
+ * $Id: Primitives.java,v 1.349 2003-08-24 19:26:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1406,7 +1406,8 @@ public final class Primitives extends Module
     };
 
     // ### make-macro
-    private static final Primitive1 MAKE_MACRO = new Primitive1("make-macro") {
+    private static final Primitive1 MAKE_MACRO =
+        new Primitive1("make-macro", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws LispError
         {
             return new MacroObject(arg);
