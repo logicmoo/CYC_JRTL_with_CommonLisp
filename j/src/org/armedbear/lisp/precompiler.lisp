@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.70 2004-06-24 14:53:18 piso Exp $
+;;; $Id: precompiler.lisp,v 1.71 2004-07-12 17:11:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -139,6 +139,8 @@
 (in-package "PRECOMPILER")
 
 (defvar *in-jvm-compile* nil)
+
+(defvar *obstacles* nil)
 
 ;;; From OpenMCL.
 (defun compiler-macroexpand-1 (form &optional env)
@@ -561,6 +563,7 @@
                       (list* 'FLET new-locals body)
                       (list* 'PROGN body))))
             (return-from precompile-flet (precompile1 new-form))))))
+    (pushnew 'FLET *obstacles*)
     (list* (car form)
            (precompile-local-functions locals)
            (mapcar #'precompile1 body))))
@@ -687,8 +690,10 @@
       (setf form result))))
 
 (defun precompile-form (form in-jvm-compile)
-  (let ((*in-jvm-compile* in-jvm-compile))
-    (precompile1 form)))
+  (let ((*in-jvm-compile* in-jvm-compile)
+        (*obstacles* ())
+        (*local-functions-and-macros* ()))
+    (values (precompile1 form) *obstacles*)))
 
 (defun install-handler (fun &optional handler)
   (let ((handler (or handler
