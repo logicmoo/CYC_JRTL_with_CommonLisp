@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.15 2003-08-12 02:06:34 piso Exp $
+ * $Id: LispFloat.java,v 1.16 2003-08-12 13:11:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,6 +181,8 @@ public final class LispFloat extends LispObject
             return value == ((Bignum)obj).getValue().floatValue();
         if (obj instanceof Ratio)
             return value == ((Ratio)obj).floatValue();
+        if (obj instanceof Complex)
+            return obj.isEqualTo(this);
         throw new TypeError(obj, "number");
     }
 
