@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AbstractArray.java,v 1.10 2003-09-20 17:01:58 piso Exp $
+ * $Id: AbstractArray.java,v 1.11 2003-10-09 15:20:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,4 +72,33 @@ public abstract class AbstractArray extends LispObject
     public abstract LispObject getRowMajor(int index) throws ConditionThrowable;
 
     public abstract void setRowMajor(int index, LispObject newValue) throws ConditionThrowable;
+
+    // Helper for toString().
+    protected void appendContents(int[] dimensions, int index, StringBuffer sb)
+    {
+        try {
+            if (dimensions.length == 0) {
+                sb.append(getRowMajor(index));
+            } else {
+                sb.append('(');
+                int[] dims = new int[dimensions.length - 1];
+                for (int i = 1; i < dimensions.length; i++)
+                    dims[i-1] = dimensions[i];
+                int count = 1;
+                for (int i = 0; i < dims.length; i++)
+                    count *= dims[i];
+                int length = dimensions[0];
+                for (int i = 0; i < length; i++) {
+                    if (i != 0)
+                        sb.append(' ');
+                    appendContents(dims, index, sb);
+                    index += count;
+                }
+                sb.append(')');
+            }
+        }
+        catch (ConditionThrowable t) {
+            Debug.trace(t);
+        }
+    }
 }
