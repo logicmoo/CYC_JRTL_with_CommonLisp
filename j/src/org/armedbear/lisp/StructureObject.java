@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.17 2003-12-13 00:02:47 piso Exp $
+ * $Id: StructureObject.java,v 1.18 2003-12-18 18:03:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ public final class StructureObject extends LispObject
                 return ((StructureObject)arg).slots[0];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError());
+                return signal(new TypeError(arg, Symbol.STRUCTURE_OBJECT));
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
@@ -125,7 +125,7 @@ public final class StructureObject extends LispObject
                 return ((StructureObject)arg).slots[1];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError());
+                return signal(new TypeError(arg, Symbol.STRUCTURE_OBJECT));
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
@@ -142,7 +142,7 @@ public final class StructureObject extends LispObject
                 return ((StructureObject)arg).slots[2];
             }
             catch (ClassCastException e) {
-                return signal(new TypeError());
+                return signal(new TypeError(arg, Symbol.STRUCTURE_OBJECT));
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
@@ -183,7 +183,7 @@ public final class StructureObject extends LispObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError());
+                return signal(new TypeError(first, Symbol.STRUCTURE_OBJECT));
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
@@ -202,7 +202,7 @@ public final class StructureObject extends LispObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError());
+                return signal(new TypeError(first, Symbol.STRUCTURE_OBJECT));
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
@@ -221,7 +221,7 @@ public final class StructureObject extends LispObject
                 return second;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError());
+                return signal(new TypeError(first, Symbol.STRUCTURE_OBJECT));
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
