@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.19 2004-09-13 13:46:51 piso Exp $
+;;; $Id: slime.lisp,v 1.20 2004-09-13 16:05:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,6 +47,12 @@
 
 (defvar *stream* nil)
 
+(defvar *continuation-counter* 0)
+
+(defvar *continuations* nil)
+
+(defvar *continuations-lock* (make-mutex))
+
 (defvar *repl-buffer-name* nil)
 
 (defun slime-local-p ()
@@ -72,13 +78,9 @@
   (when *stream*
     (ignore-errors
      (close *stream*))
-    (setf *stream* nil)))
-
-(defvar *continuation-counter* 0)
-
-(defvar *continuations* '())
-
-(defvar *continuations-lock* (make-mutex))
+    (setf *stream* nil)
+    (with-mutex (*continuations-lock*)
+      (setf *continuations* nil))))
 
 (defun slime-busy-p ()
   (not (null *continuations*)))
@@ -104,7 +106,10 @@
 
 (defun dispatch-loop ()
   (loop
-    (let ((message (swank-protocol:decode-message *stream*)))
+    (let (message)
+      (handler-case
+          (setf message (swank-protocol:decode-message *stream*))
+        (stream-error () (disconnect) (status "Slime not connected")))
       (sys::%format t "message = ~S~%" message)
       (when (eq (first message) :return)
         (dispatch-return message)))
@@ -129,17 +134,20 @@
         (stream-error () (disconnect)))))
 
 (defun slime-eval-async (form continuation)
-  (if (slime-local-p)
-      nil ;; FIXME
-      (handler-case
-          (with-mutex (*continuations-lock*)
-            (let ((continuations *continuations*)
-                  (id (incf *continuation-counter*)))
-              (push (cons id 'display-eval-result) *continuations*)
-              (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
-              (unless continuations
-                (make-thread #'(lambda () (dispatch-loop))))))
-        (stream-error () (disconnect)))))
+  (cond ((slime-local-p)
+         nil) ;; FIXME
+        ((not (slime-connected-p))
+         (status "Slime not connected"))
+        (t
+         (handler-case
+             (with-mutex (*continuations-lock*)
+               (let ((continuations *continuations*)
+                     (id (incf *continuation-counter*)))
+                 (push (cons id 'display-eval-result) *continuations*)
+                 (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
+                 (unless continuations
+                   (make-thread #'(lambda () (dispatch-loop))))))
+           (stream-error () (disconnect))))))
 
 (defun read-port-and-connect (retries)
   (status "Slime polling for connection...")
