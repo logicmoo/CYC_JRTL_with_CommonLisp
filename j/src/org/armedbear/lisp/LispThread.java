@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.32 2004-04-21 13:49:15 piso Exp $
+ * $Id: LispThread.java,v 1.33 2004-04-30 17:27:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -223,7 +223,14 @@ public final class LispThread extends LispObject
         public StackFrame(LispObject functional, LispObject[] argv)
         {
             this.functional = functional;
-            this.argv = argv;
+            this.argv = new LispObject[argv.length];
+            for (int i = 0; i < argv.length; i++) {
+                if (argv[i] == null) {
+                    Debug.trace("argv[" + i + "] is null");
+                    Debug.assertTrue(false);
+                }
+                this.argv[i] = argv[i];
+            }
         }
 
         public LispObject getFunctional()
@@ -325,8 +332,10 @@ public final class LispThread extends LispObject
                     if (frame != null) {
                         LispObject obj = NIL;
                         LispObject[] argv = frame.getArgumentVector();
-                        for (int j = argv.length; j-- > 0;)
-                            obj = new Cons(argv[j], obj);
+                        for (int j = argv.length; j-- > 0;) {
+                            if (argv[j] != null)
+                                obj = new Cons(argv[j], obj);
+                        }
                         LispObject functional = frame.getFunctional();
                         if (functional instanceof Functional &&
                             ((Functional)functional).getLambdaName() != null)
