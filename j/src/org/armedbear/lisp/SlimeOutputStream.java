@@ -1,8 +1,8 @@
 /*
  * SlimeOutputStream.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: SlimeOutputStream.java,v 1.2 2004-09-26 09:02:09 asimon Exp $
+ * Copyright (C) 2004 Peter Graves
+ * $Id: SlimeOutputStream.java,v 1.3 2004-09-26 18:42:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public final class SlimeOutputStream extends Stream
         isCharacterStream = true;
         isBinaryStream = false;
         setWriter(stringWriter = new StringWriter());
-	this.f = f;
+        this.f = f;
     }
 
     public LispObject typeOf()
@@ -104,7 +104,7 @@ public final class SlimeOutputStream extends Stream
     }
 
     public void _finishOutput() throws ConditionThrowable
-    { 
+    {
         try {
             funcall1(f, new SimpleString(stringWriter.toString()), LispThread.currentThread());
         }
