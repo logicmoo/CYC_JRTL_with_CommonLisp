@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.5 2002-12-02 15:50:09 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.6 2002-12-03 16:07:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
 
     private Object returned;
     private String encoding;
-    
+
     private JPopupMenu popup;
 
     public OpenFileTextFieldHandler(Editor editor, HistoryTextField textField)
@@ -441,6 +441,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             if (file != null && (file.isLocal() || file instanceof SshFile)) {
                 if (file.canonicalPath().equals("/"))
                     currentDirectory = file;
+                else if (file.isDirectory())
+                    currentDirectory = file;
                 else
                     currentDirectory = file.getParentFile();
             }
@@ -569,7 +571,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         MessageDialog.showMessageDialog(editor, message, title);
         editor.updateLocation();
     }
-    
+
     private void showCompletionsPopup()
     {
         for (int i = 0; i < completions.size(); i++) {
@@ -588,7 +590,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         if (popup != null)
             popup.show(textField, 0, textField.getHeight());
     }
-    
+
     private void tabPopup()
     {
         int count = popup.getComponentCount();
@@ -612,9 +614,9 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         PopupMenuItem menuItem =
             (PopupMenuItem) popup.getComponent(i);
         String s = menuItem.getText();
-        textField.setText(s);        
+        textField.setText(s);
     }
-    
+
     protected void reset()
     {
         if (popup != null) {
@@ -623,7 +625,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         }
         super.reset();
     }
-    
+
     private void updateTextField()
     {
         MenuElement[] path =
@@ -636,7 +638,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             }
         }
     }
-    
+
     private ActionListener popupActionListener = new ActionListener() {
         public void actionPerformed(ActionEvent e)
         {
@@ -644,14 +646,14 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             enter();
         }
     };
-    
+
     private ChangeListener popupChangeListener = new ChangeListener() {
         public void stateChanged(ChangeEvent e)
         {
             updateTextField();
         }
     };
-    
+
     private class PopupMenuItem extends JMenuItem
     {
         public void processKeyEvent(KeyEvent e, MenuElement[] path,
