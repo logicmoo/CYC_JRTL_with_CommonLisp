@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: subtypep.lisp,v 1.42 2004-01-18 20:22:33 piso Exp $
+;;; $Id: subtypep.lisp,v 1.43 2004-02-02 20:53:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -214,7 +214,9 @@
                          (values t t)
                          (values nil t))))
       (when (or classp-1 classp-2)
-        (return-from subtypep (values nil t)))))
+        (let ((t1 (if classp-1 (class-name type1) type1))
+              (t2 (if classp-2 (class-name type2) type2)))
+          (return-from subtypep (values (simple-subtypep t1 t2) t))))))
   (setf type1 (normalize-type type1)
         type2 (normalize-type type2))
   (when (eq type1 type2)
