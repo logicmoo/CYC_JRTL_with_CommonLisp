@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.12 2002-12-19 02:34:28 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.13 2003-01-04 15:13:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,9 +165,9 @@ public class CommandInterpreter extends Buffer
             dotLine.setFlags(STATE_INPUT);
         editor.eol();
         editor.insertLineSeparator();
-        editor.getDotLine().setFlags(0);
         if (needsRenumbering)
             renumber();
+        editor.getDotLine().setFlags(0);
         editor.moveCaretToDotCol();
         editor.getDisplay().setReframe(-2);
         resetUndo();
@@ -381,7 +381,7 @@ public class CommandInterpreter extends Buffer
 
     protected String stdOutFilter(String s)
     {
-        return s;
+        return removeEcho(s);
     }
 
     protected void stdOutUpdate(final String s)
@@ -399,17 +399,7 @@ public class CommandInterpreter extends Buffer
 
     protected String stdErrFilter(String s)
     {
-        if (stripEcho && input != null && s.startsWith(input)) {
-            int begin = input.length();
-            if (s.length() > begin && s.charAt(begin) == '\r')
-                ++begin;
-            if (s.length() > begin && s.charAt(begin) == '\n')
-                ++begin;
-            s = s.substring(begin);
-            // Strip echo only once per command line.
-            stripEcho = false;
-        }
-        return s;
+        return removeEcho(s);
     }
 
     protected void stdErrUpdate(final String s)
@@ -423,6 +413,20 @@ public class CommandInterpreter extends Buffer
             }
         };
         SwingUtilities.invokeLater(r);
+    }
+
+    private String removeEcho(String s) {
+        if (stripEcho && input != null && s.startsWith(input)) {
+            int begin = input.length();
+            if (s.length() > begin && s.charAt(begin) == '\r')
+                ++begin;
+            if (s.length() > begin && s.charAt(begin) == '\n')
+                ++begin;
+            s = s.substring(begin);
+            // Strip echo only once per command line.
+            stripEcho = false;
+        }
+        return s;
     }
 
     protected class StdoutThread extends ReaderThread
