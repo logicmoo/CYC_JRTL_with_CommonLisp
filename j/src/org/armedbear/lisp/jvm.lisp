@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.162 2004-05-09 14:13:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.163 2004-05-10 02:06:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2110,7 +2110,9 @@
                   (emit-store-value))
                 (compile-constant obj)))
            ((listp obj)
-            (let ((g (declare-object-as-string obj)))
+            (let ((g (if *compile-file-truename*
+                         (declare-object-as-string obj)
+                         (declare-object obj))))
               (emit 'getstatic
                     *this-class*
                     g
