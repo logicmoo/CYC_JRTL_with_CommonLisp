@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.25 2003-02-15 19:44:57 piso Exp $
+ * $Id: Primitives.java,v 1.26 2003-02-16 02:49:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1258,7 +1258,9 @@ public final class Primitives extends Module
                 LispObject obj = first.car();
                 variables[i] = checkSymbol(obj.car());
                 initials[i] = obj.cadr();
-                updates[i] = obj.cdr().cdr().car();
+                // Is there a step form?
+                if (obj.cdr().cdr() != NIL)
+                    updates[i] = obj.cdr().cdr().car();
                 first = first.cdr();
             }
             // Initialize variables in parallel.
@@ -1288,13 +1290,17 @@ public final class Primitives extends Module
                     LispObject results[] = new LispObject[length];
                     for (int i = 0; i < length; i++) {
                         LispObject update = updates[i];
-                        LispObject result = eval(update, extended);
-                        results[i] = result;
+                        if (update != null) {
+                            LispObject result = eval(update, extended);
+                            results[i] = result;
+                        }
                     }
                     // Update variables.
                     for (int i = 0; i < length; i++) {
-                        Symbol symbol = variables[i];
-                        rebind(symbol, results[i], extended);
+                        if (results[i] != null) {
+                            Symbol symbol = variables[i];
+                            rebind(symbol, results[i], extended);
+                        }
                     }
                 }
                 LispObject result = progn(resultForms, extended);
