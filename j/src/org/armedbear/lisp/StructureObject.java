@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.44 2005-02-18 18:20:47 piso Exp $
+ * $Id: StructureObject.java,v 1.45 2005-02-20 14:13:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,12 +205,21 @@ public final class StructureObject extends LispObject
         }
     }
 
+    // ### structure-object-p object => generalized-boolean
+    private static final Primitive STRUCTURE_OBJECT_P =
+        new Primitive("structure-object-p", PACKAGE_SYS, true, "object")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return (arg instanceof StructureObject) ? T : NIL;
+        }
+    };
+
     // ### structure-length instance => length
     private static final Primitive STRUCTURE_LENGTH =
         new Primitive("structure-length", PACKAGE_SYS, true, "instance")
     {
-        public LispObject execute(LispObject arg)
-            throws ConditionThrowable
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
                 return new Fixnum(((StructureObject)arg).slots.length);
