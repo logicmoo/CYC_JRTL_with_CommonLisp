@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.25 2003-09-04 04:28:01 piso Exp $
+ * $Id: Ratio.java,v 1.26 2003-09-05 14:30:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -230,23 +230,30 @@ public final class Ratio extends LispObject
 
     public LispObject divideBy(LispObject obj) throws LispError
     {
-        if (obj instanceof Fixnum) {
-            BigInteger n = ((Fixnum)obj).getBigInteger();
-            return number(numerator, denominator.multiply(n));
+        try {
+            if (obj instanceof Fixnum) {
+                BigInteger n = ((Fixnum)obj).getBigInteger();
+                return number(numerator, denominator.multiply(n));
+            }
+            if (obj instanceof Bignum) {
+                BigInteger n = ((Bignum)obj).getValue();
+                return number(numerator, denominator.multiply(n));
+            }
+            if (obj instanceof Ratio) {
+                BigInteger n = ((Ratio)obj).numerator;
+                BigInteger d = ((Ratio)obj).denominator;
+                return number(numerator.multiply(d), denominator.multiply(n));
+            }
+            if (obj instanceof LispFloat) {
+                return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
+            }
+            throw new TypeError(obj, "number");
         }
-        if (obj instanceof Bignum) {
-            BigInteger n = ((Bignum)obj).getValue();
-            return number(numerator, denominator.multiply(n));
+        catch (ArithmeticException e) {
+            if (obj.zerop())
+                throw new DivisionByZero();
+            throw new ArithmeticError(e.getMessage());
         }
-        if (obj instanceof Ratio) {
-            BigInteger n = ((Ratio)obj).numerator;
-            BigInteger d = ((Ratio)obj).denominator;
-            return number(numerator.multiply(d), denominator.multiply(n));
-        }
-        if (obj instanceof LispFloat) {
-            return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
-        }
-        throw new TypeError(obj, "number");
     }
 
     public boolean isEqualTo(LispObject obj) throws LispError
