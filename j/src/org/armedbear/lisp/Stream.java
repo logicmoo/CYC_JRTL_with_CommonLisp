@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.80 2004-08-24 20:11:45 piso Exp $
+ * $Id: Stream.java,v 1.81 2004-08-31 15:32:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,17 @@ public class Stream extends LispObject
         this.elementType = elementType;
         if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
             isCharacterStream = true;
-            reader = new PushbackReader(new BufferedReader(new InputStreamReader(inputStream)),
+            InputStreamReader inputStreamReader;
+            try {
+                inputStreamReader =
+                    new InputStreamReader(inputStream, "ISO-8859-1");
+            }
+            catch (java.io.UnsupportedEncodingException e) {
+                Debug.trace(e);
+                inputStreamReader =
+                    new InputStreamReader(inputStream);
+            }
+            reader = new PushbackReader(new BufferedReader(inputStreamReader),
                                         2);
         } else {
             isBinaryStream = true;
@@ -96,7 +106,13 @@ public class Stream extends LispObject
         this.elementType = elementType;
         if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
             isCharacterStream = true;
-            writer = new OutputStreamWriter(outputStream);
+            try {
+                writer = new OutputStreamWriter(outputStream, "ISO-8859-1");
+            }
+            catch (java.io.UnsupportedEncodingException e) {
+                Debug.trace(e);
+                writer = new OutputStreamWriter(outputStream);
+            }
         } else {
             isBinaryStream = true;
             out = new BufferedOutputStream(outputStream);
