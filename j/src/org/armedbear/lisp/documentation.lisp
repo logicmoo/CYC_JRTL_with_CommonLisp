@@ -1,7 +1,7 @@
 ;;; documentation.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: documentation.lisp,v 1.7 2004-02-07 19:54:40 piso Exp $
+;;; $Id: documentation.lisp,v 1.8 2004-04-15 00:05:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,3 +36,5 @@
      (setf (get symbol '%variable-documentation) docstring))
     (STRUCTURE
      (setf (get symbol '%structure-documentation) docstring))))
+
+(defsetf documentation %set-documentation)
