@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.95 2003-06-24 19:50:10 piso Exp $
+ * $Id: Lisp.java,v 1.96 2003-06-24 20:19:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,6 +175,31 @@ public abstract class Lisp
         if (profiling)
             fun.incrementCallCount();
         result = fun.execute(first, second);
+        if (debug)
+            thread.popStackFrame();
+        return result;
+    }
+
+    public static final LispObject funcall3(LispObject fun, LispObject first,
+        LispObject second, LispObject third, LispThread thread) throws Condition
+    {
+        if (fun instanceof Autoload) {
+            Autoload autoload = (Autoload) fun;
+            autoload.load();
+            fun = autoload.getSymbol().getSymbolFunction();
+        }
+        if (debug) {
+            LispObject[] argv = new LispObject[3];
+            argv[0] = first;
+            argv[1] = second;
+            argv[2] = third;
+            thread.pushStackFrame(fun, argv);
+        }
+        thread.clearValues();
+        LispObject result;
+        if (profiling)
+            fun.incrementCallCount();
+        result = fun.execute(first, second, third);
         if (debug)
             thread.popStackFrame();
         return result;
