@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.13 2004-06-17 10:50:22 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: destructuring-bind.lisp,v 1.14 2005-03-14 17:46:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;;; From CMUCL, via GCL.
+;;;; Adapted from CMUCL/SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun parse-body (body &optional (doc-string-allowed t))
   (let ((decls ())
@@ -41,48 +41,56 @@
 	      (t
 	       (return (values tail (nreverse decls) doc))))))))
 
-(defvar *arg-tests* ())
-
-(defvar *system-lets* nil)
-
-(defvar *user-lets* ())
-
-(defvar *ignorable-vars*)
+;; We don't have DEFVAR yet...
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (%defvar '*arg-tests* ())
+  (%defvar '*system-lets* ())
+  (%defvar '*user-lets* ())
+  (%defvar '*ignorable-vars* ())
+  (%defvar '*env-var* nil))
 
 (defun do-arg-count-error (error-kind name arg lambda-list minimum maximum)
   (error 'program-error
          :format-control "Wrong number of arguments for ~S."
          :format-arguments (list name)))
 
-(defun parse-defmacro (lambda-list arg-list-name code name error-kind
-				   &key (anonymousp nil)
+;;; Return, as multiple values, a body, possibly a DECLARE form to put
+;;; where this code is inserted, the documentation for the parsed
+;;; body, and bounds on the number of arguments.
+(defun parse-defmacro (lambda-list arg-list-name body name context
+				   &key
+				   (anonymousp nil)
 				   (doc-string-allowed t)
 				   ((:environment env-arg-name))
-				   (error-fun 'error))
-  (multiple-value-bind (body declarations documentation)
-		       (parse-body code doc-string-allowed)
-    (let* ((*arg-tests* ())
-	   (*user-lets* ())
-	   (*system-lets* ())
-	   (*ignorable-vars* ()))
-      (multiple-value-bind
-	  (env-arg-used minimum maximum)
+				   (error-fun 'error)
+                                   (wrap-block t))
+  (multiple-value-bind (forms declarations documentation)
+      (parse-body body doc-string-allowed)
+    (let ((*arg-tests* ())
+	  (*user-lets* ())
+	  (*system-lets* ())
+	  (*ignorable-vars* ())
+          (*env-var* nil))
+      (multiple-value-bind (env-arg-used minimum maximum)
 	  (parse-defmacro-lambda-list lambda-list arg-list-name name
-				      error-kind error-fun (not anonymousp)
-				      nil env-arg-name)
-	(values
-	 `(let* ,(nreverse *system-lets*)
-	   ,@(when *ignorable-vars*
-	       `((declare (ignorable ,@*ignorable-vars*))))
-	    ,@*arg-tests*
-	    (let* ,(nreverse *user-lets*)
-	      ,@declarations
-	      ,@body))
-	 `(,@(when (and env-arg-name (not env-arg-used))
-	       `((declare (ignore ,env-arg-name)))))
-	 documentation
-	 minimum
-	 maximum)))))
+				      context error-fun (not anonymousp)
+				      nil)
+	(values `(let* (,@(when env-arg-used
+                            `((,*env-var* ,env-arg-name)))
+                        ,@(nreverse *system-lets*))
+		   ,@(when *ignorable-vars*
+		       `((declare (ignorable ,@*ignorable-vars*))))
+		   ,@*arg-tests*
+		   (let* ,(nreverse *user-lets*)
+		     ,@declarations
+                     ,@(if wrap-block
+                           `((block ,name ,@forms))
+                           forms)))
+		`(,@(when (and env-arg-name (not env-arg-used))
+                      `((declare (ignore ,env-arg-name)))))
+		documentation
+		minimum
+		maximum)))))
 
 (defun defmacro-error (problem name)
   (error 'type-error "~S is not of type ~S~%" problem name))
@@ -101,14 +109,11 @@
 	   (return (values :dotted-list key-list)))
 	  ((null (cdr remaining))
 	   (return (values :odd-length key-list)))
-	  #+nil ;; Not ANSI compliant to disallow duplicate keywords.
-	  ((memql (car remaining) already-processed)
-	   (return (values :duplicate (car remaining))))
 	  ((or (eq (car remaining) :allow-other-keys)
 	       (memql (car remaining) valid-keys))
 	   (push (car remaining) already-processed))
 	  (t
-	   (setf unknown-keyword (car remaining))))))
+	   (setq unknown-keyword (car remaining))))))
 
 (defun lookup-keyword (keyword key-list)
   (do ((remaining key-list (cddr remaining)))
@@ -122,10 +127,10 @@
     (when (eq keyword (car remaining))
       (return t))))
 
-
 (defun parse-defmacro-lambda-list
        (lambda-list arg-list-name name error-kind error-fun
-		    &optional top-level env-illegal env-arg-name)
+		    &optional top-level env-illegal ;;env-arg-name
+                    )
   (let ((path (if top-level `(cdr ,arg-list-name) arg-list-name))
 	(now-processing :required)
 	(maximum 0)
@@ -145,11 +150,11 @@
 	 (cond ((null rest-of-args) nil)
 	       ;; Varlist is dotted, treat as &rest arg and exit.
 	       (t (push-let-binding rest-of-args path nil)
-		  (setf restp t))))
+		  (setq restp t))))
       (let ((var (car rest-of-args)))
 	(cond ((eq var '&whole)
 	       (cond ((and (cdr rest-of-args) (symbolp (cadr rest-of-args)))
-		      (setf rest-of-args (cdr rest-of-args))
+		      (setq rest-of-args (cdr rest-of-args))
 		      (push-let-binding (car rest-of-args) arg-list-name nil))
 		     ((and (cdr rest-of-args) (consp (cadr rest-of-args)))
 		      (pop rest-of-args)
@@ -164,23 +169,23 @@
 		      (defmacro-error "&WHOLE" name))))
 	      ((eq var '&environment)
 	       (cond (env-illegal
-		      (error "&ENVIRONMENT not valid with ~S" error-kind))
+		      (error "&ENVIRONMENT is not valid with ~S." error-kind))
 		     ((not top-level)
-		      (error "&ENVIRONMENT only valid at top level of lambda list")))
+		      (error "&ENVIRONMENT is only valid at top level of lambda list.")))
 	       (cond ((and (cdr rest-of-args) (symbolp (cadr rest-of-args)))
-		      (setf rest-of-args (cdr rest-of-args))
-		      (push-let-binding (car rest-of-args) env-arg-name nil)
-		      (setf env-arg-used t))
+		      (setq rest-of-args (cdr rest-of-args))
+                      (setq *env-var* (car rest-of-args)
+                            env-arg-used t))
 		     (t
 		      (defmacro-error "&ENVIRONMENT" error-kind name))))
 	      ((or (eq var '&rest) (eq var '&body))
 	       (cond ((and (cdr rest-of-args) (symbolp (cadr rest-of-args)))
-		      (setf rest-of-args (cdr rest-of-args))
-		      (setf restp t)
+		      (setq rest-of-args (cdr rest-of-args))
+		      (setq restp t)
 		      (push-let-binding (car rest-of-args) path nil))
 		     ((and (cdr rest-of-args) (consp (cadr rest-of-args)))
 		      (pop rest-of-args)
-		      (setf restp t)
+		      (setq restp t)
 		      (let* ((destructuring-lambda-list (car rest-of-args))
 			     (sub (gensym "REST-SUBLIST")))
 			(push-sub-list-binding sub path destructuring-lambda-list
@@ -190,17 +195,17 @@
 		     (t
 		      (defmacro-error (symbol-name var) error-kind name))))
 	      ((eq var '&optional)
-	       (setf now-processing :optionals))
+	       (setq now-processing :optionals))
 	      ((eq var '&key)
-	       (setf now-processing :keywords)
-	       (setf rest-name (gensym "KEYWORDS-"))
+	       (setq now-processing :keywords)
+	       (setq rest-name (gensym "KEYWORDS-"))
 	       (push rest-name *ignorable-vars*)
-	       (setf restp t)
+	       (setq restp t)
 	       (push-let-binding rest-name path t))
 	      ((eq var '&allow-other-keys)
-	       (setf allow-other-keys-p t))
+	       (setq allow-other-keys-p t))
 	      ((eq var '&aux)
-	       (setf now-processing :auxs))
+	       (setq now-processing :auxs))
 	      ((listp var)
 	       (case now-processing
 		 (:required
@@ -209,7 +214,7 @@
 					   name error-kind error-fun)
 		    (parse-defmacro-lambda-list var sub-list-name name
 						error-kind error-fun))
-		  (setf path `(cdr ,path))
+		  (setq path `(cdr ,path))
 		  (incf minimum)
 		  (incf maximum))
 		 (:optionals
@@ -219,7 +224,7 @@
 		  (push-optional-binding (car var) (cadr var) (caddr var)
 					 `(not (null ,path)) `(car ,path)
 					 name error-kind error-fun)
-		  (setf path `(cdr ,path))
+		  (setq path `(cdr ,path))
 		  (incf maximum))
 		 (:keywords
 		  (let* ((keyword-given (consp (car var)))
@@ -244,11 +249,11 @@
 		  (incf minimum)
 		  (incf maximum)
 		  (push-let-binding var `(car ,path) nil)
-		  (setf path `(cdr ,path)))
+		  (setq path `(cdr ,path)))
 		 (:optionals
 		  (incf maximum)
 		  (push-let-binding var `(car ,path) nil `(not (null ,path)))
-		  (setf path `(cdr ,path)))
+		  (setq path `(cdr ,path)))
 		 (:keywords
 		  (let ((key (make-keyword var)))
 		    (push-let-binding var `(lookup-keyword ,key ,rest-name)
@@ -324,7 +329,7 @@
 (defun push-optional-binding (value-var init-form supplied-var condition path
 					name error-kind error-fun)
   (unless supplied-var
-    (setf supplied-var (gensym "SUPPLIEDP-")))
+    (setq supplied-var (gensym "SUPPLIEDP-")))
   (push-let-binding supplied-var condition t)
   (cond ((consp value-var)
 	 (let ((whole-thing (gensym "OPTIONAL-SUBLIST-")))
@@ -340,10 +345,34 @@
 
 (defmacro destructuring-bind (lambda-list arg-list &rest body)
   (let* ((arg-list-name (gensym "ARG-LIST-")))
-    (multiple-value-bind
-	(body local-decls)
+    (multiple-value-bind (body local-decls)
 	(parse-defmacro lambda-list arg-list-name body nil 'destructuring-bind
 			:anonymousp t :doc-string-allowed nil)
       `(let ((,arg-list-name ,arg-list))
 	 ,@local-decls
 	 ,body))))
+
+;; Redefine DEFMACRO to use PARSE-DEFMACRO.
+(defmacro defmacro (name lambda-list &rest body)
+  (let* ((form (gensym "WHOLE-"))
+         (env (gensym "ENVIRONMENT-"))
+         (body (parse-defmacro lambda-list form body name 'defmacro
+                               :environment env))
+         (expander `(lambda (,form ,env) (block ,name ,body))))
+    `(progn
+       (let ((macro (make-macro ',name ,expander)))
+         (if (special-operator-p ',name)
+             (%put ',name 'macroexpand-macro macro)
+             (fset ',name macro))
+         (%set-arglist macro ',lambda-list)
+         ',name))))
+
+;; Redefine SYS:MAKE-EXPANDER-FOR-MACROLET to use PARSE-DEFMACRO.
+(defun make-expander-for-macrolet (definition)
+  (let* ((name (car definition))
+         (lambda-list (cadr definition))
+         (form (gensym "WHOLE-"))
+         (env (gensym "ENVIRONMENT-"))
+         (body (parse-defmacro lambda-list form (cddr definition) name 'defmacro
+                               :environment env)))
+    `(lambda (,form ,env) (block ,name ,body))))
