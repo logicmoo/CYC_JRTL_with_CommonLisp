@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.139 2004-04-29 12:16:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.140 2004-04-29 23:06:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2359,6 +2359,9 @@
             (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
 (defun compile-plus (form for-effect)
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-plus (compile-form new-form))))
   (let* ((args (cdr form))
          (len (length args)))
     (case len
@@ -2378,6 +2381,9 @@
        (compile-function-call form for-effect)))))
 
 (defun compile-minus (form for-effect)
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-minus (compile-form new-form))))
   (let* ((args (cdr form))
          (len (length args)))
     (case len
