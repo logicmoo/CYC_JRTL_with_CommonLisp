@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.147 2004-02-02 13:00:59 piso Exp $
+;;; $Id: boot.lisp,v 1.148 2004-02-07 19:53:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,23 +64,19 @@
 	 `((unless (boundp ',var)
 	     (setq ,var ,val))))
      ,@(when docp
-         `((setf (documentation ',var 'variable) ',doc)))
+         `((sys::%set-documentation ',var 'variable ',doc)))
      ',var))
-
 
 (defvar *features*
   '(:armedbear))
 
-
 (defun make-package (package-name &key nicknames use)
   (sys::%make-package package-name nicknames use))
-
-
-;;; READ-CONDITIONAL (from OpenMCL)
 
 (defconstant *keyword-package*
   (find-package "KEYWORD"))
 
+;;; READ-CONDITIONAL (from OpenMCL)
 (defun read-conditional (stream subchar int)
   (cond (*read-suppress*
          (read stream t nil t)
