@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.96 2003-06-24 20:19:52 piso Exp $
+ * $Id: Lisp.java,v 1.97 2003-06-25 00:20:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,25 +295,26 @@ public abstract class Lisp
                                 evalList(obj.cdr(), env, thread), thread);
                         if (profiling)
                             fun.incrementCallCount();
-                        switch (obj.cdr().length()) {
-                            case 0:
-                                return fun.execute();
-                            case 1:
-                                return fun.execute(thread.value(eval(obj.cadr(), env, thread)));
-                            case 2: {
-                                LispObject args = obj.cdr();
-                                return fun.execute(eval(args.car(), env, thread),
-                                    thread.value(eval(args.cadr(), env, thread)));
-                            }
-                            case 3: {
-                                LispObject args = obj.cdr();
-                                return fun.execute(eval(args.car(), env, thread),
-                                    eval(args.cadr(), env, thread),
-                                    thread.value(eval(args.cdr().cdr().car(), env, thread)));
-                            }
-                            default:
-                                return fun.execute(evalList(obj.cdr(), env, thread));
-                        }
+                        LispObject args = obj.cdr();
+                        if (args == NIL)
+                            return fun.execute();
+                        LispObject arg1 = args.car();
+                        args = args.cdr();
+                        if (args == NIL)
+                            return fun.execute(thread.value(eval(arg1, env, thread)));
+                        LispObject arg2 = args.car();
+                        args = args.cdr();
+                        if (args == NIL)
+                            return fun.execute(eval(arg1, env, thread),
+                                thread.value(eval(arg2, env, thread)));
+                        LispObject arg3 = args.car();
+                        args = args.cdr();
+                        if (args == NIL)
+                            return fun.execute(eval(arg1, env, thread),
+                                eval(arg2, env, thread),
+                                thread.value(eval(arg3, env, thread)));
+                        // Otherwise...
+                        return fun.execute(evalList(obj.cdr(), env, thread));
                     }
                 }
             } else {
