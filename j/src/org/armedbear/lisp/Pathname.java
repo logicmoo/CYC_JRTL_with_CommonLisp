@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.15 2003-09-25 01:07:26 piso Exp $
+ * $Id: Pathname.java,v 1.16 2003-09-25 01:21:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,7 +214,7 @@ public final class Pathname extends LispObject
                     // Lisps), we want the namestring of a directory to end
                     // with a '/' on Unix.
                     // FIXME Do we need to do something similar on Windows?
-                    if (s.startsWith("/") {
+                    if (s.startsWith("/")) {
                         // Unix.
                         if (!s.endsWith("/"))
                             s = s.concat("/");
