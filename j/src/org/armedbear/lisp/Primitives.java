@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.55 2003-02-28 15:54:14 piso Exp $
+ * $Id: Primitives.java,v 1.56 2003-02-28 16:59:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1763,7 +1763,7 @@ public final class Primitives extends Module
         {
             int fillPointer = checkVector(arg).getFillPointer();
             if (fillPointer < 0)
-                throw new LispError("array does not have a fill pointer");
+                throw new TypeError("array does not have a fill pointer");
             return new Fixnum(fillPointer);
         }
     };
@@ -1777,7 +1777,7 @@ public final class Primitives extends Module
             AbstractVector v = checkVector(first);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                throw new LispError("array does not have a fill pointer");
+                throw new TypeError("array does not have a fill pointer");
             v.setFillPointer(second);
             return second;
         }
@@ -1793,7 +1793,7 @@ public final class Primitives extends Module
             AbstractVector v = checkVector(second);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                throw new LispError("array does not have a fill pointer");
+                throw new TypeError("array does not have a fill pointer");
             v.checkIndex(fillPointer);
             v.set(fillPointer, first);
             v.setFillPointer(fillPointer + 1);
@@ -1809,7 +1809,7 @@ public final class Primitives extends Module
             AbstractVector v = checkVector(arg);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                throw new LispError("array does not have a fill pointer");
+                throw new TypeError("array does not have a fill pointer");
             if (fillPointer == 0)
                 throw new LispError("nothing left to pop");
             int newFillPointer = v.checkIndex(fillPointer - 1);
