@@ -2,7 +2,7 @@
  * JdbFormatter.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: JdbFormatter.java,v 1.2 2003-05-11 17:39:22 piso Exp $
+ * $Id: JdbFormatter.java,v 1.3 2003-05-12 17:11:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,11 @@ import org.armedbear.j.Utilities;
 public final class JdbFormatter extends Formatter
 {
     // Formats.
-    private static final byte JDB_FORMAT_TEXT   = 0;
-    private static final byte JDB_FORMAT_PROMPT = 1;
-    private static final byte JDB_FORMAT_INPUT  = 2;
+    public static final byte JDB_FORMAT_TEXT   = 0;
+    public static final byte JDB_FORMAT_PROMPT = 1;
+    public static final byte JDB_FORMAT_INPUT  = 2;
+    public static final byte JDB_FORMAT_OUTPUT = 3;
+    public static final byte JDB_FORMAT_LOG    = 4;
 
     public JdbFormatter(Buffer buffer)
     {
@@ -48,13 +50,16 @@ public final class JdbFormatter extends Formatter
             addSegment("", JDB_FORMAT_TEXT);
             return segmentList;
         }
+        int flags = line.flags();
         String text = getDetabbedText(line);
-        if (text.startsWith("> ")) {
+        if (flags == JDB_FORMAT_OUTPUT) {
+            addSegment(text, JDB_FORMAT_OUTPUT);
+        } else if (text.startsWith("> ")) {
             addSegment(text, 0, 2, JDB_FORMAT_PROMPT);
             if (text.length() > 2)
                 addSegment(text, 2, JDB_FORMAT_INPUT);
         } else
-            addSegment(text, JDB_FORMAT_TEXT);
+            addSegment(text, JDB_FORMAT_LOG);
         return segmentList;
     }
 
@@ -65,6 +70,8 @@ public final class JdbFormatter extends Formatter
             formatTable.addEntryFromPrefs(JDB_FORMAT_TEXT, "text");
             formatTable.addEntryFromPrefs(JDB_FORMAT_PROMPT, "prompt");
             formatTable.addEntryFromPrefs(JDB_FORMAT_INPUT, "input");
+            formatTable.addEntryFromPrefs(JDB_FORMAT_OUTPUT, "output", "text");
+            formatTable.addEntryFromPrefs(JDB_FORMAT_LOG, "log", "comment");
         }
         return formatTable;
     }
