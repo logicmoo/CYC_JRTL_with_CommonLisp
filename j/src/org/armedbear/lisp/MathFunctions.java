@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.1 2004-02-12 10:27:11 piso Exp $
+ * $Id: MathFunctions.java,v 1.2 2004-02-12 12:11:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,19 +90,37 @@ public final class MathFunctions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            LispFloat n = LispFloat.coerceToFloat(arg);
-            return new LispFloat(Math.atan(n.getValue()));
+            return atan(arg);
         }
 
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            LispFloat n1 = LispFloat.coerceToFloat(first);
-            LispFloat n2 = LispFloat.coerceToFloat(second);
-            LispObject quotient = n1.divideBy(n2);
-            return new LispFloat(Math.atan(((LispFloat)quotient).getValue()));
+            return atan(first.divideBy(second));
         }
     };
+
+    private static LispObject atan(LispObject arg) throws ConditionThrowable
+    {
+        if (arg instanceof Complex) {
+            LispObject im = ((Complex)arg).getImaginaryPart();
+            if (im.zerop())
+                return Complex.getInstance(atan(((Complex)arg).getRealPart()),
+                                           im);
+            LispObject result = arg.multiplyBy(arg);
+            result = result.add(Fixnum.ONE);
+            result = Fixnum.ONE.divideBy(result);
+            result = sqrt(result);
+            LispObject n = Complex.getInstance(Fixnum.ZERO, Fixnum.ONE);
+            n = n.multiplyBy(arg);
+            n = n.add(Fixnum.ONE);
+            result = n.multiplyBy(result);
+            result = log(result);
+            result = result.multiplyBy(Complex.getInstance(Fixnum.ZERO, Fixnum.MINUS_ONE));
+            return result;
+        }
+        return new LispFloat(Math.atan(LispFloat.coerceToFloat(arg).getValue()));
+    }
 
     // ### exp
     private static final Primitive1 EXP = new Primitive1("exp", "number")
