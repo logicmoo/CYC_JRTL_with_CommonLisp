@@ -2,7 +2,7 @@
  * ash.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ash.java,v 1.1 2003-09-23 16:31:03 piso Exp $
+ * $Id: ash.java,v 1.2 2003-09-23 17:09:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,20 @@ public final class ash extends Primitive2
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
+        if (first instanceof Fixnum && second instanceof Fixnum) {
+            int count = ((Fixnum)second).getValue();
+            if (count == 0)
+                return first;
+            long n = ((Fixnum)first).getValue();
+            if (n == 0)
+                return first;
+            if (count < -32) {
+                // Right shift.
+                return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
+            }
+            if (count <= 32)
+                return number(count > 0 ? (n << count) : (n >> -count));
+        }
         BigInteger n;
         if (first instanceof Fixnum)
             n = BigInteger.valueOf(((Fixnum)first).getValue());
@@ -49,7 +63,7 @@ public final class ash extends Primitive2
             // BigInteger.shiftLeft() succumbs to a stack overflow if count
             // is Integer.MIN_VALUE, so...
             if (count == Integer.MIN_VALUE)
-                return n.signum() >= 0 ? Fixnum.ZERO : new Fixnum(-1);
+                return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
             return number(n.shiftLeft(count));
         }
         if (second instanceof Bignum) {
@@ -57,7 +71,7 @@ public final class ash extends Primitive2
             if (count.signum() > 0)
                 throw new ConditionThrowable(new LispError("can't represent result of left shift"));
             if (count.signum() < 0)
-                return n.signum() >= 0 ? Fixnum.ZERO : new Fixnum(-1);
+                return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
             Debug.bug(); // Shouldn't happen.
         }
         throw new ConditionThrowable(new TypeError(second, "integer"));
