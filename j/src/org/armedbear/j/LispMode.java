@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.4 2002-10-13 18:52:34 piso Exp $
+ * $Id: LispMode.java,v 1.5 2002-10-14 02:11:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,10 +126,14 @@ public final class LispMode extends AbstractMode implements Constants, Mode
         if (buffer.needsRenumbering())
             buffer.renumber();
         Position start = findStartOfDefun(pos);
+        if (pos.equals(start))
+            return 0;
         LispSyntaxIterator it = new LispSyntaxIterator(start);
-        int depth = 0;
-        while (it.getPosition().isBefore(pos)) {
+        int depth = 1;
+        while (true) {
             char c = it.nextChar();
+            if (!it.getPosition().isBefore(pos))
+                break;
             if (c == '(')
                 ++depth;
             else if (c == ')')
