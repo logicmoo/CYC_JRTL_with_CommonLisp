@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.114 2004-01-02 02:13:54 piso Exp $
+# $Id: Makefile.in,v 1.115 2004-01-02 19:03:33 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -53,6 +53,7 @@ CLASSFILES =	AbstractArray.class \
 		Environment.class \
 		Exports.class \
 		Extensions.class \
+		FileError.class \
 		FillPointerOutputStream.class \
 		Fixnum.class \
 		Function.class \
@@ -144,6 +145,7 @@ CLASSFILES =	AbstractArray.class \
 		describe.class \
 		dolist.class \
 		dotimes.class \
+		file_error_pathname.class \
 		gc.class \
 		get_properties.class \
 		input_stream_p.class \
