@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.41 2003-11-17 01:45:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.42 2003-11-17 01:56:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1744,7 +1744,8 @@
                   initform nil))
         (cond (initform
                (compile-form initform)
-               (emit-push-value))
+               (unless (remove-store-value)
+                 (emit-push-value)))
               (t
                (emit-push-nil)))
         (cond ((special-variable-p var)
