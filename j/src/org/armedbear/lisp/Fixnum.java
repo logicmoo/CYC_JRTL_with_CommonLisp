@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.16 2003-03-14 18:53:01 piso Exp $
+ * $Id: Fixnum.java,v 1.17 2003-03-14 20:08:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,6 @@ public final class Fixnum extends LispObject
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
-        if (typeSpecifier == Symbol.BIGNUM)
-            return T; // FIXME Fool UNION.26 cons-test-20.lsp
         if (typeSpecifier == Symbol.FIXNUM)
             return T;
         if (typeSpecifier == Symbol.INTEGER)
@@ -98,16 +96,20 @@ public final class Fixnum extends LispObject
         return value;
     }
 
+    public final BigInteger getBigInteger()
+    {
+        return BigInteger.valueOf(value);
+    }
+
     public LispObject add(LispObject obj) throws LispError
     {
         try {
-            long result = (long) value + ((Fixnum)obj).value;
-            return number(result);
+            return number((long) value + ((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
-            // obj is not a Fixnum.
+            // obj is not a fixnum.
             if (obj instanceof Bignum)
-                return obj.add(this);
+                return number(getBigInteger().add(Bignum.getValue(obj)));
             if (obj instanceof LispFloat)
                 return new LispFloat(value + LispFloat.getValue(obj));
             throw new TypeError(obj, "number");
@@ -120,7 +122,12 @@ public final class Fixnum extends LispObject
             return number((long) value - ((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return number(getBigInteger().subtract(Bignum.getValue(obj)));
+            if (obj instanceof LispFloat)
+                return new LispFloat(value - LispFloat.getValue(obj));
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -130,7 +137,12 @@ public final class Fixnum extends LispObject
             return number((long) value * ((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return number(getBigInteger().multiply(Bignum.getValue(obj)));
+            if (obj instanceof LispFloat)
+                return new LispFloat(value * LispFloat.getValue(obj));
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -140,12 +152,12 @@ public final class Fixnum extends LispObject
             return number((long) value / ((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
-            if (obj instanceof Bignum) {
-                return new Bignum(value).divideBy(obj);
-            }
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return number(getBigInteger().divide(Bignum.getValue(obj)));
             if (obj instanceof LispFloat)
                 return new LispFloat(value / LispFloat.getValue(obj));
-            throw new TypeError(obj, "fixnum");
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -155,7 +167,12 @@ public final class Fixnum extends LispObject
             return value == ((Fixnum)obj).value ? T : NIL;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return getBigInteger().equals(Bignum.getValue(obj)) ? T : NIL;
+            if (obj instanceof LispFloat)
+                return (float) value == LispFloat.getValue(obj) ? T : NIL;
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -165,7 +182,12 @@ public final class Fixnum extends LispObject
             return value != ((Fixnum)obj).value ? T : NIL;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return getBigInteger().equals(Bignum.getValue(obj)) ? NIL : T;
+            if (obj instanceof LispFloat)
+                return (float) value == LispFloat.getValue(obj) ? NIL : T;
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -175,7 +197,12 @@ public final class Fixnum extends LispObject
             return value < ((Fixnum)obj).value ? T : NIL;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return getBigInteger().compareTo(Bignum.getValue(obj)) < 0 ? T : NIL;
+            if (obj instanceof LispFloat)
+                return (float) value < LispFloat.getValue(obj) ? T : NIL;
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -185,7 +212,12 @@ public final class Fixnum extends LispObject
             return value > ((Fixnum)obj).value ? T : NIL;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return getBigInteger().compareTo(Bignum.getValue(obj)) > 0 ? T : NIL;
+            if (obj instanceof LispFloat)
+                return (float) value > LispFloat.getValue(obj) ? T : NIL;
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -195,7 +227,12 @@ public final class Fixnum extends LispObject
             return value <= ((Fixnum)obj).value ? T : NIL;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return getBigInteger().compareTo(Bignum.getValue(obj)) <= 0 ? T : NIL;
+            if (obj instanceof LispFloat)
+                return (float) value <= LispFloat.getValue(obj) ? T : NIL;
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -205,7 +242,12 @@ public final class Fixnum extends LispObject
             return value >= ((Fixnum)obj).value ? T : NIL;
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a fixnum.
+            if (obj instanceof Bignum)
+                return getBigInteger().compareTo(Bignum.getValue(obj)) >= 0 ? T : NIL;
+            if (obj instanceof LispFloat)
+                return (float) value >= LispFloat.getValue(obj) ? T : NIL;
+            throw new TypeError(obj, "number");
         }
     }
 
@@ -236,11 +278,7 @@ public final class Fixnum extends LispObject
                     throw new TypeError(first, "integer");
                 if (count == 0)
                     return first; // No change.
-                n = n.shiftLeft(count);
-                if (n.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) >= 0 &&
-                    n.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) <= 0)
-                    return new Fixnum(n.intValue());
-                return new Bignum(n);
+                return number(n.shiftLeft(count));
             }
             throw new LispError("ASH: unsupported case");
         }
