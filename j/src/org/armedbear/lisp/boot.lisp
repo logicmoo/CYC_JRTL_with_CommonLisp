@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.29 2003-03-17 18:20:37 piso Exp $
+;;; $Id: boot.lisp,v 1.30 2003-03-24 15:48:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,8 @@
 
 (in-package "COMMON-LISP")
 
-(export '(lambda
+(export '(when unless
+          lambda
           defun
           *features*
           make-hash-table
@@ -35,6 +36,12 @@
           char-code-limit
           proclaim))
 
+
+(defmacro when (pred &rest body)
+  (list 'if pred (append '(progn) body)))
+
+(defmacro unless (pred &rest body)
+  (list 'if (list 'not pred) (append '(progn) body)))
 
 (defmacro lambda (lambda-list &rest body)
   (list 'FUNCTION (append (list 'LAMBDA lambda-list) body)))

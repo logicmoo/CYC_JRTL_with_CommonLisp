@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.144 2003-03-19 15:14:32 piso Exp $
+ * $Id: Primitives.java,v 1.145 2003-03-24 15:49:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1429,54 +1429,6 @@ public final class Primitives extends Module
             symbol.setConstant(true);
             setValues(null);
             return symbol;
-        }
-    };
-
-    // ### when
-    private static final SpecialOperator WHEN = new SpecialOperator("when") {
-        public LispObject execute(LispObject args, Environment env)
-            throws Condition
-        {
-            switch (args.length()) {
-                case 0:
-                    throw new WrongNumberOfArgumentsException(this);
-                case 1:
-                    return NIL;
-                case 2: {
-                    if (eval(args.car(), env) != NIL)
-                        return eval(args.cadr(), env);
-                    return NIL;
-                }
-                default: {
-                    LispObject result = eval(args.car(), env);
-                    if (result != NIL)
-                        return progn(args.cdr(), env);
-                    return NIL;
-                }
-            }
-        }
-    };
-
-    // ### unless
-    private static final SpecialOperator UNLESS =
-        new SpecialOperator("unless") {
-        public LispObject execute(LispObject args, Environment env)
-            throws Condition
-        {
-            switch (args.length()) {
-                case 0:
-                    throw new WrongNumberOfArgumentsException(this);
-                case 1:
-                    return NIL;
-                case 2:
-                    if (eval(args.car(), env) == NIL)
-                        return eval(args.cadr(), env);
-                    return NIL;
-                default:
-                    if (eval(args.car(), env) == NIL)
-                        return progn(args.cdr(), env);
-                    return NIL;
-            }
         }
     };
 

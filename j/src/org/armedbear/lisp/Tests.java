@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.18 2003-03-19 15:25:08 piso Exp $
+ * $Id: Tests.java,v 1.19 2003-03-24 15:52:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -253,10 +253,10 @@ public class Tests extends TestCase
         verify("(if (numberp '(a b c)) (+ 1 2) (+ 3 4))", "7");
 
         // when
-        verify("(when t 'hello)", "hello");
-        verify("(when nil 'hello)", "NIL");
-        verify("(when t)", "NIL");
-        verify("(when ())", "NIL");
+//         verify("(when t 'hello)", "hello");
+//         verify("(when nil 'hello)", "NIL");
+//         verify("(when t)", "NIL");
+//         verify("(when ())", "NIL");
 
         // and
         verify("(and)", "T");
@@ -268,10 +268,10 @@ public class Tests extends TestCase
         verify("temp2", "20");
 
         // unless
-        verify("(unless t 'hello)", "NIL");
-        verify("(unless nil 'hello)", "hello");
-        verify("(unless t)", "NIL");
-        verify("(unless ())", "NIL");
+//         verify("(unless t 'hello)", "NIL");
+//         verify("(unless nil 'hello)", "hello");
+//         verify("(unless t)", "NIL");
+//         verify("(unless ())", "NIL");
 
         // progn
         verify("(progn (+ 1 2) (+ 3 4) (+ 5 6))", "11");
