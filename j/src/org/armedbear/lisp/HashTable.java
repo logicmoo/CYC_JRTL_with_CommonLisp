@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.15 2003-08-25 19:15:29 piso Exp $
+ * $Id: HashTable.java,v 1.16 2003-09-09 23:16:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,8 @@ public final class HashTable extends LispObject
     private int count;
 
     private HashTable(LispObject test, int size, LispObject rehashSize,
-        LispObject rehashThreshold) throws LispError
+                      LispObject rehashThreshold)
+        throws LispError
     {
         if (test == NIL || test == Symbol.EQ.getSymbolFunction())
             this.test = TEST_EQ;
@@ -62,7 +63,8 @@ public final class HashTable extends LispObject
 
     // gethash key hash-table &optional default => value, present-p
     public synchronized LispObject gethash(LispObject key,
-        LispObject defaultValue) throws LispError
+                                           LispObject defaultValue)
+        throws LispError
     {
         LispObject[] values = new LispObject[2];
         LispObject value = (LispObject) get(key);
@@ -225,6 +227,20 @@ public final class HashTable extends LispObject
         }
     }
 
+    // Returns a list of (key . value) pairs.
+    private LispObject ENTRIES()
+    {
+        LispObject list = NIL;
+        for (int i = buckets.length; i-- > 0;) {
+            HashEntry e = buckets[i];
+            while (e != null) {
+                list = new Cons(new Cons(e.key, e.value), list);
+                e = e.next;
+            }
+        }
+        return list;
+    }
+
     private static class HashEntry
     {
         LispObject key;
@@ -268,7 +284,7 @@ public final class HashTable extends LispObject
                     length == 3 ? args[2] : NIL;
                 return ht.gethash(key, defaultValue);
             }
-            throw new TypeError(args[1], "hash table");
+            throw new TypeError(args[1], "hash-table");
         }
     };
 
@@ -293,7 +309,7 @@ public final class HashTable extends LispObject
                 }
                 return ht.puthash(key, value);
             }
-            throw new TypeError(args[1], "hash table");
+            throw new TypeError(args[1], "hash-table");
         }
     };
 
@@ -307,7 +323,7 @@ public final class HashTable extends LispObject
                 HashTable ht = (HashTable) second;
                 return ht.remhash(key);
             }
-            throw new TypeError(second, "hash table");
+            throw new TypeError(second, "hash-table");
         }
     };
 
@@ -326,6 +342,17 @@ public final class HashTable extends LispObject
         public LispObject execute(LispObject arg) throws LispError
         {
             return arg instanceof HashTable ? T : NIL;
+        }
+    };
+
+    // ### hash-table-entries
+    private static final Primitive1 HASH_TABLE_ENTRIES =
+        new Primitive1("hash-table-entries", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof HashTable)
+                return ((HashTable)arg).ENTRIES();
+            throw new TypeError(arg, "hash-table");
         }
     };
 }
