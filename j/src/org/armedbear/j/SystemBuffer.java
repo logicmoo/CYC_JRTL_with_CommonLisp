@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.9 2002-10-11 16:09:57 piso Exp $
+ * $Id: SystemBuffer.java,v 1.10 2002-11-04 15:55:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -410,9 +410,8 @@ public class SystemBuffer implements Constants
     public void writeBuffer() throws SaveException
     {
         if (Platform.isPlatformWindows()) {
-            // writeTempFile() throws a SaveException if an error occurs.
-            File tempFile = writeTempFile();
-            final int permissions = file.isFile() ? file.getPermissions() : 0;
+            // writeTemporaryFile() throws a SaveException if an error occurs.
+            File tempFile = writeTemporaryFile();
             if (!Utilities.makeBackup(file, false)) {
                 Log.error("backup failed");
                 throw new SaveException(file,
@@ -424,8 +423,6 @@ public class SystemBuffer implements Constants
                 throw new SaveException(file,
                     "Unable to rename temporary file");
             }
-            if (permissions != 0)
-                file.setPermissions(permissions);
         } else {
             // Save in place on Unix to preserve permissions and ownership of
             // file. Keep original (instead of renaming it) when making backup.
@@ -593,7 +590,7 @@ public class SystemBuffer implements Constants
         return array;
     }
 
-    private File writeTempFile() throws SaveException
+    private File writeTemporaryFile() throws SaveException
     {
         boolean succeeded = false;
         // First try to write out a temporary file in the current directory.
