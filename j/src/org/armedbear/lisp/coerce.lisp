@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: coerce.lisp,v 1.3 2004-02-12 13:02:52 piso Exp $
+;;; $Id: coerce.lisp,v 1.4 2004-03-15 17:12:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,13 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "SYSTEM")
+
+(defun coerce-list-to-vector (list result-type)
+  (let* ((length (length list))
+         (result (make-sequence result-type length)))
+    (dotimes (i length)
+      (setf (aref result i) (pop list)))
+    result))
 
 (defun coerce (object result-type)
   (cond ((eq result-type t)
@@ -46,10 +53,14 @@
              (return-from coerce object)))
         ((eq result-type 'function)
          (return-from coerce (coerce-to-function object)))
+        ((and (simple-typep object 'list)
+              (eq result-type 'vector))
+         (return-from coerce (coerce-list-to-vector object result-type)))
         ((and (%typep object 'sequence)
               (%subtypep result-type 'sequence))
          (return-from coerce (concatenate result-type object)))
         (t
          (error 'simple-type-error
+                :datum object
                 :format-control "~S cannot be converted to type ~S."
                 :format-arguments (list object result-type)))))
