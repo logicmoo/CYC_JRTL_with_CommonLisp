@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.29 2003-09-02 04:35:29 piso Exp $
+ * $Id: Bignum.java,v 1.30 2003-09-02 15:07:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,6 +100,16 @@ public final class Bignum extends LispObject
         if (value.signum() >= 0)
             return this;
         return new Bignum(value.negate());
+    }
+
+    public boolean evenp() throws TypeError
+    {
+        return !value.testBit(0);
+    }
+
+    public boolean oddp() throws TypeError
+    {
+        return value.testBit(0);
     }
 
     public LispObject PLUSP() throws TypeError
