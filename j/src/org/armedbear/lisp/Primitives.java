@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.64 2003-03-02 11:58:54 piso Exp $
+ * $Id: Primitives.java,v 1.65 2003-03-02 22:33:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,25 +97,26 @@ public final class Primitives extends Module
     private static final int SECOND                     = 66;
     private static final int SET                        = 67;
     private static final int SIMPLE_BIT_VECTOR_P        = 68;
-    private static final int SIMPLE_VECTOR_P            = 69;
-    private static final int SPECIAL_OPERATOR_P         = 70;
-    private static final int STRINGP                    = 71;
-    private static final int STRING_EQUAL               = 72;
-    private static final int STRING_EQUAL_IGNORE_CASE   = 73;
-    private static final int SUBSEQ                     = 74;
-    private static final int SUBTRACT                   = 75;
-    private static final int SUCCESSOR                  = 76;
-    private static final int SYMBOLP                    = 77;
-    private static final int SYMBOL_FUNCTION            = 78;
-    private static final int SYMBOL_NAME                = 79;
-    private static final int SYMBOL_PACKAGE             = 80;
-    private static final int SYMBOL_PLIST               = 81;
-    private static final int SYMBOL_VALUE               = 82;
-    private static final int THIRD                      = 83;
-    private static final int VALUES                     = 84;
-    private static final int VALUES_LIST                = 85;
-    private static final int VECTORP                    = 86;
-    private static final int ZEROP                      = 87;
+    private static final int SIMPLE_STRING_P            = 69;
+    private static final int SIMPLE_VECTOR_P            = 70;
+    private static final int SPECIAL_OPERATOR_P         = 71;
+    private static final int STRINGP                    = 72;
+    private static final int STRING_EQUAL               = 73;
+    private static final int STRING_EQUAL_IGNORE_CASE   = 74;
+    private static final int SUBSEQ                     = 75;
+    private static final int SUBTRACT                   = 76;
+    private static final int SUCCESSOR                  = 77;
+    private static final int SYMBOLP                    = 78;
+    private static final int SYMBOL_FUNCTION            = 79;
+    private static final int SYMBOL_NAME                = 80;
+    private static final int SYMBOL_PACKAGE             = 81;
+    private static final int SYMBOL_PLIST               = 82;
+    private static final int SYMBOL_VALUE               = 83;
+    private static final int THIRD                      = 84;
+    private static final int VALUES                     = 85;
+    private static final int VALUES_LIST                = 86;
+    private static final int VECTORP                    = 87;
+    private static final int ZEROP                      = 88;
 
     private Primitives()
     {
@@ -181,6 +182,7 @@ public final class Primitives extends Module
         definePrimitive1("rest", REST);
         definePrimitive1("second", SECOND);
         definePrimitive1("simple-bit-vector-p", SIMPLE_BIT_VECTOR_P);
+        definePrimitive1("simple-string-p", SIMPLE_STRING_P);
         definePrimitive1("simple-vector-p", SIMPLE_VECTOR_P);
         definePrimitive1("special-operator-p", SPECIAL_OPERATOR_P);
         definePrimitive1("stringp", STRINGP);
@@ -479,6 +481,8 @@ public final class Primitives extends Module
                 return arg.typep(Symbol.SIMPLE_BIT_VECTOR);
             case STRINGP:                       // ### stringp
                 return arg instanceof LispString ? T : NIL;
+            case SIMPLE_STRING_P:               // ### simple-string-p
+                return arg.typep(Symbol.SIMPLE_STRING);
             case ZEROP:                         // ### zerop
                 return Fixnum.getValue(arg) == 0 ? T : NIL;
             case SUCCESSOR:                     // ### 1+
