@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.4 2003-08-12 14:56:09 piso Exp $
+ * $Id: Complex.java,v 1.5 2003-08-12 15:22:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,15 @@ public final class Complex extends LispObject
     public int getType()
     {
         return TYPE_COMPLEX;
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws LispError
+    {
+        if (typeSpecifier == Symbol.COMPLEX)
+            return T;
+        if (typeSpecifier == Symbol.NUMBER)
+            return T;
+        return super.typep(typeSpecifier);
     }
 
     public boolean isEqualTo(LispObject obj) throws LispError
