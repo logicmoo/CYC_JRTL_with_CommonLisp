@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: AbstractMode.java,v 1.2 2002-10-01 19:21:28 piso Exp $
+ * $Id: AbstractMode.java,v 1.3 2002-10-03 17:35:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -456,14 +456,30 @@ public abstract class AbstractMode implements Constants, Mode
         return popup;
     }
 
-    /**
-     * {@inheritDoc}
-     * This returns the default toolbar from <code>frame</code>.
-     *
-     * @param frame     {@inheritDoc}
-     * @return          {@inheritDoc}
-     */
     public ToolBar getToolBar(Frame frame)
+    {
+        ToolBar tb = getCustomToolBar(frame);
+        if (tb != null)
+            return tb;
+        return getDefaultToolBar(frame);
+    }
+    
+    protected ToolBar getCustomToolBar(Frame frame)
+    {
+        String filename =
+            Editor.preferences().getStringProperty(getFullKey("toolbar"));
+        if (filename != null) {
+            File file = File.getInstance(filename);
+            if (file != null && file.isFile()) {
+                ToolBar tb = ToolBar.createToolBar(frame, file);
+                if (tb != null)
+                    return tb;
+            }
+        }
+        return null;
+    }
+    
+    protected ToolBar getDefaultToolBar(Frame frame)
     {
         return frame.getDefaultToolBar();
     }
