@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.14 2004-02-14 17:29:18 piso Exp $
+ * $Id: StringFunctions.java,v 1.15 2004-02-14 18:13:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -508,20 +508,20 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispString s = string(first);
+            LispObject s = first.stringp() ? first : string(first);
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("invalid start position " + start));
+                return signal(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("invalid end position " + start));
+                return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             int i;
@@ -542,20 +542,20 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispString s = string(first);
+            LispObject s = first.stringp() ? first : string(first);
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("invalid start position " + start));
+                return signal(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("invalid end position " + start));
+                return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             int i;
@@ -576,20 +576,20 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispString s = string(first);
+            LispObject s = first.stringp() ? first : string(first);
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("invalid start position " + start));
+                return signal(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("invalid end position " + start));
+                return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             boolean lastCharWasAlphanumeric = false;
@@ -622,35 +622,34 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispString s;
-            try {
-                s = (LispString) first;
-            }
-            catch (ClassCastException e) {
-                if (first instanceof NilVector) {
-                    if (first.length() == 0)
-                        return first;
-                    return ((NilVector)first).accessError();
-                }
-                return signal(new TypeError(first, Symbol.STRING));
-            }
-            final int length = s.length();
+            if (!first.stringp())
+                signal(new TypeError(first, Symbol.STRING));
+            final int length = first.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("invalid start position " + start));
+                return signal(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("invalid end position " + start));
+                return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
-            char[] array = s.chars();
-            for (int i = start; i < end; i++)
-                array[i] = Utilities.toUpperCase(array[i]);
-            return s;
+                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
+            if (first instanceof DisplacedArray) {
+                DisplacedArray array = (DisplacedArray) first;
+                for (int i = start; i < end; i++) {
+                    char c = LispCharacter.getValue(array.getRowMajor(i));
+                    c = Utilities.toUpperCase(c);
+                    array.setRowMajor(i, LispCharacter.getInstance(c));
+                }
+            } else {
+                char[] chars = first.chars();
+                for (int i = start; i < end; i++)
+                    chars[i] = Utilities.toUpperCase(chars[i]);
+            }
+            return first;
         }
     };
 
@@ -699,47 +698,59 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            LispString s;
-            try {
-                s = (LispString) first;
-            }
-            catch (ClassCastException e) {
-                if (first instanceof NilVector) {
-                    if (first.length() == 0)
-                        return first;
-                    return ((NilVector)first).accessError();
-                }
-                return signal(new TypeError(first, Symbol.STRING));
-            }
-            final int length = s.length();
+            if (!first.stringp())
+                signal(new TypeError(first, Symbol.STRING));
+            final int length = first.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("invalid start position " + start));
+                return signal(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
-                end = s.length();
+                end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("invalid end position " + start));
+                return signal(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
-            char[] array = s.chars();
-            boolean lastCharWasAlphanumeric = false;
-            for (int i = start; i < end; i++) {
-                char c = array[i];
-                if (Character.isLowerCase(c)) {
-                    if (!lastCharWasAlphanumeric)
-                        array[i] = Utilities.toUpperCase(c);
-                    lastCharWasAlphanumeric = true;
-                } else if (Character.isUpperCase(c)) {
-                    if (lastCharWasAlphanumeric)
-                        array[i] = Utilities.toLowerCase(c);
-                    lastCharWasAlphanumeric = true;
-                } else
-                    lastCharWasAlphanumeric = Character.isDigit(c);
+                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
+            if (first instanceof DisplacedArray) {
+                DisplacedArray array = (DisplacedArray) first;
+                boolean lastCharWasAlphanumeric = false;
+                for (int i = start; i < end; i++) {
+                    char c = LispCharacter.getValue(array.getRowMajor(i));
+                    if (Character.isLowerCase(c)) {
+                        if (!lastCharWasAlphanumeric) {
+                            c = Utilities.toUpperCase(c);
+                            array.setRowMajor(i, LispCharacter.getInstance(c));
+                        }
+                        lastCharWasAlphanumeric = true;
+                    } else if (Character.isUpperCase(c)) {
+                        if (lastCharWasAlphanumeric) {
+                            c = Utilities.toLowerCase(c);
+                            array.setRowMajor(i, LispCharacter.getInstance(c));
+                        }
+                        lastCharWasAlphanumeric = true;
+                    } else
+                        lastCharWasAlphanumeric = Character.isDigit(c);
+                }
+            } else {
+                char[] chars = first.chars();
+                boolean lastCharWasAlphanumeric = false;
+                for (int i = start; i < end; i++) {
+                    char c = chars[i];
+                    if (Character.isLowerCase(c)) {
+                        if (!lastCharWasAlphanumeric)
+                            chars[i] = Utilities.toUpperCase(c);
+                        lastCharWasAlphanumeric = true;
+                    } else if (Character.isUpperCase(c)) {
+                        if (lastCharWasAlphanumeric)
+                            chars[i] = Utilities.toLowerCase(c);
+                        lastCharWasAlphanumeric = true;
+                    } else
+                        lastCharWasAlphanumeric = Character.isDigit(c);
+                }
             }
-            return s;
+            return first;
         }
     };
 }
