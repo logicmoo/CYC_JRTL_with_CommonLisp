@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.59 2004-03-17 02:21:45 piso Exp $
+ * $Id: Stream.java,v 1.60 2004-03-17 16:22:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -834,6 +834,21 @@ public class Stream extends LispObject
             if (!rt.isWhitespace(c))
                 return c;
         }
+    }
+
+    public LispObject readDelimitedList(char delimiter)
+        throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        while (true) {
+            char c = flushWhitespace();
+            if (c == delimiter)
+                break;
+            LispObject obj = processChar(c);
+            if (obj != null)
+                result = new Cons(obj, result);
+        }
+        return result.nreverse();
     }
 
     // read-line &optional stream eof-error-p eof-value recursive-p
