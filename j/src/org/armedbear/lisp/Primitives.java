@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.27 2003-02-16 02:58:42 piso Exp $
+ * $Id: Primitives.java,v 1.28 2003-02-16 04:04:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1536,6 +1536,8 @@ public final class Primitives extends Module
             return e instanceof UndefinedFunctionError;
         if (type == Symbol.TYPE_ERROR)
             return e instanceof TypeError;
+        if (type == Symbol.PROGRAM_ERROR)
+            return e instanceof ProgramError;
         return type == Symbol.ERROR;
     }
 
