@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: restart.lisp,v 1.14 2004-01-02 01:55:11 piso Exp $
+;;; $Id: restart.lisp,v 1.15 2004-03-03 01:48:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 (defun read-evaluated-form ()
   (fresh-line *query-io*)
-  (format *query-io* "Enter a form to be evaluated:~%")
+  (%format *query-io* "Enter a form to be evaluated:~%")
   (list (eval (read *query-io*))))
 
 (defvar *restart-clusters* ())
@@ -78,8 +78,8 @@
   (funcall (or (restart-report-function restart)
 	       (let ((name (restart-name restart)))
 		 (lambda (stream)
-		   (if name (format stream "~S" name)
-		       (format stream "~S" restart)))))
+		   (if name (%format stream "~S" name)
+		       (%format stream "~S" restart)))))
 	   stream))
 
 (defun print-restart (restart stream)
