@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.279 2004-09-15 13:15:23 piso Exp $
+ * $Id: Lisp.java,v 1.280 2004-09-18 01:05:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -794,33 +794,11 @@ public abstract class Lisp
     public static final LispObject loadCompiledFunction(String namestring)
         throws ConditionThrowable
     {
-        Pathname pathname = new Pathname(namestring);
-        File file = Utilities.getFile(pathname);
-        if (file != null && file.isFile()) {
-            try {
-                JavaClassLoader loader = new JavaClassLoader();
-                Class c = loader.loadClassFromFile(file);
-                if (c != null) {
-                    Class[] parameterTypes = new Class[0];
-                    java.lang.reflect.Constructor constructor =
-                        c.getConstructor(parameterTypes);
-                    Object[] initargs = new Object[0];
-                    LispObject obj =
-                        (LispObject) constructor.newInstance(initargs);
-                    return obj;
-                }
-            }
-            catch (VerifyError e) {
-                return signal(new LispError("Class verification failed: " +
-                                            e.getMessage()));
-            }
-            catch (Throwable t) {
-                Debug.trace(t);
-            }
-            return signal(new LispError("Unable to load " +
-                                        pathname.writeToString()));
-        } else {
-            // No such file. Look in j.jar.
+        // INIT-FASL binds *DEFAULT-PATHNAME-DEFAULTS* to *LOAD-TRUENAME*.
+        Pathname defaultPathname =
+            Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
+        if (defaultPathname.getDevice() instanceof Pathname) {
+            // We're loading a fasl from j.jar.
             URL url = Lisp.class.getResource(namestring);
             if (url != null) {
                 try {
@@ -883,6 +861,33 @@ public abstract class Lisp
                 catch (Throwable t) {
                     Debug.trace(t);
                 }
+            }
+        } else {
+            Pathname pathname = new Pathname(namestring);
+            File file = Utilities.getFile(pathname);
+            if (file != null && file.isFile()) {
+                try {
+                    JavaClassLoader loader = new JavaClassLoader();
+                    Class c = loader.loadClassFromFile(file);
+                    if (c != null) {
+                        Class[] parameterTypes = new Class[0];
+                        java.lang.reflect.Constructor constructor =
+                            c.getConstructor(parameterTypes);
+                        Object[] initargs = new Object[0];
+                        LispObject obj =
+                            (LispObject) constructor.newInstance(initargs);
+                        return obj;
+                    }
+                }
+                catch (VerifyError e) {
+                    return signal(new LispError("Class verification failed: " +
+                                                e.getMessage()));
+                }
+                catch (Throwable t) {
+                    Debug.trace(t);
+                }
+                return signal(new LispError("Unable to load " +
+                                            pathname.writeToString()));
             }
         }
         return signal(new LispError("Unable to load " + namestring));
