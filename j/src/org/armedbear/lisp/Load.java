@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.65 2004-08-18 14:11:49 piso Exp $
+ * $Id: Load.java,v 1.66 2004-08-18 18:37:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,15 +99,22 @@ public final class Load extends Lisp
         catch (IOException e) {
             return signal(new LispError(e.getMessage()));
         }
-        LispObject result =
-            loadFileFromStream(truename, in, verbose, print, false);
         try {
-            in.close();
+            return loadFileFromStream(truename, in, verbose, print, false);
         }
-        catch (IOException e) {
-            return signal(new LispError(e.getMessage()));
+        catch (FaslVersionMismatch e) {
+            StringBuffer sb = new StringBuffer("Incorrect fasl version: ");
+            sb.append(truename);
+            return signal(new SimpleError(sb.toString()));
         }
-        return result;
+        finally {
+            try {
+                in.close();
+            }
+            catch (IOException e) {
+                return signal(new LispError(e.getMessage()));
+            }
+        }
     }
 
     public static final LispObject loadSystemFile(String filename)
@@ -157,6 +164,9 @@ public final class Load extends Lisp
             // No extension specified.
             candidates.add(filename + '.' + COMPILE_FILE_TYPE);
             candidates.add(filename.concat(".lisp"));
+        } else if (extension.equals(".abcl")) {
+            candidates.add(filename);
+            candidates.add(filename.substring(0, filename.length() - 5).concat(".lisp"));
         } else
             candidates.add(filename);
         InputStream in = null;
@@ -187,19 +197,25 @@ public final class Load extends Lisp
                     }
                 }
             }
-            if (in != null)
-                break;
-        }
-        if (in != null) {
-            LispObject result =
-                loadFileFromStream(truename, in, verbose, print, auto);
-            try {
-                in.close();
+            if (in != null) {
+                try {
+                    return loadFileFromStream(truename, in, verbose, print, auto);
+                }
+                catch (FaslVersionMismatch e) {
+                    StringBuffer sb =
+                        new StringBuffer("; Incorrect fasl version: ");
+                    sb.append(truename);
+                    System.err.println(sb.toString());
+                }
+                finally {
+                    try {
+                        in.close();
+                    }
+                    catch (IOException e) {
+                        return signal(new LispError(e.getMessage()));
+                    }
+                }
             }
-            catch (IOException e) {
-                return signal(new LispError(e.getMessage()));
-            }
-            return result;
         }
         return signal(new LispError("file not found: " + filename));
     }
@@ -238,13 +254,7 @@ public final class Load extends Lisp
                     return T;
                 }
             }
-            StringBuffer sb = new StringBuffer();
-            sb.append("File uses fasl format ");
-            sb.append(second.writeToString());
-            sb.append(", but fasl format ");
-            sb.append(_FASL_VERSION_.getSymbolValue().writeToString());
-            sb.append(" is required. Please recompile the source.");
-            return signal(new SimpleError(sb.toString()));
+            throw new FaslVersionMismatch(second);
         }
     };
 
@@ -407,4 +417,19 @@ public final class Load extends Lisp
                                   false);
         }
     };
+
+    private static class FaslVersionMismatch extends Error
+    {
+        private final LispObject version;
+
+        public FaslVersionMismatch(LispObject version)
+        {
+            this.version = version;
+        }
+
+        public LispObject getVersion()
+        {
+            return version;
+        }
+    }
 }
