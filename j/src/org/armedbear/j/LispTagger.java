@@ -2,7 +2,7 @@
  * LispTagger.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispTagger.java,v 1.9 2003-05-07 01:36:03 piso Exp $
+ * $Id: LispTagger.java,v 1.10 2003-05-07 15:55:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,8 @@ public final class LispTagger extends Tagger
                 continue;
             }
             if (c == '(') {
-                state = OPEN_PAREN;
+                if (state != DEFINITION)
+                    state = OPEN_PAREN;
                 pos.next();
                 continue;
             }
