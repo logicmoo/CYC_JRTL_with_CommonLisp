@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.84 2004-02-13 16:26:14 piso Exp $
+;;; $Id: clos.lisp,v 1.85 2004-02-14 00:20:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -731,6 +731,7 @@
   ((lambda-list :initarg :lambda-list)     ; :accessor method-lambda-list
    (qualifiers :initarg :qualifiers)       ; :accessor method-qualifiers
    (specializers :initarg :specializers)   ; :accessor method-specializers
+   (declarations :initarg :declarations)   ; :accessir method-declarations
    (body :initarg :body)                   ; :accessor method-body
    (environment :initarg :environment)     ; :accessor method-environment
    (generic-function :initform nil)        ; :accessor method-generic-function
@@ -753,6 +754,10 @@
 (defun method-specializers (method) (slot-value method 'specializers))
 (defun (setf method-specializers) (new-value method)
   (setf (slot-value method 'specializers) new-value))
+
+(defun method-declarations (method) (slot-value method 'declarations))
+(defun (setf method-declarations) (new-value method)
+  (setf (slot-value method 'declarations) new-value))
 
 (defun method-body (method) (slot-value method 'body))
 (defun (setf method-body) (new-value method)
@@ -952,7 +957,7 @@
 
 (defmacro defmethod (&rest args)
   (multiple-value-bind
-    (function-name qualifiers lambda-list specializers documentation body)
+    (function-name qualifiers lambda-list specializers documentation declarations body)
     (parse-defmethod args)
     `(progn
        (unless (find-generic-function ',function-name nil)
@@ -964,6 +969,7 @@
                       :qualifiers ',qualifiers
                       :specializers ',specializers
                       :documentation ,documentation
+                      :declarations ',declarations
                       :body ',body
                       :environment (top-level-environment)))))
 
@@ -1006,16 +1012,17 @@
           (canonicalize-specializers (extract-specializers specialized-lambda-list)))
     (multiple-value-bind (real-body declarations documentation)
       (parse-body body)
-      (values function-name
-              qualifiers
-              (extract-lambda-list specialized-lambda-list)
-              specializers
-              documentation
-              (list* 'block
-                     (if (consp function-name)
-                         (cadr function-name)
-                         function-name)
-                     real-body)))))
+        (values function-name
+                qualifiers
+                (extract-lambda-list specialized-lambda-list)
+                specializers
+                documentation
+                declarations
+                (list* 'block
+                         (if (consp function-name)
+                             (cadr function-name)
+                             function-name)
+                         real-body)))))
 
 (defun required-portion (gf args)
   (let ((number-required (length (gf-required-args gf))))
@@ -1184,13 +1191,15 @@
 (defun make-instance-standard-method (method-class
                                       &key
                                       lambda-list qualifiers specializers
-                                      documentation body environment)
+                                      documentation declarations body
+                                      environment)
   (declare (ignore method-class))
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
     (setf (method-qualifiers method) qualifiers)
     (setf (method-specializers method) specializers)
     (setf (method-documentation method) documentation)
+    (setf (method-declarations method) declarations)
     (setf (method-body method) (precompile-form body nil))
     (setf (method-environment method) environment)
     (setf (method-generic-function method) nil)
@@ -1463,11 +1472,12 @@
          (walk-form (cdr form)))))
 
 (defun std-compute-method-function (method)
-  (let ((form (method-body method))
+  (let ((body (method-body method))
+        (declarations (method-declarations method))
         (lambda-list (method-lambda-list method))
         (*call-next-method-p* nil)
         (*next-method-p-p* nil))
-    (walk-form form)
+    (walk-form body)
     (setf lambda-list (kludge-arglist lambda-list))
     (compile-in-lexical-environment
      (method-environment method)
@@ -1480,9 +1490,9 @@
                                          (funcall next-emfun (or cnm-args args))))
                    (next-method-p ()
                                   (not (null next-emfun))))
-              (apply #'(lambda ,lambda-list ,form) args)))
+              (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
          `(lambda (args next-emfun)
-            (apply #'(lambda ,lambda-list ,form) args))))))
+            (apply #'(lambda ,lambda-list ,@declarations ,body) args))))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
