@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.162 2003-04-09 13:42:15 piso Exp $
+ * $Id: Primitives.java,v 1.163 2003-04-09 15:17:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4249,6 +4249,46 @@ public final class Primitives extends Module
                 }
             }
             throw new LispError("EXPT: unsupported case");
+        }
+    };
+
+    // ### logand
+    // logand &rest integers => result-integer
+    private static final Primitive LOGAND = new Primitive("logand") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            BigInteger result = BigInteger.valueOf(-1);
+            for (int i = 0; i < args.length; i++) {
+                BigInteger n;
+                if (args[i] instanceof Fixnum)
+                    n = ((Fixnum)args[i]).getBigInteger();
+                else if (args[i] instanceof Bignum)
+                    n = ((Bignum)args[i]).getValue();
+                else
+                    throw new TypeError(args[i], "integer");
+                result = result.and(n);
+            }
+            return number(result);
+        }
+    };
+
+    // ### logior
+    // logior &rest integers => result-integer
+    private static final Primitive LOGIOR = new Primitive("logior") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            BigInteger result = BigInteger.ZERO;
+            for (int i = 0; i < args.length; i++) {
+                BigInteger n;
+                if (args[i] instanceof Fixnum)
+                    n = ((Fixnum)args[i]).getBigInteger();
+                else if (args[i] instanceof Bignum)
+                    n = ((Bignum)args[i]).getValue();
+                else
+                    throw new TypeError(args[i], "integer");
+                result = result.or(n);
+            }
+            return number(result);
         }
     };
 
