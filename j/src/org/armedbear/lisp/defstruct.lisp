@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.19 2003-09-20 18:22:10 piso Exp $
+;;; $Id: defstruct.lisp,v 1.20 2003-09-22 17:46:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -87,11 +87,10 @@
                               (cadr option)
                               (make-symbol (string (cadr option))))))
     (:constructor
-     (if (cdr option)
-         (if (null (cadr option))
-             (setf *ds-constructor* nil)
-             (setf *ds-constructor* (symbol-name (cadr option))))
-         (setf *ds-constructor* nil)))))
+     (when (= (length (cdr option)) 1)
+       (if (null (cadr option))
+           (setf *ds-constructor* nil)
+           (setf *ds-constructor* (symbol-name (cadr option))))))))
 
 (defun parse-name-and-options (name-and-options)
   (setf *ds-name* (car name-and-options))
