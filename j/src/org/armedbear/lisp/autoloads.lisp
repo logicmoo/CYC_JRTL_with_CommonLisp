@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.84 2004-01-03 15:44:28 piso Exp $
+;;; $Id: autoloads.lisp,v 1.85 2004-01-03 16:52:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@
 (autoload '(mismatch search))
 (autoload 'make-string)
 (autoload '(make-pathname pathname-host pathname-device pathname-directory
-            pathname-name pathname-type)
+            pathname-name pathname-type directory)
           "pathnames.lisp")
 (autoload '(signum floor ceiling round rem mod ftruncate ffloor fceiling fround
             rational rationalize gcd isqrt float-sign phase cis)
