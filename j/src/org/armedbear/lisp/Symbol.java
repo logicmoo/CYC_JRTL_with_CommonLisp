@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.114 2004-03-10 20:07:36 piso Exp $
+ * $Id: Symbol.java,v 1.115 2004-03-12 17:29:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -412,7 +412,7 @@ public class Symbol extends LispObject
         }
         boolean printEscape = (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL);
         LispObject printCase = _PRINT_CASE_.symbolValueNoThrow();
-        LispObject readtableCase = getCurrentReadtable().getReadtableCase();
+        LispObject readtableCase = currentReadtable().getReadtableCase();
         if (pkg == PACKAGE_KEYWORD) {
             if (printCase == Keyword.DOWNCASE)
                 return ":".concat(name.toLowerCase());
