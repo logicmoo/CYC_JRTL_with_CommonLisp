@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.98 2004-11-30 04:25:21 piso Exp $
+ * $Id: Stream.java,v 1.99 2004-11-30 05:07:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -591,17 +591,9 @@ public class Stream extends LispObject
             return NIL;
         final LispObject readtableCase = rt.getReadtableCase();
         final String token;
-        if (readtableCase == Keyword.INVERT) {
-            if (flags == null) {
-                token = invert(sb.toString());
-            } else {
-                // Section 23.1.2: "When the readtable case is :INVERT, then if
-                // all of the unescaped letters in the extended token are of
-                // the same case, those (unescaped) letters are converted to
-                // the opposite case."
-                token = sb.toString(); // FIXME
-            }
-        } else
+        if (readtableCase == Keyword.INVERT)
+            token = invert(sb.toString(), flags);
+        else
             token = sb.toString();
         final int length = token.length();
         if (length > 0) {
@@ -752,6 +744,46 @@ public class Stream extends LispObject
             }
         }
         return flags;
+    }
+    
+    public static final String invert(String s, BitSet flags)
+    {
+        // Section 23.1.2: "When the readtable case is :INVERT, then if all of
+        // the unescaped letters in the extended token are of the same case,
+        // those (unescaped) letters are converted to the opposite case."
+        final int limit = s.length();
+        final int LOWER = 1;
+        final int UPPER = 2;
+        int state = 0;
+        for (int i = 0; i < limit; i++) {
+            // We only care about unescaped characters.
+            if (flags != null && flags.get(i))
+                continue;
+            char c = s.charAt(i);
+            if (Character.isUpperCase(c)) {
+                if (state == LOWER)
+                    return s; // Mixed case.
+                state = UPPER;
+            }
+            if (Character.isLowerCase(c)) {
+                if (state == UPPER)
+                    return s; // Mixed case.
+                state = LOWER;
+            }
+        }
+        StringBuffer sb = new StringBuffer(limit);
+        for (int i = 0; i < limit; i++) {
+            char c = s.charAt(i);
+            if (flags != null && flags.get(i)) // Escaped.
+                sb.append(c);
+            else if (Character.isUpperCase(c))
+                sb.append(Character.toLowerCase(c));
+            else if (Character.isLowerCase(c))
+                sb.append(Character.toUpperCase(c));
+            else
+                sb.append(c);
+        }
+        return sb.toString();
     }
 
     private static final int getReadBase(LispThread thread)
