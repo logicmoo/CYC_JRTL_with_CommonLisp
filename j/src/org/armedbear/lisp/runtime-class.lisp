@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.11 2004-08-11 15:59:53 asimon Exp $
+;;; $Id: runtime-class.lisp,v 1.12 2004-08-11 17:15:05 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -275,10 +275,10 @@
 ;;end of jparse generated definitions
 
 
-(defmethod visit-3 ((instance class-writer) (v1 fixnum) (v2 string) (v3 string))
+(defmethod visit-4 ((instance class-writer) (v1 fixnum) (v2 string) (v3 string) v4)
   (jcall
    (jmethod "org.objectweb.asm.ClassWriter" "visit" "int" "java.lang.String" "java.lang.String" "[Ljava.lang.String;" "java.lang.String")
-   (java-instance instance) v1 v2 v3 nil nil))
+   (java-instance instance) v1 v2 v3 v4 nil))
 
 (defmethod visit-field-3 ((instance class-writer) (v1 fixnum) (v2 string) (v3 string))
   (jcall
@@ -385,7 +385,7 @@
         ((string= "transient" m) constants.acc-transient)
         ((string= "volatile" m) constants.acc-volatile)
         ((string= "synchronized" m) constants.acc-synchronized)
-    (t (error "Invalid modifier ~s." m))))
+        (t (error "Invalid modifier ~s." m))))
 
 
 (defun write-method
@@ -507,10 +507,11 @@
 
 
 
-(defun jnew-runtime-class (class-name super-name constructors methods fields &optional filename)
-  "Creates and loads a Java class with methods calling Lisp closures as given in METHODS.
-   CLASS-NAME and SUPER-NAME are strings, CONSTRUCTORS,  METHODS and FIELDS are lists of
-   constructor, method and field definitions.
+(defun jnew-runtime-class (class-name super-name interfaces constructors methods fields &optional filename)
+  "Creates and loads a Java class with methods calling Lisp closures
+   as given in METHODS.  CLASS-NAME and SUPER-NAME are strings,
+   INTERFACES is a list of strings, CONSTRUCTORS, METHODS and FIELDS are
+   lists of constructor, method and field definitions.
 
    Constructor definitions are lists of the form
    (argument-types function &optional super-invocation-arguments)
@@ -538,9 +539,15 @@
   (let ((cw (make-class-writer-1 (make-instance 'jboolean :java-instance t)))
         (class-type-name (type-name class-name))
         (super-type-name (type-name super-name))
+	(interface-type-names 
+	 (when interfaces 
+	   (let* ((no-of-interfaces (length interfaces))
+		  (ifarray (jnew-array "java.lang.String" no-of-interfaces)))
+	     (dotimes (i no-of-interfaces ifarray) 
+	       (setf (jarray-ref ifarray i) (type-name (nth i interfaces)))))))
         (args-for-%jnew))
-    (visit-3 cw (+ constants.acc-public constants.acc-super)
-             class-type-name super-type-name)
+    (visit-4 cw (+ constants.acc-public constants.acc-super)
+             class-type-name super-type-name interface-type-names)
     (visit-field-3 cw (+ constants.acc-private constants.acc-static)
                    "rc" "Lorg/armedbear/lisp/RuntimeClass;")
 
@@ -589,9 +596,9 @@
 
 (defun jredefine-method (class-name method-name arg-types method-def)
   "Replace the definition of the method named METHDO-NAME (or
-  constructor, if METHD-NAME is nil) of argument types ARG-TYPES of the
-  class named CLASS-NAME defined with JNEW-RUNTIME-CLASS with
-  METHOD-DEF. See the documentation of JNEW-RUNTIME-CLASS."
+   constructor, if METHD-NAME is nil) of argument types ARG-TYPES of the
+   class named CLASS-NAME defined with JNEW-RUNTIME-CLASS with
+   METHOD-DEF. See the documentation of JNEW-RUNTIME-CLASS."
   (assert (jruntime-class-exists-p class-name) (class-name)
           "Can't redefine methods of undefined runtime class ~a" class-name)
   (let ((unique-method-name 
