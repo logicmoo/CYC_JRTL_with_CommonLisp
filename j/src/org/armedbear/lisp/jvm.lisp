@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.83 2004-03-24 01:01:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.84 2004-03-25 18:21:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1487,6 +1487,14 @@
                                     (find-package "SYSTEM")
                                     (find-package "EXTENSIONS")))
 
+(defun single-valued-p (form)
+  (cond ((atom form)
+         t)
+        ((memq (car form) '(1+ 1- + - < > <= >=))
+         t)
+        (t
+         nil)))
+
 (defun compile-function-call (fun args &optional for-effect)
 ;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
   (unless (symbolp fun)
@@ -1549,7 +1557,7 @@
        (compile-form (first args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (constantp (first args))
+       (unless (single-valued-p (first args))
          (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -1562,7 +1570,7 @@
        (compile-form (second args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (every 'constantp args)
+       (unless (every 'single-valued-p args)
          (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -1578,7 +1586,7 @@
        (compile-form (third args))
        (unless (remove-store-value)
          (emit-push-value))
-       (unless (every 'constantp args)
+       (unless (every 'single-valued-p args)
          (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -1597,7 +1605,7 @@
            (emit 'aastore) ; store value in array
            (incf i))) ; array left on stack here
        ;; Stack: function array-ref
-       (unless (every 'constantp args)
+       (unless (every 'single-valued-p args)
          (emit-clear-values))
        (emit-invokevirtual +lisp-object-class+
                            "execute"
@@ -2352,16 +2360,14 @@
     (unless for-effect
       (emit-push-t)
       (emit-store-value)))
+   ((keywordp form)
+    (let ((g (declare-keyword form)))
+      (emit 'getstatic
+            *this-class*
+            g
+            "Lorg/armedbear/lisp/Symbol;")
+      (emit-store-value)))
    ((symbolp form)
-    (when (keywordp form)
-      (let ((g (declare-keyword form)))
-        (emit 'getstatic
-              *this-class*
-              g
-              "Lorg/armedbear/lisp/Symbol;"))
-      (emit-store-value)
-      (return-from compile-form))
-
     (compile-variable-ref form))
    ((constantp form)
     (unless for-effect
