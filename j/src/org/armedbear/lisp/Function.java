@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.1 2003-01-17 19:43:13 piso Exp $
+ * $Id: Function.java,v 1.2 2003-01-18 18:32:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public abstract class Function extends LispObject
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
         if (name != null) {
-            Symbol symbol = pkg.intern(name);
+            Symbol symbol = pkg.intern(this.name);
             symbol.setSymbolFunction(this);
         }
     }
