@@ -1,8 +1,8 @@
 /*
  * Buffer.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.33 2003-03-20 15:18:46 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Buffer.java,v 1.34 2003-04-23 00:46:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2368,22 +2368,21 @@ public class Buffer extends SystemBuffer
         if (file == null) {
             // This case should be handled by toString() in the derived class.
             return null;
-        } else if (file instanceof HttpFile) {
+        }
+        if (file instanceof HttpFile)
             return file.netPath();
-        } else if (file.isRemote()) {
+        if (file.isRemote()) {
             // SSH, FTP.
             FastStringBuffer sb = new FastStringBuffer(file.getName());
             sb.append(" [");
             sb.append(file.netPath());
             sb.append(']');
             return sb.toString();
-        } else {
-            // Local file.
-            if (file.isDirectory())
-                return file.canonicalPath();
-            else
-                return file.getName();
         }
+        // Local file.
+        if (file.isDirectory())
+            return file.canonicalPath();
+        return Editor.getBufferList().getUniqueName(this);
     }
 
     // For the buffer list.
