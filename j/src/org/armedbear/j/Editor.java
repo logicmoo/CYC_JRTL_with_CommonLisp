@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.41 2003-03-29 18:22:53 piso Exp $
+ * $Id: Editor.java,v 1.42 2003-03-29 19:46:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6170,6 +6170,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         textField.setHandler(new ExecuteCommandTextFieldHandler(this, textField));
         textField.setHistory(new History("executeCommand.input", 30));
         textField.recallLast();
+        textField.selectAll();
         if (dispatcher.getLastEvent().getSource() instanceof MenuItem) {
             Runnable r = new Runnable() {
                 public void run()
