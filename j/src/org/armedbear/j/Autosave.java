@@ -2,7 +2,7 @@
  * Autosave.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Autosave.java,v 1.1.1.1 2002-09-24 16:09:31 piso Exp $
+ * $Id: Autosave.java,v 1.2 2002-10-11 14:06:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,8 @@ public final class Autosave implements Constants
     public static synchronized File getAutosaveDirectory()
     {
         if (!initialized) {
-            autosaveDirectory = File.getInstance(Editor.getEditorDirectory(), "autosave");
+            autosaveDirectory =
+                File.getInstance(Directories.getEditorDirectory(), "autosave");
             if (autosaveDirectory != null) {
                 if (!autosaveDirectory.isDirectory()) {
                     autosaveDirectory.mkdirs();
@@ -197,6 +198,6 @@ public final class Autosave implements Constants
 
     private static final File getRecoverDirectory()
     {
-        return File.getInstance(Editor.getEditorDirectory(), "recover");
+        return File.getInstance(Directories.getEditorDirectory(), "recover");
     }
 }
