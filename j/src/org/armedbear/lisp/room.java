@@ -2,7 +2,7 @@
  * room.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: room.java,v 1.7 2004-01-28 20:19:22 piso Exp $
+ * $Id: room.java,v 1.8 2004-12-12 16:50:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,8 @@ public final class room extends Primitive
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
+        if (args.length > 1)
+            return signal(new WrongNumberOfArgumentsException(this));
         Runtime runtime = Runtime.getRuntime();
         long total = 0;
         long free = 0;
@@ -69,5 +71,5 @@ public final class room extends Primitive
         return number(used);
     }
 
-    private static final room ROOM = new room();
+    private static final Primitive ROOM = new room();
 }
