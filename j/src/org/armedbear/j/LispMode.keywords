@@ -259,6 +259,7 @@ locally
 logand
 logandc1
 logandc2
+logbitp
 logeqv
 logical-pathname-translations
 logior
