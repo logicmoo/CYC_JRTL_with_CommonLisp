@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.420 2003-09-21 01:39:01 piso Exp $
+ * $Id: Primitives.java,v 1.421 2003-09-21 01:40:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3356,7 +3356,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
-            LispObject arg = args.car();
+            final LispObject arg = args.car();
             if (arg instanceof Symbol) {
                 LispObject functional = env.lookupFunctional(arg);
                 if (functional instanceof Autoload) {
@@ -3372,7 +3372,7 @@ public final class Primitives extends Module
                 if (arg.car() == Symbol.LAMBDA)
                     return new Closure(arg.cadr(), arg.cddr(), env);
             }
-            throw new ConditionThrowable(new UndefinedFunction(String.valueOf(arg)));
+            throw new ConditionThrowable(new UndefinedFunction(arg));
         }
     };
 
