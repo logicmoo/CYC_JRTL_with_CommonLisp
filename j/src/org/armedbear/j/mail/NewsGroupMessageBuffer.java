@@ -2,7 +2,7 @@
  * NewsGroupMessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupMessageBuffer.java,v 1.7 2002-11-23 05:00:16 piso Exp $
+ * $Id: NewsGroupMessageBuffer.java,v 1.8 2002-12-05 21:20:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,21 +25,24 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringReader;
 import java.util.List;
 import javax.swing.SwingUtilities;
 import org.armedbear.j.BackgroundProcess;
 import org.armedbear.j.Buffer;
+import org.armedbear.j.Directories;
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
-import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.File;
 import org.armedbear.j.Headers;
 import org.armedbear.j.ImageLine;
 import org.armedbear.j.ImageLoader;
 import org.armedbear.j.Line;
 import org.armedbear.j.Log;
+import org.armedbear.j.Platform;
 import org.armedbear.j.ProgressNotifier;
 import org.armedbear.j.Property;
 import org.armedbear.j.Sidebar;
@@ -138,7 +141,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         public void run()
         {
             setBackgroundProcess(this);
-            progressNotifier = new StatusBarProgressNotifier(NewsGroupMessageBuffer.this);
+            progressNotifier =
+                new StatusBarProgressNotifier(NewsGroupMessageBuffer.this);
             cancelled = false;
             loadMessage(progressNotifier);
             progressNotifier.setText("");
@@ -148,7 +152,6 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
 
         public void cancel()
         {
-            Log.debug("loadProcess cancelled!!");
             cancelled = true;
             progressNotifier.cancel();
             summary.getSession().abort();
@@ -164,9 +167,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                 progressNotifier);
         if (cancelled)
             return;
-        if (rawText == null)
-            return;
-        message = new Message(rawText);
+        message = new Message(rawText != null ? rawText : "");
         parseMessage();
         title = message.getHeaderValue(Headers.SUBJECT);
         if (title == null)
@@ -178,6 +179,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         setLoaded(true);
         formatter.parseBuffer();
         entry.setFlags(entry.getFlags() | MailboxEntry.SEEN);
+        if (rawText == null)
+            entry.setFlags(entry.getFlags() | MailboxEntry.DELETED);
         summary.updateEntry(entry);
         final MailboxLine mailboxLine =
             summary.findLineForEntry(entry);
@@ -196,13 +199,15 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                             ed.updateDisplay();
                         } else if (ed.getBuffer() == summary) {
                             if (ed.getDot() != null) {
-                                ed.update(ed.getDotLine());
-                                ed.getDot().moveTo(mailboxLine, 0);
-                                ed.update(mailboxLine);
-                                ed.moveCaretToDotCol();
-                                ed.clearStatusText();
-                                ed.updateDisplay();
+                                if (mailboxLine != null) {
+                                    ed.updateDotLine();
+                                    ed.getDot().moveTo(mailboxLine, 0);
+                                    ed.updateDotLine();
+                                    ed.moveCaretToDotCol();
+                                }
                             }
+                            ed.clearStatusText();
+                            ed.updateDisplay();
                         }
                     }
                     Sidebar.repaintBufferListInAllFrames();
@@ -218,7 +223,8 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
         try {
             String s;
             while ((s = reader.readLine()) != null) {
-                if (s.length() >= 9 && s.startsWith("begin ")) {
+                final int length = s.length();
+                if (length >= 9 && s.startsWith("begin ") && haveUudecode()) {
                     // "begin 644 filename" or "begin 0644 filename"
                     // Skip "begin ".
                     String trim = s.substring(6).trim();
@@ -227,18 +233,18 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                     int index = trim.indexOf(' ');
                     if (index >= 0) {
                         permission = trim.substring(0, index);
-                        trim = trim.substring(index + 1);
+                        trim = trim.substring(index+1);
                     }
                     String extension = Utilities.getExtension(trim);
                     File encoded =
                         Utilities.getTempFile(Editor.getTempDirectory(), ".encoded");
                     File decoded =
                         Utilities.getTempFile(Editor.getTempDirectory(), extension);
-                    FastStringBuffer sb = new FastStringBuffer("begin ");
-                    sb.append("644 ");
+                    FastStringBuffer sb = new FastStringBuffer("begin 644 ");
                     sb.append(decoded.getName());
                     BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(encoded.getOutputStream()));
+                        new OutputStreamWriter(encoded.getOutputStream(),
+                            "ISO-8859-1"));
                     writer.write(sb.toString());
                     writer.write('\n');
                     while ((s = reader.readLine()) != null) {
@@ -250,43 +256,55 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                             break;
                         }
                     }
-                    // BUG! This won't work on Windows!
-                    sb.setText("(\\cd \"");
-                    sb.append(Editor.getTempDirectory().canonicalPath());
-                    sb.append("\" && \\uudecode \"");
-                    sb.append(encoded.getName());
-                    sb.append("\")");
-                    String[] cmdarray = {"/bin/sh", "-c", sb.toString()};
-                    Process process = Runtime.getRuntime().exec(cmdarray);
-                    if (process != null)
-                        process.waitFor();
-                    ImageLoader loader = new ImageLoader(decoded);
-                    Image image = loader.loadImage();
-                    if (image != null) {
-                        final int lineHeight = new TextLine("").getHeight();
-                        final int imageHeight = image.getHeight(null);
-                        final int imageWidth = image.getWidth(null);
-                        int y = 0;
-                        while (y < imageHeight) {
-                            Rectangle r = new Rectangle(0, y, imageWidth,
-                                Math.min(lineHeight, imageHeight - y));
-                            appendLine(new ImageLine(image, r));
-                            y += lineHeight;
+                    if (decode(encoded, "uudecode"))
+                        appendImageLine(decoded);
+                    encoded.delete();
+                    decoded.delete();
+                } else if (length > 7 && s.startsWith("=ybegin") && haveYydecode()) {
+                    final String lookFor = " name=";
+                    int index = s.indexOf(lookFor);
+                    if (index < 0) {
+                        s = s.concat(lookFor);
+                        index = s.length();
+                    } else
+                        index += lookFor.length();
+                    String name = s.substring(index);
+                    String extension = Utilities.getExtension(name);
+                    File encoded =
+                        Utilities.getTempFile(Editor.getTempDirectory(), ".encoded");
+                    File decoded =
+                        Utilities.getTempFile(Editor.getTempDirectory(), extension);
+                    BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(encoded.getOutputStream(),
+                            "ISO-8859-1"));
+                    FastStringBuffer sb =
+                        new FastStringBuffer(s.substring(0, index));
+                    sb.append(decoded.getName());
+                    writer.write(sb.toString());
+                    writer.write('\n');
+                    while ((s = reader.readLine()) != null) {
+                        writer.write(s);
+                        if (s.startsWith("=yend")) {
+                            writer.flush();
+                            writer.close();
+                            break;
                         }
+                        writer.write('\n');
                     }
-                } else if (s.length() > 0 && s.charAt(0) == 0) {
+                    if (decode(encoded, "yydecode -b"))
+                        appendImageLine(decoded);
+                    encoded.delete();
+                    decoded.delete();
+                } else if (length > 0 && s.charAt(0) == 0) {
                     // Don't append a string composed entirely of null bytes.
                     boolean empty = true;
-                    for (int i = s.length()-1; i > 0; i--) {
+                    for (int i = length; i-- > 0;) {
                         if (s.charAt(i) != 0) {
                             empty = false;
                             break;
                         }
                     }
-                    if (empty)
-                        appendLine("");
-                    else
-                        appendLine(s);
+                    appendLine(empty ? "" : s);
                 } else {
                     // Normal text.
                     appendLine(s);
@@ -295,9 +313,68 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
             renumber();
             invalidate();
         }
-        catch (Exception e) {
+        catch (IOException e) {
             Log.error(e);
         }
+    }
+
+    private boolean decode(File encoded, String decodeCommand)
+    {
+        FastStringBuffer sb = new FastStringBuffer("(\\cd \"");
+        sb.append(Directories.getTempDirectory().canonicalPath());
+        sb.append("\" && ");
+        sb.append(decodeCommand);
+        sb.append(" \"");
+        sb.append(encoded.getName());
+        sb.append("\")");
+        String[] cmdarray = {"/bin/sh", "-c", sb.toString()};
+        try {
+            Process process = Runtime.getRuntime().exec(cmdarray);
+            if (process != null) {
+                process.waitFor();
+                return true;
+            }
+        }
+        catch (Throwable t) {
+            Log.error(t);
+        }
+        return false;
+    }
+
+    private void appendImageLine(File decoded)
+    {
+        ImageLoader loader = new ImageLoader(decoded);
+        Image image = loader.loadImage();
+        if (image != null) {
+            final int lineHeight = new TextLine("").getHeight();
+            final int imageHeight = image.getHeight(null);
+            final int imageWidth = image.getWidth(null);
+            int y = 0;
+            while (y < imageHeight) {
+                Rectangle r = new Rectangle(0, y, imageWidth,
+                    Math.min(lineHeight, imageHeight - y));
+                appendLine(new ImageLine(image, r));
+                y += lineHeight;
+            }
+        }
+    }
+
+    // We only look for uudecode and yydecode on Unix platforms.
+    private static int haveUudecode = Platform.isPlatformUnix() ? -1 : 0;
+    private static int haveYydecode = Platform.isPlatformUnix() ? -1 : 0;
+
+    private static boolean haveUudecode()
+    {
+        if (haveUudecode < 0)
+            haveUudecode = Utilities.have("uudecode") ? 1 : 0;
+        return haveUudecode == 1;
+    }
+
+    private static boolean haveYydecode()
+    {
+        if (haveYydecode < 0)
+            haveYydecode = Utilities.have("yydecode") ? 1 : 0;
+        return haveYydecode == 1;
     }
 
     public void viewInline()
@@ -387,7 +464,7 @@ public final class NewsGroupMessageBuffer extends MessageBuffer
                     lockWrite();
                 }
                 catch (InterruptedException e) {
-                    Log.debug(e);
+                    Log.error(e);
                     return;
                 }
                 try {
