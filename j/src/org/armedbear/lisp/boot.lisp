@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.25 2003-03-13 03:06:57 piso Exp $
+;;; $Id: boot.lisp,v 1.26 2003-03-13 19:47:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -153,10 +153,10 @@
   nil)
 
 
-(format t "; Compiling definitions ... ")
+(format t "; Compiling definitions ...~%")
 (finish-output)
 (c::compile-package :cl)
-(format t "done~%")
+(format t "; Finished compiling definitions~%")
 (finish-output)
 
 ;; Redefine DEFUN to compile the definition on the fly.
