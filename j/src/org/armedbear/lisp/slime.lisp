@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.12 2004-09-07 20:19:12 piso Exp $
+;;; $Id: slime.lisp,v 1.13 2004-09-10 19:30:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from SLIME.
+;;; Adapted from SLIME, the "Superior Lisp Interaction Mode for Emacs",
+;;; originally written by Eric Marsden, Luke Gorrie and Helmut Eller.
 
 (in-package #:system)
 
@@ -67,14 +68,62 @@
      (close *stream*))
     (setf *stream* nil)))
 
+(defun slime-busy-p ()
+  (not (null *continuations*)))
+
+(defvar *continuation-counter* 0)
+
+(defvar *continuations* '())
+
+(defun dispatch-return (message)
+  (assert (eq (first message) :return))
+  (let* ((value (second message))
+         (id (third message))
+         (rec (and id (assoc id *continuations*))))
+    (cond (rec
+           (setf *continuations* (remove rec *continuations*))
+           (cond ((eq (first value) :ok)
+                  (funcall (cdr rec) (second value)))
+                 ((eq (first value) :abort)
+                  (if (second value)
+                      (funcall (cdr rec) (second value))
+                      (status "Evaluation aborted.")))))
+          (t
+           (sys::%format t "*continuations* = ~S~%" *continuations*)
+           (error "Unexpected message: ~S" message)
+           ))))
+
+(defun dispatch-loop ()
+  (let ((message (swank-protocol:decode-message *stream*)))
+    (sys::%format t "message = ~S~%" message)
+    (when (eq (first message) :return)
+      (invoke-later #'(lambda () (dispatch-return message)))))
+  (sys::%format t "leaving dispatch-loop~%")
+  )
+
 (defun slime-eval (form)
   (if (slime-local-p)
       (eval form)
       (handler-case
           (progn
-            (swank-protocol:encode-message form *stream*)
-            (swank-protocol:decode-message *stream*))
+            (swank-protocol:encode-message `(:eval ,form) *stream*)
+            (let* ((message (swank-protocol:decode-message *stream*))
+                   (kind (first message)))
+              (case kind
+                (:return
+                 (let ((result (second message)))
+                   (when (eq (first result) :ok)
+                     (second result)))))))
         (stream-error () (disconnect)))))
+
+(defun slime-eval-async (form continuation)
+  (let ((id (incf *continuation-counter*)))
+    (push (cons id 'display-eval-result) *continuations*)
+    (if (slime-local-p)
+        nil ;; FIXME
+        (handler-case
+            (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
+          (stream-error () (disconnect))))))
 
 (defun read-port-and-connect (retries)
   (status "Slime polling for connection...")
@@ -115,6 +164,8 @@
           (return-from completion-prefix (subseq string start end)))))))
 
 (defun complete-symbol ()
+  (when (slime-busy-p)
+    (return-from complete-symbol))
   (unless (slime-connected-p)
     (status "Slime not connected")
     (return-from complete-symbol))
@@ -174,7 +225,7 @@
 (defun enclosing-operator-names ()
   "Return the list of operator names of the forms containing point."
   (let ((result ()))
-     (save-excursion
+    (save-excursion
       (loop
         (let ((point1 (current-point))
               (point2 (progn (backward-up-list) (current-point))))
@@ -197,7 +248,8 @@
 
 (defun slime-space ()
   (unwind-protect
-   (when (slime-connected-p)
+   (when (and (slime-connected-p)
+              (not (slime-busy-p)))
      (let ((names (enclosing-operator-names)))
        (when names
          (let ((message (slime-eval `(swank:arglist-for-echo-area (quote ,names)))))
@@ -252,21 +304,19 @@
       (when file
         (let ((buffer (find-file-buffer file)))
           (when buffer
-            (let* ((index (position #\: name :from-end t))
-                   (short-name (if index
-                                   (subseq name (1+ index))
-                                   name)))
+            (let* ((short-name
+                    (let ((index (position #\: name :from-end t)))
+                      (if index (subseq name (1+ index)) name))))
               (switch-to-buffer buffer)
               (with-single-undo
-                (when position
-                  (goto-char position))
+                (goto-char (or position 0))
                 (let* ((pattern (format nil "^\\s*\\(def\\S*\\s+~A" short-name))
                        (pos (re-search-forward pattern
                                                :ignore-case t
                                                :whole-words-only t)))
                   (when pos
                     (goto-char pos))
-                  (setf pos (search-forward (string name) :ignore-case t))
+                  (setf pos (search-forward short-name :ignore-case t))
                   (when pos
                     (goto-char pos))))
               (update-display))))))))
@@ -274,6 +324,10 @@
 ;; FIXME
 (defun find-tag-at-point ()
   (j::%execute-command "findTagAtDot"))
+
+;; FIXME
+(defun push-position ()
+  (j::%execute-command "pushPosition"))
 
 (defun edit-definition (&optional function-name package-name)
   (unless (slime-connected-p)
@@ -291,19 +345,20 @@
     (let ((definitions
             (slime-eval `(swank:find-definitions-for-function-name ,function-name
                                                                    ,package-name))))
-      (if definitions
-          (goto-source-location function-name
-                                (slime-definition-location (car definitions)))
-          (find-tag-at-point)))))
+      (cond (definitions
+              (push-position)
+              (goto-source-location function-name
+                                    (slime-definition-location (car definitions))))
+            (t
+             (find-tag-at-point))))))
 
 (defun eval-region ()
   (let ((mark (current-mark)))
     (when mark
       (let* ((string (buffer-substring (current-point) mark))
-             (package (find-buffer-package))
-             (result
-              (slime-eval `(swank:interactive-eval-string ,string ,package))))
-        (status (write-string result))))))
+             (package (find-buffer-package)))
+        (slime-eval-async `(swank:eval-region ,string ,package) 'display-eval-result))
+      (make-thread #'(lambda () (dispatch-loop))))))
 
 (defun last-expression ()
   (let (start end)
@@ -313,12 +368,15 @@
     (setf end (current-point))
     (buffer-substring start end)))
 
+(defun display-eval-result (value)
+  (status value))
+
 (defun eval-last-expression ()
   (let* ((string (last-expression))
-         (package (find-buffer-package))
-         (result
-          (slime-eval `(swank:interactive-eval-string ,string ,package))))
-    (status (write-string result))))
+         (package (find-buffer-package)))
+    (slime-eval-async
+     `(swank:eval-string-async ,string ,package) 'display-eval-result))
+  (make-thread #'(lambda () (dispatch-loop))))
 
 (map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
 (map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")

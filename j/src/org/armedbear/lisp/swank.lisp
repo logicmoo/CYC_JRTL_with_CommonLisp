@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.11 2004-09-08 19:44:35 piso Exp $
+;;; $Id: swank.lisp,v 1.12 2004-09-10 19:30:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from SLIME.
+;;; Adapted from SLIME, the "Superior Lisp Interaction Mode for Emacs",
+;;; originally written by Eric Marsden, Luke Gorrie and Helmut Eller.
 
 (in-package #:swank)
 
@@ -32,8 +33,30 @@
 
 (defun server-loop ()
   (loop
-    (let ((result (eval (swank-protocol:decode-message *stream*))))
-      (swank-protocol:encode-message result *stream*))))
+    (let ((message (swank-protocol:decode-message *stream*)))
+      (assert (listp message))
+      (let ((kind (first message))
+            (form (second message))
+            (id (third message)))
+        (case kind
+          (:eval
+           (let ((result (eval form)))
+             (swank-protocol:encode-message `(:return (:ok ,result)) *stream*)))
+          (:eval-async
+           ;; Forms passed this way get evaluated (in the end) by EVAL-STRING,
+           ;; which returns either a list of values or an error object.
+           (let ((values (eval form))
+                 result ok)
+
+             (setf result (format-values-for-echo-area values))
+             (when (listp values) ;; No error.
+               (setf ok t))
+             (swank-protocol:encode-message `(:return
+                                              ,(if ok `(:ok ,result) `(:abort ,result))
+                                              ,id)
+                                            *stream*)))
+          (t
+           (error "SERVER-LOOP: unhandled case: ~S" message)))))))
 
 (defun serve-connection (server-socket)
   (let* ((stream (accept-connection server-socket)))
@@ -201,6 +224,7 @@
           (t
            "; No value"))))
 
+;; Returns either a (possibly empty) list of values or an error object.
 (defun eval-string (string)
   (let (values)
     (handler-case
@@ -212,19 +236,49 @@
               (setf values (multiple-value-list (eval form))))))
       (error (e) (return-from eval-string e)))))
 
+(defun eval-region (string package-name)
+  (let ((package (if package-name (find-package package-name) *package*)))
+    (let* ((*package* (or package *package*))
+           (values (eval-string string))
+;;            ok
+;;            result
+           )
+      (force-output)
+;;       (setf result (format-values-for-echo-area values))
+;;       (when (listp values) ;; No error.
+;;         (setf ok t))
+;;       (swank-protocol:encode-message `(:return
+;;                                        ,(if ok `(:ok ,result) `(:abort ,result))
+;;                                        ,id)
+;;                                      *stream*))))
+      values)))
+
 (defun shorten-string-for-transcript (string)
   (let ((s (subseq string 0 (min 60 (length string)))))
-    (substitute #\space #\newline s)))
+    (string-right-trim '(#\space) (substitute #\space #\newline s))))
 
-(defun interactive-eval-string (string package-name)
+(defun eval-string-async (string package-name)
+;;   (declare (ignorable id))
   (write-string ";;;; ")
   (write-string (shorten-string-for-transcript string))
+  (write-string " ...")
   (terpri)
   (force-output)
   (let ((package (if package-name (find-package package-name) *package*)))
     (let* ((*package* (or package *package*))
-           (values (eval-string string)))
+           (values (eval-string string))
+;;            ok
+;;            result
+           )
+
       (force-output)
-      (format-values-for-echo-area values))))
+;;       (setf result (format-values-for-echo-area values))
+;;       (when (listp values) ;; No error.
+;;         (setf ok t))
+;;       (swank-protocol:encode-message `(:return
+;;                                        ,(if ok `(:ok ,result) `(:abort ,result))
+;;                                        ,id)
+;;                                      *stream*))))
+      values)))
 
 (provide '#:swank)
