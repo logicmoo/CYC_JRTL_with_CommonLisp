@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.35 2004-06-04 17:09:23 piso Exp $
+ * $Id: HashTable.java,v 1.36 2004-08-19 00:43:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,29 +279,40 @@ public abstract class HashTable extends LispObject
         }
     }
 
+    private static final LispObject FUNCTION_EQ =
+        Symbol.EQ.getSymbolFunction();
+    private static final LispObject FUNCTION_EQL =
+        Symbol.EQL.getSymbolFunction();
+    private static final LispObject FUNCTION_EQUAL =
+        Symbol.EQUAL.getSymbolFunction();
+    private static final LispObject FUNCTION_EQUALP =
+        Symbol.EQUALP.getSymbolFunction();
+
     // ### %make-hash-table
-    private static final Primitive _MAKE_HASH_TABLE =
-        new Primitive("%make-hash-table", PACKAGE_SYS, false)
+    private static final Primitive4 _MAKE_HASH_TABLE =
+        new Primitive4("%make-hash-table", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject test, LispObject size,
+                                  LispObject rehashSize, LispObject rehashThreshold)
+            throws ConditionThrowable
         {
-            if (args.length != 4)
-                return signal(new WrongNumberOfArgumentsException(this));
-            LispObject test = args[0];
-            int size = Fixnum.getValue(args[1]);
-            LispObject rehashSize = args[2];
-            LispObject rehashThreshold = args[3];
-            if (test == Symbol.EQL.getSymbolFunction() || test == NIL)
-                return new EqlHashTable(size, rehashSize, rehashThreshold);
-            else if (test == Symbol.EQ.getSymbolFunction())
-                return new EqHashTable(size, rehashSize, rehashThreshold);
-            else if (test == Symbol.EQUAL.getSymbolFunction())
-                return new EqualHashTable(size, rehashSize, rehashThreshold);
-            else if (test == Symbol.EQUALP.getSymbolFunction())
-                return new EqualpHashTable(size, rehashSize, rehashThreshold);
-            else
-                return signal(new LispError("Unknown test for MAKE-HASH-TABLE: " +
-                                            test.writeToString()));
+            int n;
+            try {
+                n = ((Fixnum)size).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(size, Symbol.FIXNUM));
+            }
+            if (test == FUNCTION_EQL || test == NIL)
+                return new EqlHashTable(n, rehashSize, rehashThreshold);
+            if (test == FUNCTION_EQ)
+                return new EqHashTable(n, rehashSize, rehashThreshold);
+            if (test == FUNCTION_EQUAL)
+                return new EqualHashTable(n, rehashSize, rehashThreshold);
+            if (test == FUNCTION_EQUALP)
+                return new EqualpHashTable(n, rehashSize, rehashThreshold);
+            return signal(new LispError("Unknown test for MAKE-HASH-TABLE: " +
+                                        test.writeToString()));
         }
     };
 
