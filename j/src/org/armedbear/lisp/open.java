@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.9 2003-12-13 00:58:51 piso Exp $
+ * $Id: open.java,v 1.10 2004-01-02 19:10:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@ public final class open extends Lisp
                                    LispObject third)
             throws ConditionThrowable
         {
+            Pathname pathname = Pathname.coerceToPathname(first);
             File file = Utilities.getFile(first);
             boolean binary = checkBinaryElementType(second);
             LispObject ifExists = third;
@@ -53,9 +54,11 @@ public final class open extends Lisp
             }
             try {
                 if (binary)
-                    return new BinaryOutputStream(new FileOutputStream(file));
+                    return new BinaryOutputStream(new FileOutputStream(file),
+                                                  pathname);
                 else
-                    return new CharacterOutputStream(new FileOutputStream(file));
+                    return new CharacterOutputStream(new FileOutputStream(file),
+                                                     pathname);
             }
             catch (FileNotFoundException e) {
                 return signal(new LispError("unable to create file: " + first));
@@ -69,13 +72,16 @@ public final class open extends Lisp
         public LispObject execute (LispObject first, LispObject second)
             throws ConditionThrowable
         {
+            Pathname pathname = Pathname.coerceToPathname(first);
             File file = Utilities.getFile(first);
             boolean binary = checkBinaryElementType(second);
             try {
                 if (binary)
-                    return new BinaryInputStream(new FileInputStream(file));
+                    return new BinaryInputStream(new FileInputStream(file),
+                                                 pathname);
                 else
-                    return new CharacterInputStream(new FileInputStream(file));
+                    return new CharacterInputStream(new FileInputStream(file),
+                                                    pathname);
             }
             catch (FileNotFoundException e) {
                 return signal(new LispError("file not found: " + first));
