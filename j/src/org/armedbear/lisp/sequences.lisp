@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.33 2003-05-27 17:21:57 piso Exp $
+;;; $Id: sequences.lisp,v 1.34 2003-05-28 00:23:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -280,34 +280,6 @@
                (s2 start2 (1+ s2)))
               ((>= i l) sequence1)
             (setf (elt sequence1 s1) (elt sequence2 s2)))))))
-
-
-;;; REVERSE (from CMUCL)
-
-(defmacro vector-reverse (sequence type)
-  `(let ((length (length ,sequence)))
-     (do ((forward-index 0 (1+ forward-index))
-	  (backward-index (1- length) (1- backward-index))
-	  (new-sequence (make-sequence-of-type ,type length)))
-       ((= forward-index length) new-sequence)
-       (setf (aref new-sequence forward-index)
-	     (aref ,sequence backward-index)))))
-
-(defmacro list-reverse-macro (sequence)
-  `(do ((new-list ()))
-     ((atom ,sequence) new-list)
-     (push (pop ,sequence) new-list)))
-
-(defun reverse (sequence)
-  (seq-dispatch sequence
-		(list-reverse* sequence)
-		(vector-reverse* sequence)))
-
-(defun list-reverse* (sequence)
-  (list-reverse-macro sequence))
-
-(defun vector-reverse* (sequence)
-  (vector-reverse sequence (type-of sequence)))
 
 
 ;;; NREVERSE
