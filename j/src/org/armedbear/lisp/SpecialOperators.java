@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.3 2003-10-02 00:19:50 piso Exp $
+ * $Id: SpecialOperators.java,v 1.4 2003-10-02 00:23:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -316,6 +316,8 @@ public final class SpecialOperators extends Lisp
                     symbol.setSymbolValue(value);
                 args = args.cdr();
             }
+            // Return primary value only!
+            thread.clearValues();
             return value;
         }
     };
