@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2004 Peter Graves
-# $Id: Makefile.in,v 1.22 2004-09-15 17:54:36 piso Exp $
+# $Id: Makefile.in,v 1.23 2004-09-24 15:16:55 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -119,8 +119,7 @@ distdir:
 	mkdir $(distdir)/src/org/armedbear/j/images
 	-cp -p  src/org/armedbear/j/images/*.png $(distdir)/src/org/armedbear/j/images
 	mkdir $(distdir)/src/org/armedbear/lisp
-	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/Site.java.in src/org/armedbear/lisp/*.c src/org/armedbear/lisp/*.lisp src/org/armedbear/lisp/LICENSE $(distdir)/src/org/armedbear/lisp
-	rm -f $(distdir)/src/org/armedbear/lisp/Site.java
+	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/*.c src/org/armedbear/lisp/*.lisp src/org/armedbear/lisp/LICENSE $(distdir)/src/org/armedbear/lisp
 	mkdir $(distdir)/src/org/armedbear/lisp/java
 	mkdir $(distdir)/src/org/armedbear/lisp/java/awt
 	-cp -p  src/org/armedbear/lisp/java/awt/Makefile.in src/org/armedbear/lisp/java/awt/*.java $(distdir)/src/org/armedbear/lisp/java/awt
@@ -237,7 +236,6 @@ distclean: clean
 	-rm -f src/org/armedbear/j/jdb/Makefile
 	-rm -f src/org/armedbear/lisp/Makefile
 	-rm -f src/org/armedbear/lisp/java/awt/Makefile
-	-rm -f src/org/armedbear/lisp/Site.java
 
 j.zip:
 	-rm -f j.zip
@@ -259,7 +257,6 @@ j.zip:
 		src/org/armedbear/j/images/*.png \
 		src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml \
 		src/org/armedbear/lisp/*.java \
-		src/org/armedbear/lisp/Site.java.in \
 		src/org/armedbear/lisp/*.c \
 		src/org/armedbear/lisp/*.lisp \
 		src/org/armedbear/lisp/LICENSE \
@@ -270,7 +267,7 @@ j.zip:
 		doc/*.html doc/*.css \
 		themes/* \
 		examples/* \
-		-x themes/CVS/ examples/CVS/ src/org/armedbear/lisp/Site.java
+		-x themes/CVS/ examples/CVS/
 	unzip -t -qq j.zip
 
 j-jar.zip: j.jar
