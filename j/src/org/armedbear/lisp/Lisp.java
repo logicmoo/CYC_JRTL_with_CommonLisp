@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.331 2005-03-22 19:59:57 piso Exp $
+ * $Id: Lisp.java,v 1.332 2005-03-23 00:50:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -881,14 +881,25 @@ public abstract class Lisp
         if (type == BuiltInClass.CHARACTER)
             return Symbol.CHARACTER;
         if (type instanceof Cons) {
-            if (type.car() == Symbol.INTEGER) {
-                if (type.cadr().eql(Fixnum.ZERO)) {
-                    if (type.cdr().cadr().eql(Fixnum.ONE))
-                        return Symbol.BIT;
-                }
-            }
             if (type.equal(UNSIGNED_BYTE_8))
                 return type;
+            if (type.car() == Symbol.INTEGER) {
+                LispObject lower = type.cadr();
+                LispObject upper = type.cdr().cadr();
+                // Convert to inclusive bounds.
+                if (lower instanceof Cons)
+                    lower = lower.car().incr();
+                if (upper instanceof Cons)
+                    upper = upper.car().decr();
+                if (lower instanceof Fixnum && upper instanceof Fixnum) {
+                    int l = ((Fixnum)lower).value;
+                    int u = ((Fixnum)upper).value;
+                    if (l >= 0 && u <= 1)
+                        return Symbol.BIT;
+                    if (l >= 0 && u <= 255)
+                        return UNSIGNED_BYTE_8;
+                }
+            }
         }
         return T;
     }
