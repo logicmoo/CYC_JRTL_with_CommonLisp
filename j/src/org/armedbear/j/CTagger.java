@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CTagger.java,v 1.2 2002-10-31 13:45:21 piso Exp $
+ * $Id: CTagger.java,v 1.3 2002-11-05 01:25:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,8 +172,9 @@ public final class CTagger extends JavaTagger
         }
         token = sb.toString();
     }
-    
-    private static void skipPreprocessor(Position pos)
+
+    // Also used in CppTagger.java.
+    /*package*/ static void skipPreprocessor(Position pos)
     {
         while (true) {
             Line line = pos.getLine();
