@@ -2,7 +2,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(some every notany notevery nreverse
+(export '(some every notany notevery copy-seq nreverse
           position position-if position-if-not
           find find-if find-if-not))
 
@@ -59,6 +59,45 @@
   `(if (listp ,sequence)
        ,list-form
        ,array-form))
+
+(defmacro type-specifier-atom (type)
+  `(if (atom ,type) ,type (car ,type)))
+
+(defun make-sequence-of-type (type length)
+  (case (type-specifier-atom type)
+    (list (make-list length))
+    (string (make-string length))
+    (vector (make-array length))
+    (t
+     (error 'type-error))))
+
+(defmacro vector-copy-seq (sequence type)
+  `(let ((length (length (the vector ,sequence))))
+     (do ((index 0 (1+ index))
+	  (copy (make-sequence-of-type ,type length)))
+       ((= index length) copy)
+       (setf (aref copy index) (aref ,sequence index)))))
+
+(defmacro list-copy-seq (list)
+  `(if (atom ,list) '()
+       (let ((result (cons (car ,list) '()) ))
+	 (do ((x (cdr ,list) (cdr x))
+	      (splice result
+		      (cdr (rplacd splice (cons (car x) '() ))) ))
+           ((atom x) (unless (null x)
+                       (rplacd splice x))
+            result)))))
+
+(defun copy-seq (sequence)
+  (seq-dispatch sequence
+		(list-copy-seq* sequence)
+		(vector-copy-seq* sequence)))
+
+(defun list-copy-seq* (sequence)
+  (list-copy-seq sequence))
+
+(defun vector-copy-seq* (sequence)
+  (vector-copy-seq sequence (type-of sequence)))
 
 ;; FIXME
 (defun nreverse (sequence)
