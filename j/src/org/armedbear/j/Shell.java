@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.18 2002-12-15 02:14:47 piso Exp $
+ * $Id: Shell.java,v 1.19 2002-12-24 17:04:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,7 +176,7 @@ public class Shell extends CommandInterpreter implements Constants
             Log.debug("checkProcess returned false");
             return;
         }
-        Runnable r = new Runnable() {
+        Thread thread = new Thread("shell dispose") {
             public void run()
             {
                 try {
@@ -199,7 +199,8 @@ public class Shell extends CommandInterpreter implements Constants
                 }
             }
         };
-        new Thread(r).start();
+        thread.setDaemon(true);
+        thread.start();
     }
 
     protected void enter(final String s)
@@ -246,7 +247,7 @@ public class Shell extends CommandInterpreter implements Constants
 
     protected void startWatcherThread()
     {
-        Runnable r = new Runnable() {
+        Thread thread = new Thread("shell watcher") {
             public void run()
             {
                 try {
@@ -273,7 +274,8 @@ public class Shell extends CommandInterpreter implements Constants
                     SwingUtilities.invokeLater(processExitedRunnable);
             }
         };
-        new Thread(r).start();
+        thread.setDaemon(true);
+        thread.start();
     }
 
     private void tab()
