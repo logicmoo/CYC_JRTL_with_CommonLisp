@@ -1,8 +1,8 @@
 /*
  * Help.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Help.java,v 1.3 2003-02-13 00:50:27 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Help.java,v 1.4 2003-05-18 16:01:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,11 +35,22 @@ public final class Help
         help(null);
     }
 
-    public static void help(String commandName)
+    public static void help(String arg)
     {
         final Editor editor = Editor.currentEditor();
         final Frame frame = editor.getFrame();
         frame.setWaitCursor();
+        String fileName, commandName;
+        if (arg == null || arg.length() == 0) {
+            fileName = "contents.html";
+            commandName = null;
+        } else if (arg.endsWith(".html")) {
+            fileName = arg;
+            commandName = null;
+        } else {
+            fileName = "commands.html";
+            commandName = arg;
+        }
         if (commandName != null) {
             Command command = CommandTable.getCommand(commandName);
             if (command != null)
@@ -49,11 +60,7 @@ public final class Help
             File dir = getDocumentationDirectory();
             if (dir == null)
                 return;
-            File file = null;
-            if (commandName != null && commandName.length() > 0)
-                file = File.getInstance(dir, "commands.html");
-            else
-                file = File.getInstance(dir, "contents.html");
+            File file = File.getInstance(dir, fileName);
             if (file == null)
                 return;
             Buffer buf = null;
@@ -79,10 +86,11 @@ public final class Help
                             offset = buf.getAbsoluteOffset(dot);
                     }
                 }
-                ((WebBuffer) buf).saveHistory(buf.getFile(), offset, ((WebBuffer) buf).getContentType());
+                ((WebBuffer)buf).saveHistory(buf.getFile(), offset,
+                    ((WebBuffer)buf).getContentType());
                 if (!buf.getFile().equals(file)) {
                     // Existing buffer is not looking at the right file.
-                    ((WebBuffer) buf).go(file, 0, null);
+                    ((WebBuffer)buf).go(file, 0, null);
                 }
                 Position pos = ((WebBuffer) buf).findRef(commandName);
                 if (editor.getBuffer() == buf) {
