@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.112 2004-03-08 19:51:11 piso Exp $
+ * $Id: Symbol.java,v 1.113 2004-03-09 11:09:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -168,12 +168,6 @@ public class Symbol extends LispObject
     public static final Symbol COMMA_ATSIGN                     = PACKAGE_CL.addInternalSymbol("COMMA-ATSIGN");
     public static final Symbol COMMA_DOT                        = PACKAGE_CL.addInternalSymbol("COMMA-DOT");
     public static final Symbol MACROEXPAND_MACRO                = PACKAGE_SYS.addInternalSymbol("MACROEXPAND-MACRO");
-
-    public static final Symbol ARRAY_DIMENSION_LIMIT            = PACKAGE_CL.addExternalSymbol("ARRAY-DIMENSION-LIMIT");
-    static {
-        ARRAY_DIMENSION_LIMIT.setSymbolValue(new Fixnum(0x1000000));
-        ARRAY_DIMENSION_LIMIT.setConstant(true);
-    }
 
     // Bit flags.
     private static final int FLAG_SPECIAL  = 0x0001;
