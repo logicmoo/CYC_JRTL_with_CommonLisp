@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.12 2004-10-13 00:22:19 piso Exp $
+ * $Id: SimpleArray.java,v 1.13 2005-01-13 12:32:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public final class SimpleArray extends AbstractArray
         LispObject rest = initialContents;
         for (int i = 0; i < rank; i++) {
             dimv[i] = rest.length();
-            if (rest == NIL)
+            if (rest == NIL || rest.length() == 0)
                 break;
             rest = rest.elt(0);
         }
