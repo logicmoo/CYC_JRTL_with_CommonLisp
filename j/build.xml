@@ -123,7 +123,7 @@
     <copy file="${topdir}/j.bat.in" tofile="${topdir}/j.bat" filtering="yes" overwrite="yes"/>
   </target>
 
-  <target name="j.jar" depends="compile">
+  <target name="j.jar" depends="compile, fasls">
     <jar jarfile="../j.jar" manifest="manifest" basedir="${basedir}">
       <exclude name="pg.class"/>
       <exclude name="SampleExtension.class"/>
@@ -144,6 +144,12 @@
 
   <target name="jpty" if="jpty">
     <ant antfile="jpty/build.xml"/>
+  </target>
+
+  <target name="fasls">
+    <exec executable="${java}" dir="${basedir}">
+      <arg line="org.armedbear.lisp.Main --eval '(progn (compile-system) (quit))'"/>
+    </exec>
   </target>
 
   <!-- Install -->
