@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.55 2003-12-20 19:54:08 piso Exp $
+;;; $Id: clos.lisp,v 1.56 2004-01-02 00:41:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -779,7 +779,7 @@
         (when (fboundp function-name)
           (error 'program-error
                  :format-control "~A already names an ordinary function, macro, or special operator."
-                 :format-args (list function-name)))
+                 :format-arguments (list function-name)))
         (let ((gf (apply (if (eq generic-function-class the-class-standard-gf)
                              #'make-instance-standard-generic-function
                              #'make-instance)
@@ -1411,8 +1411,9 @@
   (std-slot-makunbound instance slot-name))
 
 (defgeneric slot-missing (class instance slot-name operation &optional new-value))
+
 (defmethod slot-missing ((class t) instance slot-name operation &optional new-value)
-  (error "the slot ~S is missing from the class ~S" slot-name class))
+  (error "The slot ~S is missing from the class ~S." slot-name class))
 
 ;;; Instance creation and initialization
 
