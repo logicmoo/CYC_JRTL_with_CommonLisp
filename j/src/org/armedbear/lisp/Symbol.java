@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.33 2003-03-30 15:15:30 piso Exp $
+ * $Id: Symbol.java,v 1.34 2003-04-06 18:36:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,14 +131,13 @@ public class Symbol extends LispObject
     // Construct an uninterned symbol.
     public Symbol(String name)
     {
-        // The symbol is uninterned, but its name is an interned String.
-        this.name = name.intern();
+        this.name = name;
         pkg = NIL;
     }
 
     public Symbol(String name, Package pkg)
     {
-        this.name = name.intern();
+        this.name = name;
         this.pkg = pkg;
     }
 
