@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.49 2003-10-18 00:28:39 piso Exp $
+;;; $Id: compiler.lisp,v 1.50 2003-10-18 14:42:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,9 +20,9 @@
 (unless (find-package "COMPILER")
   (make-package "COMPILER" :nicknames '("C") :use '("COMMON-LISP")))
 
-(in-package "COMMON-LISP")
+;; (in-package "COMMON-LISP")
 
-(export 'compile)
+;; (export 'compile)
 
 (in-package "COMPILER")
 
@@ -94,16 +94,53 @@
           (setq result (append result (list var)))))
     result))
 
+;; (defun define-local-macro (name lambda-list &rest body)
+;;   (let* ((form (gensym))
+;;          (env (gensym))
+;;          (body (sys::parse-defmacro lambda-list form body name 'macrolet
+;;                                     :environment env))
+;;          (expander `(lambda (,form ,env) (block ,name ,body))))
+;;     (format t "expander = ~S~%" expander)
+;;     (sys::make-macro expander)))
+
+(defun define-local-macro (name lambda-list body)
+  (let* ((form (gensym))
+         (env (gensym))
+         (body (sys::parse-defmacro lambda-list form body name 'macrolet
+                                    :environment env))
+         (expander `(lambda (,form ,env) (block ,name ,body)))
+         (compiled-expander (%compile nil expander)))
+;;     (format t "expander = ~S~%" expander)
+;;     (format t "compiled-expander = ~S~%" compiled-expander)
+    (or compiled-expander expander)))
+
+(defparameter *local-macros* ())
+
+(defun local-macro-function (name)
+  (getf *local-macros* name))
+
+(defun expand-local-macro (form)
+  (funcall (local-macro-function (car form)) form nil))
+
 (defun compile-macrolet (form)
-  (let ((macros (cadr form))
+  (let ((*local-macros* *local-macros*)
+        (macros (cadr form))
         (body (cddr form))
-        (res ()))
+        (res ())
+        compiled-body)
     (dolist (macro macros)
       (let ((name (car macro))
             (lambda-list (cadr macro))
             (forms (cddr macro)))
+        (push (define-local-macro name lambda-list forms) *local-macros*)
+        (push name *local-macros*)
         (push (list* name lambda-list (compile-progn forms)) res)))
-    (list* 'macrolet (reverse res) (compile-progn body))))
+;;     (format t "*local-macros* = ~S~%" *local-macros*)
+;;     (format t "body          = ~S~%" body)
+    (setf compiled-body (compile-progn body))
+;;     (format t "compiled-body = ~S~%" compiled-body)
+    (setf res (list* 'macrolet (reverse res) compiled-body))
+    res))
 
 (defun compile-special (form)
   (let ((first (car form)))
@@ -132,7 +169,10 @@
       (SETQ
        (compile-setq (cdr form)))
       (PROGN
-       (cons 'progn (mapcar #'compile-sexp (cdr form))))
+       (let ((body (cdr form)))
+         (if (= (length body) 1)
+             (compile-sexp (car body))
+             (cons 'progn (mapcar #'compile-sexp body)))))
       (IF
        (unless (<= 2 (length (cdr form)) 3)
          (error "wrong number of arguments for IF"))
@@ -195,6 +235,11 @@
 (defun compile-sexp (form)
   (if (atom form) form
       (let ((first (car form)))
+        (when (local-macro-function first)
+;;           (format t "form = ~S~%" form)
+          (let ((expansion (expand-local-macro form)))
+;;             (format t "expansion = ~S~%" expansion)
+            (return-from compile-sexp expansion)))
         (unless (and (symbolp first) (fboundp first))
           (return-from compile-sexp form))
         (cond ((eq first 'LAMBDA)
