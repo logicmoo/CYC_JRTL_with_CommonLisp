@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.14 2004-01-31 01:30:11 piso Exp $
+ * $Id: Stream.java,v 1.15 2004-01-31 13:44:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1126,6 +1126,11 @@ public class Stream extends LispObject
         String s = String.valueOf(obj);
         thread.setDynamicEnvironment(oldDynEnv);
         _writeString(s);
+    }
+
+    public LispObject listen() throws ConditionThrowable
+    {
+        return _charReady() ? T : NIL;
     }
 
     // Returns -1 at end of file.
