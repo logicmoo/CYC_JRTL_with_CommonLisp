@@ -1,7 +1,7 @@
 ;;; upgraded-complex-part-type.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: upgraded-complex-part-type.lisp,v 1.4 2005-03-13 01:46:40 piso Exp $
+;;; $Id: upgraded-complex-part-type.lisp,v 1.5 2005-03-13 01:48:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,5 +21,6 @@
   (declare (ignore environment))
   (if (subtypep typespec 'REAL)
       typespec
-      (error :format-control "The type ~S is not a subtype of ~S."
+      (error 'simple-error
+             :format-control "The type ~S is not a subtype of ~S."
              :format-arguments (list typespec 'REAL))))
