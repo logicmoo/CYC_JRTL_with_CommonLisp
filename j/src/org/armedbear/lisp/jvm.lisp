@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.201 2004-07-04 15:31:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.202 2004-07-04 17:27:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,8 +85,8 @@
     (push variable *variables*)
     (unless special-p
       (push name *all-locals*)
-      (add-variable-to-context variable)
-      )))
+      (add-variable-to-context variable))
+    variable))
 
 (defun find-visible-variable (name)
   (find name *variables* :key 'variable-name))
@@ -1895,37 +1895,16 @@
     (let ((index 0))
       (dolist (var vars)
         (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
-        (push-variable var specialp)
-        (when (< index (1- (length vars)))
-          (emit 'dup))
-        (emit 'bipush index)
-        (incf index)
-        (emit 'aaload)
-        ;; Value is on the runtime stack at this point.
-        (cond (specialp
-               (let ((g (declare-symbol var)))
-                 (emit 'aload *thread*)
-                 (emit 'swap)
-                 (emit 'getstatic
-                       *this-class*
-                       g
-                       +lisp-symbol+)
-                 (emit 'swap)
-                 (emit-invokevirtual +lisp-thread-class+
-                                     "bindSpecial"
-                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                     -2)))
-              (*use-locals-vector*
-               (let ((index (local-index var)))
-                 (unless index
-                   (error "COMPILE-MULTIPLE-VALUE-BIND: can't find local variable ~S." var))
-                 (emit 'aload 1) ; Stack: value array
-                 (emit 'swap) ; array value
-                 (emit 'bipush index) ; array value index
-                 (emit 'swap) ; array index value
-                 (emit 'aastore)))
-              (t
-               (emit 'astore (allocate-local var))))))
+        (let ((variable (push-variable var specialp)))
+          (unless specialp
+            (setf (variable-register variable) (allocate-local var)))
+          (when (< index (1- (length vars)))
+            (emit 'dup))
+          (emit 'bipush index)
+          (incf index)
+          (emit 'aaload)
+          ;; Value is on the runtime stack at this point.
+          (compile-binding variable))))
     (emit-clear-values)
     ;; Body.
     (do ((body (cdddr form) (cdr body)))
@@ -1985,81 +1964,70 @@
       (emit 'aload env-var)
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
+;; Generates code to bind variable to value at top of runtime stack.
+(defun compile-binding (variable)
+  (cond ((variable-special-p variable)
+         (ensure-thread-var-initialized)
+         (emit 'aload *thread*)
+         (emit 'swap)
+         (emit 'getstatic
+               *this-class*
+               (declare-symbol (variable-name variable))
+               +lisp-symbol+)
+         (emit 'swap)
+         (emit-invokevirtual +lisp-thread-class+
+                             "bindSpecial"
+                             "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                             -2))
+        (*use-locals-vector*
+         (let ((index (variable-index variable)))
+           (emit 'aload 1) ; Stack: value array
+           (emit 'swap) ; array value
+           (emit 'bipush index) ; array value index
+           (emit 'swap) ; array index value
+           (emit 'aastore)))
+        (t
+         (emit 'astore (variable-register variable)))))
+
 (defun compile-let-vars (varlist specials)
-  ;; Generate code to evaluate the initforms and leave the resulting values
-  ;; on the stack.
-  (let ((last-push-was-nil nil))
+  (let ((variables ()))
+    ;; Generate code to evaluate the initforms and leave the resulting values
+    ;; on the stack.
+    (let ((last-push-was-nil nil))
+      (dolist (varspec varlist)
+        (let ((initform (if (consp varspec) (cadr varspec) nil)))
+          (cond (initform
+                 (compile-form initform)
+                 (unless (remove-store-value)
+                   (emit-push-value))
+                 (maybe-emit-clear-values initform)
+                 (setf last-push-was-nil nil))
+                (t
+                 (if last-push-was-nil
+                     (emit 'dup)
+                     (emit-push-nil))
+                 (setf last-push-was-nil t))))))
+    ;; Add variables to *VARIABLES*.
     (dolist (varspec varlist)
-      (let (var initform)
-        (if (consp varspec)
-            (setq var (car varspec)
-                  initform (cadr varspec))
-            (setq var varspec
-                  initform nil))
-        (cond (initform
-               (compile-form initform)
-               (unless (remove-store-value)
-                 (emit-push-value))
-               (maybe-emit-clear-values initform)
-               (setf last-push-was-nil nil))
-              (t
-               (if last-push-was-nil
-                   (emit 'dup)
-                   (emit-push-nil))
-               (setf last-push-was-nil t))))))
-  ;; Add local variables to local variables vector.
-  (dolist (varspec varlist)
-    (let* ((var (if (consp varspec) (car varspec) varspec))
-           (specialp (if (or (memq var specials) (special-variable-p var)) t nil)))
-      (unless specialp
-        (allocate-local var))
-      (push-variable var specialp)))
-  ;; At this point the initial values are on the stack. Now generate code to
-  ;; pop them off one by one and store each one in the corresponding local or
-  ;; special variable. In order to do this, we must process the variable list
-  ;; in reverse order.
-  (do* ((varlist (reverse varlist) (cdr varlist))
-        (varspec (car varlist) (car varlist)))
-       ((null varlist))
-    (let* ((var (if (consp varspec) (car varspec) varspec)))
-      (cond ((or (memq var specials) (special-variable-p var))
-             (ensure-thread-var-initialized)
-             (emit 'aload *thread*)
-             (emit 'swap)
-             (let ((g (declare-symbol var)))
-               (emit 'getstatic
-                     *this-class*
-                     g
-                     +lisp-symbol+)
-               (emit 'swap)
-               (emit-invokevirtual +lisp-thread-class+
-                                   "bindSpecial"
-                                   "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                   -2)))
-            (*use-locals-vector*
-             (let ((index (local-index var)))
-               (unless index
-                 (error "COMPILE-LET-VARS: can't find local variable ~S." var))
-               (emit 'aload 1) ; Stack: value array
-               (emit 'swap) ; array value
-               (emit 'bipush index) ; array value index
-               (emit 'swap) ; array index value
-               (emit 'aastore)))
-            (t
-             (let ((index (local-index var)))
-               (unless index
-                 (error "COMPILE-LET-VARS: can't find local variable ~S." var))
-               (emit 'astore index)))))))
+      (let* ((name (if (consp varspec) (car varspec) varspec))
+             (specialp (if (or (memq name specials) (special-variable-p name)) t nil))
+             (variable (push-variable name specialp)))
+        (unless specialp
+          (setf (variable-register variable) (allocate-local name)))
+        (push variable variables)))
+    ;; At this point the initial values are on the runtime stack. Now generate
+    ;; code to pop them off one by one and store each one in the corresponding
+    ;; local or special variable.
+    (dolist (variable variables)
+      (compile-binding variable))))
 
 (defun compile-let*-vars (varlist specials)
   ;; Generate code to evaluate initforms and bind variables.
   (dolist (varspec varlist)
-    (let (var initform specialp)
-      (if (consp varspec)
-          (setf var (car varspec)
-                initform (cadr varspec))
-          (setf var varspec
-                initform nil))
+    (let* ((var (if (consp varspec) (car varspec) varspec))
+           (initform (if (consp varspec) (cadr varspec) nil))
+           (specialp (if (or (memq var specials) (special-variable-p var)) t nil))
+           variable)
       (cond (initform
              (compile-form initform)
              (unless (remove-store-value)
@@ -2067,35 +2035,10 @@
              (maybe-emit-clear-values initform))
             (t
              (emit-push-nil)))
-      (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
-      (push-variable var specialp)
-      (when specialp
-        (ensure-thread-var-initialized))
-      (cond (specialp
-             (let ((g (declare-symbol var)))
-               ;; Initial value is on the runtime stack at this point.
-               (emit 'aload *thread*)
-               (emit 'swap)
-               (emit 'getstatic
-                     *this-class*
-                     g
-                     +lisp-symbol+)
-               (emit 'swap)
-               (emit-invokevirtual +lisp-thread-class+
-                                   "bindSpecial"
-                                   "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                   -2)))
-            (*use-locals-vector*
-             (let ((index (local-index var)))
-               (unless index
-                 (error "COMPILE-LET-VARS: can't find local variable ~S." var))
-               (emit 'aload 1) ; Stack: value array
-               (emit 'swap) ; array value
-               (emit 'bipush index) ; array value index
-               (emit 'swap) ; array index value
-               (emit 'aastore)))
-            (t
-             (emit 'astore (allocate-local var)))))))
+      (setf variable (push-variable var specialp))
+      (unless specialp
+        (setf (variable-register variable) (allocate-local var)))
+      (compile-binding variable))))
 
 ;; Returns list of declared specials.
 (defun process-special-declarations (forms)
