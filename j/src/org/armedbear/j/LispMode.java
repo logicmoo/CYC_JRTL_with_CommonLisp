@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.16 2002-11-23 17:32:51 piso Exp $
+ * $Id: LispMode.java,v 1.17 2002-11-25 20:08:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_F, CTRL_MASK | ALT_MASK, "forwardSexp");
         km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "downList");
         km.mapKey(KeyEvent.VK_U, CTRL_MASK | ALT_MASK, "upList");
+        km.mapKey(KeyEvent.VK_E, CTRL_MASK | ALT_MASK, "evalDefunLisp");
+        km.mapKey(KeyEvent.VK_R, CTRL_MASK | ALT_MASK, "evalRegionLisp");
     }
 
     public boolean isTaggable()
@@ -225,28 +227,6 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 break;
         }
         return sb.toString();
-    }
-
-    private int depth(Line line, Buffer buffer)
-    {
-        if (buffer.needsRenumbering())
-            buffer.renumber();
-        Position pos = new Position(line, 0);
-        Position start = findStartOfDefun(pos);
-        if (pos.equals(start))
-            return 0;
-        SyntaxIterator it = getSyntaxIterator(start);
-        int depth = 1;
-        while (true) {
-            char c = it.nextChar();
-            if (!it.getPosition().isBefore(pos))
-                break;
-            if (c == '(')
-                ++depth;
-            else if (c == ')')
-                --depth;
-        }
-        return depth;
     }
 
     private static Position findStartOfDefun(Position pos)
@@ -469,6 +449,85 @@ public class LispMode extends AbstractMode implements Constants, Mode
             editor.moveDotTo(pos);
     }
 
+    public static void evalDefunLisp()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        // Look for Lisp shell.
+        LispShell lisp = LispShell.findLispShell(null);
+        if (lisp == null) {
+            MessageDialog.showMessageDialog("No Lisp shell is running", "Error");
+            return;
+        }
+        Editor ed = findEditor(lisp);
+        if (ed == null)
+            ed = editor.displayInOtherWindow(lisp);
+        Position begin = findStartOfDefun(editor.getDot());
+        if (begin != null && begin.lookingAt("(defun")) {
+            Position end = mode.forwardSexp(begin);
+            if (end != null) {
+                Region r = new Region(editor.getBuffer(), begin, end);
+                String defunName = "";
+                Position pos = mode.downList(begin);
+                if (pos != null) {
+                    pos = mode.forwardSexp(pos);
+                    if (pos != null) {
+                        pos.skipWhitespace();
+                        defunName = pos.getIdentifier(mode);
+                    }
+                }
+                Position bufEnd = lisp.getEnd();
+                bufEnd.getLine().setFlags(STATE_INPUT);
+                lisp.insertString(bufEnd,
+                    ";;; Evaluating defun " + defunName + "\n");
+                lisp.renumber();
+                lisp.eval(r.toString().trim());
+            }
+        }
+        ed.eob();
+    }
+
+    public static void evalRegionLisp()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        if (editor.getMark() == null)
+            return;
+        if (editor.isColumnSelection()) {
+            editor.notSupportedForColumnSelections();
+            return;
+        }
+        // Look for Lisp shell.
+        LispShell lisp = LispShell.findLispShell(null);
+        if (lisp == null) {
+            MessageDialog.showMessageDialog("No Lisp shell is running",
+                "Error");
+            return;
+        }
+        Editor ed = findEditor(lisp);
+        if (ed == null)
+            ed = editor.displayInOtherWindow(lisp);
+        Position bufEnd = lisp.getEnd();
+        bufEnd.getLine().setFlags(STATE_INPUT);
+        lisp.insertString(bufEnd, ";;; Evaluating region\n");
+        lisp.renumber();
+        lisp.eval(new Region(editor).toString().trim());
+        ed.eob();
+    }
+
+    private static Editor findEditor(Buffer buf)
+    {
+        Editor ed = null;
+        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+            ed = it.nextEditor();
+            if (ed.getBuffer() == buf)
+                return ed;
+        }
+        return null;
+    }
+
     private static HashMap map;
 
     public static void hyperspec()
@@ -516,8 +575,10 @@ public class LispMode extends AbstractMode implements Constants, Mode
             }
         }
         String filename = (String) map.get(s.toLowerCase());
-        if (filename == null)
+        if (filename == null) {
+            editor.status("No entry for \"" + s + '"');
             return;
+        }
         File dataDir = File.getInstance(rootDir, "Data");
         File file = File.getInstance(dataDir, filename);
         Buffer buf = null;
