@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.32 2004-07-28 23:13:44 piso Exp $
+;;; $Id: compile-file.lisp,v 1.33 2004-08-10 03:25:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,7 +83,8 @@
               (let* ((lambda-list (third form))
                      (body (nthcdr 3 form))
                      (jvm::*speed* jvm::*speed*)
-                     (jvm::*safety* jvm::*safety*))
+                     (jvm::*safety* jvm::*safety*)
+                     (jvm::*debug* jvm::*debug*))
                 (jvm::process-optimization-declarations body)
                 (let* ((expr (list 'lambda lambda-list (list* 'block name body)) nil)
                        (classfile-name (next-classfile-name))
@@ -233,6 +234,7 @@
                 (*package* *package*)
                 (jvm::*speed* jvm::*speed*)
                 (jvm::*safety* jvm::*safety*)
+                (jvm::*debug* jvm::*debug*)
                 (jvm::*toplevel-defuns* ())
                 (*fbound-names* ()))
             (write (list 'init-fasl :version *fasl-version*) :stream out)
