@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.9 2004-09-29 00:48:02 piso Exp $
+ * $Id: SimpleArray.java,v 1.10 2004-09-29 18:56:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,24 +262,33 @@ public final class SimpleArray extends AbstractArray
     {
         StringBuffer sb = new StringBuffer();
         LispThread thread = LispThread.currentThread();
-        if (_PRINT_READABLY_.symbolValue(thread) != NIL ||
-            _PRINT_ARRAY_.symbolValue(thread) != NIL)
-        {
+        LispObject printReadably = _PRINT_READABLY_.symbolValue(thread);
+        if (printReadably != NIL || _PRINT_ARRAY_.symbolValue(thread) != NIL) {
+            int maxLevel = Integer.MAX_VALUE;
+            if (printReadably == NIL) {
+                LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
+                if (printLevel instanceof Fixnum)
+                    maxLevel = ((Fixnum)printLevel).value;
+            }
+            LispObject currentPrintLevel =
+                _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+            int currentLevel = Fixnum.getValue(currentPrintLevel);
+            if (currentLevel >= maxLevel)
+                return "#";
             sb.append('#');
             sb.append(dimv.length);
             sb.append('A');
             appendContents(dimv, 0, sb);
             return sb.toString();
-        } else {
-            sb.append("(SIMPLE-ARRAY T (");
-            for (int i = 0; i < dimv.length; i++) {
-                sb.append(dimv[i]);
-                if (i < dimv.length - 1)
-                    sb.append(' ');
-            }
-            sb.append("))");
-            return unreadableString(sb.toString());
         }
+        sb.append("(SIMPLE-ARRAY T (");
+        for (int i = 0; i < dimv.length; i++) {
+            sb.append(dimv[i]);
+            if (i < dimv.length - 1)
+                sb.append(' ');
+        }
+        sb.append("))");
+        return unreadableString(sb.toString());
     }
 
     public AbstractArray adjustArray(int[] dimv, LispObject initialElement,
