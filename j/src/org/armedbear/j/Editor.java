@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.126 2004-05-22 17:27:18 piso Exp $
+ * $Id: Editor.java,v 1.127 2004-08-18 19:10:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6181,8 +6181,14 @@ public final class Editor extends JPanel implements Constants,
                 String message = null;
                 if (t instanceof ConditionThrowable) {
                     LispObject obj = ((ConditionThrowable)t).getCondition();
-                    if (obj instanceof Condition)
-                        message = ((Condition)obj).getConditionReport();
+                    if (obj instanceof Condition) {
+                        try {
+                            message = ((Condition)obj).getConditionReport();
+                        }
+                        catch (Throwable ignored) {
+                            // At least we tried.
+                        }
+                    }
                 }
                 if (message == null || message.length() == 0)
                     message = t.getMessage();
