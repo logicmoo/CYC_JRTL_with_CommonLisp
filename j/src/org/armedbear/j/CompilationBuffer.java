@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.1.1.1 2002-09-24 16:08:00 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.2 2002-10-02 17:07:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -535,6 +535,18 @@ public final class CompilationBuffer extends Buffer implements Runnable
         final String command = d.getCommand();
         if (command != null && command.length() > 0)
             compile(command, editor);
+    }
+
+    public static void compile(String args)
+    {
+        if (Platform.isPlatformWindows() && !Platform.isPlatformWindows5())
+            return;
+        if (args != null && args.length() > 0) {
+            History history = new History("compile.command");
+            history.append(args);
+            history.save();
+            compile(args, Editor.currentEditor());
+        }
     }
 
     private static void compile(final String command, final Editor editor)
