@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.38 2003-12-15 17:28:39 piso Exp $
+;;; $Id: clos.lisp,v 1.39 2003-12-19 16:50:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1187,12 +1187,11 @@
                              required-classes
                              (method-specializers method)))
                    (generic-function-methods gf)))
-   #'(lambda (m1 m2)
-      (funcall
-       (if (eq (class-of gf) the-class-standard-gf)
-           #'std-method-more-specific-p
-           #'method-more-specific-p)
-       gf m1 m2 required-classes))))
+   (if (eq (class-of gf) the-class-standard-gf)
+       #'(lambda (m1 m2)
+          (funcall #'std-method-more-specific-p gf m1 m2 required-classes))
+       #'(lambda (m1 m2)
+          (funcall #'method-more-specific-p gf m1 m2 required-classes)))))
 
 ;;; method-more-specific-p
 
@@ -1247,7 +1246,7 @@
                (push m primaries))
               ((memq (car qualifiers) '(:before :after)))
               (t
-               (invalid generic-function combin m)))))
+               (error "invalid method qualifiers")))))
     (unless (eq order :most-specific-last)
       (setq primaries (nreverse primaries)))
     (setq arounds (nreverse arounds))
@@ -1579,8 +1578,7 @@
   (std-method-more-specific-p gf method1 method2 required-classes))
 
 (defgeneric compute-effective-method-function (gf methods))
-(defmethod compute-effective-method-function
-  ((gf standard-generic-function) methods)
+(defmethod compute-effective-method-function ((gf standard-generic-function) methods)
   (std-compute-effective-method-function gf methods))
 
 (defgeneric compute-method-function (method))
