@@ -9,6 +9,7 @@
           complement constantly
           subst subst-if subst-if-not nsubst nsubst-if nsubst-if-not
           sublis nsublis
+          member member-if member-if-not tailp adjoin
           acons pairlis
           assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not))
 
@@ -280,6 +281,39 @@
 			       (setf (car subtree) (s (car subtree)))))
 			 subtree))))
             (s tree))))
+
+(defun member (item list &key key (test #'eql testp) (test-not nil notp))
+  (do ((list list (cdr list)))
+    ((null list) nil)
+    (let ((car (car list)))
+      (if (satisfies-the-test item car)
+	  (return list)))))
+
+(defun member-if (test list &key key)
+  (do ((list list (Cdr list)))
+    ((endp list) nil)
+    (if (funcall test (apply-key key (car list)))
+	(return list))))
+
+(defun member-if-not (test list &key key)
+  (do ((list list (cdr list)))
+    ((endp list) ())
+    (if (not (funcall test (apply-key key (car list))))
+	(return list))))
+
+(defun tailp (object list)
+  (do ((list list (cdr list)))
+    ((atom list) (eql list object))
+    (if (eql object list)
+	(return t))))
+
+(defun adjoin (item list &key key (test #'eql) (test-not nil notp))
+  (if (let ((key-val (apply-key key item)))
+	(if notp
+	    (member key-val list :test-not test-not :key key)
+	    (member key-val list :test test :key key)))
+      list
+      (cons item list)))
 
 (defun acons (key datum alist)
   (cons (cons key datum) alist))
