@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.49 2004-09-06 23:24:29 piso Exp $
+ * $Id: LispAPI.java,v 1.50 2004-09-07 02:29:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1292,6 +1292,17 @@ public final class LispAPI extends Lisp
                     return new JavaObject(buffer);
             }
             return NIL;
+        }
+    };
+
+    // ### current-defun => string
+    private static final Primitive CURRENT_DEFUN =
+        new Primitive("current-defun", PACKAGE_J, true, "pathname")
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            String s = LispMode.getCurrentDefun(Editor.currentEditor());
+            return s != null ? new SimpleString(s) : NIL;
         }
     };
 
