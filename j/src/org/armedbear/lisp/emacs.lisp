@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.6 2005-03-05 20:52:47 piso Exp $
+;;; $Id: emacs.lisp,v 1.7 2005-03-05 20:53:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -458,7 +458,7 @@
 ;; km.mapKey(KeyEvent.VK_F, CTRL_MASK | ALT_MASK, "forwardSexp");
 (define-key *lisp-mode-map* "Ctrl Alt F" "forwardSexp")
 ;; km.mapKey(KeyEvent.VK_B, CTRL_MASK | ALT_MASK, "backwardSexp");
-(define-key *lisp-mode-map* "Ctrl Alt B""backwardSexp")
+(define-key *lisp-mode-map* "Ctrl Alt B" "backwardSexp")
 (define-key *lisp-mode-map* "Ctrl Alt Space" "markSexp")
 ;; km.mapKey(KeyEvent.VK_D, CTRL_MASK | ALT_MASK, "downList");
 (define-key *lisp-mode-map* "Ctrl Alt D" "downList")
