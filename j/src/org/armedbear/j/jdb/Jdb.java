@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.21 2003-05-20 15:59:50 piso Exp $
+ * $Id: Jdb.java,v 1.22 2003-05-23 17:41:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -413,14 +413,35 @@ public final class Jdb extends Buffer implements JdbConstants
         }
     }
 
+    private static final String prompt = "jdb> ";
+
+    public static final String getPrompt()
+    {
+        return prompt;
+    }
+
+    public void prompt()
+    {
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                appendString(prompt, true, JdbFormatter.JDB_FORMAT_PROMPT);
+            }
+        };
+        if (SwingUtilities.isEventDispatchThread())
+            r.run();
+        else
+            SwingUtilities.invokeLater(r);
+    }
+
     private void logCommand(String command)
     {
-        log("> ".concat(command));
+        log(prompt.concat(command));
     }
 
     private void logCommand(String command, String remainder)
     {
-        FastStringBuffer sb = new FastStringBuffer("> ");
+        FastStringBuffer sb = new FastStringBuffer(prompt);
         sb.append(command);
         if (remainder != null && remainder.length() > 0) {
             sb.append(' ');
@@ -466,9 +487,17 @@ public final class Jdb extends Buffer implements JdbConstants
         }
         try {
             Position posStart = posEndOfBuffer.copy();
-            if (forceNewLine && posEndOfBuffer.getOffset() > 0) {
-                insertLineSeparator(posEndOfBuffer);
-                posEndOfBuffer.getLine().setFlags(flags);
+            if (forceNewLine) {
+                if (posEndOfBuffer.getOffset() > 0) {
+                    if (!posEndOfBuffer.getLine().getText().equals(prompt)) {
+                        insertLineSeparator(posEndOfBuffer);
+                        posEndOfBuffer.getLine().setFlags(flags);
+                    }
+                }
+            }
+            if (posEndOfBuffer.getOffset() > 0 && s.startsWith(prompt)) {
+                if (posEndOfBuffer.getLine().getText().equals(prompt))
+                    s = s.substring(prompt.length());
             }
             insertString(posEndOfBuffer, s);
             if (needsRenumbering())
@@ -553,6 +582,8 @@ public final class Jdb extends Buffer implements JdbConstants
         sb.append("reakpoint added: ");
         sb.append(bp.getLocationString());
         log(sb.toString());
+        if (isSuspended())
+            prompt();
     }
 
     public void deleteBreakpoint(ResolvableBreakpoint bp)
@@ -567,6 +598,8 @@ public final class Jdb extends Buffer implements JdbConstants
         sb.append("reakpoint deleted: ");
         sb.append(bp.getLocationString());
         log(sb.toString());
+        if (isSuspended())
+            prompt();
     }
 
     public static void jdbToggleBreakpoint()
@@ -666,6 +699,7 @@ public final class Jdb extends Buffer implements JdbConstants
         if (annotation instanceof BreakpointAnnotation) {
             ResolvableBreakpoint bp =
                 ((BreakpointAnnotation)annotation).getBreakpoint();
+            jdb.log("clear " + bp.getLocationString());
             jdb.deleteBreakpoint(bp);
             File file = bp.getFile();
             if (file != null) {
@@ -708,6 +742,7 @@ public final class Jdb extends Buffer implements JdbConstants
             }
             setCurrentThread(threadRef);
             fireContextChanged();
+            prompt();
         }
     }
 
@@ -1029,31 +1064,38 @@ public final class Jdb extends Buffer implements JdbConstants
 
     private void doBreak(String arg, boolean temporary)
     {
-        if (vm == null)
-            return;
-        if (arg == null) {
-            log("No location specified");
-            return;
-        }
-        int index = arg.indexOf(':');
-        if (index >= 0) {
-            String fileName = arg.substring(0, index);
-            try {
-                int lineNumber = Integer.parseInt(arg.substring(index+1).trim());
-                doBreakAtLineNumber(fileName, lineNumber, temporary);
-            }
-            catch (NumberFormatException e) {
-                log("Invalid line number");
-            }
-        } else {
-            index = arg.lastIndexOf('.');
-            if (index < 0) {
-                log("No class specified");
+        try {
+            if (vm == null)
+                return;
+            if (arg == null) {
+                log("No location specified");
                 return;
             }
-            String className = arg.substring(0, index);
-            String methodName = arg.substring(index+1);
-            doBreakAtMethod(className, methodName, temporary);
+            int index = arg.indexOf(':');
+            if (index >= 0) {
+                String fileName = arg.substring(0, index);
+                try {
+                    int lineNumber =
+                        Integer.parseInt(arg.substring(index+1).trim());
+                    doBreakAtLineNumber(fileName, lineNumber, temporary);
+                }
+                catch (NumberFormatException e) {
+                    log("Invalid line number");
+                }
+            } else {
+                index = arg.lastIndexOf('.');
+                if (index < 0) {
+                    log("No class specified");
+                    return;
+                }
+                String className = arg.substring(0, index);
+                String methodName = arg.substring(index+1);
+                doBreakAtMethod(className, methodName, temporary);
+            }
+        }
+        finally {
+            if (isSuspended())
+                prompt();
         }
     }
 
@@ -1081,7 +1123,6 @@ public final class Jdb extends Buffer implements JdbConstants
                 new LineNumberBreakpoint(this, className, file, lineNumber);
             if (temporary)
                 bp.setTemporary();
-
             try {
                 EventRequest eventRequest = bp.resolveAgainstPreparedClasses();
                 if (eventRequest != null) {
@@ -1249,35 +1290,40 @@ public final class Jdb extends Buffer implements JdbConstants
 
     private synchronized void doCatch(String arg)
     {
-        Log.debug("doCatch");
-        if (vm == null)
-            return;
-        int newCatchMode = -1;
-        if (arg.equals("none"))
-            newCatchMode = CATCH_NONE;
-        else if (arg.equals("uncaught"))
-            newCatchMode = CATCH_UNCAUGHT;
-        else if (arg.equals("all"))
-            newCatchMode = CATCH_ALL;
-        else {
-            log("Invalid argument");
-            return;
+        try {
+            if (vm == null)
+                return;
+            int newCatchMode = -1;
+            if (arg.equals("none"))
+                newCatchMode = CATCH_NONE;
+            else if (arg.equals("uncaught"))
+                newCatchMode = CATCH_UNCAUGHT;
+            else if (arg.equals("all"))
+                newCatchMode = CATCH_ALL;
+            else {
+                log("Invalid argument");
+                return;
+            }
+            if (newCatchMode == catchMode)
+                return; // No change.
+            EventRequestManager mgr = vm.eventRequestManager();
+            if (catchMode != CATCH_NONE) {
+                List list = mgr.exceptionRequests();
+                Log.debug("exception request count = " + list.size());
+                mgr.deleteEventRequests(list);
+            }
+            if (newCatchMode != CATCH_NONE) {
+                ExceptionRequest exceptionRequest =
+                    mgr.createExceptionRequest(null,
+                        newCatchMode == CATCH_ALL, true);
+                exceptionRequest.enable();
+            }
+            catchMode = newCatchMode;
         }
-        if (newCatchMode == catchMode)
-            return; // No change.
-        EventRequestManager mgr = vm.eventRequestManager();
-        if (catchMode != CATCH_NONE) {
-            List list = mgr.exceptionRequests();
-            Log.debug("exception request count = " + list.size());
-            mgr.deleteEventRequests(list);
+        finally {
+            if (isSuspended())
+                prompt();
         }
-        if (newCatchMode != CATCH_NONE) {
-            ExceptionRequest exceptionRequest =
-                mgr.createExceptionRequest(null,
-                    newCatchMode == CATCH_ALL, true);
-            exceptionRequest.enable();
-        }
-        catchMode = newCatchMode;
     }
 
     private void doNext(String args)
@@ -1402,6 +1448,8 @@ public final class Jdb extends Buffer implements JdbConstants
             log(e.toString());
             Log.error(e);
         }
+        if (isSuspended())
+            prompt();
     }
 
     private void doStdin(String s)
@@ -1473,8 +1521,6 @@ public final class Jdb extends Buffer implements JdbConstants
                 }
                 log(sb.toString());
             }
-            if (contextChanged)
-                fireContextChanged();
         }
         catch (AbsentInformationException absent) {
             log("Local variable information is not available.");
@@ -1485,6 +1531,8 @@ public final class Jdb extends Buffer implements JdbConstants
         }
         if (contextChanged)
             fireContextChanged();
+        if (isSuspended())
+            prompt();
     }
 
     private static String getStringValueOfObject(ObjectReference objRef,
@@ -1596,7 +1644,7 @@ public final class Jdb extends Buffer implements JdbConstants
             if (currentValue instanceof ArrayReference) {
                 int count = -1;
                 if (arg instanceof Integer)
-                    count = ((Integer) arg).intValue();
+                    count = ((Integer)arg).intValue();
                 if (count >= 0 && count < ((ArrayReference)currentValue).length())
                     currentValue = ((ArrayReference)currentValue).getValue(count);
                 else
