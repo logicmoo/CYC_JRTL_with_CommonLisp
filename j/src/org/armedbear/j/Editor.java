@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.62 2003-06-06 15:39:31 piso Exp $
+ * $Id: Editor.java,v 1.63 2003-06-12 23:44:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2433,6 +2433,26 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         return KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode, modifiers);
     }
 
+    public KeyMapping getKeyMapping(String command)
+    {
+        // Look in buffer-local keymap first.
+        KeyMapping mapping = buffer.getKeyMapForMode().getKeyMapping(command);
+        // If not found there, try global keymap.
+        if (mapping == null) {
+            mapping = KeyMap.getGlobalKeyMap().getKeyMapping(command);
+            // Don't let a global mapping hide a different mapping of the same
+            // keystroke in the buffer-local keymap!
+            if (mapping != null) {
+                javax.swing.KeyStroke keyStroke =
+                    javax.swing.KeyStroke.getKeyStroke(mapping.getKeyCode(),
+                        mapping.getModifiers());
+                if (buffer.getKeyMapForMode().lookup(keyStroke) != null)
+                    mapping = null;
+            }
+        }
+        return mapping;
+    }
+
     private Macro macro;
 
     public final Macro getMacro()
@@ -2453,7 +2473,8 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             isRecordingMacro = false;
         else {
             if (macro != null && !macro.isEmpty())
-                if (!confirm("Record Macro", "Overwrite existing keyboard macro?"))
+                if (!confirm("Record Macro",
+                    "Overwrite existing keyboard macro?"))
                     return;
             macro = new Macro();
             isRecordingMacro = true;
@@ -2463,7 +2484,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public void playbackMacro()
     {
         if (isRecordingMacro) {
-            MessageDialog.showMessageDialog(this, "Command ignored (playbackMacro is not allowed while recording a macro)", "Record Macro");
+            MessageDialog.showMessageDialog(this,
+                "Command ignored (playbackMacro is not allowed while recording a macro)",
+                "Record Macro");
             return;
         }
         if (macro == null || macro.isEmpty()){
