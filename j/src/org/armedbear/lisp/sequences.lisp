@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.40 2003-06-10 01:24:33 piso Exp $
+;;; $Id: sequences.lisp,v 1.41 2003-06-10 01:34:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -511,68 +511,14 @@
 
 (defun remove-duplicates (sequence &key (test #'eql) test-not (start 0) from-end
 				   end key)
-  (seq-dispatch sequence
-		(if sequence
-		    (list-remove-duplicates* sequence test test-not
-                                             start end key from-end))
-		(vector-remove-duplicates* sequence test test-not
-                                           start end key from-end)))
+  (if (listp sequence)
+      (if sequence
+          (list-remove-duplicates* sequence test test-not
+                                   start end key from-end))
+      (vector-remove-duplicates* sequence test test-not
+                                 start end key from-end)))
 
-
-(defun list-delete-duplicates* (list test test-not key from-end start end)
-  (let ((handle (cons nil list)))
-    (do ((current (nthcdr start list) (cdr current))
-	 (previous (nthcdr start handle))
-	 (index start (1+ index)))
-      ((or (and end (= index end)) (null current))
-       (cdr handle))
-      (if (do ((x (if from-end
-		      (nthcdr (1+ start) handle)
-		      (cdr current))
-		  (cdr x))
-	       (i (1+ index) (1+ i)))
-            ((or (null x)
-                 (and (not from-end) end (= i end))
-                 (eq x current))
-             nil)
-	    (if (if test-not
-		    (not (funcall test-not
-				  (apply-key key (car current))
-				  (apply-key key (car x))))
-		    (funcall test
-			     (apply-key key (car current))
-			     (apply-key key (car x))))
-		(return t)))
-	  (rplacd previous (cdr current))
-	  (setq previous (cdr previous))))))
-
-
-(defun vector-delete-duplicates* (vector test test-not key from-end start end
-					 &optional (length (length vector)))
-  (when (null end) (setf end (length vector)))
-  (do ((index start (1+ index))
-       (jndex start))
-    ((= index end)
-     (do ((index index (1+ index))		; copy the rest of the vector
-          (jndex jndex (1+ jndex)))
-       ((= index length)
-        (shrink-vector vector jndex)
-        vector)
-       (setf (aref vector jndex) (aref vector index))))
-    (setf (aref vector jndex) (aref vector index))
-    (unless (position (apply-key key (aref vector index)) vector :key key
-		      :start (if from-end start (1+ index)) :test test
-		      :end (if from-end jndex end) :test-not test-not)
-      (setq jndex (1+ jndex)))))
-
-
-(defun delete-duplicates (sequence &key (test #'eql) test-not (start 0) from-end
-                                   end key)
-  (seq-dispatch sequence
-                (if sequence
-                    (list-delete-duplicates* sequence test test-not key from-end start end))
-                (vector-delete-duplicates* sequence test test-not key from-end start end)))
-
+(autoload 'delete-duplicates "delete-duplicates.lisp")
 
 (autoload 'substitute "substitute.lisp")
 (autoload 'substitute-if "substitute.lisp")
