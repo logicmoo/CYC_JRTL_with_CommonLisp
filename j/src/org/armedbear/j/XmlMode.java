@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.12 2003-07-17 15:11:23 piso Exp $
+ * $Id: XmlMode.java,v 1.13 2003-08-13 15:13:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -859,8 +859,9 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
                                 sb.append(element.getName());
                             }
                             if (sb.length() > 0) {
-                                Editor.getKillRing().appendNew(sb.toString());
-                                editor.copyKillToSystemClipboard();
+                                KillRing killRing = editor.getKillRing();
+                                killRing.appendNew(sb.toString());
+                                killRing.copyLastKillToSystemClipboard();
                                 editor.status("XPath copied to clipboard");
                             }
                         }
