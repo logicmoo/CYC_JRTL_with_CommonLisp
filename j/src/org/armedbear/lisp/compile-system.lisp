@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.3 2004-04-18 14:53:33 piso Exp $
+;;; $Id: compile-system.lisp,v 1.4 2004-04-18 18:45:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,7 +152,7 @@
                             ;;"rt.lisp"
                             ;;"run-benchmarks.lisp"
                             "run-shell-command.lisp"
-                            "runtime-class.lisp"
+                            ;;"runtime-class.lisp"
                             "search.lisp"
                             "sequences.lisp"
                             "setf.lisp"
