@@ -1,8 +1,8 @@
 /*
  * PerlFormatter.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: PerlFormatter.java,v 1.2 2003-04-25 14:20:12 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: PerlFormatter.java,v 1.3 2005-02-14 16:40:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,7 +226,7 @@ public final class PerlFormatter extends Formatter
             }
             if (c == '=' || c == '!') {
                 REMatch match = matchRE.getMatch(text.substring(i));
-                if (match != null) {
+                if (match != null && match.getStartIndex() == 0) {
                     final String s = match.toString();
                     final int length = s.length();
                     // End the previous token.
