@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: j.lisp,v 1.35 2004-09-05 00:08:39 piso Exp $
+;;; $Id: j.lisp,v 1.36 2004-09-05 19:11:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,7 +41,10 @@
           with-single-undo
           save-excursion
           search-forward
-          search-backward))
+          search-backward
+          re-search-forward
+          re-search-backward
+          ))
 
 (defun set-global-property (&rest args)
   (let ((count (length args)) key value)
@@ -179,11 +182,19 @@
         (progn ,@forms)
         (goto-char ,old-point)))))
 
-(defun search-forward (string &key buffer start ignore-case whole-words-only)
-  (%search-forward string buffer start ignore-case whole-words-only))
+(defun search-forward (pattern &key buffer start ignore-case whole-words-only)
+;;   (%search-forward pattern buffer start ignore-case whole-words-only))
+  (%search pattern :forward nil buffer start ignore-case whole-words-only))
 
-(defun search-backward (string &key buffer start ignore-case whole-words-only)
-  (%search-backward string buffer start ignore-case whole-words-only))
+(defun search-backward (pattern &key buffer start ignore-case whole-words-only)
+;;   (%search-backward pattern buffer start ignore-case whole-words-only))
+  (%search pattern :backward nil buffer start ignore-case whole-words-only))
+
+(defun re-search-forward (pattern &key buffer start ignore-case whole-words-only)
+  (%search pattern :forward t buffer start ignore-case whole-words-only))
+
+(defun re-search-backward (pattern &key buffer start ignore-case whole-words-only)
+  (%search pattern :backward t buffer start ignore-case whole-words-only))
 
 (in-package "COMMON-LISP-USER")
 
