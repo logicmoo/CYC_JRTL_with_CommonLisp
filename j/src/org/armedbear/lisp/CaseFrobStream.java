@@ -2,7 +2,7 @@
  * CaseFrobStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CaseFrobStream.java,v 1.1 2004-06-08 11:26:09 piso Exp $
+ * $Id: CaseFrobStream.java,v 1.2 2004-06-08 23:05:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,16 @@
 
 package org.armedbear.lisp;
 
-public final class CaseFrobStream extends Stream
+public abstract class CaseFrobStream extends Stream
 {
-    private final Stream target;
-    private final LispObject kind;
+    protected final Stream target;
 
-    public CaseFrobStream(Stream target, LispObject kind)
+    protected CaseFrobStream(Stream target)
         throws ConditionThrowable
     {
         Debug.assertTrue(target.isCharacterStream());
         Debug.assertTrue(target.isOutputStream());
         this.target = target;
-        this.kind = kind;
     }
 
     public LispObject getElementType() throws ConditionThrowable
@@ -99,40 +97,10 @@ public final class CaseFrobStream extends Stream
         return false;
     }
 
-    public void _writeChar(char c) throws ConditionThrowable
-    {
-        if (kind == Keyword.UPCASE)
-            c = Utilities.toUpperCase(c);
-        else if (kind == Keyword.DOWNCASE)
-            c = Utilities.toLowerCase(c);
-        // FIXME CAPITALIZE, CAPITALIZE_FIRST
-        target._writeChar(c);
-    }
-
     public void _writeChars(char[] chars, int start, int end)
         throws ConditionThrowable
     {
-        target._writeChars(chars, start, end);
-    }
-
-    public void _writeString(String s) throws ConditionThrowable
-    {
-        if (kind == Keyword.UPCASE)
-            s = s.toUpperCase();
-        else if (kind == Keyword.DOWNCASE)
-            s = s.toLowerCase();
-        // FIXME CAPITALIZE, CAPITALIZE_FIRST
-        target._writeString(s);
-    }
-
-    public void _writeLine(String s) throws ConditionThrowable
-    {
-        if (kind == Keyword.UPCASE)
-            s = s.toUpperCase();
-        else if (kind == Keyword.DOWNCASE)
-            s = s.toLowerCase();
-        // FIXME CAPITALIZE, CAPITALIZE_FIRST
-        target._writeLine(s);
+        _writeString(new String(chars, start, end));
     }
 
     // Reads an 8-bit byte.
@@ -200,12 +168,16 @@ public final class CaseFrobStream extends Stream
             throws ConditionThrowable
         {
             Stream target = checkCharacterOutputStream(first);
-            LispObject kind = second;
-            if (!memq(kind, list4(Keyword.UPCASE, Keyword.DOWNCASE,
-                                  Keyword.CAPITALIZE, Keyword.CAPITALIZE_FIRST)))
-                return signal(new TypeError(
-                    "Kind must be :UPCASE, :DOWNCASE, :CAPITALIZE or :CAPITALIZE-FIRST."));
-            return new CaseFrobStream(target, kind);
+            if (second == Keyword.UPCASE)
+                return new UpcaseStream(target);
+            if (second == Keyword.DOWNCASE)
+                return new DowncaseStream(target);
+            if (second == Keyword.CAPITALIZE)
+                return new CapitalizeStream(target);
+            if (second == Keyword.CAPITALIZE_FIRST)
+                return new CapitalizeFirstStream(target);
+            return signal(new TypeError(
+                "Kind must be :UPCASE, :DOWNCASE, :CAPITALIZE or :CAPITALIZE-FIRST."));
         }
     };
 }
