@@ -1,8 +1,8 @@
 /*
  * WrapText.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: WrapText.java,v 1.7 2003-11-29 04:24:53 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: WrapText.java,v 1.8 2004-09-19 18:23:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,35 @@ public final class WrapText implements Constants
     public void wrapRegion()
     {
         wrapRegion(new Region(buffer, dot, mark));
+    }
+
+    public void wrapParagraphsInRegion()
+    {
+        final Region r;
+        if (dot != null && mark != null) {
+            r = new Region(buffer, dot, mark);
+        } else {
+            final Line firstLine = buffer.getFirstLine();
+            if (firstLine == null)
+                return;
+            r = new Region(buffer, new Position(firstLine, 0), buffer.getEnd());
+        }
+        CompoundEdit compoundEdit = buffer.beginCompoundEdit();
+        editor.moveDotTo(new Position(r.getBeginLine(), 0));
+        while (true) {
+            while (dot.getLine().isBlank() && dot.getNextLine() != null)
+                dot.setLine(dot.getNextLine());
+            wrapParagraph();
+            if (buffer.needsRenumbering())
+                buffer.renumber();
+            Position pos = findEndOfParagraph(dot);
+            if (!pos.getLine().isBefore(r.getEndLine()))
+                break;
+            if (pos.getLine() == dot.getLine())
+                break;
+            editor.moveDotTo(pos);
+        }
+        buffer.endCompoundEdit(compoundEdit);
     }
 
     public void wrapLine()
