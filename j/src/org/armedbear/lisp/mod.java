@@ -2,7 +2,7 @@
  * mod.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: mod.java,v 1.1 2004-03-14 00:24:14 piso Exp $
+ * $Id: mod.java,v 1.2 2004-03-14 01:21:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-// ### mode number divisor
+// ### mod number divisor
 public final class mod extends Primitive2
 {
     private mod()
