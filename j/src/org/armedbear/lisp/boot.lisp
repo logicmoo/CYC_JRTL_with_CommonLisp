@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.180 2004-08-01 12:48:12 piso Exp $
+;;; $Id: boot.lisp,v 1.181 2004-08-01 12:49:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -170,9 +170,6 @@
 (set-dispatch-macro-character #\# #\- #'read-conditional *standard-readtable*)
 
 (copy-readtable *standard-readtable* *readtable*)
-
-(defvar jvm::*auto-compile* nil)
-(export 'jvm::*auto-compile* "JVM")
 
 ;; SYS::%COMPILE is redefined in precompiler.lisp.
 (defun sys::%compile (name definition)
