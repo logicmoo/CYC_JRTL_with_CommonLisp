@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.62 2003-08-15 16:40:40 piso Exp $
+ * $Id: Symbol.java,v 1.63 2003-08-24 18:28:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -328,6 +328,9 @@ public class Symbol extends LispObject
     private static final Symbol _FUNCTION_DOCUMENTATION =
         PACKAGE_SYS.intern("%FUNCTION-DOCUMENTATION");
 
+    private static final Symbol _VARIABLE_DOCUMENTATION =
+        PACKAGE_SYS.intern("%VARIABLE-DOCUMENTATION");
+
     // Returns null if there is no function documentation.
     public final LispObject getFunctionDocumentation() throws LispError
     {
@@ -344,6 +347,12 @@ public class Symbol extends LispObject
         throws LispError
     {
         put(this, _FUNCTION_DOCUMENTATION, documentation);
+    }
+
+    public final void setVariableDocumentation(LispObject documentation)
+        throws LispError
+    {
+        put(this, _VARIABLE_DOCUMENTATION, documentation);
     }
 
     public String toString()
