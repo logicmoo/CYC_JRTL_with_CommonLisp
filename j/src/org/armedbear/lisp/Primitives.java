@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.123 2003-03-14 20:53:47 piso Exp $
+ * $Id: Primitives.java,v 1.124 2003-03-14 21:20:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -838,16 +838,12 @@ public final class Primitives extends Module
         {
             final int length = array.length;
             if (length == 2)
-                return Fixnum.getValue(array[0]) == Fixnum.getValue(array[1]) ? T : NIL;
+                return array[0].isEqualTo(array[1]);
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
-            long[] values = new long[length];
-            // Make sure the arguments are all numbers.
-            for (int i = 0; i < length; i++)
-                values[i] = Fixnum.getValue(array[i]);
-            final long value = values[0];
+            final LispObject obj = array[0];
             for (int i = 1; i < length; i++) {
-                if (values[i] != value)
+                if (array[i].isEqualTo(obj) != T)
                     return NIL;
             }
             return T;
@@ -860,17 +856,13 @@ public final class Primitives extends Module
         {
             final int length = array.length;
             if (length == 2)
-                return Fixnum.getValue(array[0]) != Fixnum.getValue(array[1]) ? T : NIL;
+                return array[0].isNotEqualTo(array[1]);
             if (length < 1)
                 throw new WrongNumberOfArgumentsException(this);
-            long[] values = new long[length];
-            // Make sure the arguments are all numbers.
-            for (int i = 0; i < length; i++)
-                values[i] = Fixnum.getValue(array[i]);
             for (int i = 0; i < length; i++) {
-                final long value = values[i];
+                final LispObject obj = array[i];
                 for (int j = i+1; j < length; j++) {
-                    if (values[j] == value)
+                    if (array[j].isNotEqualTo(obj) == NIL)
                         return NIL;
                 }
             }
@@ -947,14 +939,10 @@ public final class Primitives extends Module
                 case 1:
                     return T;
                 case 2:
-                    return Fixnum.getValue(array[0]) >= Fixnum.getValue(array[1]) ? T : NIL;
+                    return array[0].isGreaterThanOrEqualTo(array[1]);
                 default:
-                    long[] values = new long[length];
-                    // Make sure all of the arguments are numbers.
-                    for (int i = 0; i < length; i++)
-                        values[i] = Fixnum.getValue(array[i]);
                     for (int i = 1; i < length; i++) {
-                        if (values[i] > values[i-1])
+                        if (array[i].isGreaterThan(array[i-1]) != NIL)
                             return NIL;
                     }
                     return T;
