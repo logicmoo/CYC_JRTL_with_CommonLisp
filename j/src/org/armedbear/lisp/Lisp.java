@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.199 2004-01-24 19:20:45 piso Exp $
+ * $Id: Lisp.java,v 1.200 2004-01-27 14:00:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1491,6 +1491,11 @@ public abstract class Lisp
     // internal symbol
     public static final Symbol _LOAD_DEPTH_ =
         internSpecial("*LOAD-DEPTH*", PACKAGE_SYS, new Fixnum(0));
+
+    // ### *load-stream*
+    // internal symbol
+    public static final Symbol _LOAD_STREAM_ =
+        internSpecial("*LOAD-STREAM*", PACKAGE_SYS, NIL);
 
     // ### *autoload-verbose*
     // internal symbol
