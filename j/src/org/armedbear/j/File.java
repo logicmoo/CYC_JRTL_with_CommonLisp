@@ -1,8 +1,8 @@
 /*
  * File.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.13 2002-12-09 15:00:11 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: File.java,v 1.14 2004-11-14 15:29:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,12 +181,12 @@ public class File implements Comparable
             String before = s.substring(0, index);
 
             // Shorten s to what's left (host and port).
-            s = s.substring(index+1);
+            s = s.substring(index + 1);
 
             index = before.indexOf(':');
             if (index >= 0) {
                 userName = before.substring(0, index);
-                password = before.substring(index+1);
+                password = before.substring(index + 1);
             } else {
                 // No ':', no password.
                 userName = before;
@@ -195,16 +195,19 @@ public class File implements Comparable
             userName = System.getProperty("user.name");
         index = s.indexOf(':');
         if (index >= 0) {
-            // String contains ':', port specified.
+            // String contains ':'. See if port was specified.
             hostName = s.substring(0, index);
-            try {
-                port = Integer.parseInt(s.substring(index+1));
-            }
-            catch (NumberFormatException e) {
-                Log.error(e);
+            String portString = s.substring(index + 1);
+            if (portString.length() > 0) {
+                try {
+                    port = Integer.parseInt(portString);
+                }
+                catch (NumberFormatException e) {
+                    Log.error(e);
+                }
             }
         } else {
-            // No ':', port not specified.
+            // No ':'. Port was not specified.
             hostName = s;
         }
         return true;
