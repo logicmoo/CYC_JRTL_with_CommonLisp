@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.178 2004-06-15 01:03:07 piso Exp $
+;;; $Id: boot.lisp,v 1.179 2004-06-17 10:49:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -129,8 +129,11 @@
 (defun make-package (package-name &key nicknames use)
   (sys::%make-package package-name nicknames use))
 
-(defconstant sys::*keyword-package*
+(defconstant *keyword-package*
   (find-package "KEYWORD"))
+
+(defun make-keyword (symbol)
+  (intern (symbol-name symbol) *keyword-package*))
 
 (defun sys::featurep (form)
   (cond ((atom form)
