@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.3 2003-10-10 17:02:46 piso Exp $
+;;; $Id: defclass.lisp,v 1.4 2003-10-10 17:17:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -347,6 +347,9 @@
    class
    (allocate-slot-storage (count-if #'instance-slot-p (class-slots class))
                           secret-unbound-value)))
+
+(defun allocate-instance (class)
+  (std-allocate-instance class))
 
 (defun make-instance-standard-class (metaclass &key name direct-superclasses direct-slots
                                                &allow-other-keys)
