@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterFunctions.java,v 1.3 2003-09-19 01:46:40 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.4 2003-09-28 15:59:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ public final class CharacterFunctions extends Lisp
             char c2 = LispCharacter.getValue(second);
             if (c1 == c2)
                 return T;
-            if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+            if (Utilities.toUpperCase(c1) == Utilities.toUpperCase(c2))
                 return T;
             if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
                 return T;
@@ -72,7 +72,7 @@ public final class CharacterFunctions extends Lisp
                     char c = LispCharacter.getValue(array[i]);
                     if (c0 == c)
                         continue;
-                    if (Character.toUpperCase(c0) == Character.toUpperCase(c))
+                    if (Utilities.toUpperCase(c0) == Utilities.toUpperCase(c))
                         continue;
                     if (Character.toLowerCase(c0) == Character.toLowerCase(c))
                         continue;
@@ -89,8 +89,8 @@ public final class CharacterFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            char c1 = Character.toUpperCase(LispCharacter.getValue(first));
-            char c2 = Character.toUpperCase(LispCharacter.getValue(second));
+            char c1 = Utilities.toUpperCase(LispCharacter.getValue(first));
+            char c2 = Utilities.toUpperCase(LispCharacter.getValue(second));
             return c1 > c2 ? T : NIL;
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
@@ -101,7 +101,7 @@ public final class CharacterFunctions extends Lisp
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
-                    chars[i] = Character.toUpperCase(LispCharacter.getValue(array[i]));
+                    chars[i] = Utilities.toUpperCase(LispCharacter.getValue(array[i]));
                 for (int i = 1; i < length; i++) {
                     if (chars[i-1] <= chars[i])
                         return NIL;
@@ -117,8 +117,8 @@ public final class CharacterFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            char c1 = Character.toUpperCase(LispCharacter.getValue(first));
-            char c2 = Character.toUpperCase(LispCharacter.getValue(second));
+            char c1 = Utilities.toUpperCase(LispCharacter.getValue(first));
+            char c2 = Utilities.toUpperCase(LispCharacter.getValue(second));
             return c1 <= c2 ? T : NIL;
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
@@ -129,7 +129,7 @@ public final class CharacterFunctions extends Lisp
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
-                    chars[i] = Character.toUpperCase(LispCharacter.getValue(array[i]));
+                    chars[i] = Utilities.toUpperCase(LispCharacter.getValue(array[i]));
                 for (int i = 1; i < length; i++) {
                     if (chars[i] < chars[i-1])
                         return NIL;
@@ -145,8 +145,8 @@ public final class CharacterFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            char c1 = Character.toUpperCase(LispCharacter.getValue(first));
-            char c2 = Character.toUpperCase(LispCharacter.getValue(second));
+            char c1 = Utilities.toUpperCase(LispCharacter.getValue(first));
+            char c2 = Utilities.toUpperCase(LispCharacter.getValue(second));
             return c1 < c2 ? T : NIL;
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
@@ -157,7 +157,7 @@ public final class CharacterFunctions extends Lisp
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
-                    chars[i] = Character.toUpperCase(LispCharacter.getValue(array[i]));
+                    chars[i] = Utilities.toUpperCase(LispCharacter.getValue(array[i]));
                 for (int i = 1; i < length; i++) {
                     if (chars[i-1] >= chars[i])
                         return NIL;
@@ -173,8 +173,8 @@ public final class CharacterFunctions extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            char c1 = Character.toUpperCase(LispCharacter.getValue(first));
-            char c2 = Character.toUpperCase(LispCharacter.getValue(second));
+            char c1 = Utilities.toUpperCase(LispCharacter.getValue(first));
+            char c2 = Utilities.toUpperCase(LispCharacter.getValue(second));
             return c1 >= c2 ? T : NIL;
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
@@ -185,7 +185,7 @@ public final class CharacterFunctions extends Lisp
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
-                    chars[i] = Character.toUpperCase(LispCharacter.getValue(array[i]));
+                    chars[i] = Utilities.toUpperCase(LispCharacter.getValue(array[i]));
                 for (int i = 1; i < length; i++) {
                     if (chars[i] > chars[i-1])
                         return NIL;
