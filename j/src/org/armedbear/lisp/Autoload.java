@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.3 2003-06-10 18:18:46 piso Exp $
+ * $Id: Autoload.java,v 1.4 2003-06-10 18:37:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,12 @@ public final class Autoload extends Function
     final Symbol symbol;
     final String fileName;
 
+    public Autoload(Symbol symbol)
+    {
+        this.symbol = symbol;
+        this.fileName = null;
+    }
+
     public Autoload(Symbol symbol, String fileName)
     {
         this.symbol = symbol;
@@ -39,7 +45,9 @@ public final class Autoload extends Function
 
     public final String getFileName()
     {
-        return fileName;
+        if (fileName != null)
+            return fileName;
+        return symbol.getName().toLowerCase().concat(".lisp");
     }
 
     public final int getFunctionalType()
@@ -57,7 +65,23 @@ public final class Autoload extends Function
         return sb.toString();
     }
 
-    private static final Primitive2 AUTOLOAD = new Primitive2("autoload") {
+    private static final Primitive AUTOLOAD = new Primitive("autoload") {
+        public LispObject execute(LispObject first) throws LispError
+        {
+            if (first instanceof Symbol) {
+                Symbol symbol = (Symbol) first;
+                symbol.setSymbolFunction(new Autoload(symbol));
+                return T;
+            }
+            if (first instanceof Cons) {
+                for (LispObject list = first; list != NIL; list = list.cdr()) {
+                    Symbol symbol = checkSymbol(list.car());
+                    symbol.setSymbolFunction(new Autoload(symbol));
+                }
+                return T;
+            }
+            throw new TypeError(first);
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
