@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.15 2003-07-31 18:02:34 piso Exp $
+ * $Id: Cons.java,v 1.16 2003-08-09 16:55:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,26 +198,30 @@ public final class Cons extends LispObject
     {
         try {
             StringBuffer sb = new StringBuffer();
-            if (car == Symbol.QUOTE) {
-                sb.append('\'');
-                sb.append(cdr.car());
-            } else if (car == Symbol.FUNCTION && cdr instanceof Cons) {
-                sb.append("#'");
-                sb.append(cdr.car());
-            } else {
-                sb.append('(');
-                LispObject p = this;
-                sb.append(p.car());
-                while ((p = p.cdr()) instanceof Cons) {
-                    sb.append(' ');
-                    sb.append(p.car());
+            if (length() == 2) {
+                if (car == Symbol.QUOTE) {
+                    sb.append('\'');
+                    sb.append(cdr.car());
+                    return sb.toString();
                 }
-                if (p != NIL) {
-                    sb.append(" . ");
-                    sb.append(p);
+                if (car == Symbol.FUNCTION) {
+                    sb.append("#'");
+                    sb.append(cdr.car());
+                    return sb.toString();
                 }
-                sb.append(')');
             }
+            sb.append('(');
+            LispObject p = this;
+            sb.append(p.car());
+            while ((p = p.cdr()) instanceof Cons) {
+                sb.append(' ');
+                sb.append(p.car());
+            }
+            if (p != NIL) {
+                sb.append(" . ");
+                sb.append(p);
+            }
+            sb.append(')');
             return sb.toString();
         }
         catch (Throwable t) {
