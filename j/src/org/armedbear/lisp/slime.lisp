@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.10 2004-09-06 18:42:22 piso Exp $
+;;; $Id: slime.lisp,v 1.11 2004-09-07 01:04:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,8 @@
   (:use #:cl #:ext #:j)
   (:export #:complete-symbol
            #:slime-space
-           #:edit-definition))
+           #:edit-definition
+           #:eval-region))
 
 (in-package #:slime)
 
@@ -292,9 +293,19 @@
                                 (slime-definition-location (car definitions)))
           (find-tag-at-point)))))
 
+(defun eval-region ()
+  (let ((mark (current-mark)))
+    (when mark
+      (let* ((string (buffer-substring (current-point) mark))
+             (package (find-buffer-package))
+             (result
+              (slime-eval `(swank:interactive-eval-region ,string ,package))))
+        (status (write-string result))))))
+
 (map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
 (map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
 (map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
 (map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
 (map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp Shell")
 (map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp")
+(map-key-for-mode "Ctrl Alt R" "(slime:eval-region)" "Lisp")
