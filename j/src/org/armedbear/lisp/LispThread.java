@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.43 2004-06-04 00:34:36 piso Exp $
+ * $Id: LispThread.java,v 1.44 2004-06-23 01:50:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -352,9 +352,10 @@ public final class LispThread extends LispObject
     public void backtrace(int limit)
     {
         if (stack.size() > 0) {
-            Stream out = getTraceOutput();
-            int count = 0;
             try {
+                int count = 0;
+                Stream out =
+                    checkCharacterOutputStream(_TRACE_OUTPUT_.symbolValue());
                 out._writeLine("Evaluation stack:");
                 out._finishOutput();
                 for (int i = stack.size(); i-- > 0;) {
