@@ -557,6 +557,7 @@ unwind-protect
 upgraded-array-element-type
 upper-case-p
 use-package
+user-homedir-pathname
 values
 values-list
 vector
