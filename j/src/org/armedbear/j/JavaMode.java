@@ -1,8 +1,8 @@
 /*
  * JavaMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaMode.java,v 1.6 2003-04-27 16:00:05 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: JavaMode.java,v 1.7 2003-05-04 15:55:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -390,6 +390,11 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         } else if (buffer.getModeId() == JAVA_MODE) {
             if (s.equals("synchronized"))
                 indent = true;
+            else {
+                RE re = new UncheckedRE("=\\s*new\\s+");
+                if (re.getMatch(pos.getLine().getText()) != null)
+                    indent = true;
+            }
         } else if (buffer.getModeId() == PHP_MODE) {
             if (s.equals("elseif") || s.equals("foreach"))
                 indent = true;
@@ -508,6 +513,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             text = beginningOfStatement.getLine().trim();
         } else
             text = text.substring(0, text.length()-1).trim();
+        if (text.indexOf('=') >= 0)
+            return false;
         final String firstIdentifier = getFirstIdentifier(text);
         if (Utilities.isOneOf(firstIdentifier, conditionals))
             return false;
