@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.13 2003-12-19 02:16:52 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: restart.lisp,v 1.14 2004-01-02 01:55:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,6 +100,22 @@
                                  :format-control "Restart ~s is not active."
                                  :format-arguments (list restart)))))
     (apply (restart-function real-restart) values)))
+
+;;; INVOKE-RESTART-INTERACTIVELY (from CMUCL)
+(defun %invoke-restart-interactively (restart)
+  (apply (restart-function restart)
+	 (let ((interactive-function (restart-interactive-function restart)))
+	   (if interactive-function
+	       (funcall interactive-function)
+	       ()))))
+
+(defun invoke-restart-interactively (restart)
+  (let ((real-restart (or (find-restart restart)
+                          (error 'control-error
+                                 :format-control "Restart ~s is not active."
+                                 :format-arguments (list restart)))))
+    (%invoke-restart-interactively real-restart)))
+
 
 (defun parse-keyword-pairs (list keys)
   (do ((l list (cddr l))
