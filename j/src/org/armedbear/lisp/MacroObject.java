@@ -1,8 +1,8 @@
 /*
  * MacroObject.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: MacroObject.java,v 1.5 2003-10-25 20:53:16 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: MacroObject.java,v 1.6 2004-06-30 17:19:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class MacroObject extends Functional
         return expander;
     }
 
-    public String toString()
+    public String writeToString()
     {
         return unreadableString("MACRO-OBJECT");
     }
