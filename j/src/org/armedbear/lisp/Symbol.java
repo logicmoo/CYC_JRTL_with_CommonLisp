@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.32 2003-03-21 15:30:25 piso Exp $
+ * $Id: Symbol.java,v 1.33 2003-03-30 15:15:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,9 +51,10 @@ public class Symbol extends LispObject
     public static final Symbol BIGNUM               = export("BIGNUM");
     public static final Symbol BIT                  = export("BIT");
     public static final Symbol BIT_VECTOR           = export("BIT-VECTOR");
+    public static final Symbol CHARACTER            = export("CHARACTER");
     public static final Symbol COMPILED_FUNCTION    = export("COMPILED_FUNCTION");
     public static final Symbol CONS                 = export("CONS");
-    public static final Symbol CHARACTER            = export("CHARACTER");
+    public static final Symbol DOUBLE_FLOAT         = export("DOUBLE-FLOAT");
     public static final Symbol EXTENDED_CHAR        = export("EXTENDED-CHAR");
     public static final Symbol FIXNUM               = export("FIXNUM");
     public static final Symbol FLOAT                = export("FLOAT");
@@ -61,6 +62,7 @@ public class Symbol extends LispObject
     public static final Symbol INTEGER              = export("INTEGER");
     public static final Symbol KEYWORD              = export("KEYWORD");
     public static final Symbol LIST                 = export("LIST");
+    public static final Symbol LONG_FLOAT           = export("LONG-FLOAT");
     public static final Symbol NULL                 = export("NULL");
     public static final Symbol NUMBER               = export("NUMBER");
     public static final Symbol PACKAGE              = export("PACKAGE");
@@ -68,6 +70,7 @@ public class Symbol extends LispObject
     public static final Symbol RATIONAL             = export("RATIONAL");
     public static final Symbol REAL                 = export("REAL");
     public static final Symbol SEQUENCE             = export("SEQUENCE");
+    public static final Symbol SHORT_FLOAT          = export("SHORT-FLOAT");
     public static final Symbol SIMPLE_ARRAY         = export("SIMPLE-ARRAY");
     public static final Symbol SIMPLE_BASE_STRING   = export("SIMPLE-BASE-STRING");
     public static final Symbol SIMPLE_BIT_VECTOR    = export("SIMPLE-BIT-VECTOR");
