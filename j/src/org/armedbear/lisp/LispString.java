@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.17 2003-03-12 19:55:34 piso Exp $
+ * $Id: LispString.java,v 1.18 2003-03-13 03:14:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,38 +201,351 @@ public final class LispString extends AbstractVector implements SequenceType,
             return getValue();
     }
 
-    public static LispObject equals(LispObject first, LispObject second)
-        throws LispError
-    {
-        char[] array1 = string(first).array;
-        char[] array2 = string(second).array;
-        if (array1.length != array2.length)
-            return NIL;
-        for (int i = array1.length; i-- > 0;) {
-            if (array1[i] != array2[i])
+    // ### %string=
+    // Case sensitive.
+    private static final Primitive _STRING_EQUAL =
+        new Primitive("%string=") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            if ((end1 - start1) != (end2 - start2))
                 return NIL;
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                if (array1[i] != array2[j])
+                    return NIL;
+            }
+            return T;
         }
-        return T;
-    }
+    };
 
-    public static LispObject equalsIgnoreCase(LispObject first,
-        LispObject second) throws LispError
-    {
-        char[] array1 = string(first).array;
-        char[] array2 = string(second).array;
-        if (array1.length != array2.length)
-            return NIL;
-        for (int i = array1.length; i-- > 0;) {
-            char c1 = array1[i];
-            char c2 = array2[i];
-            if (c1 == c2)
-                continue;
-            if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
-                continue;
-            if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
-                continue;
+    // ### %string/=
+    // Case sensitive.
+    private static final Primitive _STRING_NOT_EQUAL =
+        new Primitive("%string/=") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                if (array1[i] != array2[j])
+                    return new Fixnum(i);
+            }
             return NIL;
         }
-        return T;
-    }
+    };
+
+    // ### %string-equal
+    // Case sensitive.
+    private static final Primitive _STRING_EQUAL_IGNORE_CASE =
+        new Primitive("%string-equal") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = array1[i];
+                char c2 = array2[j];
+                if (c1 == c2)
+                    continue;
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
+                    continue;
+                if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                    continue;
+                return NIL;
+            }
+            return T;
+        }
+    };
+
+    // ### %string-not-equal
+    // Case sensitive.
+    private static final Primitive _STRING_NOT_EQUAL_IGNORE_CASE =
+        new Primitive("%string-not-equal") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = array1[i];
+                char c2 = array2[j];
+                if (c1 == c2)
+                    continue;
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
+                    continue;
+                if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                    continue;
+                return new Fixnum(i);
+            }
+            return NIL;
+        }
+    };
+
+    // ### %string<
+    // Case sensitive.
+    private static final Primitive _STRING_LESS_THAN =
+        new Primitive("%string<") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = array1[i];
+                char c2 = array2[j];
+                if (c1 == c2)
+                    continue;
+                if (c1 > c2)
+                    return NIL;
+                if (c1 < c2)
+                    return new Fixnum(i);
+            }
+            // Strings are equal.
+            return NIL;
+        }
+    };
+
+    // ### %string<=
+    // Case sensitive.
+    private static final Primitive _STRING_GREATER_THAN =
+        new Primitive("%string>") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = array1[i];
+                char c2 = array2[j];
+                if (c1 == c2)
+                    continue;
+                if (c1 < c2)
+                    return NIL;
+                if (c1 > c2)
+                    return new Fixnum(i);
+            }
+            // Strings are equal.
+            return NIL;
+        }
+    };
+
+    // ### %string<=
+    // Case sensitive.
+    private static final Primitive _STRING_LE =
+        new Primitive("%string<=") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = array1[i];
+                char c2 = array2[j];
+                if (c1 == c2)
+                    continue;
+                if (c1 > c2)
+                    return NIL;
+                if (c1 < c2)
+                    return new Fixnum(i);
+            }
+            return new Fixnum(i);
+        }
+    };
+
+    // ### %string<=
+    // Case sensitive.
+    private static final Primitive _STRING_GE =
+        new Primitive("%string>=") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = array1[i];
+                char c2 = array2[j];
+                if (c1 == c2)
+                    continue;
+                if (c1 < c2)
+                    return NIL;
+                if (c1 > c2)
+                    return new Fixnum(i);
+            }
+            return new Fixnum(i);
+            //             return LispString.equals(string(args[0]), string(args[1]),
+            //                 start1, end1, start2, end2);
+        }
+    };
+
+    // ### %string-lessp
+    // Case insensitive.
+    private static final Primitive _STRING_LESSP =
+        new Primitive("%string-lessp") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = Character.toUpperCase(array1[i]);
+                char c2 = Character.toUpperCase(array2[j]);
+                if (c1 == c2)
+                    continue;
+                if (c1 > c2)
+                    return NIL;
+                if (c1 < c2)
+                    return new Fixnum(i);
+            }
+            // Strings are equal.
+            return NIL;
+        }
+    };
+
+    // ### %string-greaterp
+    // Case insensitive.
+    private static final Primitive _STRING_GREATERP =
+        new Primitive("%string-greaterp") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = Character.toUpperCase(array1[i]);
+                char c2 = Character.toUpperCase(array2[j]);
+                if (c1 == c2)
+                    continue;
+                if (c1 < c2)
+                    return NIL;
+                if (c1 > c2)
+                    return new Fixnum(i);
+            }
+            // Strings are equal.
+            return NIL;
+        }
+    };
+
+    // ### %string-not-lessp
+    // Case insensitive.
+    private static final Primitive _STRING_NOT_LESSP =
+        new Primitive("%string-not-lessp") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = Character.toUpperCase(array1[i]);
+                char c2 = Character.toUpperCase(array2[j]);
+                if (c1 == c2)
+                    continue;
+                if (c1 > c2)
+                    return new Fixnum(i);
+                if (c1 < c2)
+                    return NIL;
+            }
+            // Strings are equal.
+            return new Fixnum(i);
+        }
+    };
+
+    // ### %string-not-greaterp
+    // Case insensitive.
+    private static final Primitive _STRING_NOT_GREATERP =
+        new Primitive("%string-not-greaterp") {
+        public LispObject execute(LispObject[] args) throws LispError
+        {
+            if (args.length != 6)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] array1 = string(args[0]).array;
+            char[] array2 = string(args[1]).array;
+            int start1 = (int) Fixnum.getValue(args[2]);
+            int end1 = (int) Fixnum.getValue(args[3]);
+            int start2 = (int) Fixnum.getValue(args[4]);
+            int end2 = (int) Fixnum.getValue(args[5]);
+            int i, j;
+            for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
+                char c1 = Character.toUpperCase(array1[i]);
+                char c2 = Character.toUpperCase(array2[j]);
+                if (c1 == c2)
+                    continue;
+                if (c1 < c2)
+                    return new Fixnum(i);
+                if (c1 > c2)
+                    return NIL;
+            }
+            // Strings are equal.
+            return new Fixnum(i);
+        }
+    };
 }

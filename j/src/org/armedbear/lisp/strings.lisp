@@ -1,7 +1,7 @@
 ;;; strings.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: strings.lisp,v 1.1 2003-03-07 19:22:14 piso Exp $
+;;; $Id: strings.lisp,v 1.2 2003-03-13 03:14:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,10 +19,99 @@
 
 (in-package "COMMON-LISP")
 
-(export '(string-upcase string-downcase))
+(export '(string-upcase string-downcase
+          string= string/= string-equal string-not-equal
+          string< string>
+          string<= string>=
+          string-lessp string-greaterp
+          string-not-lessp string-not-greaterp))
 
 (defun string-upcase (string &key (start 0) end)
   (%string-upcase string start end))
 
 (defun string-downcase (string &key (start 0) end)
   (%string-downcase string start end))
+
+(defun string= (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string= string1 string2 start1 end1 start2 end2)))
+
+(defun string/= (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string/= string1 string2 start1 end1 start2 end2)))
+
+(defun string-equal (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string-equal string1 string2 start1 end1 start2 end2)))
+
+(defun string-not-equal (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string-not-equal string1 string2 start1 end1 start2 end2)))
+
+(defun string< (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string< string1 string2 start1 end1 start2 end2)))
+
+(defun string> (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string> string1 string2 start1 end1 start2 end2)))
+
+(defun string<= (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string<= string1 string2 start1 end1 start2 end2)))
+
+(defun string>= (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string>= string1 string2 start1 end1 start2 end2)))
+
+(defun string-lessp (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string-lessp string1 string2 start1 end1 start2 end2)))
+
+(defun string-greaterp (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string-greaterp string1 string2 start1 end1 start2 end2)))
+
+(defun string-not-lessp (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string-not-lessp string1 string2 start1 end1 start2 end2)))
+
+(defun string-not-greaterp (string1 string2 &key (start1 0) end1 (start2 0) end2)
+  (let* ((string1 (string string1))
+         (string2 (string string2))
+         (end1 (or end1 (length string1)))
+         (end2 (or end2 (length string2))))
+    (%string-not-greaterp string1 string2 start1 end1 start2 end2)))
