@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: setf.lisp,v 1.43 2004-06-15 18:57:58 piso Exp $
+;;; $Id: setf.lisp,v 1.44 2004-08-02 19:22:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,29 +58,6 @@
            (funcall temp form environment))
           (t
            (expand-or-get-setf-inverse form environment)))))
-
-;;; ROTATEF (from GCL)
-(defmacro rotatef (&rest rest)
-  (do ((r rest (cdr r))
-       (pairs nil)
-       (stores nil)
-       (store-forms nil)
-       (access-forms nil))
-      ((endp r)
-       (setq stores (nreverse stores))
-       (setq store-forms (nreverse store-forms))
-       (setq access-forms (nreverse access-forms))
-       `(let* ,(nconc pairs
-                      (mapcar #'list stores (cdr access-forms))
-                      (list (list (car (last stores)) (car access-forms))))
-          ,@store-forms
-          nil))
-    (multiple-value-bind (vars vals stores1 store-form access-form)
-      (get-setf-expansion (car r))
-      (setq pairs (nconc pairs (mapcar #'list vars vals)))
-      (setq stores (cons (car stores1) stores))
-      (setq store-forms (cons store-form store-forms))
-      (setq access-forms (cons access-form access-forms)))))
 
 (defmacro setf (&rest args)
   (let ((count (length args)))
