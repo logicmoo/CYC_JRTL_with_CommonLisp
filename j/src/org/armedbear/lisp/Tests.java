@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.13 2003-03-07 18:32:21 piso Exp $
+ * $Id: Tests.java,v 1.14 2003-03-10 00:01:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -425,8 +425,8 @@ public class Tests extends TestCase
 
         // lambda
         verify("((lambda (x) (+ x x)) 23)", "46");
-        verify("(apply (lambda (x y z) (+ x y z)) '(1 2 3))", "6");
-        verify("(funcall (lambda (x) (+ x 3)) 4)", "7");
+//         verify("(apply (lambda (x y z) (+ x y z)) '(1 2 3))", "6");
+//         verify("(funcall (lambda (x) (+ x 3)) 4)", "7");
 
         // mapcar
         verify("(mapcar #'(lambda (x) (+ x 10)) '(1 2 3))", "(11 12 13)");
