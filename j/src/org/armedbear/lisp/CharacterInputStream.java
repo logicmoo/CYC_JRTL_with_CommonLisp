@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.9 2003-03-07 19:03:11 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.10 2003-03-09 17:34:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public class CharacterInputStream extends LispStream
                     }
                 }
             }
-            return result;
+            return _READ_SUPPRESS_.symbolValueNoThrow() != NIL ? NIL : result;
         }
         catch (IOException e) {
             throw new StreamError(e);
@@ -282,6 +282,15 @@ public class CharacterInputStream extends LispStream
                 if (c < '0' || c > '9')
                     break;
                 numArg = numArg * 10 + c - '0';
+            }
+            LispObject fun =
+                getCurrentReadtable().getDispatchMacroCharacter('#', c);
+            if (fun != NIL) {
+                LispObject[] args = new LispObject[3];
+                args[0] = this;
+                args[1] = new LispCharacter(c);
+                args[2] = new Fixnum(numArg);
+                return funcall(fun, args);
             }
             switch (c) {
                 case '\'':
