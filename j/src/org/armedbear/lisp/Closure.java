@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.86 2004-11-05 00:41:52 piso Exp $
+ * $Id: Closure.java,v 1.87 2004-11-05 00:42:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -844,9 +844,7 @@ public class Closure extends Function
             for (int j = argsLength; j-- > argsUsed;)
                 rest = new Cons(args[j], rest);
             array[index++] = rest;
-        }
-        else // added Nov 4 2004 3:48 PM
-        if (argsUsed < argsLength) {
+        } else if (argsUsed < argsLength) {
             // No keyword parameters.
             if (argsUsed + 2 <= argsLength) {
                 // Check for :ALLOW-OTHER-KEYS.
