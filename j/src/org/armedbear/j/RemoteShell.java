@@ -1,8 +1,8 @@
 /*
  * RemoteShell.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: RemoteShell.java,v 1.6 2003-06-29 00:19:34 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: RemoteShell.java,v 1.7 2004-04-13 14:05:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,7 +226,7 @@ public class RemoteShell extends Shell
             public void run()
             {
                 appendString(sb.toString());
-                posEndOfOutput = new Position(getEnd());
+                setEndOfOutput(new Position(getEnd()));
                 updateLineFlags();
                 updateDisplayInAllFrames();
                 resetUndo();
