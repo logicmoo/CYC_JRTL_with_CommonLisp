@@ -5,7 +5,8 @@
 (export '(prog1 prog2 push pop psetq loop
           the declare declaim locally eval-when
           time
-          with-open-file with-open-stream))
+          with-open-file with-open-stream
+          do do*))
 
 (defmacro prog1 (first-form &rest forms)
   (let ((result (gensym)))
@@ -85,3 +86,48 @@
          (setq ,abortp nil))
         (when ,var
           (close ,var :abort ,abortp))))))
+
+
+;;; From CMUCL.
+
+(defun do-do-body (varlist endlist code bind step name block)
+  (format t "do-do-body~%")
+  (let* ((inits ())
+	 (steps ())
+	 (l1 (gensym))
+	 (l2 (gensym)))
+    ;; Check for illegal old-style do.
+    (when (or (not (listp varlist)) (atom endlist))
+      (error "Ill-formed ~S -- possibly illegal old style DO?" name))
+    ;; Parse the varlist to get inits and steps.
+    (dolist (v varlist)
+      (cond ((symbolp v) (push v inits))
+	    ((listp v)
+	     (unless (symbolp (first v))
+	       (error "~S step variable is not a symbol: ~S" name (first v)))
+	     (case (length v)
+	       (1 (push (first v) inits))
+	       (2 (push v inits))
+	       (3 (push (list (first v) (second v)) inits)
+		  (setq steps (list* (third v) (first v) steps)))
+	       (t (error "~S is an illegal form for a ~S varlist." v name))))
+	    (t (error "~S is an illegal form for a ~S varlist." v name))))
+    ;; And finally construct the new form.
+    `(block ,BLOCK
+            (,bind ,(nreverse inits)
+                   (tagbody
+                    (go ,L2)
+                    ,L1
+                    ,@code
+                    (,step ,@(nreverse steps))
+                    ,L2
+                    (unless ,(car endlist) (go ,L1))
+                    (return-from ,BLOCK (progn ,@(cdr endlist))))))))
+
+
+(defmacro do (varlist endlist &rest body)
+  (do-do-body varlist endlist body 'let 'psetq 'do nil))
+
+
+(defmacro do* (varlist endlist &rest body)
+  (do-do-body varlist endlist body 'let* 'setq 'do* nil))
