@@ -217,6 +217,7 @@ ignore-errors
 import
 in-package
 incf
+inspect
 integerp
 intern
 keywordp
