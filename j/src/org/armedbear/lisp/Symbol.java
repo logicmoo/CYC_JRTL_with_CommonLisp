@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.60 2003-08-14 00:38:39 piso Exp $
+ * $Id: Symbol.java,v 1.61 2003-08-15 13:09:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -179,6 +179,11 @@ public class Symbol extends LispObject
                 return T;
         }
         return super.typep(typeSpecifier);
+    }
+
+    public final LispObject SYMBOLP()
+    {
+        return T;
     }
 
     public LispObject constantp()
