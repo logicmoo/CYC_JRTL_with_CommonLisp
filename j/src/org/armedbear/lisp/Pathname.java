@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.67 2004-09-18 01:03:15 piso Exp $
+ * $Id: Pathname.java,v 1.68 2004-09-18 02:06:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,8 @@ public class Pathname extends LispObject
     {
         if (s == null)
             return;
+        if (Utilities.isPlatformWindows())
+            s = s.replace('/', '\\');
         // Jar file support.
         int bang = s.indexOf("!/");
         if (bang >= 0) {
@@ -1067,24 +1069,6 @@ public class Pathname extends LispObject
         try {
             LispObject obj = _DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue();
             _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(coerceToPathname(obj));
-        }
-        catch (Throwable t) {
-            Debug.trace(t);
-        }
-    }
-
-    // ### *lisp-home*
-    private static final Symbol _LISP_HOME_ =
-        exportSpecial("*LISP-HOME*", PACKAGE_EXT, NIL);
-
-    static {
-        try {
-            String s = Site.getLispHome();
-            if (s != null) {
-                if (!s.endsWith(File.separator))
-                    s = s.concat(File.separator);
-                _LISP_HOME_.setSymbolValue(new Pathname(s));
-            }
         }
         catch (Throwable t) {
             Debug.trace(t);

@@ -2,7 +2,7 @@
  * Site.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Site.java,v 1.1 2004-09-18 00:22:54 piso Exp $
+ * $Id: Site.java,v 1.2 2004-09-18 02:06:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 import java.io.File;
 import java.net.URL;
 
-public final class Site
+public final class Site extends Lisp
 {
     private static final String LISP_HOME;
 
@@ -35,9 +35,14 @@ public final class Site
             String protocol = url.getProtocol();
             if (protocol != null && protocol.equals("file")) {
                 String path = url.getPath();
-                int index = path.lastIndexOf(File.separatorChar);
-                if (index >= 0)
+                int index = path.lastIndexOf('/');
+                if (index >= 0) {
                     lispHome = path.substring(0, index + 1);
+                    if (Utilities.isPlatformWindows()) {
+                        if (lispHome.length() > 0 && lispHome.charAt(0) == '/')
+                            lispHome = lispHome.substring(1);
+                    }
+                }
             }
         }
         LISP_HOME = lispHome;
@@ -46,5 +51,20 @@ public final class Site
     public static final String getLispHome()
     {
         return LISP_HOME;
+    }
+
+    // ### *lisp-home*
+    private static final Symbol _LISP_HOME_ =
+        exportSpecial("*LISP-HOME*", PACKAGE_EXT, NIL);
+
+    static {
+        try {
+            String s = Site.getLispHome();
+            if (s != null)
+                _LISP_HOME_.setSymbolValue(new Pathname(s));
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
     }
 }
