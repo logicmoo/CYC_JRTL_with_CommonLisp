@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.217 2003-06-01 19:13:15 piso Exp $
+ * $Id: Primitives.java,v 1.218 2003-06-01 19:37:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2438,9 +2438,10 @@ public final class Primitives extends Module
 
     // ### mapcar
     private static final Primitive MAPCAR = new Primitive("mapcar") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(final LispObject[] args) throws Condition
         {
-            if (args.length < 2)
+            final int numArgs = args.length;
+            if (numArgs < 2)
                 throw new WrongNumberOfArgumentsException(this);
 
             // First argument must be a function.
@@ -2451,30 +2452,30 @@ public final class Primitives extends Module
                 throw new UndefinedFunctionError(args[0]);
 
             // Remaining arguments must be lists.
-            int length = -1;
-            for (int i = 1; i < args.length; i++) {
+            int commonLength = -1;
+            for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
                     throw new TypeError(args[i], "list");
                 int len = args[i].length();
-                if (length < 0)
-                    length = len;
-                else if (length > len)
-                    length = len;
+                if (commonLength < 0)
+                    commonLength = len;
+                else if (commonLength > len)
+                    commonLength = len;
             }
 
             final LispThread thread = LispThread.currentThread();
-            LispObject[] results = new LispObject[length];
-            for (int i = 0; i < length; i++) {
-                final int numFunArgs = args.length - 1;
-                LispObject[] funArgs = new LispObject[numFunArgs];
+            LispObject[] results = new LispObject[commonLength];
+            final int numFunArgs = numArgs - 1;
+            final LispObject[] funArgs = new LispObject[numFunArgs];
+            for (int i = 0; i < commonLength; i++) {
                 for (int j = 0; j < numFunArgs; j++)
                     funArgs[j] = args[j+1].car();
                 results[i] = funcall(fun, funArgs, thread);
-                for (int j = 1; j < args.length; j++)
+                for (int j = 1; j < numArgs; j++)
                     args[j] = args[j].cdr();
             }
             LispObject result = NIL;
-            for (int i = length; i-- > 0;)
+            for (int i = commonLength; i-- > 0;)
                 result = new Cons(results[i], result);
             return result;
         }
