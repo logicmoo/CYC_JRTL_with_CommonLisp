@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.5 2003-11-15 13:48:23 piso Exp $
+;;; $Id: precompiler.lisp,v 1.6 2003-11-15 14:30:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,6 +26,11 @@
                   (equal (fourth args) '(function eq))))
          `(assq ,(first args) ,(second args)))
         (t form)))
+
+(define-compiler-macro identity (&whole form &rest args)
+  (if (= (length args) 1)
+      `(progn ,(car args))
+      form))
 
 (in-package "EXTENSIONS")
 
