@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.16 2003-09-25 01:21:42 piso Exp $
+ * $Id: Pathname.java,v 1.17 2003-10-17 17:34:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,10 +85,17 @@ public final class Pathname extends LispObject
         return sb.toString();
     }
 
+    public static Pathname parseNamestring(String namestring)
+        throws ConditionThrowable
+    {
+        return new Pathname(namestring);
+    }
+
     // ### namestring
     // namestring pathname => namestring
     // FIXME arg can be a stream, too...
-    private static final Primitive1 NAMESTRING = new Primitive1("namestring") {
+    private static final Primitive1 NAMESTRING = new Primitive1("namestring")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispString)
@@ -128,7 +135,8 @@ public final class Pathname extends LispObject
     // ### pathname
     // pathname pathspec => pathname
     // FIXME pathspec can be a stream, too...
-    private static final Primitive1 PATHNAME = new Primitive1("pathname") {
+    private static final Primitive1 PATHNAME = new Primitive1("pathname")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof Pathname)
@@ -144,7 +152,8 @@ public final class Pathname extends LispObject
     // pathname
     // FIXME Very incomplete.
     private static final Primitive _MAKE_PATHNAME =
-        new Primitive("%make-pathname", PACKAGE_SYS, false) {
+        new Primitive("%make-pathname", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 8)
@@ -193,7 +202,8 @@ public final class Pathname extends LispObject
     };
 
     // ### pathnamep
-    private static final Primitive1 PATHNAMEP = new Primitive1("pathnamep") {
+    private static final Primitive1 PATHNAMEP = new Primitive1("pathnamep")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof Pathname ? T : NIL;
