@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.143 2005-03-05 17:41:19 piso Exp $
+ * $Id: Editor.java,v 1.144 2005-03-06 16:26:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2437,6 +2437,28 @@ public final class Editor extends JPanel implements Constants,
         }
     }
 
+    // FIXME Removed hard-coded Control G!
+    public static boolean checkKeyboardQuit(Object object)
+    {
+        if (object instanceof JEvent) {
+            JEvent e = (JEvent) object;
+            if (e.getID() == JEvent.KEY_PRESSED) {
+                if (e.getKeyCode() == 0x47 && e.getModifiers() == 2)
+                    return true;
+            }
+            return false;
+        }
+        if (object instanceof KeyEvent) {
+            KeyEvent e = (KeyEvent) object;
+            if (e.getID() == KeyEvent.KEY_PRESSED) {
+                if (e.getKeyCode() == 0x47 && e.getModifiers() == 2)
+                    return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
     private KeyMap requestedKeyMap;
 
     private EventSequence currentEventSequence;
@@ -2452,8 +2474,7 @@ public final class Editor extends JPanel implements Constants,
             return true;
         }
         if (requestedKeyMap != null) {
-            if (keyChar == 7 && keyCode == 0x47 && modifiers == 2) {
-                // Control G
+            if (checkKeyboardQuit(event)) {
                 requestedKeyMap = null;
                 currentEventSequence = null;
                 status("");
