@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.389 2003-09-14 12:27:19 piso Exp $
+ * $Id: Primitives.java,v 1.390 2003-09-14 13:06:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -386,9 +386,9 @@ public final class Primitives extends Module
                 return LispCharacter.getInstance(Character.toUpperCase(
                     LispCharacter.getValue(arg)));
             case STRINGP:                       // ### stringp
-                return (arg.getType() & TYPE_STRING) != 0 ? T : NIL;
+                return arg.STRINGP();
             case SIMPLE_STRING_P:               // ### simple-string-p
-                return arg.typep(Symbol.SIMPLE_STRING);
+                return arg.SIMPLE_STRING_P();
             case SUCCESSOR:                     // ### 1+
                 return arg.incr();
             case PREDECESSOR:                   // ### 1-
