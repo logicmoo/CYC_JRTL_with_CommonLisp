@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.3 2003-08-22 18:45:59 piso Exp $
+;;; $Id: numbers.lisp,v 1.4 2003-08-23 01:35:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -78,3 +78,7 @@
     (declare (ignore tru))
     rem))
 
+
+(defun ftruncate (number &optional (divisor 1))
+  (multiple-value-bind (tru rem) (truncate number divisor)
+    (values (coerce tru 'float) rem)))
