@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.55 2003-09-08 02:15:28 piso Exp $
+ * $Id: LispMode.java,v 1.56 2003-09-25 18:23:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,6 +226,20 @@ public class LispMode extends AbstractMode implements Constants, Mode
                             return buffer.getCol(p1);
                         }
                     }
+                }
+                return buffer.getCol(pos) + indentSize;
+            }
+            if (token.equals("handler-case")) {
+                Position p1 = forwardSexp(posFirst);
+                if (p1 != null) {
+                    // Skip whitespace to get to opening '(' of form to be
+                    // evaluated.
+                    p1.skipWhitespace();
+                    // Make sure line numbers are right for isBefore().
+                    if (buffer.needsRenumbering())
+                        buffer.renumber();
+                    if (here.isBefore(p1))
+                        return buffer.getCol(pos) + indentSize * 2;
                 }
                 return buffer.getCol(pos) + indentSize;
             }
