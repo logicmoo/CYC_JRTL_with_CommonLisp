@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.54 2003-12-20 19:06:48 piso Exp $
+;;; $Id: clos.lisp,v 1.55 2003-12-20 19:54:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1091,7 +1091,6 @@
   (setf (generic-function-methods gf)
         (remove method (generic-function-methods gf)))
   (setf (method-generic-function method) nil)
-;;   (format t "remove-method method-specializers = ~S~%" (method-specializers method))
   (dolist (class (method-specializers method))
     (setf (class-direct-methods class)
           (remove method (class-direct-methods class))))
@@ -1136,17 +1135,6 @@
 
 (defun subclassp (c1 c2)
   (not (null (find c2 (class-precedence-list c1)))))
-
-;;;
-;;; Generic function invocation
-;;;
-
-;;; apply-generic-function
-
-(defun apply-generic-function (gf args)
-  (apply (generic-function-discriminating-function gf) args))
-
-;;; compute-discriminating-function
 
 (defun std-compute-discriminating-function (gf)
   #'(lambda (&rest args)
