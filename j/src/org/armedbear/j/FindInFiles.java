@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: FindInFiles.java,v 1.4 2003-05-09 01:35:25 piso Exp $
+ * $Id: FindInFiles.java,v 1.5 2003-05-09 11:25:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,6 +203,19 @@ public class FindInFiles extends Replacement implements Constants,
         outputBuffer.setBackgroundProcess(null);
         outputBuffer.setBusy(false);
       }
+    if (!cancelled && getReplaceWith() != null)
+      {
+        Runnable r = new Runnable()
+          {
+            public void run()
+            {
+              Editor.getTagFileManager().setEnabled(false);
+              replaceInAllFiles();
+              Editor.getTagFileManager().setEnabled(true);
+            }
+          };
+        SwingUtilities.invokeLater(r);
+      }
   }
 
   private void runInternal()
@@ -272,13 +285,6 @@ public class FindInFiles extends Replacement implements Constants,
         return;
       }
     SwingUtilities.invokeLater(updateDisplayRunnable);
-    if (!cancelled)
-      {
-        // Replace in files.
-        Editor.getTagFileManager().setEnabled(false);
-        replaceInAllFiles();
-        Editor.getTagFileManager().setEnabled(true);
-      }
   }
 
   public final void cancel()
@@ -446,8 +452,7 @@ public class FindInFiles extends Replacement implements Constants,
       public void run()
       {
         Position end = null;
-        EditorIterator iter = new EditorIterator();
-        while (iter.hasNext())
+        for (EditorIterator iter = new EditorIterator(); iter.hasNext();)
           {
             Editor ed = iter.nextEditor();
             if (ed.getBuffer() == outputBuffer)
@@ -767,16 +772,32 @@ public class FindInFiles extends Replacement implements Constants,
           }
         final boolean wasModified = buffer.isModified();
         int oldReplacementCount = getReplacementCount();
-        CompoundEdit compoundEdit = new CompoundEdit();
-        Position pos = new Position(buffer.getFirstLine(), 0);
-        while ((pos = find(buffer, pos)) != null)
+        try
           {
-            compoundEdit.addEdit(new UndoLineEdit(buffer, pos.getLine()));
-            replaceOccurrence(pos);
-            buffer.incrementModCount();
+            buffer.lockWrite();
           }
-        compoundEdit.end();
-        buffer.addEdit(compoundEdit);
+        catch (InterruptedException e)
+          {
+            Log.error(e);
+            return;
+          }
+        try
+          {
+            CompoundEdit compoundEdit = new CompoundEdit();
+            Position pos = new Position(buffer.getFirstLine(), 0);
+            while ((pos = find(buffer, pos)) != null)
+              {
+                compoundEdit.addEdit(new UndoLineEdit(buffer, pos.getLine()));
+                replaceOccurrence(pos);
+                buffer.incrementModCount();
+              }
+            compoundEdit.end();
+            buffer.addEdit(compoundEdit);
+          }
+        finally
+          {
+            buffer.unlockWrite();
+          }
         if (buffer.isModified() != wasModified)
           Sidebar.setUpdateFlagInAllFrames(SIDEBAR_REPAINT_BUFFER_LIST);
         if (getReplacementCount() > oldReplacementCount)
@@ -871,7 +892,7 @@ public class FindInFiles extends Replacement implements Constants,
             buffer.setLastModified(buffer.getFile().lastModified());
           }
         if (!buffer.isModified())
-          editor.killBuffer();
+          buffer.kill();
       }
     else
       {
@@ -917,7 +938,28 @@ public class FindInFiles extends Replacement implements Constants,
             outputBuffer.unlockWrite();
           }
         // Update display once per file.
-        SwingUtilities.invokeLater(updateDisplayRunnable);
+        if (SwingUtilities.isEventDispatchThread())
+          {
+            Position end = null;
+            for (EditorIterator iter = new EditorIterator(); iter.hasNext();)
+              {
+                Editor ed = iter.nextEditor();
+                if (ed.getBuffer() == outputBuffer)
+                  {
+                    if (end == null)
+                      end = outputBuffer.getEnd();
+                    ed.moveDotTo(end);
+                    ed.setUpdateFlag(REPAINT);
+                    ed.updateDisplay();
+                    ed.repaintNow();
+                  }
+              }
+          }
+        else
+          {
+            Debug.bug();
+            SwingUtilities.invokeLater(updateDisplayRunnable);
+          }
       }
   }
 
