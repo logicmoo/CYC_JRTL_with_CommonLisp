@@ -2,7 +2,7 @@
  * MessageFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MessageFormatter.java,v 1.4 2003-04-20 16:03:27 piso Exp $
+ * $Id: MessageFormatter.java,v 1.5 2003-04-20 16:07:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,6 +217,8 @@ public final class MessageFormatter extends Formatter
             return true;
         if (text.startsWith("@@ "))
             return true;
+        if (text.startsWith("@") && text.endsWith("@"))
+            return true;
         if (text.startsWith("diff ")) {
             Line nextLine = line.next();
             if (nextLine != null && nextLine.trim().startsWith("---"))
@@ -257,6 +259,8 @@ public final class MessageFormatter extends Formatter
         if (text.startsWith("retrieving "))
             return true;
         if (text.startsWith("@@"))
+            return true;
+        if (text.startsWith("@") && text.endsWith("@"))
             return true;
         return false;
     }
