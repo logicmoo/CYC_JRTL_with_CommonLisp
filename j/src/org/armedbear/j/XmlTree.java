@@ -2,7 +2,7 @@
  * XmlTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: XmlTree.java,v 1.7 2003-07-16 00:59:47 piso Exp $
+ * $Id: XmlTree.java,v 1.8 2003-07-17 15:09:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -235,8 +235,8 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
         disabled = true;
         treeModel = null;
         MessageDialog.showMessageDialog(
-            "Insufficient memory to display tree",
-            "Warning");
+            "Not enough memory to display tree",
+            "XML Mode");
     }
 
     public void valueChanged(TreeSelectionEvent e)
