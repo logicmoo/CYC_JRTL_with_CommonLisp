@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.75 2003-06-01 02:47:30 piso Exp $
+ * $Id: Lisp.java,v 1.76 2003-06-01 02:54:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,23 +125,19 @@ public abstract class Lisp
         final Environment env, final LispThread thread) throws Condition
     {
         LispObject[] results = new LispObject[2];
-        if (!(form instanceof Cons)) {
-            results[0] = form;
-            results[1] = NIL;
-            thread.setValues(results);
-            return results[0];
-        }
-        LispObject car = form.car();
-        if (car instanceof Symbol) {
-            LispObject macro = car.getSymbolFunction();
-            if (macro instanceof MacroObject) {
-                LispObject expander = ((MacroObject)macro).getExpander();
-                if (profiling)
-                    expander.incrementCallCount();
-                results[0] = expander.execute(form, env);
-                results[1] = T;
-                thread.setValues(results);
-                return results[0];
+        if (form instanceof Cons) {
+            LispObject car = form.car();
+            if (car instanceof Symbol) {
+                LispObject macro = car.getSymbolFunction();
+                if (macro instanceof MacroObject) {
+                    LispObject expander = ((MacroObject)macro).getExpander();
+                    if (profiling)
+                        expander.incrementCallCount();
+                    results[0] = expander.execute(form, env);
+                    results[1] = T;
+                    thread.setValues(results);
+                    return results[0];
+                }
             }
         }
         // Not a macro.
