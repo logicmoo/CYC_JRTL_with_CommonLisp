@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.38 2004-08-31 23:18:18 piso Exp $
+ * $Id: LispAPI.java,v 1.39 2004-09-02 00:49:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -958,6 +958,19 @@ public final class LispAPI extends Lisp
             Primitives.FUNCALL.execute(PACKAGE_J.intern("INVOKE-HOOK"),
                                        PACKAGE_J.intern("AFTER-SAVE-HOOK"),
                                        new JavaObject(buffer));
+        }
+        catch (Throwable t) {
+            Log.debug(t);
+        }
+    }
+
+    public static void invokeLispShellStartupHook(Buffer buffer, String command)
+    {
+        try {
+            Primitives.FUNCALL.execute(PACKAGE_J.intern("INVOKE-HOOK"),
+                                       PACKAGE_J.intern("LISP-SHELL-STARTUP-HOOK"),
+                                       new JavaObject(buffer),
+                                       new SimpleString(command));
         }
         catch (Throwable t) {
             Log.debug(t);
