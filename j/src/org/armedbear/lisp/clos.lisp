@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.15 2003-12-08 20:54:25 piso Exp $
+;;; $Id: clos.lisp,v 1.16 2003-12-08 21:06:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -377,8 +377,7 @@
 (defun std-slot-value (instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name)))
     (if location
-        (let* ((slots (std-instance-slots instance))
-               (val (slot-contents slots location)))
+        (let ((val (slot-contents (std-instance-slots instance) location)))
           (if (eq secret-unbound-value val)
               (error "the slot ~S is unbound in the object ~S" slot-name instance)
               val))
