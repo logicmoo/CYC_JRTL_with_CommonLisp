@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.1 2003-11-11 19:54:13 piso Exp $
+;;; $Id: precompiler.lisp,v 1.2 2003-11-12 20:09:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -98,16 +98,15 @@
           result))))
 
 (defun precompile-lambda (form)
-  (let ((args (cdr form)))
-    (let* ((lambda-list (car args))
-           (auxvars (memq '&AUX lambda-list))
-           (body (cdr args)))
-      (if auxvars
-          (append (list 'LAMBDA (subseq lambda-list 0 (position '&AUX lambda-list))
-                        (append (list 'LET*
-                                      (cdr auxvars))
-                                (mapcar #'precompile1 body))))
-          (list* 'LAMBDA lambda-list (mapcar #'precompile1 body))))))
+  (let* ((args (cdr form))
+         (lambda-list (car args))
+         (auxvars (memq '&AUX lambda-list)))
+    (if auxvars
+        (append (list 'LAMBDA (subseq lambda-list 0 (position '&AUX lambda-list))
+                      (append (list 'LET*
+                                    (cdr auxvars))
+                              (mapcar #'precompile1 (cdr args)))))
+        (list* 'LAMBDA lambda-list (mapcar #'precompile1 (cdr args))))))
 
 (defun define-local-macro (name lambda-list body)
   (let* ((form (gensym))
@@ -148,7 +147,7 @@
     (setf res (list* 'PROGN compiled-body))
     res))
 
-(defun precompile-let-vars (vars)
+(defun precompile-let/let*-vars (vars)
   (let ((result nil))
     (dolist (var vars)
       (if (consp var)
@@ -162,7 +161,7 @@
 
 (defun precompile-let/let* (form)
   (list* (car form)
-         (precompile-let-vars (cadr form))
+         (precompile-let/let*-vars (cadr form))
          (mapcar #'precompile1 (cddr form))))
 
 (defun precompile-case (form)
