@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.202 2004-10-17 09:54:49 piso Exp $
+ * $Id: Autoload.java,v 1.203 2004-10-22 15:55:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,47 @@ public class Autoload extends Function
     public final int getFunctionalType()
     {
         return FTYPE_AUTOLOAD;
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute(args);
+    }
+
+    public LispObject execute() throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute();
+    }
+
+    public LispObject execute(LispObject arg) throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute(arg);
+    }
+
+    public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute(first, second);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
+        throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute(first, second, third);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
+        throws ConditionThrowable
+    {
+        load();
+        return getSymbol().execute(first, second, third, fourth);
     }
 
     public String writeToString() throws ConditionThrowable
