@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.18 2003-12-18 18:03:23 piso Exp $
+ * $Id: StructureObject.java,v 1.19 2003-12-19 02:17:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,19 @@ public final class StructureObject extends LispObject
 
     public String toString()
     {
+        // FIXME
+        try {
+            if (typep(Symbol.RESTART) != NIL) {
+                Symbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
+                LispObject fun = PRINT_RESTART.getSymbolFunction();
+                StringOutputStream stream = new StringOutputStream();
+                funcall2(fun, this, stream, LispThread.currentThread());
+                return stream.getString().getValue();
+            }
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
         StringBuffer sb = new StringBuffer("#S(");
         sb.append(structureClass.getSymbol());
         // FIXME Use *PRINT-LENGTH*.
