@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.456 2003-10-01 21:29:45 piso Exp $
+ * $Id: Primitives.java,v 1.457 2003-10-01 22:56:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3049,7 +3049,8 @@ public final class Primitives extends Module
 
     // ### function
     private static final SpecialOperator FUNCTION =
-        new SpecialOperator("function") {
+        new SpecialOperator("function")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -3068,6 +3069,12 @@ public final class Primitives extends Module
             if (arg instanceof Cons) {
                 if (arg.car() == Symbol.LAMBDA)
                     return new Closure(arg.cadr(), arg.cddr(), env);
+                if (arg.car() == Symbol.SETF) {
+                    LispObject f = get(checkSymbol(arg.cadr()),
+                                       PACKAGE_SYS.intern("SETF-FUNCTION"));
+                    if (f instanceof Function)
+                        return f;
+                }
             }
             throw new ConditionThrowable(new UndefinedFunction(arg));
         }
