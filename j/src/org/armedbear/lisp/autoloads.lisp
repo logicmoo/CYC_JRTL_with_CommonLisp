@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.95 2004-01-23 00:57:48 piso Exp $
+;;; $Id: autoloads.lisp,v 1.96 2004-01-24 20:14:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -138,6 +138,7 @@
 (autoload 'read-sequence)
 (autoload 'write-sequence)
 (autoload 'make-load-form-saving-slots)
+(autoload 'compile-file)
 
 ;; Java interface.
 (in-package "JAVA")
