@@ -29,27 +29,27 @@ public abstract class AbstractLine implements Line
     private int hidden;
     private Annotation annotation;
 
-    public final Line previous()
+    public final synchronized Line previous()
     {
         return prev;
     }
 
-    public final void setPrevious(Line line)
+    public final synchronized void setPrevious(Line line)
     {
         prev = line;
     }
 
-    public final Line next()
+    public final synchronized Line next()
     {
         return next;
     }
 
-    public final void setNext(Line line)
+    public final synchronized void setNext(Line line)
     {
         next = line;
     }
 
-    public final void insertAfter(Line line)
+    public final synchronized void insertAfter(Line line)
     {
         if (line != null) {
             Line n = line.next();
@@ -62,22 +62,22 @@ public abstract class AbstractLine implements Line
             Debug.bug();
     }
 
-    public final int lineNumber()
+    public final synchronized int lineNumber()
     {
         return lineNumber;
     }
 
-    public final void setLineNumber(int n)
+    public final synchronized void setLineNumber(int n)
     {
         lineNumber = n;
     }
 
-    public final int originalLineNumber()
+    public final synchronized int originalLineNumber()
     {
         return originalLineNumber;
     }
 
-    public final void setOriginalLineNumber(int n)
+    public final synchronized void setOriginalLineNumber(int n)
     {
         originalLineNumber = n;
     }
@@ -191,7 +191,7 @@ public abstract class AbstractLine implements Line
         this.hidden = hidden;
     }
 
-    public final Line previousVisible()
+    public final synchronized Line previousVisible()
     {
         Line line = previous();
         while (line != null && line.isHidden())
@@ -199,7 +199,7 @@ public abstract class AbstractLine implements Line
         return line;
     }
 
-    public final Line nextVisible()
+    public final synchronized Line nextVisible()
     {
         Line line = next();
         while (line != null && line.isHidden())
