@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.21 2004-02-07 00:44:43 piso Exp $
+ * $Id: StructureObject.java,v 1.22 2004-02-15 18:42:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ public final class StructureObject extends LispObject
                 LispObject fun = PRINT_RESTART.getSymbolFunction();
                 StringOutputStream stream = new StringOutputStream();
                 funcall2(fun, this, stream, LispThread.currentThread());
-                return stream.getString().getValue();
+                return stream.getString().getStringValue();
             }
         }
         catch (Throwable t) {
