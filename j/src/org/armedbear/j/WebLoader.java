@@ -1,8 +1,8 @@
 /*
  * WebLoader.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebLoader.java,v 1.1.1.1 2002-09-24 16:09:09 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: WebLoader.java,v 1.2 2004-10-25 03:27:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1165,6 +1165,8 @@ public final class WebLoader implements WebConstants
             return String.valueOf((char)233);
         else if (s == "iuml")
             return String.valueOf((char)239);
+        else if (s == "mdash")
+            return String.valueOf((char)8212);
         else if (s == "bull")
             return String.valueOf((char)8226);
         else if (s == "AElig")
