@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.3 2003-02-09 18:43:50 piso Exp $
+ * $Id: Vector.java,v 1.4 2003-02-10 18:49:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@ public final class Vector extends AbstractVector implements SequenceType,
 {
     private final LispObject[] elements;
     private final int length;
-    private int fillPointer = -1; // -1 indicates no fill pointer.
 
     public Vector(int length)
     {
@@ -56,40 +55,6 @@ public final class Vector extends AbstractVector implements SequenceType,
     public boolean isSimpleVector()
     {
         return fillPointer < 0;
-    }
-
-    public int getFillPointer()
-    {
-        return fillPointer;
-    }
-
-    public void setFillPointer(LispObject obj) throws LispException
-    {
-        if (obj == T)
-            fillPointer = 0;
-        else {
-            long n = Fixnum.getValue(obj);
-            if (n > length) {
-                StringBuffer sb = new StringBuffer("the new fill pointer (");
-                sb.append(n);
-                sb.append(") exceeds the length of the vector (");
-                sb.append(length);
-                sb.append(")");
-                throw new LispException(sb.toString());
-            }
-            if (n < 0) {
-                StringBuffer sb = new StringBuffer("the new fill pointer (");
-                sb.append(n);
-                sb.append(") is negative");
-                throw new LispException(sb.toString());
-            }
-            fillPointer = (int) n;
-        }
-    }
-
-    public void setFillPointer(int n)
-    {
-        fillPointer = n;
     }
 
     public int length()

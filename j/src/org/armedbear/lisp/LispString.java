@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.2 2003-02-09 18:45:54 piso Exp $
+ * $Id: LispString.java,v 1.3 2003-02-10 18:49:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@ public final class LispString extends AbstractVector implements SequenceType,
     VectorType
 {
     private char[] array;
-    private int fillPointer = -1; // -1 indicates no fill pointer.
 
     // For CONCATENATE.
     public LispString()
@@ -53,35 +52,6 @@ public final class LispString extends AbstractVector implements SequenceType,
     public LispString(String s)
     {
         array = s.toCharArray();
-    }
-
-    public int getFillPointer()
-    {
-        return fillPointer;
-    }
-
-    public void setFillPointer(LispObject obj) throws LispException
-    {
-        if (obj == T)
-            fillPointer = 0;
-        else {
-            long n = Fixnum.getValue(obj);
-            if (n > array.length) {
-                StringBuffer sb = new StringBuffer("the new fill pointer (");
-                sb.append(n);
-                sb.append(") exceeds the length of the string (");
-                sb.append(array.length);
-                sb.append(")");
-                throw new LispException(sb.toString());
-            }
-            if (n < 0) {
-                StringBuffer sb = new StringBuffer("the new fill pointer (");
-                sb.append(n);
-                sb.append(") is negative");
-                throw new LispException(sb.toString());
-            }
-            fillPointer = (int) n;
-        }
     }
 
     public void fill(char c)
