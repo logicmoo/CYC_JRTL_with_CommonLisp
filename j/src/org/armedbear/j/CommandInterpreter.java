@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.1 2002-10-15 16:26:03 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.2 2002-10-16 01:57:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,8 @@ public class CommandInterpreter extends Buffer
     protected CommandInterpreter()
     {
         super();
+        initializeUndo();
+        initializeHistory();
     }
 
     public final boolean isModified()
@@ -133,21 +135,6 @@ public class CommandInterpreter extends Buffer
         enter(input);
     }
 
-    private String stripPrompt(String s)
-    {
-        if (promptRE != null) {
-            REMatch match = promptRE.getMatch(s);
-            if (match != null)
-                return s.substring(match.getEndIndex());
-        }
-        // Look for login name or password prompt.
-        RE re = new UncheckedRE(".*: ?");
-        REMatch match = re.getMatch(s);
-        if (match != null)
-            return s.substring(match.getEndIndex());
-        return s;
-    }
-
     protected void enter(final String s)
     {
         final Editor editor = Editor.currentEditor();
@@ -177,6 +164,11 @@ public class CommandInterpreter extends Buffer
         posEndOfBuffer = editor.getDotCopy();
         resetUndo();
         stripEcho = true;
+        send(s);
+    }
+
+    protected void send(final String s)
+    {
         try {
             stdin.write(s.concat("\n"));
             stdin.flush();
@@ -184,6 +176,21 @@ public class CommandInterpreter extends Buffer
         catch (IOException e) {
             Log.error(e);
         }
+    }
+
+    private String stripPrompt(String s)
+    {
+        if (promptRE != null) {
+            REMatch match = promptRE.getMatch(s);
+            if (match != null)
+                return s.substring(match.getEndIndex());
+        }
+        // Look for login name or password prompt.
+        RE re = new UncheckedRE(".*: ?");
+        REMatch match = re.getMatch(s);
+        if (match != null)
+            return s.substring(match.getEndIndex());
+        return s;
     }
 
     protected void escape()
