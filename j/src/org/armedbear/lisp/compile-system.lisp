@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.28 2004-09-29 19:04:57 piso Exp $
+;;; $Id: compile-system.lisp,v 1.29 2004-10-05 13:16:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -214,8 +214,7 @@
                                   "with-slots.lisp"
                                   "with-standard-io-syntax.lisp"
                                   "with-thread-lock.lisp"
-                                  "write-sequence.lisp"
-                                  "write-string.lisp"))
+                                  "write-sequence.lisp"))
      (mapc #'maybe-compile-file '("swank-protocol.lisp"
                                   "slime.lisp"
                                   "swank-abcl.lisp"
