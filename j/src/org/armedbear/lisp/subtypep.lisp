@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.56 2005-02-06 12:54:55 piso Exp $
+;;; $Id: subtypep.lisp,v 1.57 2005-02-06 13:26:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -559,6 +559,16 @@
            (if (memq t2 '(real number))
                (values (sub-interval-p i1 i2) t)
                (values nil (known-type-p t2))))
+          ((eq t1 'complex)
+           (cond ((eq t2 'number)
+                  (values t t))
+                 ((eq t2 'complex)
+                  (cond ((equal i2 '(*))
+                         (values t t))
+                        ((equal i1 '(*))
+                         (values nil t))
+                        (t
+                         (values (subtypep i1 i2) t))))))
           ((and (eq t1 (find-class 'array)) (eq t2 'array))
            (values (equal i2 '(* *)) t))
           ((and (memq t1 '(array simple-array)) (eq t2 'array))
