@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.29 2003-03-21 02:59:02 piso Exp $
+ * $Id: LispString.java,v 1.30 2003-04-06 19:20:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,10 +84,13 @@ public final class LispString extends AbstractVector implements SequenceType,
         if (this == obj)
             return true;
         if (obj instanceof LispString) {
-            // FIXME This can be done more efficiently.
-            // FIXME Need to observe fill pointer (if any).
-            if (getValue().equals(((LispString)obj).getValue()))
-                return true;
+            LispString string = (LispString) obj;
+            if (string.length() != length())
+                return false;
+            for (int i = length(); i-- > 0;)
+                if (string.array[i] != array[i])
+                    return false;
+            return true;
         }
         return false;
     }
