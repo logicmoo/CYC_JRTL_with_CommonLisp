@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.12 2003-07-12 23:09:19 piso Exp $
+;;; $Id: defstruct.lisp,v 1.13 2003-07-13 13:43:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,7 +30,9 @@
 (defun define-constructor (slots)
   (let* ((constructor (intern (concatenate 'string "MAKE-" (symbol-name *ds-name*))))
          (slot-names (mapcar #'(lambda (x) (if (atom x) x (car x))) slots))
-         (keys (cons '&key slot-names)))
+         (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
+         (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
+         (keys (cons '&key slot-descriptions)))
     `((defun ,constructor ,keys
         (%make-structure ',*ds-name* (list ,@slot-names))))))
 
