@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.287 2004-08-25 23:12:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.288 2004-08-26 14:27:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4181,8 +4181,7 @@
       (multiple-value-bind (lambda-expression environment)
         (function-lambda-expression definition-designator)
 	(unless lambda-expression
-	  (error :format-control "Can't find a definition for ~S."
-                 :format-arguments (list definition-designator)))
+          (error "Can't find a definition for ~S." definition-designator))
         (values lambda-expression environment))))
 
 (defun load-verbose-prefix ()
@@ -4212,11 +4211,11 @@
           (%format t "~A Compiling top-level form ...~%" prefix)))
     (unless definition
       (resolve name)
-      (setf definition (fdefinition name))
-      (when (compiled-function-p definition)
-        (when (and *compile-print* name)
-          (%format t "~A Already compiled ~S~%" prefix name))
-        (return-from %jvm-compile (values name nil nil))))
+      (setf definition (fdefinition name)))
+    (when (compiled-function-p definition)
+      (when (and *compile-print* name)
+        (%format t "~A Already compiled ~S~%" prefix name))
+      (return-from %jvm-compile (values definition nil nil)))
     (multiple-value-bind (expr env) (get-lambda-to-compile definition)
       (let* ((*package* (if (and name (symbol-package name))
                             (symbol-package name)
