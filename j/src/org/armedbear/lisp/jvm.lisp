@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.299 2004-10-24 00:39:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.300 2004-10-24 23:35:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -712,6 +712,7 @@
                 precompiler::precompile1
                 declare
                 go
+                sys::%structure-ref
                 ))
     (setf (gethash op single-valued-operators) t)))
 
