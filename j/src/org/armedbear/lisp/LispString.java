@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.33 2003-04-24 16:25:50 piso Exp $
+ * $Id: LispString.java,v 1.34 2003-04-25 02:03:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -627,6 +627,60 @@ public final class LispString extends AbstractVector implements SequenceType,
         {
             checkString(first).set(Fixnum.getInt(second), checkCharacter(third));
             return third;
+        }
+    };
+
+    // ### %nstring-upcase
+    private static final Primitive3 _NSTRING_UPCASE =
+        new Primitive3("%nstring-upcase") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            LispString s = checkString(first);
+            final int length = s.length();
+            int start = (int) Fixnum.getValue(second);
+            if (start < 0 || start > length)
+                throw new TypeError("invalid start position " + start);
+            int end;
+            if (third == NIL)
+                end = length;
+            else
+                end = (int) Fixnum.getValue(third);
+            if (end < 0 || end > length)
+                throw new TypeError("invalid end position " + start);
+            if (start > end)
+                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+            char[] array = s.array;
+            for (int i = start; i < end; i++)
+                array[i] = Character.toUpperCase(array[i]);
+            return s;
+        }
+    };
+
+    // ### %nstring-downcase
+    private static final Primitive3 _NSTRING_DOWNCASE =
+        new Primitive3("%nstring-downcase") {
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws LispError
+        {
+            LispString s = checkString(first);
+            final int length = s.length();
+            int start = (int) Fixnum.getValue(second);
+            if (start < 0 || start > length)
+                throw new TypeError("invalid start position " + start);
+            int end;
+            if (third == NIL)
+                end = s.length();
+            else
+                end = (int) Fixnum.getValue(third);
+            if (end < 0 || end > length)
+                throw new TypeError("invalid end position " + start);
+            if (start > end)
+                throw new TypeError("start (" + start + ") is greater than end (" + end + ")");
+            char[] array = s.array;
+            for (int i = start; i < end; i++)
+                array[i] = Character.toLowerCase(array[i]);
+            return s;
         }
     };
 }
