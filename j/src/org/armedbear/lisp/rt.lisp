@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.86 2003-07-08 15:54:45 piso Exp $
+;;; $Id: rt.lisp,v 1.87 2003-07-13 14:50:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -354,6 +354,7 @@
                               "tagbody"
                               "tailp"
                               "tree-equal"
+                              "typecase"
                               "union"
                               "unless"
                               "unwind-protect"
