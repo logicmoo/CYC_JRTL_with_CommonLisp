@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Condition.java,v 1.14 2003-11-03 18:49:20 piso Exp $
+ * $Id: Condition.java,v 1.15 2003-12-12 16:16:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,10 @@ package org.armedbear.lisp;
 
 public class Condition extends StandardObject
 {
-    private final String message;
+    private LispObject formatControl;
+    private LispObject formatArguments;
+
+    private String message = null;
 
     public Condition()
     {
@@ -36,14 +39,48 @@ public class Condition extends StandardObject
         message = null;
     }
 
-    public Condition(LispObject initArgs)
+    public Condition(LispObject initArgs) throws ConditionThrowable
     {
-        this(); // FIXME
+        LispObject formatControl = NIL;
+        LispObject formatArguments = NIL;
+        LispObject first, second;
+        while (initArgs != NIL) {
+            first = initArgs.car();
+            initArgs = initArgs.cdr();
+            second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.FORMAT_CONTROL)
+                formatControl = second;
+            else if (first == Keyword.FORMAT_ARGUMENTS)
+                formatArguments = second;
+        }
+        setFormatControl(formatControl);
+        setFormatArguments(formatArguments);
     }
 
     public Condition(String message)
     {
         this.message = message;
+    }
+
+    public final LispObject getFormatControl()
+    {
+        return formatControl;
+    }
+
+    public final void setFormatControl(LispObject formatControl)
+    {
+        this.formatControl = formatControl;
+    }
+
+    public final LispObject getFormatArguments()
+    {
+        return formatArguments;
+    }
+
+    public final void setFormatArguments(LispObject formatArguments)
+    {
+        this.formatArguments = formatArguments;
     }
 
     public String getMessage()
