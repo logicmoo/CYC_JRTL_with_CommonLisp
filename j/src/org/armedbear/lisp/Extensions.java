@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.12 2003-09-24 22:53:30 piso Exp $
+ * $Id: Extensions.java,v 1.13 2003-09-29 14:10:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,29 @@ public final class Extensions extends Lisp
                     new CharacterInputStream(socket.getInputStream());
                 CharacterOutputStream out =
                     new CharacterOutputStream(socket.getOutputStream());
+                return new TwoWayStream(in, out);
+            }
+            catch (Exception e) {
+                throw new ConditionThrowable(new LispError(e.getMessage()));
+            }
+        }
+    };
+
+    // ### make-binary-socket
+    // make-binary-socket host port => stream
+    private static final Primitive2 MAKE_BINARY_SOCKET =
+        new Primitive2("make-binary-socket", PACKAGE_EXT, true) {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            String host = LispString.getValue(first);
+            int port = Fixnum.getValue(second);
+            try {
+                Socket socket = new Socket(host, port);
+                BinaryInputStream in =
+                    new BinaryInputStream(socket.getInputStream());
+                BinaryOutputStream out =
+                    new BinaryOutputStream(socket.getOutputStream());
                 return new TwoWayStream(in, out);
             }
             catch (Exception e) {
