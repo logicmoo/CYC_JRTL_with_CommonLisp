@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.165 2003-04-09 18:09:57 piso Exp $
+ * $Id: Primitives.java,v 1.166 2003-04-09 23:56:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1822,6 +1822,10 @@ public final class Primitives extends Module
 
     private static boolean isConditionOfType(Condition c, LispObject type)
     {
+        if (type == Symbol.END_OF_FILE)
+            return c instanceof EndOfFileException;
+        if (type == Symbol.STREAM_ERROR)
+            return c instanceof StreamError;
         if (type == Symbol.UNDEFINED_FUNCTION)
             return c instanceof UndefinedFunctionError;
         if (type == Symbol.TYPE_ERROR)
