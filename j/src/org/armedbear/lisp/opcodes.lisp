@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: opcodes.lisp,v 1.5 2004-06-28 01:05:48 piso Exp $
+;;; $Id: opcodes.lisp,v 1.6 2004-07-11 16:00:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -239,6 +239,8 @@
 (define-opcode push-value 203 nil 1)
 (define-opcode store-value 204 nil -1)
 (define-opcode clear-values 205 nil 0)
+(define-opcode var-ref 206 nil nil)
+(define-opcode var-set 207 nil nil)
 
 (defparameter *last-opcode* 205)
 
