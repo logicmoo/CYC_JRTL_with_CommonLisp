@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: j.lisp,v 1.40 2005-02-04 04:27:44 piso Exp $
+;;; $Id: j.lisp,v 1.41 2005-03-01 20:26:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -89,7 +89,6 @@
           search-forward
           set-global-property
           set-mark
-          status
           status
           switch-to-buffer
           undo
@@ -196,6 +195,10 @@
 (defsetf variable-value set-variable-value)
 
 (defsetf current-editor %set-current-editor)
+
+(defsetf buffer-mark %set-buffer-mark)
+
+(defsetf editor-mark %set-editor-mark)
 
 (defsetf line-flags %set-line-flags)
 

@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.59 2005-02-04 04:27:23 piso Exp $
+ * $Id: LispAPI.java,v 1.60 2005-03-01 20:25:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,6 +109,22 @@ public final class LispAPI extends Lisp
         catch (ClassCastException e) {
             signal(new TypeError("The value " + obj.writeToString() +
                                  " is not a buffer."));
+            // Not reached.
+            return null;
+        }
+    }
+
+    public static final KeyMap checkKeymap(LispObject obj)
+        throws ConditionThrowable
+    {
+        if (obj == null)
+            throw new NullPointerException();
+        try {
+            return (KeyMap) ((JavaObject)obj).getObject();
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError("The value " + obj.writeToString() +
+                                 " is not a keymap."));
             // Not reached.
             return null;
         }
@@ -389,9 +405,71 @@ public final class LispAPI extends Lisp
         public LispObject execute()
         {
             Position mark = Editor.currentEditor().getMark();
+            if (mark == null)
+                mark = Editor.currentBuffer().getMark();
             if (mark != null)
                 return new JavaObject(mark.copy());
             return NIL;
+        }
+    };
+
+    // ### buffer-mark buffer => mark
+    private static final Primitive BUFFER_MARK =
+        new Primitive("buffer-mark", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            final Position mark = checkBuffer(arg).getMark();
+            if (mark == null)
+                return NIL;
+            return new JavaObject(mark.copy());
+        }
+    };
+
+    // ### %set-buffer-mark buffer mark => mark
+    private static final Primitive _SET_BUFFER_MARK =
+        new Primitive("%set-buffer-mark", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Buffer buffer = checkBuffer(first);
+            if (second == NIL)
+                buffer.setMark(null);
+            else
+                buffer.setMark(checkMark(second));
+            return second;
+        }
+    };
+
+    // ### editor-mark editor => mark
+    private static final Primitive EDITOR_MARK =
+        new Primitive("editor-mark", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            final Position mark = checkEditor(arg).getMark();
+            if (mark == null)
+                return NIL;
+            return new JavaObject(mark.copy());
+        }
+    };
+
+    // ### %set-editor-mark editor mark => mark
+    private static final Primitive _SET_EDITOR_MARK =
+        new Primitive("%set-editor-mark", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Editor editor = checkEditor(first);
+            if (second == NIL)
+                editor.setMark(null);
+            else
+                editor.setMark(checkMark(second));
+            return second;
         }
     };
 
@@ -875,6 +953,52 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### make-keymap
+    private static final Primitive MAKE_KEYMAP =
+        new Primitive("make-keymap", PACKAGE_J, true, "")
+    {
+        public LispObject execute()
+        {
+            return new JavaObject(new KeyMap());
+        }
+    };
+
+    // ### use-global-map keymap => NIL
+    private static final Primitive SET_GLOBAL_KEYMAP =
+        new Primitive("use-global-map", PACKAGE_J, true, "keymap")
+    {
+        public LispObject execute(LispObject arg)
+            throws ConditionThrowable
+        {
+            KeyMap.setGlobalKeyMap(checkKeymap(arg));
+            return T;
+        }
+    };
+
+    // ### define-key keymap key definition => generalized-boolean
+    private static final Primitive DEFINE_KEY =
+        new Primitive("define-key", PACKAGE_J, true, "keymap key definition")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+	    throws ConditionThrowable
+        {
+            KeyMap keymap = checkKeymap(first);
+            String keyText = second.getStringValue();
+            Object command;
+            if (third instanceof AbstractString) {
+                command = third.getStringValue();
+            } else if (third instanceof JavaObject) {
+                command = checkKeymap(third);
+            } else {
+                // Verify that the command can be coerced to a function.
+                coerceToFunction(third);
+                command = third;
+            }
+            return keymap.mapKey(keyText, command) ? T : NIL;
+        }
+    };
+
     // ### global-map-key key command => generalized-boolean
     private static final Primitive GLOBAL_MAP_KEY =
         new Primitive("global-map-key", PACKAGE_J, true, "key command")
@@ -886,6 +1010,8 @@ public final class LispAPI extends Lisp
             Object command;
             if (second instanceof AbstractString) {
                 command = second.getStringValue();
+            } else if (second instanceof JavaObject) {
+                command = checkKeymap(second);
             } else {
                 // Verify that the command can be coerced to a function.
                 coerceToFunction(second);
@@ -1262,9 +1388,9 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### %status string => generalized-boolean
+    // ### %status string &optional editor => generalized-boolean
     private static final Primitive STATUS =
-        new Primitive("status", PACKAGE_J, true, "string")
+        new Primitive("status", PACKAGE_J, true, "string &optional editor")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1286,6 +1412,7 @@ public final class LispAPI extends Lisp
             }
             return signal(new TypeError(arg, Symbol.STRING));
         }
+
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
