@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.20 2003-06-22 00:07:09 piso Exp $
+ * $Id: Autoload.java,v 1.21 2003-06-26 02:38:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -160,6 +160,8 @@ public final class Autoload extends Function
         autoload("%string>=", "StringFunctions");
         autoload("%time", "Time");
         autoload("char-equal", "CharacterFunctions");
+        autoload("char-greaterp", "CharacterFunctions");
+        autoload("char-lessp", "CharacterFunctions");
         autoload("char-not-greaterp", "CharacterFunctions");
         autoload("char-not-lessp", "CharacterFunctions");
         autoload("char=", "CharacterFunctions");
