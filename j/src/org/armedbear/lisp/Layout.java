@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Layout.java,v 1.3 2003-12-20 02:16:32 piso Exp $
+ * $Id: Layout.java,v 1.4 2003-12-20 03:05:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +25,13 @@ public final class Layout extends LispObject
 {
     private final LispClass cls;
     private final LispObject length;
+    private final LispObject instanceSlots; // A list of slot names.
 
-    public Layout(LispClass cls, LispObject length)
+    public Layout(LispClass cls, LispObject length, LispObject instanceSlots)
     {
         this.cls = cls;
         this.length = length;
+        this.instanceSlots = instanceSlots;
     }
 
     public LispClass getLispClass()
@@ -38,14 +40,15 @@ public final class Layout extends LispObject
     }
 
     // ### make-layout
-    private static final Primitive2 MAKE_LAYOUT =
-        new Primitive2("make-layout", PACKAGE_SYS, false)
+    private static final Primitive3 MAKE_LAYOUT =
+        new Primitive3("make-layout", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject first, LispObject second)
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
             throws ConditionThrowable
         {
             try {
-                return new Layout((LispClass)first, second);
+                return new Layout((LispClass)first, second, third);
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(first, "class"));
@@ -80,6 +83,31 @@ public final class Layout extends LispObject
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, "layout"));
+            }
+        }
+    };
+
+    // ### instance-slot-index
+    // instance-slot-index layout slot-name => index
+    private static final Primitive2 INSTANCE_SLOT_INDEX =
+        new Primitive2("instance-slot-index", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                LispObject list = ((Layout)first).instanceSlots;
+                int index = 0;
+                while (list != NIL) {
+                    if (list.car() == second)
+                        return new Fixnum(index);
+                    list = list.cdr();
+                    ++index;
+                }
+                return NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, "layout"));
             }
         }
     };
