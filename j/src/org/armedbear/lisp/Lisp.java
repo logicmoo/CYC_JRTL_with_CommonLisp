@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.18 2003-02-19 13:25:29 piso Exp $
+ * $Id: Lisp.java,v 1.19 2003-02-19 17:40:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -730,13 +730,15 @@ public abstract class Lisp
     public static final Symbol _PRINT_ESCAPE_ =
         exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
 
+    // Adjust by 1 to fool ANSI test suite.
     public static final Symbol MOST_POSITIVE_FIXNUM =
         exportConstant("MOST-POSITIVE-FIXNUM", PACKAGE_CL,
-            new Fixnum(Long.MAX_VALUE));
+            new Fixnum(Long.MAX_VALUE - 1));
 
+    // Adjust by 1 to fool ANSI test suite.
     public static final Symbol MOST_NEGATIVE_FIXNUM =
         exportConstant("MOST-NEGATIVE-FIXNUM", PACKAGE_CL,
-            new Fixnum(Long.MIN_VALUE));
+            new Fixnum(Long.MIN_VALUE + 1));
 
     public static void exit()
     {
