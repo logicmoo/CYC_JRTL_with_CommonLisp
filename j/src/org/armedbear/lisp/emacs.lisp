@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.4 2005-03-03 19:50:06 piso Exp $
+;;; $Id: emacs.lisp,v 1.5 2005-03-05 04:22:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,10 +35,12 @@
     (define-key map (first mapping) (second mapping))))
 
 (defparameter *global-map* (make-keymap))
+(defparameter *esc-map* (make-keymap))
 (defparameter *control-x-map* (make-keymap))
 (defparameter *help-map* (make-keymap))
 (defparameter *java-mode-map* (make-keymap))
 
+(define-key *global-map* "Escape" *esc-map*)
 (define-key *global-map* "Ctrl X" *control-x-map*)
 (define-key *global-map* "Ctrl H" *help-map*)
 
@@ -60,7 +62,8 @@
 ;; mapKey(KeyEvent.VK_P, ALT_MASK, "properties");
 ;; mapKey(KeyEvent.VK_N, CTRL_MASK | SHIFT_MASK, "newFrame");
 ;; mapKey(KeyEvent.VK_X, ALT_MASK, "executeCommand");
-(define-key *global-map* "Alt X" "executeCommand");
+(define-key *global-map* "Alt X" "executeCommand")
+(define-key *esc-map* #\x "executecommand")
 ;; mapKey(KeyEvent.VK_P, CTRL_MASK, "print");
 ;; mapKey(KeyEvent.VK_Q, CTRL_MASK | SHIFT_MASK, "saveAllExit");
 (define-key *control-x-map* "Ctrl C" "saveAllExit")
@@ -83,6 +86,7 @@
 (define-key *global-map* "Ctrl Y" "paste")
 ;; mapKey(KeyEvent.VK_V, CTRL_MASK | SHIFT_MASK, "cyclePaste");
 (define-key *global-map* "Alt Y" "cyclePaste")
+(define-key *esc-map* #\y "cyclePaste")
 ;; mapKey(KeyEvent.VK_T, ALT_MASK, "cycleTabWidth");
 
 ;; // Goto menu.
@@ -180,6 +184,13 @@
     ("Ctrl V"                   "pageDown")
     ("Page Down"                "pageDown")))
 
+(define-keys *esc-map*
+  '((#\< "bob")
+    (#\> "eob")
+    (#\. "findTagAtDot")
+    (#\% "replace")
+    ))
+
 ;; Emacs uses Ctrl Up for backward-paragraph, which j doesn't have.
 (define-keys *global-map*
   '(("Ctrl Up"          "windowUp")
@@ -215,6 +226,7 @@
 (define-key *global-map* "Ctrl Backspace" "deleteWordLeft")
 ;; mapKey(KeyEvent.VK_ENTER, 0, "newline");
 (define-key *global-map* "Enter" "newline")
+(define-key *global-map* "Ctrl M" "newline")
 (define-key *global-map* "Ctrl J" "newlineAndIndent")
 
 ;; mapKey(KeyEvent.VK_ESCAPE, 0, "escape");
@@ -281,10 +293,6 @@
 ;; mapKey(0xffc9, CTRL_MASK, "toggleWrap"); // Ctrl F12
 
 ;; mapKey(KeyEvent.VK_T, CTRL_MASK | ALT_MASK, "visibleTabs");
-
-;; // Help menu.
-;; mapKey(KeyEvent.VK_F1, 0, "help");
-;; mapKey(KeyEvent.VK_K, ALT_MASK, "describeKey");
 
 ;; mapKey(KeyEvent.VK_SLASH, ALT_MASK, "expand");
 (define-key *global-map* "Alt /" "expand")
@@ -364,6 +372,7 @@
 (define-keys *help-map*
   '(("a"                        "apropos")
     ("b"                        "listBindings")
+    ("i"                        "help")
     ("k"                        "describeKey")))
 
 ;; Java mode.
@@ -376,6 +385,7 @@
 (define-key *java-mode-map* "Tab" "tab")
 ;; km.mapKey(KeyEvent.VK_ENTER, 0, "newlineAndIndent");
 ;; km.mapKey(';', "electricSemi");
+(define-key *java-mode-map* "';'" "electricSemi")
 ;;                km.mapKey(':', "electricColon");
 ;;                km.mapKey('*', "electricStar");
 ;;                km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
