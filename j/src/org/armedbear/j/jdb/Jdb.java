@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.9 2003-05-12 17:13:28 piso Exp $
+ * $Id: Jdb.java,v 1.10 2003-05-12 17:48:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -674,7 +674,7 @@ public final class Jdb extends Buffer
 
     public void resolveDeferredRequests(ClassPrepareEvent event)
     {
-        synchronized(breakpoints) {
+        synchronized (breakpoints) {
             Iterator iter = breakpoints.iterator();
             while (iter.hasNext()) {
                 ResolvableBreakpoint bp = (ResolvableBreakpoint) iter.next();
