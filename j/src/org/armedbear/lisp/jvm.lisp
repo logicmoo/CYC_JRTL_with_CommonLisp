@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.75 2004-02-23 14:24:48 piso Exp $
+;;; $Id: jvm.lisp,v 1.76 2004-02-25 23:52:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1433,6 +1433,9 @@
      t)
     (/=
      (compile-binary-operation "IS_NE" args)
+     t)
+    (ASH
+     (compile-binary-operation "ash" args)
      t)
     (AREF
      (compile-binary-operation "AREF" args)
