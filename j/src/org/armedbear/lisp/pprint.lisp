@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.38 2004-10-04 17:20:49 piso Exp $
+;;; $Id: pprint.lisp,v 1.39 2004-10-04 18:14:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -106,8 +106,6 @@
   line-length ;;The line length to use for formatting.
   line-limit ;;If non-NIL the max number of lines to print.
   line-no ;;number of next line to be printed.
-  char-mode ;;NIL :UP :DOWN :CAP0 :CAP1 :CAPW
-  char-mode-counter ;depth of nesting of ~(...~)
   depth-in-blocks
    ;;Number of logical blocks at QRIGHT that are started but not ended.
   (BLOCK-STACK (make-array #.block-stack-min-size)) BLOCK-STACK-PTR
@@ -300,8 +298,6 @@
                                       (t *default-right-margin*))))
   (setf (line-limit xp) *print-lines*)
   (setf (line-no xp) 1)
-  (setf (char-mode xp) nil)
-  (setf (char-mode-counter xp) 0)
   (setf (depth-in-blocks xp) 0)
   (setf (block-stack-ptr xp) 0)
   (setf (charpos xp) (cond ((output-position stream)) (T 0)))
@@ -312,46 +308,6 @@
   (setf (Qright xp) #.(- queue-entry-size))
   (setf (prefix-stack-ptr xp) #.(- prefix-stack-entry-size))
   xp)
-
-;The char-mode stuff is a bit tricky.
-;one can be in one of the following modes:
-;NIL no changes to characters output.
-;:UP CHAR-UPCASE used.
-;:DOWN CHAR-DOWNCASE used.
-;:CAP0 capitalize next alphanumeric letter then switch to :DOWN.
-;:CAP1 capitalize next alphanumeric letter then switch to :CAPW
-;:CAPW downcase letters.  When a word break letter found, switch to :CAP1.
-;It is possible for ~(~) to be nested in a format string, but note that
-;each mode specifies what should happen to every letter.  Therefore, inner
-;nested modes never have any effect.  You can just ignore them.
-
-;; (defun push-char-mode (xp new-mode)
-;;   (if (zerop (char-mode-counter xp))
-;;       (setf (char-mode xp) new-mode))
-;;   (incf (char-mode-counter xp)))
-
-;; (defun pop-char-mode (xp)
-;;   (decf (char-mode-counter xp))
-;;   (if (zerop (char-mode-counter xp))
-;;       (setf (char-mode xp) nil)))
-
-;; ;Assumes is only called when char-mode is non-nil
-;; (defun handle-char-mode (xp char)
-;;   (case (char-mode xp)
-;;     (:CAP0 (cond ((not (alphanumericp char)) char)
-;; 		 (T (setf (char-mode xp) :DOWN) (char-upcase char))))
-;;     (:CAP1 (cond ((not (alphanumericp char)) char)
-;; 		 (T (setf (char-mode xp) :CAPW) (char-upcase char))))
-;;     (:CAPW (cond ((alphanumericp char) (char-downcase char))
-;; 		 (T (setf (char-mode xp) :CAP1) char)))
-;;     (:UP (char-upcase char))
-;;     (T (char-downcase char)))) ;:DOWN
-
-;All characters output are passed through the handler above.  However, it must
-;be noted that on-each-line prefixes are only processed in the context of the
-;first place they appear.  They stay the same later no matter what.  Also
-;non-literal newlines do not count as word breaks.
-
 
 ;This handles the basic outputting of characters.  note + suffix means that
 ;the stream is known to be an XP stream, all inputs are mandatory, and no
@@ -381,7 +337,6 @@
     (force-some-output xp))
   (let ((new-buffer-end (1+ (buffer-ptr xp))))
     (check-size xp buffer new-buffer-end)
-;;     (if (char-mode xp) (setq char (handle-char-mode xp char)))
     (setf (char (buffer xp) (buffer-ptr xp)) char)
     (setf (buffer-ptr xp) new-buffer-end)))
 
@@ -405,7 +360,6 @@
 	 (j start (1+ j)))
 	((= j end))
       (let ((char (char string j)))
-;;  	(if (char-mode xp) (setq char (handle-char-mode xp char)))
 	(setf (char buffer i) char)))
     (setf (buffer-ptr xp) new-buffer-end)))
 
@@ -429,7 +383,6 @@
 				(floor (+ current (- colnum) colinc) colinc)))))))
 	   (length (- new current)))
       (when (plusp length)
-;; 	(if (char-mode xp) (handle-char-mode xp #\space))
 	(let ((end (+ (buffer-ptr xp) length)))
 	  (check-size xp buffer end)
 	  (fill (buffer xp) #\space :start (buffer-ptr xp) :end end)
@@ -447,17 +400,11 @@
 	       (member (Qtype xp ptr) '(:newline :start-block)))
       (setf (Qend xp ptr) (- (Qright xp) ptr))))
   (setf (section-start xp) (TP<-BP xp))
-;;   (when (and (member kind '(:fresh :unconditional)) (char-mode xp))
-;;     (handle-char-mode xp #\newline))
   (when (member kind '(:fresh :unconditional :mandatory))
     (attempt-to-output xp T nil)))
 
 (defun start-block (xp prefix-string on-each-line? suffix-string)
   (when prefix-string (write-string++ prefix-string xp 0 (length prefix-string)))
-;;   (if (and (char-mode xp) on-each-line?)
-;;       (setq prefix-string
-;; 	    (subseq (buffer xp) (- (buffer-ptr xp) (length prefix-string))
-;; 		    (buffer-ptr xp))))
   (push-block-stack xp)
   (enqueue xp :start-block nil
 	   (if on-each-line? (cons suffix-string prefix-string) suffix-string))
