@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.105 2003-08-04 12:57:52 piso Exp $
+ * $Id: Editor.java,v 1.106 2003-08-04 14:23:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1301,6 +1301,8 @@ public final class Editor extends JPanel implements Constants,
     // forward or backward in the buffer.
     public Position findMatchInternal(Position start, int numLines)
     {
+        if (start == null)
+            return null;
         final String s1 = new String("{([})]");
         final char origChar = start.getChar();
         int index = s1.indexOf(origChar);
