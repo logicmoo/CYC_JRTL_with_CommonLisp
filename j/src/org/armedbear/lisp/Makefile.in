@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.2 2003-03-03 15:19:17 piso Exp $
+# $Id: Makefile.in,v 1.3 2003-03-04 12:58:19 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -17,9 +17,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-JAVAC=@JAVAC@
-JAVACFLAGS=@JAVACFLAGS@
-COMPILER_CLASSPATH=@COMPILER_CLASSPATH@
+JAVAC = @JAVAC@
+JAVACFLAGS = @JAVACFLAGS@
+COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
 
 CLASSFILES =	AbstractVector.class \
 		ArrayType.class \
@@ -84,16 +84,20 @@ CLASSFILES =	AbstractVector.class \
 		Version.class \
 		WrongNumberOfArgumentsException.class
 
+SOURCEFILES = $(patsubst %.class,%.java,$(CLASSFILES))
+
 %.class : %.java
 	$(JAVAC) -classpath "$(COMPILER_CLASSPATH)" $(JAVACFLAGS) $<
 	date > build
 	touch ../../../../classes.stamp
 
-all: $(CLASSFILES)
+classes: $(CLASSFILES)
+
+lisp: $(CLASSFILES)
+	gcj -O3 $(SOURCEFILES) --main=org.armedbear.lisp.Main -o lisp
 
 clean:
 	-rm -f *.class build
 
 Makefile: Makefile.in ../../../../config.status
 	cd ../../../.. && $(SHELL) ./config.status
-
