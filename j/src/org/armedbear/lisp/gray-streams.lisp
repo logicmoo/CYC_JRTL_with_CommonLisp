@@ -1,7 +1,7 @@
 ;;; gray-streams.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: gray-streams.lisp,v 1.6 2004-06-29 12:49:05 asimon Exp $
+;;; $Id: gray-streams.lisp,v 1.7 2004-06-30 17:14:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
