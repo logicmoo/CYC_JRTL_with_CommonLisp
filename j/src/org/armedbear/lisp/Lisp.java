@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.315 2005-01-31 16:32:58 piso Exp $
+ * $Id: Lisp.java,v 1.316 2005-02-01 15:19:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1899,8 +1899,11 @@ public abstract class Lisp
     public static final Symbol _SLOT_UNBOUND_ =
         internConstant("+SLOT-UNBOUND+", PACKAGE_SYS, UNBOUND_VALUE);
 
+    public static final Symbol _CL_PACKAGE_ =
+        exportConstant("+CL-PACKAGE+", PACKAGE_SYS, PACKAGE_CL);
+
     public static final Symbol _KEYWORD_PACKAGE_ =
-        exportConstant("*KEYWORD-PACKAGE*", PACKAGE_SYS, PACKAGE_KEYWORD);
+        exportConstant("+KEYWORD-PACKAGE+", PACKAGE_SYS, PACKAGE_KEYWORD);
 
     // ### *backquote-count*
     public static final Symbol _BACKQUOTE_COUNT_ =
