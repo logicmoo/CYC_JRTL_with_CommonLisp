@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.1 2003-08-09 23:42:33 piso Exp $
+ * $Id: open.java,v 1.2 2003-08-11 18:40:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,13 @@ public final class open extends Lisp
                                    LispObject third)
             throws LispError
         {
-            String pathname = LispString.getValue(first);
+            String namestring;
+            if (first instanceof LispString)
+                namestring = ((LispString)first).getValue();
+            else if (first instanceof Pathname)
+                namestring = ((Pathname)first).getNamestring();
+            else
+                throw new TypeError(first, "pathname designator");
             boolean binary;
             LispObject elementType = second;
             if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
@@ -45,13 +51,13 @@ public final class open extends Lisp
             else
                 throw new LispError(String.valueOf(elementType).concat(
                     " is not a valid stream element type"));
-            File file = new File(pathname);
+            File file = new File(namestring);
             LispObject ifExists = third;
             if (ifExists == Keyword.SUPERSEDE) {
                 ;
             } else if (ifExists == Keyword.ERROR) {
                 if (file.exists())
-                    throw new LispError("file already exists: " + pathname);
+                    throw new LispError("file already exists: " + first);
             } else if (ifExists == NIL) {
                 if (file.exists())
                     return NIL;
@@ -67,7 +73,7 @@ public final class open extends Lisp
                     return new CharacterOutputStream(new FileOutputStream(file));
             }
             catch (FileNotFoundException e) {
-                throw new LispError("unable to create file: " + pathname);
+                throw new LispError("unable to create file: " + first);
             }
         }
     };
@@ -78,7 +84,13 @@ public final class open extends Lisp
         public LispObject execute (LispObject first, LispObject second)
             throws LispError
         {
-            String pathname = LispString.getValue(first);
+            String namestring;
+            if (first instanceof LispString)
+                namestring = ((LispString)first).getValue();
+            else if (first instanceof Pathname)
+                namestring = ((Pathname)first).getNamestring();
+            else
+                throw new TypeError(first, "pathname designator");
             boolean binary;
             LispObject elementType = second;
             if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
@@ -90,12 +102,12 @@ public final class open extends Lisp
                     " is not a valid stream element type"));
             try {
                 if (binary)
-                    return new BinaryInputStream(new FileInputStream(pathname));
+                    return new BinaryInputStream(new FileInputStream(namestring));
                 else
-                    return new CharacterInputStream(new FileInputStream(pathname));
+                    return new CharacterInputStream(new FileInputStream(namestring));
             }
             catch (FileNotFoundException e) {
-                throw new LispError(" file not found: " + pathname);
+                throw new LispError(" file not found: " + first);
             }
         }
     };
