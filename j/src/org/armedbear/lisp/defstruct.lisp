@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.4 2003-03-06 02:45:15 piso Exp $
+;;; $Id: defstruct.lisp,v 1.5 2003-07-10 13:43:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(export 'defstruct)
+(in-package "SYSTEM")
 
 (defun make-constructor (name slots)
   (let ((constructor (intern (concatenate 'string "MAKE-" (symbol-name name))))
@@ -33,9 +31,9 @@
         (setf-expander (gensym)))
     (eval `(progn
              (defun ,accessor (instance)
-               (svref instance ,index))
+               (%instance-ref instance ,index))
              (defun ,setf-expander (instance new-value)
-               (setf (svref instance ,index) new-value))
+               (%instance-set instance ,index new-value))
              (defsetf ,accessor ,setf-expander)))))
 
 (defun make-access-functions (name slots)
