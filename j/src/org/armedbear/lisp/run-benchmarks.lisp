@@ -91,6 +91,9 @@
             (user (/ (- after-user before-user) internal-time-units-per-second)))
         (format *benchmark-output*
                 ";; ~25a ~8,2f ~8,2f~%"
+                name real user)
+        (format *trace-output*
+                ";; ~25a ~8,2f ~8,2f~%"
                 name real user))
       (force-output *benchmark-output*)))
   (bench-gc)
@@ -111,10 +114,12 @@
       (force-output *benchmark-output*)
       (bench-gc)
       ;; The benchmarks.
-      (run-benchmark 'cl-bench.misc:run-compiler)
-      (run-benchmark 'cl-bench.misc:run-fasload)
+      #+nil
+      (run-benchmark 'cl-bench.misc:run-compiler nil 3)
+      #+nil
+      (run-benchmark 'cl-bench.misc:run-fasload nil 20)
       #-allegro
-      (run-benchmark 'cl-bench.misc:run-permutations)
+      (run-benchmark 'cl-bench.misc:run-permutations nil 2)
       #+nil
       (progn
         (cl-bench.misc::setup-walk-list/seq)
@@ -127,17 +132,17 @@
         (run-benchmark 'cl-bench.misc:walk-list/mess)
         (setf cl-bench.misc::*big-mess-list* nil)
         (bench-gc))
-      (run-benchmark 'cl-bench.gabriel:boyer)
-      (run-benchmark 'cl-bench.gabriel:browse)
-      (run-benchmark 'cl-bench.gabriel:dderiv-run)
-      (run-benchmark 'cl-bench.gabriel:deriv-run)
-      (run-benchmark 'cl-bench.gabriel:run-destructive)
-      (run-benchmark 'cl-bench.gabriel:run-div2-test1)
-      (run-benchmark 'cl-bench.gabriel:run-div2-test2)
-      (run-benchmark 'cl-bench.gabriel:run-fft)
-      (run-benchmark 'cl-bench.gabriel:run-frpoly/fixnum)
-      (run-benchmark 'cl-bench.gabriel:run-frpoly/bignum)
-      (run-benchmark 'cl-bench.gabriel:run-frpoly/float)
+      (run-benchmark 'cl-bench.gabriel:boyer nil 30)
+      (run-benchmark 'cl-bench.gabriel:browse nil 10)
+      (run-benchmark 'cl-bench.gabriel:dderiv-run nil 50)
+      (run-benchmark 'cl-bench.gabriel:deriv-run nil 60)
+      (run-benchmark 'cl-bench.gabriel:run-destructive nil 100)
+      (run-benchmark 'cl-bench.gabriel:run-div2-test1 nil 200)
+      (run-benchmark 'cl-bench.gabriel:run-div2-test2 nil 200)
+      (run-benchmark 'cl-bench.gabriel:run-fft nil 30)
+      (run-benchmark 'cl-bench.gabriel:run-frpoly/fixnum nil 100)
+      (run-benchmark 'cl-bench.gabriel:run-frpoly/bignum nil 30)
+      (run-benchmark 'cl-bench.gabriel:run-frpoly/float nil 100)
       (run-benchmark 'cl-bench.gabriel:run-puzzle)
       (run-benchmark 'cl-bench.gabriel:run-tak)
       (run-benchmark 'cl-bench.gabriel:run-ctak)
@@ -170,28 +175,29 @@
       (run-benchmark 'cl-bench.bignum:run-pi-atan)
       (run-benchmark 'cl-bench.ratios:run-pi-ratios)
       #-clisp
-      (run-benchmark 'cl-bench.hash:run-slurp-lines)
+      (run-benchmark 'cl-bench.hash:run-slurp-lines nil 30)
       #-allegro
-      (run-benchmark 'cl-bench.hash:hash-strings)
-      (run-benchmark 'cl-bench.hash:hash-integers)
+      (run-benchmark 'cl-bench.hash:hash-strings nil 2)
+      (run-benchmark 'cl-bench.hash:hash-integers nil 10)
       #-allegro
       (run-benchmark 'cl-bench.boehm-gc:gc-benchmark)
-      (run-benchmark 'cl-bench.deflate:run-deflate-file)
+      (run-benchmark 'cl-bench.deflate:run-deflate-file nil 100)
       #-allegro
       (run-benchmark 'cl-bench.arrays:bench-1d-arrays)
       #-allegro
       (run-benchmark 'cl-bench.arrays:bench-2d-arrays '(1000 1))
       #-allegro
       (run-benchmark 'cl-bench.arrays:bench-3d-arrays '(100 1))
-      (run-benchmark 'cl-bench.arrays:bench-bitvectors '(1000000 1))
+      (run-benchmark 'cl-bench.arrays:bench-bitvectors nil 3)
       #-allegro
-      (run-benchmark 'cl-bench.arrays:bench-strings '(1000000 1))
+      (run-benchmark 'cl-bench.arrays:bench-strings)
       #-allegro
       (run-benchmark 'cl-bench.arrays:bench-strings/adjustable '(1000000 1))
-      #-allegro
+      #-(or allegro clisp)
       (run-benchmark 'cl-bench.arrays:bench-string-concat '(1000000 1))
       #-allegro
       (run-benchmark 'cl-bench.arrays:bench-search-sequence '(1000000 1))
+      (return-from run-benchmarks)
       (run-benchmark 'cl-bench.clos:run-defclass)
       (run-benchmark 'cl-bench.clos:run-defmethod)
       (run-benchmark 'cl-bench.clos:make-instances)
