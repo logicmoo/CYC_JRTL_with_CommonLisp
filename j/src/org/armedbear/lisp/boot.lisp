@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.71 2003-07-07 00:32:31 piso Exp $
+;;; $Id: boot.lisp,v 1.72 2003-07-07 02:55:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -205,6 +205,15 @@
        `(block nil (let* ,vl ,@decl (tagbody ,@body))))
       (push (car body) decl)
       (pop body)))
+
+
+;; FIXME
+(defun compute-restarts (&optional condition)
+  nil)
+
+;; FIXME
+(defun restart-name (restart)
+  nil)
 
 
 (sys::%debug)
