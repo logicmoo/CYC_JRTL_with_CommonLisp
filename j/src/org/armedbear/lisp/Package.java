@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.3 2003-03-05 15:51:46 piso Exp $
+ * $Id: Package.java,v 1.4 2003-03-05 19:42:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -226,6 +226,15 @@ public final class Package extends LispObject
             }
         }
         return list;
+    }
+
+    public Symbol[] symbols()
+    {
+        synchronized (map) {
+            Symbol[] array = new Symbol[map.size()];
+            map.values().toArray(array);
+            return array;
+        }
     }
 
     public Iterator iterator()
