@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.18 2003-09-08 01:39:28 piso Exp $
+;;; $Id: defstruct.lisp,v 1.19 2003-09-20 18:22:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -120,6 +120,7 @@
                                 (list name-and-options)
                                 name-and-options))
     `(progn
+       (make-structure-class ',*ds-name*)
        ,@(define-constructor slots)
        ,@(define-predicate)
        ,@(define-access-functions slots)
