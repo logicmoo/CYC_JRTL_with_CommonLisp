@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.27 2004-03-02 11:55:21 piso Exp $
+;;; $Id: top-level.lisp,v 1.28 2004-04-05 20:38:22 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@
     (let ((n (read-from-string args)))
       (let ((restarts (compute-restarts)))
         (when (< -1 n (length restarts))
-          (invoke-restart (nth n restarts)))))))
+          (invoke-restart-interactively (nth n restarts)))))))
 
 (defun describe-command (args)
   (let ((obj (eval (read-from-string args))))
