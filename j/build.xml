@@ -15,7 +15,8 @@
   <property name="JAVA" value="${java}"/>
   <property name="JAVA_OPTIONS" value="${java_options}"/>
 
-  <property name="LISP_HOME" value="${basedir}/org/armedbear/lisp"/>
+<!--  <property name="LISP_HOME" value="${basedir}/org/armedbear/lisp"/>-->
+  <dirname property="LISP_HOME" file="${basedir}/org/armedbear/lisp/Site.java"/>
 
   <property name="debug" value="no"/>
 

@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.30 2004-04-27 12:39:35 piso Exp $
+;;; $Id: top-level.lisp,v 1.31 2004-05-11 18:23:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -122,9 +122,19 @@
 (defun exit-command (ignored)
   (exit))
 
+(defvar *old-pwd* nil)
+
 (defun cd-command (args)
-  (cond ((or (null args) (string= args "~"))
-         (setf args (namestring (user-homedir-pathname))))
+  (cond ((null args)
+         (setf args (if (sys::featurep :windows)
+                        "C:\\"
+                        (namestring (user-homedir-pathname)))))
+        ((string= args "-")
+         (if *old-pwd*
+             (setf args (namestring *old-pwd*))
+             (progn
+               (format t "No previous directory.")
+               (return-from cd-command))))
         ((and (> (length args) 1) (string= (subseq args 0 2) "~/")
               (setf args (concatenate 'string
                                       (namestring (user-homedir-pathname))
@@ -132,13 +142,16 @@
   (let ((dir (probe-directory args)))
     (if dir
         (progn
-          (setf *default-pathname-defaults* dir)
+          (unless (equal dir *default-pathname-defaults*)
+            (setf *old-pwd* *default-pathname-defaults*
+                  *default-pathname-defaults* dir))
           (format t "~A" (namestring *default-pathname-defaults*)))
         (format t "Error: no such directory (~S).~%" args))))
 
 (defun ls-command (args)
-  (let ((args (if (stringp args) args "")))
-    (run-shell-command (concatenate 'string "ls " args)
+  (let ((args (if (stringp args) args ""))
+        (ls-program (if (sys::featurep :windows) "dir" "ls")))
+    (run-shell-command (concatenate 'string ls-program " " args)
                        :directory *default-pathname-defaults*))
   (values))
 
@@ -171,7 +184,7 @@
       (require module))))
 
 (defun pwd-command (ignored)
-  (format t "~A~%" *default-pathname-defaults*))
+  (format t "~A~%" (namestring *default-pathname-defaults*)))
 
 (defconstant spaces (make-string 32 :initial-element #\space))
 
@@ -180,59 +193,65 @@
       (concatenate 'string string (subseq spaces 0 (- width (length string))))
       string))
 
-(defun help-command (ignored)
-  (format t "~%  COMMAND     ABBR DESCRIPTION~%")
-  (dolist (entry *command-table*)
-    (format t "  ~A~A~A~%"
-            (pad (entry-name entry) 12)
-            (pad (entry-abbr entry) 5)
-            (entry-help entry)))
-  (format t "~%Commands must be prefixed by the command character, which is '~A'~A.~%~%"
-          *command-char* (if (eql *command-char* #\:) " by default" "")))
+(defun %help-command (prefix)
+  (let ((prefix-len (length prefix)))
+    (when (and (> prefix-len 0)
+               (eql (schar prefix 0) *command-char*))
+      (setf prefix (subseq prefix 1))
+      (decf prefix-len))
+    (format t "~%  COMMAND         DESCRIPTION~%")
+    (dolist (entry *command-table*)
+      (when (or (null prefix)
+                (and (<= prefix-len (length (entry-name entry)))
+                     (string-equal prefix (subseq (entry-name entry) 0 prefix-len))))
+        (format t "  ~A~A~A~%"
+                (pad (entry-name entry) 16)
+                (entry-help entry))))
+    (format t "~%Commands may be unambiguously abbreviated and must be prefixed by the command")
+    (format t "~%character, which is '~A'~A.~%~%"
+            *command-char* (if (eql *command-char* #\:) " by default" ""))))
+
+(defun help-command (&optional ignored)
+  (%help-command nil))
 
 (defparameter *command-table*
-  '(("apropos" 2 apropos-command "show apropos")
-    ("bt" 2 backtrace-command "backtrace n stack frames (default all)")
-    ("cd" 2 cd-command "change default directory")
-    ("cf" 2 cf-command "compile file(s)")
-    ("continue" 4 continue-command "invoke restart n")
-    ("describe" 2 describe-command "describe an object")
-    ("error" 3 error-command "print the current error message")
-    ("exit" 2 exit-command "exit lisp")
-    ("help" 2 help-command "print this help")
-    ("inspect" 2 inspect-command "inspect an object")
-    ("ld" 2 ld-command "load a file")
-    ("ls" 2 ls-command "list directory")
-    ("macroexpand" 2 macroexpand-command "macroexpand an expression")
-    ("package" 2 package-command "change current package")
-    ("pwd" 3 pwd-command "print current directory")
-    ("reset" 3 reset-command "return to top level")
-    ("rq" 2 rq-command "require a module")))
+  '(("apropos" apropos-command "show apropos")
+    ("bt" backtrace-command "backtrace n stack frames (default all)")
+    ("cd" cd-command "change default directory")
+    ("cf" cf-command "compile file(s)")
+    ("continue" continue-command "invoke restart n")
+    ("describe" describe-command "describe an object")
+    ("error" error-command "print the current error message")
+    ("exit" exit-command "exit lisp")
+    ("help" help-command "print this help")
+    ("inspect" inspect-command "inspect an object")
+    ("ld" ld-command "load a file")
+    ("ls" ls-command "list directory")
+    ("macroexpand" macroexpand-command "macroexpand an expression")
+    ("package" package-command "change *PACKAGE*")
+    ("pwd" pwd-command "print current directory")
+    ("reset" reset-command "return to top level")
+    ("rq" rq-command "require a module")))
 
 (defun entry-name (entry)
   (first entry))
 
-(defun entry-min-len (entry)
+(defun entry-command (entry)
   (second entry))
 
-(defun entry-abbr (entry)
-  (if (< (entry-min-len entry) (length (entry-name entry)))
-      (subseq (entry-name entry) 0 (entry-min-len entry))
-      ""))
-
-(defun entry-command (entry)
+(defun entry-help (entry)
   (third entry))
 
-(defun entry-help (entry)
-  (fourth entry))
-
-(defun find-command (string)
-  (let ((len (length string)))
-    (dolist (entry *command-table*)
-      (let ((min-len (entry-min-len entry)))
-        (when (and (>= len min-len)
-                   (string-equal (entry-name entry) string :end1 len))
-          (return (entry-command entry)))))))
+(defun find-matching-commands (string)
+  (when (and (> (length string) 0)
+             (eql (schar string 0) *command-char*))
+    (setf string (subseq string 1)))
+  (let ((len (length string))
+        (commands ()))
+    (dolist (entry *command-table* commands)
+      (when (and (<= len (length (entry-name entry)))
+                 (string-equal string (subseq (entry-name entry) 0 len)))
+        (push (entry-command entry) commands)))))
 
 (defun process-cmd (form)
   (when (eq form *null-cmd*)
@@ -240,19 +259,24 @@
   (when (and (stringp form)
              (> (length form) 1)
              (eql (char form 0) *command-char*))
-    (let* ((pos (position #\space form))
-           (cmd (subseq form 1 pos))
+    (let* ((pos (or (position #\space form)
+                    (position #\return form)))
+           (abbrev (subseq form 0 pos))
            (args (if pos (subseq form (1+ pos)) nil)))
-      (when args
-        (setf args (string-trim " " args))
-        (when (zerop (length args))
-          (setf args nil)))
-      (let ((fun (find-command cmd)))
-        (if fun
-            (funcall fun args)
-            (%format t "Unknown top-level command ~S.~%" cmd)))
-      (return-from process-cmd t)))
-  nil)
+      (let ((commands (find-matching-commands abbrev)))
+        (cond ((null commands)
+               (%format t "Unknown command ~A.~%" (string-upcase abbrev))
+               (%help-command abbrev))
+              ((null (cdr commands))
+               (when args
+                 (setf args (string-trim (list #\space #\return) args))
+                 (when (zerop (length args))
+                   (setf args nil)))
+               (funcall (car commands) args))
+              (t
+               (%format t "The abbreviation ~A is ambiguous.~%" (string-upcase abbrev))
+               (%help-command abbrev))))
+      t)))
 
 (defun read-cmd (stream)
   (let ((c (peek-char-non-whitespace stream)))
