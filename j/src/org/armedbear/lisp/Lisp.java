@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.318 2005-02-10 12:55:09 piso Exp $
+ * $Id: Lisp.java,v 1.319 2005-02-12 03:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1912,9 +1912,6 @@ public abstract class Lisp
     // ### *bq-vector-flag*
     public static final Symbol _BQ_VECTOR_FLAG_ =
         internSpecial("*BQ-VECTOR-FLAG*", PACKAGE_SYS, list1(new Symbol("bqv")));
-
-    // Initialized in function_info.java.
-    public static EqualHashTable FUNCTION_TABLE;
 
     private static final void loadClass(String className)
     {
