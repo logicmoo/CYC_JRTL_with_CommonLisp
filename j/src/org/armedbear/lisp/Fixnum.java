@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.88 2004-05-22 17:21:49 piso Exp $
+ * $Id: Fixnum.java,v 1.89 2004-05-23 02:51:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@ public final class Fixnum extends LispObject
 
     public LispObject getDescription()
     {
-        StringBuffer sb = new StringBuffer("fixnum ");
+        StringBuffer sb = new StringBuffer("The fixnum ");
         sb.append(value);
         return new SimpleString(sb);
     }
