@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: P4.java,v 1.7 2003-03-28 04:17:59 piso Exp $
+ * $Id: P4.java,v 1.8 2003-04-21 01:28:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,7 @@ public class P4 implements Constants
             sb.append(' ');
         }
         final String cmd = sb.toString().trim();
+        final Buffer parentBuffer = editor.getBuffer();
         Runnable commandRunnable = new Runnable() {
             public void run()
             {
@@ -81,7 +82,7 @@ public class P4 implements Constants
                 Runnable completionRunnable = new Runnable() {
                     public void run()
                     {
-                        p4Completed(editor, cmd, output);
+                        p4Completed(editor, parentBuffer, cmd, output);
                     }
                 };
                 SwingUtilities.invokeLater(completionRunnable);
@@ -90,10 +91,15 @@ public class P4 implements Constants
         new Thread(commandRunnable).start();
     }
 
-    private static void p4Completed(Editor editor, String cmd, String output)
+    private static void p4Completed(Editor editor, Buffer parentBuffer,
+        String cmd, String output)
     {
         if (output != null && output.length() > 0) {
-            OutputBuffer buf = OutputBuffer.getOutputBuffer(output);
+            Buffer buf;
+            if (cmd.startsWith("p4 diff "))
+                buf = new DiffOutputBuffer(parentBuffer, output, VC_P4);
+            else
+                buf = OutputBuffer.getOutputBuffer(output);
             buf.setTitle(cmd);
             editor.makeNext(buf);
             editor.activateInOtherWindow(buf);
