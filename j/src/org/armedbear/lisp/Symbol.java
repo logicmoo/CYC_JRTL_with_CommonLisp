@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.84 2003-09-21 19:29:51 piso Exp $
+ * $Id: Symbol.java,v 1.85 2003-09-22 17:27:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ public class Symbol extends LispObject
     public static final Symbol EQUAL                            = PACKAGE_CL.addExternalSymbol("EQUAL");
     public static final Symbol EQUALP                           = PACKAGE_CL.addExternalSymbol("EQUALP");
     public static final Symbol FLET                             = PACKAGE_CL.addExternalSymbol("FLET");
+    public static final Symbol FORMAT                           = PACKAGE_CL.addExternalSymbol("FORMAT");
     public static final Symbol GO                               = PACKAGE_CL.addExternalSymbol("GO");
     public static final Symbol LAMBDA                           = PACKAGE_CL.addExternalSymbol("LAMBDA");
     public static final Symbol LET                              = PACKAGE_CL.addExternalSymbol("LET");
