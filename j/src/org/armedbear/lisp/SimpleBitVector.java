@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleBitVector.java,v 1.11 2005-02-12 20:56:44 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.12 2005-02-13 04:02:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,7 +220,7 @@ public final class SimpleBitVector extends AbstractBitVector
         return new ComplexBitVector(newCapacity, displacedTo, displacement);
     }
 
-    public SimpleBitVector and(SimpleBitVector v, SimpleBitVector result)
+    private SimpleBitVector and(SimpleBitVector v, SimpleBitVector result)
     {
         if (result == null)
             result = new SimpleBitVector(capacity);
@@ -229,7 +229,7 @@ public final class SimpleBitVector extends AbstractBitVector
         return result;
     }
 
-    public SimpleBitVector ior(SimpleBitVector v, SimpleBitVector result)
+    private SimpleBitVector ior(SimpleBitVector v, SimpleBitVector result)
     {
         if (result == null)
             result = new SimpleBitVector(capacity);
@@ -238,7 +238,7 @@ public final class SimpleBitVector extends AbstractBitVector
         return result;
     }
 
-    public SimpleBitVector xor(SimpleBitVector v, SimpleBitVector result)
+    private SimpleBitVector xor(SimpleBitVector v, SimpleBitVector result)
     {
         if (result == null)
             result = new SimpleBitVector(capacity);
@@ -247,12 +247,66 @@ public final class SimpleBitVector extends AbstractBitVector
         return result;
     }
 
-    public SimpleBitVector nand(SimpleBitVector v, SimpleBitVector result)
+    private SimpleBitVector eqv(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = ~(bits[i] ^ v.bits[i]);
+        return result;
+    }
+
+    private SimpleBitVector nand(SimpleBitVector v, SimpleBitVector result)
     {
         if (result == null)
             result = new SimpleBitVector(capacity);
         for (int i = bits.length; i-- > 0;)
             result.bits[i] = ~(bits[i] & v.bits[i]);
+        return result;
+    }
+
+    private SimpleBitVector nor(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = ~(bits[i] | v.bits[i]);
+        return result;
+    }
+
+    private SimpleBitVector andc1(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = ~bits[i] & v.bits[i];
+        return result;
+    }
+
+    private SimpleBitVector andc2(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = bits[i] & ~v.bits[i];
+        return result;
+    }
+
+    private SimpleBitVector orc1(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = ~bits[i] | v.bits[i];
+        return result;
+    }
+
+    private SimpleBitVector orc2(SimpleBitVector v, SimpleBitVector result)
+    {
+        if (result == null)
+            result = new SimpleBitVector(capacity);
+        for (int i = bits.length; i-- > 0;)
+            result.bits[i] = bits[i] | ~v.bits[i];
         return result;
     }
 
@@ -300,6 +354,20 @@ public final class SimpleBitVector extends AbstractBitVector
         }
     };
 
+    // ### %simple-bit-vector-bit-eqv
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_EQV =
+        new Primitive("%simple-bit-vector-bit-eqv", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).eqv((SimpleBitVector)second,
+                                                (SimpleBitVector)third);
+        }
+    };
+
     // ### %simple-bit-vector-bit-nand
     private static final Primitive _SIMPLE_BIT_VECTOR_BIT_NAND =
         new Primitive("%simple-bit-vector-bit-nand", PACKAGE_SYS, false,
@@ -310,6 +378,77 @@ public final class SimpleBitVector extends AbstractBitVector
             throws ConditionThrowable
         {
             return ((SimpleBitVector)first).nand((SimpleBitVector)second,
+                                                 (SimpleBitVector)third);
+        }
+    };
+
+    // ### %simple-bit-vector-bit-nor
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_NOR =
+        new Primitive("%simple-bit-vector-bit-nor", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).nor((SimpleBitVector)second,
+                                                 (SimpleBitVector)third);
+        }
+    };
+
+    // ### %simple-bit-vector-bit-andc1
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_ANDC1 =
+        new Primitive("%simple-bit-vector-bit-andc1", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).andc1((SimpleBitVector)second,
+                                                  (SimpleBitVector)third);
+        }
+    };
+
+    // ### %simple-bit-vector-bit-andc2
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_ANDC2 =
+        new Primitive("%simple-bit-vector-bit-andc2", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).andc2((SimpleBitVector)second,
+                                                  (SimpleBitVector)third);
+        }
+    };
+
+
+    // ### %simple-bit-vector-bit-orc1
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_ORC1 =
+        new Primitive("%simple-bit-vector-bit-orc1", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).orc1((SimpleBitVector)second,
+                                                 (SimpleBitVector)third);
+        }
+    };
+
+    // ### %simple-bit-vector-bit-orc2
+    private static final Primitive _SIMPLE_BIT_VECTOR_BIT_ORC2 =
+        new Primitive("%simple-bit-vector-bit-orc2", PACKAGE_SYS, false,
+                      "bit-vector1 bit-vector2 result-bit-vector")
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            return ((SimpleBitVector)first).orc2((SimpleBitVector)second,
                                                  (SimpleBitVector)third);
         }
     };
