@@ -35,6 +35,7 @@ block
 boole
 both-case-p
 boundp
+break
 butlast
 byte
 byte-position
