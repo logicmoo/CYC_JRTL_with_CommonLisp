@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.17 2004-11-20 23:51:08 piso Exp $
+;;; $Id: format.lisp,v 1.18 2004-11-21 00:06:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2666,55 +2666,55 @@
 	     :complaint
 	     "no corresponding close brace"))
     (interpret-bind-defaults ((max-count nil)) params
-                             (let* ((closed-with-colon (format-directive-colonp close))
-                                    (posn (position close directives))
-                                    (insides (if (zerop posn)
-                                                 (next-arg)
-                                                 (subseq directives 0 posn)))
-                                    (*up-up-and-out-allowed* colonp))
-                               (labels
-                                 ((do-guts (orig-args args)
-                                           (if (zerop posn)
-                                               (handler-bind
-                                                 ((format-error
-                                                   (lambda (condition)
-                                                     (error
-                                                      'format-error
-                                                      :complaint
-                                                      "~A~%while processing indirect format string:"
-                                                      :args (list condition)
-                                                      :print-banner nil
-                                                      :control-string string
-                                                      :offset (1- end)))))
-                                                 (%format stream insides orig-args args))
-                                               (interpret-directive-list stream insides
-                                                                         orig-args args)))
-                                  (bind-args (orig-args args)
-                                             (if colonp
-                                                 (let* ((arg (next-arg))
-                                                        (*logical-block-popper* nil)
-                                                        (*outside-args* args))
-                                                   (catch 'up-and-out
-                                                     (do-guts arg arg)
-                                                     args))
-                                                 (do-guts orig-args args)))
-                                  (do-loop (orig-args args)
-                                           (catch (if colonp 'up-up-and-out 'up-and-out)
-                                             (loop
-                                               (when (and (not closed-with-colon) (null args))
-                                                 (return))
-                                               (when (and max-count (minusp (decf max-count)))
-                                                 (return))
-                                               (setf args (bind-args orig-args args))
-                                               (when (and closed-with-colon (null args))
-                                                 (return)))
-                                             args)))
-                                 (if atsignp
-                                     (setf args (do-loop orig-args args))
-                                     (let ((arg (next-arg))
-                                           (*logical-block-popper* nil))
-                                       (do-loop arg arg)))
-                                 (nthcdr (1+ posn) directives))))))
+      (let* ((closed-with-colon (format-directive-colonp close))
+             (posn (position close directives))
+             (insides (if (zerop posn)
+                          (next-arg)
+                          (subseq directives 0 posn)))
+             (*up-up-and-out-allowed* colonp))
+        (labels
+            ((do-guts (orig-args args)
+                      (if (zerop posn)
+                          (handler-bind
+                            ((format-error
+                              (lambda (condition)
+                                (error
+                                 'format-error
+                                 :complaint
+                                 "~A~%while processing indirect format string:"
+                                 :args (list condition)
+                                 :print-banner nil
+                                 :control-string string
+                                 :offset (1- end)))))
+                            (%format stream insides orig-args args))
+                          (interpret-directive-list stream insides
+                                                    orig-args args)))
+             (bind-args (orig-args args)
+                        (if colonp
+                            (let* ((arg (next-arg))
+                                   (*logical-block-popper* nil)
+                                   (*outside-args* args))
+                              (catch 'up-and-out
+                                (do-guts arg arg))
+                              args)
+                            (do-guts orig-args args)))
+             (do-loop (orig-args args)
+                      (catch (if colonp 'up-up-and-out 'up-and-out)
+                        (loop
+                          (when (and (not closed-with-colon) (null args))
+                            (return))
+                          (when (and max-count (minusp (decf max-count)))
+                            (return))
+                          (setf args (bind-args orig-args args))
+                          (when (and closed-with-colon (null args))
+                            (return)))
+                        args)))
+          (if atsignp
+              (setf args (do-loop orig-args args))
+              (let ((arg (next-arg))
+                    (*logical-block-popper* nil))
+                (do-loop arg arg)))
+          (nthcdr (1+ posn) directives))))))
 
 (def-complex-format-interpreter #\} ()
   (error 'format-error
