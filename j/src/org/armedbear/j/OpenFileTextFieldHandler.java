@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.10 2002-12-06 00:43:57 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.11 2002-12-06 16:07:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -450,13 +450,14 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
 
     public List getCompletions(String prefix)
     {
-        final File currentDirectory = editor.getCompletionDirectory();
+        final File dir = editor.getCompletionDirectory();
         ArrayList completions = new ArrayList();
         final String sourcePath = checkSourcePath ? getSourcePath() : null;
         prefix = File.normalize(prefix);
         FilenameCompletion completion =
-            new FilenameCompletion(currentDirectory, prefix, sourcePath,
+            new FilenameCompletion(dir, prefix, sourcePath,
                 completionsIgnoreCase);
+        final File currentDirectory = getCurrentDirectory();
         List files = completion.listFiles();
         if (files != null) {
             final int limit = files.size();
@@ -483,12 +484,13 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         if (checkBuffers && !Utilities.isFilenameAbsolute(prefix) &&
             prefix.indexOf(LocalFile.getSeparatorChar()) < 0) {
             // Short name.
-            addCompletionsFromBufferList(completions, prefix);
+            addCompletionsFromBufferList(completions, prefix, currentDirectory);
         }
         return completions;
     }
 
-    private void addCompletionsFromBufferList(List list, String prefix)
+    private void addCompletionsFromBufferList(List list, String prefix,
+        File currentDirectory)
     {
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
             Buffer buf = it.nextBuffer();
@@ -496,15 +498,22 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 continue;
             if (buf == editor.getBuffer())
                 continue;
-            if (buf.getFile() != null) {
+            File file = buf.getFile();
+            if (file != null) {
                 boolean isMatch = false;
                 if (completionsIgnoreCase)
-                    isMatch = buf.getFile().getName().regionMatches(true, 0,
-                        prefix, 0, prefix.length());
+                    isMatch = file.getName().regionMatches(true, 0, prefix, 0,
+                        prefix.length());
                 else
-                    isMatch = buf.getFile().getName().startsWith(prefix);
-                if (isMatch)
-                    addCompletion(list, buf.getFile().getName());
+                    isMatch = file.getName().startsWith(prefix);
+                if (isMatch) {
+                    String name;
+                    if (currentDirectory.equals(file.getParentFile()))
+                        name = file.getName();
+                    else
+                        name = file.canonicalPath();
+                    addCompletion(list, name);
+                }
             }
         }
     }
@@ -513,7 +522,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     private void addCompletion(List list, String s)
     {
         if (s != null) {
-            for (int i = list.size()-1; i >= 0; i--) {
+            for (int i = list.size(); i-- > 0;) {
                 if (completionsIgnoreCase) {
                     if (s.equalsIgnoreCase((String)list.get(i)))
                         return;
@@ -537,7 +546,18 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         return false;
     }
 
-    public String getSourcePath()
+    // Returns null if there is no file associated with the current buffer.
+    private File getCurrentDirectory()
+    {
+        File file = editor.getBuffer().getFile();
+        if (file == null)
+            return null;
+        if (file.isDirectory())
+            return file;
+        return file.getParentFile();
+    }
+
+    private String getSourcePath()
     {
         ArrayList dirs = new ArrayList();
         // We want to search the mode-specific source path first.
