@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.32 2003-02-25 16:55:46 piso Exp $
+ * $Id: Buffer.java,v 1.33 2003-03-20 15:18:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ import javax.swing.undo.UndoableEdit;
 
 public class Buffer extends SystemBuffer
 {
-    private static int untitledCount = 0;
+    private static int untitledCount;
 
     protected boolean isUntitled;
 
@@ -1167,13 +1167,9 @@ public class Buffer extends SystemBuffer
             Debug.bug("buffer.kill() buffer not in list");
             return;
         }
-        // Make sure line numbers are right for any bookmarks in this buffer.
-        Marker[] bookmarks = Editor.getBookmarks();
-        for (int i = 0; i < bookmarks.length; i++) {
-            Marker m = bookmarks[i];
-            if (m != null)
-                m.bufferClosed(this);
-        }
+
+        Marker.invalidateMarkers(this);
+
         Buffer buf = bufferList.getPreviousPrimaryBuffer(this);
         if (buf != null && buf.isPaired()) {
             Buffer secondary = buf.getSecondary();
@@ -2103,7 +2099,6 @@ public class Buffer extends SystemBuffer
     }
 
     private UndoManager undoManager;
-
 
     protected void initializeUndo()
     {
