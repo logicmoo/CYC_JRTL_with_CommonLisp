@@ -2,7 +2,7 @@
  * function_info.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: function_info.java,v 1.5 2005-02-09 18:30:36 piso Exp $
+ * $Id: function_info.java,v 1.6 2005-02-12 03:29:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,8 @@ package org.armedbear.lisp;
 
 public final class function_info extends Lisp
 {
-    static {
-        FUNCTION_TABLE = new EqualHashTable(64, NIL, NIL);
-    }
+    private static EqualHashTable FUNCTION_TABLE =
+        new EqualHashTable(64, NIL, NIL);
 
     // ### function-info name
     private static final Primitive FUNCTION_INFO =
