@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.755 2005-04-04 19:32:17 piso Exp $
+ * $Id: Primitives.java,v 1.756 2005-04-05 15:32:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ public final class Primitives extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            signal(new WrongNumberOfArgumentsException("/"));
+            signal(new WrongNumberOfArgumentsException(this));
             return NIL;
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -2282,8 +2282,8 @@ public final class Primitives extends Lisp
         {
             final LispObject value1, value2;
             Function function = checkFunction(arg);
-            String name = function.getName();
-            final LispObject value3 = name != null ? new SimpleString(name) : NIL;
+            LispObject name = function.getLambdaName();
+            final LispObject value3 = name != null ? name : NIL;
             if (function instanceof CompiledClosure) {
                 value1 = NIL;
                 value2 = T;
@@ -2696,7 +2696,7 @@ public final class Primitives extends Lisp
                 return pkg != null ? pkg : NIL;
             }
             if (arg instanceof Symbol) {
-                Package pkg = Packages.findPackage(arg.getName());
+                Package pkg = Packages.findPackage(((Symbol)arg).getName());
                 return pkg != null ? pkg : NIL;
             }
             if (arg instanceof LispCharacter) {
@@ -3243,7 +3243,7 @@ public final class Primitives extends Lisp
             final int length = args.length();
             if (length < 1 || length > 2)
                 signal(new WrongNumberOfArgumentsException(this));
-            LispObject symbol;
+            Symbol symbol;
             try {
                 symbol = (Symbol) args.car();
             }

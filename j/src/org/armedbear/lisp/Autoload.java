@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.222 2005-03-19 20:00:22 piso Exp $
+ * $Id: Autoload.java,v 1.223 2005-04-05 15:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,20 +26,29 @@ public class Autoload extends Function
     protected final String fileName;
     protected final String className;
 
+    private final Symbol symbol;
+
     protected Autoload(Symbol symbol)
     {
-        super(symbol);
+        super();
         fileName = null;
         className = null;
+        this.symbol = symbol;
         symbol.setBuiltInFunction(false);
     }
 
     protected Autoload(Symbol symbol, String fileName, String className)
     {
-        super(symbol);
+        super();
         this.fileName = fileName;
         this.className = className;
+        this.symbol = symbol;
         symbol.setBuiltInFunction(false);
+    }
+
+    protected final Symbol getSymbol()
+    {
+        return symbol;
     }
 
     public static void autoload(String symbolName, String className)
@@ -108,7 +117,6 @@ public class Autoload extends Function
         } else
             Load.loadSystemFile(getFileName(), true);
         if (debug) {
-            Symbol symbol = getSymbol();
             if (symbol != null) {
                 if (symbol.getSymbolFunction() instanceof Autoload) {
                     Debug.trace("Unable to autoload " + symbol.writeToString());
@@ -122,26 +130,26 @@ public class Autoload extends Function
     {
         if (fileName != null)
             return fileName;
-        return getSymbol().getName().toLowerCase();
+        return symbol.getName().toLowerCase();
     }
 
     public LispObject execute() throws ConditionThrowable
     {
         load();
-        return getSymbol().execute();
+        return symbol.execute();
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         load();
-        return getSymbol().execute(arg);
+        return symbol.execute(arg);
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
         load();
-        return getSymbol().execute(first, second);
+        return symbol.execute(first, second);
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -149,7 +157,7 @@ public class Autoload extends Function
         throws ConditionThrowable
     {
         load();
-        return getSymbol().execute(first, second, third);
+        return symbol.execute(first, second, third);
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -157,7 +165,7 @@ public class Autoload extends Function
         throws ConditionThrowable
     {
         load();
-        return getSymbol().execute(first, second, third, fourth);
+        return symbol.execute(first, second, third, fourth);
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -166,7 +174,7 @@ public class Autoload extends Function
         throws ConditionThrowable
     {
         load();
-        return getSymbol().execute(first, second, third, fourth, fifth);
+        return symbol.execute(first, second, third, fourth, fifth);
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -175,19 +183,19 @@ public class Autoload extends Function
         throws ConditionThrowable
     {
         load();
-        return getSymbol().execute(first, second, third, fourth, fifth, sixth);
+        return symbol.execute(first, second, third, fourth, fifth, sixth);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         load();
-        return getSymbol().execute(args);
+        return symbol.execute(args);
     }
 
     public String writeToString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("#<AUTOLOAD ");
-        sb.append(getSymbol().writeToString());
+        sb.append(symbol.writeToString());
         sb.append(" \"");
         if (className != null) {
             int index = className.lastIndexOf('.');
@@ -253,7 +261,7 @@ public class Autoload extends Function
             if (fun instanceof Autoload) {
                 Autoload autoload = (Autoload) fun;
                 autoload.load();
-                return autoload.getSymbol().getSymbolFunction();
+                return symbol.getSymbolFunction();
             }
             return fun;
         }

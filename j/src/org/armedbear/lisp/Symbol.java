@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.178 2005-03-28 19:14:15 piso Exp $
+ * $Id: Symbol.java,v 1.179 2005-04-05 15:37:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,7 +214,7 @@ public class Symbol extends LispObject
 
     public final AbstractString name;
     private int hash = -1;
-    private LispObject pkg;
+    private LispObject pkg; // Either a package object or NIL.
     private LispObject value;
     private LispObject function;
     private LispObject propertyList;
@@ -401,7 +401,7 @@ public class Symbol extends LispObject
                 return("#:".concat(s));
             if (pkg == PACKAGE_KEYWORD)
                 return ":".concat(s);
-            StringBuffer sb = new StringBuffer(pkg.getName());
+            StringBuffer sb = new StringBuffer(((Package)pkg).getName());
             if (((Package)pkg).findExternalSymbol(s) != null)
                 sb.append(':');
             else
@@ -555,8 +555,8 @@ public class Symbol extends LispObject
                 StringBuffer sb = new StringBuffer();
                 if (pkg == PACKAGE_KEYWORD) {
                     sb.append(':');
-                } else if (pkg != NIL) {
-                    sb.append(multipleEscape(pkg.getName()));
+                } else if (pkg instanceof Package) {
+                    sb.append(multipleEscape(((Package)pkg).getName()));
                     sb.append("::");
                 } else {
                     sb.append("#:");
@@ -637,7 +637,7 @@ public class Symbol extends LispObject
         if (currentPackage.findInternalSymbol(name) == this)
             return symbolName;
         // Package prefix is necessary.
-        String packageName = pkg.getName();
+        String packageName = ((Package)pkg).getName();
         final boolean escapePackageName = needsEscape(packageName, readtableCase, thread);
         if (escapePackageName) {
             packageName = multipleEscape(packageName);

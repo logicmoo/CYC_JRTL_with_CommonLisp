@@ -1,8 +1,8 @@
 /*
  * LispCharacter.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.60 2005-03-25 03:19:21 piso Exp $
+ * Copyright (C) 2002-2005 Peter Graves
+ * $Id: LispCharacter.java,v 1.61 2005-04-05 15:40:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,7 +231,7 @@ public final class LispCharacter extends LispObject
                 if (arg.length() == 1)
                     return ((AbstractString)arg).AREF(0);
             } else if (arg instanceof Symbol) {
-                String name = arg.getName();
+                String name = ((Symbol)arg).getName();
                 if (name.length() == 1)
                     return getInstance(name.charAt(0));
             }

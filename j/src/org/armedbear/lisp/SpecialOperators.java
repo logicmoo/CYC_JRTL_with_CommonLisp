@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.36 2005-03-21 17:18:07 piso Exp $
+ * $Id: SpecialOperators.java,v 1.37 2005-04-05 15:41:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class SpecialOperators extends Lisp
                     return eval(args.cdr().cadr(), env, thread);
                 }
                 default:
-                    return signal(new WrongNumberOfArgumentsException("IF"));
+                    return signal(new WrongNumberOfArgumentsException(this));
             }
         }
     };

@@ -2,7 +2,7 @@
  * WrongNumberOfArgumentsException.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: WrongNumberOfArgumentsException.java,v 1.6 2005-03-19 20:00:33 piso Exp $
+ * $Id: WrongNumberOfArgumentsException.java,v 1.7 2005-04-05 15:36:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,30 +23,24 @@ package org.armedbear.lisp;
 
 public final class WrongNumberOfArgumentsException extends ProgramError
 {
-    private final LispObject object;
-    private final String name;
+    private final Operator operator;
 
-    public WrongNumberOfArgumentsException(LispObject obj)
+    public WrongNumberOfArgumentsException(Operator operator)
     {
-        this.object = obj;
-        name = null;
-    }
-
-    public WrongNumberOfArgumentsException(String name)
-    {
-        object = null;
-        this.name = name;
+        this.operator = operator;
     }
 
     public String getMessage()
     {
         StringBuffer sb = new StringBuffer("Wrong number of arguments");
-        if (name != null) {
+        if (operator.getLambdaName() != null) {
             sb.append(" for ");
-            sb.append(name);
-        } else if (object != null && object.getName() != null) {
-            sb.append(" for ");
-            sb.append(object.getName());
+            try {
+                sb.append(operator.getLambdaName().writeToString());
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+            }
         }
         sb.append('.');
         return sb.toString();

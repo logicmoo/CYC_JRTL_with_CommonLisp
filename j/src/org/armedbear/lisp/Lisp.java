@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.335 2005-04-04 19:31:56 piso Exp $
+ * $Id: Lisp.java,v 1.336 2005-04-05 15:30:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public abstract class Lisp
                 if (obj instanceof Autoload) {
                     Autoload autoload = (Autoload) obj;
                     autoload.load();
-                    obj = autoload.getSymbol().getSymbolFunction();
+                    obj = car.getSymbolFunction();
                 }
                 if (obj instanceof SpecialOperator) {
                     obj = get((Symbol)car, Symbol.MACROEXPAND_MACRO);
@@ -653,7 +653,7 @@ public abstract class Lisp
         if (arg instanceof AbstractString)
             return arg.getStringValue();
         if (arg instanceof Symbol)
-            return arg.getName();
+            return ((Symbol)arg).getName();
         if (arg instanceof LispCharacter)
             return String.valueOf(new char[] {((LispCharacter)arg).value});
         signal(new TypeError("The value " + arg.writeToString() +

@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.124 2005-03-25 16:09:34 piso Exp $
+ * $Id: LispObject.java,v 1.125 2005-04-05 15:33:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,11 +79,6 @@ public class LispObject extends Lisp
     public boolean atom()
     {
         return true;
-    }
-
-    public String getName()
-    {
-        return null;
     }
 
     public Object javaInstance() throws ConditionThrowable
