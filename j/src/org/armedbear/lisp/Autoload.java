@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.12 2003-06-20 18:16:02 piso Exp $
+ * $Id: Autoload.java,v 1.13 2003-06-20 18:28:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,9 +150,12 @@ public final class Autoload extends Function
         autoload("get-internal-real-time", "Time");
         autoload("get-universal-time", "Time");
         autoload("gethash", "HashTable");
+        autoload("make-two-way-stream", "TwoWayStream");
         autoload("puthash", "HashTable");
         autoload("remhash", "HashTable");
         autoload("room", "room");
         autoload("sxhash", "HashTable");
+        autoload("two-way-stream-input-stream", "TwoWayStream");
+        autoload("two-way-stream-output-stream", "TwoWayStream");
     }
 }
