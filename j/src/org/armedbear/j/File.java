@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.11 2002-12-08 02:19:20 piso Exp $
+ * $Id: File.java,v 1.12 2002-12-08 02:25:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -430,7 +430,7 @@ public class File implements Comparable
         return name.replace(toBeReplaced, LocalFile.getSeparatorChar());
     }
 
-    private static boolean hasRemotePrefix(String name)
+    public static boolean hasRemotePrefix(String name)
     {
         if (name.startsWith(PREFIX_HTTP))
             return true;
@@ -443,7 +443,7 @@ public class File implements Comparable
         return false;
     }
 
-    private static boolean hasLocalPrefix(String name)
+    public static boolean hasLocalPrefix(String name)
     {
         if (name.startsWith(PREFIX_FILE))
             return true;
