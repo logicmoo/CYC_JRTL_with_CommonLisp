@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.288 2004-10-22 19:01:56 piso Exp $
+ * $Id: Lisp.java,v 1.289 2004-10-24 17:50:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2034,6 +2034,14 @@ public abstract class Lisp
 
     public static final Symbol _KEYWORD_PACKAGE_ =
         exportConstant("*KEYWORD-PACKAGE*", PACKAGE_SYS, PACKAGE_KEYWORD);
+
+    // ### *backquote-count*
+    public static final Symbol _BACKQUOTE_COUNT_ =
+        internSpecial("*BACKQUOTE-COUNT*", PACKAGE_SYS, Fixnum.ZERO);
+
+    // ### *bq-vector-flag*
+    public static final Symbol _BQ_VECTOR_FLAG_ =
+        internSpecial("*BQ-VECTOR-FLAG*", PACKAGE_SYS, list1(new Symbol("bqv")));
 
     // Initialized in function_info.java.
     public static EqualHashTable FUNCTION_TABLE;
