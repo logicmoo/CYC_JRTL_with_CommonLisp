@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: print-object.lisp,v 1.7 2005-02-20 14:11:53 piso Exp $
+;;; $Id: print-object.lisp,v 1.8 2005-02-21 16:38:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@
 (defmethod print-object ((object standard-object) stream)
   (print-unreadable-object (object stream :identity t)
     (format stream "~S" (class-name (class-of object))))
-  instance)
+  object)
 
 (defmethod print-object ((class standard-class) stream)
   (print-unreadable-object (class stream :identity t)
