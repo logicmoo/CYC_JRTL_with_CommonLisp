@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.43 2003-06-29 00:19:33 piso Exp $
+ * $Id: Buffer.java,v 1.44 2003-07-05 16:04:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,8 +93,17 @@ public class Buffer extends SystemBuffer
 
     private int fileType = FILETYPE_UNKNOWN;
 
-    String entryName; // ZipEntry name.
-    String source; // String describing source of zip entry (e.g. "from /home/peter/j.zip").
+    private Compression compression;
+
+    public final Compression getCompression()
+    {
+        return compression;
+    }
+
+    public final void setCompression(Compression compression)
+    {
+        this.compression = compression;
+    }
 
     protected PropertyList properties = new PropertyList();
 
@@ -418,10 +427,13 @@ public class Buffer extends SystemBuffer
             default: {
                 Mode m = grovelModeFromFile(file);
                 if (m == null) {
-                    if (entryName != null)
-                        m = getModeForFileName(entryName);
-                    else if (file != null)
+                    if (compression != null) {
+                        String entryName = compression.getEntryName();
+                        if (entryName != null)
+                            m = getModeForFileName(entryName);
+                    } else if (file != null) {
                         m = getModeForFileName(file.getName());
+                    }
                     if (m != null && m.getId() == IMAGE_MODE) {
                         if (fileType == FILETYPE_TEXT)
                             m = modeList.getMode(PLAIN_TEXT_MODE);
@@ -960,9 +972,14 @@ public class Buffer extends SystemBuffer
                 if (toBeLoaded.isFile()) {
                     Editor editor = Editor.currentEditor();
                     FastStringBuffer sb = new FastStringBuffer("Loading");
-                    if (entryName != null) {
-                        sb.append(' ');
-                        sb.append(entryName);
+                    if (compression != null) {
+                        if (compression.getType() == COMPRESSION_ZIP) {
+                            String entryName = compression.getEntryName();
+                            if (entryName != null) {
+                                sb.append(' ');
+                                sb.append(entryName);
+                            }
+                        }
                     } else if (file != null) {
                         sb.append(' ');
                         sb.append(file.getName());

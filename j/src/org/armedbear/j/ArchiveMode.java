@@ -1,8 +1,8 @@
 /*
  * ArchiveMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: ArchiveMode.java,v 1.2 2002-10-01 18:42:06 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: ArchiveMode.java,v 1.3 2003-07-05 16:03:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,15 +79,16 @@ public final class ArchiveMode extends AbstractMode implements Constants, Mode
             return;
         String source = null;
         if (buffer.getFile() != null) {
-            source = "from " + buffer.getFile().netPath();
-        } else if (buffer.source != null && buffer.entryName != null) {
-            source = "from " + buffer.entryName + " " + buffer.source;
+            source = "[from " + buffer.getFile().netPath() + "]";
+        } else {
+            Compression compression = buffer.getCompression();
+            if (compression != null && compression.getType() == COMPRESSION_ZIP)
+                source = "[from " + compression.getEntryName() + " " + compression.getSource() + "]";
         }
-        Debug.assertTrue(source != null);
-        String title = name + " (read only) " + source;
+        String title = name + " " + source;
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
             Buffer maybe = it.nextBuffer();
-            if (maybe.title != null && maybe.title.equals(title)) {
+            if (title.equals(maybe.getTitle())) {
                 editor.makeNext(maybe);
                 editor.activate(maybe);
                 return;
@@ -104,27 +105,29 @@ public final class ArchiveMode extends AbstractMode implements Constants, Mode
             ZipEntry zipEntry;
             while((zipEntry = in.getNextEntry()) != null) {
                 if (zipEntry.getName().equals(name)) {
-                    if (zipEntry.isDirectory())
+                    if (zipEntry.isDirectory()) {
                         editor.status(name + " is a directory");
-                    else {
+                    } else {
                         Buffer buf = null;
                         File cache = cacheEntry(in);
                         // First see if it's an image...
-                        if (Editor.checkExperimental() && Editor.getModeList().modeAccepts(IMAGE_MODE, name))
+                        if (Editor.getModeList().modeAccepts(IMAGE_MODE, name))
                             buf = ImageBuffer.createImageBuffer(null, cache, null);
                         if (buf != null) {
-                            buf.entryName = name;
-                            buf.source = source;
-                            buf.title = title;
+                            buf.setCompression(new Compression(COMPRESSION_ZIP,
+                                                               zipEntry,
+                                                               source));
+                            buf.setTitle(title);
                         } else {
                             buf = new Buffer();
                             buf.type = Buffer.TYPE_NORMAL; // Default (may be changed later).
                             buf.initializeUndo();
                             buf.setCache(cache);
-                            buf.entryName = name;
-                            buf.source = source;
+                            buf.setCompression(new Compression(COMPRESSION_ZIP,
+                                                               zipEntry,
+                                                               source));
                             buf.initialize(); // May change buffer type.
-                            buf.title = title;
+                            buf.setTitle(title);
                             buf.readOnly = true;
                         }
                         editor.makeNext(buf);
