@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.129 2004-09-13 02:01:53 piso Exp $
+ * $Id: Editor.java,v 1.130 2004-09-19 18:27:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1635,10 +1635,11 @@ public final class Editor extends JPanel implements Constants,
             } else {
                 // No selection.
                 if (buffer.getBooleanProperty(Property.WRAP) &&
-                    getDotCol() >= buffer.getIntegerProperty(Property.WRAP_COL)) {
+                    getDotCol() >= buffer.getIntegerProperty(Property.WRAP_COL))
+                {
                     CompoundEdit compoundEdit = beginCompoundEdit();
                     insertChar(c);
-                    wrapLine();
+                    new WrapText(this).wrapLine();
                     endCompoundEdit(compoundEdit);
                 } else
                     insertChar(c);
@@ -6557,13 +6558,6 @@ public final class Editor extends JPanel implements Constants,
         new WrapText(this).wrapRegion();
     }
 
-    public void wrapLine()
-    {
-        if (!checkReadOnly())
-            return;
-        new WrapText(this).wrapLine();
-    }
-
     public void wrapParagraph()
     {
         if (!checkReadOnly())
@@ -6576,6 +6570,13 @@ public final class Editor extends JPanel implements Constants,
         if (!checkReadOnly())
             return;
         new WrapText(this).unwrapParagraph();
+    }
+
+    public void wrapParagraphsInRegion()
+    {
+        if (!checkReadOnly())
+            return;
+        new WrapText(this).wrapParagraphsInRegion();
     }
 
     public void visibleTabs()
