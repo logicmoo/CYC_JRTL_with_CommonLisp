@@ -2,7 +2,7 @@
  * BufferList.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: BufferList.java,v 1.2 2002-10-02 02:10:22 piso Exp $
+ * $Id: BufferList.java,v 1.3 2003-04-23 00:45:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -234,6 +234,42 @@ public final class BufferList implements Constants, PreferencesChangeListener
             reorder = false;
         else
             reorder = p.getIntegerProperty(Property.REORDER_BUFFERS) > 0;
+    }
+
+    private static final String userHome =
+        Platform.isPlatformUnix() ? Utilities.getUserHome() : null;
+
+    public synchronized String getUniqueName(Buffer buf)
+    {
+        final File file = buf.getFile();
+        final String name = file.getName();
+        boolean qualify = false;
+        Debug.assertTrue(file != null);
+        Debug.assertTrue(file.isLocal());
+        for (Iterator it = list.iterator(); it.hasNext();) {
+            Buffer b = (Buffer) it.next();
+            if (b == buf)
+                continue;
+            if (b.getFile() != null && b.getFile().getName().equals(name)) {
+                qualify = true;
+                break;
+            }
+        }
+        if (qualify) {
+            FastStringBuffer sb = new FastStringBuffer(name);
+            sb.append(" [");
+            String dir = file.getParent();
+            if (userHome != null && userHome.length() > 0) {
+                if (dir.equals(userHome))
+                    dir = "~";
+                if (dir.startsWith(userHome.concat("/")))
+                    dir = "~".concat(dir.substring(userHome.length()));
+            }
+            sb.append(dir);
+            sb.append(']');
+            return sb.toString();
+        }
+        return name;
     }
 
     private int indexOf(Buffer buf)
