@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.113 2003-08-05 00:52:32 piso Exp $
+ * $Id: Lisp.java,v 1.114 2003-08-07 01:36:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -426,6 +426,29 @@ public abstract class Lisp
             dynEnv.rebind(symbol, value);
         } else
             env.rebind(symbol, value);
+    }
+
+    public static final void bindSpecialVariable(Symbol symbol,
+                                                 LispObject value)
+    {
+        Debug.assertTrue(symbol.isSpecialVariable());
+        LispThread.currentThread().bindSpecial(symbol, value);
+    }
+
+    public static final LispObject setSpecialVariable(Symbol symbol,
+                                                      LispObject value)
+    {
+        Environment dynEnv =
+            LispThread.currentThread().getDynamicEnvironment();
+        if (dynEnv != null) {
+            Binding binding = dynEnv.getBinding(symbol);
+            if (binding != null) {
+                binding.value = value;
+                return value;
+            }
+        }
+        symbol.setSymbolValue(value);
+        return value;
     }
 
     public static final Cons list(LispObject first, LispObject second)
