@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.1 2004-02-24 01:13:31 piso Exp $
+ * $Id: SimpleVector.java,v 1.2 2004-02-24 11:24:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,16 @@ public final class SimpleVector extends AbstractVector
     public boolean isSimpleVector()
     {
         return true;
+    }
+
+    public boolean hasFillPointer()
+    {
+        return false;
+    }
+
+    public boolean isAdjustable()
+    {
+        return false;
     }
 
     public int capacity()
