@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureClass.java,v 1.7 2004-01-24 20:14:15 piso Exp $
+ * $Id: StructureClass.java,v 1.8 2004-04-16 13:27:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,19 +60,27 @@ public class StructureClass extends SlotClass
         return sb.toString();
     }
 
-    // ### make-structure-class
-    private static final Primitive3 MAKE_STRUCTURE_CLASS =
-        new Primitive3("make-structure-class", PACKAGE_SYS, false)
+    // ### make-structure-class name direct-slots slots include => class
+    private static final Primitive4 MAKE_STRUCTURE_CLASS =
+        new Primitive4("make-structure-class", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
+                                  LispObject third, LispObject fourth)
             throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(first);
             LispObject directSlots = checkList(second);
             LispObject slots = checkList(third);
+            Symbol include = checkSymbol(fourth);
             StructureClass c = new StructureClass(symbol);
-            c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
+            if (include != NIL) {
+                LispClass includedClass = LispClass.findClass(include);
+                if (includedClass == null)
+                    return signal(new SimpleError("Class " + include +
+                                                  " is undefined."));
+                c.setCPL(new Cons(c, includedClass.getCPL()));
+            } else
+                c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
             c.setDirectSlots(directSlots);
             c.setEffectiveSlots(slots);
             addClass(symbol, c);
