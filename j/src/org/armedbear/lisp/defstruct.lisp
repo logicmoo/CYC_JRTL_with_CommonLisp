@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.20 2003-09-22 17:46:26 piso Exp $
+;;; $Id: defstruct.lisp,v 1.21 2003-09-22 22:56:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,9 +38,11 @@
           (%make-structure ',*ds-name* (list ,@slot-names)))))))
 
 (defun define-predicate ()
-  (let ((pred (intern (concatenate 'string (symbol-name *ds-name*) "-P"))))
-    `((defun ,pred (object)
-        (typep object ',*ds-name*)))))
+  (when *ds-predicate*
+    (let ((pred (intern *ds-predicate*)))
+      `((defun ,pred (object)
+          (typep object ',*ds-name*))))))
+
 
 (defmacro get-slot-accessor (slot)
   (case slot
@@ -87,15 +89,21 @@
                               (cadr option)
                               (make-symbol (string (cadr option))))))
     (:constructor
-     (when (= (length (cdr option)) 1)
+     (when (= (length option) 2)
        (if (null (cadr option))
            (setf *ds-constructor* nil)
-           (setf *ds-constructor* (symbol-name (cadr option))))))))
+           (setf *ds-constructor* (symbol-name (cadr option))))))
+    (:predicate
+     (when (= (length option) 2)
+       (if (null (cadr option))
+           (setf *ds-predicate* nil)
+           (setf *ds-predicate* (symbol-name (cadr option))))))))
 
 (defun parse-name-and-options (name-and-options)
   (setf *ds-name* (car name-and-options))
   (setf *ds-conc-name* (make-symbol (concatenate 'string (symbol-name *ds-name*) "-")))
   (setf *ds-constructor* (concatenate 'string "MAKE-" (symbol-name *ds-name*)))
+  (setf *ds-predicate* (concatenate 'string (symbol-name *ds-name*) "-P"))
   (let ((options (cdr name-and-options)))
     (dolist (option options)
       (cond ((consp option)
