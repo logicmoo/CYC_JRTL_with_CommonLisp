@@ -2,7 +2,7 @@
  * JavaSource.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaSource.java,v 1.2 2002-12-21 03:27:09 piso Exp $
+ * $Id: JavaSource.java,v 1.3 2003-02-15 15:40:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,6 +87,20 @@ public final class JavaSource implements Constants
         if (jdkSourcePath != null) {
             final List dirNames = Utilities.getDirectoriesInPath(jdkSourcePath);
             if (dirNames != null) {
+                // Let the user know if the JDK source path is bogus.
+                for (Iterator it = dirNames.iterator(); it.hasNext();) {
+                    String name = (String) it.next();
+                    File dir = File.getInstance(name);
+                    String message = null;
+                    if (dir == null) {
+                        message = "Invalid directory " + name;
+                    } else if (!dir.isDirectory()) {
+                        message = "The directory " + dir.canonicalPath() +
+                            " does not exist.";
+                    }
+                    if (message != null)
+                        MessageDialog.showMessageDialog(message, "Error");
+                }
                 for (int i = 0; i < candidates.length; i++) {
                     File file = findImport(candidates[i], imports, dirNames,
                         ".java");
