@@ -1,8 +1,8 @@
 /*
  * CommandTable.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.21 2003-05-11 14:35:56 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: CommandTable.java,v 1.22 2003-05-11 17:31:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,6 @@ public class CommandTable
             addCommand("delete");
             addCommand("deleteWordLeft");
             addCommand("deleteWordRight");
-            addCommand("dir");
             addCommand("dirBrowseFile");
             addCommand("dirCopyFile");
             addCommand("dirDeleteFiles");
@@ -236,6 +235,7 @@ public class CommandTable
             addCommand("detabRegion", "RegionCommands");
             addCommand("diff", "DiffMode");
             addCommand("diffGotoFile", "DiffMode", "gotoFile");
+            addCommand("dir", "Directory");
             addCommand("dirBack", "Directory");
             addCommand("dirCycleSortBy", "Directory");
             addCommand("dirDoShellCommand", "Directory");
