@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.75 2004-09-17 00:42:02 piso Exp $
+ * $Id: Load.java,v 1.76 2004-09-18 00:30:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -160,45 +160,49 @@ public final class Load extends Lisp
                                                   boolean auto)
         throws ConditionThrowable
     {
-        ArrayList candidates = new ArrayList();
+        final int ARRAY_SIZE = 2;
+        String[] candidates = new String[ARRAY_SIZE];
         String extension = getExtension(filename);
         if (extension == null) {
             // No extension specified.
-            candidates.add(filename + '.' + COMPILE_FILE_TYPE);
-            candidates.add(filename.concat(".lisp"));
+            candidates[0] = filename + '.' + COMPILE_FILE_TYPE;
+            candidates[1] = filename.concat(".lisp");
         } else if (extension.equals(".abcl")) {
-            candidates.add(filename);
-            candidates.add(filename.substring(0, filename.length() - 5).concat(".lisp"));
+            candidates[0] = filename;
+            candidates[1] =
+                filename.substring(0, filename.length() - 5).concat(".lisp");
         } else
-            candidates.add(filename);
+            candidates[0] = filename;
         InputStream in = null;
         Pathname pathname = null;
         String truename = null;
-        for (int i = 0; i < candidates.size(); i++) {
-            String s = (String) candidates.get(i);
-            URL url = Lisp.class.getResource(s);
-            if (url != null) {
-                try {
-                    in = url.openStream();
-                    if ("jar".equals(url.getProtocol()))
-                        pathname = new Pathname(url);
-                    truename = getPath(url);
-                }
-                catch (IOException e) {
-                    in = null;
+        for (int i = 0; i < ARRAY_SIZE; i++) {
+            String s = candidates[i];
+            if (s == null)
+                break;
+            final String dir = Site.getLispHome();
+            if (dir != null) {
+                File file = new File(dir, s);
+                if (file.isFile()) {
+                    try {
+                        in = new FileInputStream(file);
+                        truename = file.getCanonicalPath();
+                    }
+                    catch (IOException e) {
+                        in = null;
+                    }
                 }
             } else {
-                final String dir = Site.getLispHome();
-                if (dir != null) {
-                    File file = new File(dir, s);
-                    if (file.isFile()) {
-                        try {
-                            in = new FileInputStream(file);
-                            truename = file.getCanonicalPath();
-                        }
-                        catch (IOException e) {
-                            in = null;
-                        }
+                URL url = Lisp.class.getResource(s);
+                if (url != null) {
+                    try {
+                        in = url.openStream();
+                        if ("jar".equals(url.getProtocol()))
+                            pathname = new Pathname(url);
+                        truename = getPath(url);
+                    }
+                    catch (IOException e) {
+                        in = null;
                     }
                 }
             }
