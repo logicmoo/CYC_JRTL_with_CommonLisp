@@ -1,7 +1,7 @@
 ;;; aver.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: aver.lisp,v 1.1 2004-07-28 16:12:53 piso Exp $
+;;; $Id: aver.lisp,v 1.2 2004-12-20 18:32:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,7 +22,9 @@
 (in-package "SYSTEM")
 
 (defun %failed-aver (expr-as-string)
-  (error 'simple-error "Failed AVER: ~S" expr-as-string))
+  (error 'simple-error
+         :format-control "Failed AVER: ~S"
+         :format-arguments (list expr-as-string)))
 
 (defmacro aver (expr)
   `(unless ,expr
