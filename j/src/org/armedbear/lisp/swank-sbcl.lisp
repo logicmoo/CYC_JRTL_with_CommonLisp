@@ -1,6 +1,6 @@
 ;;; swank-sbcl.lisp
 
-;;; From SLIME.
+;;; Adapted from SLIME.
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require '#:sb-bsd-sockets)
@@ -101,7 +101,7 @@
     (loop for method in methods
       collect (list `("method"
                       ,(princ-to-string name)
-                      ,(sb-pcl::unparse-specializers method))
+                      ,(princ-to-string (sb-pcl::unparse-specializers method)))
                     (safe-function-source-location method name)))))
 
 (defun function-definitions (name)

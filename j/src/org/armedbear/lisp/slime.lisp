@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.25 2004-09-20 02:14:47 piso Exp $
+;;; $Id: slime.lisp,v 1.26 2004-09-21 13:53:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -377,6 +377,10 @@
     (setf function-name (string-upcase (symbol-name-at-point))))
   (when function-name
     (setf function-name (string function-name))
+    (let ((pos (position #\: function-name)))
+      (when pos
+        (setf package-name (subseq function-name 0 pos))
+        (setf function-name (subseq function-name (1+ (position #\: function-name :from-end t))))))
     (let ((definitions
             (slime-eval `(swank:find-definitions-for-function-name ,function-name
                                                                    ,package-name))))

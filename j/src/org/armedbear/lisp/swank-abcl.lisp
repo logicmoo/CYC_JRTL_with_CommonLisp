@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.5 2004-09-18 18:31:07 piso Exp $
+;;; $Id: swank-abcl.lisp,v 1.6 2004-09-21 13:52:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@
           (ext:*autoload-verbose* nil))
       (ext:resolve name)))
   (when (ext:source name)
-    `(((,name)
+    `((,(princ-to-string name)
        (:location
         (:file ,(namestring (ext:source-pathname name)))
         (:position ,(or (ext:source-file-position name) 0) t)
