@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.5 2003-11-04 17:38:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.6 2003-11-04 18:35:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1163,6 +1163,9 @@
     (t
      nil)))
 
+(defconstant +cl-package+ (find-package "COMMON-LISP"))
+(defconstant +sys-package+ (find-package "SYSTEM"))
+
 (defun compile-function-call (fun args &optional for-effect)
 ;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
   (unless (symbolp fun)
@@ -1184,15 +1187,8 @@
 
     (cond
      ((eq fun *defun-name*)
-      (emit 'aload 0) ; this
-      )
-     ((eq (symbol-package fun) (find-package 'cl))
-      (let ((f (declare-function fun)))
-        (emit 'getstatic
-              *this-class*
-              f
-              "Lorg/armedbear/lisp/LispObject;")))
-     ((eq (symbol-package fun) (find-package 'sys))
+      (emit 'aload 0)) ; this
+     ((memq (symbol-package fun) '(+cl-package+ +sys-package+))
       (let ((f (declare-function fun)))
         (emit 'getstatic
               *this-class*
@@ -1258,9 +1254,7 @@
            (unless (remove-store-value)
              (emit-push-value)) ; leaves value on stack
            (emit 'aastore) ; store value in array
-           (incf i)
-           ) ; array left on stack here
-         )
+           (incf i))) ; array left on stack here
        ;; Stack: function array-ref
        (emit 'invokevirtual
              "org/armedbear/lisp/LispObject"
