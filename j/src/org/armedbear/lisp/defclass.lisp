@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.11 2003-10-11 19:44:55 piso Exp $
+;;; $Id: defclass.lisp,v 1.12 2003-10-11 19:49:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -466,13 +466,13 @@
                            slot-properties))
                  direct-slots)))
     (setf (class-direct-slots class) slots)
-;;     (dolist (direct-slot slots)
-;;       (dolist (reader (slot-definition-readers direct-slot))
-;;         (add-reader-method
-;;          class reader (slot-definition-name direct-slot)))
-;;       (dolist (writer (slot-definition-writers direct-slot))
-;;         (add-writer-method
-;;          class writer (slot-definition-name direct-slot))))
+    (dolist (direct-slot slots)
+      (dolist (reader (slot-definition-readers direct-slot))
+        (add-reader-method
+         class reader (slot-definition-name direct-slot)))
+      (dolist (writer (slot-definition-writers direct-slot))
+        (add-writer-method
+         class writer (slot-definition-name direct-slot))))
     )
   (funcall (if (eq (class-of class) (find-class 'standard-class))
                #'std-finalize-inheritance
@@ -499,19 +499,6 @@
 ;;;
 ;;; Generic function metaobjects and standard-generic-function
 ;;;
-
-;; (defparameter the-defclass-standard-generic-function
-;;   '(defclass standard-generic-function ()
-;;     ((name :initarg :name)      ; :accessor generic-function-name
-;;      (lambda-list               ; :accessor generic-function-lambda-list
-;;       :initarg :lambda-list)
-;;      (methods :initform ())     ; :accessor generic-function-methods
-;;      (method-class              ; :accessor generic-function-method-class
-;;       :initarg :method-class)
-;;      (discriminating-function)  ; :accessor generic-function-
-;;      ;    -discriminating-function
-;;      (classes-to-emf-table      ; :accessor classes-to-emf-table
-;;       :initform (make-hash-table :test #'equal)))))
 
 (defclass standard-generic-function ()
   ((name :initarg :name)      ; :accessor generic-function-name
