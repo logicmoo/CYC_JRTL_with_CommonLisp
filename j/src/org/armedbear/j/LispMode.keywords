@@ -207,6 +207,7 @@ list-all-packages
 list-length
 listp
 load
+load-time-value
 locally
 logand
 logandc1
@@ -292,6 +293,12 @@ package-use-list
 package-used-by-list
 packagep
 parse-integer
+pathname-device
+pathname-directory
+pathname-host
+pathname-name
+pathname-type
+pathname-version
 peek-char
 pop
 position
