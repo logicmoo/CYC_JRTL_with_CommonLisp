@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.4 2004-02-24 21:00:29 piso Exp $
+ * $Id: ComplexVector.java,v 1.5 2004-02-24 22:35:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,7 +190,7 @@ public final class ComplexVector extends AbstractVector
         final int limit = length();
         if (index < 0 || index >= limit)
             badIndex(index, limit);
-        return elements[index];
+        return get(index);
     }
 
     // Ignores fill pointer.
