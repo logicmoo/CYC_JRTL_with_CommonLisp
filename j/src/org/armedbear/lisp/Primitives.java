@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.346 2003-08-24 18:27:46 piso Exp $
+ * $Id: Primitives.java,v 1.347 2003-08-24 18:36:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1413,22 +1413,20 @@ public final class Primitives extends Module
         }
     };
 
-    // ### defparameter
-    // defparameter name initial-value [documentation]
-    private static final SpecialOperator DEFPARAMETER =
-        new SpecialOperator("defparameter") {
-        public LispObject execute(LispObject args, Environment env)
-            throws Condition
+    // ### %defparameter
+    private static final Primitive3 _DEFPARAMETER =
+        new Primitive3("%defparameter", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws LispError
         {
-            final int length = args.length();
-            if (length < 2 || length > 3)
-                throw new WrongNumberOfArgumentsException(this);
-            Symbol symbol = checkSymbol(args.car());
-            final LispThread thread = LispThread.currentThread();
-            LispObject initialValue = eval(args.cadr(), env, thread);
-            symbol.setSymbolValue(initialValue);
+            Symbol symbol = checkSymbol(first);
+            if (third instanceof LispString)
+                symbol.setVariableDocumentation(third);
+            else if (third != NIL)
+                throw new TypeError(third, "string");
+            symbol.setSymbolValue(second);
             symbol.setSpecial(true);
-            thread.clearValues();
             return symbol;
         }
     };
