@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.8 2004-02-25 14:41:15 piso Exp $
+ * $Id: ComplexVector.java,v 1.9 2004-02-25 15:23:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -330,19 +330,19 @@ public final class ComplexVector extends AbstractVector
             // "If INITIAL-CONTENTS is supplied, it is treated as for MAKE-
             // ARRAY. In this case none of the original contents of array
             // appears in the resulting array."
-            LispObject[] newArray = new LispObject[newCapacity];
+            LispObject[] newElements = new LispObject[newCapacity];
             if (initialContents.listp()) {
                 LispObject list = initialContents;
                 for (int i = 0; i < newCapacity; i++) {
-                    newArray[i] = list.car();
+                    newElements[i] = list.car();
                     list = list.cdr();
                 }
             } else if (initialContents.vectorp()) {
                 for (int i = 0; i < newCapacity; i++)
-                    newArray[i] = initialContents.elt(i);
+                    newElements[i] = initialContents.elt(i);
             } else
                 signal(new TypeError(initialContents, Symbol.SEQUENCE));
-            elements = newArray;
+            elements = newElements;
         } else {
             if (elements == null) {
                 // Displaced array. Copy existing elements.
@@ -350,9 +350,6 @@ public final class ComplexVector extends AbstractVector
                 final int limit = Math.min(capacity, newCapacity);
                 for (int i = 0; i < limit; i++)
                     elements[i] = array.getRowMajor(displacement + i);
-                array = null;
-                displacement = 0;
-                isDisplaced = false;
             } else if (capacity != newCapacity) {
                 LispObject[] newElements = new LispObject[newCapacity];
                 System.arraycopy(elements, 0, newElements, 0,

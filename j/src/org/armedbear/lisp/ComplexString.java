@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.8 2004-02-25 13:50:54 piso Exp $
+ * $Id: ComplexString.java,v 1.9 2004-02-25 15:24:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,67 +288,73 @@ public final class ComplexString extends AbstractString
         return capacity;
     }
 
-    public AbstractVector adjustVector(int size, LispObject initialElement,
+    public AbstractVector adjustVector(int newCapacity,
+                                       LispObject initialElement,
                                        LispObject initialContents)
         throws ConditionThrowable
     {
-        if (chars == null) {
-            // Copy array.
-            chars = new char[capacity];
-            if (array instanceof AbstractString) {
-                AbstractString string = (AbstractString) array;
-                for (int i = 0; i < capacity; i++) {
-                    chars[i] = string.getChar(displacement + i);
+        if (initialContents != NIL) {
+            // "If INITIAL-CONTENTS is supplied, it is treated as for MAKE-
+            // ARRAY. In this case none of the original contents of array
+            // appears in the resulting array."
+            char[] newChars = new char[newCapacity];
+            if (initialContents.listp()) {
+                LispObject list = initialContents;
+                for (int i = 0; i < newCapacity; i++) {
+                    newChars[i] = LispCharacter.getValue(list.car());
+                    list = list.cdr();
                 }
-            } else {
-                for (int i = 0; i < capacity; i++) {
-                    LispCharacter character =
-                        (LispCharacter) array.getRowMajor(displacement + i);
-                    chars[i] = character.value;
-                }
-            }
-            array = null;
-            displacement = 0;
-            isDisplaced = false;
-        }
-        if (capacity != size) {
-            char[] newArray = new char[size];
-            if (initialContents != NIL) {
-                if (initialContents.listp()) {
-                    LispObject list = initialContents;
-                    for (int i = 0; i < size; i++) {
-                        newArray[i] = LispCharacter.getValue(list.car());
-                        list = list.cdr();
+            } else if (initialContents.vectorp()) {
+                for (int i = 0; i < newCapacity; i++)
+                    newChars[i] = LispCharacter.getValue(initialContents.elt(i));
+            } else
+                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+            chars = newChars;
+        } else {
+            if (chars == null) {
+                // Displaced array. Copy existing characters.
+                chars = new char[newCapacity];
+                final int limit = Math.min(capacity, newCapacity);
+                if (array instanceof AbstractString) {
+                    AbstractString string = (AbstractString) array;
+                    for (int i = 0; i < limit; i++) {
+                        chars[i] = string.getChar(displacement + i);
                     }
-                } else if (initialContents.vectorp()) {
-                    for (int i = 0; i < size; i++)
-                        newArray[i] = LispCharacter.getValue(initialContents.elt(i));
-                } else
-                    signal(new TypeError(initialContents, Symbol.SEQUENCE));
-            } else {
-                System.arraycopy(chars, 0, newArray, 0,
-                                 Math.min(capacity, size));
-                if (size > capacity) {
-                    final char c;
-                    if (initialElement != NIL)
-                        c = LispCharacter.getValue(initialElement);
-                    else
-                        c = 0;
-                    for (int i = capacity; i < size; i++)
-                        newArray[i] = c;
+                } else {
+                    for (int i = 0; i < limit; i++) {
+                        LispCharacter character =
+                            (LispCharacter) array.getRowMajor(displacement + i);
+                        chars[i] = character.value;
+                    }
                 }
+            } else if (capacity != newCapacity) {
+                char[] newElements = new char[newCapacity];
+                System.arraycopy(chars, 0, newElements, 0,
+                                 Math.min(capacity, newCapacity));
+                chars = newElements;
             }
-            chars = newArray;
-            capacity = chars.length;
+            // Initialize new elements (if any).
+            final char c;
+            if (initialElement != NIL)
+                c = LispCharacter.getValue(initialElement);
+            else
+                c = 0;
+            for (int i = capacity; i < newCapacity; i++)
+                chars[i] = c;
         }
+        capacity = newCapacity;
+        array = null;
+        displacement = 0;
+        isDisplaced = false;
         return this;
     }
 
-    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
+    public AbstractVector adjustVector(int newCapacity,
+                                       AbstractArray displacedTo,
                                        int displacement)
         throws ConditionThrowable
     {
-        capacity = size;
+        capacity = newCapacity;
         array = displacedTo;
         this.displacement = displacement;
         chars = null;
