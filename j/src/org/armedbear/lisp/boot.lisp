@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.106 2003-09-10 18:46:29 piso Exp $
+;;; $Id: boot.lisp,v 1.107 2003-09-11 15:54:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -408,10 +408,42 @@
 
 
 ;;; MULTIPLE-VALUE-BIND (from CLISP)
-
 (defmacro multiple-value-bind (varlist form &body body)
   (let ((g (gensym))
         (poplist nil))
     (dolist (var varlist) (setq poplist (cons `(,var (pop ,g)) poplist)))
     `(let* ((,g (multiple-value-list ,form)) ,@(nreverse poplist))
            ,@body)))
+
+
+;;; REMF (from OpenMCL)
+(defmacro remf (place indicator &environment env)
+  "Place may be any place expression acceptable to SETF, and is expected
+   to hold a property list or ().  This list is destructively altered to
+   remove the property specified by the indicator.  Returns T if such a
+   property was present, NIL if not."
+  (multiple-value-bind (dummies vals newval setter getter)
+    (get-setf-expansion place env)
+    (do* ((d dummies (cdr d))
+          (v vals (cdr v))
+          (let-list nil)
+          (ind-temp (gensym))
+          (local1 (gensym))
+          (local2 (gensym)))
+         ((null d)
+          (push (list (car newval) getter) let-list)
+          (push (list ind-temp indicator) let-list)
+          `(let* ,(nreverse let-list)
+             (do ((,local1 ,(car newval) (cddr ,local1))
+                  (,local2 nil ,local1))
+                 ((atom ,local1) nil)
+               (cond ((atom (cdr ,local1))
+                      (error "Odd-length property list in REMF."))
+                     ((eq (car ,local1) ,ind-temp)
+                      (cond (,local2
+                             (rplacd (cdr ,local2) (cddr ,local1))
+                             (return t))
+                            (t (setq ,(car newval) (cddr ,(car newval)))
+                               ,setter
+                               (return t))))))))
+      (push (list (car d) (car v)) let-list))))
