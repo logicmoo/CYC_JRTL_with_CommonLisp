@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.20 2003-05-16 17:33:55 piso Exp $
+ * $Id: Directory.java,v 1.21 2003-05-23 17:23:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -879,7 +879,7 @@ public final class Directory extends Buffer
         if (buf != null) {
             File file = buffer.getFile();
             editor.makeNext(buf);
-            editor.activate(buf);
+            editor.switchToBuffer(buf);
             if (buf instanceof Directory && file != null) {
                 Directory dir = (Directory) buf;
                 Line line = dir.findName(file.getName());
