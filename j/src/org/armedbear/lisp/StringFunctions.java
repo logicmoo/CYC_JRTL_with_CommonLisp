@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.23 2004-02-25 01:41:19 piso Exp $
+ * $Id: StringFunctions.java,v 1.24 2004-03-09 11:08:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -754,19 +754,24 @@ public final class StringFunctions extends Lisp
         new Primitive3("%make-string", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject size, LispObject initialElement,
-                                  LispObject elementType) throws ConditionThrowable
+                                  LispObject elementType)
+            throws ConditionThrowable
         {
-            final int n = Fixnum.getValue(size);
-            final int limit =
-                Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
-            if (n < 0 || n >= limit) {
+            final int n;
+            try {
+                n = ((Fixnum)size).value;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(size, Symbol.FIXNUM));
+            }
+            if (n < 0 || n >= ARRAY_DIMENSION_MAX) {
                 StringBuffer sb = new StringBuffer();
                 sb.append("The size specified for this string (");
                 sb.append(n);
                 sb.append(')');
-                if (n >= limit) {
+                if (n >= ARRAY_DIMENSION_MAX) {
                     sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
-                    sb.append(limit);
+                    sb.append(ARRAY_DIMENSION_MAX);
                     sb.append(").");
                 } else
                     sb.append(" is negative.");
