@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.81 2004-12-03 18:27:36 piso Exp $
+;;; $Id: precompiler.lisp,v 1.82 2004-12-04 15:48:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -370,23 +370,34 @@
     (when specials
       (dolist (special specials)
         (let ((sym (gensym)))
-          (let ((res ()))
+          (let ((res ())
+                (keyp nil))
             (dolist (var lambda-list)
-              (cond ((and (consp var) (consp (first var))
+              (cond ((eq var '&KEY)
+                     (setf keyp t)
+                     (push var res))
+                    ((and (consp var) (consp (first var))
                           (eq special (second (first var))))
                      (push (list (list (first (first var)) sym) (second var)) res))
                     ((and (consp var) (eq special (first var)))
                      (push (cons sym (cdr var)) res))
                     ((eq var special)
-                     (push sym res))
+                     (if keyp
+                         ;; "&key x" => "&key ((:x x) nil)"
+                         (push (list (list (intern (symbol-name var) sys:*keyword-package*)
+                                           sym)
+                                     nil)
+                               res)
+                         (push sym res)))
                     (t
                      (push var res))))
             (setf lambda-list (nreverse res)))
           (setf body (list (append (list 'LET* (list (list special sym))) body))))))
-    (list* 'LAMBDA lambda-list (mapcar #'precompile1 body))))
+    (list* 'LAMBDA lambda-list body)))
 
 (defun precompile-lambda (form)
-  (maybe-rewrite-lambda form))
+  (setf form (maybe-rewrite-lambda form))
+  (list* 'LAMBDA (cadr form) (mapcar #'precompile1 (cddr form))))
 
 (defun define-local-macro (name lambda-list body)
   (let* ((form (gensym))
@@ -588,7 +599,7 @@
 
 (defun precompile-function (form)
   (if (and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
-      (list 'FUNCTION (maybe-rewrite-lambda (cadr form)))
+      (list 'FUNCTION (precompile-lambda (cadr form)))
       form))
 
 (defun precompile-if (form)
