@@ -1,0 +1,42 @@
+;;; boole.lisp
+;;;
+;;; Copyright (C) 2003 Peter Graves
+;;; $Id: boole.lisp,v 1.1 2003-09-10 18:01:56 piso Exp $
+;;;
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License
+;;; as published by the Free Software Foundation; either version 2
+;;; of the License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+(defun boole (op n1 n2)
+  (unless (and (integerp n1) (integerp n2))
+    (error 'type-error "BOOLE: ~s is not an integer"
+           (if (integerp n1) n2 n1)))
+  (case op
+    (#.boole-clr 0)
+    (#.boole-set -1)
+    (#.boole-1 n1)
+    (#.boole-2 n2)
+    (#.boole-c1 (lognot n1))
+    (#.boole-c2 (lognot n2))
+    (#.boole-and (logand n1 n2))
+    (#.boole-ior (logior n1 n2))
+    (#.boole-xor (logxor n1 n2))
+    (#.boole-eqv (logeqv n1 n2))
+    (#.boole-nand (lognand n1 n2))
+    (#.boole-nor (lognor n1 n2))
+    (#.boole-andc1 (logandc1 n1 n2))
+    (#.boole-andc2 (logandc2 n1 n2))
+    (#.boole-orc1 (logorc1 n1 n2))
+    (#.boole-orc2 (logorc2 n1 n2))
+    (t
+     (error 'type-error "BOOLE: invalid logical operation specifier: ~S" op))))
