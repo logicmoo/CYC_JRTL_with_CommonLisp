@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.49 2003-08-01 16:05:25 piso Exp $
+ * $Id: Buffer.java,v 1.50 2003-08-01 16:21:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1340,7 +1340,7 @@ public class Buffer extends SystemBuffer
         Debug.assertTrue(SwingUtilities.isEventDispatchThread());
         if (!isModified())
             return true;
-        addEdit(new UndoBoundary());
+        addUndoBoundary();
         final File file = getFile();
         if (file != null) {
             if (file.isLocal())
@@ -2265,6 +2265,12 @@ public class Buffer extends SystemBuffer
     {
         if (undoManager != null)
             undoManager.addEdit(edit);
+    }
+
+    public final void addUndoBoundary()
+    {
+        if (undoManager != null)
+            undoManager.addEdit(UndoBoundary.getInstance());
     }
 
     public final void appendUndoFold(Editor editor)
