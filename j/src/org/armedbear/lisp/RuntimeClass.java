@@ -123,8 +123,6 @@ public class RuntimeClass extends Lisp {
 
     public static final LispObject makeLispObject(Object obj) throws ConditionThrowable
     {
-        if (obj == null)
-            return NIL;
         if (obj instanceof Boolean)
             return ((Boolean)obj).booleanValue() ? T : NIL;
         if (obj instanceof Integer)
