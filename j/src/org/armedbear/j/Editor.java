@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.127 2004-08-18 19:10:24 piso Exp $
+ * $Id: Editor.java,v 1.128 2004-09-04 02:21:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6175,7 +6175,8 @@ public final class Editor extends JPanel implements Constants,
             // Lisp form.
             try {
                 String result = String.valueOf(Interpreter.evaluate(input));
-                status(result);
+                if (interactive)
+                    status(result);
             }
             catch (Throwable t) {
                 String message = null;
