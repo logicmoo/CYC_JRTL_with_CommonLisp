@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.113 2004-04-18 04:52:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.114 2004-04-18 18:41:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1035,6 +1035,12 @@
   (write-u2 (ash n -16))
   (write-u2 (logand n #xFFFF)))
 
+(defun write-s4 (n)
+  (cond ((minusp n)
+         (write-u4 (1+ (logxor (- n) #xFFFFFFFF))))
+        (t
+         (write-u4 n))))
+
 (defun write-utf8 (string)
   (dotimes (i (length string))
     (let ((c (char string i)))
@@ -1057,7 +1063,7 @@
      (write-u2 (utf8-length (third entry)))
      (write-utf8 (third entry)))
     (3 ; int
-     (write-u4 (second entry)))
+     (write-s4 (second entry)))
     ((5 6)
      (write-u4 (second entry))
      (write-u4 (third entry)))
