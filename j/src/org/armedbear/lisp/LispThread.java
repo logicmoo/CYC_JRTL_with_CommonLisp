@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.44 2004-06-23 01:50:06 piso Exp $
+ * $Id: LispThread.java,v 1.45 2004-06-27 13:44:33 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,6 +67,7 @@ public final class LispThread extends LispObject
 
     private final Thread javaThread;
     private boolean destroyed;
+    private String name = "Anonymous thread" ;
     public Environment dynEnv;
     public LispObject[] _values;
     private boolean threadInterrupted;
@@ -77,7 +78,7 @@ public final class LispThread extends LispObject
         this.javaThread = javaThread;
     }
 
-    private LispThread(final Function fun)
+    private LispThread(final Function fun, String name)
     {
         Runnable r = new Runnable() {
             public void run()
@@ -105,6 +106,7 @@ public final class LispThread extends LispObject
         };
         javaThread = new Thread(r);
         put(javaThread, this);
+        this.name = name;
         javaThread.start();
     }
 
@@ -505,12 +507,27 @@ public final class LispThread extends LispObject
     }
 
     // ### make-thread
-    private static final Primitive1 MAKE_THREAD =
-        new Primitive1("make-thread", PACKAGE_EXT, true)
+    private static final Primitive MAKE_THREAD =
+        new Primitive("make-thread", PACKAGE_EXT, true, "function &key name")
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            return new LispThread(checkFunction(arg));
+            final int length = args.length;
+            if (length == 0)
+                signal(new WrongNumberOfArgumentsException(this));
+            String name = "Anonymous thread"; // Default.
+            if (length > 1) {
+                if ((length - 1) % 2 != 0)
+                    signal(new ProgramError("Odd number of keyword arguments."));
+                if (length > 3)
+                    signal(new WrongNumberOfArgumentsException(this));
+                if (args[1] == Keyword.NAME)
+                    name = args[2].getStringValue();
+                else
+                    signal(new ProgramError("Unrecognized keyword argument " +
+                                            args[1].writeToString() + "."));
+            }
+            return new LispThread(checkFunction(args[0]), name);
         }
     };
 
@@ -522,6 +539,21 @@ public final class LispThread extends LispObject
         {
             try {
                 return ((LispThread)arg).javaThread.isAlive() ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, "Lisp thread"));
+            }
+        }
+    };
+
+    // ### thread-name
+    private static final Primitive1 THREAD_NAME =
+        new Primitive1("thread-name", PACKAGE_EXT, true, "thread")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return new SimpleString (((LispThread)arg).name);
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, "Lisp thread"));
