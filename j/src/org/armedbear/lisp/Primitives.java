@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.94 2003-03-07 19:19:59 piso Exp $
+ * $Id: Primitives.java,v 1.95 2003-03-07 19:32:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1907,7 +1907,8 @@ public final class Primitives extends Module
             }
             AbstractVector v;
             if (elementType == Symbol.CHARACTER ||
-                elementType == Symbol.BASE_CHAR) {
+                elementType == Symbol.BASE_CHAR ||
+                elementType == Symbol.STANDARD_CHAR) {
                 v = new LispString(size);
             } else if (elementType == Symbol.BIT) {
                 v = new BitVector(size);
