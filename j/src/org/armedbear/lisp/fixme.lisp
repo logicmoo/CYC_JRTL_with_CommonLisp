@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.12 2003-12-06 02:45:49 piso Exp $
+;;; $Id: fixme.lisp,v 1.13 2003-12-12 17:29:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,9 +33,6 @@
       `(progn ,@(nreverse res)))))
 
 (defun proclaim (decl)
-  nil)
-
-(defun warn (&rest args)
   nil)
 
 (defmacro assert (form &rest stuff)
