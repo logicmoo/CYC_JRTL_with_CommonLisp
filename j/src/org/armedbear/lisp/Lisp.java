@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.116 2003-08-11 15:33:37 piso Exp $
+ * $Id: Lisp.java,v 1.117 2003-08-12 14:15:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1152,6 +1152,38 @@ public abstract class Lisp
         exportConstant("MOST-POSITIVE-LONG-FLOAT", PACKAGE_CL,
                        new LispFloat(Float.MAX_VALUE));
 
+    public static final Symbol LEAST_POSITIVE_SHORT_FLOAT =
+        exportConstant("LEAST-POSITIVE-SHORT-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MIN_VALUE));
+
+    public static final Symbol LEAST_POSITIVE_SINGLE_FLOAT =
+        exportConstant("LEAST-POSITIVE-SINGLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MIN_VALUE));
+
+    public static final Symbol LEAST_POSITIVE_DOUBLE_FLOAT =
+        exportConstant("LEAST-POSITIVE-DOUBLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MIN_VALUE));
+
+    public static final Symbol LEAST_POSITIVE_LONG_FLOAT =
+        exportConstant("LEAST-POSITIVE-LONG-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MIN_VALUE));
+
+    public static final Symbol LEAST_POSITIVE_NORMALIZED_SHORT_FLOAT =
+        exportConstant("LEAST-POSITIVE-NORMALIZED-SHORT-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MIN_VALUE));
+
+    public static final Symbol LEAST_POSITIVE_NORMALIZED_SINGLE_FLOAT =
+        exportConstant("LEAST-POSITIVE-NORMALIZED-SINGLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MIN_VALUE));
+
+    public static final Symbol LEAST_POSITIVE_NORMALIZED_DOUBLE_FLOAT =
+        exportConstant("LEAST-POSITIVE-NORMALIZED-DOUBLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MIN_VALUE));
+
+    public static final Symbol LEAST_POSITIVE_NORMALIZED_LONG_FLOAT =
+        exportConstant("LEAST-POSITIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
+                       new LispFloat(Float.MIN_VALUE));
+
     public static final Symbol MOST_NEGATIVE_SHORT_FLOAT =
         exportConstant("MOST-NEGATIVE-SHORT-FLOAT", PACKAGE_CL,
                        new LispFloat(- Float.MAX_VALUE));
@@ -1167,6 +1199,38 @@ public abstract class Lisp
     public static final Symbol MOST_NEGATIVE_LONG_FLOAT =
         exportConstant("MOST-NEGATIVE-LONG-FLOAT", PACKAGE_CL,
                        new LispFloat(- Float.MAX_VALUE));
+
+    public static final Symbol LEAST_NEGATIVE_SHORT_FLOAT =
+        exportConstant("LEAST-NEGATIVE-SHORT-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MIN_VALUE));
+
+    public static final Symbol LEAST_NEGATIVE_SINGLE_FLOAT =
+        exportConstant("LEAST-NEGATIVE-SINGLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MIN_VALUE));
+
+    public static final Symbol LEAST_NEGATIVE_DOUBLE_FLOAT =
+        exportConstant("LEAST-NEGATIVE-DOUBLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MIN_VALUE));
+
+    public static final Symbol LEAST_NEGATIVE_LONG_FLOAT =
+        exportConstant("LEAST-NEGATIVE-LONG-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MIN_VALUE));
+
+    public static final Symbol LEAST_NEGATIVE_NORMALIZED_SHORT_FLOAT =
+        exportConstant("LEAST-NEGATIVE-NORMALIZED-SHORT-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MIN_VALUE));
+
+    public static final Symbol LEAST_NEGATIVE_NORMALIZED_SINGLE_FLOAT =
+        exportConstant("LEAST-NEGATIVE-NORMALIZED-SINGLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MIN_VALUE));
+
+    public static final Symbol LEAST_NEGATIVE_NORMALIZED_DOUBLE_FLOAT =
+        exportConstant("LEAST-NEGATIVE-NORMALIZED-DOUBLE-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MIN_VALUE));
+
+    public static final Symbol LEAST_NEGATIVE_NORMALIZED_LONG_FLOAT =
+        exportConstant("LEAST-NEGATIVE-NORMALIZED-LONG-FLOAT", PACKAGE_CL,
+                       new LispFloat(- Float.MIN_VALUE));
 
     static {
         loadClass("org.armedbear.lisp.Primitives");
