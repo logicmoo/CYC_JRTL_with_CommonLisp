@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: late-setf.lisp,v 1.7 2004-12-26 23:49:05 piso Exp $
+;;; $Id: late-setf.lisp,v 1.8 2005-02-18 18:21:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,3 +92,9 @@
                (the ,type (values ,@store-vars))
                ,setter)
             `(the ,type ,getter))))
+
+(defun (setf macro-function) (new-function symbol &optional environment)
+  (let ((macro (make-macro symbol (or (precompile nil new-function)
+                                      new-function))))
+    (fset symbol macro)
+    macro))
