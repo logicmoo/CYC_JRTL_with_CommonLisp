@@ -2,7 +2,7 @@
  * StreamError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StreamError.java,v 1.8 2003-09-20 17:02:05 piso Exp $
+ * $Id: StreamError.java,v 1.9 2003-10-03 16:35:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,8 @@ public class StreamError extends LispError
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.STREAM_ERROR)
+            return T;
+        if (type == BuiltInClass.STREAM_ERROR)
             return T;
         return super.typep(type);
     }
