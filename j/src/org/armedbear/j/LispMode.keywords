@@ -434,6 +434,7 @@ shiftf
 signal
 simple-bit-vector-p
 simple-string-p
+simple-vector-p
 sixth
 slot-exists-p
 slot-value
