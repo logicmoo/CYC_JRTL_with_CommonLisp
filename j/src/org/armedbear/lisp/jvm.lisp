@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.141 2004-04-30 12:09:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.142 2004-04-30 12:50:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1103,7 +1103,9 @@
     (cond (*hairy-arglist-p*
            (emit 'aload_0) ;; this
            (emit 'aconst_null) ;; name
-           (let ((s (format nil "~S" args)))
+           (let* ((*print-level* nil)
+                  (*print-length* nil)
+                  (s (format nil "~S" args)))
              (emit 'ldc
                    (pool-string s))
              (emit-invokestatic "org/armedbear/lisp/Lisp"
@@ -1292,9 +1294,11 @@
     g))
 
 (defun declare-object-as-string (obj)
-  (let ((g (symbol-name (gensym)))
-        (s (format nil "~S" obj))
-        (*code* *static-code*))
+  (let* ((g (symbol-name (gensym)))
+         (*print-level* nil)
+         (*print-length* nil)
+         (s (format nil "~S" obj))
+         (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc
           (pool-string s))
