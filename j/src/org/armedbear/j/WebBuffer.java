@@ -2,7 +2,7 @@
  * WebBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebBuffer.java,v 1.3 2002-10-11 01:42:37 piso Exp $
+ * $Id: WebBuffer.java,v 1.4 2002-12-11 20:04:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -717,9 +717,7 @@ public final class WebBuffer extends Buffer implements WebConstants
             return;
 
         if (destination.isLocal()) {
-            Log.debug("go destination is local");
             if (loadLocalFile(destination, contentType)) {
-                Log.debug("back from loadLocalFile contentType = " + contentType);
                 setFile(destination);
                 update(offset);
                 setLastModified(destination.lastModified());
