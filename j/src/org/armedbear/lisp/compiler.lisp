@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.37 2003-08-30 17:05:12 piso Exp $
+;;; $Id: compiler.lisp,v 1.38 2003-09-16 16:15:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -192,10 +192,13 @@
     (cond ((functionp definition)
            (multiple-value-bind (form closure-p)
              (function-lambda-expression definition)
+             (unless form
+               (format t "; No lambda expression available for ~S.~%" name)
+               (return-from %compile (values nil t t)))
              (when closure-p
-               (format t "; Note: unable to compile function ~S defined in non-null lexical environment.~%" name)
+               (format t "; Unable to compile function ~S defined in non-null lexical environment.~%" name)
                (finish-output)
-               (return-from compile (values nil t t)))
+               (return-from %compile (values nil t t)))
              (setq expr form)))
           ((and (consp definition) (eq (car definition) 'lambda))
            (setq expr definition))
@@ -249,11 +252,11 @@
     `(progn
        (if (special-operator-p ',name)
          (sys::%put ',name
-                    'macroexpand-macro
+                    'sys::macroexpand-macro
                     (sys::make-macro (c::%compile nil ,expander)))
          (sys::fset ',name
                     (sys::make-macro (c::%compile nil ,expander))))
        ',name)))
 
 ;; Make an exception just this one time...
-(sys::fset 'defmacro (get 'defmacro 'macroexpand-macro))
+(sys::fset 'defmacro (get 'defmacro 'sys::macroexpand-macro))
