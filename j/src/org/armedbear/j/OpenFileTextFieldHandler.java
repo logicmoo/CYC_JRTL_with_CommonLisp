@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.48 2003-07-03 01:30:03 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.49 2003-07-03 14:54:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,9 +121,9 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         if (entry.startsWith("pop://") || entry.startsWith("{") ||
             entry.startsWith("mailbox:")) {
             openMailbox(editor, entry);
-            editor.updateLocation();
             editor.ensureActive();
             editor.setFocusToDisplay();
+            editor.updateLocation();
             editor.updateDisplay();
             return;
         }
@@ -156,6 +156,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                         return;
                     }
                     if (!checkParentDirectory(candidate, title)) {
+                        editor.setFocusToDisplay();
                         editor.updateLocation();
                         return;
                     }
@@ -227,6 +228,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             return;
         }
         if (!checkParentDirectory(candidate, title)) {
+            editor.setFocusToDisplay();
             editor.updateLocation();
             return;
         }
@@ -630,6 +632,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
     private final void error(String message)
     {
         MessageDialog.showMessageDialog(editor, message, title);
+        editor.setFocusToDisplay();
         editor.updateLocation();
     }
 
