@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: JLisp.java,v 1.17 2004-01-30 15:17:51 piso Exp $
+ * $Id: JLisp.java,v 1.18 2004-05-21 22:43:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@ import java.net.Socket;
 import javax.swing.SwingUtilities;
 import org.armedbear.lisp.ConditionThrowable;
 import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.LispObject;
 
 public final class JLisp extends LispShell
 {
@@ -223,12 +224,13 @@ public final class JLisp extends LispShell
         Interpreter.evaluate(sb.toString());
     }
 
-    public static void runLispCommand(String command) throws ConditionThrowable
+    public static LispObject runLispCommand(String command)
+        throws ConditionThrowable
     {
         if (!Editor.isLispInitialized()) {
             Interpreter.initializeLisp(true);
             Editor.setLispInitialized(true);
         }
-        Interpreter.evaluate(command);
+        return Interpreter.evaluate(command);
     }
 }
