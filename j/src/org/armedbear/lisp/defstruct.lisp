@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.50 2004-04-18 14:35:27 piso Exp $
+;;; $Id: defstruct.lisp,v 1.51 2004-04-18 14:49:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -484,40 +484,42 @@
     (setf *dd-slots* (nreverse *dd-slots*))
     (if (or (null *dd-type*) *dd-named*)
         `(progn
-           (setf (get ',*dd-name* 'structure-definition)
-                 (make-defstruct-description :name ',*dd-name*
-                                             :conc-name ',*dd-conc-name*
-                                             :constructors ',*dd-constructors*
-                                             :copier ',*dd-copier*
-                                             :include ',*dd-include*
-                                             :type ',*dd-type*
-                                             :named ,*dd-named*
-                                             :initial-offset ,*dd-initial-offset*
-                                             :predicate ,*dd-predicate*
-                                             :print-function ,*dd-print-function*
-                                             :direct-slots ',*dd-direct-slots*
-                                             :slots ',*dd-slots*))
-           (make-structure-class ',*dd-name* ',*dd-direct-slots* ',*dd-slots*
-                                 ',(car *dd-include*))
+           (eval-when (:compile-toplevel :load-toplevel :execute)
+             (setf (get ',*dd-name* 'structure-definition)
+                   (make-defstruct-description :name ',*dd-name*
+                                               :conc-name ',*dd-conc-name*
+                                               :constructors ',*dd-constructors*
+                                               :copier ',*dd-copier*
+                                               :include ',*dd-include*
+                                               :type ',*dd-type*
+                                               :named ,*dd-named*
+                                               :initial-offset ,*dd-initial-offset*
+                                               :predicate ,*dd-predicate*
+                                               :print-function ,*dd-print-function*
+                                               :direct-slots ',*dd-direct-slots*
+                                               :slots ',*dd-slots*))
+             (make-structure-class ',*dd-name* ',*dd-direct-slots* ',*dd-slots*
+                                   ',(car *dd-include*)))
            ,@(define-constructors)
            ,@(define-predicate)
            ,@(define-access-functions)
            ,@(define-copier)
            ',*dd-name*)
         `(progn
-           (setf (get ',*dd-name* 'structure-definition)
-                 (make-defstruct-description :name ',*dd-name*
-                                             :conc-name ',*dd-conc-name*
-                                             :constructors ',*dd-constructors*
-                                             :copier ',*dd-copier*
-                                             :include ',*dd-include*
-                                             :type ',*dd-type*
-                                             :named ,*dd-named*
-                                             :initial-offset ,*dd-initial-offset*
-                                             :predicate ,*dd-predicate*
-                                             :print-function ,*dd-print-function*
-                                             :direct-slots ',*dd-direct-slots*
-                                             :slots ',*dd-slots*))
+           (eval-when (:compile-toplevel :load-toplevel :execute)
+             (setf (get ',*dd-name* 'structure-definition)
+                   (make-defstruct-description :name ',*dd-name*
+                                               :conc-name ',*dd-conc-name*
+                                               :constructors ',*dd-constructors*
+                                               :copier ',*dd-copier*
+                                               :include ',*dd-include*
+                                               :type ',*dd-type*
+                                               :named ,*dd-named*
+                                               :initial-offset ,*dd-initial-offset*
+                                               :predicate ,*dd-predicate*
+                                               :print-function ,*dd-print-function*
+                                               :direct-slots ',*dd-direct-slots*
+                                               :slots ',*dd-slots*)))
            ,@(define-constructors)
            ,@(define-predicate)
            ,@(define-access-functions)
