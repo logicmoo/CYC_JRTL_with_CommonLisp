@@ -1,7 +1,7 @@
 ;;; sublis.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sublis.lisp,v 1.1 2003-06-10 17:38:49 piso Exp $
+;;; $Id: sublis.lisp,v 1.2 2003-06-24 15:30:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
                       ((atom subtree) subtree)
                       (t (let ((car (s (car subtree)))
                                (cdr (s (cdr subtree))))
-                           (if (and (eq car (car subtreE))
+                           (if (and (eq car (car subtree))
                                     (eq cdr (cdr subtree)))
                                subtree
                                (cons car cdr))))))))
