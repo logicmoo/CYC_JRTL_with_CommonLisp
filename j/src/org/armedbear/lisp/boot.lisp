@@ -13,7 +13,8 @@
 
 (in-package "COMMON-LISP")
 
-(export '(open call-arguments-limit lambda-parameters-limit))
+(export '(open call-arguments-limit lambda-parameters-limit
+          multiple-values-limit))
 
 (defun open (filename
 	     &key
@@ -29,3 +30,5 @@
 (defconstant call-arguments-limit 50)
 
 (defconstant lambda-parameters-limit 50)
+
+(defconstant multiple-values-limit 20)
