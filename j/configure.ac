@@ -1,7 +1,7 @@
 dnl  Process this file with autoconf to produce a configure script.
 dnl
 dnl  Copyright (C) 1998-2003 Peter Graves
-dnl  $Id: configure.ac,v 1.8 2003-11-14 18:12:33 piso Exp $
+dnl  $Id: configure.ac,v 1.9 2003-11-16 15:52:57 piso Exp $
 dnl
 dnl  This program is free software; you can redistribute it and/or
 dnl  modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@ dnl  You should have received a copy of the GNU General Public License
 dnl  along with this program; if not, write to the Free Software
 dnl  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-AC_REVISION($Revision: 1.8 $)
+AC_REVISION($Revision: 1.9 $)
 
 BOOTFILE=./configure-options
 
@@ -247,6 +247,7 @@ src/org/armedbear/j/version
 src/org/armedbear/j/mail/Makefile
 src/org/armedbear/j/jdb/Makefile
 src/org/armedbear/lisp/Makefile
+src/org/armedbear/lisp/java/awt/Makefile
 j
 abl
 ])
