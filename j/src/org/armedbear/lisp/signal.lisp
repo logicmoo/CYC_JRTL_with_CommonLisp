@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: signal.lisp,v 1.4 2004-03-03 01:47:01 piso Exp $
+;;; $Id: signal.lisp,v 1.5 2004-03-08 02:58:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,6 +58,7 @@
     (let ((old-bos *break-on-signals*)
 	  (*break-on-signals* nil))
       (when (typep condition old-bos)
+        (setf *saved-backtrace* (backtrace-as-list))
 	(break "~A~%BREAK called because of *BREAK-ON-SIGNALS* (now rebound to NIL)."
 	       condition)))
     (loop
