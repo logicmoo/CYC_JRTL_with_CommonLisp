@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.9 2003-10-15 15:27:15 piso Exp $
+;;; $Id: fixme.lisp,v 1.10 2003-10-19 18:58:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,8 +27,14 @@
 (defmacro declare (&rest ignored)
   nil)
 
-(defmacro declaim (&rest ignored)
-  nil)
+(defmacro declaim (&rest decls)
+  (let ((res ()))
+    (dolist (decl decls)
+      (when (eq (car decl) 'special)
+        (dolist (var (cdr decl))
+          (push `(defvar ,var) res))))
+    (when res
+      `(progn ,@(nreverse res)))))
 
 ;; Should be a special operator.
 (defmacro locally (&rest forms)
