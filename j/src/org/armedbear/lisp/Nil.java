@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.11 2003-05-31 18:14:03 piso Exp $
+ * $Id: Nil.java,v 1.12 2003-05-31 20:05:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class Nil extends LispObject implements SequenceType
+public final class Nil extends LispObject
 {
     public int getType()
     {
