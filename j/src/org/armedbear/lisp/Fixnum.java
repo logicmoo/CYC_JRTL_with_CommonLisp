@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.23 2003-03-24 18:02:37 piso Exp $
+ * $Id: Fixnum.java,v 1.24 2003-03-26 21:49:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,6 +288,10 @@ public final class Fixnum extends LispObject
             // obj is not a fixnum.
             if (obj instanceof Bignum)
                 return getBigInteger().compareTo(Bignum.getValue(obj)) > 0;
+            if (obj instanceof Ratio) {
+                BigInteger n1 = getBigInteger().multiply(((Ratio)obj).denominator());
+                return n1.compareTo(((Ratio)obj).numerator()) > 0;
+            }
             if (obj instanceof LispFloat)
                 return (float) value > LispFloat.getValue(obj);
             throw new TypeError(obj, "number");
@@ -322,6 +326,37 @@ public final class Fixnum extends LispObject
                 return (float) value >= LispFloat.getValue(obj);
             throw new TypeError(obj, "number");
         }
+    }
+
+    public LispObject floor(LispObject obj) throws LispError
+    {
+        LispObject[] values = new LispObject[2];
+        if (obj instanceof Fixnum) {
+            long divisor = ((Fixnum)obj).value;
+            long quotient = value / divisor;
+            long remainder = value % divisor;
+            if (remainder == 0) {
+                values[0] = number(quotient);
+                values[1] = Fixnum.ZERO;
+                setValues(values);
+                return values[0];
+            }
+            // Remainder is non-zero.
+            if (value > 0 && divisor > 0) {
+                ;
+            } else if (value < 0 && divisor < 0) {
+                ;
+            } else {
+                --quotient;
+                remainder = value - quotient * divisor;
+            }
+            values[0] = number(quotient);
+            values[1] = number(remainder);
+            setValues(values);
+            return values[0];
+        }
+        Thread.dumpStack();
+        throw new LispError("not implemented");
     }
 
     public int hashCode()

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.4 2003-03-15 18:11:28 piso Exp $
+ * $Id: LispFloat.java,v 1.5 2003-03-26 21:51:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,6 +187,11 @@ public final class LispFloat extends LispObject
         catch (ClassCastException e) {
             throw new TypeError(obj, "number");
         }
+    }
+
+    public LispObject floor(LispObject obj) throws LispError
+    {
+        throw new LispError("FLOOR is not yet implemented for floats");
     }
 
     public int hashCode()
