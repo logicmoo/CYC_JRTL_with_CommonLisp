@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.30 2003-06-20 19:32:54 piso Exp $
+# $Id: Makefile.in,v 1.31 2003-06-22 18:30:17 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ CLASSFILES =	AbstractArray.class \
 		Debug.class \
 		EndOfFileException.class \
 		Environment.class \
+		Exports.class \
 		Extensions.class \
 		Fixnum.class \
 		Function.class \
