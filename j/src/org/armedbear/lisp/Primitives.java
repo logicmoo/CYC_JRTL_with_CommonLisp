@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.554 2004-01-28 20:19:19 piso Exp $
+ * $Id: Primitives.java,v 1.555 2004-01-30 20:09:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3432,25 +3432,28 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### write-byte
-    // write-byte byte stream => byte
-    private static final Primitive2 WRITE_BYTE = new Primitive2("write-byte","byte stream")
+    // ### write-8-bits
+    // write-8-bits byte stream => byte
+    private static final Primitive2 WRITE_8_BITS =
+        new Primitive2("write-8-bits", PACKAGE_SYS, false, "byte stream")
     {
         public LispObject execute (LispObject first, LispObject second)
             throws ConditionThrowable
         {
             int n = Fixnum.getValue(first);
             if (n < 0 || n > 255)
-                signal(new TypeError(first, "unsigned byte"));
+                signal(new TypeError(first,
+                                     list2(Symbol.UNSIGNED_BYTE, new Fixnum(8))));
             final Stream out = checkBinaryOutputStream(second);
             out._writeByte(n);
             return first;
         }
     };
 
-    // ### read-byte
-    // read-byte stream &optional eof-error-p eof-value => byte
-    private static final Primitive READ_BYTE = new Primitive("read-byte","stream &optional eof-error-p eof-value")
+    // ### read-8-bits
+    // read-8-bits stream &optional eof-error-p eof-value => byte
+    private static final Primitive READ_8_BITS =
+        new Primitive("read-8-bits", "stream &optional eof-error-p eof-value")
     {
         public LispObject execute (LispObject[] args) throws ConditionThrowable
         {
