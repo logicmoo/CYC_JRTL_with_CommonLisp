@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.21 2003-03-27 17:37:53 piso Exp $
+;;; $Id: list.lisp,v 1.22 2003-03-29 00:59:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -508,7 +508,7 @@
 	 (splicey ()))
       ((endp y) (setq splicex x))
       (cond ((let ((key-val-x (apply-key key (car x)))
-		   (key-val-y (apply-key key (Car y))))
+		   (key-val-y (apply-key key (car y))))
 	       (if notp
 		   (not (funcall test-not key-val-x key-val-y))
 		   (funcall test key-val-x key-val-y)))
