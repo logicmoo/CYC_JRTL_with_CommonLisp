@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.31 2003-03-05 19:55:14 piso Exp $
+;;; $Id: rt.lisp,v 1.32 2003-03-05 21:03:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
 
 (in-package :rt)
 (export '(deftest))
+
+(defvar *compile-tests* nil)
 
 (defvar *passed* 0)
 (defvar *failed* 0)
@@ -52,7 +54,9 @@
   (finish-output)
   (let* ((aborted nil)
         (r (handler-case (multiple-value-list
-                          (eval `,form))
+                          (if *compile-tests*
+                              (funcall (compile nil `(lambda () ,form)))
+                              (eval `,form)))
                          (error (c) (setf aborted t) (list c))))
         (passed (and (not aborted) (equalp-with-case r `,values))))
     (unless passed
@@ -478,5 +482,6 @@
     (format t "~A tests: ~A passed, ~A failed~%"
             (+ rt::*passed* rt::*failed*)
             rt::*passed*
-            rt::*failed*))
+            rt::*failed*)
+    (format t "*compile-tests* was ~A~%" rt::*compile-tests*))
   (values))
