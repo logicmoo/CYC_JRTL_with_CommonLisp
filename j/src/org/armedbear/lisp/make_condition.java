@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_condition.java,v 1.3 2003-09-21 13:02:40 piso Exp $
+ * $Id: make_condition.java,v 1.4 2003-09-21 19:32:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,6 +52,14 @@ public final class make_condition extends Primitive
             return new UnboundVariable(initArgs);
         if (type == Symbol.UNDEFINED_FUNCTION)
             return new UndefinedFunction(initArgs);
+
+//         if (type instanceof Symbol) {
+//             LispClass cls = findClass(type);
+//             if (cls instanceof StandardClass) {
+//                 return ((StandardClass)cls).makeInstance(initArgs);
+//             }
+//         }
+
         throw new ConditionThrowable(new LispError("MAKE-CONDITION: unsupported type " + type));
     }
 
