@@ -186,6 +186,7 @@ list*
 list-all-packages
 list-length
 listp
+load
 locally
 logand
 logandc1
