@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.181 2003-04-27 16:08:05 piso Exp $
+ * $Id: Primitives.java,v 1.182 2003-04-27 17:17:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1560,7 +1560,7 @@ public final class Primitives extends Module
         LispObject test = second.car();
         LispObject resultForms = second.cdr();
         LispObject body = args.cdr();
-        int depth = stack.size();
+        final int depth = thread.getStackDepth();
         try {
             // Implicit block.
             while (true) {
@@ -1600,7 +1600,7 @@ public final class Primitives extends Module
         }
         catch (Return ret) {
             if (ret.getName() == NIL) {
-                stack.setSize(depth);
+                thread.setStackDepth(depth);
                 return ret.getResult();
             }
             throw ret;
@@ -1627,7 +1627,7 @@ public final class Primitives extends Module
                 Environment ext = new Environment(env);
                 bind(var, list.car(), ext);
                 LispObject body = block.getBody();
-                int depth = stack.size();
+                int depth = thread.getStackDepth();
                 try {
                     while (body != NIL) {
                         LispObject result = eval(body.car(), ext);
@@ -1636,7 +1636,7 @@ public final class Primitives extends Module
                 }
                 catch (Return ret) {
                     if (ret.getName() == NIL) {
-                        stack.setSize(depth);
+                        thread.setStackDepth(depth);
                         return ret.getResult();
                     }
                     throw ret;
@@ -1670,7 +1670,7 @@ public final class Primitives extends Module
                 Environment ext = new Environment(env);
                 bind(var, new Fixnum(i), ext);
                 LispObject body = block.getBody();
-                int depth = stack.size();
+                int depth = thread.getStackDepth();
                 try {
                     while (body != NIL) {
                         LispObject result = eval(body.car(), ext);
@@ -1679,7 +1679,7 @@ public final class Primitives extends Module
                 }
                 catch (Return ret) {
                     if (ret.getName() == NIL) {
-                        stack.setSize(depth);
+                        thread.setStackDepth(depth);
                         return ret.getResult();
                     }
                     throw ret;
@@ -1724,7 +1724,7 @@ public final class Primitives extends Module
                 Environment ext = new Environment(env);
                 bind(var, symbol, ext);
                 LispObject body = block.getBody();
-                int depth = stack.size();
+                int depth = thread.getStackDepth();
                 try {
                     while (body != NIL) {
                         LispObject result = eval(body.car(), ext);
@@ -1733,7 +1733,7 @@ public final class Primitives extends Module
                 }
                 catch (Return ret) {
                     if (ret.getName() == NIL) {
-                        stack.setSize(depth);
+                        thread.setStackDepth(depth);
                         return ret.getResult();
                     }
                     throw ret;
@@ -1802,12 +1802,13 @@ public final class Primitives extends Module
         {
             LispObject form = args.car();
             LispObject clauses = args.cdr();
-            int depth = stack.size();
+            final LispThread thread = LispThread.currentThread();
+            final int depth = thread.getStackDepth();
             try {
                 return eval(form, env);
             }
             catch (Condition c) {
-                stack.setSize(depth);
+                thread.setStackDepth(depth);
                 while (clauses != NIL) {
                     Cons clause = checkCons(clauses.car());
                     LispObject type = clause.car();
@@ -3014,7 +3015,8 @@ public final class Primitives extends Module
             throws Condition
         {
             Tagbody tagbody = new Tagbody(args);
-            final int depth = stack.size();
+            final LispThread thread = LispThread.currentThread();
+            final int depth = thread.getStackDepth();
             LispObject remaining = args;
             while (remaining != NIL) {
                 LispObject current = remaining.car();
@@ -3034,7 +3036,7 @@ public final class Primitives extends Module
                         LispObject code = tagbody.getCode(go.getTag());
                         if (code != null) {
                             remaining = code;
-                            stack.setSize(depth);
+                            thread.setStackDepth(depth);
                             continue;
                         }
                         throw (go);
@@ -3072,7 +3074,8 @@ public final class Primitives extends Module
                 name = checkSymbol(args.car());
             LispObject body = args.cdr();
             LispObject result = NIL;
-            int depth = stack.size();
+            final LispThread thread = LispThread.currentThread();
+            final int depth = thread.getStackDepth();
             try {
                 while (body != NIL) {
                     result = eval(body.car(), env);
@@ -3082,7 +3085,7 @@ public final class Primitives extends Module
             }
             catch (Return ret) {
                 if (ret.getName() == name) {
-                    stack.setSize(depth);
+                    thread.setStackDepth(depth);
                     return ret.getResult();
                 }
                 throw ret;
@@ -3100,7 +3103,8 @@ public final class Primitives extends Module
             LispObject tag = eval(args.car(), env);
             LispObject body = args.cdr();
             LispObject result = NIL;
-            int depth = stack.size();
+            final LispThread thread = LispThread.currentThread();
+            final int depth = thread.getStackDepth();
             try {
                 while (body != NIL) {
                     result = eval(body.car(), env);
@@ -3110,7 +3114,7 @@ public final class Primitives extends Module
             }
             catch (Throw t) {
                 if (t.getTag() == tag) {
-                    stack.setSize(depth);
+                    thread.setStackDepth(depth);
                     return t.getResult();
                 }
                 throw t;

@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.21 2003-04-27 16:08:03 piso Exp $
+ * $Id: Interpreter.java,v 1.22 2003-04-27 17:17:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,7 +128,7 @@ public final class Interpreter extends Lisp
             initialize(jlisp);
             while (true) {
                 try {
-                    resetStack();
+                    thread.resetStack();
                     thread.setDynamicEnvironment(null);
                     ++commandNumber;
                     out.writeString(prompt());
@@ -185,7 +185,7 @@ public final class Interpreter extends Lisp
                         return;
                     out = getStandardOutput();
                     out.freshLine();
-                    checkStack();
+                    thread.checkStack();
                     LispObject[] values = thread.getValues();
                     Symbol.SLASH_SLASH_SLASH.setSymbolValue(Symbol.SLASH_SLASH.getSymbolValue());
                     Symbol.SLASH_SLASH.setSymbolValue(Symbol.SLASH.getSymbolValue());
@@ -213,12 +213,12 @@ public final class Interpreter extends Lisp
                         out.writeLine("Error: " + c.getMessage() + ".");
                     else
                         out.writeLine("Error");
-                    backtrace();
+                    thread.backtrace();
                 }
                 catch (Throwable t) {
                     getStandardInput().clearInput();
                     out.printStackTrace(t);
-                    backtrace();
+                    thread.backtrace();
                 }
             }
         }

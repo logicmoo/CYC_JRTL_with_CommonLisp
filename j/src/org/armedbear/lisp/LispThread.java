@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.1 2003-04-27 16:07:13 piso Exp $
+ * $Id: LispThread.java,v 1.2 2003-04-27 17:17:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.lisp;
 
 import java.util.HashMap;
+import java.util.Stack;
 
 public final class LispThread extends LispObject
 {
@@ -132,6 +133,155 @@ public final class LispThread extends LispObject
   public final LispObject lookupSpecial(LispObject symbol)
   {
     return dynEnv != null ? dynEnv.lookup(symbol) : null;
+  }
+
+  private static class StackFrame
+  {
+      private final Functional functional;
+      private final LispObject[] argv;
+
+      public StackFrame(LispObject obj, LispObject[] argv)
+      {
+          functional = (Functional) obj;
+          this.argv = argv;
+      }
+
+      public Functional getFunctional()
+      {
+          return functional;
+      }
+
+      public LispObject[] getArgumentVector()
+      {
+          return argv;
+      }
+  }
+
+  private final Stack stack = new Stack();
+
+  public void pushStackFrame(LispObject fun, LispObject[] args)
+  {
+      stack.push(new StackFrame(fun, args));
+  }
+
+  public void popStackFrame()
+  {
+      if (!stack.empty())
+          stack.pop();
+  }
+
+  public int getStackDepth()
+  {
+      return stack.size();
+  }
+
+  public void setStackDepth(int depth)
+  {
+      stack.setSize(depth);
+  }
+
+  public void resetStack()
+  {
+      stack.clear();
+  }
+
+  public void checkStack() throws LispError
+  {
+      if (stack.size() > 0) {
+          getStandardOutput().writeLine("stack depth = " + stack.size());
+          backtrace();
+      }
+  }
+
+  public void backtrace()
+  {
+      if (stack.size() > 0) {
+          CharacterOutputStream out = getTraceOutput();
+          try {
+              out.writeLine("Evaluation stack:");
+              out.finishOutput();
+              for (int i = stack.size(); i-- > 0;) {
+                  out.writeString("  ");
+                  out.writeString(String.valueOf(stack.size() - 1 - i));
+                  out.writeString(": ");
+                  StackFrame frame = (StackFrame) stack.get(i);
+                  LispObject obj = NIL;
+                  LispObject[] argv = frame.getArgumentVector();
+                  for (int j = argv.length; j-- > 0;)
+                      obj = new Cons(argv[j], obj);
+                  Functional functional = frame.getFunctional();
+                  if (functional.getLambdaName() != null)
+                      obj = new Cons(functional.getLambdaName(), obj);
+                  else
+                      obj = new Cons(functional, obj);
+                  pprint(obj, out.getCharPos(), out);
+                  out.terpri();
+                  out.finishOutput();
+              }
+          }
+          catch (Throwable t) {
+              t.printStackTrace();
+          }
+      }
+  }
+
+  private static void pprint(LispObject obj, int indentBy,
+      CharacterOutputStream stream) throws StreamError
+  {
+      if (stream.getCharPos() == 0) {
+          StringBuffer sb = new StringBuffer();
+          for (int i = 0; i < indentBy; i++)
+              sb.append(' ');
+          stream.writeString(sb.toString());
+      }
+      String raw = String.valueOf(obj);
+      if (stream.getCharPos() + raw.length() < 80) {
+          // It fits.
+          stream.writeString(raw);
+          return;
+      }
+      // Object doesn't fit.
+      if (obj instanceof Cons) {
+          try {
+              boolean newlineBefore = false;
+              LispObject[] array = obj.copyToArray();
+              if (array.length > 0) {
+                  LispObject first = array[0];
+                  if (first == Symbol.LET) {
+                      newlineBefore = true;
+                  }
+              }
+              int charPos = stream.getCharPos();
+              if (newlineBefore && charPos != indentBy) {
+                  stream.terpri();
+                  charPos = stream.getCharPos();
+              }
+              if (charPos < indentBy) {
+                  StringBuffer sb = new StringBuffer();
+                  for (int i = charPos; i < indentBy; i++)
+                      sb.append(' ');
+                  stream.writeString(sb.toString());
+              }
+              stream.print('(');
+              for (int i = 0; i < array.length; i++) {
+                  pprint(array[i], indentBy + 2, stream);
+                  if (i < array.length - 1)
+                      stream.print(' ');
+              }
+              stream.print(')');
+          }
+          catch (LispError e) {
+              Debug.trace(e);
+          }
+      } else {
+          stream.terpri();
+          StringBuffer sb = new StringBuffer();
+          for (int i = 0; i < indentBy; i++)
+              sb.append(' ');
+          stream.writeString(sb.toString());
+          stream.writeString(raw);
+          return;
+      }
   }
 
   // ### make-thread
