@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.26 2004-02-24 00:31:35 piso Exp $
+ * $Id: DisplacedArray.java,v 1.27 2004-02-24 00:43:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,11 @@ public final class DisplacedArray extends AbstractArray
         for (int i = dimensions.length; i-- > 0;)
             size *= dimensions[i];
         return size;
+    }
+
+    public boolean hasFillPointer()
+    {
+        return fillPointer >= 0;
     }
 
     public LispObject typeOf()

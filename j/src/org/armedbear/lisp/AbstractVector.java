@@ -24,6 +24,11 @@ public abstract class AbstractVector extends AbstractArray
 {
     protected int fillPointer = -1; // -1 indicates no fill pointer.
 
+    public boolean hasFillPointer()
+    {
+        return fillPointer >= 0;
+    }
+
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.VECTOR)

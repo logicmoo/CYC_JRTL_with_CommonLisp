@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.3 2004-02-23 19:56:58 piso Exp $
+ * $Id: SimpleString.java,v 1.4 2004-02-24 00:41:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,6 +89,11 @@ public final class SimpleString extends AbstractString
     public LispObject SIMPLE_STRING_P()
     {
         return T;
+    }
+
+    public boolean hasFillPointer()
+    {
+        return false;
     }
 
     public boolean isAdjustable()
