@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: print-object.lisp,v 1.3 2004-03-01 17:59:24 piso Exp $
+;;; $Id: print-object.lisp,v 1.4 2004-03-02 00:06:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,8 +16,6 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-;;; Adapted from Closette.
 
 (in-package "SYSTEM")
 
@@ -67,6 +65,15 @@
       (print-unreadable-object (restart stream :type t :identity t)
                                (prin1 (restart-name restart) stream))
       (restart-report restart stream)))
+
+(defmethod print-object ((c condition) stream)
+  (if *print-escape*
+      (call-next-method)
+      (let ((report (condition-report c)))
+        (cond ((stringp report)
+               (write-string report stream))
+              (t
+               (call-next-method))))))
 
 (defmethod print-object ((x undefined-function) stream)
   (if *print-escape*
