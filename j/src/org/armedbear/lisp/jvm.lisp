@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.330 2004-12-30 21:54:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.331 2004-12-31 02:22:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -282,8 +282,8 @@
 
 ;;; Pass 1.
 
-(defun p1-let/let*-vars (varlist)
-  (let ((vars nil))
+(defun p1-let-vars (varlist)
+  (let ((vars ()))
     (dolist (varspec varlist)
       (cond ((consp varspec)
              (let ((name (car varspec))
@@ -291,18 +291,34 @@
                (push (make-variable :name name :initform initform) vars)))
             (t
              (push (make-variable :name varspec) vars))))
-    ;; Check for globally declared specials.
+    (setf var (nreverse vars))
     (dolist (variable vars)
-      (when (special-variable-p (variable-name variable))
-        (setf (variable-special-p variable) t)))
+      (push variable *visible-variables*))
+    vars))
+
+(defun p1-let*-vars (varlist)
+  (let ((vars ()))
+    (dolist (varspec varlist)
+      (cond ((consp varspec)
+             (let* ((name (car varspec))
+                    (initform (p1 (cadr varspec)))
+                    (var (make-variable :name name :initform initform)))
+               (push var vars)
+               (push var *visible-variables*)))
+            (t
+             (let ((var (make-variable :name varspec)))
+               (push var vars)
+               (push var *visible-variables*)))))
     (nreverse vars)))
 
 (defun p1-let/let* (form)
-  (let* ((block (make-block-node :name '(LET)))
+  (let* ((*visible-variables* *visible-variables*)
+         (block (make-block-node :name '(LET)))
          (*blocks* (cons block *blocks*))
          (op (car form))
          (varlist (cadr form))
          (body (cddr form)))
+    (aver (or (eq op 'LET) (eq op 'LET*)))
     (when (eq op 'LET)
       ;; Convert to LET* if possible.
       (dolist (varspec varlist (setf op 'LET*))
@@ -310,7 +326,12 @@
             (constantp (cadr varspec))
             (eq (car varspec) (cadr varspec))
             (return nil))))
-    (setf (block-vars block) (p1-let/let*-vars varlist))
+    (let ((vars (if (eq op 'LET) (p1-let-vars varlist) (p1-let*-vars varlist))))
+      ;; Check for globally declared specials.
+      (dolist (variable vars)
+        (when (special-variable-p (variable-name variable))
+          (setf (variable-special-p variable) t)))
+      (setf (block-vars block) vars))
     (setf body (mapcar #'p1 body))
     (setf (block-form block) (list* op varlist body))
     ;; Process declarations.
@@ -406,7 +427,15 @@
 (defun p1-setq (form)
   (unless (= (length form) 3)
     (error "Too many arguments for SETQ."))
-  (list 'SETQ (second form) (p1 (third form))))
+  (let ((arg1 (second form))
+        (arg2 (third form)))
+    (let ((variable (find-visible-variable arg1)))
+      (if variable
+          (progn
+            (dformat t "p1-setq: write to ~S~%" arg1)
+            (incf (variable-writes variable)))
+          (dformat t "p1-setq: unknown variable ~S~%" arg1)))
+    (list 'SETQ arg1 (p1 arg2))))
 
 (defun p1-the (form)
   (dformat t "p1-the form = ~S~%" form)
@@ -427,7 +456,9 @@
         (p1 new-expr)))
      (t
       (dformat t "p1-the t case expr = ~S~%" expr)
-      (p1 expr)))))
+      (if (subtypep type 'FIXNUM)
+          (list 'THE type (p1 expr))
+          (p1 expr))))))
 
 (defun p1-default (form)
   (list* (car form) (mapcar #'p1 (cdr form))))
@@ -1134,7 +1165,8 @@
 
 (defun resolve-instructions (code)
   (let ((vector (make-array 512 :fill-pointer 0 :adjustable t)))
-    (dotimes (index (length code) vector)
+    (dotimes (index (the fixnum (length code)) vector)
+      (declare (type fixnum index))
       (let ((instruction (svref code index)))
         (case (instruction-opcode instruction)
           (205 ; CLEAR-VALUES
@@ -3215,13 +3247,14 @@
       (add-variable-to-context variable)))
   (let ((*register* *register*)
         (must-clear-values nil))
-    ;; Evaluate each initform. If the variable being bound is special,
-    ;; allocate a temporary register for the result; LET bindings must be
-    ;; done in parallel, so we don't want to modify any specials until all
-    ;; the initforms have been evaluated. Note that we can't just leave the
-    ;; values on the stack because we'll lose JVM stack consistency if there
-    ;; is a non-local GO or RETURN from one of the initforms.
+    ;; Evaluate each initform. If the variable being bound is special, allocate
+    ;; a temporary register for the result; LET bindings must be done in
+    ;; parallel, so we can't modify any specials until all the initforms have
+    ;; been evaluated. Note that we can't just push the values on the stack
+    ;; because we'll lose JVM stack consistency if there is a non-local
+    ;; transfer of control from one of the initforms.
     (dolist (variable (block-vars block))
+      (dformat t "variable = ~S writes = ~S~%" (variable-name variable) (variable-writes variable))
       (let ((initform (variable-initform variable)))
         (cond (initform
                (cond
@@ -3229,7 +3262,15 @@
                       (variable-register variable)
                       (variable-declared-type variable)
                       (subtypep (variable-declared-type variable) 'FIXNUM))
-                 (dformat t "compile-let-bindings unboxed-fixnum case~%")
+                 (dformat t "compile-let-bindings declared fixnum case: ~S~%"
+                          (variable-name variable))
+                 (setf (variable-representation variable) :unboxed-fixnum)
+                 (compile-form initform :target :stack :representation :unboxed-fixnum))
+                ((and (variable-register variable)
+                      (eql (variable-writes variable) 0)
+                      (subtypep (derive-type initform) 'FIXNUM))
+                 (dformat t "compile-let-bindings read-only fixnum case: ~S~%"
+                          (variable-name variable))
                  (setf (variable-representation variable) :unboxed-fixnum)
                  (compile-form initform :target :stack :representation :unboxed-fixnum))
                 (t
@@ -3285,7 +3326,18 @@
                       (not (variable-special-p variable))
                       (variable-declared-type variable)
                       (subtypep (variable-declared-type variable) 'FIXNUM))
-                 (dformat t "compile-let*-bindings unboxed-fixnum case~%")
+                 (dformat t "compile-let*-bindings declared fixnum case~%")
+                 (setf (variable-representation variable) :unboxed-fixnum)
+                 (compile-form initform :target :stack :representation :unboxed-fixnum)
+                 (setf (variable-register variable) (allocate-register))
+                 (emit 'istore (variable-register variable))
+                 (setf boundp t))
+                ((and (not *use-locals-vector*)
+                      (not (variable-special-p variable))
+                      (eql (variable-writes variable) 0)
+                      (subtypep (derive-type initform) 'FIXNUM))
+                 (dformat t "compile-let*-bindings read-only fixnum case: ~S~%"
+                          (variable-name variable))
                  (setf (variable-representation variable) :unboxed-fixnum)
                  (compile-form initform :target :stack :representation :unboxed-fixnum)
                  (setf (variable-register variable) (allocate-register))
@@ -4111,8 +4163,13 @@
   (compile-function-call form target representation))
 
 (defun derive-type (form)
-  (when (consp form)
-    (let ((op (car form)))
+  (cond
+   ((fixnump form)
+    (return-from derive-type 'fixnum))
+   ((unboxed-fixnum-variable form)
+    (return-from derive-type 'fixnum))
+   ((consp form)
+    (let ((op (first form)))
       (case op
         (ASH
          (dformat t "derive-type ASH case form = ~S~%" form)
@@ -4121,7 +4178,13 @@
                 (arg2 (third form)))
            (dformat t "derive-type ASH case var1 = ~S~%" var1)
            (when (and var1 (fixnump arg2) (minusp arg2))
-             (return-from derive-type 'fixnum)))))))
+             (return-from derive-type 'FIXNUM))))
+        (THE
+         (dformat t "derive-type THE case form = ~S~%" form)
+         (when (subtypep (second form) 'FIXNUM)
+           (dformat t "derive-type THE case form = ~S returning FIXNUM~%" form)
+           (return-from derive-type 'FIXNUM))
+         )))))
   t)
 
 (defun compile-length (form &key (target *val*) representation)
@@ -4937,7 +5000,8 @@
         )
     (process-optimization-declarations (cddr precompiled-form))
     ;; Pass 1.
-    (setf precompiled-form (p1 precompiled-form))
+    (let ((*visible-variables* ()))
+      (setf precompiled-form (p1 precompiled-form)))
     ;; Pass 2.
     (let* ((*declared-symbols* (make-hash-table :test 'eq))
            (*declared-functions* (make-hash-table :test 'equal))
