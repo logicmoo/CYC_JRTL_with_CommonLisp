@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.67 2005-03-29 17:28:22 piso Exp $
+;;; $Id: compile-file.lisp,v 1.68 2005-04-04 19:18:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -229,6 +229,9 @@
                     (setf (fdefinition name) #'dummy)
                     (push name *fbound-names*)))))
              ((DEFGENERIC DEFMETHOD)
+              (let ((*print-length* 2)
+                    (*print-level* 2))
+                (format t "Processing ~S~%" form))
               (jvm::note-name-defined (second form))
               (process-toplevel-form (macroexpand-1 form *compile-file-environment*)
                                      stream compile-time-too)
@@ -398,6 +401,7 @@
                 (terpri out))
               (loop
                 (let* ((*source-position* (file-position in))
+                       (jvm::*source-line-number* (stream-line-number in))
                        (form (read in nil in)))
                   (when (eq form in)
                     (return))

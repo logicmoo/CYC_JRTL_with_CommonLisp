@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.417 2005-03-31 13:21:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.418 2005-04-04 19:17:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2063,13 +2063,34 @@
       (write-u2 (symbol-value (handler-code handler)) stream)
       (write-u2 (handler-catch-type handler) stream))))
 
+(defun write-source-file-attr (source-file stream)
+  (let* ((name-index (pool-name "SourceFile"))
+         (source-file-index (pool-name source-file)))
+    (write-u2 name-index stream)
+    ;; "The value of the attribute_length item of a SourceFile_attribute
+    ;; structure must be 2."
+    (write-u4 2 stream)
+    (write-u2 source-file-index stream)))
+
+(defvar *source-line-number* nil)
+
+(defun write-line-number-table (stream)
+  (let* ((name-index (pool-name "LineNumberTable")))
+    (write-u2 name-index stream)
+    (write-u4 6 stream) ; "the length of the attribute, excluding the initial six bytes"
+    (write-u2 1 stream) ; number of entries
+    (write-u2 0 stream) ; start_pc
+    (write-u2 *source-line-number* stream)))
+
 (defun write-code-attr (method stream)
   (declare (optimize speed))
   (let* ((name-index (pool-name "Code"))
          (code (method-code method))
          (code-length (length code))
+         (line-number-available-p (fixnump *source-line-number*))
          (length (+ code-length 12
-                    (* (length (method-handlers method)) 8)))
+                    (* (length (method-handlers method)) 8)
+                    (if line-number-available-p 12 0)))
          (max-stack (or (method-max-stack method) 20))
          (max-locals (or (method-max-locals method) 1)))
     (write-u2 name-index stream)
@@ -2081,8 +2102,13 @@
       (declare (type fixnum i))
       (write-u1 (svref code i) stream))
     (write-exception-table method stream)
-    (write-u2 0 stream) ; attributes count
-    ))
+    (cond (line-number-available-p
+           ; attributes count
+           (write-u2 1 stream)
+           (write-line-number-table stream))
+          (t
+           ; attributes count
+           (write-u2 0 stream)))))
 
 (defun write-method (method stream)
   (declare (optimize speed))
@@ -5508,6 +5534,13 @@
                                         (class-file-lambda-list class-file))))
     (pool-name "Code") ; Must be in pool!
 
+    (when *compile-file-truename*
+      (pool-name "SourceFile") ; Must be in pool!
+      (pool-name (file-namestring *compile-file-truename*)))
+    (when (and (boundp '*source-line-number*)
+               (fixnump *source-line-number*))
+      (pool-name "LineNumberTable")) ; Must be in pool!
+
     ;; Write out the class file.
     (with-open-file (stream (class-file-pathname class-file)
                             :direction :output
@@ -5538,7 +5571,15 @@
         (write-method method stream))
       (write-method constructor stream)
       ;; attributes count
-      (write-u2 0 stream))))
+      (cond (*compile-file-truename*
+             ;; attributes count
+             (write-u2 1 stream)
+             ;; attributes table
+             (write-source-file-attr (file-namestring *compile-file-truename*)
+                                     stream))
+            (t
+             ;; attributes count
+             (write-u2 0 stream))))))
 
 (defvar *magic* t)
 
