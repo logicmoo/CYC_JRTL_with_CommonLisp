@@ -1,8 +1,8 @@
 /*
  * make_array.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: make_array.java,v 1.8 2003-12-27 17:02:58 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: make_array.java,v 1.9 2004-02-04 15:16:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,14 @@
 
 package org.armedbear.lisp;
 
-// ### %make-array dimensions element-type initial-element initial-contents
-// adjustable fill-pointer displaced-to displaced-index-offset => new-array
-public final class make_array extends Primitive {
-    public make_array(String name, Package pkg, boolean exported)
+// ### %make-array dimensions element-type initial-element initial-element-p
+// initial-contents adjustable fill-pointer displaced-to displaced-index-offset
+// => new-array
+public final class make_array extends Primitive
+{
+    public make_array()
     {
-        super(name, pkg, exported);
+        super("%make-array", PACKAGE_SYS, false);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -112,7 +114,7 @@ public final class make_array extends Primitive {
                     for (int i = 0; i < size; i++)
                         v.set(i, initialContents.elt(i));
                 } else
-                    return signal(new TypeError(initialContents, "sequence"));
+                    return signal(new TypeError(initialContents, Symbol.SEQUENCE));
             }
             if (fillPointer != NIL)
                 v.setFillPointer(fillPointer);
@@ -130,6 +132,5 @@ public final class make_array extends Primitive {
         return array;
     }
 
-    private static final make_array _MAKE_ARRAY =
-        new make_array("%MAKE-ARRAY", PACKAGE_SYS, false);
+    private static final Primitive _MAKE_ARRAY = new make_array();
 }

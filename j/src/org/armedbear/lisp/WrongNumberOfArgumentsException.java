@@ -1,8 +1,8 @@
 /*
  * WrongNumberOfArgumentsException.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: WrongNumberOfArgumentsException.java,v 1.4 2003-03-06 04:27:07 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: WrongNumberOfArgumentsException.java,v 1.5 2004-02-04 15:11:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class WrongNumberOfArgumentsException extends ProgramError
 
     public String getMessage()
     {
-        StringBuffer sb = new StringBuffer("wrong number of arguments");
+        StringBuffer sb = new StringBuffer("Wrong number of arguments");
         if (name != null) {
             sb.append(" for ");
             sb.append(name);
@@ -48,6 +48,7 @@ public final class WrongNumberOfArgumentsException extends ProgramError
             sb.append(" for ");
             sb.append(object.getName());
         }
+        sb.append('.');
         return sb.toString();
     }
 }
