@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.326 2003-08-14 17:15:13 piso Exp $
+ * $Id: Primitives.java,v 1.327 2003-08-15 01:18:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -309,11 +309,7 @@ public final class Primitives extends Module
             case SPECIAL_OPERATOR_P:            // ### special-operator-p
                 return arg.getSymbolFunction() instanceof SpecialOperator ? T : NIL;
             case ENDP:                          // ### endp
-                if (arg == NIL)
-                    return T;
-                if (arg instanceof Cons)
-                    return NIL;
-                throw new TypeError(arg, "list");
+                return arg.ENDP();
             case EVENP:                         // ### evenp
                 return (Fixnum.getValue(arg) % 2) == 0 ? T : NIL;
             case ODDP:                          // ### oddp
