@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.15 2003-02-13 18:44:33 piso Exp $
+ * $Id: Primitives.java,v 1.16 2003-02-13 20:05:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1477,7 +1477,7 @@ public final class Primitives extends Module
             LispObject clauses = args.cdr();
             int depth = stack.size();
             try {
-                return progn(form, env);
+                return eval(form, env);
             }
             catch (LispException e) {
                 stack.setSize(depth);
