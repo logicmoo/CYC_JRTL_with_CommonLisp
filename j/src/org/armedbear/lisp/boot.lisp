@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.137 2003-12-14 17:15:31 piso Exp $
+;;; $Id: boot.lisp,v 1.138 2003-12-16 17:02:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -78,11 +78,13 @@
   (find-package "KEYWORD"))
 
 (defun read-conditional (stream subchar int)
-  (cond (*read-suppress* (read stream t nil t) (values))
-        ((eql subchar (read-feature stream)) (read stream t nil t))
-        (t (let* ((*read-suppress* t))
-             (read stream t nil t)
-             (values)))))
+  (cond (*read-suppress*
+         (read stream t nil t))
+        ((eql subchar (read-feature stream))
+         (read stream t nil t))
+        (t
+         (let* ((*read-suppress* t))
+           (read stream t nil t)))))
 
 (defun read-feature (stream)
   (let* ((f (let* ((*package* *keyword-package*))
