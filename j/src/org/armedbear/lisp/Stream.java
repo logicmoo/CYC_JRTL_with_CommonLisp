@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.84 2004-09-28 14:06:12 piso Exp $
+ * $Id: Stream.java,v 1.85 2004-09-28 15:02:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -625,10 +625,8 @@ public class Stream extends LispObject
         sb.append(c);
         final LispThread thread = LispThread.currentThread();
         BitSet flags = _readToken(sb, thread);
-
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
-
         final Readtable rt = currentReadtable(thread);
         final LispObject readtableCase = rt.getReadtableCase();
         final String token;
@@ -701,7 +699,7 @@ public class Stream extends LispObject
                     }
                 }
                 final int radix = getReadBase(thread);
-                if ("-+0123456789".indexOf(firstChar) >= 0) {
+                if ("+-.0123456789".indexOf(firstChar) >= 0) {
                     LispObject number = makeNumber(token, length, radix);
                     if (number != null)
                         return number;
