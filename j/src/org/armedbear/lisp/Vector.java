@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.24 2003-09-19 01:46:42 piso Exp $
+ * $Id: Vector.java,v 1.25 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -174,7 +174,7 @@ public class Vector extends AbstractVector
         }
         if (n == elements.length)
             return;
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     public LispObject reverse() throws ConditionThrowable

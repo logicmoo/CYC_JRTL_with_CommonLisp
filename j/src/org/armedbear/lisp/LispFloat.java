@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.47 2003-09-19 12:43:59 piso Exp $
+ * $Id: LispFloat.java,v 1.48 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -355,7 +355,7 @@ public final class LispFloat extends LispObject
             thread.setValues(values);
             return values[0];
         }
-        throw new LispError("LispFloat.truncate(): not implemented: " + obj.typeOf());
+        throw new ConditionThrowable(new LispError("LispFloat.truncate(): not implemented: " + obj.typeOf()));
     }
 
     public int hashCode()

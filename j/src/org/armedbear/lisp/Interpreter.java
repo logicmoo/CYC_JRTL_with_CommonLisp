@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.33 2003-09-19 12:32:13 piso Exp $
+ * $Id: Interpreter.java,v 1.34 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,7 @@ public final class Interpreter extends Lisp
                 if (ldArgs != null)
                     args = ldArgs;
                 else
-                    throw new LispError("ld: no previous file");
+                    throw new ConditionThrowable(new LispError("ld: no previous file"));
             }
             if (args != null && args.length() > 0) {
                 ldArgs = args;
@@ -337,7 +337,7 @@ public final class Interpreter extends Lisp
                         new LispString(file.getCanonicalPath()));
                 }
                 catch (IOException e) {
-                    throw new LispError(e.getMessage());
+                    throw new ConditionThrowable(new LispError(e.getMessage()));
                 }
             }
             LispString string =

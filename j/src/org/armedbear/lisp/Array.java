@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.13 2003-09-19 11:50:18 piso Exp $
+ * $Id: Array.java,v 1.14 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,13 +79,13 @@ public final class Array extends AbstractArray
                 data[index] = contents;
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                throw new LispError("bad initial contents for array");
+                throw new ConditionThrowable(new LispError("bad initial contents for array"));
             }
             ++index;
         } else {
             int dim = dims[0];
             if (dim != contents.length())
-                throw new LispError("bad initial contents for array");
+                throw new ConditionThrowable(new LispError("bad initial contents for array"));
             int[] newDims = new int[dims.length-1];
             for (int i = 1; i < dims.length; i++)
                 newDims[i-1] = dims[i];

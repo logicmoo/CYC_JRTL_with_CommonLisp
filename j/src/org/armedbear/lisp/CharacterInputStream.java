@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.49 2003-09-19 12:32:13 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.50 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,7 +187,7 @@ public class CharacterInputStream extends LispStream
                     char nextChar = (char) n;
                     if (isTokenDelimiter(nextChar)) {
                         if (last == null)
-                            throw new LispError("nothing appears before . in list");
+                            throw new ConditionThrowable(new LispError("nothing appears before . in list"));
                         LispObject obj = read(true, NIL, true);
                         last.setCdr(obj);
                         continue;
@@ -234,7 +234,7 @@ public class CharacterInputStream extends LispStream
 
     private LispObject readRightParen() throws ConditionThrowable
     {
-        throw new LispError("unmatched right parenthesis");
+        throw new ConditionThrowable(new LispError("unmatched right parenthesis"));
     }
 
     private LispObject readComment() throws ConditionThrowable
@@ -347,7 +347,7 @@ public class CharacterInputStream extends LispStream
                     return readHex();
                 default:
                     //clearInput();
-                    //throw new LispError("unsupported '#' macro character '" +
+                    //throw new ConditionThrowable(new LispError("unsupported '#' macro character '" +
                     //    c + '\'');
                     return null;
             }
@@ -385,7 +385,7 @@ public class CharacterInputStream extends LispStream
             n = nameToChar(token);
             if (n >= 0)
                 return LispCharacter.getInstance((char)n);
-            throw new LispError("unrecognized character name: " + token);
+            throw new ConditionThrowable(new LispError("unrecognized character name: " + token));
         }
         catch (IOException e) {
             throw new ConditionThrowable(new StreamError(e));
@@ -517,7 +517,7 @@ public class CharacterInputStream extends LispStream
         LispObject obj = read(true, NIL, true);
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
-        throw new LispError("invalid complex number format #C" + obj);
+        throw new ConditionThrowable(new LispError("invalid complex number format #C" + obj));
     }
 
     private String readMultipleEscape() throws ConditionThrowable
@@ -619,8 +619,8 @@ public class CharacterInputStream extends LispStream
             String symbolName = token.substring(index + 2);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                throw new LispError("package \"" + packageName +
-                    "\" not found");
+                throw new ConditionThrowable(new LispError("package \"" + packageName +
+                                                           "\" not found"));
             return pkg.intern(symbolName);
         }
         index = token.indexOf(':');
@@ -636,11 +636,13 @@ public class CharacterInputStream extends LispStream
                 return symbol;
             // Error!
             if (pkg.findInternalSymbol(symbolName) != null)
-                throw new LispError("symbol \"" + symbolName +
-                    "\" is not external in package " + packageName);
+                throw new ConditionThrowable(new LispError("symbol \"" + symbolName +
+                                                           "\" is not external in package " +
+                                                           packageName));
             else
-                throw new LispError("symbol \"" + symbolName +
-                    "\" not found in package " + packageName);
+                throw new ConditionThrowable(new LispError("symbol \"" + symbolName +
+                                                           "\" not found in package " +
+                                                           packageName));
         }
         // Intern token in current package.
         return ((Package)_PACKAGE_.symbolValueNoThrow(thread)).intern(token);
@@ -758,7 +760,7 @@ public class CharacterInputStream extends LispStream
             }
             catch (NumberFormatException e) {}
             // Not a number.
-            throw new LispError();
+            throw new ConditionThrowable(new LispError());
         }
         catch (IOException e) {
             throw new ConditionThrowable(new StreamError(e));
@@ -796,7 +798,7 @@ public class CharacterInputStream extends LispStream
             }
             catch (NumberFormatException e) {}
             // Not a number.
-            throw new LispError();
+            throw new ConditionThrowable(new LispError());
         }
         catch (IOException e) {
             throw new ConditionThrowable(new StreamError(e));

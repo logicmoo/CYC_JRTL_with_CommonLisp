@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.9 2003-09-19 11:50:18 piso Exp $
+ * $Id: Java.java,v 1.10 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,10 +37,10 @@ public final class Java extends Module
                 return new JavaObject(Class.forName(LispString.getValue(arg)));
             }
             catch (ClassNotFoundException e) {
-                throw new LispError("class not found: " + arg);
+                throw new ConditionThrowable(new LispError("class not found: " + arg));
             }
             catch (Throwable t) {
-                throw new LispError(getMessage(t));
+                throw new ConditionThrowable(new LispError(getMessage(t)));
             }
         }
     };
@@ -64,13 +64,13 @@ public final class Java extends Module
                 return new JavaObject(c.getConstructor(parameterTypes));
             }
             catch (ClassNotFoundException e) {
-                throw new LispError("class not found: " + className);
+                throw new ConditionThrowable(new LispError("class not found: " + className));
             }
             catch (NoSuchMethodException e) {
-                throw new LispError("no such constructor");
+                throw new ConditionThrowable(new LispError("no such constructor"));
             }
             catch (Throwable t) {
-                throw new LispError(getMessage(t));
+                throw new ConditionThrowable(new LispError(getMessage(t)));
             }
         }
     };
@@ -112,16 +112,16 @@ public final class Java extends Module
                             return new JavaObject(method);
                     }
                 }
-                throw new LispError("no such method");
+                throw new ConditionThrowable(new LispError("no such method"));
             }
             catch (ClassNotFoundException e) {
-                throw new LispError("class not found: " + className);
+                throw new ConditionThrowable(new LispError("class not found: " + className));
             }
             catch (NoSuchMethodException e) {
-                throw new LispError("no such method");
+                throw new ConditionThrowable(new LispError("no such method"));
             }
             catch (Throwable t) {
-                throw new LispError(getMessage(t));
+                throw new ConditionThrowable(new LispError(getMessage(t)));
             }
         }
     };
@@ -164,7 +164,7 @@ public final class Java extends Module
                             }
                         }
                         if (m == null)
-                            throw new LispError("no such method");
+                            throw new ConditionThrowable(new LispError("no such method"));
                     }
                 } else
                     throw new ConditionThrowable(new TypeError(methodRef));
@@ -182,7 +182,7 @@ public final class Java extends Module
                 return makeLispObject(result);
             }
             catch (Throwable t) {
-                throw new LispError(getMessage(t));
+                throw new ConditionThrowable(new LispError(getMessage(t)));
             }
         }
     };
@@ -208,7 +208,7 @@ public final class Java extends Module
                 return new JavaObject(constructor.newInstance(initargs));
             }
             catch (Throwable t) {
-                throw new LispError(getMessage(t));
+                throw new ConditionThrowable(new LispError(getMessage(t)));
             }
         }
     };
@@ -241,7 +241,7 @@ public final class Java extends Module
                 return makeLispObject(result);
             }
             catch (Throwable t) {
-                throw new LispError(getMessage(t));
+                throw new ConditionThrowable(new LispError(getMessage(t)));
             }
         }
     };

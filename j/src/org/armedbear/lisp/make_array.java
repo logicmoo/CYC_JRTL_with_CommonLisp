@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_array.java,v 1.5 2003-09-19 11:50:19 piso Exp $
+ * $Id: make_array.java,v 1.6 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,8 @@ public final class make_array extends Primitive {
         LispObject displacedTo = args[7];
         LispObject displacedIndexOffset = args[8];
         if (initialElementProvided != NIL && initialContents != NIL) {
-            throw new LispError("MAKE-ARRAY: cannot specify both " +
-                                ":INITIAL-ELEMENT AND :INITIAL-CONTENTS");
+            throw new ConditionThrowable(new LispError("MAKE-ARRAY: cannot specify both " +
+                                                       ":INITIAL-ELEMENT AND :INITIAL-CONTENTS"));
         }
         final int rank = dimensions.listp() ? dimensions.length() : 1;
         int[] dimv = new int[rank];
@@ -64,9 +64,9 @@ public final class make_array extends Primitive {
             else
                 offset = 0;
             if (initialElementProvided != NIL)
-                throw new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO");
+                throw new ConditionThrowable(new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO"));
             if (initialContents != NIL)
-                throw new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO");
+                throw new ConditionThrowable(new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO"));
             return new DisplacedArray(dimv, array, offset);
         }
         if (rank == 1) {
@@ -84,7 +84,7 @@ public final class make_array extends Primitive {
                     sb.append(')');
                 } else
                     sb.append(" is negative");
-                throw new LispError(sb.toString());
+                throw new ConditionThrowable(new LispError(sb.toString()));
             }
             AbstractVector v;
             LispObject upgradedType =

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.412 2003-09-19 14:27:41 piso Exp $
+ * $Id: Primitives.java,v 1.413 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1085,7 +1085,7 @@ public final class Primitives extends Module
         {
             int index = Fixnum.getValue(first);
             if (index < 0)
-                throw new LispError("bad index to NTH: " + index);
+                throw new ConditionThrowable(new LispError("bad index to NTH: " + index));
             int i = 0;
             while (true) {
                 if (i == index)
@@ -1107,7 +1107,7 @@ public final class Primitives extends Module
         {
             int index = Fixnum.getValue(first);
             if (index < 0)
-                throw new LispError("bad index to NTH: " + index);
+                throw new ConditionThrowable(new LispError("bad index to NTH: " + index));
             int i = 0;
             while (true) {
                 if (i == index) {
@@ -1116,7 +1116,7 @@ public final class Primitives extends Module
                 }
                 second = second.cdr();
                 if (second == NIL)
-                    throw new LispError(String.valueOf(index) +
+                    throw new ConditionThrowable(new LispError(String.valueOf(index)) +
                         "is too large an index for SETF of NTH");
                 ++i;
             }
@@ -1200,7 +1200,7 @@ public final class Primitives extends Module
                 return NIL;
             }
             // Destination can also be stream or string with fill pointer.
-//             throw new LispError("FORMAT: not implemented");
+//             throw new ConditionThrowable(new LispError("FORMAT: not implemented"));
             return NIL;
         }
     };
@@ -1276,7 +1276,7 @@ public final class Primitives extends Module
                     sb.append(System.getProperty("line.separator"));
                 }
 //                 else
-//                     throw new LispError("FORMAT: not implemented");
+//                     throw new ConditionThrowable(new LispError("FORMAT: not implemented"));
                 state = NEUTRAL;
             } else {
                 // There are no other valid states.
@@ -1775,7 +1775,7 @@ public final class Primitives extends Module
                             LispObject[] handlerArgs = new LispObject[0];
                             return funcall(handler, handlerArgs, thread);
                         }
-                        throw new LispError("HANDLER-CASE: invalid handler clause");
+                        throw new ConditionThrowable(new LispError("HANDLER-CASE: invalid handler clause"));
                     }
                     clauses = clauses.cdr();
                 }
@@ -1807,8 +1807,6 @@ public final class Primitives extends Module
         if (type == Symbol.SIMPLE_ERROR)
             return c.getCondition() instanceof SimpleError;
         if (type == Symbol.ERROR) {
-            if (c instanceof LispError)
-                return true;
             Condition condition = c.getCondition();
             if (condition.typep(Symbol.ERROR) == T)
                 return true;
@@ -2152,7 +2150,7 @@ public final class Primitives extends Module
             if (fillPointer < 0)
                 throw new ConditionThrowable(new TypeError("array does not have a fill pointer"));
             if (fillPointer == 0)
-                throw new LispError("nothing left to pop");
+                throw new ConditionThrowable(new LispError("nothing left to pop"));
             int newFillPointer = v.checkIndex(fillPointer - 1);
             LispObject element = v.get(newFillPointer);
             v.setFillPointer(newFillPointer);
@@ -2620,8 +2618,8 @@ public final class Primitives extends Module
             Package pkg =
                 Packages.findPackage(packageName);
             if (pkg != null)
-                throw new LispError("package " + packageName +
-                    " already exists");
+                throw new ConditionThrowable(new LispError("package " + packageName +
+                                                           " already exists"));
             LispObject nicknames = checkList(second);
             if (nicknames != NIL) {
                 LispObject list = nicknames;
@@ -2645,7 +2643,7 @@ public final class Primitives extends Module
                         String s = javaString(obj);
                         Package p = Packages.findPackage(s);
                         if (p == null)
-                            throw new LispError(String.valueOf(obj) +
+                            throw new ConditionThrowable(new LispError(String.valueOf(obj)) +
                                                 " is not the name of a package");
                     }
                     list = list.cdr();
@@ -2668,7 +2666,7 @@ public final class Primitives extends Module
                     String s = javaString(obj);
                     Package p = Packages.findPackage(s);
                     if (p == null)
-                        throw new LispError(String.valueOf(obj) +
+                        throw new ConditionThrowable(new LispError(String.valueOf(obj)) +
                                             " is not the name of a package");
                     pkg.usePackage(p);
                 }
@@ -2908,7 +2906,7 @@ public final class Primitives extends Module
                         Debug.trace(t);
                     }
                 }
-                throw new LispError("unable to load ".concat(className));
+                throw new ConditionThrowable(new LispError("unable to load ".concat(className)));
             }
             symbol.setSymbolFunction(second);
             return second;
@@ -3227,7 +3225,7 @@ public final class Primitives extends Module
                 StringBuffer sb = new StringBuffer("no block named ");
                 sb.append(symbol.getName());
                 sb.append(" is currently visible");
-                throw new LispError(sb.toString());
+                throw new ConditionThrowable(new LispError(sb.toString()));
             }
             LispObject result;
             if (length == 2)
@@ -3527,7 +3525,7 @@ public final class Primitives extends Module
             } else if (obj instanceof Function) {
                 function = obj;
             } else
-                throw new LispError(String.valueOf(obj) + " is not a function name");
+                throw new ConditionThrowable(new LispError(String.valueOf(obj) + " is not a function name"));
             ArrayList arrayList = new ArrayList();
             while (args != NIL) {
                 LispObject form = args.car();
@@ -3602,7 +3600,7 @@ public final class Primitives extends Module
             if (args.length() != 1)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (eval(args.car(), env, LispThread.currentThread()) == NIL)
-                throw new LispError("assertion failed: " + args.car());
+                throw new ConditionThrowable(new LispError("assertion failed: " + args.car()));
             return NIL;
         }
     };
@@ -3706,8 +3704,8 @@ public final class Primitives extends Module
                 if (args[1] == Keyword.ABORT)
                     abort = args[2];
                 else
-                    throw new LispError(
-                        "CLOSE: unrecognized keyword argument: " + args[1]);
+                    throw new ConditionThrowable(new LispError(
+                        "CLOSE: unrecognized keyword argument: " + args[1]));
             }
             return stream.close(abort);
         }
@@ -4163,7 +4161,7 @@ public final class Primitives extends Module
             if (second instanceof Bignum) {
                 BigInteger count = ((Bignum)second).getValue();
                 if (count.signum() > 0)
-                    throw new LispError("can't represent result of left shift");
+                    throw new ConditionThrowable(new LispError("can't represent result of left shift"));
                 if (count.signum() < 0)
                     return Fixnum.ZERO;
                 Debug.bug(); // Shouldn't happen.
@@ -4216,7 +4214,7 @@ public final class Primitives extends Module
                     return new LispFloat(d);
                 }
             }
-            throw new LispError("EXPT: unsupported case");
+            throw new ConditionThrowable(new LispError("EXPT: unsupported case"));
         }
     };
 
@@ -4470,7 +4468,7 @@ public final class Primitives extends Module
             LispObject test = args[3];
             LispObject testNot = args[4];
             if (test != NIL && testNot != NIL)
-                throw new LispError("MEMBER: test and test-not both supplied");
+                throw new ConditionThrowable(new LispError("MEMBER: test and test-not both supplied"));
             if (test == NIL && testNot == NIL) {
                 test = EQL;
             } else if (test != NIL) {
@@ -4678,7 +4676,7 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof Complex)
-                throw new LispError("SQRT not implemented for complex numbers");
+                throw new ConditionThrowable(new LispError("SQRT not implemented for complex numbers"));
             if (arg.minusp())
                 return Complex.getInstance(new LispFloat(0),
                                            sqrt(Fixnum.ZERO.subtract(arg)));

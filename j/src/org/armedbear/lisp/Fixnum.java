@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.72 2003-09-19 12:43:59 piso Exp $
+ * $Id: Fixnum.java,v 1.73 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -466,7 +466,7 @@ public final class Fixnum extends LispObject
             values[0] = quotient;
             values[1] = remainder;
         } else
-            throw new LispError("Fixnum.truncate(): not implemented: " + obj.typeOf());
+            throw new ConditionThrowable(new LispError("Fixnum.truncate(): not implemented: " + obj.typeOf()));
         thread.setValues(values);
         return values[0];
     }

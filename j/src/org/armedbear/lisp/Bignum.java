@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.44 2003-09-19 11:50:18 piso Exp $
+ * $Id: Bignum.java,v 1.45 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -402,7 +402,7 @@ public final class Bignum extends LispObject
             values[0] = quotient;
             values[1] = remainder;
         } else
-            throw new LispError("Bignum.truncate(): not implemented: " + obj.typeOf());
+            throw new ConditionThrowable(new LispError("Bignum.truncate(): not implemented: " + obj.typeOf()));
         thread.setValues(values);
         return values[0];
     }

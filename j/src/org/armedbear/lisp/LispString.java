@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.59 2003-09-19 11:50:18 piso Exp $
+ * $Id: LispString.java,v 1.60 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,7 +164,7 @@ public final class LispString extends AbstractVector
         }
         if (n == array.length)
             return;
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     public LispObject reverse() throws ConditionThrowable
@@ -293,7 +293,7 @@ public final class LispString extends AbstractVector
 
     public LispObject remove(LispObject item) throws ConditionThrowable
     {
-        throw new LispError("not implemented");
+        throw new ConditionThrowable(new LispError("not implemented"));
     }
 
     private int cachedHashCode;
@@ -349,7 +349,7 @@ public final class LispString extends AbstractVector
                     sb.append(')');
                 } else
                     sb.append(" is negative");
-                throw new LispError(sb.toString());
+                throw new ConditionThrowable(new LispError(sb.toString()));
             }
             // Ignore elementType.
             LispString string = new LispString(n);

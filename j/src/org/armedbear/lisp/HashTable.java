@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.19 2003-09-19 11:50:18 piso Exp $
+ * $Id: HashTable.java,v 1.20 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ public final class HashTable extends LispObject
         else if (test == Symbol.EQUALP.getSymbolFunction())
             this.test = TEST_EQUALP;
         else
-            throw new LispError("MAKE-HASH-TABLE:  test " + test);
+            throw new ConditionThrowable(new LispError("MAKE-HASH-TABLE:  test " + test));
         // Ignore rehashSize and rehashThreshold.
         buckets = new HashEntry[size];
         threshold = (int) (size * loadFactor);

@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.18 2003-09-19 01:46:41 piso Exp $
+ * $Id: Load.java,v 1.19 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public final class Load extends Lisp
             }
         }
         if (!isFile)
-            throw new LispError("file not found: " + filename);
+            throw new ConditionThrowable(new LispError("file not found: " + filename));
         String truename = filename;
         InputStream in = null;
         try {
@@ -104,17 +104,17 @@ public final class Load extends Lisp
             truename = file.getCanonicalPath();
         }
         catch (FileNotFoundException e) {
-            throw new LispError("file not found: " + filename);
+            throw new ConditionThrowable(new LispError("file not found: " + filename));
         }
         catch (IOException e) {
-            throw new LispError(e.getMessage());
+            throw new ConditionThrowable(new LispError(e.getMessage()));
         }
         LispObject result = loadFileFromStream(truename, in, verbose, print);
         try {
             in.close();
         }
         catch (IOException e) {
-            throw new LispError(e.getMessage());
+            throw new ConditionThrowable(new LispError(e.getMessage()));
         }
         return result;
     }
@@ -154,11 +154,11 @@ public final class Load extends Lisp
                 in.close();
             }
             catch (IOException e) {
-                throw new LispError(e.getMessage());
+                throw new ConditionThrowable(new LispError(e.getMessage()));
             }
             return result;
         }
-        throw new LispError("file not found: " + filename);
+        throw new ConditionThrowable(new LispError("file not found: " + filename));
     }
 
     private static final LispObject loadFileFromStream(String truename,
@@ -205,7 +205,8 @@ public final class Load extends Lisp
     }
 
     private static final LispObject loadStream(InputStream inputStream,
-        boolean print) throws ConditionThrowable
+                                               boolean print)
+        throws ConditionThrowable
     {
         CharacterInputStream in = new CharacterInputStream(inputStream);
         try {
@@ -224,7 +225,7 @@ public final class Load extends Lisp
             }
             return T;
         }
-        catch (LispError e) {
+        catch (ConditionThrowable t) {
             CharacterOutputStream out = getStandardOutput();
             String truename = null;
             LispObject obj = _LOAD_TRUENAME_.symbolValueNoThrow();
@@ -241,7 +242,7 @@ public final class Load extends Lisp
             sb.append(in.getOffset());
             sb.append(')');
             out.writeLine(sb.toString());
-            throw e;
+            throw t;
         }
     }
 

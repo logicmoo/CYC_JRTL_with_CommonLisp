@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: open.java,v 1.4 2003-09-19 11:50:19 piso Exp $
+ * $Id: open.java,v 1.5 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,21 +49,21 @@ public final class open extends Lisp
             else if (elementType == Symbol.UNSIGNED_BYTE)
                 binary = true;
             else
-                throw new LispError(String.valueOf(elementType).concat(
-                    " is not a valid stream element type"));
+                throw new ConditionThrowable(new LispError(
+                    String.valueOf(elementType).concat(" is not a valid stream element type")));
             File file = new File(namestring);
             LispObject ifExists = third;
             if (ifExists == Keyword.SUPERSEDE) {
                 ;
             } else if (ifExists == Keyword.ERROR) {
                 if (file.exists())
-                    throw new LispError("file already exists: " + first);
+                    throw new ConditionThrowable(new LispError("file already exists: " + first));
             } else if (ifExists == NIL) {
                 if (file.exists())
                     return NIL;
             } else {
                 // FIXME
-                throw new LispError(String.valueOf(ifExists) +
+                throw new ConditionThrowable(new LispError(String.valueOf(ifExists)) +
                                     " is not a recognized value for :IF-EXISTS");
             }
             try {
@@ -73,7 +73,7 @@ public final class open extends Lisp
                     return new CharacterOutputStream(new FileOutputStream(file));
             }
             catch (FileNotFoundException e) {
-                throw new LispError("unable to create file: " + first);
+                throw new ConditionThrowable(new LispError("unable to create file: " + first));
             }
         }
     };
@@ -98,8 +98,8 @@ public final class open extends Lisp
             else if (elementType == Symbol.UNSIGNED_BYTE)
                 binary = true;
             else
-                throw new LispError(String.valueOf(elementType).concat(
-                    " is not a valid stream element type"));
+                throw new ConditionThrowable(new LispError(
+                    String.valueOf(elementType).concat(" is not a valid stream element type")));
             try {
                 if (binary)
                     return new BinaryInputStream(new FileInputStream(namestring));
@@ -107,7 +107,7 @@ public final class open extends Lisp
                     return new CharacterInputStream(new FileInputStream(namestring));
             }
             catch (FileNotFoundException e) {
-                throw new LispError(" file not found: " + first);
+                throw new ConditionThrowable(new LispError(" file not found: " + first));
             }
         }
     };

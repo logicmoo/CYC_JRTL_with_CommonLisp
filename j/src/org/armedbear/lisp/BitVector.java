@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.24 2003-09-19 11:50:18 piso Exp $
+ * $Id: BitVector.java,v 1.25 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -251,7 +251,7 @@ public final class BitVector extends AbstractVector
         }
         if (n == capacity)
             return;
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     public boolean isSimpleVector()

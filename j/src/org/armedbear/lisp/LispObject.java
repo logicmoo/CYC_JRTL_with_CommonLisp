@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.58 2003-09-19 11:50:18 piso Exp $
+ * $Id: LispObject.java,v 1.59 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -348,39 +348,39 @@ public class LispObject extends Lisp
     public LispObject execute(LispObject args, Environment env)
         throws ConditionThrowable
     {
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     // Primitive
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     // Primitive0
     public LispObject execute() throws ConditionThrowable
     {
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     // Primitive1
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     // Primitive2
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     // Primitive3
     public LispObject execute(LispObject first, LispObject second,
         LispObject third) throws ConditionThrowable
     {
-        throw new LispError();
+        throw new ConditionThrowable(new LispError());
     }
 
     public LispObject incr() throws ConditionThrowable

@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: probe_file.java,v 1.4 2003-09-19 11:50:19 piso Exp $
+ * $Id: probe_file.java,v 1.5 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ public final class probe_file extends Lisp
                 return new LispString(file.getCanonicalPath());
             }
             catch (IOException e) {
-                throw new LispError(e.getMessage());
+                throw new ConditionThrowable(new LispError(e.getMessage()));
             }
         }
     };

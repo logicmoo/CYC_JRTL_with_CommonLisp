@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.138 2003-09-19 12:43:59 piso Exp $
+ * $Id: Lisp.java,v 1.139 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -828,7 +828,7 @@ public abstract class Lisp
     {
         Package pkg = Packages.findPackage(packageName);
         if (pkg == null)
-            throw new LispError(packageName + " is not the name of a package");
+            throw new ConditionThrowable(new LispError(packageName + " is not the name of a package"));
         return pkg.intern(name);
     }
 

@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.18 2003-09-19 12:20:34 piso Exp $
+ * $Id: PackageFunctions.java,v 1.19 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -286,9 +286,9 @@ public final class PackageFunctions extends Lisp
                     if (sym != null)
                         pkg.shadowingImport(sym);
                     else
-                        throw new LispError(symbolName +
-                                            " not found in package " +
-                                            otherPkg.getName());
+                        throw new ConditionThrowable(new LispError(symbolName +
+                                                                   " not found in package " +
+                                                                   otherPkg.getName()));
                     symbolNames = symbolNames.cdr();
                 }
                 shadowingImports = shadowingImports.cdr();
@@ -302,7 +302,7 @@ public final class PackageFunctions extends Lisp
                     LispString string = string(obj);
                     Package p = Packages.findPackage(string.getValue());
                     if (p == null)
-                        throw new LispError(String.valueOf(obj) +
+                        throw new ConditionThrowable(new LispError(String.valueOf(obj)) +
                                             " is not the name of a package");
                     pkg.usePackage(p);
                 }
@@ -319,9 +319,9 @@ public final class PackageFunctions extends Lisp
                     if (sym != null)
                         pkg.importSymbol(sym);
                     else
-                        throw new LispError(symbolName +
-                                            " not found in package " +
-                                            otherPkg.getName());
+                        throw new ConditionThrowable(new LispError(symbolName +
+                                                                   " not found in package " +
+                                                                   otherPkg.getName()));
                     symbolNames = symbolNames.cdr();
                 }
                 imports = imports.cdr();

@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.45 2003-09-19 12:20:34 piso Exp $
+ * $Id: Package.java,v 1.46 2003-09-19 14:44:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,7 +385,7 @@ public final class Package extends LispObject
                             sb.append(sym.getQualifiedName());
                             sb.append(" is already accessible in package ");
                             sb.append(pkg.getName());
-                            throw new LispError(sb.toString());
+                            throw new ConditionThrowable(new LispError(sb.toString()));
                         }
                     }
                 }

@@ -147,13 +147,13 @@ public abstract class AbstractVector extends AbstractArray
                 sb.append(") exceeds the capacity of the vector (");
                 sb.append(capacity());
                 sb.append(")");
-                throw new LispError(sb.toString());
+                throw new ConditionThrowable(new LispError(sb.toString()));
             }
             if (n < 0) {
                 StringBuffer sb = new StringBuffer("the new fill pointer (");
                 sb.append(n);
                 sb.append(") is negative");
-                throw new LispError(sb.toString());
+                throw new ConditionThrowable(new LispError(sb.toString()));
             }
             fillPointer = n;
         }
