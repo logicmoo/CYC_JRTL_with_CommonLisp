@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.59 2003-05-23 17:37:44 piso Exp $
+ * $Id: Editor.java,v 1.60 2003-05-28 13:45:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7179,9 +7179,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     {
         String modeName =
             InputDialog.showInputDialog(this, "New mode:", "Change Mode");
-        if (modeName != null || modeName.length() > 0) {
-            repaintNow();
-            mode(modeName);
+        if (modeName != null) {
+            modeName = modeName.trim();
+            if (modeName.length() > 0) {
+                repaintNow();
+                mode(modeName);
+            }
         }
     }
 
