@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.191 2003-12-20 14:29:05 piso Exp $
+ * $Id: Lisp.java,v 1.192 2003-12-20 15:05:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1049,14 +1049,17 @@ public abstract class Lisp
         return null;
     }
 
-    public static final boolean memq(LispObject item, LispObject list)
+    public static final boolean memq(LispObject item, LispObject listArg)
         throws ConditionThrowable
     {
+        LispObject list = listArg;
         while (list instanceof Cons) {
             if (item == list.car())
                 return true;
             list = list.cdr();
         }
+        if (list != NIL)
+            signal(new TypeError(String.valueOf(listArg) + " is not a proper list."));
         return false;
     }
 
