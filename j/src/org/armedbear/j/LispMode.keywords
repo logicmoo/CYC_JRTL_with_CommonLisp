@@ -391,6 +391,7 @@ stringp
 subseq
 subst
 svref
+sxhash
 symbol-function
 symbol-macrolet
 symbol-name
