@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.5 2004-02-24 22:35:46 piso Exp $
+ * $Id: ComplexVector.java,v 1.6 2004-02-25 03:06:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,15 +261,17 @@ public final class ComplexVector extends AbstractVector
 
     public void shrink(int n) throws ConditionThrowable
     {
-        if (n < elements.length) {
-            LispObject[] newArray = new LispObject[n];
-            System.arraycopy(elements, 0, newArray, 0, n);
-            elements = newArray;
-            capacity = n;
-            return;
+        if (elements != null) {
+            if (n < elements.length) {
+                LispObject[] newArray = new LispObject[n];
+                System.arraycopy(elements, 0, newArray, 0, n);
+                elements = newArray;
+                capacity = n;
+                return;
+            }
+            if (n == elements.length)
+                return;
         }
-        if (n == elements.length)
-            return;
         signal(new LispError());
     }
 
