@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.99 2004-01-30 20:16:05 piso Exp $
+;;; $Id: autoloads.lisp,v 1.100 2004-02-01 16:48:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -134,6 +134,7 @@
 (autoload-macro 'assert)
 (autoload 'logical-pathname-translations)
 (autoload-macro 'with-input-from-string)
+(autoload-macro 'with-output-to-string)
 (autoload 'ensure-directories-exist)
 (autoload 'coerce)
 (autoload 'read-sequence)
