@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.11 2004-01-28 20:19:22 piso Exp $
+ * $Id: StringInputStream.java,v 1.12 2004-01-31 01:18:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,9 +50,27 @@ public final class StringInputStream extends Stream
         offset = start;
     }
 
+    public LispObject typeOf()
+    {
+        return Symbol.STRING_INPUT_STREAM;
+    }
+
     public LispClass classOf()
     {
-        return BuiltInClass.STRING_STREAM;
+        return BuiltInClass.STRING_INPUT_STREAM;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.STRING_INPUT_STREAM)
+            return T;
+        if (type == Symbol.STRING_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_INPUT_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_STREAM)
+            return T;
+        return super.typep(type);
     }
 
     public LispObject close(LispObject abort) throws ConditionThrowable
@@ -84,6 +102,11 @@ public final class StringInputStream extends Stream
     protected boolean _charReady()
     {
         return true;
+    }
+
+    public String toString()
+    {
+        return unreadableString("STRING-INPUT-STREAM");
     }
 
     // ### make-string-input-stream
