@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: format.lisp,v 1.1 2003-10-05 00:42:51 piso Exp $
+;;; $Id: format.lisp,v 1.2 2003-10-08 17:50:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,6 +31,9 @@
 ;;; Written by William Lott, with lots of stuff stolen from the previous
 ;;; version by David Adam and later rewritten by Bill Maddox.
 ;;;
+
+#+armedbear
+(sys::resolve 'write-string)
 
 #+armedbear
 (defpackage "FORMAT" (:use "CL" "EXT"))
