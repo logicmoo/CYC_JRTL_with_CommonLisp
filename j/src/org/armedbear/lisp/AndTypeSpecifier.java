@@ -2,7 +2,7 @@
  * AndTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AndTypeSpecifier.java,v 1.1 2003-08-14 01:54:44 piso Exp $
+ * $Id: AndTypeSpecifier.java,v 1.2 2003-09-11 16:15:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public final class AndTypeSpecifier extends CompoundTypeSpecifier
     public AndTypeSpecifier(Cons args)
     {
         Debug.assertTrue(args.car() == Symbol.AND);
-        this.types = args.cdr();
+        types = args.cdr();
     }
 
     public LispObject test(LispObject obj) throws LispError
