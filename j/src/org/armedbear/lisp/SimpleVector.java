@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.11 2004-03-04 01:56:53 piso Exp $
+ * $Id: SimpleVector.java,v 1.12 2004-03-15 19:31:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,10 +54,9 @@ public final class SimpleVector extends AbstractVector
         return list2(Symbol.SIMPLE_VECTOR, new Fixnum(capacity));
     }
 
-    // FIXME BuiltInClass.SIMPLE_VECTOR
     public LispClass classOf()
     {
-        return BuiltInClass.VECTOR;
+        return BuiltInClass.SIMPLE_VECTOR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
@@ -66,7 +65,10 @@ public final class SimpleVector extends AbstractVector
             return T;
         if (type == Symbol.SIMPLE_ARRAY)
             return T;
-        // FIXME BuiltInClass.SIMPLE_VECTOR, BuiltInClass.SIMPLE_ARRAY
+        if (type == BuiltInClass.SIMPLE_VECTOR)
+            return T;
+        if (type == BuiltInClass.SIMPLE_ARRAY)
+            return T;
         return super.typep(type);
     }
 
