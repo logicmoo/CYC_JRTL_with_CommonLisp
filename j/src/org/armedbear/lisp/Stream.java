@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.37 2004-03-08 19:51:47 piso Exp $
+ * $Id: Stream.java,v 1.38 2004-03-10 01:52:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1262,6 +1262,31 @@ public class Stream extends LispObject
                 charPos = 0;
             } else
                 ++charPos;
+        }
+        catch (IOException e) {
+            signal(new StreamError(this, e));
+        }
+    }
+
+    public void _writeChars(char[] chars, int start, int end)
+        throws ConditionThrowable
+    {
+        try {
+            writer.write(chars, start, end - start);
+            int index = -1;
+            for (int i = end; i-- > start;) {
+                if (chars[i] == '\n') {
+                    index = i;
+                    break;
+                }
+            }
+            if (index < 0) {
+                // No newline.
+                charPos += (end - start);
+            } else {
+                charPos = end - (index + 1);
+                writer.flush();
+            }
         }
         catch (IOException e) {
             signal(new StreamError(this, e));

@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StringOutputStream.java,v 1.13 2004-02-23 14:24:48 piso Exp $
+ * $Id: StringOutputStream.java,v 1.14 2004-03-10 01:56:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,14 @@ public final class StringOutputStream extends Stream
         super._writeChar(c);
     }
 
+    public void _writeChars(char[] chars, int start, int end)
+        throws ConditionThrowable
+    {
+        if (elementType == NIL)
+            writeError();
+        super._writeChars(chars, start, end);
+    }
+
     public void _writeString(String s) throws ConditionThrowable
     {
         if (elementType == NIL)
@@ -102,9 +110,10 @@ public final class StringOutputStream extends Stream
     {
         if (elementType == NIL)
             return new NilVector(0);
-        String s = stringWriter.toString();
-        stringWriter.getBuffer().setLength(0);
-        return new SimpleString(s);
+        StringBuffer sb = stringWriter.getBuffer();
+        SimpleString s = new SimpleString(sb);
+        sb.setLength(0);
+        return s;
     }
 
     public String toString()
@@ -131,9 +140,12 @@ public final class StringOutputStream extends Stream
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof StringOutputStream)
+            try {
                 return ((StringOutputStream)arg).getString();
-            return signal(new TypeError(this, Symbol.STRING_OUTPUT_STREAM));
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(this, Symbol.STRING_OUTPUT_STREAM));
+            }
         }
     };
 }

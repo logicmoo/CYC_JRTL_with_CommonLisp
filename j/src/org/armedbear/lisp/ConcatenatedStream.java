@@ -2,7 +2,7 @@
  * ConcatenatedStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ConcatenatedStream.java,v 1.2 2004-03-05 16:10:22 piso Exp $
+ * $Id: ConcatenatedStream.java,v 1.3 2004-03-10 01:54:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,6 +145,12 @@ public final class ConcatenatedStream extends Stream
     }
 
     public void _writeChar(char c) throws ConditionThrowable
+    {
+        outputStreamError();
+    }
+
+    public void _writeChars(char[] chars, int start, int end)
+        throws ConditionThrowable
     {
         outputStreamError();
     }

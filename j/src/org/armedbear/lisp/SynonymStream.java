@@ -2,7 +2,7 @@
  * SynonymStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SynonymStream.java,v 1.2 2004-02-01 16:50:54 piso Exp $
+ * $Id: SynonymStream.java,v 1.3 2004-03-10 01:55:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,6 +102,12 @@ public final class SynonymStream extends Stream
     public void _writeChar(char c) throws ConditionThrowable
     {
         checkStream(symbol.symbolValue())._writeChar(c);
+    }
+
+    public void _writeChars(char[] chars, int start, int end)
+        throws ConditionThrowable
+    {
+        checkStream(symbol.symbolValue())._writeChars(chars, start, end);
     }
 
     public void _writeString(String s) throws ConditionThrowable

@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.10 2004-03-05 16:10:22 piso Exp $
+ * $Id: FileStream.java,v 1.11 2004-03-10 01:56:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -174,6 +174,12 @@ public final class FileStream extends Stream
         catch (IOException e) {
             signal(new StreamError(this, e));
         }
+    }
+
+    public void _writeChars(char[] chars, int start, int end)
+        throws ConditionThrowable
+    {
+        _writeString(new String(chars, start, end - start));
     }
 
     public void _writeString(String s) throws ConditionThrowable

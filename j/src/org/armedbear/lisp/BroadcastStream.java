@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: BroadcastStream.java,v 1.6 2004-02-15 17:52:28 piso Exp $
+ * $Id: BroadcastStream.java,v 1.7 2004-03-10 01:54:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,6 +113,13 @@ public final class BroadcastStream extends Stream
     {
         for (int i = 0; i < streams.length; i++)
             streams[i]._writeChar(c);
+    }
+
+    public void _writeChars(char[] chars, int start, int end)
+        throws ConditionThrowable
+    {
+        for (int i = 0; i < streams.length; i++)
+            streams[i]._writeChars(chars, start, end);
     }
 
     public void _writeString(String s) throws ConditionThrowable
