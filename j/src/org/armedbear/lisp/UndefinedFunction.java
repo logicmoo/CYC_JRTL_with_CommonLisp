@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: UndefinedFunction.java,v 1.8 2004-01-27 18:05:08 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.9 2004-04-24 12:46:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,11 @@ public final class UndefinedFunction extends CellError
     {
         LispObject cellName = getCellName();
         StringBuffer sb = new StringBuffer("The function ");
-        sb.append(String.valueOf(cellName));
+        // FIXME
+        try {
+            sb.append(cellName.writeToString());
+        }
+        catch (Throwable t) {}
         sb.append(" is undefined.");
         return sb.toString();
     }

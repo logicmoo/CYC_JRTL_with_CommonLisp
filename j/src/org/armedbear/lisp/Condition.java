@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.23 2004-04-22 14:51:18 piso Exp $
+ * $Id: Condition.java,v 1.24 2004-04-24 12:33:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,19 +128,16 @@ public class Condition extends StandardObject
         return unreadableString(String.valueOf(typeOf()));
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
-        try {
-            if (_PRINT_ESCAPE_.symbolValue() == NIL) {
-                String s = getMessage();
-                if (s != null)
-                    return s;
-                if (formatControl != NIL)
-                    return format(formatControl, formatArguments);
-            }
+        if (_PRINT_ESCAPE_.symbolValue() == NIL) {
+            String s = getMessage();
+            if (s != null)
+                return s;
+            if (formatControl != NIL)
+                return format(formatControl, formatArguments);
         }
-        catch (Throwable t) {}
-        return unreadableString(String.valueOf(typeOf()));
+        return unreadableString(typeOf().writeToString());
     }
 
     // ### condition-report

@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractString.java,v 1.3 2004-02-23 19:56:55 piso Exp $
+ * $Id: AbstractString.java,v 1.4 2004-04-24 12:44:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,45 +62,32 @@ public abstract class AbstractString extends AbstractVector
 
     public abstract void setChar(int index, char c) throws ConditionThrowable;
 
-    public final String toString(int beginIndex, int endIndex)
+    public final String writeToString(int beginIndex, int endIndex)
+        throws ConditionThrowable
     {
-        try {
-            if (beginIndex < 0)
-                beginIndex = 0;
-            final int limit;
-            limit = length();
-            if (endIndex > limit)
-                endIndex = limit;
-            if (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL) {
-                StringBuffer sb = new StringBuffer();
-                sb.append('"');
-                for (int i = beginIndex; i < endIndex; i++) {
-                    char c = getChar(i);
-                    if (c == '\"' || c == '\\')
-                        sb.append('\\');
-                    sb.append(c);
-                }
-                sb.append('"');
-                return sb.toString();
-            } else
-                return getStringValue().substring(beginIndex, endIndex);
-        }
-        catch (ConditionThrowable t) {
-            // Shouldn't happen.
-            Debug.trace(t);
-            return "";
-        }
+        if (beginIndex < 0)
+            beginIndex = 0;
+        final int limit;
+        limit = length();
+        if (endIndex > limit)
+            endIndex = limit;
+        if (_PRINT_ESCAPE_.symbolValue() != NIL) {
+            StringBuffer sb = new StringBuffer();
+            sb.append('"');
+            for (int i = beginIndex; i < endIndex; i++) {
+                char c = getChar(i);
+                if (c == '\"' || c == '\\')
+                    sb.append('\\');
+                sb.append(c);
+            }
+            sb.append('"');
+            return sb.toString();
+        } else
+            return getStringValue().substring(beginIndex, endIndex);
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
-        try {
-            return toString(0, length());
-        }
-        catch (ConditionThrowable t) {
-            // Shouldn't happen.
-            Debug.trace(t);
-            return "";
-        }
+        return writeToString(0, length());
     }
 }

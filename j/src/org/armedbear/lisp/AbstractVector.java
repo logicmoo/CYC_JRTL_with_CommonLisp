@@ -150,29 +150,23 @@ public abstract class AbstractVector extends AbstractArray
         return this;
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("#(");
-        try {
-            final LispObject printLength = _PRINT_LENGTH_.symbolValue();
-            final int limit;
-            if (printLength instanceof Fixnum)
-                limit = Math.min(length(), ((Fixnum)printLength).value);
-            else
-                limit = length();
-            for (int i = 0; i < limit; i++) {
-                if (i > 0)
-                    sb.append(' ');
-                sb.append(getRowMajor(i));
-            }
-            if (limit < length())
-                sb.append(" ...");
-            sb.append(')');
+        final LispObject printLength = _PRINT_LENGTH_.symbolValue();
+        final int limit;
+        if (printLength instanceof Fixnum)
+            limit = Math.min(length(), ((Fixnum)printLength).value);
+        else
+            limit = length();
+        for (int i = 0; i < limit; i++) {
+            if (i > 0)
+                sb.append(' ');
+            sb.append(getRowMajor(i).writeToString());
         }
-        catch (ConditionThrowable t) {
-            // Shouldn't happen.
-            Debug.trace(t);
-        }
+        if (limit < length())
+            sb.append(" ...");
+        sb.append(')');
         return sb.toString();
     }
 

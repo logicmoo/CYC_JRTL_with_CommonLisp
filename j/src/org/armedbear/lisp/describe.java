@@ -2,7 +2,7 @@
  * describe.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: describe.java,v 1.14 2004-02-23 14:24:48 piso Exp $
+ * $Id: describe.java,v 1.15 2004-04-24 12:37:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class describe extends Lisp
             if (args.length != 1)
                 return signal(new WrongNumberOfArgumentsException(this));
             LispObject obj = args[0];
-            StringBuffer sb = new StringBuffer(String.valueOf(obj));
+            StringBuffer sb = new StringBuffer(obj.writeToString());
             if (obj instanceof Symbol) {
                 Symbol symbol = (Symbol) obj;
                 LispObject pkg = symbol.getPackage();
@@ -58,19 +58,19 @@ public final class describe extends Lisp
                     sb.append("; ");
                     if (value != null) {
                         sb.append("its value is ");
-                        sb.append(value);
+                        sb.append(value.writeToString());
                     } else
                         sb.append("it is unbound");
                     sb.append(".\n");
                 } else if (value != null) {
                     sb.append("It is an undefined variable; its value is ");
-                    sb.append(value);
+                    sb.append(value.writeToString());
                     sb.append(".\n");
                 }
                 LispObject function = symbol.getSymbolFunction();
                 if (function != null) {
                     sb.append("Its function binding is ");
-                    sb.append(function);
+                    sb.append(function.writeToString());
                     sb.append(".\n");
                     if (function instanceof Function) {
                         LispObject arglist = ((Function)function).getArglist();
@@ -82,7 +82,7 @@ public final class describe extends Lisp
                             if (arglist instanceof AbstractString)
                                 sb.append(arglist.getStringValue());
                             else
-                                sb.append(arglist);
+                                sb.append(arglist.writeToString());
                             sb.append('\n');
                             thread.setDynamicEnvironment(oldDynEnv);
                         }
@@ -101,9 +101,9 @@ public final class describe extends Lisp
                     LispObject[] array = plist.copyToArray();
                     for (int i = 0; i < array.length; i += 2) {
                         sb.append("  ");
-                        sb.append(array[i]);
+                        sb.append(array[i].writeToString());
                         sb.append(' ');
-                        sb.append(array[i+1]);
+                        sb.append(array[i+1].writeToString());
                         sb.append('\n');
                     }
                 }

@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.124 2004-04-23 12:50:04 piso Exp $
+ * $Id: Symbol.java,v 1.125 2004-04-24 12:45:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -428,9 +428,10 @@ public class Symbol extends LispObject
         put(this, _VARIABLE_DOCUMENTATION, documentation);
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
-        if (_PRINT_READABLY_.symbolValueNoThrow() != NIL) {
+        final LispThread thread = LispThread.currentThread();
+        if (_PRINT_READABLY_.symbolValue(thread) != NIL) {
             StringBuffer sb = new StringBuffer();
             if (pkg == PACKAGE_KEYWORD) {
                 sb.append(':');
@@ -443,8 +444,8 @@ public class Symbol extends LispObject
             sb.append(multipleEscape(name));
             return sb.toString();
         }
-        boolean printEscape = (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL);
-        LispObject printCase = _PRINT_CASE_.symbolValueNoThrow();
+        boolean printEscape = (_PRINT_ESCAPE_.symbolValue(thread) != NIL);
+        LispObject printCase = _PRINT_CASE_.symbolValue(thread);
         LispObject readtableCase = currentReadtable().getReadtableCase();
         if (pkg == PACKAGE_KEYWORD) {
             if (printCase == Keyword.DOWNCASE)
@@ -487,12 +488,17 @@ public class Symbol extends LispObject
         else {
             int radix;
             try {
-                radix = ((Fixnum)_PRINT_BASE_.symbolValue()).value;
+                radix = ((Fixnum)_PRINT_BASE_.symbolValue(thread)).value;
             }
-            catch (Throwable t) {
-                // FIXME What if *PRINT-BASE* is invalid?
-                Debug.trace(t);
-                radix = 10;
+            catch (ClassCastException e) {
+                signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
+                // Not reached.
+                return null;
+            }
+            if (radix < 2 || radix > 36) {
+                signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
+                // Not reached.
+                return null;
             }
             boolean seenNonDigit = false;
             for (int i = length; i-- > 0;) {
@@ -542,13 +548,13 @@ public class Symbol extends LispObject
                 s = capitalize(s, readtableCase);
         }
         if (pkg == NIL) {
-            if (_PRINT_GENSYM_.symbolValueNoThrow() != NIL)
+            if (_PRINT_GENSYM_.symbolValue(thread) != NIL)
                 return "#:".concat(s);
             else
                 return s;
         }
         // "Package prefixes are printed if necessary." (22.1.3.3.1)
-        final Package currentPackage = (Package) _PACKAGE_.symbolValueNoThrow();
+        final Package currentPackage = (Package) _PACKAGE_.symbolValue(thread);
         if (pkg == currentPackage)
             return s;
         if (currentPackage != null && currentPackage.uses(pkg)) {

@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.62 2004-04-17 10:53:50 piso Exp $
+ * $Id: Stream.java,v 1.63 2004-04-24 12:48:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -988,7 +988,7 @@ public class Stream extends LispObject
         Environment oldDynEnv = thread.getDynamicEnvironment();
         thread.bindSpecial(_PRINT_ESCAPE_, NIL);
         thread.bindSpecial(_PRINT_READABLY_, NIL);
-        String s = String.valueOf(obj);
+        String s = obj.writeToString();
         thread.setDynamicEnvironment(oldDynEnv);
         _writeString(s);
     }
@@ -1000,7 +1000,7 @@ public class Stream extends LispObject
         LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         thread.bindSpecial(_PRINT_ESCAPE_, T);
-        String s = String.valueOf(obj);
+        String s = obj.writeToString();
         thread.setDynamicEnvironment(oldDynEnv);
         _writeString(s);
     }

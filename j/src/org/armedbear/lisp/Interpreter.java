@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.58 2004-04-22 15:16:34 piso Exp $
+ * $Id: Interpreter.java,v 1.59 2004-04-24 12:34:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,6 +117,7 @@ public final class Interpreter extends Lisp
                     Autoload autoload = (Autoload) tplFun;
                     autoload.load();
                 }
+                _LOAD_VERBOSE_.setSymbolValue(T);
                 String userHome = System.getProperty("user.home");
                 File file = new File(userHome, ".ablrc");
                 if (file.isFile())
@@ -192,10 +193,10 @@ public final class Interpreter extends Lisp
                             slash = new Cons(values[i], slash);
                         Symbol.SLASH.setSymbolValue(slash);
                         for (int i = 0; i < values.length; i++)
-                            out._writeLine(String.valueOf(values[i]));
+                            out._writeLine(values[i].writeToString());
                     } else {
                         Symbol.SLASH.setSymbolValue(new Cons(result));
-                        out._writeLine(String.valueOf(result));
+                        out._writeLine(result.writeToString());
                     }
                     out._finishOutput();
                 }
@@ -313,10 +314,10 @@ public final class Interpreter extends Lisp
                     for (int i = 0; i < values.length; i++) {
                         if (i > 0)
                             sb.append(", ");
-                        sb.append(String.valueOf(values[i]));
+                        sb.append(values[i].writeToString());
                     }
                 } else
-                    sb.append(String.valueOf(result));
+                    sb.append(result.writeToString());
             }
             catch (Throwable t) {
                 return ERROR;

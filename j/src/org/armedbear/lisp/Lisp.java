@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.230 2004-04-17 10:53:16 piso Exp $
+ * $Id: Lisp.java,v 1.231 2004-04-24 12:39:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1069,7 +1069,7 @@ public abstract class Lisp
         Package pkg = Packages.findPackage(javaString(obj));
         if (pkg != null)
             return pkg;
-        signal(new PackageError(obj + " is not the name of a package"));
+        signal(new PackageError(obj.writeToString() + " is not the name of a package."));
         // Not reached.
         return null;
     }
@@ -1176,7 +1176,8 @@ public abstract class Lisp
         return NIL;
     }
 
-    public static final String format(LispObject formatControl, LispObject formatArguments)
+    public static final String format(LispObject formatControl,
+                                      LispObject formatArguments)
         throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
@@ -1202,7 +1203,7 @@ public abstract class Lisp
                             LispObject obj = args[j++];
                             Environment oldDynEnv = thread.getDynamicEnvironment();
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-                            sb.append(String.valueOf(obj));
+                            sb.append(obj.writeToString());
                             thread.setDynamicEnvironment(oldDynEnv);
                         }
                     } else if (c == 'S' || c == 's') {
@@ -1210,7 +1211,7 @@ public abstract class Lisp
                             LispObject obj = args[j++];
                             Environment oldDynEnv = thread.getDynamicEnvironment();
                             thread.bindSpecial(_PRINT_ESCAPE_, T);
-                            sb.append(String.valueOf(obj));
+                            sb.append(obj.writeToString());
                             thread.setDynamicEnvironment(oldDynEnv);
                         }
                     } else if (c == 'D' || c == 'd') {
@@ -1220,7 +1221,7 @@ public abstract class Lisp
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             thread.bindSpecial(_PRINT_RADIX_, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
-                            sb.append(String.valueOf(obj));
+                            sb.append(obj.writeToString());
                             thread.setDynamicEnvironment(oldDynEnv);
                         }
                     } else if (c == 'X' || c == 'x') {
@@ -1230,7 +1231,7 @@ public abstract class Lisp
                             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
                             thread.bindSpecial(_PRINT_RADIX_, NIL);
                             thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
-                            sb.append(String.valueOf(obj));
+                            sb.append(obj.writeToString());
                             thread.setDynamicEnvironment(oldDynEnv);
                         }
                     } else if (c == '%') {
@@ -1333,7 +1334,7 @@ public abstract class Lisp
     }
 
     public static final Symbol internSpecial(String name, Package pkg,
-        LispObject value)
+                                             LispObject value)
     {
         Symbol symbol = pkg.intern(name);
         symbol.setSpecial(true);
@@ -1342,7 +1343,7 @@ public abstract class Lisp
     }
 
     public static final Symbol exportSpecial(String name, Package pkg,
-        LispObject value)
+                                             LispObject value)
     {
         Symbol symbol = pkg.intern(name);
         try {
@@ -1357,7 +1358,7 @@ public abstract class Lisp
     }
 
     public static final Symbol exportConstant(String name, Package pkg,
-        LispObject value)
+                                              LispObject value)
     {
         Symbol symbol = pkg.intern(name);
         try {
