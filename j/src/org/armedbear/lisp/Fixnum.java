@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.10 2003-03-13 14:49:42 piso Exp $
+ * $Id: Fixnum.java,v 1.11 2003-03-13 19:52:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,4 +107,24 @@ public final class Fixnum extends LispObject
     {
         return String.valueOf(value);
     }
+
+    // ash integer count => shifted-integer
+    private static final Primitive2 ASH = new Primitive2("ash") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            long n = Fixnum.getValue(first);
+            long count = Fixnum.getValue(second);
+            if (count > 0) {
+                // Shift left.
+                return new Fixnum(n << count);
+            }
+            if (count < 0) {
+                // Shift right.
+                return new Fixnum(n >> -count);
+            }
+            // No change.
+            return first;
+        }
+    };
 }
