@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.28 2004-04-05 20:38:22 asimon Exp $
+;;; $Id: top-level.lisp,v 1.29 2004-04-22 14:48:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -290,9 +290,8 @@
   (loop
       (with-simple-restart (top-level
                             "Return to top level.")
-        #+j
-        (handler-case
-            (repl)
-          (stream-error (c) (return-from top-level-loop)))
-        #-j
-        (repl))))
+        (if (sys::featurep :j)
+            (handler-case
+                (repl)
+              (stream-error (c) (return-from top-level-loop)))
+            (repl)))))
