@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.151 2004-02-09 13:07:21 piso Exp $
+;;; $Id: rt.lisp,v 1.152 2004-02-27 02:44:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -379,7 +379,7 @@
                           "oneminus"
                           "oneplus"
                           "or"
-                          "packages"
+                          "load-packages"
                           "pairlis"
                           "parse-integer"
                           "phase"
