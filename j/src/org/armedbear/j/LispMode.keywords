@@ -262,6 +262,7 @@ package-name
 package-nicknames
 package-shadowing-symbols
 package-use-list
+parse-integer
 pop
 pprint
 prin1
