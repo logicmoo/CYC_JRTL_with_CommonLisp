@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.2 2005-03-03 15:01:32 piso Exp $
+;;; $Id: emacs.lisp,v 1.3 2005-03-03 19:39:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -115,9 +115,11 @@
 (define-key *global-map* "Ctrl S" "incrementalFind")
 ;; else
 ;; mapKey(KeyEvent.VK_F, CTRL_MASK, "find");
-;; mapKey(KeyEvent.VK_F3, ALT_MASK, "find");
+(define-key *global-map* "Alt F3" "find")
 
-;; mapKey(KeyEvent.VK_L, CTRL_MASK | ALT_MASK, "listOccurrencesOfPatternAtDot");
+;; Emacs uses Ctrl Alt L for reposition-window
+;; XEmacs uses Ctrl Alt L for switch-to-other-buffer
+(define-key *global-map* "Ctrl Alt L" "listOccurrencesOfPatternAtDot")
 
 ;; mapKey(KeyEvent.VK_F3, 0, "findNext");
 (define-key *global-map* "F3" "findNext")
