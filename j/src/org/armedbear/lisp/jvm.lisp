@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.341 2005-01-03 00:52:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.342 2005-01-03 03:14:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -197,7 +197,7 @@
   (let* ((index (if special-p nil (length (context-vars *context*))))
          (variable (make-variable :name name :special-p special-p :index index)))
     (push variable *visible-variables*)
-    (push variable *all-variables*)
+;;     (push variable *all-variables*)
     (unless special-p
       (add-variable-to-context variable))
     variable))
@@ -215,11 +215,6 @@
   (unboxed-fixnum-variable obj))
 
 (defun allocate-register ()
-;;   (prog1
-;;    *register*
-;;    (incf *register*)
-;;    (when (< *registers-allocated* *register*)
-;;      (setf *registers-allocated* *register*))))
   (let* ((register *register*)
          (next-register (1+ register)))
     (declare (type fixnum register next-register))
@@ -296,7 +291,8 @@
              (push (make-variable :name varspec) vars))))
     (setf vars (nreverse vars))
     (dolist (variable vars)
-      (push variable *visible-variables*))
+      (push variable *visible-variables*)
+      (push variable *all-variables*))
     vars))
 
 (defun p1-let*-vars (varlist)
@@ -307,11 +303,13 @@
                     (initform (p1 (cadr varspec)))
                     (var (make-variable :name name :initform initform)))
                (push var vars)
-               (push var *visible-variables*)))
+               (push var *visible-variables*)
+               (push var *all-variables*)))
             (t
              (let ((var (make-variable :name varspec)))
                (push var vars)
-               (push var *visible-variables*)))))
+               (push var *visible-variables*)
+               (push var *all-variables*)))))
     (nreverse vars)))
 
 (defun p1-let/let* (form)
@@ -371,7 +369,8 @@
       (dolist (symbol varlist)
         (let ((var (make-variable :name symbol)))
           (push var vars)
-          (push var *visible-variables*)))
+          (push var *visible-variables*)
+          (push var *all-variables*)))
       ;; Check for globally declared specials.
       (dolist (variable vars)
         (when (special-variable-p (variable-name variable))
@@ -439,21 +438,10 @@
   form)
 
 (defun p1-flet/labels (form)
-  (dformat t "p1-flet/labels~%")
   (when *current-compiland*
     (incf (compiland-children *current-compiland*) (length (cadr form))))
-
-  ;; FIXME This comment is obsolete! Jan 2 2005 7:45 AM
-  ;; Do pass 1 on the local definitions, discarding the result (we're just
-  ;; checking for non-local RETURNs and GOs.)
-
-
-
-  (let (
-;;         (*current-compiland* nil)
-        (*current-compiland* *current-compiland*)
-        (compilands ())
-        )
+  (let ((*current-compiland* *current-compiland*)
+        (compilands ()))
     (dolist (definition (cadr form))
       (let* ((name (car definition))
              (lambda-list (cadr definition))
@@ -1384,8 +1372,6 @@
          (aver nil))))
 
 (defun resolve-variables ()
-  (dump-variables (reverse *all-variables*)
-                  (%format nil "Variables in ~A:~%" (compiland-name *current-compiland*)))
   (let ((code (nreverse *code*)))
     (setf *code* nil)
     (dolist (instruction code)
@@ -1399,9 +1385,6 @@
 ;;                     (variable-name variable) representation)
 ;;            (%format t "variable-representation = ~S~%"
 ;;                     (variable-representation variable))
-           (dformat t "variable = ~S~%" (variable-name variable))
-           (dformat t "level = ~S~%" (variable-level variable))
-           (dformat t "*nesting-level* = ~S~%" *nesting-level*)
            (aver (variable-p variable))
            (cond
 ;;             ((eq (variable-representation variable) :unboxed-fixnum)
@@ -1426,7 +1409,6 @@
             ((and (variable-index variable) ; A local at the current nesting level.
                   (= (variable-level variable) *nesting-level*))
              (emit 'aload 1)
-             (aver (variable-index variable))
              (emit 'bipush (variable-index variable))
              (emit 'aaload)
              (emit-move-from-stack target))
@@ -1434,7 +1416,6 @@
              ;; The general case.
              (emit 'aload *context-register*) ; Array of arrays.
              (aver (fixnump (variable-level variable)))
-             (aver (variable-level variable))
              (emit 'bipush (variable-level variable))
              (emit 'aaload) ; Locals array for level in question.
              (aver (variable-index variable))
@@ -2736,10 +2717,9 @@
   (emit-move-from-stack target))
 
 (defun compile-local-function-call (form target)
-  (let* ((fun (car form))
+  (let* ((op (car form))
          (args (cdr form))
-         (local-function (find-local-function fun)))
-    (aver (not (null local-function)))
+         (local-function (find-local-function op)))
     (cond ((local-function-variable local-function)
            ;; LABELS
            (emit 'var-ref (local-function-variable local-function) :stack))
@@ -3218,27 +3198,6 @@
          (vars (second form))
          (bind-special-p nil)
          (variables (block-vars block)))
-    ;; Process declarations.
-;;     (dolist (f (cdddr form))
-;;       (unless (and (consp f) (eq (car f) 'declare))
-;;         (return))
-;;       (let ((decls (cdr f)))
-;;         (dolist (decl decls)
-;;           (when (eq (car decl) 'special)
-;;             (setf specials (append (cdr decl) specials))))))
-    ;; Process variables and allocate registers for them.
-;;     (dolist (var vars)
-;;       (let* ((special-p (if (or (memq var specials) (special-variable-p var)) t nil))
-;;              (variable
-;;               (make-variable :name var
-;;                              :special-p special-p
-;;                              :index (if special-p nil (length (context-vars *context*)))
-;;                              :register (if (or special-p *use-locals-vector*) nil (allocate-register)))))
-;;         (if special-p
-;;             (setf bind-special-p t)
-;;             (add-variable-to-context variable))
-;;         (push variable variables)))
-;;     (setf variables (nreverse variables))
     (dolist (variable variables)
       (let ((special-p (variable-special-p variable)))
         (cond (special-p
@@ -3314,7 +3273,8 @@
     ;; Make the variables visible for the body forms.
     (dolist (variable variables)
       (push variable *visible-variables*)
-      (push variable *all-variables*))
+;;       (push variable *all-variables*)
+      )
     ;; Body.
     (compile-progn-body (cdddr form) target)
     (when bind-special-p
@@ -3416,7 +3376,8 @@
   ;; Now make the variables visible.
   (dolist (variable (block-vars block))
     (push variable *visible-variables*)
-    (push variable *all-variables*)))
+;;     (push variable *all-variables*)
+    ))
 
 (defun compile-let*-bindings (block)
   (let ((must-clear-values nil))
@@ -3473,7 +3434,7 @@
             (setf (variable-register variable) (allocate-register)))
           (add-variable-to-context variable))
         (push variable *visible-variables*)
-        (push variable *all-variables*)
+;;         (push variable *all-variables*)
         (unless boundp
           (compile-binding variable))))
     (when must-clear-values
@@ -3891,13 +3852,8 @@
     (emit-push-nil)
     (emit-move-from-stack target)))
 
-;; (defun p2-local-function (definition local-function)
 (defun p2-local-function (compiland local-function)
-  (dformat t "entering p2-local-function~%")
-  (aver (compiland-p compiland))
-  (let* (;;(name (car definition))
-         (name (compiland-name compiland))
-         ;;(arglist (cadr definition))
+  (let* ((name (compiland-name compiland))
          (arglist (cadr (compiland-lambda-expression compiland)))
          form
          function
@@ -3912,42 +3868,19 @@
                  (when (and (consp arg)
                             (not (constantp (second arg))))
                    (error "COMPILE-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
-;;     (multiple-value-bind (body decls)
-;;         (sys::parse-body (cddr definition))
-;;       (setf body (list (list* 'BLOCK name body)))
-;;       (dolist (decl decls)
-;;         (push decl body))
-;;       (setf form (list* 'LAMBDA arglist body)))
-
     (setf form (compiland-lambda-expression compiland))
-
     (let ((*nesting-level* (1+ *nesting-level*)))
-
-;;       (setf compiland (make-compiland :name name
-;;                                       :lambda-expression form
-;;                                       :parent *current-compiland*))
-
       (setf classfile (if *compile-file-truename*
                           (sys::next-classfile-name)
                           (prog1
                            (%format nil "local-~D.class" *child-count*)
                            (incf *child-count*))))
-
       (setf (compiland-classfile compiland) classfile)
-
       (let ((*current-compiland* compiland)
             (*speed* *speed*)
             (*safety* *safety*)
             (*debug* *debug*))
-        ;; Pass 1.
-;;         (p1-compiland compiland)
-        ;; Pass 2.
-        (dformat t "p2-local-function calling p2-compiland~%")
-        (p2-compiland compiland)
-        (dformat t "p2-local-function back from p2-compiland~%")
-        )
-
-
+        (p2-compiland compiland))
       (when (null *compile-file-truename*)
         (setf function (sys:load-compiled-function classfile))))
     (cond (local-function
@@ -3969,11 +3902,8 @@
 (defun p2-flet (form &key (target *val*) representation)
   (if *use-locals-vector*
       (let ((*local-functions* *local-functions*)
-;;             (definitions (cadr form))
             (compilands (cadr form))
             (body (cddr form)))
-;;         (dolist (definition definitions)
-;;           (p2-local-function definition nil))
         (dolist (compiland compilands)
           (p2-local-function compiland nil))
         (do ((forms body (cdr forms)))
@@ -5153,7 +5083,6 @@
       (write-u2 0 stream))))
 
 (defun p1-compiland (compiland)
-  (aver (compiland-p compiland))
   (let ((precompiled-form (compiland-lambda-expression compiland)))
     (aver (eq (car precompiled-form) 'LAMBDA))
     (process-optimization-declarations (cddr precompiled-form))
@@ -5161,21 +5090,11 @@
            (closure (sys::make-closure `(lambda ,lambda-list nil) nil))
            (syms (sys::varlist closure))
            vars)
-;;       (multiple-value-bind (required optional restp rest keyp keys allowp auxp aux)
-;;         (sys::parse-lambda-list lambda-list)
-;;         (setf syms required)
-;;         (when optional
-;;           (setf syms (append syms optional)))
-;;         (when restp
-;;           (setf syms (append syms (list rest))))
-;;         (when keyp
-;;           (dformat t "keys = ~S~%" keys)
-;;           (setf syms (append syms keys)))
-      (dformat t "syms = ~S~%" syms)
       (dolist (sym syms)
-        (push (make-variable :name sym) vars))
+        (let ((var (make-variable :name sym)))
+          (push var vars)
+          (push var *all-variables*)))
       (setf (compiland-arg-vars compiland) (nreverse vars)))
-    ;; Pass 1.
     (let ((*visible-variables* *visible-variables*))
       (dformat t "p1-compiland *visible-variables* = ~S~%"
                (mapcar #'variable-name *visible-variables*))
@@ -5231,7 +5150,6 @@
          (*context-register* *context-register*)
 
          (*visible-variables* *visible-variables*)
-         (*all-variables* *all-variables*)
          (*undefined-variables* *undefined-variables*)
 
          (parameters ())
@@ -5243,16 +5161,14 @@
          (*thread* nil)
          (*initialize-thread-var* nil))
 
-    (dformat t "pass2 *visible-variables* = ~S~%"
-             (mapcar #'variable-name *visible-variables*))
+;;     (dformat t "pass2 *visible-variables* = ~S~%"
+;;              (mapcar #'variable-name *visible-variables*))
 
-;;     (setf *visible-variables*
-;;           (append *visible-variables* (compiland-arg-vars compiland)))
     (dolist (var (compiland-arg-vars compiland))
       (push var *visible-variables*))
 
-    (dformat t "pass2 *visible-variables* ==> ~S~%"
-             (mapcar #'variable-name *visible-variables*))
+;;     (dformat t "pass2 *visible-variables* ==> ~S~%"
+;;              (mapcar #'variable-name *visible-variables*))
 
     (dformat t "pass2 *using-arg-array* = ~S~%" *using-arg-array*)
     (dformat t "pass2 *use-locals-vector* = ~S~%" *use-locals-vector*)
@@ -5270,10 +5186,6 @@
                   (vars (sys::varlist closure))
                   (index 0))
              (dolist (var vars)
-;;                (let ((variable (make-variable :name var
-;;                                               :special-p nil ;; FIXME
-;;                                               :register nil
-;;                                               :index index)))
                (let ((variable (find-visible-variable var)))
                  (when (null variable)
                    (dformat t "unable to find variable ~S~%" var)
@@ -5282,8 +5194,7 @@
                  (aver (null (variable-index variable)))
                  (setf (variable-index variable) index)
 
-                 (push variable *all-variables*)
-;;                  (push variable *visible-variables*)
+;;                  (push variable *all-variables*)
                  (push variable parameters)
                  (add-variable-to-context variable)
                  (incf index)))))
@@ -5292,10 +5203,6 @@
                  (index 0))
              (dolist (arg args)
                (aver (= index (length (context-vars *context*))))
-;;                (let ((variable (make-variable :name arg
-;;                                               :special-p nil ;; FIXME
-;;                                               :register (if *using-arg-array* nil register)
-;;                                               :index index)))
                (let ((variable (find-visible-variable arg)))
                  (when (null variable)
                    (dformat t "unable to find variable ~S~%" arg)
@@ -5305,8 +5212,7 @@
                  (aver (null (variable-index variable)))
                  (setf (variable-index variable) index)
 
-                 (push variable *all-variables*)
-;;                  (push variable *visible-variables*)
+;;                  (push variable *all-variables*)
                  (push variable parameters)
                  (add-variable-to-context variable)
                  (incf register)
@@ -5318,7 +5224,7 @@
           (cond ((null variable)
                  (setf variable (make-variable :name name
                                                :special-p t))
-                 (push variable *all-variables*)
+;;                  (push variable *all-variables*)
                  (push variable *visible-variables*))
                 (t
                  (setf (variable-special-p variable) t))))))
@@ -5457,14 +5363,19 @@
 
 (defun compile-1 (compiland)
   (dformat t "compile-1 ~S~%" (compiland-name compiland))
-  (let ((*current-compiland* compiland)
+  (let ((*all-variables* ())
+        (*current-compiland* compiland)
         (*speed* *speed*)
         (*safety* *safety*)
         (*debug* *debug*))
     ;; Pass 1.
     (p1-compiland compiland)
+    (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
     ;; Pass 2.
-    (p2-compiland compiland)))
+    (prog1
+     (p2-compiland compiland)
+     (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*)))
+    ))
 
 (defun compile-defun (name form environment &optional (classfile "out.class"))
   ;;   (dformat t "COMPILE-DEFUN ~S ~S~%" name classfile)
