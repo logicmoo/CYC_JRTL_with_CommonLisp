@@ -9,7 +9,8 @@
 (export '(global-map-key global-unmap-key map-key-for-mode unmap-key-for-mode
           set-global-property
           reset-display
-          run-hooks
+          add-hook
+          invoke-hook
           current-editor
           update-display
           update-location-bar
@@ -48,15 +49,19 @@
 (defun reset-display ()
   (jstatic "resetDisplay" "org.armedbear.j.Editor"))
 
-(defun run-hooks (hook &rest args)
+(defun add-hook (hook function)
   (when (symbolp hook)
-    (setf hook (symbol-value hook))
-  (cond ((consp hook)
-         (dolist (fun hook)
-           (when (functionp fun)
-             (apply fun args))))
-        ((functionp hook)
-         (apply hook args)))))
+    (let ((hook-functions (symbol-value hook)))
+      (unless (memq function hook-functions)
+        (setq hook-functions (cons function hook-functions))
+        (set hook hook-functions)))))
+
+(defun invoke-hook (hook &rest args)
+  (when (symbolp hook)
+    (unless (boundp hook) (set hook nil))
+    (let ((hooks (symbol-value hook)))
+      (dolist (function hooks)
+        (apply function args)))))
 
 (defun current-editor ()
   (let ((method (jmethod "org.armedbear.j.Editor" "currentEditor")))
