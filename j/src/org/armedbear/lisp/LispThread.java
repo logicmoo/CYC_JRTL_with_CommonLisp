@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.16 2003-09-26 18:27:24 piso Exp $
+ * $Id: LispThread.java,v 1.17 2003-10-04 01:17:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,6 +163,30 @@ public final class LispThread extends LispObject
     public final LispObject lookupSpecial(LispObject symbol)
     {
         return dynEnv != null ? dynEnv.lookup(symbol) : null;
+    }
+
+    private Stack catchTags = new Stack();
+
+    public void pushCatchTag(LispObject tag)
+    {
+        catchTags.push(tag);
+    }
+
+    public LispObject popCatchTag()
+    {
+        if (!catchTags.empty())
+            return (LispObject) catchTags.pop();
+        Debug.assertTrue(false);
+        return null;
+    }
+
+    public boolean isValidCatchTag(LispObject tag)
+    {
+        for (int i = stack.size(); i-- > 0;) {
+            if (stack.get(i) == tag)
+                return true;
+        }
+        return false;
     }
 
     private static class StackFrame
