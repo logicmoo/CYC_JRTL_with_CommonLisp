@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.66 2004-11-13 15:01:58 piso Exp $
+ * $Id: LispThread.java,v 1.67 2004-11-13 19:00:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,13 +31,24 @@ public final class LispThread extends LispObject
 
     private static HashMap map = new HashMap();
 
+    private static Thread currentJavaThread;
+    private static LispThread currentLispThread;
+
     public static final LispThread currentThread()
     {
-        Thread currentJavaThread = Thread.currentThread();
-        LispThread lispThread = get(currentJavaThread);
+        Thread javaThread = Thread.currentThread();
+        synchronized (lock) {
+            if (javaThread == currentJavaThread)
+                return currentLispThread;
+        }
+        LispThread lispThread = (LispThread) map.get(javaThread);
         if (lispThread == null) {
-            lispThread = new LispThread(currentJavaThread);
-            put(currentJavaThread, lispThread);
+            lispThread = new LispThread(javaThread);
+            put(javaThread, lispThread);
+        }
+        synchronized (lock) {
+            currentJavaThread = javaThread;
+            currentLispThread = lispThread;
         }
         return lispThread;
     }
@@ -49,11 +60,6 @@ public final class LispThread extends LispObject
             m.put(javaThread, lispThread);
             map = m;
         }
-    }
-
-    private static LispThread get(Thread javaThread)
-    {
-        return (LispThread) map.get(javaThread);
     }
 
     private static void remove(Thread javaThread)
