@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.9 2003-02-23 01:24:29 piso Exp $
+ * $Id: JLisp.java,v 1.10 2003-03-03 20:52:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import org.armedbear.lisp.Interpreter;
-import org.armedbear.lisp.LispError;
+import org.armedbear.lisp.Condition;
 
 public final class JLisp extends CommandInterpreter
 {
@@ -191,7 +191,7 @@ public final class JLisp extends CommandInterpreter
         editor.setDefaultCursor();
     }
 
-    public static void runStartupScript(File file) throws LispError
+    public static void runStartupScript(File file) throws Condition
     {
         Interpreter.initialize(true);
         FastStringBuffer sb = new FastStringBuffer("(load \"");
@@ -210,7 +210,7 @@ public final class JLisp extends CommandInterpreter
         Interpreter.evaluate(sb.toString());
     }
 
-    public static void runLispCommand(String command) throws LispError
+    public static void runLispCommand(String command) throws Condition
     {
         Interpreter.initialize(true);
         Interpreter.evaluate(command);
