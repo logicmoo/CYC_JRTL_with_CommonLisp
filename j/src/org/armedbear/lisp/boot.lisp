@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.185 2004-09-07 15:37:36 piso Exp $
+;;; $Id: boot.lisp,v 1.186 2004-09-07 17:45:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -97,6 +97,8 @@
 (defun simple-format (destination control-string &rest args)
   (apply *simple-format-function* destination control-string args))
 
+(export 'simple-format '#:system)
+
 ;; INVOKE-DEBUGGER is redefined in debug.lisp.
 (defun invoke-debugger (condition)
   (sys::%format t "~A~%" condition)
@@ -106,11 +108,11 @@
 (defun class-name (class)
   (sys::%class-name class))
 
-(sys::load-system-file "autoloads")
-(sys::load-system-file "early-defuns")
-(sys::load-system-file "backquote")
-(sys::load-system-file "setf")
-(sys::load-system-file "documentation")
+(sys:load-system-file "autoloads")
+(sys:load-system-file "early-defuns")
+(sys:load-system-file "backquote")
+(sys:load-system-file "setf")
+(sys:load-system-file "documentation")
 
 (defmacro defvar (var &optional (val nil valp) (doc nil docp))
   `(progn
