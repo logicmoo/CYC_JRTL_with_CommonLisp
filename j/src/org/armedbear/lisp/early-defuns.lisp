@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.9 2004-01-18 20:47:36 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.10 2004-01-26 00:27:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -83,6 +83,14 @@
          (when (eq cdr-typespec '*)
            (setf cdr-typespec t))
          (setf i (list car-typespec cdr-typespec))))
+      (SIGNED-BYTE
+       (if (eq (car i) '*)
+           (return-from normalize-type 'integer)
+           (return-from normalize-type (list 'integer (expt -2 (1- (car i))) (1- (expt 2 (1- (car i))))))))
+      (UNSIGNED-BYTE
+       (if (eq (car i) '*)
+           (return-from normalize-type '(integer 0 *)))
+           (return-from normalize-type (list 'integer 0 (1- (expt 2 (car i))))))
       ((ARRAY SIMPLE-ARRAY)
        (unless i
          (return-from normalize-type (list tp '* '*)))
