@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.73 2003-06-01 01:09:58 piso Exp $
+ * $Id: Lisp.java,v 1.74 2003-06-01 02:08:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,8 +58,6 @@ public abstract class Lisp
     static final int TYPE_SPECIAL_OPERATOR  = 0x00400000;
     static final int TYPE_COMPILED_FUNCTION = 0x00800000;
 
-    static final int TYPE_MACRO_OBJECT      = 0x02000000;
-
     // Composite types.
     static final int TYPE_INTEGER  = TYPE_FIXNUM | TYPE_BIGNUM;
     static final int TYPE_RATIONAL = TYPE_INTEGER | TYPE_RATIO;
@@ -68,6 +66,10 @@ public abstract class Lisp
 
     static final int TYPE_LIST     = TYPE_CONS | TYPE_NULL;
     static final int TYPE_SEQUENCE = TYPE_VECTOR | TYPE_LIST;
+
+    // Functional types.
+    static final int FTYPE_SPECIAL_OPERATOR = 1;
+    static final int FTYPE_MACRO            = 2;
 
     public static final LispObject funcall(LispObject fun, LispObject[] argv,
         LispThread thread) throws Condition
@@ -173,14 +175,14 @@ public abstract class Lisp
                 LispObject fun = env.lookupFunctional(first);
                 if (fun == null)
                     throw new UndefinedFunctionError(first);
-                switch (fun.getType()) {
-                    case TYPE_SPECIAL_OPERATOR: {
+                switch (fun.getFunctionalType()) {
+                    case FTYPE_SPECIAL_OPERATOR: {
                         if (profiling)
                             fun.incrementCallCount();
                         // Don't eval args!
                         return fun.execute(obj.cdr(), env);
                     }
-                    case TYPE_MACRO_OBJECT:
+                    case FTYPE_MACRO:
                         return eval(macroexpand(obj, env, thread), env, thread);
                     default: {
                         if (debug)
