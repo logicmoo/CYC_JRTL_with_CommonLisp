@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.152 2004-08-01 12:47:49 piso Exp $
+;;; $Id: autoloads.lisp,v 1.153 2004-08-02 19:21:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -115,6 +115,7 @@
 (autoload-macro 'with-standard-io-syntax)
 (autoload 'sys::%with-standard-io-syntax "with-standard-io-syntax")
 (autoload-macro 'psetf)
+(autoload-macro 'rotatef)
 (autoload-macro 'shiftf)
 (autoload-macro 'formatter "format")
 
