@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.6 2003-11-24 15:57:39 piso Exp $
+;;; $Id: java.lisp,v 1.7 2003-12-02 14:27:20 dmcnaught Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -90,7 +90,8 @@
 
 (defun jinstance-of-p (obj class)
   "OBJ is an instance of CLASS (or one of its subclasses)"
-  (jcall (jmethod "java.lang.Class" "isInstance" "java.lang.Object") class obj))
+  (and (java-object-p obj)
+       (jcall (jmethod "java.lang.Class" "isInstance" "java.lang.Object") class obj)))
 
 (defun jmember-static-p (member)
   "MEMBER is a static member of its declaring class"
