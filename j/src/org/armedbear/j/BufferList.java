@@ -2,7 +2,7 @@
  * BufferList.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: BufferList.java,v 1.1.1.1 2002-09-24 16:09:14 piso Exp $
+ * $Id: BufferList.java,v 1.2 2002-10-02 02:10:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class BufferList implements Constants, PreferencesChangeListener
 {
     private final ArrayList list = new ArrayList();
 
-    private boolean sort;
+    private boolean alpha; // Sort alphabetically?
     private boolean reorder;
     private boolean modified;
 
@@ -38,8 +38,11 @@ public final class BufferList implements Constants, PreferencesChangeListener
     {
         Preferences p = Editor.preferences();
         if (p != null) {
-            sort = p.getBooleanProperty(Property.SORT_BUFFER_LIST);
-            reorder = p.getBooleanProperty(Property.REORDER_BUFFERS) && !sort;
+            alpha = p.getBooleanProperty(Property.SORT_BUFFER_LIST);
+            if (alpha)
+                reorder = false;
+            else
+                reorder = p.getIntegerProperty(Property.REORDER_BUFFERS) > 0;
             p.addPreferencesChangeListener(this);
         } else
             Debug.bug();
@@ -47,7 +50,7 @@ public final class BufferList implements Constants, PreferencesChangeListener
 
     public synchronized Iterator iterator()
     {
-        if (sort && modified)
+        if (alpha && modified)
             sort();
         return list.iterator();
     }
@@ -76,7 +79,7 @@ public final class BufferList implements Constants, PreferencesChangeListener
     public synchronized Buffer getFirstBuffer()
     {
         if (list.size() > 0) {
-            if (sort && modified)
+            if (alpha && modified)
                 sort();
             return (Buffer) list.get(0);
         }
@@ -85,7 +88,7 @@ public final class BufferList implements Constants, PreferencesChangeListener
 
     public synchronized Buffer getNextPrimaryBuffer(Buffer buffer)
     {
-        if (sort && modified)
+        if (alpha && modified)
             sort();
         if (buffer.isSecondary()) {
             Debug.assertTrue(buffer.getPrimary() != null);
@@ -112,7 +115,7 @@ public final class BufferList implements Constants, PreferencesChangeListener
 
     public synchronized Buffer getPreviousPrimaryBuffer(Buffer buffer)
     {
-        if (sort && modified)
+        if (alpha && modified)
             sort();
         if (buffer.isSecondary()) {
             Debug.assertTrue(buffer.getPrimary() != null);
@@ -220,14 +223,17 @@ public final class BufferList implements Constants, PreferencesChangeListener
     {
         Preferences p = Editor.preferences();
         boolean b = p.getBooleanProperty(Property.SORT_BUFFER_LIST);
-        if (b != sort) {
-            sort = b;
-            if (sort) {
+        if (b != alpha) {
+            alpha = b;
+            if (alpha) {
                 sort();
                 Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
             }
         }
-        reorder = p.getBooleanProperty(Property.REORDER_BUFFERS) && !sort;
+        if (alpha)
+            reorder = false;
+        else
+            reorder = p.getIntegerProperty(Property.REORDER_BUFFERS) > 0;
     }
 
     private int indexOf(Buffer buf)
@@ -243,7 +249,7 @@ public final class BufferList implements Constants, PreferencesChangeListener
 
     private void sort()
     {
-        if (sort) {
+        if (alpha) {
             if (comparator == null) {
                 comparator = new Comparator() {
                     public int compare(Object o1, Object o2)

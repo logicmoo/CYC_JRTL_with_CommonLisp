@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.2 2002-09-25 13:31:42 piso Exp $
+ * $Id: Property.java,v 1.3 2002-10-02 02:09:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,8 @@ public final class Property implements Comparable, Constants
         createProperty("Log.maxFileSize", 100000);
     public static final Property PRINTER_FONT_SIZE =
         createProperty("printerFontSize", 10);
+    public static final Property REORDER_BUFFERS =
+        createProperty("reorderBuffers", 1);
     public static final Property SHELL_OUTPUT_LIMIT =
         createProperty("shellOutputLimit", 1000);
     public static final Property SSH_TIMEOUT =
@@ -160,8 +162,6 @@ public final class Property implements Comparable, Constants
         createProperty("popExpungeDeletedMessagesOnServer", false);
     public static final Property POP_KEEP_MESSAGES_ON_SERVER =
         createProperty("popKeepMessagesOnServer", true);
-    public static final Property REORDER_BUFFERS =
-        createProperty("reorderBuffers", true);
     public static final Property REMOVE_TRAILING_WHITESPACE =
         createProperty("removeTrailingWhitespace", false);
     public static final Property RESTRICT_CARET =
