@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.213 2004-07-11 18:48:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.214 2004-07-11 19:39:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -667,7 +667,7 @@
     (dotimes (i (length code))
       (let ((instruction (svref code i)))
         (case (instruction-opcode instruction)
-          (206 ; var-ref
+          (206 ; VAR-REF
            (let ((variable (car (instruction-args instruction))))
              (assert (variable-p variable))
              (cond ((variable-register variable)
@@ -685,9 +685,10 @@
                     (emit 'bipush (variable-index variable))
                     (emit 'aaload)
                     (emit-store-value)))))
-          (207 ; var-set
+          (207 ; VAR-SET
            (let ((variable (car (instruction-args instruction))))
              (assert (variable-p variable))
+             (assert (not (variable-special-p variable)))
              (cond ((variable-register variable)
                     (emit 'astore (variable-register variable)))
                    (*child-p*
@@ -701,8 +702,7 @@
                     (emit 'swap) ; array value
                     (emit 'bipush (variable-index variable)) ; array value index
                     (emit 'swap) ; array index value
-                    (emit 'aastore)))
-           ))
+                    (emit 'aastore)))))
           (t
            (push instruction *code*)))))
     (setf *code* (nreverse (coerce *code* 'vector)))))
@@ -1729,7 +1729,7 @@
             *this-class*
             g
             +lisp-object+)) ; Stack: template-function
-    (assert (not *child-p*)) ; FIXME! Child case needs code!
+;;     (assert (not *child-p*)) ; FIXME! Child case needs code!
 ;;     (emit 'aload 1) ; Stack: template-function context
 ;;     (emit-invokestatic +lisp-class+
 ;;                        "makeCompiledClosure"
@@ -1748,7 +1748,10 @@
         (maybe-emit-clear-values arg)
         (incf i))) ; array left on stack here
     ;; Stack: template-function args
-    (emit 'aload 1) ; template-function args context
+    (if *child-p*
+        (emit 'aload *context-register*)
+        (emit 'aload 1))
+    ;; Stack: template-function args context
     (emit-invokevirtual +lisp-object-class+
                         "execute"
                         "([Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -1916,6 +1919,35 @@
                      0)
   (emit-store-value))
 
+;; Generates code to bind variable to value at top of runtime stack.
+(defun compile-binding (variable)
+  (cond ((variable-register variable)
+         (emit 'astore (variable-register variable)))
+        ((variable-special-p variable)
+         (emit-push-current-thread)
+         (emit 'swap)
+         (emit 'getstatic
+               *this-class*
+               (declare-symbol (variable-name variable))
+               +lisp-symbol+)
+         (emit 'swap)
+         (emit-invokevirtual +lisp-thread-class+
+                             "bindSpecial"
+                             "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                             -2))
+        (*child-p*
+         (emit 'aload *context-register*) ; Stack: value context
+         (emit 'swap) ; context value
+         (emit 'bipush (variable-index variable)) ; context value index
+         (emit 'swap) ; context index value
+         (emit 'aastore))
+        (*use-locals-vector*
+         (emit 'aload 1) ; Stack: value array
+         (emit 'swap) ; array value
+         (emit 'bipush (variable-index variable)) ; array value index
+         (emit 'swap) ; array index value
+         (emit 'aastore))))
+
 (defun compile-multiple-value-bind (form for-effect)
   (let* ((*register* *register*)
          (*variables* *variables*)
@@ -2024,50 +2056,6 @@
       (emit 'aload *thread*)
       (emit 'aload env-var)
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
-
-;; Generates code to bind variable to value at top of runtime stack.
-(defun compile-binding (variable)
-  (cond ((variable-register variable)
-         (emit 'astore (variable-register variable)))
-        ((variable-special-p variable)
-         (emit-push-current-thread)
-         (emit 'swap)
-         (emit 'getstatic
-               *this-class*
-               (declare-symbol (variable-name variable))
-               +lisp-symbol+)
-         (emit 'swap)
-         (emit-invokevirtual +lisp-thread-class+
-                             "bindSpecial"
-                             "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                             -2))
-        (*child-p*
-;;          ;; Compile call to setVariableValue().
-;;          (emit 'aload 0) ; this
-
-;;          (emit 'swap) ; Stack: this value
-;;          (emit 'bipush (variable-index variable)) ; Stack: thread value index
-;;          (emit-invokevirtual *this-class*
-;;                              "setVariableValue"
-;;                              "(Lorg/armedbear/lisp/LispObject;I)V"
-;;                              -3)
-         (emit 'aload 2) ; Stack: value context
-         (emit 'swap) ; context value
-         (emit 'bipush (variable-index variable)) ; context value index
-         (emit 'swap) ; context index value
-         (emit 'aastore)
-         )
-        (*use-locals-vector*
-         (let ((index (variable-index variable)))
-           (emit 'aload 1) ; Stack: value array
-           (emit 'swap) ; array value
-           (emit 'bipush index) ; array value index
-           (emit 'swap) ; array index value
-           (emit 'aastore)))
-        (t
-         (format t "line 2020~%")
-         (assert nil) ; FIXME!
-         (emit 'astore (variable-register variable)))))
 
 (defun compile-let-vars (varlist specials)
   (let ((variables ()))
