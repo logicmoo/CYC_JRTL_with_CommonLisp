@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.41 2003-03-08 17:07:15 piso Exp $
+;;; $Id: rt.lisp,v 1.42 2003-03-08 17:22:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -411,8 +411,6 @@
 
 (defun do-tests (&rest args)
   (let ((rt::*passed* 0) (rt::*failed* 0)
-;;         (prefix "/usr/share/common-lisp/source/ansi-tests/")
-;;         (prefix "/home/peter/gcl/ansi-tests/")
         (suffix ".lsp")
         (tests (or args (list "and"
                               "apply"
@@ -495,6 +493,7 @@
                               "loop9"
                               "make-sequence"
                               "make-string"
+                              "map"
                               "multiple-value-bind"
                               "multiple-value-call"
                               "multiple-value-list"

@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.21 2003-03-07 18:35:14 piso Exp $
+;;; $Id: sequences.lisp,v 1.22 2003-03-08 17:21:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 (export '(make-sequence
           some every notany notevery subseq copy-seq reverse nreverse
           concatenate
+          map
           reduce
           remove-duplicates delete-duplicates
           substitute substitute-if substitute-if-not
@@ -98,7 +99,8 @@
                          (if iesp
                              (make-list size :initial-element initial-element)
                              (make-list size))))
-          (unless (memq name '(ARRAY VECTOR SIMPLE-VECTOR STRING SIMPLE-STRING))
+          (unless (memq name '(ARRAY VECTOR SIMPLE-VECTOR BIT-VECTOR
+                               SIMPLE-BIT-VECTOR STRING SIMPLE-STRING))
             (error 'type-error "~S is not a sequence type" type))
           (let ((len nil))
             (cond ((memq name '(STRING SIMPLE-STRING))
@@ -283,6 +285,26 @@
       (setf (elt x i) (elt (car s) j))
       (incf i))))
 
+
+;;; MAP (from ECL)
+
+(defun map (result-type function sequence &rest more-sequences)
+  (setq more-sequences (cons sequence more-sequences))
+  (let ((l (apply #'min (mapcar #'length more-sequences))))
+    (if (null result-type)
+        (do ((i 0 (1+ i))
+             (l l))
+          ((>= i l) nil)
+          (apply function (mapcar #'(lambda (z) (elt z i))
+                                  more-sequences)))
+        (let ((x (make-sequence result-type l)))
+          (do ((i 0 (1+ i))
+               (l l))
+            ((>= i l) x)
+            (declare (fixnum i l))
+            (setf (elt x i)
+                  (apply function (mapcar #'(lambda (z) (elt z i))
+                                          more-sequences))))))))
 
 ;;; REDUCE (from OpenMCL)
 
