@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.11 2003-01-02 18:08:21 piso Exp $
+ * $Id: Directory.java,v 1.12 2003-01-02 18:21:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -951,7 +951,11 @@ public final class Directory extends Buffer
     public synchronized void changeDirectory(File f)
     {
         if (f.isDirectory()) {
-            Editor editor = Editor.currentEditor();
+            final Editor editor = Editor.currentEditor();
+            if (f.isLocal() && !f.canRead()) {
+                showMessageDialog("Directory is not readable");
+                return;
+            }
             final String name;
             final int offset;
             if (editor.getDot() != null) {
