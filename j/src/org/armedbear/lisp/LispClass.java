@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.17 2003-09-19 23:56:30 piso Exp $
+ * $Id: LispClass.java,v 1.18 2003-09-20 00:39:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,6 +97,7 @@ public final class LispClass extends LispObject
     public static final LispClass RATIONAL           = addClass(Symbol.RATIONAL);
     public static final LispClass REAL               = addClass(Symbol.REAL);
     public static final LispClass SEQUENCE           = addClass(Symbol.SEQUENCE);
+    public static final LispClass SIMPLE_CONDITION   = addClass(Symbol.SIMPLE_CONDITION);
     public static final LispClass SIMPLE_ERROR       = addClass(Symbol.SIMPLE_ERROR);
     public static final LispClass STANDARD_CLASS     = addClass(Symbol.STANDARD_CLASS);
     public static final LispClass STANDARD_OBJECT    = addClass(Symbol.STANDARD_OBJECT);
