@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.34 2003-07-07 17:25:52 piso Exp $
+ * $Id: Package.java,v 1.35 2003-07-07 19:21:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -574,6 +574,10 @@ public final class Package extends LispObject
     public synchronized List getAccessibleSymbols()
     {
         ArrayList list = new ArrayList();
+        for (Iterator it = internalSymbols.values().iterator(); it.hasNext();) {
+            Symbol symbol = (Symbol) it.next();
+            list.add(symbol);
+        }
         for (Iterator it = externalSymbols.values().iterator(); it.hasNext();) {
             Symbol symbol = (Symbol) it.next();
             list.add(symbol);
