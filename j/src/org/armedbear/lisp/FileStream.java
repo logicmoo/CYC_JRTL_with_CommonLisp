@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.4 2004-01-28 20:19:19 piso Exp $
+ * $Id: FileStream.java,v 1.5 2004-01-29 14:36:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public final class FileStream extends Stream
 
     public FileStream(Pathname pathname, String namestring,
                       LispObject elementType, LispObject direction,
-                      boolean append)
+                      LispObject ifExists)
         throws IOException
     {
         File file = new File(namestring);
@@ -57,9 +57,11 @@ public final class FileStream extends Stream
         }
         Debug.assertTrue(mode != null);
         raf = new RandomAccessFile(file, mode);
-        // append is ignored unless we have an output stream.
+        // ifExists is ignored unless we have an output stream.
         if (isOutputStream) {
-            if (append)
+            if (ifExists == Keyword.OVERWRITE)
+                raf.seek(0);
+            else if (ifExists == Keyword.APPEND)
                 raf.seek(raf.length());
             else
                 raf.setLength(0);
@@ -241,7 +243,7 @@ public final class FileStream extends Stream
     // ### make-file-stream pathname element-type direction => stream
     private static final Primitive MAKE_FILE_STREAM =
         new Primitive("make-file-stream", PACKAGE_SYS, false,
-                      "pathname element-type direction append")
+                      "pathname element-type direction if-exists")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -250,7 +252,7 @@ public final class FileStream extends Stream
             Pathname pathname = Pathname.coerceToPathname(args[0]);
             LispObject elementType = args[1];
             LispObject direction = args[2];
-            boolean append = (args[3] != NIL);
+            LispObject ifExists = args[3];
             if (direction != Keyword.INPUT && direction != Keyword.OUTPUT &&
                 direction != Keyword.IO)
                 signal(new LispError("Direction must be :INPUT, :OUTPUT, or :IO."));
@@ -259,7 +261,7 @@ public final class FileStream extends Stream
                 return NIL;
             try {
                 return new FileStream(pathname, namestring, elementType,
-                                      direction, append);
+                                      direction, ifExists);
             }
             catch (FileNotFoundException e) {
                 return NIL;

@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.14 2004-01-29 02:20:10 piso Exp $
+;;; $Id: open.lisp,v 1.15 2004-01-29 14:37:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -107,7 +107,7 @@
           (error 'simple-error
                  :format-control "Option not supported: ~S."
                  :format-arguments (list if-exists))))
-       (make-file-stream pathname element-type direction (eq if-exists :append)))
+       (make-file-stream pathname element-type direction if-exists))
       (t
        (error 'simple-error
               :format-control ":DIRECTION ~S not supported."
