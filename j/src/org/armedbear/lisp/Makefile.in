@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.152 2004-02-24 22:21:30 piso Exp $
+# $Id: Makefile.in,v 1.153 2004-02-25 01:52:03 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,7 +31,6 @@ CLASSFILES =	AbstractArray.class \
 		AutoloadMacro.class \
 		Bignum.class \
 		Binding.class \
-		BitVector.class \
 		Block.class \
 		BroadcastStream.class \
 		BuiltInClass.class \
@@ -40,6 +39,7 @@ CLASSFILES =	AbstractArray.class \
 		Closure.class \
 		CompiledFunction.class \
 		Complex.class \
+		ComplexBitVector.class \
 		ComplexString.class \
 		ComplexVector.class \
 		ConcatenatedStream.class \
