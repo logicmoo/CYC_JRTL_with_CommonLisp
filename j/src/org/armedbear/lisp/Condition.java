@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.28 2004-10-01 18:18:10 piso Exp $
+ * $Id: Condition.java,v 1.29 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,7 +97,7 @@ public class Condition extends StandardObject
         return Symbol.CONDITION;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         LispClass c = getLispClass();
         if (c != null)

@@ -2,7 +2,7 @@
  * ArithmeticError.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ArithmeticError.java,v 1.10 2004-03-18 01:41:11 piso Exp $
+ * $Id: ArithmeticError.java,v 1.11 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ public class ArithmeticError extends LispError
         return Symbol.ARITHMETIC_ERROR;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.ARITHMETIC_ERROR;
     }

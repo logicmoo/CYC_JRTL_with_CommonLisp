@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.22 2004-06-23 01:42:33 piso Exp $
+ * $Id: TwoWayStream.java,v 1.23 2004-10-13 00:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,7 @@ public class TwoWayStream extends Stream
         return Symbol.TWO_WAY_STREAM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.TWO_WAY_STREAM;
     }

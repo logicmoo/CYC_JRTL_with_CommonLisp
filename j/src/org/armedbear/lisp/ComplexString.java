@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.19 2004-09-27 11:19:50 piso Exp $
+ * $Id: ComplexString.java,v 1.20 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public final class ComplexString extends AbstractString
         return list2(Symbol.STRING, number(capacity()));
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.STRING;
     }

@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.32 2004-08-10 03:28:06 piso Exp $
+ * $Id: Readtable.java,v 1.33 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +142,7 @@ public final class Readtable extends LispObject
         return Symbol.READTABLE;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.READTABLE;
     }

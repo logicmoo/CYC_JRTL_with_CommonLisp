@@ -2,7 +2,7 @@
  * FloatingPointUnderflow.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FloatingPointUnderflow.java,v 1.1 2004-02-02 18:44:59 piso Exp $
+ * $Id: FloatingPointUnderflow.java,v 1.2 2004-10-13 00:22:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public class FloatingPointUnderflow extends ArithmeticError
         return Symbol.FLOATING_POINT_UNDERFLOW;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.FLOATING_POINT_UNDERFLOW;
     }

@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleCondition.java,v 1.8 2003-12-13 00:58:51 piso Exp $
+ * $Id: SimpleCondition.java,v 1.9 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public class SimpleCondition extends Condition
         return Symbol.SIMPLE_CONDITION;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.SIMPLE_CONDITION;
     }

@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispError.java,v 1.10 2004-01-16 23:43:02 piso Exp $
+ * $Id: LispError.java,v 1.11 2004-10-13 00:22:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public class LispError extends SeriousCondition
         return Symbol.ERROR;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.ERROR;
     }

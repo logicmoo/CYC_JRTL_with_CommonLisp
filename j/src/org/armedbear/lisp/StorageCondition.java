@@ -2,7 +2,7 @@
  * StorageCondition.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: StorageCondition.java,v 1.1 2004-02-02 19:21:39 piso Exp $
+ * $Id: StorageCondition.java,v 1.2 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public class StorageCondition extends SeriousCondition
         return Symbol.STORAGE_CONDITION;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.STORAGE_CONDITION;
     }

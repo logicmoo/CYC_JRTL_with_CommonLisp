@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.46 2004-09-28 17:33:30 piso Exp $
+ * $Id: Cons.java,v 1.47 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ public final class Cons extends LispObject
         return Symbol.CONS;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.CONS;
     }

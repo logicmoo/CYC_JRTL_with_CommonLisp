@@ -2,7 +2,7 @@
  * ControlError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ControlError.java,v 1.8 2003-12-18 18:04:18 piso Exp $
+ * $Id: ControlError.java,v 1.9 2004-10-13 00:22:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public class ControlError extends LispError
         return Symbol.CONTROL_ERROR;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.CONTROL_ERROR;
     }

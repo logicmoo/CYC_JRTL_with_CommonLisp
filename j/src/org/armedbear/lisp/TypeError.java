@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: TypeError.java,v 1.20 2004-05-27 20:31:49 piso Exp $
+ * $Id: TypeError.java,v 1.21 2004-10-13 00:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@ public class TypeError extends LispError
         return Symbol.TYPE_ERROR;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.TYPE_ERROR;
     }

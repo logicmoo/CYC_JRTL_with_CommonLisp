@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.32 2004-09-26 08:37:18 asimon Exp $
+ * $Id: BuiltInClass.java,v 1.33 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public class BuiltInClass extends LispClass
         return Symbol.BUILT_IN_CLASS;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.BUILT_IN_CLASS;
     }

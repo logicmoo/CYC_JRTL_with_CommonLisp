@@ -2,7 +2,7 @@
  * SimpleError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleError.java,v 1.7 2003-12-12 16:13:05 piso Exp $
+ * $Id: SimpleError.java,v 1.8 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public class SimpleError extends LispError
         return Symbol.SIMPLE_ERROR;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.SIMPLE_ERROR;
     }

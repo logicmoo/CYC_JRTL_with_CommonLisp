@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: UndefinedFunction.java,v 1.10 2004-06-29 15:15:26 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.11 2004-10-13 00:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class UndefinedFunction extends CellError
         return Symbol.UNDEFINED_FUNCTION;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.UNDEFINED_FUNCTION;
     }

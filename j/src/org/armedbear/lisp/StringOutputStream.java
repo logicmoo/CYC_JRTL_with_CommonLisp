@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StringOutputStream.java,v 1.14 2004-03-10 01:56:59 piso Exp $
+ * $Id: StringOutputStream.java,v 1.15 2004-10-13 00:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class StringOutputStream extends Stream
         return Symbol.STRING_OUTPUT_STREAM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.STRING_OUTPUT_STREAM;
     }

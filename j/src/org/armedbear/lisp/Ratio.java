@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Ratio.java,v 1.46 2004-07-29 23:25:47 piso Exp $
+ * $Id: Ratio.java,v 1.47 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ public final class Ratio extends LispObject
         return Symbol.RATIO;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.RATIO;
     }

@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.19 2004-10-03 19:32:35 piso Exp $
+ * $Id: FileStream.java,v 1.20 2004-10-13 00:22:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,7 +93,7 @@ public final class FileStream extends Stream
         return Symbol.FILE_STREAM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.FILE_STREAM;
     }

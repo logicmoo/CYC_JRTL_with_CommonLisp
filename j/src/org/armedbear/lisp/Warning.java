@@ -2,7 +2,7 @@
  * Warning.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Warning.java,v 1.2 2003-12-12 17:28:59 piso Exp $
+ * $Id: Warning.java,v 1.3 2004-10-13 00:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public class Warning extends Condition
         return Symbol.WARNING;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.WARNING;
     }

@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.48 2004-10-11 18:04:48 piso Exp $
+ * $Id: LispClass.java,v 1.49 2004-10-13 00:22:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,7 +199,7 @@ public class LispClass extends StandardObject
         return Symbol.CLASS;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.CLASS;
     }

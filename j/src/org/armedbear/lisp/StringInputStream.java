@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.15 2004-03-11 11:29:04 piso Exp $
+ * $Id: StringInputStream.java,v 1.16 2004-10-13 00:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ public final class StringInputStream extends Stream
         return Symbol.STRING_INPUT_STREAM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.STRING_INPUT_STREAM;
     }

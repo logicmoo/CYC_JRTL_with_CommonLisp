@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.10 2004-06-22 23:07:46 piso Exp $
+ * $Id: EchoStream.java,v 1.11 2004-10-13 00:22:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ public final class EchoStream extends Stream
         return Symbol.ECHO_STREAM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.ECHO_STREAM;
     }

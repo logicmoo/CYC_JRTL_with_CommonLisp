@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.14 2004-07-14 17:01:10 piso Exp $
+ * $Id: SimpleVector.java,v 1.15 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public final class SimpleVector extends AbstractVector
         return list2(Symbol.SIMPLE_VECTOR, new Fixnum(capacity));
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.SIMPLE_VECTOR;
     }

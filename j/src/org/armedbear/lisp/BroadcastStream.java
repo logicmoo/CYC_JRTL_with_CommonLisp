@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: BroadcastStream.java,v 1.8 2004-10-06 23:20:50 piso Exp $
+ * $Id: BroadcastStream.java,v 1.9 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ public final class BroadcastStream extends Stream
         return Symbol.BROADCAST_STREAM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.BROADCAST_STREAM;
     }

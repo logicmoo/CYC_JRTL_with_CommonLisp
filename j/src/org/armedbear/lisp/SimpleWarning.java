@@ -2,7 +2,7 @@
  * SimpleWarning.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleWarning.java,v 1.2 2003-12-12 17:30:00 piso Exp $
+ * $Id: SimpleWarning.java,v 1.3 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class SimpleWarning extends Warning
         return Symbol.SIMPLE_WARNING;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.SIMPLE_WARNING;
     }

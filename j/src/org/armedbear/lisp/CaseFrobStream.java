@@ -2,7 +2,7 @@
  * CaseFrobStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CaseFrobStream.java,v 1.4 2004-06-22 23:07:46 piso Exp $
+ * $Id: CaseFrobStream.java,v 1.5 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public abstract class CaseFrobStream extends Stream
         return Symbol.CASE_FROB_STREAM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.CASE_FROB_STREAM;
     }

@@ -2,7 +2,7 @@
  * ProgramError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ProgramError.java,v 1.11 2003-12-12 16:18:24 piso Exp $
+ * $Id: ProgramError.java,v 1.12 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public class ProgramError extends LispError
         return Symbol.PROGRAM_ERROR;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.PROGRAM_ERROR;
     }

@@ -2,7 +2,7 @@
  * SeriousCondition.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SeriousCondition.java,v 1.1 2004-01-16 23:42:05 piso Exp $
+ * $Id: SeriousCondition.java,v 1.2 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public class SeriousCondition extends Condition
         return Symbol.SERIOUS_CONDITION;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.SERIOUS_CONDITION;
     }

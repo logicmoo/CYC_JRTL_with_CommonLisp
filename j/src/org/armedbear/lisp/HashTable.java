@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.39 2004-10-03 17:12:21 piso Exp $
+ * $Id: HashTable.java,v 1.40 2004-10-13 00:22:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ public abstract class HashTable extends LispObject
         return Symbol.HASH_TABLE;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.HASH_TABLE;
     }

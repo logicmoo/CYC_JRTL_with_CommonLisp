@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Bignum.java,v 1.57 2004-06-19 17:01:55 piso Exp $
+ * $Id: Bignum.java,v 1.58 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public final class Bignum extends LispObject
         return Symbol.BIGNUM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.BIGNUM;
     }

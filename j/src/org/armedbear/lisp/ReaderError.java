@@ -2,7 +2,7 @@
  * ReaderError.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ReaderError.java,v 1.3 2004-10-01 18:18:33 piso Exp $
+ * $Id: ReaderError.java,v 1.4 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public class ReaderError extends StreamError
         return Symbol.READER_ERROR;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.READER_ERROR;
     }

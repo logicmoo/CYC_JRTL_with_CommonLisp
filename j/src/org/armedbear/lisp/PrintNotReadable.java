@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: PrintNotReadable.java,v 1.3 2004-09-30 00:58:07 piso Exp $
+ * $Id: PrintNotReadable.java,v 1.4 2004-10-13 00:22:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public class PrintNotReadable extends LispError
         return Symbol.PRINT_NOT_READABLE;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.PRINT_NOT_READABLE;
     }

@@ -2,7 +2,7 @@
  * CellError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CellError.java,v 1.1 2003-09-21 01:38:25 piso Exp $
+ * $Id: CellError.java,v 1.2 2004-10-13 00:22:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public class CellError extends LispError
         return Symbol.CELL_ERROR;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.CELL_ERROR;
     }

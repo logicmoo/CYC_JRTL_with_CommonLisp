@@ -2,7 +2,7 @@
  * ZeroRankArray.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ZeroRankArray.java,v 1.6 2004-09-30 19:12:23 piso Exp $
+ * $Id: ZeroRankArray.java,v 1.7 2004-10-13 00:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class ZeroRankArray extends AbstractArray
             return list3(Symbol.SIMPLE_ARRAY, elementType, NIL);
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.ARRAY;
     }

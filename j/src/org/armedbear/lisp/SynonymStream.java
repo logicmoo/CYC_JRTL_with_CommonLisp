@@ -2,7 +2,7 @@
  * SynonymStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SynonymStream.java,v 1.6 2004-06-23 01:41:51 piso Exp $
+ * $Id: SynonymStream.java,v 1.7 2004-10-13 00:22:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ public final class SynonymStream extends Stream
         return Symbol.SYNONYM_STREAM;
     }
 
-    public LispClass classOf()
+    public LispObject classOf()
     {
         return BuiltInClass.SYNONYM_STREAM;
     }
