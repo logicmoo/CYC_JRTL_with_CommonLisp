@@ -1,7 +1,7 @@
 # Makefile.in
 
-# Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.172 2004-05-02 01:56:02 piso Exp $
+# Copyright (C) 2003-2004 Peter Graves
+# $Id: Makefile.in,v 1.173 2004-05-02 13:14:05 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@ JAVAC = @JAVAC@
 JAVAH = @JAVAH@
 JAVACFLAGS = @JAVACFLAGS@
 COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
+LIBABCL=@LIBABCL@
 
 CLASSFILES =	AbstractArray.class \
 		AbstractBitVector.class \
@@ -236,6 +237,8 @@ SOURCEFILES = $(patsubst %.class,%.java,$(CLASSFILES))
 	$(JAVAC) -classpath "$(COMPILER_CLASSPATH)" $(JAVACFLAGS) $<
 	date > build
 	touch ../../../../classes.stamp
+
+all: classes $(LIBABCL)
 
 classes: Site.java $(CLASSFILES)
 
