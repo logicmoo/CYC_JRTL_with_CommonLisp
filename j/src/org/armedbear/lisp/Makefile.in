@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.145 2004-02-11 19:47:10 piso Exp $
+# $Id: Makefile.in,v 1.146 2004-02-12 10:24:40 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -84,6 +84,7 @@ CLASSFILES =	AbstractArray.class \
 		LogicalPathname.class \
 		MacroObject.class \
 		Main.class \
+		MathFunctions.class \
 		Nil.class \
 		NilVector.class \
 		Package.class \
@@ -149,7 +150,6 @@ CLASSFILES =	AbstractArray.class \
 		ash.class \
 		assq.class \
 		assql.class \
-		atan.class \
 		cell_error_name.class \
 		create_new_file.class \
 		cxr.class \
