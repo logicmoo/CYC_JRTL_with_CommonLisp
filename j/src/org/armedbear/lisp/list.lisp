@@ -4,7 +4,10 @@
 
 (export '(cdddr list-length make-list
           copy-list copy-alist copy-tree
-          revappend nconc nreconc complement
+          revappend nconc nreconc
+          complement constantly
+          subst subst-if subst-if-not nsubst nsubst-if nsubst-if-not
+          sublis nsublis
           acons pairlis
           assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not))
 
@@ -96,6 +99,170 @@
                 (arg1-p (funcall function arg0 arg1))
                 (arg0-p (funcall function arg0))
                 (t (funcall function))))))
+
+(defun constantly (value &optional (val1 nil val1-p) (val2 nil val2-p)
+			 &rest more-values)
+  "Builds a function that always returns VALUE, and posisbly MORE-VALUES."
+  (cond (more-values
+	 (let ((list (list* value val1 val2 more-values)))
+	   #'(lambda ()
+              (values-list list))))
+	(val2-p
+	 #'(lambda ()
+            (values value val1 val2)))
+	(val1-p
+	 #'(lambda ()
+            (values value val1)))
+	(t
+	 #'(lambda ()
+            value))))
+
+(defmacro satisfies-the-test (item elt)
+  (let ((key-tmp (gensym)))
+    `(let ((,key-tmp (apply-key key ,elt)))
+       (cond (testp (funcall test ,item ,key-tmp))
+             (notp (not (funcall test-not ,item ,key-tmp)))
+             (t (funcall test ,item ,key-tmp))))))
+
+
+;;; Substitution of expressions
+
+
+
+(defun subst (new old tree &key key (test #'eql testp) (test-not nil notp))
+  "Substitutes new for subtrees matching old."
+  (labels ((s (subtree)
+	      (cond ((satisfies-the-test old subtree) new)
+		    ((atom subtree) subtree)
+		    (t (let ((car (s (car subtree)))
+			     (cdr (s (cdr subtree))))
+			 (if (and (eq car (car subtree))
+				  (eq cdr (cdr subtree)))
+			     subtree
+			     (cons car cdr)))))))
+          (s tree)))
+
+(defun subst-if (new test tree &key key)
+  "Substitutes new for subtrees for which test is true."
+  (labels ((s (subtree)
+	      (cond ((funcall test (apply-key key subtree)) new)
+		    ((atom subtree) subtree)
+		    (t (let ((car (s (car subtree)))
+			     (cdr (s (cdr subtree))))
+			 (if (and (eq car (car subtree))
+				  (eq cdr (cdr subtree)))
+			     subtree
+			     (cons car cdr)))))))
+          (s tree)))
+
+(defun subst-if-not (new test tree &key key)
+  "Substitutes new for subtrees for which test is false."
+  (labels ((s (subtree)
+	      (cond ((not (funcall test (apply-key key subtree))) new)
+		    ((atom subtree) subtree)
+		    (t (let ((car (s (car subtree)))
+			     (cdr (s (cdr subtree))))
+			 (if (and (eq car (car subtree))
+				  (eq cdr (cdr subtree)))
+			     subtree
+			     (cons car cdr)))))))
+          (s tree)))
+
+(defun nsubst (new old tree &key key (test #'eql testp) (test-not nil notp))
+  "Substitutes new for subtrees matching old."
+  (labels ((s (subtree)
+	      (cond ((satisfies-the-test old subtree) new)
+		    ((atom subtree) subtree)
+		    (t (do* ((last nil subtree)
+			     (subtree subtree (Cdr subtree)))
+                         ((atom subtree)
+                          (if (satisfies-the-test old subtree)
+                              (setf (cdr last) new)))
+			 (if (satisfies-the-test old subtree)
+			     (return (setf (cdr last) new))
+			     (setf (car subtree) (s (car subtree)))))
+		       subtree))))
+          (s tree)))
+
+(defun nsubst-if (new test tree &key key)
+  "Substitutes new for subtrees of tree for which test is true."
+  (labels ((s (subtree)
+	      (cond ((funcall test (apply-key key subtree)) new)
+		    ((atom subtree) subtree)
+		    (t (do* ((last nil subtree)
+			     (subtree subtree (Cdr subtree)))
+                         ((atom subtree)
+                          (if (funcall test (apply-key key subtree))
+                              (setf (cdr last) new)))
+			 (if (funcall test (apply-key key subtree))
+			     (return (setf (cdr last) new))
+			     (setf (car subtree) (s (car subtree)))))
+		       subtree))))
+          (s tree)))
+
+(defun nsubst-if-not (new test tree &key key)
+  "Substitutes new for subtrees of tree for which test is false."
+  (labels ((s (subtree)
+	      (cond ((not (funcall test (apply-key key subtree))) new)
+		    ((atom subtree) subtree)
+		    (t (do* ((last nil subtree)
+			     (subtree subtree (Cdr subtree)))
+                         ((atom subtree)
+                          (if (not (funcall test (apply-key key subtree)))
+                              (setf (cdr last) new)))
+			 (if (not (funcall test (apply-key key subtree)))
+			     (return (setf (cdr last) new))
+			     (setf (car subtree) (s (car subtree)))))
+		       subtree))))
+          (s tree)))
+
+
+
+
+(defun sublis (alist tree &key key (test #'eql) (test-not nil notp))
+  "Substitutes from alist into tree nondestructively."
+  (declare (inline assoc))
+  (labels ((s (subtree)
+              (let* ((key-val (apply-key key subtree))
+                     (assoc (if notp
+                                (assoc key-val alist :test-not test-not)
+                                (assoc key-val alist :test test))))
+                (cond (assoc (cdr assoc))
+                      ((atom subtree) subtree)
+                      (t (let ((car (s (car subtree)))
+                               (cdr (s (cdr subtree))))
+                           (if (and (eq car (car subtreE))
+                                    (eq cdr (cdr subtree)))
+                               subtree
+                               (cons car cdr))))))))
+          (s tree)))
+
+;;; In run-time env, since can be referenced in line expansions.
+(defmacro nsublis-macro ()
+  (let ((key-tmp (gensym)))
+    `(let ((,key-tmp (apply-key key subtree)))
+       (if notp
+           (assoc ,key-tmp alist :test-not test-not)
+           (assoc ,key-tmp alist :test test)))))
+
+(defun nsublis (alist tree &key key (test #'eql) (test-not nil notp))
+  "Substitutes new for subtrees matching old."
+  (declare (inline assoc))
+  (let (temp)
+    (labels ((s (subtree)
+		(cond ((setq temp (nsublis-macro))
+		       (cdr temp))
+		      ((atom subtree) subtree)
+		      (t (do* ((last nil subtree)
+			       (subtree subtree (Cdr subtree)))
+                           ((atom subtree)
+                            (if (setq temp (nsublis-macro))
+                                (setf (cdr last) (cdr temp))))
+			   (if (setq temp (nsublis-macro))
+			       (return (setf (Cdr last) (Cdr temp)))
+			       (setf (car subtree) (s (car subtree)))))
+			 subtree))))
+            (s tree))))
 
 (defun acons (key datum alist)
   "Construct a new alist by adding the pair (key . datum) to alist"
