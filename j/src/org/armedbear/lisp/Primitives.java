@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.294 2003-07-12 14:39:15 piso Exp $
+ * $Id: Primitives.java,v 1.295 2003-07-14 13:23:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -697,6 +697,20 @@ public final class Primitives extends Module
             if (out != null)
                 out.princ(args[0]);
             return args[0];
+        }
+    };
+
+    // ### princ-to-string
+    private static final Primitive1 PRINC_TO_STRING =
+        new Primitive1("princ-to-string") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+            LispString string = new LispString(String.valueOf(arg));
+            thread.setDynamicEnvironment(oldDynEnv);
+            return string;
         }
     };
 
