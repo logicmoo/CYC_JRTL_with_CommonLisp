@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.25 2004-04-16 13:26:06 piso Exp $
+ * $Id: StructureObject.java,v 1.26 2004-04-25 17:35:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,27 +70,22 @@ public final class StructureObject extends LispObject
         return super.typep(type);
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         // FIXME
-        try {
-            if (typep(Symbol.RESTART) != NIL) {
-                Symbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
-                LispObject fun = PRINT_RESTART.getSymbolFunction();
-                StringOutputStream stream = new StringOutputStream();
-                funcall2(fun, this, stream, LispThread.currentThread());
-                return stream.getString().getStringValue();
-            }
-        }
-        catch (Throwable t) {
-            Debug.trace(t);
+        if (typep(Symbol.RESTART) != NIL) {
+            Symbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
+            LispObject fun = PRINT_RESTART.getSymbolFunction();
+            StringOutputStream stream = new StringOutputStream();
+            funcall2(fun, this, stream, LispThread.currentThread());
+            return stream.getString().getStringValue();
         }
         StringBuffer sb = new StringBuffer("#S(");
         try {
             LispObject effectiveSlots = structureClass.getEffectiveSlots();
             LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
             Debug.assertTrue(effectiveSlotsArray.length == slots.length);
-            sb.append(structureClass.getSymbol());
+            sb.append(structureClass.getSymbol().writeToString());
             final LispObject printLength = _PRINT_LENGTH_.symbolValue();
             final int limit;
             if (printLength instanceof Fixnum)
