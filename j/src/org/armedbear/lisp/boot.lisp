@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.100 2003-08-26 01:36:23 piso Exp $
+;;; $Id: boot.lisp,v 1.101 2003-08-26 14:39:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -136,12 +136,6 @@
 
 
 ;;; Miscellany.
-
-(defun plusp (n)
-  (> n 0))
-
-(defun minusp (n)
-  (< n 0))
 
 (defun integerp (n)
   (typep n 'integer))
