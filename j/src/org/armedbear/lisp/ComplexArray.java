@@ -2,7 +2,7 @@
  * ComplexArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexArray.java,v 1.9 2004-05-27 20:30:19 piso Exp $
+ * $Id: ComplexArray.java,v 1.10 2004-09-29 22:56:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,11 +209,6 @@ public final class ComplexArray extends AbstractArray
 
     public String writeToString() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
-        sb.append('#');
-        sb.append(dimv.length);
-        sb.append('A');
-        appendContents(dimv, 0, sb);
-        return sb.toString();
+        return writeToString(dimv);
     }
 }
