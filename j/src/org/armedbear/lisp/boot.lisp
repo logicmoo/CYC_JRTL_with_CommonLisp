@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.125 2003-11-07 19:15:37 piso Exp $
+;;; $Id: boot.lisp,v 1.126 2003-11-11 19:56:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,9 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (sys::%in-package "COMMON-LISP")
+
+(setq sys::*autoload-verbose* t)
+(setq *load-verbose* t)
 
 (defmacro in-package (name)
   (list 'sys::%in-package (string name)))
@@ -101,22 +104,24 @@
 (set-dispatch-macro-character #\# #\+ #'read-conditional)
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
+(make-package "JVM" :use '("COMMON-LISP" "EXTENSIONS"))
+(defvar jvm::*auto-compile* nil)
+(export 'jvm::*auto-compile* "JVM")
+
+(defun compile (name &optional definition)
+  (values (if name name definition) nil nil))
+
 (sys::%load "macros.lisp")
 (sys::%load "fixme.lisp")
 (sys::%load "destructuring-bind.lisp")
 (sys::%load "arrays.lisp")
-(sys::%load "compiler.lisp")
+(sys::%load "compiler-macro.lisp")
+(sys::%load "precompiler.lisp")
 (sys::%load "list.lisp")
 (sys::%load "sequences.lisp")
 (sys::%load "error.lisp")
 (sys::%load "defpackage.lisp")
 (sys::%load "define-modify-macro.lisp")
-
-(defpackage "JVM" (:use "COMMON-LISP" "EXTENSIONS"))
-
-(defvar jvm::*auto-compile* nil)
-
-(export 'jvm::*auto-compile* "JVM")
 
 ;;; PROVIDE, REQUIRE (from SBCL)
 (defun provide (module-name)
