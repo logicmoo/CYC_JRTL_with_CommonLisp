@@ -2,7 +2,7 @@
  * ThreadPanel.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: ThreadPanel.java,v 1.2 2003-05-16 00:40:28 piso Exp $
+ * $Id: ThreadPanel.java,v 1.3 2003-05-16 15:18:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,8 +73,7 @@ public final class ThreadPanel implements ContextListener, MouseListener
         final Vector v = new Vector();
         threads = jdb.getVM().allThreads();
         int index = -1;
-        Iterator iter = threads.iterator();
-        while (iter.hasNext()) {
+        for (Iterator iter = threads.iterator(); iter.hasNext();) {
             ThreadReference threadRef = (ThreadReference) iter.next();
             FastStringBuffer sb = new FastStringBuffer();
             sb.append(threadRef.name());
