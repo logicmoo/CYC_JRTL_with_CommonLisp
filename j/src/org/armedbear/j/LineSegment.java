@@ -2,7 +2,7 @@
  * LineSegment.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LineSegment.java,v 1.2 2004-04-01 18:39:34 piso Exp $
+ * $Id: LineSegment.java,v 1.3 2004-04-01 18:51:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,9 +83,5 @@ public class LineSegment
     public final String substring(int beginIndex)
     {
         return text.substring(begin + beginIndex, end);
-    }
-
-    public void recycle()
-    {
     }
 }

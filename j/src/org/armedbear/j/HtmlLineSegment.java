@@ -1,8 +1,8 @@
 /*
  * HtmlLineSegment.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: HtmlLineSegment.java,v 1.1.1.1 2002-09-24 16:09:14 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: HtmlLineSegment.java,v 1.2 2004-04-01 18:52:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,10 +39,5 @@ public final class HtmlLineSegment extends LineSegment
     public final Link getLink()
     {
         return link;
-    }
-
-    public final void recycle()
-    {
-        // Do nothing.
     }
 }
