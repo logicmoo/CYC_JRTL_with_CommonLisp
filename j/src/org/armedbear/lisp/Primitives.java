@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.248 2003-06-20 19:49:17 piso Exp $
+ * $Id: Primitives.java,v 1.249 2003-06-20 23:59:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3639,16 +3639,6 @@ public final class Primitives extends Module
             values[1] = new Fixnum(startIndex + in.getOffset());
             LispThread.currentThread().setValues(values);
             return result;
-        }
-    };
-
-    // ### find-class
-    private static final Primitive FIND_CLASS = new Primitive("find-class") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            if (args.length < 1)
-                throw new WrongNumberOfArgumentsException(this);
-            return LispClass.findClass(checkSymbol(args[0]));
         }
     };
 
