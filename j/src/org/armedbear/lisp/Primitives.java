@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.607 2004-03-14 03:42:27 piso Exp $
+ * $Id: Primitives.java,v 1.608 2004-03-16 02:38:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2941,8 +2941,8 @@ public final class Primitives extends Lisp
                 signal(new WrongNumberOfArgumentsException(this));
             Binding binding = env.getTagBinding(args.car());
             if (binding == null)
-                return signal(new ControlError("no tag named " + args.car() +
-                                               " is currently visible"));
+                return signal(new ControlError("No tag named " + args.car() +
+                                               " is currently visible."));
             throw new Go(args.car());
         }
     };
@@ -2961,8 +2961,8 @@ public final class Primitives extends Lisp
             else
                 tag = checkSymbol(args.car());
             LispObject body = args.cdr();
-            Block block = new Block(tag, body);
             Environment ext = new Environment(env);
+            Block block = new Block();
             ext.addBlock(tag, block);
             LispObject result = NIL;
             final LispThread thread = LispThread.currentThread();
@@ -2992,7 +2992,8 @@ public final class Primitives extends Lisp
     };
 
     // ### return-from
-    private static final SpecialOperator RETURN_FROM = new SpecialOperator("return-from")
+    private static final SpecialOperator RETURN_FROM =
+        new SpecialOperator("return-from")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
@@ -3003,9 +3004,9 @@ public final class Primitives extends Lisp
             Symbol symbol = checkSymbol(args.car());
             Block block = env.lookupBlock(symbol);
             if (block == null) {
-                StringBuffer sb = new StringBuffer("no block named ");
+                StringBuffer sb = new StringBuffer("No block named ");
                 sb.append(symbol.getName());
-                sb.append(" is currently visible");
+                sb.append(" is currently visible.");
                 signal(new LispError(sb.toString()));
             }
             LispObject result;
@@ -3014,27 +3015,6 @@ public final class Primitives extends Lisp
             else
                 result = NIL;
             throw new Return(symbol, block, result);
-        }
-    };
-
-    // ### return
-    // Should be a macro.
-    private static final SpecialOperator RETURN = new SpecialOperator("return")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            switch (args.length()) {
-                case 0:
-                    throw new Return(NIL, NIL);
-                case 1:
-                    throw new Return(NIL,
-                                     eval(args.car(), env,
-                                          LispThread.currentThread()));
-                default:
-                    signal(new WrongNumberOfArgumentsException(this));
-                    return NIL;
-            }
         }
     };
 
