@@ -2,7 +2,7 @@
  * DirectoryFilenameFilter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: DirectoryFilenameFilter.java,v 1.1.1.1 2002-09-24 16:08:42 piso Exp $
+ * $Id: DirectoryFilenameFilter.java,v 1.2 2003-03-20 15:07:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ public final class DirectoryFilenameFilter
             if (!name.endsWith(suffix))
                 return false;
         if (substring != null)
-            if (name.indexOf(substring) == -1)
+            if (name.indexOf(substring) < 0)
                 return false;
         return true;
     }
