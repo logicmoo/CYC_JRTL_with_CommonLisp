@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.50 2003-06-02 13:53:24 piso Exp $
+;;; $Id: boot.lisp,v 1.51 2003-06-06 17:06:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -114,7 +114,8 @@
                 "error.lisp"
                 "chars.lisp"
                 "strings.lisp"
-                "sort.lisp"))
+                "sort.lisp"
+                "parse-integer.lisp"))
   (%load name))
 
 
