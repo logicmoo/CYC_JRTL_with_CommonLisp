@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.167 2003-04-10 00:54:51 piso Exp $
+ * $Id: Primitives.java,v 1.168 2003-04-10 01:05:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1266,6 +1266,26 @@ public final class Primitives extends Module
                         LispObject obj = args[j++];
                         Environment oldDynEnv = dynEnv;
                         bindSpecial(_PRINT_ESCAPE_, T);
+                        sb.append(String.valueOf(obj));
+                        dynEnv = oldDynEnv;
+                    }
+                } else if (c == 'D' || c == 'd') {
+                    if (j < args.length) {
+                        LispObject obj = args[j++];
+                        Environment oldDynEnv = dynEnv;
+                        bindSpecial(_PRINT_ESCAPE_, NIL);
+                        bindSpecial(_PRINT_RADIX_, NIL);
+                        bindSpecial(_PRINT_BASE_, new Fixnum(10));
+                        sb.append(String.valueOf(obj));
+                        dynEnv = oldDynEnv;
+                    }
+                } else if (c == 'X' || c == 'x') {
+                    if (j < args.length) {
+                        LispObject obj = args[j++];
+                        Environment oldDynEnv = dynEnv;
+                        bindSpecial(_PRINT_ESCAPE_, NIL);
+                        bindSpecial(_PRINT_RADIX_, NIL);
+                        bindSpecial(_PRINT_BASE_, new Fixnum(16));
                         sb.append(String.valueOf(obj));
                         dynEnv = oldDynEnv;
                     }
