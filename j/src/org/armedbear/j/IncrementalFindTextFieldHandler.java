@@ -1,8 +1,8 @@
 /*
  * IncrementalFindTextFieldHandler.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: IncrementalFindTextFieldHandler.java,v 1.5 2004-07-15 19:20:11 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: IncrementalFindTextFieldHandler.java,v 1.6 2005-01-24 16:18:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
@@ -81,6 +82,7 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         editor.updateLocation();
         // Erase "not found" message (if any).
         editor.status("");
+        unhighlightTextField();
     }
 
     private void restoreInitialState()
@@ -210,6 +212,7 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
 
     private void finish(KeyEvent e)
     {
+        unhighlightTextField();
         if (search.getPattern() != null && search.getPatternLength() > 0) {
             editor.setLastSearch(search);
             History history = textField.getHistory();
@@ -276,8 +279,10 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         Position pos = search.findString(buffer, editor.getDot(), true);
         if (pos != null)
             found(pos);
-        else
+        else {
             search.notFound(editor);
+            highlightTextField();
+        }
     }
 
     private void backspace()
@@ -294,6 +299,7 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
                     found(pos);
                     // Erase "not found" message (if any).
                     editor.status("");
+                    unhighlightTextField();
                 } else
                     search.notFound(editor);
             } else
@@ -386,4 +392,14 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
             }
         }
     };
+
+    private final void highlightTextField()
+    {
+        textField.setBackground(Color.RED);
+    }
+
+    private final void unhighlightTextField()
+    {
+        textField.setBackground(Color.WHITE);
+    }
 }
