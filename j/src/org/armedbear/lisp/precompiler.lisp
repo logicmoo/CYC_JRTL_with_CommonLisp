@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.90 2005-03-14 17:52:12 piso Exp $
+;;; $Id: precompiler.lisp,v 1.91 2005-03-21 19:50:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -188,19 +188,21 @@
          (let ((op (car form))
                handler)
            (when (symbolp op)
-             (cond ((local-macro-function op)
-                    (let ((result (expand-local-macro (precompile-cons form))))
-                      (return-from precompile1
-                                   (if (equal result form)
-                                       result
-                                       (precompile1 result)))))
-                   ((compiler-macro-function op)
+             (cond ((compiler-macro-function op)
                     (let ((result (compiler-macroexpand form)))
                       ;; Fall through if no change...
                       (unless (equal result form)
                         (return-from precompile1 (precompile1 result)))))
                    ((setf handler (get op 'precompile-handler))
                     (return-from precompile1 (funcall handler form)))
+
+                   ((local-macro-function op)
+                    (let ((result (expand-local-macro (precompile-cons form))))
+                      (return-from precompile1
+                                   (if (equal result form)
+                                       result
+                                       (precompile1 result)))))
+
                    ((macro-function op)
                     (return-from precompile1 (precompile1 (expand-macro form))))
                    ((special-operator-p op)
