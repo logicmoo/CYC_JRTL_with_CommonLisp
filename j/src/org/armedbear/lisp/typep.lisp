@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: typep.lisp,v 1.9 2003-11-17 15:19:21 piso Exp $
+;;; $Id: typep.lisp,v 1.10 2003-11-17 15:45:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -77,6 +77,10 @@
             (or (null (cadr i)) (typep (cdr object) (cadr i)))))
       (INTEGER
        (and (integerp object) (in-interval-p object i)))
+      (RATIONAL
+       (and (rationalp object) (in-interval-p object i)))
+      (REAL
+       (and (realp object) (in-interval-p object i)))
       (SIMPLE-BIT-VECTOR
        (and (simple-bit-vector-p object)
             (or (endp i) (match-dimensions (array-dimensions object) i))))
