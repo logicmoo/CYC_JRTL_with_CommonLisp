@@ -1,7 +1,7 @@
 ;;; swank-protocol.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-protocol.lisp,v 1.4 2004-09-15 19:19:02 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: swank-protocol.lisp,v 1.5 2005-02-04 19:35:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,7 +24,8 @@
 
 (in-package #:swank-protocol)
 
-(export '(encode-message decode-message port-file))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (export '(encode-message decode-message port-file)))
 
 (defvar *swank-io-package*
   (let ((package (make-package :swank-io-package :use '())))
@@ -72,7 +73,7 @@
   (merge-pathnames ".j/swank"
                    (if (sys:featurep :windows) "C:\\" (user-homedir-pathname))))
 
-#+sbcl
+#-abcl
 (defun port-file ()
   (merge-pathnames ".j/swank" (user-homedir-pathname)))
 

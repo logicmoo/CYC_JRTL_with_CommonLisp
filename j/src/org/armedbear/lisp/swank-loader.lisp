@@ -1,7 +1,7 @@
 ;;; swank-loader.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-loader.lisp,v 1.4 2004-09-15 17:50:41 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: swank-loader.lisp,v 1.5 2005-02-04 19:34:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,12 +17,18 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package #:cl-user)
+;;; Adapted from SLIME, the "Superior Lisp Interaction Mode for Emacs",
+;;; originally written by Eric Marsden, Luke Gorrie and Helmut Eller.
+
+(defpackage #:swank-loader
+  (:use :common-lisp))
+
+(in-package #:swank-loader)
 
 #+abcl
 (sys:load-system-file "swank-package")
 
-#+sbcl
+#-abcl
 (load (merge-pathnames "swank-package.lisp" *load-truename*))
 
 #+abcl
@@ -41,16 +47,30 @@
                  (sys:load-system-file (file-namestring binary-file))
                  (sys:load-system-file (file-namestring (compile-file source-file)))))))))
 
-#+sbcl
+#-abcl
+(defun binary-pathname (source-pathname)
+  (let ((cfp (compile-file-pathname source-pathname)))
+    (merge-pathnames (make-pathname
+                      :directory `(:relative ".j" "slime" "fasl"
+                                             #+sbcl "sbcl"
+                                             #+allegro "allegro")
+                      :name (pathname-name cfp)
+                      :type (pathname-type cfp))
+                     (user-homedir-pathname))))
+
+#-abcl
 (dolist (file '("swank-protocol.lisp"
-                "swank-sbcl.lisp"
+                #+allegro "swank-allegro.lisp"
+                #+sbcl "swank-sbcl.lisp"
                 "swank.lisp"))
   (let* ((source-file (merge-pathnames file *load-truename*))
-         (binary-file (compile-file-pathname source-file)))
+         (binary-file (binary-pathname source-file)))
+    (ensure-directories-exist binary-file)
     (if (and (probe-file binary-file)
-             (> (file-write-date binary-file) (file-write-date source-file)))
+             (> (file-write-date binary-file)
+                (file-write-date source-file)))
         (load binary-file)
-        (load (compile-file source-file)))))
+        (load (compile-file source-file :output-file binary-file)))))
 
 #-j
 (funcall (intern (string '#:start-server) '#:swank))
