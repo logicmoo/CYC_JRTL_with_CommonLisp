@@ -1,8 +1,8 @@
 /*
  * Complex.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.25 2003-12-13 00:58:51 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Complex.java,v 1.26 2004-02-10 14:06:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,9 +37,9 @@ public final class Complex extends LispObject
         throws ConditionThrowable
     {
         if (!realpart.realp())
-            return signal(new TypeError(realpart, "real number"));
+            return signal(new TypeError(realpart, Symbol.REAL));
         if (!imagpart.realp())
-            return signal(new TypeError(imagpart, "real number"));
+            return signal(new TypeError(imagpart, Symbol.REAL));
         if (realpart instanceof LispFloat)
             imagpart = LispFloat.coerceToFloat(imagpart);
         else if (imagpart instanceof LispFloat)
