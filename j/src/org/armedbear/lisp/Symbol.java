@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.122 2004-04-18 19:31:29 piso Exp $
+ * $Id: Symbol.java,v 1.123 2004-04-20 15:09:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -301,7 +301,7 @@ public class Symbol extends LispObject
 
     public final String getQualifiedName()
     {
-        if (pkg == null)
+        if (pkg == NIL)
             return("#:".concat(name));
         if (pkg == PACKAGE_KEYWORD)
             return ":".concat(name);
@@ -434,7 +434,7 @@ public class Symbol extends LispObject
             StringBuffer sb = new StringBuffer();
             if (pkg == PACKAGE_KEYWORD) {
                 sb.append(':');
-            } else if (pkg != null) {
+            } else if (pkg != NIL) {
                 sb.append(multipleEscape(pkg.getName()));
                 sb.append("::");
             } else {
@@ -519,7 +519,7 @@ public class Symbol extends LispObject
             else if (printCase == Keyword.CAPITALIZE)
                 s = capitalize(s, readtableCase);
         }
-        if (pkg == null || pkg == NIL) {
+        if (pkg == NIL) {
             if (_PRINT_GENSYM_.symbolValueNoThrow() != NIL)
                 return "#:".concat(s);
             else
@@ -622,11 +622,10 @@ public class Symbol extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
-                LispObject pkg = ((Symbol)arg).pkg;
-                return pkg != null ? pkg : NIL;
+                return ((Symbol)arg).pkg;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, Symbol.SYMBOL));
             }
         }
     };
@@ -644,7 +643,7 @@ public class Symbol extends LispObject
                 return signal(new UndefinedFunction(arg));
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, Symbol.SYMBOL));
             }
         }
     };
@@ -659,7 +658,7 @@ public class Symbol extends LispObject
                 return propertyList != null ? propertyList : NIL;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, "symbol"));
+                return signal(new TypeError(arg, Symbol.SYMBOL));
             }
         }
     };
@@ -701,4 +700,3 @@ public class Symbol extends LispObject
         }
     };
 }
-
