@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.248 2004-06-02 21:20:40 piso Exp $
+ * $Id: Lisp.java,v 1.249 2004-06-04 16:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -797,6 +797,13 @@ public abstract class Lisp
             return new Fixnum(n.intValue());
         else
             return new Bignum(n);
+    }
+
+    // Adapted from SBCL.
+    public static final int mix(long x, long y)
+    {
+        long xy = x * 3 + y;
+        return (int) (536870911L & (441516657L ^ xy ^ (xy >> 5)));
     }
 
     public static final LispObject readObjectFromString(String s)
