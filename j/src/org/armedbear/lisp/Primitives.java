@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.96 2003-03-08 03:32:21 piso Exp $
+ * $Id: Primitives.java,v 1.97 2003-03-08 03:46:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2874,12 +2874,12 @@ public final class Primitives extends Module
             Environment oldDynEnv = dynEnv;
             Environment ext = new Environment(env);
             Environment evalEnv = sequential ? ext : env;
-            LispObject array[] = varList.copyToArray();
-            for (int i = 0; i < array.length; i++) {
-                LispObject obj = array[i];
+            for (int i = varList.length(); i-- > 0;) {
+                LispObject obj = varList.car();
+                varList = varList.cdr();
                 if (obj instanceof Cons) {
                     bind(checkSymbol(obj.car()),
-                        eval(obj.cadr(),evalEnv),
+                        eval(obj.cadr(), evalEnv),
                         ext);
                 } else
                     bind(checkSymbol(obj), NIL, ext);
