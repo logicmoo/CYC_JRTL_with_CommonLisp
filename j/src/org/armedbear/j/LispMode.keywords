@@ -418,6 +418,7 @@ push
 pushnew
 quote
 random
+random-state-p
 rational
 rationalize
 rationalp
