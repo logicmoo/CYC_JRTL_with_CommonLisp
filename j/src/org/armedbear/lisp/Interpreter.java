@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.61 2004-04-30 01:53:36 piso Exp $
+ * $Id: Interpreter.java,v 1.62 2004-05-02 01:47:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,10 +150,14 @@ public final class Interpreter extends Lisp
             Stream out = getStandardOutput();
             out._writeString(banner());
             out._finishOutput();
-            try {
-                ControlC.initialize();
+            if (Utilities.isPlatformUnix()) {
+                try {
+                    System.loadLibrary("abcl");
+                    ControlC.initialize();
+                    out._writeString("Control-C handler installed.\n");
+                }
+                catch (Throwable t) {}
             }
-            catch (Throwable t) {}
             initializeLisp(jlisp);
             initializeTopLevel();
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
