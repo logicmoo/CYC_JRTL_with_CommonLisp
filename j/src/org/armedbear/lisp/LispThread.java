@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.36 2004-05-10 00:19:16 piso Exp $
+ * $Id: LispThread.java,v 1.37 2004-05-26 20:59:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,43 +32,43 @@ public final class LispThread extends LispObject
 
     public static final LispThread currentThread()
     {
-        Thread t = Thread.currentThread();
-        LispThread thread = get(t);
-        if (thread == null) {
-            thread = new LispThread(t);
-            put(t, thread);
+        Thread currentJavaThread = Thread.currentThread();
+        LispThread lispThread = get(currentJavaThread);
+        if (lispThread == null) {
+            lispThread = new LispThread(currentJavaThread);
+            put(currentJavaThread, lispThread);
         }
-        return thread;
+        return lispThread;
     }
 
-    private static void put(Thread t, LispThread thread)
+    private static void put(Thread javaThread, LispThread lispThread)
     {
         synchronized (lock) {
             HashMap m = (HashMap) map.clone();
-            m.put(t, thread);
+            m.put(javaThread, lispThread);
             map = m;
         }
     }
 
-    private static LispThread get(Thread t)
+    private static LispThread get(Thread javaThread)
     {
-        return (LispThread) map.get(t);
+        return (LispThread) map.get(javaThread);
     }
 
-    private static void remove(Thread t)
+    private static void remove(Thread javaThread)
     {
         synchronized (lock) {
             HashMap m = (HashMap) map.clone();
-            m.remove(t);
+            m.remove(javaThread);
             map = m;
         }
     }
 
-    private final Thread t;
+    private final Thread javaThread;
 
-    private LispThread(Thread t)
+    private LispThread(Thread javaThread)
     {
-        this.t = t;
+        this.javaThread = javaThread;
     }
 
     private LispThread(final Function fun)
@@ -79,17 +79,20 @@ public final class LispThread extends LispObject
                 try {
                     funcall(fun, new LispObject[0], LispThread.this);
                 }
+                catch (ThreadDestroyed ignored) {
+                    ; // Might happen.
+                }
                 catch (Throwable t) {
                     t.printStackTrace();
                 }
                 finally {
-                    remove(t);
+                    remove(javaThread);
                 }
             }
         };
-        t = new Thread(r);
-        put(t, this);
-        t.start();
+        javaThread = new Thread(r);
+        put(javaThread, this);
+        javaThread.start();
     }
 
     private boolean destroyed;
@@ -464,16 +467,32 @@ public final class LispThread extends LispObject
 
     // ### make-thread
     private static final Primitive1 MAKE_THREAD =
-        new Primitive1("make-thread", PACKAGE_EXT, true) {
+        new Primitive1("make-thread", PACKAGE_EXT, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Function fun = checkFunction(arg);
-            return new LispThread(fun);
+            return new LispThread(checkFunction(arg));
+        }
+    };
+
+    // ### thread-alive-p
+    private static final Primitive1 THREAD_ALIVE_P =
+        new Primitive1("thread-alive-p", PACKAGE_EXT, true, "thread")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((LispThread)arg).javaThread.isAlive() ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, "Lisp thread"));
+            }
         }
     };
 
     // ### sleep
-    private static final Primitive1 SLEEP = new Primitive1("sleep","seconds") {
+    private static final Primitive1 SLEEP = new Primitive1("sleep", "seconds")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             double d =
@@ -493,7 +512,8 @@ public final class LispThread extends LispObject
 
     // ### mapcar-threads
     private static final Primitive1 MAPCAR_THREADS =
-        new Primitive1("mapcar-threads", PACKAGE_EXT, true) {
+        new Primitive1("mapcar-threads", PACKAGE_EXT, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Function fun = checkFunction(arg);
@@ -511,7 +531,8 @@ public final class LispThread extends LispObject
 
     // ### destroy-thread
     private static final Primitive1 DESTROY_THREAD =
-        new Primitive1("destroy-thread", PACKAGE_EXT, true) {
+        new Primitive1("destroy-thread", PACKAGE_EXT, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispThread) {
@@ -525,7 +546,8 @@ public final class LispThread extends LispObject
 
     // ### current-thread
     private static final Primitive0 CURRENT_THREAD =
-        new Primitive0("current-thread", PACKAGE_EXT, true) {
+        new Primitive0("current-thread", PACKAGE_EXT, true)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             return currentThread();
