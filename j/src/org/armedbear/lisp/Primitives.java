@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.264 2003-06-24 18:20:51 piso Exp $
+ * $Id: Primitives.java,v 1.265 2003-06-24 20:00:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2234,6 +2234,34 @@ public final class Primitives extends Module
 
     // ### funcall
     private static final Primitive FUNCALL = new Primitive("funcall") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws Condition
+        {
+            LispObject fun;
+            if (first instanceof Symbol) {
+                fun = first.getSymbolFunction();
+                if (fun instanceof SpecialOperator)
+                    throw new UndefinedFunctionError(first);
+            } else
+                fun = first;
+            if (fun instanceof Function)
+                return funcall1(fun, second, LispThread.currentThread());
+            throw new TypeError(fun, "function");
+        }
+        public LispObject execute(LispObject first, LispObject second,
+            LispObject third) throws Condition
+        {
+            LispObject fun;
+            if (first instanceof Symbol) {
+                fun = first.getSymbolFunction();
+                if (fun instanceof SpecialOperator)
+                    throw new UndefinedFunctionError(first);
+            } else
+                fun = first;
+            if (fun instanceof Function)
+                return funcall2(fun, second, third, LispThread.currentThread());
+            throw new TypeError(fun, "function");
+        }
         public LispObject execute(LispObject[] args) throws Condition
         {
             if (args.length < 1)
@@ -2257,6 +2285,25 @@ public final class Primitives extends Module
 
     // ### apply
     private static final Primitive APPLY = new Primitive("apply") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws Condition
+        {
+            LispObject spread = checkList(second);
+            LispObject fun = first;
+            if (fun instanceof Symbol)
+                fun = fun.getSymbolFunction();
+            if (fun instanceof Function) {
+                final int numFunArgs = spread.length();
+                final LispObject[] funArgs = new LispObject[numFunArgs];
+                int j = 0;
+                while (spread != NIL) {
+                    funArgs[j++] = spread.car();
+                    spread = spread.cdr();
+                }
+                return funcall(fun, funArgs, LispThread.currentThread());
+            }
+            throw new TypeError(fun, "function");
+        }
         public LispObject execute(final LispObject[] args) throws Condition
         {
             final int numArgs = args.length;
@@ -4449,12 +4496,29 @@ public final class Primitives extends Module
         public LispObject execute(LispObject first, LispObject second)
             throws Condition
         {
-            if (first != NIL) {
-                LispObject[] args = new LispObject[1];
-                args[0] = second;
-                return funcall(first, args, LispThread.currentThread());
-            }
+            if (first != NIL)
+                return funcall1(first, second, LispThread.currentThread());
             return second;
+        }
+    };
+
+    // ### %compare-elements
+    // %compare-elements test key elt1 elt2
+    private static final Primitive _COMPARE_ELEMENTS =
+        new Primitive("%compare-elements") {
+        public LispObject execute(LispObject args[]) throws Condition
+        {
+            if (args[1] == NIL) {
+                // No key function.
+                return funcall2(args[0], args[2], args[3],
+                                LispThread.currentThread());
+            }
+            LispObject key = args[1];
+            final LispThread thread = LispThread.currentThread();
+            return funcall2(args[0],
+                            funcall1(key, args[2], thread),
+                            funcall1(key, args[3], thread),
+                            thread);
         }
     };
 
