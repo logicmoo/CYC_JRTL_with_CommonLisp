@@ -2,7 +2,7 @@
  * DiffFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffFormatter.java,v 1.3 2003-04-23 03:55:06 piso Exp $
+ * $Id: DiffFormatter.java,v 1.4 2003-04-23 15:12:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class DiffFormatter extends Formatter
             return segmentList;
         }
         final String text = getDetabbedText(line);
-        final char c = text.charAt(0);
+        char c = text.charAt(0);
         if (c == '+' && !text.startsWith("+++ ")) {
             // Inserted line.
             addSegment(text, DIFF_FORMAT_INSERTED);
@@ -63,19 +63,88 @@ public final class DiffFormatter extends Formatter
             addSegment(text, DIFF_FORMAT_CHANGED);
             return segmentList;
         }
-        if (c == ' ') {
-            // Context line.
-            addSegment(text, DIFF_FORMAT_CONTEXT);
-            return segmentList;
-        }
         if (c == '?' || text.startsWith("Index: ")) {
             // File line.
             addSegment(text, DIFF_FORMAT_FILE);
             return segmentList;
         }
-        // Otherwise, it must be a header line.
-        addSegment(text, DIFF_FORMAT_HEADER);
+        if (text.startsWith("==== ") && text.endsWith(" ====")) {
+            // File line (p4 diff).
+            addSegment(text, DIFF_FORMAT_FILE);
+            return segmentList;
+        }
+        if (isDiffHeader(text)) {
+            addSegment(text, DIFF_FORMAT_HEADER);
+            return segmentList;
+        }
+        if (c == ' ' && buffer instanceof org.armedbear.j.mail.MessageBuffer) {
+            // Diff might be indented.
+            if (isDiffHeader(text.trim())) {
+                addSegment(text, DIFF_FORMAT_HEADER);
+                return segmentList;
+            }
+            int indent = -1;
+            for (Line ln = line.previous(); ln != null; ln = ln.previous()) {
+                String trim = ln.trim();
+                if (trim.startsWith("@@ ") && trim.endsWith(" @@")) {
+                    indent = getDetabbedText(ln).indexOf('@');
+                    break;
+                }
+                if (trim.startsWith("+++ ")) {
+                    indent = getDetabbedText(ln).indexOf('+');
+                    break;
+                }
+            }
+            if (indent >= 0) {
+                String s = text.substring(indent);
+                if (s.length() == 0) {
+                    addSegment("", DIFF_FORMAT_TEXT);
+                    return segmentList;
+                }
+                c = s.charAt(0);
+                if (c == '+' && !s.startsWith("+++ ")) {
+                    // Inserted line.
+                    addSegment(text, DIFF_FORMAT_INSERTED);
+                    return segmentList;
+                }
+                if (c == '-' && !s.startsWith("--- ")) {
+                    // Deleted line.
+                    addSegment(text, DIFF_FORMAT_DELETED);
+                    return segmentList;
+                }
+                if (c == '!') {
+                    // Changed line (diff -c).
+                    addSegment(s, DIFF_FORMAT_CHANGED);
+                    return segmentList;
+                }
+                if (c == '?' || s.startsWith("Index: ")) {
+                    // File line.
+                    addSegment(text, DIFF_FORMAT_FILE);
+                    return segmentList;
+                }
+                if (s.startsWith("==== ") && s.endsWith(" ====")) {
+                    // File line (p4 diff).
+                    addSegment(text, DIFF_FORMAT_FILE);
+                    return segmentList;
+                }
+            }
+        }
+        // Otherwise, assume it's a context line.
+        addSegment(text, DIFF_FORMAT_CONTEXT);
         return segmentList;
+    }
+
+    private static boolean isDiffHeader(String s)
+    {
+        return (s.startsWith("cvs server: ") ||
+            s.startsWith("========") ||
+            s.startsWith("RCS file: ") ||
+            s.startsWith("retrieving revision ") ||
+            s.startsWith("diff ") ||
+            s.startsWith("--- ") ||
+            s.startsWith("+++ ") ||
+            (s.startsWith("@@ ") || s.endsWith(" @@")) ||
+            (s.startsWith("@ ") && s.endsWith(" @")));
     }
 
     public FormatTable getFormatTable()
