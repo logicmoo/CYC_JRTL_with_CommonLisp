@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.47 2003-12-03 00:53:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.48 2003-12-03 01:15:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2110,7 +2110,7 @@
             (return-from compile-form))))
       (cond
        ((special-operator-p op)
-        (error "COMPILE-FORM unhandled special operator ~S" op))
+        (error "COMPILE-FORM unsupported special operator ~S" op))
        (t ; Function call.
         (compile-function-call op args for-effect)))))
    ((eq form '())
@@ -2290,23 +2290,26 @@
     (dotimes (i (1- sys::*load-depth*))
       (princ #\space s))))
 
+(defvar *compile-print* t)
+
 (defun jvm-compile (name &optional definition)
   (let ((prefix (load-verbose-prefix)))
-    (if name
-        (progn
-          (format t "~A Compiling ~S ...~%" prefix name)
-          (when (and (fboundp name) (typep (fdefinition name) 'generic-function))
-            (format t "~A Unable to compile generic function ~S~%" prefix name)
-            (return-from jvm-compile (values name nil t)))
-          (unless (symbolp name)
-            (format t "~A Unable to compile ~S~%" prefix name)
-            (return-from jvm-compile (values name nil t))))
-        (format t "Compiling top-level form ...~%"))
+    (when *compile-print*
+      (if name
+          (progn
+            (format t "~A Compiling ~S ...~%" prefix name)
+            (when (and (fboundp name) (typep (fdefinition name) 'generic-function))
+              (format t "~A Unable to compile generic function ~S~%" prefix name)
+              (return-from jvm-compile (values name nil t)))
+            (unless (symbolp name)
+              (format t "~A Unable to compile ~S~%" prefix name)
+              (return-from jvm-compile (values name nil t))))
+          (format t "~A Compiling top-level form ...~%" prefix)))
     (unless definition
       (resolve name)
       (setf definition (fdefinition name))
       (when (compiled-function-p definition)
-        (when name
+        (when (and *compile-print* name)
           (format t "~A Already compiled ~S~%" prefix name))
         (return-from jvm-compile (values name nil nil))))
     (handler-case
@@ -2322,13 +2325,15 @@
             (if (macro-function name)
                 (setf (fdefinition name) (sys::make-macro compiled-definition))
                 (setf (fdefinition name) compiled-definition)))
-          (if name
-              (format t "~A Compiled ~S~%" prefix name)
-              (format t "Compiled top-level form~%"))
+          (when *compile-print*
+            (if name
+                (format t "~A Compiled ~S~%" prefix name)
+                (format t "~A Compiled top-level form~%" prefix)))
           (values (or name compiled-definition) nil nil))
       (error (c)
              (format t "Error: ~S~%" c)
-             (when name (format t "~A Unable to compile ~S~%" prefix name))
+             (when name
+               (format t "~A Unable to compile ~S~%" prefix name))
              (values (or name (sys::coerce-to-function definition)) nil t)))))
 
 (defun jvm-compile-package (package-designator)
