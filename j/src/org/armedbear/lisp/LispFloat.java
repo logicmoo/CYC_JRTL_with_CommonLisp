@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.74 2004-09-21 18:12:14 piso Exp $
+ * $Id: LispFloat.java,v 1.75 2004-09-27 01:33:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -396,7 +396,7 @@ public final class LispFloat extends LispObject
             Fixnum sign = new Fixnum(s);
             LispObject result = significand;
             result =
-                result.multiplyBy(Primitives.EXPT.execute(Fixnum.TWO, exponent));
+                result.multiplyBy(MathFunctions.EXPT.execute(Fixnum.TWO, exponent));
             result = result.multiplyBy(sign);
             // Calculate remainder.
             LispObject product = result.multiplyBy(obj);

@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.682 2004-09-27 01:06:25 piso Exp $
+ * $Id: Primitives.java,v 1.683 2004-09-27 01:32:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3842,105 +3842,6 @@ public final class Primitives extends Lisp
             list = list.cdr();
         }
         return result.nreverse();
-    }
-
-    // ### expt
-    // expt base-number power-number => result
-    public static final Primitive2 EXPT =
-        new Primitive2("expt", "base-number power-number")
-    {
-        public LispObject execute(LispObject base, LispObject power)
-            throws ConditionThrowable
-        {
-            if (power.zerop()) {
-                if (power instanceof Fixnum) {
-                    if (base instanceof LispFloat)
-                        return LispFloat.ONE;
-                    if (base instanceof Complex) {
-                        if (((Complex)base).getRealPart() instanceof LispFloat)
-                            return Complex.getInstance(LispFloat.ONE,
-                                                       LispFloat.ZERO);
-                    }
-                    return Fixnum.ONE;
-                }
-                if (power instanceof LispFloat) {
-                    return LispFloat.ONE;
-                }
-            }
-            if (power instanceof Fixnum) {
-                if (base.rationalp())
-                    return intexp(base, power);
-                LispObject result;
-                if (base instanceof LispFloat)
-                    result = LispFloat.ONE;
-                else
-                    result = Fixnum.ONE;
-                int pow = ((Fixnum)power).value;
-                if (pow > 0) {
-                    for (int i = pow; i-- > 0;)
-                        result = result.multiplyBy(base);
-                } else if (pow < 0) {
-                    for (int i = -pow; i-- > 0;)
-                        result = result.divideBy(base);
-                }
-                return result;
-            }
-            final double pi = 3.141592653589793;
-            final double x; // base
-            final double y; // power
-            if (base instanceof Fixnum)
-                x = ((Fixnum)base).value;
-            else if (base instanceof Ratio)
-                x = ((Ratio)base).floatValue();
-            else if (base instanceof LispFloat)
-                x = ((LispFloat)base).value;
-            else
-                return signal(new LispError("EXPT: unsupported case"));
-            if (power instanceof Ratio)
-                y = ((Ratio)power).floatValue();
-            else if (power instanceof LispFloat)
-                y = ((LispFloat)power).value;
-            else
-                return signal(new LispError("EXPT: unsupported case"));
-            double r = Math.pow(x, y);
-            if (!Double.isNaN(r))
-                return new LispFloat(r);
-            if (x < 0) {
-                r = Math.pow(-x, y);
-                double realPart = r * Math.cos(y * pi);
-                double imagPart = r * Math.sin(y * pi);
-                return Complex.getInstance(new LispFloat(realPart),
-                                           new LispFloat(imagPart));
-            }
-            return signal(new LispError("EXPT: unsupported case"));
-        }
-    };
-
-    // Adapted from SBCL.
-    private static final LispObject intexp(LispObject base, LispObject power)
-        throws ConditionThrowable
-    {
-        if (power.minusp()) {
-            power = Fixnum.ZERO.subtract(power);
-            return Fixnum.ONE.divideBy(intexp(base, power));
-        }
-        if (base.eql(Fixnum.TWO))
-            return Fixnum.ONE.ash(power);
-        LispObject nextn = power.ash(Fixnum.MINUS_ONE);
-        LispObject total;
-        if (power.oddp())
-            total = base;
-        else
-            total = Fixnum.ONE;
-        while (true) {
-            if (nextn.zerop())
-                return total;
-            base = base.multiplyBy(base);
-            power = nextn;
-            nextn = power.ash(Fixnum.MINUS_ONE);
-            if (power.oddp())
-                total = base.multiplyBy(total);
-        }
     }
 
     // ### list

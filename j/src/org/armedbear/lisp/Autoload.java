@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.198 2004-09-26 18:47:44 piso Exp $
+ * $Id: Autoload.java,v 1.199 2004-09-27 01:32:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,6 +241,7 @@ public class Autoload extends Function
         autoload("echo-stream-input-stream", "EchoStream");
         autoload("echo-stream-output-stream", "EchoStream");
         autoload("exp", "MathFunctions");
+        autoload("expt", "MathFunctions");
         autoload("file-author", "file_author");
         autoload("file-error-pathname", "file_error_pathname");
         autoload("file-length", "file_length");
