@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.53 2005-02-01 14:21:03 piso Exp $
+;;; $Id: compile-file.lisp,v 1.54 2005-02-02 16:52:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -126,13 +126,18 @@
                                           ',lambda-list)))
                            (when compile-time-too
                              (eval form))))))
-                (push name jvm::*toplevel-defuns*)
+                (push name jvm::*functions-defined-in-current-file*)
+                (jvm::note-name-defined name)
                 ;; If NAME is not fbound, provide a dummy definition so that
                 ;; getSymbolFunctionOrDie() will succeed when we try to verify that
                 ;; functions defined later in the same file can be loaded correctly.
                 (unless (fboundp name)
                   (setf (symbol-function name) #'dummy)
                   (push name *fbound-names*)))))
+           ((DEFGENERIC DEFMETHOD)
+            (jvm::note-name-defined (second form))
+            (process-toplevel-form (macroexpand-1 form) stream compile-time-too)
+            (return-from process-toplevel-form))
            (DEFMACRO
             (let ((name (second form)))
               (%format t "; Processing macro ~A~%" name)
@@ -252,8 +257,8 @@
                   (jvm:*speed* jvm:*speed*)
                   (jvm:*safety* jvm:*safety*)
                   (jvm:*debug* jvm:*debug*)
-                  (jvm::*toplevel-defuns* ())
-                  (*fbound-names* ()))
+                  (jvm::*functions-defined-in-current-file* '())
+                  (*fbound-names* '()))
               (write "; -*- Mode: Lisp -*-" :escape nil :stream out)
               (terpri out)
               (let ((*package* (find-package '#:cl)))

@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.383 2005-02-01 22:24:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.384 2005-02-02 16:47:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -192,11 +192,10 @@
 (defvar *dump-variables* nil)
 
 (defun dump-1-variable (variable)
-  (%format t "  ~S special-p = ~S register = ~S level = ~S index = ~S declared-type = ~S~%"
+  (%format t "  ~S special-p = ~S register = ~S index = ~S declared-type = ~S~%"
            (variable-name variable)
            (variable-special-p variable)
            (variable-register variable)
-           (variable-level variable)
            (variable-index variable)
            (variable-declared-type variable)))
 
@@ -709,6 +708,43 @@
     (setf new-form (list* 'LET varlist (cddr expansion)))
     new-form))
 
+(defun p1-function-call (form)
+  (let ((op (car form)))
+    (let ((new-form (rewrite-function-call form)))
+      (when (neq new-form form)
+        (dformat t "old form = ~S~%" form)
+        (dformat t "new form = ~S~%" new-form)
+        (return-from p1-function-call (p1 new-form))))
+    (let ((source-transform (source-transform op)))
+      (when source-transform
+        (let ((new-form (expand-source-transform form)))
+          (when (neq new-form form)
+            (return-from p1-function-call (p1 new-form))))))
+    (let ((expansion (inline-expansion op)))
+      (when expansion
+        (return-from p1-function-call (p1 (expand-inline form expansion)))))
+    (let ((local-function (find-local-function op)))
+      (cond (local-function
+             (dformat t "p1 local function ~S~%" op)
+
+             ;; FIXME
+             (dformat t "local function assumed not single-valued~%")
+             (setf (compiland-single-valued-p *current-compiland*) nil)
+
+             (unless (eq (local-function-compiland local-function)
+                         *current-compiland*)
+               (let ((variable (local-function-variable local-function)))
+                 (when variable
+                   (unless (eq (variable-compiland variable) *current-compiland*)
+                     (dformat t "p1 ~S used non-locally~%" (variable-name variable))
+                     (setf (variable-used-non-locally-p variable) t))))))
+            (t
+             ;; Not a local function call.
+             (unless (single-valued-p op)
+               (%format t "not single-valued op = ~S~%" op)
+               (setf (compiland-single-valued-p *current-compiland*) nil)))))
+    (list* op (mapcar #'p1 (cdr form)))))
+
 (defun p1 (form)
   (cond ((symbolp form)
          (cond ((constantp form) ; a DEFCONSTANT
@@ -747,41 +783,9 @@
                         ((special-operator-p op)
                          (compiler-unsupported "P1: unsupported special operator ~S" op))
                         (t
-                         ;; Function call.
-                         (let ((new-form (rewrite-function-call form)))
-                           (when (neq new-form form)
-                             (dformat t "old form = ~S~%" form)
-                             (dformat t "new form = ~S~%" new-form)
-                             (return-from p1 (p1 new-form))))
-                         (let ((source-transform (source-transform op)))
-                           (when source-transform
-                             (let ((new-form (expand-source-transform form)))
-                               (when (neq new-form form)
-                                 (return-from p1 (p1 new-form))))))
-                         (let ((expansion (inline-expansion op)))
-                           (when expansion
-                             (return-from p1 (p1 (expand-inline form expansion)))))
-                         (let ((local-function (find-local-function op)))
-                           (cond (local-function
-                                  (dformat t "p1 local function ~S~%" op)
-
-                                  ;; FIXME
-                                  (dformat t "local function assumed not single-valued~%")
-                                  (setf (compiland-single-valued-p *current-compiland*) nil)
-
-                                  (unless (eq (local-function-compiland local-function)
-                                              *current-compiland*)
-                                    (let ((variable (local-function-variable local-function)))
-                                      (when variable
-                                        (unless (eq (variable-compiland variable) *current-compiland*)
-                                          (dformat t "p1 ~S used non-locally~%" (variable-name variable))
-                                          (setf (variable-used-non-locally-p variable) t))))))
-                                 (t
-                                  ;; Not a local function call.
-                                  (unless (single-valued-p op)
-                                    (%format t "not single-valued op = ~S~%" op)
-                                    (setf (compiland-single-valued-p *current-compiland*) nil)))))
-                         (list* op (mapcar #'p1 (cdr form))))))
+                         (p1-function-call form)
+                         )
+                        ))
                  ((and (consp op) (eq (car op) 'LAMBDA))
                   (p1 (list* 'FUNCALL form)))
                  (t
@@ -2559,7 +2563,17 @@
     (t
      nil)))
 
-(defvar *toplevel-defuns* nil)
+(defvar *defined-functions*)
+
+(defvar *undefined-functions*)
+
+(defun note-name-defined (name)
+  (when (boundp '*defined-functions*)
+    (push name *defined-functions*))
+  (when (boundp '*undefined-functions*)
+    (setf *undefined-functions* (remove name *undefined-functions*))))
+
+(defvar *functions-defined-in-current-file* nil)
 
 (defsubst notinline-p (name)
   (declare (optimize speed))
@@ -2571,7 +2585,7 @@
          nil)
         ((sys:built-in-function-p name)
          t)
-        ((memq name *toplevel-defuns*)
+        ((memq name *functions-defined-in-current-file*)
          t)
         (t
          nil)))
@@ -2658,6 +2672,11 @@
     (when (find-local-function op)
       (return-from compile-function-call
                    (compile-local-function-call form target representation)))
+    (when (and (boundp '*defined-functions*) (boundp '*undefined-functions*))
+      (unless (or (fboundp op)
+                  (eq op (compiland-name *current-compiland*))
+                  (memq op *defined-functions*))
+        (push op *undefined-functions*)))
     (let ((numargs (length args)))
       (case (length args)
         (1
@@ -3966,7 +3985,7 @@
                   (emit-move-from-stack target))))
           ((and (consp name) (eq (car name) 'SETF))
            ; FIXME Need to check for NOTINLINE declaration!
-           (cond ((member name *toplevel-defuns* :test #'equal)
+           (cond ((member name *functions-defined-in-current-file* :test #'equal)
                   (emit 'getstatic *this-class*
                         (declare-setf-function name) +lisp-object+)
                   (emit-move-from-stack target))
@@ -5456,10 +5475,13 @@
       (let ((*style-warnings* 0)
             (*warnings* 0)
             (*errors* 0)
+            (*defined-functions* '())
+            (*undefined-functions* '())
             (*in-compilation-unit* t))
         (unwind-protect
             (funcall fn)
-          (unless (zerop (+ *errors* *warnings* *style-warnings*))
+          (unless (and (zerop (+ *errors* *warnings* *style-warnings*))
+                       (null *undefined-functions*))
             (format t "~%; Compilation unit finished~%")
             (unless (zerop *errors*)
               (format t ";   Caught ~D ERROR condition~P~%"
@@ -5470,6 +5492,10 @@
             (unless (zerop *style-warnings*)
               (format t ";   Caught ~D STYLE-WARNING condition~P~%"
                       *style-warnings* *style-warnings*))
+            (when *undefined-functions*
+              (format t ";   The following functions were used but not defined:~%")
+              (dolist (name *undefined-functions*)
+                (format t ";     ~S~%" name)))
             (terpri))))))
 
 (defun %jvm-compile (name definition)
