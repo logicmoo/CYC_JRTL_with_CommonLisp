@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.9 2002-10-12 00:06:39 piso Exp $
+ * $Id: Editor.java,v 1.10 2002-10-12 00:45:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2450,17 +2450,14 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public void recordMacro()
     {
-        if (isRecordingMacro) {
+        if (isRecordingMacro)
             isRecordingMacro = false;
-            Log.debug("----- recordMacro end -----");
-        } else {
+        else {
             if (macro != null && !macro.isEmpty())
                 if (!confirm("Record Macro", "Overwrite existing keyboard macro?"))
                     return;
-
             macro = new Macro();
             isRecordingMacro = true;
-            Log.debug("----- recordMacro -----");
         }
     }
 
