@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.165 2004-05-03 02:01:55 piso Exp $
+;;; $Id: boot.lisp,v 1.166 2004-05-05 19:30:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(sys::%in-package "COMMON-LISP")
+(sys::%in-package "SYSTEM")
+
 (unless (ext:memq :j *features*)
     (format t "Low-level initialization completed in ~A seconds.~%"
             (float (/ (ext:uptime) 1000))))
