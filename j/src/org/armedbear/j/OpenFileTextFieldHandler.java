@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.24 2002-12-13 19:49:21 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.25 2002-12-14 01:17:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -455,7 +455,8 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         final String sourcePath = checkSourcePath ? getSourcePath() : null;
         prefix = File.normalize(prefix);
         boolean ignoreCase = Platform.isPlatformWindows() ||
-            Utilities.isLowerCase(prefix);
+            Editor.preferences().getBooleanProperty(
+                Property.FILENAME_COMPLETIONS_IGNORE_CASE);
         FilenameCompletion completion =
             new FilenameCompletion(dir, prefix, sourcePath, ignoreCase);
         final File currentDirectory = getCurrentDirectory();
