@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractBitVector.java,v 1.4 2004-03-04 02:01:45 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.5 2004-03-15 19:29:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,11 +30,6 @@ public abstract class AbstractBitVector extends AbstractVector
     // For non-displaced bit-vectors.
     protected long[] bits;
 
-    public final LispClass classOf()
-    {
-        return BuiltInClass.BIT_VECTOR;
-    }
-
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.BIT_VECTOR)
@@ -42,6 +37,11 @@ public abstract class AbstractBitVector extends AbstractVector
         if (type == BuiltInClass.BIT_VECTOR)
             return T;
         return super.typep(type);
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.BIT_VECTOR;
     }
 
     public final LispObject BIT_VECTOR_P()
