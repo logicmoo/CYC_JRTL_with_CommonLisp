@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.146 2004-05-05 01:16:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.147 2004-05-05 01:45:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -189,9 +189,9 @@
 
 (defun read-attribute (index stream)
   (let* ((name-index (read-u2 stream))
+         (name (lookup-utf8 name-index))
          (length (read-u4 stream))
          (*indent* (+ *indent* 2)))
-    (setq name (lookup-utf8 name-index))
     (out "Attribute ~D: Name index: ~D (~S)~%" index name-index name)
     (out "Attribute ~D: Length: ~D~%" index length)
     (cond ((string= name "Code")
@@ -340,7 +340,7 @@
 
 (defun dump-pool ()
   (let ((pool (reverse *pool*))
-        entry)
+        entry type)
     (dotimes (index (1- *pool-count*))
       (setq entry (car pool))
       (setq type (case (car entry)
@@ -2323,7 +2323,8 @@
          (body (cddr def))
          (form (list* 'lambda arglist body))
          (args-to-add (remove-duplicates (union (remove nil (coerce *locals* 'list))
-                                                (remove nil (coerce *args* 'list))))))
+                                                (remove nil (coerce *args* 'list)))))
+         function)
     (format t "form = ~S~%" form)
     (format t "args-to-add = ~S~%" args-to-add)
     (format t "new arglist = ~S~%" (append args-to-add arglist))
@@ -2352,7 +2353,7 @@
         (do ((forms body (cdr forms)))
             ((null forms))
           (compile-form (car forms) (cdr forms))))
-      (error "COMPILE-FLET: unsupported case")))
+      (error "COMPILE-FLET: unsupported case.")))
 
 (defun compile-function (form for-effect)
    (let ((obj (second form)))
@@ -2523,26 +2524,30 @@
                  (emit-store-value)
                  (return-from compile-variable-ref)))))))
   (when (memq var *closure-vars*)
-    (let ((g (declare-object *env*)))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-object+))
-    ;; FIXME Move this to constructor!
-    ;; Cast it to an Environment object.
-    (emit 'checkcast +lisp-environment-class+)
-    (let ((g (declare-symbol var)))
-      (emit 'getstatic
-            *this-class*
-            g
-            +lisp-symbol+))
-    (emit-invokevirtual +lisp-environment-class+
-                        "lookup"
-                        "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                        -1)
-    (emit-store-value)
-    (return-from compile-variable-ref))
+;;     (let ((g (declare-object *env*)))
+;;       (emit 'getstatic
+;;             *this-class*
+;;             g
+;;             +lisp-object+))
+;;     ;; FIXME Move this to constructor!
+;;     ;; Cast it to an Environment object.
+;;     (emit 'checkcast +lisp-environment-class+)
+;;     (let ((g (declare-symbol var)))
+;;       (emit 'getstatic
+;;             *this-class*
+;;             g
+;;             +lisp-symbol+))
+;;     (emit-invokevirtual +lisp-environment-class+
+;;                         "lookup"
+;;                         "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+;;                         -1)
+;;     (emit-store-value)
+;;     (return-from compile-variable-ref))
+    (error "COMPILE-VARIABLE-REF: unsupported case."))
   ;; Otherwise it must be a global variable.
+  (unless (special-variable-p var)
+    ;; FIXME This should be a warning!
+    (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) var))
   (let ((g (declare-symbol var)))
     (emit 'getstatic
           *this-class*
