@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.18 2003-09-04 15:03:42 piso Exp $
+ * $Id: AbstractMode.java,v 1.19 2003-10-15 14:43:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,6 +201,7 @@ public abstract class AbstractMode implements Constants, Mode
         menuBar.add(new Menu("Search", 'S'));
         menuBar.add(new Menu("Go", 'G'));
         menuBar.add(new Menu("Mode", 'M'));
+        menuBar.add(new Menu("Lisp", 'L'));
         menuBar.add(new Menu("Help", 'H'));
         return menuBar;
     }
@@ -222,7 +223,9 @@ public abstract class AbstractMode implements Constants, Mode
             populateModeMenu(editor, menu);
             if (menu.getMenuComponentCount() == 0)
                 menu.add(new JMenuItem("This menu isn't here yet!")).setEnabled(false);
-        } else if (text == "Help")
+        } else if (text == "Lisp")
+            populateLispMenu(editor, menu);
+        else if (text == "Help")
             populateHelpMenu(editor, menu);
     }
 
@@ -303,21 +306,23 @@ public abstract class AbstractMode implements Constants, Mode
 
     private static void populateSearchMenu(Editor editor, Menu menu)
     {
+        final File dir = editor.getCurrentDirectory();
+        final boolean local = (dir != null && dir.isLocal());
+        if (Editor.preferences().getBooleanProperty(Property.USE_INCREMENTAL_FIND))
+            menu.add(editor, "Incremental Find...", 'I', "incrementalFind");
         menu.add(editor, "Find...", 'F', "find");
         menu.add(editor, "Find Next", 'T', "findNext");
         menu.add(editor, "Find Previous", 'R', "findPrev");
+        menu.add(editor, "Find in Files...", 'S', "findInFiles", local);
         menu.addSeparator();
-        final File dir = editor.getCurrentDirectory();
-        final boolean local = (dir != null && dir.isLocal());
-        if (local) {
-            menu.add(editor, "Find in Files...", 'I', "findInFiles");
-            menu.add(editor, "List Files...", 'L', "listFiles");
-            menu.addSeparator();
-        }
+        menu.add(editor, "List Occurrences of Last Pattern", 'L', "listOccurrences",
+                 editor.getLastSearch() != null);
+        menu.add(editor, "List Occurrences of Pattern in Files", 'O', "listFiles",
+                 FindInFiles.getFindInFiles() != null);
+        menu.addSeparator();
         final boolean isNotReadOnly = !editor.getBuffer().isReadOnly();
         menu.add(editor, "Replace...", 'P', "replace", isNotReadOnly);
-        if (local)
-            menu.add(editor, "Replace in Files...", 'E', "replaceInFiles");
+        menu.add(editor, "Replace in Files...", 'E', "replaceInFiles", local);
         menu.addSeparator();
         menu.add(editor, "Find Tag...", 'A', "findTag");
     }
@@ -345,6 +350,12 @@ public abstract class AbstractMode implements Constants, Mode
 
     public void populateModeMenu(Editor editor, Menu menu)
     {
+    }
+
+    public void populateLispMenu(Editor editor, Menu menu)
+    {
+        menu.add(editor, "Run Lisp as Separate Process", 'L', "lisp");
+        menu.add(editor, "Run Embedded Lisp", 'E', "jlisp");
     }
 
     private static void populateHelpMenu(Editor editor, Menu menu)
