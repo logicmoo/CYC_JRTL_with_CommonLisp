@@ -1,7 +1,7 @@
 ;;; j.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: j.lisp,v 1.33 2004-09-02 00:49:37 piso Exp $
+;;; $Id: j.lisp,v 1.34 2004-09-04 02:19:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,11 +70,6 @@
 
 (defun location-bar-cancel-input ()
   (jstatic "cancelInput" "org.armedbear.j.LocationBar"))
-
-(defun status (string &optional ed)
-  (let ((method (jmethod "org.armedbear.j.Editor" "status" "java.lang.String"))
-        (ed (or ed (current-editor))))
-    (jcall method ed string)))
 
 ;; Internal.
 (defun %execute-command (command &optional ed)
