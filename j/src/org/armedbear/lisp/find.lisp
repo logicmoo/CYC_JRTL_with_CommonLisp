@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: find.lisp,v 1.9 2005-02-09 18:35:37 piso Exp $
+;;; $Id: find.lisp,v 1.10 2005-02-10 01:49:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 	 (start (if from-end (1- end) start))
 	 (end (if from-end (1- start) end)))
      (declare (type fixnum incrementer start end))
-     (do ((index start (+ index incrementer))
+     (do ((index start (the fixnum (+ index incrementer)))
 	  ,@(case return-type (:position nil) (:element '(current))))
          ((= index end) ())
        (declare (type fixnum index))
