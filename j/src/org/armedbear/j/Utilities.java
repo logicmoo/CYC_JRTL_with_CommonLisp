@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.24 2003-06-26 00:43:48 piso Exp $
+ * $Id: Utilities.java,v 1.25 2003-06-28 19:12:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1628,39 +1628,6 @@ public final class Utilities implements Constants
         Border border = BorderFactory.createEtchedBorder();
         panel.setBorder(BorderFactory.createTitledBorder(border, title));
         return panel;
-    }
-
-    private static Method setExtendedStateMethod;
-
-    public static void setExtendedState(Frame frame, int state)
-    {
-        if (!Platform.isJava14())
-            return;
-        if (setExtendedStateMethod == null) {
-            Class[] parameterTypes = new Class[1];
-            parameterTypes[0] = Integer.TYPE;
-            try {
-                setExtendedStateMethod =
-                    java.awt.Frame.class.getMethod("setExtendedState",
-                        parameterTypes);
-            }
-            catch (NoSuchMethodException e) {
-                Log.error(e);
-                return;
-            }
-        }
-        if (setExtendedStateMethod != null) {
-            Object[] args = {new Integer(state)};
-            try {
-                setExtendedStateMethod.invoke(frame, args);
-            }
-            catch (IllegalAccessException e) {
-                Log.error(e);
-            }
-            catch (InvocationTargetException e) {
-                Log.error(e);
-            }
-        }
     }
 
     // Sun/Blackdown 1.4.x.
