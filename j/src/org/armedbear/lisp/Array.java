@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.4 2003-03-19 03:14:31 piso Exp $
+ * $Id: Array.java,v 1.5 2003-05-31 20:22:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,7 @@ public final class Array extends AbstractArray
             }
             ++index;
         } else {
-            if (!(contents instanceof SequenceType))
+            if ((contents.getType() & TYPE_SEQUENCE) == 0)
                 throw new TypeError(contents, "sequence");
             int dim = dims[0];
             if (dim != contents.length())
