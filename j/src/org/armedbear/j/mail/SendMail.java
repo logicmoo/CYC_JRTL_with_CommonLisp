@@ -1,8 +1,8 @@
 /*
  * SendMail.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: SendMail.java,v 1.9 2003-08-09 17:42:30 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: SendMail.java,v 1.10 2004-12-03 12:49:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -489,6 +489,9 @@ public final class SendMail extends Buffer
 
     private void appendDefaultHeaders()
     {
+        String replyTo = preferences.getStringProperty("replyTo");
+        if (replyTo != null)
+            appendLine("Reply-To: ".concat(replyTo));
         String bcc = preferences.getStringProperty("bcc");
         if (bcc != null)
             appendLine("Bcc: ".concat(bcc));
