@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: arglist.java,v 1.1 2003-12-07 17:01:41 piso Exp $
+ * $Id: arglist.java,v 1.2 2003-12-09 20:38:53 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,15 +23,32 @@ package org.armedbear.lisp;
 
 public final class arglist extends Lisp
 {
-    // ### arglist
+
     private static final Primitive1 ARGLIST =
         new Primitive1("arglist", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
+            LispThread thread = LispThread.currentThread();
             Function function = coerceToFunction(arg);
             LispObject arglist = function.getArglist();
             final LispObject value1, value2;
+            if (arglist instanceof LispString) {
+                String s = ((LispString)arglist).getValue();
+                // Give the string list syntax.
+                s = "(" + s + ")";
+                // Bind *PACKAGE* so we use the EXT package if we need
+                // to intern any symbols.
+                Environment oldDynEnv = thread.getDynamicEnvironment();
+                thread.bindSpecial(_PACKAGE_, PACKAGE_EXT);
+                try {
+                    arglist = readObjectFromString(s);
+                }
+                finally {
+                    thread.setDynamicEnvironment(oldDynEnv);
+                }
+                function.setArglist(arglist);
+            }
             if (arglist != null) {
                 value1 = arglist;
                 value2 = T;
@@ -39,7 +56,7 @@ public final class arglist extends Lisp
                 value1 = NIL;
                 value2 = NIL;
             }
-            return LispThread.currentThread().setValues(value1, value2);
+            return thread.setValues(value1, value2);
         }
     };
 
