@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.24 2004-03-04 02:01:45 piso Exp $
+ * $Id: StructureObject.java,v 1.25 2004-04-16 13:26:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,13 +54,19 @@ public final class StructureObject extends LispObject
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type instanceof StructureClass)
-            return type == structureClass ? T : NIL; // FIXME Could be a superclass.
+            return memq(type, structureClass.getCPL()) ? T : NIL;
         if (type == structureClass.getSymbol())
             return T;
         if (type == Symbol.STRUCTURE_OBJECT)
             return T;
         if (type == BuiltInClass.STRUCTURE_OBJECT)
             return T;
+        if (type instanceof Symbol) {
+            LispClass c = LispClass.findClass((Symbol)type);
+            if (c != null) {
+                return memq(c, structureClass.getCPL()) ? T : NIL;
+            }
+        }
         return super.typep(type);
     }
 
@@ -117,7 +123,8 @@ public final class StructureObject extends LispObject
     // ### %structure-ref
     // %structure-ref instance index => value
     private static final Primitive2 _STRUCTURE_REF =
-        new Primitive2("%structure-ref", PACKAGE_SYS, false) {
+        new Primitive2("%structure-ref", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -135,7 +142,8 @@ public final class StructureObject extends LispObject
     };
 
     private static final Primitive1 _STRUCTURE_REF_0 =
-        new Primitive1("%structure-ref-0", PACKAGE_SYS, false) {
+        new Primitive1("%structure-ref-0", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
@@ -152,7 +160,8 @@ public final class StructureObject extends LispObject
     };
 
     private static final Primitive1 _STRUCTURE_REF_1 =
-        new Primitive1("%structure-ref-1", PACKAGE_SYS, false) {
+        new Primitive1("%structure-ref-1", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
@@ -169,7 +178,8 @@ public final class StructureObject extends LispObject
     };
 
     private static final Primitive1 _STRUCTURE_REF_2 =
-        new Primitive1("%structure-ref-2", PACKAGE_SYS, false) {
+        new Primitive1("%structure-ref-2", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
@@ -188,7 +198,8 @@ public final class StructureObject extends LispObject
     // ### %structure-set
     // %structure-set instance index new-value => new-value
     private static final Primitive3 _STRUCTURE_SET =
-        new Primitive3("%structure-set", PACKAGE_SYS, false) {
+        new Primitive3("%structure-set", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -208,7 +219,8 @@ public final class StructureObject extends LispObject
     };
 
     private static final Primitive1 _STRUCTURE_SET_0 =
-        new Primitive1("%structure-set-0", PACKAGE_SYS, false) {
+        new Primitive1("%structure-set-0", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -227,7 +239,8 @@ public final class StructureObject extends LispObject
     };
 
     private static final Primitive1 _STRUCTURE_SET_1 =
-        new Primitive1("%structure-set-1", PACKAGE_SYS, false) {
+        new Primitive1("%structure-set-1", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -246,7 +259,8 @@ public final class StructureObject extends LispObject
     };
 
     private static final Primitive1 _STRUCTURE_SET_2 =
-        new Primitive1("%structure-set-2", PACKAGE_SYS, false) {
+        new Primitive1("%structure-set-2", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -267,7 +281,8 @@ public final class StructureObject extends LispObject
     // ### %make-structure
     // %make-structure name slot-values => object
     private static final Primitive2 _MAKE_STRUCTURE =
-        new Primitive2("%make-structure", PACKAGE_SYS, false) {
+        new Primitive2("%make-structure", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -278,7 +293,8 @@ public final class StructureObject extends LispObject
     // ### copy-structure
     // copy-structure structure => copy
     private static final Primitive1 COPY_STRUCTURE =
-        new Primitive1("copy-structure","structure") {
+        new Primitive1("copy-structure", "structure")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {
