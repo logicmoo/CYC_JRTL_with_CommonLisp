@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.9 2003-03-18 04:04:00 piso Exp $
+;;; $Id: setf.lisp,v 1.10 2003-03-30 02:03:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,9 +35,9 @@
       (return newval))))
 
 (defmacro setf (&rest args)
-  (let ((nargs (length args)))
+  (let ((n-args (length args)))
     (cond
-     ((= nargs 2)
+     ((= n-args 2)
       (let ((place (first args))
             (value (second args)))
         (cond
@@ -54,11 +54,11 @@
                   (t
                    (error "SETF: unhandled case")))))
          (t nil))))
-     ((oddp nargs)
+     ((oddp n-args)
       (error "odd number of args to SETF"))
      (t
       (do ((a args (cddr a)) (l nil))
-        ((null a) `(progn ,@(nreverse l)))
+          ((null a) `(progn ,@(nreverse l)))
 	(setq l (cons (list 'setf (car a) (cadr a)) l)))))))
 
 (defmacro incf (place &optional (delta 1))
@@ -81,6 +81,21 @@
          (%put (cadr name) *setf-expander* function))
         (t (error 'type-error))))
 
+
+;; (defsetf subseq (sequence start &optional (end nil)) (v)
+;;   `(progn (replace ,sequence ,v :start1 ,start :end1 ,end)
+;;      ,v))
+(defun %set-subseq (sequence start &rest rest)
+  (let ((end nil) v)
+    (ecase (length rest)
+      (1
+       (setq v (car rest)))
+      (2
+       (setq end (car rest)
+             v (cadr rest))))
+    (progn (replace sequence v :start1 start :end1 end))))
+
+
 (defconstant *setf-expander* (make-symbol "SETF-EXPANDER"))
 
 (%put 'car *setf-expander* '%rplaca)
@@ -90,6 +105,7 @@
 (%put 'svref *setf-expander* '%svset)
 (%put 'fill-pointer *setf-expander* '%set-fill-pointer)
 (%put 'fdefinition *setf-expander* '%set-fdefinition)
+(%put 'subseq *setf-expander* '%set-subseq)
 (%put 'symbol-function *setf-expander* 'fset)
 (%put 'symbol-plist *setf-expander* '%set-symbol-plist)
 (%put 'get *setf-expander* '%put)
