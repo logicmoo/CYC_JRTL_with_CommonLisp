@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: open.lisp,v 1.5 2004-01-26 00:31:21 piso Exp $
+;;; $Id: open.lisp,v 1.6 2004-01-26 14:50:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,11 @@
     (case direction
       (:input
        (make-file-input-stream pathname element-type))
-      (:output
+      (:probe
+       (let ((stream (make-file-input-stream pathname element-type)))
+         (close stream)
+         stream))
+      ((:output :io)
        (unless if-exists-given
          (setf if-exists
                (if (eq (pathname-version pathname) :newest)
@@ -53,7 +57,11 @@
           (error 'simple-error
                  :format-control "Option not supported: ~S."
                  :format-arguments (list if-exists))))
-       (make-file-output-stream pathname element-type))
+       (let ((output-stream (make-file-output-stream pathname element-type)))
+         (if (eq direction :output)
+             output-stream
+             (let ((input-stream (make-file-input-stream pathname element-type)))
+               (make-two-way-stream input-stream output-stream)))))
       (t
        (error 'simple-error
               :format-control ":DIRECTION ~S not supported."
