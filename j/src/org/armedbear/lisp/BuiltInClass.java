@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.6 2003-09-21 19:31:21 piso Exp $
+ * $Id: BuiltInClass.java,v 1.7 2003-10-11 02:07:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,7 +122,7 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass STANDARD_CLASS                   = addClass(Symbol.STANDARD_CLASS);
     public static final BuiltInClass STANDARD_GENERIC_FUNCTION        = addClass(Symbol.STANDARD_GENERIC_FUNCTION);
     public static final BuiltInClass STANDARD_METHOD                  = addClass(Symbol.STANDARD_METHOD);
-    public static final BuiltInClass STANDARD_OBJECT                  = addClass(Symbol.STANDARD_OBJECT);
+//     public static final BuiltInClass STANDARD_OBJECT                  = addClass(Symbol.STANDARD_OBJECT);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
     public static final BuiltInClass STREAM_ERROR                     = addClass(Symbol.STREAM_ERROR);
@@ -140,6 +140,13 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass UNDEFINED_FUNCTION               = addClass(Symbol.UNDEFINED_FUNCTION);
     public static final BuiltInClass VECTOR                           = addClass(Symbol.VECTOR);
     public static final BuiltInClass WARNING                          = addClass(Symbol.WARNING);
+
+    public static final StandardClass STANDARD_OBJECT =
+        new StandardClass(Symbol.STANDARD_OBJECT,
+                          list1(CLASS_T));
+    static {
+        addClass(Symbol.STANDARD_OBJECT, STANDARD_OBJECT);
+    }
 
     static {
         ARITHMETIC_ERROR.setDirectSuperclass(ERROR);
@@ -284,7 +291,7 @@ public class BuiltInClass extends LispClass
         STANDARD_METHOD.setDirectSuperclass(list2(METHOD, STANDARD_OBJECT));
         STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, STANDARD_OBJECT,
                                CLASS_T);
-        STANDARD_OBJECT.setDirectSuperclass(CLASS_T);
+//         STANDARD_OBJECT.setDirectSuperclass(CLASS_T);
         STANDARD_OBJECT.setCPL(STANDARD_OBJECT, CLASS_T);
         STORAGE_CONDITION.setDirectSuperclass(SERIOUS_CONDITION);
         STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
