@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.67 2004-06-14 17:29:59 piso Exp $
+;;; $Id: precompiler.lisp,v 1.68 2004-06-17 17:42:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -820,11 +820,11 @@
                                :environment env))
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(progn
-       (let ((mac (make-macro (or (precompile nil ,expander) ,expander))))
+       (let ((macro (make-macro (or (precompile nil ,expander) ,expander))))
          (if (special-operator-p ',name)
-             (%put ',name 'macroexpand-macro mac)
-             (fset ',name mac))
-         (%set-arglist mac ',lambda-list)
+             (%put ',name 'macroexpand-macro macro)
+             (fset ',name macro))
+         (%set-arglist macro ',lambda-list)
          ',name))))
 
 ;; Make an exception just this one time...
