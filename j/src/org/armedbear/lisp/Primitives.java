@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.720 2004-12-07 18:12:45 piso Exp $
+ * $Id: Primitives.java,v 1.721 2004-12-07 19:28:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3851,46 +3851,30 @@ public final class Primitives extends Lisp
         new Primitive("read",
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue()).read(true, NIL, false);
+        }
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return inSynonymOf(arg).read(true, NIL, false);
+        }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            Stream stream = checkCharacterInputStream(first);
-            boolean eofError = (second != NIL);
-            LispObject eofValue = NIL;
-            boolean recursive = false;
-            return stream.read(eofError, eofValue, recursive);
+            return inSynonymOf(first).read(second != NIL, NIL, false);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            Stream stream = checkCharacterInputStream(first);
-            boolean eofError = (second != NIL);
-            LispObject eofValue = third;
-            boolean recursive = false;
-            return stream.read(eofError, eofValue, recursive);
+            return inSynonymOf(first).read(second != NIL, third, false);
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
             throws ConditionThrowable
         {
-            Stream stream = checkCharacterInputStream(first);
-            boolean eofError = (second != NIL);
-            LispObject eofValue = third;
-            boolean recursive = (fourth != NIL);
-            return stream.read(eofError, eofValue, recursive);
-        }
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            int length = args.length;
-            if (length > 4)
-                signal(new WrongNumberOfArgumentsException(this));
-            Stream stream =
-                length > 0 ? checkCharacterInputStream(args[0]) : getStandardInput();
-            boolean eofError = length > 1 ? (args[1] != NIL) : true;
-            LispObject eofValue = length > 2 ? args[2] : NIL;
-            boolean recursive = length > 3 ? (args[3] != NIL) : false;
-            return stream.read(eofError, eofValue, recursive);
+            return inSynonymOf(first).read(second != NIL, third, fourth != NIL);
         }
     };
 
@@ -3906,7 +3890,7 @@ public final class Primitives extends Lisp
             if (length > 4)
                 signal(new WrongNumberOfArgumentsException(this));
             Stream stream =
-                length > 0 ? checkCharacterInputStream(args[0]) : getStandardInput();
+                length > 0 ? inSynonymOf(args[0]) : getStandardInput();
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
@@ -3922,6 +3906,10 @@ public final class Primitives extends Lisp
         new Primitive("read-char",
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return checkCharacterInputStream(_STANDARD_INPUT_.symbolValue()).readChar();
+        }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return inSynonymOf(arg).readChar();
@@ -3937,6 +3925,12 @@ public final class Primitives extends Lisp
         {
             return inSynonymOf(first).readChar(second != NIL, third);
         }
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
+            return inSynonymOf(first).readChar(second != NIL, third);
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
@@ -3946,7 +3940,6 @@ public final class Primitives extends Lisp
                 length > 0 ? inSynonymOf(args[0]) : getStandardInput();
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
-            boolean recursive = length > 3 ? (args[3] != NIL) : false;
             return stream.readChar(eofError, eofValue);
         }
     };
