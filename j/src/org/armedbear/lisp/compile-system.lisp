@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.43 2005-02-12 02:36:23 piso Exp $
+;;; $Id: compile-system.lisp,v 1.44 2005-03-19 19:58:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -205,6 +205,7 @@
                                   "prog.lisp"
                                   "psetf.lisp"
                                   "query.lisp"
+                                  "read-from-string.lisp"
                                   "read-sequence.lisp"
                                   "reduce.lisp"
                                   "remf.lisp"
