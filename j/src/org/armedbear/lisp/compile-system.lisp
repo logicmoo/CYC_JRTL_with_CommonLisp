@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.10 2004-05-31 02:51:00 piso Exp $
+;;; $Id: compile-system.lisp,v 1.11 2004-05-31 20:12:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
   (time
    (let ((*default-pathname-defaults* (pathname *lisp-home*)))
      (load (compile-file "precompiler.lisp"))
+     (load (compile-file "opcodes.lisp"))
      (load (compile-file "jvm.lisp"))
      ;; Order matters for these files.
      (mapc #'compile-file '("collect.lisp"
@@ -127,7 +128,6 @@
                             "nsubstitute.lisp"
                             "nth-value.lisp"
                             "numbers.lisp"
-                            "opcodes.lisp"
                             "open.lisp"
                             "or.lisp"
                             "parse-integer.lisp"
