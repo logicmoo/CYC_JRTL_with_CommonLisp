@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_condition.java,v 1.10 2003-11-02 13:58:45 piso Exp $
+ * $Id: make_condition.java,v 1.11 2003-11-03 16:06:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,10 +47,14 @@ public final class make_condition extends Primitive2
             return new ControlError(initArgs);
         if (type == Symbol.DIVISION_BY_ZERO)
             return new DivisionByZero(initArgs);
+        if (type == Symbol.END_OF_FILE)
+            return new EndOfFile(initArgs);
         if (type == Symbol.PACKAGE_ERROR)
             return new PackageError(initArgs);
         if (type == Symbol.SIMPLE_ERROR)
             return new SimpleError(initArgs);
+        if (type == Symbol.STREAM_ERROR)
+            return new StreamError(initArgs);
         if (type == Symbol.TYPE_ERROR)
             return new TypeError(initArgs);
         if (type == Symbol.SIMPLE_TYPE_ERROR)
