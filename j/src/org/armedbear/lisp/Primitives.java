@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.30 2003-02-17 15:04:08 piso Exp $
+ * $Id: Primitives.java,v 1.31 2003-02-19 00:12:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -398,6 +398,10 @@ public final class Primitives extends Module
             case SYMBOL_PACKAGE:                // ### symbol-package
                 return checkSymbol(arg).getPackage();
             case SYMBOL_VALUE:                  // ### symbol-value
+                if (arg == T)
+                    return T;
+                if (arg == NIL)
+                    return NIL;
                 return checkSymbol(arg).symbolValue();
             case SYMBOL_FUNCTION: {             // ### symbol-function
                 LispObject function = arg.getSymbolFunction();
