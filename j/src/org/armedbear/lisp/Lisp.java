@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.112 2003-08-04 23:54:07 piso Exp $
+ * $Id: Lisp.java,v 1.113 2003-08-05 00:52:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -852,21 +852,31 @@ public abstract class Lisp
         return (Package) _PACKAGE_.symbolValueNoThrow();
     }
 
+    public static final Symbol _TERMINAL_IO_ =
+        exportSpecial("*TERMINAL-IO*", PACKAGE_CL,
+                      new TwoWayStream(new CharacterInputStream(System.in),
+                                       new CharacterOutputStream(System.out)));
+
     public static final Symbol _STANDARD_INPUT_ =
         exportSpecial("*STANDARD-INPUT*", PACKAGE_CL,
-            new CharacterInputStream(System.in));
+                      new CharacterInputStream(System.in));
 
     public static final Symbol _STANDARD_OUTPUT_ =
         exportSpecial("*STANDARD-OUTPUT*", PACKAGE_CL,
-            new CharacterOutputStream(System.out));
+                      new CharacterOutputStream(System.out));
 
     public static final Symbol _ERROR_OUTPUT_ =
         exportSpecial("*ERROR-OUTPUT*", PACKAGE_CL,
-            new CharacterOutputStream(System.out));
+                      new CharacterOutputStream(System.out));
 
     public static final Symbol _TRACE_OUTPUT_ =
         exportSpecial("*TRACE-OUTPUT*", PACKAGE_CL,
-            new CharacterOutputStream(System.out));
+                      new CharacterOutputStream(System.out));
+
+    public static final TwoWayStream getTerminalIO()
+    {
+        return (TwoWayStream) _TERMINAL_IO_.symbolValueNoThrow();
+    }
 
     public static final CharacterInputStream getStandardInput()
     {
