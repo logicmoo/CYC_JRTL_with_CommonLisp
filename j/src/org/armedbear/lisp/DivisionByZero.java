@@ -2,7 +2,7 @@
  * DivisionByZero.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DivisionByZero.java,v 1.1 2003-09-04 14:39:25 piso Exp $
+ * $Id: DivisionByZero.java,v 1.2 2003-09-22 11:07:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,5 +30,24 @@ public class DivisionByZero extends ArithmeticError
     public String getMessage()
     {
         return "division by zero";
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.DIVISION_BY_ZERO;
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.DIVISION_BY_ZERO;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.DIVISION_BY_ZERO)
+            return T;
+        if (type == BuiltInClass.DIVISION_BY_ZERO)
+            return T;
+        return super.typep(type);
     }
 }
