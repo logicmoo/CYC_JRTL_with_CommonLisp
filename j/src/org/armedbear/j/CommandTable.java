@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.9 2002-11-20 18:00:48 piso Exp $
+ * $Id: CommandTable.java,v 1.10 2002-11-22 02:04:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,6 +257,7 @@ public class CommandTable
             addCommand("htmlInsertMatchingEndTag", "HtmlMode");
             addCommand("htmlInsertTag", "HtmlMode");
             addCommand("htmlStartTag", "HtmlMode");
+            addCommand("hyperspec", "LispMode");
             addCommand("iList", "IList");
             addCommand("imageCycleBackground", "ImageMode");
             addCommand("imageFit", "ImageMode");
@@ -439,6 +440,7 @@ public class CommandTable
             addCommand("sr", "Registers", "saveToRegister");
             addCommand("ir", "Registers", "insertRegister");
             addCommand("lr", "Registers", "listRegisters");
+            addCommand("hs", "LispMode", "hyperspec");
 
             if (Editor.isDebugEnabled() && map.size() > INITIAL_CAPACITY * 0.75) {
                 Log.error("CommandTable.init need to increase initial capacity!");
