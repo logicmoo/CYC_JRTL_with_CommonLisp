@@ -1,8 +1,8 @@
 /*
  * JdbFormatter.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: JdbFormatter.java,v 1.1.1.1 2002-09-24 16:09:44 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: JdbFormatter.java,v 1.2 2003-05-11 17:39:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,11 +48,7 @@ public final class JdbFormatter extends Formatter
             addSegment("", JDB_FORMAT_TEXT);
             return segmentList;
         }
-        String text;
-        if (Editor.tabsAreVisible())
-            text = Utilities.makeTabsVisible(line.getText(), buffer.getTabWidth());
-        else
-            text = Utilities.detab(line.getText(), buffer.getTabWidth());
+        String text = getDetabbedText(line);
         if (text.startsWith("> ")) {
             addSegment(text, 0, 2, JDB_FORMAT_PROMPT);
             if (text.length() > 2)
