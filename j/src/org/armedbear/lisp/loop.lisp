@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: loop.lisp,v 1.1 2003-03-29 14:49:49 piso Exp $
+;;; $Id: loop.lisp,v 1.2 2003-07-06 16:29:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 (export '(loop loop-finish))
 
 (unless (find-package "LOOP")
-  (make-package "LOOP"))
+  (make-package "LOOP" :use '("COMMON-LISP")))
 
 (in-package "LOOP")
 
