@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.190 2004-09-29 19:01:27 piso Exp $
+;;; $Id: boot.lisp,v 1.191 2004-09-30 17:35:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -265,14 +265,16 @@
   (declare (ignore ignore))
   (when *read-suppress* (return-from sharp-sharp nil))
   (unless label
-    (%reader-error stream "missing label for ##" label))
-
+    (error 'reader-error :stream stream :format-control "Missing label for ##"))
   (let ((entry (assoc label *sharp-equal-alist*)))
     (if entry
         (third entry)
         (let ((pair (assoc label *sharp-sharp-alist*)))
           (unless pair
-            (%reader-error stream "object is not labelled #~S#" label))
+            (error 'reader-error
+                   :stream stream
+                   :format-control "Object is not labelled #~S#"
+                   :format-arguments (list label)))
           (cdr pair)))))
 
 (set-dispatch-macro-character #\# #\= #'sharp-equal *standard-readtable*)
