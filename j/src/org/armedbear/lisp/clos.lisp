@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.45 2003-12-19 19:20:29 piso Exp $
+;;; $Id: clos.lisp,v 1.46 2003-12-19 19:26:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -419,12 +419,6 @@
         (slot-definition-location slot)
         nil)))
 
-(defmacro slot-contents (slots location)
-  `(aref ,slots ,location))
-
-(defun (setf slot-contents) (new-value slots location)
-  (setf (svref slots location) new-value))
-
 (defun std-slot-value (instance slot-name)
   (let* ((location (slot-location (class-of instance) slot-name))
          (value (cond ((fixnump location)
@@ -445,7 +439,6 @@
 (defun (setf std-slot-value) (new-value instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name)))
     (cond ((fixnump location)
-;;            (setf (slot-contents (std-instance-slots instance) location) new-value))
            (setf (instance-ref instance location) new-value))
           ((consp location)
            (setf (cdr location) new-value))
@@ -462,7 +455,6 @@
 (defun std-slot-boundp (instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name)))
     (cond ((fixnump location)
-;;            (neq +slot-unbound+ (slot-contents (std-instance-slots instance) location)))
            (neq +slot-unbound+ (instance-ref instance location)))
           ((consp location)
            (neq +slot-unbound+ (cdr location)))
@@ -477,7 +469,7 @@
 (defun std-slot-makunbound (instance slot-name)
   (let ((location (slot-location (class-of instance) slot-name)))
     (cond ((fixnump location)
-           (setf (slot-contents (std-instance-slots instance) location) +slot-unbound+))
+           (setf (instance-ref instance location) +slot-unbound+))
           ((consp location)
            (setf (cdr location) +slot-unbound+))
           (t
@@ -660,8 +652,7 @@
 ;;; Internal accessor for effective method function table
 
 (defun classes-to-emf-table (gf)
-;;   (slot-value gf 'classes-to-emf-table))
-  (slot-contents (std-instance-slots gf) *sgf-classes-to-emf-table-index*))
+  (instance-ref gf *sgf-classes-to-emf-table-index*))
 
 (defun (setf classes-to-emf-table) (new-value gf)
   (setf (slot-value gf 'classes-to-emf-table) new-value))
@@ -708,8 +699,8 @@
   (setf (slot-value method 'generic-function) new-value))
 
 (defun method-function (method)
-;;   (slot-value method 'function))
-  (slot-contents (std-instance-slots method) *sm-function-index*))
+  (instance-ref method *sm-function-index*))
+
 (defun (setf method-function) (new-value method)
   (setf (slot-value method 'function) new-value))
 
@@ -803,7 +794,7 @@
   (values))
 
 (defun gf-required-args (gf)
-  (slot-contents (std-instance-slots gf) *sgf-required-args-index*))
+  (instance-ref gf *sgf-required-args-index*))
 
 (defun make-instance-standard-generic-function (generic-function-class
                                                 &key name lambda-list
