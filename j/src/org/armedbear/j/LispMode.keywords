@@ -516,6 +516,7 @@ vector-push-extend
 vectorp
 warn
 when
+with-condition-restarts
 with-hash-table-iterator
 with-input-from-string
 with-open-file
