@@ -2,7 +2,7 @@
  * file_length.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: file_length.java,v 1.1 2004-01-26 18:36:57 piso Exp $
+ * $Id: file_length.java,v 1.2 2004-01-31 01:59:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,11 +38,15 @@ public final class file_length extends Primitive1
             FileStream stream = (FileStream) arg;
             Pathname pathname = stream.getPathname();
             File file = new File(pathname.getNamestring());
-            long length = file.length();
-            // FIXME
+            long length = file.length(); // in 8-bit bytes
+            if (stream.isCharacterStream())
+                return number(length);
             // "For a binary file, the length is measured in units of the
             // element type of the stream."
-            return number(length);
+            LispObject elementType = stream.getElementType();
+            int width = Fixnum.getValue(elementType.cadr());
+            int bytesPerUnit = width / 8;
+            return number(length / bytesPerUnit);
         }
         return signal(new TypeError(String.valueOf(arg) +
                                     " is not a stream associated with a file."));
