@@ -1,8 +1,8 @@
 /*
  * Stream.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.100 2004-12-07 01:10:57 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Stream.java,v 1.101 2005-01-11 17:47:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -679,6 +679,7 @@ public class Stream extends LispObject
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
             char c = sb.charAt(0);
+            rt.checkInvalid(c);
             if (c == '|') {
                 sb.setLength(0);
                 sb.append(readMultipleEscape());
@@ -715,6 +716,7 @@ public class Stream extends LispObject
                 _unreadChar(c);
                 break;
             }
+            rt.checkInvalid(c);
             switch (c) {
                 case '\\':
                     n = _readChar();
