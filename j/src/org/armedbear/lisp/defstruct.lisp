@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.55 2004-05-31 19:13:43 piso Exp $
+;;; $Id: defstruct.lisp,v 1.56 2004-08-18 14:03:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -292,61 +292,47 @@
              `((defun ,pred (object)
                  (typep object ',*dd-name*))))))))
 
-(defun slot-reader-definition (accessor-name index)
-  (cond ((eq *dd-type* 'list)
-         `(defun ,accessor-name (instance) (elt instance ,index)))
-        ((or (eq *dd-type* 'vector)
-             (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-         `(defun ,accessor-name (instance) (aref instance ,index)))
-        (t
-         (case index
-           (0
-            `(defun ,accessor-name (instance) (%structure-ref-0 instance)))
-           (1
-            `(defun ,accessor-name (instance) (%structure-ref-1 instance)))
-           (2
-            `(defun ,accessor-name (instance) (%structure-ref-2 instance)))
-           (t
-            `(defun ,accessor-name (instance) (%structure-ref instance ,index)))))))
+(defun define-reader (slot)
+  (let ((accessor-name (if *dd-conc-name*
+                           (intern (concatenate 'string
+                                                (symbol-name *dd-conc-name*)
+                                                (symbol-name (dsd-name slot))))
+                           (dsd-name slot)))
+        (index (dsd-index slot)))
+    (cond ((eq *dd-type* 'list)
+           `((defun ,accessor-name (instance) (elt instance ,index))))
+          ((or (eq *dd-type* 'vector)
+               (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
+           `((defun ,accessor-name (instance) (aref instance ,index))))
+          (t
+           `((defun ,accessor-name (instance) (%structure-ref instance ,index))
+             (define-compiler-macro ,accessor-name (instance)
+               `(%structure-ref ,instance ,,index)))))))
 
-(defun slot-writer (index)
-  (cond ((eq *dd-type* 'list)
-         `(lambda (instance value) (%set-elt instance ,index value)))
-        ((or (eq *dd-type* 'vector)
-             (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-         `(lambda (instance value) (%aset instance ,index value)))
-        (t
-         (case index
-           (0 '%structure-set-0)
-           (1 '%structure-set-1)
-           (2 '%structure-set-2)
-           (t
-            `(lambda (instance value)
+(defun define-writer (slot)
+  (let ((accessor-name (if *dd-conc-name*
+                           (intern (concatenate 'string
+                                                (symbol-name *dd-conc-name*)
+                                                (symbol-name (dsd-name slot))))
+                           (dsd-name slot)))
+        (index (dsd-index slot)))
+    (cond ((eq *dd-type* 'list)
+           `((defun (setf ,accessor-name) (value instance)
+               (%set-elt instance ,index value))))
+          ((or (eq *dd-type* 'vector)
+               (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
+           `((defun (setf ,accessor-name) (value instance)
+               (%aset instance ,index value))))
+          (t
+           `((defun (setf ,accessor-name) (value instance)
                (%structure-set instance ,index value)))))))
 
-(defun slot-writer-definition (accessor-name index)
-  `(defun (setf ,accessor-name) (value instance) (%structure-set instance ,index value)))
-
-(defun define-access-function (slot-name index)
-  (let ((accessor-name
-         (if *dd-conc-name*
-             (intern (concatenate 'string (symbol-name *dd-conc-name*) (symbol-name slot-name)))
-             slot-name)))
-    (if (or *dd-type* (< index 3))
-        `(,(slot-reader-definition accessor-name index)
-          (eval-when (:compile-toplevel :load-toplevel :execute)
-            (%put ',accessor-name 'setf-inverse ',(slot-writer index))))
-        `(,(slot-reader-definition accessor-name index)
-          ,(slot-writer-definition accessor-name index)))))
-
 (defun define-access-functions ()
-  (let ((index 0)
-        (result ()))
+  (let ((result ()))
     (dolist (slot *dd-slots*)
-      (let ((slot-name (dsd-name slot))
-            (expected (dsd-index slot)))
-        (setf result (nconc result (define-access-function slot-name expected))))
-      (incf index))
+      (setf result (nconc result (define-reader slot)))
+      (unless (dsd-read-only slot)
+        (setf result (nconc result (define-writer slot)))))
     result))
 
 (defun define-copier ()
@@ -444,9 +430,11 @@
                                               (symbol-name name)))
                          name))
              (initform (if (atom slot) nil (cadr slot)))
-             (dsd (make-defstruct-slot-description :name name
-                                                   :reader reader
-                                                   :initform initform)))
+             (dsd (apply #'make-defstruct-slot-description
+                         :name name
+                         :reader reader
+                         :initform initform
+                         (if (atom slot) nil (cddr slot)))))
         (push dsd *dd-direct-slots*)))
     (setf *dd-direct-slots* (nreverse *dd-direct-slots*))
     (let ((index 0))
