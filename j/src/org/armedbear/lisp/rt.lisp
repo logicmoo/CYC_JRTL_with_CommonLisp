@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.62 2003-03-15 19:08:03 piso Exp $
+;;; $Id: rt.lisp,v 1.63 2003-03-17 18:29:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -754,4 +754,5 @@
 (load (concatenate 'string rt::*prefix* "cl-symbol-names.lsp"))
 (load (concatenate 'string rt::*prefix* "ansi-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "search-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "array-aux.lsp"))
 (debug)
