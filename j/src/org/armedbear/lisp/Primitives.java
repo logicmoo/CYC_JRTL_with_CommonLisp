@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.733 2005-02-10 12:58:34 piso Exp $
+ * $Id: Primitives.java,v 1.734 2005-02-11 19:20:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4803,6 +4803,23 @@ public final class Primitives extends Lisp
             }
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.SYMBOL));
+            }
+        }
+    };
+
+    // ### %set-symbol-function
+    public static final Primitive _SET_SYMBOL_FUNCTION =
+        new Primitive("%set-symbol-function", PACKAGE_SYS, false, "symbol function")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                ((Symbol)first).setSymbolFunction(second);
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.SYMBOL));
             }
         }
     };
