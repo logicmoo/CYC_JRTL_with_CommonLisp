@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.9 2004-09-07 17:46:40 piso Exp $
+;;; $Id: swank.lisp,v 1.10 2004-09-07 20:25:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -200,7 +200,7 @@
           (t
            "; No value"))))
 
-(defun eval-region (string)
+(defun eval-string (string)
   (let (values)
     (handler-case
         (with-input-from-string (stream string)
@@ -209,10 +209,12 @@
               (when (eq form stream)
                 (return values))
               (setf values (multiple-value-list (eval form))))))
-      (error (e) (return-from eval-region e)))))
+      (error (e) (return-from eval-string e)))))
 
-(defun interactive-eval-region (string package-name)
+(defun interactive-eval-string (string package-name)
   (finish-output)
   (let ((package (if package-name (find-package package-name) *package*)))
     (let ((*package* (or package *package*)))
-      (format-values-for-echo-area (eval-region string)))))
+      (format-values-for-echo-area (eval-string string)))))
+
+(provide '#:swank)

@@ -1,7 +1,7 @@
 ;;; swank-package.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-package.lisp,v 1.4 2004-09-07 00:56:25 piso Exp $
+;;; $Id: swank-package.lisp,v 1.5 2004-09-07 20:25:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,6 +20,7 @@
 (defpackage #:swank
   (:use #:cl)
   (:export #:start-server
+           #:completion-set
            #:arglist-for-echo-area
            #:find-definitions-for-function-name
-           #:interactive-eval-region))
+           #:interactive-eval-string))
