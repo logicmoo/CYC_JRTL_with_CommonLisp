@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.51 2003-05-13 17:03:03 piso Exp $
+ * $Id: Editor.java,v 1.52 2003-05-14 00:10:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3339,8 +3339,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 int yMax = dimDisplay.height - dimPopup.height - 5;
                 if (x > xMax)
                     x = xMax;
+                else
+                    ++x;
                 if (y > yMax)
                     y = yMax;
+                else
+                    ++y;
                 popup.show(mouseEvent.getComponent(), x, y);
             }
         }
@@ -3365,7 +3369,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
     }
 
-    boolean inWord()
+    private boolean inWord()
     {
         return getMode().isIdentifierPart(getDotChar());
     }
