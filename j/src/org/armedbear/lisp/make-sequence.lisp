@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.9 2004-01-20 15:39:29 piso Exp $
+;;; $Id: make-sequence.lisp,v 1.10 2004-02-13 02:14:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,6 +85,9 @@
                   ((memq name '(ARRAY SIMPLE-ARRAY))
                    (setf element-type (or (car args) t)
                          len (if (consp (cadr args)) (caadr args) '*)))
+                  ((memq name '(BIT-VECTOR SIMPLE-BIT-VECTOR))
+                   (setf element-type 'bit
+                         len (car args)))
                   (t
                    (setf element-type (or (car args) t)
                          len (cadr args))))
