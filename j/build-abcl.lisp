@@ -138,11 +138,6 @@
         (*default-pathname-defaults* *abcl-dir*)
         end)
     (initialize-build)
-    (when (or force
-              (null (probe-file "Site.java"))
-              (>= (file-write-date "Site.java.in")
-                  (file-write-date "Site.java")))
-      (copy-with-substitutions "Site.java.in" "Site.java"))
     (let* ((source-files (append (directory "*.java")
                                  (directory "java/awt/*.java")))
            (to-do ()))

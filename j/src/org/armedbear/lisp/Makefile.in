@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003-2004 Peter Graves
-# $Id: Makefile.in,v 1.186 2004-09-09 12:41:55 piso Exp $
+# $Id: Makefile.in,v 1.187 2004-09-18 00:23:22 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -272,9 +272,6 @@ clean:
 	if [ -e libabcl.so ]; then rm libabcl.so; fi
 
 Makefile: Makefile.in ../../../../config.status
-	cd ../../../.. && $(SHELL) ./config.status
-
-Site.java: Site.java.in ../../../../config.status
 	cd ../../../.. && $(SHELL) ./config.status
 
 libabcl.so: ControlC.class ControlC.c
