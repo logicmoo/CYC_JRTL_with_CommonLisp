@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.56 2004-06-11 18:17:06 piso Exp $
+ * $Id: Load.java,v 1.57 2004-06-11 18:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -221,7 +221,7 @@ public final class Load extends Lisp
             throws ConditionThrowable
         {
             if (first == Keyword.VERSION) {
-                if (second.eql(_FASL_VERSION_.getSymbolValue())){
+                if (second.eql(_FASL_VERSION_.getSymbolValue())) {
                     // OK
                     final LispThread thread = LispThread.currentThread();
                     Readtable readtable = new Readtable(NIL);
