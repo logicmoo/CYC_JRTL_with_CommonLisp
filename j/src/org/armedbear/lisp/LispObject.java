@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.38 2003-08-26 17:17:21 piso Exp $
+ * $Id: LispObject.java,v 1.39 2003-08-29 15:48:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,11 @@ public class LispObject extends Lisp
     public LispObject ATOM()
     {
         return T;
+    }
+
+    public boolean atom()
+    {
+        return true;
     }
 
     public String getName()
