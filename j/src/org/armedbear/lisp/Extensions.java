@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.27 2004-06-15 18:50:49 piso Exp $
+ * $Id: Extensions.java,v 1.28 2004-08-19 16:05:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,6 +106,7 @@ public final class Extensions extends Lisp
         }
     };
 
+    // ### source
     private static final Primitive1 SOURCE =
         new Primitive1("source", PACKAGE_EXT, true)
     {
@@ -115,6 +116,7 @@ public final class Extensions extends Lisp
         }
     };
 
+    // ### source-file-position
     private static final Primitive1 SOURCE_FILE_POSITION =
         new Primitive1("source-file-position", PACKAGE_EXT, true)
     {
@@ -127,6 +129,7 @@ public final class Extensions extends Lisp
         }
     };
 
+    // ### source-pathname
     private static final Primitive1 SOURCE_PATHNAME =
         new Primitive1("source-pathname", PACKAGE_EXT, true)
     {
@@ -141,6 +144,7 @@ public final class Extensions extends Lisp
         }
     };
 
+    // ### exit
     private static final Primitive0 EXIT =
         new Primitive0("exit", PACKAGE_EXT, true)
     {
@@ -151,6 +155,7 @@ public final class Extensions extends Lisp
         }
     };
 
+    // ### quit
     private static final Primitive0 QUIT =
         new Primitive0("quit", PACKAGE_EXT, true)
     {
