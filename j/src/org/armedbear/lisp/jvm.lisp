@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.59 2003-12-19 18:30:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.60 2003-12-23 13:42:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -322,6 +322,12 @@
 ;;         (cdr info)
 ;;         ;; Not found in variables list.
 ;;         (special-variable-p var))))
+
+(defvar *local-functions* ())
+
+(defstruct local-function
+  name
+  function)
 
 (defvar *args* nil)
 (defvar *using-arg-array* nil)
@@ -1460,7 +1466,8 @@
 ;;   (format t "compile-function-call fun = ~S args = ~S~%" fun args)
   (unless (symbolp fun)
     (error "COMPILE-FUNCTION-CALL ~S is not a symbol" fun))
-  (let ((numargs (length args)))
+  (let ((numargs (length args))
+        local-function)
     (cond ((= numargs 1)
            (when (compile-function-call-1 fun args)
              (return-from compile-function-call)))
@@ -1476,6 +1483,13 @@
     (resolve fun)
 
     (cond
+     ((setf local-function (find fun *local-functions* :key #'local-function-name))
+      (format t "compiling call to local function ~S~%" local-function)
+      (let* ((g (declare-object (local-function-function local-function))))
+        (emit 'getstatic
+              *this-class*
+              g
+              "Lorg/armedbear/lisp/LispObject;")))
      ((eq fun *defun-name*)
       (emit 'aload 0)) ; this
      ((memq (symbol-package fun) +known-packages+)
@@ -2052,6 +2066,34 @@
   ;; Nothing to do.
   )
 
+(defun compile-local-function-def (def)
+  (format t "*locals* = ~S~%" *locals*)
+  (format t "*args* = ~S~%" *args*)
+  (let* ((name (car def))
+         (arglist (cadr def))
+         (body (cddr def))
+         (form (list* 'lambda arglist body))
+         compiled-function)
+    (format t "form = ~S~%" form)
+    (setf function (compile-defun name form "flet.out"))
+    (format t "function = ~S~%" function)
+    (push (make-local-function :name name :function function) *local-functions*)))
+
+(defun compile-local-functions (defs)
+  (dolist (def defs)
+    (compile-local-function-def def)))
+
+(defun compile-flet (form for-effect)
+  #+nil
+  (let ((*local-functions* *local-functions*)
+        (locals (cadr form))
+        (body (cddr form)))
+    (compile-local-functions locals)
+    (do ((forms body (cdr forms)))
+        ((null forms))
+      (compile-form (car forms) (cdr forms))))
+  (error "COMPILE-FLET: unsupported case"))
+
 (defun compile-function (form for-effect)
    (let ((obj (second form)))
      (cond ((symbolp obj)
@@ -2250,7 +2292,7 @@
     (t (setq *using-arg-array* t)
        #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
-(defun compile-defun (name form)
+(defun compile-defun (name form &optional (classfile "out.class"))
   (unless (eq (car form) 'LAMBDA)
     (return-from compile-defun nil))
   (setf form (precompile-form form t))
@@ -2339,8 +2381,8 @@
            (constructor (make-constructor super *defun-name* args body)))
       (pool-name "Code") ; Must be in pool!
 
-      ;; Write class file (out.class in current directory).
-      (with-open-file (*stream* "out.class"
+      ;; Write class file.
+      (with-open-file (*stream* classfile
                                 :direction :output
                                 :element-type 'unsigned-byte
                                 :if-exists :supersede)
@@ -2366,7 +2408,7 @@
         (write-method constructor)
         ;; attributes count
         (write-u2 0))))
-  (sys::load-compiled-function "out.class"))
+  (sys::load-compiled-function classfile))
 
 (defun get-lambda-to-compile (definition-designator)
   (if (and (consp definition-designator)
@@ -2457,6 +2499,7 @@
                           block
                           cons
                           declare
+                          flet
                           function
                           go
                           if

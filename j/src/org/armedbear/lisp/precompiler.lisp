@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.23 2003-12-22 17:18:47 piso Exp $
+;;; $Id: precompiler.lisp,v 1.24 2003-12-23 13:42:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -297,14 +297,7 @@
     (dolist (def defs (nreverse result))
       (push (precompile-local-function-def def) result))))
 
-(defun precompile-flet (form)
-  (let ((locals (cadr form))
-        (body (cddr form)))
-    (list* (car form)
-           (precompile-local-functions locals)
-           (mapcar #'precompile1 body))))
-
-(defun precompile-labels (form)
+(defun precompile-flet/labels (form)
   (let ((locals (cadr form))
         (body (cddr form)))
     (list* (car form)
@@ -489,8 +482,8 @@
 (install-handler 'do                   'precompile-do/do*)
 (install-handler 'do*                  'precompile-do/do*)
 
-(install-handler 'flet                 'precompile-flet)
-(install-handler 'labels               'precompile-labels)
+(install-handler 'flet                 'precompile-flet/labels)
+(install-handler 'labels               'precompile-flet/labels)
 
 (install-handler 'do-symbols           'precompile-do-symbols)
 (install-handler 'do-external-symbols  'precompile-do-symbols)
