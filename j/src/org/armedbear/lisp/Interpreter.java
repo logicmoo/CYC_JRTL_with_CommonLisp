@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.38 2003-09-25 15:37:08 piso Exp $
+ * $Id: Interpreter.java,v 1.39 2003-09-25 18:22:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,6 +115,12 @@ public final class Interpreter extends Lisp
             CharacterOutputStream out = getStandardOutput();
             out.writeString(banner());
             initialize(jlisp);
+            Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
+            LispObject replFun = TOP_LEVEL_LOOP.getSymbolFunction();
+            if (replFun instanceof Function) {
+                replFun.execute();
+                return;
+            }
             while (true) {
                 try {
                     thread.resetStack();
