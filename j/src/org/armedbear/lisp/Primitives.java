@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.530 2003-12-13 20:52:36 piso Exp $
+ * $Id: Primitives.java,v 1.531 2003-12-14 17:18:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1649,123 +1649,6 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### handler-bind
-    private static final SpecialOperator HANDLER_BIND =
-        new SpecialOperator("handler-bind")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            LispObject bindings = checkList(args.car());
-            final LispThread thread = LispThread.currentThread();
-            LispObject forms = args.cdr();
-            try {
-                return progn(args.cdr(), env, thread);
-            }
-            catch (Return ret) {
-                throw ret;
-            }
-            catch (ConditionThrowable throwable) {
-                if (throwable instanceof Throw) {
-                    LispObject tag = ((Throw)throwable).getTag();
-                    if (thread.isValidCatchTag(tag))
-                        throw throwable;
-                }
-                LispObject condition = throwable.getCondition();
-                while (bindings != NIL) {
-                    Cons binding = checkCons(bindings.car());
-                    LispObject type = binding.car();
-                    if (condition.typep(type) != NIL) {
-                        LispObject obj = eval(binding.cadr(), env, thread);
-                        LispObject handler;
-                        if (obj instanceof Symbol) {
-                            handler = obj.getSymbolFunction();
-                            if (handler == null)
-                                signal(new UndefinedFunction(obj));
-                        } else
-                            handler = obj;
-                        LispObject[] handlerArgs = new LispObject[1];
-                        handlerArgs[0] = condition;
-                        // Might not return.
-                        funcall(handler, handlerArgs, thread);
-                    }
-                    bindings = bindings.cdr();
-                }
-                // Re-throw.
-                throw throwable;
-            }
-        }
-    };
-
-    // ### handler-case
-    // Should be a macro.
-    private static final SpecialOperator HANDLER_CASE =
-        new SpecialOperator("handler-case")
-    {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            LispObject form = args.car();
-            LispObject clauses = args.cdr();
-            final LispThread thread = LispThread.currentThread();
-            final int depth = thread.getStackDepth();
-            LispObject result;
-            try {
-                result = eval(form, env, thread);
-            }
-            catch (Return ret) {
-                throw ret;
-            }
-            catch (ConditionThrowable throwable) {
-                if (throwable instanceof Throw) {
-                    LispObject tag = ((Throw)throwable).getTag();
-                    if (thread.isValidCatchTag(tag))
-                        throw throwable;
-                }
-                LispObject condition = throwable.getCondition();
-                thread.setStackDepth(depth);
-                while (clauses != NIL) {
-                    Cons clause = checkCons(clauses.car());
-                    LispObject type = clause.car();
-                    if (condition.typep(type) != NIL) {
-                        LispObject parameterList = clause.cadr();
-                        LispObject body = clause.cdr().cdr();
-                        Closure handler = new Closure(parameterList, body, env);
-                        int numArgs = parameterList.length();
-                        if (numArgs == 1) {
-                            LispObject[] handlerArgs = new LispObject[1];
-                            handlerArgs[0] = condition;
-                            return funcall(handler, handlerArgs, thread);
-                        }
-                        if (numArgs == 0) {
-                            LispObject[] handlerArgs = new LispObject[0];
-                            return funcall(handler, handlerArgs, thread);
-                        }
-                        signal(new LispError("HANDLER-CASE: invalid handler clause"));
-                    }
-                    clauses = clauses.cdr();
-                }
-                // Re-throw.
-                throw throwable;
-            }
-            // No error.
-            while (clauses != NIL) {
-                Cons clause = checkCons(clauses.car());
-                if (clause.car() == Keyword.NO_ERROR) {
-                    Closure closure = new Closure(clause.cadr(), clause.cddr(),
-                                                  env);
-                    if (thread.getValues() != null)
-                        result = closure.execute(thread.getValues());
-                    else
-                        result = closure.execute(result);
-                    break;
-                }
-                clauses = clauses.cdr();
-            }
-            return result;
-        }
-    };
-
     // ### upgraded-array-element-type
     // upgraded-array-element-type typespec &optional environment
     // => upgraded-typespec
@@ -2931,7 +2814,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
-            Binding tags = null;
+            Environment ext = new Environment(env);
             LispObject body = args;
             while (body != NIL) {
                 LispObject current = body.car();
@@ -2939,7 +2822,7 @@ public final class Primitives extends Lisp
                 if (current instanceof Cons)
                     continue;
                 // It's a tag.
-                tags = new Binding(current, body, tags);
+                ext.addTagBinding(current, body);
             }
             final LispThread thread = LispThread.currentThread();
             final int depth = thread.getStackDepth();
@@ -2950,33 +2833,21 @@ public final class Primitives extends Lisp
                     try {
                         // Handle GO inline if possible.
                         if (current.car() == Symbol.GO) {
-                            LispObject code = null;
                             LispObject tag = current.cadr();
-                            for (Binding binding = tags; binding != null; binding = binding.next) {
-                                if (binding.symbol.eql(tag)) {
-                                    code = binding.value;
-                                    break;
-                                }
-                            }
-                            if (code != null) {
-                                remaining = code;
+                            Binding binding = ext.getTagBinding(tag);
+                            if (binding != null && binding.value != null) {
+                                remaining = binding.value;
                                 continue;
                             }
                             throw new Go(tag);
                         }
-                        eval(current, env, thread);
+                        eval(current, ext, thread);
                     }
                     catch (Go go) {
-                        LispObject code = null;
                         LispObject tag = go.getTag();
-                        for (Binding binding = tags; binding != null; binding = binding.next) {
-                            if (binding.symbol.eql(tag)) {
-                                code = binding.value;
-                                break;
-                            }
-                        }
-                        if (code != null) {
-                            remaining = code;
+                        Binding binding = ext.getTagBinding(tag);
+                        if (binding != null && binding.value != null) {
+                            remaining = binding.value;
                             thread.setStackDepth(depth);
                             continue;
                         }
@@ -2998,6 +2869,10 @@ public final class Primitives extends Lisp
         {
             if (args.length() != 1)
                 signal(new WrongNumberOfArgumentsException(this));
+            Binding binding = env.getTagBinding(args.car());
+            if (binding == null)
+                return signal(new ControlError("no tag named " + args.car() +
+                                               " is currently visible"));
             throw new Go(args.car());
         }
     };
