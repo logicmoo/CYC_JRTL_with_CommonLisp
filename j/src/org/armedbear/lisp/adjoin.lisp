@@ -1,7 +1,7 @@
 ;;; adjoin.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: adjoin.lisp,v 1.2 2003-07-02 17:56:32 piso Exp $
+;;; $Id: adjoin.lisp,v 1.3 2003-08-01 01:22:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(defun adjoin (item list &key key (test #'eql) (test-not nil notp))
+(defun adjoin (item list &key key (test #'eql testp) (test-not nil notp))
+  (when (and testp notp)
+    (error "test and test-not both supplied"))
   (if (let ((key-val (sys::apply-key key item)))
 	(if notp
 	    (member key-val list :test-not test-not :key key)
