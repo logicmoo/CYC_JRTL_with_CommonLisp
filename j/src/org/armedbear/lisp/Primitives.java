@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.580 2004-02-24 12:29:40 piso Exp $
+ * $Id: Primitives.java,v 1.581 2004-02-24 15:05:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1899,37 +1899,6 @@ public final class Primitives extends Lisp
                 signal(new TypeError(first, "vector"));
                 return NIL;
             }
-        }
-    };
-
-    // ### svref
-    // svref simple-vector index => element
-    private static final Primitive2 SVREF = new Primitive2("svref","simple-vector index") {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            AbstractVector v = checkVector(first);
-            if (!v.isSimpleVector())
-                signal(new TypeError(first, "simple vector"));
-            int index = v.checkIndex(second);
-            return v.get(index);
-        }
-    };
-
-    // ### %svset
-    // %svset simple-vector index new-value => new-value
-    private static final Primitive3 _SVSET =
-        new Primitive3("%svset", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            AbstractVector v = checkVector(first);
-            if (!v.isSimpleVector())
-                signal(new TypeError(first, "simple vector"));
-            int i = v.checkIndex(second);
-            v.set(i, third);
-            return third;
         }
     };
 
