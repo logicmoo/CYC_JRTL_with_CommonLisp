@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: fixme.lisp,v 1.25 2004-08-10 03:26:03 piso Exp $
+;;; $Id: fixme.lisp,v 1.26 2004-12-26 18:43:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,10 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "SYSTEM")
-
-;; Should be a special operator.
-(defmacro the (type form)
-  form)
 
 (defmacro declaim (&rest decls)
 `(eval-when (:compile-toplevel :load-toplevel :execute)
