@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Help.java,v 1.11 2003-06-29 00:19:34 piso Exp $
+ * $Id: Help.java,v 1.12 2003-07-18 12:50:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,22 +214,23 @@ public final class Help
     }
 
     private static void addBindingsFromKeyMap(KeyMap keyMap, File docDir,
-        Writer writer) throws IOException
+                                              Writer writer)
+        throws IOException
     {
-        KeyMapping[] globalMappings = keyMap.getMappings();
-        int count = globalMappings.length;
+        KeyMapping[] mappings = keyMap.getMappings();
+        int count = mappings.length;
         if (count == 0) {
-            writer.write("[No local bindings]<br>\n");
+            writer.write("[None]<br>\n");
             return;
         }
         for (int i = 0; i < count; i++) {
-            KeyMapping mapping = globalMappings[i];
+            KeyMapping mapping = mappings[i];
             FastStringBuffer sb = new FastStringBuffer(64);
             sb.append(mapping.getKeyText());
             String command = mapping.getCommand();
             if (command != null) {
                 int spaces = 32 - sb.length();
-                for (int j = spaces - 1; j >= 0; j--)
+                for (int j = spaces; j-- > 0;)
                     sb.append("&nbsp;");
                 if (docDir != null) {
                     sb.append("<a href=\"");
