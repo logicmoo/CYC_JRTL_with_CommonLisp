@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.632 2004-04-24 12:38:56 piso Exp $
+ * $Id: Primitives.java,v 1.633 2004-04-26 01:42:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2919,6 +2919,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             Environment ext = new Environment(env);
+            LispObject localTags = NIL; // Tags that are local to this TAGBODY.
             LispObject body = args;
             while (body != NIL) {
                 LispObject current = body.car();
@@ -2927,6 +2928,7 @@ public final class Primitives extends Lisp
                     continue;
                 // It's a tag.
                 ext.addTagBinding(current, body);
+                localTags = new Cons(current, localTags);
             }
             final LispThread thread = LispThread.currentThread();
             final int depth = thread.getStackDepth();
@@ -2938,10 +2940,12 @@ public final class Primitives extends Lisp
                         // Handle GO inline if possible.
                         if (current.car() == Symbol.GO) {
                             LispObject tag = current.cadr();
-                            Binding binding = ext.getTagBinding(tag);
-                            if (binding != null && binding.value != null) {
-                                remaining = binding.value;
-                                continue;
+                            if (memql(tag, localTags)) {
+                                Binding binding = ext.getTagBinding(tag);
+                                if (binding != null && binding.value != null) {
+                                    remaining = binding.value;
+                                    continue;
+                                }
                             }
                             throw new Go(tag);
                         }
@@ -2949,11 +2953,13 @@ public final class Primitives extends Lisp
                     }
                     catch (Go go) {
                         LispObject tag = go.getTag();
-                        Binding binding = ext.getTagBinding(tag);
-                        if (binding != null && binding.value != null) {
-                            remaining = binding.value;
-                            thread.setStackDepth(depth);
-                            continue;
+                        if (memql(tag, localTags)) {
+                            Binding binding = ext.getTagBinding(tag);
+                            if (binding != null && binding.value != null) {
+                                remaining = binding.value;
+                                thread.setStackDepth(depth);
+                                continue;
+                            }
                         }
                         throw go;
                     }
@@ -2975,7 +2981,8 @@ public final class Primitives extends Lisp
                 signal(new WrongNumberOfArgumentsException(this));
             Binding binding = env.getTagBinding(args.car());
             if (binding == null)
-                return signal(new ControlError("No tag named " + args.car() +
+                return signal(new ControlError("No tag named " +
+                                               args.car().writeToString() +
                                                " is currently visible."));
             throw new Go(args.car());
         }
