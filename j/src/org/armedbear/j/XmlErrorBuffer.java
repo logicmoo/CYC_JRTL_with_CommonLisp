@@ -2,7 +2,7 @@
  * XmlErrorBuffer.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: XmlErrorBuffer.java,v 1.3 2003-06-12 15:53:09 piso Exp $
+ * $Id: XmlErrorBuffer.java,v 1.4 2003-06-18 23:36:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,7 @@ public final class XmlErrorBuffer extends CompilationErrorBuffer
         if (!Editor.getBufferList().contains(this))
             relink();
         empty();
+        setCurrentError(null);
         this.file = file;
         setText(text);
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
