@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_array.java,v 1.6 2003-09-19 14:44:10 piso Exp $
+ * $Id: make_array.java,v 1.7 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ public final class make_array extends Primitive {
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         if (args.length != 9)
-            throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            return signal(new WrongNumberOfArgumentsException(this));
         LispObject dimensions = args[0];
         LispObject elementType = args[1];
         LispObject initialElement = args[2];
@@ -43,8 +43,8 @@ public final class make_array extends Primitive {
         LispObject displacedTo = args[7];
         LispObject displacedIndexOffset = args[8];
         if (initialElementProvided != NIL && initialContents != NIL) {
-            throw new ConditionThrowable(new LispError("MAKE-ARRAY: cannot specify both " +
-                                                       ":INITIAL-ELEMENT AND :INITIAL-CONTENTS"));
+            return signal(new LispError("MAKE-ARRAY: cannot specify both " +
+                                        ":INITIAL-ELEMENT AND :INITIAL-CONTENTS"));
         }
         final int rank = dimensions.listp() ? dimensions.length() : 1;
         int[] dimv = new int[rank];
@@ -64,9 +64,9 @@ public final class make_array extends Primitive {
             else
                 offset = 0;
             if (initialElementProvided != NIL)
-                throw new ConditionThrowable(new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO"));
+                return signal(new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO"));
             if (initialContents != NIL)
-                throw new ConditionThrowable(new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO"));
+                return signal(new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO"));
             return new DisplacedArray(dimv, array, offset);
         }
         if (rank == 1) {
@@ -84,7 +84,7 @@ public final class make_array extends Primitive {
                     sb.append(')');
                 } else
                     sb.append(" is negative");
-                throw new ConditionThrowable(new LispError(sb.toString()));
+                return signal(new LispError(sb.toString()));
             }
             AbstractVector v;
             LispObject upgradedType =
@@ -109,7 +109,7 @@ public final class make_array extends Primitive {
                     for (int i = 0; i < size; i++)
                         v.set(i, initialContents.elt(i));
                 } else
-                    throw new ConditionThrowable(new TypeError(initialContents, "sequence"));
+                    return signal(new TypeError(initialContents, "sequence"));
             }
             if (fillPointer != NIL)
                 v.setFillPointer(fillPointer);

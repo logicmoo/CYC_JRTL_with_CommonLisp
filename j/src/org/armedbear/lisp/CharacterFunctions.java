@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterFunctions.java,v 1.6 2003-12-09 20:26:22 asimon Exp $
+ * $Id: CharacterFunctions.java,v 1.7 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class CharacterFunctions extends Lisp
         {
             final int length = array.length;
             if (length == 0)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 final char c0 = LispCharacter.getValue(array[0]);
                 for (int i = 0; i < length; i++) {
@@ -65,7 +65,7 @@ public final class CharacterFunctions extends Lisp
         {
             final int length = array.length;
             if (length == 0)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 final char c0 = LispCharacter.getValue(array[0]);
                 for (int i = 1; i < length; i++) {
@@ -97,7 +97,7 @@ public final class CharacterFunctions extends Lisp
         {
             final int length = array.length;
             if (length == 0)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
@@ -125,7 +125,7 @@ public final class CharacterFunctions extends Lisp
         {
             final int length = array.length;
             if (length == 0)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
@@ -153,7 +153,7 @@ public final class CharacterFunctions extends Lisp
         {
             final int length = array.length;
             if (length == 0)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)
@@ -181,7 +181,7 @@ public final class CharacterFunctions extends Lisp
         {
             final int length = array.length;
             if (length == 0)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             if (length > 1) {
                 char[] chars = new char[length];
                 for (int i = 0; i < length; i++)

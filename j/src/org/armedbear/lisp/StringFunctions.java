@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.11 2003-10-10 00:49:55 piso Exp $
+ * $Id: StringFunctions.java,v 1.12 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -61,7 +61,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -97,7 +97,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -130,7 +130,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -173,7 +173,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -216,7 +216,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -257,7 +257,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -298,7 +298,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -341,7 +341,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -384,7 +384,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -425,7 +425,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -468,7 +468,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             char[] array1 = string(args[0]).chars();
             char[] array2 = string(args[1]).chars();
             int start1 = Fixnum.getInt(args[2]);
@@ -512,16 +512,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new ConditionThrowable(new TypeError("invalid start position " + start));
+                return signal(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new ConditionThrowable(new TypeError("invalid end position " + start));
+                return signal(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             int i;
@@ -546,16 +546,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new ConditionThrowable(new TypeError("invalid start position " + start));
+                return signal(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new ConditionThrowable(new TypeError("invalid end position " + start));
+                return signal(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             int i;
@@ -580,16 +580,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new ConditionThrowable(new TypeError("invalid start position " + start));
+                return signal(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new ConditionThrowable(new TypeError("invalid end position " + start));
+                return signal(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             StringBuffer sb = new StringBuffer(length);
             char[] array = s.chars();
             boolean lastCharWasAlphanumeric = false;
@@ -626,16 +626,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new ConditionThrowable(new TypeError("invalid start position " + start));
+                return signal(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new ConditionThrowable(new TypeError("invalid end position " + start));
+                return signal(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             char[] array = s.chars();
             for (int i = start; i < end; i++)
                 array[i] = Utilities.toUpperCase(array[i]);
@@ -654,16 +654,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new ConditionThrowable(new TypeError("invalid start position " + start));
+                return signal(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = s.length();
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new ConditionThrowable(new TypeError("invalid end position " + start));
+                return signal(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             char[] array = s.chars();
             for (int i = start; i < end; i++)
                 array[i] = Utilities.toLowerCase(array[i]);
@@ -682,16 +682,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                throw new ConditionThrowable(new TypeError("invalid start position " + start));
+                return signal(new TypeError("invalid start position " + start));
             int end;
             if (third == NIL)
                 end = s.length();
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                throw new ConditionThrowable(new TypeError("invalid end position " + start));
+                return signal(new TypeError("invalid end position " + start));
             if (start > end)
-                throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
+                return signal(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             char[] array = s.chars();
             boolean lastCharWasAlphanumeric = false;
             for (int i = start; i < end; i++) {

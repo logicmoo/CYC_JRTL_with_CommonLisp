@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.22 2003-12-10 07:25:34 asimon Exp $
+ * $Id: PackageFunctions.java,v 1.23 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
@@ -100,7 +100,7 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
@@ -121,7 +121,7 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
@@ -143,7 +143,7 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
@@ -184,7 +184,7 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1 || args.length > 2)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Package pkg;
             if (args.length == 2)
                 pkg = coerceToPackage(args[1]);
@@ -209,7 +209,7 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2 || args.length > 3)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             Package pkg = coerceToPackage(args[0]);
             String newName = javaString(args[1]);
             LispObject nicknames = args.length == 3 ? checkList(args[2]) : NIL;
@@ -234,7 +234,7 @@ public final class PackageFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 10)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final String packageName = LispString.getValue(args[0]);
             LispObject nicknames = checkList(args[1]);
             LispObject size = args[2];
@@ -255,7 +255,7 @@ public final class PackageFunctions extends Lisp
                 while (list != NIL) {
                     String nick = javaString(list.car());
                     if (Packages.findPackage(nick) != null) {
-                        throw new ConditionThrowable(new PackageError("a package named " + nick +
+                        return signal(new PackageError("a package named " + nick +
                                                                       " already exists"));
                     }
                     list = list.cdr();
@@ -286,7 +286,7 @@ public final class PackageFunctions extends Lisp
                     if (sym != null)
                         pkg.shadowingImport(sym);
                     else
-                        throw new ConditionThrowable(new LispError(symbolName +
+                        return signal(new LispError(symbolName +
                                                                    " not found in package " +
                                                                    otherPkg.getName()));
                     symbolNames = symbolNames.cdr();
@@ -302,7 +302,7 @@ public final class PackageFunctions extends Lisp
                     LispString string = string(obj);
                     Package p = Packages.findPackage(string.getValue());
                     if (p == null)
-                        throw new ConditionThrowable(new LispError(String.valueOf(obj) +
+                        return signal(new LispError(String.valueOf(obj) +
                                                                    " is not the name of a package"));
                     pkg.usePackage(p);
                 }
@@ -319,7 +319,7 @@ public final class PackageFunctions extends Lisp
                     if (sym != null)
                         pkg.importSymbol(sym);
                     else
-                        throw new ConditionThrowable(new LispError(symbolName +
+                        return signal(new LispError(symbolName +
                                                                    " not found in package " +
                                                                    otherPkg.getName()));
                     symbolNames = symbolNames.cdr();

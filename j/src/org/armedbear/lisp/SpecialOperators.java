@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.18 2003-11-19 16:17:32 piso Exp $
+ * $Id: SpecialOperators.java,v 1.19 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ public final class SpecialOperators extends Lisp
                     return eval(args.cdr().cadr(), env, thread);
                 }
                 default:
-                    throw new ConditionThrowable(new WrongNumberOfArgumentsException("IF"));
+                    return signal(new WrongNumberOfArgumentsException("IF"));
             }
         }
     };
@@ -166,7 +166,7 @@ public final class SpecialOperators extends Lisp
                                  new SymbolMacro(obj.cadr()),
                                  ext);
                         } else
-                            throw new ConditionThrowable(new ProgramError("SYMBOL-MACROLET: bad symbol-expansion pair: " + obj));
+                            return signal(new ProgramError("SYMBOL-MACROLET: bad symbol-expansion pair: " + obj));
                     }
                     LispObject body = args.cdr();
                     while (body != NIL) {
@@ -202,7 +202,7 @@ public final class SpecialOperators extends Lisp
                     return eval(args.car(), new Environment(),
                                 LispThread.currentThread());
                 default:
-                    throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                    return signal(new WrongNumberOfArgumentsException(this));
             }
         }
     };
@@ -302,7 +302,7 @@ public final class SpecialOperators extends Lisp
             throws ConditionThrowable
         {
             if (args.length() != 2)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             return eval(args.cadr(), env, LispThread.currentThread());
         }
     };
@@ -314,7 +314,7 @@ public final class SpecialOperators extends Lisp
             throws ConditionThrowable
         {
             if (args.length() < 2)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             final LispThread thread = LispThread.currentThread();
             final LispObject symbols = checkList(eval(args.car(), env, thread));
             LispObject values = checkList(eval(args.cadr(), env, thread));
@@ -386,7 +386,7 @@ public final class SpecialOperators extends Lisp
                     return functional;
                 if (functional instanceof GenericFunction)
                     return functional;
-                throw new ConditionThrowable(new UndefinedFunction(arg));
+                return signal(new UndefinedFunction(arg));
             }
             if (arg instanceof Cons) {
                 if (arg.car() == Symbol.LAMBDA)
@@ -398,7 +398,7 @@ public final class SpecialOperators extends Lisp
                         return f;
                 }
             }
-            throw new ConditionThrowable(new UndefinedFunction(arg));
+            return signal(new UndefinedFunction(arg));
         }
     };
 

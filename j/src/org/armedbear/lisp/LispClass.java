@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.36 2003-12-11 20:37:53 piso Exp $
+ * $Id: LispClass.java,v 1.37 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,7 +199,7 @@ public class LispClass extends StandardObject
             if (c == null) {
                 StringBuffer sb = new StringBuffer("there is no class named ");
                 sb.append(symbol);
-                throw new ConditionThrowable(new LispError(sb.toString()));
+                return signal(new LispError(sb.toString()));
             }
             return c;
         }
@@ -211,7 +211,7 @@ public class LispClass extends StandardObject
                 if (errorp != NIL) {
                     StringBuffer sb = new StringBuffer("there is no class named ");
                     sb.append(symbol);
-                    throw new ConditionThrowable(new LispError(sb.toString()));
+                    return signal(new LispError(sb.toString()));
                 }
                 return NIL;
             }
@@ -242,7 +242,7 @@ public class LispClass extends StandardObject
                 map.remove(symbol);
                 return second;
             }
-            throw new ConditionThrowable(new TypeError(second, "class"));
+            return signal(new TypeError(second, "class"));
         }
     };
 
@@ -255,7 +255,7 @@ public class LispClass extends StandardObject
                 return ((LispClass)arg).symbol;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "class"));
+                return signal(new TypeError(arg, "class"));
             }
         }
     };
@@ -272,7 +272,7 @@ public class LispClass extends StandardObject
                 return second;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(first, "class"));
+                return signal(new TypeError(first, "class"));
             }
         }
     };
@@ -288,7 +288,7 @@ public class LispClass extends StandardObject
                 return layout != null ? layout : NIL;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "class"));
+                return signal(new TypeError(arg, "class"));
             }
         }
     };
@@ -306,9 +306,9 @@ public class LispClass extends StandardObject
             }
             catch (ClassCastException e) {
                 if (!(first instanceof LispClass))
-                    throw new ConditionThrowable(new TypeError(first, "class"));
+                    return signal(new TypeError(first, "class"));
                 if (!(second instanceof Layout))
-                    throw new ConditionThrowable(new TypeError(second, "layout"));
+                    return signal(new TypeError(second, "layout"));
                 // Not reached.
                 return NIL;
             }
@@ -323,7 +323,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getDirectSuperclasses();
-            throw new ConditionThrowable(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, "class"));
         }
     };
 
@@ -338,7 +338,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).setDirectSuperclasses(second);
                 return second;
             }
-            throw new ConditionThrowable(new TypeError(first, "class"));
+            return signal(new TypeError(first, "class"));
         }
     };
 
@@ -350,7 +350,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getDirectSubclasses();
-            throw new ConditionThrowable(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, "class"));
         }
     };
 
@@ -365,7 +365,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).setDirectSubclasses(second);
                 return second;
             }
-            throw new ConditionThrowable(new TypeError(first, "class"));
+            return signal(new TypeError(first, "class"));
         }
     };
 
@@ -377,7 +377,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).getCPL();
-            throw new ConditionThrowable(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, "class"));
         }
     };
 
@@ -392,7 +392,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).classPrecedenceList = second;
                 return second;
             }
-            throw new ConditionThrowable(new TypeError(first, "class"));
+            return signal(new TypeError(first, "class"));
         }
     };
 
@@ -405,7 +405,7 @@ public class LispClass extends StandardObject
         {
             if (arg instanceof LispClass)
                 return ((LispClass)arg).directMethods;
-            throw new ConditionThrowable(new TypeError(arg, "class"));
+            return signal(new TypeError(arg, "class"));
         }
     };
 
@@ -420,7 +420,7 @@ public class LispClass extends StandardObject
                 ((LispClass)first).directMethods = second;
                 return second;
             }
-            throw new ConditionThrowable(new TypeError(first, "class"));
+            return signal(new TypeError(first, "class"));
         }
     };
 

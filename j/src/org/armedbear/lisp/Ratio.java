@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.38 2003-11-16 18:25:31 piso Exp $
+ * $Id: Ratio.java,v 1.39 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,7 +194,7 @@ public final class Ratio extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -226,7 +226,7 @@ public final class Ratio extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        Fixnum.ZERO.subtract(c.getImaginaryPart()));
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -247,7 +247,7 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return new LispFloat(floatValue() * ((LispFloat)obj).getValue());
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -267,10 +267,10 @@ public final class Ratio extends LispObject
         }
         if (obj instanceof LispFloat) {
             if (obj.zerop())
-                throw new ConditionThrowable(new DivisionByZero());
+                return signal(new DivisionByZero());
             return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
@@ -282,7 +282,9 @@ public final class Ratio extends LispObject
             return floatValue() == ((LispFloat)obj).getValue();
         if (obj.numberp())
             return false;
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
@@ -308,7 +310,9 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return floatValue() < ((LispFloat)obj).getValue();
         }
-        throw new ConditionThrowable(new TypeError(obj, "real"));
+        signal(new TypeError(obj, "real"));
+        // Not reached.
+        return false;
     }
 
     public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
@@ -329,7 +333,9 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return floatValue() > ((LispFloat)obj).getValue();
         }
-        throw new ConditionThrowable(new TypeError(obj, "real"));
+        signal(new TypeError(obj, "real"));
+        // Not reached.
+        return false;
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -350,7 +356,9 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return floatValue() <= ((LispFloat)obj).getValue();
         }
-        throw new ConditionThrowable(new TypeError(obj, "real"));
+        signal(new TypeError(obj, "real"));
+        // Not reached.
+        return false;
     }
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -371,7 +379,9 @@ public final class Ratio extends LispObject
         if (obj instanceof LispFloat) {
             return floatValue() >= ((LispFloat)obj).getValue();
         }
-        throw new ConditionThrowable(new TypeError(obj, "real"));
+        signal(new TypeError(obj, "real"));
+        // Not reached.
+        return false;
     }
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
@@ -389,7 +399,7 @@ public final class Ratio extends LispObject
             d = ((Ratio)obj).denominator();
 	  } else {
             Thread.dumpStack();
-            throw new ConditionThrowable(new TypeError(obj, "number"));
+            return signal(new TypeError(obj, "number"));
 	  }
 
 	  // Invert and multiply.
@@ -407,8 +417,8 @@ public final class Ratio extends LispObject
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
-                throw new ConditionThrowable(new DivisionByZero());
-            throw new ConditionThrowable(new ArithmeticError(e.getMessage()));
+                return signal(new DivisionByZero());
+            return signal(new ArithmeticError(e.getMessage()));
         }
     }
 

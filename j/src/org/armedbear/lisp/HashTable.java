@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.27 2003-12-09 20:26:22 asimon Exp $
+ * $Id: HashTable.java,v 1.28 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ public final class HashTable extends LispObject
         else if (test == Symbol.EQUALP.getSymbolFunction())
             this.test = TEST_EQUALP;
         else
-            throw new ConditionThrowable(new LispError("MAKE-HASH-TABLE:  test " + test));
+            signal(new LispError("MAKE-HASH-TABLE:  test " + test));
         // Ignore rehashSize and rehashThreshold.
         buckets = new HashEntry[size];
         threshold = (int) (size * loadFactor);
@@ -284,7 +284,7 @@ public final class HashTable extends LispObject
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 4)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             LispObject test = args[0];
             int size = Fixnum.getValue(args[1]);
             LispObject rehashSize = args[2];
@@ -300,7 +300,7 @@ public final class HashTable extends LispObject
         {
             final int length = args.length;
             if (length < 2 || length > 3)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             if (args[1] instanceof HashTable) {
                 LispObject key = args[0];
                 HashTable ht = (HashTable) args[1];
@@ -308,7 +308,7 @@ public final class HashTable extends LispObject
                     length == 3 ? args[2] : NIL;
                 return ht.gethash(key, defaultValue);
             }
-            throw new ConditionThrowable(new TypeError(args[1], "hash-table"));
+            return signal(new TypeError(args[1], "hash-table"));
         }
     };
 
@@ -320,7 +320,7 @@ public final class HashTable extends LispObject
         {
             final int length = args.length;
             if (length < 3 || length > 4)
-                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+                return signal(new WrongNumberOfArgumentsException(this));
             if (args[1] instanceof HashTable) {
                 LispObject key = args[0];
                 HashTable ht = (HashTable) args[1];
@@ -333,7 +333,7 @@ public final class HashTable extends LispObject
                 }
                 return ht.puthash(key, value);
             }
-            throw new ConditionThrowable(new TypeError(args[1], "hash-table"));
+            return signal(new TypeError(args[1], "hash-table"));
         }
     };
 
@@ -347,7 +347,7 @@ public final class HashTable extends LispObject
                 HashTable ht = (HashTable) second;
                 return ht.remhash(key);
             }
-            throw new ConditionThrowable(new TypeError(second, "hash-table"));
+            return signal(new TypeError(second, "hash-table"));
         }
     };
 
@@ -360,7 +360,7 @@ public final class HashTable extends LispObject
                 ((HashTable)arg).clear();
                 return arg;
             }
-            throw new ConditionThrowable(new TypeError(arg, "hash-table"));
+            return signal(new TypeError(arg, "hash-table"));
         }
     };
 
@@ -371,7 +371,7 @@ public final class HashTable extends LispObject
         {
             if (arg instanceof HashTable)
                 return new Fixnum(((HashTable)arg).getCount());
-            throw new ConditionThrowable(new TypeError(arg, "hash-table"));
+            return signal(new TypeError(arg, "hash-table"));
         }
     };
 
@@ -401,7 +401,7 @@ public final class HashTable extends LispObject
         {
             if (arg instanceof HashTable)
                 return ((HashTable)arg).ENTRIES();
-            throw new ConditionThrowable(new TypeError(arg, "hash-table"));
+            return signal(new TypeError(arg, "hash-table"));
         }
     };
 }

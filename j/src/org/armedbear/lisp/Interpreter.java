@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.46 2003-12-12 01:12:19 piso Exp $
+ * $Id: Interpreter.java,v 1.47 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,8 +338,10 @@ public final class Interpreter extends Lisp
             if (args == null || args.length() == 0) {
                 if (ldArgs != null)
                     args = ldArgs;
-                else
-                    throw new ConditionThrowable(new LispError("ld: no previous file"));
+                else {
+                    signal(new LispError("ld: no previous file"));
+                    return true;
+                }
             }
             if (args != null && args.length() > 0) {
                 ldArgs = args;
@@ -381,7 +383,8 @@ public final class Interpreter extends Lisp
                         new LispString(file.getCanonicalPath()));
                 }
                 catch (IOException e) {
-                    throw new ConditionThrowable(new LispError(e.getMessage()));
+                    signal(new LispError(e.getMessage()));
+                    return true;
                 }
             }
             LispString string =
@@ -416,8 +419,10 @@ public final class Interpreter extends Lisp
                 StringInputStream stream =
                     new StringInputStream("(apropos " + args + ")");
                 LispObject obj = stream.read(false, EOF, false);
-                if (obj == EOF)
-                    throw new ConditionThrowable(new EndOfFile());
+                if (obj == EOF) {
+                    signal(new EndOfFile());
+                    return true;
+                }
                 eval(obj, new Environment(), LispThread.currentThread());
                 getStandardOutput().freshLine();
                 return true;
@@ -430,8 +435,10 @@ public final class Interpreter extends Lisp
                 StringInputStream stream =
                     new StringInputStream("(describe " + args + ")");
                 LispObject obj = stream.read(false, EOF, false);
-                if (obj == EOF)
-                    throw new ConditionThrowable(new EndOfFile());
+                if (obj == EOF) {
+                    signal(new EndOfFile());
+                    return true;
+                }
                 eval(obj, new Environment(), LispThread.currentThread());
                 return true;
             }
@@ -588,7 +595,7 @@ public final class Interpreter extends Lisp
         StringInputStream stream = new StringInputStream(s);
         LispObject obj = stream.read(false, EOF, false);
         if (obj == EOF)
-            throw new ConditionThrowable(new EndOfFile());
+            return signal(new EndOfFile());
         return eval(obj, new Environment(), LispThread.currentThread());
     }
 

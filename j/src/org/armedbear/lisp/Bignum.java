@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.49 2003-12-03 01:51:38 piso Exp $
+ * $Id: Bignum.java,v 1.50 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,9 +176,8 @@ public final class Bignum extends LispObject
     {
         double d = value.doubleValue();
         if (Double.isInfinite(d))
-            throw new ConditionThrowable(
-                new TypeError(toString() +
-                              " is too large to be converted to a float"));
+            signal(new TypeError(toString() +
+                                 " is too large to be converted to a float"));
         return d;
     }
 
@@ -188,7 +187,9 @@ public final class Bignum extends LispObject
             return ((Bignum)obj).value;
         }
         catch (ClassCastException e) {
-            throw new ConditionThrowable(new TypeError(obj, "bignum"));
+            signal(new TypeError(obj, "bignum"));
+            // Not reached.
+            return null;
         }
     }
 
@@ -225,7 +226,7 @@ public final class Bignum extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -247,7 +248,7 @@ public final class Bignum extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        Fixnum.ZERO.subtract(c.getImaginaryPart()));
         }
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -268,7 +269,7 @@ public final class Bignum extends LispObject
         }
         if (obj instanceof LispFloat)
             return new LispFloat(floatValue() * ((LispFloat)obj).getValue());
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -283,7 +284,7 @@ public final class Bignum extends LispObject
         }
         if (obj instanceof LispFloat)
             return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        return signal(new TypeError(obj, "number"));
     }
 
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
@@ -294,7 +295,9 @@ public final class Bignum extends LispObject
             return floatValue() == ((LispFloat)obj).getValue();
         if (obj.numberp())
             return false;
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
@@ -305,7 +308,9 @@ public final class Bignum extends LispObject
             return floatValue() != ((LispFloat)obj).getValue();
         if (obj.numberp())
             return true;
-        throw new ConditionThrowable(new TypeError(obj, "number"));
+        signal(new TypeError(obj, "number"));
+        // Not reached.
+        return false;
     }
 
     public boolean isLessThan(LispObject obj) throws ConditionThrowable
@@ -320,7 +325,9 @@ public final class Bignum extends LispObject
         }
         if (obj instanceof LispFloat)
             return floatValue() < ((LispFloat)obj).getValue();
-        throw new ConditionThrowable(new TypeError(obj, "real"));
+        signal(new TypeError(obj, "real"));
+        // Not reached.
+        return false;
     }
 
     public boolean isGreaterThan(LispObject obj) throws ConditionThrowable
@@ -335,7 +342,9 @@ public final class Bignum extends LispObject
         }
         if (obj instanceof LispFloat)
             return floatValue() > ((LispFloat)obj).getValue();
-        throw new ConditionThrowable(new TypeError(obj, "real"));
+        signal(new TypeError(obj, "real"));
+        // Not reached.
+        return false;
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -350,7 +359,9 @@ public final class Bignum extends LispObject
         }
         if (obj instanceof LispFloat)
             return floatValue() <= ((LispFloat)obj).getValue();
-        throw new ConditionThrowable(new TypeError(obj, "real"));
+        signal(new TypeError(obj, "real"));
+        // Not reached.
+        return false;
     }
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws ConditionThrowable
@@ -365,7 +376,9 @@ public final class Bignum extends LispObject
         }
         if (obj instanceof LispFloat)
             return floatValue() >= ((LispFloat)obj).getValue();
-        throw new ConditionThrowable(new TypeError(obj, "real"));
+        signal(new TypeError(obj, "real"));
+        // Not reached.
+        return false;
     }
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
@@ -373,43 +386,44 @@ public final class Bignum extends LispObject
         final LispThread thread = LispThread.currentThread();
         LispObject value1, value2;
 	try {
-	  if (obj instanceof Ratio) {
-            Ratio divisor = (Ratio) obj;
-            LispObject quotient =
-	      multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
-            LispObject remainder =
-	      subtract(quotient.multiplyBy(divisor));
-            value1 = quotient;
-            value2 = remainder;
-	  } else if (obj instanceof Fixnum) {
-            BigInteger divisor = ((Fixnum)obj).getBigInteger();
-            BigInteger[] results = value.divideAndRemainder(divisor);
-            BigInteger quotient = results[0];
-            BigInteger remainder = results[1];
-            value1 = number(quotient);
-            value2 = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
-	  } else if (obj instanceof Bignum) {
-            BigInteger divisor = ((Bignum)obj).getValue();
-            BigInteger[] results = value.divideAndRemainder(divisor);
-            BigInteger quotient = results[0];
-            BigInteger remainder = results[1];
-            value1 = number(quotient);
-            value2 = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
-	  } else if (obj instanceof Ratio) {
-            Ratio divisor = (Ratio) obj;
-            LispObject quotient =
-	      multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
-            LispObject remainder =
-	      subtract(quotient.multiplyBy(divisor));
-            value1 = quotient;
-            value2 = remainder;
-	  } else
-            throw new ConditionThrowable(new LispError("Bignum.truncate(): not implemented: " + obj.typeOf()));
+            if (obj instanceof Ratio) {
+                Ratio divisor = (Ratio) obj;
+                LispObject quotient =
+                    multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
+                LispObject remainder =
+                    subtract(quotient.multiplyBy(divisor));
+                value1 = quotient;
+                value2 = remainder;
+            } else if (obj instanceof Fixnum) {
+                BigInteger divisor = ((Fixnum)obj).getBigInteger();
+                BigInteger[] results = value.divideAndRemainder(divisor);
+                BigInteger quotient = results[0];
+                BigInteger remainder = results[1];
+                value1 = number(quotient);
+                value2 = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
+            } else if (obj instanceof Bignum) {
+                BigInteger divisor = ((Bignum)obj).getValue();
+                BigInteger[] results = value.divideAndRemainder(divisor);
+                BigInteger quotient = results[0];
+                BigInteger remainder = results[1];
+                value1 = number(quotient);
+                value2 = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
+            } else if (obj instanceof Ratio) {
+                Ratio divisor = (Ratio) obj;
+                LispObject quotient =
+                    multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
+                LispObject remainder =
+                    subtract(quotient.multiplyBy(divisor));
+                value1 = quotient;
+                value2 = remainder;
+            } else
+                return signal(new LispError("Bignum.truncate(): not implemented: " + obj.typeOf()));
         }
         catch (ArithmeticException e) {
             if (obj.zerop())
-                throw new ConditionThrowable(new DivisionByZero());
-            throw new ConditionThrowable(new ArithmeticError(e.getMessage()));
+                return signal(new DivisionByZero());
+            else
+                return signal(new ArithmeticError(e.getMessage()));
         }
         return thread.setValues(value1, value2);
     }

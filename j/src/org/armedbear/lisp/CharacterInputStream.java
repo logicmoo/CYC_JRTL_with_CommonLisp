@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.57 2003-11-16 18:28:49 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.58 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,7 @@ public class CharacterInputStream extends LispInputStream
             return _READ_SUPPRESS_.symbolValueNoThrow() != NIL ? NIL : result;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -92,11 +92,11 @@ public class CharacterInputStream extends LispInputStream
                 n = read();
             }
             catch (IOException e) {
-                throw new ConditionThrowable(new StreamError(e));
+                return signal(new StreamError(e));
             }
             if (n < 0) {
                 if (eofError)
-                    throw new ConditionThrowable(new EndOfFile());
+                    return signal(new EndOfFile());
                 else
                     return eofValue;
             }
@@ -143,14 +143,20 @@ public class CharacterInputStream extends LispInputStream
             StringBuffer sb = new StringBuffer();
             while (true) {
                 int n = read();
-                if (n < 0)
-                    throw new ConditionThrowable(new EndOfFile());
+                if (n < 0) {
+                    signal(new EndOfFile());
+                    // Not reached.
+                    return null;
+                }
                 char c = (char) n;
                 if (c == '\\') {
                     // Single escape.
                     n = read();
-                    if (n < 0)
-                        throw new ConditionThrowable(new EndOfFile());
+                    if (n < 0) {
+                        signal(new EndOfFile());
+                        // Not reached.
+                        return null;
+                    }
                     sb.append((char)n);
                     continue;
                 }
@@ -162,7 +168,9 @@ public class CharacterInputStream extends LispInputStream
             return sb.toString();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
+            // Not reached.
+            return null;
         }
     }
 
@@ -178,14 +186,14 @@ public class CharacterInputStream extends LispInputStream
             n = read();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
         if (n < 0)
-            throw new ConditionThrowable(new EndOfFile());
+            return signal(new EndOfFile());
         char nextChar = (char) n;
         if (nextChar == '"')
             return Pathname.parseNamestring(_readString());
-        throw new ConditionThrowable(new TypeError("#p requires a string argument"));
+        return signal(new TypeError("#p requires a string argument"));
     }
 
     private LispObject readQuote() throws ConditionThrowable
@@ -206,11 +214,11 @@ public class CharacterInputStream extends LispInputStream
                 if (c == '.') {
                     int n = read();
                     if (n < 0)
-                        throw new ConditionThrowable(new EndOfFile());
+                        return signal(new EndOfFile());
                     char nextChar = (char) n;
                     if (isTokenDelimiter(nextChar)) {
                         if (last == null)
-                            throw new ConditionThrowable(new LispError("nothing appears before . in list"));
+                            return signal(new LispError("nothing appears before . in list"));
                         LispObject obj = read(true, NIL, true);
                         last.setCdr(obj);
                         continue;
@@ -235,7 +243,7 @@ public class CharacterInputStream extends LispInputStream
             }
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -257,7 +265,7 @@ public class CharacterInputStream extends LispInputStream
 
     private LispObject readRightParen() throws ConditionThrowable
     {
-        throw new ConditionThrowable(new LispError("unmatched right parenthesis"));
+        return signal(new LispError("unmatched right parenthesis"));
     }
 
     private LispObject readComment() throws ConditionThrowable
@@ -272,7 +280,7 @@ public class CharacterInputStream extends LispInputStream
             }
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -281,7 +289,7 @@ public class CharacterInputStream extends LispInputStream
         try {
             int n = read();
             if (n < 0)
-                throw new ConditionThrowable(new EndOfFile());
+                return signal(new EndOfFile());
             char c = (char) n;
             switch (c) {
                 case '@':
@@ -297,7 +305,7 @@ public class CharacterInputStream extends LispInputStream
             }
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -314,7 +322,7 @@ public class CharacterInputStream extends LispInputStream
             while (true) {
                 int n = read();
                 if (n < 0)
-                    throw new ConditionThrowable(new EndOfFile());
+                    return signal(new EndOfFile());
                 c = (char) n;
                 if (c < '0' || c > '9')
                     break;
@@ -373,13 +381,13 @@ public class CharacterInputStream extends LispInputStream
                     return readHex();
                 default:
                     //clearInput();
-                    //throw new ConditionThrowable(new LispError("unsupported '#' macro character '" +
+                    //return signal(new LispError("unsupported '#' macro character '" +
                     //    c + '\'');
                     return null;
             }
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -388,7 +396,7 @@ public class CharacterInputStream extends LispInputStream
         try {
             int n = read();
             if (n < 0)
-                throw new ConditionThrowable(new EndOfFile());
+                return signal(new EndOfFile());
             char c = (char) n;
             StringBuffer sb = new StringBuffer();
             sb.append(c);
@@ -411,10 +419,10 @@ public class CharacterInputStream extends LispInputStream
             n = nameToChar(token);
             if (n >= 0)
                 return LispCharacter.getInstance((char)n);
-            throw new ConditionThrowable(new LispError("unrecognized character name: " + token));
+            return signal(new LispError("unrecognized character name: " + token));
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -443,21 +451,30 @@ public class CharacterInputStream extends LispInputStream
     {
         try {
             int n = read();
-            if (n < 0)
-                throw new ConditionThrowable(new EndOfFile());
+            if (n < 0) {
+                signal(new EndOfFile());
+                // Not reached.
+                return null;
+            }
             char c = (char) n;
             StringBuffer sb = new StringBuffer();
             if (c == '|') {
                 while (true) {
                     n = read();
-                    if (n < 0)
-                        throw new ConditionThrowable(new EndOfFile());
+                    if (n < 0) {
+                        signal(new EndOfFile());
+                        // Not reached.
+                        return null;
+                    }
                     c = (char) n;
                     if (c == '\\') {
                         // Single escape.
                         n = read();
-                        if (n < 0)
-                            throw new ConditionThrowable(new EndOfFile());
+                        if (n < 0) {
+                            signal(new EndOfFile());
+                            // Not reached.
+                            return null;
+                        }
                         sb.append((char)n);
                         continue;
                     }
@@ -475,8 +492,11 @@ public class CharacterInputStream extends LispInputStream
                     if (c == '\\') {
                         // Single escape.
                         n = read();
-                        if (n < 0)
-                            throw new ConditionThrowable(new EndOfFile());
+                        if (n < 0) {
+                            signal(new EndOfFile());
+                            // Not reached.
+                            return null;
+                        }
                         sb.append((char)n);
                         continue;
                     }
@@ -492,7 +512,9 @@ public class CharacterInputStream extends LispInputStream
             return new Symbol(sb.toString());
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
+            // Not reached.
+            return null;
         }
     }
 
@@ -519,7 +541,7 @@ public class CharacterInputStream extends LispInputStream
             }
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
         }
     }
 
@@ -542,7 +564,7 @@ public class CharacterInputStream extends LispInputStream
             return new BitVector(sb.toString());
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -559,7 +581,7 @@ public class CharacterInputStream extends LispInputStream
         LispObject obj = read(true, NIL, true);
         if (obj instanceof Cons && obj.length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
-        throw new ConditionThrowable(new LispError("invalid complex number format #C" + obj));
+        return signal(new LispError("invalid complex number format #C" + obj));
     }
 
     private String readMultipleEscape() throws ConditionThrowable
@@ -578,7 +600,9 @@ public class CharacterInputStream extends LispInputStream
             return sb.toString();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
+            // Not reached.
+            return null;
         }
     }
 
@@ -606,7 +630,7 @@ public class CharacterInputStream extends LispInputStream
             return PACKAGE_KEYWORD.intern(sb.toString());
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -633,7 +657,7 @@ public class CharacterInputStream extends LispInputStream
             }
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -660,7 +684,7 @@ public class CharacterInputStream extends LispInputStream
             String symbolName = token.substring(index + 2);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                throw new ConditionThrowable(new LispError("package \"" + packageName +
+                return signal(new LispError("package \"" + packageName +
                                                            "\" not found"));
             return pkg.intern(symbolName);
         }
@@ -670,18 +694,18 @@ public class CharacterInputStream extends LispInputStream
             String symbolName = token.substring(index + 1);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                throw new ConditionThrowable(new PackageError("package \"" + packageName +
+                return signal(new PackageError("package \"" + packageName +
                                                               "\" not found"));
             Symbol symbol = pkg.findExternalSymbol(symbolName);
             if (symbol != null)
                 return symbol;
             // Error!
             if (pkg.findInternalSymbol(symbolName) != null)
-                throw new ConditionThrowable(new LispError("symbol \"" + symbolName +
+                return signal(new LispError("symbol \"" + symbolName +
                                                            "\" is not external in package " +
                                                            packageName));
             else
-                throw new ConditionThrowable(new LispError("symbol \"" + symbolName +
+                return signal(new LispError("symbol \"" + symbolName +
                                                            "\" not found in package " +
                                                            packageName));
         }
@@ -801,10 +825,10 @@ public class CharacterInputStream extends LispInputStream
             }
             catch (NumberFormatException e) {}
             // Not a number.
-            throw new ConditionThrowable(new LispError());
+            return signal(new LispError());
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -839,10 +863,10 @@ public class CharacterInputStream extends LispInputStream
             }
             catch (NumberFormatException e) {}
             // Not a number.
-            throw new ConditionThrowable(new LispError());
+            return signal(new LispError());
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 
@@ -851,15 +875,20 @@ public class CharacterInputStream extends LispInputStream
         try {
             while (true) {
                 int n = read();
-                if (n < 0)
-                    throw new ConditionThrowable(new EndOfFile());
+                if (n < 0) {
+                    signal(new EndOfFile());
+                    // Not reached.
+                    return 0;
+                }
                 char c = (char) n;
                 if (!Character.isWhitespace(c))
                     return c;
             }
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            signal(new StreamError(e));
+            // Not reached.
+            return 0;
         }
     }
 
@@ -876,7 +905,7 @@ public class CharacterInputStream extends LispInputStream
                 if (n < 0) {
                     if (sb.length() == 0) {
                         if (eofError)
-                            throw new ConditionThrowable(new EndOfFile());
+                            return signal(new EndOfFile());
                         return eofValue;
                     }
                     return LispThread.currentThread().setValues(new LispString(sb.toString()),
@@ -892,7 +921,7 @@ public class CharacterInputStream extends LispInputStream
                 }
             }
             catch (IOException e) {
-                throw new ConditionThrowable(new StreamError(e));
+                return signal(new StreamError(e));
             }
         }
     }
@@ -907,11 +936,11 @@ public class CharacterInputStream extends LispInputStream
             n = read();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
         if (n < 0) {
             if (eofError)
-                throw new ConditionThrowable(new EndOfFile());
+                return signal(new EndOfFile());
             else
                 return eofValue;
         }
@@ -925,7 +954,7 @@ public class CharacterInputStream extends LispInputStream
             unread(c.getValue());
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
         return NIL;
     }
@@ -938,7 +967,7 @@ public class CharacterInputStream extends LispInputStream
                 read();
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
         return NIL;
     }
@@ -952,7 +981,7 @@ public class CharacterInputStream extends LispInputStream
             return T;
         }
         catch (IOException e) {
-            throw new ConditionThrowable(new StreamError(e));
+            return signal(new StreamError(e));
         }
     }
 

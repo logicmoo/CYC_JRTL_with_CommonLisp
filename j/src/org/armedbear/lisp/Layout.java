@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Layout.java,v 1.1 2003-12-11 19:08:23 piso Exp $
+ * $Id: Layout.java,v 1.2 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class Layout extends LispObject
                 return new Layout((LispClass)first, second);
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(first, "class"));
+                return signal(new TypeError(first, "class"));
             }
         }
 
@@ -62,7 +62,7 @@ public final class Layout extends LispObject
                 return ((Layout)arg).cls;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "layout"));
+                return signal(new TypeError(arg, "layout"));
             }
         }
     };
@@ -76,7 +76,7 @@ public final class Layout extends LispObject
                 return ((Layout)arg).length;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "layout"));
+                return signal(new TypeError(arg, "layout"));
             }
         }
     };

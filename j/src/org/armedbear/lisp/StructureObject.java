@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.16 2003-12-09 20:26:23 asimon Exp $
+ * $Id: StructureObject.java,v 1.17 2003-12-13 00:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,11 +91,11 @@ public final class StructureObject extends LispObject
                 return ((StructureObject)first).slots[((Fixnum)second).getValue()];
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                throw new ConditionThrowable(new LispError("internal error"));
+                return signal(new LispError("internal error"));
             }
         }
     };
@@ -108,11 +108,11 @@ public final class StructureObject extends LispObject
                 return ((StructureObject)arg).slots[0];
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                throw new ConditionThrowable(new LispError("internal error"));
+                return signal(new LispError("internal error"));
             }
         }
     };
@@ -125,11 +125,11 @@ public final class StructureObject extends LispObject
                 return ((StructureObject)arg).slots[1];
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                throw new ConditionThrowable(new LispError("internal error"));
+                return signal(new LispError("internal error"));
             }
         }
     };
@@ -142,11 +142,11 @@ public final class StructureObject extends LispObject
                 return ((StructureObject)arg).slots[2];
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                throw new ConditionThrowable(new LispError("internal error"));
+                return signal(new LispError("internal error"));
             }
         }
     };
@@ -164,11 +164,11 @@ public final class StructureObject extends LispObject
                 return third;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                throw new ConditionThrowable(new LispError("internal error"));
+                return signal(new LispError("internal error"));
             }
         }
     };
@@ -183,11 +183,11 @@ public final class StructureObject extends LispObject
                 return second;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                throw new ConditionThrowable(new LispError("internal error"));
+                return signal(new LispError("internal error"));
             }
         }
     };
@@ -202,11 +202,11 @@ public final class StructureObject extends LispObject
                 return second;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                throw new ConditionThrowable(new LispError("internal error"));
+                return signal(new LispError("internal error"));
             }
         }
     };
@@ -221,11 +221,11 @@ public final class StructureObject extends LispObject
                 return second;
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError());
+                return signal(new TypeError());
             }
             catch (ArrayIndexOutOfBoundsException e) {
                 // Shouldn't happen.
-                throw new ConditionThrowable(new LispError("internal error"));
+                return signal(new LispError("internal error"));
             }
         }
     };
@@ -251,7 +251,7 @@ public final class StructureObject extends LispObject
                 return new StructureObject((StructureObject)arg);
             }
             catch (ClassCastException e) {
-                throw new ConditionThrowable(new TypeError(arg, "STRUCTURE-OBJECT"));
+                return signal(new TypeError(arg, "STRUCTURE-OBJECT"));
             }
         }
     };
