@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.63 2004-04-24 12:48:29 piso Exp $
+ * $Id: Stream.java,v 1.64 2004-04-24 15:51:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -546,6 +546,29 @@ public class Stream extends LispObject
         if (!escaped) {
             if (token.length() > 0) {
                 final char firstChar = token.charAt(0);
+                if (firstChar == '.') {
+                    // Section 2.3.3: "If a token consists solely of dots (with
+                    // no escape characters), then an error of type READER-
+                    // ERROR is signaled, except in one circumstance: if the
+                    // token is a single dot and appears in a situation where
+                    // dotted pair notation permits a dot, then it is accepted
+                    // as part of such syntax and no error is signaled."
+                    boolean ok = false;
+                    for (int i = token.length(); i-- > 1;) {
+                        if (token.charAt(i) != '.') {
+                            ok = true;
+                            break;
+                        }
+                    }
+                    if (!ok) {
+                        final String message;
+                        if (token.length() > 1)
+                            message = "Too many dots.";
+                        else
+                            message = "Dot context error.";
+                        return signal(new ReaderError(message));
+                    }
+                }
                 if ("-+0123456789".indexOf(firstChar) >= 0) {
                     LispObject number = makeNumber(token, getReadBase());
                     if (number != null)
