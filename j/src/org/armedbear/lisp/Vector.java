@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.2 2003-02-09 18:02:08 piso Exp $
+ * $Id: Vector.java,v 1.3 2003-02-09 18:43:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,21 +124,6 @@ public final class Vector extends AbstractVector implements SequenceType,
     {
         for (int i = length; i-- > 0;)
             elements[i] = obj;
-    }
-
-    public int checkIndex(int index) throws LispException
-    {
-        if (index < 0 || index >= length)
-            badIndex(index);
-        return index;
-    }
-
-    public int checkIndex(LispObject index) throws LispException
-    {
-        long i = Fixnum.getValue(index);
-        if (i < 0 || i >= length)
-            badIndex(i);
-        return (int) i;
     }
 
     public String toString()
