@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.21 2004-06-22 23:07:47 piso Exp $
+ * $Id: TwoWayStream.java,v 1.22 2004-06-23 01:42:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,6 +98,75 @@ public class TwoWayStream extends Stream
         return super.typep(type);
     }
 
+    // Returns -1 at end of file.
+    protected int _readChar() throws ConditionThrowable
+    {
+        return in._readChar();
+    }
+
+    protected void _unreadChar(int n) throws ConditionThrowable
+    {
+        in._unreadChar(n);
+    }
+
+    protected boolean _charReady() throws ConditionThrowable
+    {
+        return in._charReady();
+    }
+
+    public void _writeChar(char c) throws ConditionThrowable
+    {
+        out._writeChar(c);
+    }
+
+    public void _writeChars(char[] chars, int start, int end)
+        throws ConditionThrowable
+    {
+        out._writeChars(chars, start, end);
+    }
+
+    public void _writeString(String s) throws ConditionThrowable
+    {
+        out._writeString(s);
+    }
+
+    public void _writeLine(String s) throws ConditionThrowable
+    {
+        out._writeLine(s);
+    }
+
+    // Reads an 8-bit byte.
+    public int _readByte() throws ConditionThrowable
+    {
+        return in._readByte();
+    }
+
+    // Writes an 8-bit byte.
+    public void _writeByte(int n) throws ConditionThrowable
+    {
+        out._writeByte(n);
+    }
+
+    public void _finishOutput() throws ConditionThrowable
+    {
+        out._finishOutput();
+    }
+
+    public void _clearInput() throws ConditionThrowable
+    {
+        in._clearInput();
+    }
+
+    public LispObject listen() throws ConditionThrowable
+    {
+        return in.listen();
+    }
+
+    public LispObject freshLine() throws ConditionThrowable
+    {
+        return out.freshLine();
+    }
+
     public LispObject close(LispObject abort) throws ConditionThrowable
     {
         // "The effect of CLOSE on a constructed stream is to close the
@@ -107,7 +176,7 @@ public class TwoWayStream extends Stream
         return T;
     }
 
-    public String toString()
+    public String writeToString()
     {
         return unreadableString("TWO-WAY-STREAM");
     }

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.257 2004-06-22 23:07:46 piso Exp $
+ * $Id: Lisp.java,v 1.258 2004-06-23 01:46:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -907,15 +907,11 @@ public abstract class Lisp
     public static final Stream checkCharacterInputStream(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj == null)
-            throw new NullPointerException();
-        if (obj instanceof TwoWayStream) {
-            Stream in = ((TwoWayStream)obj).getInputStream();
-	    return checkCharacterInputStream(in);
-        }
         if (obj instanceof Stream)
             if (((Stream)obj).isCharacterInputStream())
                 return (Stream) obj;
+        if (obj == null)
+            throw new NullPointerException();
         signal(new TypeError(obj, "character input stream"));
         // Not reached.
         return null;
@@ -924,15 +920,11 @@ public abstract class Lisp
     public static final Stream checkCharacterOutputStream(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj == null)
-            throw new NullPointerException();
-        if (obj instanceof TwoWayStream) {
-            Stream out = ((TwoWayStream)obj).getOutputStream();
-	    return checkCharacterOutputStream(out);
-        }
         if (obj instanceof Stream)
             if (((Stream)obj).isCharacterOutputStream())
                 return (Stream) obj;
+        if (obj == null)
+            throw new NullPointerException();
         signal(new TypeError(obj, "character output stream"));
         // Not reached.
         return null;
@@ -941,15 +933,11 @@ public abstract class Lisp
     public static final Stream checkBinaryInputStream(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj == null)
-            throw new NullPointerException();
-        if (obj instanceof TwoWayStream) {
-            Stream in = ((TwoWayStream)obj).getInputStream();
-	    return checkBinaryInputStream(in);
-        }
         if (obj instanceof Stream)
             if (((Stream)obj).isBinaryInputStream())
                 return (Stream) obj;
+        if (obj == null)
+            throw new NullPointerException();
         signal(new TypeError(obj, "binary input stream"));
         // Not reached.
         return null;
@@ -958,15 +946,11 @@ public abstract class Lisp
     public static final Stream checkBinaryOutputStream(LispObject obj)
         throws ConditionThrowable
     {
-        if (obj == null)
-            throw new NullPointerException();
-        if (obj instanceof TwoWayStream) {
-            Stream out = ((TwoWayStream)obj).getOutputStream();
-	    return checkBinaryOutputStream(out);
-        }
         if (obj instanceof Stream)
             if (((Stream)obj).isBinaryOutputStream())
                 return (Stream) obj;
+        if (obj == null)
+            throw new NullPointerException();
         signal(new TypeError(obj, "binary output stream"));
         // Not reached.
         return null;
