@@ -2,7 +2,7 @@
  * PythonMode.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: PythonMode.java,v 1.2 2003-07-03 23:06:39 piso Exp $
+ * $Id: PythonMode.java,v 1.3 2003-10-30 19:22:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,11 @@ public final class PythonMode extends AbstractMode implements Constants, Mode
     public final SyntaxIterator getSyntaxIterator(Position pos)
     {
         return new PythonSyntaxIterator(pos);
+    }
+
+    public final String getCommentStart()
+    {
+        return "#";
     }
 
     public final Formatter getFormatter(Buffer buffer)
