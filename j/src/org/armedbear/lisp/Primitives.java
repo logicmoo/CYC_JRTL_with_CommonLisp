@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.712 2004-12-07 01:16:30 piso Exp $
+ * $Id: Primitives.java,v 1.713 2004-12-07 01:23:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3561,6 +3561,10 @@ public final class Primitives extends Lisp
         new Primitive("read-line",
                       "&optional input-stream eof-error-p eof-value recursive-p")
     {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return inSynonymOf(arg).readLine(true, NIL);
+        }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
@@ -3686,6 +3690,11 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return inSynonymOf(arg).readChar();
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return inSynonymOf(first).readChar(second != NIL, NIL);
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
