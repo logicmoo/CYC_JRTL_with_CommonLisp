@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.4 2003-10-05 01:22:11 piso Exp $
+;;; $Id: top-level.lisp,v 1.5 2003-10-05 15:09:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -224,20 +224,6 @@
 
 (defparameter *repl-read-form-fun* #'repl-read-form-fun)
 
-(defun interactive-eval (form)
-  (setf - form)
-  (let ((results (multiple-value-list (eval form))))
-    (setf /// //
-	  // /
-	  / results
-	  *** **
-	  ** *
-	  * (car results)))
-  (setf +++ ++
-	++ +
-	+ -)
-  (values-list /))
-
 (defun repl ()
   (loop
     (funcall *repl-prompt-fun* *standard-output*)
@@ -245,7 +231,7 @@
     (let* ((form (funcall *repl-read-form-fun*
                           *standard-input*
                           *standard-output*))
-           (results (multiple-value-list (interactive-eval form))))
+           (results (multiple-value-list (sys::interactive-eval form))))
       (dolist (result results)
         (fresh-line)
         (prin1 result)))))
