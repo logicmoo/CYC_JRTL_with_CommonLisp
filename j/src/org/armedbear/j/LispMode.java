@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.71 2004-08-07 16:08:50 piso Exp $
+ * $Id: LispMode.java,v 1.72 2004-08-08 00:44:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -868,16 +868,36 @@ public class LispMode extends AbstractMode implements Constants, Mode
             return;
         Editor ed = getLispShellEditor(editor);
         if (ed != null) {
-            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
-            String path = editor.getBuffer().getFile().canonicalPath();
-            if (path != null) {
-                Position end = lisp.getEnd();
-                end.getLine().setFlags(STATE_INPUT);
-                lisp.insertString(end, ";;; Loading file " + path + " ...\n");
-                lisp.renumber();
-                ed.eob();
-                ed.getDotLine().setFlags(0);
-                lisp.send("(CL:LOAD \"" + path + "\")\n");
+            Buffer buffer = editor.getBuffer();
+            boolean save = false;
+            if (buffer.isModified()) {
+                int response =
+                    ConfirmDialog.showConfirmDialogWithCancelButton(editor,
+                                                                    VC_CHECK_SAVE_PROMPT,
+                                                                    "Load File");
+                switch (response) {
+                    case RESPONSE_YES:
+                        save = true;
+                        break;
+                    case RESPONSE_NO:
+                        break;
+                    case RESPONSE_CANCEL:
+                        return;
+                }
+                editor.repaintNow();
+            }
+            if (!save || buffer.save()) {
+                CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+                String path = editor.getBuffer().getFile().canonicalPath();
+                if (path != null) {
+                    Position end = lisp.getEnd();
+                    end.getLine().setFlags(STATE_INPUT);
+                    lisp.insertString(end, ";;; Loading file " + path + " ...\n");
+                    lisp.renumber();
+                    ed.eob();
+                    ed.getDotLine().setFlags(0);
+                    lisp.send("(CL:LOAD \"" + path + "\")\n");
+                }
             }
         }
     }
@@ -889,16 +909,36 @@ public class LispMode extends AbstractMode implements Constants, Mode
             return;
         Editor ed = getLispShellEditor(editor);
         if (ed != null) {
-            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
-            String path = editor.getBuffer().getFile().canonicalPath();
-            if (path != null) {
-                Position end = lisp.getEnd();
-                end.getLine().setFlags(STATE_INPUT);
-                lisp.insertString(end, ";;; Compiling " + path + " ...\n");
-                lisp.renumber();
-                ed.eob();
-                ed.getDotLine().setFlags(0);
-                lisp.send("(CL:COMPILE-FILE \"" + path + "\")\n");
+            Buffer buffer = editor.getBuffer();
+            boolean save = false;
+            if (buffer.isModified()) {
+                int response =
+                    ConfirmDialog.showConfirmDialogWithCancelButton(editor,
+                                                                    VC_CHECK_SAVE_PROMPT,
+                                                                    "Compile File");
+                switch (response) {
+                    case RESPONSE_YES:
+                        save = true;
+                        break;
+                    case RESPONSE_NO:
+                        break;
+                    case RESPONSE_CANCEL:
+                        return;
+                }
+                editor.repaintNow();
+            }
+            if (!save || buffer.save()) {
+                CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+                String path = editor.getBuffer().getFile().canonicalPath();
+                if (path != null) {
+                    Position end = lisp.getEnd();
+                    end.getLine().setFlags(STATE_INPUT);
+                    lisp.insertString(end, ";;; Compiling " + path + " ...\n");
+                    lisp.renumber();
+                    ed.eob();
+                    ed.getDotLine().setFlags(0);
+                    lisp.send("(CL:COMPILE-FILE \"" + path + "\")\n");
+                }
             }
         }
     }
@@ -910,16 +950,36 @@ public class LispMode extends AbstractMode implements Constants, Mode
             return;
         Editor ed = getLispShellEditor(editor);
         if (ed != null) {
-            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
-            String path = editor.getBuffer().getFile().canonicalPath();
-            if (path != null) {
-                Position end = lisp.getEnd();
-                end.getLine().setFlags(STATE_INPUT);
-                lisp.insertString(end, ";;; Compiling and loading " + path + " ...\n");
-                lisp.renumber();
-                ed.eob();
-                ed.getDotLine().setFlags(0);
-                lisp.send("(CL:LOAD (CL:COMPILE-FILE \"" + path + "\"))\n");
+            Buffer buffer = editor.getBuffer();
+            boolean save = false;
+            if (buffer.isModified()) {
+                int response =
+                    ConfirmDialog.showConfirmDialogWithCancelButton(editor,
+                                                                    VC_CHECK_SAVE_PROMPT,
+                                                                    "Compile and Load File");
+                switch (response) {
+                    case RESPONSE_YES:
+                        save = true;
+                        break;
+                    case RESPONSE_NO:
+                        break;
+                    case RESPONSE_CANCEL:
+                        return;
+                }
+                editor.repaintNow();
+            }
+            if (!save || buffer.save()) {
+                CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+                String path = editor.getBuffer().getFile().canonicalPath();
+                if (path != null) {
+                    Position end = lisp.getEnd();
+                    end.getLine().setFlags(STATE_INPUT);
+                    lisp.insertString(end, ";;; Compiling and loading " + path + " ...\n");
+                    lisp.renumber();
+                    ed.eob();
+                    ed.getDotLine().setFlags(0);
+                    lisp.send("(CL:LOAD (CL:COMPILE-FILE \"" + path + "\"))\n");
+                }
             }
         }
     }
