@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.526 2003-12-12 18:48:53 piso Exp $
+ * $Id: Primitives.java,v 1.527 2003-12-12 19:13:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1285,11 +1285,10 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
             if (args[0] instanceof Condition)
-                signal((Condition)args[0]);
-            signal(new SimpleCondition());
-            return NIL;
+                throw new ConditionThrowable((Condition)args[0]);
+            throw new ConditionThrowable (new SimpleCondition());
         }
     };
 
