@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.14 2003-08-24 16:40:58 piso Exp $
+ * $Id: HashTable.java,v 1.15 2003-08-25 19:15:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -240,7 +240,7 @@ public final class HashTable extends LispObject
 
     // ### %make-hash-table
     private static final Primitive _MAKE_HASH_TABLE =
-        new Primitive("%make-hash-table", PACKAGE_SYS, true) {
+        new Primitive("%make-hash-table", PACKAGE_SYS, false) {
         public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length != 4)
