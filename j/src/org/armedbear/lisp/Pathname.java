@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.37 2004-01-07 18:56:17 piso Exp $
+ * $Id: Pathname.java,v 1.38 2004-01-08 14:40:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -309,6 +309,11 @@ public final class Pathname extends LispObject
                     sb.append(directory);
                     sb.append(" ");
                 }
+                if (name != NIL) {
+                    sb.append(":NAME ");
+                    sb.append(name);
+                    sb.append(' ');
+                }
                 if (type != NIL) {
                     sb.append(":TYPE ");
                     sb.append(type);
@@ -493,6 +498,7 @@ public final class Pathname extends LispObject
         }
     };
 
+    // ### make-pathname
     private static final Primitive MAKE_PATHNAME =
         new Primitive("make-pathname", "&key host device directory name type version defaults case")
     {
