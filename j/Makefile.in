@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2004 Peter Graves
-# $Id: Makefile.in,v 1.24 2004-09-24 17:10:50 piso Exp $
+# $Id: Makefile.in,v 1.25 2004-09-24 18:41:33 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ distdir:
 	chmod +x configure
 	chmod +x install-sh
 	chmod +x mkinstalldirs
-	cp -p  j.in abcl.in configure configure.ac Makefile.in install-sh mkinstalldirs COPYING $(distdir)
+	cp -p  j.in j.bat.in abcl.in configure configure.ac Makefile.in install-sh mkinstalldirs COPYING $(distdir)
 	cp -p  build.properties build.xml $(distdir)
 	mkdir $(distdir)/src
 	cp -p  src/Makefile.in src/manifest src/*.java $(distdir)/src
@@ -250,7 +250,7 @@ j.zip:
 	chmod +x install-sh
 	chmod +x mkinstalldirs
 	zip -q j.zip \
-		j.in abcl.in configure configure.ac Makefile.in \
+		j.in j.bat.in abcl.in configure configure.ac Makefile.in \
 		install-sh mkinstalldirs COPYING \
 		build.xml build.properties \
 		src/Makefile.in src/manifest src/*.java \
