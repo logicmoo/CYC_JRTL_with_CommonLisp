@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.49 2004-01-05 14:36:49 piso Exp $
+ * $Id: Interpreter.java,v 1.50 2004-01-24 19:28:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,13 +31,9 @@ import java.util.ArrayList;
 
 public final class Interpreter extends Lisp
 {
-    private static final int MAX_HISTORY = 30;
-
     // There can only be one interpreter.
     public static Interpreter interpreter;
 
-    private static String ldArgs;
-    private static ArrayList history;
     private static int commandNumber;
 
     private final boolean jlisp;
@@ -79,8 +75,8 @@ public final class Interpreter extends Lisp
         jlisp = true;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
-        resetIO(new CharacterInputStream(inputStream),
-                new CharacterOutputStream(outputStream));
+        resetIO(new Stream(inputStream, Symbol.CHARACTER),
+                new Stream(outputStream, Symbol.CHARACTER));
     }
 
     private static boolean lispInitialized;
@@ -145,11 +141,10 @@ public final class Interpreter extends Lisp
     public void run()
     {
         final LispThread thread = LispThread.currentThread();
-        history = new ArrayList();
         commandNumber = 0;
         done = false;
         try {
-            CharacterOutputStream out = getStandardOutput();
+            Stream out = getStandardOutput();
             out.writeString(banner());
             out.flushOutput();
             initializeLisp(jlisp);
@@ -225,7 +220,7 @@ public final class Interpreter extends Lisp
     {
         try {
             getStandardInput().clearInput();
-            CharacterOutputStream out = getStandardOutput();
+            Stream out = getStandardOutput();
             out.freshLine();
             out.writeLine("Error: unhandled condition: " + c.getCondition());
             thread.backtrace();
@@ -237,8 +232,7 @@ public final class Interpreter extends Lisp
 
     // Skip whitespace except for newline and peek at the next
     // character.
-    private char peekCharNonWhitespace(CharacterInputStream stream)
-        throws ConditionThrowable
+    private char peekCharNonWhitespace(Stream stream) throws ConditionThrowable
     {
         while (true) {
             LispCharacter character =
@@ -249,38 +243,6 @@ public final class Interpreter extends Lisp
                 return c;
             }
         }
-    }
-
-    private static Object getHistory(String s) throws ConditionThrowable
-    {
-        s = s.trim();
-        if (s.startsWith(":"))
-            s = s.substring(1);
-        String command, args;
-        int index = s.indexOf(' ');
-        if (index >= 0) {
-            command = s.substring(0, index);
-            args = s.substring(index).trim();
-        } else {
-            command = s;
-            args = null;
-        }
-        if (command == null || command.length() == 0)
-            return null;
-        if (Character.isDigit(command.charAt(0))) {
-            try {
-                int n = Integer.parseInt(command);
-                for (int i = history.size(); i-- > 0;) {
-                    HistoryEntry entry = (HistoryEntry) history.get(i);
-                    if (entry.commandNumber == n)
-                        return entry.obj;
-                }
-            }
-            catch (NumberFormatException e) {
-                Debug.trace(e);
-            }
-        }
-        return null;
     }
 
     public void kill()
@@ -411,27 +373,5 @@ public final class Interpreter extends Lisp
         sb.append(commandNumber);
         sb.append(")> ");
         return sb.toString();
-    }
-
-    // History.
-    private static void addHistory(int commandNumber, Object obj)
-    {
-        history.add(0, new HistoryEntry(commandNumber, obj));
-        while (history.size() > MAX_HISTORY)
-            history.remove(history.size() - 1);
-    }
-
-    // A history entry consists of a command number and either a String or a
-    // LispObject.
-    private static final class HistoryEntry
-    {
-        int commandNumber;
-        Object obj;
-
-        HistoryEntry(int commandNumber, Object obj)
-        {
-            this.commandNumber = commandNumber;
-            this.obj = obj;
-        }
     }
 }

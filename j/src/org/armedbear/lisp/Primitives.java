@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.552 2004-01-21 16:24:26 piso Exp $
+ * $Id: Primitives.java,v 1.553 2004-01-24 19:31:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -671,7 +671,7 @@ public final class Primitives extends Lisp
         {
             if (args.length < 1 || args.length > 2)
                 signal(new WrongNumberOfArgumentsException(this));
-            final CharacterOutputStream out;
+            final Stream out;
             if (args.length == 1)
                 out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
@@ -700,7 +700,7 @@ public final class Primitives extends Lisp
     private static final Primitive PRIN1 = new Primitive("prin1","object &optional output-stream") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            CharacterOutputStream out =
+            Stream out =
                 checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             out.prin1(arg);
             return arg;
@@ -729,7 +729,7 @@ public final class Primitives extends Lisp
     private static final Primitive1 PRINT = new Primitive1("print","object &optional output-stream") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            CharacterOutputStream out =
+            Stream out =
                 checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             out.terpri();
             out.prin1(arg);
@@ -739,7 +739,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            CharacterOutputStream out = outSynonymOf(second);
+            Stream out = outSynonymOf(second);
             out.terpri();
             out.prin1(first);
             out.writeString(" ");
@@ -754,7 +754,7 @@ public final class Primitives extends Lisp
         {
             if (args.length > 1)
                 signal(new WrongNumberOfArgumentsException(this));
-            final CharacterOutputStream out;
+            final Stream out;
             if (args.length == 0)
                 out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
@@ -770,7 +770,7 @@ public final class Primitives extends Lisp
         {
             if (args.length > 1)
                 signal(new WrongNumberOfArgumentsException(this));
-            CharacterOutputStream out;
+            Stream out;
             if (args.length == 0)
                 out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
@@ -1298,17 +1298,17 @@ public final class Primitives extends Lisp
             }
             if (destination == NIL)
                 return new LispString(s);
-            if (destination instanceof CharacterOutputStream) {
-                ((CharacterOutputStream)destination).writeString(s);
-                return NIL;
-            }
             if (destination instanceof TwoWayStream) {
-                LispOutputStream out = ((TwoWayStream)destination).getOutputStream();
-                if (out instanceof CharacterOutputStream) {
-                    ((CharacterOutputStream)out).writeString(s);
+                Stream out = ((TwoWayStream)destination).getOutputStream();
+                if (out instanceof Stream) {
+                    ((Stream)out).writeString(s);
                     return NIL;
                 }
                 signal(new TypeError(destination, "character output stream"));
+            }
+            if (destination instanceof Stream) {
+                ((Stream)destination).writeString(s);
+                return NIL;
             }
             // Destination can also be a string with a fill pointer.
 //             signal(new LispError("FORMAT: not implemented"));
@@ -3212,7 +3212,7 @@ public final class Primitives extends Lisp
             if (args.length < 1 || args.length > 2)
                 signal(new WrongNumberOfArgumentsException(this));
             final char c = LispCharacter.getValue(args[0]);
-            final CharacterOutputStream out;
+            final Stream out;
             if (args.length == 1)
                 out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
             else
@@ -3232,7 +3232,7 @@ public final class Primitives extends Lisp
             if (args.length != 4)
                 signal(new WrongNumberOfArgumentsException(this));
             String s = LispString.getValue(args[0]);
-            CharacterOutputStream out = outSynonymOf(args[1]);
+            Stream out = outSynonymOf(args[1]);
             int start = Fixnum.getValue(args[2]);
             int end = Fixnum.getValue(args[3]);
             out.writeString(s.substring(start, end));
@@ -3277,13 +3277,13 @@ public final class Primitives extends Lisp
     private static final LispObject flushOutput(LispObject[] args)
         throws ConditionThrowable
     {
-        final LispOutputStream out;
+        final Stream out;
         if (args.length == 0)
             out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-        else if (args[0] instanceof LispOutputStream)
-            out = (LispOutputStream) args[0];
         else if (args[0] instanceof TwoWayStream)
             out = ((TwoWayStream)args[0]).getOutputStream();
+        else if (args[0] instanceof Stream)
+            out = (Stream) args[0];
         else {
             signal(new TypeError(args[0], "output stream"));
             return NIL;
@@ -3299,7 +3299,7 @@ public final class Primitives extends Lisp
         {
             if (args.length > 1)
                 signal(new WrongNumberOfArgumentsException(this));
-            final CharacterInputStream in;
+            final Stream in;
             if (args.length == 0)
                 in = checkCharacterInputStream(_STANDARD_INPUT_.symbolValue());
             else
@@ -3320,7 +3320,7 @@ public final class Primitives extends Lisp
             if (length == 0)
                 signal(new WrongNumberOfArgumentsException(this));
             LispObject abort = NIL; // Default.
-            LispStream stream = checkStream(args[0]);
+            Stream stream = checkStream(args[0]);
             if (length > 1) {
                 if ((length - 1) % 2 != 0)
                     signal(new ProgramError("odd number of keyword arguments"));
@@ -3401,7 +3401,7 @@ public final class Primitives extends Lisp
             int n = Fixnum.getValue(first);
             if (n < 0 || n > 255)
                 signal(new TypeError(first, "unsigned byte"));
-            final BinaryOutputStream out = checkBinaryOutputStream(second);
+            final Stream out = checkBinaryOutputStream(second);
             out.writeByte(n);
             return first;
         }
@@ -3416,7 +3416,7 @@ public final class Primitives extends Lisp
             int length = args.length;
             if (length < 1 || length > 3)
                 signal(new WrongNumberOfArgumentsException(this));
-            final BinaryInputStream in = checkBinaryInputStream(args[0]);
+            final Stream in = checkBinaryInputStream(args[0]);
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             return in.readByte(eofError, eofValue);
@@ -3433,16 +3433,13 @@ public final class Primitives extends Lisp
             int length = args.length;
             if (length > 4)
                 signal(new WrongNumberOfArgumentsException(this));
-            CharacterInputStream stream = null;
+            Stream stream = null;
             if (length == 0)
                 stream = getStandardInput();
-            else if (args[0] instanceof CharacterInputStream)
-                stream = (CharacterInputStream) args[0];
-            else if (args[0] instanceof TwoWayStream) {
-                LispInputStream in = ((TwoWayStream)args[0]).getInputStream();
-                if (in instanceof CharacterInputStream)
-                    stream = (CharacterInputStream) in;
-            }
+            else if (args[0] instanceof TwoWayStream)
+                stream = ((TwoWayStream)args[0]).getInputStream();
+            else if (args[0] instanceof Stream)
+                stream = (Stream) args[0];
             if (stream == null)
                 signal(new TypeError(args[0], "character input stream"));
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
@@ -3612,7 +3609,7 @@ public final class Primitives extends Lisp
             int length = args.length;
             if (length > 4)
                 signal(new WrongNumberOfArgumentsException(this));
-            CharacterInputStream stream =
+            Stream stream =
                 length > 0 ? checkCharacterInputStream(args[0]) : getStandardInput();
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
@@ -3629,7 +3626,7 @@ public final class Primitives extends Lisp
             int length = args.length;
             if (length > 4)
                 signal(new WrongNumberOfArgumentsException(this));
-            CharacterInputStream stream =
+            Stream stream =
                 length > 0 ? checkCharacterInputStream(args[0]) : getStandardInput();
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
@@ -3650,7 +3647,7 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            CharacterInputStream stream = checkCharacterInputStream(second);
+            Stream stream = checkCharacterInputStream(second);
             return stream.unreadChar(checkCharacter(first));
         }
     };
@@ -4107,7 +4104,8 @@ public final class Primitives extends Lisp
 
     // ### coerce-to-function
     private static final Primitive1 COERCE_TO_FUNCTION =
-        new Primitive1("coerce-to-function", PACKAGE_SYS, false) {
+        new Primitive1("coerce-to-function", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToFunction(arg);
@@ -4115,15 +4113,17 @@ public final class Primitives extends Lisp
     };
 
     // ### streamp
-    private static final Primitive1 STREAMP = new Primitive1("streamp","object") {
+    private static final Primitive1 STREAMP = new Primitive1("streamp", "object")
+    {
         public LispObject execute(LispObject arg)
         {
-            return arg instanceof LispStream ? T : NIL;
+            return arg instanceof Stream ? T : NIL;
         }
     };
 
     // ### integerp
-    private static final Primitive1 INTEGERP = new Primitive1("integerp","object") {
+    private static final Primitive1 INTEGERP = new Primitive1("integerp", "object")
+    {
         public LispObject execute(LispObject arg)
         {
             return arg.INTEGERP();

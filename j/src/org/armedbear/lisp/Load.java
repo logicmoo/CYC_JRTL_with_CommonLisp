@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.29 2004-01-05 02:12:14 piso Exp $
+ * $Id: Load.java,v 1.30 2004-01-24 19:29:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public final class Load extends Lisp
         try {
             thread.bindSpecial(_LOAD_TRUENAME_, new LispString(truename));
             if (verbose) {
-                CharacterOutputStream out = getStandardOutput();
+                Stream out = getStandardOutput();
                 out.freshLine();
                 out.writeString(prefix);
                 out.writeString(auto ? " Autoloading " : " Loading ");
@@ -222,7 +222,7 @@ public final class Load extends Lisp
                                                boolean print)
         throws ConditionThrowable
     {
-        CharacterInputStream in = new CharacterInputStream(inputStream);
+        Stream in = new Stream(inputStream, Symbol.CHARACTER);
         final LispThread thread = LispThread.currentThread();
         try {
             final Environment env = new Environment();
@@ -232,7 +232,7 @@ public final class Load extends Lisp
                     break;
                 LispObject result = eval(obj, env, thread);
                 if (print) {
-                    CharacterOutputStream out = getStandardOutput();
+                    Stream out = getStandardOutput();
                     out.writeLine(String.valueOf(result));
                     out.flushOutput();
                 }
@@ -242,7 +242,7 @@ public final class Load extends Lisp
         catch (ConditionThrowable t) {
             if (debug)
                 thread.saveBacktrace();
-            CharacterOutputStream out = getStandardOutput();
+            Stream out = getStandardOutput();
             String truename = null;
             LispObject obj = _LOAD_TRUENAME_.symbolValueNoThrow();
             if (obj instanceof LispString)

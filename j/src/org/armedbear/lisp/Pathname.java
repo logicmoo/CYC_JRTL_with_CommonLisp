@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.43 2004-01-16 15:21:02 piso Exp $
+ * $Id: Pathname.java,v 1.44 2004-01-24 19:30:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -363,8 +363,8 @@ public final class Pathname extends LispObject
             return (Pathname) arg;
         if (arg instanceof LispString)
             return new Pathname(((LispString)arg).getValue());
-        if (arg instanceof LispStream) {
-            LispObject pathname = ((LispStream)arg).getPathname();
+        if (arg instanceof Stream) {
+            LispObject pathname = ((Stream)arg).getPathname();
             if (pathname instanceof Pathname)
                 return (Pathname) pathname;
         }
