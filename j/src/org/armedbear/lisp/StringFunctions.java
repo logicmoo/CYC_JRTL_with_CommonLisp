@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringFunctions.java,v 1.5 2003-09-19 11:50:19 piso Exp $
+ * $Id: StringFunctions.java,v 1.6 2003-09-28 16:00:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,7 +97,7 @@ public final class StringFunctions extends Lisp
                 char c2 = array2[j];
                 if (c1 == c2)
                     continue;
-                if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                if (Utilities.toUpperCase(c1) == Utilities.toUpperCase(c2))
                     continue;
                 if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
                     continue;
@@ -127,7 +127,7 @@ public final class StringFunctions extends Lisp
                 char c2 = array2[j];
                 if (c1 == c2)
                     continue;
-                if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                if (Utilities.toUpperCase(c1) == Utilities.toUpperCase(c2))
                     continue;
                 if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
                     continue;
@@ -273,8 +273,8 @@ public final class StringFunctions extends Lisp
             int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
-                char c1 = Character.toUpperCase(array1[i]);
-                char c2 = Character.toUpperCase(array2[j]);
+                char c1 = Utilities.toUpperCase(array1[i]);
+                char c2 = Utilities.toUpperCase(array2[j]);
                 if (c1 == c2)
                     continue;
                 if (c1 > c2)
@@ -303,8 +303,8 @@ public final class StringFunctions extends Lisp
             int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
-                char c1 = Character.toUpperCase(array1[i]);
-                char c2 = Character.toUpperCase(array2[j]);
+                char c1 = Utilities.toUpperCase(array1[i]);
+                char c2 = Utilities.toUpperCase(array2[j]);
                 if (c1 == c2)
                     continue;
                 if (c1 < c2)
@@ -333,8 +333,8 @@ public final class StringFunctions extends Lisp
             int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
-                char c1 = Character.toUpperCase(array1[i]);
-                char c2 = Character.toUpperCase(array2[j]);
+                char c1 = Utilities.toUpperCase(array1[i]);
+                char c2 = Utilities.toUpperCase(array2[j]);
                 if (c1 == c2)
                     continue;
                 if (c1 > c2)
@@ -363,8 +363,8 @@ public final class StringFunctions extends Lisp
             int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
-                char c1 = Character.toUpperCase(array1[i]);
-                char c2 = Character.toUpperCase(array2[j]);
+                char c1 = Utilities.toUpperCase(array1[i]);
+                char c2 = Utilities.toUpperCase(array2[j]);
                 if (c1 == c2)
                     continue;
                 if (c1 < c2)
@@ -403,7 +403,7 @@ public final class StringFunctions extends Lisp
             for (i = 0; i < start; i++)
                 sb.append(array[i]);
             for (i = start; i < end; i++)
-                sb.append(Character.toUpperCase(array[i]));
+                sb.append(Utilities.toUpperCase(array[i]));
             for (i = end; i < length; i++)
                 sb.append(array[i]);
             return new LispString(sb.toString());
@@ -472,7 +472,7 @@ public final class StringFunctions extends Lisp
             for (i = start; i < end; i++) {
                 char c = array[i];
                 if (Character.isLowerCase(c)) {
-                    sb.append(lastCharWasAlphanumeric ? c : Character.toUpperCase(c));
+                    sb.append(lastCharWasAlphanumeric ? c : Utilities.toUpperCase(c));
                     lastCharWasAlphanumeric = true;
                 } else if (Character.isUpperCase(c)) {
                     sb.append(lastCharWasAlphanumeric ? Character.toLowerCase(c) : c);
@@ -510,7 +510,7 @@ public final class StringFunctions extends Lisp
                 throw new ConditionThrowable(new TypeError("start (" + start + ") is greater than end (" + end + ")"));
             char[] array = s.chars();
             for (int i = start; i < end; i++)
-                array[i] = Character.toUpperCase(array[i]);
+                array[i] = Utilities.toUpperCase(array[i]);
             return s;
         }
     };
@@ -568,7 +568,7 @@ public final class StringFunctions extends Lisp
                 char c = array[i];
                 if (Character.isLowerCase(c)) {
                     if (!lastCharWasAlphanumeric)
-                        array[i] = Character.toUpperCase(c);
+                        array[i] = Utilities.toUpperCase(c);
                     lastCharWasAlphanumeric = true;
                 } else if (Character.isUpperCase(c)) {
                     if (lastCharWasAlphanumeric)

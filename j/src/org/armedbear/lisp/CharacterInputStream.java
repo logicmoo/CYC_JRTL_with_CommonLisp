@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.51 2003-09-28 14:11:53 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.52 2003-09-28 16:01:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -441,7 +441,7 @@ public class CharacterInputStream extends LispStream
                     sb.append(c);
                 }
             } else {
-                sb.append(Character.toUpperCase(c));
+                sb.append(Utilities.toUpperCase(c));
                 while (true) {
                     n = read();
                     if (n < 0)
@@ -461,7 +461,7 @@ public class CharacterInputStream extends LispStream
                         unread(c);
                         break;
                     }
-                    sb.append(Character.toUpperCase(c));
+                    sb.append(Utilities.toUpperCase(c));
                 }
             }
             return new Symbol(sb.toString());
@@ -576,7 +576,7 @@ public class CharacterInputStream extends LispStream
                     sb.append(readMultipleEscape());
                     continue;
                 }
-                sb.append(Character.toUpperCase(c));
+                sb.append(Utilities.toUpperCase(c));
             }
             return PACKAGE_KEYWORD.intern(sb.toString());
         }
@@ -589,7 +589,7 @@ public class CharacterInputStream extends LispStream
     {
         try {
             StringBuffer sb = new StringBuffer();
-            sb.append(firstChar);
+            sb.append(Utilities.toUpperCase(firstChar));
             while (true) {
                 int n = read();
                 if (n < 0)
@@ -603,7 +603,7 @@ public class CharacterInputStream extends LispStream
                         unread(c);
                         return makeObject(sb.toString());
                     default:
-                        sb.append(c);
+                        sb.append(Utilities.toUpperCase(c));
                 }
             }
         }
@@ -623,7 +623,6 @@ public class CharacterInputStream extends LispStream
             if (number != null)
                 return number;
         }
-        token = token.toUpperCase();
         if (token.equals("T"))
             return T;
         if (token.equals("NIL"))
