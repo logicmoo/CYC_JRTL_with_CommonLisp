@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.38 2004-01-18 11:47:28 asimon Exp $
+ * $Id: Java.java,v 1.39 2004-01-24 22:56:00 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,6 +100,7 @@ public final class Java extends Lisp
             String fieldName = null;
             Class c;
             Field f;
+            Class fieldType;
             Object instance = null;
             try {
                 if (args[1] instanceof LispString) {
@@ -113,7 +114,7 @@ public final class Java extends Lisp
                     c = instance.getClass();
                 }
                 f = c.getField(fieldName);
-
+                fieldType = f.getType();
                 switch (args.length) {
                     case 2:
                         // Cases 1 and 6.
@@ -128,12 +129,12 @@ public final class Java extends Lisp
                                 break;
                             } else {
                                 // Case 3.
-                                f.set(null,args[2].javaInstance());
+                                f.set(null,args[2].javaInstance(fieldType));
                                 return args[2];
                             }
                         } else {
                             // Case 7.
-                            f.set(instance,args[2].javaInstance());
+                            f.set(instance,args[2].javaInstance(fieldType));
                             return args[2];
                         }
                     case 4:
@@ -142,7 +143,7 @@ public final class Java extends Lisp
                             // Case 4.
                             instance = JavaObject.getObject(args[2]);
                         }
-                        f.set(instance,args[3].javaInstance());
+                        f.set(instance,args[3].javaInstance(fieldType));
                         return args[3];
                 }
                 return new JavaObject(f.get(instance));
@@ -273,9 +274,9 @@ public final class Java extends Lisp
                                                            "method class &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
-	{
+        {
             return makeLispObject((JSTATIC_RAW.execute(args)).javaInstance());
-	}
+        }
     };
 
 
@@ -315,12 +316,13 @@ public final class Java extends Lisp
                 } else
                     signal(new TypeError("wrong type: " + methodRef));
                 Object[] methodArgs = new Object[args.length-2];
+                Class[] argTypes = m.getParameterTypes();
                 for (int i = 2; i < args.length; i++) {
                     LispObject arg = args[i];
-		    if (arg == NIL)
+                    if (arg == NIL)
                         methodArgs[i-2] = null;
-		    else 
-                        methodArgs[i-2] = arg.javaInstance();
+                    else 
+                        methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
                 }
                 Object result = m.invoke(null, methodArgs);
                 return new JavaObject(result);
@@ -345,13 +347,15 @@ public final class Java extends Lisp
             LispObject classRef = args[0];
             try {
                 Constructor constructor = (Constructor) JavaObject.getObject(classRef);
+                Class[] argTypes = constructor.getParameterTypes();
                 Object[] initargs = new Object[args.length-1];
                 for (int i = 1; i < args.length; i++) {
                     LispObject arg = args[i];
-		    if (arg == NIL)
+                    if (arg == NIL)
                         initargs[i-1] = null;
-		    else 
-                        initargs[i-1] = arg.javaInstance();
+                    else {
+                        initargs[i-1] = arg.javaInstance(argTypes[i-1]);
+                    }
                 }
                 return new JavaObject(constructor.newInstance(initargs));
             }
@@ -398,7 +402,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             return makeLispObject((JARRAY_REF_RAW.execute(args)).javaInstance());
-	}
+        }
     };
 
     // ### jarray-ref-raw
@@ -457,7 +461,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             return makeLispObject((JCALL_RAW.execute(args)).javaInstance());
-	}
+        }
     };
 
     // ### jcall-raw
@@ -471,6 +475,7 @@ public final class Java extends Lisp
                 signal(new WrongNumberOfArgumentsException(this));
             try {
                 Method method = (Method) JavaObject.getObject(args[0]);
+                Class[] argTypes = method.getParameterTypes();
                 Object instance;
                 if (args[1] instanceof LispString)
                     instance = LispString.getValue(args[1]);
@@ -479,10 +484,10 @@ public final class Java extends Lisp
                 Object[] methodArgs = new Object[args.length-2];
                 for (int i = 2; i < args.length; i++) {
                     LispObject arg = args[i];
-		    if (arg == NIL)
+                    if (arg == NIL)
                         methodArgs[i-2] = null;
-		    else 
-                        methodArgs[i-2] = arg.javaInstance();
+                    else 
+                        methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
                 }
                 Object result = method.invoke(instance, methodArgs);
                 return new JavaObject(result);
@@ -548,7 +553,7 @@ public final class Java extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-	    return makeLispObject(arg.javaInstance());
+            return makeLispObject(arg.javaInstance());
         }
     };
 
@@ -601,8 +606,8 @@ public final class Java extends Lisp
 
     private static final LispObject makeLispObject(Object obj) throws ConditionThrowable
     {
-        if (obj == null) 	 
-             return NIL;
+        if (obj == null)         
+            return NIL;
         if (obj instanceof Boolean)
             return ((Boolean)obj).booleanValue() ? T : NIL;
         if (obj instanceof Integer)
