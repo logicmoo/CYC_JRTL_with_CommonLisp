@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.263 2004-07-12 19:18:25 piso Exp $
+ * $Id: Lisp.java,v 1.264 2004-07-21 18:10:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -842,7 +842,7 @@ public abstract class Lisp
     }
 
     public static final LispObject makeCompiledClosure(LispObject ctf,
-                                                       LispObject[] context)
+                                                       LispObject[][] context)
     {
         return new CompiledClosure((ClosureTemplateFunction)ctf, context);
     }
