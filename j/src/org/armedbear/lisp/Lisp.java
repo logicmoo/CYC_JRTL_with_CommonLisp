@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.135 2003-09-19 11:50:18 piso Exp $
+ * $Id: Lisp.java,v 1.136 2003-09-19 12:10:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -274,7 +274,7 @@ public abstract class Lisp
             if (result == null) {
                 result = obj.getSymbolValue();
                 if (result == null)
-                    throw new UnboundVariableException(obj.getName());
+                    throw new ConditionThrowable(new UnboundVariableException(obj.getName()));
             }
             return result;
         } else if (obj instanceof Cons) {
@@ -282,7 +282,7 @@ public abstract class Lisp
             if (first instanceof Symbol) {
                 LispObject fun = env.lookupFunctional(first);
                 if (fun == null)
-                    throw new UndefinedFunctionError(first);
+                    throw new ConditionThrowable(new UndefinedFunctionError(first));
                 switch (fun.getFunctionalType()) {
                     case FTYPE_SPECIAL_OPERATOR: {
                         if (profiling)
@@ -758,7 +758,7 @@ public abstract class Lisp
                 return (Function) fun;
         } else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
             return new Closure(obj.cadr(), obj.cddr(), new Environment());
-        throw new UndefinedFunctionError(obj);
+        throw new ConditionThrowable(new UndefinedFunctionError(obj));
     }
 
     // Returns package or throws exception.

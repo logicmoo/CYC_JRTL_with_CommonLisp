@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.77 2003-09-19 01:46:42 piso Exp $
+ * $Id: Symbol.java,v 1.78 2003-09-19 12:10:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,6 +123,7 @@ public class Symbol extends LispObject
     public static final Symbol SIMPLE_ERROR         = PACKAGE_CL.addExternalSymbol("SIMPLE-ERROR");
     public static final Symbol STREAM_ERROR         = PACKAGE_CL.addExternalSymbol("STREAM-ERROR");
     public static final Symbol TYPE_ERROR           = PACKAGE_CL.addExternalSymbol("TYPE-ERROR");
+    public static final Symbol UNBOUND_VARIABLE     = PACKAGE_CL.addExternalSymbol("UNBOUND-VARIABLE");
     public static final Symbol UNDEFINED_FUNCTION   = PACKAGE_CL.addExternalSymbol("UNDEFINED-FUNCTION");
 
     // Internal symbols.
@@ -316,7 +317,7 @@ public class Symbol extends LispObject
     public final LispObject getSymbolFunctionOrDie() throws ConditionThrowable
     {
         if (function == null)
-            throw new UndefinedFunctionError(this);
+            throw new ConditionThrowable(new UndefinedFunctionError(this));
         return function;
     }
 

@@ -2,7 +2,7 @@
  * UnboundVariableException.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UnboundVariableException.java,v 1.2 2003-02-15 16:48:17 piso Exp $
+ * $Id: UnboundVariableException.java,v 1.3 2003-09-19 12:10:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class UnboundVariableException extends LispError
+public final class UnboundVariableException extends Condition
 {
     private final String name;
 
@@ -35,5 +35,14 @@ public final class UnboundVariableException extends LispError
         if (name == null)
             return "unbound variable";
         return "the variable " + name + " has no value";
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.UNBOUND_VARIABLE)
+            return T;
+        if (type == Symbol.ERROR)
+            return T;
+        return super.typep(type);
     }
 }

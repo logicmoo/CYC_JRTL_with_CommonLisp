@@ -2,7 +2,7 @@
  * ParseError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ParseError.java,v 1.2 2003-09-19 01:07:46 piso Exp $
+ * $Id: ParseError.java,v 1.3 2003-09-19 12:10:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,5 +28,14 @@ public class ParseError extends Condition
     public ParseError(String message)
     {
         this.message = message;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.PARSE_ERROR)
+            return T;
+        if (type == Symbol.ERROR)
+            return T;
+        return super.typep(type);
     }
 }
