@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.54 2003-12-06 03:35:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.55 2003-12-06 16:36:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1678,7 +1678,6 @@
   (emit-store-value))
 
 (defun compile-let/let* (form for-effect)
-;;   (format t "compile-let/let* *locals* = ~S~%" *locals*)
   (let* ((*variables* *variables*)
          (specials ())
          (saved-fp (fill-pointer *locals*))
@@ -1693,8 +1692,6 @@
         (dolist (decl decls)
           (when (eq (car decl) 'special)
             (setf specials (append (cdr decl) specials))))))
-;;     (when specials
-;;       (format t "specials = ~S~%" specials))
     ;; Are we going to bind any special variables?
     (dolist (varspec varlist)
       (let ((var (if (consp varspec) (car varspec) varspec)))
@@ -1719,6 +1716,7 @@
       (LET*
        (compile-let*-vars varlist specials)))
     ;; Body of LET/LET*.
+    (emit-clear-values)
     (do ((body (cddr form) (cdr body)))
         ((null (cdr body))
          (compile-form (car body) for-effect))
