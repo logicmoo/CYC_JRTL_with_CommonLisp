@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.53 2004-08-23 02:32:16 piso Exp $
+ * $Id: LispCharacter.java,v 1.54 2004-09-08 18:10:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,6 +190,9 @@ public final class LispCharacter extends LispObject
                 case 0:
                     sb.append("Null");
                     break;
+                case '\b':
+                    sb.append("Backspace");
+                    break;
                 case '\t':
                     sb.append("Tab");
                     break;
@@ -202,8 +205,8 @@ public final class LispCharacter extends LispObject
                 case '\r':
                     sb.append("Return");
                     break;
-                case '\b':
-                    sb.append("Backspace");
+                case 127:
+                    sb.append("Rubout");
                     break;
                 default:
                     sb.append(value);
@@ -493,22 +496,24 @@ public final class LispCharacter extends LispObject
     public static final int nameToChar(String s)
     {
         String lower = s.toLowerCase();
-        if (lower.equals("space"))
-            return ' ';
-        if (lower.equals("tab"))
-            return '\t';
-        if (lower.equals("newline"))
-            return '\n';
-        if (lower.equals("linefeed"))
-            return '\n';
-        if (lower.equals("return"))
-            return '\r';
-        if (lower.equals("page"))
-            return '\f';
         if (lower.equals("null"))
             return 0;
         if (lower.equals("backspace"))
             return '\b';
+        if (lower.equals("tab"))
+            return '\t';
+        if (lower.equals("linefeed"))
+            return '\n';
+        if (lower.equals("newline"))
+            return '\n';
+        if (lower.equals("page"))
+            return '\f';
+        if (lower.equals("return"))
+            return '\r';
+        if (lower.equals("space"))
+            return ' ';
+        if (lower.equals("rubout"))
+            return 127;
         // Unknown.
         return -1;
     }
@@ -528,20 +533,22 @@ public final class LispCharacter extends LispObject
     public static final String charToName(char c)
     {
         switch (c) {
-            case ' ':
-                return "Space";
-            case '\n':
-                return "Newline";
-            case '\t':
-                return "Tab";
-            case '\r':
-                return "Return";
-            case '\f':
-                return "Page";
-            case '\b':
-                return "Backspace";
             case 0:
                 return "Null";
+            case '\b':
+                return "Backspace";
+            case '\t':
+                return "Tab";
+            case '\n':
+                return "Newline";
+            case '\f':
+                return "Page";
+            case '\r':
+                return "Return";
+            case ' ':
+                return "Space";
+            case 127:
+                return "Rubout";
         }
         return null;
     }
