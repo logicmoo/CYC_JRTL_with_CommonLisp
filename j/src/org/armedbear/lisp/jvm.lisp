@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.197 2004-07-03 18:25:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.198 2004-07-03 18:39:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -86,7 +86,16 @@
       )))
 
 (defun find-variable (var)
-  (find var *variables* :key 'variable-name))
+;;   (find var *variables* :key 'variable-name))
+  (let ((context *context*))
+    (loop
+      (let ((v (find var (context-vars context) :key 'variable-name)))
+        (cond (v
+               (return v))
+              (t
+               (setf context (context-parent context))
+               (when (null context)
+                 (return nil))))))))
 
 ;; Returns index of allocated slot.
 (defun allocate-local (symbol)
