@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.58 2003-11-05 19:34:56 piso Exp $
+;;; $Id: compiler.lisp,v 1.59 2003-11-07 18:26:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,12 +32,14 @@
 (defun compile-setq (exprs)
   (when (oddp (length exprs))
     (error "odd number of arguments to SETQ"))
-  (do* ((result '(setq))
-        (sym (car exprs) (car exprs))
-        (val (cadr exprs) (cadr exprs)))
-    ((null exprs) result)
-    (setq result (append result (list sym) (list (compile-sexp val))))
-    (setq exprs (cddr exprs))))
+  (if (= 2 (length exprs))
+      (list 'SETQ (car exprs) (compile-sexp (cadr exprs)))
+      (do* ((result '(setq))
+            (sym (car exprs) (car exprs))
+            (val (cadr exprs) (cadr exprs)))
+           ((null exprs) result)
+        (setq result (append result (list sym) (list (compile-sexp val))))
+        (setq exprs (cddr exprs)))))
 
 (defun compile-cond (clauses)
   (let ((result nil))
