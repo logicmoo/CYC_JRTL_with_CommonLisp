@@ -326,6 +326,7 @@
                               "labels"
                               "lambda"
                               "let"
+                              "make-string"
                               "nil"
                               "notany"
                               "notevery"
