@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaMode.java,v 1.3 2002-10-03 17:36:54 piso Exp $
+ * $Id: JavaMode.java,v 1.4 2002-10-26 15:05:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -215,6 +215,13 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         final Line model = findModel(line);
         if (model == null)
             return 0;
+
+        final int indentSize = buffer.getIndentSize();
+
+        final String firstIdentifier = getFirstIdentifier(text);
+        if (firstIdentifier.equals("throws"))
+            return buffer.getIndentation(model) + indentSize;
+
         final String modelText = trimSyntacticWhitespace(model.getText());
 
         // Model line can't be blank, so this is safe.
@@ -240,7 +247,6 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         }
 
         final int indent = getIndentationOfEnclosingScope(line, buffer);
-        final int indentSize = buffer.getIndentSize();
 
         if (textFirstChar == '{') {
             if (buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE)) {
