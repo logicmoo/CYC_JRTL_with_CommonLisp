@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: KeyMap.java,v 1.24 2005-03-05 04:00:47 piso Exp $
+ * $Id: KeyMap.java,v 1.25 2005-03-06 16:30:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -453,12 +453,29 @@ public final class KeyMap implements Constants
     {
         command = command.intern();
         ArrayList list = new ArrayList();
+        _listKeys(command, "", list);
+        return list;
+    }
+
+    private void _listKeys(String command, String prefix, ArrayList list)
+    {
         for (int i = mappings.size(); i-- > 0;) {
             KeyMapping mapping = (KeyMapping) mappings.get(i);
             if (command == mapping.getCommand())
                 list.add(mapping.getKeyText());
+            if (mapping.getCommand() instanceof KeyMap) {
+                // A submap.
+                KeyMap submap = (KeyMap) mapping.getCommand();
+                FastStringBuffer sb = new FastStringBuffer();
+                if (prefix.length() > 0) {
+                    sb.append(prefix);
+                    sb.append(' ');
+                }
+                sb.append(mapping.getKeyText());
+                sb.append(' ');
+                submap._listKeys(command, sb.toString(), list);
+            }
         }
-        return list;
     }
 
     // Add all mappings for command from source key map.
