@@ -2,7 +2,7 @@
  * WrapText.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WrapText.java,v 1.1.1.1 2002-09-24 16:08:43 piso Exp $
+ * $Id: WrapText.java,v 1.2 2002-10-06 00:10:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,7 +116,8 @@ public final class WrapText implements Constants
 
         if (commentStart != null) {
             int index = dotLine.getText().indexOf(commentStart);
-            String prefix = dotLine.getText().substring(0, index + commentStart.length());
+            String prefix =
+                dotLine.getText().substring(0, index + commentStart.length());
             Position begin = findStartOfComment(dot, commentStart);
             Position end = findEndOfComment(dot, commentStart);
             if (begin != null && end != null) {
@@ -139,21 +140,17 @@ public final class WrapText implements Constants
 
     private void wrapRegion(Region r)
     {
-        try
-        {
+        try {
             r.getBuffer().lockWrite();
         }
-        catch (InterruptedException e)
-        {
+        catch (InterruptedException e) {
             Log.error(e);
             return;
         }
-        try
-        {
+        try {
             processRegion(r, null, true);
         }
-        finally
-        {
+        finally {
             r.getBuffer().unlockWrite();
         }
     }
