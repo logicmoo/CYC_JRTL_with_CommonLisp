@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.28 2003-07-02 19:01:18 piso Exp $
+;;; $Id: compiler.lisp,v 1.29 2003-07-06 16:28:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (unless (find-package "COMPILER")
-  (make-package "COMPILER" :nicknames '("C")))
+  (make-package "COMPILER" :nicknames '("C") :use '("COMMON-LISP")))
 
 (in-package "COMMON-LISP")
 
