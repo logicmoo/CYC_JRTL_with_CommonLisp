@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.21 2004-11-29 01:51:02 piso Exp $
+;;; $Id: format.lisp,v 1.22 2004-11-29 02:17:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1065,7 +1065,7 @@
 
 (def-complex-format-directive #\[ (colonp atsignp params directives)
   (multiple-value-bind (sublists last-semi-with-colon-p remaining)
-    (parse-conditional-directive directives)
+      (parse-conditional-directive directives)
     (values
      (if atsignp
 	 (if colonp
@@ -1077,27 +1077,27 @@
 			:complaint
 			"Can only specify one section")
 		 (expand-bind-defaults () params
-                                       (expand-maybe-conditional (car sublists)))))
+                   (expand-maybe-conditional (car sublists)))))
 	 (if colonp
 	     (if (= (length sublists) 2)
 		 (expand-bind-defaults () params
-                                       (expand-true-false-conditional (car sublists)
-                                                                      (cadr sublists)))
+                   (expand-true-false-conditional (car sublists)
+                                                  (cadr sublists)))
 		 (error 'format-error
 			:complaint
 			"must specify exactly two sections"))
 	     (expand-bind-defaults ((index (expand-next-arg))) params
-                                   (setf *only-simple-args* nil)
-                                   (let ((clauses nil))
-                                     (when last-semi-with-colon-p
-                                       (push `(t ,@(expand-directive-list (pop sublists)))
-                                             clauses))
-                                     (let ((count (length sublists)))
-                                       (dolist (sublist sublists)
-                                         (push `(,(decf count)
-                                                 ,@(expand-directive-list sublist))
-                                               clauses)))
-                                     `(case ,index ,@clauses)))))
+               (setf *only-simple-args* nil)
+               (let ((clauses nil))
+                 (when last-semi-with-colon-p
+                   (push `(t ,@(expand-directive-list (pop sublists)))
+                         clauses))
+                 (let ((count (length sublists)))
+                   (dolist (sublist sublists)
+                     (push `(,(decf count)
+                             ,@(expand-directive-list sublist))
+                           clauses)))
+                 `(case ,index ,@clauses)))))
      remaining)))
 
 (defun parse-conditional-directive (directives)
@@ -1120,16 +1120,16 @@
 
 (defun expand-maybe-conditional (sublist)
   (flet ((hairy ()
-                `(let ((prev-args args)
-                       (arg ,(expand-next-arg)))
-                   (when arg
-                     (setf args prev-args)
-                     ,@(expand-directive-list sublist)))))
+           `(let ((prev-args args)
+                  (arg ,(expand-next-arg)))
+              (when arg
+                (setf args prev-args)
+                ,@(expand-directive-list sublist)))))
     (if *only-simple-args*
 	(multiple-value-bind (guts new-args)
-          (let ((*simple-args* *simple-args*))
-            (values (expand-directive-list sublist)
-                    *simple-args*))
+            (let ((*simple-args* *simple-args*))
+              (values (expand-directive-list sublist)
+                      *simple-args*))
 	  (cond ((eq *simple-args* (cdr new-args))
 		 (setf *simple-args* new-args)
 		 `(when ,(caar new-args)
