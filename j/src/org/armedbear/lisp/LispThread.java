@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.15 2003-09-26 15:04:46 piso Exp $
+ * $Id: LispThread.java,v 1.16 2003-09-26 18:27:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,6 +263,35 @@ public final class LispThread extends LispObject
         }
     }
 
+    public LispObject backtraceAsList(int limit) throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        if (stack.size() > 0) {
+            int count = 0;
+            try {
+                for (int i = stack.size(); i-- > 0;) {
+                    StackFrame frame = (StackFrame) stack.get(i);
+                    LispObject obj = NIL;
+                    LispObject[] argv = frame.getArgumentVector();
+                    for (int j = argv.length; j-- > 0;)
+                        obj = new Cons(argv[j], obj);
+                    Functional functional = frame.getFunctional();
+                    if (functional.getLambdaName() != null)
+                        obj = new Cons(functional.getLambdaName(), obj);
+                    else
+                        obj = new Cons(functional, obj);
+                    result = new Cons(obj, result);
+                    if (limit > 0 && ++count == limit)
+                        break;
+                }
+            }
+            catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+        return Primitives.NREVERSE.execute(result);
+    }
+
     private static void pprint(LispObject obj, int indentBy,
         CharacterOutputStream stream) throws ConditionThrowable
     {
@@ -413,6 +442,21 @@ public final class LispThread extends LispObject
             LispThread thread = currentThread();
             thread.backtrace(count);
             return thread.nothing();
+        }
+    };
+
+    // ### backtrace-as-list
+    private static final Primitive BACKTRACE_AS_LIST =
+        new Primitive("backtrace-as-list", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject[] args)
+            throws ConditionThrowable
+        {
+            if (args.length > 1)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            int count = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
+            LispThread thread = currentThread();
+            return thread.backtraceAsList(count);
         }
     };
 }
