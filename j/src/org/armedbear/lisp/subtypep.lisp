@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.11 2003-09-20 16:16:52 piso Exp $
+;;; $Id: subtypep.lisp,v 1.12 2003-09-21 19:30:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -133,13 +133,16 @@
     (cons tp i)))
 
 (defun simple-subtypep (type1 type2)
-  (assert (symbolp type1))
-  (assert (symbolp type2))
-  (if (memq type2 (supertypes type1))
-      t
-      (dolist (supertype (supertypes type1))
-        (when (simple-subtypep supertype type2)
-          (return t)))))
+;;   (assert (symbolp type1))
+;;   (assert (symbolp type2))
+  (cond ((and (symbolp type1) (symbolp type2))
+         (if (memq type2 (supertypes type1))
+             t
+             (dolist (supertype (supertypes type1))
+               (when (simple-subtypep supertype type2)
+                 (return t)))))
+        (t
+         nil)))
 
 (defun sub-interval-p (i1 i2)
   (let (low1 high1 low2 high2)
