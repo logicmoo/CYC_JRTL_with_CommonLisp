@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Display.java,v 1.6 2003-02-17 02:36:11 piso Exp $
+ * $Id: Display.java,v 1.7 2003-03-16 19:55:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -916,11 +916,7 @@ public final class Display extends JComponent implements Constants,
     {
         if (length == 0)
             return 0;
-        int limit = length;
-        if (limit > textArray.length) {
-            Log.debug("measureLine length = " + length + " textArray.length = " + textArray.length);
-            limit = textArray.length;
-        }
+        final int limit = Math.min(length, textArray.length);
         double totalWidth = 0;
         int i = 0;
         Formatter formatter = editor.getFormatter();
