@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.6 2004-03-15 17:05:45 piso Exp $
+ * $Id: SimpleArray.java,v 1.7 2004-03-18 13:31:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,13 @@ public final class SimpleArray extends AbstractArray
         this.elementType = elementType;
         totalSize = computeTotalSize(dimv);
         data = new LispObject[totalSize];
+        final LispObject initialElement;
+        if (elementType == Symbol.BIT)
+            initialElement = Fixnum.ZERO;
+        else
+            initialElement = NIL;
         for (int i = totalSize; i-- > 0;)
-            data[i] = NIL;
+            data[i] = initialElement;
     }
 
     public SimpleArray(int[] dimv,
@@ -56,7 +61,8 @@ public final class SimpleArray extends AbstractArray
         setInitialContents(0, dimv, initialContents, 0);
     }
 
-    public SimpleArray(int rank, LispObject initialContents) throws ConditionThrowable
+    public SimpleArray(int rank, LispObject initialContents)
+        throws ConditionThrowable
     {
         if (rank < 2)
             Debug.assertTrue(false);
