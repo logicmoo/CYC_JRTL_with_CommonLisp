@@ -2,7 +2,7 @@
  * BinaryInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BinaryInputStream.java,v 1.9 2004-01-16 17:11:58 piso Exp $
+ * $Id: BinaryInputStream.java,v 1.10 2004-01-20 00:07:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,11 @@ public final class BinaryInputStream extends LispInputStream
     {
         this(inputStream);
         setPathname(pathname);
+    }
+
+    public LispObject getElementType()
+    {
+        return Symbol.INTEGER;
     }
 
     // read-byte stream &optional eof-error-p eof-value => byte

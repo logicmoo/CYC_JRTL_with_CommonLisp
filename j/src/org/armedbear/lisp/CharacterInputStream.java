@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CharacterInputStream.java,v 1.65 2004-01-16 17:11:58 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.66 2004-01-20 00:03:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,11 @@ public class CharacterInputStream extends LispInputStream
     {
         this(in);
         setPathname(pathname);
+    }
+
+    public LispObject getElementType()
+    {
+        return Symbol.CHARACTER;
     }
 
     public int getOffset()
