@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.20 2003-12-09 21:14:51 piso Exp $
+;;; $Id: clos.lisp,v 1.21 2003-12-09 22:07:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -166,7 +166,8 @@
   readers
   writers
   allocation
-  location)
+  allocation-class
+  (location nil))
 
 (defun make-direct-slot-definition (class &rest properties
                                           &key name
@@ -185,6 +186,7 @@
     (setf (slot-definition-readers slot) readers)
     (setf (slot-definition-writers slot) writers)
     (setf (slot-definition-allocation slot) allocation)
+    (setf (slot-definition-allocation-class slot) class)
     slot))
 
 (defun make-effective-slot-definition (&rest properties
@@ -193,6 +195,7 @@
                                              (initform nil)
                                              (initfunction nil)
                                              (allocation :instance)
+                                             (allocation-class nil)
                                              &allow-other-keys)
   (let ((slot (make-slot-definition)))
     (setf (slot-definition-name slot) name)
@@ -200,6 +203,7 @@
     (setf (slot-definition-initform slot) initform)
     (setf (slot-definition-initfunction slot) initfunction)
     (setf (slot-definition-allocation slot) allocation)
+    (setf (slot-definition-allocation-class slot) allocation-class)
     slot))
 
 ;;; finalize-inheritance
@@ -222,8 +226,12 @@
          (setf (slot-definition-location slot) location)
          (incf location))
         (:class
-         (setf (slot-definition-location slot)
-               (cons (slot-definition-name slot) +slot-unbound+))))))
+         (unless (slot-definition-location slot)
+           (let ((allocation-class (slot-definition-allocation-class slot)))
+             (setf (slot-definition-location slot)
+                   (if (eq class allocation-class)
+                       (cons (slot-definition-name slot) +slot-unbound+)
+                       (slot-location allocation-class (slot-definition-name slot))))))))))
   (setf (class-default-initargs class)
         (compute-class-default-initargs class))
   (values))
@@ -352,7 +360,8 @@
      :initargs (remove-duplicates
                 (mapappend #'slot-definition-initargs
                            direct-slots))
-     :allocation (slot-definition-allocation (car direct-slots)))))
+     :allocation (slot-definition-allocation (car direct-slots))
+     :allocation-class (slot-definition-allocation-class (car direct-slots)))))
 
 ;;; Simple vectors are used for slot storage.
 
