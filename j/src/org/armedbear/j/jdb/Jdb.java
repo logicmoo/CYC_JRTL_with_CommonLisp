@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.27 2003-06-03 17:35:55 piso Exp $
+ * $Id: Jdb.java,v 1.28 2003-06-09 16:35:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -542,15 +542,20 @@ public final class Jdb extends Buffer implements JdbConstants
         sb.append("] ");
         sb.append(location.declaringType().name());
         sb.append('.');
-        sb.append(location.method().name());
+        Method method = location.method();
+        sb.append(method.name());
         try {
-            String sourceName = location.sourceName();
             sb.append(" (");
-            sb.append(location.sourceName());
-            int lineNumber = location.lineNumber();
-            if (lineNumber > 0) {
-                sb.append(':');
-                sb.append(lineNumber);
+            if (method.isNative()) {
+                sb.append("native method");
+            } else {
+                String sourceName = location.sourceName();
+                sb.append(location.sourceName());
+                int lineNumber = location.lineNumber();
+                if (lineNumber > 0) {
+                    sb.append(':');
+                    sb.append(lineNumber);
+                }
             }
             sb.append(')');
         }
@@ -913,6 +918,9 @@ public final class Jdb extends Buffer implements JdbConstants
             public void run()
             {
                 if (location == null)
+                    return;
+                Method method = location.method();
+                if (method != null && method.isNative())
                     return;
                 String className = location.declaringType().name();
                 String sourceName = null;
@@ -1478,12 +1486,20 @@ public final class Jdb extends Buffer implements JdbConstants
 
     private void doPrint(String what)
     {
-        if (what == null || what.length() < 1) {
-            log("Missing argument");
+        if (!isSuspended()) {
+            log("VM is not suspended");
             return;
         }
         try {
-            Value value = getValue(what, currentThread, currentStackFrame);
+            if (what == null || what.length() < 1) {
+                log("Missing argument");
+                return;
+            }
+            if (currentStackFrame == null) {
+                log("No stack frame");
+                return;
+            }
+            Value value = getValue(what, currentStackFrame);
             if (value == null) {
                 log("null");
             } else if (value instanceof StringReference) {
@@ -1507,19 +1523,22 @@ public final class Jdb extends Buffer implements JdbConstants
                 }
             }
         }
-        catch (AbsentInformationException absent) {
+        catch (AbsentInformationException e) {
+            Log.debug(e);
             log("Local variable information is not available.");
             log("Compile with -g to generate local variable information.");
         }
-        catch (NoSuchFieldException nsf) {
+        catch (NoSuchFieldException e) {
             log("No such field");
         }
         catch (Exception e) {
             log(e.toString());
             Log.error(e);
         }
-        if (isSuspended())
-            prompt();
+        finally {
+            if (isSuspended())
+                prompt();
+        }
     }
 
     private void doStdin(String s)
@@ -1592,7 +1611,8 @@ public final class Jdb extends Buffer implements JdbConstants
                 log(sb.toString());
             }
         }
-        catch (AbsentInformationException absent) {
+        catch (AbsentInformationException e) {
+            Log.debug(e);
             log("Local variable information is not available.");
             log("Compile with -g to generate local variable information.");
         }
@@ -1675,8 +1695,8 @@ public final class Jdb extends Buffer implements JdbConstants
         }
     }
 
-    private static Value getValue(String expression, ThreadReference threadRef,
-        StackFrame frame) throws Exception
+    private static Value getValue(String expression, StackFrame frame)
+        throws Exception
     {
         Log.debug("getValue");
         StringTokenizer st = new StringTokenizer(expression, "[].");
@@ -1717,6 +1737,10 @@ public final class Jdb extends Buffer implements JdbConstants
                     currentField = refType.fieldByName(token);
                     if (currentField != null)
                         currentValue = obj.getValue(currentField);
+                    else {
+                        Log.debug("throwing NoSuchFieldException ...");
+                        throw new NoSuchFieldException();
+                    }
                 }
             }
         }
