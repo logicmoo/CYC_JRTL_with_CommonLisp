@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.225 2004-04-05 01:01:23 piso Exp $
+ * $Id: Lisp.java,v 1.226 2004-04-08 14:48:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -523,10 +523,10 @@ public abstract class Lisp
     }
 
     public static final LispObject setSpecialVariable(Symbol symbol,
-                                                      LispObject value)
+                                                      LispObject value,
+                                                      LispThread thread)
     {
-        Environment dynEnv =
-            LispThread.currentThread().getDynamicEnvironment();
+        Environment dynEnv = thread.getDynamicEnvironment();
         if (dynEnv != null) {
             Binding binding = dynEnv.getBinding(symbol);
             if (binding != null) {
@@ -1893,6 +1893,8 @@ public abstract class Lisp
         loadClass("org.armedbear.lisp.Pathname");
         loadClass("org.armedbear.lisp.LispClass");
         loadClass("org.armedbear.lisp.BuiltInClass");
+
+        loadClass("org.armedbear.lisp.ash");
 
         cold = false;
     }
