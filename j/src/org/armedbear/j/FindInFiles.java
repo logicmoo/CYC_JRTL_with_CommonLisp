@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFiles.java,v 1.7 2003-06-27 18:08:40 piso Exp $
+ * $Id: FindInFiles.java,v 1.8 2003-06-27 18:31:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -995,6 +995,9 @@ public class FindInFiles extends Replacement implements Constants,
             for (int i = 0; i < s.length(); i++) {
                 char c = s.charAt(i);
                 switch (c) {
+                    case '.':
+                        sb.append("\\.");
+                        break;
                     case '*':
                         sb.append(".*");
                         break;
