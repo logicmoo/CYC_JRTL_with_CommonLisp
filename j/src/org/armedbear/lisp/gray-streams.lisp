@@ -1,7 +1,7 @@
 ;;; gray-streams.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: gray-streams.lisp,v 1.7 2004-06-30 17:14:22 piso Exp $
+;;; $Id: gray-streams.lisp,v 1.8 2004-09-10 14:42:01 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -633,7 +633,7 @@
       (funcall *old-streamp* stream)
       (stream-streamp stream)))
 
-(defun gray-write-sequence (sequence stream &key start end)
+(defun gray-write-sequence (sequence stream &key (start 0) end)
   (if (old-streamp stream)
       (funcall *old-write-sequence* sequence stream :start start :end end)
       (stream-write-sequence stream sequence start end)))
