@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.74 2003-07-07 18:59:52 piso Exp $
+;;; $Id: boot.lisp,v 1.75 2003-07-13 14:40:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -179,6 +179,27 @@
 
 (defmacro case (keyform &body clauses)
   (case-expand 'case 'eql keyform clauses))
+
+
+;; TYPECASE (from CLISP)
+
+(defmacro typecase (keyform &rest typeclauselist)
+  (let* ((tempvar (gensym))
+         (condclauselist nil))
+    (do ((typeclauselistr typeclauselist (cdr typeclauselistr)))
+        ((atom typeclauselistr))
+      (cond ((atom (car typeclauselistr))
+             (error 'program-error
+                    "invalid clause in ~S: ~S"
+                    'typecase (car typeclauselistr)))
+            ((let ((type (caar typeclauselistr)))
+               (or (eq type T) (eq type 'OTHERWISE)))
+             (push `(T ,@(or (cdar typeclauselistr) '(NIL))) condclauselist)
+             (return))
+            (t (push `((TYPEP ,tempvar (QUOTE ,(caar typeclauselistr)))
+                       ,@(or (cdar typeclauselistr) '(NIL)))
+                     condclauselist))))
+    `(LET ((,tempvar ,keyform)) (COND ,@(nreverse condclauselist)))))
 
 
 ;;; PROG, PROG* (from GCL)
