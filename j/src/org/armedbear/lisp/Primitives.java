@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.79 2003-03-06 04:02:01 piso Exp $
+ * $Id: Primitives.java,v 1.80 2003-03-06 19:14:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -986,9 +986,9 @@ public final class Primitives extends Module
             LispObject datum = args[0];
             if (datum instanceof Symbol) {
                 if (datum == Symbol.TYPE_ERROR)
-                    throw new TypeError();
+                    throw new TypeError(_format(args, 1));
                 if (datum == Symbol.PROGRAM_ERROR)
-                    throw new ProgramError();
+                    throw new ProgramError(_format(args, 1));
                 // Default.
                 throw new SimpleError(((Symbol)datum).getName());
             }
@@ -1028,6 +1028,19 @@ public final class Primitives extends Module
             throw new LispError("FORMAT: not implemented");
         }
     };
+
+    private static final String _format(LispObject[] args, int skip)
+        throws LispError
+    {
+        final int remaining = args.length - skip;
+        if (remaining > 0) {
+            LispObject[] array = new LispObject[remaining];
+            for (int i = skip, j = 0; i < args.length; i++, j++)
+                array[j] = args[i];
+            return _format(array);
+        } else
+            return null;
+    }
 
     private static final String _format(LispObject[] args) throws LispError
     {
