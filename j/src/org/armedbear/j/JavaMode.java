@@ -1,8 +1,8 @@
 /*
  * JavaMode.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaMode.java,v 1.14 2003-10-15 20:15:37 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: JavaMode.java,v 1.15 2004-01-04 01:41:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1167,6 +1167,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
 
     public Expression getExpressionAtDot(final Editor editor, final boolean exact)
     {
+        if (editor.getModeId() == OBJC_MODE)
+            return super.getExpressionAtDot(editor, exact);
         if (editor.getDot() == null)
             return null;
         Position begin;
