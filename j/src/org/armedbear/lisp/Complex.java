@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Complex.java,v 1.28 2004-05-27 20:30:53 piso Exp $
+ * $Id: Complex.java,v 1.29 2004-06-04 16:24:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,9 +227,14 @@ public final class Complex extends LispObject
         return T;
     }
 
-    public int hashCode()
+    public int sxhash() throws ConditionThrowable
     {
-        return realpart.hashCode() ^ imagpart.hashCode();
+        return (mix(realpart.sxhash(), imagpart.sxhash()) & 0x7fffffff);
+    }
+
+    public int psxhash() throws ConditionThrowable
+    {
+        return (mix(realpart.psxhash(), imagpart.psxhash()) & 0x7fffffff);
     }
 
     public String writeToString() throws ConditionThrowable
