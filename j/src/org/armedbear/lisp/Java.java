@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Java.java,v 1.48 2005-01-24 14:37:14 asimon Exp $
+ * $Id: Java.java,v 1.49 2005-03-01 13:09:18 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -658,6 +658,8 @@ public final class Java extends Lisp
             return ((Boolean)obj).booleanValue() ? T : NIL;
         if (obj instanceof Integer)
             return new Fixnum(((Integer)obj).intValue());
+        if (obj instanceof Short)
+            return new Fixnum(((Short)obj).shortValue());
         if (obj instanceof Long)
             return new Bignum(((Long)obj).longValue());
         if (obj instanceof Double || obj instanceof Float)
