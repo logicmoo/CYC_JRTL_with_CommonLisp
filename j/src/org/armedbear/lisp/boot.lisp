@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.175 2004-06-13 17:48:39 asimon Exp $
+;;; $Id: boot.lisp,v 1.176 2004-06-13 18:12:29 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -234,10 +234,6 @@
 (sys::load-system-file "late-setf")
 (sys::load-system-file "debug")
 (sys::load-system-file "print")
-
-(sys::load-system-file "source-location.lisp")
-
-(format t "VAN: ~s~%" (fboundp 'sys::new-source))
 
 (unless (sys::featurep :j)
   (format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
