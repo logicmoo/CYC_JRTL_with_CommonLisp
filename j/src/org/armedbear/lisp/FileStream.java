@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.14 2004-08-17 13:38:31 piso Exp $
+ * $Id: FileStream.java,v 1.15 2004-09-01 17:28:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -337,19 +337,19 @@ public final class FileStream extends Stream
         return unreadableString("FILE-STREAM");
     }
 
-    // ### make-file-stream pathname element-type direction => stream
+    // ### make-file-stream pathname element-type direction if-exists => stream
     private static final Primitive MAKE_FILE_STREAM =
         new Primitive("make-file-stream", PACKAGE_SYS, false,
                       "pathname element-type direction if-exists")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
         {
-            if (args.length != 4)
-                signal(new WrongNumberOfArgumentsException(this));
-            Pathname pathname = Pathname.coerceToPathname(args[0]);
-            LispObject elementType = args[1];
-            LispObject direction = args[2];
-            LispObject ifExists = args[3];
+            Pathname pathname = Pathname.coerceToPathname(first);
+            LispObject elementType = second;
+            LispObject direction = third;
+            LispObject ifExists = fourth;
             if (direction != Keyword.INPUT && direction != Keyword.OUTPUT &&
                 direction != Keyword.IO)
                 signal(new LispError("Direction must be :INPUT, :OUTPUT, or :IO."));
