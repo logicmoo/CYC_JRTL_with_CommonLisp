@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.51 2004-03-17 12:59:03 piso Exp $
+ * $Id: Package.java,v 1.52 2004-03-17 13:23:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -306,14 +306,17 @@ public final class Package extends LispObject
             return; // Nothing to do.
         Symbol sym = findAccessibleSymbol(symbol.getName());
         if (sym != null && sym != symbol) {
-            StringBuffer sb = new StringBuffer("the symbol ");
+            StringBuffer sb = new StringBuffer("The symbol ");
             sb.append(sym.getQualifiedName());
             sb.append(" is already accessible in package ");
             sb.append(name);
+            sb.append('.');
             signal(new PackageError(sb.toString()));
             return;
         }
         internalSymbols.put(symbol.getName(), symbol);
+        if (symbol.getPackage() == NIL)
+            symbol.setPackage(this);
     }
 
     public synchronized void export(Symbol symbol) throws ConditionThrowable
