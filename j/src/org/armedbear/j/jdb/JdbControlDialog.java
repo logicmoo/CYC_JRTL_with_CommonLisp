@@ -1,8 +1,8 @@
 /*
  * JdbControlDialog.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: JdbControlDialog.java,v 1.1.1.1 2002-09-24 16:09:43 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: JdbControlDialog.java,v 1.2 2003-05-11 01:28:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,8 +22,11 @@
 package org.armedbear.j.jdb;
 
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -50,6 +53,7 @@ import org.armedbear.j.Expansion;
 import org.armedbear.j.History;
 import org.armedbear.j.HistoryTextField;
 import org.armedbear.j.SessionProperties;
+import org.armedbear.j.StandardButton;
 
 public final class JdbControlDialog extends JDialog implements Constants,
     ActionListener, ComponentListener, KeyListener
@@ -112,17 +116,14 @@ public final class JdbControlDialog extends JDialog implements Constants,
 
     private void addButton(String text, String iconFile, String command)
     {
-        JButton button = null;
-        if (iconFile != null) {
-            URL url = Editor.class.getResource("images/" + iconFile);
-            if (url != null) {
-                button = new JButton();
-                button.setIcon(new ImageIcon(url));
-                button.setToolTipText(text);
-            }
-        }
-        if (button == null)
-            button = new JButton(text);
+        StandardButton button = new StandardButton(text);
+        Font font = button.getFont();
+        FontMetrics fm = Toolkit.getDefaultToolkit().getFontMetrics(font);
+        int width = fm.stringWidth(text);
+        Dimension dim = new Dimension(width + 14, StandardButton.DEFAULT_HEIGHT);
+        button.setMinimumSize(dim);
+        button.setMaximumSize(dim);
+        button.setPreferredSize(dim);
         if (command != null)
             button.setActionCommand(command);
         button.addActionListener(this);
