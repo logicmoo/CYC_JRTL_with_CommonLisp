@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.29 2003-08-27 17:28:26 piso Exp $
+ * $Id: Interpreter.java,v 1.30 2003-09-18 18:56:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -345,6 +345,41 @@ public final class Interpreter extends Lisp
             getStandardOutput().writeLine(string.getValue());
             return true;
         }
+        if (command.equals("apropos")) {
+            if (args != null && args.length() > 0) {
+                if (args.length() > 1 && args.charAt(0) == '"' &&
+                    args.charAt(args.length()-1) == '"') {
+                    ;
+                } else {
+                    StringBuffer sb = new StringBuffer();
+                    sb.append('"');
+                    int i = args.indexOf(' ');
+                    if (i < 0) {
+                        sb.append(args);
+                        sb.append('"');
+                    } else {
+                        // Two args to APROPOS.
+                        String arg1 = args.substring(0, i);
+                        String arg2 = args.substring(i + 1).trim();
+                        sb.append(arg1);
+                        sb.append('"');
+                        sb.append(' ');
+                        sb.append(arg2);
+                    }
+                    args = sb.toString();
+                }
+                getStandardOutput().setCharPos(0);
+                StringInputStream stream =
+                    new StringInputStream("(apropos " + args + ")");
+                LispObject obj = stream.read(false, EOF, false);
+                if (obj == EOF)
+                    throw new EndOfFileException();
+                eval(obj, new Environment(), LispThread.currentThread());
+                getStandardOutput().freshLine();
+                return true;
+            }
+            return false;
+        }
         if (command.equals("describe")) {
             if (args != null && args.length() > 0) {
                 getStandardOutput().setCharPos(0);
@@ -422,6 +457,8 @@ public final class Interpreter extends Lisp
                 return "history";
         }
         if (command.length() >= 2) {
+            if ("apropos".startsWith(command))
+                return "apropos";
             if ("describe".startsWith(command))
                 return "describe";
             if ("package".startsWith(command))
