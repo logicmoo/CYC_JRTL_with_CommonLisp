@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.62 2003-10-21 01:01:34 piso Exp $
+ * $Id: LispMode.java,v 1.63 2003-11-02 17:20:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -834,11 +834,12 @@ public class LispMode extends AbstractMode implements Constants, Mode
         if (s == null) {
             if (editor.getDot() == null)
                 return;
-            if (Character.isWhitespace(editor.getDotChar())) {
+            char c = editor.getDotChar();
+            if (c == ')' || Character.isWhitespace(c)) {
                 final Line dotLine = editor.getDotLine();
                 final String text = dotLine.getText();
                 for (int offset = editor.getDotOffset(); offset-- > 0;) {
-                    char c = text.charAt(offset);
+                    c = text.charAt(offset);
                     if (mode.isIdentifierPart(c)) {
                         s = mode.getIdentifier(dotLine, offset);
                         break;
