@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.55 2004-09-23 14:34:27 piso Exp $
+ * $Id: LispAPI.java,v 1.56 2004-11-03 18:10:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,10 +40,6 @@ import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Packages;
 import org.armedbear.lisp.Pathname;
-import org.armedbear.lisp.Primitive0;
-import org.armedbear.lisp.Primitive1;
-import org.armedbear.lisp.Primitive2;
-import org.armedbear.lisp.Primitive3;
 import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.Primitives;
 import org.armedbear.lisp.SimpleString;
@@ -151,10 +147,9 @@ public final class LispAPI extends Lisp
     }
 
     // ### current-editor
-    private static final Primitive0 CURRENT_EDITOR =
-        new Primitive0("current-editor", PACKAGE_J, true,
-                       "()",
-                       "Returns the current editor as a Lisp object.")
+    private static final Primitive CURRENT_EDITOR =
+        new Primitive("current-editor", PACKAGE_J, true, "()",
+                      "Returns the current editor as a Lisp object.")
     {
         public LispObject execute()
         {
@@ -163,10 +158,9 @@ public final class LispAPI extends Lisp
     };
 
     // ### %set-current-editor
-    private static final Primitive1 _SET_CURRENT_EDITOR =
-        new Primitive1("%set-current-editor", PACKAGE_J, false,
-                       "(EDITOR)",
-                       "Makes EDITOR the current editor.")
+    private static final Primitive _SET_CURRENT_EDITOR =
+        new Primitive("%set-current-editor", PACKAGE_J, false, "(EDITOR)",
+                      "Makes EDITOR the current editor.")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -176,8 +170,9 @@ public final class LispAPI extends Lisp
     };
 
     // ### other-editor
-    private static final Primitive0 OTHER_EDITOR =
-        new Primitive0("other-editor", PACKAGE_J, true) {
+    private static final Primitive OTHER_EDITOR =
+        new Primitive("other-editor", PACKAGE_J, true)
+    {
         public LispObject execute()
         {
             Editor otherEditor = Editor.currentEditor().getOtherEditor();
@@ -186,8 +181,9 @@ public final class LispAPI extends Lisp
     };
 
     // ### current-buffer
-    private static final Primitive0 CURRENT_BUFFER =
-        new Primitive0("current-buffer", PACKAGE_J, true) {
+    private static final Primitive CURRENT_BUFFER =
+        new Primitive("current-buffer", PACKAGE_J, true)
+    {
         public LispObject execute()
         {
             return new JavaObject(Editor.currentEditor().getBuffer());
@@ -195,8 +191,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### editor-buffer editor => buffer
-    private static final Primitive1 BUFFER =
-        new Primitive1("editor-buffer", PACKAGE_J, true)
+    private static final Primitive BUFFER =
+        new Primitive("editor-buffer", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -213,7 +209,6 @@ public final class LispAPI extends Lisp
             String name = Editor.currentEditor().getBuffer().getTitle();
             return name != null ? new SimpleString(name) : NIL;
         }
-
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String name = checkBuffer(arg).getTitle();
@@ -222,8 +217,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### get-buffer
-    private static final Primitive1 GET_BUFFER =
-        new Primitive1("get-buffer", PACKAGE_J, true, "name")
+    private static final Primitive GET_BUFFER =
+        new Primitive("get-buffer", PACKAGE_J, true, "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -246,8 +241,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### buffer-live-p object => generalized-boolean
-    private static final Primitive1 BUFFER_LIVE_P =
-        new Primitive1("buffer-live-p", PACKAGE_J, true, "object")
+    private static final Primitive BUFFER_LIVE_P =
+        new Primitive("buffer-live-p", PACKAGE_J, true, "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -277,7 +272,6 @@ public final class LispAPI extends Lisp
             }
             return NIL;
         }
-
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             File file = checkBuffer(arg).getFile();
@@ -376,8 +370,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### current-point
-    private static final Primitive0 CURRENT_POINT =
-        new Primitive0("current-point", PACKAGE_J, true, "")
+    private static final Primitive CURRENT_POINT =
+        new Primitive("current-point", PACKAGE_J, true, "")
     {
         public LispObject execute()
         {
@@ -389,8 +383,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### current-mark
-    private static final Primitive0 CURRENT_MARK =
-        new Primitive0("current-mark", PACKAGE_J, true, "")
+    private static final Primitive CURRENT_MARK =
+        new Primitive("current-mark", PACKAGE_J, true, "")
     {
         public LispObject execute()
         {
@@ -402,8 +396,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### point-min
-    private static final Primitive0 POINT_MIN =
-        new Primitive0("point-min", PACKAGE_J, true)
+    private static final Primitive POINT_MIN =
+        new Primitive("point-min", PACKAGE_J, true)
     {
         public LispObject execute()
         {
@@ -415,8 +409,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### point-max
-    private static final Primitive0 POINT_MAX =
-        new Primitive0("point-max", PACKAGE_J, true)
+    private static final Primitive POINT_MAX =
+        new Primitive("point-max", PACKAGE_J, true)
     {
         public LispObject execute()
         {
@@ -428,8 +422,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### make-mark
-    private static final Primitive1 MAKE_MARK =
-        new Primitive1("make-mark", PACKAGE_J, true)
+    private static final Primitive MAKE_MARK =
+        new Primitive("make-mark", PACKAGE_J, true)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -441,8 +435,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### mark-line
-    private static final Primitive1 MARK_LINE =
-        new Primitive1("mark-line", PACKAGE_J, true)
+    private static final Primitive MARK_LINE =
+        new Primitive("mark-line", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -451,8 +445,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### mark-charpos
-    private static final Primitive1 MARK_CHARPOS =
-        new Primitive1("mark-charpos", PACKAGE_J, true)
+    private static final Primitive MARK_CHARPOS =
+        new Primitive("mark-charpos", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -461,8 +455,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### current-line
-    private static final Primitive0 CURRENT_LINE =
-        new Primitive0("current-line", PACKAGE_J, true)
+    private static final Primitive CURRENT_LINE =
+        new Primitive("current-line", PACKAGE_J, true)
     {
         public LispObject execute()
         {
@@ -475,8 +469,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### line-next
-    private static final Primitive1 LINE_NEXT =
-        new Primitive1("line-next", PACKAGE_J, true)
+    private static final Primitive LINE_NEXT =
+        new Primitive("line-next", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -486,8 +480,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### line-previous
-    private static final Primitive1 LINE_PREVIOUS =
-        new Primitive1("line-previous", PACKAGE_J, true)
+    private static final Primitive LINE_PREVIOUS =
+        new Primitive("line-previous", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -497,8 +491,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### line-chars
-    private static final Primitive1 LINE_CHARS =
-        new Primitive1("line-chars", PACKAGE_J, true)
+    private static final Primitive LINE_CHARS =
+        new Primitive("line-chars", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -508,8 +502,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### line-flags
-    private static final Primitive1 LINE_FLAGS =
-        new Primitive1("line-flags", PACKAGE_J, true)
+    private static final Primitive LINE_FLAGS =
+        new Primitive("line-flags", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -518,8 +512,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### %set-line-flags
-    private static final Primitive2 _SET_LINE_FLAGS =
-        new Primitive2("%set-line-flags", PACKAGE_J, false)
+    private static final Primitive _SET_LINE_FLAGS =
+        new Primitive("%set-line-flags", PACKAGE_J, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -532,8 +526,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### line-number
-    private static final Primitive1 LINE_NUMBER =
-        new Primitive1("line-number", PACKAGE_J, true, "line")
+    private static final Primitive LINE_NUMBER =
+        new Primitive("line-number", PACKAGE_J, true, "line")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -543,8 +537,8 @@ public final class LispAPI extends Lisp
 
     // ### char-after
     // Returns character immediately after mark.
-    private static final Primitive1 CHAR_AFTER =
-        new Primitive1("char-after", PACKAGE_J, true)
+    private static final Primitive CHAR_AFTER =
+        new Primitive("char-after", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -554,8 +548,8 @@ public final class LispAPI extends Lisp
 
     // ### char-before
     // Returns character immediately before mark.
-    private static final Primitive1 CHAR_BEFORE =
-        new Primitive1("char-before", PACKAGE_J, true)
+    private static final Primitive CHAR_BEFORE =
+        new Primitive("char-before", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -582,7 +576,8 @@ public final class LispAPI extends Lisp
     // ### backward-char
     // Move point left N characters (right if N is negative).
     private static final Primitive BACKWARD_CHAR =
-        new Primitive("backward-char", PACKAGE_J, true) {
+        new Primitive("backward-char", PACKAGE_J, true)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             return forwardChar(-1);
@@ -627,7 +622,6 @@ public final class LispAPI extends Lisp
             Editor.currentEditor().bol();
             return NIL;
         }
-
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             int n = (arg != NIL) ? Fixnum.getValue(arg) : 1;
@@ -658,7 +652,6 @@ public final class LispAPI extends Lisp
             Editor.currentEditor().eol();
             return NIL;
         }
-
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             int n = (arg != NIL) ? Fixnum.getValue(arg) : 1;
@@ -722,10 +715,12 @@ public final class LispAPI extends Lisp
 
     // ### %variable-value
     // %variable-value symbol kind where => value
-    private static final Primitive3 _VARIABLE_VALUE =
-        new Primitive3("%variable-value", PACKAGE_J, false) {
+    private static final Primitive _VARIABLE_VALUE =
+        new Primitive("%variable-value", PACKAGE_J, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+                                  LispObject third)
+            throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(first);
             JVar jvar = JVar.getJVar(symbol);
@@ -788,7 +783,8 @@ public final class LispAPI extends Lisp
     // ### %set-variable-value
     // %set-variable-value symbol kind where new-value => new-value
     private static final Primitive _SET_VARIABLE_VALUE =
-        new Primitive("%set-variable-value", PACKAGE_J, false) {
+        new Primitive("%set-variable-value", PACKAGE_J, false)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 4)
@@ -855,8 +851,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### kill-theme
-    private static final Primitive0 KILL_THEME =
-        new Primitive0("kill-theme", PACKAGE_J, true)
+    private static final Primitive KILL_THEME =
+        new Primitive("kill-theme", PACKAGE_J, true)
     {
         public LispObject execute()
         {
@@ -866,8 +862,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### restore-focus
-    private static final Primitive0 RESTORE_FOCUS =
-        new Primitive0("restore-focus", PACKAGE_J, true)
+    private static final Primitive RESTORE_FOCUS =
+        new Primitive("restore-focus", PACKAGE_J, true)
     {
         public LispObject execute()
         {
@@ -877,8 +873,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### global-map-key key command => generalized-boolean
-    private static final Primitive2 GLOBAL_MAP_KEY =
-        new Primitive2("global-map-key", PACKAGE_J, true, "key command")
+    private static final Primitive GLOBAL_MAP_KEY =
+        new Primitive("global-map-key", PACKAGE_J, true, "key command")
     {
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
@@ -897,8 +893,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### global-unmap-key key => generalized-boolean
-    private static final Primitive1 GLOBAL_UNMAP_KEY =
-        new Primitive1("global-unmap-key", PACKAGE_J, true, "key")
+    private static final Primitive GLOBAL_UNMAP_KEY =
+        new Primitive("global-unmap-key", PACKAGE_J, true, "key")
     {
         public LispObject execute(LispObject arg)
 	    throws ConditionThrowable
@@ -909,8 +905,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### map-key-for-mode key command mode => generalized-boolean
-    private static final Primitive3 MAP_KEY_FOR_MODE =
-        new Primitive3("map-key-for-mode", PACKAGE_J, true, "key command mode")
+    private static final Primitive MAP_KEY_FOR_MODE =
+        new Primitive("map-key-for-mode", PACKAGE_J, true, "key command mode")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -934,8 +930,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### unmap-key-for-mode key mode => generalized-boolean
-    private static final Primitive2 UNMAP_KEY_FOR_MODE =
-        new Primitive2("unmap-key-for-mode", PACKAGE_J, true, "key mode")
+    private static final Primitive UNMAP_KEY_FOR_MODE =
+        new Primitive("unmap-key-for-mode", PACKAGE_J, true, "key mode")
     {
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
@@ -950,8 +946,9 @@ public final class LispAPI extends Lisp
     };
 
     // ### %set-global-property
-    private static final Primitive2 _SET_GLOBAL_PROPERTY =
-        new Primitive2("%set-global-property", PACKAGE_J, false) {
+    private static final Primitive _SET_GLOBAL_PROPERTY =
+        new Primitive("%set-global-property", PACKAGE_J, false)
+    {
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
         {
@@ -997,8 +994,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### delete-region => nil
-    private static final Primitive0 DELETE_REGION =
-        new Primitive0("delete-region", PACKAGE_J, true)
+    private static final Primitive DELETE_REGION =
+        new Primitive("delete-region", PACKAGE_J, true)
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -1011,8 +1008,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### set-mark pos => pos
-    private static final Primitive1 SET_MARK =
-        new Primitive1("set-mark", PACKAGE_J, true)
+    private static final Primitive SET_MARK =
+        new Primitive("set-mark", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1034,7 +1031,6 @@ public final class LispAPI extends Lisp
             Editor.currentEditor().undo();
             return NIL;
         }
-
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Editor editor = Editor.currentEditor();
@@ -1050,8 +1046,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### begin-compound-edit
-    private static final Primitive0 BEGIN_COMPOUND_EDIT =
-        new Primitive0("begin-compound-edit", PACKAGE_J, false)
+    private static final Primitive BEGIN_COMPOUND_EDIT =
+        new Primitive("begin-compound-edit", PACKAGE_J, false)
     {
         public LispObject execute()
         {
@@ -1060,8 +1056,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### end-compound-edit
-    private static final Primitive1 END_COMPOUND_EDIT =
-        new Primitive1("end-compound-edit", PACKAGE_J, false)
+    private static final Primitive END_COMPOUND_EDIT =
+        new Primitive("end-compound-edit", PACKAGE_J, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1078,8 +1074,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### %log-debug
-    private static final Primitive1 _LOG_DEBUG =
-        new Primitive1("%log-debug", PACKAGE_J, false)
+    private static final Primitive _LOG_DEBUG =
+        new Primitive("%log-debug", PACKAGE_J, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1089,8 +1085,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### get-last-event-time
-    private static final Primitive0 GET_LAST_EVENT_INTERNAL_TIME =
-        new Primitive0("get-last-event-internal-time", PACKAGE_J, true)
+    private static final Primitive GET_LAST_EVENT_INTERNAL_TIME =
+        new Primitive("get-last-event-internal-time", PACKAGE_J, true)
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -1150,8 +1146,8 @@ public final class LispAPI extends Lisp
     }
 
     // ### invoke-later
-    public static final Primitive1 INVOKE_LATER =
-        new Primitive1("invoke-later", PACKAGE_J, true)
+    public static final Primitive INVOKE_LATER =
+        new Primitive("invoke-later", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1195,8 +1191,8 @@ public final class LispAPI extends Lisp
     };
 
     // ### buffer-stream-buffer stream => buffer
-    private static final Primitive1 BUFFER_STREAM_BUFFER =
-        new Primitive1("buffer-stream-buffer", PACKAGE_J, true)
+    private static final Primitive BUFFER_STREAM_BUFFER =
+        new Primitive("buffer-stream-buffer", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1260,7 +1256,6 @@ public final class LispAPI extends Lisp
             }
             return signal(new TypeError(arg, Symbol.STRING));
         }
-
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
