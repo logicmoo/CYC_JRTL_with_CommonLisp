@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CTagger.java,v 1.1.1.1 2002-09-24 16:09:14 piso Exp $
+ * $Id: CTagger.java,v 1.2 2002-10-31 13:45:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.j;
 
 import gnu.regexp.RE;
 import gnu.regexp.UncheckedRE;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public final class CTagger extends JavaTagger
 {
@@ -43,7 +43,7 @@ public final class CTagger extends JavaTagger
 
     public void run()
     {
-        Vector tags = new Vector();
+        ArrayList tags = new ArrayList();
         pos = new Position(buffer.getFirstLine(), 0);
         token = null;
         tokenStart = null;
@@ -62,11 +62,15 @@ public final class CTagger extends JavaTagger
                 skipComment();
                 continue;
             }
-            if (pos.lookingAt("//") || (c == '#' && pos.getOffset() == 0)) {
+            if (pos.lookingAt("//")) {
                 Line nextLine = pos.getNextLine();
                 if (nextLine == null)
                     break;
                 pos.moveTo(nextLine, 0);
+                continue;
+            }
+            if (c == '#' && pos.getOffset() == 0) {
+                skipPreprocessor(pos);
                 continue;
             }
             if (state == METHOD_NAME) {
@@ -167,6 +171,21 @@ public final class CTagger extends JavaTagger
                 break;
         }
         token = sb.toString();
+    }
+    
+    private static void skipPreprocessor(Position pos)
+    {
+        while (true) {
+            Line line = pos.getLine();
+            Line nextLine = line.next();
+            if (nextLine == null) {
+                pos.setOffset(line.length());
+                return;
+            }
+            pos.moveTo(nextLine, 0);
+            if (line.length() == 0 || line.charAt(line.length()-1) != '\\')
+                return;
+        }
     }
 
     private static final boolean isIdentifierStart(char c)
