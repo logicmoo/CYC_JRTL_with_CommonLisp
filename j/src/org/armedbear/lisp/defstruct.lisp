@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.15 2003-07-15 19:28:40 piso Exp $
+;;; $Id: defstruct.lisp,v 1.16 2003-07-16 18:17:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -112,3 +112,5 @@
        ,@(define-access-functions slots)
        ,@(define-copier)
        ',*ds-name*)))
+
+(provide 'defstruct)
