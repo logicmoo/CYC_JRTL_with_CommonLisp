@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.134 2004-04-27 15:35:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.135 2004-04-27 16:26:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1384,7 +1384,7 @@
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/LispObject;")
+            +lisp-object+)
       (emit-store-value)))
    ((stringp form)
     (if *compile-file-truename*
@@ -1392,7 +1392,7 @@
           (emit 'getstatic
                 *this-class*
                 g
-                "Lorg/armedbear/lisp/SimpleString;")
+                +lisp-simple-string+)
           (emit-store-value))
         (let ((g (declare-object form)))
           (emit 'getstatic
@@ -1417,7 +1417,9 @@
    ((symbolp form)
     (when (null (symbol-package form))
       ;; An uninterned symbol.
-      (let ((g (declare-object-as-string form)))
+      (let ((g (if *compile-file-truename*
+                   (declare-object-as-string form)
+                   (declare-object form))))
         (emit 'getstatic
               *this-class*
               g
