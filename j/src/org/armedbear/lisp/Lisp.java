@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.187 2003-12-12 17:28:24 piso Exp $
+ * $Id: Lisp.java,v 1.188 2003-12-12 18:48:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -335,6 +335,11 @@ public abstract class Lisp
             return result;
         }
     };
+
+    public static final void signal(Condition condition) throws ConditionThrowable
+    {
+        throw new ConditionThrowable(condition);
+    }
 
     public static final LispObject eval(final LispObject obj,
                                         final Environment env,
