@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.5 2003-07-03 18:05:22 piso Exp $
+ * $Id: LispAPI.java,v 1.6 2003-07-05 02:01:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -318,6 +318,15 @@ public final class LispAPI extends Lisp
         public LispObject execute()
         {
             preferences.killTheme();
+            return T;
+        }
+    };
+
+    private static final Primitive0 RESTORE_FOCUS =
+        new Primitive0("RESTORE-FOCUS", PACKAGE_J, true) {
+        public LispObject execute()
+        {
+            Editor.currentEditor().setFocusToDisplay();
             return T;
         }
     };
