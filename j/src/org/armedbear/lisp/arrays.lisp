@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: arrays.lisp,v 1.8 2003-06-11 00:46:20 piso Exp $
+;;; $Id: arrays.lisp,v 1.9 2003-06-23 17:42:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,14 +18,6 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "COMMON-LISP")
-
-(export '(array-total-size-limit
-          array-rank-limit
-          make-array
-          array-row-major-index
-          array-in-bounds-p
-          aref
-          bit sbit))
 
 (defconstant array-total-size-limit #x1000000)
 (defconstant array-rank-limit 8)
@@ -67,10 +59,6 @@
 
 (defun array-row-major-index (array &rest subscripts)
   (%array-row-major-index array subscripts))
-
-(defun array-in-bounds-p (array &rest subscripts)
-  (if (%array-row-major-index array subscripts nil)
-      t))
 
 (defun aref (array &rest subscripts)
   (cond ((null subscripts)
