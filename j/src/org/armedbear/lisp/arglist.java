@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: arglist.java,v 1.9 2004-02-23 14:24:48 piso Exp $
+ * $Id: arglist.java,v 1.10 2004-07-10 15:59:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,7 @@ public final class arglist extends Lisp
         return null;
     }
 
+    // ### arglist
     private static final Primitive1 ARGLIST =
         new Primitive1("arglist", PACKAGE_EXT, true)
     {
