@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.4 2003-06-21 00:00:13 piso Exp $
+ * $Id: LispClass.java,v 1.5 2003-06-21 03:51:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,6 +71,16 @@ public final class LispClass extends LispObject
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);
             return findClass(checkSymbol(args[0]));
+        }
+    };
+
+    // ### class-name
+    private static final Primitive1 CLASS_NAME = new Primitive1("class-name") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof LispClass)
+                return new LispString(((LispClass)arg).getName());
+            throw new TypeError(arg, "class");
         }
     };
 }
