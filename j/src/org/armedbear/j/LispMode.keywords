@@ -20,6 +20,7 @@ array-dimensions
 array-has-fill-pointer-p
 array-in-bounds-p
 array-row-major-index
+arrayp
 ash
 assert
 assoc
