@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: typep.lisp,v 1.19 2004-02-12 11:53:35 piso Exp $
+;;; $Id: typep.lisp,v 1.20 2004-02-13 00:29:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,6 +96,14 @@
       (BIT-VECTOR
        (and (bit-vector-p object)
             (or (endp i) (match-dimensions (array-dimensions object) i))))
+      (SIMPLE-STRING
+       (and (simple-string-p object)
+            (or (null i)
+                (eql (car i) (length object)))))
+      (STRING
+       (and (stringp object)
+            (or (null i)
+                (eql (car i) (length object)))))
       (SIMPLE-VECTOR
        (and (simple-vector-p object)
             (or (endp i) (eq (car i) '*)
