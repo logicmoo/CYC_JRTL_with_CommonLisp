@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.134 2005-02-16 12:30:09 piso Exp $
+ * $Id: Editor.java,v 1.135 2005-02-17 15:47:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1329,11 +1329,8 @@ public final class Editor extends JPanel implements Constants,
         int index = s1.indexOf(origChar);
         if (index < 0)
             return null;
-        final Mode mode = getMode();
-        if (mode.isInComment(buffer, start))
-            return null;
-        boolean inQuote = mode.isInQuote(buffer, start);
-        if (inQuote)
+        final Mode mode = buffer.getMode();
+        if (mode.isInComment(buffer, start) || mode.isInQuote(buffer, start))
             return null;
         final String s2 = new String("})]{([");
         final char match = s2.charAt(index);
