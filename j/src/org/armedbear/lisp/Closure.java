@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.63 2003-12-26 16:28:30 piso Exp $
+ * $Id: Closure.java,v 1.64 2003-12-27 01:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -491,8 +491,14 @@ public class Closure extends Function
         }
         args = processArgs(args);
         Debug.assertTrue(args.length == variables.length);
-        for (int i = 0; i < variables.length; i++)
-            bind(variables[i], args[i], ext);
+        for (int i = 0; i < variables.length; i++) {
+//             bind(variables[i], args[i], ext);
+            Symbol symbol = variables[i];
+            if (isSpecial(symbol))
+                thread.bindSpecial(symbol, args[i]);
+            else
+                ext.bind(symbol, args[i]);
+        }
         if (auxVars != null)
             bindAuxVars(ext, thread);
         LispObject result = NIL;
@@ -503,6 +509,19 @@ public class Closure extends Function
         }
         thread.setDynamicEnvironment(oldDynEnv);
         return result;
+    }
+
+    private final boolean isSpecial(Symbol symbol)
+    {
+        if (symbol.isSpecialVariable())
+            return true;
+        if (specials != null) {
+            for (int i = specials.length; i-- > 0;) {
+                if (symbol == specials[i])
+                    return true;
+            }
+        }
+        return false;
     }
 
     protected LispObject[] processArgs(LispObject[] args) throws ConditionThrowable
@@ -517,6 +536,9 @@ public class Closure extends Function
         // Not fixed arity.
         if (args.length < minArgs)
             signal(new WrongNumberOfArgumentsException(this));
+        // The bindings established here are lost when this function returns.
+        // They are used only in the evaluation of initforms for optional and
+        // keyword arguments.
         Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(environment);
         LispObject[] array = new LispObject[variables.length];
