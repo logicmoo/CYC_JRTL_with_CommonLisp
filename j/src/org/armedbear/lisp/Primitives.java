@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.84 2003-03-07 02:36:37 piso Exp $
+ * $Id: Primitives.java,v 1.85 2003-03-07 03:03:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3515,6 +3515,43 @@ public final class Primitives extends Module
         {
             char c = LispCharacter.getValue(arg);
             return new Fixnum((long)c);
+        }
+    };
+
+    private static final Primitive1 NAME_CHAR = new Primitive1("name-char") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            String s = LispString.getValue(string(arg));
+            int n = nameToChar(s);
+            return n >= 0 ? new LispCharacter((char)n) : NIL;
+        }
+    };
+
+    private static final Primitive1 CHAR_NAME = new Primitive1("char-name") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            char c = LispCharacter.getValue(arg);
+            String name = null;
+            switch (c) {
+                case ' ':
+                    name = "Space";
+                    break;
+                case '\n':
+                    name = "Newline";
+                    break;
+                case '\t':
+                    name = "Tab";
+                    break;
+                case '\r':
+                    name = "Return";
+                    break;
+                case '\f':
+                    name = "Page";
+                    break;
+                default:
+                    break;
+            }
+            return name != null ? new LispString(name) : NIL;
         }
     };
 
