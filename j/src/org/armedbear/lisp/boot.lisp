@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.19 2003-03-08 18:15:30 piso Exp $
+;;; $Id: boot.lisp,v 1.20 2003-03-09 02:35:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,6 +16,11 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+(in-package "COMMON-LISP")
+
+(defmacro lambda (lambda-list &rest body)
+  (list 'FUNCTION (append (list 'LAMBDA lambda-list) body)))
 
 (dolist (name '("documentation.lisp"
                 "backquote.lisp"
@@ -34,8 +39,6 @@
 
 
 ;; Miscellany.
-
-(in-package "COMMON-LISP")
 
 (export '(plusp minusp integerp
           character

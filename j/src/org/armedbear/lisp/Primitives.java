@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.100 2003-03-08 21:31:22 piso Exp $
+ * $Id: Primitives.java,v 1.101 2003-03-09 02:36:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,12 +33,11 @@ public final class Primitives extends Module
     private static final int DO                         = 1;
     private static final int DO_                        = 2;
     private static final int FLET                       = 3;
-    private static final int LABELS                     = 5;
-    private static final int LAMBDA                     = 6;
-    private static final int LET                        = 7;
-    private static final int LET_                       = 8;
-    private static final int PROGN                      = 9;
-    private static final int QUOTE                      = 10;
+    private static final int LABELS                     = 4;
+    private static final int LET                        = 5;
+    private static final int LET_                       = 6;
+    private static final int PROGN                      = 7;
+    private static final int QUOTE                      = 8;
 
     // Primitive
     private static final int ADD                        = 1;
@@ -136,7 +135,6 @@ public final class Primitives extends Module
         defineSpecialOperator("do*", DO_);
         defineSpecialOperator("flet", FLET);
         defineSpecialOperator("labels", LABELS);
-        defineSpecialOperator("lambda", LAMBDA);
         defineSpecialOperator("let", LET);
         defineSpecialOperator("let*", LET_);
         defineSpecialOperator("progn", PROGN);
@@ -239,9 +237,6 @@ public final class Primitives extends Module
                 return _do(args, env, false);
             case DO_:
                 return _do(args, env, true);
-            case LAMBDA:                        // ### lambda
-                // Should be a macro.
-                return new Closure(args.car(), args.cdr(), env);
             case FLET:                          // ### flet
                 return _flet(args, env, false);
             case LABELS:                        // ### labels

@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.5 2003-03-08 04:26:26 piso Exp $
+;;; $Id: compiler.lisp,v 1.6 2003-03-09 02:36:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -110,9 +110,6 @@
     (case first
       (SETQ
        (compile-setq (cdr form)))
-      (LAMBDA
-       (append (list first (second form))
-               (mapcar #'compile-sexp (cddr form))))
       (BLOCK
        (unless (>= (length form) 2)
          (error "wrong number of arguments for BLOCK"))
@@ -181,7 +178,10 @@
   (let ((first (car form)))
     (unless (and first (symbolp first) (fboundp first))
       (return-from compile-list form))
-    (cond ((macro-function first)
+    (cond ((eq first 'LAMBDA)
+           (append (list 'LAMBDA (second form))
+                   (mapcar #'compile-sexp (cddr form))))
+          ((macro-function first)
            (compile-sexp (macroexpand form)))
           ((special-operator-p first)
            (compile-special form))
@@ -229,7 +229,7 @@
            (setq expr definition))
           (t
            (error 'type-error)))
-    (setq result (coerce (c::compile-sexp expr) 'function))
+    (setq result (coerce (compile-sexp expr) 'function))
     (when (and name (functionp result))
       (setf (fdefinition name) result))
     (values (or name result) nil nil)))
