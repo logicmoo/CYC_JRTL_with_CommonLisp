@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.382 2005-02-01 14:20:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.383 2005-02-01 22:24:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -478,7 +478,8 @@
   (let* ((name (second form))
          (block (find-block name)))
     (when (null block)
-      (error "P1-RETURN-FROM: no block named ~S is currently visible." name))
+      (compiler-error "RETURN-FROM ~S: no block named ~S is currently visible."
+                      name name))
     (dformat t "p1-return-from block = ~S~%" (block-name block))
     (setf (block-return-p block) t)
     (cond ((eq (block-compiland block) *current-compiland*)
@@ -1250,13 +1251,27 @@
          :format-control format-control
          :format-arguments format-arguments))
 
-(defun check-args (form n)
+;; "In addition to situations for which the standard specifies
+;; that conditions of type WARNING must or might be signaled, warnings might be
+;; signaled in situations where the compiler can determine that the
+;; consequences are undefined or that a run-time error will be signaled.
+;; Examples of this situation are as follows: violating type declarations,
+;; altering or assigning the value of a constant defined with DEFCONSTANT,
+;; calling built-in Lisp functions with a wrong number of arguments or
+;; malformed keyword argument lists, and using unrecognized declaration
+;; specifiers." (3.2.5)
+(defun check-arg-count (form n)
   (declare (type fixnum n))
-  (cond ((= (length form) (1+ n))
-         t)
-        (t
-         (compiler-style-warn "Wrong number of arguments for ~A." (car form))
-         nil)))
+  (let* ((op (car form))
+         (args (cdr form))
+         (ok (= (length args) n)))
+    (unless ok
+      (funcall (if (eq (symbol-package op) sys:+cl-package+)
+                   #'compiler-warn ; See above!
+                   #'compiler-style-warn)
+               "Wrong number of arguments for ~A (expected ~D, but received ~D)."
+               op n (length args)))
+    ok))
 
 (defparameter *resolvers* (make-hash-table :test #'eql))
 
@@ -1888,7 +1903,7 @@
       ((7 8)
        (write-u2 (second entry) stream))
       (t
-       (error "WRITE-CP-ENTRY unhandled tag ~D~%" tag)))))
+       (error "write-constant-pool-entry unhandled tag ~D~%" tag)))))
 
 (defun write-constant-pool (stream)
   (declare (optimize speed))
@@ -2460,8 +2475,9 @@
             (aver nil)))))
 
 (defun p2-eql (form &key (target :stack) representation)
-  (unless (= (length form) 3)
-    (error 'program-error "Wrong number of arguments for EQL."))
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-eql))
   (let ((arg1 (second form))
         (arg2 (third form)))
     (cond ((and (fixnum-or-unboxed-variable-p arg1)
@@ -3575,9 +3591,10 @@
       (emit-push-nil)
       (emit-move-from-stack target))))
 
-(defun compile-atom (form &key (target :stack) representation)
-  (unless (= (length form) 2)
-    (error 'program-error "Wrong number of arguments for ATOM."))
+(defun p2-atom (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-atom))
   (compile-form (cadr form) :target :stack)
   (maybe-emit-clear-values (cadr form))
   (emit 'instanceof +lisp-cons-class+)
@@ -3590,16 +3607,6 @@
     (emit-push-t)
     (label LABEL2)
     (emit-move-from-stack target)))
-
-(defun compile-block (form &key (target :stack) representation)
-;;   (format t "compile-block ~S~%" (cadr form))
-  ;; This shouldn't be called, now that we have pass 1.
-;;   (assert nil)
-  (let ((block (make-block-node :form form
-                                :name (cadr form)
-                                :target target)))
-    (p2-block-node block target)
-  ))
 
 (defun p2-block-node (block target)
   (unless (block-node-p block)
@@ -3705,10 +3712,10 @@
       (emit-push-nil)
       (emit-move-from-stack target))))
 
-(defun compile-cons (form &key (target :stack) representation)
-  (unless (check-args form 2)
+(defun p2-cons (form &key (target :stack) representation)
+  (unless (check-arg-count form 2)
     (compile-function-call form target representation)
-    (return-from compile-cons))
+    (return-from p2-cons))
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
   (process-args (cdr form))
@@ -3767,10 +3774,11 @@
            (t
             (compiler-unsupported "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
-(defun compile-rplacd (form &key (target :stack) representation)
+(defun p2-rplacd (form &key (target :stack) representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-rplacd))
   (let ((args (cdr form)))
-    (unless (= (length args) 2)
-      (error 'program-error "Wrong number of arguments for RPLACD."))
     (compile-form (first args) :target :stack)
     (when target
       (emit 'dup))
@@ -3981,7 +3989,7 @@
 
 (defun p2-ash (form &key (target :stack) representation)
   (dformat t "p2-ash form = ~S representation = ~S~%" form representation)
-  (unless (check-args form 2)
+  (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from p2-ash))
   (let* ((args (cdr form))
@@ -4122,7 +4130,7 @@
   t)
 
 (defun compile-length (form &key (target :stack) representation)
-  (check-args form 1)
+  (check-arg-count form 1)
   (let ((arg (cadr form)))
     (compile-form arg :target :stack)
     (maybe-emit-clear-values arg)
@@ -4133,7 +4141,7 @@
     (emit-move-from-stack target representation)))
 
 (defun compile-nth (form &key (target :stack) representation)
-  (unless (check-args form 2)
+  (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from compile-nth))
   (let ((index-form (second form))
@@ -4369,11 +4377,10 @@
      (dformat t "p2-minus case 10~%")
      (compile-function-call form target representation))))
 
-(defun compile-schar (form &key (target :stack) representation)
-  (unless (= (length form) 3)
-    (error 'program-error
-           :format-control "Wrong number of arguments for ~S."
-           :format-arguments (list (car form))))
+(defun p2-schar (form &key (target :stack) representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-schar))
   (compile-form (second form) :target :stack)
   (compile-form (third form) :target :stack :representation :unboxed-fixnum)
   (unless (and (single-valued-p (second form))
@@ -4382,9 +4389,10 @@
   (emit-invokevirtual +lisp-object-class+ "SCHAR" '("I") +lisp-object+)
   (emit-move-from-stack target))
 
-(defun compile-aref (form &key (target :stack) representation)
+(defun p2-aref (form &key (target :stack) representation)
+  ;; We only optimize the 2-arg case.
   (unless (= (length form) 3)
-    (return-from compile-aref (compile-function-call form target representation)))
+       (return-from p2-aref (compile-function-call form target representation)))
   (compile-form (second form) :target :stack)
   (compile-form (third form) :target :stack :representation :unboxed-fixnum)
   (unless (and (single-valued-p (second form))
@@ -4393,11 +4401,10 @@
   (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
   (emit-move-from-stack target))
 
-(defun compile-not/null (form &key (target :stack) representation)
-  (unless (= (length form) 2)
-    (error 'program-error
-           :format-control "Wrong number of arguments for ~S."
-           :format-arguments (list (car form))))
+(defun p2-not/null (form &key (target :stack) representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-not/null))
   (let ((arg (second form)))
     (cond ((null arg)
            (emit-push-t))
@@ -5384,26 +5391,40 @@
     (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
     (class-file-pathname (compiland-class-file compiland))))
 
+(defvar *compiler-error-bailout*)
+
+(defun make-compiler-error-form (form)
+  `(lambda ,(cadr form)
+     (error 'program-error :format-control "Execution of a form compiled with errors.")))
+
 (defun compile-defun (name form environment &optional (filespec "out.class"))
   (aver (eq (car form) 'LAMBDA))
   (unless (or (null environment) (sys::empty-environment-p environment))
     (compiler-unsupported "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (aver (null *current-compiland*))
-  (handler-bind ((warning #'handle-warning)
-                 (compiler-error #'handle-compiler-error))
-    (compile-1 (make-compiland :name name
-                               :lambda-expression (precompile-form form t)
-                               :class-file (make-class-file :pathname filespec
-                                                            :lambda-list (cadr form))))))
+  (catch 'compile-defun-abort
+    (let* ((class-file (make-class-file :pathname filespec
+                                        :lambda-list (cadr form)))
+           (*compiler-error-bailout*
+            (lambda ()
+              (compile-1 (make-compiland :name name
+                                         :lambda-expression (make-compiler-error-form form)
+                                         :class-file class-file)))))
+      (handler-bind ((warning #'handle-warning)
+                     (compiler-error #'handle-compiler-error))
+        (compile-1 (make-compiland :name name
+                                   :lambda-expression (precompile-form form t)
+                                   :class-file class-file))))))
 
 (defun handle-warning (condition)
   (fresh-line)
-  (format t "~%; Caught ~A:~%;   ~A~%~%" (type-of condition) condition)
+  (format t "~%; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
   (muffle-warning))
 
 (defun handle-compiler-error (condition)
   (fresh-line)
-  (format t "; Caught ~A:~%;   ~A~%" (type-of condition) condition))
+  (format t "~%; Caught ERROR:~%;   ~A~2%" condition)
+  (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
 
 (defun get-lambda-to-compile (definition-designator)
   (if (and (consp definition-designator)
@@ -5434,11 +5455,15 @@
       (funcall fn)
       (let ((*style-warnings* 0)
             (*warnings* 0)
-            (*errors* 0))
+            (*errors* 0)
+            (*in-compilation-unit* t))
         (unwind-protect
             (funcall fn)
-          (unless (and (zerop *warnings*) (zerop *style-warnings*))
+          (unless (zerop (+ *errors* *warnings* *style-warnings*))
             (format t "~%; Compilation unit finished~%")
+            (unless (zerop *errors*)
+              (format t ";   Caught ~D ERROR condition~P~%"
+                      *errors* *errors*))
             (unless (zerop *warnings*)
               (format t ";   Caught ~D WARNING condition~P~%"
                       *warnings* *warnings*))
@@ -5541,11 +5566,7 @@
       (error "Handler not found: ~S" handler))
     (setf (get symbol 'p2-handler) handler)))
 
-(mapc #'install-p2-handler '(aref
-                             atom
-                             block
-                             catch
-                             cons
+(mapc #'install-p2-handler '(catch
                              declare
                              funcall
                              if
@@ -5557,8 +5578,6 @@
                              nth
                              progn
                              quote
-                             rplacd
-                             schar
                              setq
                              throw
                              values))
@@ -5571,18 +5590,22 @@
 (install-p2-handler '/=             'p2-numeric-comparison)
 (install-p2-handler '+              'p2-plus)
 (install-p2-handler '-              'p2-minus)
+(install-p2-handler 'aref           'p2-aref)
 (install-p2-handler 'ash            'p2-ash)
+(install-p2-handler 'atom           'p2-atom)
+(install-p2-handler 'cons           'p2-cons)
 (install-p2-handler 'eql            'p2-eql)
 (install-p2-handler 'flet           'p2-flet)
 (install-p2-handler 'go             'p2-go)
 (install-p2-handler 'function       'p2-function)
 (install-p2-handler 'labels         'p2-labels)
 (install-p2-handler 'logand         'p2-logand)
-(install-p2-handler 'not            'compile-not/null)
-(install-p2-handler 'null           'compile-not/null)
+(install-p2-handler 'not            'p2-not/null)
+(install-p2-handler 'null           'p2-not/null)
 (install-p2-handler 'return-from    'p2-return-from)
+(install-p2-handler 'rplacd         'p2-rplacd)
+(install-p2-handler 'schar          'p2-schar)
 (install-p2-handler 'the            'p2-the)
-;; (install-p2-handler 'unwind-protect 'p2-unwind-protect)
 
 (install-p2-handler '%call-internal 'p2-%call-internal)
 
