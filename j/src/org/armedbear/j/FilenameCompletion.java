@@ -2,7 +2,7 @@
  * FilenameCompletion.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: FilenameCompletion.java,v 1.5 2002-12-06 00:43:06 piso Exp $
+ * $Id: FilenameCompletion.java,v 1.6 2002-12-07 11:38:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,23 +106,29 @@ public final class FilenameCompletion
         }
     }
 
-    private void addCompletionsFromDirectory(List list, File directory, String prefix)
+    private void addCompletionsFromDirectory(List list, File directory,
+        String prefix)
     {
-        String[] names = directory.list();
-        if (names != null) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            final int limit = files.length;
             if (prefix != null && prefix.length() > 0) {
-                for (int i = 0; i < names.length; i++) {
-                    boolean isMatch = false;
+                final int prefixLength = prefix.length();
+                for (int i = 0; i < limit; i++) {
+                    final File file = files[i];
+                    final String name = file.getName();
+                    final boolean isMatch;
                     if (ignoreCase)
-                        isMatch = names[i].regionMatches(true, 0, prefix, 0, prefix.length());
+                        isMatch = name.regionMatches(true, 0, prefix, 0,
+                            prefixLength);
                     else
-                        isMatch = names[i].startsWith(prefix);
+                        isMatch = name.startsWith(prefix);
                     if (isMatch)
-                        list.add(File.getInstance(directory, names[i]));
+                        list.add(file);
                 }
             } else {
-                for (int i = 0; i < names.length; i++)
-                    list.add(File.getInstance(directory, names[i]));
+                for (int i = 0; i < limit; i++)
+                    list.add(files[i]);
             }
         }
     }
