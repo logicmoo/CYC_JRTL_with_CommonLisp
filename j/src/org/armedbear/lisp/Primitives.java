@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.119 2003-03-14 01:59:58 piso Exp $
+ * $Id: Primitives.java,v 1.120 2003-03-14 02:58:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -259,11 +259,11 @@ public final class Primitives extends Module
     {
         switch (index) {
             case ADD: {                         // ### +
-                long result = 0;
+                LispObject result = new Fixnum(0);
                 final int length = args.length;
                 for (int i = 0; i < length; i++)
-                    result += Fixnum.getValue(args[i]);
-                return new Fixnum(result);
+                    result = result.add(args[i]);
+                return result;
             }
             case SUBTRACT:                      // ### -
                 switch (args.length) {
