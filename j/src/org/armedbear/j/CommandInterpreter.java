@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.14 2003-01-15 20:27:42 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.15 2003-02-16 20:06:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -178,7 +178,9 @@ public class CommandInterpreter extends Buffer
     protected void send(final String s)
     {
         try {
-            stdin.write(s.concat("\n"));
+            stdin.write(s);
+            if (!s.endsWith("\n"))
+                stdin.write("\n");
             stdin.flush();
         }
         catch (IOException e) {
