@@ -2,7 +2,7 @@
  * SshFile.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshFile.java,v 1.1.1.1 2002-09-24 16:08:29 piso Exp $
+ * $Id: SshFile.java,v 1.2 2002-11-28 15:21:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,10 @@ public final class SshFile extends File
     {
         FastStringBuffer sb = new FastStringBuffer(256);
         sb.append(PREFIX_SSH);
+        if (userName != null) {
+            sb.append(userName);
+            sb.append('@');
+        }
         sb.append(hostName);
         if (port != DEFAULT_PORT) {
             sb.append(':');
