@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.240 2004-07-25 18:13:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.241 2004-07-25 23:45:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -161,6 +161,7 @@
   (exit (gensym))
   target
   catch-tag
+  return-p ; True if there is any RETURN from this block.
   non-local-return-p ; True if there is a non-local RETURN from this block.
   )
 
@@ -184,10 +185,31 @@
   (cond ((= (length form) 2) ; (block foo)
          nil)
         (t
-         (setf form (list* 'BLOCK (cadr form) (mapcar #'p1 (cddr form))))
-         (make-block-node :form form :name (cadr form))
-;;          form
+         (let ((*blocks* *blocks*)
+               (block (make-block-node :name (cadr form))))
+           (push block *blocks*)
+           (setf form (list* 'BLOCK (cadr form) (mapcar #'p1 (cddr form))))
+;;            (make-block-node :form form :name (cadr form))
+           (setf (block-form block) form)
+           block
+           )
          )))
+
+(defun p1-return-from (form)
+;;   (%format t "P1-RETURN-FROM form = ~S~%" form)
+  (let* ((name (second form))
+         (result-form (third form))
+         (block (find name *blocks* :key #'block-name)))
+;;     (%format t "P1-RETURN-FROM block = ~S~%" block)
+    (cond ((null block)
+           (error "P1-RETURN-FROM: no block named ~S is currently visible." name))
+          ((eq (block-compiland block) *current-compiland*)
+           (setf (block-return-p block) t))
+          (t
+           (setf (block-return-p block) t)
+           (setf (block-non-local-return-p block) t))))
+;;     (%format t "P1-RETURN-FROM block-return-p = ~S~%" (block-return-p block)))
+  (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
 
 (defun p1-flet/labels (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
@@ -267,7 +289,7 @@
 (install-p1-handler 'progn                'p1-default)
 (install-p1-handler 'progv                'identity)
 (install-p1-handler 'quote                'identity)
-(install-p1-handler 'return-from          'p1-lambda)
+(install-p1-handler 'return-from          'p1-return-from)
 (install-p1-handler 'setq                 'p1-setq)
 (install-p1-handler 'symbol-macrolet      'identity)
 (install-p1-handler 'tagbody              'p1-tagbody)
@@ -2535,19 +2557,16 @@
   ))
 
 (defun compile-block-node (block target)
-;;   (%format t "entering compile-block-node~%")
-;;   (%format t "form = ~S~%" (block-form block))
+;;   (%format t "COMPILE-BLOCK-NODE ~S block-return-p = ~S~%"
+;;            (block-name block) (block-return-p block))
   (assert (node-p block))
-  (let* (
-;;          (block (make-block-node :form form
-;;                                  :name (cadr form)
-;;                                  :target target))
-         (*blocks* *blocks*)
+  (let* ((*blocks* *blocks*)
          (*register* *register*)
          env-register)
     (setf (block-target block) target)
     (push block *blocks*)
-    (when (contains-return (cddr (block-form block)))
+;;     (when (contains-return (cddr (block-form block)))
+    (when (block-return-p block)
       ;; Save current dynamic environment.
       (setf env-register (allocate-register))
       (emit-push-current-thread)
@@ -2597,9 +2616,7 @@
       ;; We saved the dynamic environment above. Restore it now.
       (emit 'aload *thread*)
       (emit 'aload env-register)
-      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)))
-;;   (%format t "leaving compile-block-node~%")
-  )
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-return-from (form &key (target *val*))
   (let* ((name (second form))
@@ -2820,6 +2837,7 @@
                 (return t))))))))
 
 (defun compile-lambda (form target)
+;;   (format t "compile-lambda ~S~%" form)
   (let* ((closure-vars *visible-variables*)
          (lambda-list (cadr form))
          (lambda-body (cddr form)))
@@ -2841,12 +2859,10 @@
       (let* ((classfile (format nil "local-~D.class" *child-count*))
              (compiled-function (sys::load-compiled-function
                                  (let ((*nesting-level* (1+ *nesting-level*)))
-                                   (compile-defun nil form nil
-                                                  classfile))))
-             (g (declare-object compiled-function)))
+                                   (compile-defun nil form nil classfile)))))
         (emit 'getstatic
               *this-class*
-              g
+              (declare-object compiled-function)
               +lisp-object+)
 
         (cond ((zerop *nesting-level*)
