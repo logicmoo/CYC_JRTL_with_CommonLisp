@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.41 2004-12-17 17:15:34 piso Exp $
+ * $Id: Function.java,v 1.42 2005-02-12 03:27:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,7 +176,9 @@ public abstract class Function extends Functional
             StringBuffer sb = new StringBuffer("#<FUNCTION");
             sb.append(' ');
             sb.append(name.writeToString());
-            sb.append('>');
+            sb.append(" {");
+            sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
+            sb.append("}>");
             return sb.toString();
         } else
             return unreadableString("FUNCTION");
