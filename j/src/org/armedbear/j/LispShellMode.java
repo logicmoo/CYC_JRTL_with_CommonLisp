@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShellMode.java,v 1.4 2002-10-19 19:46:53 piso Exp $
+ * $Id: LispShellMode.java,v 1.5 2002-10-24 21:52:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,18 +74,23 @@ public final class LispShellMode extends LispMode implements Constants, Mode
 
     public static void enter()
     {
-        CommandInterpreter.shellEnter();
-
         final Editor editor = Editor.currentEditor();
-        final Display display = editor.getDisplay();
         final Buffer buffer = editor.getBuffer();
-        final Mode mode = buffer.getMode();
-        if (mode != getMode()) {
+        if (buffer.getMode() != mode) {
             Debug.bug();
             return;
         }
-
+        
         Line dotLine = editor.getDotLine();
+        Position pos = mode.findContainingSexp(
+            new Position(dotLine, editor.getDotOffset()));
+        
+        CommandInterpreter.shellEnter();
+        
+        if (pos == null)
+            return;
+
+        dotLine = editor.getDotLine();
         if (dotLine.length() > 0)
             return;
 
@@ -98,7 +103,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         }
         try {
             buffer.getFormatter().parseBuffer();
-            int indent = LispMode.getMode().getCorrectIndentation(dotLine, buffer);
+            int indent = mode.getCorrectIndentation(dotLine, buffer);
             if (indent != buffer.getIndentation(dotLine)) {
                 editor.addUndo(SimpleEdit.LINE_EDIT);
                 buffer.setIndentation(dotLine, indent);
@@ -109,6 +114,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
                 editor.moveDotToIndentation();
                 editor.moveCaretToDotCol();
             } else {
+                final Display display = editor.getDisplay();
                 display.setCaretCol(indent - display.getShift());
                 if (buffer.getBooleanProperty(Property.RESTRICT_CARET))
                     editor.fillToCaret();
