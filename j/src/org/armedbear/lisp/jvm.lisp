@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.402 2005-02-21 18:26:52 piso Exp $
+;;; $Id: jvm.lisp,v 1.403 2005-02-23 14:32:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1916,26 +1916,43 @@
         (t
          (write-u4 n stream))))
 
+(defun write-ascii (string length stream)
+  (write-u2 length stream)
+  (dotimes (i length)
+    (sys:write-8-bits (char-code (schar string i)) stream)))
+
 (defun write-utf8 (string stream)
   (declare (optimize speed))
-  (dotimes (i (length string))
-    (declare (type fixnum i))
-    (let ((c (schar string i)))
-      (if (eql c #\null)
-          (progn
-            (sys::write-8-bits #xC0 stream)
-            (sys::write-8-bits #x80 stream))
-          (sys::write-8-bits (char-int c) stream)))))
-
-(defun utf8-length (string)
-  (declare (optimize speed))
-  (let ((length (length string)))
+  (let ((length (length string))
+        (must-convert nil))
     (declare (type fixnum length))
     (dotimes (i length)
       (declare (type fixnum i))
-      (when (eql (schar string i) #\null)
-        (incf length)))
-    length))
+      (unless (< 0 (char-code (schar string i)) #x80)
+        (setf must-convert t)
+        (return)))
+    (if must-convert
+        (let ((octets (make-array (* length 2)
+                                  :element-type '(unsigned-byte 8)
+                                  :adjustable t
+                                  :fill-pointer 0)))
+          (dotimes (i length)
+            (declare (type fixnum i))
+            (let* ((c (schar string i))
+                   (n (char-code c)))
+              (cond ((zerop n)
+                     (vector-push-extend #xC0 octets)
+                     (vector-push-extend #x80 octets))
+                    ((< 0 n #x80)
+                     (vector-push-extend n octets))
+                    (t
+                     (let ((char-octets (char-to-utf8 c)))
+                       (dotimes (j (length char-octets))
+                         (vector-push-extend (svref char-octets j) octets)))))))
+          (write-u2 (length octets) stream)
+          (dotimes (i (length octets))
+            (sys:write-8-bits (aref octets i) stream)))
+        (write-ascii string length stream))))
 
 (defun write-constant-pool-entry (entry stream)
   (declare (optimize speed))
@@ -1943,7 +1960,6 @@
     (write-u1 tag stream)
     (case tag
       (1 ; UTF8
-       (write-u2 (utf8-length (third entry)) stream)
        (write-utf8 (third entry) stream))
       (3 ; int
        (write-s4 (second entry) stream))
