@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.53 2004-06-04 00:38:15 piso Exp $
+ * $Id: Load.java,v 1.54 2004-06-05 00:49:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -222,9 +222,9 @@ public final class Load extends Lisp
             }
             StringBuffer sb = new StringBuffer();
             sb.append("File uses fasl format ");
-            sb.append(second);
+            sb.append(second.writeToString());
             sb.append(", but fasl format ");
-            sb.append(_FASL_VERSION_.getSymbolValue());
+            sb.append(_FASL_VERSION_.getSymbolValue().writeToString());
             sb.append(" is required. Please recompile the source.");
             return signal(new SimpleError(sb.toString()));
         }
