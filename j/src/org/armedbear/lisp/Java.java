@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.11 2003-09-22 17:17:53 piso Exp $
+ * $Id: Java.java,v 1.12 2003-10-23 15:01:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,7 +189,8 @@ public final class Java extends Module
 
     // ### jnew
     // jnew constructor &rest args
-    private static final Primitive JNEW = new Primitive("jnew", PACKAGE_JAVA) {
+    private static final Primitive JNEW = new Primitive("jnew", PACKAGE_JAVA)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
@@ -204,6 +205,8 @@ public final class Java extends Module
                         initargs[i-1] = ((LispString)arg).getValue();
                     else if (arg instanceof Fixnum)
                         initargs[i-1] = new Integer(((Fixnum)arg).getValue());
+                    else if (arg instanceof LispFloat)
+                        initargs[i-1] = new Double(((LispFloat)arg).getValue());
                 }
                 return new JavaObject(constructor.newInstance(initargs));
             }
@@ -215,7 +218,8 @@ public final class Java extends Module
 
     // ### jcall
     // jcall method instance &rest args
-    private static final Primitive JCALL = new Primitive("jcall", PACKAGE_JAVA) {
+    private static final Primitive JCALL = new Primitive("jcall", PACKAGE_JAVA)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
@@ -275,10 +279,12 @@ public final class Java extends Module
             return NIL;
         if (obj instanceof Boolean)
             return ((Boolean)obj).booleanValue() ? T : NIL;
-        if (obj instanceof Long)
-            return new Bignum(((Long)obj).longValue());
         if (obj instanceof Integer)
             return new Fixnum(((Integer)obj).intValue());
+        if (obj instanceof Long)
+            return new Bignum(((Long)obj).longValue());
+        if (obj instanceof Double || obj instanceof Float)
+            return new LispFloat(((Number)obj).doubleValue());
         if (obj instanceof String)
             return new LispString((String)obj);
         if (obj instanceof Object[]) {
