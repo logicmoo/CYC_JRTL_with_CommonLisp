@@ -1,8 +1,8 @@
 /*
  * Readtable.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Readtable.java,v 1.4 2003-12-16 03:13:22 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Readtable.java,v 1.5 2004-03-05 18:56:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +25,13 @@ import java.util.ArrayList;
 
 public final class Readtable extends LispObject
 {
-    private ArrayList table;
+    private final ArrayList table;
+    private LispObject readtableCase;
 
     public Readtable()
     {
         table = new ArrayList();
+        readtableCase = Keyword.UPCASE;
     }
 
     private Readtable(Readtable rt)
@@ -154,7 +156,8 @@ public final class Readtable extends LispObject
     // get-dispatch-macro-character disp-char sub-char &optional readtable
     // => function
     private static final Primitive GET_DISPATCH_MACRO_CHARACTER =
-        new Primitive("get-dispatch-macro-character", "disp-char sub-char &optional readtable")
+        new Primitive("get-dispatch-macro-character",
+                      "disp-char sub-char &optional readtable")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -175,7 +178,8 @@ public final class Readtable extends LispObject
     // set-dispatch-macro-character disp-char sub-char new-function &optional readtable
     // => t
     private static final Primitive SET_DISPATCH_MACRO_CHARACTER =
-        new Primitive("set-dispatch-macro-character", "disp-char sub-char new-function &optional readtable")
+        new Primitive("set-dispatch-macro-character",
+                      "disp-char sub-char new-function &optional readtable")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -190,6 +194,49 @@ public final class Readtable extends LispObject
             else
                 readtable = getCurrentReadtable();
             return readtable.setDispatchMacroCharacter(dispChar, subChar, function);
+        }
+    };
+
+    // ### readtable-case readtable => mode
+    private static final Primitive1 READTABLE_CASE =
+        new Primitive1("readtable-case", "readtable")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((Readtable)arg).readtableCase;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.READTABLE));
+            }
+        }
+    };
+
+    // ### %set-readtable-case readtable new-mode => new-mode
+    private static final Primitive2 _SET_READTABLE_CASE =
+        new Primitive2("%set-readtable-case", PACKAGE_SYS, false,
+                       "readtable new-mode")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                Readtable readtable = (Readtable) first;
+                if (second == Keyword.UPCASE || second == Keyword.DOWNCASE ||
+                    second == Keyword.INVERT || second == Keyword.PRESERVE)
+                {
+                    readtable.readtableCase = second;
+                    return second;
+                }
+                return signal(new TypeError(second, list5(Symbol.MEMBER,
+                                                          Keyword.INVERT,
+                                                          Keyword.PRESERVE,
+                                                          Keyword.DOWNCASE,
+                                                          Keyword.UPCASE)));
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.READTABLE));
+            }
         }
     };
 }
