@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.220 2004-07-19 16:20:01 piso Exp $
+;;; $Id: jvm.lisp,v 1.221 2004-07-19 16:35:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
 (shadow '(method variable))
 
 (defvar *use-locals-vector* nil)
-(defvar *new-way* t) ;; FIXME Remove this after transition to new way!
 
 ;; FIXME
 ;; This controls compiler debugging output, not debuggability of compiled code!
@@ -90,7 +89,6 @@
   (kind 'LOCAL) ; ARG, LOCAL, SPECIAL
   special-p
   register ; register number or NIL
-;;   context
   (level *nesting-level*)
   index)
 
@@ -107,7 +105,6 @@
 
 (defun add-variable-to-context (variable)
   (assert (variable-p variable))
-;;   (setf (variable-context variable) *context*)
   (push variable (context-vars *context*)))
 
 
@@ -1861,61 +1858,37 @@
         (maybe-emit-clear-values arg)
         (incf i))) ; array left on stack here
     ;; Stack: template-function args
-    (if *new-way*
-        (progn
-;;           (format t "compile-local-function-call *nesting-level* = ~S local-function-nesting-level = ~S~%"
-;;                   *nesting-level*
-;;                   (local-function-nesting-level local-function))
-          (cond ((zerop *nesting-level*)
-                 ;; Make a vector of size 1.
-                 (emit 'sipush 1)
-                 (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
-                 ;; Store args/locals register in slot 0.
-                 (emit 'dup)
-                 (emit 'sipush 0)
-                 (emit 'aload 1) ;; Args/locals register.
-                 (emit 'aastore))
-;;                 ((eql (local-function-nesting-level local-function) 1)
-;;                  (emit 'sipush 1)
-;;                  (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
-;;                  (emit 'dup)
-;;                  (emit 'sipush 0)
-;;                  (emit 'aload *context-register*)
-;;                  (emit 'aastore)
-;;                  )
-                ((= *nesting-level* (local-function-nesting-level local-function))
-;;                  (format t "same level case~%")
-                 (emit 'aload 2)
-                 )
-                (t
-                 ;; This is the general case.
-;;                  (%format t "line 1887~%")
-;;                  (assert nil)
-                 (emit 'sipush (local-function-nesting-level local-function))
-                 (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
-                 (dotimes (i (1- (local-function-nesting-level local-function)))
-                   (emit 'dup)
-                   (emit 'sipush i)
-                   (emit 'aload 2)
-                   (emit 'sipush i)
-                   (emit 'aaload)
-                   (emit 'aastore))
-                 (emit 'dup)
-                 (emit 'sipush (1- (local-function-nesting-level local-function)))
-                 (emit 'aload 1) ; Args/locals.
-                 (emit 'aastore)
-                 )))
-        (emit 'aload *context-register*))
+    (cond ((zerop *nesting-level*)
+           ;; Make a vector of size 1.
+           (emit 'sipush 1)
+           (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+           ;; Store args/locals register in slot 0.
+           (emit 'dup)
+           (emit 'sipush 0)
+           (emit 'aload 1) ;; Args/locals register.
+           (emit 'aastore))
+          ((= *nesting-level* (local-function-nesting-level local-function))
+           (emit 'aload 2))
+          (t
+           ;; This is the general case.
+           (emit 'sipush (local-function-nesting-level local-function))
+           (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+           (dotimes (i (1- (local-function-nesting-level local-function)))
+             (emit 'dup)
+             (emit 'sipush i)
+             (emit 'aload 2)
+             (emit 'sipush i)
+             (emit 'aaload)
+             (emit 'aastore))
+           (emit 'dup)
+           (emit 'sipush (1- (local-function-nesting-level local-function)))
+           (emit 'aload 1) ; Args/locals.
+           (emit 'aastore)))
     ;; Stack: template-function args context
-    (if *new-way*
-        (emit-invokevirtual +lisp-object-class+
-                            "execute"
-                            "([Lorg/armedbear/lisp/LispObject;[[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                            -2)
-        (emit-invokevirtual +lisp-object-class+
-                            "execute"
-                            "([Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                            -2))
+    (emit-invokevirtual +lisp-object-class+
+                        "execute"
+                        "([Lorg/armedbear/lisp/LispObject;[[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                        -2)
     (cond ((null target)
            (emit 'pop)
            (maybe-emit-clear-values form))
@@ -2997,9 +2970,7 @@
     (setq *hairy-arglist-p* t)
     (return-from analyze-args
                  (if *child-p*
-                     (if *new-way*
-                         #.(format nil "([~A[[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
-                         #.(format nil "([~A[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+))
+                     #.(format nil "([~A[[~A)~A" +lisp-object+ +lisp-object+ +lisp-object+)
                      #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
   (case (length args)
     (0 #.(format nil "()~A" +lisp-object+))
@@ -3195,7 +3166,6 @@
           (emit 'aload_0)
           (emit 'aload_1)
           ; Reserve extra slots for locals if applicable.
-;;           (if (and *use-locals-vector* (not *child-p*))
           (let ((extra (if *use-locals-vector*
                            (length (context-vars *context*))
                            0)))
@@ -3209,20 +3179,6 @@
                               "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
                               -2)
           (emit 'astore_1))
-
-        #+nil
-        (if *new-way*
-            (case *nesting-level*
-              (0)
-              (1
-;;                (emit 'aload 2) ;; Vector of context vectors.
-;;                (emit 'sipush 0)
-;;                (emit 'aaload) ;; Context vector.
-;;                (emit 'astore 2)
-               )
-              (t
-               (%format t "line 3211~%")
-               (assert nil))))
 
         (initialize-thread-var)
         (setf *code* (append code *code*)))
