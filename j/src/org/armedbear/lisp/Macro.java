@@ -2,7 +2,7 @@
  * Macro.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Macro.java,v 1.3 2003-03-10 19:35:44 piso Exp $
+ * $Id: Macro.java,v 1.4 2003-03-12 01:31:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,6 @@ public final class Macro extends Closure
         }
         return execute(argArray);
     }
-
 
     public final String toString()
     {
