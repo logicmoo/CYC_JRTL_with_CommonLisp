@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.9 2004-03-11 19:00:32 piso Exp $
+ * $Id: LispReader.java,v 1.10 2004-03-11 20:02:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public final class LispReader extends Lisp
         new ReaderMacroFunction("read-comment", PACKAGE_SYS, false,
                                 "stream character")
     {
-        public LispObject execute(Stream stream, char c)
+        public LispObject execute(Stream stream, char ignored)
             throws ConditionThrowable
         {
             while (true) {
@@ -37,6 +37,42 @@ public final class LispReader extends Lisp
                 if (n == '\n')
                     return null;
             }
+        }
+    };
+
+    public static final ReaderMacroFunction READ_STRING =
+        new ReaderMacroFunction("read-string", PACKAGE_SYS, false,
+                                "stream character")
+    {
+        public LispObject execute(Stream stream, char ignored)
+            throws ConditionThrowable
+        {
+            StringBuffer sb = new StringBuffer();
+            while (true) {
+                int n = stream._readChar();
+                if (n < 0) {
+                    signal(new EndOfFile(stream));
+                    // Not reached.
+                    return null;
+                }
+                char c = (char) n;
+                if (c == '\\') {
+                    // Single escape.
+                    n = stream._readChar();
+                    if (n < 0) {
+                        signal(new EndOfFile(stream));
+                        // Not reached.
+                        return null;
+                    }
+                    sb.append((char)n);
+                    continue;
+                }
+                if (c == '"')
+                    break;
+                // Default.
+                sb.append(c);
+            }
+            return new SimpleString(sb);
         }
     };
 }
