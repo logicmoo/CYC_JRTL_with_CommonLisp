@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.92 2004-10-24 19:24:34 piso Exp $
+ * $Id: Stream.java,v 1.93 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1380,8 +1380,8 @@ public class Stream extends LispObject
     };
 
     // ### stream-line-number
-    private static final Primitive1 STREAM_LINE_NUMBER =
-        new Primitive1("stream-line-number", PACKAGE_SYS, false, "stream")
+    private static final Primitive STREAM_LINE_NUMBER =
+        new Primitive("stream-line-number", PACKAGE_SYS, false, "stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1391,8 +1391,8 @@ public class Stream extends LispObject
     };
 
     // ### stream-offset
-    private static final Primitive1 STREAM_OFFSET =
-        new Primitive1("stream-offset", PACKAGE_SYS, false, "stream")
+    private static final Primitive STREAM_OFFSET =
+        new Primitive("stream-offset", PACKAGE_SYS, false, "stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.78 2004-11-03 15:27:22 piso Exp $
+ * $Id: LispFloat.java,v 1.79 2004-11-03 15:39:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -476,8 +476,8 @@ public final class LispFloat extends LispObject
 
     // ### integer-decode-float
     // integer-decode-float float => significand, exponent, integer-sign
-    private static final Primitive1 INTEGER_DECODE_FLOAT =
-        new Primitive1("integer-decode-float", "float")
+    private static final Primitive INTEGER_DECODE_FLOAT =
+        new Primitive("integer-decode-float", "float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -531,8 +531,8 @@ public final class LispFloat extends LispObject
     }
 
     // ### rational
-    private static final Primitive1 RATIONAL =
-        new Primitive1("rational", "number")
+    private static final Primitive RATIONAL =
+        new Primitive("rational", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -546,8 +546,8 @@ public final class LispFloat extends LispObject
 
     // ### float-radix
     // float-radix float => float-radix
-    private static final Primitive1 FLOAT_RADIX =
-        new Primitive1("float-radix", "float")
+    private static final Primitive FLOAT_RADIX =
+        new Primitive("float-radix", "float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -561,8 +561,8 @@ public final class LispFloat extends LispObject
 
     // ### float-digits
     // float-digits float => float-digits
-    private static final Primitive1 FLOAT_DIGITS =
-        new Primitive1("float-digits", "float")
+    private static final Primitive FLOAT_DIGITS =
+        new Primitive("float-digits", "float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -602,8 +602,8 @@ public final class LispFloat extends LispObject
     }
 
     // ### coerce-to-float
-    private static final Primitive1 COERCE_TO_FLOAT =
-        new Primitive1("coerce-to-float", PACKAGE_SYS, false)
+    private static final Primitive COERCE_TO_FLOAT =
+        new Primitive("coerce-to-float", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -628,7 +628,7 @@ public final class LispFloat extends LispObject
 
     // ### floatp
     // floatp object => generalized-boolean
-    private static final Primitive1 FLOATP = new Primitive1("floatp", "object")
+    private static final Primitive FLOATP = new Primitive("floatp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -637,8 +637,8 @@ public final class LispFloat extends LispObject
     };
 
     // ### double-float-high-bits
-    private static final Primitive1 DOUBLE_FLOAT_HIGH_BITS =
-        new Primitive1("double-float-high-bits", PACKAGE_SYS, false, "float")
+    private static final Primitive DOUBLE_FLOAT_HIGH_BITS =
+        new Primitive("double-float-high-bits", PACKAGE_SYS, false, "float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -651,8 +651,8 @@ public final class LispFloat extends LispObject
     };
 
     // ### double-float-low-bits
-    private static final Primitive1 DOUBLE_FLOAT_LOW_BITS =
-        new Primitive1("double-float-low-bits", PACKAGE_SYS, false, "float")
+    private static final Primitive DOUBLE_FLOAT_LOW_BITS =
+        new Primitive("double-float-low-bits", PACKAGE_SYS, false, "float")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -683,8 +683,8 @@ public final class LispFloat extends LispObject
         }
     };
 
-    private static final Primitive1 FLOAT_INFINITY_P =
-        new Primitive1("float-infinity-p", PACKAGE_SYS, false)
+    private static final Primitive FLOAT_INFINITY_P =
+        new Primitive("float-infinity-p", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -695,8 +695,8 @@ public final class LispFloat extends LispObject
         }
     };
 
-    private static final Primitive1 FLOAT_NAN_P =
-        new Primitive1("float-nan-p", PACKAGE_SYS, false)
+    private static final Primitive FLOAT_NAN_P =
+        new Primitive("float-nan-p", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable

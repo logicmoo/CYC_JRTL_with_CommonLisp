@@ -2,7 +2,7 @@
  * delete_file.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: delete_file.java,v 1.5 2004-09-16 18:34:19 piso Exp $
+ * $Id: delete_file.java,v 1.6 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 import java.io.File;
 
-public final class delete_file extends Primitive1
+public final class delete_file extends Primitive
 {
     private delete_file()
     {
@@ -56,5 +56,5 @@ public final class delete_file extends Primitive1
         }
     }
 
-    private static final Primitive1 DELETE_FILE = new delete_file();
+    private static final Primitive DELETE_FILE = new delete_file();
 }

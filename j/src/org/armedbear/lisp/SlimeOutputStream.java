@@ -2,7 +2,7 @@
  * SlimeOutputStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SlimeOutputStream.java,v 1.4 2004-10-13 00:22:19 piso Exp $
+ * $Id: SlimeOutputStream.java,v 1.5 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,8 +120,8 @@ public final class SlimeOutputStream extends Stream
 
     // ### %make-string-output-stream
     // %make-string-output-stream element-type => string-stream
-    private static final Primitive1 MAKE_SLIME_OUTPUT_STREAM =
-        new Primitive1("make-slime-output-stream", PACKAGE_EXT, true, "function")
+    private static final Primitive MAKE_SLIME_OUTPUT_STREAM =
+        new Primitive("make-slime-output-stream", PACKAGE_EXT, true, "function")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * unbound_slot_instance.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: unbound_slot_instance.java,v 1.1 2004-01-02 01:19:12 piso Exp $
+ * $Id: unbound_slot_instance.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### unbound-slot-instance
-public final class unbound_slot_instance extends Primitive1
+public final class unbound_slot_instance extends Primitive
 {
     private unbound_slot_instance()
     {

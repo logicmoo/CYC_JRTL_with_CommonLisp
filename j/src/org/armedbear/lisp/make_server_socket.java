@@ -2,7 +2,7 @@
  * make_server_socket.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: make_server_socket.java,v 1.1 2004-05-25 18:12:51 piso Exp $
+ * $Id: make_server_socket.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 import java.net.ServerSocket;
 
 // ### %make-server-socket
-public final class make_server_socket extends Primitive1
+public final class make_server_socket extends Primitive
 {
     private make_server_socket()
     {
@@ -44,5 +44,5 @@ public final class make_server_socket extends Primitive1
         }
     }
 
-    private static final Primitive1 MAKE_SERVER_SOCKET = new make_server_socket();
+    private static final Primitive MAKE_SERVER_SOCKET = new make_server_socket();
 }

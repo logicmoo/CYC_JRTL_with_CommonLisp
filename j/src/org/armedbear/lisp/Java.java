@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Java.java,v 1.44 2004-08-10 22:28:13 asimon Exp $
+ * $Id: Java.java,v 1.45 2004-11-03 15:38:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@ import java.lang.reflect.Array;
 public final class Java extends Lisp
 {
     // ### jclass
-    private static final Primitive1 JCLASS = new Primitive1("jclass", PACKAGE_JAVA, true, "name")
+    private static final Primitive JCLASS = new Primitive("jclass", PACKAGE_JAVA, true, "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -540,7 +540,7 @@ public final class Java extends Lisp
         }
     };
 
-    private static final Primitive1 JAVA_OBJECT_P = new Primitive1("java-object-p", PACKAGE_JAVA, true,
+    private static final Primitive JAVA_OBJECT_P = new Primitive("java-object-p", PACKAGE_JAVA, true,
                                                                    "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
@@ -551,8 +551,8 @@ public final class Java extends Lisp
 
     // ### jobject-lisp-value
     // jobject-lisp-value java-object
-    private static final Primitive1 JOBJECT_LISP_VALUE =
-        new Primitive1("jobject-lisp-value", PACKAGE_JAVA, true, "java-object")
+    private static final Primitive JOBJECT_LISP_VALUE =
+        new Primitive("jobject-lisp-value", PACKAGE_JAVA, true, "java-object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

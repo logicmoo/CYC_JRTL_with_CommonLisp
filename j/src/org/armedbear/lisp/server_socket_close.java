@@ -2,7 +2,7 @@
  * server_socket_close.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: server_socket_close.java,v 1.1 2004-05-25 18:13:46 piso Exp $
+ * $Id: server_socket_close.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 import java.net.ServerSocket;
 
 // ### %server-socket-close
-public final class server_socket_close extends Primitive1
+public final class server_socket_close extends Primitive
 {
     private server_socket_close()
     {
@@ -44,5 +44,5 @@ public final class server_socket_close extends Primitive1
         }
     }
 
-    private static final Primitive1 SERVER_SOCKET_CLOSE = new server_socket_close();
+    private static final Primitive SERVER_SOCKET_CLOSE = new server_socket_close();
 }

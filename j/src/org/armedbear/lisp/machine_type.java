@@ -2,7 +2,7 @@
  * machine_type.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: machine_type.java,v 1.1 2004-02-27 17:20:31 piso Exp $
+ * $Id: machine_type.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### machine-type
-public final class machine_type extends Primitive0
+public final class machine_type extends Primitive
 {
     private machine_type()
     {
@@ -34,5 +34,5 @@ public final class machine_type extends Primitive0
         return new SimpleString(System.getProperty("os.arch"));
     }
 
-    private static final Primitive0 MACHINE_TYPE = new machine_type();
+    private static final Primitive MACHINE_TYPE = new machine_type();
 }

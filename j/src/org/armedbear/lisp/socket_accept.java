@@ -2,7 +2,7 @@
  * socket_accept.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: socket_accept.java,v 1.3 2004-06-13 18:09:55 asimon Exp $
+ * $Id: socket_accept.java,v 1.4 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 // ### %socket-accept
-public final class socket_accept extends Primitive1
+public final class socket_accept extends Primitive
 {
     private socket_accept()
     {
@@ -46,5 +46,5 @@ public final class socket_accept extends Primitive1
 	}
     }
 
-    private static final Primitive1 SOCKET_ACCEPT = new socket_accept();
+    private static final Primitive SOCKET_ACCEPT = new socket_accept();
 }

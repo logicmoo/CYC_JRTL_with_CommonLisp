@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispCharacter.java,v 1.58 2004-10-20 00:11:10 piso Exp $
+ * $Id: LispCharacter.java,v 1.59 2004-11-03 15:38:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,8 +220,8 @@ public final class LispCharacter extends LispObject
         return sb.toString();
     }
 
-    private static final Primitive1 CHARACTER =
-        new Primitive1("character", "character")
+    private static final Primitive CHARACTER =
+        new Primitive("character", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -240,8 +240,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### whitespacep
-    private static final Primitive1 WHITESPACEP =
-        new Primitive1("whitespacep", PACKAGE_SYS, false)
+    private static final Primitive WHITESPACEP =
+        new Primitive("whitespacep", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -255,7 +255,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### char-code
-    private static final Primitive1 CHAR_CODE = new Primitive1("char-code", "character")
+    private static final Primitive CHAR_CODE = new Primitive("char-code", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -269,7 +269,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### char-int
-    private static final Primitive1 CHAR_INT = new Primitive1("char-int", "character")
+    private static final Primitive CHAR_INT = new Primitive("char-int", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -283,7 +283,7 @@ public final class LispCharacter extends LispObject
     };
 
     // ### code-char
-    private static final Primitive1 CODE_CHAR = new Primitive1("code-char", "code")
+    private static final Primitive CODE_CHAR = new Primitive("code-char", "code")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -300,8 +300,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### characterp
-    private static final Primitive1 CHARACTERP =
-        new Primitive1("characterp", "object")
+    private static final Primitive CHARACTERP =
+        new Primitive("characterp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -310,8 +310,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### both-case-p
-    private static final Primitive1 BOTH_CASE_P =
-        new Primitive1("both-case-p", "character")
+    private static final Primitive BOTH_CASE_P =
+        new Primitive("both-case-p", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -323,8 +323,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### lower-case-p
-    private static final Primitive1 LOWER_CASE_P =
-        new Primitive1("lower-case-p", "character")
+    private static final Primitive LOWER_CASE_P =
+        new Primitive("lower-case-p", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -333,8 +333,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### upper-case-p
-    private static final Primitive1 UPPER_CASE_P =
-        new Primitive1("upper-case-p", "character")
+    private static final Primitive UPPER_CASE_P =
+        new Primitive("upper-case-p", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -343,8 +343,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### char-downcase
-    private static final Primitive1 CHAR_DOWNCASE =
-        new Primitive1("char-downcase", "character")
+    private static final Primitive CHAR_DOWNCASE =
+        new Primitive("char-downcase", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -353,8 +353,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### char-upcase
-    private static final Primitive1 CHAR_UPCASE =
-        new Primitive1("char-upcase", "character")
+    private static final Primitive CHAR_UPCASE =
+        new Primitive("char-upcase", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -453,8 +453,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### standard-char-p
-    private static final Primitive1 STANDARD_CHAR_P =
-        new Primitive1("standard-char-p", "character")
+    private static final Primitive STANDARD_CHAR_P =
+        new Primitive("standard-char-p", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -468,8 +468,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### graphic-char-p
-    private static final Primitive1 GRAPHIC_CHAR_P =
-        new Primitive1("graphic-char-p", "char")
+    private static final Primitive GRAPHIC_CHAR_P =
+        new Primitive("graphic-char-p", "char")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -486,8 +486,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### alpha-char-p
-    private static final Primitive1 ALPHA_CHAR_P =
-        new Primitive1("alpha-char-p", "character")
+    private static final Primitive ALPHA_CHAR_P =
+        new Primitive("alpha-char-p", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -501,8 +501,8 @@ public final class LispCharacter extends LispObject
     };
 
     // ### alphanumericp
-    private static final Primitive1 ALPHANUMERICP =
-        new Primitive1("alphanumericp", "character")
+    private static final Primitive ALPHANUMERICP =
+        new Primitive("alphanumericp", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -541,8 +541,8 @@ public final class LispCharacter extends LispObject
     }
 
     // ### name-char
-    private static final Primitive1 NAME_CHAR =
-        new Primitive1("name-char", "name")
+    private static final Primitive NAME_CHAR =
+        new Primitive("name-char", "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -576,8 +576,8 @@ public final class LispCharacter extends LispObject
     }
 
     // ### char-name
-    private static final Primitive1 CHAR_NAME =
-        new Primitive1("char-name", "character")
+    private static final Primitive CHAR_NAME =
+        new Primitive("char-name", "character")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

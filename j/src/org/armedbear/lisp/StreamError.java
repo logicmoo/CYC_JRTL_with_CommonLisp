@@ -2,7 +2,7 @@
  * StreamError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StreamError.java,v 1.13 2004-10-13 00:22:20 piso Exp $
+ * $Id: StreamError.java,v 1.14 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,8 +99,8 @@ public class StreamError extends LispError
     }
 
     // ### stream-error-stream
-    private static final Primitive1 STREAM_ERROR_STREAM =
-        new Primitive1("stream-error-stream", "condition")
+    private static final Primitive STREAM_ERROR_STREAM =
+        new Primitive("stream-error-stream", "condition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SlotClass.java,v 1.7 2004-11-03 15:27:23 piso Exp $
+ * $Id: SlotClass.java,v 1.8 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,8 +68,8 @@ public class SlotClass extends LispClass
     }
 
     // ### class-direct-slots
-    private static final Primitive1 CLASS_DIRECT_SLOTS =
-        new Primitive1("class-direct-slots", PACKAGE_SYS, false)
+    private static final Primitive CLASS_DIRECT_SLOTS =
+        new Primitive("class-direct-slots", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -98,8 +98,8 @@ public class SlotClass extends LispClass
     };
 
     // ### class-slots
-    private static final Primitive1 CLASS_SLOTS =
-        new Primitive1("class-slots", PACKAGE_SYS, false)
+    private static final Primitive CLASS_SLOTS =
+        new Primitive("class-slots", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -128,8 +128,8 @@ public class SlotClass extends LispClass
     };
 
     // ### class-direct-default-initargs
-    private static final Primitive1 CLASS_DIRECT_DEFAULT_INITARGS =
-        new Primitive1("class-direct-default-initargs", PACKAGE_SYS, false)
+    private static final Primitive CLASS_DIRECT_DEFAULT_INITARGS =
+        new Primitive("class-direct-default-initargs", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -158,8 +158,8 @@ public class SlotClass extends LispClass
     };
 
     // ### class-default-initargs
-    private static final Primitive1 CLASS_DEFAULT_INITARGS =
-        new Primitive1("class-default-initargs", PACKAGE_SYS, false)
+    private static final Primitive CLASS_DEFAULT_INITARGS =
+        new Primitive("class-default-initargs", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable

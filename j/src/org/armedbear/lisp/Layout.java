@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Layout.java,v 1.6 2004-11-03 15:06:03 piso Exp $
+ * $Id: Layout.java,v 1.7 2004-11-03 15:38:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,8 +58,8 @@ public final class Layout extends LispObject
     };
 
     // ### layout-class
-    private static final Primitive1 LAYOUT_CLASS =
-        new Primitive1("layout-class", PACKAGE_SYS, false)
+    private static final Primitive LAYOUT_CLASS =
+        new Primitive("layout-class", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -73,8 +73,8 @@ public final class Layout extends LispObject
     };
 
     // ### layout-length
-    private static final Primitive1 LAYOUT_LENGTH =
-        new Primitive1("layout-length", PACKAGE_SYS, false)
+    private static final Primitive LAYOUT_LENGTH =
+        new Primitive("layout-length", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * input_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: input_stream_p.java,v 1.4 2004-01-31 20:11:13 piso Exp $
+ * $Id: input_stream_p.java,v 1.5 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### input-stream-p
-public final class input_stream_p extends Primitive1
+public final class input_stream_p extends Primitive
 {
     private input_stream_p()
     {
@@ -39,5 +39,5 @@ public final class input_stream_p extends Primitive1
         }
     }
 
-    private static final Primitive1 INPUT_STREAM_P = new input_stream_p();
+    private static final Primitive INPUT_STREAM_P = new input_stream_p();
 }

@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: PackageFunctions.java,v 1.27 2004-08-15 12:39:38 piso Exp $
+ * $Id: PackageFunctions.java,v 1.28 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ public final class PackageFunctions extends Lisp
 {
     // ### packagep
     // packagep object => generalized-boolean
-    private static final Primitive1 PACKAGEP = new Primitive1("packagep", "object")
+    private static final Primitive PACKAGEP = new Primitive("packagep", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -35,8 +35,8 @@ public final class PackageFunctions extends Lisp
 
     // ### package-name
     // package-name package => nicknames
-    private static final Primitive1 PACKAGE_NAME =
-        new Primitive1("package-name", "package")
+    private static final Primitive PACKAGE_NAME =
+        new Primitive("package-name", "package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -47,8 +47,8 @@ public final class PackageFunctions extends Lisp
 
     // ### package-nicknames
     // package-nicknames package => nicknames
-    private static final Primitive1 PACKAGE_NICKNAMES =
-        new Primitive1("package-nicknames", "package")
+    private static final Primitive PACKAGE_NICKNAMES =
+        new Primitive("package-nicknames", "package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -58,8 +58,8 @@ public final class PackageFunctions extends Lisp
 
     // ### package-use-list
     // package-use-list package => use-list
-    private static final Primitive1 PACKAGE_USE_LIST =
-        new Primitive1("package-use-list", "package")
+    private static final Primitive PACKAGE_USE_LIST =
+        new Primitive("package-use-list", "package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -69,8 +69,8 @@ public final class PackageFunctions extends Lisp
 
     // ### package-used-by-list
     // package-used-by-list package => used-by-list
-    private static final Primitive1 PACKAGE_USED_BY_LIST =
-        new Primitive1("package-used-by-list", "package")
+    private static final Primitive PACKAGE_USED_BY_LIST =
+        new Primitive("package-used-by-list", "package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -172,8 +172,8 @@ public final class PackageFunctions extends Lisp
 
     // ### package-shadowing-symbols
     // package-shadowing-symbols package => used-by-list
-    private static final Primitive1 PACKAGE_SHADOWING_SYMBOLS =
-        new Primitive1("package-shadowing-symbols", "package")
+    private static final Primitive PACKAGE_SHADOWING_SYMBOLS =
+        new Primitive("package-shadowing-symbols", "package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -182,8 +182,8 @@ public final class PackageFunctions extends Lisp
     };
 
     // ### delete-package
-    private static final Primitive1 DELETE_PACKAGE =
-        new Primitive1("delete-package", "package")
+    private static final Primitive DELETE_PACKAGE =
+        new Primitive("delete-package", "package")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -234,8 +234,8 @@ public final class PackageFunctions extends Lisp
         }
     };
 
-    private static final Primitive0 LIST_ALL_PACKAGES =
-        new Primitive0("list-all-packages", "")
+    private static final Primitive LIST_ALL_PACKAGES =
+        new Primitive("list-all-packages", "")
     {
         public LispObject execute()
         {

@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: probe_file.java,v 1.13 2004-01-08 17:42:02 piso Exp $
+ * $Id: probe_file.java,v 1.14 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,8 @@ public final class probe_file extends Lisp
 {
     // ### probe-file
     // probe-file pathspec => truename
-    private static final Primitive1 PROBE_FILE =
-        new Primitive1("probe-file", "pathspec")
+    private static final Primitive PROBE_FILE =
+        new Primitive("probe-file", "pathspec")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -39,8 +39,8 @@ public final class probe_file extends Lisp
 
     // ### truename
     // truename filespec => truename
-    private static final Primitive1 TRUENAME =
-        new Primitive1("truename", "filespec")
+    private static final Primitive TRUENAME =
+        new Primitive("truename", "filespec")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -50,8 +50,8 @@ public final class probe_file extends Lisp
 
     // ### probe-directory
     // probe-directory pathspec => truename
-    private static final Primitive1 PROBE_DIRECTORY =
-        new Primitive1("probe-directory", PACKAGE_EXT, true)
+    private static final Primitive PROBE_DIRECTORY =
+        new Primitive("probe-directory", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -65,8 +65,8 @@ public final class probe_file extends Lisp
 
     // ### file-directory-p
     // file-directory-p pathspec => generalized-boolean
-    private static final Primitive1 FILE_DIRECTORY_P =
-        new Primitive1("file-directory-p", PACKAGE_EXT, true)
+    private static final Primitive FILE_DIRECTORY_P =
+        new Primitive("file-directory-p", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

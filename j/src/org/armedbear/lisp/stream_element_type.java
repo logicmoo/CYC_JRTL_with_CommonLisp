@@ -2,7 +2,7 @@
  * stream_element_type.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: stream_element_type.java,v 1.2 2004-01-24 19:56:23 piso Exp $
+ * $Id: stream_element_type.java,v 1.3 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### stream-element-type
-public final class stream_element_type extends Primitive1
+public final class stream_element_type extends Primitive
 {
     private stream_element_type()
     {
@@ -39,5 +39,5 @@ public final class stream_element_type extends Primitive1
         }
     }
 
-    private static final Primitive1 STREAM_ELEMENT_TYPE = new stream_element_type();
+    private static final Primitive STREAM_ELEMENT_TYPE = new stream_element_type();
 }

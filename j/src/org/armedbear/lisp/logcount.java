@@ -2,7 +2,7 @@
  * logcount.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: logcount.java,v 1.3 2003-12-13 00:58:51 piso Exp $
+ * $Id: logcount.java,v 1.4 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import java.math.BigInteger;
 
 // ### logcount
 // logcount integer => number-of-on-bits
-public final class logcount extends Primitive1
+public final class logcount extends Primitive
 {
     private logcount()
     {

@@ -2,7 +2,7 @@
  * open_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: open_stream_p.java,v 1.3 2004-02-13 17:04:52 piso Exp $
+ * $Id: open_stream_p.java,v 1.4 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### open-stream-p
-public final class open_stream_p extends Primitive1
+public final class open_stream_p extends Primitive
 {
     private open_stream_p()
     {
@@ -39,5 +39,5 @@ public final class open_stream_p extends Primitive1
         }
     }
 
-    private static final Primitive1 OPEN_STREAM_P = new open_stream_p();
+    private static final Primitive OPEN_STREAM_P = new open_stream_p();
 }

@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.16 2004-10-13 00:22:20 piso Exp $
+ * $Id: StringInputStream.java,v 1.17 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,8 +146,8 @@ public final class StringInputStream extends Stream
     };
 
     // ### string-input-stream-current
-    private static final Primitive1 STRING_INPUT_STREAM_CURRENT =
-        new Primitive1("string-input-stream-current", PACKAGE_EXT, true, "stream")
+    private static final Primitive STRING_INPUT_STREAM_CURRENT =
+        new Primitive("string-input-stream-current", PACKAGE_EXT, true, "stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

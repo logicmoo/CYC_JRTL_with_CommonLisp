@@ -2,7 +2,7 @@
  * output_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: output_stream_p.java,v 1.4 2004-01-31 20:11:07 piso Exp $
+ * $Id: output_stream_p.java,v 1.5 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### output-stream-p
-public final class output_stream_p extends Primitive1
+public final class output_stream_p extends Primitive
 {
     private output_stream_p()
     {
@@ -39,5 +39,5 @@ public final class output_stream_p extends Primitive1
         }
     }
 
-    private static final Primitive1 OUTPUT_STREAM_P = new output_stream_p();
+    private static final Primitive OUTPUT_STREAM_P = new output_stream_p();
 }

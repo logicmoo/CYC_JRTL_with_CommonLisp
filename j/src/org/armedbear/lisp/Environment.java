@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Environment.java,v 1.16 2004-08-19 18:14:46 piso Exp $
+ * $Id: Environment.java,v 1.17 2004-11-03 15:38:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,8 +204,8 @@ public final class Environment extends LispObject
     }
 
     // ### empty-environment-p
-    private static final Primitive1 EMPTY_ENVIRONMENT_P =
-        new Primitive1("empty-environment-p", PACKAGE_SYS, false, "environment")
+    private static final Primitive EMPTY_ENVIRONMENT_P =
+        new Primitive("empty-environment-p", PACKAGE_SYS, false, "environment")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -220,8 +220,8 @@ public final class Environment extends LispObject
     };
 
     // ### environment-vars
-    private static final Primitive1 ENVIRONMENT_VARS =
-        new Primitive1("environment-vars", PACKAGE_SYS, false, "environment")
+    private static final Primitive ENVIRONMENT_VARS =
+        new Primitive("environment-vars", PACKAGE_SYS, false, "environment")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

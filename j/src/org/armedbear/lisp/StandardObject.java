@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.27 2004-11-03 15:27:23 piso Exp $
+ * $Id: StandardObject.java,v 1.28 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,8 +114,8 @@ public class StandardObject extends LispObject
     }
 
     // ### std-instance-layout
-    private static final Primitive1 STD_INSTANCE_LAYOUT =
-        new Primitive1("std-instance-layout", PACKAGE_SYS, false)
+    private static final Primitive STD_INSTANCE_LAYOUT =
+        new Primitive("std-instance-layout", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -151,8 +151,8 @@ public class StandardObject extends LispObject
     };
 
     // ### std-instance-class
-    private static final Primitive1 STD_INSTANCE_CLASS =
-        new Primitive1("std-instance-class", PACKAGE_SYS, false)
+    private static final Primitive STD_INSTANCE_CLASS =
+        new Primitive("std-instance-class", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -163,8 +163,8 @@ public class StandardObject extends LispObject
     };
 
     // ### std-instance-slots
-    private static final Primitive1 STD_INSTANCE_SLOTS =
-        new Primitive1("std-instance-slots", PACKAGE_SYS, false)
+    private static final Primitive STD_INSTANCE_SLOTS =
+        new Primitive("std-instance-slots", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * lisp_implementation_version.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: lisp_implementation_version.java,v 1.4 2004-02-23 14:24:48 piso Exp $
+ * $Id: lisp_implementation_version.java,v 1.5 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import java.math.BigInteger;
 
 // ### lisp_implementation_version
 // lisp_implementation_version <no arguments> => description
-public final class lisp_implementation_version extends Primitive0
+public final class lisp_implementation_version extends Primitive
 {
     private lisp_implementation_version()
     {

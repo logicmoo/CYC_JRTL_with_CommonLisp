@@ -2,7 +2,7 @@
  * gc.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: gc.java,v 1.1 2003-10-14 12:47:18 piso Exp $
+ * $Id: gc.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### gc
-public final class gc extends Primitive0
+public final class gc extends Primitive
 {
     private gc()
     {

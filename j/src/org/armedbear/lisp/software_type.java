@@ -2,7 +2,7 @@
  * software_type.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: software_type.java,v 1.1 2004-02-27 16:44:12 piso Exp $
+ * $Id: software_type.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### software-type
-public final class software_type extends Primitive0
+public final class software_type extends Primitive
 {
     private software_type()
     {
@@ -34,5 +34,5 @@ public final class software_type extends Primitive0
         return new SimpleString(System.getProperty("os.name"));
     }
 
-    private static final Primitive0 SOFTWARE_TYPE = new software_type();
+    private static final Primitive SOFTWARE_TYPE = new software_type();
 }

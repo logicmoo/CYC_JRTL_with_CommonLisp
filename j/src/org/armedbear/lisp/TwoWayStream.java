@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: TwoWayStream.java,v 1.24 2004-11-03 15:27:23 piso Exp $
+ * $Id: TwoWayStream.java,v 1.25 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -205,8 +205,8 @@ public class TwoWayStream extends Stream
 
     // ### two-way-stream-input-stream
     // two-way-stream => input-stream
-    private static final Primitive1 TWO_WAY_STREAM_INPUT_STREAM =
-        new Primitive1("two-way-stream-input-stream", "two-way-stream")
+    private static final Primitive TWO_WAY_STREAM_INPUT_STREAM =
+        new Primitive("two-way-stream-input-stream", "two-way-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -218,8 +218,8 @@ public class TwoWayStream extends Stream
 
     // ### two-way-stream-output-stream
     // two-way-stream => output-stream
-    private static final Primitive1 TWO_WAY_STREAM_OUTPUT_STREAM =
-        new Primitive1("two-way-stream-output-stream", "two-way-stream")
+    private static final Primitive TWO_WAY_STREAM_OUTPUT_STREAM =
+        new Primitive("two-way-stream-output-stream", "two-way-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * ThreadLock.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ThreadLock.java,v 1.3 2004-10-09 13:25:50 piso Exp $
+ * $Id: ThreadLock.java,v 1.4 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,8 +58,8 @@ public final class ThreadLock extends LispObject
     }
 
     // ### make-thread-lock
-    private static final Primitive0 MAKE_THREAD_LOCK =
-        new Primitive0("make-thread-lock", PACKAGE_EXT, true)
+    private static final Primitive MAKE_THREAD_LOCK =
+        new Primitive("make-thread-lock", PACKAGE_EXT, true)
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -68,8 +68,8 @@ public final class ThreadLock extends LispObject
     };
 
     // ### thread-lock lock
-    private static final Primitive1 THREAD_LOCK =
-        new Primitive1("thread-lock", PACKAGE_EXT, true)
+    private static final Primitive THREAD_LOCK =
+        new Primitive("thread-lock", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -80,8 +80,8 @@ public final class ThreadLock extends LispObject
     };
 
     // ### thread-unlock lock
-    private static final Primitive1 THREAD_UNLOCK =
-        new Primitive1("thread-unlock", PACKAGE_EXT, true)
+    private static final Primitive THREAD_UNLOCK =
+        new Primitive("thread-unlock", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

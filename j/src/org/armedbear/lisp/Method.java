@@ -2,7 +2,7 @@
  * Method.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Method.java,v 1.4 2004-10-24 00:38:26 piso Exp $
+ * $Id: Method.java,v 1.5 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,8 +93,8 @@ public final class Method extends StandardObject
         return super.writeToString();
     }
 
-    private static final Primitive1 _METHOD_GENERIC_FUNCTION =
-        new Primitive1("%method-generic-function", PACKAGE_SYS, false)
+    private static final Primitive _METHOD_GENERIC_FUNCTION =
+        new Primitive("%method-generic-function", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -107,8 +107,8 @@ public final class Method extends StandardObject
         }
     };
 
-    private static final Primitive1 _SET_METHOD_GENERICFUNCTION =
-        new Primitive1("%set-method-generic-function", PACKAGE_SYS, false)
+    private static final Primitive _SET_METHOD_GENERICFUNCTION =
+        new Primitive("%set-method-generic-function", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -123,8 +123,8 @@ public final class Method extends StandardObject
         }
     };
 
-    private static final Primitive1 METHOD_FUNCTION =
-        new Primitive1("method-function", PACKAGE_SYS, false)
+    private static final Primitive METHOD_FUNCTION =
+        new Primitive("method-function", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -137,8 +137,8 @@ public final class Method extends StandardObject
         }
     };
 
-    private static final Primitive1 _SET_METHOD_FUNCTION =
-        new Primitive1("%set-method-function", PACKAGE_SYS, false)
+    private static final Primitive _SET_METHOD_FUNCTION =
+        new Primitive("%set-method-function", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -153,8 +153,8 @@ public final class Method extends StandardObject
         }
     };
 
-    private static final Primitive1 _METHOD_SPECIALIZERS =
-        new Primitive1("%method-specializers", PACKAGE_SYS, false)
+    private static final Primitive _METHOD_SPECIALIZERS =
+        new Primitive("%method-specializers", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -167,8 +167,8 @@ public final class Method extends StandardObject
         }
     };
 
-    private static final Primitive1 _SET_METHOD_SPECIALIZERS =
-        new Primitive1("%set-method-specializers", PACKAGE_SYS, false)
+    private static final Primitive _SET_METHOD_SPECIALIZERS =
+        new Primitive("%set-method-specializers", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

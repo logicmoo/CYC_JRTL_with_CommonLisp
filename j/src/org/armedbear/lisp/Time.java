@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Time.java,v 1.21 2004-06-23 01:50:39 piso Exp $
+ * $Id: Time.java,v 1.22 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@ import java.util.TimeZone;
 public final class Time extends Lisp
 {
     // ### %time
-    private static final Primitive1 _TIME =
-        new Primitive1("%time", PACKAGE_SYS, false)
+    private static final Primitive _TIME =
+        new Primitive("%time", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -58,8 +58,8 @@ public final class Time extends Lisp
     };
 
     // ### get-internal-real-time
-    private static final Primitive0 GET_INTERNAL_REAL_TIME =
-        new Primitive0("get-internal-real-time","") {
+    private static final Primitive GET_INTERNAL_REAL_TIME =
+        new Primitive("get-internal-real-time","") {
         public LispObject execute() throws ConditionThrowable
         {
             return number(System.currentTimeMillis());
@@ -67,8 +67,8 @@ public final class Time extends Lisp
     };
 
     // ### get-internal-run-time
-    private static final Primitive0 GET_INTERNAL_RUN_TIME =
-        new Primitive0("get-internal-run-time","") {
+    private static final Primitive GET_INTERNAL_RUN_TIME =
+        new Primitive("get-internal-run-time","") {
         public LispObject execute() throws ConditionThrowable
         {
             return number(System.currentTimeMillis()); // FIXME
@@ -76,8 +76,8 @@ public final class Time extends Lisp
     };
 
     // ### get-universal-time
-    private static final Primitive0 GET_UNIVERSAL_TIME =
-        new Primitive0("get-universal-time","") {
+    private static final Primitive GET_UNIVERSAL_TIME =
+        new Primitive("get-universal-time","") {
         public LispObject execute()
         {
             return number(System.currentTimeMillis() / 1000 + 2208988800L);
@@ -85,8 +85,8 @@ public final class Time extends Lisp
     };
 
     // ### default-time-zone
-    private static final Primitive0 DEFAULT_TIME_ZONE =
-        new Primitive0("default-time-zone", PACKAGE_SYS, false)
+    private static final Primitive DEFAULT_TIME_ZONE =
+        new Primitive("default-time-zone", PACKAGE_SYS, false)
     {
         public LispObject execute() throws ConditionThrowable
         {

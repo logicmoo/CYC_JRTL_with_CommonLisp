@@ -2,7 +2,7 @@
  * file_author.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: file_author.java,v 1.1 2004-01-07 19:05:37 piso Exp $
+ * $Id: file_author.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 import java.io.File;
 
 // ### file-author
-public final class file_author extends Primitive1
+public final class file_author extends Primitive
 {
     private file_author()
     {
@@ -39,5 +39,5 @@ public final class file_author extends Primitive1
         return NIL;
     }
 
-    private static final Primitive1 FILE_AUTHOR = new file_author();
+    private static final Primitive FILE_AUTHOR = new file_author();
 }

@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.35 2004-11-03 15:27:23 piso Exp $
+ * $Id: Readtable.java,v 1.36 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,8 +261,8 @@ public final class Readtable extends LispObject
     }
 
     // ### readtablep
-    private static final Primitive1 READTABLEP =
-        new Primitive1("readtablep", "object")
+    private static final Primitive READTABLEP =
+        new Primitive("readtablep", "object")
     {
         public LispObject execute(LispObject arg)
         {
@@ -485,8 +485,8 @@ public final class Readtable extends LispObject
     };
 
     // ### readtable-case readtable => mode
-    private static final Primitive1 READTABLE_CASE =
-        new Primitive1("readtable-case", "readtable")
+    private static final Primitive READTABLE_CASE =
+        new Primitive("readtable-case", "readtable")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * Math.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: MathFunctions.java,v 1.15 2004-11-03 15:27:22 piso Exp $
+ * $Id: MathFunctions.java,v 1.16 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### sin
-    private static final Primitive1 SIN = new Primitive1("sin", "radians")
+    private static final Primitive SIN = new Primitive("sin", "radians")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -56,7 +56,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### cos
-    private static final Primitive1 COS = new Primitive1("cos", "radians")
+    private static final Primitive COS = new Primitive("cos", "radians")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -79,7 +79,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### tan
-    private static final Primitive1 TAN = new Primitive1("tan", "radians")
+    private static final Primitive TAN = new Primitive("tan", "radians")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -90,7 +90,7 @@ public final class MathFunctions extends Lisp
     };
 
     // ### asin
-    private static final Primitive1 ASIN = new Primitive1("asin", "number")
+    private static final Primitive ASIN = new Primitive("asin", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -125,7 +125,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### acos
-    private static final Primitive1 ACOS = new Primitive1("acos", "number")
+    private static final Primitive ACOS = new Primitive("acos", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -191,7 +191,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### sinh
-    private static final Primitive1 SINH = new Primitive1("sinh", "number")
+    private static final Primitive SINH = new Primitive("sinh", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -244,7 +244,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### cosh
-    private static final Primitive1 COSH = new Primitive1("cosh", "number")
+    private static final Primitive COSH = new Primitive("cosh", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -299,7 +299,7 @@ public final class MathFunctions extends Lisp
     private static Method tanhMethod = null;
 
     // ### tanh
-    private static final Primitive1 TANH = new Primitive1("tanh", "number")
+    private static final Primitive TANH = new Primitive("tanh", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -329,7 +329,7 @@ public final class MathFunctions extends Lisp
     };
 
     // ### asinh
-    private static final Primitive1 ASINH = new Primitive1("asinh", "number")
+    private static final Primitive ASINH = new Primitive("asinh", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -361,7 +361,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### acosh
-    private static final Primitive1 ACOSH = new Primitive1("acosh", "number")
+    private static final Primitive ACOSH = new Primitive("acosh", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -397,7 +397,7 @@ public final class MathFunctions extends Lisp
     }
 
     // ### atanh
-    private static final Primitive1 ATANH = new Primitive1("atanh", "number")
+    private static final Primitive ATANH = new Primitive("atanh", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

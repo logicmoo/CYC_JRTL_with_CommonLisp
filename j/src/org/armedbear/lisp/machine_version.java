@@ -2,7 +2,7 @@
  * machine_version.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: machine_version.java,v 1.1 2004-02-27 17:19:59 piso Exp $
+ * $Id: machine_version.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 // ### machine-version
-public final class machine_version extends Primitive0
+public final class machine_version extends Primitive
 {
     private machine_version()
     {
@@ -65,5 +65,5 @@ public final class machine_version extends Primitive0
         return NIL;
     }
 
-    private static final Primitive0 MACHINE_VERSION = new machine_version();
+    private static final Primitive MACHINE_VERSION = new machine_version();
 }

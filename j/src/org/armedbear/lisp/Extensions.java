@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.32 2004-11-03 15:27:21 piso Exp $
+ * $Id: Extensions.java,v 1.33 2004-11-03 15:38:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,8 +74,8 @@ public final class Extensions extends Lisp
     };
 
     // ### special-variable-p
-    private static final Primitive1 SPECIAL_VARIABLE_P =
-        new Primitive1("special-variable-p", PACKAGE_EXT, true)
+    private static final Primitive SPECIAL_VARIABLE_P =
+        new Primitive("special-variable-p", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -85,8 +85,8 @@ public final class Extensions extends Lisp
 
     // ### charpos
     // charpos stream => position
-    private static final Primitive1 CHARPOS =
-        new Primitive1("charpos", PACKAGE_EXT, true)
+    private static final Primitive CHARPOS =
+        new Primitive("charpos", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -110,8 +110,8 @@ public final class Extensions extends Lisp
     };
 
     // ### source
-    private static final Primitive1 SOURCE =
-        new Primitive1("source", PACKAGE_EXT, true)
+    private static final Primitive SOURCE =
+        new Primitive("source", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -120,8 +120,8 @@ public final class Extensions extends Lisp
     };
 
     // ### source-file-position
-    private static final Primitive1 SOURCE_FILE_POSITION =
-        new Primitive1("source-file-position", PACKAGE_EXT, true)
+    private static final Primitive SOURCE_FILE_POSITION =
+        new Primitive("source-file-position", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -133,8 +133,8 @@ public final class Extensions extends Lisp
     };
 
     // ### source-pathname
-    private static final Primitive1 SOURCE_PATHNAME =
-        new Primitive1("source-pathname", PACKAGE_EXT, true)
+    private static final Primitive SOURCE_PATHNAME =
+        new Primitive("source-pathname", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -148,8 +148,8 @@ public final class Extensions extends Lisp
     };
 
     // ### exit
-    private static final Primitive0 EXIT =
-        new Primitive0("exit", PACKAGE_EXT, true)
+    private static final Primitive EXIT =
+        new Primitive("exit", PACKAGE_EXT, true)
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -159,8 +159,8 @@ public final class Extensions extends Lisp
     };
 
     // ### quit
-    private static final Primitive0 QUIT =
-        new Primitive0("quit", PACKAGE_EXT, true)
+    private static final Primitive QUIT =
+        new Primitive("quit", PACKAGE_EXT, true)
     {
         public LispObject execute() throws ConditionThrowable
         {

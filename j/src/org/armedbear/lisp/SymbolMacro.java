@@ -2,7 +2,7 @@
  * SymbolMacro.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SymbolMacro.java,v 1.2 2003-10-25 21:51:31 piso Exp $
+ * $Id: SymbolMacro.java,v 1.3 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,8 @@ public final class SymbolMacro extends LispObject
     }
 
     // ### make-symbol-macro
-    private static final Primitive1 MAKE_MACRO =
-        new Primitive1("make-symbol-macro", PACKAGE_SYS, false)
+    private static final Primitive MAKE_MACRO =
+        new Primitive("make-symbol-macro", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

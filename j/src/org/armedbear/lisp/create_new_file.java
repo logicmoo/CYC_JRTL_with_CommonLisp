@@ -2,7 +2,7 @@
  * create_new_file.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: create_new_file.java,v 1.2 2004-03-05 16:10:22 piso Exp $
+ * $Id: create_new_file.java,v 1.3 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import java.io.File;
 import java.io.IOException;
 
 // ### create-new-file
-public final class create_new_file extends Primitive1
+public final class create_new_file extends Primitive
 {
     private create_new_file()
     {
@@ -46,5 +46,5 @@ public final class create_new_file extends Primitive1
         }
     }
 
-    private static final Primitive1 CREATE_NEW_FILE = new create_new_file();
+    private static final Primitive CREATE_NEW_FILE = new create_new_file();
 }

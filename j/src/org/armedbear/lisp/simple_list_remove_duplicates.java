@@ -2,7 +2,7 @@
  * simple_list_remove_duplicates.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: simple_list_remove_duplicates.java,v 1.1 2004-03-13 17:49:00 piso Exp $
+ * $Id: simple_list_remove_duplicates.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### simple-list-remove-duplicates
-public final class simple_list_remove_duplicates extends Primitive1
+public final class simple_list_remove_duplicates extends Primitive
 {
     private simple_list_remove_duplicates()
     {
@@ -50,6 +50,6 @@ public final class simple_list_remove_duplicates extends Primitive1
         return result.nreverse();
     }
 
-    private static final Primitive1 SIMPLE_LIST_REMOVE_DUPLICATES =
+    private static final Primitive SIMPLE_LIST_REMOVE_DUPLICATES =
         new simple_list_remove_duplicates();
 }

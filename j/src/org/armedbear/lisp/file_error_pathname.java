@@ -2,7 +2,7 @@
  * file_error_pathname.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: file_error_pathname.java,v 1.1 2004-01-02 19:03:01 piso Exp $
+ * $Id: file_error_pathname.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### file-error-pathname
-public final class file_error_pathname extends Primitive1
+public final class file_error_pathname extends Primitive
 {
     private file_error_pathname()
     {

@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.51 2004-11-03 15:27:22 piso Exp $
+ * $Id: LispClass.java,v 1.52 2004-11-03 15:39:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -283,8 +283,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %class-name
-    private static final Primitive1 _CLASS_NAME =
-        new Primitive1("%class-name", PACKAGE_SYS, false, "class")
+    private static final Primitive _CLASS_NAME =
+        new Primitive("%class-name", PACKAGE_SYS, false, "class")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -315,8 +315,8 @@ public class LispClass extends StandardObject
     };
 
     // ### class-layout
-    private static final Primitive1 CLASS_LAYOUT =
-        new Primitive1("class-layout", PACKAGE_SYS, false)
+    private static final Primitive CLASS_LAYOUT =
+        new Primitive("class-layout", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -353,8 +353,8 @@ public class LispClass extends StandardObject
     };
 
     // ### class-direct-superclasses
-    private static final Primitive1 CLASS_DIRECT_SUPERCLASSES =
-        new Primitive1("class-direct-superclasses", PACKAGE_SYS, false)
+    private static final Primitive CLASS_DIRECT_SUPERCLASSES =
+        new Primitive("class-direct-superclasses", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -380,8 +380,8 @@ public class LispClass extends StandardObject
     };
 
     // ### class-direct-subclasses
-    private static final Primitive1 CLASS_DIRECT_SUBCLASSES =
-        new Primitive1("class-direct-subclasses", PACKAGE_SYS, false)
+    private static final Primitive CLASS_DIRECT_SUBCLASSES =
+        new Primitive("class-direct-subclasses", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -407,8 +407,8 @@ public class LispClass extends StandardObject
     };
 
     // ### class-precedence-list
-    private static final Primitive1 CLASS_PRECEDENCE_LIST =
-        new Primitive1("class-precedence-list", PACKAGE_SYS, false)
+    private static final Primitive CLASS_PRECEDENCE_LIST =
+        new Primitive("class-precedence-list", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -419,8 +419,8 @@ public class LispClass extends StandardObject
     };
 
     // ### %set-class-precedence-list
-    private static final Primitive1 _SET_CLASS_PRECEDENCE_LIST =
-        new Primitive1("%set-class-precedence-list", PACKAGE_SYS, false)
+    private static final Primitive _SET_CLASS_PRECEDENCE_LIST =
+        new Primitive("%set-class-precedence-list", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -434,8 +434,8 @@ public class LispClass extends StandardObject
     };
 
     // ### class-direct-methods
-    private static final Primitive1 CLASS_DIRECT_METHODS =
-        new Primitive1("class-direct-methods", PACKAGE_SYS, false)
+    private static final Primitive CLASS_DIRECT_METHODS =
+        new Primitive("class-direct-methods", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -462,8 +462,8 @@ public class LispClass extends StandardObject
     };
 
     // ### class-documentation
-    private static final Primitive1 CLASS_DOCUMENTATION =
-        new Primitive1("class-documentation", PACKAGE_SYS, false)
+    private static final Primitive CLASS_DOCUMENTATION =
+        new Primitive("class-documentation", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
@@ -490,8 +490,8 @@ public class LispClass extends StandardObject
     };
 
     // ### classp
-    private static final Primitive1 CLASSP =
-        new Primitive1("classp", PACKAGE_EXT, true)
+    private static final Primitive CLASSP =
+        new Primitive("classp", PACKAGE_EXT, true)
     {
         public LispObject execute(LispObject arg)
         {

@@ -2,7 +2,7 @@
  * lisp_implementation_type.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: lisp_implementation_type.java,v 1.4 2004-03-19 01:01:26 piso Exp $
+ * $Id: lisp_implementation_type.java,v 1.5 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### lisp-implementation-type <no arguments> => description
-public final class lisp_implementation_type extends Primitive0
+public final class lisp_implementation_type extends Primitive
 {
     private lisp_implementation_type()
     {

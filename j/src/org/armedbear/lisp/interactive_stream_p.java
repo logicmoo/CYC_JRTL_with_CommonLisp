@@ -2,7 +2,7 @@
  * interactive_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: interactive_stream_p.java,v 1.2 2004-01-24 19:53:17 piso Exp $
+ * $Id: interactive_stream_p.java,v 1.3 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### interactive-stream-p
-public final class interactive_stream_p extends Primitive1
+public final class interactive_stream_p extends Primitive
 {
     private interactive_stream_p()
     {
@@ -36,5 +36,5 @@ public final class interactive_stream_p extends Primitive1
         return signal(new TypeError(arg, Symbol.STREAM));
     }
 
-    private static final Primitive1 INTERACTIVE_STREAM_P = new interactive_stream_p();
+    private static final Primitive INTERACTIVE_STREAM_P = new interactive_stream_p();
 }

@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.70 2004-11-03 15:27:22 piso Exp $
+ * $Id: Pathname.java,v 1.71 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -566,8 +566,8 @@ public class Pathname extends LispObject
         }
     };
 
-    private static final Primitive1 PATHNAME_VERSION =
-        new Primitive1("pathname-version", "pathname")
+    private static final Primitive PATHNAME_VERSION =
+        new Primitive("pathname-version", "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -577,8 +577,8 @@ public class Pathname extends LispObject
 
     // ### namestring
     // namestring pathname => namestring
-    private static final Primitive1 NAMESTRING =
-        new Primitive1("namestring", "pathname")
+    private static final Primitive NAMESTRING =
+        new Primitive("namestring", "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -593,8 +593,8 @@ public class Pathname extends LispObject
 
     // ### directory-namestring
     // directory-namestring pathname => namestring
-    private static final Primitive1 DIRECTORY_NAMESTRING =
-        new Primitive1("directory-namestring", "pathname")
+    private static final Primitive DIRECTORY_NAMESTRING =
+        new Primitive("directory-namestring", "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -604,8 +604,8 @@ public class Pathname extends LispObject
 
     // ### pathname
     // pathname pathspec => pathname
-    private static final Primitive1 PATHNAME =
-        new Primitive1("pathname", "pathspec")
+    private static final Primitive PATHNAME =
+        new Primitive("pathname", "pathspec")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -706,8 +706,8 @@ public class Pathname extends LispObject
     }
 
     // ### pathnamep
-    private static final Primitive1 PATHNAMEP =
-        new Primitive1("pathnamep", "object")
+    private static final Primitive PATHNAMEP =
+        new Primitive("pathnamep", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -754,8 +754,8 @@ public class Pathname extends LispObject
     };
 
     // ### list-directory
-    private static final Primitive1 LIST_DIRECTORY =
-        new Primitive1("list-directory", PACKAGE_SYS, false)
+    private static final Primitive LIST_DIRECTORY =
+        new Primitive("list-directory", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -985,8 +985,8 @@ public class Pathname extends LispObject
     }
 
     // ### mkdir
-    private static final Primitive1 MKDIR =
-        new Primitive1("mkdir", PACKAGE_SYS, false)
+    private static final Primitive MKDIR =
+        new Primitive("mkdir", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1032,8 +1032,8 @@ public class Pathname extends LispObject
     };
 
     // ### file-namestring pathname => namestring
-    private static final Primitive1 FILE_NAMESTRING =
-        new Primitive1("file-namestring", "pathname")
+    private static final Primitive FILE_NAMESTRING =
+        new Primitive("file-namestring", "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -1056,8 +1056,8 @@ public class Pathname extends LispObject
     };
 
     // ### host-namestring pathname => namestring
-    private static final Primitive1 HOST_NAMESTRING =
-        new Primitive1("host-namestring", "pathname")
+    private static final Primitive HOST_NAMESTRING =
+        new Primitive("host-namestring", "pathname")
     {
         public LispObject execute(LispObject arg)
         {

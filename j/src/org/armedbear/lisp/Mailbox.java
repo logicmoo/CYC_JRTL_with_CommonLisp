@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: Mailbox.java,v 1.5 2004-11-03 15:27:22 piso Exp $
+ * $Id: Mailbox.java,v 1.6 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,8 +72,8 @@ public final class Mailbox extends LispObject
 
 
     // ### make-mailbox
-    private static final Primitive0 MAKE_MAILBOX =
-        new Primitive0("make-mailbox", PACKAGE_EXT, true, "")
+    private static final Primitive MAKE_MAILBOX =
+        new Primitive("make-mailbox", PACKAGE_EXT, true, "")
     {
         public LispObject execute() throws ConditionThrowable
         {
@@ -98,8 +98,8 @@ public final class Mailbox extends LispObject
     };
 
     // ### mailbox-read mailbox
-    private static final Primitive1 MAILBOX_READ =
-        new Primitive1("mailbox-read", PACKAGE_EXT, true, "mailbox")
+    private static final Primitive MAILBOX_READ =
+        new Primitive("mailbox-read", PACKAGE_EXT, true, "mailbox")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -112,8 +112,8 @@ public final class Mailbox extends LispObject
     };
 
     // ### mailbox-peek mailbox
-    private static final Primitive1 MAILBOX_PEEK =
-        new Primitive1("mailbox-peek", PACKAGE_EXT, true, "mailbox")
+    private static final Primitive MAILBOX_PEEK =
+        new Primitive("mailbox-peek", PACKAGE_EXT, true, "mailbox")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -126,8 +126,8 @@ public final class Mailbox extends LispObject
     };
 
     // ### mailbox-empty-p mailbox
-    private static final Primitive1 MAILBOX_EMPTY_P =
-        new Primitive1("mailbox-empty-p", PACKAGE_EXT, true, "mailbox")
+    private static final Primitive MAILBOX_EMPTY_P =
+        new Primitive("mailbox-empty-p", PACKAGE_EXT, true, "mailbox")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * SynonymStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SynonymStream.java,v 1.7 2004-10-13 00:22:20 piso Exp $
+ * $Id: SynonymStream.java,v 1.8 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,8 +190,8 @@ public final class SynonymStream extends Stream
     };
 
     // ### synonym-stream-symbol synonym-stream => symbol
-    private static final Primitive1 SYNONYM_STREAM_STREAMS =
-        new Primitive1("synonym-stream-symbol", "synonym-stream")
+    private static final Primitive SYNONYM_STREAM_STREAMS =
+        new Primitive("synonym-stream-symbol", "synonym-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

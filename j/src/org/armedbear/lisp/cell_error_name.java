@@ -2,7 +2,7 @@
  * cell_error_name.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: cell_error_name.java,v 1.3 2004-01-02 01:23:37 piso Exp $
+ * $Id: cell_error_name.java,v 1.4 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### cell-error-name
-public final class cell_error_name extends Primitive1
+public final class cell_error_name extends Primitive
 {
     private cell_error_name()
     {

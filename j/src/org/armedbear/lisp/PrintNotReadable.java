@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: PrintNotReadable.java,v 1.4 2004-10-13 00:22:19 piso Exp $
+ * $Id: PrintNotReadable.java,v 1.5 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,8 +86,8 @@ public class PrintNotReadable extends LispError
     }
 
     // ### print-not-readable-object
-    private static final Primitive1 PRINT_NOT_READABLE_OBJECT =
-        new Primitive1("print-not-readable-object", "condition")
+    private static final Primitive PRINT_NOT_READABLE_OBJECT =
+        new Primitive("print-not-readable-object", "condition")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

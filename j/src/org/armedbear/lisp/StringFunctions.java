@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.30 2004-11-03 15:27:23 piso Exp $
+ * $Id: StringFunctions.java,v 1.31 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -778,7 +778,7 @@ public final class StringFunctions extends Lisp
     };
 
     // ### stringp
-    public static final Primitive1 STRINGP = new Primitive1("stringp", "object")
+    public static final Primitive STRINGP = new Primitive("stringp", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -787,8 +787,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### simple-string-p
-    public static final Primitive1 SIMPLE_STRING_P =
-        new Primitive1("simple-string-p", "object")
+    public static final Primitive SIMPLE_STRING_P =
+        new Primitive("simple-string-p", "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

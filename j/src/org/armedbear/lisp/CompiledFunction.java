@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.29 2004-09-18 18:43:55 piso Exp $
+ * $Id: CompiledFunction.java,v 1.30 2004-11-03 15:38:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,8 +107,8 @@ public class CompiledFunction extends Closure
     };
 
     // ### varlist
-    private static final Primitive1 VARLIST =
-        new Primitive1("varlist", PACKAGE_SYS, false)
+    private static final Primitive VARLIST =
+        new Primitive("varlist", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable {
             if (arg instanceof Closure)

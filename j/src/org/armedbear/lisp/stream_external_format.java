@@ -2,7 +2,7 @@
  * stream_external_format.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: stream_external_format.java,v 1.1 2004-01-28 19:48:38 piso Exp $
+ * $Id: stream_external_format.java,v 1.2 2004-11-03 15:39:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
 package org.armedbear.lisp;
 
 // ### stream-external-format
-public final class stream_external_format extends Primitive1
+public final class stream_external_format extends Primitive
 {
     private stream_external_format()
     {
@@ -37,6 +37,6 @@ public final class stream_external_format extends Primitive1
             return signal(new TypeError(arg, Symbol.STREAM));
     }
 
-    private static final Primitive1 STREAM_EXTERNAL_FORMAT =
+    private static final Primitive STREAM_EXTERNAL_FORMAT =
         new stream_external_format();
 }

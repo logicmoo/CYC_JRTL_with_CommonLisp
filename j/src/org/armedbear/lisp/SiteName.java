@@ -2,7 +2,7 @@
  * SiteName.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SiteName.java,v 1.1 2004-02-27 17:50:06 piso Exp $
+ * $Id: SiteName.java,v 1.2 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +37,8 @@ public final class SiteName extends Lisp
         return hostName != null ? new SimpleString(hostName) : NIL;
     }
 
-    private static final Primitive0 MACHINE_INSTANCE =
-        new Primitive0("machine-instance")
+    private static final Primitive MACHINE_INSTANCE =
+        new Primitive("machine-instance")
     {
         public LispObject execute()
         {
@@ -46,8 +46,8 @@ public final class SiteName extends Lisp
         }
     };
 
-    private static final Primitive0 LONG_SITE_NAME =
-        new Primitive0("long-site-name")
+    private static final Primitive LONG_SITE_NAME =
+        new Primitive("long-site-name")
     {
         public LispObject execute()
         {
@@ -55,8 +55,8 @@ public final class SiteName extends Lisp
         }
     };
 
-    private static final Primitive0 SHORT_SITE_NAME =
-        new Primitive0("short-site-name")
+    private static final Primitive SHORT_SITE_NAME =
+        new Primitive("short-site-name")
     {
         public LispObject execute()
         {

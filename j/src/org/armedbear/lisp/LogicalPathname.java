@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LogicalPathname.java,v 1.5 2004-11-03 15:27:22 piso Exp $
+ * $Id: LogicalPathname.java,v 1.6 2004-11-03 15:39:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,8 +69,8 @@ public final class LogicalPathname extends Pathname
     };
 
     // ### logical-pathname-translations host => translations
-    private static final Primitive1 LOGICAL_PATHNAME_TRANSLATIONS =
-        new Primitive1("logical-pathname-translations", "host")
+    private static final Primitive LOGICAL_PATHNAME_TRANSLATIONS =
+        new Primitive("logical-pathname-translations", "host")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -79,8 +79,8 @@ public final class LogicalPathname extends Pathname
     };
 
     // ### load-logical-pathname-translations host => just-loaded
-    private static final Primitive1 LOAD_LOGICAL_PATHNAME_TRANSLATIONS =
-        new Primitive1("load-logical-pathname-translations", "host")
+    private static final Primitive LOAD_LOGICAL_PATHNAME_TRANSLATIONS =
+        new Primitive("load-logical-pathname-translations", "host")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -92,8 +92,8 @@ public final class LogicalPathname extends Pathname
     };
 
     // ### logical-pathname pathspec => logical-pathname
-    private static final Primitive1 LOGICAL_PATHNAME =
-        new Primitive1("logical-pathname", "pathspec")
+    private static final Primitive LOGICAL_PATHNAME =
+        new Primitive("logical-pathname", "pathspec")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {

@@ -2,7 +2,7 @@
  * ConcatenatedStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ConcatenatedStream.java,v 1.5 2004-10-13 00:22:17 piso Exp $
+ * $Id: ConcatenatedStream.java,v 1.6 2004-11-03 15:38:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -234,8 +234,8 @@ public final class ConcatenatedStream extends Stream
     };
 
     // ### concatenated-stream-streams concatenated-stream => streams
-    private static final Primitive1 CONCATENATED_STREAM_STREAMS =
-        new Primitive1("concatenated-stream-streams", "concatenated-stream")
+    private static final Primitive CONCATENATED_STREAM_STREAMS =
+        new Primitive("concatenated-stream-streams", "concatenated-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
