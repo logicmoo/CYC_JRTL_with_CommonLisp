@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.39 2003-01-28 01:30:25 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.40 2003-02-06 16:25:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -429,7 +429,13 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                 if (completions.size() == 1) {
                     String s = (String) completions.get(0);
                     textField.setText(s);
-                    textField.setCaretPosition(s.length());
+                    Runnable r = new Runnable() {
+                        public void run()
+                        {
+                            textField.setCaretPosition(textField.getText().length());
+                        }
+                    };
+                    SwingUtilities.invokeLater(r);
                 } else if (completions.size() > 1)
                     showCompletionsPopup();
             } else
