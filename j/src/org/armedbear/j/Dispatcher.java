@@ -2,7 +2,7 @@
  * Dispatcher.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Dispatcher.java,v 1.5 2003-05-13 17:05:52 piso Exp $
+ * $Id: Dispatcher.java,v 1.6 2003-05-26 13:36:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -235,9 +235,6 @@ public final class Dispatcher implements Constants, KeyListener, MouseListener,
 
         // Mask off the bits we don't care about (Java 1.4).
         modifiers &= 0x0f;
-
-        // We care about ALT but not META.
-//         modifiers &= ~InputEvent.META_MASK;
 
         if (DEBUG_KEY_PRESSED)
             Log.debug("modifiers = 0x" + Integer.toString(modifiers, 16));
