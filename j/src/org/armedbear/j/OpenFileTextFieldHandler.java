@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.43 2003-06-09 17:54:31 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.44 2003-06-17 15:29:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -482,11 +482,9 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         FilenameCompletion completion =
             new FilenameCompletion(dir, prefix, sourcePath, ignoreCase);
         final File currentDirectory = getCurrentDirectory();
-        final File currentFile = editor.getBuffer().getFile();
         List files = completion.listFiles();
         if (files != null) {
-            final int limit = files.size();
-            for (int i = 0; i < limit; i++) {
+            for (int i = 0, limit = files.size(); i < limit; i++) {
                 final File file = (File) files.get(i);
                 final String name = getNameForFile(file, currentDirectory);
                 if (file.isDirectory()) {
