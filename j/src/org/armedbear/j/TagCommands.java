@@ -2,7 +2,7 @@
  * TagCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: TagCommands.java,v 1.6 2002-11-06 02:51:35 piso Exp $
+ * $Id: TagCommands.java,v 1.7 2002-11-10 01:03:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -350,7 +350,8 @@ public final class TagCommands implements Constants
             editor.setWaitCursor();
             final Buffer buffer = editor.getBuffer();
             List tags = findMatchingTagsInDirectory(name,
-                buffer.getCurrentDirectory(), buffer.getMode(), -1, Utilities.isLowerCase(name));
+                buffer.getCurrentDirectory(), buffer.getMode(), -1,
+                Utilities.isLowerCase(name));
             editor.setDefaultCursor();
             if (tags != null) {
                 ListTagsBuffer buf =
