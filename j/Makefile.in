@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.5 2003-03-29 20:15:53 piso Exp $
+# $Id: Makefile.in,v 1.6 2003-06-04 01:10:42 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -46,8 +46,7 @@ config.status: configure
 classes:
 	set -e; \
 	for i in src/bsh src/bsh/classpath src/bsh/commands src/bsh/reflect src/gnu/regexp \
-	  src/org/xml/sax src/org/xml/sax/helpers src/org/xml/sax/ext \
-	  src/org/armedbear/j/aelfred src/org/armedbear/j/mail \
+	  src/org/armedbear/j/mail \
 	  src/org/armedbear/j/jdb \
 	  src/org/armedbear/j \
 	  src/org/armedbear/lisp src; \
@@ -68,8 +67,7 @@ j.jar: classes.stamp
 	  org/armedbear/j/version org/armedbear/j/build \
 	  org/armedbear/j/images/*.png \
 	  bsh/*.class bsh/classpath/*.class bsh/commands/*.class bsh/commands/*.bsh bsh/reflect/*.class \
-	  gnu/regexp/*.class gnu/regexp/MessagesBundle.properties org/xml/sax/*.class \
-	  org/xml/sax/helpers/*.class org/xml/sax/ext/*.class org/armedbear/j/aelfred/*.class \
+	  gnu/regexp/*.class gnu/regexp/MessagesBundle.properties \
 	  org/armedbear/j/mail/*.class \
 	  org/armedbear/j/jdb/*.class \
 	  org/armedbear/j/*.keywords org/armedbear/j/mail/*.keywords \
@@ -104,8 +102,6 @@ distdir:
 	-cp -p  src/org/armedbear/j/mail/Makefile.in src/org/armedbear/j/mail/*.java src/org/armedbear/j/mail/*.keywords $(distdir)/src/org/armedbear/j/mail
 	mkdir $(distdir)/src/org/armedbear/j/jdb
 	-cp -p  src/org/armedbear/j/jdb/Makefile.in src/org/armedbear/j/jdb/*.java $(distdir)/src/org/armedbear/j/jdb
-	mkdir $(distdir)/src/org/armedbear/j/aelfred
-	-cp -p  src/org/armedbear/j/aelfred/Makefile.in src/org/armedbear/j/aelfred/*.java $(distdir)/src/org/armedbear/j/aelfred
 	mkdir $(distdir)/src/org/armedbear/j/images
 	-cp -p  src/org/armedbear/j/images/*.png $(distdir)/src/org/armedbear/j/images
 	mkdir $(distdir)/src/org/armedbear/lisp
@@ -121,13 +117,6 @@ distdir:
 	mkdir $(distdir)/src/gnu
 	mkdir $(distdir)/src/gnu/regexp
 	-cp -p  src/gnu/regexp/Makefile.in src/gnu/regexp/*.java  src/gnu/regexp/MessagesBundle.properties $(distdir)/src/gnu/regexp
-	mkdir $(distdir)/src/org/xml
-	mkdir $(distdir)/src/org/xml/sax
-	-cp -p  src/org/xml/sax/Makefile.in src/org/xml/sax/*.java $(distdir)/src/org/xml/sax
-	mkdir $(distdir)/src/org/xml/sax/helpers
-	-cp -p  src/org/xml/sax/helpers/Makefile.in src/org/xml/sax/helpers/*.java $(distdir)/src/org/xml/sax/helpers
-	mkdir $(distdir)/src/org/xml/sax/ext
-	-cp -p  src/org/xml/sax/ext/Makefile.in src/org/xml/sax/ext/*.java $(distdir)/src/org/xml/sax/ext
 	mkdir $(distdir)/doc
 	cp -p  doc/*.html $(distdir)/doc
 	cp -p  doc/*.css $(distdir)/doc
@@ -212,7 +201,6 @@ clean:
 	-rm -f src/jpty/jpty src/jpty/jpty.exe
 	-rm -f src/org/armedbear/j/*.class
 	-rm -f src/org/armedbear/j/build
-	-rm -f src/org/armedbear/j/aelfred/*.class
 	-rm -f src/org/armedbear/j/mail/*.class
 	-rm -f src/org/armedbear/j/jdb/*.class
 	-rm -f src/org/armedbear/lisp/*.class
@@ -222,9 +210,6 @@ clean:
 	-rm -f src/bsh/commands/*.class
 	-rm -f src/bsh/reflect/*.class
 	-rm -f src/gnu/regexp/*.class
-	-rm -f src/org/xml/sax/*.class
-	-rm -f src/org/xml/sax/helpers/*.class
-	-rm -f src/org/xml/sax/ext/*.class
 	-rm -rf $(distdir)
 	-rm -f classes.stamp
 
@@ -237,12 +222,8 @@ distclean: clean
 	-rm -f src/bsh/commands/Makefile
 	-rm -f src/bsh/reflect/Makefile
 	-rm -f src/gnu/regexp/Makefile
-	-rm -f src/org/xml/sax/Makefile
-	-rm -f src/org/xml/sax/helpers/Makefile
-	-rm -f src/org/xml/sax/ext/Makefile
 	-rm -f src/org/armedbear/j/Makefile
 	-rm -f src/org/armedbear/j/version
-	-rm -f src/org/armedbear/j/aelfred/Makefile
 	-rm -f src/org/armedbear/j/mail/Makefile
 	-rm -f src/org/armedbear/j/jdb/Makefile
 	-rm -f src/org/armedbear/lisp/Makefile
@@ -273,10 +254,6 @@ j.zip:
 		src/bsh/commands/Makefile.in src/bsh/commands/*.java src/bsh/commands/*.bsh \
 		src/bsh/reflect/Makefile.in src/bsh/reflect/*.java \
 		src/gnu/regexp/Makefile.in src/gnu/regexp/*.java src/gnu/regexp/MessagesBundle.properties \
-		src/org/xml/sax/Makefile.in src/org/xml/sax/*.java \
-		src/org/xml/sax/helpers/Makefile.in src/org/xml/sax/helpers/*.java \
-		src/org/xml/sax/ext/Makefile.in src/org/xml/sax/ext/*.java \
-		src/org/armedbear/j/aelfred/Makefile.in src/org/armedbear/j/aelfred/*.java \
 		doc/*.html doc/*.css \
 		themes/* \
 		examples/* \
