@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: PackageFunctions.java,v 1.26 2004-02-23 14:24:47 piso Exp $
+ * $Id: PackageFunctions.java,v 1.27 2004-08-15 12:39:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,7 +279,7 @@ public final class PackageFunctions extends Lisp
             }
             pkg = Packages.createPackage(packageName);
             while (nicknames != NIL) {
-                LispObject string = string(nicknames.car());
+                LispObject string = nicknames.car().STRING();
                 pkg.addNickname(string.getStringValue());
                 nicknames = nicknames.cdr();
             }
@@ -310,7 +310,7 @@ public final class PackageFunctions extends Lisp
                 if (obj instanceof Package)
                     pkg.usePackage((Package)obj);
                 else {
-                    LispObject string = string(obj);
+                    LispObject string = obj.STRING();
                     Package p = Packages.findPackage(string.getStringValue());
                     if (p == null)
                         return signal(new LispError(String.valueOf(obj) +
