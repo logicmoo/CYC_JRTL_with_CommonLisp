@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.46 2005-04-05 15:42:17 piso Exp $
+ * $Id: Function.java,v 1.47 2005-04-05 22:57:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,24 +23,18 @@ package org.armedbear.lisp;
 
 public abstract class Function extends Operator
 {
-    private Symbol symbol;
-
     private int callCount;
 
-    protected Function()
-    {
-        symbol = null;
-    }
+    protected Function() {}
 
     public Function(String name)
     {
         if (name != null) {
-            symbol = Symbol.addFunction(name.toUpperCase(), this);
+            Symbol symbol = Symbol.addFunction(name.toUpperCase(), this);
             if (cold)
                 symbol.setBuiltInFunction(true);
             setLambdaName(symbol);
-        } else
-            symbol = null;
+        }
     }
 
     public Function(String name, String arglist)
@@ -72,6 +66,7 @@ public abstract class Function extends Operator
             setArglist(new SimpleString(arglist));
         if (name != null) {
             try {
+                Symbol symbol;
                 if (exported)
                     symbol = pkg.internAndExport(name.toUpperCase());
                 else
@@ -89,9 +84,9 @@ public abstract class Function extends Operator
         }
     }
 
-    public Function(Symbol symbol)
+    public Function(LispObject name)
     {
-        this.symbol = symbol;
+        setLambdaName(name);
     }
 
     public LispObject typeOf()

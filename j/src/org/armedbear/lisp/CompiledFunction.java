@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CompiledFunction.java,v 1.32 2005-03-19 20:00:23 piso Exp $
+ * $Id: CompiledFunction.java,v 1.33 2005-04-05 22:58:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,11 @@ package org.armedbear.lisp;
 
 public class CompiledFunction extends Closure
 {
-    public CompiledFunction(Symbol symbol, LispObject lambdaList,
+    public CompiledFunction(LispObject name, LispObject lambdaList,
                             LispObject body, Environment env)
         throws ConditionThrowable
     {
-        super(null, lambdaList, body, env);
+        super(name, lambdaList, body, env);
     }
 
     public LispObject typeOf()

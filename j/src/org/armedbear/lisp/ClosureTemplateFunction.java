@@ -2,7 +2,7 @@
  * ClosureTemplateFunction.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ClosureTemplateFunction.java,v 1.6 2005-03-19 20:00:23 piso Exp $
+ * $Id: ClosureTemplateFunction.java,v 1.7 2005-04-05 22:57:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,11 +29,11 @@ public abstract class ClosureTemplateFunction extends Closure
         super(lambdaList, NIL, null);
     }
 
-    public ClosureTemplateFunction(Symbol symbol, LispObject lambdaList,
+    public ClosureTemplateFunction(LispObject name, LispObject lambdaList,
                                    LispObject body, Environment env)
         throws ConditionThrowable
     {
-        super(null, lambdaList, body, env);
+        super(name, lambdaList, body, env);
     }
 
     public final LispObject execute() throws ConditionThrowable

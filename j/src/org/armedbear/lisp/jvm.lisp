@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.418 2005-04-04 19:17:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.419 2005-04-05 22:59:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -80,6 +80,7 @@
 
 (defstruct (class-file (:constructor %make-class-file))
   pathname ; pathname of output file
+  lambda-name
   class
   superclass
   lambda-list ; as advertised
@@ -102,9 +103,10 @@
         (setf (char name i) #\_)))
     (concatenate 'string "org/armedbear/lisp/" name)))
 
-(defun make-class-file (&key pathname lambda-list)
+(defun make-class-file (&key pathname lambda-name lambda-list)
   (aver (not (null pathname)))
   (let ((class-file (%make-class-file :pathname pathname
+                                      :lambda-name lambda-name
                                       :lambda-list lambda-list)))
     (setf (class-file-class class-file) (class-name-from-filespec pathname))
     class-file))
@@ -2005,7 +2007,7 @@
   code
   handlers)
 
-(defun make-constructor (super args)
+(defun make-constructor (super lambda-name args)
 ;;   (sys::%format t "make-constructor (length *static-code*) = ~S~%" (length *static-code*))
   (let* ((*compiler-debug* nil) ; We don't normally need to see debugging output for constructors.
          (constructor (make-method :name "<init>"
@@ -2028,11 +2030,19 @@
            (emit-push-nil) ;; body
            (emit 'aconst_null) ;; environment
            (emit-invokespecial-init super
-                                    (list +lisp-symbol+ +lisp-object+
+                                    (list +lisp-object+ +lisp-object+
                                           +lisp-object+ +lisp-environment+)))
           ((equal super +lisp-primitive-class+)
-           (emit 'aload_0)
-           (emit-invokespecial-init super nil))
+           (emit 'aload_0) ; this
+           (cond ((and (symbolp lambda-name) (symbol-package lambda-name))
+                  (emit 'ldc (pool-string (symbol-name lambda-name)))
+                  (emit 'ldc (pool-string (package-name (symbol-package lambda-name))))
+                  (emit-invokestatic +lisp-class+ "internInPackage"
+                                     (list +java-string+ +java-string+) +lisp-symbol+)
+                  (emit-invokespecial-init super (list +lisp-object+)))
+                 (t
+                  (emit-invokespecial-init super nil)))
+           )
           ((equal super +lisp-ctf-class+)
            (emit 'aload_0) ;; this
            (let* ((*print-level* nil)
@@ -5531,6 +5541,7 @@
          (this-index (pool-class (class-file-class class-file)))
          (super-index (pool-class super))
          (constructor (make-constructor super
+                                        (class-file-lambda-name class-file)
                                         (class-file-lambda-list class-file))))
     (pool-name "Code") ; Must be in pool!
 
@@ -6090,6 +6101,7 @@
     (compiler-unsupported "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (catch 'compile-defun-abort
     (let* ((class-file (make-class-file :pathname filespec
+                                        :lambda-name name
                                         :lambda-list (cadr form)))
            (*compiler-error-bailout*
             (lambda ()

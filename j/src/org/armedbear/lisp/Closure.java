@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Closure.java,v 1.94 2005-03-19 20:00:22 piso Exp $
+ * $Id: Closure.java,v 1.95 2005-04-05 22:58:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,11 +66,11 @@ public class Closure extends Function
         this(null, lambdaList, body, env);
     }
 
-    public Closure(Symbol symbol, LispObject lambdaList, LispObject body,
+    public Closure(LispObject name, LispObject lambdaList, LispObject body,
                    Environment env)
         throws ConditionThrowable
     {
-        super(symbol);
+        super(name);
         this.lambdaList = lambdaList;
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
         boolean andKey = false;
