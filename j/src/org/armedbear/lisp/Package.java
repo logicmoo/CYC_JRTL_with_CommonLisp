@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.17 2003-05-31 19:16:09 piso Exp $
+ * $Id: Package.java,v 1.18 2003-06-03 14:04:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,7 +150,23 @@ public final class Package extends LispObject
 
     public synchronized Symbol intern(String name)
     {
-        final LispThread thread = LispThread.currentThread();
+        // Look in external and internal symbols of this package.
+        Symbol symbol = (Symbol) map.get(name);
+        if (symbol != null)
+            return symbol;
+        // Look in external symbols of used packages.
+        for (Iterator it = useList.iterator(); it.hasNext();) {
+            Package pkg = (Package) it.next();
+            symbol = pkg.findSymbolInPackage(name);
+            if (symbol != null && symbol.isExternal())
+                return symbol;
+        }
+        // Not found.
+        return addSymbol(name);
+    }
+
+    public synchronized Symbol intern(String name, LispThread thread)
+    {
         LispObject[] values = new LispObject[2];
         // Look in external and internal symbols of this package.
         Symbol symbol = (Symbol) map.get(name);
