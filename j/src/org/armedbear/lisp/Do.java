@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Do.java,v 1.1 2003-09-23 12:57:30 piso Exp $
+ * $Id: Do.java,v 1.2 2003-09-23 14:55:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public final class Do extends Lisp
         final int depth = thread.getStackDepth();
         // Look for tags.
         Binding tags = null;
-        LispObject remaining = args;
+        LispObject remaining = body;
         while (remaining != NIL) {
             LispObject current = remaining.car();
             remaining = remaining.cdr();
