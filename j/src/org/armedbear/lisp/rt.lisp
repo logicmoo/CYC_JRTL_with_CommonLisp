@@ -309,6 +309,7 @@
         (tests (or args (list "and"
                               "apply"
                               "aref"
+                              "bit-vector"
                               "block"
                               "boundp"
                               "call-arguments-limit"
