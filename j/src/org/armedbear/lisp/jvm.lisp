@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.415 2005-03-31 00:18:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.416 2005-03-31 05:36:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1319,6 +1319,8 @@
                122 ; ISHR
                123 ; LSHR
                126 ; IAND
+               128 ; IOR
+               130 ; IXOR
                132 ; IINC
                133 ; I2L
                136 ; L2I
@@ -4351,6 +4353,68 @@
   (dformat t "p2-logand default case~%")
   (compile-function-call form target representation))
 
+(defun p2-logxor (form &key (target :stack) representation)
+  (dformat t "p2-logxor form = ~S rep = ~S~%" form representation) (finish-output)
+  (let* ((args (cdr form))
+         (len (length args)))
+    (cond ((= len 2)
+           (let* ((arg1 (first args))
+                  (arg2 (second args))
+                  (var1 (unboxed-fixnum-variable arg1))
+                  (type1 t)
+                  (type2 t))
+             (when (and (fixnump arg1) (not (fixnump arg2)))
+               (setf arg1 (second args)
+                     arg2 (first args)
+                     var1 (unboxed-fixnum-variable arg1)))
+             ;;         (format t "p2-logxor type-of arg2 is ~S~%" (type-of arg2))
+             (setf type1 (derive-type arg1)
+                   type2 (derive-type arg2))
+             (dformat t "type1 = ~S type2 = ~S~%" type1 type2)
+             (cond ((and (integerp arg1) (integerp arg2))
+                    (dformat t "p2-logxor case 1~%")
+                    (compile-constant (logxor arg1 arg2) :target target :representation representation)
+                    (return-from p2-logxor t))
+                   ((and var1 (fixnump arg2))
+                    (dformat t "p2-logxor case 3~%")
+                    (finish-output)
+                    (unless (eq representation :unboxed-fixnum)
+                      (emit 'new +lisp-fixnum-class+)
+                      (emit 'dup))
+                    (emit 'iload (variable-register var1))
+                    (emit-push-constant-int arg2)
+                    (emit 'ixor)
+                    (unless (eq representation :unboxed-fixnum)
+                      (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+                    (emit-move-from-stack target representation)
+                    (return-from p2-logxor t))
+                   ((and (subtypep type1 'fixnum) (subtypep type2 'fixnum))
+                    (dformat t "p2-logxor case 4~%")
+                    (unless (eq representation :unboxed-fixnum)
+                      (emit 'new +lisp-fixnum-class+)
+                      (emit 'dup))
+                    (compile-form arg1 :target :stack :representation :unboxed-fixnum)
+                    (compile-form arg2 :target :stack :representation :unboxed-fixnum)
+                    (unless (and (single-valued-p arg1)
+                                 (single-valued-p arg2))
+                      (emit-clear-values))
+                    (emit 'ixor)
+                    (unless (eq representation :unboxed-fixnum)
+                      (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+                    (emit-move-from-stack target representation)
+                    (return-from p2-logxor t))
+                   )))
+          ((= len 3)
+           (dformat t "p2-logxor case 5~%")
+           ;; (logxor a b c) => (logxor (logxor a b) c)
+           (let ((new-form `(LOGXOR (LOGXOR ,(second form) ,(third form)) ,(fourth form))))
+             (dformat t "form = ~S~%" form)
+             (dformat t "new-form = ~S~%" new-form)
+             (p2-logxor new-form :target target :representation representation))
+           (return-from p2-logxor t))))
+  (dformat t "p2-logxor default case~%")
+  (compile-function-call form target representation))
+
 (defun p2-mod (form &key (target :stack) representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -4408,7 +4472,9 @@
          (let ((op (first form)))
            (case op
              (ASH
-              (derive-type-ash (second form) (third form)))
+              (ash-derive-type (second form) (third form)))
+             (AREF
+              (aref-derive-type (cdr form)))
              (-
               (if (and (= (length form) 2)
                        (or (fixnump (cadr form))
@@ -4416,7 +4482,9 @@
                   'FIXNUM
                   t))
              (LOGAND
-              (derive-type-logand (cdr form)))
+              (logand-derive-type (cdr form)))
+             (LOGXOR
+              (logxor-derive-type (cdr form)))
              (THE
               (second form))
              (t
@@ -4424,11 +4492,34 @@
         (t
          t)))
 
-(defun derive-type-logand (args)
+(defun aref-derive-type (args)
+  (let* ((array-arg (car args))
+         (array-type (derive-type array-arg))
+         (result-type t))
+    (dformat t "aref-derive-type array type = ~S~%" array-type)
+    (when (and (consp array-type)
+               (memq (first array-type) '(ARRAY SIMPLE-ARRAY VECTOR)))
+      (let ((element-type (second array-type)))
+        (dformat t "element-type = ~S~%" element-type)
+        (unless (eq element-type '*)
+          (setf result-type element-type))))
+    result-type))
+
+(defun logxor-derive-type (args)
+  (let ((result-type nil))
+    (dolist (arg args)
+      (let ((type (derive-type arg)))
+        (dformat t "logxor-derive-type arg = ~S type = ~S~%" arg type)
+        (unless (subtypep type result-type)
+          (setf result-type type))))
+    (dformat t "logxor-derive-type returning ~S~%" result-type)
+    result-type))
+
+(defun logand-derive-type (args)
   (let ((result-type 'INTEGER))
     (dolist (arg args)
       (let ((type (derive-type arg)))
-        (dformat t "derive-type-logand arg = ~S type = ~S~%" arg type)
+        (dformat t "logand-derive-type arg = ~S type = ~S~%" arg type)
         (cond ((subtypep type '(UNSIGNED-BYTE 8))
                (unless (subtypep result-type '(UNSIGNED-BYTE 8))
                  (setf result-type '(UNSIGNED-BYTE 8))))
@@ -4440,19 +4531,15 @@
                  (setf result-type '(UNSIGNED-BYTE 24))))
               ((eq type 'T))
               (t
-               (dformat t "derive-type-logand unsupported type ~S~%" type)))))
-    (dformat t "derive-type-logand returning ~S~%" result-type)
+               (dformat t "logand-derive-type unsupported type ~S~%" type)))))
+    (dformat t "logand-derive-type returning ~S~%" result-type)
     result-type))
 
-(defun derive-type-ash (arg1 arg2)
-  (dformat t "derive-type-ash ~S ~S~%" arg1 arg2)
-  (let* ((type1 t)
+(defun ash-derive-type (arg1 arg2)
+  (dformat t "ash-derive-type ~S ~S~%" arg1 arg2)
+  (let* ((type1 (sys::normalize-type (derive-type arg1)))
          (result-type 'INTEGER))
-    (when (symbolp arg1)
-      (let ((variable (find-visible-variable arg1)))
-        (when variable
-          (setf type1 (sys::normalize-type (variable-declared-type variable))))))
-    (dformat t "derive-type-ash type1 = ~S~%" type1)
+    (dformat t "ash-derive-type type1 = ~S~%" type1)
     (when (subtypep type1 'fixnum)
       (let ((low most-negative-fixnum)
             (high most-positive-fixnum))
@@ -4467,12 +4554,12 @@
         (when (fixnump arg2)
           (cond ((= arg2 0)
                  (setf result-type type1))
-                ((= arg2 1)
-                 (setf result-type (list 'INTEGER (* low 2) (* high 2))))
+                ((<= 1 arg2 32)
+                 (setf result-type (list 'INTEGER (ash low 1) (ash high 1))))
                 ((minusp arg2)
                  ;; Shift right.
                  (setf result-type 'FIXNUM))))))
-    (dformat t "derive-type-ash returning ~S~%" result-type)
+    (dformat t "ash-derive-type returning ~S~%" result-type)
     result-type))
 
 (defun p2-length (form &key (target :stack) representation)
@@ -5691,7 +5778,7 @@
                  (let ((variable (find-visible-variable name)))
                    (when variable
                      (setf (variable-declared-type variable) (cadr decl))
-                     (unless (or *child-p*
+                     (unless (or ;;*child-p*
                                  (plusp (compiland-children *current-compiland*)))
                        (when (and (variable-register variable)
                                   (not (variable-special-p variable))
@@ -5706,7 +5793,7 @@
                  (let ((variable (find-visible-variable name)))
                    (when variable
                      (setf (variable-declared-type variable) (car decl))
-                     (unless (or *child-p*
+                     (unless (or ;;*child-p*
                                  (plusp (compiland-children *current-compiland*)))
                        (when (and (variable-register variable)
                                   (not (variable-special-p variable))
@@ -5838,7 +5925,8 @@
                                    +lisp-object-array+)))
         (emit 'astore (compiland-argument-register compiland)))
 
-      (unless (or *child-p* *using-arg-array*)
+      (unless (or ;;*child-p*
+                  *using-arg-array*)
 ;;         (dolist (variable (reverse *visible-variables*))
         (dolist (variable (compiland-arg-vars compiland))
           (when (eq (variable-representation variable) :unboxed-fixnum)
@@ -6153,6 +6241,7 @@
   (install-p2-handler 'labels          'p2-labels)
   (install-p2-handler 'length          'p2-length)
   (install-p2-handler 'logand          'p2-logand)
+  (install-p2-handler 'logxor          'p2-logxor)
   (install-p2-handler 'load-time-value 'p2-load-time-value)
   (install-p2-handler 'mod             'p2-mod)
   (install-p2-handler 'not             'p2-not/null)
