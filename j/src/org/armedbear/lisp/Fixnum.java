@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.94 2004-08-08 18:15:04 piso Exp $
+ * $Id: Fixnum.java,v 1.95 2004-09-21 18:14:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -428,7 +428,7 @@ public final class Fixnum extends LispObject
             return n.compareTo(((Ratio)obj).numerator()) < 0;
         }
         if (obj instanceof LispFloat)
-            return (float) value < LispFloat.getValue(obj);
+            return isLessThan(((LispFloat)obj).rational());
         signal(new TypeError(obj, "number"));
         // Not reached.
         return false;
@@ -446,7 +446,7 @@ public final class Fixnum extends LispObject
             return n.compareTo(((Ratio)obj).numerator()) > 0;
         }
         if (obj instanceof LispFloat)
-            return (float) value > LispFloat.getValue(obj);
+            return isGreaterThan(((LispFloat)obj).rational());
         signal(new TypeError(obj, "number"));
         // Not reached.
         return false;
@@ -464,7 +464,7 @@ public final class Fixnum extends LispObject
             return n.compareTo(((Ratio)obj).numerator()) <= 0;
         }
         if (obj instanceof LispFloat)
-            return (float) value <= LispFloat.getValue(obj);
+            return isLessThanOrEqualTo(((LispFloat)obj).rational());
         signal(new TypeError(obj, "number"));
         // Not reached.
         return false;
@@ -482,7 +482,7 @@ public final class Fixnum extends LispObject
             return n.compareTo(((Ratio)obj).numerator()) >= 0;
         }
         if (obj instanceof LispFloat)
-            return (float) value >= LispFloat.getValue(obj);
+            return isGreaterThanOrEqualTo(((LispFloat)obj).rational());
         signal(new TypeError(obj, "number"));
         // Not reached.
         return false;
