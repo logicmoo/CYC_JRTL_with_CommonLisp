@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_array.java,v 1.1 2003-09-14 11:35:44 piso Exp $
+ * $Id: make_array.java,v 1.2 2003-09-14 11:45:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,15 @@ public final class make_array extends Primitive {
                                 ":INITIAL-ELEMENT AND :INITIAL-CONTENTS");
         }
         final int rank = dimensions.listp() ? dimensions.length() : 1;
+        int[] dimv = new int[rank];
+        if (dimensions.listp()) {
+            for (int i = 0; i < rank; i++) {
+                LispObject dim = dimensions.car();
+                dimv[i] = Fixnum.getValue(dim);
+                dimensions = dimensions.cdr();
+            }
+        } else
+            dimv[0] = Fixnum.getValue(dimensions);
         if (displacedTo != NIL) {
             final AbstractArray array = checkArray(displacedTo);
             final int offset;
@@ -58,20 +67,10 @@ public final class make_array extends Primitive {
                 throw new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO");
             if (initialContents != NIL)
                 throw new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO");
-            int[] dimv = new int[rank];
-            for (int i = 0; i < rank; i++) {
-                LispObject dim = dimensions.car();
-                dimv[i] = Fixnum.getValue(dim);
-                dimensions = dimensions.cdr();
-            }
             return new DisplacedArray(dimv, array, offset);
         }
         if (rank == 1) {
-            final int size;
-            if (dimensions instanceof Cons)
-                size = Fixnum.getValue(dimensions.car());
-            else
-                size = Fixnum.getValue(dimensions);
+            final int size = dimv[0];
             int limit =
                 Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
             if (size < 0 || size >= limit) {
@@ -118,12 +117,6 @@ public final class make_array extends Primitive {
             return v;
         }
         // rank != 1
-        int[] dimv = new int[rank];
-        for (int i = 0; i < rank; i++) {
-            LispObject dim = dimensions.car();
-            dimv[i] = Fixnum.getValue(dim);
-            dimensions = dimensions.cdr();
-        }
         Array array;
         if (initialContents != NIL) {
             array = new Array(dimv, initialContents);
