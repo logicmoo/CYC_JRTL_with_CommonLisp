@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_array.java,v 1.7 2003-12-13 00:02:47 piso Exp $
+ * $Id: make_array.java,v 1.8 2003-12-27 17:02:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,10 @@ public final class make_array extends Primitive {
                 return signal(new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO"));
             if (initialContents != NIL)
                 return signal(new LispError(":INITIAL-CONTENTS must not be specified with :DISPLACED-TO"));
-            return new DisplacedArray(dimv, array, offset);
+            DisplacedArray displacedArray = new DisplacedArray(dimv, array, offset);
+            if (rank == 1 && fillPointer != NIL)
+                displacedArray.setFillPointer(fillPointer);
+            return displacedArray;
         }
         if (rank == 1) {
             final int size = dimv[0];
@@ -75,15 +78,15 @@ public final class make_array extends Primitive {
                 Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
             if (size < 0 || size >= limit) {
                 StringBuffer sb = new StringBuffer();
-                sb.append("the size specified for this array (");
+                sb.append("The size specified for this array (");
                 sb.append(size);
                 sb.append(')');
                 if (size >= limit) {
                     sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
                     sb.append(limit);
-                    sb.append(')');
+                    sb.append(").");
                 } else
-                    sb.append(" is negative");
+                    sb.append(" is negative.");
                 return signal(new LispError(sb.toString()));
             }
             AbstractVector v;
