@@ -2,7 +2,7 @@
  * ImapSession.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapSession.java,v 1.1.1.1 2002-09-24 16:10:12 piso Exp $
+ * $Id: ImapSession.java,v 1.2 2002-09-25 13:58:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,8 @@ public final class ImapSession
     private final String password;
     private final int port;
 
+    private String tunnelHost;
+    private int tunnelPort = -1;
     private ImapMailbox mailbox;
     private int state;
     private boolean echo;
@@ -139,6 +141,27 @@ public final class ImapSession
         return errorText;
     }
 
+    public void setTunnel(String tunnel)
+    {
+        if (tunnel != null) {
+            tunnel = tunnel.trim();
+            int colon = tunnel.indexOf(':');
+            if (colon > 0) {
+                tunnelHost = tunnel.substring(0, colon);
+                try {
+                    tunnelPort =
+                        Integer.parseInt(tunnel.substring(colon+1).trim());
+                }
+                catch (NumberFormatException e) {
+                    Log.error(e);
+                    tunnelHost = null;
+                    tunnelPort = -1;
+                }
+            }
+        }
+        Log.debug("setTunnel host = |" + tunnelHost + "| port = " + tunnelPort);
+    }
+
     public synchronized final long getLastErrorMillis()
     {
         return lastErrorMillis;
@@ -199,9 +222,18 @@ public final class ImapSession
     {
         socket = null;
         errorText = null;
-        SocketConnection sc =
-            new SocketConnection(host, port, 30000, 200, null);
-        Log.debug("connecting to " + host + " on port " + port);
+        final String h; // Host.
+        final int p; // Port.
+        if (tunnelHost != null && tunnelPort > 0) {
+            h = tunnelHost;
+            p = tunnelPort;
+            Log.debug("connect using tunnel h = " + h + " p = " + p);
+        } else {
+            h = host;
+            p = port;
+        }
+        SocketConnection sc = new SocketConnection(h, p, 30000, 200, null);
+        Log.debug("connecting to " + h + " on port " + p);
         socket = sc.connect();
         if (socket == null) {
             errorText = sc.getErrorText();
