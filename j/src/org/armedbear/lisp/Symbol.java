@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.17 2003-03-02 01:46:33 piso Exp $
+ * $Id: Symbol.java,v 1.18 2003-03-03 02:13:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,7 @@ public class Symbol extends LispObject
     public static final Symbol CONTROL_ERROR      = export("CONTROL-ERROR");
     public static final Symbol PACKAGE_ERROR      = export("PACKAGE-ERROR");
     public static final Symbol PROGRAM_ERROR      = export("PROGRAM-ERROR");
+    public static final Symbol SIMPLE_ERROR       = export("SIMPLE-ERROR");
     public static final Symbol TYPE_ERROR         = export("TYPE-ERROR");
     public static final Symbol UNDEFINED_FUNCTION =
         export("UNDEFINED-FUNCTION");
