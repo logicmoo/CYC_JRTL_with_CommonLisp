@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.135 2003-12-08 03:01:06 piso Exp $
+;;; $Id: boot.lisp,v 1.136 2003-12-13 20:21:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -272,9 +272,17 @@
            (tagbody
             ,@forms))))))
 
+(defmacro do-symbols ((var &optional (package '*package*) (result nil)) &body body)
+  `(dolist (,var
+            (append (sys::package-symbols ,package)
+                    (sys::package-inherited-symbols ,package))
+            ,result)
+     ,@body))
+
+(defmacro do-external-symbols ((var &optional (package '*package*) (result nil)) &body body)
+  `(dolist (,var (sys::package-external-symbols ,package) ,result) ,@body))
 
 ;;; From CMUCL.
-
 (defmacro with-output-to-string ((var &optional string &key element-type)
 				 &body forms)
   "If STRING is specified, it must be a string with a fill pointer;
