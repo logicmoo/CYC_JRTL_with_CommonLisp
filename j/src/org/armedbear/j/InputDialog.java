@@ -2,7 +2,7 @@
  * InputDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: InputDialog.java,v 1.2 2003-06-26 00:43:48 piso Exp $
+ * $Id: InputDialog.java,v 1.3 2003-07-23 16:13:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@ import java.awt.event.KeyListener;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -53,7 +52,7 @@ public class InputDialog extends JDialog implements KeyListener
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        panel.add(new JLabel(prompt));
+        panel.add(new Label(prompt));
         textField = new HistoryTextField(20);
         textField.addKeyListener(this);
         panel.add(textField);

@@ -1,8 +1,8 @@
 /*
  * ConfirmReplacementDialog.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: ConfirmReplacementDialog.java,v 1.1.1.1 2002-09-24 16:07:46 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: ConfirmReplacementDialog.java,v 1.2 2003-07-23 16:16:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public final class ConfirmReplacementDialog extends AbstractDialog
@@ -45,7 +44,7 @@ public final class ConfirmReplacementDialog extends AbstractDialog
         this.inFiles = inFiles;
         JPanel textPanel = new JPanel();
         textPanel.setAlignmentX(LEFT_ALIGNMENT);
-        textPanel.add(new JLabel("Replace this occurrence?"));
+        textPanel.add(new Label("Replace this occurrence?"));
         mainPanel.add(textPanel);
         JPanel buttonBox = new JPanel();
         buttonBox.setAlignmentX(LEFT_ALIGNMENT);
