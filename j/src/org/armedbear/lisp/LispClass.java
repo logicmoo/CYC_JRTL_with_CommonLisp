@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.27 2003-09-28 14:58:43 piso Exp $
+ * $Id: LispClass.java,v 1.28 2003-09-28 18:32:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,6 +153,21 @@ public class LispClass extends StandardObject
             return T;
         return super.typep(type);
     }
+
+    // ### add-class
+    private static final Primitive1 ADD_CLASS =
+        new Primitive1("add-class", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject obj) throws ConditionThrowable
+        {
+            if (obj instanceof LispClass) {
+                LispClass c = (LispClass) obj;
+                addClass(c.getSymbol(), c);
+                return c;
+            }
+            throw new ConditionThrowable(new TypeError(this, "class"));
+        }
+    };
 
     // ### find-class
     // find-class symbol &optional errorp environment => class
