@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.8 2003-11-17 01:44:50 piso Exp $
+;;; $Id: precompiler.lisp,v 1.9 2003-11-17 19:12:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,6 +46,17 @@
   (if (= (length args) 1)
       `(progn ,(car args))
       form))
+
+(defun quoted-form-p (form)
+  (and (consp form) (eq (car form) 'quote) (= (length form) 2)))
+
+(define-compiler-macro eql (&whole form &rest args)
+  (let ((first (car args))
+        (second (cadr args)))
+    (if (or (and (sys::quoted-form-p first) (symbolp (cadr first)))
+            (and (sys::quoted-form-p second) (symbolp (cadr second))))
+        `(eq ,(car args) ,(cadr args))
+        form)))
 
 (in-package "EXTENSIONS")
 
