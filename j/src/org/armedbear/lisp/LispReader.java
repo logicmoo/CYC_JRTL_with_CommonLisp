@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.11 2004-03-12 00:26:59 piso Exp $
+ * $Id: LispReader.java,v 1.12 2004-03-12 00:36:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,18 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             return signal(new ReaderError("Unmatched right parenthesis."));
+        }
+    };
+
+    public static final ReaderMacroFunction READ_QUOTE =
+        new ReaderMacroFunction("read-quote", PACKAGE_SYS, false,
+                                "stream character")
+    {
+        public LispObject execute(Stream stream, char ignored)
+            throws ConditionThrowable
+        {
+            return new Cons(Symbol.QUOTE,
+                            new Cons(stream.read(true, NIL, true)));
         }
     };
 }
