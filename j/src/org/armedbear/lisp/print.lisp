@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.4 2004-05-16 14:08:38 piso Exp $
+;;; $Id: print.lisp,v 1.5 2004-06-11 16:52:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -65,7 +65,8 @@
                       (return))
                     (write-char #\space stream)
                     (incf length)))
-                (write-char #\) stream)))))
+                (write-char #\) stream))))
+  list)
 
 ;;; Output the abbreviated #< form of an array.
 (defun output-terse-array (array stream)
