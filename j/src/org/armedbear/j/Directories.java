@@ -1,8 +1,8 @@
 /*
  * Directories.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directories.java,v 1.1.1.1 2002-09-24 16:08:27 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Directories.java,v 1.2 2003-06-28 23:52:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,37 +84,31 @@ public final class Directories
 
     public static final File getUserHomeDirectory()
     {
-        Debug.assertTrue(userHomeDirectory != null);
         return userHomeDirectory;
     }
 
     public static File getEditorDirectory()
     {
-        Debug.assertTrue(editorDirectory != null);
         return editorDirectory;
     }
 
     public static File getTempDirectory()
     {
-        Debug.assertTrue(tempDirectory != null);
         return tempDirectory;
     }
 
     public static final File getMailDirectory()
     {
-        Debug.assertTrue(mailDirectory != null);
         return mailDirectory;
     }
 
     public static final File getDraftsFolder()
     {
-        Debug.assertTrue(draftsFolder != null);
         return draftsFolder;
     }
 
     public static final File getRegistersDirectory()
     {
-        Debug.assertTrue(registersDirectory != null);
         return registersDirectory;
     }
 
@@ -129,7 +123,6 @@ public final class Directories
 
     public static final void moveUnsentMessagesToDraftsFolder()
     {
-        Debug.assertTrue(mailDirectory != null);
         File unsentMessagesDirectory =
             File.getInstance(mailDirectory, "unsent");
         if (unsentMessagesDirectory == null) {
@@ -156,7 +149,6 @@ public final class Directories
                 return;
             }
         }
-        Debug.assertTrue(draftsFolder.isDirectory());
         if (!draftsFolder.canWrite()) {
             Log.error(draftsFolder.netPath() + " is not writable");
         }
