@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.4 2004-04-18 18:45:48 piso Exp $
+;;; $Id: compile-system.lisp,v 1.5 2004-04-24 12:36:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -135,6 +135,7 @@
                             "pathnames.lisp"
                             ;;"pprint.lisp"
                             "precompiler.lisp"
+                            "print.lisp"
                             ;;"print-object.lisp"
                             "print-unreadable-object.lisp"
                             "profiler.lisp"
