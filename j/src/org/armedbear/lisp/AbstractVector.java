@@ -43,8 +43,6 @@ public abstract class AbstractVector extends AbstractArray
                 return T;
             if (name.equals("ARRAY"))
                 return T;
-        } else if (typeSpecifier instanceof Cons) {
-            return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
         }
         return super.typep(typeSpecifier);
     }

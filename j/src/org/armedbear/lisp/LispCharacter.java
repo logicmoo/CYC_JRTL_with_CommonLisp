@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.21 2003-09-11 16:08:24 piso Exp $
+ * $Id: LispCharacter.java,v 1.22 2003-09-16 19:01:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,8 +54,6 @@ public final class LispCharacter extends LispObject
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
-        if (typeSpecifier instanceof Cons)
-            return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
         if (typeSpecifier == Symbol.CHARACTER)
             return T;
         if (typeSpecifier == Symbol.BASE_CHAR)

@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.8 2003-09-14 17:03:42 piso Exp $
+ * $Id: Array.java,v 1.9 2003-09-16 19:01:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,8 +134,6 @@ public final class Array extends AbstractArray
             if (name.equals("ARRAY"))
                 return T;
         }
-        if (typeSpecifier instanceof Cons)
-            return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
         return super.typep(typeSpecifier);
     }
 
