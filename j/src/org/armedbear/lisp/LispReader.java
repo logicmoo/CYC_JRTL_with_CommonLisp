@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.29 2004-10-24 18:05:12 piso Exp $
+ * $Id: LispReader.java,v 1.30 2005-01-11 18:12:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -195,8 +195,9 @@ public final class LispReader extends Lisp
                 // n was supplied.
                 final int length = sb.length();
                 if (length == 0) {
-                    return signal(new ReaderError("No element specified for bit vector of length "
-                                                  + n + '.'));
+                    if (n > 0)
+                        return signal(new ReaderError("No element specified for bit vector of length "
+                                                      + n + '.'));
                 }
                 if (n > length) {
                     final char c = sb.charAt(length - 1);
