@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.479 2003-10-21 18:41:54 piso Exp $
+ * $Id: Primitives.java,v 1.480 2003-10-21 19:10:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1116,7 +1116,8 @@ public final class Primitives extends Module
     };
 
     // ### error
-    private static final Primitive ERROR = new Primitive("error") {
+    private static final Primitive ERROR = new Primitive("error")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
@@ -1131,6 +1132,8 @@ public final class Primitives extends Module
                     throw new ConditionThrowable(new ParseError(_format(args, 1)));
                 if (datum == Symbol.PROGRAM_ERROR)
                     throw new ConditionThrowable(new ProgramError(_format(args, 1)));
+                if (datum == Symbol.SIMPLE_ERROR)
+                    throw new ConditionThrowable(new SimpleError(_format(args, 1)));
                 if (datum == Symbol.TYPE_ERROR)
                     throw new ConditionThrowable(new TypeError(_format(args, 1)));
                 // Default.
@@ -1141,7 +1144,8 @@ public final class Primitives extends Module
     };
 
     // ### signal
-    private static final Primitive SIGNAL = new Primitive("signal") {
+    private static final Primitive SIGNAL = new Primitive("signal")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
