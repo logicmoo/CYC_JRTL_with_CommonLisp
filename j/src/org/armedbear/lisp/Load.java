@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.42 2004-03-30 22:16:11 piso Exp $
+ * $Id: Load.java,v 1.43 2004-04-16 01:09:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -300,20 +300,15 @@ public final class Load extends Lisp
     }
 
     // ### %load filespec verbose print if-does-not-exist => generalized-boolean
-    public static final Primitive _LOAD =
-        new Primitive("%load", PACKAGE_SYS, false,
-                      "filespec verbose print if-does-not-exist")
+    public static final Primitive4 _LOAD =
+        new Primitive4("%load", PACKAGE_SYS, false,
+                       "filespec verbose print if-does-not-exist")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject filespec, LispObject verbose,
+                                  LispObject print, LispObject ifDoesNotExist)
+            throws ConditionThrowable
         {
-            if (args.length != 4)
-                return signal(new WrongNumberOfArgumentsException(this));
-            Pathname pathname = Pathname.coerceToPathname(args[0]);
-            LispObject verbose = args[1];
-            LispObject print = args[2];
-            LispObject ifDoesNotExist = args[3];
-            String filename = pathname.getNamestring();
-            return load(filename,
+            return load(Pathname.coerceToPathname(filespec).getNamestring(),
                         verbose != NIL,
                         print != NIL,
                         ifDoesNotExist != NIL);
