@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.24 2003-07-06 14:04:44 piso Exp $
+ * $Id: Package.java,v 1.25 2003-07-06 17:29:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,15 +269,26 @@ public final class Package extends LispObject
         return T;
     }
 
-    public void export(Symbol symbol) throws LispError
+    public synchronized void importSymbol(Symbol symbol) throws LispError
     {
-        if (symbol.getPackage() != this) {
-            StringBuffer sb = new StringBuffer("attempt to export symbol ");
-            sb.append(symbol.getQualifiedName());
-            sb.append(" from package ");
+        if (symbol.getPackage() == this)
+            return; // Nothing to do.
+        Symbol sym = findAccessibleSymbol(symbol.getName());
+        if (sym != null && sym != symbol) {
+            StringBuffer sb = new StringBuffer("the symbol ");
+            sb.append(sym.getQualifiedName());
+            sb.append(" is already accessible in package ");
             sb.append(name);
-            throw new PackageError(sb.toString());
+            // FIXME Should be a correctable error of type PACKAGE-ERROR.
+            throw new LispError(sb.toString());
         }
+        internalSymbols.put(symbol.getName(), symbol);
+    }
+
+    public synchronized void export(Symbol symbol) throws LispError
+    {
+        if (symbol.getPackage() != this)
+            importSymbol(symbol);
         final String symbolName = symbol.getName();
         if (internalSymbols.get(symbolName) == symbol) {
             // Found existing internal symbol in this package.
