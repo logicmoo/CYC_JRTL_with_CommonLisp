@@ -1039,6 +1039,38 @@ separator character, which is a colon for Unix and a semicolon for Windows.
 <a href="commands.html#listIncludes">listIncludes</a>
 </dl>
 
+<code><a name="indentAfterBrace">indentAfterBrace</a></code>
+<dl>
+<dd>
+If true, the next line after a line that ends with '{' is indented, like this:
+<pre>
+        if (foo)
+        {
+            bar(); // This line is indented because of the preceding '{'.
+        }
+</pre>
+<p>
+<b>See also:</b> <a href="#indentBeforeBrace">indentBeforeBrace</a>
+<p>
+<b>Default value:</b> true
+</dl>
+
+<code><a name="indentBeforeBrace">indentBeforeBrace</a></code>
+<dl>
+<dd>
+If true, lines that start with '{' are indented, like this:
+<pre>
+        if (foo)
+            {      // This line is indented because it starts with '{'.
+            bar();
+            }
+</pre>
+<p>
+<b>See also:</b> <a href="#indentAfterBrace">indentAfterBrace</a>
+<p>
+<b>Default value:</b> false
+</dl>
+
 <code><a name="indentLineFixWhitespace">indentLineFixWhitespace</a></code>
 <dl>
 <dd>
