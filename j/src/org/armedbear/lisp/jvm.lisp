@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.254 2004-07-30 16:52:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.255 2004-07-31 17:57:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -102,6 +102,8 @@
 
 (defstruct variable
   name
+  initform
+  temp-register
   (kind 'LOCAL) ; ARG, LOCAL, SPECIAL
   special-p
   register ; register number or NIL
@@ -122,7 +124,6 @@
 (defun add-variable-to-context (variable)
   (aver (variable-p variable))
   (push variable (context-vars *context*)))
-
 
 (defun push-variable (name special-p)
   (let* ((index (if special-p nil (length (context-vars *context*))))
@@ -1154,22 +1155,56 @@
           (clear instr3)
           (setf locally-changed-p t))))
     (when locally-changed-p
+      (format t "OPTIMIZE-4 found something to do~%")
+      (assert nil)
       (setf *code* (delete 0 *code* :key #'instruction-opcode))
       t)))
 
-;; Don't do CLEAR-VALUES twice in a row.
+;; CLEAR-VALUES CLEAR-VALUES => CLEAR-VALUES
+;; TODO: GETSTATIC POP => nothing
+#+nil
 (defun optimize-5 ()
-  (let ((locally-changed-p nil)
+  (let ((code *code*)
+        (changed nil)
         (previous-opcode nil))
-    (dotimes (i (length *code*))
-      (let ((instruction (svref *code* i)))
+    (dotimes (i (length code))
+      (let ((instruction (svref code i)))
         (when (eql (instruction-opcode instruction) 205) ; CLEAR-VALUES
           (when (eql previous-opcode 205)
-            (clear instruction)
-            (setf locally-changed-p t)))
+            (setf (svref code i) nil)
+            (setf changed t)))
         (setf previous-opcode (instruction-opcode instruction))))
-    (when locally-changed-p
-      (setf *code* (delete 0 *code* :key #'instruction-opcode))
+    (when changed
+;;       (format t "OPTIMIZE-5 found something to do~%")
+      (setf *code* (delete nil code))
+      t)))
+
+(defun optimize-5 ()
+;;   (format t "optimize-5~%")
+  (let* ((code (coerce *code* 'list))
+         (tail code)
+         (changed nil))
+    (loop
+      (when (null (cdr tail))
+        (return))
+      (let ((this-opcode (instruction-opcode (car tail)))
+            (next-opcode (instruction-opcode (cadr tail))))
+        (case this-opcode
+          (205 ; CLEAR-VALUES
+           (when (eql next-opcode 205) ; CLEAR-VALUES
+             (setf (car tail) (cadr tail)
+                   (cdr tail) (cddr tail)
+                   changed t)))
+          (178 ; GETSTATIC
+;;            (format t "GETSTATIC~%")
+           (when (eql next-opcode 87) ; POP
+;;              (format t "GETSTATIC POP~%")
+             (setf (car tail) (caddr tail)
+                   (cdr tail) (cdddr tail)
+                   changed t)))))
+      (setf tail (cdr tail)))
+    (when changed
+      (setf *code* (coerce code 'vector))
       t)))
 
 (defvar *delete-unreachable-code-flag* t)
@@ -1568,7 +1603,10 @@
   (let ((g (gethash n *declared-fixnums*)))
     (unless g
       (let ((*code* *static-code*))
-        (setf g (symbol-name (gensym)))
+;;         (setf g (symbol-name (gensym)))
+        (setf g (%format nil "FIXNUM_~A~D"
+                         (if (minusp n) "MINUS_" "")
+                         (abs n)))
         (declare-field g +lisp-fixnum+)
         (emit 'new +lisp-fixnum-class+)
         (emit 'dup)
@@ -2418,9 +2456,7 @@
          (*visible-variables* *visible-variables*)
          (specials ())
          (varlist (cadr form))
-         (specialp nil)
-;;          env-register
-         )
+         (specialp nil))
     ;; Process declarations.
     (dolist (f (cddr form))
       (unless (and (consp f) (eq (car f) 'declare))
@@ -2444,9 +2480,9 @@
       (emit 'astore (block-environment-register block)))
     (ecase (car form)
       (LET
-       (compile-let-vars varlist specials))
+       (compile-let-bindings varlist specials))
       (LET*
-       (compile-let*-vars varlist specials)))
+       (compile-let*-bindings varlist specials)))
     ;; Body of LET/LET*.
     (do ((body (cddr form) (cdr body)))
         ((null (cdr body)) (compile-form (car body) :target target))
@@ -2458,53 +2494,60 @@
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
-(defun compile-let-vars (varlist specials)
+(defun compile-let-bindings (varlist specials)
   (let ((variables ()))
-    ;; Generate code to evaluate the initforms and leave the resulting values
-    ;; on the stack.
-    (let ((last-push-was-nil nil))
-      (dolist (varspec varlist)
-        (let ((initform (if (consp varspec) (cadr varspec) nil)))
-          (cond (initform
-                 (compile-form initform :target :stack)
-                 (maybe-emit-clear-values initform)
-                 (setf last-push-was-nil nil))
-                (t
-                 (if last-push-was-nil
-                     (emit 'dup)
-                     (emit-push-nil))
-                 (setf last-push-was-nil t))))))
-    ;; Add variables to *VARIABLES*.
     (dolist (varspec varlist)
       (let* ((name (if (consp varspec) (car varspec) varspec))
-             (specialp (if (or (memq name specials) (special-variable-p name)) t nil))
-             (variable (push-variable name specialp)))
-        (unless (or specialp *use-locals-vector*)
-          (setf (variable-register variable) (allocate-register)))
+             (initform (if (consp varspec) (cadr varspec) nil))
+             (special-p (if (or (memq name specials) (special-variable-p name)) t nil))
+             (variable
+              (make-variable :name name
+                             :initform initform
+                             :special-p special-p
+                             :index (if special-p nil (length (context-vars *context*)))
+                             :register (if (or special-p *use-locals-vector*) nil (allocate-register)))))
+        (unless special-p
+          (add-variable-to-context variable))
         (push variable variables)))
-    ;; At this point the initial values are on the runtime stack. Now generate
-    ;; code to pop them off one by one and store each one in the corresponding
-    ;; local or special variable.
-    (dolist (variable variables)
-      (compile-binding variable))))
+    (let ((*register* *register*))
+      ;; Generate code to evaluate each initform and leave the result in the
+      ;; variable's temp register. We do it this way to ensure JVM stack
+      ;; consistency if there is a non-local GO or RETURN from one of the
+      ;; initforms.
+      ;; FIXME Optimizations are possible here!
+      (dolist (variable (reverse variables))
+        (let ((initform (variable-initform variable)))
+          (cond (initform
+                 (compile-form initform :target :stack)
+                 (maybe-emit-clear-values initform))
+                (t
+                 (emit-push-nil)))
+          (setf (variable-temp-register variable) (allocate-register))
+          (emit-move-from-stack (variable-temp-register variable))))
+      ;; Move each result from the temp register to the proper destination.
+      (dolist (variable variables)
+        (emit 'aload (variable-temp-register variable))
+        (compile-binding variable)))
+    ;; Now make the variables visible.
+    (dolist (variable (reverse variables))
+      (push variable *visible-variables*)
+      (push variable *all-variables*))))
 
-(defun compile-let*-vars (varlist specials)
+(defun compile-let*-bindings (varlist specials)
   ;; Generate code to evaluate initforms and bind variables.
   (dolist (varspec varlist)
     (let* ((var (if (consp varspec) (car varspec) varspec))
            (initform (if (consp varspec) (cadr varspec) nil))
-           (specialp (if (or (memq var specials) (special-variable-p var)) t nil))
+           (special-p (if (or (memq var specials) (special-variable-p var)) t nil))
            variable)
       (cond (initform
              (compile-form initform :target :stack)
              (maybe-emit-clear-values initform))
             (t
              (emit-push-nil)))
-      (setf variable (push-variable var specialp))
-      (unless (or specialp *use-locals-vector*)
+      (setf variable (push-variable var special-p))
+      (unless (or special-p *use-locals-vector*)
         (setf (variable-register variable) (allocate-register)))
-;;       (format t "compile-let*-vars variable = ~S~%" (variable-name variable))
-;;       (dump-1-variable variable)
       (compile-binding variable))))
 
 ;; Returns list of declared specials.
@@ -2950,8 +2993,6 @@
                                       :classfile classfile)
                  *local-functions*)))))
 
-
-
 (defun compile-flet (form &key (target *val*))
   (if *use-locals-vector*
       (let ((*local-functions* *local-functions*)
@@ -3014,68 +3055,116 @@
          (lambda-list (cadr form))
          (lambda-body (cddr form)))
 
-    (when (and *use-locals-vector* (null *compile-file-truename*))
+    (unless *use-locals-vector*
+      (error "*USE-LOCALS-VECTOR* is NIL, can't compile lambda form~S"))
 
-      (when (or (memq '&optional lambda-list)
-                (memq '&key lambda-list))
-        (let ((state nil))
-          (dolist (arg lambda-list)
-            (cond ((memq arg lambda-list-keywords)
-                   (setf state arg))
-                  ((memq state '(&optional &key))
-                   (when (and (consp arg)
-                              (not (constantp (second arg))))
-                     (error "COMPILE-LAMBDA: can't handle optional argument with non-constant initform.")))))))
+    (when (or (memq '&optional lambda-list)
+              (memq '&key lambda-list))
+      (let ((state nil))
+        (dolist (arg lambda-list)
+          (cond ((memq arg lambda-list-keywords)
+                 (setf state arg))
+                ((memq state '(&optional &key))
+                 (when (and (consp arg)
+                            (not (constantp (second arg))))
+                   (error "COMPILE-LAMBDA: can't handle optional argument with non-constant initform.")))))))
 
-;;       (format t "compiling lambda form...~%")
-      (let* ((classfile
-              (prog1 (format nil "local-~D.class" *child-count*) (incf *child-count*)))
-             (compiled-function (sys::load-compiled-function
-                                 (let ((*nesting-level* (1+ *nesting-level*)))
-                                   (compile-defun nil form nil classfile)))))
-        (emit 'getstatic
-              *this-class*
-              (declare-object compiled-function)
-              +lisp-object+)
+    (cond (*compile-file-truename*
+           (let ((classfile
+                  (let ((*nesting-level* (1+ *nesting-level*)))
+                    (compile-defun nil form nil (sys::next-classfile-name)))))
+             (let* ((local-function (make-local-function :classfile classfile))
+                    (g (declare-local-function local-function)))
+               (emit 'getstatic
+                     *this-class*
+                     g
+                     +lisp-object+)
+               (cond ((zerop *nesting-level*)
+                      ;;                (format t "*nesting-level* is zero~%")
+                      ;; Make a vector of size 1.
+                      (emit 'sipush 1)
+                      (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+                      ;; Store args/locals register in slot 0.
+                      (emit 'dup)
+                      (emit 'sipush 0)
+                      (emit 'aload 1) ;; Args/locals register.
+                      (emit 'aastore))
+                     ;;                        ((= *nesting-level* (local-function-nesting-level local-function))
+                     ;;                         (emit 'aload 2))
+                     ;;                        (t
+                     ;;                         ;; This is the general case.
+                     ;;                         (emit 'sipush (local-function-nesting-level local-function))
+                     ;;                         (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+                     ;;                         (dotimes (i (1- (local-function-nesting-level local-function)))
+                     ;;                           (emit 'dup)
+                     ;;                           (emit 'sipush i)
+                     ;;                           (emit 'aload 2)
+                     ;;                           (emit 'sipush i)
+                     ;;                           (emit 'aaload)
+                     ;;                           (emit 'aastore))
+                     ;;                         (emit 'dup)
+                     ;;                         (emit 'sipush (1- (local-function-nesting-level local-function)))
+                     ;;                         (emit 'aload 1) ; Args/locals.
+                     ;;                         (emit 'aastore))
+                     (t
+                      (error "nesting level > 0, not supported"))
+                     )
+               (emit-invokestatic +lisp-class+
+                                  "makeCompiledClosure"
+                                  "(Lorg/armedbear/lisp/LispObject;[[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                                  -1) ; Stack: compiled-closure
+               (emit-move-from-stack target))))
+          (t
+;;            (%format t "COMPILE-LAMBDA t case~%")
+           (let* ((classfile
+                   (prog1 (format nil "local-~D.class" *child-count*) (incf *child-count*)))
+                  (compiled-function (sys::load-compiled-function
+                                      (let ((*nesting-level* (1+ *nesting-level*)))
+                                        (compile-defun nil form nil classfile)))))
+             (emit 'getstatic
+                   *this-class*
+                   (declare-object compiled-function)
+                   +lisp-object+)
+             (cond ((zerop *nesting-level*)
+                    ;;                (format t "*nesting-level* is zero~%")
+                    ;; Make a vector of size 1.
+                    (emit 'sipush 1)
+                    (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+                    ;; Store args/locals register in slot 0.
+                    (emit 'dup)
+                    (emit 'sipush 0)
+                    (emit 'aload 1) ;; Args/locals register.
+                    (emit 'aastore))
+                   ;;                        ((= *nesting-level* (local-function-nesting-level local-function))
+                   ;;                         (emit 'aload 2))
+                   ;;                        (t
+                   ;;                         ;; This is the general case.
+                   ;;                         (emit 'sipush (local-function-nesting-level local-function))
+                   ;;                         (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
+                   ;;                         (dotimes (i (1- (local-function-nesting-level local-function)))
+                   ;;                           (emit 'dup)
+                   ;;                           (emit 'sipush i)
+                   ;;                           (emit 'aload 2)
+                   ;;                           (emit 'sipush i)
+                   ;;                           (emit 'aaload)
+                   ;;                           (emit 'aastore))
+                   ;;                         (emit 'dup)
+                   ;;                         (emit 'sipush (1- (local-function-nesting-level local-function)))
+                   ;;                         (emit 'aload 1) ; Args/locals.
+                   ;;                         (emit 'aastore))
+                   (t
+                    (error "nesting level > 0, not supported"))
+                   )
+             (emit-invokestatic +lisp-class+
+                                "makeCompiledClosure"
+                                "(Lorg/armedbear/lisp/LispObject;[[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                                -1) ; Stack: compiled-closure
+             (emit-move-from-stack target)
+             ;;         (incf *child-count*)
+             )))
+    (return-from compile-lambda)
 
-        (cond ((zerop *nesting-level*)
-;;                (format t "*nesting-level* is zero~%")
-               ;; Make a vector of size 1.
-               (emit 'sipush 1)
-               (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
-               ;; Store args/locals register in slot 0.
-               (emit 'dup)
-               (emit 'sipush 0)
-               (emit 'aload 1) ;; Args/locals register.
-               (emit 'aastore))
-              ;;                        ((= *nesting-level* (local-function-nesting-level local-function))
-              ;;                         (emit 'aload 2))
-              ;;                        (t
-              ;;                         ;; This is the general case.
-              ;;                         (emit 'sipush (local-function-nesting-level local-function))
-              ;;                         (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
-              ;;                         (dotimes (i (1- (local-function-nesting-level local-function)))
-              ;;                           (emit 'dup)
-              ;;                           (emit 'sipush i)
-              ;;                           (emit 'aload 2)
-              ;;                           (emit 'sipush i)
-              ;;                           (emit 'aaload)
-              ;;                           (emit 'aastore))
-              ;;                         (emit 'dup)
-              ;;                         (emit 'sipush (1- (local-function-nesting-level local-function)))
-              ;;                         (emit 'aload 1) ; Args/locals.
-              ;;                         (emit 'aastore))
-              (t
-               (error "nesting level > 0, not supported"))
-              )
-        (emit-invokestatic +lisp-class+
-                           "makeCompiledClosure"
-                           "(Lorg/armedbear/lisp/LispObject;[[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                           -1) ; Stack: compiled-closure
-
-        (emit-move-from-stack target)
-;;         (incf *child-count*)
-        (return-from compile-lambda)))
+;; FOLLOWING CODE IS NOT REACHED!!
 
     (when closure-vars
       (dolist (variable closure-vars)
@@ -3152,7 +3241,6 @@
       (emit-move-from-stack target))))
 
 (defun compile-function (form &key (target *val*))
-;;   (format t "compile-function form = ~S~%" form)
   (let ((name (second form))
         (local-function))
     (cond ((symbolp name)
@@ -3240,82 +3328,6 @@
                   (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
           ((and (consp name) (eq (car name) 'LAMBDA))
            (compile-lambda name target))
-;;            (let* ((closure-vars *visible-variables*)
-;;                   (lambda-form name)
-;;                   (lambda-body (cddr lambda-form)))
-;;              (when closure-vars
-;;                (dolist (variable closure-vars)
-;;                  (when (contains-symbol (variable-name variable) lambda-body)
-;;                    (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))))
-;;              (when (contains-return lambda-body)
-;;                (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing RETURN or RETURN-FROM."))
-;;              (when (contains-go lambda-body)
-;;                (error "COMPILE-FUNCTION: unable to compile LAMBDA form containing GO."))
-;;              (fresh-line)
-;;              (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
-
-;;              (unless *use-locals-vector*
-;;                (format t "*use-locals-vector* is NIL, can't compile lambda form~S"))
-
-;;              (when (and *use-locals-vector* (null *compile-file-truename*))
-;;                (format t "compiling lambda form...~%")
-;;                (let* ((classfile (format nil "local-~D.class" *child-count*))
-;;                       (compiled-function (sys::load-compiled-function
-;;                                           (compile-defun nil lambda-form nil
-;;                                                          classfile)))
-;;                       (g (declare-object compiled-function)))
-;;                  (emit 'getstatic
-;;                        *this-class*
-;;                        g
-;;                        +lisp-object+)
-
-;;                  (cond ((zerop *nesting-level*)
-;;                         (format t "*nesting-level* is zero~%")
-;;                         ;; Make a vector of size 1.
-;;                         (emit 'sipush 1)
-;;                         (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
-;;                         ;; Store args/locals register in slot 0.
-;;                         (emit 'dup)
-;;                         (emit 'sipush 0)
-;;                         (emit 'aload 1) ;; Args/locals register.
-;;                         (emit 'aastore))
-;; ;;                        ((= *nesting-level* (local-function-nesting-level local-function))
-;; ;;                         (emit 'aload 2))
-;; ;;                        (t
-;; ;;                         ;; This is the general case.
-;; ;;                         (emit 'sipush (local-function-nesting-level local-function))
-;; ;;                         (emit 'anewarray "[Lorg/armedbear/lisp/LispObject;")
-;; ;;                         (dotimes (i (1- (local-function-nesting-level local-function)))
-;; ;;                           (emit 'dup)
-;; ;;                           (emit 'sipush i)
-;; ;;                           (emit 'aload 2)
-;; ;;                           (emit 'sipush i)
-;; ;;                           (emit 'aaload)
-;; ;;                           (emit 'aastore))
-;; ;;                         (emit 'dup)
-;; ;;                         (emit 'sipush (1- (local-function-nesting-level local-function)))
-;; ;;                         (emit 'aload 1) ; Args/locals.
-;; ;;                         (emit 'aastore))
-;;                        (t
-;;                         (error "nesting level > 0, not supported"))
-;;                        )
-;;                  (emit-invokestatic +lisp-class+
-;;                                     "makeCompiledClosure"
-;;                                     "(Lorg/armedbear/lisp/LispObject;[[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-;;                                     -1) ; Stack: compiled-closure
-
-;;                  (emit-move-from-stack target)
-;;                  (incf *child-count*)
-;;                  (return-from compile-function)))
-
-;;              (let ((g (if *compile-file-truename*
-;;                           (declare-lambda lambda-form)
-;;                           (declare-object (sys::coerce-to-function lambda-form)))))
-;;                (emit 'getstatic
-;;                      *this-class*
-;;                      g
-;;                      +lisp-object+)
-;;                (emit-move-from-stack target))))
           (t
            (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
