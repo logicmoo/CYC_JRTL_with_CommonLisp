@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.20 2003-10-13 12:08:23 piso Exp $
+;;; $Id: defclass.lisp,v 1.21 2003-10-13 13:11:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -57,6 +57,9 @@
 (defsetf class-direct-slots %set-class-direct-slots)
 (defsetf class-precedence-list %set-class-precedence-list)
 (defsetf class-slots %set-class-slots)
+
+(defun (setf find-class) (new-value symbol &optional errorp environment)
+  (%set-find-class symbol new-value))
 
 (defun canonicalize-direct-slots (direct-slots)
   `(list ,@(mapcar #'canonicalize-direct-slot direct-slots)))
@@ -501,7 +504,7 @@
     (unless class
       (setf class (apply #'make-instance-standard-class
                          (find-class 'standard-class) :name name all-keys))
-      (add-class class))
+      (%set-find-class name class))
     class))
 
 (defmacro defclass (name direct-superclasses direct-slots
@@ -1103,19 +1106,19 @@
 (defun std-compute-method-function (method)
   (let ((form (method-body method))
         (lambda-list (method-lambda-list method)))
-    (compile-in-lexical-environment (method-environment method)
-                                    `(lambda (args next-emfun)
-                                       (flet ((call-next-method (&rest cnm-args)
-                                                                (if (null next-emfun)
-                                                                    (error "No next method for the~@
-                                                                    generic function ~S."
-                                                                           (method-generic-function ',method))
-                                                                    (funcall next-emfun (or cnm-args args))))
-                                              (next-method-p ()
-                                                             (not (null next-emfun))))
-                                         (apply #'(lambda ,(kludge-arglist lambda-list)
-                                                   ,form)
-                                                args))))))
+    (compile-in-lexical-environment
+     (method-environment method)
+     `(lambda (args next-emfun)
+        (flet ((call-next-method (&rest cnm-args)
+                                 (if (null next-emfun)
+                                     (error "no next method for the generic function ~S"
+                                            (method-generic-function ',method))
+                                     (funcall next-emfun (or cnm-args args))))
+               (next-method-p ()
+                              (not (null next-emfun))))
+          (apply #'(lambda ,(kludge-arglist lambda-list)
+                    ,form)
+                 args))))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
