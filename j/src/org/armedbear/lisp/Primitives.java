@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.608 2004-03-16 02:38:38 piso Exp $
+ * $Id: Primitives.java,v 1.609 2004-03-16 03:12:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2962,7 +2962,7 @@ public final class Primitives extends Lisp
                 tag = checkSymbol(args.car());
             LispObject body = args.cdr();
             Environment ext = new Environment(env);
-            Block block = new Block();
+            final Block block = new Block();
             ext.addBlock(tag, block);
             LispObject result = NIL;
             final LispThread thread = LispThread.currentThread();
@@ -2975,14 +2975,7 @@ public final class Primitives extends Lisp
                 return result;
             }
             catch (Return ret) {
-                if (ret.getBlock() != null) {
-                    if (ret.getBlock() == block) {
-                        thread.setStackDepth(depth);
-                        return ret.getResult();
-                    } else
-                        throw ret;
-                }
-                if (ret.getTag() == tag) {
+                if (ret.getBlock() == block) {
                     thread.setStackDepth(depth);
                     return ret.getResult();
                 }
