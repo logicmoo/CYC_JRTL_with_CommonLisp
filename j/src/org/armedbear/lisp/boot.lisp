@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.75 2003-07-13 14:40:00 piso Exp $
+;;; $Id: boot.lisp,v 1.76 2003-07-16 17:11:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -229,6 +229,10 @@
 
 ;; FIXME
 (defun restart-name (restart)
+  nil)
+
+;; FIXME
+(defmacro check-type (place typespec &optional string)
   nil)
 
 
