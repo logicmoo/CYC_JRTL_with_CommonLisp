@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.221 2004-07-19 16:35:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.222 2004-07-19 17:07:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@
 (defstruct handler from to code catch-type)
 
 ;; Variables visible at the current point of compilation.
-(defvar *variables* ())
+(defvar *visible-variables* ())
 
 ;; All variables seen so far.
 (defvar *all-variables* ())
@@ -111,14 +111,14 @@
 (defun push-variable (name special-p)
   (let* ((index (if special-p nil (length (context-vars *context*))))
          (variable (make-variable :name name :special-p special-p :index index)))
-    (push variable *variables*)
+    (push variable *visible-variables*)
     (push variable *all-variables*)
     (unless special-p
       (add-variable-to-context variable))
     variable))
 
 (defun find-visible-variable (name)
-  (find name *variables* :key 'variable-name))
+  (find name *visible-variables* :key 'variable-name))
 
 (defun allocate-register ()
   (prog1
@@ -2077,7 +2077,7 @@
 
 (defun compile-multiple-value-bind (form &key (target *val*))
   (let* ((*register* *register*)
-         (*variables* *variables*)
+         (*visible-variables* *visible-variables*)
          (specials ())
          (vars (second form))
          (specialp nil)
@@ -2139,7 +2139,7 @@
 
 (defun compile-let/let* (form &key (target *val*))
   (let* ((*register* *register*)
-         (*variables* *variables*)
+         (*visible-variables* *visible-variables*)
          (specials ())
          (varlist (cadr form))
          (specialp nil)
@@ -2244,7 +2244,7 @@
     specials))
 
 (defun compile-locally (form &key (target *val*))
-  (let ((*variables* *variables*)
+  (let ((*visible-variables* *visible-variables*)
         (specials (process-special-declarations (cdr form))))
     (dolist (var specials)
       (push-variable var t))
@@ -3033,7 +3033,7 @@
 
            (*context-register* *context-register*)
 
-           (*variables* *variables*)
+           (*visible-variables* *visible-variables*)
 
            (*all-variables* *all-variables*)
 
@@ -3066,7 +3066,7 @@
                                              :register nil
                                              :index index)))
                 (push variable *all-variables*)
-                (push variable *variables*)
+                (push variable *visible-variables*)
                 (push variable parameters)
                 (add-variable-to-context variable)
                 (incf index))))
@@ -3078,7 +3078,7 @@
                                              :register (if *using-arg-array* nil register)
                                              :index (length (context-vars *context*)))))
                 (push variable *all-variables*)
-                (push variable *variables*)
+                (push variable *visible-variables*)
                 (push variable parameters)
                 (add-variable-to-context variable)
                 (incf register)))))
@@ -3091,7 +3091,7 @@
                                                  :kind 'SPECIAL
                                                  :special-p t))
                    (push variable *all-variables*)
-                   (push variable *variables*))
+                   (push variable *visible-variables*))
                   (t
                    (setf (variable-special-p variable) t))))))
 
