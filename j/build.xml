@@ -142,14 +142,12 @@
       <exclude name="org/armedbear/lisp/Tests.class"/>
       <include name="**/*.class"/>
       <include name="**/*.keywords"/>
-      <include name="**/*.bsh"/>
       <include name="org/armedbear/j/version"/>
       <include name="org/armedbear/j/build"/>
       <include name="org/armedbear/j/snapshot"/>
       <include name="org/armedbear/j/images/*.png"/>
       <include name="gnu/regexp/MessagesBundle.properties"/>
       <include name="org/armedbear/lisp/build"/>
-      <!-- Lisp source files (boot.lisp and friends) -->
       <include name="org/armedbear/lisp/*.lisp"/>
     </jar>
   </target>
