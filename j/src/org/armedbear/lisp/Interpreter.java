@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.10 2003-02-16 20:05:18 piso Exp $
+ * $Id: Interpreter.java,v 1.11 2003-02-17 03:02:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,6 +297,14 @@ public final class Interpreter extends Lisp
             getStandardOutput().writeLine(string.getValue());
             return true;
         }
+        if (command.equals("describe")) {
+            if (args != null && args.length() > 0) {
+                getStandardOutput().setCharPos(0);
+                evaluate("(describe " + args + ")");
+                return true;
+            }
+            return false;
+        }
         if (command.equals("package")) {
             if (args == null || args.length() == 0) {
                 Package pkg = (Package) _PACKAGE_.getSymbolValue();
@@ -359,6 +367,8 @@ public final class Interpreter extends Lisp
                 return "history";
         }
         if (command.length() >= 2) {
+            if ("describe".startsWith(command))
+                return "describe";
             if ("package".startsWith(command))
                 return "package";
             if ("exit".startsWith(command))
@@ -420,7 +430,6 @@ public final class Interpreter extends Lisp
         System.err.println("Interpreter.finalize");
     }
 
-    // Used only by JLisp.runStartupScript() and JLisp.runLispCommand().
     public static LispObject evaluate(String s) throws LispError
     {
         LispReader reader = new LispReader(s);
