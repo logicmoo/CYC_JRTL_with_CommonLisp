@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Directory.java,v 1.27 2004-05-21 16:45:20 piso Exp $
+ * $Id: Directory.java,v 1.28 2004-05-22 00:04:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,8 +105,18 @@ public final class Directory extends Buffer
         String iso = "[0-9]+" + " " + isoMaybeYear + isoMonthAndDay + " " +
             isoMaybeTime + " *";
 
+        // Mac OS X (Pete Kirkham)
+        // --time-style="+%e %b  %Y"
+        // -rw-r--r--    1 pete  pete    6065 23 Oct  2003 Directories.java
+        // --time-style="+%e %b %H:%M"
+        // -rw-r--r--    1 pete  pete   75350 21 May 19:58 Directory.java
+        String osx = "[0-9]+" + " " + dd + " " + month + " " + timeOrYear + " ";
+
         nativeMoveToFilenameRegExp =
-            new UncheckedRE("(" + traditional + ")|(" + iso + ")", 0, syntax);
+            new UncheckedRE("(" + traditional + ")|(" + iso + ")|(" + osx + ")",
+                            0,
+                            syntax);
+
         internalMoveToFilenameRegExp = new UncheckedRE(":[0-5][0-9]" + " ");
     }
 
