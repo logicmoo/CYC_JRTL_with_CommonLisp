@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.4 2004-01-01 01:34:58 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.5 2004-01-01 01:38:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
   (unless (typep arg type)
     (error 'simple-type-error
            :format-control "The value ~S is not of type ~A."
-           :format-initargs arg type)))
+           :format-arguments (list arg type))))
 
 (defun caaaar (list) (car (car (car (car list)))))
 (defun caaadr (list) (car (car (car (cdr list)))))
