@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: format.lisp,v 1.22 2004-11-29 02:17:43 piso Exp $
+;;; $Id: format.lisp,v 1.23 2004-12-06 16:45:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -794,7 +794,7 @@
    ((base nil) (mincol 0) (padchar #\space) (commachar #\,)
     (commainterval 3))
    params
-   (let ((n-arg (gensym))) 
+   (let ((n-arg (gensym)))
      `(let ((,n-arg ,(expand-next-arg)))
         (if ,base
             (format-print-integer stream ,n-arg ,colonp ,atsignp
@@ -2152,10 +2152,9 @@
 ;;; instead of spaces.
 (defun format-fixed-aux (stream number w d k ovf pad atsign)
   (cond
-   ((or (not (or w d))
-	(and (floatp number)
-	     (or (sys::float-infinity-p number)
-		 (sys::float-nan-p number))))
+   ((and (floatp number)
+         (or (sys::float-infinity-p number)
+             (sys::float-nan-p number)))
     (prin1 number stream)
     nil)
    (t
@@ -2185,7 +2184,7 @@
 	       t)
 	      (t
 	       (when w (dotimes (i spaceleft) (write-char pad stream)))
-	       (cond ((minusp number)
+	       (cond ((minusp (float-sign number))
                       (write-char #\- stream))
                      (atsign
                       (write-char #\+ stream)))
