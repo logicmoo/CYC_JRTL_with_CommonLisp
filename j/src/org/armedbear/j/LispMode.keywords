@@ -22,6 +22,7 @@ array-in-bounds-p
 array-row-major-index
 assert
 assoc
+ash
 atom
 bit
 bit-vector-p
