@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.28 2005-02-04 04:28:47 piso Exp $
+;;; $Id: slime.lisp,v 1.29 2005-03-08 02:22:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -442,16 +442,26 @@
     (slime-eval-async
      `(swank:swank-compile-file ,pathname t) 'display-eval-result)))
 
-(map-key-for-mode "Tab" "(slime:slime-complete-symbol)" "Lisp Shell")
-(map-key-for-mode "Ctrl Alt I" "(slime:slime-complete-symbol)" "Lisp")
-(map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
-(map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
-(map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp Shell")
-(map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp")
-(map-key-for-mode "Ctrl Alt R" "(slime:slime-eval-region)" "Lisp")
-(map-key-for-mode "Ctrl Alt E" "(slime:slime-eval-last-expression)" "Lisp")
-(map-key-for-mode "Ctrl Alt K" "(slime:slime-compile-and-load-file)" "Lisp")
-(map-key-for-mode "Ctrl Alt X" "(slime:slime-eval-defun)" "Lisp")
-(map-key-for-mode "Ctrl Alt C" "(slime:slime-compile-defun)" "Lisp")
+(unless (find-package '#:emacs)
+  (defpackage #:emacs
+    (:use #:cl #:ext #:j)))
+
+(let ((emulation (variable-value 'emulation)))
+  (cond ((null emulation)
+         (map-key-for-mode "Tab" "(slime:slime-complete-symbol)" "Lisp Shell")
+         (map-key-for-mode "Ctrl Alt I" "(slime:slime-complete-symbol)" "Lisp")
+         (map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
+         (map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
+         (map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp Shell")
+         (map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp")
+         (map-key-for-mode "Ctrl Alt R" "(slime:slime-eval-region)" "Lisp")
+         (map-key-for-mode "Ctrl Alt E" "(slime:slime-eval-last-expression)" "Lisp")
+         (map-key-for-mode "Ctrl Alt K" "(slime:slime-compile-and-load-file)" "Lisp")
+         (map-key-for-mode "Ctrl Alt X" "(slime:slime-eval-defun)" "Lisp")
+         (map-key-for-mode "Ctrl Alt C" "(slime:slime-compile-defun)" "Lisp"))
+        ((and (stringp emulation)
+              (string-equal emulation "emacs")
+              (fboundp 'emacs::define-keys-for-slime))
+         (emacs::define-keys-for-slime))))
 
 (pushnew :slime *features*)
