@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.166 2004-05-24 16:29:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.167 2004-05-24 17:28:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1020,6 +1020,26 @@
     (setf *static-code* *code*)
     g))
 
+(defun declare-package (obj)
+  (let* ((g (symbol-name (gensym)))
+         (*print-level* nil)
+         (*print-length* nil)
+         (s (format nil "(FIND-PACKAGE ~S)" (package-name obj)))
+         (*code* *static-code*))
+    (declare-field g +lisp-object+)
+    (emit 'ldc
+          (pool-string s))
+    (emit-invokestatic +lisp-class+
+                       "readObjectFromString"
+                       "(Ljava/lang/String;)Lorg/armedbear/lisp/LispObject;"
+                       0)
+    (emit 'putstatic
+          *this-class*
+          g
+          +lisp-object+)
+    (setf *static-code* *code*)
+    g))
+
 (defun declare-object (obj)
   (let ((key (symbol-name (gensym))))
     (sys::remember key obj)
@@ -1164,6 +1184,15 @@
    ((pathnamep form)
     (let ((g (if *compile-file-truename*
                  (declare-object-as-string form)
+                 (declare-object form))))
+      (emit 'getstatic
+            *this-class*
+            g
+            +lisp-object+)
+      (emit-store-value)))
+   ((packagep form)
+    (let ((g (if *compile-file-truename*
+                 (declare-package form)
                  (declare-object form))))
       (emit 'getstatic
             *this-class*
