@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Bignum.java,v 1.53 2004-02-28 16:42:14 piso Exp $
+ * $Id: Bignum.java,v 1.54 2004-03-13 17:55:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,7 +256,7 @@ public final class Bignum extends LispObject
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
-            int n = ((Fixnum)obj).getValue();
+            int n = ((Fixnum)obj).value;
             if (n == 0)
                 return Fixnum.ZERO;
             if (n == 1)
@@ -404,7 +404,7 @@ public final class Bignum extends LispObject
                 value1 = number(quotient);
                 value2 = (remainder.signum() == 0) ? Fixnum.ZERO : number(remainder);
             } else if (obj instanceof Bignum) {
-                BigInteger divisor = ((Bignum)obj).getValue();
+                BigInteger divisor = ((Bignum)obj).value;
                 BigInteger[] results = value.divideAndRemainder(divisor);
                 BigInteger quotient = results[0];
                 BigInteger remainder = results[1];
