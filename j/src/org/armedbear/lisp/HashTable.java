@@ -1,8 +1,8 @@
 /*
  * HashTable.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.31 2004-01-01 17:10:38 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: HashTable.java,v 1.32 2004-02-12 01:56:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -209,7 +209,7 @@ public final class HashTable extends LispObject
         return null;
     }
 
-    final int hash(LispObject key)
+    final int hash(LispObject key) throws ConditionThrowable
     {
         return key == null ? 0 : (key.sxhash().getValue() % buckets.length);
     }
@@ -231,7 +231,7 @@ public final class HashTable extends LispObject
         }
     }
 
-    private void rehash()
+    private void rehash() throws ConditionThrowable
     {
         HashEntry[] oldBuckets = buckets;
         int newCapacity = buckets.length * 2 + 1;
@@ -383,7 +383,7 @@ public final class HashTable extends LispObject
     // sxhash object => hash-code
     private static final Primitive1 SXHASH = new Primitive1("sxhash","object")
     {
-        public LispObject execute(LispObject arg)
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.sxhash();
         }
