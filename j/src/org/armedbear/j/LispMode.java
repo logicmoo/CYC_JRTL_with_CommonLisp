@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.78 2004-09-07 20:23:49 piso Exp $
+ * $Id: LispMode.java,v 1.79 2004-09-11 10:24:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,6 +135,10 @@ public class LispMode extends AbstractMode implements Constants, Mode
         definers.put("def!struct", "defstruct");
         definers.put("defmacro-mundanely", "defmacro");
         definers.put("def!macro", "defmacro");
+        // Slime
+        definers.put("defslimefun", "defun");
+        definers.put("definterface", "defgeneric");
+        definers.put("defimplementation", "defmethod");
     }
 
     public static final String translateDefiner(String s)
