@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.64 2003-08-25 18:46:22 piso Exp $
+ * $Id: Symbol.java,v 1.65 2003-09-04 14:40:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,6 +102,8 @@ public class Symbol extends LispObject
     public static final Symbol SIMPLE_CONDITION     = PACKAGE_CL.addExternalSymbol("SIMPLE-CONDITION");
     public static final Symbol SERIOUS_CONDITION    = PACKAGE_CL.addExternalSymbol("SERIOUS-CONDITION");
 
+    public static final Symbol ARITHMETIC_ERROR     = PACKAGE_CL.addExternalSymbol("ARITHMETIC-ERROR");
+    public static final Symbol DIVISION_BY_ZERO     = PACKAGE_CL.addExternalSymbol("DIVISION-BY-ZERO");
     public static final Symbol END_OF_FILE          = PACKAGE_CL.addExternalSymbol("END-OF-FILE");
     public static final Symbol ERROR                = PACKAGE_CL.addExternalSymbol("ERROR");
     public static final Symbol CONTROL_ERROR        = PACKAGE_CL.addExternalSymbol("CONTROL-ERROR");
