@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: inspect.lisp,v 1.3 2003-12-11 14:41:30 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: inspect.lisp,v 1.4 2004-05-22 17:29:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,13 +22,23 @@
 (require 'clos)
 
 (defun inspect (obj)
-  (format t "~S~%" (type-of obj))
-  (when (typep obj 'standard-object)
-    (do ((slots (class-slots (class-of obj)) (cdr slots))
-         (i 0 (1+ i)))
-        ((null slots))
-      (let* ((slot (car slots))
-             (name (slot-definition-name slot)))
-        (format t "   ~D ~A -> ~S~%" i name
-                (if (slot-boundp obj name) (slot-value obj name) +slot-unbound+)))))
+  (format t "~A~%" (inspected-description obj))
+  (cond ((typep obj 'standard-object)
+         (do ((slots (class-slots (class-of obj)) (cdr slots))
+              (i 0 (1+ i)))
+             ((null slots))
+           (let* ((slot (car slots))
+                  (name (slot-definition-name slot)))
+             (format t "   ~D ~A -> ~S~%" i name
+                     (if (slot-boundp obj name) (slot-value obj name) +slot-unbound+)))))
+        ((vectorp obj)
+         (let ((limit (min (length obj) 25)))
+           (dotimes (i limit)
+             (format t "  ~D-> ~A~%" i (inspected-description (aref obj i))))))
+        (t
+         (let ((parts (inspected-parts obj))
+               (i 0))
+           (dolist (part parts)
+             (format t "  ~D ~A -> ~S~%" i (car part) (cdr part))
+             (incf i)))))
   (values))
