@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.55 2003-10-17 17:35:07 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.56 2003-11-03 16:07:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public class CharacterInputStream extends LispInputStream
             }
             if (n < 0) {
                 if (eofError)
-                    throw new ConditionThrowable(new EndOfFileException());
+                    throw new ConditionThrowable(new EndOfFile());
                 else
                     return eofValue;
             }
@@ -144,13 +144,13 @@ public class CharacterInputStream extends LispInputStream
             while (true) {
                 int n = read();
                 if (n < 0)
-                    throw new ConditionThrowable(new EndOfFileException());
+                    throw new ConditionThrowable(new EndOfFile());
                 char c = (char) n;
                 if (c == '\\') {
                     // Single escape.
                     n = read();
                     if (n < 0)
-                        throw new ConditionThrowable(new EndOfFileException());
+                        throw new ConditionThrowable(new EndOfFile());
                     sb.append((char)n);
                     continue;
                 }
@@ -181,7 +181,7 @@ public class CharacterInputStream extends LispInputStream
             throw new ConditionThrowable(new StreamError(e));
         }
         if (n < 0)
-            throw new ConditionThrowable(new EndOfFileException());
+            throw new ConditionThrowable(new EndOfFile());
         char nextChar = (char) n;
         if (nextChar == '"')
             return Pathname.parseNamestring(_readString());
@@ -206,7 +206,7 @@ public class CharacterInputStream extends LispInputStream
                 if (c == '.') {
                     int n = read();
                     if (n < 0)
-                        throw new ConditionThrowable(new EndOfFileException());
+                        throw new ConditionThrowable(new EndOfFile());
                     char nextChar = (char) n;
                     if (isTokenDelimiter(nextChar)) {
                         if (last == null)
@@ -281,7 +281,7 @@ public class CharacterInputStream extends LispInputStream
         try {
             int n = read();
             if (n < 0)
-                throw new ConditionThrowable(new EndOfFileException());
+                throw new ConditionThrowable(new EndOfFile());
             char c = (char) n;
             switch (c) {
                 case '@':
@@ -314,7 +314,7 @@ public class CharacterInputStream extends LispInputStream
             while (true) {
                 int n = read();
                 if (n < 0)
-                    throw new ConditionThrowable(new EndOfFileException());
+                    throw new ConditionThrowable(new EndOfFile());
                 c = (char) n;
                 if (c < '0' || c > '9')
                     break;
@@ -388,7 +388,7 @@ public class CharacterInputStream extends LispInputStream
         try {
             int n = read();
             if (n < 0)
-                throw new ConditionThrowable(new EndOfFileException());
+                throw new ConditionThrowable(new EndOfFile());
             char c = (char) n;
             StringBuffer sb = new StringBuffer();
             sb.append(c);
@@ -444,20 +444,20 @@ public class CharacterInputStream extends LispInputStream
         try {
             int n = read();
             if (n < 0)
-                throw new ConditionThrowable(new EndOfFileException());
+                throw new ConditionThrowable(new EndOfFile());
             char c = (char) n;
             StringBuffer sb = new StringBuffer();
             if (c == '|') {
                 while (true) {
                     n = read();
                     if (n < 0)
-                        throw new ConditionThrowable(new EndOfFileException());
+                        throw new ConditionThrowable(new EndOfFile());
                     c = (char) n;
                     if (c == '\\') {
                         // Single escape.
                         n = read();
                         if (n < 0)
-                            throw new ConditionThrowable(new EndOfFileException());
+                            throw new ConditionThrowable(new EndOfFile());
                         sb.append((char)n);
                         continue;
                     }
@@ -476,7 +476,7 @@ public class CharacterInputStream extends LispInputStream
                         // Single escape.
                         n = read();
                         if (n < 0)
-                            throw new ConditionThrowable(new EndOfFileException());
+                            throw new ConditionThrowable(new EndOfFile());
                         sb.append((char)n);
                         continue;
                     }
@@ -852,7 +852,7 @@ public class CharacterInputStream extends LispInputStream
             while (true) {
                 int n = read();
                 if (n < 0)
-                    throw new ConditionThrowable(new EndOfFileException());
+                    throw new ConditionThrowable(new EndOfFile());
                 char c = (char) n;
                 if (!Character.isWhitespace(c))
                     return c;
@@ -876,7 +876,7 @@ public class CharacterInputStream extends LispInputStream
                 if (n < 0) {
                     if (sb.length() == 0) {
                         if (eofError)
-                            throw new ConditionThrowable(new EndOfFileException());
+                            throw new ConditionThrowable(new EndOfFile());
                         return eofValue;
                     }
                     LispObject[] values = new LispObject[2];
@@ -917,7 +917,7 @@ public class CharacterInputStream extends LispInputStream
         }
         if (n < 0) {
             if (eofError)
-                throw new ConditionThrowable(new EndOfFileException());
+                throw new ConditionThrowable(new EndOfFile());
             else
                 return eofValue;
         }
