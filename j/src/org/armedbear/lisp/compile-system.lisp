@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.30 2004-10-11 18:39:26 piso Exp $
+;;; $Id: compile-system.lisp,v 1.31 2004-10-12 14:04:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,6 @@
 
 (require '#:loop)
 (require '#:collect)
-(require '#:format) ;; Replace the version of FORMAT from Primitives.java.
 (require '#:jvm)
 
 (defun maybe-compile-file (source-file &key force)
