@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.345 2005-01-13 03:01:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.346 2005-01-13 10:01:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -154,7 +154,6 @@
   (declared-type t)
   representation ; NIL (i.e. a LispObject reference) or :UNBOXED-FIXNUM
   register ; register number or NIL
-  (level *nesting-level*)
   index
   closure-index
   (reads 0)
