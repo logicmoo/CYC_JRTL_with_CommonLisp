@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.29 2004-09-28 17:31:59 piso Exp $
+;;; $Id: pprint.lisp,v 1.30 2004-09-29 00:44:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -899,7 +899,6 @@
 	(t
          (sys::output-object object stream))))
 
-;; Added Aug 24 2004 8:09 AM
 (defun write (object &key
 		     ((:stream stream) *standard-output*)
 		     ((:escape *print-escape*) *print-escape*)
