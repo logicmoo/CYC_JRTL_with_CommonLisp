@@ -1,7 +1,7 @@
 # -*- Mode: Properties -*-
 # Freefloater
 # Mikol Graves
-# $Id: Freefloater,v 1.4 2003-02-05 04:05:03 piso Exp $
+# $Id: Freefloater,v 1.5 2003-02-21 21:21:05 piso Exp $
 
 color.background                        =  51  77 102
 color.disabled                          = 102 128 153
@@ -21,7 +21,7 @@ color.number                            = 255 255 255
 color.operator                          = 255 255   0
 color.preprocessor                      = 255 204   0
 color.prompt                            = 255 153   0
-color.selectionBackground               = 128  26   0
+color.selectionBackground               = 204 102   0
 color.matchingBracketBackground         = 128  26   0
 color.string                            = 230 230 204
 color.text                              = 255 255 255
