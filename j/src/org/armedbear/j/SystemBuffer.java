@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.5 2002-10-10 16:25:54 piso Exp $
+ * $Id: SystemBuffer.java,v 1.6 2002-10-11 01:37:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,13 +45,13 @@ public class SystemBuffer implements Constants
     public static final int TYPE_LIST_OCCURRENCES = 12;
 
     protected int type = TYPE_SYSTEM;
-    protected boolean isLoaded;
     protected boolean readOnly;
     protected boolean forceReadOnly;
     protected Mode mode;
     protected String lineSeparator;
     protected int lineCount;
 
+    private boolean isLoaded;
     private Line firstLine;
     private Line lastLine;
     private File file;
@@ -103,12 +103,12 @@ public class SystemBuffer implements Constants
         this.file = file;
     }
 
-    public final boolean isLoaded()
+    public final synchronized boolean isLoaded()
     {
         return isLoaded;
     }
 
-    public final void setLoaded(boolean b)
+    public final synchronized void setLoaded(boolean b)
     {
         isLoaded = b;
     }
