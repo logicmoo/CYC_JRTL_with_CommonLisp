@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.21 2003-09-20 17:02:04 piso Exp $
+ * $Id: HashTable.java,v 1.22 2003-10-02 13:40:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,6 +78,13 @@ public final class HashTable extends LispObject
         if (type == BuiltInClass.HASH_TABLE)
             return T;
         return super.typep(type);
+    }
+
+    public synchronized void clear()
+    {
+        for (int i = buckets.length; i-- > 0;)
+            buckets[i] = null;
+        count = 0;
     }
 
     // gethash key hash-table &optional default => value, present-p
@@ -343,6 +350,19 @@ public final class HashTable extends LispObject
                 return ht.remhash(key);
             }
             throw new ConditionThrowable(new TypeError(second, "hash-table"));
+        }
+    };
+
+    // ### clrhash
+    // clrhash hash-table => hash-table
+    private static final Primitive1 CLRHASH = new Primitive1("clrhash") {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof HashTable) {
+                ((HashTable)arg).clear();
+                return arg;
+            }
+            throw new ConditionThrowable(new TypeError(arg, "hash-table"));
         }
     };
 
