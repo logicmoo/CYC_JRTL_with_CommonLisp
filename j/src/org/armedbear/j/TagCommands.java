@@ -2,7 +2,7 @@
  * TagCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: TagCommands.java,v 1.3 2002-10-12 13:07:49 piso Exp $
+ * $Id: TagCommands.java,v 1.4 2002-10-13 16:16:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,21 +137,24 @@ public final class TagCommands implements Constants
         if (list == null) {
             // No exact match in the current buffer. Look in the current
             // directory.
-            list =
-                TagCommands.findMatchingTagsInDirectory(expression,
-                    buffer.getCurrentDirectory(), mode);
+            final File currentDirectory = buffer.getCurrentDirectory();
+            list = findMatchingTagsInDirectory(expression, currentDirectory,
+                                               mode);
             if (list == null) {
                 // Look at all the directories in the buffer's tag path.
                 List dirs = getDirectoriesInTagPath(buffer);
                 if (dirs != null) {
                     for (int i = 0; i < dirs.size(); i++) {
                         String dir = (String) dirs.get(i);
-                        File directory = File.getInstance(dir);
-                        if (directory.equals(buffer.getCurrentDirectory()))
+                        File directory =
+                            File.getInstance(currentDirectory, dir);
+                        if (directory == null)
+                            continue;
+                        if (directory.equals(currentDirectory))
                             continue;
                         List tagsInDir =
-                            TagCommands.findMatchingTagsInDirectory(expression,
-                                directory, mode);
+                            findMatchingTagsInDirectory(expression, directory,
+                                                        mode);
                         if (tagsInDir != null) {
                             if (list == null)
                                 list = new ArrayList();
