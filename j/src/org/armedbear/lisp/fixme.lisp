@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: fixme.lisp,v 1.17 2004-01-27 16:26:06 piso Exp $
+;;; $Id: fixme.lisp,v 1.18 2004-02-27 01:12:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,3 +39,6 @@
 
 (defun compile-file-pathname (pathname)
   (concatenate 'string (namestring pathname) ".compiled"))
+
+(defun disassemble (fn)
+  (%format t "; DISASSEMBLE is not implemented."))
