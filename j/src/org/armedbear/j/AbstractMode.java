@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.14 2003-06-18 15:41:00 piso Exp $
+ * $Id: AbstractMode.java,v 1.15 2003-06-19 14:08:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -352,10 +352,11 @@ public abstract class AbstractMode implements Constants, Mode
     private static void populateHelpMenu(Editor editor, Menu menu)
     {
         menu.add(editor, "Help", 'P', "help");
+        menu.add(editor, "Apropos...", 'A', "apropos");
         menu.add(editor, "Key Bindings", 'B', "listBindings");
         menu.add(editor, "Describe Key...", 'K', "describeKey");
         menu.add(editor, "Where is...", 'W', "whereIs");
-        menu.add(editor, "About J", 'A', "about");
+        menu.add(editor, "About J", 'O', "about");
     }
 
     public JPopupMenu getContextMenu(Editor editor)
