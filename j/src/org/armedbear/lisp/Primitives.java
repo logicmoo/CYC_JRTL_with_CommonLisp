@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.564 2004-02-11 19:50:51 piso Exp $
+ * $Id: Primitives.java,v 1.565 2004-02-12 01:42:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3235,7 +3235,8 @@ public final class Primitives extends Lisp
     // ### write-char
     // write-char character &optional output-stream => character
     private static final Primitive WRITE_CHAR =
-        new Primitive("write-char","character &optional output-stream") {
+        new Primitive("write-char", "character &optional output-stream")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1 || args.length > 2)
@@ -3260,7 +3261,18 @@ public final class Primitives extends Lisp
         {
             if (args.length != 4)
                 signal(new WrongNumberOfArgumentsException(this));
-            String s = LispString.getValue(args[0]);
+            String s;
+            try {
+                s = ((LispString)args[0]).getValue();
+            }
+            catch (ClassCastException e) {
+                if (args[0] instanceof NilVector) {
+                    if (args[0].length() == 0)
+                        return args[0];
+                    return ((NilVector)args[0]).accessError();
+                }
+                return signal(new TypeError(args[0], Symbol.STRING));
+            }
             Stream out = outSynonymOf(args[1]);
             int start = Fixnum.getValue(args[2]);
             int end = Fixnum.getValue(args[3]);
@@ -3283,7 +3295,9 @@ public final class Primitives extends Lisp
 
     // ### finish-output
     // finish-output &optional output-stream => nil
-    private static final Primitive FINISH_OUTPUT = new Primitive("finish-output","&optional output-stream") {
+    private static final Primitive FINISH_OUTPUT =
+        new Primitive("finish-output", "&optional output-stream")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
@@ -3294,7 +3308,9 @@ public final class Primitives extends Lisp
 
     // ### force-output
     // force-output &optional output-stream => nil
-    private static final Primitive FORCE_OUTPUT = new Primitive("force-output","&optional output-stream") {
+    private static final Primitive FORCE_OUTPUT =
+        new Primitive("force-output", "&optional output-stream")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length > 1)
