@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.256 2004-07-31 18:30:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.257 2004-07-31 21:31:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3465,6 +3465,17 @@
 (defun compile-variable-reference (name target)
   (let ((variable (find-visible-variable name)))
     (cond ((null variable)
+           (when (and (special-variable-p name)
+                      (constantp name))
+             (let ((value (symbol-value name)))
+               (when (or (null *compile-file-truename*)
+                         ;; FIXME File compilation doesn't support all constant
+                         ;; types yet.
+                         (stringp value)
+                         (numberp value)
+                         (packagep value))
+                 (compile-constant value :target target)
+                 (return-from compile-variable-reference))))
            (unless (special-variable-p name)
              ;; FIXME This should be a warning!
              (%format t "~A Note: undefined variable ~S~%" (load-verbose-prefix) name))
