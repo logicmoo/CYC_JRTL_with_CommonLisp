@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Buffer.java,v 1.41 2003-06-18 15:43:34 piso Exp $
+ * $Id: Buffer.java,v 1.42 2003-06-28 16:00:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2921,7 +2921,7 @@ public class Buffer extends SystemBuffer
         sb.append(String.valueOf(display.getAbsoluteCaretCol()+1));
         if (getBooleanProperty(Property.WRAP))
             sb.append("   Wrap");
-        if (editor.isRecordingMacro())
+        if (Editor.isRecordingMacro())
             sb.append("   [Recording macro...]");
         return sb.toString();
     }
