@@ -146,7 +146,7 @@
       jarfile="../j.jar"
       manifest="manifest"
       basedir="${basedir}"
-      excludes="pg.class, SampleExtension.class, org/armedbear/lisp/**/*"
+      excludes="pg.class, SampleExtension.class, org/armedbear/j/JLisp*.class, org/armedbear/lisp/**/*"
       includes="**/*.class, **/*.keywords, **/*.bsh, org/armedbear/j/version, org/armedbear/j/build, org/armedbear/j/snapshot, org/armedbear/j/images/*.gif, org/armedbear/j/images/*.png, gnu/regexp/MessagesBundle.properties"
     />
   </target>
