@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.63 2003-03-17 18:29:33 piso Exp $
+;;; $Id: rt.lisp,v 1.64 2003-03-19 00:47:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,6 +40,9 @@
     (and (consp y)
 	 (equalp-with-case (car x) (car y))
 	 (equalp-with-case (cdr x) (cdr y))))
+   ((and (typep x 'array)
+	 (= (array-rank x) 0))
+    (equalp-with-case (aref x) (aref y)))
    ((vectorp x)
     (and (vectorp y)
 	 (let ((x-len (length x))
@@ -50,6 +53,17 @@
                     (unless (equalp-with-case (aref x i) (aref y i))
                       (return nil)))
                   t)))))
+   ((and (typep x 'array)
+	 (typep y 'array)
+	 (not (equal (array-dimensions x)
+		     (array-dimensions y))))
+    nil)
+   ((typep x 'array)
+    (and (typep y 'array)
+	 (let ((size (array-total-size x)))
+	   (loop for i from 0 below size
+             always (equalp-with-case (row-major-aref x i)
+                                      (row-major-aref y i))))))
    (t (eql x y))))
 
 (defmacro deftest (name form &rest values)
