@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.18 2003-02-14 14:58:47 piso Exp $
+ * $Id: Primitives.java,v 1.19 2003-02-14 18:43:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+import java.io.File;
 import java.util.Iterator;
 
 public final class Primitives extends Module
@@ -3089,6 +3090,14 @@ public final class Primitives extends Module
                 return ht.remhash(key);
             }
             throw new WrongTypeException(second, "hash table");
+        }
+    };
+
+    private static final Primitive1 PROBE_FILE = new Primitive1("probe-file") {
+        public LispObject execute(LispObject arg) throws LispException
+        {
+            String pathname = LispString.getValue(arg);
+            return new File(pathname).exists() ? T : NIL;
         }
     };
 
