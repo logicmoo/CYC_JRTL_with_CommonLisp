@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.7 2002-10-11 14:05:14 piso Exp $
+ * $Id: Buffer.java,v 1.8 2002-10-11 15:58:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,8 @@ public class Buffer extends SystemBuffer
     {
         this.listing = s;
     }
+
+    private View lastView;
 
     private boolean backedUp = false; // Ignored for local buffers.
 
@@ -1867,11 +1869,64 @@ public class Buffer extends SystemBuffer
         deleteAutosaveFile();
     }
 
+    public void empty()
+    {
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            _empty();
+        }
+        finally {
+            unlockWrite();
+        }
+        setTags(null);
+        // Invalidate any stored views that are referencing the old contents
+        // of this buffer.
+        if (lastView != null)
+            lastView.invalidate();
+        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+            Editor ed = it.nextEditor();
+            View view = ed.getView(this);
+            if (view != null)
+                view.invalidate();
+            if (ed.getBuffer() == this) {
+                ed.setDot(null);
+                ed.setMark(null);
+                ed.setTopLine(null);
+            }
+        }
+    }
+
     public void invalidate()
     {
         needsParsing = true;
         maxColsValid = false;
         setTags(null);
+    }
+
+    public final View getLastView()
+    {
+        if (lastView != null)
+            return (View) lastView.clone();
+        else
+            return null;
+    }
+
+    public final void setLastView(View view)
+    {
+        lastView = (View) view.clone();
+    }
+
+    public void saveView(Editor editor)
+    {
+        final View view = saveViewInternal(editor);
+        editor.setView(this, view);
+        setLastView(view);
     }
 
     public boolean needsParsing()
