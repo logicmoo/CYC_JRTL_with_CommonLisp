@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.281 2004-08-18 14:10:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.282 2004-08-19 15:19:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -557,8 +557,7 @@
   (emit 'clear-values))
 
 (defun generate-interrupt-check ()
-  (unless (and (eql *speed* 3)
-               (eql *safety* 0))
+  (unless (> *speed* *safety*)
     (let ((label1 (gensym)))
       (emit 'getstatic +lisp-class+ "interrupted" "Z")
       (emit 'ifeq `,label1)
