@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.116 2004-03-05 18:24:52 piso Exp $
+;;; $Id: autoloads.lisp,v 1.117 2004-03-05 19:12:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -102,6 +102,7 @@
           "clos.lisp")
 (autoload 'inspect)
 (autoload 'enough-namestring)
+(autoload 'upgraded-complex-part-type)
 
 (autoload '(tpl::top-level-loop) "top-level.lisp")
 
