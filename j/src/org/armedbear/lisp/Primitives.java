@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.621 2004-03-28 02:02:57 piso Exp $
+ * $Id: Primitives.java,v 1.622 2004-03-29 22:54:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3140,7 +3140,16 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
-            return progn(args.cdr(), env, LispThread.currentThread());
+            LispObject situations = args.car();
+            if (situations != NIL) {
+                final LispThread thread = LispThread.currentThread();
+                if (memq(Keyword.EXECUTE, situations) ||
+                    memq(Symbol.EVAL, situations))
+                {
+                    return progn(args.cdr(), env, thread);
+                }
+            }
+            return NIL;
         }
     };
 
