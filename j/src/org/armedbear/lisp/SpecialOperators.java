@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SpecialOperators.java,v 1.13 2003-10-31 18:30:33 piso Exp $
+ * $Id: SpecialOperators.java,v 1.14 2003-11-06 17:12:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -342,9 +342,17 @@ public final class SpecialOperators extends Lisp
         }
     };
 
+    // ### declare
+    private static final SpecialOperator DECLARE = new SpecialOperator("declare")
+    {
+        public LispObject execute(LispObject args, Environment env)
+        {
+            return NIL;
+        }
+    };
+
     // ### function
-    private static final SpecialOperator FUNCTION =
-        new SpecialOperator("function")
+    private static final SpecialOperator FUNCTION = new SpecialOperator("function")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
