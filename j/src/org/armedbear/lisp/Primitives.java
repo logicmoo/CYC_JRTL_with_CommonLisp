@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.688 2004-10-01 17:17:06 piso Exp $
+ * $Id: Primitives.java,v 1.689 2004-10-05 14:20:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -684,37 +684,6 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new SimpleString(arg.writeToString());
-        }
-    };
-
-    // ### princ-to-string
-    private static final Primitive1 PRINC_TO_STRING =
-        new Primitive1("princ-to-string", "object")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            LispThread thread = LispThread.currentThread();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-            thread.bindSpecial(_PRINT_READABLY_, NIL);
-            SimpleString string = new SimpleString(arg.writeToString());
-            thread.setDynamicEnvironment(oldDynEnv);
-            return string;
-        }
-    };
-
-    // ### prin1-to-string
-    private static final Primitive1 PRIN1_TO_STRING =
-        new Primitive1("prin1-to-string", "object")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            LispThread thread = LispThread.currentThread();
-            Environment oldDynEnv = thread.getDynamicEnvironment();
-            thread.bindSpecial(_PRINT_ESCAPE_, T);
-            SimpleString string = new SimpleString(arg.writeToString());
-            thread.setDynamicEnvironment(oldDynEnv);
-            return string;
         }
     };
 
