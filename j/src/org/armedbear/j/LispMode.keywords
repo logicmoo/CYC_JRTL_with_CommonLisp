@@ -397,6 +397,7 @@ read-preserving-whitespace
 read-sequence
 readtable-case
 readtablep
+realp
 reduce
 rem
 remf
