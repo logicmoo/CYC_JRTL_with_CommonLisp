@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: print-object.lisp,v 1.4 2004-03-02 00:06:49 piso Exp $
+;;; $Id: print-object.lisp,v 1.5 2004-04-01 14:50:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@
         (cond ((stringp report)
                (write-string report stream))
               (t
-               (call-next-method))))))
+               (%format stream "~A" c))))))
 
 (defmethod print-object ((x undefined-function) stream)
   (if *print-escape*
