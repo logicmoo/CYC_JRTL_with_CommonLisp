@@ -1,8 +1,8 @@
 /*
  * ListOccurrences.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: ListOccurrences.java,v 1.6 2003-07-26 17:52:11 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: ListOccurrences.java,v 1.7 2004-04-02 03:27:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,7 +150,7 @@ public class ListOccurrences extends Buffer
             return Directories.getUserHomeDirectory();
     }
 
-    public void findOccurrenceAtDot(Editor editor)
+    public void findOccurrenceAtDot(Editor editor, boolean killList)
     {
         Position pos = editor.getDotCopy();
         if (pos == null)
@@ -186,10 +186,11 @@ public class ListOccurrences extends Buffer
         else
             target = buf.getLine(sourceLine.lineNumber());
         if (target != null)
-            gotoSource(editor, buf, target);
+            gotoSource(editor, buf, target, killList);
     }
 
-    protected void gotoSource(Editor editor, Buffer buf, Line target)
+    protected void gotoSource(Editor editor, Buffer buf, Line target,
+                              boolean killList)
     {
         if (target != null) {
             Editor ed;
@@ -215,6 +216,15 @@ public class ListOccurrences extends Buffer
             }
             ed.update(ed.getDotLine());
             ed.updateDisplay();
+
+            if (killList) {
+                if (ed.getFrame().getEditorCount() > 1) {
+                    Editor otherEditor = ed.getOtherEditor();
+                    if (otherEditor != null)
+                        ed.getFrame().closeEditor(otherEditor);
+                    kill();
+                }
+            }
         }
     }
 
@@ -323,7 +333,15 @@ public class ListOccurrences extends Buffer
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();
         if (buffer instanceof ListOccurrences)
-            ((ListOccurrences)buffer).findOccurrenceAtDot(editor);
+            ((ListOccurrences)buffer).findOccurrenceAtDot(editor, false);
+    }
+
+    public static void findOccurrenceAtDotAndKillList()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer instanceof ListOccurrences)
+            ((ListOccurrences)buffer).findOccurrenceAtDot(editor, true);
     }
 
     public static void mouseFindOccurrence()
@@ -334,7 +352,7 @@ public class ListOccurrences extends Buffer
             AWTEvent e = editor.getDispatcher().getLastEvent();
             if (e instanceof MouseEvent) {
                 editor.mouseMoveDotToPoint((MouseEvent)e);
-                ((ListOccurrences)buffer).findOccurrenceAtDot(editor);
+                ((ListOccurrences)buffer).findOccurrenceAtDot(editor, false);
             }
         }
     }
