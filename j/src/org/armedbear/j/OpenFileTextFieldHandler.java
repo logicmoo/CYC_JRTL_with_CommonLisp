@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.27 2002-12-15 15:24:05 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.28 2002-12-16 00:08:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -725,13 +725,6 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
         SwingUtilities.invokeLater(r);
     }
 
-    private void right()
-    {
-        reset();
-        textField.requestFocus();
-        end();
-    }
-
     protected void reset()
     {
         if (popup != null) {
@@ -806,7 +799,9 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                     case KeyEvent.VK_END:
                     case KeyEvent.VK_RIGHT:
                     case KeyEvent.VK_KP_RIGHT:
-                        right();
+                        reset();
+                        textField.requestFocus();
+                        end();
                         e.consume();
                         return;
                     case KeyEvent.VK_SHIFT:
@@ -895,16 +890,22 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                         return;
                     }
                     break;
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_KP_RIGHT:
+                    textField.getCaret().setVisible(true);
+                    break;
                 default:
                     break;
             }
         } else {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_KP_LEFT:
                     left();
                     e.consume();
                     return;
                 case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_KP_RIGHT:
                     textField.getCaret().setVisible(true);
                     break;
             }
