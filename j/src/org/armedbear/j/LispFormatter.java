@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.4 2002-10-25 00:10:01 piso Exp $
+ * $Id: LispFormatter.java,v 1.5 2002-12-21 15:31:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,29 @@ package org.armedbear.j;
 
 public final class LispFormatter extends Formatter
 {
+    // States.
+    private static final int STATE_OPEN_PAREN              = STATE_LAST + 1;
+    private static final int STATE_CLOSE_PAREN             = STATE_LAST + 2;
+    private static final int STATE_CAR                     = STATE_LAST + 3;
+    private static final int STATE_DEFUN                   = STATE_LAST + 4;
+    private static final int STATE_DEFINITION              = STATE_LAST + 5;
+    private static final int STATE_NAME                    = STATE_LAST + 6;
+    private static final int STATE_SUBSTITUTION            = STATE_LAST + 7;
+    private static final int STATE_SECONDARY_KEYWORD       = STATE_LAST + 8;
+    private static final int STATE_PUNCTUATION             = STATE_LAST + 9;
+    private static final int STATE_ARGLIST                 = STATE_LAST + 10;
+
     // Formats.
-    private static final int LISP_FORMAT_TEXT     = 0;
-    private static final int LISP_FORMAT_COMMENT  = 1;
-    private static final int LISP_FORMAT_STRING   = 2;
-    private static final int LISP_FORMAT_KEYWORD  = 3;
-    private static final int LISP_FORMAT_FUNCTION = 4;
-    private static final int LISP_FORMAT_NUMBER   = 5;
+    private static final int LISP_FORMAT_TEXT              = 0;
+    private static final int LISP_FORMAT_COMMENT           = 1;
+    private static final int LISP_FORMAT_STRING            = 2;
+    private static final int LISP_FORMAT_KEYWORD           = 3;
+    private static final int LISP_FORMAT_DEFUN             = 4;
+    private static final int LISP_FORMAT_NAME              = 5;
+    private static final int LISP_FORMAT_PARENTHESIS       = 6;
+    private static final int LISP_FORMAT_PUNCTUATION       = 7;
+    private static final int LISP_FORMAT_SUBSTITUTION      = 8;
+    private static final int LISP_FORMAT_SECONDARY_KEYWORD = 9;
 
     private final Mode mode;
 
@@ -47,19 +63,48 @@ public final class LispFormatter extends Formatter
             int format = -1;
             switch (state) {
                 case STATE_NEUTRAL:
+                case STATE_ARGLIST:
+                    format = LISP_FORMAT_TEXT;
                     break;
                 case STATE_QUOTE:
                     format = LISP_FORMAT_STRING;
                     break;
+                case STATE_OPEN_PAREN:
+                case STATE_CLOSE_PAREN:
+                    format = LISP_FORMAT_PARENTHESIS;
+                    break;
+                case STATE_CAR: {
+                    String token = text.substring(tokenBegin, tokenEnd).trim();
+                    if (token.startsWith("def"))
+                        format = LISP_FORMAT_DEFUN;
+                    else if (isKeyword(token))
+                        format = LISP_FORMAT_KEYWORD;
+                    else
+                        format = LISP_FORMAT_TEXT;
+                    break;
+                }
+                case STATE_NAME:
+                    format = LISP_FORMAT_NAME;
+                    break;
+                case STATE_DEFINITION:
                 case STATE_IDENTIFIER:
+                    format = LISP_FORMAT_TEXT;
+                    break;
+                case STATE_SECONDARY_KEYWORD:
+                    format = LISP_FORMAT_SECONDARY_KEYWORD;
+                    break;
+                case STATE_SUBSTITUTION:
+                    format = LISP_FORMAT_SUBSTITUTION;
                     break;
                 case STATE_COMMENT:
                     format = LISP_FORMAT_COMMENT;
                     break;
-                case STATE_NUMBER:
-                case STATE_HEXNUMBER:
-                    format = LISP_FORMAT_NUMBER;
-                    break;
+                case STATE_PUNCTUATION:
+                    format = LISP_FORMAT_PUNCTUATION;
+            }
+            if (format < 0) {
+                Log.debug("endToken unhandled case state = " + state);
+                format = LISP_FORMAT_TEXT;
             }
             addSegment(text, tokenBegin, tokenEnd, format);
             tokenBegin = tokenEnd;
@@ -123,14 +168,97 @@ public final class LispFormatter extends Formatter
                 return;
             }
             if (c == '#' && i < limit-1) {
-                if (text.charAt(i+1) == '|') {
+                c = text.charAt(i+1);
+                if (c == '|') {
                     endToken(text, i, state);
                     state = STATE_COMMENT;
                     i += 2;
                     continue;
                 }
+                ++i;
+                continue;
             }
-            if (state == STATE_IDENTIFIER) {
+            if (c == '`') {
+                endToken(text, i, state);
+                state = STATE_PUNCTUATION;
+                ++i;
+                endToken(text, i, state);
+                state = STATE_NEUTRAL;
+                continue;
+            }
+            if (c == ',') {
+                endToken(text, i, state);
+                state = STATE_PUNCTUATION;
+                ++i;
+                if (i < limit) {
+                    c = text.charAt(i);
+                    if (c == '@' || c == '.')
+                        ++i;
+                }
+                endToken(text, i, state);
+                state = STATE_SUBSTITUTION;
+                continue;
+            }
+            if (state == STATE_ARGLIST) {
+                if (c == '(') {
+                    endToken(text, i, state);
+                    ++i;
+                    endToken(text, i, STATE_OPEN_PAREN);
+                    continue;
+                }
+            }
+            if (c == '(') {
+                endToken(text, i, state);
+                state = STATE_OPEN_PAREN;
+                ++i;
+                continue;
+            }
+            if (c == ')') {
+                endToken(text, i, state);
+                state = STATE_CLOSE_PAREN;
+                ++i;
+                continue;
+            }
+            if (state == STATE_OPEN_PAREN) {
+                if (c == ':' || c == '&') {
+                    endToken(text, i, state);
+                    state = STATE_SECONDARY_KEYWORD;
+                } else if (!Character.isWhitespace(c)) {
+                    endToken(text, i, state);
+                    state = STATE_CAR;
+                }
+                ++i;
+                continue;
+            }
+            if (state == STATE_CLOSE_PAREN) {
+                if (c != ')') {
+                    endToken(text, i, state);
+                    state = STATE_NEUTRAL;
+                }
+            }
+            if (state == STATE_CAR) {
+                if (Character.isWhitespace(c)) {
+                    endToken(text, i, state);
+                    LineSegment s = segmentList.getLastSegment();
+                    if (s != null && s.getFormat() == LISP_FORMAT_DEFUN)
+                        state = STATE_DEFINITION;
+                    else
+                        state = STATE_NEUTRAL;
+                }
+                ++i;
+                continue;
+            }
+            if (state == STATE_NAME) {
+                if (!mode.isIdentifierPart(c)) {
+                    endToken(text, i, state);
+                    state = STATE_ARGLIST;
+                }
+                ++i;
+                continue;
+            }
+            if (state == STATE_IDENTIFIER ||
+                state == STATE_SECONDARY_KEYWORD ||
+                state == STATE_SUBSTITUTION) {
                 if (!mode.isIdentifierPart(c)) {
                     endToken(text, i, state);
                     state = STATE_NEUTRAL;
@@ -138,47 +266,19 @@ public final class LispFormatter extends Formatter
                 ++i;
                 continue;
             }
-            if (state == STATE_NUMBER) {
-                if (Character.isDigit(c))
-                    ;
-                else if (c == 'u' || c == 'U' || c == 'l' || c == 'L')
-                    ;
-                else if (i - tokenBegin == 1 && c == 'x' || c == 'X')
-                    state = STATE_HEXNUMBER;
-                else {
-                    endToken(text, i, state);
-                    if (Character.isJavaIdentifierStart(c))
-                        state = STATE_IDENTIFIER;
-                    else
-                        state = STATE_NEUTRAL;
-                }
-                ++i;
-                continue;
-            }
-            if (state == STATE_HEXNUMBER) {
-                if (Character.isDigit(c))
-                    ;
-                else if ((c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))
-                    ;
-                else if (c == 'u' || c == 'U' || c == 'l' || c == 'L')
-                    ;
-                else {
-                    endToken(text, i, state);
-                    if (Character.isJavaIdentifierStart(c))
-                        state = STATE_IDENTIFIER;
-                    else
-                        state = STATE_NEUTRAL;
-                }
+            if (state == STATE_DEFINITION) {
+                if (mode.isIdentifierStart(c))
+                    state = STATE_NAME;
                 ++i;
                 continue;
             }
             if (state == STATE_NEUTRAL) {
-                if (mode.isIdentifierStart(c)) {
+                if (c == ':' || c == '&') {
+                    endToken(text, i, state);
+                    state = STATE_SECONDARY_KEYWORD;
+                } else if (mode.isIdentifierStart(c)) {
                     endToken(text, i, state);
                     state = STATE_IDENTIFIER;
-                } else if (Character.isDigit(c)) {
-                    endToken(text, i, state);
-                    state = STATE_NUMBER;
                 } else // Still neutral...
                     ;
             }
@@ -195,33 +295,6 @@ public final class LispFormatter extends Formatter
             return segmentList;
         }
         parseLine(line);
-        final int size = segmentList.size();
-        for (int i = 0; i < size; i++) {
-            LineSegment segment = segmentList.getSegment(i);
-            if (segment.getFormat() >= 0)
-                continue;
-            String token = segment.getText();
-            if (isKeyword(token))
-                segment.setFormat(LISP_FORMAT_KEYWORD);
-            else {
-                boolean isFunction = false;
-                if (i >= 2) {
-                    LineSegment prevSegment = segmentList.getSegment(i-2);
-                    String prevToken = prevSegment.getText();
-                    String trim = prevToken.trim();
-                    if (trim.startsWith("def")) {
-                        if (trim.equals("defun") ||
-                            trim.equals("defvar") ||
-                            trim.equals("defmacro") ||
-                            trim.equals("defcustom") ||
-                            trim.equals("defgroup")) {
-                            isFunction = true;
-                        }
-                    }
-                }
-                segment.setFormat(isFunction ? LISP_FORMAT_FUNCTION : LISP_FORMAT_TEXT);
-            }
-        }
         return segmentList;
     }
 
@@ -268,8 +341,24 @@ public final class LispFormatter extends Formatter
                     }
                     continue;
                 }
-                if (c == '"')
+                if (c == '"') {
                     state = STATE_QUOTE;
+                    continue;
+                }
+                if (c == '(') {
+                    state = STATE_OPEN_PAREN;
+                    continue;
+                }
+                if (state == STATE_OPEN_PAREN) {
+                    if (!Character.isWhitespace(c))
+                        state = STATE_CAR;
+                    continue;
+                }
+                if (state == STATE_CAR) {
+                    if (c == ')' || Character.isWhitespace(c))
+                        state = STATE_NEUTRAL;
+                    continue;
+                }
             }
             line = line.next();
         }
@@ -285,8 +374,16 @@ public final class LispFormatter extends Formatter
             formatTable.addEntryFromPrefs(LISP_FORMAT_COMMENT, "comment");
             formatTable.addEntryFromPrefs(LISP_FORMAT_STRING, "string");
             formatTable.addEntryFromPrefs(LISP_FORMAT_KEYWORD, "keyword");
-            formatTable.addEntryFromPrefs(LISP_FORMAT_FUNCTION, "function");
-            formatTable.addEntryFromPrefs(LISP_FORMAT_NUMBER, "number");
+            formatTable.addEntryFromPrefs(LISP_FORMAT_DEFUN, "keyword");
+            formatTable.addEntryFromPrefs(LISP_FORMAT_NAME, "function");
+            formatTable.addEntryFromPrefs(LISP_FORMAT_PARENTHESIS,
+                                          "parenthesis","text");
+            formatTable.addEntryFromPrefs(LISP_FORMAT_PUNCTUATION,
+                                          "punctuation", "text");
+            formatTable.addEntryFromPrefs(LISP_FORMAT_SUBSTITUTION,
+                                          "substitution", "text");
+            formatTable.addEntryFromPrefs(LISP_FORMAT_SECONDARY_KEYWORD,
+                                          "secondaryKeyword", "text");
         }
         return formatTable;
     }
