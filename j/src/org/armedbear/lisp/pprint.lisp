@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.17 2004-06-11 14:42:54 piso Exp $
+;;; $Id: pprint.lisp,v 1.18 2004-06-11 16:51:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1039,10 +1039,13 @@
 ;additionally assume the thing being output does not contain a newline.
 
 (defun basic-write (object stream)
-  (cond ((xp-structure-p stream) (write+ object stream))
-	(*print-pretty* (maybe-initiate-xp-printing
-                         #'(lambda (s o) (write+ o s)) stream object))
-	(t (sys::output-object object stream))))
+  (cond ((xp-structure-p stream)
+         (write+ object stream))
+	(*print-pretty*
+         (maybe-initiate-xp-printing #'(lambda (s o) (write+ o s))
+                                     stream object))
+	(t
+         (sys::output-object object stream))))
 
 (defun maybe-initiate-xp-printing (fn stream &rest args)
   (if (xp-structure-p stream) (apply fn stream args)
@@ -1125,11 +1128,11 @@
 		   (write-string+ stuff xp 0 (length stuff)))))))))
 
 (defun non-pretty-print (object s)
-  (cl:write object
-	      :level (if *print-level*
-			 (- *print-level* *current-level*))
-	      :pretty nil
-	      :stream s))
+  (write object
+         :level (if *print-level*
+                    (- *print-level* *current-level*))
+         :pretty nil
+         :stream s))
 
 ;It is vital that this function be called EXACTLY once for each occurrence of
 ;  each thing in something being printed.
@@ -1228,7 +1231,7 @@
 
 
 (defun print (object &optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (terpri stream)
   (let ((*print-escape* t))
     (basic-write object stream))
@@ -1236,13 +1239,13 @@
   object)
 
 (defun prin1 (object &optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (let ((*print-escape* t))
     (basic-write object stream))
   object)
 
 (defun princ (object &optional (stream *standard-output*))
-  (setq stream (decode-stream-arg stream))
+  (setf stream (decode-stream-arg stream))
   (let ((*print-escape* nil)
         (*print-readably* nil))
     (basic-write object stream))
