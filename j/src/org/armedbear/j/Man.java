@@ -1,8 +1,8 @@
 /*
  * Man.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: Man.java,v 1.3 2002-10-11 15:30:21 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: Man.java,v 1.4 2003-05-10 15:41:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ public final class Man extends Buffer
         title = ManMode.getTitle(topic);
         mode = Editor.getModeList().getMode(MAN_MODE);
         formatter = new ManFormatter(this, apropos);
+        setTransient(true);
         setInitialized(true);
     }
 
