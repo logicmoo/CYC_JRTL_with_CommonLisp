@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.631 2004-04-19 17:51:49 piso Exp $
+ * $Id: Primitives.java,v 1.632 2004-04-24 12:38:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -650,27 +650,16 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %write
-    // %write object stream => object
-    private static final Primitive2 _WRITE =
-        new Primitive2("%write", PACKAGE_SYS, false)
+    // ### %output-object
+    // %output-object object stream => object
+    private static final Primitive2 _OUTPUT_OBJECT =
+        new Primitive2("%output-object", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            outSynonymOf(second)._writeString(String.valueOf(first));
+            outSynonymOf(second)._writeString(first.writeToString());
             return first;
-        }
-    };
-
-    // ### %write-to-string
-    // %write-to-string object => string
-    private static final Primitive1 _WRITE_TO_STRING =
-        new Primitive1("%write-to-string", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return new SimpleString(String.valueOf(arg));
         }
     };
 
@@ -723,7 +712,7 @@ public final class Primitives extends Lisp
             Environment oldDynEnv = thread.getDynamicEnvironment();
             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
             thread.bindSpecial(_PRINT_READABLY_, NIL);
-            SimpleString string = new SimpleString(String.valueOf(arg));
+            SimpleString string = new SimpleString(arg.writeToString());
             thread.setDynamicEnvironment(oldDynEnv);
             return string;
         }
@@ -738,7 +727,7 @@ public final class Primitives extends Lisp
             LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             thread.bindSpecial(_PRINT_ESCAPE_, T);
-            SimpleString string = new SimpleString(String.valueOf(arg));
+            SimpleString string = new SimpleString(arg.writeToString());
             thread.setDynamicEnvironment(oldDynEnv);
             return string;
         }
@@ -1335,8 +1324,6 @@ public final class Primitives extends Lisp
                 ((Stream)destination)._writeString(s);
                 return NIL;
             }
-            // Destination can also be a string with a fill pointer.
-//             signal(new LispError("FORMAT: not implemented"));
             return NIL;
         }
     };
@@ -2623,8 +2610,8 @@ public final class Primitives extends Lisp
                         String s = javaString(obj);
                         Package p = Packages.findPackage(s);
                         if (p == null) {
-                            signal(new LispError(String.valueOf(obj) +
-                                                 " is not the name of a package"));
+                            signal(new LispError(obj.writeToString() +
+                                                 " is not the name of a package."));
                             return NIL;
                         }
                     }
@@ -2648,7 +2635,7 @@ public final class Primitives extends Lisp
                     String s = javaString(obj);
                     Package p = Packages.findPackage(s);
                     if (p == null) {
-                        signal(new LispError(String.valueOf(obj) +
+                        signal(new LispError(obj.writeToString() +
                                              " is not the name of a package."));
                         return NIL;
                     }
@@ -3284,7 +3271,8 @@ public final class Primitives extends Lisp
             } else if (obj instanceof Function) {
                 function = obj;
             } else {
-                signal(new LispError(String.valueOf(obj) + " is not a function name"));
+                signal(new LispError(obj.writeToString() +
+                                     " is not a function name."));
                 return NIL;
             }
             ArrayList arrayList = new ArrayList();
@@ -4149,7 +4137,8 @@ public final class Primitives extends Lisp
         {
             int size = Fixnum.getValue(first);
             if (size < 0)
-                signal(new TypeError(String.valueOf(size) + " is not a valid list length."));
+                signal(new TypeError(String.valueOf(size) +
+                                     " is not a valid list length."));
             LispObject result = NIL;
             for (int i = size; i-- > 0;)
                 result = new Cons(second, result);
