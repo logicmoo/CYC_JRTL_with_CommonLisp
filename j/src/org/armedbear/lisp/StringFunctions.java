@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.34 2005-03-19 20:00:31 piso Exp $
+ * $Id: StringFunctions.java,v 1.35 2005-03-25 03:19:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -852,7 +852,7 @@ public final class StringFunctions extends Lisp
             throws ConditionThrowable
         {
             try {
-                return ((AbstractString)first).getRowMajor(((Fixnum)second).value);
+                return ((AbstractString)first).AREF(((Fixnum)second).value);
             }
             catch (ClassCastException e) {
                 if (first instanceof AbstractString)
@@ -872,7 +872,7 @@ public final class StringFunctions extends Lisp
             throws ConditionThrowable
         {
             try {
-                ((AbstractString)first).setRowMajor(((Fixnum)second).value,
+                ((AbstractString)first).aset(((Fixnum)second).value,
                                                     ((LispCharacter)third));
                 return third;
             }

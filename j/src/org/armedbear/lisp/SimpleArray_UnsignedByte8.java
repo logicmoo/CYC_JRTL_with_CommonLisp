@@ -2,7 +2,7 @@
  * SimpleArray_UnsignedByte8.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleArray_UnsignedByte8.java,v 1.2 2005-03-23 18:30:54 piso Exp $
+ * $Id: SimpleArray_UnsignedByte8.java,v 1.3 2005-03-25 03:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
                 AbstractVector v = checkVector(contents);
                 final int length = v.length();
                 for (int i = 0; i < length; i++) {
-                    LispObject content = v.getRowMajor(i);
+                    LispObject content = v.AREF(i);
                     index =
                         setInitialContents(axis + 1, newDims, content, index);
                 }
@@ -167,7 +167,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
         return false;
     }
 
-    public LispObject getRowMajor(int index) throws ConditionThrowable
+    public LispObject AREF(int index) throws ConditionThrowable
     {
         try {
             return coerceJavaByteToLispObject(data[index]);
@@ -177,7 +177,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
         }
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
+    public void aset(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             data[index] = coerceLispObjectToJavaByte(newValue);
@@ -301,7 +301,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
         } else {
             int i1 = a1.getRowMajorIndex(subscripts);
             int i2 = a2.getRowMajorIndex(subscripts);
-            a2.setRowMajor(i2, a1.getRowMajor(i1));
+            a2.aset(i2, a1.AREF(i1));
         }
     }
 

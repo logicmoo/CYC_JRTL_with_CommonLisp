@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.37 2005-03-22 19:59:56 piso Exp $
+ * $Id: AbstractArray.java,v 1.38 2005-03-25 03:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public abstract class AbstractArray extends LispObject
                     return false;
             }
             for (int i = getTotalSize(); i--> 0;) {
-                if (!getRowMajor(i).equalp(a.getRowMajor(i)))
+                if (!AREF(i).equalp(a.AREF(i)))
                     return false;
             }
             return true;
@@ -102,9 +102,10 @@ public abstract class AbstractArray extends LispObject
 
     public abstract int getTotalSize();
 
-    public abstract LispObject getRowMajor(int index) throws ConditionThrowable;
+    public abstract LispObject AREF(int index) throws ConditionThrowable;
 
-    public abstract void setRowMajor(int index, LispObject newValue) throws ConditionThrowable;
+    public abstract void aset(int index, LispObject newValue)
+        throws ConditionThrowable;
 
     // FIXME Detect overflow!
     protected static final int computeTotalSize(int[] dimensions)
@@ -162,13 +163,13 @@ public abstract class AbstractArray extends LispObject
 
     public LispObject get(int[] subscripts) throws ConditionThrowable
     {
-        return getRowMajor(getRowMajorIndex(subscripts));
+        return AREF(getRowMajorIndex(subscripts));
     }
 
     public void set(int[] subscripts, LispObject newValue)
         throws ConditionThrowable
     {
-        setRowMajor(getRowMajorIndex(subscripts), newValue);
+        aset(getRowMajorIndex(subscripts), newValue);
     }
 
     public abstract void fill(LispObject obj) throws ConditionThrowable;
@@ -230,10 +231,10 @@ public abstract class AbstractArray extends LispObject
             if (_PRINT_CIRCLE_.symbolValue(thread) != NIL) {
                 StringOutputStream stream = new StringOutputStream();
                 thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
-                               getRowMajor(index), stream);
+                               AREF(index), stream);
                 sb.append(stream.getString().getStringValue());
             } else
-                sb.append(getRowMajor(index).writeToString());
+                sb.append(AREF(index).writeToString());
         } else {
             final LispObject printReadably =
                 _PRINT_READABLY_.symbolValue(thread);

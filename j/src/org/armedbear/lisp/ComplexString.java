@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.24 2005-03-20 01:18:46 piso Exp $
+ * $Id: ComplexString.java,v 1.25 2005-03-25 03:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,7 +220,7 @@ public final class ComplexString extends AbstractString
         } else {
             for (int i = 0; i < n; i++) {
                 LispCharacter character =
-                    (LispCharacter) array.getRowMajor(displacement + i);
+                    (LispCharacter) array.AREF(displacement + i);
                 chars[i] = character.value;
             }
         }
@@ -255,12 +255,12 @@ public final class ComplexString extends AbstractString
         return this;
     }
 
-    public LispObject getRowMajor(int index) throws ConditionThrowable
+    public LispObject AREF(int index) throws ConditionThrowable
     {
         return LispCharacter.getInstance(charAt(index));
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
+    public void aset(int index, LispObject newValue) throws ConditionThrowable
     {
         setCharAt(index, LispCharacter.getValue(newValue));
     }
@@ -276,7 +276,7 @@ public final class ComplexString extends AbstractString
                 return 0; // Not reached.
             }
         } else
-            return LispCharacter.getValue(array.getRowMajor(index + displacement));
+            return LispCharacter.getValue(array.AREF(index + displacement));
     }
 
     public void setCharAt(int index, char c) throws ConditionThrowable
@@ -289,7 +289,7 @@ public final class ComplexString extends AbstractString
                 badIndex(index, capacity);
             }
         } else
-            array.setRowMajor(index + displacement, LispCharacter.getInstance(c));
+            array.aset(index + displacement, LispCharacter.getInstance(c));
     }
 
     public String getStringValue() throws ConditionThrowable
@@ -350,7 +350,7 @@ public final class ComplexString extends AbstractString
                 } else {
                     for (int i = 0; i < limit; i++) {
                         LispCharacter character =
-                            (LispCharacter) array.getRowMajor(displacement + i);
+                            (LispCharacter) array.AREF(displacement + i);
                         chars[i] = character.value;
                     }
                 }
@@ -423,7 +423,7 @@ public final class ComplexString extends AbstractString
                 signal(new TypeError(element, Symbol.CHARACTER));
             }
         } else
-            array.setRowMajor(fillPointer + displacement, element);
+            array.aset(fillPointer + displacement, element);
         return new Fixnum(fillPointer++);
     }
 
@@ -446,7 +446,7 @@ public final class ComplexString extends AbstractString
                 signal(new TypeError(element, Symbol.CHARACTER));
             }
         } else
-            array.setRowMajor(fillPointer + displacement, element);
+            array.aset(fillPointer + displacement, element);
         return new Fixnum(fillPointer++);
     }
 
@@ -476,7 +476,7 @@ public final class ComplexString extends AbstractString
                 } else {
                     for (int i = 0; i < limit; i++) {
                         LispCharacter character =
-                            (LispCharacter) array.getRowMajor(displacement + i);
+                            (LispCharacter) array.AREF(displacement + i);
                         chars[i] = character.value;
                     }
                 }

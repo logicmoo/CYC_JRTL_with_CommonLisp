@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.38 2005-03-13 03:56:49 piso Exp $
+ * $Id: StandardObject.java,v 1.39 2005-03-25 03:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public class StandardObject extends LispObject
             if (slotNames != null) {
                 for (int i = 0; i < slotNames.length; i++) {
                     parts = parts.push(new Cons(slotNames[i],
-                                                slots.getRowMajor(i)));
+                                                slots.AREF(i)));
                 }
             }
         }

@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.13 2005-03-22 20:00:07 piso Exp $
+ * $Id: adjust_array.java,v 1.14 2005-03-25 03:19:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ public final class adjust_array extends Primitive
         }
         if (array.getRank() == 0) {
             if (initialContentsProvided != NIL)
-                array.setRowMajor(0, initialContents);
+                array.aset(0, initialContents);
             return array;
         }
         if (array.getRank() == 1) {

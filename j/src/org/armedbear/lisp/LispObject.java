@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.122 2005-03-24 23:53:55 piso Exp $
+ * $Id: LispObject.java,v 1.123 2005-03-25 03:19:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -414,12 +414,34 @@ public class LispObject extends Lisp
 
     public LispObject AREF(int index) throws ConditionThrowable
     {
-        return AREF(new Fixnum(index));
+        return signal(new TypeError(this, Symbol.ARRAY));
     }
 
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
-        return signal(new TypeError(this, Symbol.ARRAY));
+        try {
+            return AREF(((Fixnum)index).value);
+        }
+        catch (ClassCastException e) {
+            return signal(new TypeError(index, Symbol.FIXNUM));
+        }
+    }
+
+    public void aset(int index, LispObject newValue)
+        throws ConditionThrowable
+    {
+        signal(new TypeError(this, Symbol.ARRAY));
+    }
+
+    public void aset(LispObject index, LispObject newValue)
+        throws ConditionThrowable
+    {
+        try {
+            aset(((Fixnum)index).value, newValue);
+        }
+        catch (ClassCastException e) {
+            signal(new TypeError(index, Symbol.FIXNUM));
+        }
     }
 
     public LispObject[] copyToArray() throws ConditionThrowable

@@ -2,7 +2,7 @@
  * ComplexVector_UnsignedByte32.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector_UnsignedByte32.java,v 1.1 2005-03-23 18:18:03 piso Exp $
+ * $Id: ComplexVector_UnsignedByte32.java,v 1.2 2005-03-25 03:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,7 +144,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
         final int limit = length();
         if (index < 0 || index >= limit)
             badIndex(index, limit);
-        return getRowMajor(index);
+        return AREF(index);
     }
 
     // Ignores fill pointer.
@@ -159,31 +159,17 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
                 return NIL; // Not reached.
             }
         } else
-            return array.getRowMajor(index + displacement);
+            return array.AREF(index + displacement);
     }
 
     // Ignores fill pointer.
     // FIXME inline
     public LispObject AREF(LispObject index) throws ConditionThrowable
     {
-        return getRowMajor(Fixnum.getValue(index));
+        return AREF(Fixnum.getValue(index));
     }
 
-    public LispObject getRowMajor(int index) throws ConditionThrowable
-    {
-        if (elements != null) {
-            try {
-                return elements[index];
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                badIndex(index, elements.length);
-                return NIL; // Not reached.
-            }
-        } else
-            return array.getRowMajor(index + displacement);
-    }
-
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
+    public void aset(int index, LispObject newValue) throws ConditionThrowable
     {
         if (elements != null) {
             try {
@@ -193,7 +179,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
                 badIndex(index, elements.length);
             }
         } else
-            array.setRowMajor(index + displacement, newValue);
+            array.aset(index + displacement, newValue);
     }
 
     public LispObject subseq(int start, int end) throws ConditionThrowable
@@ -202,7 +188,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
         int i = start, j = 0;
         try {
             while (i < end)
-                v.setRowMajor(j++, getRowMajor(i++));
+                v.aset(j++, AREF(i++));
             return v;
         }
         catch (ArrayIndexOutOfBoundsException e) {
@@ -238,7 +224,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
         SimpleVector result = new SimpleVector(length);
         int i, j;
         for (i = 0, j = length - 1; i < length; i++, j--)
-            result.setRowMajor(i, getRowMajor(j));
+            result.aset(i, AREF(j));
         return result;
     }
 
@@ -260,7 +246,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
             LispObject[] data = new LispObject[length];
             int i, j;
             for (i = 0, j = length - 1; i < length; i++, j--)
-                data[i] = getRowMajor(j);
+                data[i] = AREF(j);
             elements = data;
             capacity = length;
             array = null;
@@ -280,7 +266,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
             // Need to extend vector.
             ensureCapacity(capacity * 2 + 1);
         }
-        setRowMajor(fillPointer, element);
+        aset(fillPointer, element);
         return new Fixnum(fillPointer++);
     }
 
@@ -295,7 +281,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
             ext = Math.max(ext, capacity + 1);
             ensureCapacity(capacity + ext);
         }
-        setRowMajor(fillPointer, element);
+        aset(fillPointer, element);
         return new Fixnum(fillPointer++);
     }
 
@@ -319,7 +305,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
                 final int limit =
                     Math.min(capacity, array.getTotalSize() - displacement);
                 for (int i = 0; i < limit; i++)
-                    elements[i] = array.getRowMajor(displacement + i);
+                    elements[i] = array.AREF(displacement + i);
                 capacity = minCapacity;
                 array = null;
                 displacement = 0;
@@ -356,7 +342,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
                 elements = new LispObject[newCapacity];
                 final int limit = Math.min(capacity, newCapacity);
                 for (int i = 0; i < limit; i++)
-                    elements[i] = array.getRowMajor(displacement + i);
+                    elements[i] = array.AREF(displacement + i);
             } else if (capacity != newCapacity) {
                 LispObject[] newElements = new LispObject[newCapacity];
                 System.arraycopy(elements, 0, newElements, 0,

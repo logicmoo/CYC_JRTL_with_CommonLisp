@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.748 2005-03-24 23:56:16 piso Exp $
+ * $Id: Primitives.java,v 1.749 2005-03-25 03:19:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1993,7 +1993,7 @@ public final class Primitives extends Lisp
         {
             AbstractArray array = checkArray(arg);
             if (array.getRank() == 0)
-                return array.getRowMajor(0);
+                return array.AREF(0);
             StringBuffer sb =
                 new StringBuffer("Wrong number of subscripts (0) for array of rank ");
             sb.append(array.getRank());
@@ -2057,10 +2057,10 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %aset
-    // %aset array subscripts new-element => new-element
-    private static final Primitive _ASET =
-        new Primitive("%aset", PACKAGE_SYS, false, "array subscripts new-element")
+    // ### aset array subscripts new-element => new-element
+    private static final Primitive ASET =
+        new Primitive("aset", PACKAGE_SYS, false,
+                      "array subscripts new-element")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -2075,28 +2075,14 @@ public final class Primitives extends Lisp
                                             first.writeToString() +
                                             " is not an array of rank 0."));
             }
-            array.setRowMajor(0, second);
+            array.aset(0, second);
             return second;
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            final AbstractVector v;
-            try {
-                v = (AbstractVector) first;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(first, Symbol.VECTOR));
-            }
-            final int index;
-            try {
-                index = ((Fixnum)second).value;
-            }
-            catch (ClassCastException e) {
-                return signal(new TypeError(second, Symbol.FIXNUM));
-            }
-            v.setRowMajor(index, third);
+            first.aset(second, third);
             return third;
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -2133,29 +2119,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             try {
-                return ((AbstractArray)first).getRowMajor(((Fixnum)second).value);
-            }
-            catch (ClassCastException e) {
-                if (first instanceof AbstractArray)
-                    return signal(new TypeError(second, Symbol.FIXNUM));
-                else
-                    return signal(new TypeError(first, Symbol.ARRAY));
-            }
-        }
-    };
-
-    // ### %set-row-major-aref
-    // %set-row-major-aref array index new-value => new-value
-    private static final Primitive _SET_ROW_MAJOR_AREF =
-        new Primitive("%set-row-major-aref", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            try {
-                ((AbstractArray)first).setRowMajor(((Fixnum)second).value, third);
-                return third;
+                return ((AbstractArray)first).AREF(((Fixnum)second).value);
             }
             catch (ClassCastException e) {
                 if (first instanceof AbstractArray)
@@ -2167,33 +2131,12 @@ public final class Primitives extends Lisp
     };
 
     // ### vector
-    private static final Primitive VECTOR = new Primitive("vector", "&rest objects")
+    private static final Primitive VECTOR =
+        new Primitive("vector", "&rest objects")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             return new SimpleVector(args);
-        }
-    };
-
-    // ### %vset
-    // %vset vector index new-value => new-value
-    private static final Primitive _VSET =
-        new Primitive("%vset", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            try {
-                ((AbstractVector)first).setRowMajor(((Fixnum)second).value, third);
-                return third;
-            }
-            catch (ClassCastException e) {
-                if (first instanceof AbstractVector)
-                    return signal(new TypeError(second, Symbol.FIXNUM));
-                else
-                    return signal(new TypeError(first, Symbol.VECTOR));
-            }
         }
     };
 
@@ -2246,7 +2189,7 @@ public final class Primitives extends Lisp
                 v.noFillPointer();
             if (fillPointer >= v.capacity())
                 return NIL;
-            v.setRowMajor(fillPointer, first);
+            v.aset(fillPointer, first);
             v.setFillPointer(fillPointer + 1);
             return new Fixnum(fillPointer);
         }
@@ -2295,7 +2238,7 @@ public final class Primitives extends Lisp
             if (fillPointer == 0)
                 signal(new LispError("nothing left to pop"));
             int newFillPointer = v.checkIndex(fillPointer - 1);
-            LispObject element = v.getRowMajor(newFillPointer);
+            LispObject element = v.AREF(newFillPointer);
             v.setFillPointer(newFillPointer);
             return element;
         }
@@ -4339,7 +4282,7 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             if (first instanceof AbstractVector) {
-                ((AbstractVector)first).setRowMajor(Fixnum.getValue(second), third);
+                ((AbstractVector)first).aset(Fixnum.getValue(second), third);
                 return third;
             }
             if (first instanceof Cons) {
@@ -4730,15 +4673,15 @@ public final class Primitives extends Lisp
             final int limit = v.length() - patternLength;
             if (first instanceof AbstractVector) {
                 AbstractVector pattern = (AbstractVector) first;
-                LispObject element = pattern.getRowMajor(0);
+                LispObject element = pattern.AREF(0);
                 for (int i = 0; i <= limit; i++) {
-                    if (v.getRowMajor(i).eql(element)) {
+                    if (v.AREF(i).eql(element)) {
                         // Found match for first element of pattern.
                         boolean match = true;
                         // We've already checked the first element.
                         int j = i + 1;
                         for (int k = 1; k < patternLength; k++) {
-                            if (v.getRowMajor(j).eql(pattern.getRowMajor(k))) {
+                            if (v.AREF(j).eql(pattern.AREF(k))) {
                                 ++j;
                             } else {
                                 match = false;
@@ -4753,13 +4696,13 @@ public final class Primitives extends Lisp
                 // Pattern is a list.
                 LispObject element = first.car();
                 for (int i = 0; i <= limit; i++) {
-                    if (v.getRowMajor(i).eql(element)) {
+                    if (v.AREF(i).eql(element)) {
                         // Found match for first element of pattern.
                         boolean match = true;
                         // We've already checked the first element.
                         int j = i + 1;
                         for (LispObject rest = first.cdr(); rest != NIL; rest = rest.cdr()) {
-                            if (v.getRowMajor(j).eql(rest.car())) {
+                            if (v.AREF(j).eql(rest.car())) {
                                 ++j;
                             } else {
                                 match = false;

@@ -1,7 +1,7 @@
 ;;; delete.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: delete.lisp,v 1.6 2003-10-08 17:49:55 piso Exp $
+;;; $Id: delete.lisp,v 1.7 2005-03-25 03:20:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,8 +36,8 @@
            (jndex jndex (1+ jndex)))
         ((= index length)
          (shrink-vector sequence jndex))
-        (%vset sequence jndex (aref sequence index))))
-     (%vset sequence jndex (aref sequence index))
+        (aset sequence jndex (aref sequence index))))
+     (aset sequence jndex (aref sequence index))
      (if ,pred
          (setq number-zapped (1+ number-zapped))
          (setq jndex (1+ jndex)))))
@@ -57,8 +57,8 @@
               (jndex jndex (1+ jndex)))
            ((= index length)
             (shrink-vector sequence jndex))
-           (%vset sequence jndex (aref sequence index))))
-        (%vset sequence jndex (aref sequence index))
+           (aset sequence jndex (aref sequence index))))
+        (aset sequence jndex (aref sequence index))
         (if (= index (car losers))
             (pop losers)
             (setq jndex (1+ jndex)))))

@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Java.java,v 1.50 2005-03-17 14:50:59 piso Exp $
+ * $Id: Java.java,v 1.51 2005-03-25 03:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -672,7 +672,7 @@ public final class Java extends Lisp
             Object[] array = (Object[]) obj;
             SimpleVector v = new SimpleVector(array.length);
             for (int i = array.length; i-- > 0;)
-                v.setRowMajor(i, new JavaObject(array[i]));
+                v.aset(i, new JavaObject(array[i]));
             return v;
         }
         if (obj instanceof LispObject)

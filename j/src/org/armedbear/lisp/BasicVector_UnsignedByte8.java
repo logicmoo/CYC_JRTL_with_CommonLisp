@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: BasicVector_UnsignedByte8.java,v 1.3 2005-03-24 23:55:30 piso Exp $
+ * $Id: BasicVector_UnsignedByte8.java,v 1.4 2005-03-25 03:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -160,18 +160,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
         }
     }
 
-    public LispObject getRowMajor(int index) throws ConditionThrowable
-    {
-        try {
-            return coerceJavaByteToLispObject(elements[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, capacity);
-            return NIL; // Not reached.
-        }
-    }
-
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
+    public void aset(int index, LispObject newValue) throws ConditionThrowable
     {
         try {
             elements[index] = coerceLispObjectToJavaByte(newValue);

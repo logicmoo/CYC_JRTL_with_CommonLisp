@@ -2,7 +2,7 @@
  * StandardObjectFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.1 2004-11-28 15:41:04 piso Exp $
+ * $Id: StandardObjectFunctions.java,v 1.2 2005-03-25 03:19:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,7 +128,7 @@ public class StandardObjectFunctions extends Lisp
             throws ConditionThrowable
         {
             try {
-                ((StandardObject)first).slots.setRowMajor(Fixnum.getValue(second),
+                ((StandardObject)first).slots.aset(Fixnum.getValue(second),
                                                           third);
                 return third;
             }
@@ -157,7 +157,7 @@ public class StandardObjectFunctions extends Lisp
             int index = layout.getSlotIndex(second);
             if (index >= 0) {
                 // Found instance slot.
-                LispObject value = instance.slots.getRowMajor(index);
+                LispObject value = instance.slots.AREF(index);
                 return value != UNBOUND_VALUE ? T : NIL;
             }
             // Check for class slot.
@@ -197,7 +197,7 @@ public class StandardObjectFunctions extends Lisp
             int index = layout.getSlotIndex(second);
             if (index >= 0) {
                 // Found instance slot.
-                value = instance.slots.getRowMajor(index);
+                value = instance.slots.AREF(index);
             } else {
                 // Check for class slot.
                 LispObject location = layout.getClassSlotLocation(second);
@@ -234,7 +234,7 @@ public class StandardObjectFunctions extends Lisp
             int index = layout.getSlotIndex(second);
             if (index >= 0) {
                 // Found instance slot.
-                instance.slots.setRowMajor(index, third);
+                instance.slots.aset(index, third);
                 return third;
             }
             // Check for class slot.

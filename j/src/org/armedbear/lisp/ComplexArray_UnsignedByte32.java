@@ -2,7 +2,7 @@
  * ComplexArray_UnsignedByte32.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ComplexArray_UnsignedByte32.java,v 1.1 2005-03-23 18:17:32 piso Exp $
+ * $Id: ComplexArray_UnsignedByte32.java,v 1.2 2005-03-25 03:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
                 AbstractVector v = checkVector(contents);
                 final int length = v.length();
                 for (int i = 0; i < length; i++) {
-                    LispObject content = v.getRowMajor(i);
+                    LispObject content = v.AREF(i);
                     index =
                         setInitialContents(axis + 1, newDims, content, index);
                 }
@@ -166,7 +166,7 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
         return LispThread.currentThread().setValues(value1, value2);
     }
 
-    public LispObject getRowMajor(int index) throws ConditionThrowable
+    public LispObject AREF(int index) throws ConditionThrowable
     {
         if (data != null) {
             try {
@@ -176,10 +176,10 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
                 return signal(new TypeError("Bad row major index " + index + "."));
             }
         } else
-            return array.getRowMajor(index + displacement);
+            return array.AREF(index + displacement);
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
+    public void aset(int index, LispObject newValue) throws ConditionThrowable
     {
         if (data != null) {
             try {
@@ -189,7 +189,7 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
                 signal(new TypeError("Bad row major index " + index + "."));
             }
         } else
-            array.setRowMajor(index + displacement, newValue);
+            array.aset(index + displacement, newValue);
     }
 
     public void fill(LispObject obj) throws ConditionThrowable
@@ -199,7 +199,7 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
                 data[i] = obj;
         } else {
             for (int i = totalSize; i-- > 0;)
-                setRowMajor(i, obj);
+                aset(i, obj);
         }
     }
 

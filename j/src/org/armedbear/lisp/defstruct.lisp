@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.64 2005-03-18 18:41:16 piso Exp $
+;;; $Id: defstruct.lisp,v 1.65 2005-03-25 03:20:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -334,7 +334,7 @@
           ((or (eq *dd-type* 'vector)
                (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
            `((defun (setf ,accessor-name) (value instance)
-               (%aset instance ,index value))))
+               (aset instance ,index value))))
           (t
            `((defun (setf ,accessor-name) (value instance)
                (%structure-set instance ,index value))

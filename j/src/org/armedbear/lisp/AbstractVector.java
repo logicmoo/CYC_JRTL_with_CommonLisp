@@ -52,7 +52,7 @@ public abstract class AbstractVector extends AbstractArray
                 return false;
             AbstractVector v = (AbstractVector) obj;
             for (int i = length(); i-- > 0;)
-                if (!getRowMajor(i).equalp(v.getRowMajor(i)))
+                if (!AREF(i).equalp(v.AREF(i)))
                     return false;
             return true;
         }
@@ -141,9 +141,9 @@ public abstract class AbstractVector extends AbstractArray
         int i = 0;
         int j = length() - 1;
         while (i < j) {
-            LispObject temp = getRowMajor(i);
-            setRowMajor(i, getRowMajor(j));
-            setRowMajor(j, temp);
+            LispObject temp = AREF(i);
+            aset(i, AREF(j));
+            aset(j, temp);
             ++i;
             --j;
         }
@@ -159,7 +159,7 @@ public abstract class AbstractVector extends AbstractArray
             for (int i = 0; i < limit; i++) {
                 if (i > 0)
                     sb.append(' ');
-                sb.append(getRowMajor(i).writeToString());
+                sb.append(AREF(i).writeToString());
             }
             sb.append(')');
             return sb.toString();
@@ -187,7 +187,7 @@ public abstract class AbstractVector extends AbstractArray
                     for (int i = 0; i < limit; i++) {
                         if (i > 0)
                             sb.append(' ');
-                        sb.append(getRowMajor(i).writeToString());
+                        sb.append(AREF(i).writeToString());
                     }
                 }
                 finally {
@@ -215,7 +215,7 @@ public abstract class AbstractVector extends AbstractArray
             final int limit = length < 4 ? length : 4;
             long result = 48920713; // Chosen at random.
             for (int i = 0; i < length; i++)
-                result = mix(result, getRowMajor(i).psxhash());
+                result = mix(result, AREF(i).psxhash());
             return (int) (result & 0x7fffffff);
         }
         catch (Throwable t) {

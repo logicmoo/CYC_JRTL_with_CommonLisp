@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.46 2005-02-20 18:24:15 piso Exp $
+ * $Id: StructureObject.java,v 1.47 2005-03-25 03:19:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public final class StructureObject extends LispObject
         LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
         for (int i = 0; i < slots.length; i++) {
             SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
-            LispObject slotName = slotDefinition.getRowMajor(1);
+            LispObject slotName = slotDefinition.AREF(1);
             result = result.push(new Cons(slotName, slots[i]));
         }
         return result.nreverse();
@@ -167,8 +167,8 @@ public final class StructureObject extends LispObject
                 for (int i = 0; i < limit; i++) {
                     sb.append(' ');
                     SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
-                    // FIXME getRowMajor(1)
-                    LispObject slotName = slotDefinition.getRowMajor(1);
+                    // FIXME AREF(1)
+                    LispObject slotName = slotDefinition.AREF(1);
                     Debug.assertTrue(slotName instanceof Symbol);
                     Symbol keyword =
                         PACKAGE_KEYWORD.intern(((Symbol)slotName).getName());

@@ -1,7 +1,7 @@
 ;;; remove.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: remove.lisp,v 1.5 2003-10-08 17:48:47 piso Exp $
+;;; $Id: remove.lisp,v 1.6 2005-03-25 03:20:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@
          (do ((index ,left (,bump index))
               (result (make-sequence-like sequence length)))
            ((= index ,begin) result)
-           (%vset result index (aref sequence index))))
+           (aset result index (aref sequence index))))
         (new-index ,begin)
         (number-zapped 0)
         (this-element))
@@ -43,10 +43,10 @@
       (do ((index index (,bump index))
            (new-index new-index (,bump new-index)))
         ((= index ,right) (shrink-vector result new-index))
-        (%vset result new-index (aref sequence index))))
+        (aset result new-index (aref sequence index))))
      (setq this-element (aref sequence index))
      (cond (,pred (setq number-zapped (1+ number-zapped)))
-           (t (%vset result new-index this-element)
+           (t (aset result new-index this-element)
               (setq new-index (,bump new-index))))))
 
 (defmacro mumble-remove (pred)

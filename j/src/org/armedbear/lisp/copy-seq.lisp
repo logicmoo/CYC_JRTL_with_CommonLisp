@@ -1,7 +1,7 @@
 ;;; copy-seq.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: copy-seq.lisp,v 1.4 2003-10-08 17:34:19 piso Exp $
+;;; $Id: copy-seq.lisp,v 1.5 2005-03-25 03:20:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
      (do ((index 0 (1+ index))
 	  (copy (make-sequence-of-type ,type length)))
        ((= index length) copy)
-       (%vset copy index (aref ,sequence index)))))
+       (aset copy index (aref ,sequence index)))))
 
 (defmacro list-copy-seq (list)
   `(if (atom ,list) '()

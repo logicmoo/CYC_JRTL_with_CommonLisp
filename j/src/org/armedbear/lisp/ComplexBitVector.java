@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.10 2004-12-12 18:31:29 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.11 2005-03-25 03:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,10 +113,10 @@ public final class ComplexBitVector extends AbstractBitVector
         // The index < 0 case is checked in get().
         if (index >= length())
             badIndex(index, length());
-        return getRowMajor(index);
+        return AREF(index);
     }
 
-    public LispObject getRowMajor(int index) throws ConditionThrowable
+    public LispObject AREF(int index) throws ConditionThrowable
     {
         if (bits != null) {
             if (index < 0 || index >= capacity)
@@ -124,7 +124,7 @@ public final class ComplexBitVector extends AbstractBitVector
             int offset = index >> 6;
             return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
         } else
-            return array.getRowMajor(index + displacement);
+            return array.AREF(index + displacement);
     }
 
     protected int getBit(int index) throws ConditionThrowable
@@ -133,10 +133,10 @@ public final class ComplexBitVector extends AbstractBitVector
             int offset = index >> 6;
             return (bits[offset] & (1L << index)) != 0 ? 1 : 0;
         } else
-            return Fixnum.getValue(array.getRowMajor(index + displacement));
+            return Fixnum.getValue(array.AREF(index + displacement));
     }
 
-    public void setRowMajor(int index, LispObject newValue) throws ConditionThrowable
+    public void aset(int index, LispObject newValue) throws ConditionThrowable
     {
         if (index < 0 || index >= capacity)
             badIndex(index, capacity);
@@ -170,7 +170,7 @@ public final class ComplexBitVector extends AbstractBitVector
             int offset = index >> 6;
             bits[offset] |= 1L << index;
         } else
-            array.setRowMajor(index + displacement, Fixnum.ONE);
+            array.aset(index + displacement, Fixnum.ONE);
     }
 
     protected void clearBit(int index) throws ConditionThrowable
@@ -179,7 +179,7 @@ public final class ComplexBitVector extends AbstractBitVector
             int offset = index >> 6;
             bits[offset] &= ~(1L << index);
         } else
-            array.setRowMajor(index + displacement, Fixnum.ZERO);
+            array.aset(index + displacement, Fixnum.ZERO);
     }
 
     public void shrink(int n) throws ConditionThrowable
@@ -219,7 +219,7 @@ public final class ComplexBitVector extends AbstractBitVector
             // Need to extend vector.
             ensureCapacity(capacity() * 2 + 1);
         }
-        setRowMajor(fp, element);
+        aset(fp, element);
         setFillPointer(fp + 1);
         return new Fixnum(fp);
     }
@@ -237,7 +237,7 @@ public final class ComplexBitVector extends AbstractBitVector
             ext = Math.max(ext, capacity() + 1);
             ensureCapacity(capacity() + ext);
         }
-        setRowMajor(fp, element);
+        aset(fp, element);
         setFillPointer(fp + 1);
         return new Fixnum(fp);
     }
@@ -267,7 +267,7 @@ public final class ComplexBitVector extends AbstractBitVector
                 final int limit =
                     Math.min(capacity, array.getTotalSize() - displacement);
                 for (int i = 0; i < limit; i++) {
-                    int n = Fixnum.getValue(array.getRowMajor(displacement + i));
+                    int n = Fixnum.getValue(array.AREF(displacement + i));
                     if (n == 1)
                         setBit(i);
                     else
@@ -293,7 +293,7 @@ public final class ComplexBitVector extends AbstractBitVector
                 ++size;
             bits = new long[size];
             for (int i = 0; i < capacity; i++) {
-                int n = Fixnum.getValue(array.getRowMajor(displacement + i));
+                int n = Fixnum.getValue(array.AREF(displacement + i));
                 if (n == 1)
                     setBit(i);
                 else
@@ -312,12 +312,12 @@ public final class ComplexBitVector extends AbstractBitVector
                 if (initialContents.listp()) {
                     LispObject list = initialContents;
                     for (int i = 0; i < newCapacity; i++) {
-                        setRowMajor(i, list.car());
+                        aset(i, list.car());
                         list = list.cdr();
                     }
                 } else if (initialContents.vectorp()) {
                     for (int i = 0; i < newCapacity; i++)
-                        setRowMajor(i, initialContents.elt(i));
+                        aset(i, initialContents.elt(i));
                 } else
                     signal(new TypeError(initialContents, Symbol.SEQUENCE));
             } else {

@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.93 2005-03-23 23:13:37 piso Exp $
+;;; $Id: precompiler.lisp,v 1.94 2005-03-25 03:20:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,11 +47,6 @@
 (define-compiler-macro search (&whole form &rest args)
   (if (= (length args) 2)
       `(simple-search ,@args)
-      form))
-
-(define-compiler-macro %aset (&whole form &rest args)
-  (if (= (length args) 3)
-      `(%set-row-major-aref ,(first args) ,(second args) ,(third args))
       form))
 
 (define-compiler-macro identity (&whole form &rest args)

@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: make_array.java,v 1.27 2005-03-24 14:28:43 piso Exp $
+ * $Id: make_array.java,v 1.28 2005-03-25 03:19:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -151,12 +151,12 @@ public final class make_array extends Primitive
                 if (initialContents.listp()) {
                     LispObject list = initialContents;
                     for (int i = 0; i < size; i++) {
-                        v.setRowMajor(i, list.car());
+                        v.aset(i, list.car());
                         list = list.cdr();
                     }
                 } else if (initialContents.vectorp()) {
                     for (int i = 0; i < size; i++)
-                        v.setRowMajor(i, initialContents.elt(i));
+                        v.aset(i, initialContents.elt(i));
                 } else
                     return signal(new TypeError(initialContents, Symbol.SEQUENCE));
             }
