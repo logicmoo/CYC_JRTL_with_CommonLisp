@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StringInputStream.java,v 1.4 2003-10-23 12:53:59 piso Exp $
+ * $Id: StringInputStream.java,v 1.5 2003-11-02 19:57:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,11 @@ public final class StringInputStream extends CharacterInputStream
         this.start = start;
         this.end = end;
         offset = start;
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.STRING_STREAM;
     }
 
     protected int read()

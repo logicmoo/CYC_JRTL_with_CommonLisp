@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: StringOutputStream.java,v 1.4 2003-09-19 11:50:19 piso Exp $
+ * $Id: StringOutputStream.java,v 1.5 2003-11-02 19:57:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,11 @@ public final class StringOutputStream extends CharacterOutputStream
     {
         super();
         setWriter(stringWriter = new StringWriter());
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.STRING_STREAM;
     }
 
     public LispString getString()
