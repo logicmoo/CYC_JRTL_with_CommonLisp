@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.72 2003-03-03 20:13:40 piso Exp $
+ * $Id: Primitives.java,v 1.73 2003-03-04 03:11:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2854,8 +2854,7 @@ public final class Primitives extends Module
                 throw new UndefinedFunctionError(arg);
             }
             if (arg instanceof Cons) {
-                Symbol symbol = checkSymbol(arg.car());
-                if (symbol == Symbol.LAMBDA)
+                if (arg.car() == Symbol.LAMBDA)
                     return new Closure(arg.cadr(), arg.cddr(), env);
             }
             throw new UndefinedFunctionError(String.valueOf(arg));
