@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.595 2004-03-07 06:22:24 piso Exp $
+ * $Id: Primitives.java,v 1.596 2004-03-08 02:53:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -716,6 +716,7 @@ public final class Primitives extends Lisp
             LispThread thread = LispThread.currentThread();
             Environment oldDynEnv = thread.getDynamicEnvironment();
             thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+            thread.bindSpecial(_PRINT_READABLY_, NIL);
             SimpleString string = new SimpleString(String.valueOf(arg));
             thread.setDynamicEnvironment(oldDynEnv);
             return string;
