@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.160 2005-01-13 12:30:56 piso Exp $
+;;; $Id: rt.lisp,v 1.161 2005-02-06 19:59:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -97,17 +97,17 @@
            (passed (and (not aborted) (equalp-with-case r `,values))))
       (unless passed
         (let ((*print-pretty* t))
-          (format t "Form: ~S~%" `,form))
-        (format t "Expected value: ~S~%"
-                (if (= (length `,values) 1)
-                    (car `,values)
-                    `,values))
-        (let ((r (if (= (length r) 1) (car r) r)))
-          (format t "Actual value: ~S" r)
-          (when (typep r 'condition)
-            (format t " [\"~A\"]" r))
-          (terpri))
-        (finish-output))
+          (format t "Form: ~S~%" `,form)
+          (format t "Expected value: ~S~%"
+                  (if (= (length `,values) 1)
+                      (car `,values)
+                      `,values))
+          (let ((r (if (= (length r) 1) (car r) r)))
+            (format t "Actual value: ~S" r)
+            (when (typep r 'condition)
+              (format t " [\"~A\"]" r))
+            (terpri))
+          (finish-output)))
       (if passed (incf *passed*) (incf *failed*)))))
 
 (in-package :cl-user)
