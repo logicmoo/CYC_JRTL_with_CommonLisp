@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.14 2003-09-19 14:44:10 piso Exp $
+ * $Id: Array.java,v 1.15 2003-09-20 17:02:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,7 +125,7 @@ public final class Array extends AbstractArray
 
     public LispClass classOf()
     {
-        return LispClass.ARRAY;
+        return BuiltInClass.ARRAY;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable

@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.73 2003-09-19 14:44:10 piso Exp $
+ * $Id: Fixnum.java,v 1.74 2003-09-20 17:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,30 +48,30 @@ public final class Fixnum extends LispObject
 
     public LispClass classOf()
     {
-        return LispClass.FIXNUM;
+        return BuiltInClass.FIXNUM;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.FIXNUM)
             return T;
-        if (type == LispClass.FIXNUM)
+        if (type == BuiltInClass.FIXNUM)
             return T;
         if (type == Symbol.INTEGER)
             return T;
-        if (type == LispClass.INTEGER)
+        if (type == BuiltInClass.INTEGER)
             return T;
         if (type == Symbol.RATIONAL)
             return T;
-        if (type == LispClass.RATIONAL)
+        if (type == BuiltInClass.RATIONAL)
             return T;
         if (type == Symbol.REAL)
             return T;
-        if (type == LispClass.REAL)
+        if (type == BuiltInClass.REAL)
             return T;
         if (type == Symbol.NUMBER)
             return T;
-        if (type == LispClass.NUMBER)
+        if (type == BuiltInClass.NUMBER)
             return T;
         if (type == Symbol.UNSIGNED_BYTE)
             return value >= 0 ? T : NIL;

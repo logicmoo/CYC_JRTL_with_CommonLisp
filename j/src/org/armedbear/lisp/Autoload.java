@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.69 2003-09-19 11:50:18 piso Exp $
+ * $Id: Autoload.java,v 1.70 2003-09-20 17:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,6 +208,7 @@ public class Autoload extends Function
         autoload("logorc1", "logorc1");
         autoload("logorc2", "logorc2");
         autoload("logxor", "logxor");
+        autoload("make-condition", "make_condition");
         autoload("make-string-output-stream", "StringOutputStream");
         autoload("namestring", "Pathname");
         autoload("package-name", "PackageFunctions");
@@ -227,6 +228,7 @@ public class Autoload extends Function
         autoload("sxhash", "HashTable");
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
+        autoload(PACKAGE_SYS, "%define-condition", "define_condition");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");

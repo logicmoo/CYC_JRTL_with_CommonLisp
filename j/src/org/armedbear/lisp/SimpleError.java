@@ -2,7 +2,7 @@
  * SimpleError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleError.java,v 1.3 2003-09-19 16:04:50 piso Exp $
+ * $Id: SimpleError.java,v 1.4 2003-09-20 17:02:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class SimpleError extends LispError
 
     public LispClass classOf()
     {
-        return LispClass.SIMPLE_ERROR;
+        return BuiltInClass.SIMPLE_ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

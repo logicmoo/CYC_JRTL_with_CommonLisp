@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndefinedFunction.java,v 1.1 2003-09-19 15:50:19 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.2 2003-09-20 17:02:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ public final class UndefinedFunction extends LispError
 
     public LispClass classOf()
     {
-        return LispClass.UNDEFINED_FUNCTION;
+        return BuiltInClass.UNDEFINED_FUNCTION;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

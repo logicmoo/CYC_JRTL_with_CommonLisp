@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.23 2003-09-19 01:46:40 piso Exp $
+ * $Id: Function.java,v 1.24 2003-09-20 17:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@ public abstract class Function extends Functional
 
     public LispClass classOf()
     {
-        return LispClass.FUNCTION;
+        return BuiltInClass.FUNCTION;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
@@ -112,7 +112,7 @@ public abstract class Function extends Functional
             return T;
         if (typeSpecifier == Symbol.COMPILED_FUNCTION)
             return T;
-        if (typeSpecifier == LispClass.FUNCTION)
+        if (typeSpecifier == BuiltInClass.FUNCTION)
             return T;
         return super.typep(typeSpecifier);
     }

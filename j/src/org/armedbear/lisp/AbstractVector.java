@@ -28,11 +28,11 @@ public abstract class AbstractVector extends AbstractArray
     {
         if (type == Symbol.VECTOR)
             return T;
-        if (type == LispClass.VECTOR)
+        if (type == BuiltInClass.VECTOR)
             return T;
         if (type == Symbol.SEQUENCE)
             return T;
-        if (type == LispClass.SEQUENCE)
+        if (type == BuiltInClass.SEQUENCE)
             return T;
         if (type == Symbol.SIMPLE_VECTOR)
             return isSimpleVector() ? T : NIL;

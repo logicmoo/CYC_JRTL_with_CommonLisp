@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispError.java,v 1.6 2003-09-20 00:40:13 piso Exp $
+ * $Id: LispError.java,v 1.7 2003-09-20 17:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class LispError extends Condition
 
     public LispClass classOf()
     {
-        return LispClass.ERROR;
+        return BuiltInClass.ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

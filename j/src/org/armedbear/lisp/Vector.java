@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.25 2003-09-19 14:44:10 piso Exp $
+ * $Id: Vector.java,v 1.26 2003-09-20 17:02:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public class Vector extends AbstractVector
 
     public LispClass classOf()
     {
-        return LispClass.VECTOR;
+        return BuiltInClass.VECTOR;
     }
 
     public LispObject getElementType()

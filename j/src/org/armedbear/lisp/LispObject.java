@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.59 2003-09-19 14:44:10 piso Exp $
+ * $Id: LispObject.java,v 1.60 2003-09-20 17:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,14 +35,14 @@ public class LispObject extends Lisp
 
     public LispClass classOf()
     {
-        return LispClass.CLASS_T;
+        return BuiltInClass.CLASS_T;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == T)
             return T;
-        if (typeSpecifier == LispClass.CLASS_T)
+        if (typeSpecifier == BuiltInClass.CLASS_T)
             return T;
         if (typeSpecifier == Symbol.ATOM)
             return T;

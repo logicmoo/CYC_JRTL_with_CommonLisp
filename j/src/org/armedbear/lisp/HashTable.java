@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.20 2003-09-19 14:44:10 piso Exp $
+ * $Id: HashTable.java,v 1.21 2003-09-20 17:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,16 +68,16 @@ public final class HashTable extends LispObject
 
     public LispClass classOf()
     {
-        return LispClass.HASH_TABLE;
+        return BuiltInClass.HASH_TABLE;
     }
 
-    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+    public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (typeSpecifier == Symbol.HASH_TABLE)
+        if (type == Symbol.HASH_TABLE)
             return T;
-        if (typeSpecifier == LispClass.HASH_TABLE)
+        if (type == BuiltInClass.HASH_TABLE)
             return T;
-        return super.typep(typeSpecifier);
+        return super.typep(type);
     }
 
     // gethash key hash-table &optional default => value, present-p

@@ -2,7 +2,7 @@
  * ControlError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ControlError.java,v 1.4 2003-09-19 16:04:50 piso Exp $
+ * $Id: ControlError.java,v 1.5 2003-09-20 17:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class ControlError extends LispError
 
     public LispClass classOf()
     {
-        return LispClass.CONTROL_ERROR;
+        return BuiltInClass.CONTROL_ERROR;
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

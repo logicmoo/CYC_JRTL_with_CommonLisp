@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.48 2003-09-19 14:44:10 piso Exp $
+ * $Id: LispFloat.java,v 1.49 2003-09-20 17:02:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,14 +40,14 @@ public final class LispFloat extends LispObject
 
     public LispClass classOf()
     {
-        return LispClass.FLOAT;
+        return BuiltInClass.FLOAT;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.FLOAT)
             return T;
-        if (typeSpecifier == LispClass.FLOAT)
+        if (typeSpecifier == BuiltInClass.FLOAT)
             return T;
         if (typeSpecifier == Symbol.REAL)
             return T;
