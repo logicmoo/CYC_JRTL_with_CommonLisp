@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.15 2003-03-06 00:01:39 piso Exp $
+;;; $Id: sequences.lisp,v 1.16 2003-03-06 03:14:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -171,6 +171,7 @@
                    (funcall ,function value ,what)))
          ((= count ,end) value)))))
 
+
 (defmacro list-reduce-from-end (function sequence start end
                                          initial-value ivp key)
   (let ((what `(if ,key (funcall ,key (car sequence)) (car sequence))))
@@ -181,6 +182,7 @@
             (value (if ,ivp ,initial-value ,what)
                    (funcall ,function ,what value)))
          ((= count ,end) value)))))
+
 
 (defun reduce (function sequence &key from-end (start 0)
                         end (initial-value nil ivp) key)
@@ -208,28 +210,19 @@
                  value (funcall function (if from-end element value) (if from-end value element))))))))
 
 
-;;; Remove-Duplicates:
+;; REMOVE-DUPLICATES (from CMUCL)
 
-;;; Remove duplicates from a list. If from-end, remove the later duplicates,
-;;; not the earlier ones. Thus if we check from-end we don't copy an item
-;;; if we look into the already copied structure (from after :start) and see
-;;; the item. If we check from beginning we check into the rest of the
-;;; original list up to the :end marker (this we have to do by running a
-;;; do loop down the list that far and using our test.
 (defun list-remove-duplicates* (list test test-not start end key from-end)
-  (declare (fixnum start))
   (let* ((result (list ())) ; Put a marker on the beginning to splice with.
 	 (splice result)
 	 (current list))
     (do ((index 0 (1+ index)))
       ((= index start))
-      (declare (fixnum index))
       (setq splice (cdr (rplacd splice (list (car current)))))
       (setq current (cdr current)))
     (do ((index 0 (1+ index)))
       ((or (and end (= index (the fixnum end)))
            (atom current)))
-      (declare (fixnum index))
       (if (or (and from-end
 		   (not (member (apply-key key (car current))
 				(nthcdr (1+ start) result)
@@ -242,7 +235,6 @@
 			     (i (1+ index) (1+ i)))
                           ((or (atom l) (and end (= i (the fixnum end))))
                            ())
-			  (declare (fixnum i))
 			  (if (if test-not
 				  (not (funcall test-not it (apply-key key (car l))))
 				  (funcall test it (apply-key key (car l))))
@@ -256,15 +248,12 @@
     (cdr result)))
 
 
-
 (defun vector-remove-duplicates* (vector test test-not start end key from-end
 					 &optional (length (length vector)))
-  (declare (vector vector) (fixnum start length))
   (when (null end) (setf end (length vector)))
   (let ((result (make-sequence-like vector length))
 	(index 0)
 	(jndex start))
-    (declare (fixnum index jndex))
     (do ()
       ((= index start))
       (setf (aref result index) (aref vector index))
@@ -291,13 +280,6 @@
 
 (defun remove-duplicates (sequence &key (test #'eql) test-not (start 0) from-end
 				   end key)
-  "The elements of Sequence are compared pairwise, and if any two match,
-   the one occuring earlier is discarded, unless FROM-END is true, in
-   which case the one later in the sequence is discarded.  The resulting
-   sequence is returned.
-
-   The :TEST-NOT argument is depreciated."
-  (declare (fixnum start))
   (seq-dispatch sequence
 		(if sequence
 		    (list-remove-duplicates* sequence test test-not
@@ -306,18 +288,13 @@
                                            start end key from-end)))
 
 
-;;; Delete-Duplicates:
-
-
 (defun list-delete-duplicates* (list test test-not key from-end start end)
-  (declare (fixnum start))
   (let ((handle (cons nil list)))
     (do ((current (nthcdr start list) (cdr current))
 	 (previous (nthcdr start handle))
 	 (index start (1+ index)))
       ((or (and end (= index (the fixnum end))) (null current))
        (cdr handle))
-      (declare (fixnum index))
       (if (do ((x (if from-end
 		      (nthcdr (1+ start) handle)
 		      (cdr current))
@@ -327,7 +304,6 @@
                  (and (not from-end) end (= i (the fixnum end)))
                  (eq x current))
              nil)
-	    (declare (fixnum i))
 	    (if (if test-not
 		    (not (funcall test-not
 				  (apply-key key (car current))
@@ -342,7 +318,6 @@
 
 (defun vector-delete-duplicates* (vector test test-not key from-end start end
 					 &optional (length (length vector)))
-  (declare (vector vector) (fixnum start length))
   (when (null end) (setf end (length vector)))
   (do ((index start (1+ index))
        (jndex start))
@@ -353,7 +328,6 @@
         (shrink-vector vector jndex)
         vector)
        (setf (aref vector jndex) (aref vector index))))
-    (declare (fixnum index jndex))
     (setf (aref vector jndex) (aref vector index))
     (unless (position (apply-key key (aref vector index)) vector :key key
 		      :start (if from-end start (1+ index)) :test test
@@ -363,15 +337,11 @@
 
 (defun delete-duplicates (sequence &key (test #'eql) test-not (start 0) from-end
                                    end key)
-  "The elements of Sequence are examined, and if any two match, one is
-   discarded.  The resulting sequence, which may be formed by destroying the
-   given sequence, is returned.
-
-   The :TEST-NOT argument is depreciated."
   (seq-dispatch sequence
                 (if sequence
                     (list-delete-duplicates* sequence test test-not key from-end start end))
                 (vector-delete-duplicates* sequence test test-not key from-end start end)))
+
 
 (defmacro vector-locater-macro (sequence body-form return-type)
   `(let ((incrementer (if from-end -1 1))
@@ -568,7 +538,6 @@
        (do ((index %start ,next-index)
             (count 0))
          ((= index (the fixnum %end)) count)
-         (declare (fixnum index count))
          (,(if not-p 'unless 'when) ,pred
            (setq count (1+ count)))))))
 
@@ -581,14 +550,13 @@
             (index %start (1+ index))
             (count 0))
          ((or (= index (the fixnum %end)) (null sequence)) count)
-         (declare (fixnum index count))
          (,(if not-p 'unless 'when) ,pred
            (setq count (1+ count)))))))
 
 (defun count (item sequence &key from-end (test #'eql test-p) (test-not nil test-not-p)
 		   (start 0) end key)
   (when (and test-p test-not-p)
-    (error ":TEST and :TEST-NOT are both present."))
+    (error "test and test-not both supplied"))
   (let* ((length (length sequence))
 	 (end (or end length)))
     (let ((%test (if test-not-p
@@ -627,103 +595,88 @@
 		      (vector-count-if t nil test sequence)))))
 
 
-;;; Search comparison functions:
+;; SEARCH (from CMUCL)
 
-(eval-when (compile eval)
-
-           ;;; Compare two elements and return if they don't match:
-
-           (defmacro compare-elements (elt1 elt2)
-             `(if test-not
-                  (if (funcall test-not (apply-key key ,elt1) (apply-key key ,elt2))
-                      (return nil)
-                      t)
-                  (if (not (funcall test (apply-key key ,elt1) (apply-key key ,elt2)))
-                      (return nil)
-                      t)))
-
-           (defmacro search-compare-list-list (main sub)
-             `(do ((main ,main (cdr main))
-                   (jndex start1 (1+ jndex))
-                   (sub (nthcdr start1 ,sub) (cdr sub)))
-                ((or (null main) (null sub) (= (the fixnum end1) jndex))
-                 t)
-                (declare (fixnum jndex))
-                (compare-elements (car main) (car sub))))
-
-           (defmacro search-compare-list-vector (main sub)
-             `(do ((main ,main (cdr main))
-                   (index start1 (1+ index)))
-                ((or (null main) (= index (the fixnum end1))) t)
-                (declare (fixnum index))
-                (compare-elements (car main) (aref ,sub index))))
-
-           (defmacro search-compare-vector-list (main sub index)
-             `(do ((sub (nthcdr start1 ,sub) (cdr sub))
-                   (jndex start1 (1+ jndex))
-                   (index ,index (1+ index)))
-                ((or (= (the fixnum end1) jndex) (null sub)) t)
-                (declare (fixnum jndex index))
-                (compare-elements (aref ,main index) (car sub))))
-
-           (defmacro search-compare-vector-vector (main sub index)
-             `(do ((index ,index (1+ index))
-                   (sub-index start1 (1+ sub-index)))
-                ((= sub-index (the fixnum end1)) t)
-                (declare (fixnum sub-index index))
-                (compare-elements (aref ,main index) (aref ,sub sub-index))))
-
-           (defmacro search-compare (main-type main sub index)
-             (if (eq main-type 'list)
-                 `(seq-dispatch ,sub
-                                (search-compare-list-list ,main ,sub)
-                                (search-compare-list-vector ,main ,sub))
-                 `(seq-dispatch ,sub
-                                (search-compare-vector-list ,main ,sub ,index)
-                                (search-compare-vector-vector ,main ,sub ,index))))
-
-           )
-
-(eval-when (compile eval)
-
-           (defmacro list-search (main sub)
-             `(do ((main (nthcdr start2 ,main) (cdr main))
-                   (index2 start2 (1+ index2))
-                   (terminus (- (the fixnum end2)
-                                (the fixnum (- (the fixnum end1)
-                                               (the fixnum start1)))))
-                   (last-match ()))
-                ((> index2 terminus) last-match)
-                (declare (fixnum index2 terminus))
-                (if (search-compare list main ,sub index2)
-                    (if from-end
-                        (setq last-match index2)
-                        (return index2)))))
+(defmacro compare-elements (elt1 elt2)
+  `(if test-not
+       (if (funcall test-not (apply-key key ,elt1) (apply-key key ,elt2))
+           (return nil)
+           t)
+       (if (not (funcall test (apply-key key ,elt1) (apply-key key ,elt2)))
+           (return nil)
+           t)))
 
 
-           (defmacro vector-search (main sub)
-             `(do ((index2 start2 (1+ index2))
-                   (terminus (- (the fixnum end2)
-                                (the fixnum (- (the fixnum end1)
-                                               (the fixnum start1)))))
-                   (last-match ()))
-                ((> index2 terminus) last-match)
-                (declare (fixnum index2 terminus))
-                (if (search-compare vector ,main ,sub index2)
-                    (if from-end
-                        (setq last-match index2)
-                        (return index2)))))
+(defmacro search-compare-list-list (main sub)
+  `(do ((main ,main (cdr main))
+        (jndex start1 (1+ jndex))
+        (sub (nthcdr start1 ,sub) (cdr sub)))
+     ((or (null main) (null sub) (= (the fixnum end1) jndex))
+      t)
+     (compare-elements (car main) (car sub))))
 
-           )
+
+(defmacro search-compare-list-vector (main sub)
+  `(do ((main ,main (cdr main))
+        (index start1 (1+ index)))
+     ((or (null main) (= index (the fixnum end1))) t)
+     (compare-elements (car main) (aref ,sub index))))
+
+
+(defmacro search-compare-vector-list (main sub index)
+  `(do ((sub (nthcdr start1 ,sub) (cdr sub))
+        (jndex start1 (1+ jndex))
+        (index ,index (1+ index)))
+     ((or (= (the fixnum end1) jndex) (null sub)) t)
+     (compare-elements (aref ,main index) (car sub))))
+
+
+(defmacro search-compare-vector-vector (main sub index)
+  `(do ((index ,index (1+ index))
+        (sub-index start1 (1+ sub-index)))
+     ((= sub-index (the fixnum end1)) t)
+     (compare-elements (aref ,main index) (aref ,sub sub-index))))
+
+
+(defmacro search-compare (main-type main sub index)
+  (if (eq main-type 'list)
+      `(seq-dispatch ,sub
+                     (search-compare-list-list ,main ,sub)
+                     (search-compare-list-vector ,main ,sub))
+      `(seq-dispatch ,sub
+                     (search-compare-vector-list ,main ,sub ,index)
+                     (search-compare-vector-vector ,main ,sub ,index))))
+
+
+(defmacro list-search (main sub)
+  `(do ((main (nthcdr start2 ,main) (cdr main))
+        (index2 start2 (1+ index2))
+        (terminus (- (the fixnum end2)
+                     (the fixnum (- (the fixnum end1)
+                                    (the fixnum start1)))))
+        (last-match ()))
+     ((> index2 terminus) last-match)
+     (if (search-compare list main ,sub index2)
+         (if from-end
+             (setq last-match index2)
+             (return index2)))))
+
+
+(defmacro vector-search (main sub)
+  `(do ((index2 start2 (1+ index2))
+        (terminus (- (the fixnum end2)
+                     (the fixnum (- (the fixnum end1)
+                                    (the fixnum start1)))))
+        (last-match ()))
+     ((> index2 terminus) last-match)
+     (if (search-compare vector ,main ,sub index2)
+         (if from-end
+             (setq last-match index2)
+             (return index2)))))
 
 
 (defun search (sequence1 sequence2 &key from-end (test #'eql) test-not
                          (start1 0) end1 (start2 0) end2 key)
-  "A search is conducted using EQL for the first subsequence of sequence2
-   which element-wise matches sequence1.  If there is such a subsequence in
-   sequence2, the index of the its leftmost element is returned;
-   otherwise () is returned."
-  (declare (fixnum start1 start2))
   (let ((end1 (or end1 (length sequence1)))
 	(end2 (or end2 (length sequence2))))
     (seq-dispatch sequence2
