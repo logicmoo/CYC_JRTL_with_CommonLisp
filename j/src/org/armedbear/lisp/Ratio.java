@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.8 2003-04-27 16:08:05 piso Exp $
+ * $Id: Ratio.java,v 1.9 2003-05-31 18:13:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,11 @@ public final class Ratio extends LispObject
     public BigInteger denominator()
     {
         return denominator;
+    }
+
+    public int getType()
+    {
+        return TYPE_RATIO;
     }
 
     public LispObject typeOf()

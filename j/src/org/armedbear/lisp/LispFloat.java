@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.10 2003-04-27 16:08:04 piso Exp $
+ * $Id: LispFloat.java,v 1.11 2003-05-31 18:13:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,11 @@ public final class LispFloat extends LispObject
     public LispFloat(float value)
     {
         this.value = value;
+    }
+
+    public int getType()
+    {
+        return TYPE_FLOAT;
     }
 
     public LispObject typeOf()
