@@ -1,8 +1,8 @@
 /*
  * KeyMap.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.21 2005-03-01 20:24:03 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: KeyMap.java,v 1.22 2005-03-03 14:11:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.KeyStroke;
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.JavaObject;
+import org.armedbear.lisp.LispObject;
 
 public final class KeyMap implements Constants
 {
@@ -46,6 +49,22 @@ public final class KeyMap implements Constants
     public static synchronized KeyMap getGlobalKeyMap()
     {
         if (globalKeyMap == null) {
+            if (Editor.isLispInitialized()) {
+                try {
+                    LispObject result =
+                        Interpreter.evaluate("(j:current-global-map)");
+                    if (result instanceof JavaObject) {
+                        Object obj = ((JavaObject)result).getObject();
+                        if (obj instanceof KeyMap) {
+                            globalKeyMap = (KeyMap) obj;
+                            return globalKeyMap;
+                        }
+                    }
+                }
+                catch (Throwable t) {
+                    Log.debug(t);
+                }
+            }
             String filename =
                 Editor.preferences().getStringProperty(Property.GLOBAL_KEY_MAP);
             if (filename != null) {
@@ -257,6 +276,7 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_BACK_SPACE, SHIFT_MASK, "backspace");
         mapKey(KeyEvent.VK_BACK_SPACE, CTRL_MASK, "deleteWordLeft");
         mapKey(KeyEvent.VK_ENTER, 0, "newline");
+        mapKey(KeyEvent.VK_J, CTRL_MASK, "newlineAndIndent");
 
         mapKey(KeyEvent.VK_ESCAPE, 0, "escape");
 
