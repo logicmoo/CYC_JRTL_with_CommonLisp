@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.59 2005-02-26 17:44:10 piso Exp $
+;;; $Id: subtypep.lisp,v 1.60 2005-03-13 01:50:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -225,7 +225,8 @@
                FLOAT SINGLE-FLOAT DOUBLE-FLOAT SHORT-FLOAT LONG-FLOAT)
               (make-ctype 'REAL type))
              (COMPLEX
-              (make-ctype 'COMPLEX type))
+              (make-ctype 'COMPLEX
+                          (if (atom type) '* (cadr type))))
              (FUNCTION
               (make-ctype 'FUNCTION type)))))))
 
@@ -435,6 +436,16 @@
           (t
            (values nil nil)))))
 
+(defun csubtypep-complex (ct1 ct2)
+  (let ((type1 (cdr ct1))
+        (type2 (cdr ct2)))
+    (cond ((or (null type2) (eq type2 '*))
+           (values t t))
+          ((eq type1 '*)
+           (values nil t))
+          (t
+           (subtypep type1 type2)))))
+
 (defun csubtypep (ctype1 ctype2)
   (cond ((null (and ctype1 ctype2))
          (values nil nil))
@@ -444,6 +455,8 @@
          (csubtypep-array ctype1 ctype2))
         ((eq (ctype-super ctype1) 'function)
          (csubtypep-function ctype1 ctype2))
+        ((eq (ctype-super ctype1) 'complex)
+         (csubtypep-complex ctype1 ctype2))
         (t
          (values nil nil))))
 
