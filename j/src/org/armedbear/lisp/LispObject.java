@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.22 2003-08-01 02:04:17 piso Exp $
+ * $Id: LispObject.java,v 1.23 2003-08-02 17:17:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,11 @@ public class LispObject extends Lisp
     }
 
     public LispObject LISTP()
+    {
+        return NIL;
+    }
+
+    public LispObject NOT()
     {
         return NIL;
     }
