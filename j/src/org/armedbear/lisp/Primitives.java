@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.359 2003-08-28 00:00:15 piso Exp $
+ * $Id: Primitives.java,v 1.360 2003-09-02 04:36:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4202,7 +4202,7 @@ public final class Primitives extends Module
                 int bitLength = limit.bitLength();
                 BigInteger rand = new BigInteger(bitLength + 1, random);
                 BigInteger remainder = rand.remainder(limit);
-                return new Bignum(remainder);
+                return number(remainder);
             }
             if (args[0] instanceof LispFloat) {
                 float limit = ((LispFloat)args[0]).getValue();
