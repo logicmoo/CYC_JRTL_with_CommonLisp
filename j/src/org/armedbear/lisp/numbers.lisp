@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.19 2004-02-06 11:39:27 piso Exp $
+;;; $Id: numbers.lisp,v 1.20 2004-02-09 13:07:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -250,7 +250,7 @@
       (error "argument to CIS is complex: ~S" theta)
       (complex (cos theta) (sin theta))))
 
-(when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
+(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(floor
                                ceiling
                                round

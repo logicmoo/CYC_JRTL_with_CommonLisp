@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: find.lisp,v 1.5 2004-01-09 18:21:49 piso Exp $
+;;; $Id: find.lisp,v 1.6 2004-02-09 13:07:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -208,7 +208,7 @@
         (list-find-if-not test sequence)
         (vector-find-if-not test sequence))))
 
-(when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
+(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(position
                                list-position*
                                vector-position*

@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: chars.lisp,v 1.8 2004-01-09 18:21:49 piso Exp $
+;;; $Id: chars.lisp,v 1.9 2004-02-09 13:07:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@
 		  (return nil)))
       (return nil))))
 
-(when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
+(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(digit-char-p
                                alphanumericp
                                char/=

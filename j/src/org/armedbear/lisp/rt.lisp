@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.150 2004-02-02 13:45:16 piso Exp $
+;;; $Id: rt.lisp,v 1.151 2004-02-09 13:07:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -499,7 +499,7 @@
     (time (do-tests))))
 
 #+armedbear
-(when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
+(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(sys::list-remove-duplicates*
                                sys::vector-remove-duplicates*
                                remove-duplicates
@@ -525,7 +525,7 @@
 (load (concatenate 'string regression-test::*prefix* "remove-duplicates-aux.lsp"))
 
 #+armedbear
-(when (and (fboundp 'jvm::jvmcompile) (not (autoloadp 'jvm::jvm-compile)))
+(when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(regression-test::equalp-with-case
                                cl-test::make-scaffold-copy
                                cl-test::check-scaffold-copy
