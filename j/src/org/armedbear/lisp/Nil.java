@@ -1,8 +1,8 @@
 /*
  * Nil.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.29 2004-01-03 18:10:09 asimon Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Nil.java,v 1.30 2004-01-14 02:23:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,6 +56,14 @@ public final class Nil extends Symbol
         if (typeSpecifier == Symbol.SYMBOL)
             return T;
         if (typeSpecifier == Symbol.BOOLEAN)
+            return T;
+        if (typeSpecifier == BuiltInClass.NULL)
+            return T;
+        if (typeSpecifier == BuiltInClass.LIST)
+            return T;
+        if (typeSpecifier == BuiltInClass.SEQUENCE)
+            return T;
+        if (typeSpecifier == BuiltInClass.SYMBOL)
             return T;
         return super.typep(typeSpecifier);
     }
