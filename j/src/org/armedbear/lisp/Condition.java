@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Condition.java,v 1.7 2003-09-19 16:04:50 piso Exp $
+ * $Id: Condition.java,v 1.8 2003-09-19 16:13:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,11 +59,9 @@ public class Condition extends LispObject
 
     public String toString()
     {
-        if (_PRINT_ESCAPE_.symbolValueNoThrow() == NIL) {
-            String s = getMessage();
-            if (s != null)
-                return s;
-        }
+        String s = getMessage();
+        if (s != null)
+            return s;
         StringBuffer sb = new StringBuffer("#<");
         sb.append(typeOf());
         sb.append(" @ ");
