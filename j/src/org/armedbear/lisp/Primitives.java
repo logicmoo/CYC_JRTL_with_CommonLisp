@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.183 2003-04-28 00:53:31 piso Exp $
+ * $Id: Primitives.java,v 1.184 2003-04-28 01:50:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1216,6 +1216,10 @@ public final class Primitives extends Module
                 return new LispString(s);
             if (destination instanceof CharacterOutputStream) {
                 ((CharacterOutputStream)destination).writeString(s);
+                return NIL;
+            }
+            if (destination instanceof TwoWayStream) {
+                ((TwoWayStream)destination).getOutputStream().writeString(s);
                 return NIL;
             }
             // Destination can also be stream or string with fill pointer.
@@ -3516,6 +3520,8 @@ public final class Primitives extends Module
                 LispObject streamArg = args[0];
                 if (streamArg instanceof CharacterOutputStream)
                     out = (CharacterOutputStream) streamArg;
+                else if (streamArg instanceof TwoWayStream)
+                    out = ((TwoWayStream)streamArg).getOutputStream();
                 else if (streamArg == T || streamArg == NIL)
                     out = getStandardOutput();
                 else
@@ -3819,8 +3825,15 @@ public final class Primitives extends Module
             int length = args.length;
             if (length > 4)
                 throw new WrongNumberOfArgumentsException(this);
-            CharacterInputStream stream =
-                length > 0 ? checkInputStream(args[0]) : getStandardInput();
+            CharacterInputStream stream;
+            if (length == 0)
+                stream = getStandardInput();
+            else if (args[0] instanceof CharacterInputStream)
+                stream = (CharacterInputStream) args[0];
+            else if (args[0] instanceof TwoWayStream)
+                stream = ((TwoWayStream)args[0]).getInputStream();
+            else
+                throw new TypeError(args[0], "input stream");
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
