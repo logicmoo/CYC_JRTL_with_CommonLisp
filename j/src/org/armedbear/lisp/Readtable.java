@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Readtable.java,v 1.40 2005-02-06 00:53:33 piso Exp $
+ * $Id: Readtable.java,v 1.41 2005-02-06 19:36:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,7 +255,8 @@ public final class Readtable extends LispObject
         DispatchTable dispatchTable = dispatchTables[dispChar];
         if (dispatchTable == null) {
             LispCharacter c = LispCharacter.getInstance(dispChar);
-            return signal(new LispError(String.valueOf(c) + " is not a dispatch character."));
+            return signal(new LispError(c.writeToString() +
+                                        " is not a dispatch character."));
         }
         LispObject function =
             dispatchTable.functions[Utilities.toUpperCase(subChar)];
@@ -269,7 +270,8 @@ public final class Readtable extends LispObject
         DispatchTable dispatchTable = dispatchTables[dispChar];
         if (dispatchTable == null) {
             LispCharacter c = LispCharacter.getInstance(dispChar);
-            signal(new LispError(String.valueOf(c) + " is not a dispatch character."));
+            signal(new LispError(c.writeToString() +
+                                 " is not a dispatch character."));
         }
         dispatchTable.functions[Utilities.toUpperCase(subChar)] = function;
     }
@@ -509,6 +511,12 @@ public final class Readtable extends LispObject
             toReadtable.syntax[toChar] = fromReadtable.syntax[fromChar];
             toReadtable.readerMacroFunctions[toChar] =
                 fromReadtable.readerMacroFunctions[fromChar];
+            // "If the character is a dispatching macro character, its entire
+            // dispatch table of reader macro functions is copied."
+            if (fromReadtable.dispatchTables[fromChar] != null) {
+                toReadtable.dispatchTables[toChar] =
+                    new DispatchTable(fromReadtable.dispatchTables[fromChar]);
+            }
             return T;
         }
     };
