@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.47 2003-08-02 00:39:29 piso Exp $
+ * $Id: LispMode.java,v 1.48 2003-08-02 13:45:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         super(LISP_MODE, LISP_MODE_NAME);
         keywords = new Keywords(this);
         setProperty(Property.INDENT_SIZE, 2);
+        setProperty(Property.HIGHLIGHT_BRACKETS, true);
     }
 
     protected LispMode(int id, String displayName)
