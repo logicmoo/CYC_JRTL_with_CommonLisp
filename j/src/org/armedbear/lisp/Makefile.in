@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.26 2003-06-20 17:24:29 piso Exp $
+# $Id: Makefile.in,v 1.27 2003-06-20 18:13:08 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -32,6 +32,7 @@ CLASSFILES =	AbstractArray.class \
 		Binding.class \
 		BitVector.class \
 		Block.class \
+		CharacterFunctions.class \
 		CharacterInputStream.class \
 		CharacterOutputStream.class \
 		Closure.class \
@@ -89,6 +90,7 @@ CLASSFILES =	AbstractArray.class \
 		Tagbody.class \
 		ThreadDestroyed.class \
 		Throw.class \
+		Time.class \
 		Type.class \
 		TypeError.class \
 		TwoWayStream.class \
