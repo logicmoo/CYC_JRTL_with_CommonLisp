@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.24 2003-02-04 16:39:15 piso Exp $
+ * $Id: Buffer.java,v 1.25 2003-02-04 16:48:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -412,10 +412,12 @@ public class Buffer extends SystemBuffer
                     else
                         m = modeList.getMode(BINARY_MODE);
                 } else if (m == null) {
-                    if (file.getProtocol() == File.PROTOCOL_HTTP ||
-                        file.getProtocol() == File.PROTOCOL_HTTPS)
-                        m = modeList.getMode(HTML_MODE);
-                    else
+                    if (file != null) {
+                        if (file.getProtocol() == File.PROTOCOL_HTTP ||
+                            file.getProtocol() == File.PROTOCOL_HTTPS)
+                            m = modeList.getMode(HTML_MODE);
+                    }
+                    if (m == null)
                         m = modeList.getMode(PLAIN_TEXT_MODE);
                 }
                 return m;
