@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.13 2003-04-18 17:01:36 piso Exp $
+ * $Id: MessageBuffer.java,v 1.14 2003-04-18 17:28:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,6 +220,7 @@ public class MessageBuffer extends Buffer
         allHeaders = message.getAllHeaders();
         defaultHeaders = getDefaultHeaders(allHeaders);
         rawBody = message.getRawBody();
+        wrap = true;
         setText();
         formatter.parseBuffer();
         int flags = entry.getFlags();
