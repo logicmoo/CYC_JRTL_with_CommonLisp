@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleCondition.java,v 1.2 2003-09-19 00:05:11 piso Exp $
+ * $Id: SimpleCondition.java,v 1.3 2003-09-20 00:38:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class SimpleCondition extends ConditionThrowable
+public class SimpleCondition extends Condition
 {
     public SimpleCondition()
     {
@@ -30,5 +30,22 @@ public class SimpleCondition extends ConditionThrowable
     public SimpleCondition(String message)
     {
         super(message);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.SIMPLE_CONDITION;
+    }
+
+    public LispClass classOf()
+    {
+        return LispClass.SIMPLE_CONDITION;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.CONDITION)
+            return T;
+        return super.typep(type);
     }
 }
