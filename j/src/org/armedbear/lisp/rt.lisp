@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.143 2003-11-17 18:04:50 piso Exp $
+;;; $Id: rt.lisp,v 1.144 2003-12-14 17:06:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@
    (t (eql x y))))
 
 (defmacro deftest (name &rest body)
-  (format t "Test ~s~%" `,name)
+  (format t "Test ~S~%" `,name)
   (finish-output)
   (let* ((p body)
 	 (properties
@@ -93,11 +93,11 @@
                             (error (c) (setf aborted t) (list c))))
            (passed (and (not aborted) (equalp-with-case r `,values))))
       (unless passed
-        (format t "  Expected value: ~s~%"
+        (format t "  Expected value: ~A~%"
                 (if (= (length `,values) 1)
                     (car `,values)
                     `,values))
-        (format t "    Actual value: ~s~%"
+        (format t "    Actual value: ~A~%"
                 (if (= (length r) 1)
                     (car r)
                     r))
