@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.162 2004-02-24 00:32:03 piso Exp $
+ * $Id: Autoload.java,v 1.163 2004-02-24 15:15:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -296,7 +296,6 @@ public class Autoload extends Function
         autoload("remhash", "HashTable");
         autoload("rename-package", "PackageFunctions");
         autoload("room", "room");
-        autoload("schar", "StringFunctions");
         autoload("shadow", "PackageFunctions");
         autoload("shadowing-import", "PackageFunctions");
         autoload("simple-string-p", "StringFunctions");
@@ -350,7 +349,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "%set-logical-pathname-translations", "LogicalPathname");
-        autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
