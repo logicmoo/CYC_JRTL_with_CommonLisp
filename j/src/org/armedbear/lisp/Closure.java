@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.35 2003-06-08 16:54:52 piso Exp $
+ * $Id: Closure.java,v 1.36 2003-06-08 17:00:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,10 +73,10 @@ public class Closure extends Function
         boolean restp = false;
         if (lambdaList instanceof Cons) {
             final int length = lambdaList.length();
+            ArrayList requiredParameters = null;
+            ArrayList optionalParameters = null;
             ArrayList keywordParameters = new ArrayList();
             ArrayList auxVars = null;
-            ArrayList requiredParameters = new ArrayList();
-            ArrayList optionalParameters = new ArrayList();
             int state = STATE_REQUIRED;
             LispObject remaining = lambdaList;
             while (remaining != NIL) {
@@ -112,6 +112,8 @@ public class Closure extends Function
                         arity = -1; // FIXME
                     } else {
                         if (state == STATE_OPTIONAL) {
+                            if (optionalParameters == null)
+                                optionalParameters = new ArrayList();
                             optionalParameters.add(new Parameter((Symbol)obj,
                                 NIL, OPTIONAL));
                             if (maxArgs >= 0)
@@ -123,6 +125,8 @@ public class Closure extends Function
                                 maxArgs += 2;
                         } else {
                             Debug.assertTrue(state == STATE_REQUIRED);
+                            if (requiredParameters == null)
+                                requiredParameters = new ArrayList();
                             requiredParameters.add(new Parameter((Symbol)obj));
                             ++required;
                             if (maxArgs >= 0)
@@ -141,6 +145,8 @@ public class Closure extends Function
                         Symbol symbol = checkSymbol(obj.car());
                         LispObject initForm = obj.cadr();
                         LispObject svar = obj.cdr().cdr().car();
+                        if (optionalParameters == null)
+                            optionalParameters = new ArrayList();
                         optionalParameters.add(new Parameter(symbol, initForm, svar, OPTIONAL));
                         if (maxArgs >= 0)
                             ++maxArgs;
@@ -178,10 +184,16 @@ public class Closure extends Function
             }
             if (arity == 0)
                 arity = length;
-            this.requiredParameters = new Parameter[requiredParameters.size()];
-            requiredParameters.toArray(this.requiredParameters);
-            this.optionalParameters = new Parameter[optionalParameters.size()];
-            optionalParameters.toArray(this.optionalParameters);
+            if (requiredParameters != null) {
+                this.requiredParameters = new Parameter[requiredParameters.size()];
+                requiredParameters.toArray(this.requiredParameters);
+            } else
+                this.requiredParameters = null;
+            if (optionalParameters != null) {
+                this.optionalParameters = new Parameter[optionalParameters.size()];
+                optionalParameters.toArray(this.optionalParameters);
+            } else
+                this.optionalParameters = null;
             Debug.assertTrue(keywordParameterCount == keywordParameters.size());
             this.keywordParameters = new Parameter[keywordParameters.size()];
             keywordParameters.toArray(this.keywordParameters);
