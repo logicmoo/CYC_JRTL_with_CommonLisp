@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.21 2003-03-19 00:48:51 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.22 2003-03-21 11:52:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -587,6 +587,8 @@ public class CharacterInputStream extends LispStream
 
     private LispObject makeNumber(String token) throws LispError
     {
+        if (token.indexOf('/') >= 0)
+            return makeRatio(token);
         if (token.endsWith("."))
             token = token.substring(0, token.length()-1);
         LispObject number = makeFloat(token);
@@ -608,6 +610,20 @@ public class CharacterInputStream extends LispStream
         }
         catch (NumberFormatException e) {}
         // Not a number.
+        return null;
+    }
+
+    private LispObject makeRatio(String token) throws LispError
+    {
+        final int index = token.indexOf('/');
+        if (index < 0)
+            return null;
+        try {
+            BigInteger numerator = new BigInteger(token.substring(0, index));
+            BigInteger denominator = new BigInteger(token.substring(index + 1));
+            return number(numerator, denominator);
+        }
+        catch (NumberFormatException e) {}
         return null;
     }
 
