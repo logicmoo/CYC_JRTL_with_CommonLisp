@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.78 2004-10-22 15:53:32 piso Exp $
+;;; $Id: precompiler.lisp,v 1.79 2004-10-22 19:39:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -98,6 +98,7 @@
     (if (and (consp callee)
              (eq (car callee) 'function)
              (symbolp (cadr callee))
+             (not (special-operator-p (cadr callee)))
              (memq (symbol-package (cadr callee))
                    (list (find-package "CL") (find-package "SYS"))))
         `(,(cadr callee) ,@(cdr args))
