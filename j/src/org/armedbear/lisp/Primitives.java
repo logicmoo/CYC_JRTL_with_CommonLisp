@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.687 2004-10-01 16:09:28 piso Exp $
+ * $Id: Primitives.java,v 1.688 2004-10-01 17:17:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3610,15 +3610,14 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### %read-from-string
-    // read-from-string string &optional eof-error-p eof-value &key start end
-    // preserve-whitespace => object, position
+    // ### %read-from-string string eof-error-p eof-value start end preserve-whitespace
+    // => object, position
     private static final Primitive _READ_FROM_STRING =
         new Primitive("%read-from-string", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            if (args.length < 6)
+            if (args.length != 6)
                 signal(new WrongNumberOfArgumentsException(this));
             String s = args[0].getStringValue();
             boolean eofError = args[1] != NIL;
@@ -3626,13 +3625,14 @@ public final class Primitives extends Lisp
             LispObject start = args[3];
             LispObject end = args[4];
             boolean preserveWhitespace = args[5] != NIL;
-            int startIndex, endIndex;
+            final int startIndex;
             if (start != NIL)
-                startIndex = (int) Fixnum.getValue(start);
+                startIndex = Fixnum.getValue(start);
             else
                 startIndex = 0;
+            final int endIndex;
             if (end != NIL)
-                endIndex = (int) Fixnum.getValue(end);
+                endIndex = Fixnum.getValue(end);
             else
                 endIndex = s.length();
             StringInputStream in =
