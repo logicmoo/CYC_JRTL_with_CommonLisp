@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.26 2004-07-11 12:43:51 piso Exp $
+ * $Id: CompiledFunction.java,v 1.27 2004-09-15 13:19:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,6 @@
  */
 
 package org.armedbear.lisp;
-
-import java.io.File;
 
 public class CompiledFunction extends Closure
 {
@@ -112,36 +110,20 @@ public class CompiledFunction extends Closure
 
     // ### load-compiled-function
     private static final Primitive1 LOAD_COMPILED_FUNCTION =
-        new Primitive1("load-compiled-function", PACKAGE_SYS, false)
+        new Primitive1("load-compiled-function", PACKAGE_SYS, true,
+                       "pathname")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Pathname pathname = Pathname.coerceToPathname(arg);
-            File file = Utilities.getFile(pathname);
-            if (file != null && file.isFile()) {
-                try {
-                    JavaClassLoader loader = new JavaClassLoader();
-                    Class c = loader.loadClassFromFile(file);
-                    if (c != null) {
-                        Class[] parameterTypes = new Class[0];
-                        java.lang.reflect.Constructor constructor =
-                            c.getConstructor(parameterTypes);
-                        Object[] initargs = new Object[0];
-                        LispObject obj =
-                            (LispObject) constructor.newInstance(initargs);
-                        return obj;
-                    }
-                }
-                catch (VerifyError e) {
-                    return signal(new LispError("Class verification failed: " +
-                                                e.getMessage()));
-                }
-                catch (Throwable t) {
-                    Debug.trace(t);
-                }
+            String namestring = null;
+            if (arg instanceof Pathname) {
+                namestring = ((Pathname)arg).getNamestring();
+            } else if (arg instanceof AbstractString) {
+                namestring = arg.getStringValue();
             }
-            return signal(new LispError("Unable to load " +
-                                        pathname.writeToString()));
+            if (namestring != null)
+                return loadCompiledFunction(namestring);
+            return signal(new LispError("Unable to load " + arg.writeToString()));
         }
     };
 
