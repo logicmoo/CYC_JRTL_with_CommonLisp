@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.78 2003-07-29 01:13:57 piso Exp $
+;;; $Id: boot.lisp,v 1.79 2003-07-29 23:31:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,8 +16,6 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-(sys::%nodebug)
 
 (sys::%in-package "COMMON-LISP")
 
@@ -257,6 +255,3 @@
 ;; FIXME
 (defmacro check-type (place typespec &optional string)
   nil)
-
-
-(sys::%debug)
