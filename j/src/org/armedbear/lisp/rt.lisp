@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.69 2003-03-30 02:05:55 piso Exp $
+;;; $Id: rt.lisp,v 1.70 2003-03-30 19:37:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -783,4 +783,5 @@
 (load (concatenate 'string rt::*prefix* "ansi-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "search-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "array-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "universe.lsp"))
 #+armedbear (debug)
