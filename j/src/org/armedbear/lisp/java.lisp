@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: java.lisp,v 1.13 2004-07-06 16:27:56 asimon Exp $
+;;; $Id: java.lisp,v 1.14 2004-07-09 07:32:21 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -119,9 +119,10 @@
                              (push m indices)
                              (setq n r))
                            finally (return (nreverse indices)))))
-    (let* ((dimensions (array-dimensions array))
+    (let* ((fill-pointer (when (array-has-fill-pointer-p array) (fill-pointer array)))
+	   (dimensions (if fill-pointer (list fill-pointer) (array-dimensions array)))
            (jarray (apply #'jnew-array element-type dimensions)))
-      (dotimes (i (array-total-size array) jarray)
+      (dotimes (i (if fill-pointer fill-pointer (array-total-size array)) jarray)
 	#+maybe_one_day
 	(setf (apply #'jarray-ref jarray (row-major-to-index dimensions i)) (row-major-aref array i))
 	(apply #'(setf jarray-ref) (row-major-aref array i) jarray (row-major-to-index dimensions i))))))
