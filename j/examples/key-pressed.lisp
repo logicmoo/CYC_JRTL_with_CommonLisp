@@ -1,7 +1,7 @@
 ;;; key-pressed.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: key-pressed.lisp,v 1.6 2004-03-19 01:31:39 piso Exp $
+;;; $Id: key-pressed.lisp,v 1.7 2004-04-22 15:17:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 (defcommand next-buffer)
 (defcommand prev-buffer)
 (defcommand new-frame)
-(defcommand execute-command "executeCommand")
+;; (defcommand execute-command "executeCommand")
 ;; (defcommand j-print "print")
 (defcommand save-all-exit)
 (defcommand quit)

@@ -12,6 +12,7 @@
           location-bar-cancel-input
           status
           defcommand
+          execute-command
           open-file-hook
           buffer-activated-hook
           after-save-hook
@@ -57,7 +58,7 @@
     (jcall method ed string)))
 
 ;; Internal.
-(defun execute-command (command &optional ed)
+(defun %execute-command (command &optional ed)
   (let ((method (jmethod "org.armedbear.j.Editor"
                          "executeCommand" "java.lang.String"))
         (ed (or ed (current-editor))))
@@ -66,9 +67,14 @@
 
 (defmacro defcommand (name &optional (command nil))
   (unless command
-    (setq command (remove #\- (string `,name))))
+    (setf command (remove #\- (string `,name))))
   `(setf (symbol-function ',name)
-         (lambda () (execute-command ,command))))
+         (lambda (&optional arg)
+           (%execute-command (if arg
+                                 (concatenate 'string ,command " " arg)
+                                 ,command)))))
+
+(defcommand execute-command)
 
 ;;; HOOKS
 (defun add-hook (hook function)
