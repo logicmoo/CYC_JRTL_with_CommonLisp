@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.650 2004-06-07 01:33:45 piso Exp $
+ * $Id: Primitives.java,v 1.651 2004-06-07 01:51:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -783,7 +783,7 @@ public final class Primitives extends Lisp
     // ### %terpri
     // %terpri output-stream => nil
     private static final Primitive1 _TERPRI =
-        new Primitive1("%terpri", PACKAGE_SYS, false, "&optional output-stream")
+        new Primitive1("%terpri", PACKAGE_SYS, false, "output-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -794,7 +794,7 @@ public final class Primitives extends Lisp
     // ### %fresh-line
     // %fresh-line &optional output-stream => generalized-boolean
     private static final Primitive1 _FRESH_LINE =
-        new Primitive1("%fresh-line", PACKAGE_SYS, false, "&optional output-stream")
+        new Primitive1("%fresh-line", PACKAGE_SYS, false, "output-stream")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -3355,23 +3355,17 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### write-char
-    // write-char character &optional output-stream => character
-    private static final Primitive WRITE_CHAR =
-        new Primitive("write-char", "character &optional output-stream")
+    // ### %write-char
+    // %write-char character output-stream => character
+    private static final Primitive2 _WRITE_CHAR =
+        new Primitive2("%write-char", PACKAGE_SYS, false,
+                       "character output-stream")
     {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
         {
-            if (args.length < 1 || args.length > 2)
-                signal(new WrongNumberOfArgumentsException(this));
-            final char c = LispCharacter.getValue(args[0]);
-            final Stream out;
-            if (args.length == 1)
-                out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
-            else
-                out = outSynonymOf(args[1]);
-            out._writeChar(c);
-            return args[0];
+            outSynonymOf(second)._writeChar(LispCharacter.getValue(first));
+            return first;
         }
     };
 
