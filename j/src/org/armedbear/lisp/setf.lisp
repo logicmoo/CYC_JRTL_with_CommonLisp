@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.51 2005-02-28 20:22:20 piso Exp $
+;;; $Id: setf.lisp,v 1.52 2005-03-24 01:20:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -215,7 +215,6 @@
 (defsetf gethash puthash)
 (defsetf char %set-char)
 (defsetf schar %set-schar)
-(defsetf charpos %set-charpos)
 (defsetf logical-pathname-translations %set-logical-pathname-translations)
 (defsetf readtable-case %set-readtable-case)
 
