@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.22 2003-11-11 17:08:45 piso Exp $
+;;; $Id: subtypep.lisp,v 1.23 2003-11-11 17:37:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -206,12 +206,12 @@
                                          (dolist (supertype type1-supertypes)
                                            (when (simple-subtypep supertype type2)
                                              (return (values t)))))))))
-  (let ((c1 (if (classp type1) type1 (find-class type1 nil)))
-        (c2 (if (classp type2) type2 (find-class type2 nil))))
-    (when (and c1 c2)
-      (return-from simple-subtypep
-                   (if (memq c2 (class-precedence-list c1)) t nil))))
-  nil)
+  (let (c1 c2)
+    (if (and (setf c1 (if (classp type1) type1 (find-class type1 nil)))
+             (setf c2 (if (classp type2) type2 (find-class type2 nil)))
+             (memq c2 (class-precedence-list c1)))
+        t
+        nil)))
 
 (defun subtypep (type1 type2)
   (when (or (eq type1 type2)
@@ -333,7 +333,7 @@
                   (values nil nil)))))))
 
 (when (fboundp 'jvm::jvm-compile)
-  (mapcar #'jvm::jvm-compile '(sys::subtypep-normalize-type
-                               sys::sub-interval-p
-                               sys::simple-subtypep
+  (mapcar #'jvm::jvm-compile '(subtypep-normalize-type
+                               sub-interval-p
+                               simple-subtypep
                                subtypep)))
