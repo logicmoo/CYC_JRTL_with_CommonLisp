@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: make_condition.java,v 1.6 2003-09-22 17:26:12 piso Exp $
+ * $Id: make_condition.java,v 1.7 2003-11-02 00:22:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,23 +21,18 @@
 
 package org.armedbear.lisp;
 
-// ### make-condition
-public final class make_condition extends Primitive
+public final class make_condition extends Primitive2
 {
-    private make_condition(String name)
+    private make_condition()
     {
-        super(name);
+        super("%make-condition", PACKAGE_SYS, false);
     }
 
-    // make-condition type &rest slot-initializations => condition
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    // ### %make-condition
+    // %make-condition type slot-initializations => condition
+    public LispObject execute(LispObject type, LispObject initArgs)
+        throws ConditionThrowable
     {
-        if (args.length < 1)
-            throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-        LispObject type = args[0];
-        LispObject initArgs = NIL;
-        for (int i = args.length; i-- > 1;)
-            initArgs = new Cons(args[i], initArgs);
         if (type == Symbol.CONDITION)
             return new Condition(initArgs);
         if (type == Symbol.SIMPLE_CONDITION)
@@ -59,16 +54,8 @@ public final class make_condition extends Primitive
         if (type == Symbol.UNDEFINED_FUNCTION)
             return new UndefinedFunction(initArgs);
 
-//         if (type instanceof Symbol) {
-//             LispClass cls = findClass(type);
-//             if (cls instanceof StandardClass) {
-//                 return ((StandardClass)cls).makeInstance(initArgs);
-//             }
-//         }
-
-        throw new ConditionThrowable(new LispError("MAKE-CONDITION: unsupported type " + type));
+        return NIL;
     }
 
-    private static final make_condition MAKE_CONDITION =
-        new make_condition("make-condition");
+    private static final make_condition MAKE_CONDITION = new make_condition();
 }
