@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.72 2004-09-14 16:41:34 piso Exp $
+ * $Id: Interpreter.java,v 1.73 2004-09-15 17:52:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,11 +167,12 @@ public final class Interpreter extends Lisp
     {
         if (args.length > 0) {
             for (int i = 0; i < args.length; ++i) {
-                if (args[i].equals("--eval")) {
-                    if (i+1 < args.length) {
+                String arg = args[i];
+                if (arg.equals("--eval")) {
+                    if (i + 1 < args.length) {
                         LispObject result = null;
                         try {
-                            result = evaluate(args[i+1]);
+                            result = evaluate(args[i + 1]);
                         }
                         catch (ConditionThrowable c) {
                             System.err.println("Caught condition: " +
@@ -185,11 +186,14 @@ public final class Interpreter extends Lisp
                         System.err.println("No argument supplied to --eval");
                         System.exit(1);
                     }
-                } else if (args[i].equals("--load")) {
-                    if (i+1 < args.length) {
-                        LispObject result = null;
+                } else if (arg.equals("--load") ||
+                           arg.equals("--load-system-file")) {
+                    if (i + 1 < args.length) {
                         try {
-                            result = Load.load(args[i+1], false, false, true);
+                            if (arg.equals("--load"))
+                                Load.load(args[i + 1], false, false, true);
+                            else
+                                Load.loadSystemFile(args[i + 1]);
                         }
                         catch (ConditionThrowable c) {
                             System.err.println("Caught condition: " +
