@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.1 2003-03-25 16:22:26 piso Exp $
+ * $Id: CompiledFunction.java,v 1.2 2003-04-09 18:11:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class CompiledFunction extends Function
+public class CompiledFunction extends Function
 {
     public final int getType()
     {
