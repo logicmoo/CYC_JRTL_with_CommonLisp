@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.30 2003-03-28 18:07:32 piso Exp $
+ * $Id: LispMode.java,v 1.31 2003-03-29 01:16:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,9 +261,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    public Position findContainingSexp(Position start)
+    public static Position findContainingSexp(Position start)
     {
-        SyntaxIterator it = getSyntaxIterator(start);
+        LispSyntaxIterator it = new LispSyntaxIterator(start);
         int parenCount = 0;
         while (true) {
             switch (it.prevChar()) {
