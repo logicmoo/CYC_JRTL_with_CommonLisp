@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.1 2004-01-24 19:03:49 piso Exp $
+ * $Id: Stream.java,v 1.2 2004-01-25 15:53:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,9 +170,16 @@ public class Stream extends LispObject
         open = b;
     }
 
+    public LispObject typeOf()
+    {
+        return Symbol.STREAM;
+    }
+
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.STREAM)
+            return T;
+        if (typeSpecifier == BuiltInClass.STREAM)
             return T;
         return super.typep(typeSpecifier);
     }
