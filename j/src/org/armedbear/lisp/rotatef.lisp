@@ -1,7 +1,7 @@
 ;;; rotatef.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: rotatef.lisp,v 1.1 2004-08-02 19:20:23 piso Exp $
+;;; $Id: rotatef.lisp,v 1.2 2004-09-07 15:39:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,9 +19,10 @@
 
 ;;; Adapted from SBCL.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
-(require '#:collect)
+(eval-when (:compile-toplevel)
+  (require '#:collect))
 
 (defmacro rotatef (&rest args &environment env)
   (when args
