@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.120 2004-11-06 13:49:09 piso Exp $
+;;; $Id: clos.lisp,v 1.121 2004-11-06 14:39:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -186,8 +186,6 @@
 
 (defun make-initfunction (initform)
   `(function (lambda () ,initform)))
-
-(defconstant +slot-unbound+ (make-symbol "SLOT-UNBOUND"))
 
 ;;; Slot definition metaobjects
 
