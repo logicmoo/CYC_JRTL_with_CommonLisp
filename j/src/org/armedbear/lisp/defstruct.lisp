@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.49 2004-04-18 13:33:58 piso Exp $
+;;; $Id: defstruct.lisp,v 1.50 2004-04-18 14:35:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -482,25 +482,44 @@
         (push dsd *dd-slots*)
         (incf index)))
     (setf *dd-slots* (nreverse *dd-slots*))
-    `(progn
-       (setf (get ',*dd-name* 'structure-definition)
-             (make-defstruct-description :name ',*dd-name*
-                                         :conc-name ',*dd-conc-name*
-                                         :constructors ',*dd-constructors*
-                                         :copier ',*dd-copier*
-                                         :include ',*dd-include*
-                                         :type ',*dd-type*
-                                         :named ,*dd-named*
-                                         :initial-offset ,*dd-initial-offset*
-                                         :predicate ,*dd-predicate*
-                                         :print-function ,*dd-print-function*
-                                         :direct-slots ',*dd-direct-slots*
-                                         :slots ',*dd-slots*))
-       (when (or ',*dd-named* (null ',*dd-type*))
-         (make-structure-class ',*dd-name* ',*dd-direct-slots* ',*dd-slots*
-                               ',(car *dd-include*)))
-       ,@(define-constructors)
-       ,@(define-predicate)
-       ,@(define-access-functions)
-       ,@(define-copier)
-       ',*dd-name*)))
+    (if (or (null *dd-type*) *dd-named*)
+        `(progn
+           (setf (get ',*dd-name* 'structure-definition)
+                 (make-defstruct-description :name ',*dd-name*
+                                             :conc-name ',*dd-conc-name*
+                                             :constructors ',*dd-constructors*
+                                             :copier ',*dd-copier*
+                                             :include ',*dd-include*
+                                             :type ',*dd-type*
+                                             :named ,*dd-named*
+                                             :initial-offset ,*dd-initial-offset*
+                                             :predicate ,*dd-predicate*
+                                             :print-function ,*dd-print-function*
+                                             :direct-slots ',*dd-direct-slots*
+                                             :slots ',*dd-slots*))
+           (make-structure-class ',*dd-name* ',*dd-direct-slots* ',*dd-slots*
+                                 ',(car *dd-include*))
+           ,@(define-constructors)
+           ,@(define-predicate)
+           ,@(define-access-functions)
+           ,@(define-copier)
+           ',*dd-name*)
+        `(progn
+           (setf (get ',*dd-name* 'structure-definition)
+                 (make-defstruct-description :name ',*dd-name*
+                                             :conc-name ',*dd-conc-name*
+                                             :constructors ',*dd-constructors*
+                                             :copier ',*dd-copier*
+                                             :include ',*dd-include*
+                                             :type ',*dd-type*
+                                             :named ,*dd-named*
+                                             :initial-offset ,*dd-initial-offset*
+                                             :predicate ,*dd-predicate*
+                                             :print-function ,*dd-print-function*
+                                             :direct-slots ',*dd-direct-slots*
+                                             :slots ',*dd-slots*))
+           ,@(define-constructors)
+           ,@(define-predicate)
+           ,@(define-access-functions)
+           ,@(define-copier)
+           ',*dd-name*))))
