@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.12 2003-02-15 16:48:16 piso Exp $
+ * $Id: Lisp.java,v 1.13 2003-02-15 16:57:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ public abstract class Lisp
                 return fun.execute(args);
             case TYPE_SPECIAL_OPERATOR:
             default:
-                throw new UndefinedFunctionException(String.valueOf(fun));
+                throw new UndefinedFunctionError(String.valueOf(fun));
         }
     }
 
@@ -280,7 +280,7 @@ public abstract class Lisp
                 if (fun == null) {
                     fun = first.getSymbolFunction();
                     if (fun == null)
-                        throw new UndefinedFunctionException(first);
+                        throw new UndefinedFunctionError(first);
                 }
                 switch (fun.getType()) {
                     case TYPE_SPECIAL_OPERATOR: {
