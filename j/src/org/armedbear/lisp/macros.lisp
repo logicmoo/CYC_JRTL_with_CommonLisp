@@ -17,6 +17,8 @@
   `(prog1 (car ,place) (setf ,place (cdr ,place))))
 
 (defmacro loop (&rest exps)
+  (if (and exps (symbolp (car exps)))
+      (error "loop keywords are not supported"))
   (let ((tag (gensym)))
     `(block nil (tagbody ,tag ,@exps (go ,tag)))))
 
@@ -30,5 +32,3 @@
 
 (defmacro time (form)
   `(%time #'(lambda () ,form)))
-
-(provide "macros")
