@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.20 2004-10-20 00:10:12 piso Exp $
+ * $Id: SimpleString.java,v 1.21 2004-10-20 01:48:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class SimpleString extends AbstractString
     public SimpleString(LispCharacter c)
     {
         chars = new char[1];
-        chars[0] = c.getValue();
+        chars[0] = c.value;
         capacity = 1;
     }
 
