@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.28 2004-04-17 10:54:51 piso Exp $
+ * $Id: Readtable.java,v 1.29 2004-05-26 00:25:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -283,7 +283,11 @@ public final class Readtable extends LispObject
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            Readtable from = checkReadtable(first);
+            Readtable from;
+            if (first == NIL)
+                from = new Readtable();
+            else
+                from = checkReadtable(first);
             if (second == NIL)
                 return new Readtable(from);
             Readtable to = checkReadtable(second);
