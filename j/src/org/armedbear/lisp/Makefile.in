@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.144 2004-02-04 15:13:10 piso Exp $
+# $Id: Makefile.in,v 1.145 2004-02-11 19:47:10 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -85,6 +85,7 @@ CLASSFILES =	AbstractArray.class \
 		MacroObject.class \
 		Main.class \
 		Nil.class \
+		NilVector.class \
 		Package.class \
 		PackageError.class \
 		PackageFunctions.class \
