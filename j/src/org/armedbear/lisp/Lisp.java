@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.195 2004-01-05 02:08:01 piso Exp $
+ * $Id: Lisp.java,v 1.196 2004-01-09 16:45:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,8 @@ public abstract class Lisp
         Packages.createPackage("TOP-LEVEL");
     public static final Package PACKAGE_EXT =
         Packages.createPackage("EXTENSIONS");
+    public static final Package PACKAGE_JVM =
+        Packages.createPackage("JVM");
     public static final Package PACKAGE_PROF =
         Packages.createPackage("PROFILER");
     public static final Package PACKAGE_JAVA =
@@ -58,6 +60,8 @@ public abstract class Lisp
             PACKAGE_TPL.usePackage(PACKAGE_EXT);
             PACKAGE_EXT.addNickname("EXT");
             PACKAGE_EXT.usePackage(PACKAGE_CL);
+            PACKAGE_JVM.usePackage(PACKAGE_CL);
+            PACKAGE_JVM.usePackage(PACKAGE_EXT);
             PACKAGE_PROF.addNickname("PROF");
             PACKAGE_PROF.usePackage(PACKAGE_CL);
             PACKAGE_PROF.usePackage(PACKAGE_EXT);
