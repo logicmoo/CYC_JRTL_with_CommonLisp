@@ -2,7 +2,7 @@
  * RemoteShell.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: RemoteShell.java,v 1.2 2002-10-10 18:28:38 piso Exp $
+ * $Id: RemoteShell.java,v 1.3 2002-10-11 13:58:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,46 +55,52 @@ public class RemoteShell extends Shell
 
     private void startProcess()
     {
+        Process process = null;
         try {
             process = Runtime.getRuntime().exec("jpty " + shellCommand + " " + host);
+            setProcess(process);
         }
-        catch (Throwable t) {}
-        if (process != null) {
-            startWatcherThread();
-            // See if the process exits right away, meaning jpty couldn't launch the program.
-            try {
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e) {
-                Log.error(e);
-            }
-            if (process == null)
-                return;
-            Property p;
-            switch (type) {
-                case TYPE_TELNET:
-                    p = Property.TELNET_PROMPT_PATTERN;
-                    break;
-                case TYPE_SSH:
-                    p = Property.SSH_PROMPT_PATTERN;
-                    break;
-                default:
-                    p = null;
-                    break;
-            }
-            if (p != null)
-                setPromptRE(Editor.preferences().getStringProperty(p));
-            try {
-                stdin  = new OutputStreamWriter(process.getOutputStream());
-                stdoutThread = new StdoutThread();
-                stderrThread = new StderrThread();
-                stdoutThread.start();
-                stderrThread.start();
-                readOnly = false;
-            }
-            catch (Throwable t) {
-                Log.error(t);
-            }
+        catch (Throwable t) {
+            setProcess(null);
+            return;
+        }
+        startWatcherThread();
+        // See if the process exits right away (meaning jpty couldn't launch
+        // the program).
+        try {
+            Thread.sleep(100);
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+        }
+        // When the process exits, the watcher thread calls setProcess(null),
+        // so check the value of getProcess() here.
+        if (getProcess() == null)
+            return; // Process exited.
+        Property property;
+        switch (type) {
+            case TYPE_TELNET:
+                property = Property.TELNET_PROMPT_PATTERN;
+                break;
+            case TYPE_SSH:
+                property = Property.SSH_PROMPT_PATTERN;
+                break;
+            default:
+                property = null;
+                break;
+        }
+        if (property != null)
+            setPromptRE(Editor.preferences().getStringProperty(property));
+        try {
+            stdin  = new OutputStreamWriter(process.getOutputStream());
+            stdoutThread = new StdoutThread(process.getInputStream());
+            stderrThread = new StderrThread(process.getErrorStream());
+            stdoutThread.start();
+            stderrThread.start();
+            readOnly = false;
+        }
+        catch (Throwable t) {
+            Log.error(t);
         }
     }
 
@@ -102,7 +108,7 @@ public class RemoteShell extends Shell
     {
         RemoteShell remoteShell = new RemoteShell(type, host);
         remoteShell.startProcess();
-        if (remoteShell.process == null) {
+        if (remoteShell.getProcess() == null) {
             Editor.getBufferList().remove(remoteShell);
             String program = null;
             switch (type) {
@@ -280,7 +286,7 @@ public class RemoteShell extends Shell
         }
         RemoteShell remoteShell = findRemoteShell(TYPE_TELNET, host);
         if (remoteShell != null) {
-            if (remoteShell.process == null)
+            if (remoteShell.getProcess() == null)
                 remoteShell.startProcess();
         } else
             remoteShell = createRemoteShell(TYPE_TELNET, host);
@@ -315,7 +321,7 @@ public class RemoteShell extends Shell
         }
         RemoteShell remoteShell = RemoteShell.findRemoteShell(TYPE_SSH, host);
         if (remoteShell != null) {
-            if (remoteShell.process == null)
+            if (remoteShell.getProcess() == null)
                 remoteShell.startProcess();
         } else
             remoteShell = RemoteShell.createRemoteShell(TYPE_SSH, host);
