@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.48 2003-12-03 01:15:25 piso Exp $
+;;; $Id: jvm.lisp,v 1.49 2003-12-03 18:03:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -929,13 +929,24 @@
 
 (defun write-utf8 (string)
   (dotimes (i (length string))
-    (write-u1 (char-int (char string i)))))
+    (let ((c (char string i)))
+      (if (eql c #\null)
+          (progn
+            (write-u1 #xC0)
+            (write-u1 #x80))
+          (write-u1 (char-int c))))))
+
+(defun utf8-length (string)
+  (let ((len 0))
+    (dotimes (i (length string))
+      (incf len (if (eql (char string i) #\null) 2 1)))
+    len))
 
 (defun write-cp-entry (entry)
   (write-u1 (first entry))
   (case (first entry)
-    (1
-     (write-u2 (second entry))
+    (1 ; UTF8
+     (write-u2 (utf8-length (third entry)))
      (write-utf8 (third entry)))
     ((5 6)
      (write-u4 (second entry))
@@ -1185,6 +1196,9 @@
       g2)))
 
 (defun declare-string (string)
+;;   (format t "declare-string string = |~S|~%" string)
+;;   (when (position #\0 string)
+;;     (setf string (utf8 string)))
   (let ((g (symbol-name (gensym)))
         (*code* *static-code*))
     (declare-field g "Lorg/armedbear/lisp/LispString;")
@@ -1203,7 +1217,7 @@
 
 (defun compile-constant (form)
   (cond
-   ((sys::fixnump form)
+   ((fixnump form)
     (let ((n form))
       (cond ((zerop n)
              (emit 'getstatic
@@ -1237,19 +1251,19 @@
             g
             "Lorg/armedbear/lisp/LispObject;")
       (emit-store-value)))
-   ((vectorp form)
-    (let ((g (declare-object-as-string form)))
-      (emit 'getstatic
-            *this-class*
-            g
-            "Lorg/armedbear/lisp/LispObject;")
-      (emit-store-value)))
    ((stringp form)
     (let ((g (declare-string form)))
       (emit 'getstatic
             *this-class*
             g
             "Lorg/armedbear/lisp/LispString;")
+      (emit-store-value)))
+   ((vectorp form)
+    (let ((g (declare-object-as-string form)))
+      (emit 'getstatic
+            *this-class*
+            g
+            "Lorg/armedbear/lisp/LispObject;")
       (emit-store-value)))
    ((characterp form)
     (let ((g (declare-object-as-string form)))
