@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.5 2003-12-17 00:12:41 piso Exp $
+;;; $Id: restart.lisp,v 1.6 2003-12-17 16:50:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -186,10 +186,10 @@
 (defun muffle-warning (&optional condition)
   (invoke-restart 'muffle-warning))
 
-(defun store-value (value)
+(defun store-value (value &optional condition)
   (invoke-restart 'store-value value))
 
-(defun use-value (value)
+(defun use-value (value &optional condition)
   (invoke-restart 'use-value value))
 
 ;;; Adapted from SBCL.
