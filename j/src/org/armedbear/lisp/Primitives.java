@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.538 2003-12-20 17:02:20 piso Exp $
+ * $Id: Primitives.java,v 1.539 2003-12-20 18:31:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4040,8 +4040,7 @@ public final class Primitives extends Lisp
         {
             int size = Fixnum.getValue(first);
             if (size < 0)
-                signal(new TypeError("MAKE-LIST: " + size +
-                                                           " is not a valid list length"));
+                signal(new TypeError(String.valueOf(size) + " is not a valid list length."));
             LispObject result = NIL;
             for (int i = size; i-- > 0;)
                 result = new Cons(second, result);
