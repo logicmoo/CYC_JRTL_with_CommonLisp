@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.2 2004-02-16 00:47:13 piso Exp $
+ * $Id: adjust_array.java,v 1.3 2004-02-16 01:26:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,8 @@ public final class adjust_array extends Primitive
             } else
                 newSize = dimensions;
             if (newSize != null)
-                return v.adjustArray(Fixnum.getValue(newSize), initialElement);
+                return v.adjustArray(Fixnum.getValue(newSize), initialElement,
+                                     initialContents);
         }
         if (array instanceof LispString) {
             LispString s = (LispString) array;
@@ -72,7 +73,8 @@ public final class adjust_array extends Primitive
             } else
                 newSize = dimensions;
             if (newSize != null)
-                return s.adjustArray(Fixnum.getValue(newSize), initialElement);
+                return s.adjustArray(Fixnum.getValue(newSize), initialElement,
+                                     initialContents);
         }
         return signal(new LispError("ADJUST-ARRAY: unsupported case."));
     }
