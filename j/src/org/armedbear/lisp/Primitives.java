@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.451 2003-09-28 20:14:12 piso Exp $
+ * $Id: Primitives.java,v 1.452 2003-09-29 12:58:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3367,11 +3367,15 @@ public final class Primitives extends Module
     private static final LispObject flushOutput(LispObject[] args)
         throws ConditionThrowable
     {
-        final CharacterOutputStream out;
+        final LispOutputStream out;
         if (args.length == 0)
             out = checkCharacterOutputStream(_STANDARD_OUTPUT_.symbolValue());
+        else if (args[0] instanceof LispOutputStream)
+            out = (LispOutputStream) args[0];
+        else if (args[0] instanceof TwoWayStream)
+            out = ((TwoWayStream)args[0]).getOutputStream();
         else
-            out = outSynonymOf(args[0]);
+            throw new ConditionThrowable(new TypeError(args[0], "output stream"));
         out.flushOutput();
         return NIL;
     }
