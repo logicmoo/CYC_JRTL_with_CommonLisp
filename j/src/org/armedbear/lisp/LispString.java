@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.42 2003-06-23 11:11:16 piso Exp $
+ * $Id: LispString.java,v 1.43 2003-07-06 01:17:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,6 +289,41 @@ public final class LispString extends AbstractVector
         } else
             return getValue();
     }
+
+    // ### %make-string
+    // %make-string size initial-element element-type => string
+    // Returns a simple string.
+    private static final Primitive3 _MAKE_STRING =
+        new Primitive3("%make-string", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject size, LispObject initialElement,
+                                  LispObject elementType) throws LispError
+        {
+            final int n = Fixnum.getValue(size);
+            final int limit =
+                Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
+            if (n < 0 || n >= limit) {
+                StringBuffer sb = new StringBuffer();
+                sb.append("the size specified for this string (");
+                sb.append(n);
+                sb.append(')');
+                if (n >= limit) {
+                    sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
+                    sb.append(limit);
+                    sb.append(')');
+                } else
+                    sb.append(" is negative");
+                throw new LispError(sb.toString());
+            }
+            // Ignore elementType.
+            LispString string = new LispString(n);
+            if (initialElement != NIL) {
+                // Initial element was specified.
+                char c = checkCharacter(initialElement).getValue();
+                string.fill(c);
+            }
+            return string;
+        }
+    };
 
     private static final Primitive2 CHAR = new Primitive2("char") {
         public LispObject execute(LispObject first, LispObject second)

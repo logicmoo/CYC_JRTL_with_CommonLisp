@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.277 2003-07-06 01:14:53 piso Exp $
+ * $Id: Primitives.java,v 1.278 2003-07-06 01:17:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2850,41 +2850,6 @@ public final class Primitives extends Module
             else
                 pkg = getCurrentPackage();
             return pkg.findSymbol(name);
-        }
-    };
-
-    // ### make-string
-    // make-string size &key initial-element element-type => string
-    // Returns a simple string.
-    private static final Primitive3 _MAKE_STRING =
-        new Primitive3("%make-string", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject size, LispObject initialElement,
-                                  LispObject elementType) throws LispError
-        {
-            final int n = Fixnum.getValue(size);
-            final int limit =
-                Fixnum.getValue(Symbol.ARRAY_DIMENSION_LIMIT.getSymbolValue());
-            if (n < 0 || n >= limit) {
-                StringBuffer sb = new StringBuffer();
-                sb.append("the size specified for this string (");
-                sb.append(n);
-                sb.append(')');
-                if (n >= limit) {
-                    sb.append(" is >= ARRAY-DIMENSION-LIMIT (");
-                    sb.append(limit);
-                    sb.append(')');
-                } else
-                    sb.append(" is negative");
-                throw new LispError(sb.toString());
-            }
-            // Ignore elementType.
-            LispString string = new LispString(n);
-            if (initialElement != NIL) {
-                // Initial element was specified.
-                char c = checkCharacter(initialElement).getValue();
-                string.fill(c);
-            }
-            return string;
         }
     };
 
