@@ -2,7 +2,7 @@
  * ResolvableBreakpoint.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: ResolvableBreakpoint.java,v 1.2 2003-05-12 17:06:41 piso Exp $
+ * $Id: ResolvableBreakpoint.java,v 1.3 2003-05-15 01:17:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,8 @@ public abstract class ResolvableBreakpoint
     protected Line line;
     protected EventRequest eventRequest;
 
+    private boolean temporary;
+
     protected ResolvableBreakpoint(Jdb jdb)
     {
         this.jdb = jdb;
@@ -63,6 +65,16 @@ public abstract class ResolvableBreakpoint
     public final EventRequest getEventRequest()
     {
         return eventRequest;
+    }
+
+    public boolean isTemporary()
+    {
+        return temporary;
+    }
+
+    public void setTemporary()
+    {
+        temporary = true;
     }
 
     public final void clear()
