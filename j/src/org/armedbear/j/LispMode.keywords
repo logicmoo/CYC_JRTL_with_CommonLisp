@@ -127,6 +127,7 @@ ctypecase
 decf
 declaim
 declare
+decode-float
 defclass
 defconstant
 defgeneric
@@ -204,7 +205,10 @@ finish-output
 first
 flet
 float
+float-digits
+float-precision
 float-radix
+float-sign
 floatp
 floor
 fmakunbound
@@ -221,10 +225,10 @@ functionp
 gcd
 gensym
 get
-getf
 get-dispatch-macro-character
 get-output-stream-string
 get-setf-expansion
+getf
 gethash
 go
 handler-bind
@@ -443,6 +447,7 @@ row-major-aref
 rplaca
 rplacd
 sbit
+scale-float
 schar
 search
 second
