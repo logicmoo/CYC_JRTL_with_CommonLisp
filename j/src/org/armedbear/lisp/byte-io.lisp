@@ -1,7 +1,7 @@
 ;;; byte-io.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: byte-io.lisp,v 1.3 2004-02-15 19:29:17 piso Exp $
+;;; $Id: byte-io.lisp,v 1.4 2004-03-09 02:23:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,17 +20,17 @@
 (in-package "SYSTEM")
 
 (defun write-byte (byte stream)
-  (let* ((element-type (stream-element-type stream))
-         (width (cadr element-type)))
+  (let ((element-type (stream-element-type stream)))
     (require-type byte element-type)
-    (if (= width 8)
-        (write-8-bits byte stream)
-        (let ((bytes ()))
-          (dotimes (i (/ width 8))
-            (push (logand byte #xff) bytes)
-            (setf byte (ash byte -8)))
-          (dolist (b bytes)
-            (write-8-bits b stream))))))
+    (let ((width (cadr element-type)))
+      (if (= width 8)
+          (write-8-bits byte stream)
+          (let ((bytes ()))
+            (dotimes (i (/ width 8))
+              (push (logand byte #xff) bytes)
+              (setf byte (ash byte -8)))
+            (dolist (b bytes)
+              (write-8-bits b stream)))))))
 
 (defun read-byte (stream &optional (eof-error-p t) eof-value)
   (let* ((element-type (stream-element-type stream))
