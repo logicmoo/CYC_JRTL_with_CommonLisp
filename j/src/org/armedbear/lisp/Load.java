@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.43 2004-04-16 01:09:48 piso Exp $
+ * $Id: Load.java,v 1.44 2004-04-18 14:54:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,6 +208,8 @@ public final class Load extends Lisp
         final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
             Pathname p = Pathname.parseNamestring(truename);
+            boolean isFasl = truename.endsWith("." + COMPILE_FILE_TYPE) ||
+                truename.endsWith(".lisp-obj"); // FIXME (special case for SBCL)
             thread.bindSpecial(_LOAD_PATHNAME_, p);
             thread.bindSpecial(_LOAD_TRUENAME_, p);
             if (verbose) {
@@ -218,7 +220,7 @@ public final class Load extends Lisp
                 out._writeString(truename);
                 out._writeLine(" ...");
                 out._finishOutput();
-                LispObject result = loadStream(in, print);
+                LispObject result = loadStream(in, print, isFasl);
                 long elapsed = System.currentTimeMillis() - start;
                 out.freshLine();
                 out._writeString(prefix);
@@ -230,7 +232,7 @@ public final class Load extends Lisp
                 out._finishOutput();
                 return result;
             } else
-                return loadStream(in, print);
+                return loadStream(in, print, isFasl);
         }
         finally {
             thread.setDynamicEnvironment(oldDynEnv);
@@ -245,14 +247,44 @@ public final class Load extends Lisp
         return sb.toString();
     }
 
+    // ### *fasl-anonymous-package*
+    // internal symbol
+    public static final Symbol _FASL_ANONYMOUS_PACKAGE_ =
+        internSpecial("*FASL-ANONYMOUS-PACKAGE*", PACKAGE_SYS, NIL);
+
+    // ### fasl-sharp-colon
+    public static final DispatchMacroFunction FASL_SHARP_COLON =
+        new DispatchMacroFunction("sharp-colon", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            LispThread thread = LispThread.currentThread();
+            Symbol symbol = (Symbol) stream.readSymbol();
+            LispObject pkg = _FASL_ANONYMOUS_PACKAGE_.symbolValue(thread);
+            if (pkg == NIL) {
+                thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_,
+                                   pkg = new Package());
+            }
+            return ((Package)pkg).intern(symbol.getName());
+        }
+    };
+
     private static final LispObject loadStream(InputStream inputStream,
-                                               boolean print)
+                                               boolean print, boolean isFasl)
         throws ConditionThrowable
     {
         Stream in = new Stream(inputStream, Symbol.CHARACTER);
         final LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         thread.bindSpecial(_LOAD_STREAM_, in);
+        if (isFasl) {
+            Readtable readtable = new Readtable();
+            readtable.setDispatchMacroCharacter('#', ':', FASL_SHARP_COLON);
+            thread.bindSpecial(_READTABLE_, readtable);
+            thread.bindSpecial(_FASL_ANONYMOUS_PACKAGE_, NIL);
+        }
         try {
             final Environment env = new Environment();
             while (true) {
