@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.292 2004-11-03 15:38:52 piso Exp $
+ * $Id: Lisp.java,v 1.293 2004-11-04 11:28:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,86 +146,6 @@ public abstract class Lisp
         return result;
     }
 
-    public static final LispObject funcall0(LispObject fun, LispThread thread)
-        throws ConditionThrowable
-    {
-        LispObject stack = thread.getStack();
-        thread.pushStackFrame(fun);
-        thread.clearValues();
-        LispObject result;
-        if (profiling)
-            if (!sampling)
-                fun.incrementCallCount();
-        try {
-            result = fun.execute();
-        }
-        finally {
-            thread.setStack(stack);
-        }
-        return result;
-    }
-
-    public static final LispObject funcall1(LispObject fun, LispObject arg,
-                                            LispThread thread)
-        throws ConditionThrowable
-    {
-        LispObject stack = thread.getStack();
-        thread.pushStackFrame(fun, arg);
-        thread.clearValues();
-        LispObject result;
-        if (profiling)
-            if (!sampling)
-                fun.incrementCallCount();
-        try {
-            result = fun.execute(arg);
-        }
-        finally {
-            thread.setStack(stack);
-        }
-        return result;
-    }
-
-    public static final LispObject funcall2(LispObject fun, LispObject first,
-                                            LispObject second, LispThread thread)
-        throws ConditionThrowable
-    {
-        LispObject stack = thread.getStack();
-        thread.pushStackFrame(fun, first, second);
-        thread.clearValues();
-        LispObject result;
-        if (profiling)
-            if (!sampling)
-                fun.incrementCallCount();
-        try {
-            result = fun.execute(first, second);
-        }
-        finally {
-            thread.setStack(stack);
-        }
-        return result;
-    }
-
-    public static final LispObject funcall3(LispObject fun, LispObject first,
-                                            LispObject second, LispObject third,
-                                            LispThread thread)
-        throws ConditionThrowable
-    {
-        LispObject stack = thread.getStack();
-        thread.pushStackFrame(fun, first, second, third);
-        thread.clearValues();
-        LispObject result;
-        if (profiling)
-            if (!sampling)
-                fun.incrementCallCount();
-        try {
-            result = fun.execute(first, second, third);
-        }
-        finally {
-            thread.setStack(stack);
-        }
-        return result;
-    }
-
     public static final LispObject macroexpand(LispObject form,
                                                final Environment env,
                                                final LispThread thread)
@@ -302,7 +222,7 @@ public abstract class Lisp
             Symbol.MINUS.setSymbolValue(object);
             LispObject result;
             try {
-                result = funcall1(Symbol.EVAL.getSymbolFunction(), object, thread);
+                result = thread.execute(Symbol.EVAL.getSymbolFunction(), object);
             }
             catch (OutOfMemoryError e) {
                 return signal(new LispError("Out of memory."));
@@ -628,7 +548,7 @@ public abstract class Lisp
         LispObject[] values = thread.getValues();
         thread.clearValues();
         if (values == null)
-            return funcall1(coerceToFunction(function), result, thread);
+            return thread.execute(coerceToFunction(function), result);
         else
             return funcall(coerceToFunction(function), values, thread);
     }
@@ -641,7 +561,7 @@ public abstract class Lisp
             return (Symbol) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "symbol"));
+            signal(new TypeError(obj, Symbol.SYMBOL));
             // Not reached.
             return null;
         }
@@ -655,7 +575,7 @@ public abstract class Lisp
             return (Cons) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "cons"));
+            signal(new TypeError(obj, Symbol.CONS));
             // Not reached.
             return null;
         }
