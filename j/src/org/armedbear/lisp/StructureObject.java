@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StructureObject.java,v 1.8 2003-09-08 01:35:30 piso Exp $
+ * $Id: StructureObject.java,v 1.9 2003-09-17 15:05:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,8 @@ public final class StructureObject extends LispObject
         if (typeSpecifier == name)
             return T;
         if (typeSpecifier == Symbol.STRUCTURE_OBJECT)
+            return T;
+        if (typeSpecifier == LispClass.STRUCTURE_OBJECT)
             return T;
         return super.typep(typeSpecifier);
     }
