@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Utilities.java,v 1.36 2004-06-06 04:36:53 piso Exp $
+ * $Id: Utilities.java,v 1.37 2004-09-17 18:14:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1401,37 +1401,39 @@ public final class Utilities implements Constants
     public static List tokenize(String s)
     {
         ArrayList list = new ArrayList();
-        FastStringBuffer sb = new FastStringBuffer();
-        boolean inQuote = false;
-        final int limit = s.length();
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            switch (c) {
-                case ' ':
-                    if (inQuote)
-                        sb.append(c);
-                    else if (sb.length() > 0) {
-                        list.add(sb.toString());
-                        sb.setLength(0);
-                    }
-                    break;
-                case '"':
-                    if (inQuote) {
-                        if (sb.length() > 0) {
+        if (s != null) {
+            FastStringBuffer sb = new FastStringBuffer();
+            boolean inQuote = false;
+            final int limit = s.length();
+            for (int i = 0; i < limit; i++) {
+                char c = s.charAt(i);
+                switch (c) {
+                    case ' ':
+                        if (inQuote)
+                            sb.append(c);
+                        else if (sb.length() > 0) {
                             list.add(sb.toString());
                             sb.setLength(0);
                         }
-                        inQuote = false;
-                    } else
-                        inQuote = true;
-                    break;
-                default:
-                    sb.append(c);
-                    break;
+                        break;
+                    case '"':
+                        if (inQuote) {
+                            if (sb.length() > 0) {
+                                list.add(sb.toString());
+                                sb.setLength(0);
+                            }
+                            inQuote = false;
+                        } else
+                            inQuote = true;
+                        break;
+                    default:
+                        sb.append(c);
+                        break;
+                }
             }
+            if (sb.length() > 0)
+                list.add(sb.toString());
         }
-        if (sb.length() > 0)
-            list.add(sb.toString());
         return list;
     }
 
