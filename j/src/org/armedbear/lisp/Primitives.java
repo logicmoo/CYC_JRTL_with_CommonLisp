@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.377 2003-09-08 17:16:28 piso Exp $
+ * $Id: Primitives.java,v 1.378 2003-09-08 18:18:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2328,8 +2328,6 @@ public final class Primitives extends Module
                 throw new WrongNumberOfArgumentsException(this);
             if (args[0] == NIL)
                 return T;
-            if (args[1] == NIL)
-                return NIL;
             TypeSpecifier ts1 = TypeSpecifier.getInstance(args[0]);
             TypeSpecifier ts2 = TypeSpecifier.getInstance(args[1]);
             return ts1.isSubtypeOf(ts2);
