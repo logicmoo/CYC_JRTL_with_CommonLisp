@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.161 2003-04-08 14:16:54 piso Exp $
+ * $Id: Primitives.java,v 1.162 2003-04-09 13:42:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1214,6 +1214,10 @@ public final class Primitives extends Module
             }
             if (destination == NIL)
                 return new LispString(s);
+            if (destination instanceof CharacterOutputStream) {
+                ((CharacterOutputStream)destination).writeString(s);
+                return NIL;
+            }
             // Destination can also be stream or string with fill pointer.
             throw new LispError("FORMAT: not implemented");
         }
@@ -3644,23 +3648,38 @@ public final class Primitives extends Module
     };
 
     // ### %open-output-file
-    private static final Primitive1 _OPEN_OUTPUT_FILE =
-        new Primitive1("%open-output-file") {
-        public LispObject execute (LispObject arg) throws LispError {
-            String pathname = LispString.getValue(arg);
-            try {
-                return new CharacterOutputStream(new FileOutputStream(pathname));
-            }
-            catch (FileNotFoundException e) {
-                throw new LispError(" file not found: " + pathname);
-            }
+    private static final Primitive2 _OPEN_OUTPUT_FILE =
+        new Primitive2("%open-output-file") {
+        public LispObject execute (LispObject first, LispObject second)
+            throws LispError
+        {
+            String pathname = LispString.getValue(first);
+            LispObject elementType = second;
+            if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER) {
+                try {
+                    return new CharacterOutputStream(new FileOutputStream(pathname));
+                }
+                catch (FileNotFoundException e) {
+                    throw new LispError(" file not found: " + pathname);
+                }
+            } else if (elementType == Symbol.UNSIGNED_BYTE) {
+                try {
+                    return new BinaryOutputStream(new FileOutputStream(pathname));
+                }
+                catch (FileNotFoundException e) {
+                    throw new LispError(" file not found: " + pathname);
+                }
+            } else
+                throw new LispError(String.valueOf(elementType).concat(
+                    " is not a valid stream element type"));
         }
     };
 
     // ### %open-input-file
     private static final Primitive1 _OPEN_INPUT_FILE =
         new Primitive1("%open-input-file") {
-        public LispObject execute (LispObject arg) throws LispError {
+        public LispObject execute (LispObject arg) throws LispError
+        {
             String pathname = LispString.getValue(arg);
             try {
                 return new CharacterInputStream(new FileInputStream(pathname));
@@ -3668,6 +3687,23 @@ public final class Primitives extends Module
             catch (FileNotFoundException e) {
                 throw new LispError(" file not found: " + pathname);
             }
+        }
+    };
+
+    // write-byte byte stream => byte
+    private static final Primitive2 WRITE_BYTE =
+        new Primitive2("write-byte") {
+        public LispObject execute (LispObject first, LispObject second)
+            throws LispError
+        {
+            int n = Fixnum.getValue(first);
+            if (n < 0 || n > 255)
+                throw new TypeError(second, "unsigned byte");
+            if (second instanceof BinaryOutputStream) {
+                ((BinaryOutputStream)second).writeByte(n);
+                return first;
+            }
+            throw new TypeError(first, "binary output stream");
         }
     };
 
