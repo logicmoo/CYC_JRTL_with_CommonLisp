@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.37 2003-06-11 00:45:03 piso Exp $
+;;; $Id: list.lisp,v 1.38 2003-06-22 17:51:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -81,23 +81,7 @@
       ((endp top) result)))
 
 (autoload '(butlast nbutlast) "butlast.lisp")
-
-;;; LDIFF (from SBCL)
-
-(defun ldiff (list object)
-  (unless (listp list)
-    (error 'type-error))
-  (do* ((list list (cdr list))
-	(result (list ()))
-	(splice result))
-       ((atom list)
-        (if (eql list object)
-            (cdr result)
-            (progn (rplacd splice list) (cdr result))))
-    (if (eql list object)
-	(return (cdr result))
-	(setq splice (cdr (rplacd splice (list (car list))))))))
-
+(autoload 'ldiff)
 
 (defmacro apply-key (key element)
   `(if ,key
