@@ -1,8 +1,8 @@
 /*
  * XmlParserImpl.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: XmlParserImpl.java,v 1.2 2002-10-02 16:36:31 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: XmlParserImpl.java,v 1.3 2003-06-04 00:24:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,17 +30,18 @@ import java.util.Stack;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
-import org.xml.sax.AttributeList;
-import org.xml.sax.DocumentHandler;
-import org.xml.sax.HandlerBase;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
-import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.ParserFactory;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
-public final class XmlParserImpl extends HandlerBase implements Runnable,
-    DocumentHandler
+public final class XmlParserImpl extends DefaultHandler implements Runnable,
+    ContentHandler, EntityResolver
 {
     private String parserClassName;
     private boolean aelfred;
@@ -112,14 +113,14 @@ public final class XmlParserImpl extends HandlerBase implements Runnable,
         }
         treeModel = null;
         stack = new Stack();
-        Parser parser = getParser();
-        if (parser != null) {
-            parser.setDocumentHandler(this);
-            parser.setErrorHandler(this);
-            parser.setEntityResolver(this);
+        XMLReader xmlReader = getXMLReader();
+        if (xmlReader != null) {
+            xmlReader.setContentHandler(this);
+            xmlReader.setErrorHandler(this);
+            xmlReader.setEntityResolver(this);
             buffer.exception = null;
             try {
-                parser.parse(inputSource);
+                xmlReader.parse(inputSource);
             }
             catch (Exception e) {
                 exception = e;
@@ -128,48 +129,48 @@ public final class XmlParserImpl extends HandlerBase implements Runnable,
         }
     }
 
-    private Parser getParser()
+    private static final String DEFAULT_XML_READER =
+        "org.apache.crimson.parser.XMLReaderImpl";
+
+    private XMLReader getXMLReader()
     {
-        Parser parser = null;
+        XMLReader xmlReader = null;
         String className =
-            Editor.preferences().getStringProperty("org.xml.sax.parser");
+            Editor.preferences().getStringProperty("org.xml.sax.driver");
         if (className == null) {
-            className = System.getProperty("org.xml.sax.parser");
+            className = System.getProperty("org.xml.sax.driver");
             if (className == null)
-                className = "org.armedbear.j.aelfred.SAXDriver";
+                className = DEFAULT_XML_READER;
         }
         try {
-            parser = ParserFactory.makeParser(className);
+            xmlReader = XMLReaderFactory.createXMLReader(className);
         }
-        catch (Exception e) {}
-        if (parser == null) {
-            // Last resort. See if there's something in the CLASSPATH that we
-            // know how to use.
-            String[] knownParsers = {
-                "com.sun.xml.parser.Parser",
-                "org.apache.xerces.parsers.SAXParser",
-                "com.jclark.xml.sax.Driver"
-            };
-            for (int i = 0; i < knownParsers.length; i++) {
+        catch (Exception e) {
+            Log.debug(e);
+        }
+        if (xmlReader == null) {
+            if (className != null && !className.equals(DEFAULT_XML_READER))
                 try {
-                    parser = ParserFactory.makeParser(knownParsers[i]);
-                    break;
+                    xmlReader =
+                        XMLReaderFactory.createXMLReader(DEFAULT_XML_READER);
                 }
-                catch (Exception e) {}
+            catch (Exception e) {
+                Log.debug(e);
             }
         }
-        if (parser == null) {
+        if (xmlReader == null) {
             parserClassName = null;
             aelfred = false;
             Log.error("no parser found");
         } else {
-            parserClassName = parser.getClass().getName();
+            parserClassName = xmlReader.getClass().getName();
             if (parserClassName.equals("org.armedbear.j.aelfred.SAXDriver"))
                 aelfred = true;
             else
                 aelfred = false;
         }
-        return parser;
+        Log.debug("XmlParserImpl.getXMLReader xmlReader = " + xmlReader);
+        return xmlReader;
     }
 
     public InputSource resolveEntity(String publicId, String systemId)
@@ -243,7 +244,8 @@ public final class XmlParserImpl extends HandlerBase implements Runnable,
         this.locator = locator;
     }
 
-    public void startElement(String name, AttributeList attributes) throws SAXException
+    public void startElement(String uri, String localName, String qName,
+        Attributes attributes) throws SAXException
     {
         int lineNumber = 0;
         int columnNumber = 0;
@@ -252,11 +254,11 @@ public final class XmlParserImpl extends HandlerBase implements Runnable,
             columnNumber = locator.getColumnNumber();
         }
         DefaultMutableTreeNode node =
-            new DefaultMutableTreeNode(new XmlTreeElement(name, attributes,
-                lineNumber, columnNumber));
-        if (treeModel == null)
+            new DefaultMutableTreeNode(new XmlTreeElement(localName,
+                attributes, lineNumber, columnNumber));
+        if (treeModel == null) {
             treeModel = new DefaultTreeModel(node);
-        else {
+        } else {
             Debug.assertTrue(current != null);
             current.insert(node, current.getChildCount());
             stack.push(current);
@@ -264,7 +266,7 @@ public final class XmlParserImpl extends HandlerBase implements Runnable,
         current = node;
     }
 
-    public void endElement(String name)
+    public void endElement(String uri, String localName, String qName)
     {
         if (stack.empty())
             current = null;
