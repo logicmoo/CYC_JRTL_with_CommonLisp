@@ -1,0 +1,181 @@
+;;; parse-lambda-list.lisp
+;;;
+;;; Copyright (C) 2003 Peter Graves
+;;; $Id: parse-lambda-list.lisp,v 1.1 2003-11-22 18:56:11 piso Exp $
+;;;
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License
+;;; as published by the Free Software Foundation; either version 2
+;;; of the License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+;;; Adapted from SBCL.
+
+(in-package "SYSTEM")
+
+(require '#:collect)
+
+;;; Break something like a lambda list (but not necessarily actually a
+;;; lambda list, e.g. the representation of argument types which is
+;;; used within an FTYPE specification) into its component parts. We
+;;; return 13 values:
+;;;  1. a list of the required args;
+;;;  2. a list of the &OPTIONAL arg specs;
+;;;  3. true if a &REST arg was specified;
+;;;  4. the &REST arg;
+;;;  5. true if &KEY args are present;
+;;;  6. a list of the &KEY arg specs;
+;;;  7. true if &ALLOW-OTHER-KEYS was specified.;
+;;;  8. true if any &AUX is present (new in SBCL vs. CMU CL);
+;;;  9. a list of the &AUX specifiers;
+;;; 10. true if a &MORE arg was specified;
+;;; 11. the &MORE context var;
+;;; 12. the &MORE count var;
+;;; 13. true if any lambda list keyword is present (only for
+;;;     PARSE-LAMBDA-LIST-LIKE-THING).
+;;;
+;;; The top level lambda list syntax is checked for validity, but the
+;;; arg specifiers are just passed through untouched. If something is
+;;; wrong, we signal an error.
+
+(defun parse-lambda-list-like-thing (list)
+  (collect ((required)
+            (optional)
+            (keys)
+            (aux))
+    (let ((restp nil)
+          (rest nil)
+          (morep nil)
+          (more-context nil)
+          (more-count nil)
+          (keyp nil)
+	  (auxp nil)
+          (allowp nil)
+          (state :required))
+      (declare (type (member :allow-other-keys :aux
+                             :key
+                             :more-context :more-count
+                             :optional
+                             :post-more :post-rest
+                             :required :rest)
+                     state))
+      (dolist (arg list)
+        (if (and (symbolp arg)
+                 (let ((name (symbol-name arg)))
+                   (and (plusp (length name))
+                        (char= (char name 0) #\&))))
+            (case arg
+              (&optional
+               (unless (eq state :required)
+                 (error "misplaced &OPTIONAL in lambda list: ~S" list))
+               (setq state :optional))
+              (&rest
+               (unless (member state '(:required :optional))
+                 (error "misplaced &REST in lambda list: ~S" list))
+               (setq state :rest))
+              (&more
+               (unless (member state '(:required :optional))
+                 (error "misplaced &MORE in lambda list: ~S" list))
+               (setq morep t
+                     state :more-context))
+              (&key
+               (unless (member state
+                               '(:required :optional :post-rest :post-more))
+                 (error "misplaced &KEY in lambda list: ~S" list))
+               (setq keyp t
+                     state :key))
+              (&allow-other-keys
+               (unless (eq state ':key)
+                 (error "misplaced &ALLOW-OTHER-KEYS in lambda list: ~S" list))
+               (setq allowp t
+                     state :allow-other-keys))
+              (&aux
+               (when (member state '(:rest :more-context :more-count))
+                 (error "misplaced &AUX in lambda list: ~S" list))
+               (setq auxp t
+		     state :aux))
+              ;; FIXME: I don't think ANSI says this is an error. (It
+              ;; should certainly be good for a STYLE-WARNING,
+              ;; though.)
+              (t
+               (error "unknown &KEYWORD in lambda list: ~S" arg)))
+            (case state
+              (:required (required arg))
+              (:optional (optional arg))
+              (:rest
+               (setq restp t
+                     rest arg
+                     state :post-rest))
+              (:more-context
+               (setq more-context arg
+                     state :more-count))
+              (:more-count
+               (setq more-count arg
+                     state :post-more))
+              (:key (keys arg))
+              (:aux (aux arg))
+              (t
+               (error "found garbage in lambda list when expecting a keyword: ~S"
+                      arg)))))
+      (when (eq state :rest)
+        (error "&REST without rest variable"))
+
+      (values (required) (optional) restp rest keyp (keys) allowp auxp (aux)
+              morep more-context more-count
+              (neq state :required)))))
+
+;;; like PARSE-LAMBDA-LIST-LIKE-THING, except our LAMBDA-LIST argument
+;;; really *is* a lambda list, not just a "lambda-list-like thing", so
+;;; can barf on things which're illegal as arguments in lambda lists
+;;; even if they could conceivably be legal in not-quite-a-lambda-list
+;;; weirdosities
+(defun parse-lambda-list (lambda-list)
+
+  ;; Classify parameters without checking their validity individually.
+  (multiple-value-bind (required optional restp rest keyp keys allowp auxp aux
+			morep more-context more-count)
+      (parse-lambda-list-like-thing lambda-list)
+
+    ;; Check validity of parameters.
+    (flet ((need-symbol (x why)
+	     (unless (symbolp x)
+	       (error "~A is not a symbol: ~S" why x))))
+      (dolist (i required)
+	(need-symbol i "Required argument"))
+      (dolist (i optional)
+	(typecase i
+	  (symbol)
+	  (cons
+	   (destructuring-bind (var &optional init-form supplied-p) i
+	     (declare (ignore init-form supplied-p))
+	     (need-symbol var "&OPTIONAL parameter name")))
+	  (t
+	   (error "&OPTIONAL parameter is not a symbol or cons: ~S" i))))
+      (when restp
+	(need-symbol rest "&REST argument"))
+      (when keyp
+	(dolist (i keys)
+	  (typecase i
+	    (symbol)
+	    (cons
+	     (destructuring-bind (var-or-kv &optional init-form supplied-p) i
+	       (declare (ignore init-form supplied-p))
+	       (if (consp var-or-kv)
+		   (destructuring-bind (keyword-name var) var-or-kv
+		     (declare (ignore keyword-name))
+		     (need-symbol var "&KEY parameter name"))
+		   (need-symbol var-or-kv "&KEY parameter name"))))
+	    (t
+	     (error "&KEY parameter is not a symbol or cons: ~S" i))))))
+
+    ;; Voila.
+    (values required optional restp rest keyp keys allowp auxp aux
+	    morep more-context more-count)))
