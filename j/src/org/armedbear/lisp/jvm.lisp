@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.350 2005-01-14 22:02:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.351 2005-01-15 07:20:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -494,27 +494,35 @@
     (list* (car form) local-functions (mapcar #'p1 (cddr form)))))
 
 (defun p1-function (form)
-  (cond
-   ((and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
-    (when *current-compiland*
-      (incf (compiland-children *current-compiland*)))
-    (let* ((*current-compiland* *current-compiland*)
-           (lambda-form (cadr form))
-           (lambda-list (cadr lambda-form))
-           (body (cddr lambda-form))
-           (compiland (make-compiland :name (gensym "ANONYMOUS-LAMBDA-")
-                                      :lambda-expression lambda-form
-                                      :parent *current-compiland*)))
-      (multiple-value-bind (body decls)
-        (sys::parse-body body)
-        (setf (compiland-lambda-expression compiland)
-              `(lambda ,lambda-list ,@decls (block nil ,@body)))
-        (let ((*visible-variables* *visible-variables*)
-              (*current-compiland* compiland))
-          (p1-compiland compiland)))
-      (list 'FUNCTION compiland)))
-   (t
-    form)))
+  (let (local-function)
+    (cond ((and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
+           (when *current-compiland*
+             (incf (compiland-children *current-compiland*)))
+           (let* ((*current-compiland* *current-compiland*)
+                  (lambda-form (cadr form))
+                  (lambda-list (cadr lambda-form))
+                  (body (cddr lambda-form))
+                  (compiland (make-compiland :name (gensym "ANONYMOUS-LAMBDA-")
+                                             :lambda-expression lambda-form
+                                             :parent *current-compiland*)))
+             (multiple-value-bind (body decls)
+               (sys::parse-body body)
+               (setf (compiland-lambda-expression compiland)
+                     `(lambda ,lambda-list ,@decls (block nil ,@body)))
+               (let ((*visible-variables* *visible-variables*)
+                     (*current-compiland* compiland))
+                 (p1-compiland compiland)))
+             (list 'FUNCTION compiland)))
+          ((setf local-function (find-local-function (cadr form)))
+           (dformat t "p1-function local function ~S~%" (cadr form))
+           (let ((variable (local-function-variable local-function)))
+             (when variable
+               (unless (eq (variable-compiland variable) *current-compiland*)
+                 (dformat t "p1-function ~S used non-locally~%" (variable-name variable))
+                 (setf (variable-used-non-locally-p variable) t))))
+           form)
+          (t
+           form))))
 
 (defun p1-lambda (form)
   (let* ((lambda-list (cadr form))
@@ -5373,17 +5381,19 @@
 
     ;; Move args from their original registers to the closure variables array,
     ;; if applicable.
-    (when *closure-variables*
+    (when (and *closure-variables*
+               #+nil (some #'variable-closure-index parameters)
+               )
       (dformat t "moving arguments to closure array (if applicable)~%")
-      (cond
-       (*child-p*
-        (aver (eql (compiland-closure-register compiland) 1))
-        (emit 'aload (compiland-closure-register compiland))
-        )
-       (t
-        (emit-push-constant-int (length *closure-variables*))
-        (dformat t "p2-compiland ~S anewarray 1~%" (compiland-name compiland))
-        (emit 'anewarray "org/armedbear/lisp/LispObject")))
+      (cond (*child-p*
+             (aver (eql (compiland-closure-register compiland) 1))
+             (when (some #'variable-closure-index parameters)
+               (emit 'aload (compiland-closure-register compiland)))
+             )
+            (t
+             (emit-push-constant-int (length *closure-variables*))
+             (dformat t "p2-compiland ~S anewarray 1~%" (compiland-name compiland))
+             (emit 'anewarray "org/armedbear/lisp/LispObject")))
       (dolist (variable parameters)
         (dformat t "considering ~S ...~%" (variable-name variable))
         (when (variable-closure-index variable)
@@ -5414,11 +5424,11 @@
             )
           )))
       (aver (not (null (compiland-closure-register compiland))))
-      (cond
-       (*child-p*
-        (emit 'pop))
-       (t
-        (emit 'astore (compiland-closure-register compiland)))))
+      (cond (*child-p*
+             (when (some #'variable-closure-index parameters)
+               (emit 'pop)))
+            (t
+             (emit 'astore (compiland-closure-register compiland)))))
 
     ;; Establish dynamic bindings for any variables declared special.
     (dolist (variable parameters)
