@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.678 2004-09-19 16:50:28 asimon Exp $
+ * $Id: Primitives.java,v 1.679 2004-09-20 18:45:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -492,7 +492,8 @@ public final class Primitives extends Lisp
     };
 
     // ### symbol-value
-    private static final Primitive1 SYMBOL_VALUE = new Primitive1("symbol-value","symbol")
+    private static final Primitive1 SYMBOL_VALUE =
+        new Primitive1("symbol-value", "symbol")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -503,7 +504,7 @@ public final class Primitives extends Lisp
                 value = symbol.symbolValue();
                 if (value instanceof SymbolMacro)
                     signal(new LispError(arg.writeToString() +
-                                         " has no dynamic value"));
+                                         " has no dynamic value."));
             }
             return value;
         }
@@ -511,7 +512,7 @@ public final class Primitives extends Lisp
 
     // ### set
     // set symbol value => value
-    private static final Primitive2 SET = new Primitive2("set","symbol value")
+    private static final Primitive2 SET = new Primitive2("set", "symbol value")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -532,7 +533,8 @@ public final class Primitives extends Lisp
     };
 
     // ### rplaca
-    private static final Primitive2 RPLACA = new Primitive2("rplaca","cons object")
+    private static final Primitive2 RPLACA =
+        new Primitive2("rplaca", "cons object")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -543,7 +545,8 @@ public final class Primitives extends Lisp
     };
 
     // ### rplacd
-    private static final Primitive2 RPLACD = new Primitive2("rplacd","cons object")
+    private static final Primitive2 RPLACD =
+        new Primitive2("rplacd", "cons object")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -554,7 +557,7 @@ public final class Primitives extends Lisp
     };
 
     // ### +
-    private static final Primitive ADD = new Primitive("+","&rest numbers")
+    private static final Primitive ADD = new Primitive("+", "&rest numbers")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -572,7 +575,7 @@ public final class Primitives extends Lisp
     };
 
     // ### 1+
-    private static final Primitive1 ONE_PLUS = new Primitive1("1+","number")
+    private static final Primitive1 ONE_PLUS = new Primitive1("1+", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -581,7 +584,8 @@ public final class Primitives extends Lisp
     };
 
     // ### -
-    private static final Primitive SUBTRACT = new Primitive("-","minuend &rest subtrahends")
+    private static final Primitive SUBTRACT =
+        new Primitive("-", "minuend &rest subtrahends")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -618,7 +622,8 @@ public final class Primitives extends Lisp
     };
 
     // ### when
-    private static final SpecialOperator WHEN = new SpecialOperator("when") {
+    private static final SpecialOperator WHEN = new SpecialOperator("when")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -639,8 +644,7 @@ public final class Primitives extends Lisp
     };
 
     // ### unless
-    private static final SpecialOperator UNLESS =
-        new SpecialOperator("unless")
+    private static final SpecialOperator UNLESS = new SpecialOperator("unless")
     {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
