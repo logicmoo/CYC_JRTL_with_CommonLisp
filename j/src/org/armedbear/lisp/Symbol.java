@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.59 2003-08-12 15:22:07 piso Exp $
+ * $Id: Symbol.java,v 1.60 2003-08-14 00:38:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@ public class Symbol extends LispObject
     public static final Symbol QUOTE                = PACKAGE_CL.addExternalSymbol("QUOTE");
 
     // Type specifiers.
+    public static final Symbol AND                  = PACKAGE_CL.addExternalSymbol("AND");
     public static final Symbol ARRAY                = PACKAGE_CL.addExternalSymbol("ARRAY");
     public static final Symbol ATOM                 = PACKAGE_CL.addExternalSymbol("ATOM");
     public static final Symbol BASE_CHAR            = PACKAGE_CL.addExternalSymbol("BASE-CHAR");
@@ -68,6 +69,7 @@ public class Symbol extends LispObject
     public static final Symbol KEYWORD              = PACKAGE_CL.addExternalSymbol("KEYWORD");
     public static final Symbol LIST                 = PACKAGE_CL.addExternalSymbol("LIST");
     public static final Symbol LONG_FLOAT           = PACKAGE_CL.addExternalSymbol("LONG-FLOAT");
+    public static final Symbol NOT                  = PACKAGE_CL.addExternalSymbol("NOT");
     public static final Symbol NULL                 = PACKAGE_CL.addExternalSymbol("NULL");
     public static final Symbol NUMBER               = PACKAGE_CL.addExternalSymbol("NUMBER");
     public static final Symbol OR                   = PACKAGE_CL.addExternalSymbol("OR");
