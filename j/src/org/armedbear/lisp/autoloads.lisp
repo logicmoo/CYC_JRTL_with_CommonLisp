@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.56 2003-10-31 19:25:39 piso Exp $
+;;; $Id: autoloads.lisp,v 1.57 2003-11-02 00:23:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -103,7 +103,7 @@
 (autoload-macro 'with-hash-table-iterator)
 (autoload-macro 'with-package-iterator)
 (autoload-macro 'remf)
-(autoload-macro 'define-condition)
+(autoload-macro '(define-condition make-condition) "define-condition.lisp")
 (autoload-macro 'check-type)
 (autoload-macro 'deftype)
 (autoload-macro '(defclass defgeneric defmethod) "clos.lisp")
