@@ -1,8 +1,8 @@
 /*
  * SimpleTypeError.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: SimpleTypeError.java,v 1.2 2003-12-12 16:13:46 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: SimpleTypeError.java,v 1.3 2004-02-23 00:36:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ public final class SimpleTypeError extends TypeError
                 Primitives.APPLY.execute(Symbol.FORMAT,
                                          Primitives.APPEND.execute(list2(NIL, getFormatControl()),
                                                                    getFormatArguments()));
-            return ((LispString)result).getValue();
+            return result.getStringValue();
         }
         catch (Throwable t) {
             return "simple type error";
