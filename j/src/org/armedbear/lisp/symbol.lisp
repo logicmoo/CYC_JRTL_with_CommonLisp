@@ -1,7 +1,7 @@
 ;;; symbol.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: symbol.lisp,v 1.6 2003-09-14 18:01:12 piso Exp $
+;;; $Id: symbol.lisp,v 1.7 2003-10-02 00:03:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,18 +20,6 @@
 (in-package "SYSTEM")
 
 ;;; From CMUCL.
-
-(defun remprop (symbol indicator)
-  (do ((pl (symbol-plist symbol) (cddr pl))
-       (prev nil pl))
-    ((atom pl) nil)
-    (cond ((atom (cdr pl))
-	   (error "~S has an odd number of items in its property list" symbol))
-	  ((eq (car pl) indicator)
-	   (cond (prev (rplacd (cdr prev) (cddr pl)))
-		 (t
-		  (setf (symbol-plist symbol) (cddr pl))))
-	   (return t)))))
 
 (defun getf (place indicator &optional (default ()))
   (do ((plist place (cddr plist)))
