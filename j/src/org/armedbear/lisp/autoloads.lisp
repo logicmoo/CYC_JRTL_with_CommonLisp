@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.142 2004-05-28 10:50:50 asimon Exp $
+;;; $Id: autoloads.lisp,v 1.143 2004-06-03 21:41:57 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -242,6 +242,8 @@
 (autoload 'get-socket-stream "socket")
 (export 'compile-system)
 (autoload 'compile-system)
+(export 'with-thread-lock)
+(autoload-macro 'with-thread-lock)
 
 ;; JVM compiler.
 (in-package "JVM")
