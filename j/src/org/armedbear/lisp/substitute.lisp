@@ -1,7 +1,7 @@
 ;;; substitute.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: substitute.lisp,v 1.5 2003-08-06 18:09:35 piso Exp $
+;;; $Id: substitute.lisp,v 1.6 2003-08-06 19:17:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -138,11 +138,3 @@
 	 test-not
 	 old)
     (subst-dispatch 'if-not)))
-
-(when (and (find-package "JVM")
-           (fboundp 'jvm:jvm-compile))
-  (mapcar #'jvm:jvm-compile '(list-substitute*
-                              vector-substitute*
-                              substitute
-                              substitute-if
-                              substitute-if-not)))
