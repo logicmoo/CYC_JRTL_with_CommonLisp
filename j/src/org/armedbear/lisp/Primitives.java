@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.285 2003-07-07 13:01:02 piso Exp $
+ * $Id: Primitives.java,v 1.286 2003-07-07 15:05:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2714,7 +2714,7 @@ public final class Primitives extends Module
             LispString string = string(arg);
             Package pkg = Packages.findPackage(string.getValue());
             if (pkg == null)
-                throw new LispError("package " + arg + " does not exist");
+                throw new PackageError("package " + arg + " does not exist");
             LispThread thread = LispThread.currentThread();
             Environment dynEnv = thread.getDynamicEnvironment();
             if (dynEnv != null) {
