@@ -3,6 +3,7 @@
 (in-package "COMMON-LISP")
 
 (export '(some every notany notevery copy-seq reverse nreverse
+          reduce
           position position-if position-if-not
           find find-if find-if-not
           count count-if count-if-not))
@@ -133,6 +134,56 @@
   (seq-dispatch sequence
 		(list-nreverse* sequence)
 		(vector-nreverse* sequence)))
+
+
+;; REDUCE (from OpenMCL)
+
+(defmacro list-reduce (function sequence start end initial-value ivp key)
+  (let ((what `(if ,key (funcall ,key (car sequence)) (car sequence))))
+    `(let ((sequence (nthcdr ,start ,sequence)))
+       (do ((count (if ,ivp ,start (1+ ,start)) (1+ count))
+            (sequence (if ,ivp sequence (cdr sequence))
+                      (cdr sequence))
+            (value (if ,ivp ,initial-value ,what)
+                   (funcall ,function value ,what)))
+         ((= count ,end) value)))))
+
+(defmacro list-reduce-from-end (function sequence start end
+                                         initial-value ivp key)
+  (let ((what `(if ,key (funcall ,key (car sequence)) (car sequence))))
+    `(let ((sequence (nthcdr (- (length ,sequence) ,end) (reverse ,sequence))))
+       (do ((count (if ,ivp ,start (1+ ,start)) (1+ count))
+            (sequence (if ,ivp sequence (cdr sequence))
+                      (cdr sequence))
+            (value (if ,ivp ,initial-value ,what)
+                   (funcall ,function ,what value)))
+         ((= count ,end) value)))))
+
+(defun reduce (function sequence &key from-end (start 0)
+                        end (initial-value nil ivp) key)
+  (unless end (setq end (length sequence)))
+  (if (= end start)
+      (if ivp initial-value (funcall function))
+      (seq-dispatch
+       sequence
+       (if from-end
+           (list-reduce-from-end  function sequence start end initial-value ivp key)
+           (list-reduce function sequence start end initial-value ivp key))
+       (let* ((disp (if from-end -1 1))
+              (index (if from-end (1- end) start))
+              (terminus (if from-end (1- start) end))
+              (value (if ivp initial-value
+                         (let ((elt (aref sequence index)))
+                           (setq index (+ index disp))
+                           (if key (funcall key elt) elt))))
+              (element nil))
+         (do* ()
+           ((= index terminus) value)
+           (setq element (aref sequence index)
+                 index (+ index disp)
+                 element (if key (funcall key element) element)
+                 value (funcall function (if from-end element value) (if from-end value element))))))))
+
 
 (defmacro vector-locater-macro (sequence body-form return-type)
   `(let ((incrementer (if from-end -1 1))
