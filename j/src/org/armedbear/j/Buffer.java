@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.12 2002-11-05 17:11:33 piso Exp $
+ * $Id: Buffer.java,v 1.13 2002-11-25 19:03:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2163,7 +2163,7 @@ public class Buffer extends SystemBuffer
     }
 
     // Inserts s at pos, moves pos past s.
-    protected void insertString(Position pos, String s)
+    public void insertString(Position pos, String s)
     {
         try {
             lockWrite();
