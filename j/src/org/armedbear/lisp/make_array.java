@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.18 2004-02-25 01:52:26 piso Exp $
+ * $Id: make_array.java,v 1.19 2004-02-25 03:10:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,6 +59,8 @@ public final class make_array extends Primitive
         } else
             dimv[0] = Fixnum.getValue(dimensions);
         if (displacedTo != NIL) {
+            // FIXME Make sure element type (if specified) is compatible with
+            // displaced-to array.
             final AbstractArray array = checkArray(displacedTo);
             if (initialElementProvided != NIL)
                 return signal(new LispError(":INITIAL-ELEMENT must not be specified with :DISPLACED-TO"));
@@ -75,6 +77,11 @@ public final class make_array extends Primitive
                     if (fillPointer != NIL)
                         s.setFillPointer(fillPointer);
                     return s;
+                } else if (array.getElementType() == Symbol.BIT) {
+                    ComplexBitVector v = new ComplexBitVector(dimv[0], array, displacement);
+                    if (fillPointer != NIL)
+                        v.setFillPointer(fillPointer);
+                    return v;
                 } else {
                     ComplexVector v = new ComplexVector(dimv[0], array, displacement);
                     if (fillPointer != NIL)

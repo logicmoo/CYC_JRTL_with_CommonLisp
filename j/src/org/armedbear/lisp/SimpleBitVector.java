@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleBitVector.java,v 1.1 2004-02-24 22:21:00 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.2 2004-02-25 03:05:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,9 @@
 
 package org.armedbear.lisp;
 
+// "The type of a bit vector that is not displaced to another array, has no
+// fill pointer, and is not expressly adjustable is a subtype of type SIMPLE-
+// BIT-VECTOR."
 public final class SimpleBitVector extends AbstractBitVector
 {
     private int capacity;

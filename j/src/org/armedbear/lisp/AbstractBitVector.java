@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractBitVector.java,v 1.1 2004-02-24 22:19:50 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.2 2004-02-25 03:06:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,9 +166,9 @@ public abstract class AbstractBitVector extends AbstractVector
         set(index, newValue);
     }
 
-    protected abstract int getBit(int index);
+    protected abstract int getBit(int index) throws ConditionThrowable;
 
-    protected abstract void setBit(int index);
+    protected abstract void setBit(int index) throws ConditionThrowable;
 
-    protected abstract void clearBit(int index);
+    protected abstract void clearBit(int index) throws ConditionThrowable;
 }
