@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.15 2003-03-10 14:04:49 piso Exp $
+ * $Id: Tests.java,v 1.16 2003-03-13 03:13:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -486,14 +486,14 @@ public class Tests extends TestCase
         verify("(string #\\c)", "\"c\"");
 
         // string= (case sensitive)
-        verify("(string= \"foo\" \"foo\")", "T");
-        verify("(string= \"foo\" \"Foo\")", "NIL");
-        verify("(string= \"foo\" \"bar\")", "NIL");
+//         verify("(string= \"foo\" \"foo\")", "T");
+//         verify("(string= \"foo\" \"Foo\")", "NIL");
+//         verify("(string= \"foo\" \"bar\")", "NIL");
 
         // string-equal (case insensitive)
-        verify("(string-equal \"foo\" \"foo\")", "T");
-        verify("(string-equal \"foo\" \"Foo\")", "T");
-        verify("(string-equal \"foo\" \"bar\")", "NIL");
+//         verify("(string-equal \"foo\" \"foo\")", "T");
+//         verify("(string-equal \"foo\" \"Foo\")", "T");
+//         verify("(string-equal \"foo\" \"bar\")", "NIL");
 
         // make-string
         verify("(make-string 10 :initial-element #\\5)", "\"5555555555\"");
