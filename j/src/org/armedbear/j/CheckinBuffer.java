@@ -2,7 +2,7 @@
  * CheckinBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CheckinBuffer.java,v 1.1.1.1 2002-09-24 16:07:41 piso Exp $
+ * $Id: CheckinBuffer.java,v 1.2 2002-10-10 16:31:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,8 +35,20 @@ public final class CheckinBuffer extends Buffer implements Constants
         type = TYPE_NORMAL;
         isUntitled = true;
         mode = CheckinMode.getMode();
-        appendLine("");
-        renumber();
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            appendLine("");
+            renumber();
+        }
+        finally {
+            unlockWrite();
+        }
         isLoaded = true;
         setInitialized(true);
     }
