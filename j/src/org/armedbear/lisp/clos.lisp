@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.113 2004-10-13 02:18:54 piso Exp $
+;;; $Id: clos.lisp,v 1.114 2004-10-14 12:54:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -923,12 +923,6 @@
     (finalize-generic-function gf)
     gf))
 
-(defun top-level-environment ()
-  nil)
-
-(defun compile-in-lexical-environment (env lambda-expr)
-  (make-closure lambda-expr env))
-
 (defmacro defmethod (&rest args &environment env)
   (when (and env (empty-environment-p env))
     (setf env nil))
@@ -1238,7 +1232,7 @@
    :qualifiers ()
    :specializers (list class)
    :body `(slot-value object ',slot-name)
-   :environment (top-level-environment))
+   :environment nil)
   (values))
 
 (defun add-writer-method (class fn-name slot-name)
@@ -1250,7 +1244,7 @@
    :specializers (list (find-class 't) class)
    :body `(setf (slot-value object ',slot-name)
                 new-value)
-   :environment (top-level-environment))
+   :environment nil)
   (values))
 
 (defun subclassp (c1 c2)
@@ -1493,20 +1487,18 @@
         (*call-next-method-p* nil)
         (*next-method-p-p* nil))
     (walk-form body)
-    (compile-in-lexical-environment
-     (method-environment method)
-     (if (or *call-next-method-p* *next-method-p-p*)
-         `(lambda (args next-emfun)
-            (flet ((call-next-method (&rest cnm-args)
-                                     (if (null next-emfun)
-                                         (error "No next method for generic function ~S."
-                                                (method-generic-function ',method))
-                                         (funcall next-emfun (or cnm-args args))))
-                   (next-method-p ()
-                                  (not (null next-emfun))))
-              (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
-         (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
-                                   (method-environment method))))
+    (if (or *call-next-method-p* *next-method-p-p*)
+        `(lambda (args next-emfun)
+           (flet ((call-next-method (&rest cnm-args)
+                                    (if (null next-emfun)
+                                        (error "No next method for generic function ~S."
+                                               (method-generic-function ',method))
+                                        (funcall next-emfun (or cnm-args args))))
+                  (next-method-p ()
+                                 (not (null next-emfun))))
+             (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
+        (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
+                                  (method-environment method))))
 
 ;;            (progn
 ;;              (sys:simple-format t "STD-COMPUTE-METHOD-FUNCTION ~S ~S "
@@ -1523,7 +1515,7 @@
 ;;                    (t
 ;;                     (sys:simple-format t "environment is not empty~%"))))
 
-           `(lambda (args next-emfun) (apply ,code args)))))))
+          `(lambda (args next-emfun) (apply ,code args))))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
 ;;; between argument keyword compatibility for regular functions versus
