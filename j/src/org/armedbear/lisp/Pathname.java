@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.3 2003-08-10 00:43:56 piso Exp $
+ * $Id: Pathname.java,v 1.4 2003-08-10 01:10:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,8 +110,12 @@ public final class Pathname extends LispObject
             // FIXME
             if (host != NIL || device != NIL || directory != NIL || name != NIL)
                 throw new LispError("MAKE-PATHNAME: not implemented");
-            if (defaults instanceof LispString) {
-                String namestring = ((LispString)defaults).getValue();
+            String namestring = null;
+            if (defaults instanceof Pathname)
+                namestring = ((Pathname)defaults).getNamestring();
+            else if (defaults instanceof LispString)
+                namestring = ((LispString)defaults).getValue();
+            if (namestring != null) {
                 if (type instanceof LispString) {
                     File file = new File(namestring);
                     String d = file.getParent();
@@ -124,7 +128,7 @@ public final class Pathname extends LispObject
                     return new Pathname(d, n);
                 }
             }
-            return NIL;
+            throw new LispError("MAKE-PATHNAME: not implemented");
         }
     };
 }
