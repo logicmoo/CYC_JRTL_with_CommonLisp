@@ -1,7 +1,7 @@
 ;;; defpackage.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defpackage.lisp,v 1.1 2003-07-06 16:23:55 piso Exp $
+;;; $Id: defpackage.lisp,v 1.2 2003-07-06 20:04:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -111,5 +111,5 @@
 		    `(:shadowing-import-from
 		      ,@(apply #'append (mapcar #'rest shadowing-imports))))
     `(%defpackage ,(string package) ',nicknames ',size
-                  ',shadows ',shadowing-imports ',(if use-p use :default)
+                  ',shadows ',shadowing-imports ',(if use-p use nil)
                   ',imports ',interns ',exports ',doc)))
