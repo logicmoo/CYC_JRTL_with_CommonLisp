@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.45 2003-05-27 20:13:38 piso Exp $
+;;; $Id: boot.lisp,v 1.46 2003-05-27 23:39:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -111,7 +111,6 @@
                 "strings.lisp"
                 "sort.lisp"
                 "arrays.lisp"
-                "defstruct.lisp"
                 "compiler.lisp"))
   (cl::%load name))
 
@@ -194,7 +193,8 @@
          (expander `(lambda (,form ,env) (block ,name ,body))))
     `(fset ',name (make-macro (compile nil ,expander)))))
 
-;; Load loop.lisp AFTER redefining DEFUN and DEFMACRO...
+;; Load defstruct.lisp and loop.lisp AFTER redefining DEFUN and DEFMACRO...
+(cl::%load "defstruct.lisp")
 (cl::%load "loop.lisp")
 
 
