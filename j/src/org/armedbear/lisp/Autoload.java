@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.79 2003-09-29 16:58:45 piso Exp $
+ * $Id: Autoload.java,v 1.80 2003-09-30 10:59:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,6 +272,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%structure-set-1", "StructureObject");
         autoload(PACKAGE_SYS, "%structure-set-2", "StructureObject");
         autoload(PACKAGE_SYS, "%time", "Time");
+        autoload(PACKAGE_SYS, "default-time-zone", "Time");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTable");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
         autoload(PACKAGE_SYS, "make-instance-standard-class", "StandardClass");
