@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.680 2004-09-20 18:57:43 piso Exp $
+ * $Id: Primitives.java,v 1.681 2004-09-21 18:14:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -937,7 +937,9 @@ public final class Primitives extends Lisp
     };
 
     // Returns true if no two numbers are the same; otherwise returns false.
-    private static final Primitive NOT_EQUALS = new Primitive("/=","&rest numbers") {
+    private static final Primitive NOT_EQUALS =
+        new Primitive("/=", "&rest numbers")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -983,7 +985,8 @@ public final class Primitives extends Lisp
     };
 
     // ### <=
-    private static final Primitive LE = new Primitive("<=","&rest numbers") {
+    private static final Primitive LE = new Primitive("<=", "&rest numbers")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -1012,7 +1015,9 @@ public final class Primitives extends Lisp
     };
 
     // ### >
-    private static final Primitive GREATER_THAN = new Primitive(">","&rest numbers") {
+    private static final Primitive GREATER_THAN =
+        new Primitive(">", "&rest numbers")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -1032,7 +1037,8 @@ public final class Primitives extends Lisp
     };
 
     // ### >=
-    private static final Primitive GE = new Primitive(">=","&rest numbers") {
+    private static final Primitive GE = new Primitive(">=", "&rest numbers")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -1063,7 +1069,8 @@ public final class Primitives extends Lisp
     // assoc item alist &key key test test-not => entry
     // This is the bootstrap version (needed for %set-documentation).
     // Redefined properly in assoc.lisp.
-    private static final Primitive ASSOC = new Primitive("assoc","item alist &key key test test-not")
+    private static final Primitive ASSOC =
+        new Primitive("assoc", "item alist &key key test test-not")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
