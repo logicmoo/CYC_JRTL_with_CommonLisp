@@ -2,7 +2,7 @@
  * JavaSource.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaSource.java,v 1.3 2003-02-15 15:40:48 piso Exp $
+ * $Id: JavaSource.java,v 1.4 2003-02-15 15:42:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ public final class JavaSource implements Constants
         if (jdkSourcePath != null) {
             final List dirNames = Utilities.getDirectoriesInPath(jdkSourcePath);
             if (dirNames != null) {
-                // Let the user know if the JDK source path is bogus.
+                // Tell the user if the JDK source path is bogus.
                 for (Iterator it = dirNames.iterator(); it.hasNext();) {
                     String name = (String) it.next();
                     File dir = File.getInstance(name);
