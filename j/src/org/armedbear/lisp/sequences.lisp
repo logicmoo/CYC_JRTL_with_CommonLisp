@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.34 2003-05-28 00:23:21 piso Exp $
+;;; $Id: sequences.lisp,v 1.35 2003-05-28 00:59:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -280,14 +280,6 @@
                (s2 start2 (1+ s2)))
               ((>= i l) sequence1)
             (setf (elt sequence1 s1) (elt sequence2 s2)))))))
-
-
-;;; NREVERSE
-
-(defun nreverse (sequence)
-  (if (listp sequence)
-      (list-nreverse sequence)
-      (vector-nreverse sequence)))
 
 
 ;;; CONCATENATE (from GCL)
