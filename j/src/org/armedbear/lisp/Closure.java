@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.38 2003-06-08 17:23:00 piso Exp $
+ * $Id: Closure.java,v 1.39 2003-06-08 17:38:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,6 @@ public class Closure extends Function
     private final boolean allowOtherKeys;
     private Symbol restVar;
     private int arity;
-    private int required;
 
     private int minArgs;
     private int maxArgs;
@@ -125,7 +124,6 @@ public class Closure extends Function
                             if (requiredParameters == null)
                                 requiredParameters = new ArrayList();
                             requiredParameters.add(new Parameter((Symbol)obj));
-                            ++required;
                             if (maxArgs >= 0)
                                 ++maxArgs;
                         }
@@ -215,11 +213,11 @@ public class Closure extends Function
         this.body = body;
         this.environment = env;
         this.function = new Cons(Symbol.LAMBDA, new Cons(lambdaList, body));
-        if (arity >= 0)
-            Debug.assertTrue(arity == required);
         this.allowOtherKeys = allowOtherKeys;
 
-        minArgs = required;
+        minArgs = requiredParameters != null ? requiredParameters.length : 0;
+        if (arity >= 0)
+            Debug.assertTrue(arity == minArgs);
     }
 
     private static final void invalidParameter(LispObject obj)
@@ -401,23 +399,20 @@ public class Closure extends Function
             return result;
         }
         // Not fixed arity.
-        if (args.length < required)
+        if (args.length < minArgs)
             throw new WrongNumberOfArgumentsException(this);
         Environment oldDynEnv = thread.getDynamicEnvironment();
         Environment ext = new Environment(env);
         // Required parameters.
-        int i;
         if (requiredParameters != null) {
-            Debug.assertTrue(requiredParameters.length == required);
-            for (i = 0; i < required; i++) {
+            for (int i = 0; i < minArgs; i++) {
                 Parameter parameter = requiredParameters[i];
                 Symbol symbol = parameter.var;
                 bind(symbol, args[i], ext);
             }
-        } else
-            Debug.assertTrue(required == 0);
-        i = required;
-        int argsUsed = required;
+        }
+        int i = minArgs;
+        int argsUsed = minArgs;
         // Optional parameters.
         if (optionalParameters != null) {
             for (int j = 0; j < optionalParameters.length; j++) {
