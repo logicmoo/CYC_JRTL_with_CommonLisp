@@ -1,8 +1,8 @@
 /*
  * BeanShellMode.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: BeanShellMode.java,v 1.1.1.1 2002-09-24 16:08:46 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: BeanShellMode.java,v 1.2 2003-06-12 16:35:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,5 +44,10 @@ public final class BeanShellMode extends JavaMode implements Constants, Mode
         super.setKeyMapDefaults(km);
         km.unmapKey(KeyEvent.VK_F9, 0); // compile
         km.unmapKey(KeyEvent.VK_F9, CTRL_MASK); // recompile
+    }
+
+    public void populateModeMenu(Editor editor, Menu menu)
+    {
+        // No mode menu yet.
     }
 }

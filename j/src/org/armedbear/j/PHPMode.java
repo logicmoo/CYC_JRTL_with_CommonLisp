@@ -1,8 +1,8 @@
 /*
  * PHPMode.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: PHPMode.java,v 1.2 2002-10-03 17:37:27 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: PHPMode.java,v 1.3 2003-06-12 16:37:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,11 @@ public final class PHPMode extends JavaMode implements Constants, Mode
     public static final Mode getMode()
     {
         return mode;
+    }
+
+    public void populateModeMenu(Editor editor, Menu menu)
+    {
+        // No mode menu yet.
     }
 
     public SyntaxIterator getSyntaxIterator(Position pos)

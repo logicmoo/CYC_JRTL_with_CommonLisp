@@ -1,8 +1,8 @@
 /*
  * JavaScriptMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaScriptMode.java,v 1.1.1.1 2002-09-24 16:08:27 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: JavaScriptMode.java,v 1.2 2003-06-12 16:35:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,11 @@ public final class JavaScriptMode extends JavaMode implements Constants, Mode
     {
         super.setKeyMapDefaults(km);
         km.mapKey(KeyEvent.VK_ENTER, CTRL_MASK, "newline");
+    }
+
+    public void populateModeMenu(Editor editor, Menu menu)
+    {
+        // No mode menu yet.
     }
 
     public int getCorrectIndentation(Line line, Buffer buffer)
