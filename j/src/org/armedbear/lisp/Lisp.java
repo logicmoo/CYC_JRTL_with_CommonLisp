@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.33 2003-03-12 20:12:38 piso Exp $
+ * $Id: Lisp.java,v 1.34 2003-03-12 21:12:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+import java.util.Random;
 import java.util.Stack;
 
 public abstract class Lisp
@@ -335,7 +336,7 @@ public abstract class Lisp
                         result = eval(macroexpand(obj, env), env);
                         break;
                     default:
-                        result = apply(fun, evalList(obj.cdr(), env);
+                        result = apply(fun, evalList(obj.cdr(), env));
                 }
             } else {
                 LispObject args = obj.cdr();
@@ -969,6 +970,10 @@ public abstract class Lisp
 
     public static final Symbol _PRINT_ESCAPE_ =
         exportSpecial("*PRINT-ESCAPE*", PACKAGE_CL, T);
+
+    public static final Symbol _RANDOM_STATE_ =
+        exportSpecial("*RANDOM-STATE*", PACKAGE_CL,
+            new JavaObject(new Random()));
 
     static {
         loadClass("org.armedbear.lisp.Primitives");
