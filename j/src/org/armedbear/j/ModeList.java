@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: ModeList.java,v 1.8 2003-04-09 16:45:49 piso Exp $
+ * $Id: ModeList.java,v 1.9 2003-04-10 23:24:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public final class ModeList implements Constants
         addEntry(CPP_MODE, CPP_MODE_NAME, "CppMode", true, "(.+\\.cpp)|(.+\\.cxx)|(.+\\.cc)|(.+\\.hpp)|(.+\\.hxx)|(.+\\.h)");
         addEntry(CSS_MODE, CSS_MODE_NAME, "CSSMode", true, ".+\\.css");
         addEntry(C_MODE, C_MODE_NAME, "CMode", true, ".+\\.c");
-        addEntry(DIFF_MODE, DIFF_MODE_NAME, "DiffMode", true, ".+\\.diff");
+        addEntry(DIFF_MODE, DIFF_MODE_NAME, "DiffMode", true, ".+\\.diff|.+\\.patch");
         addEntry(DIRECTORY_MODE, DIRECTORY_MODE_NAME, "DirectoryMode", false, null);
         addEntry(HTML_MODE, HTML_MODE_NAME, "HtmlMode", true, ".+\\.html?");
         addEntry(IMAGE_MODE, IMAGE_MODE_NAME, "ImageMode", false, ".+\\.gif|.+\\.jpe?g|.+\\.png");
