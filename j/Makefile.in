@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.9 2003-10-21 15:42:15 piso Exp $
+# $Id: Makefile.in,v 1.10 2003-10-21 18:25:37 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ distdir:
 	chmod +x configure
 	chmod +x install-sh
 	chmod +x mkinstalldirs
-	cp -p  j.in j.bat.in abl.in configure configure.in Makefile.in install-sh mkinstalldirs COPYING $(distdir)
+	cp -p  j.in abl.in configure configure.in Makefile.in install-sh mkinstalldirs COPYING $(distdir)
 	cp -p  build.properties build.xml $(distdir)
 	mkdir $(distdir)/src
 	cp -p  src/Makefile.in src/manifest src/*.java $(distdir)/src
@@ -164,7 +164,6 @@ install:
 	$(INSTALL_SCRIPT) j $(bindir)
 	$(INSTALL_SCRIPT) abl $(bindir)
 	if [ -f src/jpty/$(JPTY) ]; then $(INSTALL_PROGRAM) src/jpty/$(JPTY) $(bindir); fi
-	if [ -f j.bat ]; then $(INSTALL_SCRIPT) j.bat $(bindir); fi
 	for i in themes/* ; do test -f $$i && $(INSTALL_DATA) $$i $(datadir)/j/themes ; done
 	$(INSTALL_DATA) doc/*.html $(datadir)/doc/j
 	$(INSTALL_DATA) doc/*.css $(datadir)/doc/j
@@ -175,7 +174,6 @@ uninstall:
 	-rm -f $(bindir)/abl
 	-rm -f $(bindir)/jpty.exe
 	-rm -f $(bindir)/jpty
-	-rm -f $(bindir)/j.bat
 	-rm -f $(datadir)/j/themes/*
 	-rmdir $(datadir)/j/themes
 	-rm -f $(datadir)/doc/j/*.html
@@ -201,7 +199,7 @@ clean:
 	-rm -f classes.stamp
 
 distclean: clean
-	-rm -f config.status config.log config.cache Makefile j j.bat
+	-rm -f config.status config.log config.cache Makefile j abl
 	-rm -f src/Makefile
 	-rm -f src/jpty/Makefile
 	-rm -f src/gnu/regexp/Makefile
@@ -218,7 +216,7 @@ j.zip:
 	chmod +x install-sh
 	chmod +x mkinstalldirs
 	zip -q j.zip \
-		j.in j.bat.in abl.in configure configure.in Makefile.in \
+		j.in abl.in configure configure.in Makefile.in \
 		install-sh mkinstalldirs COPYING \
 		build.xml build.properties \
 		src/Makefile.in src/manifest src/*.java \
