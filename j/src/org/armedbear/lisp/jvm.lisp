@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.119 2004-04-24 15:18:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.120 2004-04-24 15:47:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2122,12 +2122,22 @@
              (compile-form (cadr rest))
              (unless (remove-store-value)
                (emit-push-value))
-             (emit 'aastore))
+             (cond (for-effect
+                    (emit 'aastore))
+                   (t
+                    (emit 'dup)
+                    (emit 'aastore)
+                    (emit-store-value))))
             (t
              (compile-form (cadr rest))
              (unless (remove-store-value)
                (emit-push-value))
-             (emit 'astore (1+ index))))
+             (cond (for-effect
+                    (emit 'astore (1+ index)))
+                   (t
+                    (emit 'dup)
+                    (emit 'astore (1+ index))
+                    (emit-store-value)))))
       (maybe-emit-clear-values (cadr rest))
       (return-from compile-setq))
     (when (memq sym *closure-vars*)
