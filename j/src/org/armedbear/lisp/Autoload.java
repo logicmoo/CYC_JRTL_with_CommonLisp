@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.99 2003-11-04 19:40:36 piso Exp $
+ * $Id: Autoload.java,v 1.100 2003-11-12 21:30:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,12 +46,14 @@ public class Autoload extends Function
         autoload(PACKAGE_CL, symbolName, className);
     }
 
-    public static void autoload(Package pkg, String symbolName, String className)
+    public static void autoload(Package pkg, String symbolName,
+                                String className)
     {
         autoload(pkg, symbolName, className, false);
     }
 
-    public static void autoload(Package pkg, String symbolName, String className, boolean exported)
+    public static void autoload(Package pkg, String symbolName,
+                                String className, boolean exported)
     {
         Symbol symbol = intern(symbolName.toUpperCase(), pkg);
         if (pkg != PACKAGE_CL && exported) {
@@ -276,6 +278,8 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
+        autoload(PACKAGE_PROF, "start-profiler", "Profiler", true);
+        autoload(PACKAGE_PROF, "stop-profiler", "Profiler", true);
         autoload(PACKAGE_SYS, "%define-condition", "define_condition");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
         autoload(PACKAGE_SYS, "%make-array", "make_array");
