@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.36 2003-05-30 16:15:40 piso Exp $
+;;; $Id: sequences.lisp,v 1.37 2003-05-30 18:58:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,24 +36,6 @@
           count count-if count-if-not
           mismatch
           search))
-
-(defun signal-index-too-large-error (sequence index)
-  (error 'type-error))
-
-(defun %setelt (sequence index newval)
-  (cond ((listp sequence)
-         (do ((count index (1- count))
-              (seq sequence))
-           ((= count 0) (rplaca seq newval) newval)
-           (if (atom (cdr seq))
-               (signal-index-too-large-error sequence index)
-               (setq seq (cdr seq)))))
-        ((vectorp sequence)
-         (when (>= index (length sequence))
-           (signal-index-too-large-error sequence index))
-         (setf (aref sequence index) newval))))
-
-(defsetf elt %setelt)
 
 
 ;;; MAKE-SEQUENCE (from ECL)
