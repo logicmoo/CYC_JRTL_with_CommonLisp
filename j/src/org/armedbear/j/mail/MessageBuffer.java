@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.2 2002-10-04 23:54:43 piso Exp $
+ * $Id: MessageBuffer.java,v 1.3 2002-10-05 00:32:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -798,7 +798,7 @@ public class MessageBuffer extends Buffer
         }
         int shown = -1;
         ArrayList list = new ArrayList();
-        list.add(new TextLine("Parts/Attachments:"));
+        list.add(new MessageHeaderLine("Parts/Attachments:"));
         for (int i = 0; i < parts.size(); i++) {
             FastStringBuffer sb = new FastStringBuffer();
             sb.append("   ");
@@ -834,7 +834,7 @@ public class MessageBuffer extends Buffer
             }
             sb.append(part.getSize());
             sb.append(" bytes)");
-            Line line = new TextLine(sb.toString());
+            Line line = new MessageHeaderLine(sb.toString());
             line.setAnnotation(new Annotation(part));
             list.add(line);
         }
@@ -903,7 +903,9 @@ public class MessageBuffer extends Buffer
             Iterator iter = attachmentLines.iterator();
             while (iter.hasNext()) {
                 Line line = (Line) iter.next();
-                appendHeaderLine(line.getText());
+                if (!(line instanceof MessageHeaderLine))
+                    Debug.bug();
+                appendLine(line);
                 ++headerLineCount;
             }
         }
