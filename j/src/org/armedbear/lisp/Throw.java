@@ -2,7 +2,7 @@
  * Throw.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Throw.java,v 1.6 2003-09-19 14:11:02 piso Exp $
+ * $Id: Throw.java,v 1.7 2003-11-16 15:05:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,10 @@ public final class Throw extends ConditionThrowable
 
     public LispObject getResult()
     {
-        LispThread.currentThread().setValues(values);
+        if (values != null)
+            LispThread.currentThread().setValues(values);
+        else
+            LispThread.currentThread().clearValues();
         return result;
     }
 
