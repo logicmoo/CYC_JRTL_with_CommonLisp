@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.60 2003-05-28 13:45:39 piso Exp $
+ * $Id: Editor.java,v 1.61 2003-06-05 17:31:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5928,7 +5928,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         String message = null;
         int lineNumber = -1;
         int columnNumber = -1;
-
         if (getModeId() == XML_MODE) {
             if (buffer.exception != null) {
                 message = buffer.exception.getMessage();
@@ -5945,7 +5944,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             }
         } else {
             CompilationBuffer cb = null;
-
             // Look for existing compilation buffer.
             for (BufferIterator it = new BufferIterator(); it.hasNext();) {
                 Buffer buf = it.nextBuffer();
@@ -5954,31 +5952,24 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                     break;
                 }
             }
-
             if (cb == null)
                 return;
-
-            message = cb.getMessage();
-
-            lineNumber = cb.getErrorLineNumber();
-
-            // Our column numbers start at 1, so add 1 to the offset.
-            int errorOffset = cb.getErrorOffset();
-            if (errorOffset != 0)
-                columnNumber = errorOffset + 1;
-
+            CompilationError ce = cb.getCompilationError();
+            if (ce != null) {
+                message = ce.getMessage();
+                lineNumber = ce.getLineNumber();
+                int offset = ce.getOffset();
+                if (offset >= 0)
+                    columnNumber = offset + 1;
+            }
             title = "Line " + lineNumber;
-
-            if (columnNumber != -1)
+            if (columnNumber > 0)
                 title += "   Col " + columnNumber;
         }
-
         if (message == null)
             return;
-
         if (message.length() > 65)
             message = Utilities.wrap(message, 65, 8);
-
         MessageDialog.showMessageDialog(this, message, title);
     }
 
