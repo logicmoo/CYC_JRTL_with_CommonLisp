@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.172 2005-02-24 18:51:07 piso Exp $
+ * $Id: Symbol.java,v 1.173 2005-02-28 00:55:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,6 +133,7 @@ public class Symbol extends LispObject
     public static final Symbol VECTOR                             = PACKAGE_CL.addExternalSymbol("VECTOR");
 
     public static final Symbol CASE_FROB_STREAM                   = PACKAGE_SYS.addInternalSymbol("CASE-FROB-STREAM");
+    public static final Symbol ENVIRONMENT                        = PACKAGE_SYS.addExternalSymbol("ENVIRONMENT");
     public static final Symbol FORWARD_REFERENCED_CLASS           = PACKAGE_SYS.addExternalSymbol("FORWARD-REFERENCED-CLASS");
     public static final Symbol NIL_VECTOR                         = PACKAGE_EXT.addExternalSymbol("NIL-VECTOR");
     public static final Symbol SLIME_INPUT_STREAM                 = PACKAGE_EXT.addExternalSymbol("SLIME-INPUT-STREAM");
