@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.11 2003-04-02 15:49:29 piso Exp $
+;;; $Id: setf.lisp,v 1.12 2003-05-30 18:59:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -118,3 +118,5 @@
 
 (defmacro defsetf (access-function update-function)
   `(%put ',access-function *setf-expander* ',update-function))
+
+(defsetf elt %setelt)
