@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.9 2003-09-30 10:58:48 piso Exp $
+ * $Id: Time.java,v 1.10 2003-10-07 17:22:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,11 +54,21 @@ public final class Time extends Lisp
         }
     };
 
+    // ### get-internal-real-time
     private static final Primitive0 GET_INTERNAL_REAL_TIME =
         new Primitive0("get-internal-real-time") {
         public LispObject execute() throws ConditionThrowable
         {
             return number(System.currentTimeMillis());
+        }
+    };
+
+    // ### get-internal-run-time
+    private static final Primitive0 GET_INTERNAL_RUN_TIME =
+        new Primitive0("get-internal-run-time") {
+        public LispObject execute() throws ConditionThrowable
+        {
+            return number(System.currentTimeMillis()); // FIXME
         }
     };
 
