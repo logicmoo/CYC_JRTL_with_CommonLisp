@@ -411,6 +411,7 @@
                               "position-if-not"
                               "prog1"
                               "progn"
+                              "simple-vector-p"
                               "some"
                               "string"
                               "svref"
