@@ -2,7 +2,7 @@
  * Type.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Type.java,v 1.20 2003-09-11 16:06:05 piso Exp $
+ * $Id: Type.java,v 1.21 2003-09-17 18:26:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,36 +97,24 @@ public class Type extends LispObject
         throw new TypeError(typeSpecifier);
     }
 
-    public LispObject isSubtypeOf(Type otherType)
-    {
-        final boolean b = _isSubtypeOf(otherType);
-        LispObject subtypep = b ? Symbol.T : NIL;
-        LispObject validp = Symbol.T; // For now.
-        LispObject[] values = new LispObject[2];
-        values[0] = subtypep;
-        values[1] = validp;
-        LispThread.currentThread().setValues(values);
-        return subtypep;
-    }
-
-    public boolean _isSubtypeOf(Type otherType)
-    {
-        if (otherType == this)
-            return true;
-        for (int i = 0; i < supertypes.size(); i++) {
-            if (supertypes.get(i) == otherType)
-                return true;
-        }
-        for (int i = 0; i < supertypes.size(); i++) {
-            Type supertype = (Type) supertypes.get(i);
-            // Avoid loops!
-            if (supertype._isSubtypeOf(this))
-                continue;
-            if (supertype._isSubtypeOf(otherType))
-                return true;
-        }
-        return false;
-    }
+//     public boolean _isSubtypeOf(Type otherType)
+//     {
+//         if (otherType == this)
+//             return true;
+//         for (int i = 0; i < supertypes.size(); i++) {
+//             if (supertypes.get(i) == otherType)
+//                 return true;
+//         }
+//         for (int i = 0; i < supertypes.size(); i++) {
+//             Type supertype = (Type) supertypes.get(i);
+//             // Avoid loops!
+//             if (supertype._isSubtypeOf(this))
+//                 continue;
+//             if (supertype._isSubtypeOf(otherType))
+//                 return true;
+//         }
+//         return false;
+//     }
 
     public String toString()
     {
@@ -138,10 +126,10 @@ public class Type extends LispObject
     public static final Type TYPE_T    = new Type(Symbol.T);
 
     public static final Type TYPE_NIL  = new Type((Symbol)NIL) {
-        public boolean _isSubtypeOf(Type otherType)
-        {
-            return true;
-        }
+//         public boolean _isSubtypeOf(Type otherType)
+//         {
+//             return true;
+//         }
     };
 
     public static final Type ATOM      = new Type(Symbol.ATOM, TYPE_T);
