@@ -2,7 +2,7 @@
  * MenuItem.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MenuItem.java,v 1.3 2003-07-25 17:47:12 piso Exp $
+ * $Id: MenuItem.java,v 1.4 2003-10-15 12:07:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,9 +38,11 @@ public final class MenuItem extends JMenuItem
     private static final Font acceleratorFont =
         UIManager.getFont("MenuItem.acceleratorFont");
     private static final Color acceleratorForeground =
-         UIManager.getColor("MenuItem.acceleratorForeground");
+        UIManager.getColor("MenuItem.acceleratorForeground");
     private static final Color acceleratorSelectionForeground =
         UIManager.getColor("MenuItem.acceleratorSelectionForeground");
+    private static final Color disabledForeground =
+        UIManager.getColor("MenuItem.disabledForeground");
 
     private final String acceleratorText;
 
@@ -66,7 +68,12 @@ public final class MenuItem extends JMenuItem
         super.paint(g);
         if (acceleratorText != null) {
             g.setFont(acceleratorFont);
-            g.setColor(getModel().isArmed() ? acceleratorSelectionForeground : acceleratorForeground);
+            Color c;
+            if (isEnabled())
+                c = getModel().isArmed() ? acceleratorSelectionForeground : acceleratorForeground;
+            else
+                c = disabledForeground;
+            g.setColor(c);
             FontMetrics fm = g.getFontMetrics();
             Insets insets = getInsets();
             g.drawString(acceleratorText,
