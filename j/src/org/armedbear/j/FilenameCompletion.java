@@ -2,7 +2,7 @@
  * FilenameCompletion.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: FilenameCompletion.java,v 1.2 2002-11-30 15:51:15 piso Exp $
+ * $Id: FilenameCompletion.java,v 1.3 2002-12-03 18:04:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,13 +53,12 @@ public final class FilenameCompletion
     {
         list = new ArrayList();
         if (Utilities.isFilenameAbsolute(prefix)) {
-            if (prefix.endsWith(LocalFile.getSeparator())) {
-                File directory = File.getInstance(currentDirectory, prefix);
-                prefix = null;
-                addCompletionsFromDirectory(list, directory, prefix);
+            File directory = File.getInstance(currentDirectory, prefix);
+            if (directory.isDirectory()) {
+                addCompletionsFromDirectory(list, directory, null);
             } else {
                 File file = File.getInstance(currentDirectory, prefix);
-                File directory = file.getParentFile();
+                directory = file.getParentFile();
                 prefix = file.getName();
                 addCompletionsFromDirectory(list, directory, prefix);
             }
