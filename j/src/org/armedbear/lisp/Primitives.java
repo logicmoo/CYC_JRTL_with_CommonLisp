@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.615 2004-03-17 12:40:31 piso Exp $
+ * $Id: Primitives.java,v 1.616 2004-03-17 12:59:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2731,25 +2731,30 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### export
-    // export symbols &optional package
+    // ### export symbols &optional package
     private static final Primitive EXPORT =
-        new Primitive("export","symbols &optional package") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        new Primitive("export", "symbols &optional package")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (args.length == 0 || args.length > 2)
-                signal(new WrongNumberOfArgumentsException(this));
-            Package pkg;
-            if (args.length == 2)
-                pkg = coerceToPackage(args[1]);
-            else
-                pkg = (Package) _PACKAGE_.symbolValue();
-            // args[0] can be a single symbol or a list.
-            if (args[0] instanceof Cons) {
-                for (LispObject list = args[0]; list != NIL; list = list.cdr())
+            if (arg instanceof Cons) {
+                Package pkg = getCurrentPackage();
+                for (LispObject list = arg; list != NIL; list = list.cdr())
                     pkg.export(checkSymbol(list.car()));
             } else
-                pkg.export(checkSymbol(args[0]));
+                getCurrentPackage().export(checkSymbol(arg));
+            return T;
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof Cons) {
+                Package pkg = coerceToPackage(second);
+                for (LispObject list = first; list != NIL; list = list.cdr())
+                    pkg.export(checkSymbol(list.car()));
+            } else
+                coerceToPackage(second).export(checkSymbol(first));
             return T;
         }
     };
