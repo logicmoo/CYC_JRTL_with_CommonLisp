@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.32 2003-02-19 00:42:33 piso Exp $
+ * $Id: Primitives.java,v 1.33 2003-02-19 00:52:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,56 +56,57 @@ public final class Primitives extends Module
     private static final int FMAKUNBOUND                = 28;
     private static final int FOURTH                     = 29;
     private static final int FUNCTIONP                  = 30;
-    private static final int IF                         = 31;
-    private static final int LABELS                     = 32;
-    private static final int LAMBDA                     = 33;
-    private static final int LAST                       = 34;
-    private static final int LENGTH                     = 35;
-    private static final int LET                        = 36;
-    private static final int LET_                       = 37;
-    private static final int LIST                       = 38;
-    private static final int LISTP                      = 39;
-    private static final int LISTX                      = 40;
-    private static final int LIST_ALL_PACKAGES          = 41;
-    private static final int MAKE_SYMBOL                = 42;
-    private static final int MAKUNBOUND                 = 43;
-    private static final int MAX                        = 44;
-    private static final int MEMBER                     = 45;
-    private static final int MIN                        = 46;
-    private static final int MOD                        = 47;
-    private static final int MULTIPLY                   = 48;
-    private static final int NOT                        = 49;
-    private static final int NULL                       = 50;
-    private static final int NUMBERP                    = 51;
-    private static final int ODDP                       = 52;
-    private static final int PREDECESSOR                = 53;
-    private static final int PROGN                      = 54;
-    private static final int QUOTE                      = 55;
-    private static final int REST                       = 56;
-    private static final int ROOM                       = 57;
-    private static final int RPLACA                     = 58;
-    private static final int RPLACD                     = 59;
-    private static final int SECOND                     = 60;
-    private static final int SET                        = 61;
-    private static final int SIMPLE_VECTOR_P            = 62;
-    private static final int SPECIAL_OPERATOR_P         = 63;
-    private static final int STRINGP                    = 64;
-    private static final int STRING_EQUAL               = 65;
-    private static final int STRING_EQUAL_IGNORE_CASE   = 66;
-    private static final int SUBSEQ                     = 67;
-    private static final int SUBTRACT                   = 68;
-    private static final int SUCCESSOR                  = 69;
-    private static final int SYMBOLP                    = 70;
-    private static final int SYMBOL_FUNCTION            = 71;
-    private static final int SYMBOL_NAME                = 72;
-    private static final int SYMBOL_PACKAGE             = 73;
-    private static final int SYMBOL_PLIST               = 74;
-    private static final int SYMBOL_VALUE               = 75;
-    private static final int THIRD                      = 76;
-    private static final int VALUES                     = 77;
-    private static final int VALUES_LIST                = 78;
-    private static final int VECTORP                    = 79;
-    private static final int ZEROP                      = 80;
+    private static final int IDENTITY                   = 31;
+    private static final int IF                         = 32;
+    private static final int LABELS                     = 33;
+    private static final int LAMBDA                     = 34;
+    private static final int LAST                       = 35;
+    private static final int LENGTH                     = 36;
+    private static final int LET                        = 37;
+    private static final int LET_                       = 38;
+    private static final int LIST                       = 39;
+    private static final int LISTP                      = 40;
+    private static final int LISTX                      = 41;
+    private static final int LIST_ALL_PACKAGES          = 42;
+    private static final int MAKE_SYMBOL                = 43;
+    private static final int MAKUNBOUND                 = 44;
+    private static final int MAX                        = 45;
+    private static final int MEMBER                     = 46;
+    private static final int MIN                        = 47;
+    private static final int MOD                        = 48;
+    private static final int MULTIPLY                   = 49;
+    private static final int NOT                        = 50;
+    private static final int NULL                       = 51;
+    private static final int NUMBERP                    = 52;
+    private static final int ODDP                       = 53;
+    private static final int PREDECESSOR                = 54;
+    private static final int PROGN                      = 55;
+    private static final int QUOTE                      = 56;
+    private static final int REST                       = 57;
+    private static final int ROOM                       = 58;
+    private static final int RPLACA                     = 59;
+    private static final int RPLACD                     = 60;
+    private static final int SECOND                     = 61;
+    private static final int SET                        = 62;
+    private static final int SIMPLE_VECTOR_P            = 63;
+    private static final int SPECIAL_OPERATOR_P         = 64;
+    private static final int STRINGP                    = 65;
+    private static final int STRING_EQUAL               = 66;
+    private static final int STRING_EQUAL_IGNORE_CASE   = 67;
+    private static final int SUBSEQ                     = 68;
+    private static final int SUBTRACT                   = 69;
+    private static final int SUCCESSOR                  = 70;
+    private static final int SYMBOLP                    = 71;
+    private static final int SYMBOL_FUNCTION            = 72;
+    private static final int SYMBOL_NAME                = 73;
+    private static final int SYMBOL_PACKAGE             = 74;
+    private static final int SYMBOL_PLIST               = 75;
+    private static final int SYMBOL_VALUE               = 76;
+    private static final int THIRD                      = 77;
+    private static final int VALUES                     = 78;
+    private static final int VALUES_LIST                = 79;
+    private static final int VECTORP                    = 80;
+    private static final int ZEROP                      = 81;
 
     private Primitives()
     {
@@ -155,6 +156,7 @@ public final class Primitives extends Module
         definePrimitive1("fmakunbound", FMAKUNBOUND);
         definePrimitive1("fourth", FOURTH);
         definePrimitive1("functionp", FUNCTIONP);
+        definePrimitive1("identity", IDENTITY);
         definePrimitive1("length", LENGTH);
         definePrimitive1("listp", LISTP);
         definePrimitive1("make-symbol", MAKE_SYMBOL);
@@ -363,6 +365,8 @@ public final class Primitives extends Module
         throws LispError
     {
         switch (index) {
+            case IDENTITY:                      // ### identity
+                return arg;
             case CAR:                           // ### car
             case FIRST:                         // ### first
                 return arg.car();
