@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.320 2005-02-16 19:47:14 piso Exp $
+ * $Id: Lisp.java,v 1.321 2005-02-18 14:31:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -291,6 +291,17 @@ public abstract class Lisp
         setInterrupted(false);
         Symbol.BREAK.getSymbolFunction().execute();
         setInterrupted(false);
+    }
+
+    // Used by JVM compiler.
+    public static final LispObject loadTimeValue(LispObject obj)
+        throws ConditionThrowable
+    {
+        final LispThread thread = LispThread.currentThread();
+        if (_LOAD_TRUENAME_.symbolValue(thread) != NIL)
+            return eval(obj, new Environment(), thread);
+        else
+            return NIL;
     }
 
     public static final LispObject eval(final LispObject obj,
