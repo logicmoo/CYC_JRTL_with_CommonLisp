@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.18 2004-09-13 01:48:05 piso Exp $
+;;; $Id: slime.lisp,v 1.19 2004-09-13 13:46:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,13 +32,14 @@
 
 (defpackage #:slime
   (:use #:cl #:ext #:j)
-  (:export #:complete-symbol
+  (:export #:slime-complete-symbol
            #:slime-space
-           #:edit-definition
-           #:eval-region
+           #:slime-edit-definition
+           #:slime-eval-region
            #:slime-eval-last-expression
            #:slime-eval-defun
            #:slime-compile-defun
+           #:slime-load-file
            #:slime-compile-file
            #:slime-compile-and-load-file))
 
@@ -178,15 +179,15 @@
           (incf start)
           (return (when (> end start) (subseq string start end))))))))
 
-(defun complete-symbol ()
+(defun slime-complete-symbol ()
   (when (slime-busy-p)
-    (return-from complete-symbol))
+    (return-from slime-complete-symbol))
   (unless (slime-connected-p)
     (status "Slime not connected")
-    (return-from complete-symbol))
+    (return-from slime-complete-symbol))
   (cond ((eq *last-command* 'complete)
          (unless (> (length *completions*) 1)
-           (return-from complete-symbol))
+           (return-from slime-complete-symbol))
          (undo)
          (incf *completion-index*)
          (when (> *completion-index* (1- (length *completions*)))
@@ -344,15 +345,15 @@
 (defun push-position ()
   (j::%execute-command "pushPosition"))
 
-(defun edit-definition (&optional function-name package-name)
+(defun slime-edit-definition (&optional function-name package-name)
   (unless (slime-connected-p)
     (find-tag-at-point)
-    (return-from edit-definition))
+    (return-from slime-edit-definition))
   (let ((pathname (buffer-pathname (current-buffer))))
     (when (and pathname
                (string-equal (pathname-type pathname) "el"))
       (find-tag-at-point)
-      (return-from edit-definition)))
+      (return-from slime-edit-definition)))
   (unless function-name
     (setf function-name (string-upcase (symbol-name-at-point))))
   (when function-name
@@ -367,7 +368,7 @@
             (t
              (find-tag-at-point))))))
 
-(defun eval-region ()
+(defun slime-eval-region ()
   (let ((mark (current-mark)))
     (when mark
       (let* ((string (buffer-substring (current-point) mark))
@@ -404,25 +405,28 @@
     (slime-eval-async
      `(swank:swank-compile-string ,string ,package) 'display-eval-result)))
 
+(defun slime-load-file ()
+  (let ((pathname (buffer-pathname)))
+    (slime-eval-async
+     `(swank:swank-load-file ,pathname) 'display-eval-result)))
+
 (defun slime-compile-file ()
   (let ((pathname (buffer-pathname)))
-    (sys::%format t "pathname = ~S~%" pathname)
     (slime-eval-async
      `(swank:swank-compile-file ,pathname nil) 'display-eval-result)))
 
 (defun slime-compile-and-load-file ()
   (let ((pathname (buffer-pathname)))
-    (sys::%format t "pathname = ~S~%" pathname)
     (slime-eval-async
      `(swank:swank-compile-file ,pathname t) 'display-eval-result)))
 
-(map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
-(map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
+(map-key-for-mode "Tab" "(slime:slime-complete-symbol)" "Lisp Shell")
+(map-key-for-mode "Ctrl Alt I" "(slime:slime-complete-symbol)" "Lisp")
 (map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
 (map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
-(map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp Shell")
-(map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp")
-(map-key-for-mode "Ctrl Alt R" "(slime:eval-region)" "Lisp")
+(map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp Shell")
+(map-key-for-mode "Alt ." "(slime:slime-edit-definition)" "Lisp")
+(map-key-for-mode "Ctrl Alt R" "(slime:slime-eval-region)" "Lisp")
 (map-key-for-mode "Ctrl Alt E" "(slime:slime-eval-last-expression)" "Lisp")
 (map-key-for-mode "Ctrl Alt K" "(slime:slime-compile-and-load-file)" "Lisp")
 (map-key-for-mode "Ctrl Alt X" "(slime:slime-eval-defun)" "Lisp")
