@@ -1,8 +1,8 @@
 /*
  * ListOccurrencesInFiles.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: ListOccurrencesInFiles.java,v 1.3 2002-11-15 14:43:40 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: ListOccurrencesInFiles.java,v 1.4 2003-05-14 22:34:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -191,7 +191,6 @@ public final class ListOccurrencesInFiles extends ListOccurrences
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();
             if (ed.getBuffer() == this) {
-                Log.debug("moving dot to line " + (line.lineNumber()+1));
                 ed.moveDotTo(line, 0);
                 ed.updateDisplay();
             }
