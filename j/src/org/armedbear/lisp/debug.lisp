@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.25 2004-08-25 17:47:10 piso Exp $
+;;; $Id: debug.lisp,v 1.26 2004-08-26 14:55:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,14 +79,16 @@
                  "Debugger invoked on condition of type ~A:~%"
                  "Unhandled condition of type ~A:~%")
              (type-of condition))
-    (if (and (fboundp 'print-object)
-             (not (autoloadp 'print-object)))
-        (progn
-          (write-string "  " *debug-io*)
-          (let ((*print-escape* nil))
-            (print-object condition *debug-io*))
-          (terpri *debug-io*))
-        (%format *debug-io* "  ~A~%" condition))))
+;;     (if (and (fboundp 'print-object)
+;;              (not (autoloadp 'print-object)))
+;;         (progn
+;;           (write-string "  " *debug-io*)
+;;           (let ((*print-escape* nil))
+;;             (print-object condition *debug-io*))
+;;           (terpri *debug-io*))
+        (%format *debug-io* "  ~A~%" condition)
+;;     )
+  ))
 
 (defun invoke-debugger (condition)
   (when *debugger-hook*

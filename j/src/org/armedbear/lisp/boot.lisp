@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.182 2004-08-18 17:10:51 piso Exp $
+;;; $Id: boot.lisp,v 1.183 2004-08-26 14:54:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -63,9 +63,6 @@
 (defun write-char (character &optional output-stream)
   (sys::%write-char character output-stream))
 
-(defun format (destination control-string &rest args)
-  (apply #'sys::%format destination control-string args))
-
 ;; SYS::OUTPUT-OBJECT is redefined in print.lisp.
 (defun sys::output-object (object stream)
   (sys::%output-object object stream))
@@ -99,7 +96,7 @@
 
 ;; INVOKE-DEBUGGER is redefined in debug.lisp.
 (defun invoke-debugger (condition)
-  (format t "~A~%" condition)
+  (sys::%format t "~A~%" condition)
   (ext:quit))
 
 ;; CLASS-NAME is redefined as a generic function when CLOS is loaded.
@@ -192,6 +189,10 @@
 (sys::load-system-file "defpackage")
 (sys::load-system-file "define-modify-macro")
 
+;;; Package definitions.
+(defpackage "FORMAT" (:use "CL" "EXT"))
+(defpackage "XP" (:use "CL"))
+
 ;;; PROVIDE, REQUIRE (from SBCL)
 (defun provide (module-name)
   (pushnew (string module-name) *modules* :test #'string=)
@@ -231,4 +232,4 @@
 
 (unless (sys::featurep :j)
   (sys::load-system-file "top-level")
-  (format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
+  (sys::%format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))

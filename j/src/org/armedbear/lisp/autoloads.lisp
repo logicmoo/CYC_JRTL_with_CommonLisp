@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: autoloads.lisp,v 1.155 2004-08-15 11:18:15 piso Exp $
+;;; $Id: autoloads.lisp,v 1.156 2004-08-26 14:53:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -117,7 +117,6 @@
 (autoload-macro 'psetf)
 (autoload-macro 'rotatef)
 (autoload-macro 'shiftf)
-(autoload-macro 'formatter "format")
 
 (autoload '(find-restart invoke-restart restart-name compute-restarts
             abort continue muffle-warning store-value use-value warn cerror)
@@ -147,7 +146,12 @@
 (autoload 'write-sequence)
 (autoload 'make-load-form-saving-slots)
 (autoload '(compile-file compile-file-pathname) "compile-file")
-(autoload '(pprint pprint-logical-block copy-pprint-dispatch) "pprint")
+
+(autoload '(pprint pprint-newline copy-pprint-dispatch) "pprint")
+(autoload-macro 'pprint-logical-block "pprint")
+(autoload 'format "format")
+(autoload-macro 'formatter "format")
+
 (autoload '(write-byte read-byte) "byte-io")
 (autoload-macro 'with-open-file)
 (autoload 'translate-logical-pathname)

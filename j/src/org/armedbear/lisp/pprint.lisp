@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.26 2004-08-07 17:40:25 piso Exp $
+;;; $Id: pprint.lisp,v 1.27 2004-08-26 14:56:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,20 +17,8 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-#-armedbear
-(in-package "XP" :use '("LISP"))
-
-#+armedbear
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (require 'format))
-
-;This is the November, 26 1991 version of
-;Richard C. Waters' XP pretty printer.
-
-;The standard version of this program is available by anonymous FTP
-;from MERL.COM in the files /pub/xp/xp*.  If you have gotten the file
-;from somewhere else, or copied the files a long time ago, you might
-;consider copying them from MERL.COM now to obtain the latest version.
+;;; Adapted from the November, 26 1991 version of Richard C. Waters' XP pretty
+;;; printer.
 
 ;------------------------------------------------------------------------
 
@@ -55,38 +43,8 @@
 
 ;------------------------------------------------------------------------
 
-;The functions in this file are documented in Chapter 27 of Common Lisp:
-;the Language Second Edition, Guy L. Steele Jr, Digital press, 1990,
-;and in even greater detail in
-;  MIT/AIM-1102a, July 1989.
-;This report can be obtained by writing to
-
-;              Publications
-;	       MIT AI Laboratory
-;	       545 Tech. Sq.
-;	       Cambridge MA 02139
-
-;This file attempts to be as compatible with pure Common Lisp as possible.
-;It has been tested on the following Common Lisps to date.
-;  Symbolics CL versions 7 and 8 (does not work in version 6).
-;  LUCID CL version 3.0.2 on a sun.
-;  Allegro CL version 1.2.1 on a Macintosh.
-;  LispWorks CL version 2.1.
-;  CMU CL.
-
-;The companion file "XPTEST.LISP" contains a set of 600+ tests.  You should
-;run these tests after the first time you compile this file on a new system.
-
-;The companion file "XPDOC.TXT" contains brief documentation.
-
-#+armedbear
-(defpackage "XP" (:use "COMMON-LISP"))
-
 #+armedbear
 (in-package "XP")
-
-#-armedbear
-(provide "XP")
 
 ;must do the following in common lisps not supporting *print-shared*
 
@@ -116,104 +74,13 @@
 (defvar *abbreviation-happened* nil
   "t if current thing being printed has been abbreviated.")
 (defvar *result* nil "used to pass back a value")
-
+
 ;default (bad) definitions for the non-portable functions
 
 #-(or :symbolics :lucid :franz-inc :cmu)(eval-when (eval load compile)
 (defun structure-type-p (x) (and (symbolp x) (get x 'structure-printer)))
 (defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
 (defun output-position  (&optional (s *standard-output*)) (declare (ignore s)) nil) )
-
-
-;; #+:symbolics(eval-when (eval load compile)
-;; (defun structure-type-p (x) (and (symbolp x) (get x 'si:defstruct-description)))
-;; (defun output-width     (&optional (s *standard-output*))
-;;   (si:send s :send-if-handles :size-in-characters))
-;; (defun output-position  (&optional (s *standard-output*))
-;;   (si:send s :send-if-handles :read-cursorpos :character)) )
-
-
-;; ;XP is being considered for inclusion in Lucid Common Lisp.
-;; ;The prime contact there is Eric Benson "eb@lucid.com".
-
-;; #+:lucid(eval-when (eval load compile)
-;; (defun structure-type-p (x) (subtypep x 'structure))
-;; (defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
-;; (defun output-position  (&optional (s *standard-output*)) (declare (ignore s)) nil) )
-
-
-;XP is being included in CMU's Common Lisp.
-;The prime contact there is Bill Chiles "chiles@cs.cmu.edu"
-;and/or Blain Burks "mbb@cs.cmu.edu".
-
-;; #+:cmu(eval-when (eval load compile)
-;; (defun structure-type-p (x) (and (symbolp x) (get x 'cl::%structure-definition)))
-;; (defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
-;; (defun output-position  (&optional (s *standard-output*)) (cl::charpos s)) )
-
-
-;Definitions for FRANZ Common Lisp. (Only verified for the version 1.3
-;(5/31/87) currently running on suns at MIT.)
-
-;; #+:franz-inc(eval-when (eval load compile)
-;; (defun structure-type-p (x) (and (symbolp x) (get x 'structure-printer)))
-;; (defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
-;; (defun output-position  (&optional (s *standard-output*)) (excl::charpos s)) )
-
-
-;; ; Joachim Laubsch <laubsch%hpljl@hplabs.hp.com> is the contact at HP Labs.
-;; ; He reports that HP COMMON LISP II Development Environment Rev A.02.15 11/10/88
-;; ; requires the following patch due to a bug in REPLACE:
-
-;; #+(and lucid hp (not patched))
-;; (eval-when (eval load)
-;;   (system::defadvice (replace patch)
-;;       (SEQUENCE1 SEQUENCE2 &KEY (START1 0) END1 (START2 0) END2)
-;;     (declare (fixnum START1 START2))
-;;     (let ((copy-length (min (- (or end1 (length SEQUENCE1)) START1)
-;; 			    (- (or end2 (length SEQUENCE2)) START2))))
-;;       (declare (fixnum copy-length))
-;;       (if (= 0 copy-length)
-;; 	  SEQUENCE1
-;; 	(system::apply-advice-continue SEQUENCE1 SEQUENCE2
-;; 				       :START1 START1
-;; 				       :END1 (+ START1 copy-length)
-;; 				       :START2 START2
-;; 				       :END2 (+ START2 copy-length)
-;; 				       ()))
-
-;;       )))
-
-;; #+symbolics
-;; (defvar original-trace-print nil)
-
-;; #-armedbear
-;; (defun install (&key (package *package*) (macro nil) (shadow T) (remove nil))
-;;   (when (not (packagep package)) (setq package (find-package package)))
-;;   (when (not remove)
-;;     (when macro
-;;       (set-dispatch-macro-character #\# #\" #'format-string-reader))
-;;     (when (not (eq package (find-package "XP")))
-;;       (use-package "XP" package)
-;;       (when shadow (shadowing-import *xp-printing-functions* package)))
-;;   #+symbolics
-;;     (progn
-;;       (when (null original-trace-print)
-;; 	(setq original-trace-print (symbol-function 'si:trace-print)))
-;;       (setf (symbol-function 'si:trace-print) (symbol-function 'trace-print))
-;;       (zl:setq-standard-value scl:*print-pretty-printer* 'pretty-printer)))
-;;   (when (and remove (member (find-package "XP") (package-use-list package)))
-;;     (unuse-package "XP" package)
-;;     (dolist (sym (intersection *xp-printing-functions*
-;; 			       (package-shadowing-symbols package)))
-;;       (unintern sym package))
-;;   #+symbolics
-;;     (progn
-;;       (when original-trace-print
-;; 	(setf (symbol-function 'si:trace-print) original-trace-print))
-;;       (zl:setq-standard-value scl:*print-pretty-printer* 'gprint:print-object)))
-;;   T)
-
 
 (defvar *locating-circularities* nil
   "Integer if making a first pass over things to identify circularities.
@@ -238,7 +105,7 @@
 (defun free-circularity-hash-table (table)
   (clrhash table)
   (pushnew table *free-circularity-hash-tables*))
-
+
 ;                       ---- DISPATCHING ----
 
 (defstruct (pprint-dispatch-table (:conc-name nil) (:copier nil))
@@ -256,7 +123,7 @@
   (full-spec nil))  ;list of priority and type specifier
 
 (defun copy-pprint-dispatch (&optional (table *print-pprint-dispatch*))
-  (when (null table) (setq table *IPD*))
+  (when (null table) (setf table *IPD*))
   (let* ((new-conses-with-cars
            (make-hash-table :test #'eq
 	     :size (max (hash-table-count (conses-with-cars table)) 32)))
@@ -273,7 +140,7 @@
       :conses-with-cars new-conses-with-cars
       :structures new-structures
       :others (copy-list (others table)))))
-
+
 (defun set-pprint-dispatch (type-specifier function
 			    &optional (priority 0) (table *print-pprint-dispatch*))
   (when (or (not (numberp priority)) (complexp priority))
@@ -289,7 +156,9 @@
 			  (symbolp (caaddr pred))
 			  (equal (cdaddr pred) '(x)))
 		     (symbol-function (caaddr pred))
-		     (compile nil pred)))))
+;;                      (compile nil pred)
+                     pred
+                     ))))
 	 (entry (if function (make-entry :test pred
 					 :fn function
 					 :full-spec (list priority type-specifier)))))
@@ -825,7 +694,7 @@
 
 ;note following is smallest number >= x that is a multiple of colinc
 ;  (* colinc (floor (+ x (1- colinc)) colinc))
-
+
 (defun pprint-newline+ (kind xp)
   (enqueue xp :newline kind)
   (do ((ptr (Qleft xp) (Qnext ptr)))    ;find sections we are ending
@@ -868,7 +737,7 @@
 
 (defun pprint-indent+ (kind n xp)
   (enqueue xp :ind kind n))
-
+
 ; The next function scans the queue looking for things it can do.
 ;it keeps outputting things until the queue is empty, or it finds
 ;a place where it cannot make a decision yet.
@@ -1030,6 +899,29 @@
 	(t
          (sys::output-object object stream))))
 
+;; Added Aug 24 2004 8:09 AM
+(defun write (object &key
+		     ((:stream stream) *standard-output*)
+		     ((:escape *print-escape*) *print-escape*)
+		     ((:radix *print-radix*) *print-radix*)
+		     ((:base *print-base*) *print-base*)
+		     ((:circle *print-circle*) *print-circle*)
+		     ((:pretty *print-pretty*) *print-pretty*)
+		     ((:level *print-level*) *print-level*)
+		     ((:length *print-length*) *print-length*)
+		     ((:case *print-case*) *print-case*)
+		     ((:array *print-array*) *print-array*)
+		     ((:gensym *print-gensym*) *print-gensym*)
+		     ((:readably *print-readably*) *print-readably*)
+		     ((:right-margin *print-right-margin*)
+		      *print-right-margin*)
+		     ((:miser-width *print-miser-width*)
+		      *print-miser-width*)
+		     ((:lines *print-lines*) *print-lines*)
+		     ((:pprint-dispatch *print-pprint-dispatch*)
+		      *print-pprint-dispatch*))
+  (basic-write object stream))
+
 (defun maybe-initiate-xp-printing (fn stream &rest args)
   (if (xp-structure-p stream) (apply fn stream args)
       (let ((*abbreviation-happened* nil)
@@ -1059,11 +951,13 @@
     (setq *abbreviation-happened* nil)
     (setq *parents* nil)
     (setq *result* (do-xp-printing fn stream args))))
-
+
 (defun decode-stream-arg (stream)
-  (cond ((eq stream T) *terminal-io*)
-	((null stream) *standard-output*)
-	(T stream)))
+  (cond ((eq stream t)
+         *terminal-io*)
+	((null stream)
+         *standard-output*)
+	(t stream)))
 
 (defun do-xp-printing (fn stream args)
   (let ((xp (get-pretty-print-stream stream))
@@ -1199,22 +1093,6 @@
   (let ((s (sys::%write-to-string fixnum)))
     (write-string++ s xp 0 (length s))))
 
-;just wants to succeed fast in a lot of common cases.
-;assumes no funny readtable junk for the characters shown.
-
-(defun no-escapes-needed (s)
-  (let ((n (length s)))
-    (and (not (zerop n))
-	 (let ((c (schar s 0)))
-	   (or (and (alpha-char-p c) (upper-case-p c)) (find c "*<>")))
-	 (do ((i 1 (1+ i))) ((= i n) T)
-	   (let ((c (schar s i)))
-	     (if (not (or (digit-char-p c)
-			  (and (alpha-char-p c) (upper-case-p c))
-			  (find c "*+<>-")))
-		 (return nil)))))))
-
-
 (defun print (object &optional (stream *standard-output*))
   (setf stream (decode-stream-arg stream))
   (terpri stream)
@@ -1272,43 +1150,6 @@
   (with-output-to-string (stream)
     (let ((*print-escape* nil))
       (basic-write object stream))))
-
-;Any format string that is converted to a function is always printed
-;via an XP stream (See formatter).
-
-(defun format (stream string-or-fn &rest args)
-  (cond ((stringp stream)
-	 (format::%format stream "~A"
-                          (list (with-output-to-string (stream)
-                                  (apply #'format stream string-or-fn args))))
-	 nil)
-	((null stream)
-	 (with-output-to-string (stream)
-	   (apply #'format stream string-or-fn args)))
-	(T (if (eq stream T) (setq stream *standard-output*))
-	   (when (stringp string-or-fn)
-	     (setq string-or-fn (process-format-string string-or-fn nil)))
-	   (cond ((not (stringp string-or-fn))
-		  (apply string-or-fn stream args))
-		 ((xp-structure-p stream)
-		  (apply #'using-format stream string-or-fn args))
-		 (t
-                  (format::%format stream string-or-fn args)))
-	   nil)))
-
-(defvar *format-string-cache* T)
-
-(defun process-format-string (string-or-fn force-fn?)
-  (cond ((not (stringp string-or-fn)) string-or-fn) ;called from ~? too.
-	((not *format-string-cache*)
-	 (maybe-compile-format-string string-or-fn force-fn?))
-	(T (when (not (hash-table-p *format-string-cache*))
-	     (setq *format-string-cache* (make-hash-table :test #'eq)))
-	   (let ((value (gethash string-or-fn *format-string-cache*)))
-	     (when (or (not value) (and force-fn? (stringp value)))
-	       (setq value (maybe-compile-format-string string-or-fn force-fn?))
-	       (setf (gethash string-or-fn *format-string-cache*) value))
-	     value))))
 
 (defun write-char (char &optional (stream *standard-output*))
   (setf stream (decode-stream-arg stream))
@@ -1391,34 +1232,34 @@
   (sys::%clear-output stream)
   nil)
 
-;           ---- FUNCTIONAL INTERFACE TO DYNAMIC FORMATTING ----
-
 ;The internal functions in this file, and the (formatter "...") expansions
 ;use the '+' forms of these functions directly (which is faster) because,
 ;they do not need error checking or fancy stream coercion.  The '++' forms
 ;additionally assume the thing being output does not contain a newline.
 
 (defmacro pprint-logical-block ((stream-symbol list
-				 &key (prefix nil) (per-line-prefix nil)
-				      (suffix ""))
+                                               &key
+                                               (prefix nil prefix-p)
+                                               (per-line-prefix nil per-line-prefix-p)
+                                               (suffix ""))
 				&body body)
-  (cond ((eq stream-symbol nil) (setq stream-symbol '*standard-output*))
-	((eq stream-symbol T) (setq stream-symbol '*terminal-io*)))
+  (cond ((eq stream-symbol nil)
+         (setf stream-symbol '*standard-output*))
+	((eq stream-symbol t)
+         (setf stream-symbol '*terminal-io*)))
   (when (not (symbolp stream-symbol))
-    (warn "STREAM-SYMBOL arg ~S to PPRINT-LOGICAL-BLOCK is not a bindable symbol"
+    (warn "STREAM-SYMBOL arg ~S to PPRINT-LOGICAL-BLOCK is not a bindable symbol."
 	  stream-symbol)
-    (setq stream-symbol '*standard-output*))
-  (when (and prefix per-line-prefix)
-    (warn "prefix ~S and per-line-prefix ~S cannot both be specified ~
-           in PPRINT-LOGICAL-BLOCK")
-    (setq per-line-prefix nil))
+    (setf stream-symbol '*standard-output*))
+  (when (and prefix-p per-line-prefix-p)
+    (error "Cannot specify values for both PREFIX and PER-LINE-PREFIX."))
   `(maybe-initiate-xp-printing
      #'(lambda (,stream-symbol)
 	 (let ((+l ,list)
 	       (+p ,(or prefix per-line-prefix ""))
 	       (+s ,suffix))
 	   (pprint-logical-block+
-	     (,stream-symbol +l +p +s ,(not (null per-line-prefix)) T nil)
+	     (,stream-symbol +l +p +s ,(not (null per-line-prefix)) t nil)
 	     ,@ body nil)))
      (decode-stream-arg ,stream-symbol)))
 
@@ -1427,7 +1268,7 @@
 (defmacro pprint-logical-block+ ((var args prefix suffix per-line? circle-check? atsign?)
 				 &body body)
    (when (and circle-check? atsign?)
-     (setq circle-check? 'not-first-p))
+     (setf circle-check? 'not-first-p))
   `(let ((*current-level* (1+ *current-level*))
 	 (*current-length* -1)
 	 (*parents* *parents*)
@@ -1441,11 +1282,11 @@
 			`(if (null ,',args) (return-from logical-block nil))))
 	     ,@ body)
 	   (end-block ,var ,suffix))))))
-
+
 (defun pprint-newline (kind &optional (stream *standard-output*))
   (setq stream (decode-stream-arg stream))
   (when (not (member kind '(:linear :miser :fill :mandatory)))
-    (error "Invalid KIND argument ~A to PPRINT-NEWLINE" kind))
+    (error "Invalid KIND argument ~A to PPRINT-NEWLINE." kind))
   (when (xp-structure-p stream)
     (pprint-newline+ kind stream))
   nil)
@@ -1462,775 +1303,49 @@
   (setq stream (decode-stream-arg stream))
   (when (not (member kind '(:line :section :line-relative :section-relative)))
     (error "Invalid KIND argument ~A to PPRINT-TAB" kind))
-  (when (xp-structure-p stream)
+  (when (and (xp-structure-p stream) *print-pretty*)
     (pprint-tab+ kind colnum colinc stream))
   nil)
-
-;                        ---- COMPILED FORMAT ----
 
-;Note that compiled format strings always print through xp streams even if
-;they don't have any xp directives in them.  As a result, the compiled code
-;can depend on the fact that the stream being operated on is an xp
-;stream not an ordinary one.
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defmacro pprint-pop+ (args xp)
+    `(if (pprint-pop-check+ ,args ,xp)
+         (return-from logical-block nil)
+         (pop ,args)))
+
+  (defun pprint-pop-check+ (args xp)
+    (incf *current-length*)
+    (cond ((not (listp args))  ;must be first so supersedes length abbrev
+           (write-string++ ". " xp 0 2)
+           (write+ args xp)
+           T)
+          ((and *print-length* ;must supersede circle check
+                (not *print-readably*)
+                (not (< *current-length* *print-length*)))
+           (write-string++ "..." xp 0 3)
+           (setq *abbreviation-happened* T)
+           T)
+          ((and *circularity-hash-table* (not (zerop *current-length*)))
+           (case (circularity-process xp args T)
+             (:first ;; note must inhibit rechecking of circularity for args.
+              (write+ (cons (car args) (cdr args)) xp) T)
+             (:subsequent t)
+             (t nil)))))
+
+  (defun check-block-abbreviation (xp args circle-check?)
+    (cond ((not (listp args))
+           (write+ args xp) T)
+          ((and *print-level*
+                (not *print-readably*)
+                (> *current-level* *print-level*))
+           (write-char++ #\# XP) (setq *abbreviation-happened* T) T)
+          ((and *circularity-hash-table*
+                circle-check?
+                (eq (circularity-process xp args nil) :subsequent)) T)
+          (t
+           nil)))
+) ;; EVAL-WHEN
 
- (eval-when (eval load compile)
-
-(proclaim '(special *string* *used-args* *used-outer-args* *used-initial*
-		    *get-arg-carefully* *inner-end* *outer-end* *at-top*))
-
-(defvar *fn-table* (make-hash-table) "used to access fns for commands")
-
-;Each of these functions expect to get called with two arguments
-;start and end.  Start points to the first character after the ~
-;marking the command.  End points to the first character after the
-;command.  This includes the matching end command for paired commands.
-
-(defmacro def-format-handler (char args &body body)
-  (let ((name (intern (sys::%format nil "FORMAT-~A" char) (find-package "XP"))))
-    `(eval-when (eval load compile)
-       (defun ,name ,args ,@ body)
-       (setf (gethash (char-upcase ,char) *fn-table*) (function ,name))
-       (setf (gethash (char-downcase ,char) *fn-table*) (function ,name)))))
-
-;Definitions of the forms used in the code created by PARSE.
-;Note these functions assume the stream is in the var XP and is an xp stream,
-
-; INITIAL holds the initial value of ARGS (for ~@*).
-;Initial is always bound to (args) if it is bound at all.
-;Note this uses args, but only when actually binding
-
-(defun initial () (setq *used-initial* T) 'init)
-
-(defmacro bind-initial (&body code)
-  `(let* ((*used-initial* nil)
-	  (body (progn ,@ code)))
-     (if *used-initial* (make-binding 'init (args) body) body)))
-
-; ARGS holds the current argument list
-;The val bound to args must always be computed (to use it up) even if args is not used.
-
-(defun args () (setq *used-args* T) 'args)
-
-(defmacro bind-args (doit? val &body code)
-  (if (eq doit? T)
-      `(let* ((val ,val)
-	      (*used-args* nil)
-	      (body (progn ,@ code)))
-	 (if *used-args* (make-binding 'args val body) (cons val body)))
-      `(flet ((code () ,@ code))
-	 (if (not ,doit?) (code) ;important bindings not done if not doit?
-	     (let* ((val ,val)
-		    (*used-args* nil)
-		    (body (code)))
-	       (if *used-args* (make-binding 'args val body) (cons val body)))))))
-
-(defun outer-args () (setq *used-outer-args* T) 'outer-args)
-
-(defmacro bind-outer-args (&body code)
-  `(let* ((*used-outer-args* nil)
-	  (body (progn ,@ code)))
-     (if *used-outer-args* (make-binding 'outer-args (args) body) body)))
-
-(defmacro maybe-bind (doit? var val &body code)
-  `(let ((body (progn ,@ code)))
-     (if ,doit? (make-binding ,var ,val body) body)))
-
-(defun make-binding (var value body)
-  `((let ((,var ,value)) ,@ body)))
-
-(defun num-args () `(length ,(args)))
-
-(defun get-arg ()
-  (if *get-arg-carefully*
-      (if *at-top* `(pprint-pop+top ,(args) xp) `(pprint-pop+ ,(args) xp))
-      `(pop ,(args))))
-
-(defmacro pprint-pop+ (args xp)
-  `(if (pprint-pop-check+ ,args ,xp)
-       (return-from logical-block nil)
-       (pop ,args)))
-
-(defun pprint-pop-check+ (args xp)
-  (incf *current-length*)
-  (cond ((not (listp args))  ;must be first so supersedes length abbrev
-	 (write-string++ ". " xp 0 2)
-	 (write+ args xp)
-	 T)
-	((and *print-length* ;must supersede circle check
-              (not *print-readably*)
-	      (not (< *current-length* *print-length*)))
-	 (write-string++ "..." xp 0 3)
-	 (setq *abbreviation-happened* T)
-	 T)
-	((and *circularity-hash-table* (not (zerop *current-length*)))
-	 (case (circularity-process xp args T)
-	   (:first ;; note must inhibit rechecking of circularity for args.
-		   (write+ (cons (car args) (cdr args)) xp) T)
-	   (:subsequent T)
-	   (T nil)))))
-
-(defmacro pprint-pop+top (args xp)
-  `(if (pprint-pop-check+top ,args ,xp)
-       (return-from logical-block nil)
-       (pop ,args)))
-
-(defun pprint-pop-check+top (args xp)
-  (incf *current-length*)
-  (cond ((not (listp args))  ;must be first so supersedes length abbrev
-	 (write-string++ ". " xp 0 2)
-	 (write+ args xp)
-	 T)
-	((and *print-length* ;must supersede circle check
-              (not *print-readably*)
-	      (not (< *current-length* *print-length*)))
-	 (write-string++ "..." xp 0 3)
-	 (setq *abbreviation-happened* T)
-	 T)))
-
-(defun literal (start end)
-  (let ((sub-end nil) next-newline (result nil))
-    (loop (setq next-newline
-		(position #\newline *string* :start start :end end))
-	  (setq sub-end (if next-newline next-newline end))
-	  (when (< start sub-end)
-	    (push (if (= start (1- sub-end))
-		      `(write-char++ ,(aref *string* start) xp)
-		      `(write-string++ ,(subseq *string* start sub-end) xp
-				    ,0 ,(- sub-end start)))
-		  result))
-	  (when (null next-newline) (return nil))
-	  (push `(pprint-newline+ :unconditional xp) result)
-	  (setq start (1+ sub-end)))
-    (if (null (cdr result)) (car result) (cons 'progn (nreverse result)))))
-
-;This is available for putting on #".
-
-(proclaim '(special *default-package*))
-
-(defun format-string-reader (stream sub-char arg)
-    (declare (ignore arg))
-  (unread-char sub-char stream)
-  `(function
-    (lambda (s &rest args)
-      (formatter-in-package ,(read stream) ,(package-name *package*)))))
-
-(defmacro formatter-in-package (string reader-package)
-  (formatter-fn string reader-package))
-
-(defmacro formatter (string)
-  `(function
-    (lambda (s &rest args)
-      (formatter-in-package ,string "CL-USER"))))
-
-(defun formatter-fn (*string* *default-package*)
-  (or (catch :format-compilation-error
-	`(apply (function maybe-initiate-xp-printing)
-	        (function
-		 (lambda (xp &rest args)
-		  ,@(bind-initial
-		     `((block top
-			 ,@(let ((*get-arg-carefully* nil)
-				 (*at-top* t)
-				 (*inner-end* 'top)
-				 (*outer-end* 'top))
-			     (compile-format 0 (length *string*))))))
-		  (if ,(args) (copy-list ,(args))))) ;needed by symbolics.
-	        s args))
-      `(apply #'format s *string* args)))
-
-
-
-;The business with the catch above allows many (formatter "...") errors to be
-;reported in a file without stopping the compilation of the file.
-
-(defun maybe-compile-format-string (string force-fn?)
-  (if (not (or force-fn? (fancy-directives-p string))) string
-      (eval `(formatter ,string))))
-
-;COMPILE-FORMAT gets called to turn a bit of format control string into code.
-
-(defvar *testing-errors* nil "Used only when testing XP")
-
-(defun err (id msg i)
-  (if *testing-errors* (throw :testing-errors (list id i)))
-  (warn "XP: cannot compile format string ~%~A~%~S~%~V@T|"
-	msg *string* (1+ i))
-  (throw :format-compilation-error nil))
-
-(defun position-in (set start)
-  (position-if #'(lambda (c) (find c set)) *string* :start start))
-
-(defun position-not-in (set start)
-  (position-if-not #'(lambda (c) (find c set)) *string* :start start))
-
-(defun next-directive1 (start end)
-  (let ((i (position #\~ *string* :start start :end end)) j)
-    (when i
-      (setq j (params-end (1+ i)))
-      (when (char= (aref *string* j) #\/)
-	(setq j (position #\/ *string* :start (1+ j) :end end))
- 	(when (null j)
-	  (err 3 "Matching / missing" (position #\/ *string* :start start)))))
-    (values i j)))
-
-(defun params-end (start) ;start points just after ~
-  (let ((j start) (end (length *string*)))
-    (loop
-      (setq j (position-not-in "+-0123456789,Vv#:@" j))
-      (when (null j) (err 1 "missing directive" (1- start)))
-      (when (not (eq (aref *string* j) #\')) (return j))
-      (incf j)
-      (if (= j end) (err 2 "No character after '" (1- j)))
-      (incf j))))
-
-;Only called after correct parse is known.
-
-(defun directive-start (end) ;end points at characters after params
-  (loop
-    (setq end (position #\~ *string* :end end :from-end T))
-    (when (or (zerop end) (not (eq (aref *string* (1- end)) #\')))
-      (return end))
-    (decf end)))
-
-(defun next-directive (start end)
-  (let (i j ii k count c close
-	(pairs '((#\( . #\)) (#\[ . #\]) (#\< . #\>) (#\{ . #\}))))
-    (multiple-value-setq (i j) (next-directive1 start end))
-    (when i
-      (setq c (aref *string* j))
-      (setq close (cdr (assoc c pairs)))
-      (when close
-	(setq k j count 0)
-	(loop
-	  (multiple-value-setq (ii k) (next-directive1 k end))
-	  (when (null ii) (err 4 "No matching close directive" j))
-	  (when (eql (aref *string* k) c) (incf count))
-	  (when (eql (aref *string* k) close) (decf count)
-	    (when (minusp count) (setq j k) (return nil))))))
-    (values c i j)))
-
-;breaks things up at ~; directives.
-
-(defun chunk-up (start end)
-  (let ((positions (list start)) (spot start))
-    (loop
-      (multiple-value-bind (c i j) (next-directive spot end)
-	(declare (ignore i))
-	(when (null c) (return (nreverse (cons end positions))))
-	(when (eql c #\;) (push (1+ j) positions))
-	(setq spot j)))))
-
-(defun fancy-directives-p (*string*)
-  (let (i (j 0) (end (length *string*)) c)
-    (loop
-      (multiple-value-setq (i j) (next-directive1 j end))
-      (when (not i) (return nil))
-      (setq c (aref *string* j))
-      (when (or (find c "_Ii/Ww") (and (find c ">Tt") (colonp j)))
-	(return T)))))
-
-(defun num-args-in-args (start &optional (err nil))
-  (let ((n 0) (i (1- start)) c)
-    (loop
-      (setq i (position-not-in "+-0123456789," (1+ i)))
-      (setq c (aref *string* i))
-      (cond ((or (char= c #\V) (char= c #\v)) (incf n))
-	    ((char= c #\#)
-	     (when err
-	       (err 21 "# not allowed in ~~<...~~> by (formatter \"...\")" start))
-	     (return nil))
-	    ((char= c #\') (incf i))
-	    (T (return n))))))
-
-(defun compile-format (start end)
-  (let ((result nil))
-    (prog (c i j fn)
-     L(multiple-value-setq (c i j) (next-directive start end))
-      (when (if (null c) (< start end) (< start i))
-	(push (literal start (if i i end)) result))
-      (when (null c) (return (nreverse result)))
-      (when (char= c #\newline)
-	(multiple-value-bind (colon atsign)
-	    (parse-params (1+ i) nil :nocolonatsign T)
-	  (when atsign (push `(pprint-newline+ :unconditional xp) result))
-	  (incf j)
-	  (when (not colon)
-	    (setq j (position-if-not
-		      #'(lambda (c)
-			  (or (char= c #\tab) (char= c #\space)))
-		      *string* :start j :end end))
-	    (when (null j) (setq j end)))
-	  (setq start j)
-	  (go L)))
-      (setq fn (gethash c *fn-table*))
-      (when (null fn) (err 5 "Unknown format directive" j))
-      (incf j)
-      (push (funcall fn (1+ i) j) result)
-      (setq start j)
-      (go L))))
-
-;This gets called with start pointing to the character after the ~ that
-;starts a command.  Defaults, is a list of default values for the
-;parameters.  Max is the maximum number of parameters allowed.  Nocolon,
-;noatsign, nocolonatsign can be used to specify what colon atsign
-;combinations are permitted. Parse params returns three values, colon?,
-;atsign? and a list of code chunks that correspond to the parameters
-;specified.
-
-(defun parse-params (start defaults &key (max (length defaults))
-		     (nocolon nil) (noatsign nil) (nocolonatsign nil))
-  (let ((colon nil) (atsign nil) (params nil) (i start) j c)
-    (loop
-      (setq c (aref *string* i))
-      (cond ((or (char= c #\V) (char= c #\v)) (push (get-arg) params) (incf i))
-	    ((char= c #\#) (push (num-args) params) (incf i))
-	    ((char= c #\') (incf i) (push (aref *string* i) params) (incf i))
-	    ((char= c #\,) (push nil params))
-	    (T (setq j (position-not-in "+-0123456789" i))
-	       (if (= i j) (return nil))
-	       (push (parse-integer *string* :start i :end j :radix 10.) params)
-	       (setq i j)))
-      (if (char= (aref *string* i) #\,) (incf i) (return nil)))
-    (setq params (nreverse params))
-    (do ((ps params (cdr ps))
-	 (ds defaults (cdr ds))
-	 (nps nil))
-	((null ds) (setq params (nreconc nps ps)))
-      (push (cond ((or (null ps) (null (car ps))) (car ds))
-		  ((not (consp (car ps))) (car ps))
-		  (T `(cond (,(car ps)) (T ,(car ds)))))
-	    nps))
-    (if (and max (< max (length params))) (err 6 "Too many parameters" i))
-    (loop
-      (setq c (aref *string* i))
-      (cond ((char= c #\:)
-	     (if colon (err 7 "Two colons specified" i))
-	     (setq colon T))
-	    ((char= c #\@)
-	     (if atsign (err 8 "Two atsigns specified" i))
-	     (setq atsign T))
-	    (T (return nil)))
-      (incf i))
-    (if (and colon nocolon) (err 9 "Colon not permitted" i))
-    (if (and atsign noatsign) (err 10 "Atsign not permitted" i))
-    (if (and colon atsign nocolonatsign)
-	(err 11 "Colon and atsign together not permitted" i))
-    (values colon atsign params)))
-
-;Both these only called if correct parse already known.
-
-(defun colonp (j) ;j points to directive name
-  (or (eql (aref *string* (1- j)) #\:)
-      (and (eql (aref *string* (1- j)) #\@)
-	   (eql (aref *string* (- j 2)) #\:))))
-
-(defun atsignp (j) ;j points to directive name
-  (or (eql (aref *string* (1- j)) #\@)
-      (and (eql (aref *string* (1- j)) #\:)
-	   (eql (aref *string* (- j 2)) #\@))))
-
-(def-format-handler #\/ (start end)
-  (multiple-value-bind (colon atsign params) (parse-params start nil :max nil)
-    (let* ((whole-name-start (1+ (params-end start)))
-	   (colon-pos (position #\: *string* :start whole-name-start :end (1- end)))
-	   (pkg (find-package
-		  (if colon-pos
-		      (string-upcase (subseq *string* whole-name-start colon-pos))
-		      *default-package*)))
-	   (name-start (cond ((null colon-pos) whole-name-start)
-			     ((and (< colon-pos (1- end))
-				   (char= #\: (aref *string* (1+ colon-pos))))
-			      (+ colon-pos 2))
-			     (T (1+ colon-pos))))
-	   (fn (intern (string-upcase (subseq *string* name-start (1- end))) pkg)))
-      (if (not (find-if #'consp params))
-	  `(funcall (symbol-function ',fn) xp ,(get-arg) ,colon ,atsign ,@ params)
-	  (let ((vars (mapcar #'(lambda (arg)
-				  (declare (ignore arg))
-				  (gentemp))
-			      params)))
-	    `(let ,(mapcar #'list vars params)
-	       (funcall (symbol-function ',fn) xp ,(get-arg) ,colon ,atsign ,@ vars)))))))
-
-(def-format-handler #\A (start end)
-  (if (not (= end (1+ start))) (simple-directive start end)
-      `(let ((*print-escape* nil))
-	 (write+ ,(get-arg) XP))))
-
-(def-format-handler #\S (start end)
-  (if (not (= end (1+ start))) (simple-directive start end)
-      `(let ((*print-escape* T))
-	 (write+ ,(get-arg) XP))))
-
-;The basic Format directives "DBOXRCFEG$".  The key thing about all of
-;these directives is that they just get a single arg and print a chunk of
-;stuff.  Further they are complex enough that I just call the standard
-;definition of FORMAT to get the work done.  What should really be being
-;called is the internal routine that FORMAT uses to do the corresponding
-;work.  However, this cannot be done in a portable way.
-
-(def-format-handler #\D (start end) (simple-directive start end))
-(def-format-handler #\B (start end) (simple-directive start end))
-(def-format-handler #\O (start end) (simple-directive start end))
-(def-format-handler #\X (start end) (simple-directive start end))
-(def-format-handler #\R (start end) (simple-directive start end))
-(def-format-handler #\C (start end) (simple-directive start end))
-(def-format-handler #\F (start end) (simple-directive start end))
-(def-format-handler #\E (start end) (simple-directive start end))
-(def-format-handler #\G (start end) (simple-directive start end))
-(def-format-handler #\$ (start end) (simple-directive start end))
-
-(defun simple-directive (start end)
-  (let ((n (num-args-in-args start)))
-    (if n `(using-format xp ,(subseq *string* (1- start) end)
-			 ,@ (copy-tree (make-list (1+ n) :initial-element (get-arg))))
-	(multiple-value-bind (colon atsign params)
-	    (parse-params start nil :max 8)
-	  (let* ((arg-str (subseq "v,v,v,v,v,v,v,v" 0
-				  (max 0 (1- (* 2 (length params))))))
-		 (str (concatenate 'string "~"
-				   arg-str
-				   (if colon ":" "")
-				   (if atsign "@" "")
-				   (subseq *string* (1- end) end))))
-	    `(using-format xp ,str ,@ params ,(get-arg)))))))
-
-(defun using-format (xp string &rest args)
-  (let ((result (apply #'cl:format nil string args)))
-    (write-string+ result xp 0 (length result))))
-
-;Format directives that get open coded "P%&~|T*?^"
-
-(def-format-handler #\P (start end) (declare (ignore end))
-  (multiple-value-bind (colon atsign) (parse-params start nil)
-  (let ((arg (if colon `(car (backup-in-list 1 ,(initial) ,(args))) (get-arg))))
-    (if atsign
-	`(if (not (eql ,arg 1)) (write-string++ "ies" xp 0 3) (write-char++ #\y xp))
-	`(if (not (eql ,arg 1)) (write-char++ #\s XP))))))
-
-(def-format-handler #\% (start end) (declare (ignore end))
-  (multiple-newlines start :unconditional))
-
-(def-format-handler #\& (start end) (declare (ignore end))
-  (multiple-newlines start :fresh))
-
-(defun multiple-newlines (start kind)
-  (multiple-value-bind (colon atsign params)
-      (parse-params start '(1) :nocolon T :noatsign T)
-      (declare (ignore colon atsign))
-    (if (eql (car params) 1) `(pprint-newline+ ,kind xp)
-	`(multiple-newlines1 xp ,kind ,(car params)))))
-
-(defun multiple-newlines1 (xp kind num)
-  (do ((n num (1- n))) ((not (plusp n)))
-    (pprint-newline+ kind xp)
-    (setq kind :unconditional)))
-
-(def-format-handler #\| (start end) (declare (ignore end))
-  #-armedbear
-  (multiple-chars start #.(aref (cl:format nil "~|") 0))
-  #+armedbear
-  (multiple-chars start #\page))
-
-(def-format-handler #\~ (start end) (declare (ignore end))
-  (multiple-chars start #\~))
-
-(defun multiple-chars (start char)
-  (multiple-value-bind (colon atsign params)
-      (parse-params start '(1) :nocolon t :noatsign t)
-      (declare (ignore colon atsign))
-    (if (eql (car params) 1) `(write-char++ ,char xp)
-	`(multiple-chars1 xp ,(car params) ,char))))
-
-(defun multiple-chars1 (xp num char)
-  (do ((n num (1- n))) ((not (plusp n)))
-    (write-char++ char xp)))
-
-(def-format-handler #\T (start end) (declare (ignore end))
-  (multiple-value-bind (colon atsign params) (parse-params start '(1 1))
-    `(pprint-tab+ ,(if colon (if atsign :section-relative :section)
-		             (if atsign :line-relative :line))
-		  ,(pop params) ,(pop params) xp)))
-
-(def-format-handler #\* (start end) (declare (ignore end))
-  (if (atsignp (params-end start))
-      (multiple-value-bind (colon atsign params)
-	  (parse-params start '(0) :nocolon t)
-	  (declare (ignore colon atsign))
-	`(setq args (backup-to ,(car params) ,(initial) ,(args))))
-      (multiple-value-bind (colon atsign params)
-	  (parse-params start '(1))
-	  (declare (ignore atsign))
-	`(setq args
-	       ,(if colon `(backup-in-list ,(car params) ,(initial) ,(args))
-		    `(nthcdr ,(car params) ,(args)))))))
-
-;fancy stuff here, so will not get spurious indications of circularity.
-
-(defun backup-in-list (num list some-tail)
-  (backup-to (- (tail-pos list some-tail) num) list some-tail))
-
-(defun backup-to (num list some-tail)
-  (if (not *circularity-hash-table*) (nthcdr num list)
-      (multiple-value-bind (pos share) (tail-pos list some-tail)
-	  (declare (ignore pos))
-	(if (not (< num share)) (nthcdr num list)
-	    (do ((L (nthcdr num list) (cdr L))
-		 (n (- share num) (1- n))
-		 (R nil (cons (car L) R)))
-		((zerop n) (nreconc R L)))))))
-
-;because of backup-to, a prefix of some-tail may have been copied (in which
-;case it cannot share anything with list), but there is a cons in some-tail
-;that is in list.  This can be used to determine the position of some-tail
-;relative to list.  However, we have to be careful, because they both could
-;be cdr recursive.
-
-(defun tail-pos (list some-tail)
-  (block outer
-    (do ((n 0 (1+ n))
-	 (L list (cdr L)))
-	(nil)
-      (do ((m n (1- m))
-	   (ST some-tail (cdr ST)))
-	  (nil)
-	(if (minusp m) (return nil))
-	(if (eq ST L) (return-from outer (values m n)))))))
-
-(def-format-handler #\? (start end) (declare (ignore end))
-  (multiple-value-bind (colon atsign) (parse-params start nil :nocolon t)
-      (declare (ignore colon))
-    (if (not atsign) `(apply #'format xp ,(get-arg) ,(get-arg))
-	`(let ((fn (process-format-string ,(get-arg) T)))
-	   (setq args (apply fn xp ,(args)))))))
-
-(def-format-handler #\^ (start end) (declare (ignore end))
-  (multiple-value-bind (colon atsign params)
-      (parse-params start nil :max 3 :noatsign t)
-      (declare (ignore atsign))
-    `(if ,(cond ((null params) `(null ,(if colon `(cdr ,(outer-args)) (args))))
-		(t `(do-complex-^-test ,@ params)))
-	 (return-from ,(if colon *outer-end* *inner-end*) nil))))
-
-(defun do-complex-^-test (a1 &optional (a2 nil) (a3 nil))
-  (cond (a3 (and (<= a1 a2) (<= a2 a3)))
-	(a2 (= a1 a2))
-	(t (= 0 a1))))
-
-;delimited pairs of format directives. "(){}[]<>;"
-
-(def-format-handler #\[ (start end)
-  (multiple-value-bind (colon atsign params)
-      (parse-params start nil :max 1 :nocolonatsign T)
-    (setq start (1+ (params-end start)))
-    (let* ((chunks (chunk-up start end))
-	   (innards (do ((ns chunks (cdr ns))
-			 (ms (cdr chunks) (cdr ms))
-			 (result nil))
-			((null ms) (return (nreverse result)))
-		      (push (compile-format (car ns) (directive-start (car ms)))
-			    result))))
-      (cond (colon (when (not (= (length innards) 2))
-		     (err 13 "Wrong number of clauses in ~~:[...~~]" (1- start)))
-		   `(cond ((null ,(get-arg)) ,@ (car innards))
-			  (T ,@ (cadr innards))))
-	    (atsign (when (not (= (length innards) 1))
-		      (err 14 "Too many clauses in ~~@[...~~]" (1- start)))
-		    `(cond ((car args) ,@ (car innards)) (T ,(get-arg))))
-	    (T (let* ((j -1) (len (- (length chunks) 2))
-		      (else? (colonp (1- (nth len chunks)))))
-		 `(case ,(if params (car params) (get-arg))
-		    ,@(mapcar #'(lambda (unit)
-				  (incf j)
-				  `(,(if (and else? (= j len)) T j) ,@ unit))
-			      innards))))))))
-
-(def-format-handler #\( (start end)
-  (multiple-value-bind (colon atsign) (parse-params start nil)
-    (setq start (1+ (params-end start)))
-    (setq end (directive-start end))
-    `(progn (push-char-mode xp ,(cond ((and colon atsign) :UP)
-				      (colon :CAP1)
-				      (atsign :CAP0)
-				      (T :DOWN)))
-	    ,@(compile-format start end)
-	    (pop-char-mode xp))))
-
-(def-format-handler #\; (start end) (declare (ignore start))
-  (err 15 "~~; appears out of context" (1- end)))
-(def-format-handler #\] (start end) (declare (ignore start))
-  (err 16 "Unmatched closing directive" (1- end)))
-(def-format-handler #\) (start end) (declare (ignore start))
-  (err 17 "Unmatched closing directive" (1- end)))
-(def-format-handler #\> (start end) (declare (ignore start))
-  (err 18 "Unmatched closing directive" (1- end)))
-(def-format-handler #\} (start end) (declare (ignore start))
-  (err 19 "Unmatched closing directive" (1- end)))
-
-(def-format-handler #\{ (start end)
-  (multiple-value-bind (colon atsign params)
-      (parse-params start '(-1) :max 1)
-    (let* ((force-once (colonp (1- end)))
-	   (n (car params))
-	   (bounded (not (eql n -1))))
-      (setq start (1+ (params-end start)))
-      (setq end (directive-start end))
-      (car (maybe-bind bounded 'N n ;must be outermost if is V or #
-	     (maybe-bind (not (> end start)) 'FN  ;must be second
-			 `(process-format-string ,(get-arg) T)
-	       (bind-args (not atsign) (get-arg)
-		 `((prog () ,@(if force-once '((go S)))
-		       L (if (null ,(args)) (return nil))
-		       ,@(if force-once '(S))
-			 ,@(if bounded '((if (= N 0) (return nil) (decf N))))
-			 ,@(bind-outer-args
-			     (bind-args colon (get-arg)
-			       (bind-initial
-				 (let ((*get-arg-carefully*
-					 (and *get-arg-carefully* atsign))
-				       (*at-top* (and *at-top* atsign))
-				       (*outer-end* nil)
-				       (*inner-end* nil))
-				   (if (not colon)
-				       (if (not (> end start))
-					   `((setq args (apply FN xp ,(args))))
-					   (compile-format start end))
-				       (let ((*inner-end* 'inner))
-					 `((block inner
-					     ,@(if (not (> end start))
-						   `((setq args (apply FN xp ,(args))))
-						   (compile-format start end))))))))))
-			 (go L))))))))))
-
-(def-format-handler #\< (start end)
-  (if (colonp (1- end))
-      (handle-logical-block start end)
-      (handle-standard-< start end)))
-
-(defun handle-standard-< (start end)
-  (let ((n (num-args-in-directive start end)))
-    `(using-format xp ,(subseq *string* (1- start) end)
-		   ,@ (copy-tree (make-list n :initial-element (get-arg))))))
-
-(defun num-args-in-directive (start end)
-  (let ((n 0) c i j)
-    (incf n (num-args-in-args start T))
-    (multiple-value-setq (j i) (next-directive1 start end))
-    (loop
-      (multiple-value-setq (c i j) (next-directive j end))
-      (when (null c) (return n))
-      (cond ((eql c #\;)
-	     (if (colonp j)
-		 (err 22 "~~:; not supported in ~~<...~~> by (formatter \"...\")." j)))
-	    ((find c "*[^<_IiWw{Tt")
-	     (err 23 "~~<...~~> too complicated to be supported by (formatter \"...\")." j))
-	    ((eql c #\() (incf n (num-args-in-directive (1+ i) j)))
-	    ((find c "%&\|~") (incf n (num-args-in-args (1+ i) T)))
-	    ((eql c #\?)
-	     (when (atsignp j)
-	       (err 23 "~~<...~~> too complicated to be supported by (formatter \"...\")." j))
-	     (incf n 2))
-	    ((find c "AaSsDdBbOoXxRrCcFfEeGg$Pp")
-	     (incf n (1+ (num-args-in-args (1+ i) T))))))))
-
-;The pretty-printing directives. "_IW<:>"
-
-(def-format-handler #\_ (start end) (declare (ignore end))
-  (multiple-value-bind (colon atsign) (parse-params start nil)
-    `(pprint-newline+ ,(cond ((and colon atsign) :mandatory)
-			     (colon :fill)
-			     (atsign :miser)
-			     (T :linear)) XP)))
-
-(def-format-handler #\I (start end) (declare (ignore end))
-  (multiple-value-bind (colon atsign params)
-      (parse-params start '(0) :noatsign T)
-      (declare (ignore atsign))
-    `(pprint-indent+ ,(if colon :current :block) ,(car params) XP)))
-
-(def-format-handler #\W (start end) (declare (ignore end))
-  (multiple-value-bind (colon atsign) (parse-params start nil)
-    (cond ((not (or colon atsign)) `(write+ ,(get-arg) XP))
-	  (T `(let (,@(if colon '((*print-pretty* T)))
-		    ,@(if atsign '((*print-level* nil) (*print-length* nil))))
-		(write+ ,(get-arg) XP))))))
-
-(defun handle-logical-block (start end)
-  (multiple-value-bind (colon atsign) (parse-params start nil)
-    (setq start (1+ (params-end start)))
-    (let* ((chunks (chunk-up start end))
-	   (on-each-line?
-	     (and (cddr chunks) (atsignp (1- (cadr chunks)))))
-	   (prefix
-	     (cond ((cddr chunks) (pop chunks)
-		    (subseq *string* start (directive-start (car chunks))))
-		   (colon "(")))
-	   (suffix
-	     (cond ((cddr chunks)
-		    (subseq *string* (cadr chunks)
-			    (directive-start (caddr chunks))))
-		   (colon ")"))))
-      (when (cdddr chunks) (err 24 "Too many subclauses in ~~<...~~:>" (1- start)))
-      (when (and prefix (or (find #\~ prefix) (find #\newline prefix)))
-	(err 25 "Prefix in ~~<...~~:> must be a literal string without newline" start))
-      (when (and suffix (or (find #\~ suffix) (find #\newline suffix)))
-	(err 26 "Suffix in ~~<...~~:> must be a literal string without newline"
-	     (cadr chunks)))
-      (car (bind-args T (if atsign `(prog1 ,(args) (setq ,(args) nil)) (get-arg))
-	     (bind-initial
-	       `((pprint-logical-block+ (xp ,(args) ,prefix ,suffix ,on-each-line?
-					    ,(not (and *at-top* atsign)) ,atsign)
-		   ,@(fill-transform (atsignp (1- end))
-		       (let ((*get-arg-carefully* T)
-			     (*at-top* (and *at-top* atsign))
-			     (*inner-end* 'logical-block)
-			     (*outer-end* 'logical-block))
-			 (compile-format (car chunks)
-					 (directive-start (cadr chunks)))))))))))))
-
-(defun check-block-abbreviation (xp args circle-check?)
-  (cond ((not (listp args))
-         (write+ args xp) T)
-	((and *print-level*
-              (not *print-readably*)
-              (> *current-level* *print-level*))
-	 (write-char++ #\# XP) (setq *abbreviation-happened* T) T)
-	((and *circularity-hash-table*
-              circle-check?
-	      (eq (circularity-process xp args nil) :subsequent)) T)
-	(t
-         nil)))
-
-(defun fill-transform (doit? body)
-  (if (not doit?) body
-      (mapcan #'(lambda (form)
-		  (cond ((eq (car form) 'write-string++)
-			 (fill-transform-literal (cadr form)))
-			((eq (car form) 'write-char++)
-			 (fill-transform-char (cadr form)))
-			(T (list form))))
-	      body)))
-
-(defun fill-transform-char (char)
-  (if (or (char= char #\space) (char= char #\tab))
-      (list `(write-char++ ,char xp) '(pprint-newline+ :fill xp))
-      `((write-char++ ,char xp))))
-
-(defun fill-transform-literal (string)
-  (flet ((white-space (c) (or (char= c #\space) (char= c #\tab))))
-    (do ((index 0 end) (result) (end nil nil)) (nil)
-      (let ((white (position-if #'white-space string :start index)))
-	(when white
-	  (setq end (position-if-not #'white-space string :start (1+ white))))
-	(when (null end)
-	  (setq end (length string)))
-	(push `(write-string++ ,(subseq string index end) xp ,0 ,(- end index))
-	      result)
-	(if white (push '(pprint-newline+ :fill xp) result))
-	(if (null white) (return (nreverse result)))))))
-
- ) ;end of eval when for all (formatter "...") stuff.
-
 ;                ---- PRETTY PRINTING FORMATS ----
 
 (defun pretty-array (xp array)
@@ -2275,12 +1390,12 @@
 			   (write-char++ #\space xp)
 			   (pprint-newline+ (if (= slice bottom) :fill :linear) xp)))))))
       (pretty-slice 0))))
-
+
 ;Must use pprint-logical-block (no +) in the following three, because they are
 ;exported functions.
 
 (defun pprint-linear (s list &optional (colon? T) atsign?)
-     (declare (ignore atsign?))
+  (declare (ignore atsign?))
   (pprint-logical-block (s list :prefix (if colon? "(" "")
 			        :suffix (if colon? ")" ""))
     (pprint-exit-if-list-exhausted)
@@ -2290,7 +1405,7 @@
 	  (pprint-newline+ :linear s))))
 
 (defun pprint-fill (s list &optional (colon? T) atsign?)
-    (declare (ignore atsign?))
+  (declare (ignore atsign?))
   (pprint-logical-block (s list :prefix (if colon? "(" "")
 			        :suffix (if colon? ")" ""))
     (pprint-exit-if-list-exhausted)
@@ -2321,7 +1436,7 @@
   (if (> (length (symbol-name (car list))) 12)
       (funcall (formatter "~:<~1I~@{~W~^ ~_~}~:>") xp list)
       (funcall (formatter "~:<~W~^ ~:I~@_~@{~W~^ ~_~}~:>") xp list)))
-
+
 (defun bind-list (xp list &rest args)
     (declare (ignore args))
   (if (do ((i 50 (1- i))
@@ -2394,9 +1509,8 @@
 
 (defun do-print (xp obj)
   (funcall
- (formatter "~:<~W~^ ~:I~@_~/xp:bind-list/~^ ~_~:/xp:pprint-linear/ ~1I~^~@{ ~_~W~^~}~:>")
-           xp obj))
-
+   (formatter "~:<~W~^ ~:I~@_~/xp:bind-list/~^ ~_~:/xp:pprint-linear/ ~1I~^~@{ ~_~W~^~}~:>")
+   xp obj))
 
 (defun flet-print (xp obj)
   (funcall (formatter "~:<~1I~W~^ ~@_~:<~@{~/xp:block-like/~^ ~_~}~:>~^~@{ ~_~W~^~}~:>")
@@ -2433,7 +1547,7 @@
 
 (defun up-print (xp list)
   (print-fancy-fn-call xp list '(0 3 1 1)))
-
+
 ;here is some simple stuff for printing LOOP
 
 ;The challange here is that we have to effectively parse the clauses of the
@@ -2486,7 +1600,7 @@
 		 :test #'string=)
 	 :block-head)
 	(T :expr)))
-
+
 (defun pretty-loop (xp loop)
   (if (not (and (consp (cdr loop)) (symbolp (cadr loop)))) ; old-style loop
       (fn-call xp loop)
@@ -2568,108 +1682,11 @@
 	    (loop (print-clause xp)
 		  (write-char #\space xp)
 		  (pprint-newline :linear xp)))))))
-
-;Backquote is a big problem we MUST do all this reconsing of structure in
-;order to get a list that will trigger the right formatting functions to
-;operate on it.  On the other side of the coin, we must use a non-list structure
-;for the little backquote printing markers to ensure that they will always
-;print out the way we want no matter what the code printers say.
-;  Note that since it is sometimes possible to write the same
-;backquote form in several ways, this might not necessarily print out a
-;form in exactly the way you wrote it.  For example '`(a .,b) and '`(a ,@b)
-;both print out as `'(a .,b), because the backquote reader produces the
-;same code in both cases.
 
-(defvar *bq-list* #+:lucid 'lucid-runtime-support:bq-list
-	          #+:symbolics 'si:xr-bq-list)
-(defvar *bq-list** #+:lucid 'lucid-runtime-support:bq-list*
-	           #+:symbolics 'si:xr-bq-list*)
-(defvar *bq-cons* #+:lucid 'lucid-runtime-support:bq-cons
-	          #+:symbolics 'si:xr-bq-cons)
-(defvar *bq-append* #+:lucid 'lucid-runtime-support:bq-append
-	            #+:symbolics 'si:xr-bq-append)
-(defvar *bq-nconc* #+:lucid 'lucid-runtime-support:bq-nconc
-	           #+:symbolics 'si:xr-bq-nconc)
-
-(defun bq-print (xp obj)
-  (funcall (formatter "`~W") xp (bqtify obj)))
-
-(defvar *bq-vector* #+:lucid 'lucid-runtime-support:bq-nconc
-	           #+:symbolics (list nil)) ;turned off
-(defvar *bq-list-to-vector* #+:lucid 'lucid-runtime-support:bq-nconc
-	                    #+:symbolics (list nil)) ;turned off
-
-(defun bq-vector-print (xp obj)
-  (funcall (formatter "`#~W") xp (car (bqtify obj))))
-
-(defstruct bq-struct code data)
-
-(defun bq-struct-print (xp obj)
-  ;; We must print out the string as a string, in order to prevent
-  ;; circularity testing
-  (let ((code (bq-struct-code obj)))
-    (declare (simple-string code))
-    (write-string++ code xp 0 (length code))
-    (write+ (bq-struct-data obj) xp)))
-
-;Convert the backquote form to a list resembling what the user typed in,
-;with calls to printers for ",", ",@", etc.
-
-(defun bqtify (exp)
-  (cond ((or (numberp exp) (eq exp t) (null exp) (stringp exp)) exp)
-	((symbolp exp) (make-bq-struct :code "," :data exp))
-	((bq-struct-p exp)
-	 (make-bq-struct :code "," :data exp))
-	((atom exp) exp)
-	((eq (car exp) 'quote) (cadr exp))
-	((eq (car exp) *bq-list*)
-	 (mapcar 'bqtify (cdr exp)))
-	((eq (car exp) *bq-cons*)
-	 (cons (bqtify (cadr exp)) (bqtify-inline (cddr exp) nil)))
-	((eq (car exp) *bq-list**)
-	 (nconc (mapcar 'bqtify (butlast (cdr exp)))
-		(bqtify-inline (last exp) nil)))
-	((eq (car exp) *bq-append*)
-	 (mapcon #'(lambda (x) (bqtify-inline x t)) (cdr exp)))
-	((eq (car exp) *bq-nconc*)
-	 (mapcon #'(lambda (x) (bqtify-inline x nil)) (cdr exp)))
-	((eq (car exp) *bq-vector*)
-	 (list (mapcar 'bqtify (cdr exp))))
-	((eq (car exp) *bq-list-to-vector*)
-	 (mapcar 'bqtify (cdr exp)))
-	(t (make-bq-struct :code "," :data exp))))
-
-;Convert a thing in a bq-form which is being expanded into the list, not
-;just being made an element.  The argument is the list whose car is the
-;form, and the value is stuff to be appended into the resulting code list.
-
-(defun bqtify-inline (loc copy-p)
-  (cond ((atom (cdr loc))
-	 (let ((tem (bqtify (car loc))))
-	   (cond ((and (bq-struct-p tem) (equal (bq-struct-code tem) ","))
-		  (list (make-bq-struct :code ".," :data (car loc))))
-		 (t tem))))
-	((and (listp (car loc))
-	      (eq (caar loc) 'quote)
-	      (listp (cadar loc)))
-	 (cadar loc))
-	(t (list (make-bq-struct :code (cond (copy-p ",@") (T ",."))
-				 :data (car loc))))))
-
 (setq *IPD* (make-pprint-dispatch-table))
 
 (set-pprint-dispatch+ '(satisfies function-call-p) #'fn-call '(-5) *IPD*)
 (set-pprint-dispatch+ 'cons #'pprint-fill '(-10) *IPD*)
-
-#+(or :lucid :symbolics)(eval-when (eval load)
-(set-pprint-dispatch+ 'bq-struct #'bq-struct-print '(0) *IPD*)
-(set-pprint-dispatch+ `(cons (member ,*bq-cons*)) #'bq-print '(0) *IPD*)
-(set-pprint-dispatch+ `(cons (member ,*bq-list*)) #'bq-print '(0) *IPD*)
-(set-pprint-dispatch+ `(cons (member ,*bq-list**)) #'bq-print '(0) *IPD*)
-(set-pprint-dispatch+ `(cons (member ,*bq-append*)) #'bq-print '(0) *IPD*)
-(set-pprint-dispatch+ `(cons (member ,*bq-nconc*)) #'bq-print '(0) *IPD*)
-(set-pprint-dispatch+ `(cons (member ,*bq-vector*)) #'bq-vector-print '(0) *IPD*)
-(set-pprint-dispatch+ `(cons (member ,*bq-list-to-vector*)) #'bq-vector-print '(0) *IPD*) )
 
 (set-pprint-dispatch+ '(cons (member block)) #'block-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member case)) #'block-like '(0) *IPD*)
@@ -2729,7 +1746,7 @@
 (set-pprint-dispatch+ '(cons (member with-open-file)) #'block-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member with-open-stream)) #'block-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member with-output-to-string)) #'block-like '(0) *IPD*)
-
+
 (defun pprint-dispatch-print (xp table)
   (let ((stuff (copy-list (others table))))
     (maphash #'(lambda (key val) (declare (ignore key))
@@ -2752,9 +1769,7 @@
 
 (set-pprint-dispatch+ 'pprint-dispatch-table #'pprint-dispatch-print '(0) *IPD*)
 
-;so only happens first time is loaded.
-(when (eq *print-pprint-dispatch* T)
-  (setq *print-pprint-dispatch* (copy-pprint-dispatch nil)))
+(setf *print-pprint-dispatch* (copy-pprint-dispatch nil))
 
 (provide 'pprint)
 

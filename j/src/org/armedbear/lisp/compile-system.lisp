@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.21 2004-08-21 03:39:06 piso Exp $
+;;; $Id: compile-system.lisp,v 1.22 2004-08-26 14:54:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,10 +38,14 @@
      (load (compile-file "source-transform.lisp"))
      (load (compile-file "opcodes.lisp"))
      (load (compile-file "jvm.lisp"))
+     ;; FIXME We need to load clos.lisp before we can compile clos.lisp.
+     (load "clos.lisp")
      ;; Order matters for these files.
      (mapc #'compile-file '("collect.lisp"
                             "macros.lisp"
                             "loop.lisp"))
+     (mapc #'compile-file '("pprint.lisp"
+                            "format.lisp"))
      ;; But not for these.
      (mapc #'compile-file '("adjoin.lisp"
                             "and.lisp"
@@ -61,7 +65,7 @@
                             "case.lisp"
                             "chars.lisp"
                             "check-type.lisp"
-                            ;;"clos.lisp"
+                            "clos.lisp"
                             "coerce.lisp"
                             "compile-file.lisp"
                             "compiler-macro.lisp"
@@ -100,7 +104,7 @@
                             "find-all-symbols.lisp"
                             "find.lisp"
                             "fixme.lisp"
-                            "format.lisp"
+;;                             "format.lisp"
                             "gentemp.lisp"
                             "gray-streams.lisp"
                             "inspect.lisp"
@@ -137,7 +141,6 @@
                             "parse-lambda-list.lisp"
                             "parse-namestring.lisp"
                             "pathnames.lisp"
-                            "pprint.lisp"
                             "print.lisp"
                             ;;"print-object.lisp"
                             "print-unreadable-object.lisp"
