@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.398 2003-09-16 13:29:57 piso Exp $
+ * $Id: Primitives.java,v 1.399 2003-09-16 16:24:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1364,7 +1364,11 @@ public final class Primitives extends Module
                     get(symbol, Symbol.MACROEXPAND_MACRO, NIL);
                 if (macroObject instanceof MacroObject)
                     return ((MacroObject)macroObject).getExpander();
+                return NIL;
             }
+            if (obj instanceof AutoloadMacro)
+                return obj;
+
             return NIL;
         }
     };
