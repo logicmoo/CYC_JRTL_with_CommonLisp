@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.189 2004-06-26 14:58:27 asimon Exp $
+ * $Id: Autoload.java,v 1.190 2004-07-09 17:39:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,12 @@ package org.armedbear.lisp;
 
 public class Autoload extends Function
 {
-    protected final Symbol symbol;
     protected final String fileName;
     protected final String className;
 
     protected Autoload(Symbol symbol)
     {
-        this.symbol = symbol;
+        super(symbol);
         fileName = null;
         className = null;
         symbol.setBuiltInFunction(false);
@@ -37,7 +36,7 @@ public class Autoload extends Function
 
     protected Autoload(Symbol symbol, String fileName, String className)
     {
-        this.symbol = symbol;
+        super(symbol);
         this.fileName = fileName;
         this.className = className;
         symbol.setBuiltInFunction(false);
@@ -110,16 +109,11 @@ public class Autoload extends Function
             Load.loadSystemFile(getFileName(), true);
     }
 
-    public final Symbol getSymbol()
-    {
-        return symbol;
-    }
-
     protected final String getFileName()
     {
         if (fileName != null)
             return fileName;
-        return symbol.getName().toLowerCase();
+        return getSymbol().getName().toLowerCase();
     }
 
     public final int getFunctionalType()
@@ -127,10 +121,10 @@ public class Autoload extends Function
         return FTYPE_AUTOLOAD;
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("#<AUTOLOAD ");
-        sb.append(symbol);
+        sb.append(getSymbol().writeToString());
         sb.append(" \"");
         if (className != null) {
             int index = className.lastIndexOf('.');
