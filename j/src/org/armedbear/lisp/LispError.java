@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispError.java,v 1.3 2003-09-19 14:44:10 piso Exp $
+ * $Id: LispError.java,v 1.4 2003-09-19 14:55:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@ public class LispError extends Condition
 {
     public LispError()
     {
-        super();
     }
 
     public LispError(String message)

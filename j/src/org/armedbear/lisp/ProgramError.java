@@ -2,7 +2,7 @@
  * ProgramError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ProgramError.java,v 1.6 2003-09-19 12:43:59 piso Exp $
+ * $Id: ProgramError.java,v 1.7 2003-09-19 14:55:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class ProgramError extends Condition
+public class ProgramError extends LispError
 {
     public ProgramError()
     {
@@ -35,8 +35,6 @@ public class ProgramError extends Condition
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.PROGRAM_ERROR)
-            return T;
-        if (type == Symbol.ERROR)
             return T;
         return super.typep(type);
     }

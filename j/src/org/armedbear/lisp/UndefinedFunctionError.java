@@ -2,7 +2,7 @@
  * UndefinedFunctionError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndefinedFunctionError.java,v 1.3 2003-09-19 12:10:28 piso Exp $
+ * $Id: UndefinedFunctionError.java,v 1.4 2003-09-19 14:55:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class UndefinedFunctionError extends Condition
+public final class UndefinedFunctionError extends LispError
 {
     private final LispObject object;
     private final String name;
@@ -47,8 +47,6 @@ public final class UndefinedFunctionError extends Condition
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.UNDEFINED_FUNCTION)
-            return T;
-        if (type == Symbol.ERROR)
             return T;
         return super.typep(type);
     }

@@ -2,7 +2,7 @@
  * ArithmeticError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ArithmeticError.java,v 1.3 2003-09-19 12:43:59 piso Exp $
+ * $Id: ArithmeticError.java,v 1.4 2003-09-19 14:55:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class ArithmeticError extends Condition
+public class ArithmeticError extends LispError
 {
     public ArithmeticError()
     {
@@ -35,8 +35,6 @@ public class ArithmeticError extends Condition
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.ARITHMETIC_ERROR)
-            return T;
-        if (type == Symbol.ERROR)
             return T;
         return super.typep(type);
     }

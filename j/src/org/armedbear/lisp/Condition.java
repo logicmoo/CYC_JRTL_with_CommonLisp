@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Condition.java,v 1.5 2003-09-19 12:43:59 piso Exp $
+ * $Id: Condition.java,v 1.6 2003-09-19 14:55:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,15 +23,21 @@ package org.armedbear.lisp;
 
 public class Condition extends LispObject
 {
-    private String message;
+    private final String message;
 
     public Condition()
     {
+        message = null;
     }
 
     public Condition(String message)
     {
         this.message = message;
+    }
+
+    public String getMessage()
+    {
+        return message;
     }
 
     public LispObject typeOf()
