@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.11 2003-12-19 01:24:27 piso Exp $
+;;; $Id: restart.lisp,v 1.12 2003-12-19 01:36:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -198,17 +198,23 @@
   (error 'control-error
          :format-control "ABORT restart failed to transfer control dynamically."))
 
-(defun continue (&optional condition)
-  (invoke-restart 'continue))
-
 (defun muffle-warning (&optional condition)
   (invoke-restart 'muffle-warning))
 
+(defun continue (&optional condition)
+  (let ((restart (find-restart 'continue condition)))
+    (when restart
+      (invoke-restart restart))))
+
 (defun store-value (value &optional condition)
-  (invoke-restart 'store-value value))
+  (let ((restart (find-restart 'store-value condition)))
+    (when restart
+      (invoke-restart restart value))))
 
 (defun use-value (value &optional condition)
-  (invoke-restart 'use-value value))
+  (let ((restart (find-restart 'use-value condition)))
+    (when restart
+      (invoke-restart restart value))))
 
 ;;; Adapted from SBCL.
 (defun warn (datum &rest arguments)
