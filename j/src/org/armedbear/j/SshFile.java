@@ -2,7 +2,7 @@
  * SshFile.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshFile.java,v 1.5 2002-11-30 15:49:21 piso Exp $
+ * $Id: SshFile.java,v 1.6 2002-12-07 02:10:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -182,7 +182,7 @@ public final class SshFile extends File
         session.unlock();
         return result;
     }
-    
+
     public String getDirectoryListing()
     {
         return getDirectoryListing(false);
@@ -236,5 +236,15 @@ public final class SshFile extends File
         if (f.canonicalPath == null || canonicalPath == null)
             return false;
         return f.canonicalPath.equals(canonicalPath);
+    }
+
+    public final String getSeparator()
+    {
+        return "/";
+    }
+
+    public final char getSeparatorChar()
+    {
+        return '/';
     }
 }
