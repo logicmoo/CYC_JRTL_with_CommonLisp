@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.80 2004-04-16 01:06:50 piso Exp $
+ * $Id: LispObject.java,v 1.81 2004-04-24 12:23:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -388,9 +388,9 @@ public class LispObject extends Lisp
         return signal(new TypeError(this, Symbol.SYMBOL));
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
-        return super.toString();
+        return toString();
     }
 
     public String unreadableString(String s)
