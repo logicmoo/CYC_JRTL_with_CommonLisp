@@ -1,7 +1,7 @@
 ;;; upgraded-complex-part-type.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: upgraded-complex-part-type.lisp,v 1.3 2005-02-06 18:28:28 piso Exp $
+;;; $Id: upgraded-complex-part-type.lisp,v 1.4 2005-03-13 01:46:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,17 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from SBCL.
-
 (defun upgraded-complex-part-type (typespec &optional environment)
   (declare (ignore environment))
-  (cond ((null typespec)
-         nil)
-        ((subtypep typespec 'float)
-	 'float)
-	((subtypep typespec 'rational)
-	 'rational)
-        ((subtypep typespec 'real)
-         'real)
-	(t
-	 t)))
+  (if (subtypep typespec 'REAL)
+      typespec
+      (error :format-control "The type ~S is not a subtype of ~S."
+             :format-arguments (list typespec 'REAL))))
