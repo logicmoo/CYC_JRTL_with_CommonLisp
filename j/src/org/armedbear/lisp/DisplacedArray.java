@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.27 2004-02-24 00:43:11 piso Exp $
+ * $Id: DisplacedArray.java,v 1.28 2004-02-24 12:51:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,6 +117,11 @@ public final class DisplacedArray extends AbstractArray
             return new String(chars, 0, fillPointer);
         else
             return new String(chars);
+    }
+
+    public LispObject VECTORP()
+    {
+        return vectorp() ? T : NIL;
     }
 
     public boolean vectorp()
