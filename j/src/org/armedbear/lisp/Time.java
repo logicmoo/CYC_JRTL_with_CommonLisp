@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.7 2003-09-25 15:37:08 piso Exp $
+ * $Id: Time.java,v 1.8 2003-09-29 17:59:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 package org.armedbear.lisp;
 
 import java.io.File;
+import java.util.TimeZone;
 
 public final class Time extends Lisp
 {
@@ -87,6 +88,19 @@ public final class Time extends Lisp
             if (lastModified == 0)
                 return NIL;
             return number(lastModified / 1000 + 2208988800L);
+        }
+    };
+
+    private static final Primitive0 DEFAULT_TIME_ZONE =
+        new Primitive0("default-time-zone", PACKAGE_SYS, false)
+    {
+        public LispObject execute() throws ConditionThrowable
+        {
+            TimeZone tz = TimeZone.getDefault();
+            int offset = tz.getOffset(System.currentTimeMillis());
+            // "Time zone values increase with motion to the west..."
+            // Convert milliseconds to hours.
+            return new Fixnum(- offset).divideBy(new Fixnum(3600000));
         }
     };
 }
