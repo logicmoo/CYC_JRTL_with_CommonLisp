@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.71 2004-09-15 18:35:56 piso Exp $
+ * $Id: LispShell.java,v 1.72 2004-09-16 18:33:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,15 +142,6 @@ public class LispShell extends Shell
                 lisp.setExitCommand(",quit");
         }
         lisp.needsRenumbering(true);
-        if (startSlime) {
-            try {
-                JLisp.runLispCommand("(sys:load-system-file \"slime-loader.lisp\")");
-                JLisp.runLispCommand("(setq slime::*repl-buffer-name* \"" + title + "\")");
-            }
-            catch (Throwable t) {
-                Log.debug(t);
-            }
-        }
         if (Editor.isLispInitialized())
             LispAPI.invokeLispShellStartupHook(lisp, shellCommand);
         return lisp;
@@ -510,7 +501,28 @@ public class LispShell extends Shell
                 editor.switchToBuffer(buf);
             else
                 editor.activateInOtherWindow(buf);
+            if (startSlime)
+                startSlime(buf);
         }
+    }
+
+    private static void startSlime(final Buffer buffer)
+    {
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                try {
+                    JLisp.runLispCommand("(sys:load-system-file \"slime-loader.lisp\")");
+                    JLisp.runLispCommand("(setq slime::*repl-buffer-name* \"" +
+                                         buffer.getTitle() + "\")");
+                    JLisp.runLispCommand("(slime:slime)");
+                }
+                catch (Throwable t) {
+                    Log.debug(t);
+                }
+            }
+        };
+        new Thread(r).start();
     }
 
     private static String getDefaultLispShellCommand()
