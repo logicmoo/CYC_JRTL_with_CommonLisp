@@ -330,6 +330,7 @@ null
 numberp
 nunion
 oddp
+open-stream-p
 or
 otherwise
 output-stream-p
