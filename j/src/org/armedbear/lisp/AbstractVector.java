@@ -28,6 +28,8 @@ public abstract class AbstractVector extends LispObject
     {
         if (typeSpecifier == Symbol.VECTOR)
             return T;
+        if (typeSpecifier == Symbol.ARRAY)
+            return T;
         if (typeSpecifier == Symbol.SEQUENCE)
             return T;
         if (typeSpecifier == Symbol.SIMPLE_VECTOR)
