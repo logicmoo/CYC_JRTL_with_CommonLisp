@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.27 2003-04-06 18:42:14 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.28 2003-04-09 14:47:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -320,6 +320,9 @@ public class CharacterInputStream extends LispStream
                 case 'a':
                 case 'A':
                     return readArray(numArg);
+                case 'x':
+                case 'X':
+                    return readHex();
                 default:
                     //clearInput();
                     //throw new LispError("unsupported '#' macro character '" +
@@ -660,6 +663,44 @@ public class CharacterInputStream extends LispStream
         }
         catch (NumberFormatException e) {
             return null;
+        }
+    }
+
+    private LispObject readHex() throws LispError
+    {
+        try {
+            StringBuffer sb = new StringBuffer();
+            while (true) {
+                int n = read();
+                if (n < 0)
+                    break;
+                char c = (char) n;
+                if (c >= '0' && c <= '9')
+                    sb.append(c);
+                else if (c >= 'A' && c <= 'F')
+                    sb.append(c);
+                else if (c >= 'a' && c <= 'f')
+                    sb.append(c);
+                else {
+                    unread(c);
+                    break;
+                }
+            }
+            String s = sb.toString();
+            try {
+                return new Fixnum(Integer.parseInt(s, 16));
+            }
+            catch (NumberFormatException e) {}
+            // parseInt() failed.
+            try {
+                return new Bignum(new BigInteger(s, 16));
+            }
+            catch (NumberFormatException e) {}
+            // Not a number.
+            throw new LispError();
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
         }
     }
 
