@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.53 2004-04-20 15:25:52 piso Exp $
+;;; $Id: defstruct.lisp,v 1.54 2004-05-21 11:58:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -330,7 +330,8 @@
              (intern (concatenate 'string (symbol-name *dd-conc-name*) (symbol-name slot-name)))
              slot-name)))
     `(,(slot-reader-definition accessor-name index)
-      (%put ',accessor-name 'setf-inverse ',(slot-writer index )))))
+      (eval-when (:compile-toplevel :load-toplevel :execute)
+        (%put ',accessor-name 'setf-inverse ',(slot-writer index))))))
 
 (defun define-access-functions ()
   (let ((index 0)
