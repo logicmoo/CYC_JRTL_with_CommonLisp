@@ -1,7 +1,7 @@
 ;;; with-package-iterator.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: with-package-iterator.lisp,v 1.2 2003-09-14 16:04:38 piso Exp $
+;;; $Id: with-package-iterator.lisp,v 1.3 2003-09-14 16:27:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
       (unless (packagep pkg)
         (setq pkg (find-package pkg))
         (unless pkg
-          (error "not a package")))
+          (error 'package-error "not a package")))
       (when (memq :internal symbol-types)
         (dolist (sym (package-internal-symbols pkg))
           (push (list sym :internal pkg) results)))
