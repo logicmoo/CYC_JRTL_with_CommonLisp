@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.25 2003-03-12 20:34:48 piso Exp $
+;;; $Id: sequences.lisp,v 1.26 2003-03-14 20:05:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -850,13 +850,6 @@
                 (if sequence
                     (list-delete-duplicates* sequence test test-not key from-end start end))
                 (vector-delete-duplicates* sequence test test-not key from-end start end)))
-
-
-(defmacro real-count (count)
-  `(cond ((null ,count) most-positive-fixnum)
-	 ((fixnump ,count) (if (minusp ,count) 0 ,count))
-	 ((integerp ,count) (if (minusp ,count) 0 most-positive-fixnum))
-	 (t ,count)))
 
 
 (defun list-substitute* (pred new list start end count key test test-not old)
