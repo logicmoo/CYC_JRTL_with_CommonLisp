@@ -1,7 +1,7 @@
 ;;; dolist.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: dolist.lisp,v 1.2 2004-05-06 11:06:12 piso Exp $
+;;; $Id: dolist.lisp,v 1.3 2004-12-11 15:37:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,26 +17,28 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from SBCL.
-
 (in-package "SYSTEM")
 
-(defmacro dolist ((var list &optional (result nil)) &body body)
+(defmacro dolist ((var list-form &optional (result-form nil)) &body body)
   (multiple-value-bind (forms decls) (parse-body body nil)
-    (let ((rest (gensym "REST"))
-          (start (gensym "START")))
+    (let ((rest (gensym "REST-"))
+          (top (gensym "TOP-"))
+          (test (gensym "TEST-")))
       `(block nil
-         (let ((,rest ,list))
+         (let ((,rest ,list-form)
+               (,var nil))
+           ,@decls
            (tagbody
-            ,start
+            (go ,test)
+            ,top
+            (setq ,var (car ,rest))
+            ,@forms
+            (setq ,rest (cdr ,rest))
+            ,test
             (unless (endp ,rest)
-              (let ((,var (car ,rest)))
-                ,@decls
-                (setq ,rest (cdr ,rest))
-                (tagbody ,@forms))
-              (go ,start))))
-         ,(if result
+              (go ,top))))
+         ,(if (constantp result-form)
+              `,result-form
               `(let ((,var nil))
                  ,var
-                 ,result)
-              nil)))))
+                 ,result-form))))))
