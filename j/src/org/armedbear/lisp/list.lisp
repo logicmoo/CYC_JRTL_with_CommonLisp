@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.28 2003-06-02 14:44:57 piso Exp $
+;;; $Id: list.lisp,v 1.29 2003-06-02 16:32:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -312,12 +312,8 @@
             (s tree))))
 
 
-(defun member (item list &key key (test #'eql testp) (test-not nil notp))
-  (do ((list list (cdr list)))
-      ((null list) nil)
-    (let ((car (car list)))
-      (if (satisfies-the-test item car)
-	  (return list)))))
+(defun member (item list &key key test test-not)
+  (%member item list key test test-not))
 
 (defun member-if (test list &key key)
   (do ((list list (cdr list)))
