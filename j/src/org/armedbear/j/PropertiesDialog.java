@@ -2,7 +2,7 @@
  * PropertiesDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: PropertiesDialog.java,v 1.5 2003-07-24 16:25:06 piso Exp $
+ * $Id: PropertiesDialog.java,v 1.6 2003-07-27 01:14:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,6 +173,7 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
 
             modeComboBox.setSelectedItem(buffer.getMode().toString());
             label.setLabelFor(modeComboBox);
+            modeComboBox.addKeyListener(this);
 
             flow.add(Box.createHorizontalStrut(5));
             flow.add(modeComboBox);
