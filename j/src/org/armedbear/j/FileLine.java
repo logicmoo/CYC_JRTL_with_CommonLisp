@@ -2,7 +2,7 @@
  * FileLine.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: FileLine.java,v 1.1.1.1 2002-09-24 16:08:12 piso Exp $
+ * $Id: FileLine.java,v 1.2 2002-12-11 01:23:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public final class FileLine extends TextLine
 
     public FileLine(File file, boolean listEachOccurrence)
     {
-        super(listEachOccurrence ? "File: " + file.netPath() : file.netPath());
+        super(listEachOccurrence ? "File: " + file.canonicalPath() : file.canonicalPath());
     }
 
     public FileLine(String fileName)
