@@ -2,7 +2,7 @@
  * AtomicTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AtomicTypeSpecifier.java,v 1.1 2003-07-15 15:30:18 piso Exp $
+ * $Id: AtomicTypeSpecifier.java,v 1.2 2003-07-15 16:28:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,11 @@ public class AtomicTypeSpecifier extends TypeSpecifier
     public AtomicTypeSpecifier(Symbol symbol) throws LispError
     {
         type = Type.getInstance(symbol);
+    }
+
+    public final Type getType()
+    {
+        return type;
     }
 
     public LispObject isSubtypeOf(TypeSpecifier ts) throws LispError
