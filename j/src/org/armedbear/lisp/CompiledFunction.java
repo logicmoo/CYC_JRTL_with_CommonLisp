@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.20 2004-04-08 16:46:54 piso Exp $
+ * $Id: CompiledFunction.java,v 1.21 2004-04-16 05:55:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,6 +63,18 @@ public class CompiledFunction extends Closure
         args[0] = first;
         args[1] = second;
         args[2] = third;
+        return execute(args);
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[4];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
         return execute(args);
     }
 
