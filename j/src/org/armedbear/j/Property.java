@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Property.java,v 1.20 2003-06-04 00:23:53 piso Exp $
+ * $Id: Property.java,v 1.21 2003-06-14 17:48:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,6 +290,8 @@ public final class Property implements Comparable, Constants
         createProperty("lsExtraOptions");
     public static final Property NEWS =
         createProperty("news");
+    public static final Property PATCH_MODE =
+        createProperty("patchMode");
     public static final Property SHELL_FILE_NAME =
         createProperty("shellFileName");
     public static final Property SIGNATURE =
