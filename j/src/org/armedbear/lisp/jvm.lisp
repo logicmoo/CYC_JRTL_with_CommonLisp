@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.410 2005-03-25 19:32:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.411 2005-03-29 17:26:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,16 +25,12 @@
 
 (export '(compile-defun *catch-errors* jvm-compile jvm-compile-package))
 
-(import '(sys::%format
-          sys::source-transform
-          sys::define-source-transform
-          sys::expand-source-transform))
-
-(require '#:format)
-(require '#:clos)
-(require '#:print-object)
-(require '#:source-transform)
-(require '#:opcodes)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (require '#:format)
+  (require '#:clos)
+  (require '#:print-object)
+  (require '#:source-transform)
+  (require '#:opcodes))
 
 (shadow '(method variable))
 
@@ -152,7 +148,7 @@
   (single-valued-p t))
 
 (defmethod print-object ((compiland compiland) stream)
-  (%format stream "#<~S ~S>" 'compiland (compiland-name compiland)))
+  (sys::%format stream "#<~S ~S>" 'compiland (compiland-name compiland)))
 
 (defvar *current-compiland* nil)
 
@@ -190,7 +186,7 @@
 (defvar *dump-variables* nil)
 
 (defun dump-1-variable (variable)
-  (%format t "  ~S special-p = ~S register = ~S index = ~S declared-type = ~S~%"
+  (sys::%format t "  ~S special-p = ~S register = ~S index = ~S declared-type = ~S~%"
            (variable-name variable)
            (variable-special-p variable)
            (variable-register variable)
@@ -203,7 +199,7 @@
     (if list
         (dolist (variable list)
           (dump-1-variable variable))
-        (%format t "  None.~%"))))
+        (sys::%format t "  None.~%"))))
 
 (defstruct variable
   name
@@ -712,9 +708,9 @@
         (dformat t "old form = ~S~%" form)
         (dformat t "new form = ~S~%" new-form)
         (return-from p1-function-call (p1 new-form))))
-    (let ((source-transform (source-transform op)))
+    (let ((source-transform (sys::source-transform op)))
       (when source-transform
-        (let ((new-form (expand-source-transform form)))
+        (let ((new-form (sys::expand-source-transform form)))
           (when (neq new-form form)
             (return-from p1-function-call (p1 new-form))))))
     (let ((expansion (inline-expansion op)))
@@ -738,7 +734,7 @@
             (t
              ;; Not a local function call.
              (unless (single-valued-p op)
-               (%format t "not single-valued op = ~S~%" op)
+               (sys::%format t "not single-valued op = ~S~%" op)
                (setf (compiland-single-valued-p *current-compiland*) nil)))))
     (list* op (mapcar #'p1 (cdr form)))))
 
@@ -789,34 +785,38 @@
 (defun install-p1-handler (symbol handler)
   (setf (get symbol 'p1-handler) handler))
 
-(install-p1-handler 'block                'p1-block)
-(install-p1-handler 'catch                'p1-default)
-(install-p1-handler 'declare              'identity)
-(install-p1-handler 'eval-when            'p1-eval-when)
-(install-p1-handler 'flet                 'p1-flet)
-(install-p1-handler 'function             'p1-function)
-(install-p1-handler 'go                   'p1-go)
-(install-p1-handler 'if                   'p1-default)
-(install-p1-handler 'labels               'p1-labels)
-(install-p1-handler 'lambda               'p1-lambda)
-(install-p1-handler 'let                  'p1-let/let*)
-(install-p1-handler 'let*                 'p1-let/let*)
-(install-p1-handler 'load-time-value      'identity)
-(install-p1-handler 'locally              'p1-default)
-(install-p1-handler 'multiple-value-bind  'p1-m-v-b)
-(install-p1-handler 'multiple-value-call  'p1-default)
-(install-p1-handler 'multiple-value-list  'p1-default)
-(install-p1-handler 'multiple-value-prog1 'p1-default)
-(install-p1-handler 'progn                'p1-default)
-(install-p1-handler 'progv                'identity)
-(install-p1-handler 'quote                'p1-quote)
-(install-p1-handler 'return-from          'p1-return-from)
-(install-p1-handler 'setq                 'p1-setq)
-(install-p1-handler 'symbol-macrolet      'identity)
-(install-p1-handler 'tagbody              'p1-tagbody)
-(install-p1-handler 'the                  'p1-the)
-(install-p1-handler 'throw                'p1-throw)
-(install-p1-handler 'unwind-protect       'p1-unwind-protect)
+(defun initilize-p1-handlers ()
+  (dolist (pair '((BLOCK                p1-block)
+                  (CATCH                p1-default)
+                  (DECLARE              identity)
+                  (EVAL-WHEN            p1-eval-when)
+                  (FLET                 p1-flet)
+                  (FUNCTION             p1-function)
+                  (GO                   p1-go)
+                  (IF                   p1-default)
+                  (LABELS               p1-labels)
+                  (LAMBDA               p1-lambda)
+                  (LET                  p1-let/let*)
+                  (LET*                 p1-let/let*)
+                  (LOAD-TIME-VALUE      identity)
+                  (LOCALLY              p1-default)
+                  (MULTIPLE-VALUE-BIND  p1-m-v-b)
+                  (MULTIPLE-VALUE-CALL  p1-default)
+                  (MULTIPLE-VALUE-LIST  p1-default)
+                  (MULTIPLE-VALUE-PROG1 p1-default)
+                  (PROGN                p1-default)
+                  (PROGV                identity)
+                  (QUOTE                p1-quote)
+                  (RETURN-FROM          p1-return-from)
+                  (SETQ                 p1-setq)
+                  (SYMBOL-MACROLET      identity)
+                  (TAGBODY              p1-tagbody)
+                  (THE                  p1-the)
+                  (THROW                p1-throw)
+                  (UNWIND-PROTECT       p1-unwind-protect)))
+    (install-p1-handler (car pair) (cadr pair))))
+
+(initilize-p1-handlers)
 
 (defun dump-pool ()
   (let ((pool (reverse *pool*))
@@ -835,7 +835,7 @@
                    (6 'double)
                    (12 'name-and-type)
                    (1 'utf8)))
-      (%format t "~D: ~A ~S~%" (1+ index) type entry)
+      (sys::%format t "~D: ~A ~S~%" (1+ index) type entry)
       (setq pool (cdr pool))))
   t)
 
@@ -902,7 +902,7 @@
     depth))
 
 (defun print-instruction (instruction)
-  (%format nil "~A ~A stack = ~S depth = ~S"
+  (sys::%format nil "~A ~A stack = ~S depth = ~S"
           (opcode-name (instruction-opcode instruction))
           (instruction-args instruction)
           (instruction-stack instruction)
@@ -1278,74 +1278,76 @@
 (defun unsupported-opcode (instruction)
   (error "Unsupported opcode ~D." (instruction-opcode instruction)))
 
-(dotimes (n (1+ *last-opcode*))
-  (setf (gethash n *resolvers*) #'unsupported-opcode))
+(defun initialize-resolvers ()
+  (dotimes (n (1+ *last-opcode*))
+    (setf (gethash n *resolvers*) #'unsupported-opcode))
+  ;; The following opcodes resolve to themselves.
+  (dolist (n '(0 ; NOP
+               1 ; ACONST_NULL
+               2 ; ICONST_M1
+               3 ; ICONST_0
+               4 ; ICONST_1
+               5 ; ICONST_2
+               6 ; ICONST_3
+               7 ; ICONST_4
+               8 ; ICONST_5
+               9 ; LCONST_0
+               10 ; LCONST_1
+               42 ; ALOAD_0
+               43 ; ALOAD_1
+               44 ; ALOAD_2
+               45 ; ALOAD_3
+               50 ; AALOAD
+               75 ; ASTORE_0
+               76 ; ASTORE_1
+               77 ; ASTORE_2
+               78 ; ASTORE_3
+               83 ; AASTORE
+               87 ; POP
+               89 ; DUP
+               90 ; DUP_X1
+               91 ; DUP_X2
+               95 ; SWAP
+               96 ; IADD
+               97 ; LADD
+               100 ; ISUB
+               101 ; LSUB
+               116 ; INEG
+               120 ; ISHL
+               121 ; LSHL
+               122 ; ISHR
+               123 ; LSHR
+               126 ; IAND
+               132 ; IINC
+               133 ; I2L
+               136 ; L2I
+               153 ; IFEQ
+               154 ; IFNE
+               155 ; IFGE
+               156 ; IFGT
+               157 ; IFGT
+               158 ; IFLE
+               159 ; IF_ICMPEQ
+               160 ; IF_ICMPNE
+               161 ; IF_ICMPLT
+               162 ; IF_ICMPGE
+               163 ; IF_ICMPGT
+               164 ; IF_ICMPLE
+               165 ; IF_ACMPEQ
+               166 ; IF_ACMPNE
+               167 ; GOTO
+               168 ; JSR
+               169 ; RET
+               176 ; ARETURN
+               177 ; RETURN
+               190 ; ARRAYLENGTH
+               191 ; ATHROW
+               198 ; IFNULL
+               202 ; LABEL
+               ))
+    (setf (gethash n *resolvers*) nil)))
 
-;; The following opcodes resolve to themselves.
-(dolist (n '(0 ; NOP
-             1 ; ACONST_NULL
-             2 ; ICONST_M1
-             3 ; ICONST_0
-             4 ; ICONST_1
-             5 ; ICONST_2
-             6 ; ICONST_3
-             7 ; ICONST_4
-             8 ; ICONST_5
-             9 ; LCONST_0
-             10 ; LCONST_1
-             42 ; ALOAD_0
-             43 ; ALOAD_1
-             44 ; ALOAD_2
-             45 ; ALOAD_3
-             50 ; AALOAD
-             75 ; ASTORE_0
-             76 ; ASTORE_1
-             77 ; ASTORE_2
-             78 ; ASTORE_3
-             83 ; AASTORE
-             87 ; POP
-             89 ; DUP
-             90 ; DUP_X1
-             91 ; DUP_X2
-             95 ; SWAP
-             96 ; IADD
-             97 ; LADD
-             100 ; ISUB
-             101 ; LSUB
-             116 ; INEG
-             120 ; ISHL
-             121 ; LSHL
-             122 ; ISHR
-             123 ; LSHR
-             126 ; IAND
-             132 ; IINC
-             133 ; I2L
-             136 ; L2I
-             153 ; IFEQ
-             154 ; IFNE
-             155 ; IFGE
-             156 ; IFGT
-             157 ; IFGT
-             158 ; IFLE
-             159 ; IF_ICMPEQ
-             160 ; IF_ICMPNE
-             161 ; IF_ICMPLT
-             162 ; IF_ICMPGE
-             163 ; IF_ICMPGT
-             164 ; IF_ICMPLE
-             165 ; IF_ACMPEQ
-             166 ; IF_ACMPNE
-             167 ; GOTO
-             168 ; JSR
-             169 ; RET
-             176 ; ARETURN
-             177 ; RETURN
-             190 ; ARRAYLENGTH
-             191 ; ATHROW
-             198 ; IFNULL
-             202 ; LABEL
-             ))
-  (setf (gethash n *resolvers*) nil))
+(initialize-resolvers)
 
 (defmacro define-resolver (opcodes args &body body)
   (let ((name (gensym)))
@@ -1510,7 +1512,7 @@
       (when (instruction-depth instruction)
         (unless (eql (instruction-depth instruction) (+ depth (instruction-stack instruction)))
           (fresh-line)
-          (%format t "Stack inconsistency at index ~D: found ~S, expected ~S.~%"
+          (sys::%format t "Stack inconsistency at index ~D: found ~S, expected ~S.~%"
                    i
                    (instruction-depth instruction)
                    (+ depth (instruction-stack instruction))))
@@ -1544,14 +1546,14 @@
         (if (instruction-stack instruction)
             (when (opcode-stack-effect opcode)
               (unless (eql (instruction-stack instruction) (opcode-stack-effect opcode))
-                (%format t "instruction-stack = ~S opcode-stack-effect = ~S~%"
+                (sys::%format t "instruction-stack = ~S opcode-stack-effect = ~S~%"
                          (instruction-stack instruction)
                          (opcode-stack-effect opcode))
-                (%format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
+                (sys::%format t "index = ~D instruction = ~A~%" i (print-instruction instruction))))
             (setf (instruction-stack instruction) (opcode-stack-effect opcode)))
 ;;         (aver (not (null (instruction-stack instruction))))
         (unless (instruction-stack instruction)
-          (%format t "no stack information for instruction ~D~%" (instruction-opcode instruction))
+          (sys::%format t "no stack information for instruction ~D~%" (instruction-opcode instruction))
           (aver nil))))
     (walk-code code 0 0)
     (dolist (handler *handlers*)
@@ -1565,9 +1567,9 @@
           (when depth
             (setf max-stack (max max-stack depth)))))
       (when *compiler-debug*
-        (%format t "compiland name = ~S~%" (compiland-name *current-compiland*))
-        (%format t "max-stack = ~D~%" max-stack)
-        (%format t "----- after stack analysis -----~%")
+        (sys::%format t "compiland name = ~S~%" (compiland-name *current-compiland*))
+        (sys::%format t "max-stack = ~D~%" max-stack)
+        (sys::%format t "----- after stack analysis -----~%")
         (print-code))
       max-stack)))
 
@@ -1653,7 +1655,7 @@
 (defun print-code ()
   (dotimes (i (length *code*))
     (let ((instruction (elt *code* i)))
-      (%format t "~D ~A ~S ~S ~S~%"
+      (sys::%format t "~D ~A ~S ~S ~S~%"
                i
                (opcode-name (instruction-opcode instruction))
                (instruction-args instruction)
@@ -1838,10 +1840,10 @@
 
 (defun optimize-code ()
   (unless *enable-optimization*
-    (%format t "optimizations are disabled~%"))
+    (sys::%format t "optimizations are disabled~%"))
   (when *enable-optimization*
     (when *compiler-debug*
-      (%format t "----- before optimization -----~%")
+      (sys::%format t "----- before optimization -----~%")
       (print-code))
     (loop
       (let ((changed-p nil))
@@ -1855,7 +1857,7 @@
     (unless (typep *code* 'vector)
       (setf *code* (coerce *code* 'vector)))
     (when *compiler-debug*
-      (%format t "----- after optimization -----~%")
+      (sys::%format t "----- after optimization -----~%")
       (print-code))))
 
 (defun code-bytes (code)
@@ -2001,7 +2003,7 @@
   handlers)
 
 (defun make-constructor (super args)
-;;   (%format t "make-constructor (length *static-code*) = ~S~%" (length *static-code*))
+;;   (sys::%format t "make-constructor (length *static-code*) = ~S~%" (length *static-code*))
   (let* ((*compiler-debug* nil) ; We don't normally need to see debugging output for constructors.
          (constructor (make-method :name "<init>"
                                    :descriptor "()V"))
@@ -2016,7 +2018,7 @@
            (emit 'aconst_null) ;; name
            (let* ((*print-level* nil)
                   (*print-length* nil)
-                  (s (%format nil "~S" args)))
+                  (s (sys::%format nil "~S" args)))
              (emit 'ldc (pool-string s))
              (emit-invokestatic +lisp-class+ "readObjectFromString"
                                 (list +java-string+) +lisp-object+))
@@ -2032,7 +2034,7 @@
            (emit 'aload_0) ;; this
            (let* ((*print-level* nil)
                   (*print-length* nil)
-                  (s (%format nil "~S" args)))
+                  (s (sys::%format nil "~S" args)))
              (emit 'ldc (pool-string s))
              (emit-invokestatic +lisp-class+ "readObjectFromString"
                                 (list +java-string+) +lisp-object+))
@@ -2130,7 +2132,7 @@
                            (list +java-string+ +java-string+) +lisp-symbol+)
         (emit 'putstatic *this-class* g +lisp-symbol+)
         (setf *static-code* *code*)
-;;         (%format t "declare-symbol (length *static-code* = ~S~%" (length *static-code*))
+;;         (sys::%format t "declare-symbol (length *static-code* = ~S~%" (length *static-code*))
         (setf (gethash symbol *declared-symbols*) g)))
     g))
 
@@ -2204,7 +2206,7 @@
   (let ((g (gethash n *declared-fixnums*)))
     (unless g
       (let ((*code* *static-code*))
-        (setf g (%format nil "FIXNUM_~A~D"
+        (setf g (sys::%format nil "FIXNUM_~A~D"
                          (if (minusp n) "MINUS_" "")
                          (abs n)))
         (declare-field g +lisp-fixnum+)
@@ -2237,7 +2239,7 @@
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (%format nil "~S" obj))
+         (s (sys::%format nil "~S" obj))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2251,7 +2253,7 @@
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (%format nil "~S" obj))
+         (s (sys::%format nil "~S" obj))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2271,7 +2273,7 @@
     (let* ((g (symbol-name (gensym)))
            (*print-level* nil)
            (*print-length* nil)
-           (s (%format nil "~S" creation-form))
+           (s (sys::%format nil "~S" creation-form))
            (*code* *static-code*))
       (declare-field g +lisp-object+)
       (emit 'ldc (pool-string s))
@@ -2287,7 +2289,7 @@
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (%format nil "#.(FIND-PACKAGE ~S)" (package-name obj)))
+         (s (sys::%format nil "#.(FIND-PACKAGE ~S)" (package-name obj)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2315,7 +2317,7 @@
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (%format nil "~S" obj))
+         (s (sys::%format nil "~S" obj))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc
@@ -2424,43 +2426,44 @@
 (defun define-unary-operator (operator translation)
   (setf (gethash operator unary-operators) translation))
 
-;; (define-unary-operator '1+              "incr")
-;; (define-unary-operator '1-              "decr")
-(define-unary-operator 'ABS             "ABS")
-(define-unary-operator 'ATOM            "ATOM")
-(define-unary-operator 'BIT-VECTOR-P    "BIT_VECTOR_P")
-(define-unary-operator 'CADR            "cadr")
-(define-unary-operator 'CAR             "car")
-(define-unary-operator 'CDDR            "cddr")
-(define-unary-operator 'CDR             "cdr")
-(define-unary-operator 'CHARACTERP      "CHARACTERP")
-(define-unary-operator 'CLASS-OF        "classOf")
-(define-unary-operator 'COMPLEXP        "COMPLEXP")
-(define-unary-operator 'CONSTANTP       "CONSTANTP")
-(define-unary-operator 'DENOMINATOR     "DENOMINATOR")
-(define-unary-operator 'ENDP            "ENDP")
-(define-unary-operator 'EVENP           "EVENP")
-(define-unary-operator 'FIRST           "car")
-(define-unary-operator 'FLOATP          "FLOATP")
-(define-unary-operator 'INTEGERP        "INTEGERP")
-(define-unary-operator 'LENGTH          "LENGTH")
-(define-unary-operator 'LISTP           "LISTP")
-(define-unary-operator 'MINUSP          "MINUSP")
-(define-unary-operator 'NREVERSE        "nreverse")
-(define-unary-operator 'NUMBERP         "NUMBERP")
-(define-unary-operator 'NUMERATOR       "NUMERATOR")
-(define-unary-operator 'ODDP            "ODDP")
-(define-unary-operator 'PLUSP           "PLUSP")
-(define-unary-operator 'RATIONALP       "RATIONALP")
-(define-unary-operator 'REALP           "REALP")
-(define-unary-operator 'REST            "cdr")
-(define-unary-operator 'SECOND          "cadr")
-(define-unary-operator 'SIMPLE-STRING-P "SIMPLE_STRING_P")
-(define-unary-operator 'STRING          "STRING")
-(define-unary-operator 'STRINGP         "STRINGP")
-(define-unary-operator 'SYMBOLP         "SYMBOLP")
-(define-unary-operator 'VECTORP         "VECTORP")
-;; (define-unary-operator 'ZEROP           "ZEROP")
+(defun initialize-unary-operators ()
+  (dolist (pair '((ABS             "ABS")
+                  (ATOM            "ATOM")
+                  (BIT-VECTOR-P    "BIT_VECTOR_P")
+                  (CADR            "cadr")
+                  (CAR             "car")
+                  (CDDR            "cddr")
+                  (CDR             "cdr")
+                  (CHARACTERP      "CHARACTERP")
+                  (CLASS-OF        "classOf")
+                  (COMPLEXP        "COMPLEXP")
+                  (CONSTANTP       "CONSTANTP")
+                  (DENOMINATOR     "DENOMINATOR")
+                  (ENDP            "ENDP")
+                  (EVENP           "EVENP")
+                  (FIRST           "car")
+                  (FLOATP          "FLOATP")
+                  (INTEGERP        "INTEGERP")
+                  (LENGTH          "LENGTH")
+                  (LISTP           "LISTP")
+                  (MINUSP          "MINUSP")
+                  (NREVERSE        "nreverse")
+                  (NUMBERP         "NUMBERP")
+                  (NUMERATOR       "NUMERATOR")
+                  (ODDP            "ODDP")
+                  (PLUSP           "PLUSP")
+                  (RATIONALP       "RATIONALP")
+                  (REALP           "REALP")
+                  (REST            "cdr")
+                  (SECOND          "cadr")
+                  (SIMPLE-STRING-P "SIMPLE_STRING_P")
+                  (STRING          "STRING")
+                  (STRINGP         "STRINGP")
+                  (SYMBOLP         "SYMBOLP")
+                  (VECTORP         "VECTORP")))
+    (define-unary-operator (first pair) (second pair))))
+
+(initialize-unary-operators)
 
 (defun compile-function-call-1 (op args target representation)
   (let ((arg (first args)))
@@ -2494,26 +2497,30 @@
 (defun define-binary-operator (operator translation)
   (setf (gethash operator binary-operators) translation))
 
-(define-binary-operator 'eql                 "EQL")
-(define-binary-operator 'equal               "EQUAL")
-(define-binary-operator '+                   "add")
-(define-binary-operator '-                   "subtract")
-(define-binary-operator '/                   "divideBy")
-(define-binary-operator '*                   "multiplyBy")
-(define-binary-operator '<                   "IS_LT")
-(define-binary-operator '<=                  "IS_LE")
-(define-binary-operator '>                   "IS_GT")
-(define-binary-operator '>=                  "IS_GE")
-(define-binary-operator ' =                  "IS_E")
-(define-binary-operator '/=                  "IS_NE")
-(define-binary-operator 'ash                 "ash")
-(define-binary-operator 'logand              "logand")
-(define-binary-operator 'aref                "AREF")
-(define-binary-operator 'sys::simple-typep   "typep")
-(define-binary-operator 'rplaca              "RPLACA")
-(define-binary-operator 'rplacd              "RPLACD")
-(define-binary-operator 'sys::%rplaca        "_RPLACA")
-(define-binary-operator 'sys::%rplacd        "_RPLACD")
+(defun initialize-binary-operators ()
+  (dolist (pair '((EQL                 "EQL")
+                  (EQUAL               "EQUAL")
+                  (+                   "add")
+                  (-                   "subtract")
+                  (/                   "divideBy")
+                  (*                   "multiplyBy")
+                  (<                   "IS_LT")
+                  (<=                  "IS_LE")
+                  (>                   "IS_GT")
+                  (>=                  "IS_GE")
+                  ( =                  "IS_E")
+                  (/=                  "IS_NE")
+                  (ASH                 "ash")
+                  (LOGAND              "logand")
+                  (AREF                "AREF")
+                  (SYS::SIMPLE-TYPEP   "typep")
+                  (RPLACA              "RPLACA")
+                  (RPLACD              "RPLACD")
+                  (SYS::%RPLACA        "_RPLACA")
+                  (SYS::%RPLACD        "_RPLACD")))
+    (define-binary-operator (first pair) (second pair))))
+
+(initialize-binary-operators)
 
 (defun compile-binary-operation (op args target representation)
   (compile-form (first args) :target :stack)
@@ -2844,7 +2851,7 @@
            (process-args args)
            (emit-call-thread-execute numargs)))))
 
-(define-source-transform funcall (&whole form fun &rest args)
+(sys::define-source-transform funcall (&whole form fun &rest args)
   (cond ((> *debug* *speed*)
          form)
         ((and (consp fun)
@@ -2982,23 +2989,27 @@
 (defun define-java-predicate (predicate translation)
   (setf (gethash predicate java-predicates) translation))
 
-(define-java-predicate 'CHARACTERP         "characterp")
-(define-java-predicate 'CONSTANTP          "constantp")
-(define-java-predicate 'ENDP               "endp")
-(define-java-predicate 'EVENP              "evenp")
-(define-java-predicate 'FLOATP             "floatp")
-(define-java-predicate 'INTEGERP           "integerp")
-(define-java-predicate 'LISTP              "listp")
-(define-java-predicate 'MINUSP             "minusp")
-(define-java-predicate 'NUMBERP            "numberp")
-(define-java-predicate 'ODDP               "oddp")
-(define-java-predicate 'PLUSP              "plusp")
-(define-java-predicate 'RATIONALP          "rationalp")
-(define-java-predicate 'REALP              "realp")
-(define-java-predicate 'STRINGP            "stringp")
-(define-java-predicate 'SPECIAL-VARIABLE-P "isSpecialVariable")
-(define-java-predicate 'VECTORP            "vectorp")
-(define-java-predicate 'ZEROP              "zerop")
+(defun initialize-java-predicates ()
+  (dolist (pair '((CHARACTERP         "characterp")
+                  (CONSTANTP          "constantp")
+                  (ENDP               "endp")
+                  (EVENP              "evenp")
+                  (FLOATP             "floatp")
+                  (INTEGERP           "integerp")
+                  (LISTP              "listp")
+                  (MINUSP             "minusp")
+                  (NUMBERP            "numberp")
+                  (ODDP               "oddp")
+                  (PLUSP              "plusp")
+                  (RATIONALP          "rationalp")
+                  (REALP              "realp")
+                  (STRINGP            "stringp")
+                  (SPECIAL-VARIABLE-P "isSpecialVariable")
+                  (VECTORP            "vectorp")
+                  (ZEROP              "zerop")))
+    (define-java-predicate (car pair) (cadr pair))))
+
+(initialize-java-predicates)
 
 (defun compile-test-2 (form negatep)
   (let* ((op (car form))
@@ -3789,7 +3800,7 @@
 
 (defun p2-block-node (block target)
   (unless (block-node-p block)
-    (%format t "type-of block = ~S~%" (type-of block))
+    (sys::%format t "type-of block = ~S~%" (type-of block))
     (aver (block-node-p block)))
   (let* ((*blocks* (cons block *blocks*))
          (*register* *register*))
@@ -4019,7 +4030,7 @@
       (setf pathname (if *compile-file-truename*
                          (sys::next-classfile-name)
                          (prog1
-                           (%format nil "local-~D.class" *child-count*)
+                           (sys::%format nil "local-~D.class" *child-count*)
                            (incf *child-count*))))
 
       (setf class-file (make-class-file :pathname pathname
@@ -4100,7 +4111,7 @@
           (make-class-file :pathname (if *compile-file-truename*
                                          (sys::next-classfile-name)
                                          (prog1
-                                           (%format nil "local-~D.class" *child-count*)
+                                           (sys::%format nil "local-~D.class" *child-count*)
                                            (incf *child-count*)))
                            :lambda-list lambda-list)))
   (with-class-file (compiland-class-file compiland)
@@ -5371,7 +5382,7 @@
                 )
             (dformat t "optional-args = ~S~%" optional-args)
             (when (= (length optional-args) 1)
-;;               (%format t "~%magic case~%")
+;;               (sys::%format t "~%magic case~%")
               (let* ((optional-arg (car optional-args))
                      (name (if (consp optional-arg) (car optional-arg) optional-arg))
                      (initform (if (consp optional-arg) (cadr optional-arg) nil))
@@ -5587,7 +5598,7 @@
                          (setf (variable-representation variable) :unboxed-fixnum))))))))))))
 
     (dump-variables (reverse parameters)
-                    (%format nil "Arguments to ~A:~%" (compiland-name *current-compiland*))
+                    (sys::%format nil "Arguments to ~A:~%" (compiland-name *current-compiland*))
                     )
 
     (allocate-register) ;; register 0: "this" pointer
@@ -5897,21 +5908,21 @@
       (fresh-line)
       (if name
           (progn
-            (%format t "~A Compiling ~S ...~%" prefix name)
+            (sys::%format t "~A Compiling ~S ...~%" prefix name)
             (when (and (fboundp name)
                        (sys::%typep (fdefinition name) 'generic-function))
-              (%format t "~A Unable to compile generic function ~S~%" prefix name)
+              (sys::%format t "~A Unable to compile generic function ~S~%" prefix name)
               (return-from %jvm-compile (values name nil t)))
             (unless (symbolp name)
-              (%format t "~A Unable to compile ~S~%" prefix name)
+              (sys::%format t "~A Unable to compile ~S~%" prefix name)
               (return-from %jvm-compile (values name nil t))))
-          (%format t "~A Compiling top-level form ...~%" prefix)))
+          (sys::%format t "~A Compiling top-level form ...~%" prefix)))
     (unless definition
       (resolve name)
       (setf definition (fdefinition name)))
     (when (compiled-function-p definition)
       (when (and *compile-print* name)
-        (%format t "~A Already compiled ~S~%" prefix name))
+        (sys::%format t "~A Already compiled ~S~%" prefix name))
       (return-from %jvm-compile (values name nil nil)))
     (multiple-value-bind (expr env) (get-lambda-to-compile definition)
       (let* ((*package* (if (and name (symbol-package name))
@@ -5938,8 +5949,8 @@
                    (setf failure-p nil)))
             (when *compile-print*
               (if name
-                  (%format t "~A Compiled ~S~%" prefix name)
-                  (%format t "~A Compiled top-level form~%" prefix)))))
+                  (sys::%format t "~A Compiled ~S~%" prefix name)
+                  (sys::%format t "~A Compiled top-level form~%" prefix)))))
         (values (or name compiled-definition) warnings-p failure-p)))))
 
 (defun jvm-compile (name &optional definition)
@@ -5950,18 +5961,18 @@
           (compiler-unsupported-feature-error
            (c)
            (fresh-line)
-           (%format t "; UNSUPPORTED FEATURE: ~A~%" c)
+           (sys::%format t "; UNSUPPORTED FEATURE: ~A~%" c)
            (if name
-               (%format t "~A Unable to compile ~S.~%" prefix name)
-               (%format t "~A Unable to compile top-level form.~%" prefix))
+               (sys::%format t "~A Unable to compile ~S.~%" prefix name)
+               (sys::%format t "~A Unable to compile top-level form.~%" prefix))
            (precompiler::precompile name definition))
           #+nil
           (error (c)
                  (fresh-line)
-                 (%format t "~A Note: ~A~%" prefix c)
+                 (sys::%format t "~A Note: ~A~%" prefix c)
                  (if name
-                     (%format t "~A Unable to compile ~S.~%" prefix name)
-                     (%format t "~A Unable to compile top-level form.~%" prefix))
+                     (sys::%format t "~A Unable to compile ~S.~%" prefix name)
+                     (sys::%format t "~A Unable to compile top-level form.~%" prefix))
                  (precompiler::precompile name definition))
           ))
       (%jvm-compile name definition)))
@@ -5987,54 +5998,57 @@
       (error "Handler not found: ~S" handler))
     (setf (get symbol 'p2-handler) handler)))
 
-(mapc #'install-p2-handler '(catch
-                             declare
-                             funcall
-                             if
-                             locally
-                             multiple-value-call
-                             multiple-value-list
-                             multiple-value-prog1
-                             nth
-                             progn
-                             quote
-                             throw
-                             values))
+(defun initialize-p2-handlers ()
+  (mapc #'install-p2-handler '(catch
+                               declare
+                               funcall
+                               if
+                               locally
+                               multiple-value-call
+                               multiple-value-list
+                               multiple-value-prog1
+                               nth
+                               progn
+                               quote
+                               throw
+                               values))
 
-(install-p2-handler '*               'p2-times)
-(install-p2-handler '+               'p2-plus)
-(install-p2-handler '-               'p2-minus)
-(install-p2-handler '/=              'p2-numeric-comparison)
-(install-p2-handler '<               'p2-numeric-comparison)
-(install-p2-handler '<=              'p2-numeric-comparison)
-(install-p2-handler '=               'p2-numeric-comparison)
-(install-p2-handler '>               'p2-numeric-comparison)
-(install-p2-handler '>=              'p2-numeric-comparison)
-(install-p2-handler 'aref            'p2-aref)
-(install-p2-handler 'sys::aset       'p2-aset)
-(install-p2-handler 'ash             'p2-ash)
-(install-p2-handler 'atom            'p2-atom)
-(install-p2-handler 'cons            'p2-cons)
-(install-p2-handler 'eql             'p2-eql)
-(install-p2-handler 'eval-when       'p2-eval-when)
-(install-p2-handler 'flet            'p2-flet)
-(install-p2-handler 'go              'p2-go)
-(install-p2-handler 'function        'p2-function)
-(install-p2-handler 'labels          'p2-labels)
-(install-p2-handler 'length          'p2-length)
-(install-p2-handler 'logand          'p2-logand)
-(install-p2-handler 'load-time-value 'p2-load-time-value)
-(install-p2-handler 'mod             'p2-mod)
-(install-p2-handler 'not             'p2-not/null)
-(install-p2-handler 'null            'p2-not/null)
-(install-p2-handler 'return-from     'p2-return-from)
-(install-p2-handler 'rplacd          'p2-rplacd)
-(install-p2-handler 'schar           'p2-schar)
-(install-p2-handler 'setq            'p2-setq)
-(install-p2-handler 'the             'p2-the)
-(install-p2-handler 'zerop           'p2-zerop)
+  (install-p2-handler '*               'p2-times)
+  (install-p2-handler '+               'p2-plus)
+  (install-p2-handler '-               'p2-minus)
+  (install-p2-handler '/=              'p2-numeric-comparison)
+  (install-p2-handler '<               'p2-numeric-comparison)
+  (install-p2-handler '<=              'p2-numeric-comparison)
+  (install-p2-handler '=               'p2-numeric-comparison)
+  (install-p2-handler '>               'p2-numeric-comparison)
+  (install-p2-handler '>=              'p2-numeric-comparison)
+  (install-p2-handler 'aref            'p2-aref)
+  (install-p2-handler 'sys::aset       'p2-aset)
+  (install-p2-handler 'ash             'p2-ash)
+  (install-p2-handler 'atom            'p2-atom)
+  (install-p2-handler 'cons            'p2-cons)
+  (install-p2-handler 'eql             'p2-eql)
+  (install-p2-handler 'eval-when       'p2-eval-when)
+  (install-p2-handler 'flet            'p2-flet)
+  (install-p2-handler 'go              'p2-go)
+  (install-p2-handler 'function        'p2-function)
+  (install-p2-handler 'labels          'p2-labels)
+  (install-p2-handler 'length          'p2-length)
+  (install-p2-handler 'logand          'p2-logand)
+  (install-p2-handler 'load-time-value 'p2-load-time-value)
+  (install-p2-handler 'mod             'p2-mod)
+  (install-p2-handler 'not             'p2-not/null)
+  (install-p2-handler 'null            'p2-not/null)
+  (install-p2-handler 'return-from     'p2-return-from)
+  (install-p2-handler 'rplacd          'p2-rplacd)
+  (install-p2-handler 'schar           'p2-schar)
+  (install-p2-handler 'setq            'p2-setq)
+  (install-p2-handler 'the             'p2-the)
+  (install-p2-handler 'zerop           'p2-zerop)
 
-(install-p2-handler '%call-internal 'p2-%call-internal)
+  (install-p2-handler '%call-internal  'p2-%call-internal))
+
+(initialize-p2-handlers)
 
 (defun process-optimization-declarations (forms)
   (let (alist ())

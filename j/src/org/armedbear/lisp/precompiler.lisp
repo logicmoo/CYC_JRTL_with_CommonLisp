@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.94 2005-03-25 03:20:42 piso Exp $
+;;; $Id: precompiler.lisp,v 1.95 2005-03-29 17:27:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -397,6 +397,11 @@
   (setf form (maybe-rewrite-lambda form))
   (list* 'LAMBDA (cadr form) (mapcar #'precompile1 (cddr form))))
 
+(defun precompile-defun (form)
+  (if *in-jvm-compile*
+      (precompile1 (expand-macro form))
+      form))
+
 (defun define-local-macro (name lambda-list body)
   (let* ((form (gensym))
          (env (gensym))
@@ -726,63 +731,67 @@
       (error "No handler for ~S." fun))
     (setf (get fun 'precompile-handler) handler)))
 
-(mapcar #'install-handler '(and
-                            block
-                            case
-                            cond
-                            dolist
-                            dotimes
-                            eval-when
-                            function
-                            if
-                            lambda
-                            macrolet
-                            multiple-value-bind
-                            multiple-value-list
-                            nth-value
-                            or
-                            progn
-                            progv
-                            psetf
-                            psetq
-                            restart-case
-                            return
-                            return-from
-                            setf
-                            setq
-                            symbol-macrolet
-                            tagbody
-                            unwind-protect
-                            unless
-                            when))
+(defun install-handlers ()
+  (mapcar #'install-handler '(AND
+                              BLOCK
+                              CASE
+                              COND
+                              DOLIST
+                              DOTIMES
+                              EVAL-WHEN
+                              FUNCTION
+                              IF
+                              LAMBDA
+                              MACROLET
+                              MULTIPLE-VALUE-BIND
+                              MULTIPLE-VALUE-LIST
+                              NTH-VALUE
+                              OR
+                              PROGN
+                              PROGV
+                              PSETF
+                              PSETQ
+                              RESTART-CASE
+                              RETURN
+                              RETURN-FROM
+                              SETF
+                              SETQ
+                              SYMBOL-MACROLET
+                              TAGBODY
+                              UNWIND-PROTECT
+                              UNLESS
+                              WHEN))
 
-(install-handler 'ecase                'precompile-case)
+  (dolist (pair '((ECASE                precompile-case)
 
-(install-handler 'catch                'precompile-cons)
-(install-handler 'locally              'precompile-cons)
-(install-handler 'multiple-value-call  'precompile-cons)
-(install-handler 'multiple-value-prog1 'precompile-cons)
+                  (CATCH                precompile-cons)
+                  (LOCALLY              precompile-cons)
+                  (MULTIPLE-VALUE-CALL  precompile-cons)
+                  (MULTIPLE-VALUE-PROG1 precompile-cons)
 
-(install-handler 'do                   'precompile-do/do*)
-(install-handler 'do*                  'precompile-do/do*)
+                  (DO                   precompile-do/do*)
+                  (DO*                  precompile-do/do*)
 
-(install-handler 'let                  'precompile-let)
-(install-handler 'let*                 'precompile-let*)
+                  (LET                  precompile-let)
+                  (LET*                 precompile-let*)
 
-(install-handler 'flet                 'precompile-flet/labels)
-(install-handler 'labels               'precompile-flet/labels)
+                  (FLET                 precompile-flet/labels)
+                  (LABELS               precompile-flet/labels)
 
-(install-handler 'load-time-value      'precompile-load-time-value)
+                  (LOAD-TIME-VALUE      precompile-load-time-value)
 
-(install-handler 'declare              'precompile-identity)
-(install-handler 'defmethod            'precompile-identity)
-(install-handler 'defun                'precompile-identity)
-(install-handler 'go                   'precompile-identity)
-(install-handler 'quote                'precompile-identity)
-(install-handler 'the                  'precompile-the)
-(install-handler 'throw                'precompile-cons)
+                  (DECLARE              precompile-identity)
+                  (DEFMETHOD            precompile-identity)
+                  (DEFUN                precompile-defun)
+                  (GO                   precompile-identity)
+                  (QUOTE                precompile-identity)
+                  (THE                  precompile-the)
+                  (THROW                precompile-cons)))
+    (install-handler (first pair) (second pair))))
 
-(in-package "SYSTEM")
+(install-handlers)
+
+(in-package #:system)
 
 (defun precompile (name &optional definition)
   (unless definition
