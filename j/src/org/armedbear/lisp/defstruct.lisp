@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.14 2003-07-13 18:09:40 piso Exp $
+;;; $Id: defstruct.lisp,v 1.15 2003-07-15 19:28:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -63,6 +63,10 @@
       (incf index))
     result))
 
+(defun define-copier ()
+  (let ((copier (intern (concatenate 'string "COPY-" (symbol-name *ds-name*)))))
+    `((setf (fdefinition ',copier) #'copy-structure))))
+
 (defun parse-1-option (option)
   (case (car option)
     (:conc-name
@@ -106,4 +110,5 @@
        ,@(define-constructor slots)
        ,@(define-predicate)
        ,@(define-access-functions slots)
+       ,@(define-copier)
        ',*ds-name*)))
