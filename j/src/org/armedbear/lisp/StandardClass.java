@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardClass.java,v 1.12 2003-11-05 01:47:47 piso Exp $
+ * $Id: StandardClass.java,v 1.13 2003-11-20 18:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,13 +21,8 @@
 
 package org.armedbear.lisp;
 
-public class StandardClass extends LispClass
+public class StandardClass extends SlotClass
 {
-    private LispObject directSlots = NIL;
-    private LispObject effectiveSlots = NIL;
-    private LispObject directDefaultInitargs = NIL;
-    private LispObject effectiveDefaultInitargs = NIL;
-
     public StandardClass()
     {
     }
@@ -63,124 +58,4 @@ public class StandardClass extends LispClass
         sb.append('>');
         return sb.toString();
     }
-
-    // ### class-direct-slots
-    private static final Primitive1 CLASS_DIRECT_SLOTS =
-        new Primitive1("class-direct-slots", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg)
-            throws ConditionThrowable
-        {
-            if (arg instanceof StandardClass)
-                return ((StandardClass)arg).directSlots;
-            if (arg instanceof BuiltInClass)
-                return NIL;
-            throw new ConditionThrowable(new TypeError(arg, "standard class"));
-        }
-    };
-
-    // ### %set-class-direct-slots
-    private static final Primitive2 _SET_CLASS_DIRECT_SLOTS =
-        new Primitive2("%set-class-direct-slots", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            if (first instanceof StandardClass) {
-                ((StandardClass)first).directSlots = second;
-                return second;
-            }
-            throw new ConditionThrowable(new TypeError(first, "standard class"));
-        }
-    };
-
-    // ### class-slots
-    private static final Primitive1 CLASS_SLOTS =
-        new Primitive1("class-slots", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg)
-            throws ConditionThrowable
-        {
-            if (arg instanceof StandardClass)
-                return ((StandardClass)arg).effectiveSlots;
-            if (arg instanceof BuiltInClass)
-                return NIL;
-            throw new ConditionThrowable(new TypeError(arg, "standard class"));
-        }
-    };
-
-    // ### %set-class-slots
-    private static final Primitive2 _SET_CLASS_SLOTS =
-        new Primitive2("%set-class-slots", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            if (first instanceof StandardClass) {
-                ((StandardClass)first).effectiveSlots = second;
-                return second;
-            }
-            throw new ConditionThrowable(new TypeError(first, "standard class"));
-        }
-    };
-
-    // ### class-direct-default-initargs
-    private static final Primitive1 CLASS_DIRECT_DEFAULT_INITARGS =
-        new Primitive1("class-direct-default-initargs", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg)
-            throws ConditionThrowable
-        {
-            if (arg instanceof StandardClass)
-                return ((StandardClass)arg).directDefaultInitargs;
-            if (arg instanceof BuiltInClass)
-                return NIL;
-            throw new ConditionThrowable(new TypeError(arg, "standard class"));
-        }
-    };
-
-    // ### %set-class-direct-default-initargs
-    private static final Primitive2 _SET_CLASS_DIRECT_DEFAULT_INITARGS =
-        new Primitive2("%set-class-direct-default-initargs", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            if (first instanceof StandardClass) {
-                ((StandardClass)first).directDefaultInitargs = second;
-                return second;
-            }
-            throw new ConditionThrowable(new TypeError(first, "standard class"));
-        }
-    };
-
-    // ### class-default-initargs
-    private static final Primitive1 CLASS_DEFAULT_INITARGS =
-        new Primitive1("class-default-initargs", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg)
-            throws ConditionThrowable
-        {
-            if (arg instanceof StandardClass)
-                return ((StandardClass)arg).effectiveDefaultInitargs;
-            if (arg instanceof BuiltInClass)
-                return NIL;
-            throw new ConditionThrowable(new TypeError(arg, "standard class"));
-        }
-    };
-
-    // ### %set-class-default-initargs
-    private static final Primitive2 _SET_CLASS_DEFAULT_INITARGS =
-        new Primitive2("%set-class-default-initargs", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            if (first instanceof StandardClass) {
-                ((StandardClass)first).effectiveDefaultInitargs = second;
-                return second;
-            }
-            throw new ConditionThrowable(new TypeError(first, "standard class"));
-        }
-    };
 }
