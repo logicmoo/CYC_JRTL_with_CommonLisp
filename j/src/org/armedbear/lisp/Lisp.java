@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.214 2004-03-08 02:49:27 piso Exp $
+ * $Id: Lisp.java,v 1.215 2004-03-09 11:07:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1533,6 +1533,12 @@ public abstract class Lisp
     // internal symbol
     public static final Symbol _AUTOLOAD_VERBOSE_ =
         exportSpecial("*AUTOLOAD-VERBOSE*", PACKAGE_EXT, NIL);
+
+    // ### array-dimension-limit
+    public static final int ARRAY_DIMENSION_MAX = 0x1000000;
+    public static final Symbol ARRAY_DIMENSION_LIMIT =
+        exportConstant("ARRAY-DIMENSION-LIMIT", PACKAGE_CL,
+                       new Fixnum(ARRAY_DIMENSION_MAX));
 
     // ### char-code-limit
     // "The upper exclusive bound on the value returned by the function CHAR-CODE."
