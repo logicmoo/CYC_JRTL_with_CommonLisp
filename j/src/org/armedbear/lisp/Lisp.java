@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.48 2003-03-27 02:14:09 piso Exp $
+ * $Id: Lisp.java,v 1.49 2003-03-30 19:16:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -510,6 +510,8 @@ public abstract class Lisp
             char c2 = ((LispCharacter)second).getValue();
             return (Character.toLowerCase(c1) == Character.toLowerCase(c2));
         }
+        if (first.typep(Symbol.NUMBER) != NIL && second.typep(Symbol.NUMBER) != NIL)
+            return first.isEqualTo(second);
         if (first instanceof Cons && second instanceof Cons) {
             if (equalp(first.car(), second.car()) &&
                 equalp(first.cdr(), second.cdr()))
