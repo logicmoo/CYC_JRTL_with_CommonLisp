@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.7 2004-03-04 02:01:45 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.8 2004-03-15 17:02:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ public final class ComplexBitVector extends AbstractBitVector
 
     public LispObject typeOf()
     {
-        return list2(Symbol.BIT_VECTOR, new Fixnum(length()));
+        return list2(Symbol.BIT_VECTOR, new Fixnum(capacity));
     }
 
     public boolean hasFillPointer()
