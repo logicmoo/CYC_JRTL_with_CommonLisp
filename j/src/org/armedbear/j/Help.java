@@ -2,7 +2,7 @@
  * Help.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Help.java,v 1.15 2005-03-01 21:18:47 piso Exp $
+ * $Id: Help.java,v 1.16 2005-03-06 04:37:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
 import java.util.List;
@@ -172,12 +173,12 @@ public final class Help
             writer.write(" mode)");
             writer.write("</b><br><br>");
             addBindingsFromKeyMap(editor.getBuffer().getKeyMapForMode(), docDir,
-                writer);
+                                  writer, "");
             writer.write("<br>");
             writer.write("<b>");
             writer.write("Global Bindings");
             writer.write("</b><br><br>");
-            addBindingsFromKeyMap(KeyMap.getGlobalKeyMap(), docDir, writer);
+            addBindingsFromKeyMap(KeyMap.getGlobalKeyMap(), docDir, writer, "");
             writer.write("</body>\n</html>\n");
             writer.flush();
             writer.close();
@@ -216,7 +217,7 @@ public final class Help
     }
 
     private static void addBindingsFromKeyMap(KeyMap keyMap, File docDir,
-                                              Writer writer)
+                                              Writer writer, String prefix)
         throws IOException
     {
         KeyMapping[] mappings = keyMap.getMappings();
@@ -225,12 +226,19 @@ public final class Help
             writer.write("[None]<br>\n");
             return;
         }
+        int prefixLength = prefix.length();
+        final String sanitizedPrefix =
+            (prefixLength > 0) ? sanitize(prefix) : null;
+        final int spaces = 32 - prefixLength;
+        ArrayList submappings = null;
         for (int i = 0; i < count; i++) {
             KeyMapping mapping = mappings[i];
-            FastStringBuffer sb = new FastStringBuffer(64);
-            sb.append(mapping.getKeyText());
-            int spaces = 32 - sb.length();
-            for (int j = spaces; j-- > 0;)
+            FastStringBuffer sb = new FastStringBuffer();
+            if (sanitizedPrefix != null)
+                sb.append(sanitizedPrefix);
+            final String keytext = mapping.getKeyText();
+            sb.append(sanitize(keytext));
+            for (int j = spaces - keytext.length(); j-- > 0;)
                 sb.append("&nbsp;");
             Object command = mapping.getCommand();
             if (command instanceof String) {
@@ -249,11 +257,7 @@ public final class Help
             } else if (command instanceof LispObject) {
                 try {
                     String s = ((LispObject)command).writeToString();
-                    if (s.startsWith("#<"))
-                        s = "#&lt;".concat(s.substring(2));
-                    if (s.endsWith(">"))
-                        s = s.substring(0, s.length() - 1).concat("&gt;");
-                    sb.append(s);
+                    sb.append(sanitize(s));
                 }
                 catch (Throwable t) {
                     Log.debug(t);
@@ -261,10 +265,66 @@ public final class Help
             } else if (command instanceof KeyMap) {
                 sb.append(mapping.getKeyText());
                 sb.append(" prefix command");
+                if (submappings == null)
+                    submappings = new ArrayList();
+                submappings.add(mapping);
             }
             sb.append("<br>\n");
             writer.write(sb.toString());
         }
+        if (submappings != null) {
+            for (int i = 0; i < submappings.size(); i++) {
+                writer.write("<br>\n");
+                KeyMapping mapping = (KeyMapping) submappings.get(i);
+                String keytext = mapping.getKeyText();
+                KeyMap submap = (KeyMap) mapping.getCommand();
+                FastStringBuffer sb = new FastStringBuffer();
+                if (prefixLength > 0) {
+                    sb.append(prefix);
+                    sb.append(' ');
+                }
+                sb.append(keytext);
+                sb.append(' ');
+                addBindingsFromKeyMap(submap, docDir, writer, sb.toString());
+            }
+        }
+    }
+
+    private static String sanitize(String s)
+    {
+        FastStringBuffer sb = null;
+        final int limit = s.length();
+        for (int i = 0; i < limit; i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '<':
+                    if (sb == null) {
+                        sb = new FastStringBuffer();
+                        sb.append(s.substring(0, i));
+                    }
+                    sb.append("&lt;");
+                    break;
+                case '>':
+                    if (sb == null) {
+                        sb = new FastStringBuffer();
+                        sb.append(s.substring(0, i));
+                    }
+                    sb.append("&gt;");
+                    break;
+                case '&':
+                    if (sb == null) {
+                        sb = new FastStringBuffer();
+                        sb.append(s.substring(0, i));
+                    }
+                    sb.append("&amp;");
+                    break;
+                default:
+                    if (sb != null)
+                        sb.append(c);
+                    break;
+            }
+        }
+        return (sb != null) ? sb.toString() : s;
     }
 
     private static boolean isListBindingsBuffer(Buffer buffer)
