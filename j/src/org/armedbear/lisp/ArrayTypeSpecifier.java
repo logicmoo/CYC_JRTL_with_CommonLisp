@@ -2,7 +2,7 @@
  * ArrayTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ArrayTypeSpecifier.java,v 1.3 2003-07-15 16:29:40 piso Exp $
+ * $Id: ArrayTypeSpecifier.java,v 1.4 2003-07-15 17:31:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,9 +92,24 @@ public final class ArrayTypeSpecifier extends CompoundTypeSpecifier
             return type.isSubtypeOf(ats.getType());
         }
 
+        LispObject subtypep = NIL;
+        LispObject validp = NIL;
+
+        if (ts instanceof ArrayTypeSpecifier) {
+            ArrayTypeSpecifier ats = (ArrayTypeSpecifier) ts;
+            if (type == ats.type) {
+                if (elementType == ats.elementType) {
+                    if (dimensions == ats.dimensions) {
+                        subtypep = T;
+                        validp = T;
+                    }
+                }
+            }
+        }
+
         LispObject[] values = new LispObject[2];
-        values[0] = NIL;
-        values[1] = NIL;
+        values[0] = subtypep;
+        values[1] = validp;
         LispThread.currentThread().setValues(values);
         return NIL;
     }
