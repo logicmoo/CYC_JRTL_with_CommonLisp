@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.93 2004-03-01 17:28:42 piso Exp $
+;;; $Id: clos.lisp,v 1.94 2004-03-02 00:03:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1828,13 +1828,17 @@
                         (write-string ,arg stream))
                     `#'(lambda (condition stream)
                         (funcall #',arg condition stream)))))))
-    `(progn
-       (defclass ,name ,parent-types ,slot-specs ,@options)
-       (defmethod print-object ((condition ,name) stream)
-         (if *print-escape*
-             (call-next-method)
-             (funcall ,report condition stream)))
-       ',name)))
+    (if report
+        `(progn
+           (defclass ,name ,parent-types ,slot-specs ,@options)
+           (defmethod print-object ((condition ,name) stream)
+             (if *print-escape*
+                 (call-next-method)
+                 (funcall ,report condition stream)))
+           ',name)
+        `(progn
+           (defclass ,name ,parent-types ,slot-specs ,@options)
+           ',name))))
 
 (defun make-condition (type &rest initargs)
   (or (%make-condition type initargs)
