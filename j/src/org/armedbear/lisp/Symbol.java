@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.159 2004-11-08 18:21:29 piso Exp $
+ * $Id: Symbol.java,v 1.160 2004-11-08 18:24:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,6 @@ public class Symbol extends LispObject
     public static final Symbol FILE_STREAM                      = PACKAGE_CL.addExternalSymbol("FILE-STREAM");
     public static final Symbol FIXNUM                           = PACKAGE_CL.addExternalSymbol("FIXNUM");
     public static final Symbol FLOAT                            = PACKAGE_CL.addExternalSymbol("FLOAT");
-    public static final Symbol FORWARD_REFERENCED_CLASS         = PACKAGE_SYS.addExternalSymbol("FORWARD-REFERENCED-CLASS");
     public static final Symbol FUNCTION                         = PACKAGE_CL.addExternalSymbol("FUNCTION");
     public static final Symbol GENERIC_FUNCTION                 = PACKAGE_CL.addExternalSymbol("GENERIC-FUNCTION");
     public static final Symbol HASH_TABLE                       = PACKAGE_CL.addExternalSymbol("HASH-TABLE");
@@ -134,6 +133,7 @@ public class Symbol extends LispObject
     public static final Symbol VECTOR                           = PACKAGE_CL.addExternalSymbol("VECTOR");
 
     public static final Symbol CASE_FROB_STREAM                 = PACKAGE_SYS.addInternalSymbol("CASE-FROB-STREAM");
+    public static final Symbol FORWARD_REFERENCED_CLASS         = PACKAGE_SYS.addExternalSymbol("FORWARD-REFERENCED-CLASS");
     public static final Symbol NIL_VECTOR                       = PACKAGE_EXT.addExternalSymbol("NIL-VECTOR");
     public static final Symbol SLIME_INPUT_STREAM               = PACKAGE_EXT.addExternalSymbol("SLIME-INPUT-STREAM");
     public static final Symbol SLIME_OUTPUT_STREAM              = PACKAGE_EXT.addExternalSymbol("SLIME-OUTPUT-STREAM");
