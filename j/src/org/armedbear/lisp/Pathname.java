@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.18 2003-11-03 15:24:13 piso Exp $
+ * $Id: Pathname.java,v 1.19 2003-12-04 18:40:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,6 +214,29 @@ public final class Pathname extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof Pathname ? T : NIL;
+        }
+    };
+
+    // ### pathname-type
+    private static final Primitive1 PATHNAME_TYPE = new Primitive1("pathname-type")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            String namestring;
+            if (arg instanceof LispString)
+                namestring = ((LispString)arg).getValue();
+            else if (arg instanceof Pathname)
+                namestring = ((Pathname)arg).getNamestring();
+            else
+                throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
+            if (namestring != null) {
+                for (int i = namestring.length(); i-- > 0;) {
+                    char c = namestring.charAt(i);
+                    if (c == '.')
+                        return new LispString(namestring.substring(i + 1));
+                }
+            }
+            return NIL;
         }
     };
 
