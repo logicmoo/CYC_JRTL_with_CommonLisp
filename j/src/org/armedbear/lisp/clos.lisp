@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.53 2003-12-20 18:29:32 piso Exp $
+;;; $Id: clos.lisp,v 1.54 2003-12-20 19:06:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1172,20 +1172,6 @@
         (error "No applicable methods for generic function ~S with arguments ~S of classes ~S."
                gf args classes))))
 
-(defun compute-applicable-methods-using-classes (gf required-classes)
-  (sort
-   (copy-list
-    (remove-if-not #'(lambda (method)
-                      (every #'subclassp
-                             required-classes
-                             (method-specializers method)))
-                   (generic-function-methods gf)))
-   (if (eq (class-of gf) the-class-standard-gf)
-       #'(lambda (m1 m2)
-          (std-method-more-specific-p m1 m2 required-classes))
-       #'(lambda (m1 m2)
-          (method-more-specific-p gf m1 m2 required-classes)))))
-
 (defun sub-specializer-p (c1 c2 c-arg)
   (find c2 (cdr (memq c1 (class-precedence-list c-arg)))))
 
@@ -1198,6 +1184,18 @@
         (method-specializers method2)
         required-classes)
   nil)
+
+(defun compute-applicable-methods-using-classes (gf required-classes)
+  (let ((methods ()))
+    (dolist (method (generic-function-methods gf))
+      (when (every #'subclassp required-classes (method-specializers method))
+        (push method methods)))
+    (sort methods
+          (if (eq (class-of gf) the-class-standard-gf)
+              #'(lambda (m1 m2)
+                 (std-method-more-specific-p m1 m2 required-classes))
+              #'(lambda (m1 m2)
+                 (method-more-specific-p gf m1 m2 required-classes))))))
 
 (defun primary-method-p (method)
   (null (intersection '(:before :after :around) (method-qualifiers method))))
