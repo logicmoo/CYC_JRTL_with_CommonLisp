@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.319 2004-12-27 14:20:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.320 2004-12-27 15:23:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4138,8 +4138,15 @@
         (t
          (dformat t "compile-plus case 8~%")
          (compile-binary-operation "add" args target representation)))))
-    (t
+    (4
      (dformat t "compile-plus case 9~%")
+     ;; (+ a b c) => (+ (+ a b) c)
+     (let ((new-form `(+ (+ ,(second form) ,(third form)) ,(fourth form))))
+       (dformat t "form = ~S~%" form)
+       (dformat t "new-form = ~S~%" new-form)
+       (compile-plus new-form :target target :representation representation)))
+    (t
+     (dformat t "compile-plus case 10~%")
      (compile-function-call form target representation))))
 
 (defun compile-minus (form &key (target *val*) representation)
@@ -4227,8 +4234,15 @@
         (t
          (dformat t "compile-minus case 8~%")
          (compile-binary-operation "subtract" args target representation)))))
-    (t
+    (4
      (dformat t "compile-minus case 9~%")
+     ;; (- a b c) => (- (- a b) c)
+     (let ((new-form `(- (- ,(second form) ,(third form)) ,(fourth form))))
+       (dformat t "form = ~S~%" form)
+       (dformat t "new-form = ~S~%" new-form)
+       (compile-minus new-form :target target :representation representation)))
+    (t
+     (dformat t "compile-minus case 10~%")
      (compile-function-call form target representation))))
 
 (defun compile-schar (form &key (target *val*) representation)
