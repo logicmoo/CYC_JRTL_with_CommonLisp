@@ -1,5 +1,5 @@
 # Anokha Classic
-# $Id: AnokhaClassic,v 1.2 2002-12-24 20:32:39 piso Exp $
+# $Id: AnokhaClassic,v 1.3 2002-12-29 16:44:54 piso Exp $
 
 color.text                              = 255 255 255
 color.background                        = 0   51  51
@@ -47,7 +47,10 @@ MailboxMode.style.flaggedFrom           = 1
 PerlMode.color.scalar                   = 255 255 204
 PerlMode.color.list                     = 204 204 153
 
-LispMode.color.substitution             = 255 255 204
+LispMode.color.substitution             = 255 204 102
+LispMode.color.parenthesis              = 153 153 102
+LispMode.color.punctuation              = 153 153 102
+LispMode.color.secondaryKeyword         = 153 102 51
 
 PHPMode.color.var                       = 255 255 204
 PHPMode.color.attribute                 = 204 204 153
