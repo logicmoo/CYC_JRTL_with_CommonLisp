@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.13 2003-10-24 00:05:13 piso Exp $
+ * $Id: Java.java,v 1.14 2003-10-26 14:54:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,30 +46,103 @@ public final class Java extends Module
         }
     };
 
-    // ### jfield
-    // jfield class-name field-name &optional instance
+    // ### jfield - retrieve or modify a field in a Java class or instance.
+    /*
+     * Supported argument patterns:
+     *
+     *   Case 1: class-name  field-name:
+     *               to retrieve the value of a static field.
+     *
+     *   Case 2: class-name  field-name  instance-ref:
+     *               to retrieve the value of a class field of the instance.
+     *
+     *   Case 3: class-name  field-name  primitive-value:
+     *               to store primitive-value in a static field.
+     *
+     *   Case 4: class-name  field-name  instance-ref  value:
+     *               to store value in a class field of the instance.
+     *
+     *   Case 5: class-name  field-name  nil  value:
+     *               to store value in a static field (when value may be
+     *               confused with an instance-ref).
+     *
+     *   Case 6: field-name  instance:
+     *               to retrieve the value of a field of the instance. The
+     *               class is derived from the instance.
+     *
+     *   Case 7: field-name  instance  value:
+     *               to store value in a field of the instance. The class is
+     *               derived from the instance.
+     */
     private static final Primitive JFIELD = new Primitive("jfield", PACKAGE_JAVA)
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            if (args.length < 2 || args.length > 3)
+            if (args.length < 2 || args.length > 4)
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            String className = LispString.getValue(args[0]);
-	    String fieldName = LispString.getValue(args[1]);
+	    String fieldName, className = null;
+	    Class c;
+	    Field f;
 	    Object instance = null;
             try {
-                final Class c = Class.forName(className);
-		final Field f = c.getField(fieldName);
-		if (args.length == 3) {
-		  if (args[2] instanceof LispString)
-                    instance = LispString.getValue(args[2]);
-		  else
-                    instance = JavaObject.getObject(args[2]);
+                if (args[1] instanceof LispString) {
+                    // Cases 1-5.
+                    fieldName = LispString.getValue(args[1]);
+                    className = LispString.getValue(args[0]);
+                    c = Class.forName(className);
+                } else {
+                    // Cases 6 and 7.
+                    fieldName = LispString.getValue(args[0]);
+                    instance = JavaObject.getObject(args[1]);
+                    c = instance.getClass();
+                    className = c.getName(); //needed only for the error message
                 }
-		return makeLispObject(f.get(instance));
+                f = c.getField(fieldName);
+                Class requiredType = f.getType();
+                switch (args.length) {
+                    case 2:
+                        // Cases 1 and 6.
+                        break;
+                    case 3:
+                        // Cases 2,3, and 7.
+                        if (instance == null) {
+                            // Cases 2 and 3.
+                            if (args[2] instanceof JavaObject) {
+                                // Case 2.
+                                instance = JavaObject.getObject(args[2]);
+                                break;
+                            } else {
+                                // Case 3.
+                                if (args[2] instanceof Fixnum)
+                                    f.set(instance, new Integer(((Fixnum)args[2]).getValue()));
+                                else if (args[2] instanceof LispFloat)
+                                    f.set(instance, new Double(((LispFloat)args[2]).getValue()));
+                                else if (args[2] instanceof LispCharacter)
+                                    f.set(instance, new Character(((LispCharacter)args[2]).getValue()));
+                                else
+                                    throw new ConditionThrowable(new TypeError(
+                                        "unsupported type in jfield"));
+                                return args[2];
+                            }
+                        } else {
+                            // Case 7.
+                            f.set(instance,JavaObject.getObject(args[2]));
+                            return args[2];
+                        }
+                    case 4:
+                        // Cases 4 and 5.
+                        if (args[2] != NIL) {
+                            // Case 4.
+                            instance = JavaObject.getObject(args[2]);
+                        }
+                        f.set(instance,JavaObject.getObject(args[3]));
+                        return args[3];
+                }
+                return makeLispObject(f.get(instance));
             }
             catch (ClassNotFoundException e) {
-                throw new ConditionThrowable(new LispError("class not found: " + className));
+                throw new ConditionThrowable(new LispError("class not found: " +
+                                                           className));
             }
             catch (NoSuchFieldException e) {
                 throw new ConditionThrowable(new LispError("no such field"));
@@ -334,6 +407,8 @@ public final class Java extends Module
             return new LispFloat(((Number)obj).doubleValue());
         if (obj instanceof String)
             return new LispString((String)obj);
+        if (obj instanceof Character)
+            return LispCharacter.getInstance(((Character)obj).charValue());
         if (obj instanceof Object[]) {
             Object[] array = (Object[]) obj;
             Vector v = new Vector(array.length);
