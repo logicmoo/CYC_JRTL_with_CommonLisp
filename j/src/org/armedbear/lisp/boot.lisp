@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.187 2004-09-07 20:22:06 piso Exp $
+;;; $Id: boot.lisp,v 1.188 2004-09-28 01:40:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -214,7 +214,7 @@
                (sys::load-system-file (string-downcase (string module-name))))))
       (set-difference *modules* saved-modules))))
 
-(defun read-from-string (string &optional eof-error-p eof-value
+(defun read-from-string (string &optional (eof-error-p t) eof-value
 				&key (start 0) end preserve-whitespace)
   (sys::%read-from-string string eof-error-p eof-value start end preserve-whitespace))
 
