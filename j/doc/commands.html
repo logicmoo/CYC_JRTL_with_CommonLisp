@@ -314,7 +314,9 @@
     <li><a href="commands.html#shellCommand">shellCommand</a></li>
     <li><a href="commands.html#shellEscape">shellEscape</a></li>
     <li><a href="commands.html#shellHome">shellHome</a></li>
+    <li><a href="commands.html#shellNextInput">shellNextInput</a></li>
     <li><a href="commands.html#shellNextPrompt">shellNextPrompt</a></li>
+    <li><a href="commands.html#shellPreviousInput">shellPreviousInput</a></li>
     <li><a href="commands.html#shellPreviousPrompt">shellPreviousPrompt</a></li>
     <li><a href="commands.html#shellTab">shellTab</a></li>
     <li><a href="commands.html#showMessage">showMessage</a></li>
@@ -4241,19 +4243,43 @@ moves the caret to the beginning of the current line.
 <br><br>
 </dl><!--<hr>-->
 
+<a name="shellNextInput">shellNextInput</a><dl><dd>
+<p>
+Retrieves the next command from input history in a shell buffer.
+<p>
+<b>Default key mapping:</b> Ctrl N in Shell mode
+<p>
+<b>See also:</b> <a href="#shellPreviousInput">shellPreviousInput</a>
+<br><br>
+</dl><!--<hr>-->
+
 <a name="shellNextPrompt">shellNextPrompt</a><dl><dd>
 <p>
-Moves the caret to the next prompt.
+Moves the caret to the next prompt in a shell buffer.
 <p>
 <b>Default key mapping:</b> Ctrl Alt N in Shell mode
+<p>
+<b>See also:</b> <a href="#shellPreviousPrompt">shellPreviousPrompt</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="shellPreviousInput">shellPreviousInput</a><dl><dd>
+<p>
+Retrieves the previous command from input history in a shell buffer.
+<p>
+<b>Default key mapping:</b> Ctrl P in Shell mode
+<p>
+<b>See also:</b> <a href="#shellNextInput">shellNextInput</a>
 <br><br>
 </dl><!--<hr>-->
 
 <a name="shellPreviousPrompt">shellPreviousPrompt</a><dl><dd>
 <p>
-Moves the caret to the previous prompt.
+Moves the caret to the previous prompt in a shell buffer.
 <p>
 <b>Default key mapping:</b> Ctrl Alt P in Shell mode
+<p>
+<b>See also:</b> <a href="#shellNextPrompt">shellNextPrompt</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -4268,9 +4294,9 @@ Completes pending input.
 <a name="showMessage">showMessage</a><dl><dd>
 <p>
 Displays the current compiler or XML parser error message.
-<br><br>
+<p>
 <b>Default key mapping:</b> Ctrl Alt M
-<br><br>
+<p>
 <b>See also:</b> <a href="#xmlParseBuffer">xmlParseBuffer</a>,
 <a href="#xmlValidateBuffer">xmlValidateBuffer</a>
 <br><br>
