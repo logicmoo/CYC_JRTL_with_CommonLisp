@@ -1,8 +1,8 @@
 /*
  * HtmlMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: HtmlMode.java,v 1.1.1.1 2002-09-24 16:09:01 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: HtmlMode.java,v 1.2 2004-04-22 14:58:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,7 +297,7 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
 
     private static boolean wantsEndTag(String elementName)
     {
-        elementName = elementName.toLowerCase();
+        elementName = elementName.trim().toLowerCase();
         if (elements == null)
             loadElementList();
         if (elements != null) {
@@ -420,10 +420,31 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
         InsertTagDialog d = new InsertTagDialog(editor);
         editor.centerDialog(d);
         d.show();
-        String tagName = d.getTagName();
-        if (tagName == null || tagName.length() == 0)
+        _htmlInsertTag(editor, d.getInput());
+    }
+
+    public static void htmlInsertTag(String input)
+    {
+        final Editor editor = Editor.currentEditor();
+        if (!editor.checkReadOnly())
             return;
-        InsertTagDialog.insertTag(editor, tagName, d.getExtra(), wantsEndTag(tagName));
+        _htmlInsertTag(editor, input);
+    }
+
+    private static void _htmlInsertTag(Editor editor, String input)
+    {
+        if (input != null && input.length() > 0) {
+            final String tagName, extra;
+            int index = input.indexOf(' ');
+            if (index >= 0) {
+                tagName = input.substring(0, index);
+                extra = input.substring(index);
+            } else {
+                tagName = input;
+                extra = "";
+            }
+            InsertTagDialog.insertTag(editor, tagName, extra, wantsEndTag(tagName));
+        }
     }
 
     public static void htmlInsertMatchingEndTag()
@@ -484,34 +505,11 @@ public final class HtmlMode extends AbstractMode implements Constants, Mode
         final Buffer buffer = editor.getBuffer();
         if (!editor.checkReadOnly())
             return;
-        boolean adjustDot = true;
-
-        // We don't need to adjust dot if the inserted "<b>" is not on the same
-        // line.
-        if (editor.getMark() != null && editor.getMarkLine() != editor.getDotLine())
-            adjustDot = false;
-
         CompoundEdit compoundEdit = editor.beginCompoundEdit();
-
         if (editor.getMark() == null)
             editor.fillToCaret();
-
-        Position saved = new Position(editor.getDot());
         boolean upper = buffer.getBooleanProperty(Property.UPPER_CASE_TAG_NAMES);
         InsertTagDialog.insertTag(editor,  upper ? "B" : "b", "", true);
-        editor.moveDotTo(saved);
-
-        if (adjustDot) {
-            // We want to keep dot where it was, relative to the text around it.
-            // We inserted 3 characters ("<b>"), so...
-            Position dot = editor.getDot();
-            dot.setOffset(dot.getOffset() + 3);
-
-            if (dot.getOffset() > dot.getLineLength())
-                dot.setOffset(dot.getLineLength());
-        }
-
-        editor.moveCaretToDotCol();
         editor.endCompoundEdit(compoundEdit);
     }
 
