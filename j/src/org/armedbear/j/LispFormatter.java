@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.8 2002-12-26 13:01:05 piso Exp $
+ * $Id: LispFormatter.java,v 1.9 2002-12-26 15:40:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ public final class LispFormatter extends Formatter
     private static final int STATE_SECONDARY_KEYWORD       = STATE_LAST + 8;
     private static final int STATE_PUNCTUATION             = STATE_LAST + 9;
     private static final int STATE_ARGLIST                 = STATE_LAST + 10;
+    private static final int STATE_QUOTED_LIST             = STATE_LAST + 11;
 
     // Formats.
     private static final int LISP_FORMAT_TEXT              = 0;
@@ -64,6 +65,7 @@ public final class LispFormatter extends Formatter
             switch (state) {
                 case STATE_NEUTRAL:
                 case STATE_ARGLIST:
+                case STATE_QUOTED_LIST:
                     format = LISP_FORMAT_TEXT;
                     break;
                 case STATE_QUOTE:
@@ -176,7 +178,12 @@ public final class LispFormatter extends Formatter
                     continue;
                 }
             }
+            if (c == '\'') {
+                i = skipQuotedObject(text, ++i);
+                continue;
+            }
             if (c == '`') {
+                // Backquote.
                 endToken(text, i, state);
                 state = STATE_PUNCTUATION;
                 ++i;
@@ -300,68 +307,240 @@ public final class LispFormatter extends Formatter
     {
         int state = STATE_NEUTRAL;
         boolean changed = false;
-        Line line = buffer.getFirstLine();
-        while (line != null) {
-            int oldflags = line.flags();
-            if (state != oldflags) {
-                line.setFlags(state);
-                changed = true;
-            }
-            int limit = line.length();
-            for (int i = 0; i < limit; i++) {
-                char c = line.charAt(i);
-                if (c == '\\' && i < limit-1) {
-                    // Escape.
-                    ++i;
-                    continue;
-                }
-                if (state == STATE_COMMENT) {
-                    if (c == '|' && i < limit-1 && line.charAt(i+1) == '#') {
-                        ++i;
-                        state = STATE_NEUTRAL;
+        Position pos = new Position(buffer.getFirstLine(), 0);
+        while (!pos.atEnd()) {
+            char c = pos.getChar();
+            if (c == EOL) {
+                if (pos.nextLine()) {
+                    Line line = pos.getLine();
+                    int oldflags = line.flags();
+                    if (state != oldflags) {
+                        line.setFlags(state);
+                        changed = true;
                     }
                     continue;
-                }
-                if (state == STATE_QUOTE) {
-                    if (c == '"')
-                        state = STATE_NEUTRAL;
-                    continue;
-                }
-                // Not in comment or quoted string.
-                if (c == ';') {
-                    // Single-line comment beginning. Ignore rest of line.
-                    break;
-                }
-                if (c == '#') {
-                    if (i < limit-1 && line.charAt(i+1) == '|') {
-                        state = STATE_COMMENT;
-                        ++i;
+                } else
+                    break; // Reached end of buffer.
+            }
+            if (c == '\\') {
+                // Escape.
+                pos.skip();
+                pos.next();
+                continue;
+            }
+            // Not in comment or quoted string.
+            if (c == ';') {
+                // Single-line comment beginning. Ignore rest of line.
+                if (pos.nextLine()) {
+                    Line line = pos.getLine();
+                    int oldflags = line.flags();
+                    if (state != oldflags) {
+                        line.setFlags(state);
+                        changed = true;
                     }
                     continue;
-                }
-                if (c == '"') {
-                    state = STATE_QUOTE;
-                    continue;
-                }
-                if (c == '(') {
-                    state = STATE_OPEN_PAREN;
-                    continue;
-                }
-                if (state == STATE_OPEN_PAREN) {
-                    if (!Character.isWhitespace(c))
-                        state = STATE_CAR;
-                    continue;
-                }
-                if (state == STATE_CAR) {
-                    if (c == ')' || Character.isWhitespace(c))
-                        state = STATE_NEUTRAL;
-                    continue;
+                } else {
+                    pos.moveTo(pos.getLine(), pos.getLine().length());
+                    break; // Reached end of buffer.
                 }
             }
-            line = line.next();
+            if (c == '#') {
+                if (pos.lookingAt("#|")) {
+                    pos.skip(2);
+                    changed = skipMultilineComment(pos) || changed;
+                } else
+                    pos.skip();
+                continue;
+            }
+            if (c == '"') {
+                pos.skip();
+                changed = skipString(pos) || changed;
+                continue;
+            }
+            if (c == '\'') {
+                pos.skip();
+                changed = skipQuotedObject(pos) || changed;
+                continue;
+            }
+            if (c == '(') {
+                state = STATE_OPEN_PAREN;
+                pos.skip();
+                continue;
+            }
+            if (state == STATE_OPEN_PAREN) {
+                if (!Character.isWhitespace(c))
+                    state = STATE_CAR;
+                pos.next();
+                continue;
+            }
+            if (state == STATE_CAR) {
+                if (c == ')' || Character.isWhitespace(c))
+                    state = STATE_NEUTRAL;
+                pos.next();
+                continue;
+            }
+            // Default.
+            pos.skip();
+            continue;
         }
         buffer.setNeedsParsing(false);
         return changed;
+    }
+
+    private static boolean skipString(Position pos)
+    {
+        boolean changed = false;
+        while (!pos.atEnd()) {
+            char c = pos.getChar();
+            if (c == EOL) {
+                if (pos.nextLine()) {
+                    Line line = pos.getLine();
+                    int oldflags = line.flags();
+                    if (oldflags != STATE_QUOTE) {
+                        line.setFlags(STATE_QUOTE);
+                        changed = true;
+                    }
+                    continue;
+                } else
+                    break; // Reached end of buffer.
+            }
+            if (c == '\\') {
+                // Escape.
+                pos.skip();
+                pos.next();
+                continue;
+            }
+            if (c == '"') {
+                pos.next();
+                break;
+            }
+            // Default.
+            pos.skip();
+        }
+        return changed;
+    }
+
+    private static boolean skipMultilineComment(Position pos)
+    {
+        boolean changed = false;
+        while (!pos.atEnd()) {
+            char c = pos.getChar();
+            if (c == EOL) {
+                if (pos.nextLine()) {
+                    Line line = pos.getLine();
+                    int oldflags = line.flags();
+                    if (oldflags != STATE_COMMENT) {
+                        line.setFlags(STATE_COMMENT);
+                        changed = true;
+                    }
+                    continue;
+                } else
+                    break; // End of buffer.
+            }
+            if (c == '\\') {
+                // Escape.
+                pos.skip();
+                pos.next();
+                continue;
+            }
+            if (c == '|') {
+                if (pos.lookingAt("|#")) {
+                    pos.skip(2);
+                    break; // End of comment.
+                }
+            }
+            // Default.
+            pos.skip();
+        }
+        return changed;
+    }
+
+    private static int skipQuotedObject(String text, int i)
+    {
+        int count = 0;
+        final int limit = text.length();
+        while (i < limit) {
+            char c = text.charAt(i);
+            if (Character.isWhitespace(c)) {
+                ++i;
+                continue;
+            }
+            if (c == '(') {
+                ++count;
+                ++i;
+                continue;
+            }
+            if (c == ')') {
+                ++i;
+                if (count > 0) {
+                    --count;
+                    if (count == 0)
+                        break;
+                }
+                continue;
+            }
+            // Not whitespace or paren.
+            while (++i < limit) {
+                c = text.charAt(i);
+                if (Character.isWhitespace(c))
+                    break;
+            }
+            break;
+        }
+        return i;
+    }
+
+    private static boolean skipQuotedObject(Position pos)
+    {
+        boolean changed = false;
+        int count = 0;
+        while (!pos.atEnd()) {
+            char c = pos.getChar();
+            if (c == EOL) {
+                if (pos.nextLine()) {
+                    Line line = pos.getLine();
+                    int oldflags = line.flags();
+                    if (oldflags != STATE_QUOTED_LIST) {
+                        line.setFlags(STATE_QUOTED_LIST);
+                        changed = true;
+                    }
+                    continue;
+                } else
+                    break; // End of buffer.
+            }
+            if (Character.isWhitespace(c)) {
+                pos.skip();
+                continue;
+            }
+            if (c == '(') {
+                ++count;
+                pos.skip();
+                continue;
+            }
+            if (c == ')') {
+                pos.skip();
+                if (count > 0) {
+                    --count;
+                    if (count == 0)
+                        break;
+                }
+                continue;
+            }
+            // Not EOL, whitespace or paren.
+            if (count == 0) {
+                skipToken(pos);
+                break;
+            }
+            // Default.
+            pos.skip();
+        }
+        return changed;
+    }
+
+    private static void skipToken(Position pos)
+    {
+        while (!Character.isWhitespace(pos.getChar()) && pos.next())
+            ;
     }
 
     public FormatTable getFormatTable()
