@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.100 2004-04-20 23:08:50 piso Exp $
+;;; $Id: clos.lisp,v 1.101 2004-05-24 18:22:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1562,11 +1562,11 @@
 (defmethod (setf documentation) (new-value (x symbol) doc-type)
   (case doc-type
     (FUNCTION
-     (setf (get x '%function-documentation) docstring))
+     (setf (get x '%function-documentation) new-value))
     (VARIABLE
-     (setf (get x '%variable-documentation) docstring))
+     (setf (get x '%variable-documentation) new-value))
     (STRUCTURE
-     (setf (get x '%structure-documentation) docstring))))
+     (setf (get x '%structure-documentation) new-value))))
 
 (defmethod documentation ((x standard-class) (doc-type (eql 't)))
   (class-documentation x))
