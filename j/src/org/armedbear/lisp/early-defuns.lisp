@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.6 2004-01-17 14:15:25 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.7 2004-01-17 17:31:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,6 +43,8 @@
        (return-from normalize-type 'character))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
        (return-from normalize-type 'float))
+      (ARRAY
+       (return-from normalize-type '(array * *)))
       (t
        (unless (get type 'deftype-definition)
          (return-from normalize-type type)))))
@@ -68,7 +70,9 @@
            (setf cdr-typespec t))
          (setf i (list car-typespec cdr-typespec))))
       ((ARRAY SIMPLE-ARRAY)
-       (when (and i (eq (car i) nil)) ; Element type is NIL.
+       (unless i
+         (return-from normalize-type (list tp '* '*)))
+       (when (null (car i)) ; Element type is NIL.
          (if (eq tp 'simple-array)
              (setf tp 'simple-string)
              (setf tp 'string))
@@ -80,7 +84,9 @@
                  ((eql (cadr i) 1)
                   (setf i nil))
                  (t
-                  (error "invalid type specifier ~S" type))))))
+                  (error "invalid type specifier ~S" type)))))
+       (when (= (length i) 1)
+         (setf i (append i '(*)))))
       ((SHORT-FLOAT SINGLE-FLOAT DOUBLE-FLOAT LONG-FLOAT)
        (setf tp 'float)))
     (if i (cons tp i) tp)))

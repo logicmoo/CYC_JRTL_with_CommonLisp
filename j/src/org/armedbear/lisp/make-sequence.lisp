@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.6 2004-01-17 14:15:52 piso Exp $
+;;; $Id: make-sequence.lisp,v 1.7 2004-01-17 17:28:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@
                   (t
                    (setq element-type (or (car args) t)
                          len (cadr args))))
-            (unless (or (null len) (eq len '*))
+            (unless (or (null len) (eq len '*) (equal len '(*)))
               (when (/= size len)
                 (size-mismatch-error type size))))))
     (setq sequence
