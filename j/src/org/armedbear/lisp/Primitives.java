@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.741 2005-03-14 17:50:28 piso Exp $
+ * $Id: Primitives.java,v 1.742 2005-03-14 20:24:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1550,7 +1550,6 @@ public final class Primitives extends Lisp
     };
 
     // ### macro-function
-    // Need to support optional second argument specifying environment.
     private static final Primitive MACRO_FUNCTION =
         new Primitive("macro-function", "symbol &optional environment")
     {
@@ -1568,6 +1567,32 @@ public final class Primitives extends Lisp
                 if (obj instanceof AutoloadMacro) {
                     ((AutoloadMacro)obj).load();
                     obj = get((Symbol) arg, Symbol.MACROEXPAND_MACRO, NIL);
+                }
+                if (obj instanceof MacroObject)
+                    return ((MacroObject)obj).getExpander();
+            }
+            return NIL;
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            LispObject obj;
+            if (second != NIL) {
+                Environment env = checkEnvironment(second);
+                obj = env.lookupFunction(first);
+            } else
+                obj = first.getSymbolFunction();
+            if (obj instanceof AutoloadMacro) {
+                ((AutoloadMacro)obj).load();
+                obj = first.getSymbolFunction();
+            }
+            if (obj instanceof MacroObject)
+                return ((MacroObject)obj).getExpander();
+            if (obj instanceof SpecialOperator) {
+                obj = get((Symbol) first, Symbol.MACROEXPAND_MACRO, NIL);
+                if (obj instanceof AutoloadMacro) {
+                    ((AutoloadMacro)obj).load();
+                    obj = get((Symbol) first, Symbol.MACROEXPAND_MACRO, NIL);
                 }
                 if (obj instanceof MacroObject)
                     return ((MacroObject)obj).getExpander();
