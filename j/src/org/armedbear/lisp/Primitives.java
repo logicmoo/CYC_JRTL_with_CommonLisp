@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.584 2004-02-26 19:30:46 piso Exp $
+ * $Id: Primitives.java,v 1.585 2004-02-27 02:43:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1286,6 +1286,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### %format
     private static final Primitive _FORMAT =
         new Primitive("%format", PACKAGE_SYS, false)
     {
@@ -1811,11 +1812,20 @@ public final class Primitives extends Lisp
     // ### row-major-aref
     // row-major-aref array index => element
     private static final Primitive2 ROW_MAJOR_AREF =
-        new Primitive2("row-major-aref","array index") {
+        new Primitive2("row-major-aref", "array index")
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            return checkArray(first).getRowMajor(Fixnum.getValue(second));
+            try {
+                return ((AbstractArray)first).getRowMajor(((Fixnum)second).value);
+            }
+            catch (ClassCastException e) {
+                if (first instanceof AbstractArray)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.ARRAY));
+            }
         }
     };
 
@@ -1829,12 +1839,14 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             try {
-                ((AbstractArray)first).setRowMajor(Fixnum.getValue(second), third);
+                ((AbstractArray)first).setRowMajor(((Fixnum)second).value, third);
                 return third;
             }
             catch (ClassCastException e) {
-                signal(new TypeError(first, "array"));
-                return NIL;
+                if (first instanceof AbstractArray)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.ARRAY));
             }
         }
     };
@@ -1858,12 +1870,14 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             try {
-                ((AbstractVector)first).set(Fixnum.getValue(second), third);
+                ((AbstractVector)first).set(((Fixnum)second).value, third);
                 return third;
             }
             catch (ClassCastException e) {
-                signal(new TypeError(first, "vector"));
-                return NIL;
+                if (first instanceof AbstractVector)
+                    return signal(new TypeError(second, Symbol.FIXNUM));
+                else
+                    return signal(new TypeError(first, Symbol.VECTOR));
             }
         }
     };
@@ -1875,29 +1889,32 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject arg)
             throws ConditionThrowable
         {
-            int fillPointer = -1;
-            if (arg instanceof AbstractVector)
-                fillPointer = ((AbstractVector)arg).getFillPointer();
-            if (fillPointer >= 0)
-                return new Fixnum(fillPointer);
-            if (arg instanceof AbstractArray)
-                return ((AbstractArray)arg).noFillPointer();
-            else
+            try {
+                return new Fixnum(((AbstractArray)arg).getFillPointer());
+            }
+            catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.ARRAY));
+            }
         }
     };
 
-    // ### %set-fill-pointer
+    // ### %set-fill-pointer vector new-fill-pointer
     private static final Primitive2 _SET_FILL_POINTER =
         new Primitive2("%set-fill-pointer", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            AbstractVector v = checkVector(first);
-            if (v.getFillPointer() < 0)
-                v.noFillPointer();
-            v.setFillPointer(second);
-            return second;
+            try {
+                AbstractVector v = (AbstractVector) first;
+                if (v.hasFillPointer())
+                    v.setFillPointer(second);
+                else
+                    v.noFillPointer();
+                return second;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.VECTOR));
+            }
         }
     };
 
