@@ -12,6 +12,7 @@
 abort
 acons
 adjoin
+adjust-array
 and
 append
 apply
