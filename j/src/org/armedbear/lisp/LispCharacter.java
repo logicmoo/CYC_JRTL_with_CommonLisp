@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.12 2003-06-06 17:05:05 piso Exp $
+ * $Id: LispCharacter.java,v 1.13 2003-06-20 17:15:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,6 +135,23 @@ public final class LispCharacter extends LispObject
         }
         return sb.toString();
     }
+
+    private static final Primitive1 CHARACTER = new Primitive1("character") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            if (arg instanceof LispCharacter)
+                return arg;
+            if (arg instanceof LispString) {
+                if (arg.length() == 1)
+                    return ((LispString)arg).get(0);
+            } else if (arg instanceof Symbol) {
+                String name = arg.getName();
+                if (name.length() == 1)
+                    return new LispCharacter(name.charAt(0));
+            }
+            throw new TypeError();
+        }
+    };
 
     private static final Primitive1 WHITESPACEP = new Primitive1("whitespacep") {
         public LispObject execute(LispObject arg) throws LispError
