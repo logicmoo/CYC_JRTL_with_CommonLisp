@@ -1,7 +1,7 @@
 ;;; parse-lambda-list.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: parse-lambda-list.lisp,v 1.1 2003-11-22 18:56:11 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: parse-lambda-list.lisp,v 1.2 2004-12-03 18:27:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@
 ;;; Break something like a lambda list (but not necessarily actually a
 ;;; lambda list, e.g. the representation of argument types which is
 ;;; used within an FTYPE specification) into its component parts. We
-;;; return 13 values:
+;;; return 10 values:
 ;;;  1. a list of the required args;
 ;;;  2. a list of the &OPTIONAL arg specs;
 ;;;  3. true if a &REST arg was specified;
@@ -36,10 +36,7 @@
 ;;;  7. true if &ALLOW-OTHER-KEYS was specified.;
 ;;;  8. true if any &AUX is present (new in SBCL vs. CMU CL);
 ;;;  9. a list of the &AUX specifiers;
-;;; 10. true if a &MORE arg was specified;
-;;; 11. the &MORE context var;
-;;; 12. the &MORE count var;
-;;; 13. true if any lambda list keyword is present (only for
+;;; 10. true if any lambda list keyword is present (only for
 ;;;     PARSE-LAMBDA-LIST-LIKE-THING).
 ;;;
 ;;; The top level lambda list syntax is checked for validity, but the
@@ -53,18 +50,14 @@
             (aux))
     (let ((restp nil)
           (rest nil)
-          (morep nil)
-          (more-context nil)
-          (more-count nil)
           (keyp nil)
 	  (auxp nil)
           (allowp nil)
           (state :required))
       (declare (type (member :allow-other-keys :aux
                              :key
-                             :more-context :more-count
                              :optional
-                             :post-more :post-rest
+                             :post-rest
                              :required :rest)
                      state))
       (dolist (arg list)
@@ -81,14 +74,9 @@
                (unless (member state '(:required :optional))
                  (error "misplaced &REST in lambda list: ~S" list))
                (setq state :rest))
-              (&more
-               (unless (member state '(:required :optional))
-                 (error "misplaced &MORE in lambda list: ~S" list))
-               (setq morep t
-                     state :more-context))
               (&key
                (unless (member state
-                               '(:required :optional :post-rest :post-more))
+                               '(:required :optional :post-rest))
                  (error "misplaced &KEY in lambda list: ~S" list))
                (setq keyp t
                      state :key))
@@ -98,7 +86,7 @@
                (setq allowp t
                      state :allow-other-keys))
               (&aux
-               (when (member state '(:rest :more-context :more-count))
+               (when (eq state :rest)
                  (error "misplaced &AUX in lambda list: ~S" list))
                (setq auxp t
 		     state :aux))
@@ -114,12 +102,6 @@
                (setq restp t
                      rest arg
                      state :post-rest))
-              (:more-context
-               (setq more-context arg
-                     state :more-count))
-              (:more-count
-               (setq more-count arg
-                     state :post-more))
               (:key (keys arg))
               (:aux (aux arg))
               (t
@@ -129,7 +111,6 @@
         (error "&REST without rest variable"))
 
       (values (required) (optional) restp rest keyp (keys) allowp auxp (aux)
-              morep more-context more-count
               (neq state :required)))))
 
 ;;; like PARSE-LAMBDA-LIST-LIKE-THING, except our LAMBDA-LIST argument
@@ -138,12 +119,9 @@
 ;;; even if they could conceivably be legal in not-quite-a-lambda-list
 ;;; weirdosities
 (defun parse-lambda-list (lambda-list)
-
   ;; Classify parameters without checking their validity individually.
-  (multiple-value-bind (required optional restp rest keyp keys allowp auxp aux
-			morep more-context more-count)
+  (multiple-value-bind (required optional restp rest keyp keys allowp auxp aux)
       (parse-lambda-list-like-thing lambda-list)
-
     ;; Check validity of parameters.
     (flet ((need-symbol (x why)
 	     (unless (symbolp x)
@@ -177,5 +155,4 @@
 	     (error "&KEY parameter is not a symbol or cons: ~S" i))))))
 
     ;; Voila.
-    (values required optional restp rest keyp keys allowp auxp aux
-	    morep more-context more-count)))
+    (values required optional restp rest keyp keys allowp auxp aux)))
