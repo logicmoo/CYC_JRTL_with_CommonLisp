@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.21 2003-03-13 15:37:28 piso Exp $
+ * $Id: LispString.java,v 1.22 2003-03-14 12:21:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,10 +219,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             if ((end1 - start1) != (end2 - start2))
                 return NIL;
             int i, j;
@@ -244,10 +244,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 if (array1[i] != array2[j])
@@ -267,10 +267,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = array1[i];
@@ -297,10 +297,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = array1[i];
@@ -327,10 +327,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = array1[i];
@@ -357,10 +357,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = array1[i];
@@ -387,10 +387,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = array1[i];
@@ -416,10 +416,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = array1[i];
@@ -447,10 +447,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = Character.toUpperCase(array1[i]);
@@ -477,10 +477,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = Character.toUpperCase(array1[i]);
@@ -507,10 +507,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = Character.toUpperCase(array1[i]);
@@ -537,10 +537,10 @@ public final class LispString extends AbstractVector implements SequenceType,
                 throw new WrongNumberOfArgumentsException(this);
             char[] array1 = string(args[0]).array;
             char[] array2 = string(args[1]).array;
-            int start1 = (int) Fixnum.getValue(args[2]);
-            int end1 = (int) Fixnum.getValue(args[3]);
-            int start2 = (int) Fixnum.getValue(args[4]);
-            int end2 = (int) Fixnum.getValue(args[5]);
+            int start1 = Fixnum.getInt(args[2]);
+            int end1 = Fixnum.getInt(args[3]);
+            int start2 = Fixnum.getInt(args[4]);
+            int end2 = Fixnum.getInt(args[5]);
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = Character.toUpperCase(array1[i]);
