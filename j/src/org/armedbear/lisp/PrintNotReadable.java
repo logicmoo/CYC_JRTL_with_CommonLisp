@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: PrintNotReadable.java,v 1.2 2004-03-18 00:26:07 piso Exp $
+ * $Id: PrintNotReadable.java,v 1.3 2004-09-30 00:58:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,29 @@ public class PrintNotReadable extends LispError
         if (type == BuiltInClass.PRINT_NOT_READABLE)
             return T;
         return super.typep(type);
+    }
+
+    public String getMessage()
+    {
+        StringBuffer sb = new StringBuffer();
+        if (object != NIL) {
+            final LispThread thread = LispThread.currentThread();
+            final Environment oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_PRINT_READABLY_, NIL);
+            thread.bindSpecial(_PRINT_ARRAY_, NIL);
+            try {
+                sb.append(object.writeToString());
+            }
+            catch (Throwable t) {
+                sb.append("Object");
+            }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
+        } else
+            sb.append("Object");
+        sb.append(" cannot be printed readably.");
+        return sb.toString();
     }
 
     // ### print-not-readable-object
