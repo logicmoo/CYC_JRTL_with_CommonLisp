@@ -1,8 +1,8 @@
 /*
  * NewsGroupSummary.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummary.java,v 1.9 2003-02-04 21:12:55 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: NewsGroupSummary.java,v 1.10 2003-06-25 18:38:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,61 +89,65 @@ public final class NewsGroupSummary extends Mailbox
     private Runnable loadRunnable = new Runnable() {
         public void run()
         {
-            if (session.connect()) {
-                if (!selectGroup()) {
-                    errorText = "No group \"" + groupName + '\"';
-                    SwingUtilities.invokeLater(errorRunnable);
-                    return;
-                }
-                final int count = session.getCount();
-                if (count == 0) {
-                    errorText = "No articles";
-                    SwingUtilities.invokeLater(errorRunnable);
-                    return;
-                }
-                if (count > 100) {
-                    Runnable confirmRunnable = new Runnable() {
-                        public void run()
-                        {
-                            Editor editor = Editor.currentEditor();
-                            editor.setDefaultCursor();
-                            String prompt = "How many headers would you like?";
-                            String defaultValue = String.valueOf(count);
-                            String response =
-                                InputDialog.showInputDialog(editor, prompt,
-                                    groupName, defaultValue);
-                            editor.setWaitCursor();
-                            numberToGet = 0;
-                            if (response != null && response.length() > 0) {
-                                try {
-                                    numberToGet = Integer.parseInt(response);
-                                }
-                                catch (NumberFormatException e) {
-                                    Log.error(e);
-                                }
+            if (!session.connect())
+            {
+                errorText = session.getErrorText();
+                SwingUtilities.invokeLater(errorRunnable);
+                return;
+            }
+            if (!selectGroup()) {
+                errorText = "No group \"" + groupName + '\"';
+                SwingUtilities.invokeLater(errorRunnable);
+                return;
+            }
+            final int count = session.getCount();
+            if (count == 0) {
+                errorText = "No articles";
+                SwingUtilities.invokeLater(errorRunnable);
+                return;
+            }
+            if (count > 100) {
+                Runnable confirmRunnable = new Runnable() {
+                    public void run()
+                    {
+                        Editor editor = Editor.currentEditor();
+                        editor.setDefaultCursor();
+                        String prompt = "How many headers would you like?";
+                        String defaultValue = String.valueOf(count);
+                        String response =
+                            InputDialog.showInputDialog(editor, prompt,
+                                groupName, defaultValue);
+                        editor.setWaitCursor();
+                        numberToGet = 0;
+                        if (response != null && response.length() > 0) {
+                            try {
+                                numberToGet = Integer.parseInt(response);
+                            }
+                            catch (NumberFormatException e) {
+                                Log.error(e);
                             }
                         }
-                    };
-                    try {
-                        SwingUtilities.invokeAndWait(confirmRunnable);
                     }
-                    catch (Exception e) {
-                        Log.error(e);
-                    }
-                } else
-                    numberToGet = count;
-                if (numberToGet == 0) {
-                    SwingUtilities.invokeLater(errorRunnable);
-                    return;
+                };
+                try {
+                    SwingUtilities.invokeAndWait(confirmRunnable);
                 }
-                getHeaders();
-                if (entries != null && entries.size() > 0) {
-                    addEntriesToBuffer();
-                    SwingUtilities.invokeLater(updateDisplayRunnable);
-                } else {
-                    errorText = "No articles";
-                    SwingUtilities.invokeLater(errorRunnable);
+                catch (Exception e) {
+                    Log.error(e);
                 }
+            } else
+                numberToGet = count;
+            if (numberToGet == 0) {
+                SwingUtilities.invokeLater(errorRunnable);
+                return;
+            }
+            getHeaders();
+            if (entries != null && entries.size() > 0) {
+                addEntriesToBuffer();
+                SwingUtilities.invokeLater(updateDisplayRunnable);
+            } else {
+                errorText = "No articles";
+                SwingUtilities.invokeLater(errorRunnable);
             }
         }
     };
