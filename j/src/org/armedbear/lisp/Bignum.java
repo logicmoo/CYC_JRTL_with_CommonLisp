@@ -1,8 +1,8 @@
 /*
  * Bignum.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.50 2003-12-13 00:02:47 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: Bignum.java,v 1.51 2004-01-17 00:39:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,8 @@ public final class Bignum extends LispObject
         if (type == Symbol.NUMBER)
             return T;
         if (type == BuiltInClass.NUMBER)
+            return T;
+        if (type == Symbol.SIGNED_BYTE)
             return T;
         if (type == Symbol.UNSIGNED_BYTE)
             return value.signum() >= 0 ? T : NIL;
