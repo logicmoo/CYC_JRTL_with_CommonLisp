@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.218 2003-06-01 19:37:29 piso Exp $
+ * $Id: Primitives.java,v 1.219 2003-06-01 20:08:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4666,6 +4666,21 @@ public final class Primitives extends Module
                     return new Cons(a, d);
             } else
                 return fun.execute(x);
+        }
+    };
+
+    private static final Primitive2 _MAKE_LIST = new Primitive2("%make-list") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws Condition
+        {
+            int size = Fixnum.getValue(first);
+            if (size < 0)
+                throw new TypeError("MAKE-LIST: " + size +
+                    " is not a valid list length");
+            LispObject result = NIL;
+            for (int i = size; i-- > 0;)
+                result = new Cons(second, result);
+            return result;
         }
     };
 }
