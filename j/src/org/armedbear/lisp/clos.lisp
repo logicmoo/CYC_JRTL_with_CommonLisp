@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.23 2003-12-10 02:48:40 piso Exp $
+;;; $Id: clos.lisp,v 1.24 2003-12-10 02:54:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -93,6 +93,7 @@
             (initfunction nil)
             (initform nil)
             (initargs ())
+            (type nil)
             (readers ())
             (writers ())
             (other-options ()))
@@ -109,6 +110,12 @@
              (setq initform `',(cadr olist)))
             (:initarg
              (push-on-end (cadr olist) initargs))
+            (:type
+             (when type
+               (error 'program-error
+                      "duplicate slot option :TYPE for slot named ~S"
+                      name))
+             (setf type (cadr olist)))
             (:reader
              (push-on-end (cadr olist) readers))
             (:writer
