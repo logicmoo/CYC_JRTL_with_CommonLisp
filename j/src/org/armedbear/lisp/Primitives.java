@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.135 2003-03-16 19:54:32 piso Exp $
+ * $Id: Primitives.java,v 1.136 2003-03-16 23:08:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1466,18 +1466,14 @@ public final class Primitives extends Module
                     throw new WrongNumberOfArgumentsException(this);
                 case 1:
                     return NIL;
-                case 2: {
-                    LispObject result = eval(args.car(), env);
-                    if (result == NIL)
+                case 2:
+                    if (eval(args.car(), env) == NIL)
                         return eval(args.cadr(), env);
                     return NIL;
-                }
-                default: {
-                    LispObject result = eval(args.car(), env);
-                    if (result == NIL)
+                default:
+                    if (eval(args.car(), env) == NIL)
                         return progn(args.cdr(), env);
                     return NIL;
-                }
             }
         }
     };
