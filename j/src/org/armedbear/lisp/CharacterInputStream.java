@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.2 2003-02-23 02:09:59 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.3 2003-02-25 16:35:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,7 +293,7 @@ public class CharacterInputStream extends LispStream
                 case '.':
                     return eval(read(true, NIL, true), new Environment());
                 case '*':
-                    return NIL;
+                    return readBitVector();
                 default:
                     //clearInput();
                     //throw new LispError("unsupported '#' macro character '" +
@@ -370,6 +370,29 @@ public class CharacterInputStream extends LispStream
                         skipBalancedComment(); // Nested comment. Recurse!
                 }
             }
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
+        }
+    }
+
+    private LispObject readBitVector() throws LispError
+    {
+        try {
+            StringBuffer sb = new StringBuffer();
+            while (true) {
+                int n = read();
+                if (n < 0)
+                    break;
+                char c = (char) n;
+                if (c == '0' || c == '1')
+                    sb.append(c);
+                else {
+                    unread(c);
+                    break;
+                }
+            }
+            return new BitVector(sb.toString());
         }
         catch (IOException e) {
             throw new StreamError(e);
