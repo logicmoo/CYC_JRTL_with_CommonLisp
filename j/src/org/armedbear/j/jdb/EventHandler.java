@@ -2,7 +2,7 @@
  * EventHandler.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: EventHandler.java,v 1.7 2003-05-25 02:28:41 piso Exp $
+ * $Id: EventHandler.java,v 1.8 2003-05-28 16:11:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,7 @@ import org.armedbear.j.Editor;
 import org.armedbear.j.FastStringBuffer;
 import org.armedbear.j.File;
 import org.armedbear.j.Log;
+import org.armedbear.j.Platform;
 
 public final class EventHandler implements Runnable
 {
@@ -113,7 +114,8 @@ public final class EventHandler implements Runnable
                     Runnable r = new Runnable() {
                         public void run()
                         {
-                            Editor.getCurrentFrame().toFront();
+                            if (!Platform.isPlatformWindows())
+                                Editor.getCurrentFrame().toFront();
                             jdb.getControlDialog().toFront();
                         }
                     };
