@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.13 2004-04-24 12:22:15 piso Exp $
+;;; $Id: compile-file.lisp,v 1.14 2004-04-30 17:25:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,6 +41,8 @@
            (eval form)))
         (t
          (case (car form)
+           (MACROLET
+            (eval form))
            ((IN-PACKAGE DEFPACKAGE)
             (eval form))
            ((DEFVAR DEFPARAMETER)
