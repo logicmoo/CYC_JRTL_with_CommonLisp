@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: macros.lisp,v 1.24 2004-02-02 02:16:00 piso Exp $
+;;; $Id: macros.lisp,v 1.25 2004-02-02 13:44:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,14 +31,50 @@
 (defmacro prog2 (first-form second-form &rest forms)
   `(prog1 (progn ,first-form ,second-form) ,@forms))
 
+;; Adapted from SBCL.
 (defmacro push (item place)
-  `(setf ,place (cons ,item ,place)))
+  (if (and (symbolp place)
+	   (eq place (macroexpand place)))
+      `(setq ,place (cons ,item ,place))
+      (multiple-value-bind (dummies vals newval setter getter)
+        (get-setf-expansion place)
+        (let ((g (gensym)))
+          `(let* ((,g ,item)
+                  ,@(mapcar #'list dummies vals)
+                  (,(car newval) (cons ,g ,getter)))
+             ,setter)))))
 
-(defmacro pop (place)
-  `(prog1 (car ,place) (setf ,place (cdr ,place))))
-
+;; Adapted from SBCL.
 (defmacro pushnew (item place &rest keys)
-  `(setf ,place (adjoin ,item ,place ,@keys)))
+  (if (and (symbolp place)
+	   (eq place (macroexpand place)))
+      `(setq ,place (adjoin ,item ,place ,@keys))
+      (multiple-value-bind (dummies vals newval setter getter)
+        (get-setf-expansion place)
+        (let ((g (gensym)))
+          `(let* ((,g ,item)
+                  ,@(mapcar #'list dummies vals)
+                  (,(car newval) (adjoin ,g ,getter ,@keys)))
+             ,setter)))))
+
+;; Adapted from SBCL.
+(defmacro pop (place)
+  (if (and (symbolp place)
+	   (eq place (macroexpand place)))
+      `(prog1 (car ,place)
+	      (setq ,place (cdr ,place)))
+      (multiple-value-bind (dummies vals newval setter getter)
+        (get-setf-expansion place)
+        (do* ((d dummies (cdr d))
+              (v vals (cdr v))
+              (let-list nil))
+             ((null d)
+              (push (list (car newval) getter) let-list)
+              `(let* ,(nreverse let-list)
+                 (prog1 (car ,(car newval))
+                        (setq ,(car newval) (cdr ,(car newval)))
+                        ,setter)))
+          (push (list (car d) (car v)) let-list)))))
 
 (defmacro psetq (&rest args)
   (do ((l args (cddr l))
