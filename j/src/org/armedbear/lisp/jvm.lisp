@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.12 2003-11-06 17:14:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.13 2003-11-07 16:17:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2022,16 +2022,47 @@
 (install-handler '+    'compile-plus)
 (install-handler '-    'compile-minus)
 
-#+nil
+(defun process-optimization-declarations (forms)
+  (let (alist ())
+    (dolist (form forms)
+      (unless (and (consp form) (eq (car form) 'declare))
+        (return))
+      (let ((decl (cadr form)))
+        (when (eq (car decl) 'optimize)
+          (dolist (spec (cdr decl))
+            (let ((val 3)
+                  (quantity spec))
+              (if (consp spec)
+                  (setq quantity (car spec) val (cadr spec)))
+              (if (and (fixnump val) (<= 0 val 3) (memq quantity '(debug speed space safety compilation-speed)))
+                  (push (cons quantity val) alist)))))))
+    alist))
+
 (defun compile (name &optional definition)
-  (jvm:jvm-compile name definition))
+  (if (consp name)
+      (return-from compile (values name nil nil)))
+  (if (and name (fboundp name) (typep (symbol-function name) 'generic-function))
+      (return-from compile (values name nil nil)))
+  (unless definition
+    (setq definition (or (and (symbolp name) (macro-function name))
+                         (fdefinition name))))
+  (let ((expr (get-lambda-to-compile definition))
+        (speed nil))
+    (when (eq (car expr) 'lambda)
+      (let ((decls (process-optimization-declarations (cddr expr))))
+        (setf speed (cdr (assoc 'speed decls)))))
+    (if (eql speed 3)
+        (progn
+          (c::%compile name definition)
+          (jvm-compile name definition))
+        (progn
+          (c::%compile name definition)
+          ))))
 
 (defmacro defun (name lambda-list &rest body)
   `(progn
      (sys::%defun ',name ',lambda-list ',body)
-     (compiler::%compile ',name)
-     (when *auto-compile*
-       (jvm-compile ',name))
+     (compile ',name)
      ',name))
 
 (mapc #'jvm-compile '(pool-add
