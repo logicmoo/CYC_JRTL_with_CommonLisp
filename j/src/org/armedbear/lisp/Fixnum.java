@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.36 2003-05-31 18:12:44 piso Exp $
+ * $Id: Fixnum.java,v 1.37 2003-06-03 14:19:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -402,16 +402,17 @@ public final class Fixnum extends LispObject
 
     public String toString()
     {
+        final LispThread thread = LispThread.currentThread();
         int base;
         try {
-            base = Fixnum.getValue(_PRINT_BASE_.symbolValueNoThrow());
+            base = Fixnum.getValue(_PRINT_BASE_.symbolValueNoThrow(thread));
         }
         catch (Throwable t) {
             Debug.trace(t);
             base = 10;
         }
         String s = Integer.toString(value, base).toUpperCase();
-        if (_PRINT_RADIX_.symbolValueNoThrow() != NIL) {
+        if (_PRINT_RADIX_.symbolValueNoThrow(thread) != NIL) {
             StringBuffer sb = new StringBuffer();
             switch (base) {
                 case 2:
