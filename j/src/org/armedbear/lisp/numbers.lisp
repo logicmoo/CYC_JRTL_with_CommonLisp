@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.27 2004-04-04 17:17:47 piso Exp $
+;;; $Id: numbers.lisp,v 1.28 2004-04-08 11:19:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -130,12 +130,10 @@
 (defun isqrt (natural)
   "Returns the root of the nearest integer less than natural which is a perfect
    square."
-  (declare (type unsigned-byte natural) (values unsigned-byte))
   (unless (and (integerp natural) (not (minusp natural)))
-    ;;FIXME
-    (error 'type-error "Wrong type: ~A is not a non-negative real number."
-           natural))
-  ;; theoretically (> n 7) ,i.e., n-len-quarter > 0
+    (error 'simple-type-error
+           :format-control "The value ~A is not a non-negative real number."
+           :format-arguments (list natural)))
   (if (and (fixnump natural) (<= natural 24))
       (cond ((> natural 15) 4)
 	    ((> natural  8) 3)
