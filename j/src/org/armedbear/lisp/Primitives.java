@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.131 2003-03-15 19:06:23 piso Exp $
+ * $Id: Primitives.java,v 1.132 2003-03-15 22:09:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1452,9 +1452,13 @@ public final class Primitives extends Module
             while (args != NIL) {
                 LispObject clause = args.car();
                 result = eval(clause.car(), env);
+                setValues(null);
                 if (result != NIL) {
-                    if (clause.cdr() != NIL)
-                        result = progn(clause.cdr(), env);
+                    LispObject body = clause.cdr();
+                    while (body != NIL) {
+                        result = eval(body.car(), env);
+                        body = body.cdr();
+                    }
                     return result;
                 }
                 args = args.cdr();
