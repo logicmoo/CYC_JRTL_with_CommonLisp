@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.237 2003-06-18 17:07:57 piso Exp $
+ * $Id: Primitives.java,v 1.238 2003-06-20 00:01:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4865,6 +4865,29 @@ public final class Primitives extends Module
                 tail = tail.cdr();
             }
             return NIL;
+        }
+    };
+
+    // ### get-universal-time
+    private static final Primitive0 GET_UNIVERSAL_TIME =
+        new Primitive0("get-universal-time") {
+        public LispObject execute()
+        {
+            return number(System.currentTimeMillis() / 1000 + 2208988800L);
+        }
+    };
+
+    // ### file-write-date
+    private static final Primitive1 FILE_WRITE_DATE =
+        new Primitive1("file-write-date") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            String pathname = LispString.getValue(arg);
+            File file = new File(pathname);
+            long lastModified = file.lastModified();
+            if (lastModified == 0)
+                return NIL;
+            return number(lastModified / 1000 + 2208988800L);
         }
     };
 }
