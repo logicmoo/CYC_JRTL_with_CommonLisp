@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.529 2003-12-13 20:23:28 piso Exp $
+ * $Id: Primitives.java,v 1.530 2003-12-13 20:52:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1224,7 +1224,8 @@ public final class Primitives extends Lisp
             LispObject formatControl = args[0];
             LispObject formatArguments = NIL;
             for (int i = 1; i < args.length; i++)
-                formatArguments = new Cons(formatArguments, new Cons(args[i]));
+                formatArguments = new Cons(args[i], formatArguments);
+            formatArguments = formatArguments.nreverse();
             signal(new SimpleError(formatControl, formatArguments));
             return NIL;
         }
