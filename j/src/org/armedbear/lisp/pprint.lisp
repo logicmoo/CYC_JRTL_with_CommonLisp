@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.6 2004-04-24 12:41:51 piso Exp $
+;;; $Id: pprint.lisp,v 1.7 2004-04-25 16:46:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1060,13 +1060,6 @@
 	     (apply #'cl:write object pairs))))
   object)
 
-#-armedbear
-(defun basic-write (object stream)
-  (cond ((xp-structure-p stream) (write+ object stream))
-	(*print-pretty* (maybe-initiate-xp-printing
-			  #'(lambda (s o) (write+ o s)) stream object))
-	(T (cl:write object :stream stream))))
-#+armedbear
 (defun basic-write (object stream)
   (cond ((xp-structure-p stream) (write+ object stream))
 	(*print-pretty* (maybe-initiate-xp-printing
