@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.12 2003-03-05 19:53:26 piso Exp $
+;;; $Id: boot.lisp,v 1.13 2003-03-06 04:27:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(let ((*load-verbose* nil))
+;; (let ((*load-verbose* nil))
   (dolist (name '("documentation"
                   "backquote"
                   "setf"
@@ -29,15 +29,32 @@
                   "defstruct"
                   "sort"
                   "compiler"))
-    (cl::%load (concatenate 'string name ".lisp"))))
+    (cl::%load (concatenate 'string name ".lisp")))
 
 
 ;; Miscellany.
 
 (in-package "COMMON-LISP")
 
-(export '(open call-arguments-limit lambda-parameters-limit
+(export '(plusp minusp integerp
+          open
+          call-arguments-limit
+          lambda-parameters-limit
           multiple-values-limit))
+
+(defun plusp (n)
+  (> n 0))
+
+(defun minusp (n)
+  (< n 0))
+
+;; FIXME
+(defun integerp (n)
+  (numberp n))
+
+;; FIXME
+(defun fixnump (n)
+  (numberp n))
 
 (defun open (filename
 	     &key
@@ -58,6 +75,8 @@
 
 
 ;; Compile the world.
+(format t "; Compiling Lisp code ... ")
+(finish-output)
 (dolist (sym (package-symbols :cl))
   (when (fboundp sym)
     (unless (or (special-operator-p sym) (macro-function sym))
@@ -66,3 +85,5 @@
 ;;           (format t "compiling ~S~%" sym)
 ;;           (finish-output)
           (compile sym))))))
+(format t "done~%")
+(finish-output)
