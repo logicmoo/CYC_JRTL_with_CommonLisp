@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.651 2004-06-07 01:51:15 piso Exp $
+ * $Id: Primitives.java,v 1.652 2004-06-07 02:09:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3393,17 +3393,6 @@ public final class Primitives extends Lisp
             checkBounds(start, end, chars.length);
             out._writeChars(chars, start, end);
             return first;
-        }
-    };
-
-    // ### %write-newline output-stream => nil
-    private static final Primitive1 _WRITE_NEWLINE =
-        new Primitive1("%write-newline", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            outSynonymOf(arg)._writeChar('\n');
-            return NIL;
         }
     };
 
