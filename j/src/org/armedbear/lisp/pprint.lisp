@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.13 2004-06-07 02:10:30 piso Exp $
+;;; $Id: pprint.lisp,v 1.14 2004-06-07 17:37:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,7 +100,7 @@
           #-armedbear write-char
           #-armedbear terpri
           #-armedbear fresh-line
-	  defstruct
+	  #-armedbear defstruct
           finish-output
           force-output
           clear-output))
@@ -267,7 +267,7 @@
 
 ;                       ---- DISPATCHING ----
 
-(cl:defstruct (pprint-dispatch-table (:conc-name nil) (:copier nil))
+(defstruct (pprint-dispatch-table (:conc-name nil) (:copier nil))
   (conses-with-cars (make-hash-table :test #'eq) :type hash-table)
   (structures (make-hash-table :test #'eq) :type hash-table)
   (others nil :type list))
@@ -276,7 +276,7 @@
 ;following form.  When stored in the hash tables, the test entry is
 ;the number of entries in the OTHERS list that have a higher priority.
 
-(cl:defstruct (entry (:conc-name nil))
+(defstruct (entry (:conc-name nil))
   (test nil)        ;predicate function or count of higher priority others.
   (fn nil)          ;pprint function
   (full-spec nil))  ;list of priority and type specifier
@@ -456,7 +456,7 @@
   (defvar prefix-min-size 256.)
   (defvar suffix-min-size 256.))
 
-(cl:defstruct (xp-structure (:conc-name nil) (:print-function describe-xp))
+(defstruct (xp-structure (:conc-name nil) (:print-function describe-xp))
   (BASE-STREAM nil) ;;The stream io eventually goes to.
   LINEL ;;The line length to use for formatting.
   LINE-LIMIT ;;If non-NIL the max number of lines to print.
@@ -1441,57 +1441,7 @@
       (setq stream (base-stream stream))))
   (cl:clear-output stream)
   nil)
-
-;note we are assuming that if a structure is defined using xp::defstruct,
-;then its print-function (if any) will be defined using xp::print etc.
 
-#-armedbear
-(defmacro defstruct (name &body body)
-  (let* ((struct-name (if (consp name) (car name) name))
-	 (printer (cadr (safe-assoc :print-function name)))
-	 (xp-print-fn
-	   (intern (concatenate 'string
-		     "PRINT-" (string (package-name
-					(symbol-package struct-name)))
-		     ":" (string struct-name))
-		   (find-package "XP"))))
-    (cond (printer
-	   `(eval-when (eval load compile)
-	      (cl:defstruct ,name ,@ body)
-	      (defun ,xp-print-fn (xp obj)
-		(funcall (function ,printer) obj xp *current-level*))
-	      (setf (get ',struct-name 'structure-printer) #',xp-print-fn)
-	      ',(if (consp name) (car name) name)))
-	  ((and (not (safe-assoc :type name))
-		(not (safe-assoc :include name)))
-	   (let* ((conc-name-spec (safe-assoc :conc-name name))
-		  (conc-name (cond ((null conc-name-spec)
-				    (concatenate 'string (string struct-name) "-"))
-				   ((null (cadr conc-name-spec)) "")
-				   (T (string (cadr conc-name-spec)))))
-		  (slots (mapcar #'(lambda (x) (if (consp x) (car x) x)) body)))
-	     `(eval-when (eval load compile)
-		(cl:defstruct ,name ,@ body)
-		(defun ,xp-print-fn (xp obj)
-		  (funcall (formatter "~@<#S(~;~W ~:I~@_~@{:~A ~W~^ ~:_~}~;)~:>") xp
-			   ',struct-name
-			   ,@(mapcan #'(lambda (slot)
-					 `(,(string slot)
-					    (,(intern (concatenate 'string
-					                 conc-name (string slot)))
-					      obj)))
-				     slots)))
-		(setf (get ',struct-name 'structure-printer) #',xp-print-fn)
-		',(if (consp name) (car name) name))))
-	  (T `(eval-when (eval load compile)
-		(setf (get ',struct-name 'structure-printer) :none)
-		(cl:defstruct ,name ,@ body))))))
-
-#-armedbear
-(defun safe-assoc (item list)
-  (do ((l list (cdr l))) ((not (consp l)) nil)
-    (if (and (consp (car l)) (eq (caar l) item)) (return (car l)))))
-
 ;           ---- FUNCTIONAL INTERFACE TO DYNAMIC FORMATTING ----
 
 ;The internal functions in this file, and the (formatter "...") expansions
@@ -2694,7 +2644,7 @@
 (defun bq-vector-print (xp obj)
   (funcall (xp:formatter "`#~W") xp (car (bqtify obj))))
 
-(cl:defstruct bq-struct code data)
+(defstruct bq-struct code data)
 
 (defun bq-struct-print (xp obj)
   ;; We must print out the string as a string, in order to prevent
@@ -2763,7 +2713,6 @@
 (set-pprint-dispatch+ `(cons (member ,*bq-vector*)) #'bq-vector-print '(0) *IPD*)
 (set-pprint-dispatch+ `(cons (member ,*bq-list-to-vector*)) #'bq-vector-print '(0) *IPD*) )
 
-(set-pprint-dispatch+ '(cons (member defstruct)) #'block-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member block)) #'block-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member case)) #'block-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member catch)) #'block-like '(0) *IPD*)
@@ -2778,7 +2727,7 @@
 (set-pprint-dispatch+ '(cons (member defparameter)) #'defun-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member defsetf)) #'defsetf-print '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member define-setf-method)) #'defun-like '(0) *IPD*)
-(set-pprint-dispatch+ '(cons (member cl:defstruct)) #'block-like '(0) *IPD*)
+(set-pprint-dispatch+ '(cons (member defstruct)) #'block-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member deftype)) #'defun-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member defun)) #'defun-like '(0) *IPD*)
 (set-pprint-dispatch+ '(cons (member defvar)) #'defun-like '(0) *IPD*)
@@ -2844,195 +2793,12 @@
 (setf (get 'pprint-dispatch-table 'structure-printer) #'pprint-dispatch-print)
 
 (set-pprint-dispatch+ 'pprint-dispatch-table #'pprint-dispatch-print '(0) *IPD*)
-
-;       ---- THINGS THAT ONLY WORK ON SYMBOLICS MACHINES ----
-
-;The following are a number of special things that work on the
-;Symbolics Lisp Machine only.  Similar things may be possible on
-;other systems.
-
-#+symbolics
-(eval-when (eval load)
-
-;must be careful to avoid an infinite loop, because XP calls write,
-;which obeys scl:*print-pretty-printer*.
-
-(defvar *allow-errors* nil)
-
-(defun default-system-printing (object template stream)
-    (declare (ignore template))
-  (si:print-object object *current-level* *print-escape* stream))
-
-(defun pretty-printer (object template stream)
-    (declare (ignore template))
-  (let ((scl:*print-pretty-printer* #'default-system-printing))
-    (setq stream (decode-stream-arg stream))
-    (if (or *allow-errors* (and (streamp stream) (not (scl:send stream :interactive))))
-	(let ((*allow-errors* nil)) (format stream (formatter "~w") object))
-	(unless (scl:ignore-errors (format stream (formatter "~w") object) t)
-	  (let ((*print-pretty* nil))
-	    (cl:princ "#<Cannot pretty print " stream)
-	    (unless (scl:ignore-errors (cl:write object :stream stream) t)
-	      (cl:princ "#<Cannot print value of " stream)
-	      (cl:princ (sys:%p-pointer object) stream)
-	      (cl:princ ">" stream)))
-	  (cl:princ ">" stream))))
-  object)
-
-(defun xp-print (fn stream args &optional (recursive nil))
-  (unless (and (not recursive)
-	       (si:send-if-handles stream :xp fn stream args))
-    (setq *result* (do-xp-printing fn stream args))
-    (when *locating-circularities*
-      (setq *locating-circularities* nil)
-      (setq *abbreviation-happened* nil)
-      (setq *parents* nil)
-      (setq *result* (do-xp-printing fn stream args)))))
-
-(defun xp-sensitivity-print (fn stream args)
-  (let* ((object (cond ((and args (null (cdr args))) (car args))
-		       ((copy-list args))))) ;in case is in stack
-    (si:with-sensitivity-flag (object stream)
-      (xp-print fn stream args T))
-    T))
-dw::
-(defmethod (:xp dynamic-window) (fn stream args)
-  (xp::xp-sensitivity-print fn stream args))
-zwei::
-(defmethod (:xp presentation-recording-interval-stream) (fn stream args)
-    (xp::xp-sensitivity-print fn stream args))
-zwei::
-(defmethod (:xp mini-ie-stream) mini-ie-forward-output-message)
-
-;didn't bother with (:xp filling-stream) see (:gprint filling-stream).
-
-;see the method (:gprint dynamic-window) and the file gprint for
-;info about how to really make everything mousable.
-
-dw::
-(define-presentation-translator print-without-abbreviation ;modelled on describe-form
-  (expression form
-   :gesture :print-without-abbreviation
-   :documentation "Pretty print in full"
-   :priority 3.0)
-   (object)
-  `(xp::pp1 ',object))
-
-(setf (dw::mouse-char-for-gesture :print-without-abbreviation) #\mouse-m)
-
-(defun xp::pp1 (x)
-  (pp x)
-  (setq *** ** ** * * x)
-  (values))
-
-(defun pp1-print (xp obj)
-  (setf (line-limit xp) 1)
-  (funcall (formatter "~W") xp (cons 'pp (cdr obj))))
-
-(set-pprint-dispatch+ '(cons (member pp1)) #'pp1-print '(0) *IPD*)
-
-#|
-;The following seems to cause problems in Genera 8.0.1 and does not
-;seem all that worth saving, since we now have mousability.
-
-(defun re-pretty-print-in-full (ignore)
-  (zl:send tv:selected-window :refresh-rubout-handler)
-  (let ((*print-lines* nil)
-	(*print-length* nil)
-	(*print-level* nil))
-    (cl:fresh-line tv:selected-window)
-    (funcall (scl:symbol-value-in-stack-group '*last-abbreviated-printing*
-	       (zl:send (zl:send tv:selected-window :process) :stack-group))
-	     tv:selected-window))
-  (when (and (zl:send tv:selected-window :interactor-p)
-	     (not (and (typep tv:selected-window 'tv:basic-typeout-window)
-		       (zl:send tv:selected-window :incomplete-p))))
-    (cl:terpri tv:selected-window)
-    (if (stringp si:*cp-prompt*) (cl:princ si:*cp-prompt* tv:selected-window)
-	(funcall si:*cp-prompt* tv:selected-window nil))
-    (zl:send tv:selected-window :refresh-rubout-handler)))
-
-;The above can be installed by doing
-;(tv:add-function-key #\resume 're-pretty-print-in-full
-;		      "print without length, line, or level abbreviation")
-|#
-
-;The following allows XP to utilize the information maintained by the ZWEI
-;editor about how various forms should be indented.
-
-(defun fancy-fn-call (xp list)
-  (let ((template (gethash (car list) zwei:*lisp-indentation-offset-hash-table*)))
-    (when (not (consp template))
-      (setq template
-	    (if (string-equal (car list) "def" :end1 3 :end2 3)
-		zwei:*lisp-defun-indentation*)))
-    (if template (print-fancy-fn-call xp list template) (fn-call xp list))))
-
-(set-pprint-dispatch+ '(satisfies function-call-p) #'fancy-fn-call '(-5) *IPD*)
-
-;inverter for #"..."
-
-(defun formatter-print (xp list)
-  (if (and (consp (cdr list)) (stringp (cadr list)) (null (cddr list))
-	   (eq (get-dispatch-macro-character #\# #\") #'format-string-reader))
-      (funcall (formatter "#~W") xp (cadr list))
-      (xp:pprint-fill xp list)))
-
-(set-pprint-dispatch+ '(cons (member formatter)) #'formatter-print '(0) *IPD*)
-
-;This ZL function needs extra help to print right.
-
-(defun do-named-print (xp obj)
-  (funcall (formatter "~:<~W~^ ~:I~@_~W~^ ~_~/xp:bind-list/~^ ~_~
-                       ~:/xp:pprint-linear/~^~1I~@{~_~W~^~}~:>") xp obj))
-
-(set-pprint-dispatch+ '(cons (member zl:do-named)) #'do-named-print '(0) *IPD*)
-
-;;; This is a revamped trace printing function utilizing xp to the full.
-;;; because of the weak way XP supports mousability at the moment,
-;;; we cannot get the args on one line when they will fit yet.
-
-(defconstant trace-leader "|   |   |   |   |   |   |   |   |   |   |   |   | ")
-
-(defvar *trace-print-lines* 1 "controles *print-lines* when trace prints")
-
-(defun trace-print (depth direction function print-args-flag extras-1 extras-2)
-  (declare (special si:arglist si:values))
-  (let ((ind (min 50 (* 2 (1- si:trace-level))))
-	(args (and (eq direction 'si:enter) print-args-flag si:arglist))
-	(vals (and print-args-flag si:values))
-	(*print-lines* *trace-print-lines*))
-    (flet ((trace-line (control-string &rest args)
-	     (terpri si:trace-output)
-	     (write-string trace-leader si:trace-output :end ind)
-	     (apply #'format si:trace-output control-string args)))
-      (trace-line "~D ~A ~S " depth direction function)
-      (if (and args (null (cdr args))) (prin1 (car args) si:trace-output)
-	  (dolist (a args) (trace-line "  ~S" a)))
-      (if (and vals (null (cdr vals))) (prin1 (car vals) si:trace-output)
-	  (dolist (v vals) (trace-line "  ~S" v)))
-      (dolist (e extras-1) (trace-line "  \\\\ ~S" (eval e)))
-      (dolist (e extras-2) (trace-line "  // ~S" (eval e))))))
-
-(defun pp (&optional (object nil objectp) (stream *standard-output*))
-  (let ((*print-pretty* T)
-	(*print-lines* nil)
-	(*print-length* nil)
-	(*print-level* nil))
-    (cl:fresh-line stream)
-    (if objectp (write object :stream stream)
-	(funcall *last-abbreviated-printing* stream))
-    (values)))
-)
 
 ;so only happens first time is loaded.
 (when (eq *print-pprint-dispatch* T)
   (setq *print-pprint-dispatch* (copy-pprint-dispatch nil)))
 
 (provide 'pprint)
-
-;changes since last documentation.
-;~/fn/ only refers to global function values, not lexical.
 
 ;------------------------------------------------------------------------
 
