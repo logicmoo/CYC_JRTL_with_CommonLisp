@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.411 2003-09-19 13:02:44 piso Exp $
+ * $Id: Primitives.java,v 1.412 2003-09-19 14:27:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3148,7 +3148,7 @@ public final class Primitives extends Module
                             thread.setStackDepth(depth);
                             continue;
                         }
-                        throw (go);
+                        throw go;
                     }
                 }
                 remaining = remaining.cdr();
