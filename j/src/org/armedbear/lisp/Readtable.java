@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.23 2004-03-16 17:14:24 piso Exp $
+ * $Id: Readtable.java,v 1.24 2004-03-16 18:03:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,14 +70,19 @@ public final class Readtable extends LispObject
         readerMacroFunctions[',']  = LispReader.COMMA_MACRO;
 
         DispatchTable dt = new DispatchTable();
+        dt.functions['(']  = LispReader.SHARP_LEFT_PAREN;
         dt.functions['*']  = LispReader.SHARP_STAR;
         dt.functions[':']  = LispReader.SHARP_COLON;
         dt.functions['A']  = LispReader.SHARP_A;
         dt.functions['B']  = LispReader.SHARP_B;
+        dt.functions['C']  = LispReader.SHARP_C;
         dt.functions['O']  = LispReader.SHARP_O;
+        dt.functions['P']  = LispReader.SHARP_P;
         dt.functions['R']  = LispReader.SHARP_R;
+        dt.functions['S']  = LispReader.SHARP_S;
         dt.functions['X']  = LispReader.SHARP_X;
         dt.functions['\\'] = LispReader.SHARP_BACKSLASH;
+        dt.functions['|']  = LispReader.SHARP_VERTICAL_BAR;
         dispatchTables['#'] = dt;
 
         readtableCase = Keyword.UPCASE;

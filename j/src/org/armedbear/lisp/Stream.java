@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.55 2004-03-16 17:14:15 piso Exp $
+ * $Id: Stream.java,v 1.56 2004-03-16 18:02:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -267,7 +267,7 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject readPathname() throws ConditionThrowable
+    public LispObject readPathname() throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, false);
         if (obj instanceof AbstractString)
@@ -277,7 +277,7 @@ public class Stream extends LispObject
         return signal(new TypeError("#p requires a string or list argument."));
     }
 
-    private LispObject readStructure() throws ConditionThrowable
+    public LispObject readStructure() throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, false);
         if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
@@ -423,23 +423,9 @@ public class Stream extends LispObject
             case '\'':
                 return new Cons(Symbol.FUNCTION,
                                 new Cons(read(true, NIL, true)));
-            case '(':
-                return new SimpleVector(readList());
-            case '|':
-                skipBalancedComment();
-                return null;
             case '.':
                 return eval(read(true, NIL, true), new Environment(),
                             LispThread.currentThread());
-            case 'c':
-            case 'C':
-                return readComplex();
-            case 'p':
-            case 'P':
-                return readPathname();
-            case 's':
-            case 'S':
-                return readStructure();
             default:
                 //clearInput();
                 //return signal(new LispError("unsupported '#' macro character '" +
@@ -481,7 +467,7 @@ public class Stream extends LispObject
         return signal(new LispError("Unrecognized character name: \"" + token + '"'));
     }
 
-    private void skipBalancedComment() throws ConditionThrowable
+    public void skipBalancedComment() throws ConditionThrowable
     {
         while (true) {
             int n = _readChar();
@@ -536,7 +522,7 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject readComplex() throws ConditionThrowable
+    public LispObject readComplex() throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
         if (obj instanceof Cons && obj.length() == 2)

@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.20 2004-03-16 17:13:42 piso Exp $
+ * $Id: LispReader.java,v 1.21 2004-03-16 18:02:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,6 +152,18 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### sharp-left-paren
+    public static final DispatchMacroFunction SHARP_LEFT_PAREN =
+        new DispatchMacroFunction("sharp-left-paren", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return new SimpleVector(stream.readList());
+        }
+    };
+
     // ### sharp-star
     public static final DispatchMacroFunction SHARP_STAR =
         new DispatchMacroFunction("sharp-star", PACKAGE_SYS, false,
@@ -164,7 +176,7 @@ public final class LispReader extends Lisp
         }
     };
 
-    // ### sharp-star
+    // ### sharp-colon
     public static final DispatchMacroFunction SHARP_COLON =
         new DispatchMacroFunction("sharp-colon", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
@@ -176,7 +188,7 @@ public final class LispReader extends Lisp
         }
     };
 
-    // ### sharp-b
+    // ### sharp-a
     public static final DispatchMacroFunction SHARP_A =
         new DispatchMacroFunction("sharp-a", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
@@ -200,6 +212,18 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### sharp-c
+    public static final DispatchMacroFunction SHARP_C =
+        new DispatchMacroFunction("sharp-c", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readComplex();
+        }
+    };
+
     // ### sharp-o
     public static final DispatchMacroFunction SHARP_O =
         new DispatchMacroFunction("sharp-o", PACKAGE_SYS, false,
@@ -212,6 +236,18 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### sharp-p
+    public static final DispatchMacroFunction SHARP_P =
+        new DispatchMacroFunction("sharp-p", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readPathname();
+        }
+    };
+
     // ### sharp-r
     public static final DispatchMacroFunction SHARP_R =
         new DispatchMacroFunction("sharp-r", PACKAGE_SYS, false,
@@ -221,6 +257,18 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             return stream.readRadix(n);
+        }
+    };
+
+    // ### sharp-s
+    public static final DispatchMacroFunction SHARP_S =
+        new DispatchMacroFunction("sharp-s", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readStructure();
         }
     };
 
@@ -245,6 +293,19 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             return stream.readCharacterLiteral();
+        }
+    };
+
+    // ### sharp-vertical-bar
+    public static final DispatchMacroFunction SHARP_VERTICAL_BAR =
+        new DispatchMacroFunction("sharp-vertical-bar", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            stream.skipBalancedComment();
+            return null;
         }
     };
 }
