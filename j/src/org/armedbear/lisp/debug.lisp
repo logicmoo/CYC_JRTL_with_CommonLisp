@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: debug.lisp,v 1.22 2004-05-14 17:20:14 piso Exp $
+;;; $Id: debug.lisp,v 1.23 2004-05-29 15:24:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -110,7 +110,7 @@
   (let ((*debugger-hook* nil)) ; Specifically required by ANSI.
     (with-simple-restart (continue "Return from BREAK.")
       (invoke-debugger
-       (make-condition 'simple-condition
-                       :format-control format-control
-                       :format-arguments format-arguments)))
+       (%make-condition 'simple-condition
+                        (list :format-control format-control
+                              :format-arguments format-arguments))))
     nil))
