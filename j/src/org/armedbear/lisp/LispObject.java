@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.69 2004-01-24 22:51:00 asimon Exp $
+ * $Id: LispObject.java,v 1.70 2004-02-04 15:18:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,6 +277,11 @@ public class LispObject extends Lisp
     public LispObject STRINGP()
     {
         return NIL;
+    }
+
+    public boolean stringp()
+    {
+        return false;
     }
 
     public LispObject SIMPLE_STRING_P()
