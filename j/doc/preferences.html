@@ -1106,6 +1106,35 @@ line) is removed before the buffer is saved.
 <b>Default value:</b> false
 </dl>
 
+<code><a name="reorderBuffers">reorderBuffers</a></code>
+<dl>
+<dd>
+Controls reordering of buffers for the sidebar buffer list and the buffer
+navigation commands <a href="commands.html#nextBuffer">nextBuffer</a> and
+<a href="commands.html#prevBuffer">prevBuffer</a>.
+<p>
+If reorderBuffers is 0, no reordering is performed; buffers are left in the
+order in which they were originally opened.
+<p>
+If reorderBuffers is 1, buffers opened (or activated) by
+<a href="commands.html#openFile">openFile</a> (and similar commands) are
+placed after the current buffer in the list.
+<p>
+If reorderBuffers is 2, reordering is also performed when you use the sidebar
+buffer list to switch to a different buffer.
+<p>
+Buffers are never reordered when you use
+<a href="commands.html#nextBuffer">nextBuffer</a> or
+<a href="commands.html#prevBuffer">prevBuffer</a> to switch between buffers.
+<p>
+If <a href="#sortBufferList">sortBufferList</a> is true, this property is
+ignored.
+<p>
+<b>Default value:</b> 1
+<p>
+<b>See also:</b> <a href="#sortBufferList">sortBufferList</a>
+</dl>
+
 <code><a name="restrictCaret">restrictCaret</a></code>
 <dl>
 <dd>
@@ -1180,14 +1209,6 @@ Regular expression to match prompts when using ssh.
 <b>Default value:</b> "^[^#$%>]*[#$%>] *|^: *"
 </dl>
 
-<code><a name="telnetPromptPattern">telnetPromptPattern</a></code>
-<dl>
-<dd>
-Regular expression to match prompts in a telnet buffer.
-<p>
-<b>Default value:</b> "^[^#$%>]*[#$%>] *|^: *"
-</dl>
-
 <code><a name="showChangeMarks">showChangeMarks</a></code>
 <dl>
 <dd>
@@ -1217,9 +1238,11 @@ If true, line numbers are displayed in the edit window.
 <code><a name="sortBufferList">sortBufferList</a></code>
 <dl>
 <dd>
-If true, the sidebar buffer list is kept sorted in case-sensitive alphabetical order.
+If true, the sidebar buffer list is kept sorted in alphabetical order.
 <p>
 <b>Default value:</b> false
+<p>
+<b>See also:</b> <a href="#reorderBuffers">reorderBuffers</a>
 </dl>
 
 <code><a name="sourcePath">sourcePath</a></code>
@@ -1263,6 +1286,14 @@ If true, the line separator for the current buffer (LF, CR, or CR+LF) is display
 the status bar.
 <p>
 <b>Default value:</b> false
+</dl>
+
+<code><a name="telnetPromptPattern">telnetPromptPattern</a></code>
+<dl>
+<dd>
+Regular expression to match prompts in a telnet buffer.
+<p>
+<b>Default value:</b> "^[^#$%>]*[#$%>] *|^: *"
 </dl>
 
 <code><a name="ToolBar.isRollover">ToolBar.isRollover</a></code>
