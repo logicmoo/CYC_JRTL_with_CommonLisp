@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.1.1.1 2002-09-24 16:09:34 piso Exp $
+ * $Id: LispFormatter.java,v 1.2 2002-10-15 00:25:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,17 +31,19 @@ public final class LispFormatter extends Formatter
     private static final int LISP_FORMAT_FUNCTION = 4;
     private static final int LISP_FORMAT_NUMBER   = 5;
 
-    private FastStringBuffer sb = new FastStringBuffer();
-    private int tokStart;
+    private final Mode mode;
 
     public LispFormatter(Buffer buffer)
     {
         this.buffer = buffer;
+        this.mode = buffer.getMode();
     }
 
-    private void endToken(int state)
+    private int tokenBegin = 0;
+
+    private void endToken(String text, int tokenEnd, int state)
     {
-        if (sb.length() > 0) {
+        if (tokenEnd - tokenBegin > 0) {
             int format = -1;
             switch (state) {
                 case STATE_NEUTRAL:
@@ -59,62 +61,50 @@ public final class LispFormatter extends Formatter
                     format = LISP_FORMAT_NUMBER;
                     break;
             }
-            addSegment(sb.toString(), format);
-            tokStart += sb.length();
-            sb.setLength(0);
+            addSegment(text, tokenBegin, tokenEnd, format);
+            tokenBegin = tokenEnd;
         }
     }
 
-    private void parseLine(String text, int state)
+    private void parseLine(Line line)
     {
-        if (Editor.tabsAreVisible())
-            text = Utilities.makeTabsVisible(text, buffer.getTabWidth());
-        else
-            text = Utilities.detab(text, buffer.getTabWidth());
+        final String text = getDetabbedText(line);
+        tokenBegin = 0;
+        int state = line.flags();
         clearSegmentList();
-        sb.setLength(0);
+        final int limit = text.length();
         int i = 0;
-        tokStart = 0;
-        int limit = text.length();
-        char c;
         // Skip whitespace at start of line.
         while (i < limit) {
-            c = text.charAt(i);
-            if (Character.isWhitespace(c)) {
-                sb.append(c);
+            if (Character.isWhitespace(text.charAt(i))) {
                 ++i;
             } else {
-                endToken(state);
+                endToken(text, i, state);
                 break;
             }
         }
         while (i < limit) {
-            c = text.charAt(i);
+            char c = text.charAt(i);
             if (c == '\\' && i < limit-1) {
-                sb.append(c);
-                sb.append(text.charAt(++i));
-                ++i;
+                i += 2;
                 continue;
             }
             if (state == STATE_COMMENT) {
                 if (c == '|' && i < limit-1) {
                     c = text.charAt(i+1);
                     if (c == '#') {
-                        sb.append("|#");
-                        endToken(state);
+                        endToken(text, i, state);
                         state = STATE_NEUTRAL;
                         i += 2;
                         continue;
                     }
                 }
-                sb.append(c);
                 ++i;
                 continue;
             }
             if (state == STATE_QUOTE) {
-                sb.append(c);
                 if (c == '"') {
-                    endToken(state);
+                    endToken(text, i, state);
                     state = STATE_NEUTRAL;
                 }
                 ++i;
@@ -122,34 +112,27 @@ public final class LispFormatter extends Formatter
             }
             // Reaching here, we're not in a comment or quoted string.
             if (c == '"') {
-                endToken(state);
-                sb.append(c);
+                endToken(text, i, state);
                 state = STATE_QUOTE;
                 ++i;
                 continue;
             }
             if (c == ';') {
-                endToken(state);
-                state = STATE_COMMENT;
-                sb.append(text.substring(i));
-                endToken(state);
+                endToken(text, i, state);
+                endToken(text, limit, STATE_COMMENT);
                 return;
             }
             if (c == '#' && i < limit-1) {
                 if (text.charAt(i+1) == '|') {
-                    endToken(state);
+                    endToken(text, i, state);
                     state = STATE_COMMENT;
-                    sb.append("#|");
                     i += 2;
                     continue;
                 }
             }
             if (state == STATE_IDENTIFIER) {
-                if (buffer.mode.isIdentifierPart(c))
-                    sb.append(c);
-                else {
-                    endToken(state);
-                    sb.append(c);
+                if (!mode.isIdentifierPart(c)) {
+                    endToken(text, i, state);
                     state = STATE_NEUTRAL;
                 }
                 ++i;
@@ -157,15 +140,13 @@ public final class LispFormatter extends Formatter
             }
             if (state == STATE_NUMBER) {
                 if (Character.isDigit(c))
-                    sb.append(c);
+                    ;
                 else if (c == 'u' || c == 'U' || c == 'l' || c == 'L')
-                    sb.append(c); // Valid suffix.
-                else if (sb.length() == 1 && c == 'x' || c == 'X') {
-                    sb.append(c);
+                    ;
+                else if (i - tokenBegin == 1 && c == 'x' || c == 'X')
                     state = STATE_HEXNUMBER;
-                } else {
-                    endToken(state);
-                    sb.append(c);
+                else {
+                    endToken(text, i, state);
                     if (Character.isJavaIdentifierStart(c))
                         state = STATE_IDENTIFIER;
                     else
@@ -176,14 +157,13 @@ public final class LispFormatter extends Formatter
             }
             if (state == STATE_HEXNUMBER) {
                 if (Character.isDigit(c))
-                    sb.append(c);
+                    ;
                 else if ((c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))
-                    sb.append(c);
+                    ;
                 else if (c == 'u' || c == 'U' || c == 'l' || c == 'L')
-                    sb.append(c); // Valid suffix.
+                    ;
                 else {
-                    endToken(state);
-                    sb.append(c);
+                    endToken(text, i, state);
                     if (Character.isJavaIdentifierStart(c))
                         state = STATE_IDENTIFIER;
                     else
@@ -193,20 +173,18 @@ public final class LispFormatter extends Formatter
                 continue;
             }
             if (state == STATE_NEUTRAL) {
-                if (buffer.getMode().isIdentifierStart(c)) {
-                    endToken(state);
-                    sb.append(c);
+                if (mode.isIdentifierStart(c)) {
+                    endToken(text, i, state);
                     state = STATE_IDENTIFIER;
                 } else if (Character.isDigit(c)) {
-                    endToken(state);
-                    sb.append(c);
+                    endToken(text, i, state);
                     state = STATE_NUMBER;
                 } else // Still neutral...
-                    sb.append(c);
+                    ;
             }
             ++i;
         }
-        endToken(state);
+        endToken(text, i, state);
     }
 
     public LineSegmentList formatLine(Line line)
@@ -216,7 +194,7 @@ public final class LispFormatter extends Formatter
             addSegment("", LISP_FORMAT_TEXT);
             return segmentList;
         }
-        parseLine(line.getText(), line.flags());
+        parseLine(line);
         final int size = segmentList.size();
         for (int i = 0; i < size; i++) {
             LineSegment segment = segmentList.getSegment(i);
