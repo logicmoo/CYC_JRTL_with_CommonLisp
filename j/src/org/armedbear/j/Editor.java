@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.61 2003-06-05 17:31:26 piso Exp $
+ * $Id: Editor.java,v 1.62 2003-06-06 15:39:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5924,71 +5924,30 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public void showMessage()
     {
-        String title = "";
-        String message = null;
-        int lineNumber = -1;
-        int columnNumber = -1;
-        if (getModeId() == XML_MODE) {
-            if (buffer.exception != null) {
-                message = buffer.exception.getMessage();
-                if (buffer.exception instanceof SAXParseException){
-                    SAXParseException e = (SAXParseException) buffer.exception;
-                    lineNumber = e.getLineNumber();
-                    columnNumber = e.getColumnNumber();
-                    if (e.getSystemId() != null)
-                        title = e.getSystemId() + " ";
-                    title += "Line " + lineNumber;
-                    if (columnNumber != -1)
+        CompilationErrorBuffer errorBuffer;
+        if (getModeId() == XML_MODE)
+            errorBuffer = XmlMode.getErrorBuffer();
+        else
+            errorBuffer = CompilationCommands.getCompilationBuffer();
+        if (errorBuffer != null) {
+            CompilationError error = errorBuffer.getCurrentError();
+            if (error != null) {
+                String message = error.getMessage();
+                if (message != null) {
+                    int lineNumber = error.getLineNumber();
+                    int columnNumber = -1;
+                    int offset = error.getOffset();
+                    if (offset >= 0)
+                        columnNumber = offset + 1;
+                    String title = "Line " + lineNumber;
+                    if (columnNumber > 0)
                         title += "   Col " + columnNumber;
+                    if (message.length() > 65)
+                        message = Utilities.wrap(message, 65, 8);
+                    MessageDialog.showMessageDialog(this, message, title);
                 }
             }
-        } else {
-            CompilationBuffer cb = null;
-            // Look for existing compilation buffer.
-            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                Buffer buf = it.nextBuffer();
-                if (buf.getType() == Buffer.TYPE_COMPILATION) {
-                    cb = (CompilationBuffer) buf;
-                    break;
-                }
-            }
-            if (cb == null)
-                return;
-            CompilationError ce = cb.getCompilationError();
-            if (ce != null) {
-                message = ce.getMessage();
-                lineNumber = ce.getLineNumber();
-                int offset = ce.getOffset();
-                if (offset >= 0)
-                    columnNumber = offset + 1;
-            }
-            title = "Line " + lineNumber;
-            if (columnNumber > 0)
-                title += "   Col " + columnNumber;
         }
-        if (message == null)
-            return;
-        if (message.length() > 65)
-            message = Utilities.wrap(message, 65, 8);
-        MessageDialog.showMessageDialog(this, message, title);
-    }
-
-    public void showMessage(SAXParseException e)
-    {
-        String message = e.getMessage();
-        if (message == null)
-            return;
-        int lineNumber = e.getLineNumber();
-        int columnNumber = e.getColumnNumber();
-        String title = "";
-        if (e.getSystemId() != null)
-            title = e.getSystemId() + " ";
-        title += "Line " + lineNumber;
-        if (columnNumber != -1)
-            title += "   Col " + columnNumber;
-        if (message.length() > 65)
-            message = Utilities.wrap(message, 65, 8);
-        MessageDialog.showMessageDialog(this, message, title);
     }
 
     public void nextFrame()
