@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Property.java,v 1.10 2002-12-11 14:59:36 piso Exp $
+ * $Id: Property.java,v 1.11 2002-12-29 15:43:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,6 +94,8 @@ public final class Property implements Comparable, Constants
         createProperty("autoSelectLine", true);
     public static final Property BEAUTIFY_HEADERS =
         createProperty("beautifyHeaders", true);
+    public static final Property BLINK_CARET =
+        createProperty("blinkCaret", true);
     public static final Property CHECK_ENABLED =
         createProperty("checkEnabled", false);
     public static final Property CONFIRM_SEND =
