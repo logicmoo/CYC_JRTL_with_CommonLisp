@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.21 2004-09-15 17:51:24 piso Exp $
+;;; $Id: slime.lisp,v 1.22 2004-09-16 18:35:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,7 +33,8 @@
 
 (defpackage #:slime
   (:use #:cl #:ext #:j)
-  (:export #:slime-complete-symbol
+  (:export #:slime
+           #:slime-complete-symbol
            #:slime-space
            #:slime-edit-definition
            #:slime-eval-region
@@ -55,6 +56,8 @@
 (defvar *continuations-lock* (make-mutex))
 
 (defvar *repl-buffer-name* nil)
+
+(defvar *repl-buffer* nil)
 
 (defun slime-local-p ()
   (let ((name (buffer-name)))
@@ -82,6 +85,28 @@
     (setf *stream* nil)
     (with-mutex (*continuations-lock*)
       (setf *continuations* nil))))
+
+(defun read-port-and-connect (retries)
+  (status "Slime polling for connection...")
+  (dotimes (i retries (status "Slime timed out"))
+    (unless (buffer-live-p *repl-buffer*)
+      (status "Killed")
+      (return))
+    (when (probe-file (swank-protocol:port-file))
+      (with-open-file (s (swank-protocol:port-file)
+                         :direction :input)
+        (let ((port (read s)))
+          (when (connect "127.0.0.1" port)
+            (status "Slime connected!")
+            (return)))))
+    (sleep 1)))
+
+(defun slime ()
+  (when *stream*
+    (disconnect))
+  (setf *repl-buffer* (current-buffer))
+  (unless (slime-local-p)
+    (make-thread #'(lambda () (read-port-and-connect 60)))))
 
 (defun slime-busy-p ()
   (not (null *continuations*)))
@@ -149,24 +174,6 @@
                  (unless continuations
                    (make-thread #'(lambda () (dispatch-loop))))))
            (stream-error () (disconnect))))))
-
-(defun read-port-and-connect (retries)
-  (status "Slime polling for connection...")
-  (dotimes (i retries (status "Slime timed out"))
-    (when (probe-file (swank-protocol:port-file))
-      (with-open-file (s (swank-protocol:port-file)
-                         :direction :input)
-        (let ((port (read s)))
-          (when (connect "127.0.0.1" port)
-            (status "Slime connected!")
-            (return)))))
-    (sleep 1)))
-
-(defun slime ()
-  (when *stream*
-    (disconnect))
-  (unless (slime-local-p)
-    (make-thread #'(lambda () (read-port-and-connect 60)))))
 
 (defvar *prefix* nil)
 (defvar *completions* ())
