@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaObject.java,v 1.5 2003-06-30 19:14:45 piso Exp $
+ * $Id: JavaObject.java,v 1.6 2003-07-03 18:06:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ public class JavaObject extends LispObject
 
     public JavaObject(Object obj)
     {
+        Debug.assertTrue(obj != null);
         this.obj = obj;
     }
 
