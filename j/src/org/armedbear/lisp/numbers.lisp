@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.13 2003-09-10 01:22:57 piso Exp $
+;;; $Id: numbers.lisp,v 1.14 2003-09-11 16:32:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -160,7 +160,6 @@
 (defun rationalize (x)
   (rational x))
 
-
 (defun gcd (&rest numbers)
   "Returns the greatest common divisor of the arguments, which must be
    integers.  Gcd with no arguments is defined to be 0."
@@ -173,7 +172,6 @@
 		   (gcd-2 gcd (car rest)))
 	      (rest (cdr numbers) (cdr rest)))
 	     ((null rest) gcd)))))
-
 
 ;;; From discussion on comp.lang.lisp and Akira Kurihara.
 (defun isqrt (n)
@@ -208,6 +206,12 @@
 	 (float 1 float1))
      (abs float2)))
 
+(defun conjugate (number)
+  (etypecase number
+    (complex
+     (complex (realpart number) (- (imagpart number))))
+    (number
+     number)))
 
 (defun phase (number)
   "Returns the angle part of the polar representation of a complex number.
@@ -229,7 +233,6 @@
                   0.0d0))
              (complex
               (atan (imagpart number) (realpart number)))))
-
 
 (when (and (find-package "JVM")
            (fboundp 'jvm::jvm-compile))
