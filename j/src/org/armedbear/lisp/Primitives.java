@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.643 2004-05-27 20:42:40 piso Exp $
+ * $Id: Primitives.java,v 1.644 2004-05-29 15:20:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2955,6 +2955,8 @@ public final class Primitives extends Lisp
                     try {
                         // Handle GO inline if possible.
                         if (current.car() == Symbol.GO) {
+                            if (interrupted())
+                                handleInterrupt();
                             LispObject tag = current.cadr();
                             if (memql(tag, localTags)) {
                                 Binding binding = ext.getTagBinding(tag);
@@ -3124,16 +3126,21 @@ public final class Primitives extends Lisp
             final LispThread thread = LispThread.currentThread();
             LispObject tag = eval(args.car(), env, thread);
             LispObject result = eval(args.cadr(), env, thread);
-            if (thread.isValidCatchTag(tag))
+            if (thread.isValidCatchTag(tag)) {
                 throw new Throw(tag, result);
-            else
-                return signal(new ControlError("attempt to throw to the non-existent tag " + tag));
+            } else {
+                return signal(
+                    new ControlError(
+                        "Attempt to throw to the non-existent tag " +
+                        tag.writeToString() + "."));
+            }
         }
     };
 
     // ### unwind-protect
     private static final SpecialOperator UNWIND_PROTECT =
-        new SpecialOperator("unwind-protect") {
+        new SpecialOperator("unwind-protect")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
