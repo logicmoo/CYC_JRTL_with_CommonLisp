@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.67 2004-08-09 16:21:25 piso Exp $
+ * $Id: Interpreter.java,v 1.68 2004-08-18 18:39:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,11 +79,9 @@ public final class Interpreter extends Lisp
                 new Stream(outputStream, Symbol.CHARACTER));
     }
 
-    private static boolean lispInitialized;
-
     public static synchronized void initializeLisp(boolean jlisp)
     {
-        if (!lispInitialized) {
+        if (!initialized) {
             try {
                 if (jlisp) {
                     _FEATURES_.setSymbolValue(new Cons(Keyword.J,
@@ -96,19 +94,12 @@ public final class Interpreter extends Lisp
                 }
             }
             catch (ConditionThrowable c) {
-                LispThread thread = null;
-                try {
-                    thread = LispThread.currentThread();
-                }
-                catch (Throwable t) {
-                    ;
-                }
-                reportError(c, thread);
+                reportError(c, LispThread.currentThread());
             }
             catch (Throwable t) {
                 t.printStackTrace();
             }
-            lispInitialized = true;
+            initialized = true;
         }
     }
 
@@ -192,6 +183,11 @@ public final class Interpreter extends Lisp
                 }
                 catch (Throwable t) {}
             }
+            if (!jlisp) {
+                double uptime = (System.currentTimeMillis() - Main.startTimeMillis) / 1000.0;
+                System.out.println("Low-level initialization completed in " +
+                                   uptime + " seconds.");
+            }
             initializeLisp(jlisp);
             initializeTopLevel();
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
@@ -266,8 +262,9 @@ public final class Interpreter extends Lisp
             getStandardInput().clearInput();
             Stream out = getStandardOutput();
             out.freshLine();
+            Condition condition = (Condition) c.getCondition();
             out._writeLine("Error: unhandled condition: " +
-                           c.getCondition().writeToString());
+                           condition.getConditionReport());
             if (thread != null)
                 thread.backtrace();
         }
@@ -320,7 +317,7 @@ public final class Interpreter extends Lisp
     // Used only by org.armedbear.j.Editor.executeCommand().
     public static LispObject evaluate(String s) throws ConditionThrowable
     {
-        if (!lispInitialized)
+        if (!initialized)
             initializeLisp(true);
         StringInputStream stream = new StringInputStream(s);
         LispObject obj = stream.read(false, EOF, false);
