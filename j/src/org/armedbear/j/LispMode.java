@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.23 2003-01-25 17:50:09 piso Exp $
+ * $Id: LispMode.java,v 1.24 2003-02-20 18:54:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,6 +97,20 @@ public class LispMode extends AbstractMode implements Constants, Mode
     public final boolean isIdentifierPart(char c)
     {
         return validChars.indexOf(c) >= 0;
+    }
+
+    private static final String[] definers = new String[] {
+        "defclass", "defconstant", "define-condition", "defmacro", "defmethod",
+        "defparameter", "defstruct", "defun", "defvar"
+    };
+
+    public static final boolean isDefiner(String s)
+    {
+        if (s.startsWith("def"))
+            if (Utilities.isOneOf(s, definers))
+                return true;
+
+        return false;
     }
 
     public boolean isInQuote(Buffer buffer, Position pos)
