@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.60 2003-11-07 20:21:17 piso Exp $
+;;; $Id: autoloads.lisp,v 1.61 2003-11-10 00:09:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,7 +29,8 @@
             string< string>
             string<= string>=
             string-lessp string-greaterp
-            string-not-lessp string-not-greaterp)
+            string-not-lessp string-not-greaterp
+            string-left-trim string-right-trim string-trim)
           "strings.lisp")
 (autoload '(get-properties copy-symbol) "symbol.lisp")
 (autoload '(open parse-integer))
@@ -125,3 +126,4 @@
 (autoload-macro 'print-unreadable-object)
 (autoload 'print-object)
 (autoload-macro '(prog prog*) "prog.lisp")
+(autoload 'concatenate)
