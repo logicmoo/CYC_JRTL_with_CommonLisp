@@ -207,6 +207,24 @@ public abstract class AbstractVector extends AbstractArray
         }
     }
 
+    // For EQUALP hash tables.
+    public int psxhash()
+    {
+        try {
+            final int length = length();
+            final int limit = length < 4 ? length : 4;
+            long result = 48920713; // Chosen at random.
+            for (int i = 0; i < length; i++)
+                result = mix(result, getRowMajor(i).psxhash());
+            return (int) (result & 0x7fffffff);
+        }
+        catch (Throwable t) {
+            // Shouldn't happen.
+            Debug.trace(t);
+            return 0;
+        }
+    }
+
     public abstract AbstractVector adjustVector(int size,
                                                 LispObject initialElement,
                                                 LispObject initialContents)
