@@ -18,6 +18,7 @@ aref
 array-dimension
 array-dimensions
 array-has-fill-pointer-p
+array-in-bounds-p
 array-row-major-index
 assert
 assoc
