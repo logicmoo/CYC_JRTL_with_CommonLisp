@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.34 2004-04-16 00:23:12 piso Exp $
+ * $Id: Function.java,v 1.35 2004-04-16 01:06:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,6 +148,14 @@ public abstract class Function extends Functional
     // Primitive3
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
+        throws ConditionThrowable
+    {
+        return signal(new WrongNumberOfArgumentsException(this));
+    }
+
+    // Primitive4
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
         return signal(new WrongNumberOfArgumentsException(this));

@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.69 2004-04-03 23:02:57 piso Exp $
+ * $Id: Closure.java,v 1.70 2004-04-16 01:05:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,11 +381,15 @@ public class Closure extends Function
                 bindAuxVars(ext, thread);
             LispObject result = NIL;
             LispObject prog = body;
-            while (prog != NIL) {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
+            try {
+                while (prog != NIL) {
+                    result = eval(prog.car(), ext, thread);
+                    prog = prog.cdr();
+                }
             }
-            thread.setDynamicEnvironment(oldDynEnv);
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
             return result;
         } else {
             LispObject[] args = new LispObject[1];
@@ -419,11 +423,15 @@ public class Closure extends Function
                 bindAuxVars(ext, thread);
             LispObject result = NIL;
             LispObject prog = body;
-            while (prog != NIL) {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
+            try {
+                while (prog != NIL) {
+                    result = eval(prog.car(), ext, thread);
+                    prog = prog.cdr();
+                }
             }
-            thread.setDynamicEnvironment(oldDynEnv);
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
             return result;
         } else {
             LispObject[] args = new LispObject[2];
@@ -460,17 +468,69 @@ public class Closure extends Function
                 bindAuxVars(ext, thread);
             LispObject result = NIL;
             LispObject prog = body;
-            while (prog != NIL) {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
+            try {
+                while (prog != NIL) {
+                    result = eval(prog.car(), ext, thread);
+                    prog = prog.cdr();
+                }
             }
-            thread.setDynamicEnvironment(oldDynEnv);
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
             return result;
         } else {
             LispObject[] args = new LispObject[3];
             args[0] = first;
             args[1] = second;
             args[2] = third;
+            return execute(args);
+        }
+    }
+
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
+        throws ConditionThrowable
+    {
+        if (minArgs == 4) {
+            final LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Environment ext = new Environment(environment);
+            if (specials != null) {
+                for (int i = 0; i < specials.length; i++)
+                    ext.declareSpecial(specials[i]);
+            }
+            bind(requiredParameters[0].var, first, ext);
+            bind(requiredParameters[1].var, second, ext);
+            bind(requiredParameters[2].var, third, ext);
+            bind(requiredParameters[3].var, fourth, ext);
+            if (arity != 4) {
+                if (optionalParameters != null)
+                    bindOptionalParameterDefaults(ext, thread);
+                if (restVar != null)
+                    bind(restVar, NIL, ext);
+                if (keywordParameters != null)
+                    bindKeywordParameterDefaults(ext, thread);
+            }
+            if (auxVars != null)
+                bindAuxVars(ext, thread);
+            LispObject result = NIL;
+            LispObject prog = body;
+            try {
+                while (prog != NIL) {
+                    result = eval(prog.car(), ext, thread);
+                    prog = prog.cdr();
+                }
+            }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
+            return result;
+        } else {
+            LispObject[] args = new LispObject[4];
+            args[0] = first;
+            args[1] = second;
+            args[2] = third;
+            args[3] = fourth;
             return execute(args);
         }
     }
