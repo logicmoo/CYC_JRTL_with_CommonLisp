@@ -2,7 +2,7 @@
  * Main.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Main.java,v 1.3 2004-03-23 03:28:52 piso Exp $
+ * $Id: Main.java,v 1.4 2004-03-25 01:20:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,21 +35,25 @@ public final class Main
         if (args.length > 0) {
             interpreter.initializeLisp(false);
 
-           for (int i = 0; i < args.length; ++i) {
-                if (args[i].equals("--noprint"))
+            for (int i = 0; i < args.length; ++i) {
+                if (args[i].equals("--noprint")) {
                     print = false;
-                else if (args[i].equals("--eval")) {
+                } else if (args[i].equals("--eval")) {
                     if (i+1 < args.length) {
                         LispObject result = null;
                         try {
                             result = interpreter.evaluate(args[i+1]);
-                        } catch (ConditionThrowable c) {
-                            System.err.println("Caught condition: " + c.getCondition().toString()
-                                               + " while evaluating: " + args[i+1]);
+                        }
+                        catch (ConditionThrowable c) {
+                            System.err.println("Caught condition: " +
+                                               c.getCondition().toString() +
+                                               " while evaluating: " +
+                                               args[i+1]);
                             System.exit(2);
                         }
                         ++i;
-                        if (print) System.out.println(String.valueOf(result)); // TODO: multiple values
+                        if (print)
+                            System.out.println(String.valueOf(result)); // TODO: multiple values
                     } else {
                         System.err.println("No argument supplied to --eval");
                         System.exit(1);
@@ -59,14 +63,18 @@ public final class Main
                         LispObject result = null;
                         try {
                             // String loadStr = "(load \"" + String.valueOf(args[i+1]) + "\")";
-                            result = Load.load(args[i+1], false, false);
-                        } catch (ConditionThrowable c) {
-                            System.err.println("Caught condition: " + c.getCondition().toString()
-                                               + " while loading: " + args[i+1]);
+                            result = Load.load(args[i+1], false, false, true);
+                        }
+                        catch (ConditionThrowable c) {
+                            System.err.println("Caught condition: " +
+                                               c.getCondition().toString() +
+                                               " while loading: " +
+                                               args[i+1]);
                             System.exit(2);
                         }
                         ++i;
-                        if (print) System.out.println(String.valueOf(result));
+                        if (print)
+                            System.out.println(String.valueOf(result));
                     } else {
                         System.err.println("No argument supplied to --load");
                         System.exit(1);

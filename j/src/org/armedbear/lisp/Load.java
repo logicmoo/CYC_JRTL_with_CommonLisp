@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.40 2004-03-25 00:56:35 piso Exp $
+ * $Id: Load.java,v 1.41 2004-03-25 01:20:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,11 +36,14 @@ public final class Load extends Lisp
     {
         return load(filename,
                     _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                    _LOAD_PRINT_.symbolValueNoThrow() != NIL);
+                    _LOAD_PRINT_.symbolValueNoThrow() != NIL,
+                    true);
     }
 
     public static final LispObject load(final String filename,
-                                        boolean verbose, boolean print)
+                                        boolean verbose,
+                                        boolean print,
+                                        boolean ifDoesNotExist)
         throws ConditionThrowable
     {
         File file = null;
@@ -75,8 +78,12 @@ public final class Load extends Lisp
                 }
             }
         }
-        if (!isFile)
-            return signal(new LispError("file not found: " + filename));
+        if (!isFile) {
+            if (ifDoesNotExist)
+                return signal(new FileError("File not found: " + filename));
+            else
+                return NIL;
+        }
         String truename = filename;
         InputStream in = null;
         try {
@@ -84,7 +91,10 @@ public final class Load extends Lisp
             truename = file.getCanonicalPath();
         }
         catch (FileNotFoundException e) {
-            return signal(new LispError("file not found: " + filename));
+            if (ifDoesNotExist)
+                return signal(new FileError("File not found: " + filename));
+            else
+                return NIL;
         }
         catch (IOException e) {
             return signal(new LispError(e.getMessage()));
@@ -305,7 +315,8 @@ public final class Load extends Lisp
             String filename = pathname.getNamestring();
             return load(filename,
                         verbose != NIL,
-                        print != NIL);
+                        print != NIL,
+                        ifDoesNotExist != NIL);
         }
     };
 
