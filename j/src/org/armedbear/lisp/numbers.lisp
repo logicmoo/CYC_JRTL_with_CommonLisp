@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: numbers.lisp,v 1.25 2004-03-14 00:26:02 piso Exp $
+;;; $Id: numbers.lisp,v 1.26 2004-04-04 14:54:35 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -89,64 +89,65 @@
     (round number divisor)
     (values (float res (if (floatp rem) rem 1.0)) rem)))
 
-(defun rational (x)
+(defun rational (number)
   "RATIONAL produces a rational number for any real numeric argument.  This is
    more efficient than RATIONALIZE, but it assumes that floating-point is
    completely accurate, giving a result that isn't as pretty."
-  (cond ((floatp x)
-         (multiple-value-bind (bits exp)
-           (integer-decode-float x)
-           (if (eql bits 0)
-               0
-               (let* ((int (if (minusp x) (- bits) bits))
-                      (digits (float-digits x))
-                      (ex (+ exp digits)))
-                 (if (minusp ex)
-                     (/ int (ash 1 (+ digits (- ex))))
-                     (/ (ash int ex) (ash 1 digits)))))))
-        ((rationalp x)
-         x)
-        (t
-         (error 'type-error "wrong type: ~S is not a real number" x))))
+  (etypecase number
+    (float
+      (multiple-value-bind (bits exp)
+        (integer-decode-float number)
+        (if (eql bits 0)
+          0
+          (let* ((int (if (minusp number) (- bits) bits))
+                  (digits (float-digits number))
+                  (ex (+ exp digits)))
+            (if (minusp ex)
+              (/ int (ash 1 (+ digits (- ex))))
+              (/ (ash int ex) (ash 1 digits)))))))
+    (rational number)))
+
+
 
 ;;; FIXME
-(defun rationalize (x)
-  (rational x))
+(defun rationalize (number)
+  (rational number))
 
-(defun gcd (&rest numbers)
+(defun gcd (&rest integers)
   "Returns the greatest common divisor of the arguments, which must be
    integers.  Gcd with no arguments is defined to be 0."
-  (unless (every #'integerp numbers)
-    (error 'type-error))
-  (cond ((null numbers) 0)
-	((null (cdr numbers)) (abs (car numbers)))
+  (unless (every #'integerp integers)
+    (error 'type-error :datum (find-if-not #'integerp integers) :expected-type 'integer))
+  (cond ((null integers) 0)
+	((null (cdr integers)) (abs (car integers)))
 	(t
-	 (do ((gcd (car numbers)
+	 (do ((gcd (car integers)
 		   (gcd-2 gcd (car rest)))
-	      (rest (cdr numbers) (cdr rest)))
+	      (rest (cdr integers) (cdr rest)))
 	     ((null rest) gcd)))))
 
 ;;; From discussion on comp.lang.lisp and Akira Kurihara.
-(defun isqrt (n)
-  "Returns the root of the nearest integer less than n which is a perfect
+(defun isqrt (natural)
+  "Returns the root of the nearest integer less than natural which is a perfect
    square."
-  (declare (type unsigned-byte n) (values unsigned-byte))
-  (unless (and (numberp n) (not (minusp n)))
+  (declare (type unsigned-byte natural) (values unsigned-byte))
+  (unless (and (integerp natural) (not (minusp natural)))
+    ;;FIXME
     (error 'type-error "wrong type: ~A is not a non-negative real number" n))
   ;; theoretically (> n 7) ,i.e., n-len-quarter > 0
-  (if (and (fixnump n) (<= n 24))
-      (cond ((> n 15) 4)
-	    ((> n  8) 3)
-	    ((> n  3) 2)
-	    ((> n  0) 1)
+  (if (and (fixnump natural) (<= natural 24))
+      (cond ((> natural 15) 4)
+	    ((> natural  8) 3)
+	    ((> natural  3) 2)
+	    ((> natural  0) 1)
 	    (t 0))
-      (let* ((n-len-quarter (ash (integer-length n) -2))
-	     (n-half (ash n (- (ash n-len-quarter 1))))
+      (let* ((n-len-quarter (ash (integer-length natural) -2))
+	     (n-half (ash natural (- (ash n-len-quarter 1))))
 	     (n-half-isqrt (isqrt n-half))
 	     (init-value (ash (1+ n-half-isqrt) n-len-quarter)))
 	(loop
 	  (let ((iterated-value
-		 (ash (+ init-value (truncate n init-value)) -1)))
+		 (ash (+ init-value (truncate natural init-value)) -1)))
 	    (unless (< iterated-value init-value)
 	      (return init-value))
 	    (setq init-value iterated-value))))))
@@ -158,14 +159,14 @@
              :format-control "~S is not of type FLOAT."
              :format-arguments (list float))))
 
-(defun float-sign (float1 &optional (float2 (float 1 float1)))
+(defun float-sign (float-1 &optional (float-2 (float 1 float-1)))
   "Returns a floating-point number that has the same sign as
-   float1 and, if float2 is given, has the same absolute value
-   as float2."
-  (* (if (minusp float1)
-	 (float -1 float1)
-	 (float 1 float1))
-     (abs float2)))
+   float-1 and, if float-2 is given, has the same absolute value
+   as float-2."
+  (* (if (minusp float-1)
+	 (float -1 float-1)
+	 (float 1 float-1))
+     (abs float-2)))
 
 (defun decode-float (float)
   (multiple-value-bind (significand exponent sign) (integer-decode-float float)
@@ -203,11 +204,11 @@
                   (* (/ pi 2) (signum (imagpart number)))
                   (atan (imagpart number) (realpart number))))))
 
-(defun cis (theta)
+(defun cis (radians)
   "Return cos(Theta) + i sin(Theta), AKA exp(i Theta)."
-  (if (complexp theta)
-      (error "argument to CIS is complex: ~S" theta)
-      (complex (cos theta) (sin theta))))
+  (if (complexp radians)
+      (error "argument to CIS is complex: ~S" radians)
+      (complex (cos radians) (sin radians))))
 
 (when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
   (mapcar #'jvm::jvm-compile '(ceiling
