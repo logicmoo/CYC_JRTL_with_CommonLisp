@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: SystemBuffer.java,v 1.13 2003-04-19 18:29:56 piso Exp $
+ * $Id: SystemBuffer.java,v 1.14 2003-06-06 12:35:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,14 +35,13 @@ public class SystemBuffer implements Constants
     public static final int TYPE_ARCHIVE          =  2;
     public static final int TYPE_DIRECTORY        =  3;
     public static final int TYPE_SHELL            =  4;
-    public static final int TYPE_COMPILATION      =  5;
-    public static final int TYPE_MAN              =  6;
-    public static final int TYPE_OUTPUT           =  7;
-    public static final int TYPE_IMAGE            =  8;
-    public static final int TYPE_MAILBOX          =  9;
-    public static final int TYPE_TELNET           = 10;
-    public static final int TYPE_SSH              = 11;
-    public static final int TYPE_LIST_OCCURRENCES = 12;
+    public static final int TYPE_MAN              =  5;
+    public static final int TYPE_OUTPUT           =  6;
+    public static final int TYPE_IMAGE            =  7;
+    public static final int TYPE_MAILBOX          =  8;
+    public static final int TYPE_TELNET           =  9;
+    public static final int TYPE_SSH              = 10;
+    public static final int TYPE_LIST_OCCURRENCES = 11;
 
     protected int type = TYPE_SYSTEM;
     protected boolean readOnly;
