@@ -1,8 +1,8 @@
 /*
  * Registers.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: Registers.java,v 1.1.1.1 2002-09-24 16:07:57 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Registers.java,v 1.2 2004-08-26 17:13:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -186,15 +186,29 @@ public final class Registers
 
     private static final boolean validateName(String name)
     {
-        if (name.length() == 1) {
-            char c = name.charAt(0);
-            if (c >= 'a' && c <= 'z')
-                return true;
+        boolean lenOk = false;
+        boolean charsOk = true;
+        int len = name.length();
+        // Keep the names of the registers between 1 and 25 chars
+        if (len > 0 && len <= 25) {
+            lenOk = true;
+            for (int x = 0; x < len; x++) {
+                char c = name.charAt(x);
+                // Allow alphanumeric chars plus "-" and "_" only, with no spaces.
+                if (!Character.isLetterOrDigit(c) &&
+                    c != '-' && c != '_' ) {
+                    charsOk = false;
+                    break;
+                }
+            }
         }
+        if (lenOk && charsOk)
+            return true;
         FastStringBuffer sb = new FastStringBuffer('"');
         sb.append(name);
         sb.append("\" is not a valid register name. ");
-        sb.append("Register names must be lower case letters (a-z).");
+        sb.append("Register names must be between 1 and 25 characters long ");
+        sb.append("and contain only the characters \"a-z\", \"A-Z\", \"0-9\", \"-\", or \"_\".");
         String message = sb.toString();
         if (message.length() > 65)
             message = Utilities.wrap(message, 65, 8);
@@ -236,3 +250,4 @@ public final class Registers
         }
     }
 }
+
