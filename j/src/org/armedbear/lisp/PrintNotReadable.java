@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: PrintNotReadable.java,v 1.1 2004-02-02 19:12:00 piso Exp $
+ * $Id: PrintNotReadable.java,v 1.2 2004-03-18 00:26:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,24 @@ package org.armedbear.lisp;
 
 public class PrintNotReadable extends LispError
 {
-    public PrintNotReadable()
-    {
-    }
+    public final LispObject object;
 
     public PrintNotReadable(LispObject initArgs) throws ConditionThrowable
     {
         super(initArgs);
-    }
-
-    public PrintNotReadable(String message)
-    {
-        super(message);
+        LispObject object = NIL;
+        LispObject first, second;
+        while (initArgs != NIL) {
+            first = initArgs.car();
+            initArgs = initArgs.cdr();
+            second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.OBJECT) {
+                object = second;
+                break;
+            }
+        }
+        this.object = object;
     }
 
     public LispObject typeOf()
@@ -55,4 +61,19 @@ public class PrintNotReadable extends LispError
             return T;
         return super.typep(type);
     }
+
+    // ### print-not-readable-object
+    private static final Primitive1 PRINT_NOT_READABLE_OBJECT =
+        new Primitive1("print-not-readable-object", "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                return ((PrintNotReadable)arg).object;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.PRINT_NOT_READABLE));
+            }
+        }
+    };
 }

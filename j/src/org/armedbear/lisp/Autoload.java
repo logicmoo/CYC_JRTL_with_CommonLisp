@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.177 2004-03-17 17:54:36 piso Exp $
+ * $Id: Autoload.java,v 1.178 2004-03-18 00:26:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -308,6 +308,7 @@ public class Autoload extends Function
         autoload("package-used-by-list", "PackageFunctions");
         autoload("packagep", "PackageFunctions");
         autoload("peek-char", "peek_char");
+        autoload("print-not-readable-object", "PrintNotReadable");
         autoload("probe-file", "probe_file");
         autoload("read-char-no-hang", "read_char_no_hang");
         autoload("read-delimited-list", "read_delimited_list");
