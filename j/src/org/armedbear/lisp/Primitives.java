@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.139 2003-03-17 17:17:15 piso Exp $
+ * $Id: Primitives.java,v 1.140 2003-03-17 18:16:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2084,6 +2084,16 @@ public final class Primitives extends Module
         }
     };
 
+    // ### array-rank
+    // array-rank array => rank
+    private static final Primitive1 ARRAY_RANK =
+        new Primitive1("array-rank") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return new Fixnum(checkArray(arg).getRank());
+        }
+    };
+
     // ### array-dimensions
     // array-dimensions array => dimensions
     // Returns a list of integers. Fill pointer (if any) is ignored.
@@ -2107,6 +2117,16 @@ public final class Primitives extends Module
             if (n != 0)
                 throw new LispError("only one-dimensional arrays are supported");
             return new Fixnum(v.capacity());
+        }
+    };
+
+    // ### array-element-type
+    // array-element-type array => typespec
+    private static final Primitive1 ARRAY_ELEMENT_TYPE =
+        new Primitive1("array-element-type") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return checkArray(arg).getElementType();
         }
     };
 
