@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.42 2004-09-04 02:18:39 piso Exp $
+ * $Id: LispAPI.java,v 1.43 2004-09-05 00:07:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,6 +102,8 @@ public final class LispAPI extends Lisp
     {
         if (obj == null)
             throw new NullPointerException();
+        if (obj == NIL)
+            return Editor.currentEditor().getBuffer();
         try {
             return (Buffer) ((JavaObject)obj).getObject();
         }
@@ -112,7 +114,7 @@ public final class LispAPI extends Lisp
         }
     }
 
-    public static final Position checkMarker(LispObject obj)
+    private static final Position checkMark(LispObject obj)
         throws ConditionThrowable
     {
         if (obj == null)
@@ -121,7 +123,7 @@ public final class LispAPI extends Lisp
             return (Position) ((JavaObject)obj).getObject();
         }
         catch (ClassCastException e) {
-            signal(new TypeError("The value " + obj + " is not a marker."));
+            signal(new TypeError("The value " + obj + " is not a mark."));
             // Not reached.
             return null;
         }
@@ -198,7 +200,8 @@ public final class LispAPI extends Lisp
 
     // ### buffer-pathname
     private static final Primitive1 BUFFER_PATHNAME =
-        new Primitive1("buffer-pathname", PACKAGE_J, true) {
+        new Primitive1("buffer-pathname", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             File file = checkBuffer(arg).getFile();
@@ -213,7 +216,8 @@ public final class LispAPI extends Lisp
 
     // ### buffer-string
     private static final Primitive BUFFER_STRING =
-        new Primitive("buffer-string", PACKAGE_J, true) {
+        new Primitive("buffer-string", PACKAGE_J, true)
+    {
         public LispObject execute() throws ConditionThrowable
         {
             return new SimpleString(Editor.currentBuffer().getText());
@@ -224,45 +228,49 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### copy-marker
-    private static final Primitive1 COPY_MARK =
-        new Primitive1("copy-marker", PACKAGE_J, true) {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return new JavaObject(new Position(checkMarker(arg)));
-            }
-            catch (Exception e) {
-                return signal(new TypeError(arg, "marker"));
-            }
-        }
-    };
-
     // ### goto-char
-    // goto-char position &optional marker
+    // goto-char position &optional mark
     private static final Primitive GOTO_CHAR =
-        new Primitive("goto-char", PACKAGE_J, true) {
+        new Primitive("goto-char", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             // Move dot to position.
             final Editor editor = Editor.currentEditor();
-            editor.moveDotTo(checkMarker(arg));
+            editor.moveDotTo(checkMark(arg));
             return new JavaObject(editor.getDot());
-        }
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            Log.debug("goto-char two argument case");
-            Position pos1 = checkMarker(first);
-            Position pos2 = checkMarker(second);
-            pos1.moveTo(pos2);
-            return first;
         }
     };
 
+    // ### move-to-position mark charpos &optional line
+    private static final Primitive MOVE_TO_POSITION =
+        new Primitive("move-to-position", PACKAGE_J, true)
+    {
+        public LispObject execute(LispObject mark, LispObject charpos)
+            throws ConditionThrowable
+        {
+            Position pos = checkMark(mark);
+            pos.setOffset(Fixnum.getValue(charpos));
+            return mark;
+        }
+        public LispObject execute(LispObject mark, LispObject charpos,
+                                  LispObject line)
+            throws ConditionThrowable
+        {
+            Position pos = checkMark(mark);
+            if (line == NIL)
+                pos.setOffset(Fixnum.getValue(charpos));
+            else
+                pos.moveTo(checkLine(line), Fixnum.getValue(charpos));
+            return mark;
+        }
+    };
+
+
     // ### point
-    private static final Primitive0 POINT =
-        new Primitive0("point", PACKAGE_J, true) {
+    private static final Primitive0 CURRENT_POINT =
+        new Primitive0("current-point", PACKAGE_J, true)
+    {
         public LispObject execute()
         {
             Position dot = Editor.currentEditor().getDot();
@@ -274,7 +282,8 @@ public final class LispAPI extends Lisp
 
     // ### point-min
     private static final Primitive0 POINT_MIN =
-        new Primitive0("point-min", PACKAGE_J, true) {
+        new Primitive0("point-min", PACKAGE_J, true)
+    {
         public LispObject execute()
         {
             final Line line = Editor.currentBuffer().getFirstLine();
@@ -286,7 +295,8 @@ public final class LispAPI extends Lisp
 
     // ### point-max
     private static final Primitive0 POINT_MAX =
-        new Primitive0("point-max", PACKAGE_J, true) {
+        new Primitive0("point-max", PACKAGE_J, true)
+    {
         public LispObject execute()
         {
             Position pos = Editor.currentBuffer().getEnd();
@@ -296,9 +306,10 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### make-marker
-    private static final Primitive1 MAKE_MARKER =
-        new Primitive1("make-marker", PACKAGE_J, true) {
+    // ### make-mark
+    private static final Primitive1 MAKE_MARK =
+        new Primitive1("make-mark", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -308,27 +319,30 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### marker-line
-    private static final Primitive1 MARKER_LINE =
-        new Primitive1("marker-line", PACKAGE_J, true) {
+    // ### mark-line
+    private static final Primitive1 MARK_LINE =
+        new Primitive1("mark-line", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new JavaObject(checkMarker(arg).getLine());
+            return new JavaObject(checkMark(arg).getLine());
         }
     };
 
-    // ### marker-charpos
-    private static final Primitive1 MARKER_CHARPOS =
-        new Primitive1("marker-charpos", PACKAGE_J, true) {
+    // ### mark-charpos
+    private static final Primitive1 MARK_CHARPOS =
+        new Primitive1("mark-charpos", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return number(checkMarker(arg).getOffset());
+            return number(checkMark(arg).getOffset());
         }
     };
 
     // ### current-line
     private static final Primitive0 CURRENT_LINE =
-        new Primitive0("current-line", PACKAGE_J, true) {
+        new Primitive0("current-line", PACKAGE_J, true)
+    {
         public LispObject execute()
         {
             Editor editor = Editor.currentEditor();
@@ -341,7 +355,8 @@ public final class LispAPI extends Lisp
 
     // ### line-next
     private static final Primitive1 LINE_NEXT =
-        new Primitive1("line-next", PACKAGE_J, true) {
+        new Primitive1("line-next", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Line next = checkLine(arg).next();
@@ -351,7 +366,8 @@ public final class LispAPI extends Lisp
 
     // ### line-previous
     private static final Primitive1 LINE_PREVIOUS =
-        new Primitive1("line-previous", PACKAGE_J, true) {
+        new Primitive1("line-previous", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Line prev = checkLine(arg).previous();
@@ -361,7 +377,8 @@ public final class LispAPI extends Lisp
 
     // ### line-chars
     private static final Primitive1 LINE_CHARS =
-        new Primitive1("line-chars", PACKAGE_J, true) {
+        new Primitive1("line-chars", PACKAGE_J, true)
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String s = checkLine(arg).getText();
@@ -404,24 +421,24 @@ public final class LispAPI extends Lisp
     };
 
     // ### char-after
-    // Returns character immediately after marker.
+    // Returns character immediately after mark.
     private static final Primitive1 CHAR_AFTER =
         new Primitive1("char-after", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return LispCharacter.getInstance(checkMarker(arg).getChar());
+            return LispCharacter.getInstance(checkMark(arg).getChar());
         }
     };
 
     // ### char-before
-    // Returns character immediately before marker.
+    // Returns character immediately before mark.
     private static final Primitive1 CHAR_BEFORE =
         new Primitive1("char-before", PACKAGE_J, true)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Position pos = checkMarker(arg).copy();
+            Position pos = checkMark(arg).copy();
             return pos.prev() ? LispCharacter.getInstance(pos.getChar()) : NIL;
         }
     };
@@ -718,7 +735,8 @@ public final class LispAPI extends Lisp
 
     // ### kill-theme
     private static final Primitive0 KILL_THEME =
-        new Primitive0("kill-theme", PACKAGE_J, true) {
+        new Primitive0("kill-theme", PACKAGE_J, true)
+    {
         public LispObject execute()
         {
             preferences.killTheme();
@@ -728,7 +746,8 @@ public final class LispAPI extends Lisp
 
     // ### restore-focus
     private static final Primitive0 RESTORE_FOCUS =
-        new Primitive0("restore-focus", PACKAGE_J, true) {
+        new Primitive0("restore-focus", PACKAGE_J, true)
+    {
         public LispObject execute()
         {
             Editor.currentEditor().setFocusToDisplay();
@@ -736,9 +755,10 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### global-map-key
+    // ### global-map-key key command => generalized-boolean
     private static final Primitive2 GLOBAL_MAP_KEY =
-        new Primitive2("global-map-key", PACKAGE_J, true) {
+        new Primitive2("global-map-key", PACKAGE_J, true, "key command")
+    {
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
         {
@@ -755,9 +775,10 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### global-unmap-key
+    // ### global-unmap-key key => generalized-boolean
     private static final Primitive1 GLOBAL_UNMAP_KEY =
-        new Primitive1("global-unmap-key", PACKAGE_J, true) {
+        new Primitive1("global-unmap-key", PACKAGE_J, true, "key")
+    {
         public LispObject execute(LispObject arg)
 	    throws ConditionThrowable
         {
@@ -766,9 +787,10 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### map-key-for-mode
+    // ### map-key-for-mode key command mode => generalized-boolean
     private static final Primitive3 MAP_KEY_FOR_MODE =
-        new Primitive3("map-key-for-mode", PACKAGE_J, true) {
+        new Primitive3("map-key-for-mode", PACKAGE_J, true, "key command mode")
+    {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 	    throws ConditionThrowable
@@ -790,9 +812,10 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### unmap-key-for-mode
+    // ### unmap-key-for-mode key mode => generalized-boolean
     private static final Primitive2 UNMAP_KEY_FOR_MODE =
-        new Primitive2("unmap-key-for-mode", PACKAGE_J, true) {
+        new Primitive2("unmap-key-for-mode", PACKAGE_J, true, "key mode")
+    {
         public LispObject execute(LispObject first, LispObject second)
 	    throws ConditionThrowable
         {
@@ -873,7 +896,7 @@ public final class LispAPI extends Lisp
         {
             final Editor editor = Editor.currentEditor();
             if (arg != NIL)
-                editor.setMark(checkMarker(arg));
+                editor.setMark(checkMark(arg));
             else
                 editor.unmark();
             return arg;
@@ -1059,37 +1082,6 @@ public final class LispAPI extends Lisp
         }
     };
 
-    // ### send-to-lisp string &optional buffer => generalized-boolean
-    private static final Primitive SEND_TO_LISP =
-        new Primitive("send-to-lisp", PACKAGE_J, true,
-                      "string &optional buffer")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            CommandInterpreter comint = LispShell.findLisp(null);
-            if (comint != null) {
-                comint.send(arg.getStringValue());
-                return T;
-            }
-            return NIL;
-        }
-
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            String s = first.getStringValue();
-            Buffer buf = checkBuffer(second);
-            if (buf instanceof CommandInterpreter) {
-                CommandInterpreter comint = (CommandInterpreter) buf;
-                if (comint.isLisp()) {
-                    comint.send(s);
-                    return T;
-                }
-            }
-            return NIL;
-        }
-    };
-
     // ### %status string => generalized-boolean
     private static final Primitive STATUS =
         new Primitive("status", PACKAGE_J, true, "string")
@@ -1139,6 +1131,63 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### search-forward string
+    private static final Primitive SEARCH_FORWARD =
+        new Primitive("%search-forward", PACKAGE_J, false,
+                      "pattern buffer start ignore-case-p whole-words-only-p")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length != 5)
+                return signal(new WrongNumberOfArgumentsException(this));
+            final String pattern;
+            if (args[0] instanceof AbstractString)
+                pattern = args[0].getStringValue();
+            else
+                return signal(new TypeError(args[0], Symbol.STRING));
+            final Buffer buffer = checkBuffer(args[1]);
+            final Position start;
+            if (args[2] == NIL)
+                start = Editor.currentEditor().getDot();
+            else
+                start = checkMark(args[2]);
+            final boolean ignoreCase = (args[3] != NIL);
+            final boolean wholeWordsOnly = (args[4] != NIL);
+            Search search =
+                new Search(pattern, ignoreCase, wholeWordsOnly);
+            Position pos = search.findString(buffer, start);
+            return pos != null ? new JavaObject(pos) : NIL;
+        }
+    };
+
+    // ### search-backward string
+    private static final Primitive SEARCH_BACKWARD =
+        new Primitive("%search-backward", PACKAGE_J, false,
+                      "string buffer start ignore-case-p whole-words-only-p")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length != 5)
+                return signal(new WrongNumberOfArgumentsException(this));
+            final String pattern;
+            if (args[0] instanceof AbstractString)
+                pattern = args[0].getStringValue();
+            else
+                return signal(new TypeError(args[0], Symbol.STRING));
+            final Buffer buffer = checkBuffer(args[1]);
+            final Position start;
+            if (args[2] == NIL)
+                start = Editor.currentEditor().getDot();
+            else
+                start = checkMark(args[2]);
+            final boolean ignoreCase = (args[3] != NIL);
+            final boolean wholeWordsOnly = (args[4] != NIL);
+            Search search =
+                new Search(pattern, ignoreCase, wholeWordsOnly);
+            Position pos = search.reverseFindString(buffer, start);
+            return pos != null ? new JavaObject(pos) : NIL;
+        }
+    };
 
     static {
         for (Iterator it = Property.iterator(); it.hasNext();)
