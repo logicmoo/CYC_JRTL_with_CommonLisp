@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.58 2004-03-16 19:19:07 piso Exp $
+ * $Id: Stream.java,v 1.59 2004-03-17 02:21:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,7 +257,7 @@ public class Stream extends LispObject
             return ((ReaderMacroFunction)handler).execute(this, c);
         if (handler != null && handler != NIL)
             return handler.execute(this, LispCharacter.getInstance(c));
-        return makeObject(readToken(c));
+        return readToken(c);
     }
 
     public LispObject readPathname() throws ConditionThrowable
@@ -268,6 +268,13 @@ public class Stream extends LispObject
         if (obj.listp())
             return Pathname.makePathname(obj);
         return signal(new TypeError("#p requires a string or list argument."));
+    }
+
+    public LispObject readSymbol() throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer();
+        _readToken(sb);
+        return new Symbol(sb.toString());
     }
 
     public LispObject readStructure() throws ConditionThrowable
@@ -528,20 +535,36 @@ public class Stream extends LispObject
         return sb.toString();
     }
 
-    public final String readToken() throws ConditionThrowable
-    {
-        return readToken(new StringBuffer());
-    }
-
-    private final String readToken(char firstChar) throws ConditionThrowable
+    private LispObject readToken(char c) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        sb.append(firstChar);
-        return readToken(sb);
+        sb.append(c);
+        boolean escaped = _readToken(sb);
+        if (_READ_SUPPRESS_.symbolValueNoThrow() != NIL)
+            return NIL;
+        String token = sb.toString();
+        if (!escaped) {
+            if (token.length() > 0) {
+                final char firstChar = token.charAt(0);
+                if ("-+0123456789".indexOf(firstChar) >= 0) {
+                    LispObject number = makeNumber(token, getReadBase());
+                    if (number != null)
+                        return number;
+                }
+                final int radix = getReadBase();
+                if (Character.digit(firstChar, radix) >= 0) {
+                    LispObject number = makeNumber(token, radix);
+                    if (number != null)
+                        return number;
+                }
+            }
+        }
+        return makeSymbol(token);
     }
 
-    private final String readToken(StringBuffer sb) throws ConditionThrowable
+    private final boolean _readToken(StringBuffer sb) throws ConditionThrowable
     {
+        boolean escaped = false;
         LispObject readtableCase = currentReadtable().getReadtableCase();
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
@@ -549,14 +572,16 @@ public class Stream extends LispObject
             if (c == '|') {
                 sb.setLength(0);
                 sb.append(readMultipleEscape());
+                escaped = true;
             } else if (c == '\\') {
                 int n = _readChar();
                 if (n < 0) {
                     signal(new EndOfFile(this));
                     // Not reached.
-                    return null;
+                    return escaped;
                 }
                 sb.setCharAt(0, (char) n);
+                escaped = true;
             } else if (readtableCase == Keyword.UPCASE) {
                 sb.setCharAt(0, Utilities.toUpperCase(c));
             } else if (readtableCase == Keyword.DOWNCASE) {
@@ -582,9 +607,11 @@ public class Stream extends LispObject
                     if (n < 0)
                         break loop;
                     sb.append((char)n);
+                    escaped = true;
                     break;
                 case '|':
                     sb.append(readMultipleEscape());
+                    escaped = true;
                     break;
                 default:
                     if (readtableCase == Keyword.UPCASE)
@@ -594,31 +621,13 @@ public class Stream extends LispObject
                     sb.append(c);
             }
         }
-        if (readtableCase == Keyword.INVERT)
-            return invert(sb.toString());
-        return sb.toString();
-    }
-
-    private static LispObject makeObject(String token) throws ConditionThrowable
-    {
-        final LispThread thread = LispThread.currentThread();
-        if (_READ_SUPPRESS_.symbolValueNoThrow(thread) != NIL)
-            return NIL;
-        if (token.length() > 0) {
-            final char firstChar = token.charAt(0);
-            if ("-+0123456789".indexOf(firstChar) >= 0) {
-                LispObject number = makeNumber(token, getReadBase());
-                if (number != null)
-                    return number;
-            }
-            final int radix = getReadBase();
-            if (Character.digit(firstChar, radix) >= 0) {
-                LispObject number = makeNumber(token, radix);
-                if (number != null)
-                    return number;
-            }
+        if (readtableCase == Keyword.INVERT) {
+            // FIXME Preserve case of escaped characters!
+            String s = invert(sb.toString());
+            sb.setLength(0);
+            sb.append(s);
         }
-        return makeSymbol(token);
+        return escaped;
     }
 
     private static LispObject makeSymbol(String token) throws ConditionThrowable
@@ -791,7 +800,11 @@ public class Stream extends LispObject
 
     public LispObject readRadix(int radix) throws ConditionThrowable
     {
-        String s = readToken();
+        StringBuffer sb = new StringBuffer();
+        boolean escaped = _readToken(sb);
+        if (escaped)
+            return signal(new ReaderError("Illegal syntax for number."));
+        String s = sb.toString();
         if (s.indexOf('/') >= 0)
             return makeRatio(s, radix);
         try {
