@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.135 2004-04-27 16:26:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.136 2004-04-28 13:38:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -457,16 +457,10 @@
 (defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
 
 (defun emit-push-nil ()
-  (emit 'getstatic
-        +lisp-class+
-        "NIL"
-        +lisp-object+))
+  (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
 
 (defun emit-push-t ()
-  (emit 'getstatic
-        +lisp-class+
-        "T"
-        "Lorg/armedbear/lisp/Symbol;"))
+  (emit 'getstatic +lisp-class+ "T" +lisp-symbol+))
 
 (defun emit-invokestatic (class-name method-name descriptor stack)
   (assert stack)
@@ -1879,7 +1873,7 @@
     (dolist (varspec varlist)
       (let ((var (if (consp varspec) (car varspec) varspec)))
         (when (or (memq var specials) (special-variable-p var))
-          (setq specialp t)
+          (setf specialp t)
           (return))))
     ;; If so...
     (when specialp
@@ -1958,7 +1952,7 @@
                (emit 'getstatic
                      *this-class*
                      g
-                     "Lorg/armedbear/lisp/Symbol;")
+                     +lisp-symbol+)
                (emit 'swap)
                (emit-invokevirtual +lisp-thread-class+
                                    "bindSpecial"
@@ -2186,7 +2180,7 @@
         (emit 'getstatic
               *this-class*
               g
-              "Lorg/armedbear/lisp/LispObject;"))
+              +lisp-object+))
       ;; FIXME Move this to constructor!
       ;; Cast it to an Environment object.
       (emit 'checkcast +lisp-environment-class+)
@@ -2194,7 +2188,7 @@
         (emit 'getstatic
               *this-class*
               g
-              "Lorg/armedbear/lisp/Symbol;"))
+              +lisp-symbol+))
       (compile-form (cadr rest))
       (unless (remove-store-value)
         (emit-push-value))
@@ -2213,7 +2207,7 @@
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/Symbol;")
+            +lisp-symbol+)
       (compile-form (cadr rest))
       (unless (remove-store-value)
         (emit-push-value))
@@ -2237,7 +2231,7 @@
                   (emit 'getstatic
                         *this-class*
                         g
-                        "Lorg/armedbear/lisp/Symbol;")
+                        +lisp-symbol+)
                   (emit-store-value))
                 (compile-constant obj)))
            ((listp obj)
@@ -2322,13 +2316,13 @@
                   (emit 'getstatic
                         *this-class*
                         g
-                        "Lorg/armedbear/lisp/LispObject;")
+                        +lisp-object+)
                   (emit-store-value))
                 (let ((g (declare-symbol obj)))
                   (emit 'getstatic
                         *this-class*
                         g
-                        "Lorg/armedbear/lisp/Symbol;")
+                        +lisp-symbol+)
                   (emit-invokevirtual +lisp-object-class+
                                       "getSymbolFunctionOrDie"
                                       "()Lorg/armedbear/lisp/LispObject;"
@@ -2450,7 +2444,7 @@
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/LispObject;"))
+            +lisp-object+))
     ;; FIXME Move this to constructor!
     ;; Cast it to an Environment object.
     (emit 'checkcast +lisp-environment-class+)
@@ -2458,7 +2452,7 @@
       (emit 'getstatic
             *this-class*
             g
-            "Lorg/armedbear/lisp/Symbol;"))
+            +lisp-symbol+))
     (emit-invokevirtual +lisp-environment-class+
                         "lookup"
                         "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
@@ -2470,7 +2464,7 @@
     (emit 'getstatic
           *this-class*
           g
-          "Lorg/armedbear/lisp/Symbol;")
+          +lisp-symbol+)
     (emit-invokevirtual +lisp-symbol-class+
                         "symbolValue"
                         "()Lorg/armedbear/lisp/LispObject;"
@@ -2505,7 +2499,7 @@
            (emit 'getstatic
                  *this-class*
                  g
-                 "Lorg/armedbear/lisp/Symbol;")
+                 +lisp-symbol+)
            (emit-store-value)))
         ((symbolp form)
          (compile-variable-ref form))
@@ -2593,11 +2587,11 @@
         ;; for args.
         (setf (fill-pointer *locals*) (1+ (length args))))
     ;; Reserve the next available slot for the value register.
-    (setq *val* (fill-pointer *locals*))
+    (setf *val* (fill-pointer *locals*))
     (incf (fill-pointer *locals*))
     (setf *max-locals* (fill-pointer *locals*))
     ;; Reserve the next available slot for the thread register.
-    (setq *thread* (fill-pointer *locals*))
+    (setf *thread* (fill-pointer *locals*))
     (incf (fill-pointer *locals*))
     (setf *max-locals* (fill-pointer *locals*))
     (when *hairy-arglist-p*
@@ -2617,7 +2611,6 @@
     (optimize-code)
     (setf (method-max-stack execute-method) (analyze-stack))
     (setf (method-code execute-method) (code-bytes *code*))
-;;     (setf (method-max-stack execute-method) *max-stack*)
     (setf (method-max-locals execute-method) *max-locals*)
 
     (let* ((super
