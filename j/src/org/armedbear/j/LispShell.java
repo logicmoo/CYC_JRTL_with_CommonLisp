@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.69 2004-09-13 14:54:13 piso Exp $
+ * $Id: LispShell.java,v 1.70 2004-09-15 17:53:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,15 +92,16 @@ public class LispShell extends Shell
                                          boolean startSlime)
     {
         if (startSlime) {
-            if (shellCommand.indexOf("sbcl") >= 0 ||
-                shellCommand.indexOf("abcl") >= 0 ||
-                shellCommand.indexOf("org.armedbear.lisp") >= 0)
-            {
+            if (shellCommand.indexOf("sbcl") >= 0) {
                 File lispHome = File.getInstance(Site.getLispHome());
                 File swankLoader = File.getInstance(lispHome,
                                                     "swank-loader.lisp");
                 shellCommand =
                     shellCommand + " --load " + swankLoader.canonicalPath();
+            } else if (shellCommand.indexOf("abcl") >= 0 ||
+                       shellCommand.indexOf("org.armedbear.lisp") >= 0) {
+                shellCommand =
+                    shellCommand.concat(" --load-system-file swank-loader.lisp");
             }
         }
         LispShell lisp = new LispShell(shellCommand, title);
