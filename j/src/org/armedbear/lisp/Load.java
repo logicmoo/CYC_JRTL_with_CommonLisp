@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.54 2004-06-05 00:49:40 piso Exp $
+ * $Id: Load.java,v 1.55 2004-06-07 18:10:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,15 +122,26 @@ public final class Load extends Lisp
     public static final LispObject loadSystemFile(String filename, boolean auto)
         throws ConditionThrowable
     {
-        boolean verbose;
-        if (auto)
-            verbose = _AUTOLOAD_VERBOSE_.symbolValueNoThrow() != NIL;
-        else
-            verbose = _LOAD_VERBOSE_.symbolValueNoThrow() != NIL;
-        return loadSystemFile(filename,
-                              verbose,
-                              _LOAD_PRINT_.symbolValueNoThrow() != NIL,
-                              auto);
+        LispThread thread = LispThread.currentThread();
+        if (auto) {
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_READTABLE_,
+                               Readtable._STANDARD_READTABLE_.symbolValue(thread));
+            try {
+                return loadSystemFile(filename,
+                                      _AUTOLOAD_VERBOSE_.symbolValue(thread) != NIL,
+                                      _LOAD_PRINT_.symbolValue(thread) != NIL,
+                                      auto);
+            }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
+        } else {
+            return loadSystemFile(filename,
+                                  _LOAD_VERBOSE_.symbolValue(thread) != NIL,
+                                  _LOAD_PRINT_.symbolValue(thread) != NIL,
+                                  auto);
+        }
     }
 
     public static final LispObject loadSystemFile(final String filename,
