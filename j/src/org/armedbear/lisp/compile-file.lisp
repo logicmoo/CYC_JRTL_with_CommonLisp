@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.5 2004-04-16 20:05:21 piso Exp $
+;;; $Id: compile-file.lisp,v 1.6 2004-04-17 01:41:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,6 +31,9 @@
                       (incf *class-number*))))
     (namestring (merge-pathnames (make-pathname :name name :type "cls")
                                  *compile-file-pathname*))))
+
+;; Dummy function. Should never be called.
+(defun dummy () (assert nil))
 
 (defun process-toplevel-form (form stream compile-time-too)
   (cond ((atom form)
@@ -80,7 +83,7 @@
                 ;; functions defined later in the same file can be loaded correctly.
                 (unless (fboundp name)
                   (%format t "; Installing dummy function for ~A~%" name)
-                  (setf (symbol-function name) #'car)
+                  (setf (symbol-function name) #'dummy)
                   (push name *fbound-names*)))))
            (DEFMACRO
             (let ((name (second form)))
