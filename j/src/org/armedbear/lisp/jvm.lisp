@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.45 2003-11-27 14:44:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.46 2003-12-02 19:52:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2291,14 +2291,16 @@
 
 (defun jvm-compile (name &optional definition)
   (let ((prefix (load-verbose-prefix)))
-    (when name
-      (format t "~A Compiling ~S ...~%" prefix name)
-      (when (and (fboundp name) (typep (fdefinition name) 'generic-function))
-        (format t "~A Unable to compile generic function ~S~%" prefix name)
-        (return-from jvm-compile (values name nil t)))
-      (unless (symbolp name)
-        (format t "~A Unable to compile ~S~%" prefix name)
-        (return-from jvm-compile (values name nil t))))
+    (if name
+        (progn
+          (format t "~A Compiling ~S ...~%" prefix name)
+          (when (and (fboundp name) (typep (fdefinition name) 'generic-function))
+            (format t "~A Unable to compile generic function ~S~%" prefix name)
+            (return-from jvm-compile (values name nil t)))
+          (unless (symbolp name)
+            (format t "~A Unable to compile ~S~%" prefix name)
+            (return-from jvm-compile (values name nil t))))
+        (format t "Compiling top-level form ...~%"))
     (unless definition
       (resolve name)
       (setf definition (fdefinition name))
@@ -2319,8 +2321,9 @@
             (if (macro-function name)
                 (setf (fdefinition name) (sys::make-macro compiled-definition))
                 (setf (fdefinition name) compiled-definition)))
-          (when name
-            (format t "~A Compiled ~S~%" prefix name))
+          (if name
+              (format t "~A Compiled ~S~%" prefix name)
+              (format t "Compiled top-level form~%"))
           (values (or name compiled-definition) nil nil))
       (error (c)
              (format t "Error: ~S~%" c)
@@ -2398,7 +2401,8 @@
     (when (eq (car expr) 'lambda)
       (let ((decls (process-optimization-declarations (cddr expr))))
         (setf speed (cdr (assoc 'speed decls)))))
-    (if (eql speed 3)
+    (if (or (eql speed 3)
+            (and (null speed) *auto-compile*))
         (progn
           (precompile name definition)
           (jvm-compile name definition))
