@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.99 2003-08-25 18:00:29 piso Exp $
+;;; $Id: boot.lisp,v 1.100 2003-08-26 01:36:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -386,3 +386,13 @@
         '(format s "@ ~A" (sys::hashcode-to-string obj)))
      (format s ">")
      nil))
+
+
+;;; MULTIPLE-VALUE-BIND (from CLISP)
+
+(defmacro multiple-value-bind (varlist form &body body)
+  (let ((g (gensym))
+        (poplist nil))
+    (dolist (var varlist) (setq poplist (cons `(,var (pop ,g)) poplist)))
+    `(let* ((,g (multiple-value-list ,form)) ,@(nreverse poplist))
+           ,@body)))
