@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.4 2004-02-12 19:11:38 piso Exp $
+ * $Id: EchoStream.java,v 1.5 2004-02-12 19:53:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@ public final class EchoStream extends Stream
 {
     private final Stream in;
     private final Stream out;
+
+    private int unreadChar = -1;
 
     public EchoStream(Stream in, Stream out)
     {
@@ -101,14 +103,20 @@ public final class EchoStream extends Stream
     protected int _readChar() throws ConditionThrowable
     {
         int n = in._readChar();
-        if (n >= 0)
-            out._writeChar((char)n);
+        if (n >= 0) {
+            // Not at end of file.
+            if (unreadChar < 0)
+                out._writeChar((char)n);
+            else
+                unreadChar = -1;
+        }
         return n;
     }
 
     protected void _unreadChar(int n) throws ConditionThrowable
     {
         in._unreadChar(n);
+        unreadChar = n;
     }
 
     protected boolean _charReady() throws ConditionThrowable
