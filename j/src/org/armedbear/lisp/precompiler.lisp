@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.57 2004-05-04 18:24:45 piso Exp $
+;;; $Id: precompiler.lisp,v 1.58 2004-05-04 18:25:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -400,7 +400,7 @@
             (expansion (cadr def)))
         (when (special-variable-p sym)
           (error 'program-error
-                 :format-control "Attempt to bind the special varialbe ~S with SYMBOL-MACROLET."
+                 :format-control "Attempt to bind the special variable ~S with SYMBOL-MACROLET."
                  :format-arguments (list sym)))
         (push (list sym :symbol-macro expansion) *local-variables*)))
     (multiple-value-bind (body decls) (sys::parse-body (cddr form) nil)
