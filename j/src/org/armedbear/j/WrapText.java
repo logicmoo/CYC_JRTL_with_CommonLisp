@@ -2,7 +2,7 @@
  * WrapText.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: WrapText.java,v 1.8 2004-09-19 18:23:25 piso Exp $
+ * $Id: WrapText.java,v 1.9 2004-09-19 19:01:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,12 +64,22 @@ public final class WrapText implements Constants
                 return;
             r = new Region(buffer, new Position(firstLine, 0), buffer.getEnd());
         }
+        Position savedDot = dot.copy();
+        boolean seenDot = false;
         CompoundEdit compoundEdit = buffer.beginCompoundEdit();
         editor.moveDotTo(new Position(r.getBeginLine(), 0));
         while (true) {
             while (dot.getLine().isBlank() && dot.getNextLine() != null)
                 dot.setLine(dot.getNextLine());
-            wrapParagraph();
+            Position start = dot.copy();
+            Position end = findEndOfParagraph(dot);
+            if (!seenDot && !savedDot.isBefore(start) && savedDot.isBefore(end)) {
+                editor.moveDotTo(savedDot);
+                wrapParagraph();
+                savedDot = dot.copy();
+                seenDot = true;
+            } else
+                wrapParagraph();
             if (buffer.needsRenumbering())
                 buffer.renumber();
             Position pos = findEndOfParagraph(dot);
@@ -79,6 +89,8 @@ public final class WrapText implements Constants
                 break;
             editor.moveDotTo(pos);
         }
+        if (buffer.contains(savedDot.getLine()))
+            editor.moveDotTo(savedDot);
         buffer.endCompoundEdit(compoundEdit);
     }
 
