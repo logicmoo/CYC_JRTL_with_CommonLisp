@@ -2,7 +2,7 @@
  * DiffMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffMode.java,v 1.5 2003-04-21 02:14:24 piso Exp $
+ * $Id: DiffMode.java,v 1.6 2003-04-22 15:31:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
     public static void diff(String args)
     {
         final Editor editor = Editor.currentEditor();
-        Buffer parentBuffer = null;
+        final Buffer parentBuffer = editor.getBuffer();
         List argList = Utilities.tokenize(args);
         for (int i = 0; i < argList.size(); i++) {
             String arg = (String) argList.get(i);
@@ -87,10 +87,9 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
                 }
                 // OK.
                 argList.set(i, file.canonicalPath());
-                parentBuffer = editor.getBuffer();
             } else if (!arg.startsWith("-")) {
                 File file = File.getInstance(editor.getCurrentDirectory(), arg);
-                if (file.isFile())
+                if (file.exists())
                     argList.set(i, file.canonicalPath());
             }
         }
@@ -139,8 +138,10 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
                 p4GotoFile(editor, diffOutputBuffer);
                 break;
             case VC_CVS:
-            default:
                 cvsGotoFile(editor, diffOutputBuffer);
+                break;
+            default:
+                localGotoFile(editor, diffOutputBuffer);
                 break;
         }
     }
@@ -211,7 +212,8 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
             Debug.bug();
     }
 
-    private static void p4GotoFile(Editor editor, DiffOutputBuffer diffOutputBuffer)
+    private static void p4GotoFile(Editor editor,
+        DiffOutputBuffer diffOutputBuffer)
     {
         final Line dotLine = editor.getDotLine();
         final int dotOffset = editor.getDotOffset();
@@ -263,6 +265,123 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         }
     }
 
+    private static void localGotoFile(Editor editor,
+        DiffOutputBuffer diffOutputBuffer)
+    {
+        final Line dotLine = editor.getDotLine();
+        String filename1 = null;
+        String filename2 = null;;
+        for (Line line = dotLine; line != null; line = line.previous()) {
+            String text = line.getText();
+            if (text.startsWith("+++ ")) {
+                filename2 = extractFilename(text);
+            } else if (text.startsWith("--- ")) {
+                filename1 = extractFilename(text);
+                if (filename2 == null) {
+                    line = line.next();
+                    if (line != null)
+                        filename2 = extractFilename(line.getText());
+                }
+                break;
+            }
+        }
+        final String text = dotLine.getText();
+        if (text.startsWith("---")) {
+            Buffer buf = editor.getBuffer(File.getInstance(filename1));
+            if (buf != null) {
+                editor.makeNext(buf);
+                editor.activateInOtherWindow(buf);
+            }
+            return;
+        }
+        if (text.startsWith("+++")) {
+            Buffer buf = editor.getBuffer(File.getInstance(filename2));
+            if (buf != null) {
+                editor.makeNext(buf);
+                editor.activateInOtherWindow(buf);
+            }
+            return;
+        }
+        int oldLineNumber = -1;
+        int newLineNumber = -1;
+        int oldLines = 0;
+        int newLines = 0;
+        int unchangedLines = 0;
+        Line line = dotLine;
+        if (line.getText().startsWith("@@")) {
+            oldLineNumber = parseLineNumber(line, '-');
+            newLineNumber = parseLineNumber(line, '+');
+        } else {
+            line = line.previous();
+            while (line != null && !line.getText().startsWith("@@")) {
+                if (line.getText().startsWith("-"))
+                    ++oldLines;
+                else if (line.getText().startsWith("+"))
+                    ++newLines;
+                else
+                    ++unchangedLines;
+                line = line.previous();
+            }
+            if (line == null)
+                return;
+            Debug.assertTrue(line.getText().startsWith("@@"));
+            oldLineNumber = parseLineNumber(line, '-');
+            newLineNumber = parseLineNumber(line, '+');
+        }
+        // Our line numbers are zero-based.
+        --oldLineNumber;
+        --newLineNumber;
+        String filename = filename2;
+        if (text.startsWith("-")) {
+            oldLineNumber += unchangedLines + oldLines;
+            newLineNumber += unchangedLines;
+            filename = filename1;
+        } else if (text.startsWith("+")) {
+            oldLineNumber += unchangedLines;
+            newLineNumber += unchangedLines + newLines;
+            filename = filename2;
+        } else {
+            // Context line.
+            oldLineNumber = oldLineNumber + unchangedLines + oldLines;
+            newLineNumber = newLineNumber + unchangedLines + newLines;
+            File parentFile = diffOutputBuffer.getParentBuffer().getFile();
+            if (parentFile != null) {
+                String cp = parentFile.canonicalPath();
+                if (cp != null) {
+                    if (cp.equals(filename1))
+                        filename = filename1;
+                }
+            }
+        }
+        File dir = null;
+        Buffer parentBuffer = diffOutputBuffer.getParentBuffer();
+        if (parentBuffer != null)
+            dir = parentBuffer.getCurrentDirectory();
+        final File file;
+        if (dir != null)
+            file = File.getInstance(dir, filename);
+        else
+            file = File.getInstance(filename);
+        if (file != null && file.isFile()) {
+            Buffer buf = editor.getBuffer(file);
+            if (buf != null) {
+                int lineNumber =
+                    (filename == filename1) ? oldLineNumber : newLineNumber;
+                final int offset = editor.getDotOffset();
+                gotoLocation(editor, buf, lineNumber,
+                    offset > 0 ? offset-1 : 0);
+            }
+        }
+    }
+
+    private static String extractFilename(String s)
+    {
+        if (s.startsWith("+++ ") || s.startsWith("--- "))
+            s = s.substring(4);
+        int index = s.indexOf('\t');
+        return index >= 0 ? s.substring(0, index) : s;
+    }
+
     private static void gotoLocation(Editor editor, Buffer buf, int lineNumber,
         int offset)
     {
@@ -278,8 +397,13 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
 
     private static int parseLineNumber(Line line)
     {
+        return parseLineNumber(line, '+');
+    }
+
+    private static int parseLineNumber(Line line, char c)
+    {
         String s = line.getText();
-        int index = s.indexOf('+');
+        int index = s.indexOf(c);
         if (index < 0)
             return 0;
         try {
