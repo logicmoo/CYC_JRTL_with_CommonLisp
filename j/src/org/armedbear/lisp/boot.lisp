@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.117 2003-10-14 16:04:55 piso Exp $
+;;; $Id: boot.lisp,v 1.118 2003-10-18 22:34:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -416,3 +416,5 @@
     (dolist (var varlist) (setq poplist (cons `(,var (pop ,g)) poplist)))
     `(let* ((,g (multiple-value-list ,form)) ,@(nreverse poplist))
            ,@body)))
+
+(setq *load-verbose* t)
