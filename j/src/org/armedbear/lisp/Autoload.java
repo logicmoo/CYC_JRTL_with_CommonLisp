@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.102 2003-11-14 15:28:33 piso Exp $
+ * $Id: Autoload.java,v 1.103 2003-11-14 15:34:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -278,7 +278,7 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
-        autoload(PACKAGE_JAVA, "jregister-handler1", "JHandler");
+        autoload(PACKAGE_JAVA, "%jregister-handler", "JHandler");
         autoload(PACKAGE_PROF, "%start-profiler", "Profiler", true);
         autoload(PACKAGE_PROF, "stop-profiler", "Profiler", true);
         autoload(PACKAGE_SYS, "%define-condition", "define_condition");
