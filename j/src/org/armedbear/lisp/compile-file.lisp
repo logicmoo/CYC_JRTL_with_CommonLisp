@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.54 2005-02-02 16:52:06 piso Exp $
+;;; $Id: compile-file.lisp,v 1.55 2005-02-12 03:49:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -132,7 +132,7 @@
                 ;; getSymbolFunctionOrDie() will succeed when we try to verify that
                 ;; functions defined later in the same file can be loaded correctly.
                 (unless (fboundp name)
-                  (setf (symbol-function name) #'dummy)
+                  (setf (fdefinition name) #'dummy)
                   (push name *fbound-names*)))))
            ((DEFGENERIC DEFMETHOD)
             (jvm::note-name-defined (second form))
