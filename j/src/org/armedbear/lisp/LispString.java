@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.23 2003-03-15 03:56:01 piso Exp $
+ * $Id: LispString.java,v 1.24 2003-03-15 17:37:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -271,7 +271,7 @@ public final class LispString extends AbstractVector implements SequenceType,
     };
 
     // ### %string-equal
-    // Case sensitive.
+    // Case insensitive.
     private static final Primitive _STRING_EQUAL_IGNORE_CASE =
         new Primitive("%string-equal") {
         public LispObject execute(LispObject[] args) throws LispError
@@ -284,15 +284,17 @@ public final class LispString extends AbstractVector implements SequenceType,
             int end1 = Fixnum.getInt(args[3]);
             int start2 = Fixnum.getInt(args[4]);
             int end2 = Fixnum.getInt(args[5]);
+            if ((end1 - start1) != (end2 - start2))
+                return NIL;
             int i, j;
             for (i = start1, j = start2; i < end1 && j < end2; i++, j++) {
                 char c1 = array1[i];
                 char c2 = array2[j];
                 if (c1 == c2)
                     continue;
-                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
-                    continue;
                 if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                    continue;
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
                     continue;
                 return NIL;
             }
@@ -320,9 +322,9 @@ public final class LispString extends AbstractVector implements SequenceType,
                 char c2 = array2[j];
                 if (c1 == c2)
                     continue;
-                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
-                    continue;
                 if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                    continue;
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
                     continue;
                 return new Fixnum(i);
             }
