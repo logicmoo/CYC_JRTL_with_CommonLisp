@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispReader.java,v 1.2 2003-01-29 17:32:54 piso Exp $
+ * $Id: LispReader.java,v 1.3 2003-02-14 02:03:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,6 +204,9 @@ public final class LispReader extends Lisp
                 return handleFeature(c);
             case ':':
                 return readUninternedSymbol();
+            case '|':
+                skipBalancedComment();
+                return readObject(true);
             default:
                 clearInput();
                 throw new LispException("unsupported '#' macro character '" +
@@ -247,6 +250,29 @@ public final class LispReader extends Lisp
                     return;
                 if (c == '\n')
                     return;
+            }
+        }
+        catch (IOException e) {
+            throw new StreamError(e);
+        }
+    }
+
+    private void skipBalancedComment() throws StreamError
+    {
+        try {
+            while (true) {
+                int c = read();
+                if (c < 0)
+                    return;
+                if (c == '|') {
+                    c = read();
+                    if (c == '#')
+                        return;
+                } else if (c == '#') {
+                    c = read();
+                    if (c == '|')
+                        skipBalancedComment(); // Nested comment. Recurse!
+                }
             }
         }
         catch (IOException e) {
