@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.53 2003-12-06 02:44:23 piso Exp $
+;;; $Id: jvm.lisp,v 1.54 2003-12-06 03:35:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1809,19 +1809,21 @@
   ;; Generate code to evaluate initforms and bind variables.
   (let ((i (fill-pointer *locals*)))
     (dolist (varspec varlist)
-      (let (var initform)
+      (let (var initform specialp)
         (if (consp varspec)
-            (setq var (car varspec)
+            (setf var (car varspec)
                   initform (cadr varspec))
-            (setq var varspec
+            (setf var varspec
                   initform nil))
+        (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
+        (push-variable var specialp i)
         (cond (initform
                (compile-form initform)
                (unless (remove-store-value)
                  (emit-push-value)))
               (t
                (emit-push-nil)))
-        (cond ((special-variable-p var)
+        (cond (specialp
                (let ((g (declare-symbol var)))
                  (emit 'getstatic
                        *this-class*
