@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.193 2003-12-27 07:46:42 piso Exp $
+ * $Id: Lisp.java,v 1.194 2003-12-27 16:24:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -649,7 +649,7 @@ public abstract class Lisp
             throw new NullPointerException();
         if (obj.listp())
             return obj;
-        return signal(new TypeError(obj, "list"));
+        return signal(new TypeError(obj, Symbol.LIST));
     }
 
     public static final AbstractArray checkArray(LispObject obj)
@@ -661,7 +661,7 @@ public abstract class Lisp
             return (AbstractArray) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "array"));
+            signal(new TypeError(obj, Symbol.ARRAY));
             // Not reached.
             return null;
         }
@@ -676,7 +676,7 @@ public abstract class Lisp
             return (AbstractVector) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "vector"));
+            signal(new TypeError(obj, Symbol.VECTOR));
             // Not reached.
             return null;
         }
@@ -691,7 +691,7 @@ public abstract class Lisp
             return (LispString) obj;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, "string"));
+            signal(new TypeError(obj, Symbol.STRING));
             // Not reached.
             return null;
         }
