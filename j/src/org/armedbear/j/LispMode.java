@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.69 2004-08-04 01:59:06 piso Exp $
+ * $Id: LispMode.java,v 1.70 2004-08-07 14:24:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,6 +81,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_E, CTRL_MASK | ALT_MASK, "evalDefunLisp");
         km.mapKey(KeyEvent.VK_C, CTRL_MASK | ALT_MASK, "compileDefunLisp");
         km.mapKey(KeyEvent.VK_R, CTRL_MASK | ALT_MASK, "evalRegionLisp");
+        km.mapKey(KeyEvent.VK_L, CTRL_MASK | ALT_MASK, "loadLispFile");
+        km.mapKey(KeyEvent.VK_C, CTRL_MASK | ALT_MASK | SHIFT_MASK, "compileLispFile");
+        km.mapKey(KeyEvent.VK_L, CTRL_MASK | ALT_MASK | SHIFT_MASK, "compileAndLoadLispFile");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK, "lispFindMatchingChar");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "lispSelectSyntax");
         km.mapKey(KeyEvent.VK_9, CTRL_MASK | SHIFT_MASK, "insertParentheses");
@@ -93,6 +96,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
         menu.add(editor, "Eval Region", 'R', "evalRegionLisp", enabled);
         menu.add(editor, "Eval Defun", 'D', "evalDefunLisp", enabled);
         menu.add(editor, "Compile Defun", 'C', "compileDefunLisp", enabled);
+        menu.add(editor, "Load File", 'L', "loadLispFile", enabled);
+        menu.add(editor, "Compile File", 'F', "compileLispFile", enabled);
+        menu.add(editor, "Compile and Load File", 'A', "compileAndLoadLispFile", enabled);
     }
 
     public boolean isTaggable()
@@ -749,6 +755,17 @@ public class LispMode extends AbstractMode implements Constants, Mode
         return editor.displayInOtherWindow(lisp);
     }
 
+    private static Editor findEditor(Buffer buf)
+    {
+        Editor ed = null;
+        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+            ed = it.nextEditor();
+            if (ed.getBuffer() == buf)
+                return ed;
+        }
+        return null;
+    }
+
     private static String getCurrentDefun(Editor editor)
     {
         Position begin = findStartOfDefun(editor.getDot());
@@ -847,15 +864,67 @@ public class LispMode extends AbstractMode implements Constants, Mode
         }
     }
 
-    private static Editor findEditor(Buffer buf)
+    public static void loadLispFile()
     {
-        Editor ed = null;
-        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-            ed = it.nextEditor();
-            if (ed.getBuffer() == buf)
-                return ed;
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Editor ed = getLispShellEditor(editor);
+        if (ed != null) {
+            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+            String path = editor.getBuffer().getFile().canonicalPath();
+            if (path != null) {
+                Position end = lisp.getEnd();
+                end.getLine().setFlags(STATE_INPUT);
+                lisp.insertString(end, ";;; Loading file " + path + " ...\n");
+                lisp.renumber();
+                ed.eob();
+                ed.getDotLine().setFlags(0);
+                lisp.send("(CL:LOAD \"" + path + "\")\n");
+            }
         }
-        return null;
+    }
+
+    public static void compileLispFile()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Editor ed = getLispShellEditor(editor);
+        if (ed != null) {
+            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+            String path = editor.getBuffer().getFile().canonicalPath();
+            if (path != null) {
+                Position end = lisp.getEnd();
+                end.getLine().setFlags(STATE_INPUT);
+                lisp.insertString(end, ";;; Compiling " + path + " ...\n");
+                lisp.renumber();
+                ed.eob();
+                ed.getDotLine().setFlags(0);
+                lisp.send("(CL:COMPILE-FILE \"" + path + "\")\n");
+            }
+        }
+    }
+
+    public static void compileAndLoadLispFile()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Editor ed = getLispShellEditor(editor);
+        if (ed != null) {
+            CommandInterpreter lisp = (CommandInterpreter) ed.getBuffer();
+            String path = editor.getBuffer().getFile().canonicalPath();
+            if (path != null) {
+                Position end = lisp.getEnd();
+                end.getLine().setFlags(STATE_INPUT);
+                lisp.insertString(end, ";;; Compiling and loading " + path + " ...\n");
+                lisp.renumber();
+                ed.eob();
+                ed.getDotLine().setFlags(0);
+                lisp.send("(CL:LOAD (CL:COMPILE-FILE \"" + path + "\"))\n");
+            }
+        }
     }
 
     private static HashMap map;
