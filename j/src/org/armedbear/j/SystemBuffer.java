@@ -1,8 +1,8 @@
 /*
  * SystemBuffer.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.12 2002-12-08 01:27:59 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: SystemBuffer.java,v 1.13 2003-04-19 18:29:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ public class SystemBuffer implements Constants
     private String loadEncoding;
     private List tags;
 
-    protected SystemBuffer()
+    public SystemBuffer()
     {
     }
 
