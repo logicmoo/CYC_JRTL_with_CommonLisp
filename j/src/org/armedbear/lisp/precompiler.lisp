@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.84 2004-12-26 18:45:04 piso Exp $
+;;; $Id: precompiler.lisp,v 1.85 2004-12-28 12:27:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -471,6 +471,11 @@
                          :format-arguments (list special))))))))
       (list* 'PROGN (mapcar #'precompile1 body)))))
 
+(defun precompile-the (form)
+  (list 'THE
+        (second form)
+        (precompile1 (third form))))
+
 (defun precompile-let/let*-vars (vars)
   (let ((result nil))
     (dolist (var vars)
@@ -775,7 +780,7 @@
 (install-handler 'defun                'precompile-identity)
 (install-handler 'go                   'precompile-identity)
 (install-handler 'quote                'precompile-identity)
-(install-handler 'the                  'precompile-identity)
+(install-handler 'the                  'precompile-the)
 (install-handler 'throw                'precompile-cons)
 
 (in-package "SYSTEM")
