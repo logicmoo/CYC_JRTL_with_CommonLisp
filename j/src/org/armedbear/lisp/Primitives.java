@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.463 2003-10-06 17:15:12 piso Exp $
+ * $Id: Primitives.java,v 1.464 2003-10-08 14:56:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1854,12 +1854,18 @@ public final class Primitives extends Module
     // ### %set-row-major-aref
     // %set-row-major-aref array index new-value => new-value
     private static final Primitive3 _SET_ROW_MAJOR_AREF =
-        new Primitive3("%set-row-major-aref", PACKAGE_SYS, false) {
+        new Primitive3("%set-row-major-aref", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
         {
-            checkArray(first).setRowMajor(Fixnum.getValue(second), third);
-            return third;
+            try {
+                ((AbstractArray)first).setRowMajor(Fixnum.getValue(second), third);
+                return third;
+            }
+            catch (ClassCastException e) {
+                throw new ConditionThrowable(new TypeError(first, "array"));
+            }
         }
     };
 
