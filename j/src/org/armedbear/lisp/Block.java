@@ -1,8 +1,8 @@
 /*
  * Block.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Block.java,v 1.2 2003-06-21 18:48:27 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Block.java,v 1.3 2004-03-16 02:37:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,4 @@ package org.armedbear.lisp;
 
 public final class Block extends LispObject
 {
-    private final LispObject tag;
-    private final LispObject body;
-
-    public Block(LispObject tag, LispObject body)
-    {
-        this.tag = tag;
-        this.body = body;
-    }
 }
