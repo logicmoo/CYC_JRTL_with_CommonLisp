@@ -1,8 +1,8 @@
 /*
  * JumpCommands.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: JumpCommands.java,v 1.1.1.1 2002-09-24 16:07:45 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: JumpCommands.java,v 1.2 2003-07-01 12:44:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,26 +94,10 @@ public final class JumpCommands implements Constants
             throw new NumberFormatException();
         char c = s.charAt(0);
         if (c == '+' || c == '-') {
-            // It's an offset from the current location. Prepend the current
-            // location to the string.
-            s = String.valueOf(here).concat(s);
-        } else {
-            // Maybe it's just a number.
-            try {
-                return Integer.parseInt(s);
-            }
-            catch (NumberFormatException e) {
-                // Fall through...
-            }
+            // It's an offset from the current location.
+            int offset = Integer.parseInt(s.substring(1).trim());
+            return c == '+' ? here + offset : here - offset;
         }
-        // It's not just a number. Maybe it's an arithmetic expression.
-        bsh.Interpreter interpreter = new bsh.Interpreter();
-        try {
-            Object obj = interpreter.eval(s);
-            return ((Integer)obj).intValue();
-        }
-        catch (Throwable t) {
-            throw new NumberFormatException();
-        }
+        return Integer.parseInt(s);
     }
 }
