@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: precompiler.lisp,v 1.2 2003-11-12 20:09:34 piso Exp $
+;;; $Id: precompiler.lisp,v 1.3 2003-11-14 00:06:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,9 +155,9 @@
                  (expr (cadr var)))
             (unless (symbolp v)
               (error 'type-error))
-            (setq result (append result (list (list v (precompile1 expr))))))
-          (setq result (append result (list var)))))
-    result))
+            (push (list v (precompile1 expr)) result))
+          (push var result)))
+    (nreverse result)))
 
 (defun precompile-let/let* (form)
   (list* (car form)
@@ -435,6 +435,7 @@
   t)
 
 (precompile-package "PRECOMPILER")
+(precompile-package "EXTENSIONS")
 (precompile-package "SYSTEM")
 (precompile-package "COMMON-LISP")
 
