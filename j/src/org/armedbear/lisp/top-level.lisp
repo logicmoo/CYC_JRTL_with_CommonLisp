@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.33 2004-05-28 10:52:15 asimon Exp $
+;;; $Id: top-level.lisp,v 1.34 2004-05-28 11:27:02 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -201,13 +201,13 @@
 
 
 (defun trace-command (args) 
-  (if (zerop (length args))
+  (if (null args)
     (format t "~A~%" (list-traced-functions))
     (dolist (f (tokenize args))
       (trace-1 (read-from-string f)))))
 
 (defun untrace-command (args) 
-  (if (zerop (length args))
+  (if (null args)
     (untrace-all)
     (dolist (f (tokenize args))
       (untrace-1 (read-from-string f)))))
