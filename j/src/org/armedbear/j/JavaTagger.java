@@ -2,7 +2,7 @@
  * JavaTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaTagger.java,v 1.2 2002-11-09 18:17:21 piso Exp $
+ * $Id: JavaTagger.java,v 1.3 2002-11-10 01:07:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -306,13 +306,55 @@ public class JavaTagger extends Tagger implements Constants
             pos.skip(2);
     }
 
-    protected static final void skipSingleLineComment(Position pos)
+    protected final void skipSingleLineComment(Position pos)
     {
+        checkForExplicitTag(pos);
         Line next = pos.getNextLine();
         if (next != null)
             pos.moveTo(next, 0);
         else
             pos.setOffset(pos.getLineLength());
+    }
+
+    private final void checkForExplicitTag(Position pos)
+    {
+        if (tags == null)
+            return; // Only supported for Java and JavaScript for now.
+        final String explicitTag =
+            Editor.preferences().getStringProperty(Property.EXPLICIT_TAG);
+        if (explicitTag != null && explicitTag.length() > 0) {
+            pos = pos.copy();
+            String s = pos.getString(); // Substring to end of line.
+            int index = s.indexOf(explicitTag);
+            if (index >= 0) {
+                pos.skip(index + explicitTag.length());
+                pos.skipWhitespace();
+                // Now we're looking at the first character of the tag.
+                String tag;
+                if (pos.getChar() == '"') {
+                    FastStringBuffer sb = new FastStringBuffer();
+                    while (pos.next()) {
+                        char c = pos.getChar();
+                        if (c == '"')
+                            break;
+                        sb.append(c);
+                    }
+                    tag = sb.toString();
+                } else {
+                    Mode mode = buffer.getMode();
+                    if (mode == null)
+                        mode = JavaMode.getMode();
+                    tag = pos.getIdentifier(mode);
+                }
+                pos.setOffset(0);
+                pos.skipWhitespace();
+                if (pos.lookingAt("//") && pos.getNextLine() != null) {
+                    pos.moveTo(pos.getNextLine(), 0);
+                    pos.skipWhitespace();
+                }
+                tags.add(new JavaTag(tag, pos, TAG_EXPLICIT, 0, currentClass));
+            }
+        }
     }
 
     // If canonical is true, strings like "java.lang.String" are considered to
