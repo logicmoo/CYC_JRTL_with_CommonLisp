@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.34 2004-03-06 04:50:02 piso Exp $
+ * $Id: Stream.java,v 1.35 2004-03-08 02:56:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -753,28 +753,38 @@ public class Stream extends LispObject
     private final String readToken(char firstChar) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        sb.append(Utilities.toUpperCase(firstChar));
+        sb.append(firstChar);
         return readToken(sb);
     }
 
     private final String readToken(StringBuffer sb) throws ConditionThrowable
     {
+      loop:
         while (true) {
             int n = _readChar();
             if (n < 0)
-                return sb.toString();
+                break;
             char c = (char) n;
             if (Character.isWhitespace(c))
-                return sb.toString();
+                break;
             switch (c) {
                 case '(':
                 case ')':
                     _unreadChar(c);
-                    return sb.toString();
+                    break loop;
                 default:
-                    sb.append(Utilities.toUpperCase(c));
+                    sb.append(c);
             }
         }
+        LispObject readtableCase = getCurrentReadtable().getReadtableCase();
+        if (readtableCase == Keyword.UPCASE)
+            return sb.toString().toUpperCase();
+        if (readtableCase == Keyword.DOWNCASE)
+            return sb.toString().toLowerCase();
+        if (readtableCase == Keyword.INVERT)
+            return invert(sb.toString());
+        // PRESERVE
+        return sb.toString();
     }
 
     private static LispObject makeObject(String token) throws ConditionThrowable
@@ -1126,6 +1136,7 @@ public class Stream extends LispObject
         LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
         thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+        thread.bindSpecial(_PRINT_READABLY_, NIL);
         String s = String.valueOf(obj);
         thread.setDynamicEnvironment(oldDynEnv);
         _writeString(s);
