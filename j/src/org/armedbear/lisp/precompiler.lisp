@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.25 2004-02-10 16:21:25 piso Exp $
+;;; $Id: precompiler.lisp,v 1.26 2004-02-10 16:28:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -82,6 +82,16 @@
         (if (and op (= (length arg) 3))
             (cons op (cdr arg))
             form))))
+
+(define-compiler-macro typep (&whole form &rest args)
+  (if (= (length args) 2)
+      `(%typep ,@args)
+      form))
+
+(define-compiler-macro subtypep (&whole form &rest args)
+  (if (= (length args) 2)
+      `(%subtypep ,@args)
+      form))
 
 (in-package "EXTENSIONS")
 
