@@ -1,8 +1,8 @@
 /*
  * UndoDeleteLineSeparator.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: UndoDeleteLineSeparator.java,v 1.2 2002-10-11 14:07:33 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: UndoDeleteLineSeparator.java,v 1.3 2003-06-11 13:54:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,11 +52,9 @@ public final class UndoDeleteLineSeparator extends AbstractUndoableEdit
         if (postState.modificationCount != preState.modificationCount) {
             // Buffer was changed.
             buffer.invalidate();
-            if (postState.modified != preState.modified) {
-                Sidebar.setUpdateFlagInAllFrames(SIDEBAR_MODIFIED_BUFFER_COUNT |
-                    SIDEBAR_REPAINT_BUFFER_LIST);
-                Sidebar.repaintBufferListInAllFrames();
-            }
+            Sidebar.setUpdateFlagInAllFrames(SIDEBAR_MODIFIED_BUFFER_COUNT |
+                SIDEBAR_REPAINT_BUFFER_LIST);
+            Sidebar.repaintBufferListInAllFrames();
         }
     }
 
@@ -71,11 +69,9 @@ public final class UndoDeleteLineSeparator extends AbstractUndoableEdit
         if (postState.modificationCount != preState.modificationCount) {
             // Buffer was changed.
             buffer.invalidate();
-            if (postState.modified != preState.modified) {
-                Sidebar.setUpdateFlagInAllFrames(SIDEBAR_MODIFIED_BUFFER_COUNT |
-                    SIDEBAR_REPAINT_BUFFER_LIST);
-                Sidebar.repaintBufferListInAllFrames();
-            }
+            Sidebar.setUpdateFlagInAllFrames(SIDEBAR_MODIFIED_BUFFER_COUNT |
+                SIDEBAR_REPAINT_BUFFER_LIST);
+            Sidebar.repaintBufferListInAllFrames();
         }
     }
 
