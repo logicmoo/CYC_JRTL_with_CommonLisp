@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.29 2003-11-13 19:54:04 piso Exp $
+;;; $Id: subtypep.lisp,v 1.30 2003-11-17 15:19:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -213,7 +213,7 @@
         nil)))
 
 (defun subtypep (type1 type2)
-  (when (or (equal type1 type2)
+  (when (or (eq type1 type2)
             (null type1)
             (eq type2 t))
     (return-from subtypep (values t t)))
@@ -235,7 +235,7 @@
         (return-from subtypep (values nil t)))))
   (setq type1 (subtypep-normalize-type type1)
         type2 (subtypep-normalize-type type2))
-  (when (equal type1 type2)
+  (when (eq type1 type2)
     (return-from subtypep (values t t)))
   (let (t1 t2 i1 i2)
     (if (atom type1)
@@ -252,6 +252,14 @@
            (dolist (e i1)
              (unless (typep e type2) (return-from subtypep (values nil t))))
            (return-from subtypep (values t t)))
+          ((eq t1 'eql)
+           (case t2
+             (EQL
+              (return-from subtypep (values (eql (car i1) (car i2)) t)))
+             (SATISFIES
+              (return-from subtypep (values (funcall (car i2) (car i1)) t)))
+             (t
+              (return-from subtypep (values (typep (car i1) type2) t)))))
           ((eq t1 'or)
            (dolist (tt i1)
              (multiple-value-bind (tv flag) (subtypep tt type2)
