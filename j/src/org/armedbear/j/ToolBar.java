@@ -1,8 +1,8 @@
 /*
  * ToolBar.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: ToolBar.java,v 1.5 2003-07-24 19:39:14 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: ToolBar.java,v 1.6 2004-05-25 00:24:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,6 +61,12 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
 
     public ToolBarButton addButton(String text, String iconFile, String methodName)
     {
+        return addButton(text, iconFile, methodName, true);
+    }
+
+    public ToolBarButton addButton(String text, String iconFile, String methodName,
+                                   boolean enabled)
+    {
         ToolBarButton button = new ToolBarButton(frame, methodName, this);
         switch (style) {
             case STYLE_DEFAULT:
@@ -93,6 +99,7 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
             }
         }
         button.setRolloverEnabled(isRolloverEnabled());
+        button.setEnabled(enabled);
         add(button);
         return button;
     }
