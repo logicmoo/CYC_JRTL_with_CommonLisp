@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.26 2003-12-08 05:06:10 piso Exp $
+ * $Id: Function.java,v 1.27 2003-12-09 06:07:05 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,12 @@ public abstract class Function extends Functional
         index = 0;
         if (name != null)
             setLambdaName(Symbol.addFunction(this.name, this));
+    }
+
+    public Function(String name, String arglist)
+    {
+        this(name);
+        this.arglist = new LispString(arglist);
     }
 
     public Function(String name, Package pkg)

@@ -2,7 +2,7 @@
  * Primitive3.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive3.java,v 1.9 2003-12-08 05:06:10 piso Exp $
+ * $Id: Primitive3.java,v 1.10 2003-12-09 06:07:05 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,11 @@ public class Primitive3 extends Function
     public Primitive3(String name)
     {
         super(name);
+    }
+
+    public Primitive3(String name, String arglist)
+    {
+        super(name,arglist);
     }
 
     public Primitive3(String name, Package pkg)
