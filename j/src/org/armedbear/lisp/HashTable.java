@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.4 2003-03-15 03:56:01 piso Exp $
+ * $Id: HashTable.java,v 1.5 2003-04-06 15:24:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,9 +40,9 @@ public final class HashTable extends LispObject
     private HashEntry[] buckets;
 
     // The number of key-value pairs.
-    private int size;
+    private int count;
 
-    public HashTable(LispObject test, LispObject size, LispObject rehashSize,
+    public HashTable(LispObject test, int size, LispObject rehashSize,
         LispObject rehashThreshold) throws LispError
     {
         if (test == NIL || test == Symbol.EQ.getSymbolFunction())
@@ -53,17 +53,11 @@ public final class HashTable extends LispObject
             this.test = TEST_EQUAL;
         else if (test == Symbol.EQUALP.getSymbolFunction())
             this.test = TEST_EQUALP;
-        int initialCapacity;
-        if (size == NIL)
-            initialCapacity = 11; // Default size.
         else
-            initialCapacity = (int) Fixnum.getValue(size);
-        if (initialCapacity < 0)
-            throw new TypeError("MAKE-HASH-TABLE: " + initialCapacity +
-                " is not a valid size");
+            throw new LispError("MAKE-HASH-TABLE:  test " + test);
         // Ignore rehashSize and rehashThreshold.
-        buckets = new HashEntry[initialCapacity];
-        threshold = (int) (initialCapacity * loadFactor);
+        buckets = new HashEntry[size];
+        threshold = (int) (size * loadFactor);
     }
 
     // gethash key hash-table &optional default => value, present-p
@@ -116,8 +110,8 @@ public final class HashTable extends LispObject
                 Debug.bug();
         }
         sb.append(" hash table, ");
-        sb.append(size);
-        if (size == 1)
+        sb.append(count);
+        if (count == 1)
             sb.append(" entry>");
         else
             sb.append(" entries>");
@@ -149,7 +143,7 @@ public final class HashTable extends LispObject
                 e = e.next;
         }
         // Not found. We need to add a new entry.
-        if (++size > threshold) {
+        if (++count > threshold) {
             rehash();
             // Need a new hash value to suit the bigger table.
             idx = hash(key);
@@ -171,7 +165,7 @@ public final class HashTable extends LispObject
                     buckets[idx] = e.next;
                 else
                     last.next = e.next;
-                --size;
+                --count;
                 return e.value;
             }
             last = e;
