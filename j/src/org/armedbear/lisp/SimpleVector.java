@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.2 2004-02-24 11:24:46 piso Exp $
+ * $Id: SimpleVector.java,v 1.3 2004-02-24 12:13:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,16 @@ public final class SimpleVector extends AbstractVector
     public LispClass classOf()
     {
         return BuiltInClass.VECTOR;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.SIMPLE_VECTOR)
+            return T;
+        if (type == Symbol.SIMPLE_ARRAY)
+            return T;
+        // FIXME BuiltInClass.SIMPLE_VECTOR, BuiltInClass.SIMPLE_ARRAY
+        return super.typep(type);
     }
 
     public LispObject getElementType()
