@@ -2,7 +2,7 @@
  * DescribeKeyDialog.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: DescribeKeyDialog.java,v 1.8 2005-03-03 19:12:46 piso Exp $
+ * $Id: DescribeKeyDialog.java,v 1.9 2005-03-06 19:31:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ public final class DescribeKeyDialog extends AbstractDialog
     private boolean eventHandled;
     private boolean disposed;
     private KeyMap requestedKeyMap;
+    private EventSequence currentEventSequence;
     private boolean local;
 
     private DescribeKeyDialog(Editor editor)
@@ -69,7 +70,7 @@ public final class DescribeKeyDialog extends AbstractDialog
         final int modifiers = e.getModifiers();
         KeyMapping mapping = new KeyMapping(keycode, modifiers, null);
         lastKeyText = mapping.getKeyText();
-        Object command = describeKey(e.getKeyChar(), keycode, modifiers);
+        Object command = describeKey(new JEvent(e));
         if (eventHandled) {
             if (keyStrokeText == null)
                 keyStrokeText = lastKeyText;
@@ -99,7 +100,7 @@ public final class DescribeKeyDialog extends AbstractDialog
                     textField.setText(keyStrokeText);
                 }
             }
-            Object command = describeKey(c, e.getKeyCode(), modifiers);
+            Object command = describeKey(new JEvent(e));
             if (command != null)
                 report(command);
         }
@@ -129,17 +130,24 @@ public final class DescribeKeyDialog extends AbstractDialog
         eventHandled = false; // Start over.
     }
 
-    private Object describeKey(char keyChar, int keyCode, int modifiers)
+    private Object describeKey(JEvent event)
     {
         if (disposed)
             return null;
-        // Mask off the bits we don't care about (Java 1.4).
-        modifiers &= 0x0f;
+        char keyChar = event.getKeyChar();
+        int keyCode = event.getKeyCode();
+        int modifiers = event.getModifiers() & 0x0f;
         if (keyCode == 0 && modifiers == InputEvent.SHIFT_MASK) // Shift only.
             modifiers = 0; // Ignore modifier.
         KeyMapping mapping = null;
         if (requestedKeyMap != null) {
             mapping = requestedKeyMap.lookup(keyChar, keyCode, modifiers);
+            if (mapping == null && local) {
+                // Not found in local keymap.
+                EventSequence copy = currentEventSequence.copy();
+                copy.addEvent(event);
+                mapping = KeyMap.getGlobalKeyMap().lookupEventSequence(copy);
+            }
         } else {
             final Mode mode = buffer.getMode();
             mapping = mode.getKeyMap().lookup(keyChar, keyCode, modifiers);
@@ -154,6 +162,9 @@ public final class DescribeKeyDialog extends AbstractDialog
         eventHandled = true;
         Object command = mapping.getCommand();
         if (command instanceof KeyMap) {
+            if (currentEventSequence == null)
+                currentEventSequence = new EventSequence();
+            currentEventSequence.addEvent(event);
             requestedKeyMap = (KeyMap) command;
             return null;
         }
