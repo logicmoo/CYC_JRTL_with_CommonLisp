@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.1.1.1 2002-09-24 16:08:38 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.2 2002-11-27 17:37:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -372,51 +372,55 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler impl
         if (entry.startsWith("http:") || entry.startsWith("https:") ||
             entry.startsWith("ftp:"))
             return;
+        String completion = null;
         File dir = editor.getCurrentDirectory();
-        if (dir != null && !dir.isRemote()) {
-            String s = null;
-            if (Utilities.isFilenameAbsolute(entry) || entry.startsWith("..")) {
+        if (dir != null) {
+            if (dir.isLocal() && Utilities.isFilenameAbsolute(entry) ||
+                entry.startsWith("..")) {
                 File file = File.getInstance(dir, entry);
                 if (file != null)
-                    s = getCompletion(file.canonicalPath());
+                    completion = getCompletion(file.canonicalPath());
             } else
-                s = getCompletion(entry);
-            if (s != null && !s.equals(entry)) {
-                textField.setText(s);
-                textField.setCaretPosition(s.length());
-            }
+                completion = getCompletion(entry);
+        }
+        if (completion != null && !completion.equals(entry)) {
+            textField.setText(completion);
+            textField.setCaretPosition(completion.length());
         }
     }
 
     public List getCompletions(String prefix)
     {
-        final File currentDirectory = editor.getCurrentDirectory();
-        final String sourcePath = checkSourcePath ? getSourcePath() : null;
-        prefix = File.normalize(prefix);
-        FilenameCompletion completion = new FilenameCompletion(currentDirectory,
-            prefix, sourcePath, completionsIgnoreCase);
         ArrayList completions = new ArrayList();
-        List files = completion.listFiles();
-        if (files != null) {
-            final int limit = files.size();
-            for (int i = 0; i < limit; i++) {
-                File file = (File) files.get(i);
-                // We don't want the file we're currently looking at.
-                if (file.equals(editor.getBuffer().getFile()))
-                    continue;
-                String name;
-                if (currentDirectory.equals(file.getParentFile()))
-                    name = file.getName();
-                else
-                    name = file.canonicalPath();
-                if (file.isDirectory()) {
-                    addCompletion(completions,
-                        name.concat(LocalFile.getSeparator()));
-                    continue;
+        final File currentDirectory = editor.getCurrentDirectory();
+        if (currentDirectory.isLocal()) {
+            final String sourcePath = checkSourcePath ? getSourcePath() : null;
+            prefix = File.normalize(prefix);
+            FilenameCompletion completion =
+                new FilenameCompletion(currentDirectory, prefix, sourcePath,
+                    completionsIgnoreCase);
+            List files = completion.listFiles();
+            if (files != null) {
+                final int limit = files.size();
+                for (int i = 0; i < limit; i++) {
+                    File file = (File) files.get(i);
+                    // We don't want the file we're currently looking at.
+                    if (file.equals(editor.getBuffer().getFile()))
+                        continue;
+                    String name;
+                    if (currentDirectory.equals(file.getParentFile()))
+                        name = file.getName();
+                    else
+                        name = file.canonicalPath();
+                    if (file.isDirectory()) {
+                        addCompletion(completions,
+                            name.concat(LocalFile.getSeparator()));
+                        continue;
+                    }
+                    if (isExcluded(name))
+                        continue;
+                    addCompletion(completions, name);
                 }
-                if (isExcluded(name))
-                    continue;
-                addCompletion(completions, name);
             }
         }
         if (checkBuffers && !Utilities.isFilenameAbsolute(prefix) &&
