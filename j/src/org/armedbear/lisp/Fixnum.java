@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.104 2004-12-19 15:15:21 piso Exp $
+ * $Id: Fixnum.java,v 1.105 2004-12-20 13:19:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,6 +279,15 @@ public final class Fixnum extends LispObject
         if (value > Integer.MIN_VALUE)
             return new Fixnum(value - 1);
         return new Bignum((long) value - 1);
+    }
+
+    public LispObject add(int n)
+    {
+        long result = (long) value + n;
+        if (result >= Integer.MIN_VALUE && result <= Integer.MAX_VALUE)
+            return new Fixnum((int)result);
+        else
+            return new Bignum(result);
     }
 
     public LispObject add(LispObject obj) throws ConditionThrowable

@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.110 2004-12-20 01:51:41 piso Exp $
+ * $Id: LispObject.java,v 1.111 2004-12-20 13:20:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -533,6 +533,11 @@ public class LispObject extends Lisp
     public LispObject decr() throws ConditionThrowable
     {
         return signal(new TypeError(this, Symbol.NUMBER));
+    }
+
+    public LispObject add(int n) throws ConditionThrowable
+    {
+        return add(new Fixnum(n));
     }
 
     public LispObject add(LispObject obj) throws ConditionThrowable
