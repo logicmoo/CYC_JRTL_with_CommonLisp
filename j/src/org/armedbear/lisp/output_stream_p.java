@@ -2,7 +2,7 @@
  * output_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: output_stream_p.java,v 1.1 2004-01-02 02:13:23 piso Exp $
+ * $Id: output_stream_p.java,v 1.2 2004-01-16 16:32:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +31,14 @@ public final class output_stream_p extends Primitive1
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
+        if (arg instanceof LispOutputStream)
+            return T;
+        if (arg instanceof TwoWayStream)
+            return T;
         if (arg instanceof LispStream)
-            return arg instanceof LispOutputStream ? T : NIL;
+            return NIL;
         return signal(new TypeError(arg, Symbol.STREAM));
     }
 
-    private static final output_stream_p OUTPUT_STREAM_P = new output_stream_p();
+    private static final Primitive1 OUTPUT_STREAM_P = new output_stream_p();
 }
