@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.159 2004-11-21 13:52:52 piso Exp $
+;;; $Id: rt.lisp,v 1.160 2005-01-13 12:30:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,6 +70,8 @@
 	   (loop for i from 0 below size
 		 always (equalp-with-case (row-major-aref x i)
 					  (row-major-aref y i))))))
+   ((typep x 'pathname)
+    (equal x y))
    (t (eql x y))))
 
 (defmacro deftest (name &rest body)
