@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.6 2003-08-10 04:34:40 piso Exp $
+ * $Id: Pathname.java,v 1.7 2003-08-15 15:09:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -120,27 +120,35 @@ public final class Pathname extends LispObject
             LispObject defaults = args[6];
             LispObject _case = args[7]; // Ignored.
             // FIXME
-            if (host != NIL || device != NIL || directory != NIL || name != NIL)
+            if (host != NIL || device != NIL || directory != NIL)
                 throw new LispError("MAKE-PATHNAME: not implemented");
-            String namestring = null;
+            String d = ""; // directory
+            String n = ""; // name
+            String t = ""; // type
+            String defaultNamestring = null;
             if (defaults instanceof Pathname)
-                namestring = ((Pathname)defaults).getNamestring();
+                defaultNamestring = ((Pathname)defaults).getNamestring();
             else if (defaults instanceof LispString)
-                namestring = ((LispString)defaults).getValue();
-            if (namestring != null) {
-                if (type instanceof LispString) {
-                    File file = new File(namestring);
-                    String d = file.getParent();
-                    String n = file.getName();
-                    String t = ((LispString)type).getValue();
-                    int index = n.lastIndexOf('.');
-                    if (index >= 0)
-                        n = n.substring(0, index);
-                    n = n + "." + t;
-                    return new Pathname(d, n);
-                }
+                defaultNamestring = ((LispString)defaults).getValue();
+            if (defaultNamestring != null) {
+                File file = new File(defaultNamestring);
+                d = file.getParent();
+                n = file.getName();
+                int index = n.lastIndexOf('.');
+                if (index >= 0)
+                    t = n.substring(index + 1);
             }
-            throw new LispError("MAKE-PATHNAME: not implemented");
+            if (name == Keyword.WILD)
+                n = "*";
+            else if (name instanceof LispString)
+                n = ((LispString)name).getValue();
+            if (type == Keyword.WILD)
+                t = "*";
+            else if (type instanceof LispString)
+                t = ((LispString)type).getValue();
+            if (t.length() > 0)
+                n = n + "." + t;
+            return new Pathname(d, n);
         }
     };
 
