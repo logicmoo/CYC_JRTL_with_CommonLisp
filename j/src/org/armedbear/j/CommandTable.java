@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandTable.java,v 1.47 2004-08-03 21:36:39 piso Exp $
+ * $Id: CommandTable.java,v 1.48 2004-08-07 14:25:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -218,6 +218,8 @@ public class CommandTable
             addCommand("chmod", "Directory");
             addCommand("clearRegister", "Registers");
             addCommand("compile", "CompilationCommands");
+            addCommand("compileAndLoadLispFile", "LispMode");
+            addCommand("compileLispFile", "LispMode");
             addCommand("copyLink", "WebBuffer");
             addCommand("copyXPath", "XmlMode");
             addCommand("cvs", "CVS", "cvs");
@@ -300,6 +302,7 @@ public class CommandTable
             addCommand("listRegisters", "Registers");
             addCommand("listTags", "ListTagsDialog");
             addCommand("listThreads", "Debug");
+            addCommand("loadLispFile", "LispMode");
             addCommand("loadSession", "Session");
             addCommand("lowerCaseRegion", "RegionCommands");
             addCommand("makeTagFile", "TagCommands");
