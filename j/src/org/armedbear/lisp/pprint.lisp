@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.32 2004-09-29 19:04:05 piso Exp $
+;;; $Id: pprint.lisp,v 1.33 2004-09-30 01:01:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1200,6 +1200,9 @@
 (declaim (special *prefix*))
 
 (defun pretty-non-vector (xp array)
+  (when (and *print-readably*
+	     (not (array-readably-printable-p array)))
+    (error 'print-not-readable :object array))
   (let* ((bottom (1- (array-rank array)))
 	 (indices (make-list (1+ bottom) :initial-element 0))
 	 (dims (array-dimensions array))
@@ -1220,6 +1223,14 @@
 			   (write-char++ #\space xp)
 			   (pprint-newline+ (if (= slice bottom) :fill :linear) xp)))))))
       (pretty-slice 0))))
+
+(defun array-readably-printable-p (array)
+  (and (eq (array-element-type array) t)
+       (let ((zero (position 0 (array-dimensions array)))
+	     (number (position 0 (array-dimensions array)
+			       :test (complement #'eql)
+			       :from-end t)))
+	 (or (null zero) (null number) (> zero number)))))
 
 ;Must use pprint-logical-block (no +) in the following three, because they are
 ;exported functions.
