@@ -1,7 +1,7 @@
 <project name="j" default="compile" basedir="./src">
 
   <!-- Set global properties for this build -->
-  <property name="version" value="0.21.0"/>
+  <property name="version" value="0.21.0+"/>
   <property name="topdir" value="${basedir}/.."/>
   <property name="distdir" value="/tmp/j-${version}"/>
   <property file="${topdir}/build.properties"/>
@@ -11,6 +11,8 @@
   <property name="junit" value=""/>
   <property name="datadir" value="/usr/local/share"/>
   <property name="bindir" value="/usr/local/bin"/>
+
+  <property name="build.compiler.emacs" value="yes"/>
 
   <property name="JAVA" value="${java}"/>
   <property name="JAVA_OPTIONS" value="${java_options}"/>
@@ -25,6 +27,12 @@
   </path>
 
   <property name="CLASSPATH" refid="classpath"/>
+
+  <path id="abcl_classpath">
+    <pathelement location="${basedir}"/>
+  </path>
+
+  <property name="ABCL_CLASSPATH" refid="abcl_classpath"/>
 
   <target name="prepare">
     <!-- Create the time stamp -->
@@ -120,7 +128,9 @@
     <filter token="JAVA" value="${JAVA}"/>
     <filter token="JAVA_OPTIONS" value="${JAVA_OPTIONS}"/>
     <filter token="CLASSPATH" value="${CLASSPATH}"/>
+    <filter token="ABCL_CLASSPATH" value="${ABCL_CLASSPATH}"/>
     <copy file="${topdir}/j.bat.in" tofile="${topdir}/j.bat" filtering="yes" overwrite="yes"/>
+    <copy file="${topdir}/abcl.bat.in" tofile="${topdir}/abcl.bat" filtering="yes" overwrite="yes"/>
   </target>
 
   <target name="j.jar" depends="compile, fasls">
