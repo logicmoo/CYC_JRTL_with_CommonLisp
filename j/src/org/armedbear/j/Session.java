@@ -2,7 +2,7 @@
  * Session.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Session.java,v 1.6 2003-02-03 01:33:24 piso Exp $
+ * $Id: Session.java,v 1.7 2003-02-03 01:39:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,7 +227,7 @@ public final class Session extends HandlerBase implements Constants
                         if (entry.getModeId() == WEB_MODE)
                             buf = WebBuffer.createWebBuffer(file, null, null);
                         else
-                            buf = Buffer.createBuffer(file);
+                            buf = Buffer.precreateBuffer(file);
                     }
                     if (buf != null) {
                         buf.setLastView(new View(entry));
