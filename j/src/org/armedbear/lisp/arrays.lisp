@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: arrays.lisp,v 1.7 2003-04-25 00:34:51 piso Exp $
+;;; $Id: arrays.lisp,v 1.8 2003-06-11 00:46:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -56,7 +56,8 @@
               (size dim (* dim size)))
           (nil)
           (let ((s (elt subscripts i)))
-            (require-type s 'integer)
+            (unless (integerp s)
+              (error 'type-error))
             (when (or (< s 0) (>= s dim))
               (if invalid-index-error-p
                   (error 'program-error)
