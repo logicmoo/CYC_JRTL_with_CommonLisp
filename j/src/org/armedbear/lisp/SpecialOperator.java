@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SpecialOperator.java,v 1.6 2003-03-13 18:19:32 piso Exp $
+ * $Id: SpecialOperator.java,v 1.7 2003-03-14 18:41:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public class SpecialOperator extends Functional
     private final String name;
     private final int index;
 
-    private long callCount;
+    private int callCount;
 
     public SpecialOperator(String name)
     {
@@ -70,14 +70,14 @@ public class SpecialOperator extends Functional
     }
 
     // Profiling.
-    public final long getCallCount()
+    public final int getCallCount()
     {
         return callCount;
     }
 
-    public final void setCallCount(long l)
+    public final void setCallCount(int n)
     {
-        callCount = l;
+        callCount = n;
     }
 
     public final void incrementCallCount()

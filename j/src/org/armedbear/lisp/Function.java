@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.10 2003-03-13 18:19:15 piso Exp $
+ * $Id: Function.java,v 1.11 2003-03-14 18:43:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public abstract class Function extends Functional
     private final String name;
     protected final int index;
 
-    private long callCount;
+    private int callCount;
 
     protected Function()
     {
@@ -112,14 +112,14 @@ public abstract class Function extends Functional
     }
 
     // Profiling.
-    public final long getCallCount()
+    public final int getCallCount()
     {
         return callCount;
     }
 
-    public void setCallCount(long l)
+    public void setCallCount(int n)
     {
-        callCount = l;
+        callCount = n;
     }
 
     public final void incrementCallCount()
