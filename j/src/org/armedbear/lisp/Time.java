@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Time.java,v 1.25 2005-01-30 02:35:37 piso Exp $
+ * $Id: Time.java,v 1.26 2005-02-14 19:05:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,8 @@ public final class Time extends Lisp
             long userStart = -1;
             long systemStart = -1;
             try {
-                userStart = ControlC.getCurrentThreadUserTime();
-                systemStart = ControlC.getCurrentThreadSystemTime();
+                userStart = Native.getCurrentThreadUserTime();
+                systemStart = Native.getCurrentThreadSystemTime();
             }
             catch (Throwable t) {}
             long realStart = System.currentTimeMillis();
@@ -49,8 +49,8 @@ public final class Time extends Lisp
                 long userStop = -1;
                 long systemStop = -1;
                 if (userStart > 0) {
-                    userStop = ControlC.getCurrentThreadUserTime();
-                    systemStop = ControlC.getCurrentThreadSystemTime();
+                    userStop = Native.getCurrentThreadUserTime();
+                    systemStop = Native.getCurrentThreadSystemTime();
                 }
                 long count = Cons.getCount();
                 Stream out =
@@ -83,7 +83,8 @@ public final class Time extends Lisp
 
     // ### get-internal-real-time
     private static final Primitive GET_INTERNAL_REAL_TIME =
-        new Primitive("get-internal-real-time","") {
+        new Primitive("get-internal-real-time", "")
+    {
         public LispObject execute() throws ConditionThrowable
         {
             return number(System.currentTimeMillis());
@@ -92,16 +93,29 @@ public final class Time extends Lisp
 
     // ### get-internal-run-time
     private static final Primitive GET_INTERNAL_RUN_TIME =
-        new Primitive("get-internal-run-time","") {
+        new Primitive("get-internal-run-time", "")
+    {
         public LispObject execute() throws ConditionThrowable
         {
-            return number(System.currentTimeMillis()); // FIXME
+            if (Utilities.isPlatformUnix()) {
+                long userTime = -1;
+                long systemTime = -1;
+                try {
+                    userTime = Native.getCurrentThreadUserTime();
+                    systemTime = Native.getCurrentThreadSystemTime();
+                }
+                catch (Throwable t) {}
+                if (userTime >= 0 && systemTime >= 0)
+                    return number((userTime + systemTime) * 10);
+            }
+            return number(System.currentTimeMillis());
         }
     };
 
     // ### get-universal-time
     private static final Primitive GET_UNIVERSAL_TIME =
-        new Primitive("get-universal-time","") {
+        new Primitive("get-universal-time", "")
+    {
         public LispObject execute()
         {
             return number(System.currentTimeMillis() / 1000 + 2208988800L);
