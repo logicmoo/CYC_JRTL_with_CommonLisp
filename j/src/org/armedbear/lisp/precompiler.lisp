@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.38 2004-03-31 04:09:54 piso Exp $
+;;; $Id: precompiler.lisp,v 1.39 2004-04-01 01:15:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -554,7 +554,7 @@
            (multiple-value-bind (form closure-p)
              (function-lambda-expression definition)
              (unless form
-               (format t "; No lambda expression available for ~S.~%" name)
+;;                (format t "; No lambda expression available for ~S.~%" name)
                (return-from precompile (values nil t t)))
              (when closure-p
                (format t "; Unable to compile function ~S defined in non-null lexical environment.~%" name)
@@ -564,7 +564,9 @@
           ((and (consp definition) (eq (car definition) 'lambda))
            (setq expr definition))
           (t
-           (error 'type-error)))
+;;            (error 'type-error)))
+           (format t "Unable to precompile ~S.~%" name)
+           (return-from precompile (values nil t t))))
     (setf result (coerce-to-function (precompile-form expr nil)))
     (when (and name (functionp result))
       (%set-lambda-name result name)
@@ -585,7 +587,7 @@
         (let ((f (fdefinition sym)))
           (unless (compiled-function-p f)
             (when verbose
-              (format t "compiling ~S~%" sym)
+              (format t "Precompiling ~S~%" sym)
               (finish-output))
             (precompile sym))))))
   t)
@@ -595,7 +597,7 @@
       (values name nil nil)
       (precompile name definition)))
 
-;; Redefine DEFMACRO to compile the expansion function on the fly.
+;; Redefine DEFMACRO to precompile the expansion function on the fly.
 
 (defmacro defmacro (name lambda-list &rest body)
   (let* ((form (gensym))
@@ -612,7 +614,9 @@
          ',name))))
 
 ;; Make an exception just this one time...
-(fset 'defmacro (get 'defmacro 'macroexpand-macro))
+(when (get 'defmacro 'macroexpand-macro)
+  (fset 'defmacro (get 'defmacro 'macroexpand-macro))
+  (remprop 'defmacro 'macroexpand-macro))
 
 ;; Redefine DEFUN to compile the definition on the fly.
 (defmacro defun (name lambda-list &rest body &environment env)
