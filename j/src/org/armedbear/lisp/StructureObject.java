@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.20 2004-01-24 20:14:28 piso Exp $
+ * $Id: StructureObject.java,v 1.21 2004-02-07 00:44:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,6 @@ public final class StructureObject extends LispObject
             LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
             Debug.assertTrue(effectiveSlotsArray.length == slots.length);
             sb.append(structureClass.getSymbol());
-            // FIXME Use *PRINT-LENGTH*.
             final LispObject printLength = _PRINT_LENGTH_.symbolValue();
             final int limit;
             if (printLength instanceof Fixnum)
@@ -97,8 +96,11 @@ public final class StructureObject extends LispObject
                 sb.append(' ');
                 Vector slotDefinition = (Vector) effectiveSlotsArray[i];
                 LispObject slotName = slotDefinition.get(1);
-                sb.append(':');
-                sb.append(slotName);
+                if (slotName instanceof Symbol) {
+                    sb.append(':');
+                    sb.append(((Symbol)slotName).getName());
+                } else
+                    sb.append(slotName);
                 sb.append(' ');
                 sb.append(slots[i]);
             }
