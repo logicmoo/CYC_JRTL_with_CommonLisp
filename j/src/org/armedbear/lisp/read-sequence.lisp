@@ -1,7 +1,7 @@
 ;;; read-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: read-sequence.lisp,v 1.1 2004-01-20 00:18:08 piso Exp $
+;;; $Id: read-sequence.lisp,v 1.2 2004-02-28 15:46:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -25,9 +25,12 @@
       (require-type end '(integer 0))
       (setf end (length sequence)))
   (let* ((element-type (stream-element-type stream))
-         (read-function (if (eq element-type 'character)
-                            #'read-char
-                            #'read-byte)))
+         (read-function (cond ((eq element-type 'character)
+                               #'read-char)
+                              ((equal element-type '(unsigned-byte 8))
+                               #'read-8-bits)
+                              (t
+                               #'read-byte))))
     (do ((pos start (1+ pos)))
         ((>= pos end) pos)
       (let ((element (funcall read-function stream nil :eof)))
