@@ -2,7 +2,7 @@
  * SendMail.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: SendMail.java,v 1.7 2003-05-21 17:13:48 piso Exp $
+ * $Id: SendMail.java,v 1.8 2003-06-28 00:20:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -960,14 +960,14 @@ public final class SendMail extends Buffer
             return null;
         int begin = 0;
         int end = s.length();
-        for (int i = index-1; i >= 0; i--) {
+        for (int i = index; i-- > 0;) {
             char c = s.charAt(i);
             if (c == ',' || c == '"' || c == '<' || Character.isWhitespace(c)) {
                 begin = i + 1;
                 break;
             }
         }
-        for (int i = index + 1; i < s.length(); i++) {
+        for (int i = index + 1; i < end; i++) {
             char c = s.charAt(i);
             if (c == ',' || c == '"' || c == '>' || Character.isWhitespace(c)) {
                 end = i;
