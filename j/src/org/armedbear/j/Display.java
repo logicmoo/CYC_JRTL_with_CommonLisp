@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Display.java,v 1.5 2002-12-29 16:05:09 piso Exp $
+ * $Id: Display.java,v 1.6 2003-02-17 02:36:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -720,11 +720,10 @@ public final class Display extends JComponent implements Constants,
         providePaintLineImage(displayWidth, charHeight);
 
         Color backgroundColor;
-        if (editor.getDot() != null && editor.getMark() == null && line == editor.getDotLine()) {
+        if (line == getCurrentLine())
             backgroundColor = editor.getFormatter().getCurrentLineBackgroundColor();
-        } else {
+        else
             backgroundColor = editor.getFormatter().getBackgroundColor();
-        }
         drawBackgroundForLine(paintLineGraphics, backgroundColor, line, 0);
 
         int totalChars = formatLine(line, shift, maxCols);
@@ -761,11 +760,10 @@ public final class Display extends JComponent implements Constants,
         final int x = gutterWidth - shift * charWidth;
 
         Color backgroundColor;
-        if (editor.getDot() != null && editor.getMark() == null && imageLine == editor.getDotLine()) {
+        if (imageLine == getCurrentLine())
             backgroundColor = editor.getFormatter().getCurrentLineBackgroundColor();
-        } else {
+        else
             backgroundColor = editor.getFormatter().getBackgroundColor();
-        }
 
         g.setColor(backgroundColor);
         // Left.
@@ -1022,11 +1020,7 @@ public final class Display extends JComponent implements Constants,
         final Region r = editor.getMark() != null ? new Region(editor) : null;
 
         // Current line.
-        Line currentLine;
-        if (editor.getDot() != null && editor.getMark() == null)
-            currentLine = editor.getDotLine();
-        else
-            currentLine = null;
+        final Line currentLine = getCurrentLine();
 
         final Color colorBackground = editor.getFormatter().getBackgroundColor();
         int y = - pixelsAboveTopLine;
@@ -1041,9 +1035,10 @@ public final class Display extends JComponent implements Constants,
                 paintImageLine((ImageLine)line, g2d, y);
             } else {
                 Color backgroundColor;
-                if (line == currentLine)
-                    backgroundColor = editor.getFormatter().getCurrentLineBackgroundColor();
-                else
+                if (line == currentLine) {
+                    backgroundColor =
+                        editor.getFormatter().getCurrentLineBackgroundColor();
+                } else
                     backgroundColor = colorBackground;
                 drawBackgroundForLine(g2d, backgroundColor, line, y);
                 int totalChars = formatLine(line, shift, maxCols);
@@ -1076,6 +1071,13 @@ public final class Display extends JComponent implements Constants,
         if (showLineNumbers && editor.getDot() != null)
             drawGutterBorder(g2d);
         updateFlag &= ~REPAINT;
+    }
+
+    private Line getCurrentLine()
+    {
+        if (editor.getDot() != null && editor.getMark() == null)
+            return editor.getDotLine();
+        return null;
     }
 
     private void handleSelection(Region r, Line line, int[] formatArray,
