@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.15 2003-03-29 18:23:43 piso Exp $
+ * $Id: CommandTable.java,v 1.16 2003-03-31 01:54:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -212,6 +212,7 @@ public class CommandTable
             addCommand("alias", "AliasDialog");
             addCommand("alignStrings",  "AlignStrings");
             addCommand("archiveOpenFile", "ArchiveMode");
+            addCommand("backwardSexp", "LispMode");
             addCommand("binaryMode", "BinaryMode");
             addCommand("browseFileAtDot", "BrowseFile");
             addCommand("centerTag", "TagCommands");
