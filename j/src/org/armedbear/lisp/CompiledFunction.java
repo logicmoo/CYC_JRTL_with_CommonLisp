@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.24 2004-06-28 14:27:38 piso Exp $
+ * $Id: CompiledFunction.java,v 1.25 2004-07-09 17:32:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,11 +89,6 @@ public class CompiledFunction extends Closure
         return signal(new LispError("not implemented"));
     }
 
-    public String toString()
-    {
-        return unreadableString("COMPILED-FUNCTION");
-    }
-
     // ### make-compiled-function
     // make-compiled-function name lambda-list body => object
     private static final Primitive3 MAKE_COMPILED_FUNCTION =
@@ -155,8 +150,8 @@ public class CompiledFunction extends Closure
         new Primitive1("varlist", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable {
-            if (arg instanceof CompiledFunction)
-                return ((CompiledFunction)arg).getVariableList();
+            if (arg instanceof Closure)
+                return ((Closure)arg).getVariableList();
             return signal(new TypeError(arg, "compiled function"));
         }
     };
