@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.37 2004-08-24 14:17:19 piso Exp $
+;;; $Id: top-level.lisp,v 1.38 2004-08-24 17:41:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,7 +70,7 @@
                    most-positive-fixnum))
         (n 0))
     (dolist (frame *saved-backtrace*)
-      (%format t "  ~D: ~S~%" n frame)
+      (%format *debug-io* "  ~D: ~S~%" n frame)
       (incf n)
       (when (>= n count)
         (return))))
@@ -346,16 +346,14 @@
 
 (defparameter *repl-read-form-fun* #'repl-read-form-fun)
 
-(defun repl ()
+(defun repl (&optional (in *standard-input*) (out *standard-output*))
   (loop
-    (let* ((form (funcall *repl-read-form-fun*
-                          *standard-input*
-                          *standard-output*))
+    (let* ((form (funcall *repl-read-form-fun* in out))
            (results (multiple-value-list (sys::interactive-eval form)))
            (*print-length* 10))
       (dolist (result results)
-        (fresh-line)
-        (prin1 result)))))
+        (fresh-line out)
+        (prin1 result out)))))
 
 (defun top-level-loop ()
   (fresh-line)
