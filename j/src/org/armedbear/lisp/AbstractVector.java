@@ -113,14 +113,14 @@ public abstract class AbstractVector extends AbstractArray
 
     protected void badIndex(int index, int limit) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer("invalid array index ");
+        StringBuffer sb = new StringBuffer("Invalid array index ");
         sb.append(index);
         sb.append(" for ");
         sb.append(toString());
         if (limit > 0) {
             sb.append(" (should be >= 0 and < ");
             sb.append(limit);
-            sb.append(')');
+            sb.append(").");
         }
         signal(new TypeError(sb.toString()));
     }
