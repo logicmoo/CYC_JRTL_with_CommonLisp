@@ -1,8 +1,8 @@
 /*
  * LispShell.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShell.java,v 1.50 2003-12-08 02:55:44 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: LispShell.java,v 1.51 2004-01-07 19:55:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -144,8 +144,10 @@ public class LispShell extends Shell
             editor.newlineAndIndent();
             return; // For now.
         }
-        if (dotLine.flags() != STATE_PROMPT)
-            dotLine.setFlags(STATE_INPUT);
+        Line promptLine = posEndOfOutput.getLine();
+        Annotation a = new Annotation(posEndOfOutput.getOffset());
+        promptLine.setAnnotation(a);
+        promptLine.setFlags(STATE_PROMPT);
         Position end = editor.getBuffer().getEnd();
         Position pos = LispMode.findContainingSexp(end);
         boolean isComplete = (pos == null || pos.isBefore(posEndOfOutput));
@@ -154,8 +156,11 @@ public class LispShell extends Shell
             editor.eob();
             editor.insertLineSeparator();
             editor.getDotLine().setFlags(0);
-        } else
+        } else {
+            // Not complete; multiline input.
             editor.newline();
+            editor.getDotLine().setFlags(STATE_INPUT);
+        }
         if (needsRenumbering)
             renumber();
         editor.moveCaretToDotCol();
@@ -181,6 +186,7 @@ public class LispShell extends Shell
             if (line.flags() != STATE_PROMPT)
                 line.setFlags(STATE_INPUT);
             appendString(resetCommand.concat("\n"));
+            Editor.currentEditor().eob();
             send(resetCommand);
         }
     }
@@ -212,6 +218,9 @@ public class LispShell extends Shell
         Runnable r = new Runnable() {
             public void run()
             {
+                Position pos = getEnd();
+                if (pos != null)
+                    pos.getLine().setFlags(0); // This value will propagate.
                 if (output.length() > 0)
                     appendString(output);
                 updateDisplayInAllFrames();

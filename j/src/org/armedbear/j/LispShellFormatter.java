@@ -1,8 +1,8 @@
 /*
  * LispShellFormatter.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispShellFormatter.java,v 1.9 2003-12-04 14:56:08 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: LispShellFormatter.java,v 1.10 2004-01-07 19:56:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,57 +49,49 @@ public final class LispShellFormatter extends Formatter
             return segmentList;
         }
         final String text = getDetabbedText(line);
-        final String trim = text.trim();
-        if (trim.length() > 0 && trim.charAt(0) == ';') {
-            addSegment(text, FORMAT_COMMENT);
-            return segmentList;
-        }
-        switch (line.flags()) {
-            case STATE_PROMPT: {
-                int end = getPromptEndIndex(text);
-                if (end > 0) {
-                    line.setFlags(STATE_PROMPT);
-                    addSegment(text, 0, end, FORMAT_PROMPT);
-                    addSegment(text, end, FORMAT_INPUT);
+        Annotation a = line.getAnnotation();
+        if (a != null) {
+            // Prompt line.
+            int index = a.getIntegerValue();
+            if (index > 0 && index <= text.length()) {
+                addSegment(text, 0, index, FORMAT_PROMPT);
+                // There might be a comment at the end of the input.
+                int commentStart = text.indexOf(';', index);
+                if (commentStart >= index) {
+                    addSegment(text, index, commentStart, FORMAT_INPUT);
+                    addSegment(text, commentStart, FORMAT_COMMENT);
                 } else
-                    addSegment(text, FORMAT_PROMPT);
+                    addSegment(text, index, FORMAT_INPUT);
                 return segmentList;
             }
-            case STATE_INPUT: {
-                int promptEnd = getPromptEndIndex(text);
-                if (promptEnd > 0) {
-                    addSegment(text, 0, promptEnd, FORMAT_PROMPT);
-                    int commentStart = text.indexOf(';', promptEnd);
-                    if (commentStart >= 0) {
-                        addSegment(text, promptEnd, commentStart, FORMAT_INPUT);
-                        addSegment(text, commentStart, FORMAT_COMMENT);
-                    } else
-                        addSegment(text, promptEnd, FORMAT_INPUT);
-                } else {
-                    // No prompt.
-                    int commentStart = text.indexOf(';');
-                    if (commentStart >= 0) {
-                        addSegment(text, 0, commentStart, FORMAT_INPUT);
-                        addSegment(text, commentStart, FORMAT_COMMENT);
-                    } else
-                        addSegment(text, FORMAT_INPUT);
-                }
-                return segmentList;
-            }
-            default:
-                break;
         }
-        if (line.next() == null) {
-            // Last line of buffer. Check for prompt.
-            int end = getPromptEndIndex(text);
-            if (end > 0) {
+        if (line.flags() == 0) {
+            int promptEnd = getPromptEndIndex(text);
+            if (promptEnd > 0) {
+                line.setAnnotation(new Annotation(promptEnd));
                 line.setFlags(STATE_PROMPT);
-                addSegment(text, 0, end, FORMAT_PROMPT);
-                addSegment(text, end, FORMAT_INPUT);
+
+                addSegment(text, 0, promptEnd, FORMAT_PROMPT);
+                int commentStart = text.indexOf(';', promptEnd);
+                if (commentStart >= promptEnd) {
+                    addSegment(text, promptEnd, commentStart, FORMAT_INPUT);
+                    addSegment(text, commentStart, FORMAT_COMMENT);
+                } else
+                    addSegment(text, promptEnd, FORMAT_INPUT);
                 return segmentList;
             }
+            // LispShell.enter() calls setFlags(STATE_INPUT), so this line
+            // must be output.
+            line.setFlags(STATE_OUTPUT);
+            // Fall through...
         }
-        addSegment(text, FORMAT_TEXT);
+        int format = (line.flags() == STATE_INPUT) ? FORMAT_INPUT : FORMAT_TEXT;
+        int commentStart = text.indexOf(';');
+        if (commentStart >= 0) {
+            addSegment(text, 0, commentStart, format);
+            addSegment(text, commentStart, FORMAT_COMMENT);
+        } else
+            addSegment(text, format);
         return segmentList;
     }
 
