@@ -2,7 +2,7 @@
  * NntpSession.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NntpSession.java,v 1.1.1.1 2002-09-24 16:10:09 piso Exp $
+ * $Id: NntpSession.java,v 1.2 2002-10-02 17:50:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,6 +100,8 @@ public final class NntpSession
     {
         writeLine("ARTICLE ".concat(String.valueOf(articleNumber)));
         String response = readLine();
+        if (response == null)
+            return null;
         if (!response.startsWith("220"))
             return null;
         echo = false;
