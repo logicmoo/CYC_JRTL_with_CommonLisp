@@ -1,7 +1,7 @@
 ;;; reduce.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: reduce.lisp,v 1.1 2003-06-10 16:04:55 piso Exp $
+;;; $Id: reduce.lisp,v 1.2 2003-06-11 01:02:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@
       (if ivp initial-value (funcall function))
       (if (listp sequence)
           (if from-end
-              (list-reduce-from-end  function sequence start end initial-value ivp key)
+              (list-reduce-from-end function sequence start end initial-value ivp key)
               (list-reduce function sequence start end initial-value ivp key))
           (let* ((disp (if from-end -1 1))
                  (index (if from-end (1- end) start))
