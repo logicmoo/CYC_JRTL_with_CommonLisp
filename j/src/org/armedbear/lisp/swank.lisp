@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.4 2004-09-03 19:39:50 piso Exp $
+;;; $Id: swank.lisp,v 1.5 2004-09-04 00:56:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,6 +152,7 @@
          (write obj :stream stream))))
 
 (defun arglist-to-string (arglist package)
+  (declare (ignorable package))
   (let ((result
          (with-output-to-string (s)
            (write-arglist arglist s))))
