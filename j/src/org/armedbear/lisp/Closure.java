@@ -1,8 +1,8 @@
 /*
  * Closure.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.65 2004-01-01 01:33:30 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Closure.java,v 1.66 2004-01-16 12:51:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,7 @@ public class Closure extends Function
     private final Parameter[] auxVars;
     private final LispObject body;
     private final Environment environment;
+    private final boolean andKey;
     private final boolean allowOtherKeys;
     private Symbol restVar;
     private Symbol envVar;
@@ -70,6 +71,7 @@ public class Closure extends Function
         super(name, getCurrentPackage());
         this.lambdaList = lambdaList;
         Debug.assertTrue(lambdaList == NIL || lambdaList instanceof Cons);
+        boolean andKey = false;
         boolean allowOtherKeys = false;
         if (lambdaList instanceof Cons) {
             final int length = lambdaList.length();
@@ -112,6 +114,7 @@ public class Closure extends Function
                         arity = -1; // FIXME
                     } else if (obj == Symbol.AND_KEY) {
                         state = STATE_KEYWORD;
+                        andKey = true;
                         arity = -1;
                     } else if (obj == Symbol.AND_ALLOW_OTHER_KEYS) {
                         allowOtherKeys = true;
@@ -229,6 +232,7 @@ public class Closure extends Function
         }
         this.body = body;
         this.environment = env;
+        this.andKey = andKey;
         this.allowOtherKeys = allowOtherKeys;
         minArgs = requiredParameters != null ? requiredParameters.length : 0;
         if (arity >= 0)
@@ -682,22 +686,33 @@ public class Closure extends Function
                     }
                 }
             }
-        } else {
+        } else if (argsUsed < args.length) {
             // No keyword parameters.
             if (argsUsed + 2 <= args.length) {
                 // Check for :ALLOW-OTHER-KEYS.
-                LispObject allowOtherKeysValue = null;
-                LispObject keyword = args[argsUsed];
-                if (keyword == Keyword.ALLOW_OTHER_KEYS) {
-                    allowOtherKeysValue = args[argsUsed + 1];
-                    argsUsed += 2;
+                LispObject allowOtherKeysValue = NIL;
+                int n = argsUsed;
+                while (n < args.length) {
+                    LispObject keyword = args[n];
+                    if (keyword == Keyword.ALLOW_OTHER_KEYS) {
+                        allowOtherKeysValue = args[n+1];
+                        break;
+                    }
+                    n += 2;
                 }
-                if (allowOtherKeys ||
-                    (allowOtherKeysValue != null && allowOtherKeysValue != NIL))
-                {
+                if (allowOtherKeys || allowOtherKeysValue != NIL) {
                     // Skip keyword/value pairs.
                     while (argsUsed + 2 <= args.length)
                         argsUsed += 2;
+                } else if (andKey) {
+                    LispObject keyword = args[argsUsed];
+                    if (keyword == Keyword.ALLOW_OTHER_KEYS) {
+                        // Section 3.4.1.4: "Note that if &key is present, a
+                        // keyword argument of :allow-other-keys is always
+                        // permitted---regardless of whether the associated
+                        // value is true or false."
+                        argsUsed += 2;
+                    }
                 }
             }
             if (argsUsed < args.length) {
