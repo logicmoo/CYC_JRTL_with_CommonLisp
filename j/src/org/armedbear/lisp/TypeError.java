@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: TypeError.java,v 1.7 2003-09-20 17:02:05 piso Exp $
+ * $Id: TypeError.java,v 1.8 2003-09-22 02:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,9 @@ public final class TypeError extends LispError
 
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
-        if (type == Symbol.ERROR)
+        if (type == Symbol.TYPE_ERROR)
+            return T;
+        if (type == BuiltInClass.TYPE_ERROR)
             return T;
         return super.typep(type);
     }
