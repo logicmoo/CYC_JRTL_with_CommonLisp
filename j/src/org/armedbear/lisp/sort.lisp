@@ -1,7 +1,7 @@
 ;;; sort.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sort.lisp,v 1.3 2003-06-10 15:38:43 piso Exp $
+;;; $Id: sort.lisp,v 1.4 2003-09-18 18:07:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,8 +124,9 @@
 ;;; MERGE (from ECL)
 
 (defun merge (result-type sequence1 sequence2 predicate
-                          &key (key #'identity)
+                          &key key
                           &aux (l1 (length sequence1)) (l2 (length sequence2)))
+  (unless key (setq key #'identity))
   (do ((newseq (make-sequence result-type (+ l1 l2)))
        (j 0 (1+ j))
        (i1 0)
