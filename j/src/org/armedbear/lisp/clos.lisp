@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.29 2003-12-10 16:33:58 piso Exp $
+;;; $Id: clos.lisp,v 1.30 2003-12-10 17:31:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -506,9 +506,6 @@
    class
    (allocate-slot-storage (count-if #'instance-slot-p (class-slots class))
                           +slot-unbound+)))
-
-(defun allocate-instance (class)
-  (std-allocate-instance class))
 
 (defun make-instance-standard-class (metaclass
                                      &key name direct-superclasses direct-slots
@@ -1415,6 +1412,11 @@
 
 ;;; Instance creation and initialization
 
+(defgeneric allocate-instance (class &rest initargs &key &allow-other-keys))
+
+(defmethod allocate-instance ((class standard-class) &rest initargs)
+  (std-allocate-instance class))
+
 (defgeneric make-instance (class &key))
 
 (defmethod make-instance ((class standard-class) &rest initargs)
@@ -1429,7 +1431,7 @@
           (when (eq (getf initargs key not-found) not-found)
             (setf default-initargs (append default-initargs (list key (funcall fn))))))
         (setf initargs (append initargs default-initargs)))))
-  (let ((instance (allocate-instance class)))
+  (let ((instance (std-allocate-instance class)))
     (apply #'initialize-instance instance initargs)
     instance))
 
@@ -1469,6 +1471,7 @@
 ;;; change-class
 
 (defgeneric change-class (instance new-class &key))
+
 (defmethod change-class
   ((old-instance standard-object)
    (new-class standard-class)
@@ -1493,6 +1496,7 @@
   (apply #'change-class instance (find-class new-class) initargs))
 
 (defgeneric update-instance-for-different-class (old new &key))
+
 (defmethod update-instance-for-different-class
   ((old standard-object) (new standard-object) &rest initargs)
   (let ((added-slots
