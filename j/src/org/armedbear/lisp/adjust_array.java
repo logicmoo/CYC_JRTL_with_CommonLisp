@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.10 2004-02-25 18:37:26 piso Exp $
+ * $Id: adjust_array.java,v 1.11 2004-02-26 02:13:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,30 @@ public final class adjust_array extends Primitive
                 if (fillPointer != NIL)
                     v2.setFillPointer(fillPointer);
                 return v2;
+            }
+        }
+        // rank > 1
+        final int rank = dimensions.listp() ? dimensions.length() : 1;
+        int[] dimv = new int[rank];
+        if (dimensions.listp()) {
+            for (int i = 0; i < rank; i++) {
+                LispObject dim = dimensions.car();
+                dimv[i] = Fixnum.getValue(dim);
+                dimensions = dimensions.cdr();
+            }
+        } else
+            dimv[0] = Fixnum.getValue(dimensions);
+        if (array instanceof SimpleArray) {
+            SimpleArray a = (SimpleArray) array;
+            if (displacedTo != NIL) {
+                final int displacement;
+                if (displacedIndexOffset == NIL)
+                    displacement = 0;
+                else
+                    displacement = Fixnum.getValue(displacedIndexOffset);
+                return a.adjustArray(dimv,
+                                     checkArray(displacedTo),
+                                     displacement);
             }
         }
         return signal(new LispError("ADJUST-ARRAY: unsupported case."));

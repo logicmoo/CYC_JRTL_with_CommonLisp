@@ -2,7 +2,7 @@
  * ComplexArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexArray.java,v 1.2 2004-02-26 01:36:02 piso Exp $
+ * $Id: ComplexArray.java,v 1.3 2004-02-26 02:12:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.lisp;
 public final class ComplexArray extends AbstractArray
 {
     private final int[] dimv;
+    private final LispObject elementType;
     private final int totalSize;
 
     // For non-displaced arrays.
@@ -33,18 +34,23 @@ public final class ComplexArray extends AbstractArray
     private AbstractArray array;
     private int displacement;
 
-    public ComplexArray(int[] dimv)
+    public ComplexArray(int[] dimv, LispObject elementType)
     {
         this.dimv = dimv;
+        this.elementType = elementType;
         totalSize = computeTotalSize(dimv);
         data = new LispObject[totalSize];
         for (int i = totalSize; i-- > 0;)
             data[i] = NIL;
     }
 
-    public ComplexArray(int[] dimv, LispObject initialContents) throws ConditionThrowable
+    public ComplexArray(int[] dimv,
+                        LispObject elementType,
+                        LispObject initialContents)
+        throws ConditionThrowable
     {
         this.dimv = dimv;
+        this.elementType = elementType;
         final int rank = dimv.length;
         LispObject rest = initialContents;
         for (int i = 0; i < rank; i++) {
@@ -59,6 +65,7 @@ public final class ComplexArray extends AbstractArray
     public ComplexArray(int[] dimv, AbstractArray array, int displacement)
     {
         this.dimv = dimv;
+        this.elementType = array.getElementType();
         this.array = array;
         this.displacement = displacement;
         totalSize = computeTotalSize(dimv);
@@ -149,7 +156,7 @@ public final class ComplexArray extends AbstractArray
 
     public LispObject getElementType()
     {
-        return T;
+        return elementType;
     }
 
     public int getTotalSize()

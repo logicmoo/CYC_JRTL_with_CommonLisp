@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.1 2004-02-26 01:34:01 piso Exp $
+ * $Id: SimpleArray.java,v 1.2 2004-02-26 02:12:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,20 +24,26 @@ package org.armedbear.lisp;
 public final class SimpleArray extends AbstractArray
 {
     private final int[] dimv;
+    private final LispObject elementType;
     private final LispObject[] data;
 
-    public SimpleArray(int[] dimv)
+    public SimpleArray(int[] dimv, LispObject elementType)
     {
         this.dimv = dimv;
+        this.elementType = elementType;
         int size = computeTotalSize(dimv);
         data = new LispObject[size];
         for (int i = 0; i < size; i++)
             data[i] = NIL;
     }
 
-    public SimpleArray(int[] dimv, LispObject initialContents) throws ConditionThrowable
+    public SimpleArray(int[] dimv,
+                       LispObject elementType,
+                       LispObject initialContents)
+        throws ConditionThrowable
     {
         this.dimv = dimv;
+        this.elementType = elementType;
         final int rank = dimv.length;
         LispObject rest = initialContents;
         for (int i = 0; i < rank; i++) {
@@ -54,6 +60,7 @@ public final class SimpleArray extends AbstractArray
         if (rank < 2)
             Debug.assertTrue(false);
         dimv = new int[rank];
+        this.elementType = T;
         LispObject rest = initialContents;
         for (int i = 0; i < rank; i++) {
             dimv[i] = rest.length();
@@ -151,7 +158,7 @@ public final class SimpleArray extends AbstractArray
 
     public LispObject getElementType()
     {
-        return T;
+        return elementType;
     }
 
     public int getTotalSize()
@@ -193,5 +200,11 @@ public final class SimpleArray extends AbstractArray
         sb.append('A');
         appendContents(dimv, 0, sb);
         return sb.toString();
+    }
+
+    public AbstractArray adjustArray(int[] dimv, AbstractArray displacedTo,
+                                     int displacement)
+    {
+        return new ComplexArray(dimv, displacedTo, displacement);
     }
 }

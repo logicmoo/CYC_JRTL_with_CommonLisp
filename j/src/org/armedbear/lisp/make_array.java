@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: make_array.java,v 1.21 2004-02-26 01:39:27 piso Exp $
+ * $Id: make_array.java,v 1.22 2004-02-26 02:13:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,14 +86,15 @@ public final class make_array extends Primitive
             }
             return new ComplexArray(dimv, array, displacement);
         }
+        LispObject upgradedType =
+            getUpgradedArrayElementType(elementType);
         if (rank == 0) {
             LispObject data;
             if (initialElementProvided != NIL)
                 data = initialElement;
             else
                 data = initialContents;
-            return new ZeroRankArray(getUpgradedArrayElementType(elementType),
-                                     data, adjustable != NIL);
+            return new ZeroRankArray(upgradedType, data, adjustable != NIL);
         }
         if (rank == 1) {
             final int size = dimv[0];
@@ -113,8 +114,6 @@ public final class make_array extends Primitive
                 return signal(new LispError(sb.toString()));
             }
             AbstractVector v;
-            LispObject upgradedType =
-                getUpgradedArrayElementType(elementType);
             if (upgradedType == Symbol.CHARACTER) {
                 if (fillPointer != NIL || adjustable != NIL)
                     v = new ComplexString(size);
@@ -153,21 +152,21 @@ public final class make_array extends Primitive
                 v.setFillPointer(fillPointer);
             return v;
         }
-        // rank != 1
+        // rank > 1
         AbstractArray array;
         if (adjustable == NIL) {
             if (initialContents != NIL) {
-                array = new SimpleArray(dimv, initialContents);
+                array = new SimpleArray(dimv, upgradedType, initialContents);
             } else {
-                array = new SimpleArray(dimv);
+                array = new SimpleArray(dimv, upgradedType);
                 if (initialElementProvided != NIL)
                     array.fill(initialElement);
             }
         } else {
             if (initialContents != NIL) {
-                array = new ComplexArray(dimv, initialContents);
+                array = new ComplexArray(dimv, upgradedType, initialContents);
             } else {
-                array = new ComplexArray(dimv);
+                array = new ComplexArray(dimv, upgradedType);
                 if (initialElementProvided != NIL)
                     array.fill(initialElement);
             }
