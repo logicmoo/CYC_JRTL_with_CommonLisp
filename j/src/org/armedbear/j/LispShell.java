@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispShell.java,v 1.80 2004-10-25 01:43:32 piso Exp $
+ * $Id: LispShell.java,v 1.81 2004-12-25 13:41:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,6 +93,9 @@ public class LispShell extends Shell
                                          boolean startSlime)
     {
         if (startSlime) {
+            File portFile = File.getInstance(Directories.getEditorDirectory(),
+                                             "swank");
+            portFile.delete();
             if (shellCommand.indexOf("sbcl") >= 0) {
                 File lispHome = File.getInstance(Site.getLispHome());
                 if (lispHome == null)
