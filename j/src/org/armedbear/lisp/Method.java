@@ -1,8 +1,8 @@
 /*
  * Method.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: Method.java,v 1.5 2004-11-03 15:39:01 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: Method.java,v 1.6 2005-04-05 23:23:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ public final class Method extends StandardObject
             LispObject name =
                 ((GenericFunction)genericFunction).getGenericFunctionName();
             if (name != null) {
-                StringBuffer sb = new StringBuffer("#<");
+                StringBuffer sb = new StringBuffer();
                 sb.append(getLispClass().getSymbol().writeToString());
                 sb.append(' ');
                 sb.append(name.writeToString());
@@ -86,8 +86,7 @@ public final class Method extends StandardObject
                     sb.append(' ');
                     sb.append(names.nreverse().writeToString());
                 }
-                sb.append('>');
-                return sb.toString();
+                return unreadableString(sb.toString());
             }
         }
         return super.writeToString();
