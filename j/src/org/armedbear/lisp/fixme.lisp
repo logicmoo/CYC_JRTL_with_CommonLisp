@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.11 2003-11-06 17:13:49 piso Exp $
+;;; $Id: fixme.lisp,v 1.12 2003-12-06 02:45:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,10 +31,6 @@
           (push `(defvar ,var) res))))
     (when res
       `(progn ,@(nreverse res)))))
-
-;; Should be a special operator.
-(defmacro locally (&rest forms)
-  `(progn ,@forms))
 
 (defun proclaim (decl)
   nil)
