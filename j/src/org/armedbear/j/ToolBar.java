@@ -1,8 +1,8 @@
 /*
  * ToolBar.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: ToolBar.java,v 1.2 2002-10-02 18:27:06 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: ToolBar.java,v 1.3 2003-06-03 17:40:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,12 +25,13 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JToolBar;
-import org.xml.sax.AttributeList;
-import org.xml.sax.DocumentHandler;
-import org.xml.sax.HandlerBase;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.Parser;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 public class ToolBar extends JToolBar implements ActionListener, ToolBarConstants
 {
@@ -140,13 +141,15 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
         if (!file.isFile())
             return null;
         try {
-            Parser parser = (Parser) Class.forName(
-                "org.armedbear.j.aelfred.SAXDriver").newInstance();
+            String defaultReader = "org.apache.crimson.parser.XMLReaderImpl";
+            XMLReader xmlReader =
+                XMLReaderFactory.createXMLReader(defaultReader);
+            Log.debug("ToolBar.createToolBar xmlReader = " + xmlReader);
             ToolBar toolBar = new ToolBar(frame);
             Handler handler = new Handler(toolBar);
-            parser.setDocumentHandler(handler);
+            xmlReader.setContentHandler(handler);
             InputSource inputSource = new InputSource(file.getInputStream());
-            parser.parse(inputSource);
+            xmlReader.parse(inputSource);
             return toolBar;
         }
         catch (Exception e) {
@@ -155,7 +158,7 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
         }
     }
 
-    private static class Handler extends HandlerBase implements DocumentHandler
+    private static class Handler extends DefaultHandler implements ContentHandler
     {
         private final ToolBar toolBar;
 
@@ -164,15 +167,15 @@ public class ToolBar extends JToolBar implements ActionListener, ToolBarConstant
             this.toolBar = toolBar;
         }
 
-        public void startElement(String name, AttributeList attributes)
-            throws SAXException
+        public void startElement(String uri, String localName, String qName,
+            Attributes attributes) throws SAXException
         {
-            if (name.equals("button")) {
-                String label = attributes.getValue("label");
-                String icon = attributes.getValue("icon");
-                String command = attributes.getValue("command");
+            if (localName.equals("button")) {
+                String label = attributes.getValue("", "label");
+                String icon = attributes.getValue("", "icon");
+                String command = attributes.getValue("", "command");
                 toolBar.addButton(label, icon, command);
-            } else if (name.equals("separator"))
+            } else if (localName.equals("separator"))
                 toolBar.addSeparator();
         }
     }
