@@ -1,8 +1,8 @@
 /*
  * SshSession.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: SshSession.java,v 1.9 2003-02-11 17:37:17 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: SshSession.java,v 1.10 2003-05-19 14:41:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,8 @@ public final class SshSession implements Constants
     private static final String PROMPT = "$ ";
 
     private static ArrayList sessionList;
+
+    private static CleanupThread cleanupThread;
 
     private String hostName;
     private String userName;
@@ -104,19 +106,24 @@ public final class SshSession implements Constants
         if (sessionList == null)
             sessionList = new ArrayList();
         sessionList.add(session);
-        Log.debug("leaving register() size = " + sessionList.size());
+        if (cleanupThread == null) {
+            cleanupThread = new CleanupThread(cleanupRunnable);
+            cleanupThread.start();
+        }
+        Log.debug("leaving register() session count = " + sessionList.size());
     }
 
     private static synchronized void unregister(SshSession session)
     {
         if (sessionList == null) {
-            Debug.bug("SshSession.unregister no session list");
+            Debug.bug();
             return;
         }
         if (!sessionList.contains(session))
-            Debug.bug("SshSession.unregister session not in list");
+            Debug.bug();
         sessionList.remove(session);
-        Log.debug("leaving unregister() size = " + sessionList.size());
+        Log.debug("leaving unregister() session count = "
+            + sessionList.size());
     }
 
     public static synchronized SshSession getSession(SshFile file)
@@ -144,6 +151,7 @@ public final class SshSession implements Constants
         return new SshSession(file, true);
     }
 
+    // Called only from synchronized methods.
     private static SshSession lockSession(SshFile file)
     {
         if (sessionList != null) {
@@ -163,6 +171,7 @@ public final class SshSession implements Constants
         return null;
     }
 
+    // Called only from synchronized methods.
     private static SshSession findSession(SshFile file)
     {
         if (sessionList != null) {
@@ -201,7 +210,7 @@ public final class SshSession implements Constants
             Debug.bug("SshSession.unlock session was not locked");
         synchronized (SshSession.class) {
             if (sessionList != null)
-                Log.debug("unlock size = " + sessionList.size());
+                Log.debug("unlock session count = " + sessionList.size());
             else
                 Debug.bug("SshSession.unlock no session list");
         }
@@ -459,10 +468,12 @@ public final class SshSession implements Constants
 
     public synchronized boolean connect()
     {
-        if (connected)
+        if (connected) {
+            Log.debug("SshSession.connect(): already connected");
             return true;
+        }
         FastStringBuffer sb = new FastStringBuffer("jpty ssh ");
-        if (userName != null && userName.length() != 0) {
+        if (userName != null && userName.length() > 0) {
             sb.append("-l ");
             sb.append(userName);
             sb.append(' ');
@@ -869,6 +880,7 @@ public final class SshSession implements Constants
             }
             catch (InterruptedException e) {
                 Log.error(e);
+                return null;
             }
             s = output.toString();
             int index = 0;
@@ -1056,36 +1068,50 @@ public final class SshSession implements Constants
         }
     }
 
-    public static synchronized void cleanup()
+    private static synchronized void cleanup()
     {
+        // Walk buffer list in event dispatch thread.
+        if (!SwingUtilities.isEventDispatchThread()) {
+            Debug.bug();
+            return;
+        }
         if (sessionList != null) {
             for (int i = sessionList.size(); i-- > 0;) {
                 SshSession session = (SshSession) sessionList.get(i);
+                if (session.isLocked())
+                    continue;
+                String hostName = session.getHostName();
                 boolean inUse = false;
                 for (BufferIterator it = new BufferIterator(); it.hasNext();) {
                     Buffer buf = it.nextBuffer();
                     if (buf.getFile() instanceof SshFile) {
-                        if (session.getHostName().equals(buf.getFile().getHostName())) {
+                        if (hostName.equals(buf.getFile().getHostName())) {
                             inUse = true;
                             break;
                         }
                     }
                 }
-                if (!inUse) {
-                    if (session.isLocked())
-                        Debug.bug("SshSession.cleanup session is not in use but still locked");
-                    else {
-                        Log.debug("SshSession.cleanup closing connection to " + session.getHostName());
-                        session.dispose();
-                    }
+                if (!inUse)
+                    session.dispose();
+            }
+            Log.debug("leaving SshSession.cleanup session count = " +
+                sessionList.size());
+            if (sessionList.size() == 0) {
+                sessionList = null;
+                if (cleanupThread != null) {
+                    cleanupThread.cancel();
+                    cleanupThread = null;
                 }
             }
-            Log.debug("leaving SshSession.cleanup size = " + sessionList.size());
-            if (sessionList.size() == 0)
-                sessionList = null;
-        } else
-            Debug.bug("SshSession.cleanup no session list");
+        }
     }
+
+    private static final Runnable cleanupRunnable = new Runnable() {
+        public void run()
+        {
+            cleanup();
+        }
+    };
 
     private String stdOutFilter(String s)
     {

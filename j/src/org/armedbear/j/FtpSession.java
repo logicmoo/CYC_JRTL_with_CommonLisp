@@ -2,7 +2,7 @@
  * FtpSession.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FtpSession.java,v 1.2 2003-05-16 17:18:15 piso Exp $
+ * $Id: FtpSession.java,v 1.3 2003-05-19 14:37:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,11 +35,14 @@ import java.net.SocketException;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import javax.swing.SwingUtilities;
 
 public class FtpSession implements Constants
 {
     private static final boolean echo = true;
-    private static Vector sessions = new Vector();
+    private static final Vector sessionList = new Vector();
+
+    private static CleanupThread cleanupThread;
 
     private String host;
     private int port;
@@ -62,7 +65,7 @@ public class FtpSession implements Constants
 
     private FtpSession()
     {
-        sessions.add(this);
+        register(this);
     }
 
     private FtpSession(Login login, int port)
@@ -71,8 +74,25 @@ public class FtpSession implements Constants
         user = login.user;
         password = login.password;
         this.port = port;
-        usePassiveMode = Editor.preferences().getBooleanProperty(Property.FTP_USE_PASSIVE_MODE);
-        sessions.add(this);
+        usePassiveMode =
+            Editor.preferences().getBooleanProperty(Property.FTP_USE_PASSIVE_MODE);
+        register(this);
+    }
+
+    private static synchronized void register(FtpSession session)
+    {
+        sessionList.add(session);
+        if (cleanupThread == null) {
+            cleanupThread = new CleanupThread(cleanupRunnable);
+            cleanupThread.start();
+        }
+    }
+
+    private static synchronized void unregister(FtpSession session)
+    {
+        if (!sessionList.contains(session))
+            Debug.bug();
+        sessionList.remove(session);
     }
 
     protected Object clone()
@@ -980,18 +1000,23 @@ public class FtpSession implements Constants
         return null;
     }
 
-    public static void cleanup()
+    private static synchronized void cleanup()
     {
-        Log.debug("entering FtpSession.cleanup " + sessions.size() + " session(s)");
-        for (int i = sessions.size() - 1; i >= 0; i--) {
-            FtpSession session = (FtpSession) sessions.get(i);
-            if (session.isLocked())
-                Log.debug("session " + i + " is locked");
+        // Walk buffer list in event dispatch thread.
+        if (!SwingUtilities.isEventDispatchThread()) {
+            Debug.bug();
+            return;
+        }
+        if (sessionList.size() == 0)
+            return; // Nothing to do.
+        for (int i = sessionList.size(); i-- > 0;) {
+            FtpSession session = (FtpSession) sessionList.get(i);
+            String host = session.getHost();
             boolean inUse = false;
             for (BufferIterator it = new BufferIterator(); it.hasNext();) {
                 Buffer buf = it.nextBuffer();
                 if (buf.getFile() instanceof FtpFile) {
-                    if (session.getHost().equals(buf.getFile().getHostName())) {
+                    if (host.equals(buf.getFile().getHostName())) {
                          inUse = true;
                          break;
                     }
@@ -999,11 +1024,25 @@ public class FtpSession implements Constants
             }
             if (!inUse) {
                 session.close();
-                sessions.remove(i);
+                unregister(session);
             }
         }
-        Log.debug("leaving FtpSession.cleanup " + sessions.size() + " session(s)");
+        Log.debug("leaving FtpSession.cleanup session count = " +
+            sessionList.size());
+        if (sessionList.size() == 0) {
+            if (cleanupThread != null) {
+                cleanupThread.cancel();
+                cleanupThread = null;
+            }
+        }
     }
+
+    private static final Runnable cleanupRunnable = new Runnable() {
+        public void run()
+        {
+            cleanup();
+        }
+    };
 
     public synchronized void disconnect()
     {
@@ -1180,8 +1219,8 @@ public class FtpSession implements Constants
 
     private static FtpSession lockSession(String host, int port)
     {
-        for (int i = 0; i < sessions.size(); i++) {
-            FtpSession session = (FtpSession) sessions.get(i);
+        for (int i = 0; i < sessionList.size(); i++) {
+            FtpSession session = (FtpSession) sessionList.get(i);
             if (session.host.equals(host) && session.port == port) {
                 if (session.lock())
                     return session;
@@ -1192,8 +1231,8 @@ public class FtpSession implements Constants
 
     private static FtpSession findSession(String host, int port)
     {
-        for (int i = 0; i < sessions.size(); i++) {
-            FtpSession session = (FtpSession) sessions.get(i);
+        for (int i = 0; i < sessionList.size(); i++) {
+            FtpSession session = (FtpSession) sessionList.get(i);
             if (session.host.equals(host) && session.port == port)
                 return session;
         }
