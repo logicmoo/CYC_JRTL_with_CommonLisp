@@ -2,7 +2,7 @@
  * AsynchronousShellCommand.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: AsynchronousShellCommand.java,v 1.1 2002-10-05 01:31:19 piso Exp $
+ * $Id: AsynchronousShellCommand.java,v 1.2 2002-10-05 13:09:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,6 +130,7 @@ public final class AsynchronousShellCommand implements Constants, Runnable
                 outputBuffer.insertString(posEndOfBuffer, s);
                 if (outputBuffer.needsRenumbering())
                     outputBuffer.renumber();
+                outputBuffer.enforceOutputLimit(Property.SHELL_OUTPUT_LIMIT);
                 for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                     Editor ed = it.nextEditor();
                     if (ed.getBuffer() == outputBuffer) {
@@ -176,6 +177,7 @@ public final class AsynchronousShellCommand implements Constants, Runnable
             setProperty(Property.HIGHLIGHT_MATCHING_BRACKET, false);
             setProperty(Property.HIGHLIGHT_BRACKETS, false);
             appendLine("");
+            renumber();
             setInitialized(true);
         }
 
