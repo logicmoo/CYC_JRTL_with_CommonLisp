@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.16 2003-07-16 18:17:22 piso Exp $
+;;; $Id: defstruct.lisp,v 1.17 2003-09-07 16:42:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,14 +42,21 @@
     `((defun ,pred (object)
         (typep object ',*ds-name*)))))
 
+(defmacro get-accessor (slot)
+  (case slot
+    (0 #'%structure-ref-0)
+    (1 #'%structure-ref-1)
+    (2 #'%structure-ref-2)
+    (t
+     `(lambda (instance) (%structure-ref instance ,slot)))))
+
 (defun define-access-function (slot-name index)
   (let ((accessor
          (if *ds-conc-name*
              (intern (concatenate 'string (symbol-name *ds-conc-name*) (symbol-name slot-name)))
              slot-name))
         (setf-expander (gensym)))
-    `((defun ,accessor (instance)
-        (%structure-ref instance ,index))
+    `((setf (symbol-function ',accessor) (get-accessor ,index))
       (defun ,setf-expander (instance new-value)
         (%structure-set instance ,index new-value))
       (defsetf ,accessor ,setf-expander))))
