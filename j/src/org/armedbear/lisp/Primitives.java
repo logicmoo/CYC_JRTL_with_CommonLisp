@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.9 2003-01-31 16:23:55 piso Exp $
+ * $Id: Primitives.java,v 1.10 2003-01-31 18:12:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,59 +48,63 @@ public final class Primitives extends Module
     private static final int EXIT                       = 21;
     private static final int FBOUNDP                    = 22;
     private static final int FIRST                      = 23;
-    private static final int FMAKUNBOUND                = 24;
-    private static final int FOURTH                     = 25;
-    private static final int FUNCTIONP                  = 26;
-    private static final int IF                         = 27;
-    private static final int LAMBDA                     = 28;
-    private static final int LAST                       = 29;
-    private static final int LENGTH                     = 30;
-    private static final int LET                        = 31;
-    private static final int LETX                       = 32;
-    private static final int LIST                       = 33;
-    private static final int LISTP                      = 34;
-    private static final int LISTX                      = 35;
-    private static final int LIST_ALL_PACKAGES          = 36;
-    private static final int MAKE_SYMBOL                = 37;
-    private static final int MAKUNBOUND                 = 38;
-    private static final int MEMBER                     = 39;
-    private static final int MOD                        = 40;
-    private static final int MULTIPLY                   = 41;
-    private static final int NOT                        = 42;
-    private static final int NULL                       = 43;
-    private static final int NUMBERP                    = 44;
-    private static final int PREDECESSOR                = 45;
-    private static final int PROGN                      = 46;
-    private static final int QUOTE                      = 47;
-    private static final int REST                       = 48;
-    private static final int ROOM                       = 49;
-    private static final int RPLACA                     = 50;
-    private static final int RPLACD                     = 51;
-    private static final int SECOND                     = 52;
-    private static final int SET                        = 53;
-    private static final int SIMPLE_VECTOR_P            = 54;
-    private static final int SPECIAL_OPERATOR_P         = 55;
-    private static final int STRINGP                    = 56;
-    private static final int STRING_EQUAL               = 57;
-    private static final int STRING_EQUAL_IGNORE_CASE   = 58;
-    private static final int SUBSEQ                     = 59;
-    private static final int SUBTRACT                   = 60;
-    private static final int SUCCESSOR                  = 61;
-    private static final int SYMBOLP                    = 62;
-    private static final int SYMBOL_FUNCTION            = 63;
-    private static final int SYMBOL_NAME                = 64;
-    private static final int SYMBOL_PACKAGE             = 65;
-    private static final int SYMBOL_PLIST               = 66;
-    private static final int SYMBOL_VALUE               = 67;
-    private static final int THIRD                      = 68;
-    private static final int VALUES                     = 69;
-    private static final int VALUES_LIST                = 70;
-    private static final int VECTORP                    = 71;
-    private static final int ZEROP                      = 72;
+    private static final int FLET                       = 24;
+    private static final int FMAKUNBOUND                = 25;
+    private static final int FOURTH                     = 26;
+    private static final int FUNCTIONP                  = 27;
+    private static final int IF                         = 28;
+    private static final int LABELS                     = 29;
+    private static final int LAMBDA                     = 30;
+    private static final int LAST                       = 31;
+    private static final int LENGTH                     = 32;
+    private static final int LET                        = 33;
+    private static final int LETX                       = 34;
+    private static final int LIST                       = 35;
+    private static final int LISTP                      = 36;
+    private static final int LISTX                      = 37;
+    private static final int LIST_ALL_PACKAGES          = 38;
+    private static final int MAKE_SYMBOL                = 39;
+    private static final int MAKUNBOUND                 = 40;
+    private static final int MEMBER                     = 41;
+    private static final int MOD                        = 42;
+    private static final int MULTIPLY                   = 43;
+    private static final int NOT                        = 44;
+    private static final int NULL                       = 45;
+    private static final int NUMBERP                    = 46;
+    private static final int PREDECESSOR                = 47;
+    private static final int PROGN                      = 48;
+    private static final int QUOTE                      = 49;
+    private static final int REST                       = 50;
+    private static final int ROOM                       = 51;
+    private static final int RPLACA                     = 52;
+    private static final int RPLACD                     = 53;
+    private static final int SECOND                     = 54;
+    private static final int SET                        = 55;
+    private static final int SIMPLE_VECTOR_P            = 56;
+    private static final int SPECIAL_OPERATOR_P         = 57;
+    private static final int STRINGP                    = 58;
+    private static final int STRING_EQUAL               = 59;
+    private static final int STRING_EQUAL_IGNORE_CASE   = 60;
+    private static final int SUBSEQ                     = 61;
+    private static final int SUBTRACT                   = 62;
+    private static final int SUCCESSOR                  = 63;
+    private static final int SYMBOLP                    = 64;
+    private static final int SYMBOL_FUNCTION            = 65;
+    private static final int SYMBOL_NAME                = 66;
+    private static final int SYMBOL_PACKAGE             = 67;
+    private static final int SYMBOL_PLIST               = 68;
+    private static final int SYMBOL_VALUE               = 69;
+    private static final int THIRD                      = 70;
+    private static final int VALUES                     = 71;
+    private static final int VALUES_LIST                = 72;
+    private static final int VECTORP                    = 73;
+    private static final int ZEROP                      = 74;
 
     private Primitives()
     {
         defineSpecialOperator("if", IF);
+        defineSpecialOperator("flet", FLET);
+        defineSpecialOperator("labels", LABELS);
         defineSpecialOperator("lambda", LAMBDA);
         defineSpecialOperator("let", LET);
         defineSpecialOperator("let*", LETX);
@@ -200,6 +204,10 @@ public final class Primitives extends Module
             case LAMBDA:                        // ### lambda
                 // Should be a macro.
                 return new Closure(args.car(), args.cdr(), env);
+            case FLET:                          // ### flet
+                return _flet(args, env, false);
+            case LABELS:                        // ### labels
+                return _flet(args, env, true);
             case LET:                           // ### let
                 return _let(args, env, false);
             case LETX:                          // ### let*
@@ -2430,70 +2438,38 @@ public final class Primitives extends Module
         return result;
     }
 
-    // ### flet
-    // e.g. (flet ((double (x) (+ x x))) ... )
-    public static final SpecialOperator FLET = new SpecialOperator("flet") {
-        public LispObject execute(LispObject args, Environment env)
-            throws LispException
-        {
-            // First argument is a list of local function definitions.
-            LispObject defs = checkList(args.car());
-            LispObject result;
-            if (defs != NIL) {
-                Environment oldDynEnv = dynEnv;
-                Environment ext = new Environment(env);
-                while (defs != NIL) {
-                    LispObject def = checkList(defs.car());
-                    Symbol symbol = checkSymbol(def.car());
-                    LispObject rest = def.cdr();
-                    LispObject parameters = rest.car();
-                    LispObject body = rest.cdr();
-                    body = new Cons(symbol, body);
-                    body = new Cons(Symbol.BLOCK, body);
-                    body = new Cons(body, NIL);
-                    Closure closure = new Closure(parameters, body, env);
-                    ext.bindFunctional(symbol, closure);
-                    defs = defs.cdr();
-                }
-                result = progn(args.cdr(), ext);
-                dynEnv = oldDynEnv;
-            } else
-                result = progn(args.cdr(), env);
-            return result;
-        }
-    };
-
-    // ### labels
-    public static final SpecialOperator LABELS = new SpecialOperator("labels") {
-        public LispObject execute(LispObject args, Environment env)
-            throws LispException
-        {
-            // First argument is a list of local function definitions.
-            LispObject defs = checkList(args.car());
-            LispObject result;
-            if (defs != NIL) {
-                Environment oldDynEnv = dynEnv;
-                Environment ext = new Environment(env);
-                while (defs != NIL) {
-                    LispObject def = checkList(defs.car());
-                    Symbol symbol = checkSymbol(def.car());
-                    LispObject rest = def.cdr();
-                    LispObject parameters = rest.car();
-                    LispObject body = rest.cdr();
-                    body = new Cons(symbol, body);
-                    body = new Cons(Symbol.BLOCK, body);
-                    body = new Cons(body, NIL);
-                    Closure closure = new Closure(parameters, body, ext);
-                    ext.bindFunctional(symbol, closure);
-                    defs = defs.cdr();
-                }
-                result = progn(args.cdr(), ext);
-                dynEnv = oldDynEnv;
-            } else
-                result = progn(args.cdr(), env);
-            return result;
-        }
-    };
+    private static final LispObject _flet(LispObject args, Environment env,
+        boolean recursive) throws LispException
+    {
+        // First argument is a list of local function definitions.
+        LispObject defs = checkList(args.car());
+        LispObject result;
+        if (defs != NIL) {
+            Environment oldDynEnv = dynEnv;
+            Environment ext = new Environment(env);
+            while (defs != NIL) {
+                LispObject def = checkList(defs.car());
+                Symbol symbol = checkSymbol(def.car());
+                LispObject rest = def.cdr();
+                LispObject parameters = rest.car();
+                LispObject body = rest.cdr();
+                body = new Cons(symbol, body);
+                body = new Cons(Symbol.BLOCK, body);
+                body = new Cons(body, NIL);
+                Closure closure;
+                if (recursive)
+                    closure = new Closure(parameters, body, ext);
+                else
+                    closure = new Closure(parameters, body, env);
+                ext.bindFunctional(symbol, closure);
+                defs = defs.cdr();
+            }
+            result = progn(args.cdr(), ext);
+            dynEnv = oldDynEnv;
+        } else
+            result = progn(args.cdr(), env);
+        return result;
+    }
 
     // ### block
     private static final SpecialOperator BLOCK = new SpecialOperator("block") {
