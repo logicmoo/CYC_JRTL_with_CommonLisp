@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.289 2003-07-07 18:28:19 piso Exp $
+ * $Id: Primitives.java,v 1.290 2003-07-07 18:59:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2704,17 +2704,13 @@ public final class Primitives extends Module
         }
     };
 
-    // ### in-package
-    private static final SpecialOperator IN_PACKAGE =
-        new SpecialOperator("in-package") {
-        public LispObject execute(LispObject args, Environment env)
-            throws LispError
+    // ### %in-package
+    private static final Primitive1 _IN_PACKAGE =
+        new Primitive1("%in-package", PACKAGE_SYS, false) {
+        public LispObject execute(LispObject arg) throws LispError
         {
-            if (args.length() != 1)
-                throw new WrongNumberOfArgumentsException(this);
-            LispObject arg = args.car();
-            LispString string = string(arg);
-            Package pkg = Packages.findPackage(string.getValue());
+            String packageName = javaString(arg);
+            Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
                 throw new PackageError("package " + arg + " does not exist");
             LispThread thread = LispThread.currentThread();
