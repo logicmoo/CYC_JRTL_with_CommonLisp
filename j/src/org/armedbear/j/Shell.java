@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.14 2002-10-19 13:30:35 piso Exp $
+ * $Id: Shell.java,v 1.15 2002-11-08 17:09:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,7 +173,6 @@ public class Shell extends CommandInterpreter implements Constants
 
     public void dispose()
     {
-        Log.debug("Shell.dispose");
         if (!checkProcess()) {
             Log.debug("checkProcess returned false");
             return;
@@ -182,10 +181,8 @@ public class Shell extends CommandInterpreter implements Constants
             public void run()
             {
                 try {
-                    Log.debug("stdin.write(3)");
                     stdin.write(3);
                     stdin.flush();
-                    Log.debug("stdin.write(\"exit\\n\")");
                     stdin.write("exit\n");
                     stdin.flush();
                     stdin.close();
@@ -201,7 +198,6 @@ public class Shell extends CommandInterpreter implements Constants
                 catch (InterruptedException e) {
                     Log.error(e);
                 }
-                Log.debug("dispose thread exiting");
             }
         };
         new Thread(r).start();
@@ -258,7 +254,6 @@ public class Shell extends CommandInterpreter implements Constants
                     Process p = getProcess();
                     if (p != null)
                         p.waitFor();
-                    Log.debug("watcher thread waitFor() returned");
                     setProcess(null);
                     if (stdoutThread != null)
                         stdoutThread.join();
@@ -277,7 +272,6 @@ public class Shell extends CommandInterpreter implements Constants
                 };
                 if (stderrThread != null)
                     SwingUtilities.invokeLater(processExitedRunnable);
-                Log.debug("watcher thread exiting");
             }
         };
         new Thread(r).start();
