@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.19 2004-10-13 00:22:19 piso Exp $
+ * $Id: SimpleString.java,v 1.20 2004-10-20 00:10:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,8 +103,6 @@ public final class SimpleString extends AbstractString
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.SIMPLE_STRING)
-            return T;
-        if (type == Symbol.SIMPLE_BASE_STRING)
             return T;
         if (type == Symbol.SIMPLE_ARRAY)
             return T;

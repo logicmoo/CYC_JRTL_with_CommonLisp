@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractString.java,v 1.6 2004-08-15 10:57:33 piso Exp $
+ * $Id: AbstractString.java,v 1.7 2004-10-20 00:08:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,6 @@ public abstract class AbstractString extends AbstractVector
     {
         if (type instanceof Symbol) {
             if (type == Symbol.STRING)
-                return T;
-            if (type == Symbol.BASE_STRING)
                 return T;
         }
         if (type == BuiltInClass.STRING)
