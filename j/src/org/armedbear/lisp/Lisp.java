@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.240 2004-05-25 15:53:08 piso Exp $
+ * $Id: Lisp.java,v 1.241 2004-05-25 17:58:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -897,8 +897,7 @@ public abstract class Lisp
             throw new NullPointerException();
         if (obj instanceof TwoWayStream) {
             Stream in = ((TwoWayStream)obj).getInputStream();
-            if (in.isCharacterStream())
-                return in;
+	    return checkCharacterInputStream(in);
         }
         if (obj instanceof Stream)
             if (((Stream)obj).isInputStream())
@@ -916,8 +915,7 @@ public abstract class Lisp
             throw new NullPointerException();
         if (obj instanceof TwoWayStream) {
             Stream out = ((TwoWayStream)obj).getOutputStream();
-            if (out.isCharacterStream())
-                return out;
+	    return checkCharacterOutputStream(out);
         }
         if (obj instanceof Stream)
             if (((Stream)obj).isOutputStream())
@@ -935,8 +933,7 @@ public abstract class Lisp
             throw new NullPointerException();
         if (obj instanceof TwoWayStream) {
             Stream in = ((TwoWayStream)obj).getInputStream();
-            if (in.isBinaryStream())
-                return in;
+	    return checkBinaryInputStream(in);
         }
         if (obj instanceof Stream)
             if (((Stream)obj).isInputStream())
@@ -954,8 +951,7 @@ public abstract class Lisp
             throw new NullPointerException();
         if (obj instanceof TwoWayStream) {
             Stream out = ((TwoWayStream)obj).getOutputStream();
-            if (out.isBinaryStream())
-                return out;
+	    return checkBinaryOutputStream(out);
         }
         if (obj instanceof Stream)
             if (((Stream)obj).isOutputStream())
@@ -977,8 +973,7 @@ public abstract class Lisp
             Stream stream = (Stream) obj;
             if (stream instanceof TwoWayStream) {
                 Stream in = ((TwoWayStream)stream).getInputStream();
-                if (in.isInputStream() && in.isCharacterStream())
-                    return in;
+		return inSynonymOf(in);
             }
             if (stream.isInputStream() && stream.isCharacterStream())
                 return stream;
@@ -999,8 +994,7 @@ public abstract class Lisp
             Stream stream = (Stream) obj;
             if (stream instanceof TwoWayStream) {
                 Stream out = ((TwoWayStream)obj).getOutputStream();
-                if (out.isOutputStream() && out.isCharacterStream())
-                    return out;
+		return outSynonymOf(out);
             }
             if (stream.isOutputStream() && stream.isCharacterStream())
                 return stream;
@@ -1590,6 +1584,10 @@ public abstract class Lisp
                                             Keyword.COMMON_LISP,
                                             Keyword.ANSI_CL,
                                             Keyword.WINDOWS));
+        } else {
+            _FEATURES_.setSymbolValue(list4(Keyword.ARMEDBEAR,
+                                            Keyword.COMMON_LISP,
+                                            Keyword.ANSI_CL,));
         }
     }
 
