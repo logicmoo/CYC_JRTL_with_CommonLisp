@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: TypeError.java,v 1.21 2004-10-13 00:22:20 piso Exp $
+ * $Id: TypeError.java,v 1.22 2004-10-13 17:53:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public class TypeError extends LispError
         }
         this.datum = datum;
         this.expectedType = expectedType;
-        this.typeString = String.valueOf(expectedType);
+        this.typeString = expectedType.writeToString();
     }
 
     public TypeError(String message)
