@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.294 2004-11-04 17:19:31 piso Exp $
+ * $Id: Lisp.java,v 1.295 2004-11-04 18:37:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -286,21 +286,14 @@ public abstract class Lisp
                                         final LispThread thread)
         throws ConditionThrowable
     {
-        if (profiling && sampling) {
-            // FIXME
-            // This is not exactly the right place to do this. We should
-            // include the current call as well.
-            if (sampleNow)
-                Profiler.sample(thread);
-        }
         thread.clearValues();
         if (interrupted)
             handleInterrupt();
         if (thread.isDestroyed())
             throw new ThreadDestroyed();
         if (obj instanceof Symbol) {
-            LispObject result = null;
-            if (env.isDeclaredSpecial((Symbol)obj) || obj.isSpecialVariable())
+            LispObject result;
+            if (env.isDeclaredSpecial(obj) || obj.isSpecialVariable())
                 result = thread.lookupSpecial(obj);
             else
                 result = env.lookup(obj);
@@ -333,15 +326,14 @@ public abstract class Lisp
                         autoload.load();
                         return eval(obj, env, thread);
                     }
-                    default: {
+                    default:
                         return evalCall(fun, obj.cdr(), env, thread);
-                    }
                 }
             } else {
                 if (first.car() == Symbol.LAMBDA) {
                     LispObject rest = first.cdr();
                     Closure closure = new Closure(rest.car(), rest.cdr(), env);
-                    return closure.execute(evalList(obj.cdr(), env, thread));
+                    return evalCall(closure, obj.cdr(), env, thread);
                 } else
                     return signal(new ProgramError("Illegal function object: " +
                                                    first.writeToString()));
@@ -368,39 +360,34 @@ public abstract class Lisp
     {
         if (args == NIL)
             return thread.execute(function);
-        LispObject first = args.car();
-        LispObject rest = args.cdr();
-        if (rest == NIL) {
-            first = eval1(first, env, thread);
+        LispObject first = eval1(args.car(), env, thread);
+        args = args.cdr();
+        if (args == NIL)
             return thread.execute(function, first);
-        }
-        LispObject second = rest.car();
-        rest = rest.cdr();
-        if (rest == NIL) {
-            first = eval1(first, env, thread);
-            second = eval1(second, env, thread);
+        LispObject second = eval1(args.car(), env, thread);
+        args = args.cdr();
+        if (args == NIL)
             return thread.execute(function, first, second);
-        }
-        LispObject third = rest.car();
-        rest = rest.cdr();
-        if (rest == NIL) {
-            first = eval1(first, env, thread);
-            second = eval1(second, env, thread);
-            third = eval1(third, env, thread);
+        LispObject third = eval1(args.car(), env, thread);
+        args = args.cdr();
+        if (args == NIL)
             return thread.execute(function, first, second, third);
-        }
-        LispObject fourth = rest.car();
-        rest = rest.cdr();
-        if (rest == NIL) {
-            first = eval1(first, env, thread);
-            second = eval1(second, env, thread);
-            third = eval1(third, env, thread);
-            fourth = eval1(fourth, env, thread);
+        LispObject fourth = eval1(args.car(), env, thread);
+        args = args.cdr();
+        if (args == NIL)
             return thread.execute(function, first, second, third, fourth);
+        // More than 4 arguments.
+        final int length = args.length() + 4;
+        LispObject[] array = new LispObject[length];
+        array[0] = first;
+        array[1] = second;
+        array[2] = third;
+        array[3] = fourth;
+        for (int i = 4; i < length; i++) {
+            array[i] = eval1(args.car(), env, thread);
+            args = args.cdr();
         }
-        return funcall(function,
-                       evalList(args, env, thread),
-                       thread);
+        return thread.execute(function, array);
     }
 
     private static final LispObject[] evalList(LispObject args,
