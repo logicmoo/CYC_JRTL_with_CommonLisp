@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.388 2003-09-14 11:37:15 piso Exp $
+ * $Id: Primitives.java,v 1.389 2003-09-14 12:27:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -354,7 +354,7 @@ public final class Primitives extends Module
             case SIMPLE_VECTOR_P:               // ### simple-vector-p
                 return arg.typep(Symbol.SIMPLE_VECTOR);
             case BIT_VECTOR_P:                  // ### bit-vector-p
-                return (arg.getType() & TYPE_BIT_VECTOR) != 0 ? T : NIL;
+                return arg.BIT_VECTOR_P();
             case SIMPLE_BIT_VECTOR_P:           // ### simple-bit-vector-p
                 return arg.typep(Symbol.SIMPLE_BIT_VECTOR);
             case CHAR_CODE:                     // ### char-code
