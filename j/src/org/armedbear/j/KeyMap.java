@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.18 2003-10-15 14:56:29 piso Exp $
+ * $Id: KeyMap.java,v 1.19 2003-12-05 03:22:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -329,8 +329,10 @@ public final class KeyMap implements Constants
         mapKey(VK_MOUSE_1, CTRL_MASK | SHIFT_MASK, "mouseSelectColumn");
         mapKey(VK_DOUBLE_MOUSE_1, 0, "selectWord");
 
-        if (Platform.isPlatformUnix())
+        if (Platform.isPlatformUnix()) {
             mapKey(VK_MOUSE_2, 0, "pastePrimarySelection");
+            mapKey(KeyEvent.VK_INSERT, SHIFT_MASK, "pastePrimarySelection");
+        }
 
         mapKey(VK_MOUSE_3, 0, "mouseShowContextMenu");
 
