@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.33 2003-11-18 02:58:20 piso Exp $
+;;; $Id: defstruct.lisp,v 1.34 2003-11-18 03:18:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,14 +72,20 @@
              (or *ds-named* (null *ds-type*)))
     (let ((pred (intern *ds-predicate*)))
       (cond ((eq *ds-type* 'list)
-             `((defun ,pred (object)
-                 (and (consp object) (eq (car object) ',*ds-name*)))))
+             (if *ds-initial-offset*
+                 `((defun ,pred (object)
+                     (and (consp object)
+                          (> (length object) ,*ds-initial-offset*)
+                          (eq (elt object ,*ds-initial-offset*) ',*ds-name*))))
+                 `((defun ,pred (object)
+                     (and (consp object) (eq (car object) ',*ds-name*))))))
             ((or (eq *ds-type* 'vector)
                  (and (consp *ds-type*) (eq (car *ds-type*) 'vector)))
-             `((defun ,pred (object)
-                 (and (vectorp object)
-                      (> (length object) 0)
-                      (eq (aref object 0) ',*ds-name*)))))
+             (let ((index (or *ds-initial-offset* 0)))
+               `((defun ,pred (object)
+                   (and (vectorp object)
+                        (> (length object) ,index)
+                        (eq (aref object ,index) ',*ds-name*))))))
             (t
              `((defun ,pred (object)
                  (typep object ',*ds-name*))))))))
