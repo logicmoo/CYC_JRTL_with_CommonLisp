@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.41 2004-03-25 01:20:22 piso Exp $
+ * $Id: Load.java,v 1.42 2004-03-30 22:16:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,7 +143,7 @@ public final class Load extends Lisp
         String extension = getExtension(filename);
         if (extension == null) {
             // No extension specified.
-            candidates.add(filename.concat(".fasl"));
+            candidates.add(filename + '.' + COMPILE_FILE_TYPE);
             candidates.add(filename.concat(".lisp"));
         } else
             candidates.add(filename);
