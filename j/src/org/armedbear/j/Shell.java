@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.20 2003-01-02 19:10:57 piso Exp $
+ * $Id: Shell.java,v 1.21 2003-01-04 02:17:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,7 @@ public class Shell extends CommandInterpreter implements Constants
             Editor.preferences().getStringProperty(Property.SHELL_FILE_NAME);
         if (s != null)
             return s;
-        return "bash -i";
+        return Platform.isPlatformWindows() ? "cmd.exe" : "bash -i";
     }
 
     protected void initializeHistory()
@@ -118,26 +118,44 @@ public class Shell extends CommandInterpreter implements Constants
                 initialDir = Editor.getUserHomeDirectory();
         }
 
+        Process p = null;
+        
         // Shell command may contain a space (e.g. "bash -i").
         StringTokenizer st = new StringTokenizer(shellCommand);
-        String[] cmdArray = new String[st.countTokens() + 3];
-        int i = 0;
-        cmdArray[i++] = "jpty";
-        cmdArray[i++] = "-cd";
-        cmdArray[i++] = initialDir.canonicalPath();
-        while (st.hasMoreTokens())
-            cmdArray[i++] = st.nextToken();
-
-        Process p = null;
-        try {
-            p = Runtime.getRuntime().exec(cmdArray);
-            setProcess(p);
+        
+        String[] cmdArray;
+        if (Utilities.haveJpty()) {
+            cmdArray = new String[st.countTokens() + 3];
+            int i = 0;
+            cmdArray[i++] = "jpty";
+            cmdArray[i++] = "-cd";
+            cmdArray[i++] = initialDir.canonicalPath();
+            while (st.hasMoreTokens())
+                cmdArray[i++] = st.nextToken();
+            try {
+                p = Runtime.getRuntime().exec(cmdArray);
+                setProcess(p);
+            }
+            catch (Throwable t) {
+                setProcess(null);
+                return;
+            }
+        } else {
+            cmdArray = new String[st.countTokens()];
+            int i = 0;
+            while (st.hasMoreTokens())
+                cmdArray[i++] = st.nextToken();
+            try {
+                p = Runtime.getRuntime().exec(cmdArray, null,
+                    new java.io.File(initialDir.canonicalPath()));
+                setProcess(p);
+            }
+            catch (Throwable t) {
+                setProcess(null);
+                return;
+            }            
         }
-        catch (Throwable t) {
-            setProcess(null);
-            return;
-        }
-
+        
         currentDir = initialDir;
         startWatcherThread();
 
@@ -571,6 +589,9 @@ public class Shell extends CommandInterpreter implements Constants
     {
         if (!Editor.checkExperimental())
             return;
+        if (Platform.isPlatformWindows())
+            if (!Platform.isPlatformWindows5())
+                return;
         // Look for existing shell buffer.
         Buffer buf = null;
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
