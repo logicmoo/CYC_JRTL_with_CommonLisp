@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: sequences.lisp,v 1.57 2004-02-13 00:27:12 piso Exp $
+;;; $Id: sequences.lisp,v 1.58 2004-02-24 01:46:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,13 +24,16 @@
 
 (defun make-sequence-of-type (type length)
   (case (type-specifier-atom type)
-    (list (make-list length))
+    (list
+     (make-list length))
     ((bit-vector simple-bit-vector)
      (make-array length :element-type 'bit))
     ((simple-string string)
      (make-string length))
-    (vector (make-array length))
-    (nil-vector (make-array length :element-type nil))
+    ((simple-vector vector)
+     (make-array length))
+    (nil-vector
+     (make-array length :element-type nil))
     (t
      (error 'type-error))))
 
