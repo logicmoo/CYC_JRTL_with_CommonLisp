@@ -2,7 +2,7 @@
  * read_char_no_hang.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: read_char_no_hang.java,v 1.2 2004-01-24 19:56:00 piso Exp $
+ * $Id: read_char_no_hang.java,v 1.3 2004-03-11 10:55:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public final class read_char_no_hang extends Primitive
         if (length > 4)
             signal(new WrongNumberOfArgumentsException(this));
         Stream stream =
-            length > 0 ? checkCharacterInputStream(args[0]) : getStandardInput();
+            length > 0 ? inSynonymOf(args[0]) : getStandardInput();
         boolean eofError = length > 1 ? (args[1] != NIL) : true;
         LispObject eofValue = length > 2 ? args[2] : NIL;
         boolean recursive = length > 3 ? (args[3] != NIL) : false;
