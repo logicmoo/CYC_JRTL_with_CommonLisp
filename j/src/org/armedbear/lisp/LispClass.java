@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.45 2004-05-03 14:21:34 piso Exp $
+ * $Id: LispClass.java,v 1.46 2004-05-23 15:20:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public class LispClass extends StandardObject
 
     protected Symbol symbol;
     private Layout layout;
-    private LispObject directSuperclasses;
+    private LispObject directSuperclasses = NIL;
     private LispObject directSubclasses = NIL;
     private LispObject classPrecedenceList = NIL;
     private LispObject directMethods = NIL;
@@ -63,6 +63,19 @@ public class LispClass extends StandardObject
     {
         this.symbol = symbol;
         this.directSuperclasses = directSuperclasses;
+    }
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        result = result.push(new Cons("NAME", symbol));
+        result = result.push(new Cons("LAYOUT", layout));
+        result = result.push(new Cons("DIRECT-SUPERCLASSES", directSuperclasses));
+        result = result.push(new Cons("DIRECT-SUBCLASSES", directSubclasses));
+        result = result.push(new Cons("CLASS-PRECEDENCE-LIST", classPrecedenceList));
+        result = result.push(new Cons("DIRECT-METHODS", directMethods));
+        result = result.push(new Cons("DOCUMENTATION", documentation));
+        return result.nreverse();
     }
 
     public final Symbol getSymbol()

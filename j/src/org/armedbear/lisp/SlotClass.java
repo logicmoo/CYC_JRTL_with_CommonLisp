@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SlotClass.java,v 1.5 2004-01-24 20:13:50 piso Exp $
+ * $Id: SlotClass.java,v 1.6 2004-05-23 15:23:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,16 @@ public class SlotClass extends LispClass
     public SlotClass(Symbol symbol, LispObject directSuperclasses)
     {
         super(symbol, directSuperclasses);
+    }
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject result = super.getParts().nreverse();
+        result = result.push(new Cons("DIRECT-SLOTS", directSlots));
+        result = result.push(new Cons("EFFECTIVE-SLOTS", effectiveSlots));
+        result = result.push(new Cons("DIRECT-DEFAULT-INITARGS", directDefaultInitargs));
+        result = result.push(new Cons("EFFECTIVE-DEFAULT-INITARGS", effectiveDefaultInitargs));
+        return result.nreverse();
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

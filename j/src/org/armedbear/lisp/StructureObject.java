@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.27 2004-05-10 00:18:20 piso Exp $
+ * $Id: StructureObject.java,v 1.28 2004-05-23 15:26:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,20 @@ public final class StructureObject extends LispObject
     public LispClass classOf()
     {
         return structureClass;
+    }
+
+    public LispObject getParts() throws ConditionThrowable
+    {
+        LispObject result = NIL;
+        result = result.push(new Cons("class", structureClass));
+        LispObject effectiveSlots = structureClass.getEffectiveSlots();
+        LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
+        for (int i = 0; i < slots.length; i++) {
+            SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
+            LispObject slotName = slotDefinition.getRowMajor(1);
+            result = result.push(new Cons(slotName, slots[i]));
+        }
+        return result.nreverse();
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
