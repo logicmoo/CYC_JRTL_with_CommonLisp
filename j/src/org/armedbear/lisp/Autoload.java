@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.158 2004-02-15 17:52:04 piso Exp $
+ * $Id: Autoload.java,v 1.159 2004-02-15 18:47:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,7 +281,6 @@ public class Autoload extends Function
         autoload("make-concatenated-stream", "ConcatenatedStream");
         autoload("make-echo-stream", "EchoStream");
         autoload("make-string-input-stream", "StringInputStream");
-        autoload("make-string-output-stream", "StringOutputStream");
         autoload("make-synonym-stream", "SynonymStream");
         autoload("open-stream-p", "open_stream_p");
         autoload("output-stream-p", "output_stream_p");
@@ -331,6 +330,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%make-array", "make_array");
         autoload(PACKAGE_SYS, "%make-condition", "make_condition");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
+        autoload(PACKAGE_SYS, "%make-string-output-stream", "StringOutputStream");
         autoload(PACKAGE_SYS, "%make-structure", "StructureObject");
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
