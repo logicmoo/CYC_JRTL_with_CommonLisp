@@ -2,7 +2,7 @@
  * ProcessTable.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ProcessTable.java,v 1.1.1.1 2002-09-24 16:08:30 piso Exp $
+ * $Id: ProcessTable.java,v 1.2 2002-10-05 01:04:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,13 @@ package org.armedbear.j;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 public final class ProcessTable
 {
-    private Vector v = new Vector();
+    private ArrayList entries = new ArrayList();
 
     private ProcessTable()
     {
@@ -40,7 +41,7 @@ public final class ProcessTable
             return null;
         ProcessTable table = new ProcessTable();
         try {
-            String[] cmdarray = {"/bin/sh", "-c", "ps -A -o pid,ppid,command"};
+            String[] cmdarray = {"/bin/sh", "-c", "ps -o pid,ppid,command"};
             Process process = Runtime.getRuntime().exec(cmdarray);
             BufferedReader reader =
                 new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -53,24 +54,35 @@ public final class ProcessTable
             }
         }
         catch (Throwable t) {
-            t.printStackTrace();
+            Log.error(t);
         }
         return table;
     }
 
-    public Vector findAllMatchingEntries(String command)
+    public List findMatchingEntries(String command)
     {
-        Vector results = new Vector();
+        ArrayList results = new ArrayList();
         if (command != null && command.length() > 0){
-            // First char of command might be replaced with '-', so we'll look
+            // First char of command might be replaced with '-', so we look
             // for that pattern too.
-            String alternate = "-" + command.substring(1);
-            for (int i = 0; i < v.size(); i++) {
-                ProcessTableEntry entry = (ProcessTableEntry) v.get(i);
+            String alternate = "-".concat(command.substring(1));
+            for (int i = 0; i < entries.size(); i++) {
+                ProcessTableEntry entry = (ProcessTableEntry) entries.get(i);
                 if (entry.command.indexOf(command) >= 0 ||
                     entry.command.indexOf(alternate) >= 0)
                     results.add(entry);
             }
+        }
+        return results;
+    }
+
+    public List findChildren(int pid)
+    {
+        ArrayList results = new ArrayList();
+        for (int i = 0; i < entries.size(); i++) {
+            ProcessTableEntry entry = (ProcessTableEntry) entries.get(i);
+            if (entry.ppid == pid)
+                results.add(entry);
         }
         return results;
     }
@@ -86,11 +98,9 @@ public final class ProcessTable
             try {
                 pid  = Integer.parseInt(pidString);
                 ppid = Integer.parseInt(ppidString);
+                entries.add(new ProcessTableEntry(pid, ppid, command));
             }
-            catch (NumberFormatException e) {
-                return;
-            }
-            v.add(new ProcessTableEntry(pid, ppid, command));
+            catch (NumberFormatException e) {}
         }
     }
 }
