@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.53 2004-05-03 14:20:32 piso Exp $
+;;; $Id: precompiler.lisp,v 1.54 2004-05-03 18:01:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,38 +155,47 @@
             (return))))
     (values form expanded-p)))
 
+(defvar *local-variables* ())
+
 (defun precompile1 (form)
-  (if (atom form)
-      form
-      (let ((op (car form))
-            handler)
-        (when (symbolp op)
-          (cond ((local-macro-function op)
-                 (let ((result (expand-local-macro form)))
-                   (if (equal result form)
-                       (return-from precompile1 result)
-                       (return-from precompile1 (precompile1 result)))))
-                ((compiler-macro-function op)
-                 (let ((result (compiler-macroexpand form)))
-                   ;; Fall through if no change...
-                   (unless (equal result form)
-                     (return-from precompile1 (precompile1 result)))))
-                ((eq op 'setf)
-                 (let ((place (second form)))
-                   (when (and (consp place)
-                              (local-macro-function (car place)))
-                     (let ((expansion (expand-local-macro place)))
-                       (return-from precompile1
-                                    (precompile1 (list* op expansion
-                                                        (cddr form))))))
-                   (return-from precompile1 (precompile1 (expand-macro form)))))
-                ((setf handler (get op 'precompile-handler))
-                 (return-from precompile1 (funcall handler form)))
-                ((macro-function op)
-                 (return-from precompile1 (precompile1 (expand-macro form))))
-                ((special-operator-p op)
-                 (error "PRECOMPILE1: unsupported special operator ~S." op))))
-        (precompile-cons form))))
+  (cond ((symbolp form)
+         (let ((varspec (find form *local-variables* :key #'car)))
+           (if (and varspec (eq (second varspec) :symbol-macro))
+               (third varspec)
+               form)))
+        ((atom form)
+         form)
+        (t
+         (let ((op (car form))
+               handler)
+           (when (symbolp op)
+             (cond ((local-macro-function op)
+                    (let ((result (expand-local-macro (precompile-cons form))))
+                      (return-from precompile1
+                                   (if (equal result form)
+                                       result
+                                       (precompile1 result)))))
+                   ((compiler-macro-function op)
+                    (let ((result (compiler-macroexpand form)))
+                      ;; Fall through if no change...
+                      (unless (equal result form)
+                        (return-from precompile1 (precompile1 result)))))
+                   ((eq op 'setf)
+                    (let ((place (second form)))
+                      (when (and (consp place)
+                                 (local-macro-function (car place)))
+                        (let ((expansion (expand-local-macro place)))
+                          (return-from precompile1
+                                       (precompile1 (list* op expansion
+                                                           (cddr form))))))
+                      (return-from precompile1 (precompile1 (expand-macro form)))))
+                   ((setf handler (get op 'precompile-handler))
+                    (return-from precompile1 (funcall handler form)))
+                   ((macro-function op)
+                    (return-from precompile1 (precompile1 (expand-macro form))))
+                   ((special-operator-p op)
+                    (error "PRECOMPILE1: unsupported special operator ~S." op))))
+           (precompile-cons form)))))
 
 (defun precompile-identity (form)
   form)
@@ -359,41 +368,55 @@
       (list* 'PROGN (mapcar #'precompile1 body)))))
 
 (defun precompile-symbol-macrolet (form)
-  (multiple-value-bind (body decls) (sys::parse-body (cddr form) nil)
-    (when decls
-      (let ((specials ()))
-        (dolist (decl decls)
-          (when (eq (car decl) 'DECLARE)
-            (dolist (declspec (cdr decl))
-              (when (eq (car declspec) 'SPECIAL)
-                (setf specials (append specials (cdr declspec)))))))
-        (when specials
-          (let ((syms (mapcar #'car (cadr form))))
-            (dolist (special specials)
-              (when (memq special syms)
-                (error 'program-error
-                       :format-control "~S is a symbol-macro and may not be declared special."
-                       :format-arguments (list special))))))))
-    (list* 'SYMBOL-MACROLET (cadr form) (mapcar #'precompile1 body))))
+  (let ((*local-variables* *local-variables*)
+        (defs (cadr form)))
+    (dolist (def defs)
+      (let ((sym (car def))
+            (expansion (cadr def)))
+        (when (special-variable-p sym)
+          (error 'program-error
+                 :format-control "Attempt to bind the special varialbe ~S with SYMBOL-MACROLET."
+                 :format-arguments (list sym)))
+        (push (list sym :symbol-macro expansion) *local-variables*)))
+    (multiple-value-bind (body decls) (sys::parse-body (cddr form) nil)
+      (when decls
+        (let ((specials ()))
+          (dolist (decl decls)
+            (when (eq (car decl) 'DECLARE)
+              (dolist (declspec (cdr decl))
+                (when (eq (car declspec) 'SPECIAL)
+                  (setf specials (append specials (cdr declspec)))))))
+          (when specials
+            (let ((syms (mapcar #'car (cadr form))))
+              (dolist (special specials)
+                (when (memq special syms)
+                  (error 'program-error
+                         :format-control "~S is a symbol-macro and may not be declared special."
+                         :format-arguments (list special))))))))
+      (list* 'PROGN (mapcar #'precompile1 body)))))
 
 (defun precompile-let/let*-vars (vars)
   (let ((result nil))
     (dolist (var vars)
-      (if (consp var)
-          (let* ((v (car var))
-                 (expr (cadr var)))
-            (unless (symbolp v)
-              (error 'simple-type-error
-                     :format-control "The variable ~S is not a symbol."
-                     :format-arguments (list v)))
-            (push (list v (precompile1 expr)) result))
-          (push var result)))
+      (cond ((consp var)
+             (let ((v (car var))
+                   (expr (cadr var)))
+               (unless (symbolp v)
+                 (error 'simple-type-error
+                        :format-control "The variable ~S is not a symbol."
+                        :format-arguments (list v)))
+               (push (list v (precompile1 expr)) result)
+               (push (list v :variable) *local-variables*)))
+            (t
+             (push var result)
+             (push (list var :variable) *local-variables*))))
     (nreverse result)))
 
 (defun precompile-let (form)
-  (list* 'LET
-         (precompile-let/let*-vars (cadr form))
-         (mapcar #'precompile1 (cddr form))))
+  (let ((*local-variables* *local-variables*))
+    (list* 'LET
+           (precompile-let/let*-vars (cadr form))
+           (mapcar #'precompile1 (cddr form)))))
 
 ;; (LET* ((X 1)) (LET* ((Y 2)) (LET* ((Z 3)) (+ X Y Z)))) =>
 ;; (LET* ((X 1) (Y 2) (Z 3)) (+ X Y Z))
@@ -407,9 +430,10 @@
 
 (defun precompile-let* (form)
   (setf form (maybe-fold-let* form))
-  (list* 'LET*
-         (precompile-let/let*-vars (cadr form))
-         (mapcar #'precompile1 (cddr form))))
+  (let ((*local-variables* *local-variables*))
+    (list* 'LET*
+           (precompile-let/let*-vars (cadr form))
+           (mapcar #'precompile1 (cddr form)))))
 
 (defun precompile-case (form)
   (if *in-jvm-compile*
