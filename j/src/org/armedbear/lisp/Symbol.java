@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.115 2004-03-12 17:29:36 piso Exp $
+ * $Id: Symbol.java,v 1.116 2004-03-18 01:03:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,6 +42,7 @@ public class Symbol extends LispObject
     public static final Symbol EQUALP                           = PACKAGE_CL.addExternalSymbol("EQUALP");
     public static final Symbol FLET                             = PACKAGE_CL.addExternalSymbol("FLET");
     public static final Symbol FORMAT                           = PACKAGE_CL.addExternalSymbol("FORMAT");
+    public static final Symbol FUNCALL                          = PACKAGE_CL.addExternalSymbol("FUNCALL");
     public static final Symbol GO                               = PACKAGE_CL.addExternalSymbol("GO");
     public static final Symbol LAMBDA                           = PACKAGE_CL.addExternalSymbol("LAMBDA");
     public static final Symbol LET                              = PACKAGE_CL.addExternalSymbol("LET");
@@ -311,6 +312,16 @@ public class Symbol extends LispObject
     public final LispObject symbolValue() throws ConditionThrowable
     {
         LispObject val = LispThread.currentThread().lookupSpecial(this);
+        if (val != null)
+            return val;
+        if (value != null)
+            return value;
+        return signal(new LispError(toString().concat(" has no dynamic value")));
+    }
+
+    public final LispObject symbolValue(LispThread thread) throws ConditionThrowable
+    {
+        LispObject val = thread.lookupSpecial(this);
         if (val != null)
             return val;
         if (value != null)
