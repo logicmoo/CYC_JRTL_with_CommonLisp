@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.77 2004-06-22 23:07:46 piso Exp $
+ * $Id: Stream.java,v 1.78 2004-08-22 14:26:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@ import java.io.PushbackReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.util.BitSet;
 
 public class Stream extends LispObject
 {
@@ -564,19 +565,48 @@ public class Stream extends LispObject
         return sb.toString();
     }
 
+    private static final int findUnescapedSingleColon(String s, BitSet flags)
+    {
+        if (flags == null)
+            return s.indexOf(':');
+        final int limit = s.length();
+        for (int i = 0; i < limit; i++) {
+            if (s.charAt(i) == ':' && !flags.get(i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static final int findUnescapedDoubleColon(String s, BitSet flags)
+    {
+        if (flags == null)
+            return s.indexOf("::");
+        final int limit = s.length() - 1;
+        for (int i = 0; i < limit; i++) {
+            if (s.charAt(i) == ':' && !flags.get(i)) {
+                if (s.charAt(i + 1) == ':' && !flags.get(i + 1)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
     private final LispObject readToken(char c) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         sb.append(c);
         final LispThread thread = LispThread.currentThread();
-        boolean escaped = _readToken(sb, thread);
+        BitSet flags = _readToken(sb, thread);
+        boolean escaped = (flags != null);
         if (_READ_SUPPRESS_.symbolValue(thread) != NIL)
             return NIL;
         final String token = sb.toString();
         final int length = token.length();
         if (length > 0) {
             final char firstChar = token.charAt(0);
-            if (!escaped) {
+            if (flags == null) {
                 if (firstChar == '.') {
                     // Section 2.3.3: "If a token consists solely of dots (with
                     // no escape characters), then an error of type READER-
@@ -613,7 +643,7 @@ public class Stream extends LispObject
             }
             if (firstChar == ':')
                 return PACKAGE_KEYWORD.intern(token.substring(1));
-            int index = token.indexOf("::");
+            int index = findUnescapedDoubleColon(token, flags);
             if (index > 0) {
                 String packageName = token.substring(0, index);
                 String symbolName = token.substring(index + 2);
@@ -623,7 +653,7 @@ public class Stream extends LispObject
                                                 "\" not found."));
                 return pkg.intern(symbolName);
             }
-            index = token.indexOf(':');
+            index = findUnescapedSingleColon(token, flags);
             if (index > 0) {
                 String packageName = token.substring(0, index);
                 String symbolName = token.substring(index + 1);
@@ -649,10 +679,10 @@ public class Stream extends LispObject
         return ((Package)_PACKAGE_.symbolValue(thread)).intern(token);
     }
 
-    private final boolean _readToken(StringBuffer sb, LispThread thread)
+    private final BitSet _readToken(StringBuffer sb, LispThread thread)
         throws ConditionThrowable
     {
-        boolean escaped = false;
+        BitSet flags = null;
         final Readtable rt = currentReadtable(thread);
         final LispObject readtableCase = rt.getReadtableCase();
         if (sb.length() > 0) {
@@ -661,16 +691,19 @@ public class Stream extends LispObject
             if (c == '|') {
                 sb.setLength(0);
                 sb.append(readMultipleEscape());
-                escaped = true;
+                flags = new BitSet(sb.length());
+                for (int i = sb.length(); i-- > 0;)
+                    flags.set(i);
             } else if (c == '\\') {
                 int n = _readChar();
                 if (n < 0) {
                     signal(new EndOfFile(this));
                     // Not reached.
-                    return escaped;
+                    return flags;
                 }
                 sb.setCharAt(0, (char) n);
-                escaped = true;
+                flags = new BitSet(1);
+                flags.set(0);
             } else if (readtableCase == Keyword.UPCASE) {
                 sb.setCharAt(0, Utilities.toUpperCase(c));
             } else if (readtableCase == Keyword.DOWNCASE) {
@@ -695,12 +728,20 @@ public class Stream extends LispObject
                     if (n < 0)
                         break loop;
                     sb.append((char)n);
-                    escaped = true;
+                    if (flags == null)
+                        flags = new BitSet(sb.length());
+                    flags.set(sb.length() - 1);
                     break;
-                case '|':
+                case '|': {
+                    int begin = sb.length();
                     sb.append(readMultipleEscape());
-                    escaped = true;
+                    int end = sb.length();
+                    if (flags == null)
+                        flags = new BitSet(sb.length());
+                    for (int i = begin; i < end; i++)
+                        flags.set(i);
                     break;
+                }
                 default:
                     if (readtableCase == Keyword.UPCASE)
                         c = Utilities.toUpperCase(c);
@@ -715,7 +756,7 @@ public class Stream extends LispObject
             sb.setLength(0);
             sb.append(s);
         }
-        return escaped;
+        return flags;
     }
 
     private static final int getReadBase(LispThread thread)
@@ -853,7 +894,7 @@ public class Stream extends LispObject
     public LispObject readRadix(int radix) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
-        boolean escaped = _readToken(sb, LispThread.currentThread());
+        boolean escaped = (_readToken(sb, LispThread.currentThread()) != null);
         if (escaped)
             return signal(new ReaderError("Illegal syntax for number."));
         String s = sb.toString();
