@@ -2,7 +2,7 @@
  * DirectoryTreeModel.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: DirectoryTreeModel.java,v 1.1.1.1 2002-09-24 16:07:49 piso Exp $
+ * $Id: DirectoryTreeModel.java,v 1.2 2003-03-19 12:23:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,7 +143,7 @@ public class DirectoryTreeModel extends DefaultTreeModel
 
     private static DefaultMutableTreeNode getNode(DefaultMutableTreeNode root, File file)
     {
-        if (root == null)
+        if (root == null || file == null)
             return null;
         DefaultMutableTreeNode currentNode = root;
         while (true) {
@@ -161,22 +161,24 @@ public class DirectoryTreeModel extends DefaultTreeModel
     }
 
     // Find child that is ancestor of file (so to speak).
-    private static DefaultMutableTreeNode findMatchingChild(DefaultMutableTreeNode parent,
-        File file)
+    private static DefaultMutableTreeNode findMatchingChild(
+        DefaultMutableTreeNode parent, File file)
     {
-        for (int i = 0; i < parent.getChildCount(); i++) {
-            DefaultMutableTreeNode node =
-                (DefaultMutableTreeNode) parent.getChildAt(i);
-            DirectoryTreeElement treeElement =
-                (DirectoryTreeElement) node.getUserObject();
-            File f = treeElement.getFile();
-            if (file.canonicalPath().equals(f.canonicalPath()))
-                return node;
-            String prefix = f.canonicalPath();
-            if (!prefix.endsWith(f.getSeparator()))
-                prefix += f.getSeparator();
-            if (file.canonicalPath().startsWith(prefix))
-                return node;
+        if (file != null) {
+            for (int i = 0; i < parent.getChildCount(); i++) {
+                DefaultMutableTreeNode node =
+                    (DefaultMutableTreeNode) parent.getChildAt(i);
+                DirectoryTreeElement treeElement =
+                    (DirectoryTreeElement) node.getUserObject();
+                File f = treeElement.getFile();
+                if (file.canonicalPath().equals(f.canonicalPath()))
+                    return node;
+                String prefix = f.canonicalPath();
+                if (!prefix.endsWith(f.getSeparator()))
+                    prefix += f.getSeparator();
+                if (file.canonicalPath().startsWith(prefix))
+                    return node;
+            }
         }
         return null;
     }
