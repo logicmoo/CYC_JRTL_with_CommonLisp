@@ -1,8 +1,8 @@
 /*
  * LispTagger.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispTagger.java,v 1.14 2003-10-10 18:58:18 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: LispTagger.java,v 1.15 2004-04-11 18:34:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,10 +126,11 @@ public final class LispTagger extends Tagger
                         state = NEUTRAL;
                         continue;
                     }
-                    String token = gatherToken(pos);
-                    if (LispMode.isDefiner(token.toLowerCase())) {
+                    String token = gatherToken(pos).toLowerCase();
+                    token = LispMode.translateDefiner(token);
+                    if (token != null) {
                         state = DEFINITION;
-                        definer = token.toLowerCase();
+                        definer = token;
                     } else
                         state = NEUTRAL;
                     continue;
