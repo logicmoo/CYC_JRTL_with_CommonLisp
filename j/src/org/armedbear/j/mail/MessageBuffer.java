@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.10 2002-11-15 17:19:00 piso Exp $
+ * $Id: MessageBuffer.java,v 1.11 2002-11-27 23:58:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1086,5 +1086,20 @@ public class MessageBuffer extends Buffer
     {
         if (mailbox != null && mailbox.getPreviewBuffer() == this)
             mailbox.setPreviewBuffer(null);
+        flushImages();
+    }
+    
+    public void empty()
+    {
+        flushImages();
+        super.empty();
+    }
+    
+    private void flushImages()
+    {
+        for (Line line = getFirstLine(); line != null; line = line.next()) {
+            if (line instanceof ImageLine)
+                ((ImageLine)line).flushImage();
+        }
     }
 }
