@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.19 2002-12-24 17:04:08 piso Exp $
+ * $Id: Shell.java,v 1.20 2003-01-02 19:10:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,6 +281,8 @@ public class Shell extends CommandInterpreter implements Constants
     private void tab()
     {
         final Editor editor = Editor.currentEditor();
+        if (editor.getMark() != null)
+            return;
         final Line dotLine = editor.getDotLine();
         final String dotLineText = dotLine.getText();
         final REMatch match = promptRE.getMatch(dotLineText);
