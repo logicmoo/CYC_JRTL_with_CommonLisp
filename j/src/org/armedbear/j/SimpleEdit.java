@@ -2,7 +2,7 @@
  * SimpleEdit.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: SimpleEdit.java,v 1.3 2003-07-19 17:13:28 piso Exp $
+ * $Id: SimpleEdit.java,v 1.4 2003-08-01 17:28:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,12 @@ package org.armedbear.j;
 public final class SimpleEdit
 {
     public static final int MOVE            =  1;
-    public static final int LINE_EDIT       =  2;
-    public static final int INSERT_LINE_SEP =  3;
-    public static final int DELETE_LINE_SEP =  4;
-    public static final int INSERT_STRING   =  5;
-    public static final int FOLD            =  6;
+    public static final int SCROLL_CARET    =  2;
+    public static final int LINE_EDIT       =  3;
+    public static final int INSERT_LINE_SEP =  4;
+    public static final int DELETE_LINE_SEP =  5;
+    public static final int INSERT_STRING   =  6;
+    public static final int FOLD            =  7;
 
     public static boolean addUndo(Editor editor, int type)
     {
@@ -42,6 +43,9 @@ public final class SimpleEdit
         switch (type) {
             case MOVE:
                 buffer.addEdit(new UndoMove(editor));
+                break;
+            case SCROLL_CARET:
+                buffer.addEdit(new UndoScrollCaret(editor));
                 break;
             case LINE_EDIT:
                 buffer.addEdit(new UndoLineEdit(editor));
