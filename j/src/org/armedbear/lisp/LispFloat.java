@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.11 2003-05-31 18:13:17 piso Exp $
+ * $Id: LispFloat.java,v 1.12 2003-06-23 11:11:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,19 @@ public final class LispFloat extends LispObject
             if (value == ((LispFloat)obj).value)
                 return true;
         }
+        return false;
+    }
+
+    public boolean equalp(LispObject obj)
+    {
+        if (obj instanceof LispFloat)
+            return value == ((LispFloat)obj).value;
+        if (obj instanceof Fixnum)
+            return value == ((Fixnum)obj).getValue();
+        if (obj instanceof Bignum)
+            return value == ((Bignum)obj).getValue().floatValue();
+        if (obj instanceof Ratio)
+            return value == ((Ratio)obj).floatValue();
         return false;
     }
 

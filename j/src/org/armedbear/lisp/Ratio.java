@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.10 2003-06-03 14:19:00 piso Exp $
+ * $Id: Ratio.java,v 1.11 2003-06-23 11:11:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,6 +86,18 @@ public final class Ratio extends LispObject
     public boolean equal(LispObject obj)
     {
         return eql(obj);
+    }
+
+    public boolean equalp(LispObject obj)
+    {
+        if (obj instanceof Ratio) {
+            return numerator.equals(((Ratio)obj).numerator) &&
+                denominator.equals(((Ratio)obj).denominator);
+        }
+        if (obj instanceof LispFloat) {
+            return floatValue() == ((LispFloat)obj).getValue();
+        }
+        return false;
     }
 
     public float floatValue()

@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.8 2003-06-20 17:43:32 piso Exp $
+ * $Id: HashTable.java,v 1.9 2003-06-23 11:11:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -194,7 +194,7 @@ public final class HashTable extends LispObject
             case TEST_EQUAL:
                 return o1.equal(o2);
             case TEST_EQUALP:
-                return equalp(o1, o2);
+                return o1.equalp(o2);
             default:
                 Debug.bug();
                 return false;

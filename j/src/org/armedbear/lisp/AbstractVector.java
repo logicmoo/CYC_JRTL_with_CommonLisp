@@ -114,6 +114,20 @@ public abstract class AbstractVector extends AbstractArray
         return super.typep(typeSpecifier);
     }
 
+    public boolean equalp(LispObject obj) throws LispError
+    {
+        if (obj instanceof AbstractVector) {
+            if (length() != obj.length())
+                return false;
+            AbstractVector v = (AbstractVector) obj;
+            for (int i = length(); i-- > 0;)
+                if (!get(i).equalp(v.get(i)))
+                    return false;
+            return true;
+        }
+        return false;
+    }
+
     public int getRank()
     {
         return 1;
