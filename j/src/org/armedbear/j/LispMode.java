@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.48 2003-08-02 13:45:34 piso Exp $
+ * $Id: LispMode.java,v 1.49 2003-08-04 15:46:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_E, CTRL_MASK | ALT_MASK, "evalDefunLisp");
         km.mapKey(KeyEvent.VK_R, CTRL_MASK | ALT_MASK, "evalRegionLisp");
         km.mapKey(KeyEvent.VK_M, CTRL_MASK, "lispFindMatchingChar");
+        km.mapKey(KeyEvent.VK_M, CTRL_MASK | SHIFT_MASK, "lispSelectSyntax");
     }
 
     public boolean isTaggable()
@@ -312,10 +313,6 @@ public class LispMode extends AbstractMode implements Constants, Mode
                     if (parenCount == 0) {
                         // Found unmatched '('.
                         return it.getPosition();
-                    }
-                    if (it.getPosition().getOffset() == 0) {
-                        // Found '(' in column 0.
-                        return null;
                     }
                     --parenCount;
                     break;
@@ -581,16 +578,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
         Position dot = editor.getDotCopy();
         if (dot == null)
             return;
-        char origChar = dot.getChar();
-        if (origChar != '(') {
-            // Look at previous char.
-            dot.prev();
-            origChar = dot.getChar();
-            if (origChar != ')')
-                return;
-        }
+        Position pos = findDelimiterNear(dot);
         editor.setWaitCursor();
-        Position match = editor.findMatchInternal(dot, 0);
+        Position match = editor.findMatchInternal(pos, 0);
         editor.setDefaultCursor();
         if (match != null) {
             // Move past closing parenthesis.
@@ -604,6 +594,104 @@ public class LispMode extends AbstractMode implements Constants, Mode
             editor.moveCaretToDotCol();
         } else
             editor.status("No match");
+    }
+
+    public static void lispSelectSyntax()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (editor.getMode() != mode)
+            return;
+        Position dot = editor.getDotCopy();
+        if (dot == null)
+            return;
+        Position pos;
+        if (editor.getMark() != null) {
+            pos = findContainingSexp(dot);
+        } else {
+            pos = findDelimiterNear(dot);
+            if (pos == null)
+                pos = findContainingSexp(dot);
+        }
+        if (pos == null)
+            return;
+        editor.setWaitCursor();
+        Position match = editor.findMatchInternal(pos, 0);
+        if (match != null) {
+            if (pos.getChar() == ')')
+                pos.next();
+            else if (match.getChar() == ')')
+                match.next();
+            if (pos.getLine() != match.getLine()) {
+                // Extend selection to full lines if possible.
+                Region r = new Region(editor.getBuffer(), pos, match);
+                Position begin = r.getBegin();
+                if (begin.getLine().substring(0, begin.getOffset()).trim().length() == 0) {
+                    Position end = r.getEnd();
+                    String trim = end.getLine().substring(end.getOffset()).trim();
+                    if (trim.length() == 0 || trim.charAt(0) == ';') {
+                        // Extend selection to complete lines.
+                        begin.setOffset(0);
+                        if (end.getNextLine() != null)
+                            end.moveTo(end.getNextLine(), 0);
+                        else
+                            end.setOffset(end.getLineLength());
+                        if (pos.isBefore(match)) {
+                            pos = begin;
+                            match = end;
+                        } else {
+                            match = begin;
+                            pos = end;
+                        }
+                    }
+                }
+            }
+            editor.addUndo(SimpleEdit.MOVE);
+            editor.unmark();
+            editor.getDot().moveTo(pos);
+            editor.setMarkAtDot();
+            editor.updateDotLine();
+            editor.getDot().moveTo(match);
+            editor.updateDotLine();
+            editor.moveCaretToDotCol();
+            if (editor.getDotLine() != editor.getMarkLine())
+                editor.setUpdateFlag(REPAINT);
+        } else
+            editor.status("No match");
+        editor.setDefaultCursor();
+    }
+
+    private static Position findDelimiterNear(Position pos)
+    {
+        Position saved = pos.copy();
+        if (pos.getChar() == '(')
+            return pos;
+        if (pos.getOffset() > 0) {
+            pos.prev();
+            if (pos.getChar() == ')')
+                return pos;
+        }
+        // Go back to original starting point.
+        pos.moveTo(saved);
+        while (pos.getOffset() > 0) {
+            // Look at previous char.
+            pos.prev();
+            char c = pos.getChar();
+            if (c == '(' || c == ')')
+                return pos;
+        }
+        // Go back to original starting point.
+        pos.moveTo(saved);
+        final int limit = pos.getLineLength() - 1;
+        while (pos.getOffset() < limit) {
+            // Look at next char.
+            pos.next();
+            char c = pos.getChar();
+            if (c == '(' || c == ')')
+                return pos;
+            if (c == ';')
+                return null; // The rest of the line is a comment.
+        }
+        return null;
     }
 
     public static void evalDefunLisp()
