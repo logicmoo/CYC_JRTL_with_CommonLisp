@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Keyword.java,v 1.32 2004-03-29 00:00:15 piso Exp $
+ * $Id: Keyword.java,v 1.33 2004-04-02 03:20:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,12 +32,15 @@ public final class Keyword extends Lisp
         ABORT               = internKeyword("ABORT"),
         ABSOLUTE            = internKeyword("ABSOLUTE"),
         ALLOW_OTHER_KEYS    = internKeyword("ALLOW-OTHER-KEYS"),
+        ANSI_CL             = internKeyword("ANSI-CL"),
         APPEND              = internKeyword("APPEND"),
+        ARMEDBEAR           = internKeyword("ARMEDBEAR"),
         BACK                = internKeyword("BACK"),
         BOOLEAN             = internKeyword("BOOLEAN"),
         CAPITALIZE          = internKeyword("CAPITALIZE"),
         CASE                = internKeyword("CASE"),
         COMMON              = internKeyword("COMMON"),
+        COMMON_LISP         = internKeyword("COMMON-LISP"),
         COMPILE_TOPLEVEL    = internKeyword("COMPILE-TOPLEVEL"),
         COUNT_ONLY          = internKeyword("COUNT-ONLY"),
         DATUM               = internKeyword("DATUM"),
@@ -66,6 +69,7 @@ public final class Keyword extends Lisp
         INTERNAL            = internKeyword("INTERNAL"),
         INVERT              = internKeyword("INVERT"),
         IO                  = internKeyword("IO"),
+        J                   = internKeyword("J"),
         LOAD_TOPLEVEL       = internKeyword("LOAD-TOPLEVEL"),
         LOCAL               = internKeyword("LOCAL"),
         NAME                = internKeyword("NAME"),
