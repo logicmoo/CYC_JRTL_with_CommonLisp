@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.12 2003-12-19 01:36:31 piso Exp $
+;;; $Id: restart.lisp,v 1.13 2003-12-19 02:16:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -81,6 +81,12 @@
 		   (if name (format stream "~S" name)
 		       (format stream "~S" restart)))))
 	   stream))
+
+(defun print-restart (restart stream)
+  (if *print-escape*
+      (print-unreadable-object (restart stream :type t :identity t)
+                               (prin1 (restart-name restart) stream))
+      (restart-report restart stream)))
 
 (defun find-restart (name &optional condition)
   (let ((restarts (compute-restarts condition)))
