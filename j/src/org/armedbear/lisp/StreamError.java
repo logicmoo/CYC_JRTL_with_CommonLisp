@@ -2,7 +2,7 @@
  * StreamError.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StreamError.java,v 1.11 2004-03-05 16:02:23 piso Exp $
+ * $Id: StreamError.java,v 1.12 2004-09-28 14:03:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,6 +25,13 @@ public class StreamError extends LispError
 {
     private final LispObject stream;
     private final Throwable cause;
+
+    public StreamError(String message)
+    {
+        super(message);
+        stream = null;
+        cause = null;
+    }
 
     public StreamError(Stream stream)
     {
