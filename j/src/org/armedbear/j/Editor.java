@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.30 2003-01-07 20:09:53 piso Exp $
+ * $Id: Editor.java,v 1.31 2003-01-09 15:32:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7224,16 +7224,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
                 sidebar.refreshSidebar();
             }
         }
-    }
-
-    public void threads()
-    {
-        listThreads();
-    }
-
-    public static final void listThreads()
-    {
-        Thread.currentThread().getThreadGroup().list();
     }
 
     public void fold()
