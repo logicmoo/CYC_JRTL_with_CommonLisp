@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.46 2004-04-28 17:35:11 piso Exp $
+;;; $Id: precompiler.lisp,v 1.47 2004-04-28 17:42:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -323,10 +323,10 @@
          (compiled-expander (sys::%compile nil expander)))
     (sys::coerce-to-function (or compiled-expander expander))))
 
-(defvar *local-macros* ())
+(defvar *local-functions-and-macros* ())
 
 (defun local-macro-function (name)
-  (getf *local-macros* name))
+  (getf *local-functions-and-macros* name))
 
 (defun expand-local-macro (form)
   (let ((expansion (funcall (local-macro-function (car form)) form nil)))
@@ -337,14 +337,14 @@
         expansion)))
 
 (defun precompile-macrolet (form)
-  (let ((*local-macros* *local-macros*)
+  (let ((*local-functions-and-macros* *local-functions-and-macros*)
         (macros (cadr form)))
     (dolist (macro macros)
       (let ((name (car macro))
             (lambda-list (cadr macro))
             (forms (cddr macro)))
-        (push (define-local-macro name lambda-list forms) *local-macros*)
-        (push name *local-macros*)))
+        (push (define-local-macro name lambda-list forms) *local-functions-and-macros*)
+        (push name *local-functions-and-macros*)))
     ;; FIXME Process declarations!
     (let ((body (sys::parse-body (cddr form) nil)))
       (list* 'PROGN (mapcar #'precompile1 body)))))
@@ -418,6 +418,9 @@
   (let ((name (car def))
         (arglist (cadr def))
         (body (cddr def)))
+    ;; Macro names are shadowed by local functions.
+    (push nil *local-functions-and-macros*)
+    (push name *local-functions-and-macros*)
     (list* name arglist (mapcar #'precompile1 body))))
 
 (defun precompile-local-functions (defs)
@@ -426,7 +429,8 @@
       (push (precompile-local-function-def def) result))))
 
 (defun precompile-flet/labels (form)
-  (let ((locals (cadr form))
+  (let ((*local-functions-and-macros* *local-functions-and-macros*)
+        (locals (cadr form))
         (body (cddr form)))
     (list* (car form)
            (precompile-local-functions locals)
