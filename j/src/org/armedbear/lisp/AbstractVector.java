@@ -22,6 +22,21 @@ package org.armedbear.lisp;
 
 public abstract class AbstractVector extends LispObject
 {
+    public int checkIndex(int index) throws LispException
+    {
+        if (index < 0 || index >= length())
+            badIndex(index);
+        return index;
+    }
+
+    public int checkIndex(LispObject index) throws LispException
+    {
+        long i = Fixnum.getValue(index);
+        if (i < 0 || i >= length())
+            badIndex(i);
+        return (int) i;
+    }
+
     protected void badIndex(long index) throws LispException
     {
         StringBuffer sb = new StringBuffer("invalid array index ");
