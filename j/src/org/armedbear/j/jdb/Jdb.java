@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.13 2003-05-16 15:19:47 piso Exp $
+ * $Id: Jdb.java,v 1.14 2003-05-17 17:38:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,7 @@ import javax.swing.SwingUtilities;
 import org.armedbear.j.Annotation;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.BufferIterator;
+import org.armedbear.j.Debug;
 import org.armedbear.j.Editor;
 import org.armedbear.j.EditorIterator;
 import org.armedbear.j.EditorList;
@@ -71,7 +72,7 @@ import org.armedbear.j.ReaderThread;
 import org.armedbear.j.SimpleEdit;
 import org.armedbear.j.Utilities;
 
-public final class Jdb extends Buffer
+public final class Jdb extends Buffer implements JdbConstants
 {
     private JdbSession session;
     private VirtualMachine vm;
@@ -90,7 +91,7 @@ public final class Jdb extends Buffer
     private Position posEndOfBuffer;
     private ArrayList breakpointListeners = new ArrayList();
     private ArrayList contextListeners = new ArrayList();
-    private String lastCommand;
+    private int lastCommand;
     private final List breakpoints = new ArrayList();
 
     public static void jdb()
@@ -197,7 +198,7 @@ public final class Jdb extends Buffer
         return sourcePath;
     }
 
-    public String getLastCommand()
+    public int getLastCommand()
     {
         return lastCommand;
     }
@@ -316,53 +317,71 @@ public final class Jdb extends Buffer
             args = null;
         }
         // Command may be abbreviated.
-        String command = JdbCommands.findCommand(cmd);
-        if (command != null) {
-            doCommand(command, args);
-            lastCommand = command;
-        } else {
+        int command = JdbCommands.findCommand(cmd);
+        if (command < 0) {
+            // Not found.
             logCommand(cmd);
             log("Command not found");
+        } else {
+            doCommand(command, args);
+            lastCommand = command;
         }
     }
 
-    public void doCommand(String command, String args)
+    public void doCommand(int command, String args)
     {
-        if (command.equals("stop")) {
-            logCommand("stop", args);
-            doStop(args);
-        } else if (command.equals("clear")) {
-            logCommand("clear", args);
-            doClear(args);
-        } else if (command.equals("finish")) {
-            logCommand("finish");
-            doFinish();
-        } else if (command.equals("locals")) {
-            logCommand("locals");
-            doLocals();
-        } else if (command.equals("next")) {
-            logCommand("next");
-            doNext(args);
-        } else if (command.equals("print")) {
-            logCommand("print", args);
-            doPrint(args);
-        } else if (command.equals("quit")) {
-            logCommand("quit");
-            quit();
-        } else if (command.equals("restart")) {
-            logCommand("restart");
-            restart();
-        } else if (command.equals("resume")) {
-            logCommand("resume");
-            doResume();
-        } else if (command.equals("stdin")) {
-            doStdin(args);
-        } else if (command.equals("step")) {
-            logCommand("step", args);
-            doStep(args);
-        } else if (command.equals("suspend")) {
-            logCommand("suspend");
-            doSuspend();
+        switch (command) {
+            case JDB_BREAK:
+                logCommand("break", args);
+                doStop(args);
+                break;
+            case JDB_CLEAR:
+                logCommand("clear", args);
+                doClear(args);
+                break;
+            case JDB_FINISH:
+                logCommand("finish");
+                doFinish();
+                break;
+            case JDB_LOCALS:
+                logCommand("locals");
+                doLocals();
+                break;
+            case JDB_NEXT:
+                logCommand("next");
+                doNext(args);
+                break;
+            case JDB_PRINT:
+                logCommand("print", args);
+                doPrint(args);
+                break;
+            case JDB_QUIT:
+                logCommand("quit");
+                quit();
+                break;
+            case JDB_RESTART:
+                logCommand("restart");
+                restart();
+                break;
+            case JDB_CONTINUE:
+                logCommand("continue");
+                doContinue();
+                break;
+            case JDB_STDIN:
+                doStdin(args);
+                break;
+            case JDB_STEP:
+                logCommand("step", args);
+                doStep(args);
+                break;
+            case JDB_SUSPEND:
+                logCommand("suspend");
+                doSuspend();
+                break;
+            default:
+                Log.error("Jdb.doCommand unknown command " + command);
+                Debug.bug();
+                break;
         }
     }
 
@@ -548,7 +567,7 @@ public final class Jdb extends Buffer
             return;
         setBreakpointAtCurrentLine(true);
         jdb.logCommand("continue");
-        jdb.doResume();
+        jdb.doContinue();
     }
 
     private static void setBreakpointAtCurrentLine(boolean temporary)
@@ -631,7 +650,7 @@ public final class Jdb extends Buffer
         }
     }
 
-    public void doResume()
+    public void doContinue()
     {
         if (vm != null) {
             currentThread = null;
@@ -1078,7 +1097,7 @@ public final class Jdb extends Buffer
             StepRequest.STEP_LINE, StepRequest.STEP_OVER);
         request.addCountFilter(count);
         request.enable();
-        doResume();
+        doContinue();
     }
 
     private void doStep(String args)
@@ -1112,7 +1131,7 @@ public final class Jdb extends Buffer
                 out ? StepRequest.STEP_OUT : StepRequest.STEP_INTO);
         request.addCountFilter(count);
         request.enable();
-        doResume();
+        doContinue();
     }
 
     private void doFinish()
@@ -1130,7 +1149,7 @@ public final class Jdb extends Buffer
                 StepRequest.STEP_OUT);
         request.addCountFilter(1);
         request.enable();
-        doResume();
+        doContinue();
     }
 
     private void doPrint(String what)

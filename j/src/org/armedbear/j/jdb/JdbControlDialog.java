@@ -2,7 +2,7 @@
  * JdbControlDialog.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbControlDialog.java,v 1.2 2003-05-11 01:28:02 piso Exp $
+ * $Id: JdbControlDialog.java,v 1.3 2003-05-17 17:38:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,8 +55,8 @@ import org.armedbear.j.HistoryTextField;
 import org.armedbear.j.SessionProperties;
 import org.armedbear.j.StandardButton;
 
-public final class JdbControlDialog extends JDialog implements Constants,
-    ActionListener, ComponentListener, KeyListener
+public final class JdbControlDialog extends JDialog implements JdbConstants,
+    Constants, ActionListener, ComponentListener, KeyListener
 {
     private static final String commandKey = "jdb.command";
 
@@ -173,16 +173,13 @@ public final class JdbControlDialog extends JDialog implements Constants,
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             // Mask off the bits we don't care about (Java 1.4).
             if ((e.getModifiers() & 0x0f) == 0) {
-                String command = commandTextField.getText().trim();
-                if (command.length() > 0) {
+                if (commandTextField.getText().trim().length() > 0) {
                     jdb.doCommand(commandTextField.getText());
                     commandTextField.setText("");
                 } else {
-                    command = jdb.getLastCommand();
-                    if (command != null) {
-                        if (command.equals("next") || command.equals("step"))
-                            jdb.doCommand(command);
-                    }
+                    int command = jdb.getLastCommand();
+                    if (command == JDB_NEXT || command == JDB_STEP)
+                        jdb.doCommand(command, null);
                 }
             }
         }
