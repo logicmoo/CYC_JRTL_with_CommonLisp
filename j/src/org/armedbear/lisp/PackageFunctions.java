@@ -2,7 +2,7 @@
  * PackageFunctions.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.3 2003-07-06 14:05:21 piso Exp $
+ * $Id: PackageFunctions.java,v 1.4 2003-07-06 14:09:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,15 @@ package org.armedbear.lisp;
 
 public final class PackageFunctions extends Lisp
 {
+    // ### packagep
+    // packagep object => generalized-boolean
+    private static final Primitive1 PACKAGEP = new Primitive1("packagep") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            return arg instanceof Package ? T : NIL;
+        }
+    };
+
     // ### package-nicknames
     // package-nicknames package => nicknames
     private static final Primitive1 PACKAGE_NICKNAMES =
