@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.30 2004-09-29 22:54:55 piso Exp $
+ * $Id: AbstractArray.java,v 1.31 2004-09-30 01:00:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,7 +180,19 @@ public abstract class AbstractArray extends LispObject
         LispObject printReadably = _PRINT_READABLY_.symbolValue(thread);
         if (printReadably != NIL || _PRINT_ARRAY_.symbolValue(thread) != NIL) {
             int maxLevel = Integer.MAX_VALUE;
-            if (printReadably == NIL) {
+            if (printReadably != NIL) {
+                for (int i = 0; i < dimv.length - 1; i++) {
+                    if (dimv[i] == 0) {
+                        for (int j = i + 1; j < dimv.length; j++) {
+                            if (dimv[j] != 0) {
+                                signal(new PrintNotReadable(list2(Keyword.OBJECT,
+                                                                  this)));
+                                return null; // Not reached.
+                            }
+                        }
+                    }
+                }
+            } else {
                 LispObject printLevel = _PRINT_LEVEL_.symbolValue(thread);
                 if (printLevel instanceof Fixnum)
                     maxLevel = ((Fixnum)printLevel).value;
