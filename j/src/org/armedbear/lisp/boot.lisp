@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.111 2003-10-01 01:14:56 piso Exp $
+;;; $Id: boot.lisp,v 1.112 2003-10-03 00:34:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -137,6 +137,9 @@
 (defun read-from-string (string &optional eof-error-p eof-value
 				&key (start 0) end preserve-whitespace)
   (sys::%read-from-string string eof-error-p eof-value start end preserve-whitespace))
+
+(defconstant lambda-list-keywords
+  '(&optional &rest &key &aux &body &whole &allow-other-keys &environment))
 
 (defconstant call-arguments-limit 50)
 
