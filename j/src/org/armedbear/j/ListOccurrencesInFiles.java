@@ -2,7 +2,7 @@
  * ListOccurrencesInFiles.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ListOccurrencesInFiles.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * $Id: ListOccurrencesInFiles.java,v 1.3 2002-11-15 14:43:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -200,7 +200,6 @@ public final class ListOccurrencesInFiles extends ListOccurrences
 
     private Line findLineForOccurrence(File sourceFile, Line sourceLine)
     {
-        Log.debug("findLineForOccurrence " + sourceFile + " " + (sourceLine.lineNumber()+1));
         if (sourceFile == null)
             return null;
         if (sourceLine == null)
@@ -221,17 +220,12 @@ public final class ListOccurrencesInFiles extends ListOccurrences
         Line best = null;
         for (line = line.next(); line instanceof OccurrenceLine; line = line.next()) {
             int candidate = ((OccurrenceLine)line).getSourceLineNumber();
-            Log.debug("candidate = " + candidate);
             if (candidate == target)
                 return line;
-            if (best != null)
-                if (candidate > target) {
-                    Log.debug("candidate = " + candidate + " best = " + best);
-                    return best;
-                }
+            if (best != null && candidate > target)
+                return best;
             best = line;
         }
-        Log.debug("returning best = " + best);
         return best;
     }
 
