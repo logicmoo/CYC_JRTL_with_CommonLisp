@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.94 2003-06-23 11:08:20 piso Exp $
+ * $Id: Lisp.java,v 1.95 2003-06-24 19:50:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,6 +128,53 @@ public abstract class Lisp
                 result = fun.execute(argv);
                 break;
         }
+        if (debug)
+            thread.popStackFrame();
+        return result;
+    }
+
+    public static final LispObject funcall1(LispObject fun, LispObject arg,
+        LispThread thread) throws Condition
+    {
+        if (fun instanceof Autoload) {
+            Autoload autoload = (Autoload) fun;
+            autoload.load();
+            fun = autoload.getSymbol().getSymbolFunction();
+        }
+        if (debug) {
+            LispObject[] argv = new LispObject[1];
+            argv[0] = arg;
+            thread.pushStackFrame(fun, argv);
+        }
+        thread.clearValues();
+        LispObject result;
+        if (profiling)
+            fun.incrementCallCount();
+        result = fun.execute(arg);
+        if (debug)
+            thread.popStackFrame();
+        return result;
+    }
+
+    public static final LispObject funcall2(LispObject fun, LispObject first,
+        LispObject second, LispThread thread) throws Condition
+    {
+        if (fun instanceof Autoload) {
+            Autoload autoload = (Autoload) fun;
+            autoload.load();
+            fun = autoload.getSymbol().getSymbolFunction();
+        }
+        if (debug) {
+            LispObject[] argv = new LispObject[2];
+            argv[0] = first;
+            argv[1] = second;
+            thread.pushStackFrame(fun, argv);
+        }
+        thread.clearValues();
+        LispObject result;
+        if (profiling)
+            fun.incrementCallCount();
+        result = fun.execute(first, second);
         if (debug)
             thread.popStackFrame();
         return result;
