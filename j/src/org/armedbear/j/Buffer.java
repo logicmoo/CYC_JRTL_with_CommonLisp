@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.1.1.1 2002-09-24 16:07:54 piso Exp $
+ * $Id: Buffer.java,v 1.2 2002-10-05 13:08:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2687,10 +2687,9 @@ public class Buffer extends SystemBuffer
     public String getStatusText(Editor editor)
     {
         Debug.assertTrue(editor.getBuffer() == this);
-        Position dot = editor.getDot();
+        Position dot = editor.getDotCopy();
         if (dot == null)
             return null;
-        dot = dot.copy();
         final FastStringBuffer sb = new FastStringBuffer();
         if (cvsEntry != null) {
             sb.append("CVS ");
