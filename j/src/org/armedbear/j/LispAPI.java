@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.24 2003-08-02 21:55:37 piso Exp $
+ * $Id: LispAPI.java,v 1.25 2003-09-15 16:18:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@ import org.armedbear.lisp.Primitive1;
 import org.armedbear.lisp.Primitive2;
 import org.armedbear.lisp.Primitive3;
 import org.armedbear.lisp.Primitive;
+import org.armedbear.lisp.Primitives;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TypeError;
 import org.armedbear.lisp.WrongNumberOfArgumentsException;
@@ -770,6 +771,30 @@ public final class LispAPI extends Lisp
             }
         }
     };
+
+    public static void invokeOpenFileHook(Buffer buffer)
+    {
+        try {
+            Primitives.FUNCALL.execute(PACKAGE_J.intern("INVOKE-HOOK"),
+                                       PACKAGE_J.intern("OPEN-FILE-HOOK"),
+                                       new JavaObject(buffer));
+        }
+        catch (Throwable t) {
+            Log.debug(t);
+        }
+    }
+
+    public static void invokeAfterSaveHook(Buffer buffer)
+    {
+        try {
+            Primitives.FUNCALL.execute(PACKAGE_J.intern("INVOKE-HOOK"),
+                                       PACKAGE_J.intern("AFTER-SAVE-HOOK"),
+                                       new JavaObject(buffer));
+        }
+        catch (Throwable t) {
+            Log.debug(t);
+        }
+    }
 
     static {
         for (Iterator it = Property.iterator(); it.hasNext();)
