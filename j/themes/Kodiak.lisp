@@ -1,6 +1,6 @@
 ;;; -*- Mode: Lisp -*-
 ;;; Kodiak 4/14/2000-11/1/2000
-;;; $Id: Kodiak.lisp,v 1.2 2003-04-01 02:19:20 piso Exp $
+;;; $Id: Kodiak.lisp,v 1.3 2003-04-23 15:13:04 piso Exp $
 
 (use-package "J")
 
@@ -91,6 +91,8 @@
  "DiffMode.style.inserted"              plain
  "DiffMode.color.deleted"               "  0   0 153"
  "DiffMode.style.deleted"               plain
+ "DiffMode.color.changed"               "  0 102 153"
+ "DiffMode.style.changed"               plain
 
  "DirectoryMode.color.directory"        black
  "DirectoryMode.style.directory"        bold
