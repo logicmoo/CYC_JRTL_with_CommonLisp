@@ -1,6 +1,6 @@
 ;;; -*- Mode: Lisp -*-
 ;;; Anokha Classic
-;;; $Id: AnokhaClassic.lisp,v 1.2 2003-04-01 02:19:57 piso Exp $
+;;; $Id: AnokhaClassic.lisp,v 1.3 2003-05-10 16:37:20 piso Exp $
 
 (use-package "J")
 
@@ -37,6 +37,7 @@
  "color.gutterBorder"                   " 96  96  72"
  "color.change"                         "255 164   0"
  "color.savedChange"                    "128  96   0"
+ "color.delimiter"                      "255 255   0"
 
  "color.headerName"                     "204 102   0"
  "color.headerValue"                    "255 255 204"
@@ -70,7 +71,6 @@
  "PHPMode.color.var"                    "255 255 204"
  "PHPMode.color.attribute"              "204 204 153"
  "PHPMode.color.equals"                 "255 255   0"
- "PHPMode.color.delimiter"              "255 255   0"
  "PHPMode.color.tag"                    "255 153   0"
 
  "color.prompt"                         "153 204 153"
@@ -78,7 +78,6 @@
 
  "XmlMode.color.attribute"              "204 204 153"
  "XmlMode.color.equals"                 "255 255   0"
- "XmlMode.color.delimiter"              "255 255   0"
  "XmlMode.color.namespace"              "255 204   0"
  "XmlMode.color.tag"                    "255 153   0"
 
@@ -97,7 +96,6 @@
  "PropertiesMode.style.key"             plain
  "PropertiesMode.color.value"           white
  "PropertiesMode.style.value"           plain
- "PropertiesMode.color.delimiter"       "255 255   0"
  "PropertiesMode.color.section"         "255 153   0"
  "PropertiesMode.style.section"         bold
 
@@ -126,7 +124,5 @@
  "DirectoryMode.style.marked"           plain
  "style.prompt"                         plain
  "style.comment"                        plain
- "XmlMode.style.tag"                    plain
- "XmlMode.style.delimiter"              plain
- "PHPMode.style.tag"                    plain
- "PHPMode.style.delimiter"              plain)
+ "style.tag"                            plain
+ "style.delimiter"                      plain)
