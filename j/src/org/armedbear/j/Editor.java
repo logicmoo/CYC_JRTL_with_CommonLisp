@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.4 2002-10-05 15:42:00 piso Exp $
+ * $Id: Editor.java,v 1.5 2002-10-10 16:34:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -343,9 +343,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         Log.initialize();
         Directories.moveUnsentMessagesToDraftsFolder();
         loadExtensions();
-        if (quick == 0)
+        if (quick == 0) {
+            long start = System.currentTimeMillis();
             runStartupScript();
-
+            long elapsed = System.currentTimeMillis() - start;
+            Log.debug("runStartupScript() " + elapsed + " ms");
+        }
         DefaultLookAndFeel.setLookAndFeel();
 
         if (Platform.isJava14())
