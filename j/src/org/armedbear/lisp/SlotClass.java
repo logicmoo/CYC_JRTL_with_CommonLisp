@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SlotClass.java,v 1.1 2003-11-20 17:36:59 piso Exp $
+ * $Id: SlotClass.java,v 1.2 2003-11-20 18:41:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,11 @@ public class SlotClass extends LispClass
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         return super.typep(type);
+    }
+
+    public void setDirectSlots(LispObject directSlots)
+    {
+        this.directSlots = directSlots;
     }
 
     // ### class-direct-slots
