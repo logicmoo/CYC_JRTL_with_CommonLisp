@@ -64,6 +64,7 @@ cddr
 cdr
 cerror
 char
+char-code
 char-downcase
 char-equal
 char-greaterp
@@ -81,6 +82,7 @@ char>=
 check-type
 clear-output
 close
+code-char
 coerce
 compiler-macro-function
 concatenate
@@ -277,6 +279,7 @@ package-use-list
 package-used-by-list
 packagep
 parse-integer
+peek-char
 pop
 position
 position-if
@@ -304,6 +307,9 @@ push
 pushnew
 quote
 random
+read
+read-byte
+read-char
 read-char-no-hang
 read-from-string
 read-line
