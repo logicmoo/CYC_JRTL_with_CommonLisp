@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.68 2004-05-12 19:08:53 piso Exp $
+ * $Id: Stream.java,v 1.69 2004-06-07 15:52:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -607,7 +607,8 @@ public class Stream extends LispObject
     private final boolean _readToken(StringBuffer sb) throws ConditionThrowable
     {
         boolean escaped = false;
-        LispObject readtableCase = currentReadtable().getReadtableCase();
+        final Readtable rt = currentReadtable();
+        final LispObject readtableCase = rt.getReadtableCase();
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
             char c = sb.charAt(0);
@@ -630,7 +631,6 @@ public class Stream extends LispObject
                 sb.setCharAt(0, Utilities.toLowerCase(c));
             }
         }
-        final Readtable rt = currentReadtable();
       loop:
         while (true) {
             int n = _readChar();
