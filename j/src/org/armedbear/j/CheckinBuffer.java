@@ -1,8 +1,8 @@
 /*
  * CheckinBuffer.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CheckinBuffer.java,v 1.4 2002-10-14 16:32:31 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: CheckinBuffer.java,v 1.5 2003-07-01 17:23:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,9 @@ public final class CheckinBuffer extends Buffer implements Constants
 
     public final File getCurrentDirectory()
     {
-        return parentBuffer.getCurrentDirectory();
+        if (parentBuffer != null)
+            return parentBuffer.getCurrentDirectory();
+        return Directories.getUserHomeDirectory();
     }
 
     public final int getVCType()
