@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.31 2003-12-10 17:55:06 piso Exp $
+;;; $Id: clos.lisp,v 1.32 2003-12-10 18:10:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -491,6 +491,7 @@
 (defun std-slot-exists-p (instance slot-name)
   (not (null (find slot-name (class-slots (class-of instance))
                    :key #'slot-definition-name))))
+
 (defun slot-exists-p (object slot-name)
   (if (eq (class-of (class-of object)) the-class-standard-class)
       (std-slot-exists-p object slot-name)
@@ -1392,8 +1393,11 @@
   (setf (std-slot-value instance slot-name) new-value))
 
 (defgeneric slot-exists-p-using-class (class instance slot-name))
-(defmethod slot-exists-p-using-class
-  ((class standard-class) instance slot-name)
+
+(defmethod slot-exists-p-using-class (class instance slot-name)
+  nil)
+
+(defmethod slot-exists-p-using-class ((class standard-class) instance slot-name)
   (std-slot-exists-p instance slot-name))
 
 (defgeneric slot-boundp-using-class (class instance slot-name))
