@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.148 2004-02-23 14:23:17 piso Exp $
+# $Id: Makefile.in,v 1.149 2004-02-23 15:11:02 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@ CLASSFILES =	AbstractArray.class \
 		Closure.class \
 		CompiledFunction.class \
 		Complex.class \
+		ComplexString.class \
 		ConcatenatedStream.class \
 		Condition.class \
 		ConditionThrowable.class \
@@ -80,7 +81,6 @@ CLASSFILES =	AbstractArray.class \
 		LispError.class \
 		LispFloat.class \
 		LispObject.class \
-		LispString.class \
 		LispThread.class \
 		Load.class \
 		LogicalPathname.class \
