@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.351 2003-08-25 17:33:53 piso Exp $
+ * $Id: Primitives.java,v 1.352 2003-08-25 17:56:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2172,7 +2172,7 @@ public final class Primitives extends Module
 
     // ### %set-fill-pointer
     private static final Primitive2 _SET_FILL_POINTER =
-        new Primitive2("%set-fill-pointer") {
+        new Primitive2("%set-fill-pointer", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
@@ -2965,7 +2965,7 @@ public final class Primitives extends Module
 
     // ### fset
     private static final Primitive2 FSET =
-        new Primitive2("fset") {
+        new Primitive2("fset", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
             throws LispError
         {
@@ -3037,7 +3037,8 @@ public final class Primitives extends Module
 
     // ### %put
     // %put symbol indicator value
-    private static final Primitive3 _PUT = new Primitive3("%put") {
+    private static final Primitive3 _PUT =
+        new Primitive3("%put", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws LispError
         {
@@ -3933,7 +3934,7 @@ public final class Primitives extends Module
     // read-from-string string &optional eof-error-p eof-value &key start end
     // preserve-whitespace => object, position
     private static final Primitive _READ_FROM_STRING =
-        new Primitive("%read-from-string") {
+        new Primitive("%read-from-string", PACKAGE_SYS, false) {
         public LispObject execute(LispObject[] args) throws Condition
         {
             if (args.length < 6)
