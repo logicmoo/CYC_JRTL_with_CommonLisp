@@ -56,8 +56,12 @@ public final class LispTagger extends Tagger
                 // Escape.
                 if (pos.getOffset() < pos.getLineLength()-1)
                     pos.skip(2);
-                else
-                    pos.moveTo(pos.getNextLine(), 0);
+                else {
+                    Line nextLine = pos.getNextLine();
+                    if (nextLine == null)
+                        break;
+                    pos.moveTo(nextLine, 0);
+                }
                 continue;
             }
             if (c == '\"') {
