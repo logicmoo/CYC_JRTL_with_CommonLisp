@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.28 2003-12-12 19:41:20 piso Exp $
+ * $Id: Java.java,v 1.29 2003-12-20 09:04:39 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ import java.lang.reflect.Modifier;
 public final class Java extends Lisp
 {
     // ### jclass
-    private static final Primitive1 JCLASS = new Primitive1("jclass", PACKAGE_JAVA)
+    private static final Primitive1 JCLASS = new Primitive1("jclass", PACKAGE_JAVA, true, "name")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -76,7 +76,9 @@ public final class Java extends Lisp
      *               to store value in a field of the instance. The class is
      *               derived from the instance.
      */
-    private static final Primitive JFIELD = new Primitive("jfield", PACKAGE_JAVA)
+    private static final Primitive JFIELD = 
+      new Primitive("jfield", PACKAGE_JAVA, true, 
+                    "class-ref-or-field field-or-instance &optional instance value")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -90,7 +92,7 @@ public final class Java extends Lisp
                 if (args[1] instanceof LispString) {
                     // Cases 1-5.
                     fieldName = LispString.getValue(args[1]);
-		    c = forClassRef(args[0]);
+                    c = forClassRef(args[0]);
                 } else {
                     // Cases 6 and 7.
                     fieldName = LispString.getValue(args[0]);
@@ -158,7 +160,7 @@ public final class Java extends Lisp
     // ### jconstructor
     // jconstructor class-ref &rest parameter-class-refs
     private static final Primitive JCONSTRUCTOR =
-        new Primitive("jconstructor", PACKAGE_JAVA)
+        new Primitive("jconstructor", PACKAGE_JAVA, true, "class-ref &rest parameter-class-refs")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -204,7 +206,8 @@ public final class Java extends Lisp
 
     // ### jmethod
     // jmethod class-ref name &rest parameter-class-refs
-    private static final Primitive JMETHOD = new Primitive("jmethod", PACKAGE_JAVA)
+    private static final Primitive JMETHOD = new Primitive("jmethod", PACKAGE_JAVA, true, 
+                                                           "class-ref name &rest parameter-class-refs")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -253,7 +256,8 @@ public final class Java extends Lisp
 
     // ### jstatic
     // jstatic method class &rest args
-    private static final Primitive JSTATIC = new Primitive("jstatic", PACKAGE_JAVA)
+    private static final Primitive JSTATIC = new Primitive("jstatic", PACKAGE_JAVA, true, 
+                                                           "method class &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -302,7 +306,8 @@ public final class Java extends Lisp
 
     // ### jnew
     // jnew constructor &rest args
-    private static final Primitive JNEW = new Primitive("jnew", PACKAGE_JAVA)
+    private static final Primitive JNEW = new Primitive("jnew", PACKAGE_JAVA, true, 
+                                                        "constructor &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -327,7 +332,8 @@ public final class Java extends Lisp
 
     // ### jcall
     // jcall method instance &rest args
-    private static final Primitive JCALL = new Primitive("jcall", PACKAGE_JAVA)
+    private static final Primitive JCALL = new Primitive("jcall", PACKAGE_JAVA, true, 
+                                                         "method instance &rest args")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -357,7 +363,8 @@ public final class Java extends Lisp
 
     // ### make-immediate-object
     // make-immediate-object object &optional type
-    private static final Primitive MAKE_IMMEDIATE_OBJECT = new Primitive("make-immediate-object", PACKAGE_JAVA, true)
+    private static final Primitive MAKE_IMMEDIATE_OBJECT = 
+      new Primitive("make-immediate-object", PACKAGE_JAVA, true, "object &optional type")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -385,7 +392,8 @@ public final class Java extends Lisp
         }
     };
 
-    private static final Primitive1 JAVA_OBJECT_P = new Primitive1("java-object-p", PACKAGE_JAVA)
+    private static final Primitive1 JAVA_OBJECT_P = new Primitive1("java-object-p", PACKAGE_JAVA, true, 
+                                                                   "object")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -483,16 +491,5 @@ public final class Java extends Lisp
         if (message == null || message.length() == 0)
             message = t.getClass().getName();
         return message;
-    }
-
-    static {
-        export("JCLASS", PACKAGE_JAVA);
-        export("JFIELD", PACKAGE_JAVA);
-        export("JCONSTRUCTOR", PACKAGE_JAVA);
-        export("JMETHOD", PACKAGE_JAVA);
-        export("JSTATIC", PACKAGE_JAVA);
-        export("JNEW", PACKAGE_JAVA);
-        export("JCALL", PACKAGE_JAVA);
-        export("JAVA-OBJECT-P", PACKAGE_JAVA);
     }
 }
