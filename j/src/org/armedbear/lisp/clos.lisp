@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.34 2003-12-11 19:17:41 piso Exp $
+;;; $Id: clos.lisp,v 1.35 2003-12-15 16:22:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -181,8 +181,8 @@
      (list (car option) `',(cadr option)))
     (t
      (error 'program-error
-            "invalid DEFCLASS option ~S"
-            (car option)))))
+            :format-control "invalid DEFCLASS option ~S"
+            :format-arguments (list (car option))))))
 
 (defun make-initfunction (initform)
   `(function (lambda () ,initform)))
