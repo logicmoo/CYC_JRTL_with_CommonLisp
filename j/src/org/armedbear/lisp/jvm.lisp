@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.357 2005-01-19 14:57:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.358 2005-01-19 15:59:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -67,8 +67,6 @@
 #+nil
 (defmacro defsubst (&rest args)
   `(defun ,@args))
-
-;; (defvar *use-locals-vector* nil)
 
 (defvar *compiler-debug* nil)
 
@@ -3566,7 +3564,6 @@
          (initform
           (cond
            ((and *trust-user-type-declarations*
-;;                  (not *use-locals-vector*)
                  (null (variable-closure-index variable))
                  (not (variable-special-p variable))
                  (variable-declared-type variable)
@@ -3577,8 +3574,7 @@
             (setf (variable-register variable) (allocate-register))
             (emit 'istore (variable-register variable))
             (setf boundp t))
-           ((and ;;(not *use-locals-vector*)
-                 (null (variable-closure-index variable))
+           ((and (null (variable-closure-index variable))
                  (not (variable-special-p variable))
                  (eql (variable-writes variable) 0)
                  (subtypep (derive-type initform) 'FIXNUM))
@@ -5554,37 +5550,34 @@
           (emit 'aload_0) ; this
           (aver (not (null (compiland-argument-register compiland))))
           (emit 'aload (compiland-argument-register compiland)) ; arg vector
-          ; Reserve extra slots for locals if applicable.
-;;           (let ((extra (if *use-locals-vector*
-;;                            (length (context-vars *context*))
-;;                            0)))
-;;             (emit 'sipush extra))
-          (emit-push-constant-int 0)
-          (emit-invokevirtual *this-class*
-                              (if (or (memq '&optional args) (memq '&key args))
-                                  "processArgs"
-                                  "fastProcessArgs")
-                              "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                              -2)
-         (emit 'astore (compiland-argument-register compiland)))
-        )
+          (cond ((or (memq '&optional args) (memq '&key args))
+                 (emit 'iconst_0)
+                 (emit-invokevirtual *this-class*
+                                     "processArgs"
+                                     "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
+                                     -2))
+                (t
+                 (emit-invokevirtual *this-class*
+                                     "fastProcessArgs"
+                                     "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;"
+                                     -1)))
+          (emit 'astore (compiland-argument-register compiland))))
        (*hairy-arglist-p*
         (dformat t "prologue case 1~%")
         (emit 'aload_0) ; this
         (aver (not (null (compiland-argument-register compiland))))
         (emit 'aload (compiland-argument-register compiland)) ; arg vector
-        ; Reserve extra slots for locals if applicable.
-;;         (let ((extra (if *use-locals-vector*
-;;                          (length (context-vars *context*))
-;;                          0)))
-;;           (emit 'sipush extra))
-        (emit-push-constant-int 0)
-        (emit-invokevirtual *this-class*
-                            (if (or (memq '&optional args) (memq '&key args))
-                                "processArgs"
-                                "fastProcessArgs")
-                            "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
-                            -2)
+        (cond ((or (memq '&optional args) (memq '&key args))
+               (emit 'iconst_0)
+               (emit-invokevirtual *this-class*
+                                   "processArgs"
+                                   "([Lorg/armedbear/lisp/LispObject;I)[Lorg/armedbear/lisp/LispObject;"
+                                   -2))
+              (t
+               (emit-invokevirtual *this-class*
+                                   "fastProcessArgs"
+                                   "([Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;"
+                                   -1)))
         (emit 'astore (compiland-argument-register compiland)))
        ((not *using-arg-array*)
         (dformat t "prologue case 2~%")
