@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.53 2004-03-16 16:12:40 piso Exp $
+ * $Id: Stream.java,v 1.54 2004-03-16 16:22:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -441,24 +441,15 @@ public class Stream extends LispObject
             case 'a':
             case 'A':
                 return readArray(numArg);
-            case 'b':
-            case 'B':
-                return readRadix(2);
             case 'c':
             case 'C':
                 return readComplex();
-            case 'o':
-            case 'O':
-                return readRadix(8);
             case 'p':
             case 'P':
                 return readPathname();
             case 's':
             case 'S':
                 return readStructure();
-            case 'x':
-            case 'X':
-                return readRadix(16);
             default:
                 //clearInput();
                 //return signal(new LispError("unsupported '#' macro character '" +

@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: LispReader.java,v 1.18 2004-03-16 16:10:35 piso Exp $
+ * $Id: LispReader.java,v 1.19 2004-03-16 16:21:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.lisp;
 
 public final class LispReader extends Lisp
 {
+    // ### read-comment
     public static final ReaderMacroFunction READ_COMMENT =
         new ReaderMacroFunction("read-comment", PACKAGE_SYS, false,
                                 "stream character")
@@ -40,6 +41,7 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### read-string
     public static final ReaderMacroFunction READ_STRING =
         new ReaderMacroFunction("read-string", PACKAGE_SYS, false,
                                 "stream character")
@@ -76,6 +78,7 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### read-list
     public static final ReaderMacroFunction READ_LIST =
         new ReaderMacroFunction("read-list", PACKAGE_SYS, false,
                                 "stream character")
@@ -87,6 +90,7 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### read-right-paren
     public static final ReaderMacroFunction READ_RIGHT_PAREN =
         new ReaderMacroFunction("read-right-paren", PACKAGE_SYS, false,
                                 "stream character")
@@ -98,6 +102,7 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### read-quote
     public static final ReaderMacroFunction READ_QUOTE =
         new ReaderMacroFunction("read-quote", PACKAGE_SYS, false,
                                 "stream character")
@@ -122,6 +127,7 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### backquote-macro
     public static final ReaderMacroFunction BACKQUOTE_MACRO =
         new ReaderMacroFunction("backquote-macro", PACKAGE_SYS, false,
                                 "stream character")
@@ -134,6 +140,7 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### comma-macro
     public static final ReaderMacroFunction COMMA_MACRO =
         new ReaderMacroFunction("comma-macro", PACKAGE_SYS, false,
                                 "stream character")
@@ -145,14 +152,51 @@ public final class LispReader extends Lisp
         }
     };
 
+    // ### sharp-b
+    public static final DispatchMacroFunction SHARP_B =
+        new DispatchMacroFunction("sharp-b", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readRadix(2);
+        }
+    };
+
+    // ### sharp-o
+    public static final DispatchMacroFunction SHARP_O =
+        new DispatchMacroFunction("sharp-o", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readRadix(8);
+        }
+    };
+
+    // ### sharp-r
     public static final DispatchMacroFunction SHARP_R =
-        new DispatchMacroFunction("sharp-R", PACKAGE_SYS, false,
+        new DispatchMacroFunction("sharp-r", PACKAGE_SYS, false,
                                   "stream sub-char numarg")
     {
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
             return stream.readRadix(n);
+        }
+    };
+
+    // ### sharp-x
+    public static final DispatchMacroFunction SHARP_X =
+        new DispatchMacroFunction("sharp-x", PACKAGE_SYS, false,
+                                  "stream sub-char numarg")
+    {
+        public LispObject execute(Stream stream, char c, int n)
+            throws ConditionThrowable
+        {
+            return stream.readRadix(16);
         }
     };
 }
