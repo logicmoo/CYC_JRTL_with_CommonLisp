@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.5 2003-08-08 13:04:46 piso Exp $
+ * $Id: Extensions.java,v 1.6 2003-08-10 16:28:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,16 @@ public final class Extensions extends Lisp
         public LispObject execute(LispObject arg) throws Condition
         {
             return arg.isSpecialVariable() ? T : NIL;
+        }
+    };
+
+    private static final Primitive1 CHARPOS =
+        new Primitive1("charpos", PACKAGE_EXT, true) {
+        public LispObject execute(LispObject arg) throws Condition
+        {
+            if (arg instanceof CharacterOutputStream)
+                return new Fixnum(((CharacterOutputStream)arg).getCharPos());
+            throw new TypeError(arg, "character output stream");
         }
     };
 }
