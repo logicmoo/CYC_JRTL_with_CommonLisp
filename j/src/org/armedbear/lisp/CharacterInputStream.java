@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.15 2003-03-14 02:57:57 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.16 2003-03-14 10:58:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -544,7 +544,7 @@ public class CharacterInputStream extends LispStream
                 catch (NumberFormatException e) {}
             } else {
                 try {
-                    return new Fixnum(Integer.parseInt(token));
+                    return new Fixnum(Long.parseLong(token));
                 }
                 catch (NumberFormatException e) {}
             }
