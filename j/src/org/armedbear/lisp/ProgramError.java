@@ -22,4 +22,13 @@ package org.armedbear.lisp;
 
 public class ProgramError extends LispError
 {
+    public ProgramError()
+    {
+        super();
+    }
+
+    public ProgramError(String message)
+    {
+        super(message);
+    }
 }
