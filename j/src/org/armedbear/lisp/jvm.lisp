@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.112 2004-04-17 01:40:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.113 2004-04-18 04:52:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -513,97 +513,101 @@
 
 (defparameter single-valued-operators (make-hash-table :test 'eq))
 
-(dolist (op '(+ - * /
-              1+ 1- + - < > <= >= = /=
-              car cdr caar cadr cdar cddr cadar caddr cdddr cddddr
-              first second third
-              eq eql equal equalp
-              length
-              constantp symbolp
-              list list*
-              macro-function
-              compiler-macro-function
-              get
-              atom
-              compiled-function-p
-              fdefinition
-              special-operator-p keywordp functionp fboundp zerop consp listp
-              numberp integerp floatp
-              plusp minusp
-              complexp arrayp readtablep packagep
-              array-dimensions array-rank array-total-size
-              array-element-type upgraded-array-element-type
-              simple-vector-p simple-string-p bit-vector-p simple-bit-vector-p
-              stringp
-              row-major-aref
-              quote function
-              mapcar
-              find position
-              append nconc subseq adjoin
-              revappend nreconc
-              copy-seq
-              assoc assoc-if assoc-if-not acons assq assql
-              char-code code-char char-int digit-char-p
-              member ext:memq
-              remove remove-if remove-if-not delete delete-if delete-if-not
-              special-variable-p
-              gensym
-              symbol-name symbol-function
-              coerce
-              reverse nreverse
-              last
-              cons rplaca rplacd
-              copy-list
-              make-sequence make-list make-array make-package make-hash-table
-              make-string
-              find-package
-              pathname make-pathname pathname-name directory
-              package-used-by-list package-shadowing-symbols
-              nthcdr
-              aref elt
-              not null endp
-              concatenate
-              format prin1 princ print write
-              compute-restarts find-restart restart-name
-              string
-              string=
-              setq
-              multiple-value-list push pop
-              type-of class-of
-              typep sys::%typep
-              abs
-              ash
-              float-radix
-              logand logandc1 logandc2 logeqv logior lognand
-              lognot logorc1 logorc2 logxor
-              logbitp
-              slot-boundp slot-value slot-exists-p
-              allocate-instance
-              find-class
-              class-name
-              constantly
-              exp expt log
-              min max
-              realpart imagpart
-              integer-length
-              sqrt isqrt gcd lcm
-              char schar
-              open
-              svref
-              fill-pointer
-              symbol-value symbol-package package-name
-              fourth
-              vector-push vector-push-extend
-              union nunion
-              remove-duplicates delete-duplicates
-              read-byte
-              ext:classp
-              ext:fixnump
-              ext:memql
-              sys::generic-function-name
-              precompiler::precompile1
-              ))
-  (setf (gethash op single-valued-operators) t))
+(defun single-valued-p-init ()
+  (dolist (op '(+ - * /
+                1+ 1- + - < > <= >= = /=
+                car cdr caar cadr cdar cddr cadar caddr cdddr cddddr
+                first second third
+                eq eql equal equalp
+                length
+                constantp symbolp
+                list list*
+                macro-function
+                compiler-macro-function
+                get
+                atom
+                compiled-function-p
+                fdefinition
+                special-operator-p keywordp functionp fboundp zerop consp listp
+                numberp integerp floatp
+                plusp minusp
+                complexp arrayp readtablep packagep
+                array-dimensions array-rank array-total-size
+                array-element-type upgraded-array-element-type
+                simple-vector-p simple-string-p bit-vector-p simple-bit-vector-p
+                stringp
+                row-major-aref
+                quote function
+                mapcar
+                find position
+                append nconc subseq adjoin
+                revappend nreconc
+                copy-seq
+                assoc assoc-if assoc-if-not acons assq assql
+                char-code code-char char-int digit-char-p
+                member ext:memq
+                remove remove-if remove-if-not delete delete-if delete-if-not
+                special-variable-p
+                gensym
+                symbol-name symbol-function
+                coerce
+                reverse nreverse
+                last
+                cons rplaca rplacd
+                copy-list
+                make-sequence make-list make-array make-package make-hash-table
+                make-string
+                find-package
+                pathname make-pathname pathname-name directory
+                package-used-by-list package-shadowing-symbols
+                nthcdr
+                aref elt
+                not null endp
+                concatenate
+                format prin1 princ print write
+                compute-restarts find-restart restart-name
+                string
+                string=
+                setq
+                multiple-value-list push pop
+                type-of class-of
+                typep sys::%typep
+                abs
+                ash
+                float-radix
+                logand logandc1 logandc2 logeqv logior lognand
+                lognot logorc1 logorc2 logxor
+                logbitp
+                slot-boundp slot-value slot-exists-p
+                allocate-instance
+                find-class
+                class-name
+                constantly
+                exp expt log
+                min max
+                realpart imagpart
+                integer-length
+                sqrt isqrt gcd lcm
+                char schar
+                open
+                svref
+                fill-pointer
+                symbol-value symbol-package package-name
+                fourth
+                vector-push vector-push-extend
+                union nunion
+                remove-duplicates delete-duplicates
+                read-byte
+                ext:classp
+                ext:fixnump
+                ext:memql
+                sys::generic-function-name
+                precompiler::precompile1
+                ))
+    (setf (gethash op single-valued-operators) t)))
+
+(eval-when (:load-toplevel :execute)
+  (single-valued-p-init))
 
 (defun single-valued-p (form)
   (cond ((atom form)
