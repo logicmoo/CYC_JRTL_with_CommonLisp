@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.8 2003-01-07 20:10:58 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.9 2003-01-08 13:10:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,8 @@ import javax.swing.SwingUtilities;
 
 public final class CompilationBuffer extends Buffer implements Runnable
 {
+    private static CompilationBuffer lastCompilationBuffer;
+
     private String command;
     private String expandedCommand;
 
@@ -572,22 +574,15 @@ public final class CompilationBuffer extends Buffer implements Runnable
         CompilationBuffer cb = null;
         boolean visible = false;
 
-        // Look for existing compilation buffer.
-        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-            Buffer buf = it.nextBuffer();
-            if (buf.getType() == Buffer.TYPE_COMPILATION) {
-                cb = (CompilationBuffer) buf;
-                break;
-            }
-        }
-
-        if (cb != null) {
-            // Found existing compilation buffer.
+        if (lastCompilationBuffer != null) {
+            // Re-use existing compilation buffer.
+            cb = lastCompilationBuffer;
+            if (!Editor.getBufferList().contains(cb))
+                cb.relink();
             cb.empty();
             cb.setCommand(command);
             cb.setParentBuffer(editor.getBuffer());
             cb.setCurrentDirectory(editor.getCurrentDirectory());
-
             // Is it visible?
             EditorIterator it = new EditorIterator();
             while (it.hasNext()) {
@@ -601,6 +596,7 @@ public final class CompilationBuffer extends Buffer implements Runnable
         } else {
             cb = new CompilationBuffer(command, editor.getCurrentDirectory());
             cb.setParentBuffer(editor.getBuffer());
+            lastCompilationBuffer = cb;
         }
 
         // Call initialize() before starting the thread so we can put the
@@ -692,55 +688,52 @@ public final class CompilationBuffer extends Buffer implements Runnable
 
     public static void nextError()
     {
+        if (lastCompilationBuffer == null)
+            return;
+
         final Editor editor = Editor.currentEditor();
 
-        // Look for existing compilation buffer.
-        CompilationBuffer cb = null;
-        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-            Buffer buf = it.nextBuffer();
-            if (buf.getType() == Buffer.TYPE_COMPILATION) {
-                cb = (CompilationBuffer) buf;
-                break;
-            }
+        CompilationBuffer cb = lastCompilationBuffer;
+        if (!Editor.getBufferList().contains(cb)) {
+            cb.relink();
+            Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
         }
-        if (cb == null)
-            return;
 
         cb.nextErrorInternal();
 
+        boolean useOtherWindow = false;
+
+        // Find editor displaying compilation buffer (if any).
+        Editor ed = null;
+        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+            ed = it.nextEditor();
+            if (ed.getBuffer() == cb)
+                break;
+        }
+
+        if (ed.getBuffer() != cb) {
+            // The compilation buffer is not currently displayed.
+            ed = editor.displayInOtherWindow(cb);
+        } else if (ed == editor) {
+            // This command was invoked from the window displaying the
+            // compilation buffer.
+            useOtherWindow = true;
+        }
+
+        // Move caret to relevant line of compilation buffer.
+        if (cb.lastErrorLine != null) {
+            Debug.assertTrue(ed.getBuffer() == cb);
+            Line line = cb.lastErrorLine;
+            ed.addUndo(SimpleEdit.MOVE);
+            ed.update(ed.getDotLine());
+            ed.setDot(line, 0);
+            ed.update(ed.getDotLine());
+            ed.moveCaretToDotCol();
+            ed.getDisplay().setUpdateFlag(REFRAME);
+            ed.updateDisplay();
+        }
+
         if (cb.errorFileName != null && cb.errorLineNumber != 0) {
-            boolean useOtherWindow = false;
-
-            // Find editor displaying compilation buffer (if any).
-            Editor ed = null;
-            for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-                ed = it.nextEditor();
-                if (ed.getBuffer() == cb)
-                    break;
-            }
-
-            if (ed.getBuffer() != cb) {
-                // The compilation buffer is not currently displayed.
-                ed = editor.displayInOtherWindow(cb);
-            } else if (ed == editor) {
-                // This command was invoked from the window displaying the
-                // compilation buffer.
-                useOtherWindow = true;
-            }
-
-            // Move caret to relevant line of compilation buffer.
-            if (cb.lastErrorLine != null) {
-                Debug.assertTrue(ed.getBuffer() == cb);
-                Line line = cb.lastErrorLine;
-                ed.addUndo(SimpleEdit.MOVE);
-                ed.update(ed.getDotLine());
-                ed.setDot(line, 0);
-                ed.update(ed.getDotLine());
-                ed.moveCaretToDotCol();
-                ed.getDisplay().setUpdateFlag(REFRAME);
-                ed.updateDisplay();
-            }
-
             // Find or create buffer for source file containing the error.
             Buffer buf = cb.getSourceBuffer();
             if (buf == null)
