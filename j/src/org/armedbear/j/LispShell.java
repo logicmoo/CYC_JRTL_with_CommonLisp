@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.18 2002-12-24 16:31:46 piso Exp $
+ * $Id: LispShell.java,v 1.19 2002-12-29 16:29:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@ public final class LispShell extends Shell
     private static final String CMUCL_PROMPT_PATTERN =
         "^\\* |^[0-9]+\\] ";
 
+    private String resetCommand = null;
     private String exitCommand = "(exit)";
 
     private LispShell(String shellCommand)
@@ -50,6 +51,11 @@ public final class LispShell extends Shell
     public final boolean isLisp()
     {
         return true;
+    }
+
+    private void setResetCommand(String s)
+    {
+        resetCommand = s;
     }
 
     private void setExitCommand(String s)
@@ -71,13 +77,20 @@ public final class LispShell extends Shell
             MessageDialog.showMessageDialog(message, "Error");
             return null;
         }
-        if (shellCommand.equals("alisp") || shellCommand.equals("/usr/bin/alisp"))
+        if (shellCommand.equals("alisp") || shellCommand.equals("/usr/bin/alisp")) {
             shell.setPromptRE(ALLEGRO_PROMPT_PATTERN);
-        else if (shellCommand.equals("clisp") || shellCommand.equals("/usr/bin/clisp"))
+            shell.setResetCommand(":reset");
+        } else if (shellCommand.indexOf("clisp") >= 0) {
+            // clisp -I
             shell.setPromptRE(CLISP_PROMPT_PATTERN);
-        else if (shellCommand.equals("/usr/bin/lisp")) {
+            shell.setResetCommand("(sys::debug-unwind)");
+        } else if (shellCommand.equals("/usr/bin/lisp")) {
             shell.setPromptRE(CMUCL_PROMPT_PATTERN);
+            shell.setResetCommand(":q");
             shell.setExitCommand("(quit)");
+        } else if (shellCommand.equals("sbcl") || shellCommand.equals("/usr/bin/sbcl")) {
+            shell.setPromptRE(CMUCL_PROMPT_PATTERN);
+            shell.setResetCommand(":r toplevel");
         } else {
             shell.setPromptRE(DEFAULT_PROMPT_PATTERN);
             if (shellCommand.equals("rep") || shellCommand.equals("/usr/bin/rep"))
@@ -143,6 +156,15 @@ public final class LispShell extends Shell
             indentLineAtDot(editor);
     }
 
+    public void resetLisp()
+    {
+        if (resetCommand != null) {
+            Editor.currentEditor().getDotLine().setFlags(STATE_INPUT);
+            appendString(resetCommand.concat("\n"));
+            send(resetCommand);
+        }
+    }
+
     protected void stdOutUpdate(final String s)
     {
         String prompt;
@@ -170,9 +192,8 @@ public final class LispShell extends Shell
         Runnable r = new Runnable() {
             public void run()
             {
-                if (output.length() > 0) {
+                if (output.length() > 0)
                     appendString(output);
-                }
                 updateDisplayInAllFrames();
                 resetUndo();
             }
