@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.141 2004-01-26 00:28:16 piso Exp $
+ * $Id: Autoload.java,v 1.142 2004-01-26 00:33:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -311,8 +311,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%nstring-upcase", "StringFunctions");
-        autoload(PACKAGE_SYS, "%open-input-file", "open");
-        autoload(PACKAGE_SYS, "%open-output-file", "open");
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
         autoload(PACKAGE_SYS, "%set-class-direct-methods", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass");

@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.131 2004-01-25 15:53:58 piso Exp $
+# $Id: Makefile.in,v 1.132 2004-01-26 00:33:28 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -169,7 +169,6 @@ CLASSFILES =	AbstractArray.class \
 		logxor.class \
 		make_array.class \
 		make_condition.class \
-		open.class \
 		open_stream_p.class \
 		output_stream_p.class \
 		peek_char.class \
