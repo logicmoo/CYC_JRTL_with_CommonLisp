@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Utilities.java,v 1.2 2003-09-28 15:45:23 piso Exp $
+ * $Id: Utilities.java,v 1.3 2003-09-28 15:58:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,5 +70,19 @@ public final class Utilities
     static {
         for (int i = UPPER_CASE_CHARS.length; i-- > 0;)
             UPPER_CASE_CHARS[i] = Character.toUpperCase((char)i);
+    }
+
+    public static final char toLowerCase(char c)
+    {
+        if (c < 128)
+            return LOWER_CASE_CHARS[c];
+        return Character.toLowerCase(c);
+    }
+
+    private static final char[] LOWER_CASE_CHARS = new char[128];
+
+    static {
+        for (int i = LOWER_CASE_CHARS.length; i-- > 0;)
+            LOWER_CASE_CHARS[i] = Character.toLowerCase((char)i);
     }
 }
