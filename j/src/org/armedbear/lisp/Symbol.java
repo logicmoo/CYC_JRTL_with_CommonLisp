@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.90 2003-11-17 16:02:47 piso Exp $
+ * $Id: Symbol.java,v 1.91 2003-11-18 13:54:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@ public class Symbol extends LispObject
     public static final Symbol OTHERWISE                        = PACKAGE_CL.addExternalSymbol("OTHERWISE");
     public static final Symbol QUOTE                            = PACKAGE_CL.addExternalSymbol("QUOTE");
     public static final Symbol SETF                             = PACKAGE_CL.addExternalSymbol("SETF");
+    public static final Symbol SPECIAL                          = PACKAGE_CL.addExternalSymbol("SPECIAL");
 
     // Type specifiers.
     public static final Symbol AND                              = PACKAGE_CL.addExternalSymbol("AND");
@@ -169,8 +170,8 @@ public class Symbol extends LispObject
     }
 
     // Bit flags.
-    private static final int SPECIAL  = 0x0001;
-    private static final int CONSTANT = 0x0002;
+    private static final int FLAG_SPECIAL  = 0x0001;
+    private static final int FLAG_CONSTANT = 0x0002;
 
     public static final Symbol addFunction(String name, LispObject obj)
     {
@@ -234,7 +235,7 @@ public class Symbol extends LispObject
 
     public LispObject CONSTANTP()
     {
-        return (flags & CONSTANT) != 0 ? T : NIL;
+        return (flags & FLAG_CONSTANT) != 0 ? T : NIL;
     }
 
     public LispObject getPackage()
@@ -249,28 +250,28 @@ public class Symbol extends LispObject
 
     public final boolean isSpecialVariable()
     {
-        return (flags & SPECIAL) != 0;
+        return (flags & FLAG_SPECIAL) != 0;
     }
 
     public final void setSpecial(boolean b)
     {
         if (b)
-            flags |= SPECIAL;
+            flags |= FLAG_SPECIAL;
         else
-            flags &= ~SPECIAL;
+            flags &= ~FLAG_SPECIAL;
     }
 
     public final boolean isConstant()
     {
-        return (flags & CONSTANT) != 0;
+        return (flags & FLAG_CONSTANT) != 0;
     }
 
     public final void setConstant(boolean b)
     {
         if (b)
-            flags |= CONSTANT;
+            flags |= FLAG_CONSTANT;
         else
-            flags &= ~CONSTANT;
+            flags &= ~FLAG_CONSTANT;
     }
 
     public final String getName()
@@ -307,7 +308,7 @@ public class Symbol extends LispObject
     // symbol-value
     public final LispObject symbolValue() throws ConditionThrowable
     {
-        if ((flags & SPECIAL) != 0) {
+        if ((flags & FLAG_SPECIAL) != 0) {
             LispObject val = LispThread.currentThread().lookupSpecial(this);
             if (val != null)
                 return val;
@@ -319,7 +320,7 @@ public class Symbol extends LispObject
 
     public final LispObject symbolValueNoThrow()
     {
-        if ((flags & SPECIAL) != 0) {
+        if ((flags & FLAG_SPECIAL) != 0) {
             LispObject val = LispThread.currentThread().lookupSpecial(this);
             if (val != null)
                 return val;
@@ -329,7 +330,7 @@ public class Symbol extends LispObject
 
     public final LispObject symbolValueNoThrow(LispThread thread)
     {
-        if ((flags & SPECIAL) != 0) {
+        if ((flags & FLAG_SPECIAL) != 0) {
             LispObject val = thread.lookupSpecial(this);
             if (val != null)
                 return val;
