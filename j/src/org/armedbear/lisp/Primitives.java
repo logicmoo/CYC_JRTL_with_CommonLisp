@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.154 2003-03-30 16:11:09 piso Exp $
+ * $Id: Primitives.java,v 1.155 2003-04-01 14:39:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.lisp;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -3547,6 +3548,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### %open-output-file
     private static final Primitive1 _OPEN_OUTPUT_FILE =
         new Primitive1("%open-output-file") {
         public LispObject execute (LispObject arg) throws LispError {
@@ -3557,6 +3559,39 @@ public final class Primitives extends Module
             catch (FileNotFoundException e) {
                 throw new LispError(" file not found: " + pathname);
             }
+        }
+    };
+
+    // ### %open-input-file
+    private static final Primitive1 _OPEN_INPUT_FILE =
+        new Primitive1("%open-input-file") {
+        public LispObject execute (LispObject arg) throws LispError {
+            String pathname = LispString.getValue(arg);
+            try {
+                return new CharacterInputStream(new FileInputStream(pathname));
+            }
+            catch (FileNotFoundException e) {
+                throw new LispError(" file not found: " + pathname);
+            }
+        }
+    };
+
+    // ### read-line
+    // read-line &optional input-stream eof-error-p eof-value recursive-p
+    // => line, missing-newline-p
+    private static final Primitive READ_LINE =
+        new Primitive("read-line") {
+        public LispObject execute(LispObject[] args) throws Condition
+        {
+            int length = args.length;
+            if (length > 4)
+                throw new WrongNumberOfArgumentsException(this);
+            CharacterInputStream stream =
+                length > 0 ? checkInputStream(args[0]) : getStandardInput();
+            boolean eofError = length > 1 ? (args[1] != NIL) : true;
+            LispObject eofValue = length > 2 ? args[2] : NIL;
+            boolean recursive = length > 3 ? (args[3] != NIL) : false;
+            return stream.readLine(eofError, eofValue);
         }
     };
 
