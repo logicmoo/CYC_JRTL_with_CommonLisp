@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.12 2002-11-25 20:09:20 piso Exp $
+ * $Id: CommandTable.java,v 1.13 2002-12-29 16:30:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -323,6 +323,7 @@ public class CommandTable
             addCommand("replace", "ReplaceDialog");
             addCommand("replaceInFiles", "FindInFiles");
             addCommand("resetDisplay", "Display");
+            addCommand("resetLisp", "LispShellMode");
             addCommand("saveSession", "Session");
             addCommand("saveToRegister", "Registers");
             addCommand("shellCommand", "ShellCommand");
