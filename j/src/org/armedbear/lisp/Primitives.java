@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.563 2004-02-10 14:08:58 piso Exp $
+ * $Id: Primitives.java,v 1.564 2004-02-11 19:50:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2393,30 +2393,55 @@ public final class Primitives extends Lisp
     // ### intern
     // intern string &optional package => symbol, status
     // status is one of :INHERITED, :EXTERNAL, :INTERNAL or NIL.
-    private static final Primitive INTERN = new Primitive("intern","string &optional package") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+    private static final Primitive INTERN =
+        new Primitive("intern"," string &optional package")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            final LispThread thread = LispThread.currentThread();
-            switch (args.length) {
-                case 1: {
-                    Package pkg =
-                        (Package) _PACKAGE_.symbolValueNoThrow(thread);
-                    return pkg.intern(LispString.getValue(args[0]), thread);
-                }
-                case 2: {
-                    Package pkg = coerceToPackage(args[1]);
-                    return pkg.intern(LispString.getValue(args[0]), thread);
-                }
-                default:
-                    signal(new WrongNumberOfArgumentsException(this));
-                    return NIL;
+            String s;
+            try {
+                s = ((LispString)arg).getValue();
             }
+            catch (ClassCastException e) {
+                if (arg instanceof NilVector) {
+                    if (arg.length() == 0)
+                        s = "";
+                    else
+                        return ((NilVector)arg).accessError();
+                } else
+                    return signal(new TypeError(arg, Symbol.STRING));
+            }
+            final LispThread thread = LispThread.currentThread();
+            Package pkg =
+                (Package) _PACKAGE_.symbolValueNoThrow(thread);
+            return pkg.intern(s, thread);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            String s;
+            try {
+                s = ((LispString)first).getValue();
+            }
+            catch (ClassCastException e) {
+                if (first instanceof NilVector) {
+                    if (first.length() == 0)
+                        s = "";
+                    else
+                        return ((NilVector)first).accessError();
+                } else
+                    return signal(new TypeError(first, Symbol.STRING));
+            }
+            Package pkg = coerceToPackage(second);
+            return pkg.intern(s, LispThread.currentThread());
         }
     };
 
     // ### unintern
     // unintern symbol &optional package => generalized-boolean
-    private static final Primitive UNINTERN = new Primitive("unintern","symbol &optional package") {
+    private static final Primitive UNINTERN =
+        new Primitive("unintern", "symbol &optional package")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
