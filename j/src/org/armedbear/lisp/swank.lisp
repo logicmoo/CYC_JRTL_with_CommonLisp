@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.15 2004-09-12 17:52:55 piso Exp $
+;;; $Id: swank.lisp,v 1.16 2004-09-13 13:46:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -259,6 +259,16 @@
            (values (eval-string string)))
       (force-output)
       values)))
+
+(defun swank-load-file (pathname)
+  (force-output)
+  (write-string ";;;; Load file ")
+  (write-string (namestring pathname))
+  (write-string " ...")
+  (terpri)
+  (force-output)
+  (let ((result (load pathname)))
+    (list result)))
 
 (defun swank-compile-file (pathname load-p)
   (force-output)
