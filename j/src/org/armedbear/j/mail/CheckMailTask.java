@@ -1,8 +1,8 @@
 /*
  * CheckMailTask.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: CheckMailTask.java,v 1.1.1.1 2002-09-24 16:10:04 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: CheckMailTask.java,v 1.2 2004-07-03 17:04:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,10 @@
 
 package org.armedbear.j.mail;
 
+import java.util.ArrayList;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.BufferIterator;
+import org.armedbear.j.BufferList;
 import org.armedbear.j.Editor;
 import org.armedbear.j.IdleThreadTask;
 import org.armedbear.j.Log;
@@ -57,12 +59,22 @@ public final class CheckMailTask extends IdleThreadTask
                 return;
             // Only check every 10 seconds.
             if (System.currentTimeMillis() - lastRun > 10000) {
-                synchronized (Editor.getBufferList()) {
+                // Make a list of mailboxes to check. We don't want to keep the
+                // buffer list locked while we do the actual check!
+                ArrayList mailboxes = new ArrayList();
+                BufferList bufferList = Editor.getBufferList();
+                synchronized (bufferList) {
                     for (BufferIterator it = new BufferIterator(); it.hasNext();) {
                         Buffer buf = it.nextBuffer();
                         if (buf instanceof ImapMailbox || buf instanceof PopMailbox)
-                            check((Mailbox)buf);
+                            mailboxes.add(buf);
                     }
+                }
+                // Now check the mailboxes in the list.
+                for (int i = 0; i < mailboxes.size(); i++) {
+                    Mailbox mb = (Mailbox) mailboxes.get(i);
+                    if (bufferList.contains(mb))
+                        check(mb);
                 }
                 lastRun = System.currentTimeMillis();
             }
