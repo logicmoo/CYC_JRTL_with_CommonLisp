@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.571 2004-02-16 15:31:52 piso Exp $
+ * $Id: Primitives.java,v 1.572 2004-02-17 01:39:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2062,7 +2062,7 @@ public final class Primitives extends Lisp
                 if (env == null || env.isEmpty())
                     value2 = NIL;
                 else
-                    value2 = T;
+                    value2 = env;
             } else
                 value1 = value2 = NIL;
             return LispThread.currentThread().setValues(value1, value2, value3);
