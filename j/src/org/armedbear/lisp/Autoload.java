@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.64 2003-09-16 13:30:09 piso Exp $
+ * $Id: Autoload.java,v 1.65 2003-09-16 16:14:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,20 +21,20 @@
 
 package org.armedbear.lisp;
 
-public final class Autoload extends Function
+public class Autoload extends Function
 {
-    final Symbol symbol;
-    final String fileName;
-    final String className;
+    protected final Symbol symbol;
+    protected final String fileName;
+    protected final String className;
 
-    private Autoload(Symbol symbol)
+    protected Autoload(Symbol symbol)
     {
         this.symbol = symbol;
         fileName = null;
         className = null;
     }
 
-    private Autoload(Symbol symbol, String fileName, String className)
+    protected Autoload(Symbol symbol, String fileName, String className)
     {
         this.symbol = symbol;
         this.fileName = fileName;
@@ -92,7 +92,7 @@ public final class Autoload extends Function
         return symbol;
     }
 
-    private final String getFileName()
+    protected final String getFileName()
     {
         if (fileName != null)
             return fileName;
