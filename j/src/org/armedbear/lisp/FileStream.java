@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.1 2004-01-25 15:52:06 piso Exp $
+ * $Id: FileStream.java,v 1.2 2004-01-26 00:28:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,10 @@
 
 package org.armedbear.lisp;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -51,4 +55,48 @@ public final class FileStream extends Stream
             return T;
         return super.typep(typeSpecifier);
     }
+
+    // ### make-file-input-stream pathname element-type => stream
+    private static final Primitive2 MAKE_FILE_INPUT_STREAM =
+        new Primitive2("make-file-input-stream", PACKAGE_SYS, false,
+                       "pathname element-type")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Pathname pathname = Pathname.coerceToPathname(first);
+            String namestring = pathname.getNamestring();
+            File file = new File(namestring);
+            try {
+                return new FileStream(new FileInputStream(file),
+                                      second,
+                                      pathname);
+            }
+            catch (FileNotFoundException e) {
+                return NIL;
+            }
+        }
+    };
+
+    // ### make-file-output-stream namestring element-type => stream
+    private static final Primitive2 MAKE_FILE_OUTPUT_STREAM =
+        new Primitive2("make-file-output-stream", PACKAGE_SYS, false,
+                       "pathname element-type")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Pathname pathname = Pathname.coerceToPathname(first);
+            String namestring = pathname.getNamestring();
+            File file = new File(namestring);
+            try {
+                return new FileStream(new FileOutputStream(file),
+                                      second,
+                                      pathname);
+            }
+            catch (FileNotFoundException e) {
+                return NIL;
+            }
+        }
+    };
 }

@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.140 2004-01-24 19:10:18 piso Exp $
+ * $Id: Autoload.java,v 1.141 2004-01-26 00:28:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -356,6 +356,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "layout-class", "Layout");
         autoload(PACKAGE_SYS, "layout-length", "Layout");
+        autoload(PACKAGE_SYS, "make-file-input-stream", "FileStream");
+        autoload(PACKAGE_SYS, "make-file-output-stream", "FileStream");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
         autoload(PACKAGE_SYS, "make-instance-standard-class", "StandardClass");
         autoload(PACKAGE_SYS, "make-layout", "Layout");
