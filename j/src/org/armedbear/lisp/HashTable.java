@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.25 2003-11-30 05:54:08 piso Exp $
+ * $Id: HashTable.java,v 1.26 2003-11-30 18:18:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,7 +207,7 @@ public final class HashTable extends LispObject
 
     final int hash(LispObject key)
     {
-        return key == null ? 0 : Math.abs(key.hashCode() % buckets.length);
+        return key == null ? 0 : (key.sxhash().getValue() % buckets.length);
     }
 
     private final boolean equals(LispObject o1, LispObject o2) throws ConditionThrowable
@@ -225,11 +225,6 @@ public final class HashTable extends LispObject
                 Debug.bug();
                 return false;
         }
-    }
-
-    private static final int hashCode(LispObject o)
-    {
-        return o == null ? 0 : o.hashCode();
     }
 
     private void rehash()
