@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.14 2003-05-17 17:38:52 piso Exp $
+ * $Id: Jdb.java,v 1.15 2003-05-17 19:28:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,7 @@ import org.armedbear.j.EditorIterator;
 import org.armedbear.j.EditorList;
 import org.armedbear.j.File;
 import org.armedbear.j.FastStringBuffer;
+import org.armedbear.j.JavaMode;
 import org.armedbear.j.JavaSource;
 import org.armedbear.j.Line;
 import org.armedbear.j.Log;
@@ -86,6 +87,7 @@ public final class Jdb extends Buffer implements JdbConstants
     private String javaExecutable;
     private String vmArgs;
     private boolean startSuspended;
+    private boolean isSuspended = true;
     private String sourcePath;
     private JdbControlDialog controlDialog;
     private Position posEndOfBuffer;
@@ -94,7 +96,7 @@ public final class Jdb extends Buffer implements JdbConstants
     private int lastCommand;
     private final List breakpoints = new ArrayList();
 
-    public static void jdb()
+    public static synchronized void jdb()
     {
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();
@@ -122,6 +124,7 @@ public final class Jdb extends Buffer implements JdbConstants
             } else {
                 jdb = new Jdb(session);
                 if (jdb != null) {
+                    JavaMode.setJdb(jdb);
                     editor.getFrame().unsplitWindow();
                     editor.makeNext(jdb);
                     editor.activateInOtherWindow(jdb);
@@ -220,7 +223,12 @@ public final class Jdb extends Buffer implements JdbConstants
 
     public boolean isSuspended()
     {
-        return currentThread != null;
+        return isSuspended;
+    }
+
+    public void setSuspended(boolean b)
+    {
+        isSuspended = b;
     }
 
     public void setCurrentStackFrame(StackFrame stackFrame)
@@ -256,12 +264,22 @@ public final class Jdb extends Buffer implements JdbConstants
         }
     }
 
+    private final Runnable fireContextChangedRunnable = new Runnable() {
+        public void run()
+        {
+            synchronized (contextListeners) {
+                for (Iterator it = contextListeners.iterator(); it.hasNext();)
+                    ((ContextListener)it.next()).contextChanged();
+            }
+        }
+    };
+
     public void fireContextChanged()
     {
-        synchronized(contextListeners) {
-            for (Iterator it = contextListeners.iterator(); it.hasNext();)
-                ((ContextListener)it.next()).contextChanged();
-        }
+        if (SwingUtilities.isEventDispatchThread())
+            fireContextChangedRunnable.run();
+        else
+            SwingUtilities.invokeLater(fireContextChangedRunnable);
     }
 
     public void initialize()
@@ -650,19 +668,23 @@ public final class Jdb extends Buffer implements JdbConstants
         }
     }
 
-    public void doContinue()
+    public synchronized void doContinue()
     {
         if (vm != null) {
             currentThread = null;
             currentStackFrame = null;
             vm.resume();
+            isSuspended = false;
+            fireContextChanged();
         }
     }
 
-    public void doSuspend()
+    public synchronized void doSuspend()
     {
-        if (vm != null && !isSuspended()) {
+        if (vm != null && !isSuspended) {
             vm.suspend();
+            isSuspended = true;
+            log("VM suspended");
             ThreadReference threadRef = null;
             List threads = vm.allThreads();
             for (int i = 0; i < threads.size(); i++) {
@@ -681,12 +703,7 @@ public final class Jdb extends Buffer implements JdbConstants
 
     public static Jdb findJdb()
     {
-        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-            Buffer buf = it.nextBuffer();
-            if (buf instanceof Jdb)
-                return (Jdb) buf;
-        }
-        return null;
+        return (Jdb) JavaMode.getJdb();
     }
 
     public void startProcess()
@@ -740,8 +757,11 @@ public final class Jdb extends Buffer implements JdbConstants
                 ClassPrepareRequest cpr = mgr.createClassPrepareRequest();
                 cpr.addClassFilter(mainClass);
                 cpr.enable();
-                if (!startSuspended)
+                if (!startSuspended) {
                     vm.resume();
+                    isSuspended = false;
+                    fireContextChanged();
+                }
             }
         }
     }
@@ -916,12 +936,6 @@ public final class Jdb extends Buffer implements JdbConstants
             controlDialog = null;
         }
         saveSession();
-        cleanup();
-    }
-
-    private void cleanup()
-    {
-        Log.debug("Jdb.cleanup");
         if (breakpoints != null) {
             Iterator iter = breakpoints.iterator();
             while (iter.hasNext()) {
@@ -930,6 +944,11 @@ public final class Jdb extends Buffer implements JdbConstants
                 if (line != null)
                     line.setAnnotation(null);
             }
+        }
+        synchronized (Jdb.class) {
+            if (JavaMode.getJdb() != this)
+                Debug.bug();
+            JavaMode.setJdb(null);
         }
     }
 
