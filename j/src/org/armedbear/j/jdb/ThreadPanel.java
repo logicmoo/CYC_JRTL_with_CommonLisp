@@ -1,8 +1,8 @@
 /*
  * ThreadPanel.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: ThreadPanel.java,v 1.1.1.1 2002-09-24 16:09:39 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: ThreadPanel.java,v 1.2 2003-05-16 00:40:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,35 +136,38 @@ public final class ThreadPanel implements ContextListener, MouseListener
                 ThreadReference threadRef = (ThreadReference) threads.get(index);
                 jdb.setCurrentThread(threadRef);
                 try {
-                    StackFrame stackFrame = threadRef.frame(0);
-                    Location location = stackFrame.location();
-                    String className = location.declaringType().name();
-                    final int lineNumber = location.lineNumber();
-                    Log.debug(className.concat(":").concat(String.valueOf(lineNumber)));
-                    File file =
-                        JavaSource.findSource(className, jdb.getSourcePath());
-                    if (file != null) {
-                        Buffer buffer = Editor.getBuffer(file);
-                        if (buffer != null) {
-                            Editor editor = null;
-                            for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-                                Editor ed = it.nextEditor();
-                                if (ed.getBuffer() instanceof Jdb) {
-                                    editor = ed;
-                                    break;
+                    List frames = threadRef.frames();
+                    if (frames.size() > 0) {
+                        StackFrame stackFrame = threadRef.frame(0);
+                        Location location = stackFrame.location();
+                        String className = location.declaringType().name();
+                        final int lineNumber = location.lineNumber();
+                        Log.debug(className.concat(":").concat(String.valueOf(lineNumber)));
+                        File file =
+                            JavaSource.findSource(className, jdb.getSourcePath());
+                        if (file != null) {
+                            Buffer buffer = Editor.getBuffer(file);
+                            if (buffer != null) {
+                                Editor editor = null;
+                                for (EditorIterator it = new EditorIterator(); it.hasNext();) {
+                                    Editor ed = it.nextEditor();
+                                    if (ed.getBuffer() instanceof Jdb) {
+                                        editor = ed;
+                                        break;
+                                    }
                                 }
-                            }
-                            if (editor != null) {
-                                editor.makeNext(buffer);
-                                editor = editor.activateInOtherWindow(buffer);
-                            } else {
-                                editor = Editor.currentEditor();
-                                editor.makeNext(buffer);
-                                editor.activate(buffer);
-                            }
-                            if (lineNumber > 0) {
-                                editor.jumpToLine(lineNumber - 1);
-                                editor.updateDisplay();
+                                if (editor != null) {
+                                    editor.makeNext(buffer);
+                                    editor = editor.activateInOtherWindow(buffer);
+                                } else {
+                                    editor = Editor.currentEditor();
+                                    editor.makeNext(buffer);
+                                    editor.activate(buffer);
+                                }
+                                if (lineNumber > 0) {
+                                    editor.jumpToLine(lineNumber - 1);
+                                    editor.updateDisplay();
+                                }
                             }
                         }
                     }
