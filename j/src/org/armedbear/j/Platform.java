@@ -1,8 +1,8 @@
 /*
  * Platform.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Platform.java,v 1.4 2003-05-26 02:00:41 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Platform.java,v 1.5 2004-06-09 23:44:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,25 @@ public final class Platform
         try {
             final int major = Integer.parseInt(s);
             return major >= 5;
+        }
+        catch (NumberFormatException e) {
+            Log.error(e);
+            return false;
+        }
+    }
+
+    public static final boolean isPlatformWindowsNT4()
+    {
+        if (!isPlatformWindows)
+            return false;
+        if (osName.indexOf("Windows NT") < 0)
+            return false;
+        final String version = System.getProperty("os.version");
+        int index = version.indexOf('.');
+        final String s = index >= 0 ? version.substring(0, index) : version;
+        try {
+            final int major = Integer.parseInt(s);
+            return major >= 4;
         }
         catch (NumberFormatException e) {
             Log.error(e);
