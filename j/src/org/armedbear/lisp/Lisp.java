@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.65 2003-05-10 14:57:25 piso Exp $
+ * $Id: Lisp.java,v 1.66 2003-05-23 17:35:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@ public abstract class Lisp
     /*package*/ static final int TYPE_COMPILED_FUNCTION = 9;
     /*package*/ static final int TYPE_MACRO             = 10;
     /*package*/ static final int TYPE_CONS              = 11;
+    /*package*/ static final int TYPE_MACRO_OBJECT      = 12;
 
     public static final LispObject funcall(LispObject fun, LispObject[] argv)
         throws Condition
@@ -117,6 +118,15 @@ public abstract class Lisp
             thread.setValues(results);
             return results[0];
         }
+        if (macro instanceof MacroObject) {
+            LispObject expander = ((MacroObject)macro).getExpander();
+            if (profiling)
+                expander.incrementCallCount();
+            results[0] = expander.execute(form, env);
+            results[1] = T;
+            thread.setValues(results);
+            return results[0];
+        }
         // Not a macro.
         results[0] = form;
         results[1] = NIL;
@@ -166,6 +176,7 @@ public abstract class Lisp
                         // Don't eval args!
                         return fun.execute(obj.cdr(), env);
                     }
+                    case TYPE_MACRO_OBJECT:
                     case TYPE_MACRO:
                         return eval(macroexpand(obj, env), env, thread);
                     default: {
