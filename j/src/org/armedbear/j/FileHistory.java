@@ -2,7 +2,7 @@
  * FileHistory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FileHistory.java,v 1.2 2003-06-03 16:16:03 piso Exp $
+ * $Id: FileHistory.java,v 1.3 2003-06-03 16:25:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,10 +27,10 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
-import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.DefaultHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 public final class FileHistory extends DefaultHandler implements ContentHandler
