@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.335 2005-01-01 16:38:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.336 2005-01-01 18:31:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -73,6 +73,8 @@
 (defstruct compiland
   name
   lambda-expression
+  arg-vars
+  p1-result
   classfile
   parent
   (children 0) ; Number of local functions defined with FLET or LABELS.
@@ -364,9 +366,6 @@
          (body (cdddr form)))
     ;; Process the values-form first. ("The scopes of the name binding and
     ;; declarations do not include the values-form.")
-;;     (setf values-form (if (consp values-form)
-;;                           (mapcar #'p1 values-form)
-;;                           (p1 values-form)))
     (setf values-form (p1 values-form))
     (let ((vars ()))
       (dolist (symbol varlist)
@@ -3467,7 +3466,7 @@
     (when (eql name (tag-name tag))
       (return tag))))
 
-(defun compile-tagbody-node (block target)
+(defun p2-tagbody-node (block target)
   (let* ((*blocks* (cons block *blocks*))
          (*visible-tags* *visible-tags*)
          (*register* *register*)
@@ -3559,7 +3558,7 @@
               *handlers*)))
     (label EXIT)
     (when must-clear-values
-;;       (dformat t "compile-tagbody-node calling emit-clear-values~%")
+;;       (dformat t "p2-tagbody-node calling emit-clear-values~%")
       (emit-clear-values))
     ;; TAGBODY returns NIL.
     (when target
@@ -4985,7 +4984,7 @@
                  (compile-form expansion :target target :representation representation))))))
         ((block-node-p form)
          (cond ((equal (block-name form) '(TAGBODY))
-                (compile-tagbody-node form target))
+                (p2-tagbody-node form target))
                ((equal (block-name form) '(LET))
                 (p2-let/let*-node form target))
                ((equal (block-name form) '(MULTIPLE-VALUE-BIND))
@@ -5066,70 +5065,65 @@
       ;; attributes count
       (write-u2 0 stream))))
 
-(defun compile-1 (compiland)
-  (dformat t "compile-1 ~S~%" (compiland-name compiland))
-  (let ((*current-compiland* compiland)
-        (precompiled-form (compiland-lambda-expression compiland))
-        (classfile (compiland-classfile compiland))
-        (*speed* *speed*)
-        (*safety* *safety*)
-        (*debug* *debug*)
-        )
-    (process-optimization-declarations (cddr precompiled-form))
-    ;; Pass 1.
-    (let ((*visible-variables* *visible-variables*))
-      (setf precompiled-form (p1 precompiled-form)))
-    ;; Pass 2.
-    (let* ((*declared-symbols* (make-hash-table :test 'eq))
-           (*declared-functions* (make-hash-table :test 'equal))
-           (*declared-strings* (make-hash-table :test 'eq))
-           (*declared-fixnums* (make-hash-table :test 'eql))
-           (class-name
-            (let* ((pathname (pathname classfile))
-                   (name (pathname-name classfile)))
-              (dotimes (i (length name))
-                (when (eql (char name i) #\-)
-                  (setf (char name i) #\_)))
-              name))
-           (*this-class*
-            (concatenate 'string "org/armedbear/lisp/" class-name))
-           (args (cadr precompiled-form))
-           (body (cddr precompiled-form))
-           (*using-arg-array* nil)
-           (*hairy-arglist-p* nil)
-           (*arity* nil)
+(defun p2-compiland (compiland)
+  (let* ((p1-result (compiland-p1-result compiland))
+         (*declared-symbols* (make-hash-table :test 'eq))
+         (*declared-functions* (make-hash-table :test 'equal))
+         (*declared-strings* (make-hash-table :test 'eq))
+         (*declared-fixnums* (make-hash-table :test 'eql))
+         (classfile (compiland-classfile compiland))
+         (class-name
+          (let* ((pathname (pathname classfile))
+                 (name (pathname-name classfile)))
+            (dotimes (i (length name))
+              (when (eql (char name i) #\-)
+                (setf (char name i) #\_)))
+            name))
+         (*this-class*
+          (concatenate 'string "org/armedbear/lisp/" class-name))
+         (args (cadr p1-result))
+         (body (cddr p1-result))
+         (*using-arg-array* nil)
+         (*hairy-arglist-p* nil)
+         (*arity* nil)
 
-           (*child-p* (not (null (compiland-parent compiland))))
+         (*child-p* (not (null (compiland-parent compiland))))
 
-           (*use-locals-vector* (or (> (compiland-children *current-compiland*) 0)
-                                    (compiland-contains-lambda *current-compiland*)))
+         (*use-locals-vector* (or (> (compiland-children *current-compiland*) 0)
+                                  (compiland-contains-lambda *current-compiland*)))
 
-           (descriptor (analyze-args args))
-           (execute-method (make-method :name "execute"
-                                        :descriptor descriptor))
-           (*code* ())
-           (*static-code* ())
-           (*fields* ())
-           (*register* 0)
-           (*registers-allocated* 0)
-           (*handlers* ())
+         (descriptor (analyze-args args))
+         (execute-method (make-method :name "execute"
+                                      :descriptor descriptor))
+         (*code* ())
+         (*static-code* ())
+         (*fields* ())
+         (*register* 0)
+         (*registers-allocated* 0)
+         (*handlers* ())
 
-           (*context* *context*)
+         (*context* *context*)
 
-           (*context-register* *context-register*)
+         (*context-register* *context-register*)
 
-           (*visible-variables* *visible-variables*)
-           (*all-variables* *all-variables*)
-           (*undefined-variables* *undefined-variables*)
+         (*visible-variables* *visible-variables*)
+         (*all-variables* *all-variables*)
+         (*undefined-variables* *undefined-variables*)
 
-           (parameters ())
+         (parameters ())
 
-           (*pool* ())
-           (*pool-count* 1)
-           (*pool-entries* (make-hash-table :test #'equal))
-           (*val* nil)
-           (*thread* nil)
-           (*initialize-thread-var* nil))
+         (*pool* ())
+         (*pool-count* 1)
+         (*pool-entries* (make-hash-table :test #'equal))
+         (*val* nil)
+         (*thread* nil)
+         (*initialize-thread-var* nil))
+
+      (setf *visible-variables*
+            (append *visible-variables* (compiland-arg-vars compiland)))
+
+      (dformat t "pass2 *visible-variables* = ~S~%"
+               (mapcar #'variable-name *visible-variables*))
 
       (when (zerop *nesting-level*)
         (setf *child-count* 0))
@@ -5139,12 +5133,11 @@
       (setf (method-descriptor-index execute-method)
             (pool-name (method-descriptor execute-method)))
       (cond (*hairy-arglist-p*
-             (let* ((closure (sys::make-closure precompiled-form nil))
+             (let* ((closure (sys::make-closure p1-result nil))
                     (vars (sys::varlist closure))
                     (index 0))
                (dolist (var vars)
                  (let ((variable (make-variable :name var
-;;                                                 :kind 'ARG
                                                 :special-p nil ;; FIXME
                                                 :register nil
                                                 :index index)))
@@ -5310,7 +5303,39 @@
       (setf (method-max-locals execute-method) *registers-allocated*)
       (setf (method-handlers execute-method) (nreverse *handlers*))
       (write-class-file args body execute-method classfile)
-      classfile)))
+      classfile))
+
+(defun compile-1 (compiland)
+  (dformat t "compile-1 ~S~%" (compiland-name compiland))
+  (let ((*current-compiland* compiland)
+        (precompiled-form (compiland-lambda-expression compiland))
+        (*speed* *speed*)
+        (*safety* *safety*)
+        (*debug* *debug*))
+    (process-optimization-declarations (cddr precompiled-form))
+    (aver (eq (car precompiled-form) 'LAMBDA))
+    (let ((lambda-list (cadr precompiled-form))
+          syms vars)
+      (multiple-value-bind (required optional restp rest keyp keys allowp auxp aux)
+          (sys::parse-lambda-list lambda-list)
+        (setf syms required)
+        (when optional
+          (setf syms (append syms optional)))
+        (when restp
+          (setf syms (append syms (list rest))))
+        (when keyp
+          (setf syms (append syms keys)))
+        (dformat t "syms = ~S~%" syms))
+      (dolist (sym syms)
+        (push (make-variable :name sym) vars))
+      (setf (compiland-arg-vars compiland) (nreverse vars)))
+    ;; Pass 1.
+    (let ((*visible-variables* *visible-variables*))
+      (setf *visible-variables*
+            (append *visible-variables* (compiland-arg-vars compiland)))
+      (setf (compiland-p1-result compiland) (p1 precompiled-form)))
+    ;; Pass 2.
+    (p2-compiland compiland)))
 
 (defun compile-defun (name form environment &optional (classfile "out.class"))
   ;;   (dformat t "COMPILE-DEFUN ~S ~S~%" name classfile)
