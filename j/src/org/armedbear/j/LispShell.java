@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.14 2002-12-14 22:55:05 piso Exp $
+ * $Id: LispShell.java,v 1.15 2002-12-15 02:24:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,11 @@ public final class LispShell extends Shell
     {
         super(shellCommand, LispShellMode.getMode());
         formatter = mode.getFormatter(this);
+    }
+
+    public final boolean isLisp()
+    {
+        return true;
     }
 
     private void setExitCommand(String s)
@@ -279,7 +284,7 @@ public final class LispShell extends Shell
             return;
         }
         // Look for an existing LispShell buffer with the same shell command.
-        Buffer buf = findLispShell(shellCommand);
+        Buffer buf = findLisp(shellCommand);
         if (buf != null) {
             Shell shell = (Shell) buf;
             if (shell.getProcess() == null)
@@ -297,14 +302,17 @@ public final class LispShell extends Shell
         }
     }
 
-    public static LispShell findLispShell(String shellCommand)
+    public static CommandInterpreter findLisp(String shellCommand)
     {
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
             Buffer b = it.nextBuffer();
-            if (b instanceof LispShell) {
-                if (shellCommand == null ||
-                    shellCommand.equals(((LispShell)b).shellCommand))
-                    return (LispShell) b;
+            if (b instanceof CommandInterpreter) {
+                CommandInterpreter comint = (CommandInterpreter) b;
+                if (comint.isLisp()) {
+                    if (shellCommand == null ||
+                        shellCommand.equals(comint.getShellCommand()))
+                        return comint;
+                }
             }
         }
         return null;
