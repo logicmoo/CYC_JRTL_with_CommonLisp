@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.36 2004-01-07 02:59:21 piso Exp $
+ * $Id: Pathname.java,v 1.37 2004-01-07 18:56:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -641,6 +641,27 @@ public final class Pathname extends LispObject
         }
     };
 
+    public boolean isWild() throws ConditionThrowable
+    {
+        if (host == Keyword.WILD || host == Keyword.WILD_INFERIORS)
+            return true;
+        if (device == Keyword.WILD || device == Keyword.WILD_INFERIORS)
+            return true;
+        if (directory instanceof Cons) {
+            if (memq(Keyword.WILD, directory))
+                return true;
+            if (memq(Keyword.WILD_INFERIORS, directory))
+                return true;
+        }
+        if (name == Keyword.WILD || name == Keyword.WILD_INFERIORS)
+            return true;
+        if (type == Keyword.WILD || type == Keyword.WILD_INFERIORS)
+            return true;
+        if (version == Keyword.WILD || version == Keyword.WILD_INFERIORS)
+            return true;
+        return false;
+    }
+
     private static final Primitive2 _WILD_PATHNAME_P =
         new Primitive2("%wild-pathname-p", PACKAGE_SYS, false)
     {
@@ -648,25 +669,8 @@ public final class Pathname extends LispObject
             throws ConditionThrowable
         {
             Pathname pathname = Pathname.coerceToPathname(first);
-            if (second == NIL) {
-                if (pathname.host == Keyword.WILD || pathname.host == Keyword.WILD_INFERIORS)
-                    return T;
-                if (pathname.device == Keyword.WILD || pathname.device == Keyword.WILD_INFERIORS)
-                    return T;
-                if (pathname.directory instanceof Cons) {
-                    if (memq(Keyword.WILD, pathname.directory))
-                        return T;
-                    if (memq(Keyword.WILD_INFERIORS, pathname.directory))
-                        return T;
-                }
-                if (pathname.name == Keyword.WILD || pathname.name == Keyword.WILD_INFERIORS)
-                    return T;
-                if (pathname.type == Keyword.WILD || pathname.type == Keyword.WILD_INFERIORS)
-                    return T;
-                if (pathname.version == Keyword.WILD || pathname.version == Keyword.WILD_INFERIORS)
-                    return T;
-                return NIL;
-            }
+            if (second == NIL)
+                return pathname.isWild() ? T : NIL;
             if (second == Keyword.DIRECTORY) {
                 if (pathname.directory instanceof Cons) {
                     if (memq(Keyword.WILD, pathname.directory))
