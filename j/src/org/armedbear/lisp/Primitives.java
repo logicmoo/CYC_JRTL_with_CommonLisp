@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.583 2004-02-26 01:45:03 piso Exp $
+ * $Id: Primitives.java,v 1.584 2004-02-26 19:30:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1769,7 +1769,7 @@ public final class Primitives extends Lisp
         {
             AbstractArray array = checkArray(first);
             LispObject[] subscripts = second.copyToArray();
-            return number(arrayRowMajorIndex(array, subscripts));
+            return number(array.getRowMajorIndex(subscripts));
         }
     };
 
@@ -1803,45 +1803,10 @@ public final class Primitives extends Lisp
             LispObject[] subscripts = new LispObject[args.length - 1];
             for (int i = subscripts.length; i-- > 0;)
                 subscripts[i] = args[i+1];
-            int rowMajorIndex = arrayRowMajorIndex(array, subscripts);
+            int rowMajorIndex = array.getRowMajorIndex(subscripts);
             return array.getRowMajor(rowMajorIndex);
         }
     };
-
-    private static final int arrayRowMajorIndex(AbstractArray array,
-                                                LispObject[] subscripts)
-        throws ConditionThrowable
-    {
-        final int rank = array.getRank();
-        if (rank != subscripts.length) {
-            StringBuffer sb = new StringBuffer("Wrong number of subscripts (");
-            sb.append(subscripts.length);
-            sb.append(") for array of rank ");
-            sb.append(rank);
-            sb.append('.');
-            signal(new ProgramError(sb.toString()));
-        }
-        if (rank == 0)
-            return 0;
-        int sum = 0;
-        int size = 1;
-        for (int i = rank; i-- > 0;) {
-            int dim = array.getDimension(i);
-            int lastSize = size;
-            size *= dim;
-            LispObject subscript = subscripts[i];
-            if (subscript instanceof Fixnum) {
-                int n = ((Fixnum)subscript).getValue();
-                if (n < 0 || n >= array.getDimension(i))
-                    signal(new ProgramError());
-                sum += n * lastSize;
-            } else if (subscript instanceof Bignum) {
-                signal(new ProgramError());
-            } else
-                signal(new TypeError(subscript, "integer"));
-        }
-        return sum;
-    }
 
     // ### row-major-aref
     // row-major-aref array index => element
