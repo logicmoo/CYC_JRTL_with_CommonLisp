@@ -2,7 +2,7 @@
  * WrapText.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: WrapText.java,v 1.6 2003-06-18 14:50:13 piso Exp $
+ * $Id: WrapText.java,v 1.7 2003-11-29 04:24:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,6 +126,8 @@ public final class WrapText implements Constants
 
         if (commentStart != null) {
             int index = dotLine.getText().indexOf(commentStart);
+            if (index < 0)
+                return;
             String prefix =
                 dotLine.getText().substring(0, index + commentStart.length());
             Position begin = findStartOfComment(dot, commentStart);
