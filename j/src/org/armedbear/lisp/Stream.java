@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.48 2004-03-12 01:37:11 piso Exp $
+ * $Id: Stream.java,v 1.49 2004-03-12 01:59:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,22 +255,6 @@ public class Stream extends LispObject
         if (handler instanceof ReaderMacroFunction)
             return ((ReaderMacroFunction)handler).execute(this, c);
         switch (c) {
-//             case '"':
-//                 return LispReader.READ_STRING.execute(this, c);
-//             case '\'':
-//                 return readQuote();
-            case '(':
-                return readList();
-//             case ')':
-//                 return readRightParen();
-//             case ';':
-//                 return LispReader.READ_COMMENT.execute(this, c);
-//             case ',':
-//                 return readComma();
-//             case '`':
-//                 return readBackquote();
-//             case '#':
-//                 return readSharp();
             case '|':
                 // Let readToken() process the multiple escape.
                 _unreadChar(c);
@@ -313,12 +297,7 @@ public class Stream extends LispObject
         return signal(new ReaderError("Non-list following #S: " + obj));
     }
 
-//     private LispObject readQuote() throws ConditionThrowable
-//     {
-//         return new Cons(Symbol.QUOTE, new Cons(read(true, NIL, true)));
-//     }
-
-    private LispObject readList() throws ConditionThrowable
+    public LispObject readList() throws ConditionThrowable
     {
         Cons first = null;
         Cons last = null;
