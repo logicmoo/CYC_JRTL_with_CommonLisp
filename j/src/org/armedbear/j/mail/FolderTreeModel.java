@@ -2,7 +2,7 @@
  * FolderTreeModel.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: FolderTreeModel.java,v 1.1.1.1 2002-09-24 16:09:55 piso Exp $
+ * $Id: FolderTreeModel.java,v 1.2 2003-03-18 23:07:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,12 +124,11 @@ public final class FolderTreeModel extends DefaultTreeModel
                 parent = new DefaultMutableTreeNode(url.getHost());
                 ((DefaultMutableTreeNode) root).add(parent);
             }
-            List list = ((ImapURL) url).getFolderPathComponents();
+            List list = ((ImapURL)url).getFolderPathComponents();
             for (int i = 0; i < list.size()-1; i++) {
                 boolean add = true;
                 nodes = parent.children();
-                while (nodes.hasMoreElements())
-                {
+                while (nodes.hasMoreElements()) {
                     DefaultMutableTreeNode node =
                         (DefaultMutableTreeNode) nodes.nextElement();
                     Object obj = node.getUserObject();
