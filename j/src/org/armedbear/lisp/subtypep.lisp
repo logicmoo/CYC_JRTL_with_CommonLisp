@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subtypep.lisp,v 1.25 2003-11-11 18:18:51 piso Exp $
+;;; $Id: subtypep.lisp,v 1.26 2003-11-11 18:30:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -251,11 +251,11 @@
     (if (atom type2)
         (setq t2 type2 i2 nil)
         (setq t2 (car type2) i2 (cdr type2)))
-    (when (eq t2 'atom)
-      (return-from subtypep (cond ((memq t1 '(cons list)) (values nil t))
-                                  ((known-type-p t1) (values t t))
-                                  (t (values nil nil)))))
-    (cond ((eq t1 'member)
+    (cond ((eq t2 'atom)
+           (return-from subtypep (cond ((memq t1 '(cons list)) (values nil t))
+                                       ((known-type-p t1) (values t t))
+                                       (t (values nil nil)))))
+          ((eq t1 'member)
            (dolist (e i1)
              (unless (typep e type2) (return-from subtypep (values nil t))))
            (return-from subtypep (values t t)))
