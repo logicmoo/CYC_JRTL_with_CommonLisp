@@ -1,7 +1,7 @@
 ;;; defsetf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defsetf.lisp,v 1.2 2005-02-05 17:47:23 piso Exp $
+;;; $Id: defsetf.lisp,v 1.3 2005-02-05 18:31:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,13 +23,6 @@
 
 (require '#:collect)
 
-(defun %define-setf-macro (name expander inverse doc)
-  (when inverse
-    (setf (get name 'setf-inverse) inverse))
-  (when expander
-    (setf (get name 'setf-expander) expander))
-  name)
-
 (defun %defsetf (orig-access-form num-store-vars expander)
   (collect ((subforms) (subform-vars) (subform-exprs) (store-vars))
            (dolist (subform (cdr orig-access-form))
@@ -50,7 +43,9 @@
 (defmacro defsetf (access-fn &rest rest)
   (cond ((not (listp (car rest)))
 	 `(eval-when (:load-toplevel :compile-toplevel :execute)
-	    (%define-setf-macro ',access-fn nil ',(car rest)
+	    (%define-setf-macro ',access-fn
+                                nil
+                                ',(car rest)
 				,(when (and (car rest) (stringp (cadr rest)))
 				   `',(cadr rest)))))
 	((and (cdr rest) (listp (cadr rest)))
