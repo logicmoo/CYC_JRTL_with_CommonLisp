@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.7 2005-03-05 20:53:10 piso Exp $
+;;; $Id: emacs.lisp,v 1.8 2005-03-06 04:38:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -383,6 +383,7 @@
 (define-key *java-mode-map* "Ctrl Tab" "insertTab")
 (define-key *java-mode-map* "';'" "electricSemi")
 ;;                km.mapKey(':', "electricColon");
+(define-key *java-mode-map* #\: "electricColon")
 ;;                km.mapKey('*', "electricStar");
 ;;                km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
 ;;                km.mapKey(KeyEvent.VK_PERIOD, ALT_MASK, "findTagAtDot");
