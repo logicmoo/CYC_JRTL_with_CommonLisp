@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.214 2003-06-01 15:11:07 piso Exp $
+ * $Id: Primitives.java,v 1.215 2003-06-01 17:43:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4627,6 +4627,32 @@ public final class Primitives extends Module
                 return third;
             } else
                 throw new TypeError(first, "sequence");
+        }
+    };
+
+//     (defun maptree (fun x)
+//       (if (atom x)
+//           (funcall fun x)
+//           (let ((a (funcall fun (car x)))
+//                 (d (maptree fun (cdr x))))
+//             (if (and (eql a (car x)) (eql d (cdr x)))
+//                 x
+//                 (cons a d)))))
+
+    private static final Primitive2 MAPTREE = new Primitive2("maptree") {
+        public LispObject execute(LispObject fun, LispObject x)
+            throws Condition
+        {
+            if (x instanceof Cons) {
+                LispObject a = fun.execute(x.car());
+                // Recurse!
+                LispObject d = execute(fun, x.cdr());
+                if (a.eql(x.car()) && d.eql(x.cdr()))
+                    return x;
+                else
+                    return new Cons(a, d);
+            } else
+                return fun.execute(x);
         }
     };
 }
