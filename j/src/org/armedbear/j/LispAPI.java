@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispAPI.java,v 1.27 2003-10-07 00:36:23 piso Exp $
+ * $Id: LispAPI.java,v 1.28 2003-10-10 18:55:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,8 +54,10 @@ public final class LispAPI extends Lisp
         Packages.createPackage("J-INTERNALS");
     static {
         PACKAGE_J.usePackage(PACKAGE_CL);
+        PACKAGE_J.usePackage(PACKAGE_EXT);
         PACKAGE_J.usePackage(PACKAGE_JAVA);
         PACKAGE_J_INTERNALS.usePackage(PACKAGE_CL);
+        PACKAGE_J_INTERNALS.usePackage(PACKAGE_EXT);
         PACKAGE_J_INTERNALS.usePackage(PACKAGE_JAVA);
     }
 
