@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: BuiltInClass.java,v 1.26 2004-02-11 19:58:19 piso Exp $
+ * $Id: BuiltInClass.java,v 1.27 2004-03-15 19:27:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,7 +103,11 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass REAL                             = addClass(Symbol.REAL);
     public static final BuiltInClass RESTART                          = addClass(Symbol.RESTART);
     public static final BuiltInClass SEQUENCE                         = addClass(Symbol.SEQUENCE);
+    public static final BuiltInClass SIMPLE_ARRAY                     = addClass(Symbol.SIMPLE_ARRAY);
+    public static final BuiltInClass SIMPLE_BIT_VECTOR                = addClass(Symbol.SIMPLE_BIT_VECTOR);
     public static final BuiltInClass SIMPLE_ERROR                     = addClass(Symbol.SIMPLE_ERROR);
+    public static final BuiltInClass SIMPLE_STRING                    = addClass(Symbol.SIMPLE_STRING);
+    public static final BuiltInClass SIMPLE_VECTOR                    = addClass(Symbol.SIMPLE_VECTOR);
     public static final BuiltInClass SIMPLE_TYPE_ERROR                = addClass(Symbol.SIMPLE_TYPE_ERROR);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
@@ -382,6 +386,11 @@ public class BuiltInClass extends LispClass
         SERIOUS_CONDITION.setDirectSuperclass(CONDITION);
         SERIOUS_CONDITION.setCPL(SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
                                  CLASS_T);
+        SIMPLE_ARRAY.setDirectSuperclass(ARRAY);
+        SIMPLE_ARRAY.setCPL(SIMPLE_ARRAY, ARRAY, CLASS_T);
+        SIMPLE_BIT_VECTOR.setDirectSuperclasses(list2(BIT_VECTOR, SIMPLE_ARRAY));
+        SIMPLE_BIT_VECTOR.setCPL(SIMPLE_BIT_VECTOR, BIT_VECTOR, VECTOR,
+                                 SIMPLE_ARRAY, ARRAY, SEQUENCE, CLASS_T);
         SIMPLE_CONDITION.setCPL(SIMPLE_CONDITION, CONDITION, STANDARD_OBJECT,
                                 CLASS_T);
         SIMPLE_ERROR.setDirectSuperclass(ERROR);
@@ -392,6 +401,12 @@ public class BuiltInClass extends LispClass
         SIMPLE_TYPE_ERROR.setCPL(SIMPLE_TYPE_ERROR, SIMPLE_CONDITION,
                                  TYPE_ERROR, ERROR, SERIOUS_CONDITION,
                                  CONDITION, STANDARD_OBJECT, CLASS_T);
+        SIMPLE_STRING.setDirectSuperclasses(list2(STRING, SIMPLE_ARRAY));
+        SIMPLE_STRING.setCPL(SIMPLE_STRING, STRING, VECTOR, SIMPLE_ARRAY, ARRAY,
+                             SEQUENCE, CLASS_T);
+        SIMPLE_VECTOR.setDirectSuperclasses(list2(VECTOR, SIMPLE_ARRAY));
+        SIMPLE_VECTOR.setCPL(SIMPLE_VECTOR, VECTOR, SIMPLE_ARRAY, ARRAY, SEQUENCE,
+                             CLASS_T);
         SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
                               CONDITION, STANDARD_OBJECT, CLASS_T);
         STANDARD_CLASS.setDirectSuperclass(CLASS);
