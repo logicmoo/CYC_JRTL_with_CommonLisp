@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.539 2003-12-20 18:31:27 piso Exp $
+ * $Id: Primitives.java,v 1.540 2003-12-27 03:08:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1337,58 +1337,53 @@ public final class Primitives extends Lisp
                 env = checkEnvironment(args[3]);
             else
                 env = new Environment();
+            final Symbol symbol;
             if (first instanceof Symbol) {
-                Symbol symbol = checkSymbol(first);
+                symbol = checkSymbol(first);
                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
                     String message =
                         symbol.getName() + " is a special operator and may not be redefined";
-                    signal(new ProgramError(message));
-                    return NIL;
+                    return signal(new ProgramError(message));
                 }
-                LispObject arglist = checkList(second);
-                LispObject body = checkList(third);
-                if (body.car() instanceof LispString && body.cdr() != NIL) {
-                    // Documentation.
+            } else if (first instanceof Cons && first.car() == Symbol.SETF) {
+                symbol = checkSymbol(first.cadr());
+            } else
+                return signal(new TypeError(first, "valid function name"));
+            LispObject arglist = checkList(second);
+            LispObject body = checkList(third);
+            if (body.car() instanceof LispString && body.cdr() != NIL) {
+                // Documentation.
+                if (first instanceof Symbol)
                     symbol.setFunctionDocumentation(body.car());
-                    body = body.cdr();
-                }
-                LispObject decls = NIL;
-                while (body.car() instanceof Cons && body.car().car() == Symbol.DECLARE) {
-                    decls = new Cons(body.car(), decls);
-                    body = body.cdr();
-                }
-                body = new Cons(symbol, body);
-                body = new Cons(Symbol.BLOCK, body);
-                body = new Cons(body, NIL);
-                while (decls != NIL) {
-                    body = new Cons(decls.car(), body);
-                    decls = decls.cdr();
-                }
-                Closure closure = new Closure(symbol.getName(), arglist, body,
-                                              env);
-                closure.setArglist(arglist);
+                else
+                    ; // FIXME Support documentation for SETF functions!
+                body = body.cdr();
+            }
+            LispObject decls = NIL;
+            while (body.car() instanceof Cons && body.car().car() == Symbol.DECLARE) {
+                decls = new Cons(body.car(), decls);
+                body = body.cdr();
+            }
+            body = new Cons(symbol, body);
+            body = new Cons(Symbol.BLOCK, body);
+            body = new Cons(body, NIL);
+            while (decls != NIL) {
+                body = new Cons(decls.car(), body);
+                decls = decls.cdr();
+            }
+            final String name;
+            if (first instanceof Symbol)
+                name = symbol.getName();
+            else
+                name = null;
+            Closure closure = new Closure(name, arglist, body, env);
+            closure.setArglist(arglist);
+            if (first instanceof Symbol)
                 symbol.setSymbolFunction(closure);
-                return symbol;
-            }
-            if (first instanceof Cons && first.car() == Symbol.SETF) {
-                Symbol symbol = checkSymbol(first.cadr());
-                LispObject arglist = checkList(second);
-                LispObject body = checkList(third);
-                if (body.car() instanceof LispString && body.cdr() != NIL) {
-                    // Documentation.
-//                     symbol.setFunctionDocumentation(body.car());
-                    body = body.cdr();
-                }
-                body = new Cons(symbol, body);
-                body = new Cons(Symbol.BLOCK, body);
-                body = new Cons(body, NIL);
-                Closure closure = new Closure(arglist, body, env);
-                closure.setArglist(arglist);
+            else
+                // SETF function
                 put(symbol, PACKAGE_SYS.intern("SETF-FUNCTION"), closure);
-                return symbol;
-            }
-            signal(new TypeError(first, "valid function name"));
-            return NIL;
+            return first;
         }
     };
 
