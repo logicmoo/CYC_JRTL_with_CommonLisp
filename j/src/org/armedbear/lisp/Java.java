@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.1 2003-01-17 19:43:16 piso Exp $
+ * $Id: Java.java,v 1.2 2003-01-18 18:30:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,7 @@ public final class Java extends Module
     };
 
     // ### jconstructor
+    // jconstructor class-name &rest parameter-types
     private static final Primitive JCONSTRUCTOR =
         new Primitive("jconstructor", PACKAGE_JAVA) {
         public LispObject execute(LispObject[] args) throws LispException
@@ -270,5 +271,14 @@ public final class Java extends Module
         if (message == null || message.length() == 0)
             message = t.getClass().getName();
         return message;
+    }
+
+    static {
+        export("JCLASS", PACKAGE_JAVA);
+        export("JCONSTRUCTOR", PACKAGE_JAVA);
+        export("JMETHOD", PACKAGE_JAVA);
+        export("JSTATIC", PACKAGE_JAVA);
+        export("JNEW", PACKAGE_JAVA);
+        export("JCALL", PACKAGE_JAVA);
     }
 }
