@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.97 2003-03-08 03:46:07 piso Exp $
+ * $Id: Primitives.java,v 1.98 2003-03-08 04:08:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3198,6 +3198,36 @@ public final class Primitives extends Module
             else
                 symbol.setSymbolValue(value);
             return value;
+        }
+    };
+
+    // ### %%incq
+    private static final SpecialOperator __INCQ =
+        new SpecialOperator("%%incq") {
+        public LispObject execute(LispObject args, Environment env)
+            throws Condition
+        {
+            Symbol symbol = (Symbol) args.car();
+            if (symbol.isSpecialVariable()) {
+                if (dynEnv != null) {
+                    Binding binding = dynEnv.getBinding(symbol);
+                    if (binding != null) {
+                        return binding.value =
+                            new Fixnum(Fixnum.getValue(binding.value) + 1);
+                    }
+                }
+                LispObject value =
+                    new Fixnum(Fixnum.getValue(symbol.getSymbolValue()) + 1);
+                symbol.setSymbolValue(value);
+                return value;
+            }
+            // Not special.
+            Binding binding = env.getBinding(symbol);
+            if (binding != null) {
+                return binding.value =
+                    new Fixnum(Fixnum.getValue(binding.value) + 1);
+            }
+            throw new UnboundVariableException(symbol.toString());
         }
     };
 
