@@ -1,8 +1,8 @@
 /*
  * CommandTable.java
  *
- * Copyright (C) 1998-2004 Peter Graves
- * $Id: CommandTable.java,v 1.54 2004-10-25 01:44:47 piso Exp $
+ * Copyright (C) 1998-2005 Peter Graves
+ * $Id: CommandTable.java,v 1.55 2005-03-03 19:27:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,6 +184,7 @@ public class CommandTable
             addCommand("splitWindow");
             addCommand("stamp");
             addCommand("tab");
+            addCommand("tempBufferQuit");
             addCommand("textMode");
             addCommand("toCenter");
             addCommand("toTop");
