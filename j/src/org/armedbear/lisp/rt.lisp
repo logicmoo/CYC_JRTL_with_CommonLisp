@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.158 2004-10-18 22:59:41 piso Exp $
+;;; $Id: rt.lisp,v 1.159 2004-11-21 13:52:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -509,7 +509,7 @@
 (compile-and-load "random-aux.lsp")
 (compile-and-load "ansi-aux.lsp")
 
-(load (concatenate 'string regression-test::*prefix* "char-aux.lsp"))
+(compile-and-load "char-aux.lsp")
 (load (concatenate 'string regression-test::*prefix* "cl-symbols-aux.lsp"))
 (load (concatenate 'string regression-test::*prefix* "cl-symbol-names.lsp"))
 (load (concatenate 'string regression-test::*prefix* "array-aux.lsp"))
