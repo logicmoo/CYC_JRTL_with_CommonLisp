@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.641 2004-05-15 17:57:31 piso Exp $
+ * $Id: Primitives.java,v 1.642 2004-05-22 17:20:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4444,13 +4444,13 @@ public final class Primitives extends Lisp
         }
     };
 
-    // ### hashcode-to-string
-    private static final Primitive1 HASHCODE_TO_STRING =
-        new Primitive1("hashcode-to-string", PACKAGE_SYS, false)
+    // ### identity-hash-code
+    private static final Primitive1 IDENTITY_HASH_CODE =
+        new Primitive1("identity-hash-code", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return new SimpleString(Integer.toHexString(System.identityHashCode(arg)));
+            return new Fixnum(System.identityHashCode(arg));
         }
     };
 
@@ -4536,6 +4536,26 @@ public final class Primitives extends Lisp
             catch (ClassCastException e) {
                 return signal(new TypeError(arg, Symbol.SYMBOL));
             }
+        }
+    };
+
+    // ### inspected-parts
+    private static final Primitive1 INSPECTED_PARTS =
+        new Primitive1("inspected-parts", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.getParts();
+        }
+    };
+
+    // ### inspected-description
+    private static final Primitive1 INSPECTED_DESCRIPTION =
+        new Primitive1("inspected-description", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.getDescription();
         }
     };
 
