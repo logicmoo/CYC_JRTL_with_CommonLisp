@@ -1,8 +1,8 @@
 /*
  * BitVector.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.30 2004-02-11 00:11:26 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: BitVector.java,v 1.31 2004-02-24 12:56:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ public final class BitVector extends AbstractVector
     private static final int LONG_MASK = 0x3f;
 
     private int capacity;
+    private int fillPointer = -1; // -1 indicates no fill pointer.
     private long[] bits;
 
     public BitVector(int length) throws ConditionThrowable
@@ -71,16 +72,54 @@ public final class BitVector extends AbstractVector
             return T;
         if (type == Symbol.SIMPLE_BIT_VECTOR)
             return isSimpleVector() ? T : NIL;
-        if (type == Symbol.SIMPLE_VECTOR)
-            return NIL; // Can't hold elements of any type, only bits.
         if (type == BuiltInClass.BIT_VECTOR)
             return T;
+        if (type == Symbol.SIMPLE_ARRAY)
+            return fillPointer < 0 ? T : NIL; // FIXME displaced, adjustable
         return super.typep(type);
     }
 
     public LispObject BIT_VECTOR_P()
     {
         return T;
+    }
+
+    public boolean hasFillPointer()
+    {
+        return fillPointer >= 0;
+    }
+
+    public int getFillPointer()
+    {
+        return fillPointer;
+    }
+
+    public void setFillPointer(int n)
+    {
+        fillPointer = n;
+    }
+
+    public void setFillPointer(LispObject obj) throws ConditionThrowable
+    {
+        if (obj == T)
+            fillPointer = capacity();
+        else {
+            int n = Fixnum.getValue(obj);
+            if (n > capacity()) {
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
+                sb.append(n);
+                sb.append(") exceeds the capacity of the vector (");
+                sb.append(capacity());
+                sb.append(").");
+                signal(new LispError(sb.toString()));
+            } else if (n < 0) {
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
+                sb.append(n);
+                sb.append(") is negative.");
+                signal(new LispError(sb.toString()));
+            } else
+                fillPointer = n;
+        }
     }
 
     public LispObject getElementType()
@@ -301,6 +340,40 @@ public final class BitVector extends AbstractVector
         for (int i = 0; i < limit; i++)
             hashCode = hashCode * 31 + _get(i);
         return hashCode;
+    }
+
+    // FIXME
+    public LispObject vectorPushExtend(LispObject element)
+        throws ConditionThrowable
+    {
+        final int fp = getFillPointer();
+        if (fp < 0)
+            noFillPointer();
+        if (fp >= capacity()) {
+            // Need to extend vector.
+            ensureCapacity(capacity() * 2 + 1);
+        }
+        set(fp, element);
+        setFillPointer(fp + 1);
+        return new Fixnum(fp);
+    }
+
+    // FIXME
+    public LispObject vectorPushExtend(LispObject element, LispObject extension)
+        throws ConditionThrowable
+    {
+        int ext = Fixnum.getValue(extension);
+        final int fp = getFillPointer();
+        if (fp < 0)
+            noFillPointer();
+        if (fp >= capacity()) {
+            // Need to extend vector.
+            ext = Math.max(ext, capacity() + 1);
+            ensureCapacity(capacity() + ext);
+        }
+        set(fp, element);
+        setFillPointer(fp + 1);
+        return new Fixnum(fp);
     }
 
     public String toString()

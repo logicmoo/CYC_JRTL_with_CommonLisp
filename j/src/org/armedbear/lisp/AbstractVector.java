@@ -22,13 +22,6 @@ package org.armedbear.lisp;
 
 public abstract class AbstractVector extends AbstractArray
 {
-    protected int fillPointer = -1; // -1 indicates no fill pointer.
-
-    public boolean hasFillPointer()
-    {
-        return fillPointer >= 0;
-    }
-
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.VECTOR)
@@ -39,11 +32,12 @@ public abstract class AbstractVector extends AbstractArray
             return T;
         if (type == BuiltInClass.SEQUENCE)
             return T;
-        if (type == Symbol.SIMPLE_VECTOR)
-            return isSimpleVector() ? T : NIL;
-        if (type == Symbol.SIMPLE_ARRAY)
-            return fillPointer < 0 ? T : NIL;
         return super.typep(type);
+    }
+
+    public final LispObject VECTORP()
+    {
+        return T;
     }
 
     public final boolean vectorp()
@@ -133,37 +127,20 @@ public abstract class AbstractVector extends AbstractArray
         signal(new TypeError(sb.toString()));
     }
 
-    public int getFillPointer()
+    public int getFillPointer() throws ConditionThrowable
     {
-        return fillPointer;
+        noFillPointer();
+        return -1; // Not reached.
     }
 
-    public void setFillPointer(int n)
+    public void setFillPointer(int n) throws ConditionThrowable
     {
-        fillPointer = n;
+        noFillPointer();
     }
 
     public void setFillPointer(LispObject obj) throws ConditionThrowable
     {
-        if (obj == T)
-            fillPointer = capacity();
-        else {
-            int n = Fixnum.getValue(obj);
-            if (n > capacity()) {
-                StringBuffer sb = new StringBuffer("The new fill pointer (");
-                sb.append(n);
-                sb.append(") exceeds the capacity of the vector (");
-                sb.append(capacity());
-                sb.append(").");
-                signal(new LispError(sb.toString()));
-            } else if (n < 0) {
-                StringBuffer sb = new StringBuffer("The new fill pointer (");
-                sb.append(n);
-                sb.append(") is negative.");
-                signal(new LispError(sb.toString()));
-            } else
-                fillPointer = n;
-        }
+        noFillPointer();
     }
 
     public boolean isSimpleVector()
@@ -190,32 +167,12 @@ public abstract class AbstractVector extends AbstractArray
     public LispObject vectorPushExtend(LispObject element)
         throws ConditionThrowable
     {
-        final int fp = getFillPointer();
-        if (fp < 0)
-            noFillPointer();
-        if (fp >= capacity()) {
-            // Need to extend vector.
-            ensureCapacity(capacity() * 2 + 1);
-        }
-        set(fp, element);
-        setFillPointer(fp + 1);
-        return new Fixnum(fp);
+        return noFillPointer();
     }
 
     public LispObject vectorPushExtend(LispObject element, LispObject extension)
         throws ConditionThrowable
     {
-        int ext = Fixnum.getValue(extension);
-        final int fp = getFillPointer();
-        if (fp < 0)
-            noFillPointer();
-        if (fp >= capacity()) {
-            // Need to extend vector.
-            ext = Math.max(ext, capacity() + 1);
-            ensureCapacity(capacity() + ext);
-        }
-        set(fp, element);
-        setFillPointer(fp + 1);
-        return new Fixnum(fp);
+        return noFillPointer();
     }
 }

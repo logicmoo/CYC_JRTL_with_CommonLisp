@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.3 2004-02-23 19:56:55 piso Exp $
+ * $Id: ComplexString.java,v 1.4 2004-02-24 12:55:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,8 @@ package org.armedbear.lisp;
 public final class ComplexString extends AbstractString
 {
     private int capacity;
+    private int fillPointer = -1; // -1 indicates no fill pointer.
+    private boolean isDisplaced;
 
     // For non-displaced arrays.
     private char[] chars;
@@ -55,6 +57,49 @@ public final class ComplexString extends AbstractString
     public LispClass classOf()
     {
         return BuiltInClass.STRING;
+    }
+
+    public boolean hasFillPointer()
+    {
+        return fillPointer >= 0;
+    }
+
+    public int getFillPointer()
+    {
+        return fillPointer;
+    }
+
+    public void setFillPointer(int n)
+    {
+        fillPointer = n;
+    }
+
+    public void setFillPointer(LispObject obj) throws ConditionThrowable
+    {
+        if (obj == T)
+            fillPointer = capacity();
+        else {
+            int n = Fixnum.getValue(obj);
+            if (n > capacity()) {
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
+                sb.append(n);
+                sb.append(") exceeds the capacity of the vector (");
+                sb.append(capacity());
+                sb.append(").");
+                signal(new LispError(sb.toString()));
+            } else if (n < 0) {
+                StringBuffer sb = new StringBuffer("The new fill pointer (");
+                sb.append(n);
+                sb.append(") is negative.");
+                signal(new LispError(sb.toString()));
+            } else
+                fillPointer = n;
+        }
+    }
+
+    public boolean isDisplaced()
+    {
+        return isDisplaced;
     }
 
     public LispObject arrayDisplacement()
