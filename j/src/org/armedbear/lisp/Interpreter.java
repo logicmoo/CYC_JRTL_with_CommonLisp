@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.11 2003-02-17 03:02:24 piso Exp $
+ * $Id: Interpreter.java,v 1.12 2003-02-20 01:18:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,6 +99,12 @@ public final class Interpreter extends Lisp
                 Load._load("boot.lisp", true, false);
                 if (jlisp)
                     Load._load("j.lisp", true, false);
+                else {
+                    File file = new File(System.getProperty("user.home"),
+                        ".ablisprc");
+                    if (file.isFile())
+                        Load.load(file.getCanonicalPath());
+                }
             }
             catch (Throwable t) {
                 t.printStackTrace();
@@ -256,7 +262,7 @@ public final class Interpreter extends Lisp
                 List tokens = tokenize(args);
                 for (Iterator it = tokens.iterator(); it.hasNext();) {
                     String filename = (String) it.next();
-                    result = Load.load(filename);
+                    result = evaluate("(load \"" + filename + "\")");
                     if (result == NIL)
                         break;
                 }
