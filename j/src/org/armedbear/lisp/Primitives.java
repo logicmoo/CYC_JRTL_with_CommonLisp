@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.340 2003-08-17 16:03:00 piso Exp $
+ * $Id: Primitives.java,v 1.341 2003-08-23 01:36:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4232,6 +4232,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### truncate
     private static final Primitive TRUNCATE = new Primitive("truncate") {
         public LispObject execute(LispObject[] args) throws Condition
         {
