@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.28 2003-07-06 19:26:00 piso Exp $
+ * $Id: Package.java,v 1.29 2003-07-07 00:41:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,10 +100,16 @@ public final class Package extends LispObject
             arrayList.add(javaString(newNicks.car()));
             newNicks = newNicks.cdr();
         }
-        // Must do this before changing name or nicknames.
+
+        // Remove old name and nicknames from Packages map.
         Packages.deletePackage(this);
+
+        // Now change the names...
         name = newName;
         nicknames = arrayList;
+
+        // And add the package back.
+        Packages.addPackage(this);
     }
 
     public synchronized Symbol findInternalSymbol(String name)
