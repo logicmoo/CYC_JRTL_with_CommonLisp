@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.5 2004-03-06 20:48:25 piso Exp $
+ * $Id: SimpleArray.java,v 1.6 2004-03-15 17:05:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,7 +118,7 @@ public final class SimpleArray extends AbstractArray
 
     public LispObject typeOf()
     {
-        return list3(Symbol.SIMPLE_ARRAY, T, getDimensions());
+        return list3(Symbol.SIMPLE_ARRAY, elementType, getDimensions());
     }
 
     public LispClass classOf()
