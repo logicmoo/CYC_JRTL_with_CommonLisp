@@ -1,8 +1,8 @@
 /*
  * ModeList.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: ModeList.java,v 1.17 2003-12-30 19:31:53 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: ModeList.java,v 1.18 2004-04-12 23:03:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,6 +57,7 @@ public final class ModeList implements Constants
         addEntry(JAVA_MODE, JAVA_MODE_NAME, "JavaMode", true, ".+\\.java|.+\\.jad");
         addEntry(JDB_MODE, JDB_MODE_NAME, "JdbMode", false, null);
         addEntry(LISP_MODE, LISP_MODE_NAME, "LispMode", true, ".+\\.[ej]l|.*\\.li?sp|.*\\.cl|.*\\.emacs");
+        addEntry(LISP_SHELL_MODE, LISP_SHELL_MODE_NAME, "LispShellMode", false, null);
         addEntry(LIST_OCCURRENCES_MODE, LIST_OCCURRENCES_MODE_NAME, "ListOccurrencesMode", false, null);
         addEntry(LIST_REGISTERS_MODE, LIST_REGISTERS_MODE_NAME, "ListRegistersMode", false, null);
         addEntry(LIST_TAGS_MODE, LIST_TAGS_MODE_NAME, "ListTagsMode", false, null);
