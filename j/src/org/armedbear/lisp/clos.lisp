@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.3 2003-10-29 21:23:45 piso Exp $
+;;; $Id: clos.lisp,v 1.4 2003-11-02 19:11:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -593,7 +593,7 @@
 
 ;;; Method metaobjects and standard-method
 
-(defclass standard-method ()
+(defclass standard-method (method)
   ((lambda-list :initarg :lambda-list)     ; :accessor method-lambda-list
    (qualifiers :initarg :qualifiers)       ; :accessor method-qualifiers
    (specializers :initarg :specializers)   ; :accessor method-specializers
