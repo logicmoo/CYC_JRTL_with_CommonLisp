@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.41 2003-10-16 14:34:33 piso Exp $
+ * $Id: Interpreter.java,v 1.42 2003-10-23 00:29:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,8 +37,6 @@ public final class Interpreter extends Lisp
 
     // There can only be one interpreter.
     public static Interpreter interpreter;
-
-    public static boolean initialized;
 
     private static String ldArgs;
     private static ArrayList history;
@@ -87,25 +85,58 @@ public final class Interpreter extends Lisp
                 new CharacterOutputStream(outputStream));
     }
 
-    public static synchronized void initialize(boolean jlisp)
+    private static boolean lispInitialized;
+
+    public static synchronized void initializeLisp(boolean jlisp)
     {
-        if (!initialized) {
+        if (!lispInitialized) {
             try {
                 Load._load("boot.lisp", true, false, false);
                 if (jlisp) {
                     Class.forName("org.armedbear.j.LispAPI");
                     Load._load("j.lisp");
-                } else {
-                    File file = new File(System.getProperty("user.home"),
-                                         ".ablisprc");
-                    if (file.isFile())
-                        Load.load(file.getCanonicalPath(), true, false);
                 }
             }
             catch (Throwable t) {
                 t.printStackTrace();
             }
-            initialized = true;
+            lispInitialized = true;
+        }
+    }
+
+    private static boolean topLevelInitialized;
+
+    private static synchronized void initializeTopLevel()
+    {
+        if (!topLevelInitialized) {
+            try {
+                // Resolve top-level-loop autoload.
+                Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
+                LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
+                if (tplFun instanceof Autoload) {
+                    Autoload autoload = (Autoload) tplFun;
+                    autoload.load();
+                }
+                _LOAD_VERBOSE_.setSymbolValue(T);
+                _AUTOLOAD_VERBOSE_.setSymbolValue(T);
+                String userHome = System.getProperty("user.home");
+                File file = new File(userHome, ".ablrc");
+                if (file.isFile())
+                    Load.load(file.getCanonicalPath());
+                else {
+                    file = new File(userHome, ".ablisprc");
+                    if (file.isFile()) {
+                        String message =
+                            "Warning: use of .ablisprc is deprecated; use .ablrc instead.";
+                        getStandardOutput().writeLine(message);
+                        Load.load(file.getCanonicalPath());
+                    }
+                }
+            }
+            catch (Throwable t) {
+                t.printStackTrace();
+            }
+            topLevelInitialized = true;
         }
     }
 
@@ -121,7 +152,8 @@ public final class Interpreter extends Lisp
             CharacterOutputStream out = getStandardOutput();
             out.writeString(banner());
             out.flushOutput();
-            initialize(jlisp);
+            initializeLisp(jlisp);
+            initializeTopLevel();
             Symbol TOP_LEVEL_LOOP = intern("TOP-LEVEL-LOOP", PACKAGE_TPL);
             LispObject tplFun = TOP_LEVEL_LOOP.getSymbolFunction();
             if (tplFun instanceof Function) {
@@ -541,8 +573,8 @@ public final class Interpreter extends Lisp
     // Used only by org.armedbear.j.Editor.executeCommand().
     public static LispObject evaluate(String s) throws ConditionThrowable
     {
-        if (!initialized)
-            initialize(true);
+        if (!lispInitialized)
+            initializeLisp(true);
         StringInputStream stream = new StringInputStream(s);
         LispObject obj = stream.read(false, EOF, false);
         if (obj == EOF)
