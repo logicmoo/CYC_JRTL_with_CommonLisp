@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JLisp.java,v 1.11 2003-06-13 16:39:26 piso Exp $
+ * $Id: JLisp.java,v 1.12 2003-09-16 00:45:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ import java.net.Socket;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Condition;
 
-public final class JLisp extends CommandInterpreter
+public final class JLisp extends LispShell
 {
     private Thread thread;
     private final File initialDir;
@@ -43,13 +43,7 @@ public final class JLisp extends CommandInterpreter
         this.initialDir = initialDir;
         mode = LispShellMode.getMode();
         formatter = mode.getFormatter(this);
-        setTransient(true);
         setInitialized(true);
-    }
-
-    public final boolean isLisp()
-    {
-        return true;
     }
 
     protected void initializeHistory()
@@ -60,6 +54,12 @@ public final class JLisp extends CommandInterpreter
     public String toString()
     {
         return "jlisp";
+    }
+
+    // Returns true if underlying process is alive and well.
+    protected boolean checkProcess()
+    {
+        return true;
     }
 
     protected void startProcess()
