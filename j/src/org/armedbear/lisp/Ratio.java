@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Ratio.java,v 1.48 2005-02-23 16:30:53 piso Exp $
+ * $Id: Ratio.java,v 1.49 2005-03-12 17:06:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -430,8 +430,12 @@ public final class Ratio extends LispObject
 
     public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
-        if (obj instanceof LispFloat)
+        if (obj instanceof LispFloat) {
+            // "When rationals and floats are combined by a numerical function,
+            // the rational is first converted to a float of the same format."
+            // 12.1.4.1
             return new LispFloat(floatValue()).truncate(obj);
+        }
         BigInteger n, d;
 	try {
 	  if (obj instanceof Fixnum) {
