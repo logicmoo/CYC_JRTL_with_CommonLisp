@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.13 2002-11-25 19:03:05 piso Exp $
+ * $Id: Buffer.java,v 1.14 2002-11-30 15:32:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -219,7 +219,6 @@ public class Buffer extends SystemBuffer
                 return null;
             return new RemoteBuffer((FtpFile)file, session);
         }
-
         if (file instanceof HttpFile) {
             if (Editor.getModeList().modeAccepts(IMAGE_MODE, file.getName()))
                 return new RemoteBuffer(file);
@@ -228,30 +227,28 @@ public class Buffer extends SystemBuffer
             else
                 return new RemoteBuffer(file);
         }
-
         if (file instanceof SshFile) {
             SshFile sshFile = (SshFile) file;
             SshSession session = SshSession.getSession(sshFile);
             if (session == null)
                 return null;
-            Debug.assertTrue(session.isLocked());
-            if (session.checkLogin()) {
-                if (sshFile.getUserName() == null)
-                    sshFile.setUserName(session.getUserName());
-                else
-                    Debug.assertTrue(sshFile.getUserName().equals(session.getUserName()));
-                if (sshFile.getPassword() == null)
-                    sshFile.setPassword(session.getPassword());
-                else
-                    Debug.assertTrue(sshFile.getPassword().equals(session.getPassword()));
-                session.unlock();
-                return new RemoteBuffer(file);
-            } else {
-                session.dispose();
+            if (!session.isLocked()) {
+                Debug.bug();
                 return null;
             }
+            session.checkLogin();
+            if (sshFile.getUserName() == null) {
+                Debug.bug();
+                sshFile.setUserName(session.getUserName());
+            }
+            if (!sshFile.getUserName().equals(session.getUserName())) {
+                Debug.bug();
+                session.unlock();
+                return null;
+            }
+            session.unlock();
+            return new RemoteBuffer(file);
         }
-
         // Special case for unsent messages.
         File dir = file.getParentFile();
         if (dir != null && dir.equals(Directories.getDraftsFolder())) {
@@ -259,7 +256,7 @@ public class Buffer extends SystemBuffer
             if (sendMailMode != null)
                 return sendMailMode.createBuffer(file);
         }
-
+        // Local file.
         return createBuffer(file, null, null);
     }
 
