@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: print-object.lisp,v 1.2 2003-12-17 18:39:07 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: print-object.lisp,v 1.3 2004-03-01 17:59:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -67,3 +67,8 @@
       (print-unreadable-object (restart stream :type t :identity t)
                                (prin1 (restart-name restart) stream))
       (restart-report restart stream)))
+
+(defmethod print-object ((x undefined-function) stream)
+  (if *print-escape*
+      (call-next-method)
+      (format stream "The function ~S is undefined." (cell-error-name x))))
