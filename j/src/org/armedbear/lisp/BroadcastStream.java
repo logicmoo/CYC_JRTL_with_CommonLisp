@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: BroadcastStream.java,v 1.2 2004-01-31 19:06:32 piso Exp $
+ * $Id: BroadcastStream.java,v 1.3 2004-01-31 19:25:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,6 +79,14 @@ public final class BroadcastStream extends Stream
             return streams[streams.length - 1].fileLength();
         else
             return Fixnum.ZERO;
+    }
+
+    public LispObject fileStringLength(LispObject arg) throws ConditionThrowable
+    {
+        if (streams.length > 0)
+            return streams[streams.length - 1].fileStringLength(arg);
+        else
+            return Fixnum.ONE;
     }
 
     // Returns -1 at end of file.
