@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.7 2004-05-06 18:47:24 piso Exp $
+;;; $Id: compile-system.lisp,v 1.8 2004-05-06 19:04:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,6 +88,7 @@
                             "dolist.lisp"
                             "dotimes.lisp"
                             "dribble.lisp"
+                            "dump-class.lisp"
                             "early-defuns.lisp"
                             "enough-namestring.lisp"
                             "ensure-directories-exist.lisp"
