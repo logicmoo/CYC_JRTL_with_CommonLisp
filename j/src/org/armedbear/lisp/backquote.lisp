@@ -1,7 +1,7 @@
 ;;; backquote.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: backquote.lisp,v 1.3 2003-06-01 17:44:30 piso Exp $
+;;; $Id: backquote.lisp,v 1.4 2003-08-24 19:18:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,15 +19,15 @@
 
 (in-package "COMMON-LISP")
 
-(defvar *comma* 'COMMA)
-(defvar *comma-atsign* 'COMMA-ATSIGN)
-(defvar *comma-dot* 'COMMA-DOT)
-(defvar *bq-list* (make-symbol "BQ-LIST"))
-(defvar *bq-append* (make-symbol "BQ-APPEND"))
-(defvar *bq-list** (make-symbol "BQ-LIST*"))
-(defvar *bq-nconc* (make-symbol "BQ-NCONC"))
-(defvar *bq-clobberable* (make-symbol "BQ-CLOBBERABLE"))
-(defvar *bq-quote* (make-symbol "BQ-QUOTE"))
+(defconstant *comma* 'COMMA)
+(defconstant *comma-atsign* 'COMMA-ATSIGN)
+(defconstant *comma-dot* 'COMMA-DOT)
+(defconstant *bq-list* (make-symbol "BQ-LIST"))
+(defconstant *bq-append* (make-symbol "BQ-APPEND"))
+(defconstant *bq-list** (make-symbol "BQ-LIST*"))
+(defconstant *bq-nconc* (make-symbol "BQ-NCONC"))
+(defconstant *bq-clobberable* (make-symbol "BQ-CLOBBERABLE"))
+(defconstant *bq-quote* (make-symbol "BQ-QUOTE"))
 
 (defmacro backquote (form)
   (bq-completely-process form))
