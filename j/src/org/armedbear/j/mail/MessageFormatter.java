@@ -2,7 +2,7 @@
  * MessageFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MessageFormatter.java,v 1.7 2003-05-19 19:38:24 piso Exp $
+ * $Id: MessageFormatter.java,v 1.8 2003-07-03 18:08:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,6 +154,7 @@ public final class MessageFormatter extends Formatter
                 // We're in the body of the message.
                 if (text.equals("-- ")) {
                     inSig = true;
+                    inDiff = false;
                     line.setFlags(MESSAGE_FORMAT_SIGNATURE);
                     continue;
                 }
@@ -177,13 +178,13 @@ public final class MessageFormatter extends Formatter
                 }
                 // Neutral state.
                 line.setFlags(0);
-                text = text.trim();
                 if (text.length() == 0)
                     continue;
                 final char c = text.charAt(0);
                 if (buffer.getLineCount() - line.lineNumber() < 16) {
                     if (c == '_' || c == '-') {
                         // See if line is all underscores or all hyphens.
+                        text = text.trim();
                         boolean all = true;
                         for (int i = text.length(); i-- > 0;) {
                             if (text.charAt(i) != c) {
