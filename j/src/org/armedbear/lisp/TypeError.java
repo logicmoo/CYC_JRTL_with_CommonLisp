@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: TypeError.java,v 1.14 2003-12-13 00:28:08 piso Exp $
+ * $Id: TypeError.java,v 1.15 2003-12-16 17:17:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,22 +95,27 @@ public class TypeError extends LispError
         String s = super.getMessage();
         if (s != null)
             return s;
-        StringBuffer sb = new StringBuffer("wrong type");
+        StringBuffer sb = new StringBuffer();
         String name = datum != null ? String.valueOf(datum) : null;
-        if (typeString != null) {
+        String type = null;
+        if (typeString != null)
+            type = typeString;
+        else if (expectedType != null)
+            type = String.valueOf(expectedType);
+        if (type != null) {
             if (name == null)
-                name = "datum";
-            sb.append(": ");
+                name = "Datum";
             sb.append(name);
             sb.append(" is not a");
-            if ("aeiou".indexOf(typeString.charAt(0)) >= 0)
+            if ("aeiou".indexOf(type.charAt(0)) >= 0)
                 sb.append('n');
             sb.append(' ');
-            sb.append(typeString);
+            sb.append(type);
         } else if (name != null) {
-            sb.append(": ");
+            sb.append("Wrong type: ");
             sb.append(name);
         }
+        sb.append('.');
         return sb.toString();
     }
 
