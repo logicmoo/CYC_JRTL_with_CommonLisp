@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SpecialOperators.java,v 1.25 2004-04-27 23:54:51 piso Exp $
+ * $Id: SpecialOperators.java,v 1.26 2004-04-28 17:59:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,12 +161,19 @@ public final class SpecialOperators extends Lisp
                         LispObject obj = varList.car();
                         varList = varList.cdr();
                         if (obj instanceof Cons && obj.length() == 2) {
-                            bind(checkSymbol(obj.car()),
-//                                  new SymbolMacro(eval(obj.cadr(), evalEnv, thread)),
-                                 new SymbolMacro(obj.cadr()),
-                                 ext);
-                        } else
-                            return signal(new ProgramError("SYMBOL-MACROLET: bad symbol-expansion pair: " + obj.writeToString()));
+                            Symbol symbol = checkSymbol(obj.car());
+                            if (symbol.isSpecialVariable()) {
+                                return signal(new ProgramError(
+                                    "Attempt to bind the special variable " +
+                                    symbol.writeToString() +
+                                    " with SYMBOL-MACROLET."));
+                            }
+                            bind(symbol, new SymbolMacro(obj.cadr()), ext);
+                        } else {
+                            return signal(new ProgramError(
+                                "Malformed symbol-expansion pair in SYMBOL-MACROLET: " +
+                                obj.writeToString()));
+                        }
                     }
                     LispObject body = args.cdr();
                     while (body != NIL) {
