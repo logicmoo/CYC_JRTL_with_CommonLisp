@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.5 2002-12-07 10:53:40 piso Exp $
+ * $Id: File.java,v 1.6 2002-12-07 11:39:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -757,37 +757,34 @@ public class File implements Comparable
             while ((s = reader.readLine()) != null) {
                 DirectoryEntry entry = DirectoryEntry.getDirectoryEntry(s, null);
                 if (entry != null) {
-                    String name = entry.extractName();
+                    final String name = entry.extractName();
                     if (name == null || name.equals(".") || name.equals(".."))
                         continue;
-                    list.add(entry);
+                    String path = appendNameToPath(canonicalPath(), name, '/');
+                    File file = null;
+                    if (protocol == PROTOCOL_FTP)
+                        file = new FtpFile(hostName, path, userName, password, port);
+                    else if (protocol == PROTOCOL_SSH)
+                        file = new SshFile(hostName, path, userName, password, port);
+                    else
+                        Debug.bug();
+                    if (file != null) {
+                        if (entry.isDirectory())
+                            file.type = TYPE_DIRECTORY;
+                        else if (entry.isLink())
+                            file.type = TYPE_LINK;
+                        else
+                            file.type = TYPE_FILE;
+                        list.add(file);
+                    }
                 }
             }
-            long elapsed = System.currentTimeMillis() - start;
-            Log.debug("listFiles entry list " + elapsed + " ms");
             if (list.size() == 0)
                 return null;
             File[] files = new File[list.size()];
-            for (int i = 0; i < list.size(); i++) {
-                DirectoryEntry entry = (DirectoryEntry) list.get(i);
-                String path = appendNameToPath(canonicalPath(), entry.extractName(), '/');
-                File file = null;
-                if (protocol == PROTOCOL_FTP)
-                    file = new FtpFile(hostName, path, userName, password, port);
-                else if (protocol == PROTOCOL_SSH)
-                    file = new SshFile(hostName, path, userName, password, port);
-                else
-                    Debug.assertTrue(false);
-                if (entry.isDirectory())
-                    file.type = TYPE_DIRECTORY;
-                else if (entry.isLink())
-                    file.type = TYPE_LINK;
-                else
-                    file.type = TYPE_FILE;
-                files[i] = file;
-            }
-            elapsed = System.currentTimeMillis() - start;
-            Log.debug("listFiles total " + elapsed + " ms " + this);
+            list.toArray(files);
+            long elapsed = System.currentTimeMillis() - start;
+            Log.debug("listFiles " + elapsed + " ms " + this);
             return files;
         }
         if (isRemote)
