@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.79 2004-06-17 19:52:47 piso Exp $
+ * $Id: Closure.java,v 1.80 2004-06-28 01:04:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -549,7 +549,7 @@ public class Closure extends Function
             for (int i = 0; i < specials.length; i++)
                 ext.declareSpecial(specials[i]);
         }
-        args = processArgs(args);
+        args = processArgs(args, 0);
         Debug.assertTrue(args.length == variables.length);
         for (int i = 0; i < variables.length; i++) {
             Symbol sym = variables[i];
@@ -587,7 +587,8 @@ public class Closure extends Function
         return false;
     }
 
-    protected LispObject[] processArgs(LispObject[] args) throws ConditionThrowable
+    protected final LispObject[] processArgs(LispObject[] args, int extra)
+        throws ConditionThrowable
     {
         final int argsLength = args.length;
         if (arity >= 0) {
@@ -600,7 +601,7 @@ public class Closure extends Function
         if (argsLength < minArgs)
             signal(new WrongNumberOfArgumentsException(this));
         final LispThread thread = LispThread.currentThread();
-        LispObject[] array = new LispObject[variables.length];
+        LispObject[] array = new LispObject[variables.length + extra];
         int index = 0;
         // The bindings established here (if any) are lost when this function
         // returns. They are used only in the evaluation of initforms for
