@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.154 2004-05-07 16:55:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.155 2004-05-07 18:14:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,15 +44,20 @@
 (defvar *locals* ())
 (defvar *max-locals* 0)
 
+;; Returns index of allocated slot.
+(defun allocate-local (symbol)
+  (let ((index (vector-push symbol *locals*)))
+    (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
+    index))
+
 (defvar *variables* ())
 
 (defstruct variable
   name
-  special-p
-  index)
+  special-p)
 
-(defun push-variable (var special-p index)
-  (push (make-variable :name var :special-p special-p :index index) *variables*))
+(defun push-variable (var special-p)
+  (push (make-variable :name var :special-p special-p) *variables*))
 
 (defun find-variable (var)
   (find var *variables* :key 'variable-name))
@@ -1598,8 +1603,7 @@
     ;; If so...
     (when specialp
       ;; Save current dynamic environment.
-      (setf env-var (vector-push nil *locals*))
-      (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
+      (setf env-var (allocate-local nil))
       (ensure-thread-var-initialized)
       (emit 'aload *thread*)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
@@ -1651,11 +1655,10 @@
   (dolist (varspec varlist)
     (let* ((var (if (consp varspec) (car varspec) varspec))
            (specialp (if (or (memq var specials) (special-variable-p var)) t nil))
-           (index (if specialp nil (fill-pointer *locals*))))
-      (push-variable var specialp index)
+           index)
       (unless specialp
-        (vector-push var *locals*))))
-  (setq *max-locals* (max *max-locals* (fill-pointer *locals*)))
+        (setf index (allocate-local var)))
+      (push-variable var specialp)))
   ;; At this point the initial values are on the stack. Now generate code to
   ;; pop them off one by one and store each one in the corresponding local or
   ;; special variable. In order to do this, we must process the variable list
@@ -1663,8 +1666,7 @@
   (do* ((varlist (reverse varlist) (cdr varlist))
         (varspec (car varlist) (car varlist)))
        ((null varlist))
-    (let* ((var (if (consp varspec) (car varspec) varspec))
-           (v (find-variable var)))
+    (let* ((var (if (consp varspec) (car varspec) varspec)))
       (cond ((or (memq var specials) (special-variable-p var))
              (ensure-thread-var-initialized)
              (emit 'aload *thread*)
@@ -1683,50 +1685,44 @@
              (let ((index (position var *locals* :from-end t)))
                (unless index
                  (error "COMPILE-LET-VARS can't find local variable"))
-               (unless (eql index (variable-index v))
-                 (error "COMPILE-LET-VARS wrong index"))
                (emit 'astore index)))))))
 
 (defun compile-let*-vars (varlist specials)
   ;; Generate code to evaluate initforms and bind variables.
-  (let ((i (fill-pointer *locals*)))
-    (dolist (varspec varlist)
-      (let (var initform specialp)
-        (if (consp varspec)
-            (setf var (car varspec)
-                  initform (cadr varspec))
-            (setf var varspec
-                  initform nil))
-        (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
-        (push-variable var specialp i)
-        (when specialp
-          (ensure-thread-var-initialized))
-        (cond (initform
-               (compile-form initform)
-               (unless (remove-store-value)
-                 (emit-push-value))
-               (maybe-emit-clear-values initform))
-              (t
-               (emit-push-nil)))
-        (cond (specialp
-               (let ((g (declare-symbol var)))
-                 ;; Initial value is on the runtime stack at this point.
-                 (emit 'aload *thread*)
-                 (emit 'swap)
-                 (emit 'getstatic
-                       *this-class*
-                       g
-                       +lisp-symbol+)
-                 (emit 'swap)
-                 (emit-invokevirtual +lisp-thread-class+
-                                     "bindSpecial"
-                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                     -2)))
-              (t
-               (emit 'astore i)
-               (vector-push var *locals*)
-               (incf i))))))
-  (setq *max-locals* (max *max-locals* (fill-pointer *locals*))))
+  (dolist (varspec varlist)
+    (let (var initform specialp)
+      (if (consp varspec)
+          (setf var (car varspec)
+                initform (cadr varspec))
+          (setf var varspec
+                initform nil))
+      (setf specialp (if (or (memq var specials) (special-variable-p var)) t nil))
+      (push-variable var specialp)
+      (when specialp
+        (ensure-thread-var-initialized))
+      (cond (initform
+             (compile-form initform)
+             (unless (remove-store-value)
+               (emit-push-value))
+             (maybe-emit-clear-values initform))
+            (t
+             (emit-push-nil)))
+      (cond (specialp
+             (let ((g (declare-symbol var)))
+               ;; Initial value is on the runtime stack at this point.
+               (emit 'aload *thread*)
+               (emit 'swap)
+               (emit 'getstatic
+                     *this-class*
+                     g
+                     +lisp-symbol+)
+               (emit 'swap)
+               (emit-invokevirtual +lisp-thread-class+
+                                   "bindSpecial"
+                                   "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                   -2)))
+            (t
+             (emit 'astore (allocate-local var)))))))
 
 ;; Returns list of declared specials.
 (defun process-special-declarations (forms)
@@ -1744,7 +1740,7 @@
   (let ((*variables* *variables*)
         (specials (process-special-declarations (cdr form))))
     (dolist (var specials)
-      (push-variable var t nil))
+      (push-variable var t))
     (cond ((null (cdr form))
            (emit-push-nil)
            (emit-store-value))
@@ -1810,19 +1806,6 @@
     (emit 'label `,label2)
     (emit-store-value)))
 
-;; (defun compile-block (form for-effect)
-;;   (let* ((rest (cdr form))
-;;          (block-label (car rest))
-;;          (block-exit (gensym))
-;;          (*blocks* (acons block-label block-exit *blocks*)))
-;;     (do ((subforms (cdr rest) (cdr subforms)))
-;;         ((null subforms))
-;;       (let ((subform (car subforms))
-;;             (really-for-effect (or (cdr subforms) for-effect)))
-;;         (compile-form subform really-for-effect)
-;;         (when really-for-effect
-;;           (maybe-emit-clear-values subform))))
-;;     (emit 'label `,block-exit)))
 (defun compile-block (form for-effect)
   (let* ((rest (cdr form))
          (block-label (car rest))
@@ -1831,13 +1814,12 @@
          (saved-fp (fill-pointer *locals*))
          env-var)
     ;; Save current dynamic environment.
-    (setf env-var (vector-push nil *locals*))
-    (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
+    (setf env-var (allocate-local nil))
     (ensure-thread-var-initialized)
     (emit 'aload *thread*)
     (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
     (emit 'astore env-var)
-
+    ;; Compile subforms.
     (do ((subforms (cdr rest) (cdr subforms)))
         ((null subforms))
       (let ((subform (car subforms))
@@ -2402,13 +2384,9 @@
         ;; for args.
         (setf (fill-pointer *locals*) (1+ (length args))))
     ;; Reserve the next available slot for the value register.
-    (setf *val* (fill-pointer *locals*))
-    (incf (fill-pointer *locals*))
-    (setf *max-locals* (fill-pointer *locals*))
+    (setf *val* (allocate-local nil))
     ;; Reserve the next available slot for the thread register.
-    (setf *thread* (fill-pointer *locals*))
-    (incf (fill-pointer *locals*))
-    (setf *max-locals* (fill-pointer *locals*))
+    (setf *thread* (allocate-local nil))
     (when *hairy-arglist-p*
       (emit 'aload_0)
       (emit 'aload_1)
