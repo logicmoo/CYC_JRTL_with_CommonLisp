@@ -2,7 +2,7 @@
  * IncrementalFindTextFieldHandler.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: IncrementalFindTextFieldHandler.java,v 1.7 2005-03-04 17:34:48 piso Exp $
+ * $Id: IncrementalFindTextFieldHandler.java,v 1.8 2005-03-05 00:46:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,8 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         keyMap.addMappingsForCommand("findNext", buffer.getKeyMapForMode());
         keyMap.addMappingsForCommand("findPrev", KeyMap.getGlobalKeyMap());
         keyMap.addMappingsForCommand("findPrev", buffer.getKeyMapForMode());
+        keyMap.addMappingsForCommand("escape", KeyMap.getGlobalKeyMap());
+        keyMap.addMappingsForCommand("escape", buffer.getKeyMapForMode());
     }
 
     public void escape()
@@ -162,6 +164,12 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
             if (command == "findPrev") {
                 e.consume();
                 findPrev();
+                return;
+            }
+            if (command == "escape") {
+                // keyboard-quit
+                escape();
+                e.consume();
                 return;
             }
         }
