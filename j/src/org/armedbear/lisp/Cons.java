@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Cons.java,v 1.38 2004-04-24 12:32:28 piso Exp $
+ * $Id: Cons.java,v 1.39 2004-05-06 11:15:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -237,6 +237,11 @@ public final class Cons extends LispObject
     public final LispObject LISTP()
     {
         return T;
+    }
+
+    public final boolean endp()
+    {
+        return false;
     }
 
     public final LispObject ENDP()
