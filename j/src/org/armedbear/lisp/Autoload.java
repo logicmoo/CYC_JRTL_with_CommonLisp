@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.174 2004-03-13 19:28:40 piso Exp $
+ * $Id: Autoload.java,v 1.175 2004-03-14 00:24:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,7 +130,15 @@ public class Autoload extends Function
         StringBuffer sb = new StringBuffer("#<AUTOLOAD ");
         sb.append(symbol);
         sb.append(" \"");
-        sb.append(getFileName());
+        if (className != null) {
+            int index = className.lastIndexOf('.');
+            if (index >= 0)
+                sb.append(className.substring(index + 1));
+            else
+                sb.append(className);
+            sb.append(".class");
+        } else
+            sb.append(getFileName());
         sb.append("\">");
         return sb.toString();
     }
@@ -288,6 +296,7 @@ public class Autoload extends Function
         autoload("make-echo-stream", "EchoStream");
         autoload("make-string-input-stream", "StringInputStream");
         autoload("make-synonym-stream", "SynonymStream");
+        autoload("mod", "mod");
         autoload("open-stream-p", "open_stream_p");
         autoload("output-stream-p", "output_stream_p");
         autoload("package-error-package", "PackageError");
