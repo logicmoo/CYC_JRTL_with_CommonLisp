@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Utilities.java,v 1.21 2003-04-10 23:30:37 piso Exp $
+ * $Id: Utilities.java,v 1.22 2003-06-16 15:26:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1369,7 +1369,7 @@ public final class Utilities implements Constants
         return s;
     }
 
-    // Does not handle single-quoted embedded strings.
+    // Does not handle embedded single-quoted strings.
     public static List tokenize(String s)
     {
         ArrayList list = new ArrayList();
@@ -1394,7 +1394,8 @@ public final class Utilities implements Constants
                             sb.setLength(0);
                         }
                         inQuote = false;
-                    }
+                    } else
+                        inQuote = true;
                     break;
                 default:
                     sb.append(c);
