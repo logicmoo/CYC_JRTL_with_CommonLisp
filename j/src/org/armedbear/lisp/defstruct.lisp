@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.27 2003-10-05 18:37:59 piso Exp $
+;;; $Id: defstruct.lisp,v 1.28 2003-11-18 00:50:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@
 (defvar *ds-conc-name*)
 (defvar *ds-constructors*)
 (defvar *ds-copier*)
+(defvar *ds-type*)
 (defvar *ds-named*)
 (defvar *ds-predicate*)
 (defvar *ds-print-function*)
@@ -33,8 +34,16 @@
          (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
          (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
          (keys (cons '&key slot-descriptions)))
-    `((defun ,constructor-name ,keys
-        (%make-structure ',*ds-name* (list ,@slot-names))))))
+    (case *ds-type*
+      (LIST
+       (if *ds-named*
+           `((defun ,constructor-name ,keys
+               (list ',*ds-name* ,@slot-names)))
+           `((defun ,constructor-name ,keys
+               (list ,@slot-names)))))
+      (t
+       `((defun ,constructor-name ,keys
+           (%make-structure ',*ds-name* (list ,@slot-names))))))))
 
 (defun default-constructor-name ()
   (concatenate 'string "MAKE-" (symbol-name *ds-name*)))
@@ -44,53 +53,66 @@
       (let ((results ()))
         (dolist (constructor *ds-constructors*)
           (when (car constructor)
-            (setf results (append results (define-constructor constructor slots)))))
+            (setf results (nconc results (define-constructor constructor slots)))))
         results)
       (define-constructor (cons (default-constructor-name) nil) slots)))
 
 (defun define-predicate ()
-  (when *ds-predicate*
+  (when (and *ds-predicate*
+             (or *ds-named* (null *ds-type*)))
     (let ((pred (intern *ds-predicate*)))
       `((defun ,pred (object)
           (typep object ',*ds-name*))))))
 
 
-(defmacro get-slot-accessor (slot)
-  (case slot
-    (0 #'%structure-ref-0)
-    (1 #'%structure-ref-1)
-    (2 #'%structure-ref-2)
+(defmacro get-slot-accessor (slot type)
+  (case type
+    (LIST
+     `(lambda (instance) (elt instance ,slot)))
     (t
-     `(lambda (instance) (%structure-ref instance ,slot)))))
+     (case slot
+       (0 #'%structure-ref-0)
+       (1 #'%structure-ref-1)
+       (2 #'%structure-ref-2)
+       (t
+        `(lambda (instance) (%structure-ref instance ,slot)))))))
 
-(defmacro get-slot-mutator (slot)
-  (case slot
-    (0 #'%structure-set-0)
-    (1 #'%structure-set-1)
-    (2 #'%structure-set-2)
+(defmacro get-slot-mutator (slot type)
+  (case type
+    (LIST
+     `(lambda (instance value) (%set-elt instance ,slot value)))
     (t
-     `(lambda (instance value) (%structure-set instance ,slot value)))))
+     (case slot
+       (0 #'%structure-set-0)
+       (1 #'%structure-set-1)
+       (2 #'%structure-set-2)
+       (t
+        `(lambda (instance value) (%structure-set instance ,slot value)))))))
 
 (defun define-access-function (slot-name index)
   (let ((accessor
          (if *ds-conc-name*
              (intern (concatenate 'string (symbol-name *ds-conc-name*) (symbol-name slot-name)))
              slot-name)))
-    `((setf (symbol-function ',accessor) (get-slot-accessor ,index))
-      (%put ',accessor 'setf-inverse (get-slot-mutator ,index)))))
+    `((setf (symbol-function ',accessor) (get-slot-accessor ,index ,*ds-type*))
+      (%put ',accessor 'setf-inverse (get-slot-mutator ,index ,*ds-type*)))))
 
 (defun define-access-functions (slots)
   (let ((index 0)
         (result ()))
     (dolist (slot slots)
       (let ((slot-name (if (atom slot) slot (car slot))))
-        (setf result (append result (define-access-function slot-name index))))
+        (setf result (nconc result (define-access-function slot-name index))))
       (incf index))
     result))
 
 (defun define-copier ()
   (when *ds-copier*
-    `((setf (fdefinition ',*ds-copier*) #'copy-structure))))
+    (case *ds-type*
+      (LIST
+       `((setf (fdefinition ',*ds-copier*) #'copy-list)))
+      (t
+       `((setf (fdefinition ',*ds-copier*) #'copy-structure))))))
 
 (defun parse-1-option (option)
   (case (car option)
@@ -123,7 +145,11 @@
      (when (= (length option) 2)
        (if (null (cadr option))
            (setf *ds-predicate* nil)
-           (setf *ds-predicate* (symbol-name (cadr option))))))))
+           (setf *ds-predicate* (symbol-name (cadr option))))))
+    (:type
+     (setf *ds-type* (cadr option)))
+    (t
+     (format t "unrecognized DEFSTRUCT option: ~S~%" (car option)))))
 
 (defun parse-name-and-options (name-and-options)
   (setf *ds-name* (car name-and-options))
@@ -147,6 +173,8 @@
         (*ds-conc-name* nil)
         (*ds-constructors* nil)
         (*ds-copier* nil)
+        (*ds-type* nil)
+        (*ds-named* nil)
         (*ds-predicate* nil)
         (*ds-print-function* nil))
     (parse-name-and-options (if (atom name-and-options)
@@ -161,5 +189,3 @@
        ,@(define-access-functions slots)
        ,@(define-copier)
        ',*ds-name*)))
-
-(provide 'defstruct)
