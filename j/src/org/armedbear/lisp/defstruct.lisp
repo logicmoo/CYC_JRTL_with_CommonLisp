@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.9 2003-07-12 15:25:40 piso Exp $
+;;; $Id: defstruct.lisp,v 1.10 2003-07-12 19:18:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,11 +27,16 @@
 (defvar *ds-predicate*)
 (defvar *ds-print-function*)
 
-(defun make-constructor (name slots)
-  (let ((constructor-name (intern (concatenate 'string "MAKE-" (symbol-name name))))
+(defun make-constructor (slots)
+  (let ((constructor-name (intern (concatenate 'string "MAKE-" (symbol-name *ds-name*))))
         (keys (cons '&key slots)))
-    (eval `(defun ,constructor-name ,keys
-             (%make-structure ',name (list ,@slots))))))
+    `((defun ,constructor-name ,keys
+        (%make-structure ',*ds-name* (list ,@slots))))))
+
+(defun make-predicate ()
+  (let ((pred (intern (concatenate 'string (symbol-name *ds-name*) "-p"))))
+    `((defun ,pred (object)
+        (typep object ',*ds-name*)))))
 
 (defun make-access-function (conc-name slot index)
   (let ((accessor
@@ -85,6 +90,7 @@
                                 (list name-and-options)
                                 name-and-options))
     `(progn
-       (make-constructor ',*ds-name* ',slots)
+       ,@(make-constructor slots)
+       ,@(make-predicate)
        (make-access-functions ',*ds-conc-name* ',slots)
        ',*ds-name*)))
