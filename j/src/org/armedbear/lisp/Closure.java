@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Closure.java,v 1.66 2004-01-16 12:51:42 piso Exp $
+ * $Id: Closure.java,v 1.67 2004-02-21 00:14:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -496,7 +496,6 @@ public class Closure extends Function
         args = processArgs(args);
         Debug.assertTrue(args.length == variables.length);
         for (int i = 0; i < variables.length; i++) {
-//             bind(variables[i], args[i], ext);
             Symbol symbol = variables[i];
             if (isSpecial(symbol))
                 thread.bindSpecial(symbol, args[i]);
