@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.6 2003-06-13 00:06:46 piso Exp $
+ * $Id: KeyMap.java,v 1.7 2003-06-13 00:33:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -415,7 +415,7 @@ public final class KeyMap implements Constants
     public synchronized final KeyMapping getKeyMapping(String command)
     {
         command = command.intern();
-        for (int i = mappings.size(); i-- > 0;) {
+        for (int i = 0, limit = mappings.size(); i < limit; i++) {
             KeyMapping mapping = (KeyMapping) mappings.get(i);
             if (command == mapping.getCommand())
                 return mapping;
