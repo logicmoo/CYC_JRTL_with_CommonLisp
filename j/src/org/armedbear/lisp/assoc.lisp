@@ -1,7 +1,7 @@
 ;;; assoc.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: assoc.lisp,v 1.3 2003-06-11 00:33:17 piso Exp $
+;;; $Id: assoc.lisp,v 1.4 2003-10-14 16:04:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,12 +17,9 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(export '(assoc assoc-if assoc-if-not
-          rassoc rassoc-if rassoc-if-not))
-
 ;;; From CMUCL.
+
+(in-package "SYSTEM")
 
 (defmacro assoc-guts (test-guy)
   `(do ((alist alist (cdr alist)))
