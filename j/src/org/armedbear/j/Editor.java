@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.74 2003-06-28 00:56:13 piso Exp $
+ * $Id: Editor.java,v 1.75 2003-06-28 01:20:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6967,33 +6967,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         String s = String.valueOf(((float) loopsPerSecond) / 500000);
         currentEditor.status(s);
         setDefaultCursor();
-    }
-
-    public void httpShowHeaders()
-    {
-        final File file = buffer.getFile();
-        if (file instanceof HttpFile) {
-            setWaitCursor();
-            final String title = "httpShowHeaders ".concat(file.netPath());
-            Buffer buf = null;
-            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
-                Buffer b = it.nextBuffer();
-                if (b instanceof OutputBuffer && b.getParentBuffer() == buffer) {
-                    if (title.equals(b.getTitle())) {
-                        buf = b;
-                        break;
-                    }
-                }
-            }
-            if (buf == null) {
-                buf = OutputBuffer.getOutputBuffer(((HttpFile)file).getHeaders());
-                buf.setParentBuffer(buffer);
-                buf.setTitle(title);
-            }
-            makeNext(buf);
-            activateInOtherWindow(buf);
-            setDefaultCursor();
-        }
     }
 
     public void httpDeleteCookies()

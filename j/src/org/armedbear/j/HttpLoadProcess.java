@@ -1,8 +1,8 @@
 /*
  * HttpLoadProcess.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: HttpLoadProcess.java,v 1.1.1.1 2002-09-24 16:08:41 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: HttpLoadProcess.java,v 1.2 2003-06-28 01:20:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -404,6 +404,35 @@ public final class HttpLoadProcess extends LoadProcess implements BackgroundProc
         if (errorRunnable != null) {
             errorRunnable.setMessage(errorText);
             SwingUtilities.invokeLater(errorRunnable);
+        }
+    }
+
+    public static void httpShowHeaders()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        final File file = buffer.getFile();
+        if (file instanceof HttpFile) {
+            editor.setWaitCursor();
+            final String title = "httpShowHeaders ".concat(file.netPath());
+            Buffer buf = null;
+            for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+                Buffer b = it.nextBuffer();
+                if (b instanceof OutputBuffer && b.getParentBuffer() == buffer) {
+                    if (title.equals(b.getTitle())) {
+                        buf = b;
+                        break;
+                    }
+                }
+            }
+            if (buf == null) {
+                buf = OutputBuffer.getOutputBuffer(((HttpFile)file).getHeaders());
+                buf.setParentBuffer(buffer);
+                buf.setTitle(title);
+            }
+            editor.makeNext(buf);
+            editor.activateInOtherWindow(buf);
+            editor.setDefaultCursor();
         }
     }
 }
