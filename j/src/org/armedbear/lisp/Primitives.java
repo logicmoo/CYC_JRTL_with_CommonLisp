@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.286 2003-07-07 15:05:59 piso Exp $
+ * $Id: Primitives.java,v 1.287 2003-07-07 16:12:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2652,12 +2652,9 @@ public final class Primitives extends Module
             if (pkg != null)
                 throw new LispError("package " + packageName +
                     " already exists");
-            pkg = Packages.createPackage(packageName);
-
             // Defaults.
-            LispObject nicknames = null;
-            LispObject use = null;
-
+            LispObject nicknames = NIL;
+            LispObject use = NIL;
             // Process keyword arguments (if any).
             for (int i = 1; i < args.length; i += 2) {
                 LispObject keyword = checkSymbol(args[i]);
@@ -2670,34 +2667,56 @@ public final class Primitives extends Module
                     throw new ProgramError("unrecognized keyword argument " +
                                            keyword);
             }
-
-            if (nicknames != null) {
+            if (nicknames != NIL) {
                 LispObject list = checkList(nicknames);
                 while (list != NIL) {
-                    LispString string = string(list.car());
-                    pkg.addNickname(string.getValue());
-                    list = list.cdr();
-                }
-            }
-
-            if (use != null) {
-                LispObject list = checkList(use);
-                while (list != NIL) {
-                    LispObject obj = list.car();
-                    if (obj instanceof Package)
-                        pkg.usePackage((Package)obj);
-                    else {
-                        LispString string = string(obj);
-                        Package p = Packages.findPackage(string.getValue());
-                        if (p == null)
-                            throw new LispError(String.valueOf(obj) +
-                                " is not the name of a package");
-                        pkg.usePackage(p);
+                    String nick = javaString(list.car());
+                    if (Packages.findPackage(nick) != null) {
+                        throw new LispError("a package named " + nick +
+                                            " already exists");
                     }
                     list = list.cdr();
                 }
             }
-
+            if (use != NIL) {
+                LispObject list = checkList(use);
+                while (list != NIL) {
+                    LispObject obj = list.car();
+                    if (obj instanceof Package)
+                        ; // OK.
+                    else {
+                        String s = javaString(obj);
+                        Package p = Packages.findPackage(s);
+                        if (p == null)
+                            throw new LispError(String.valueOf(obj) +
+                                                " is not the name of a package");
+                    }
+                    list = list.cdr();
+                }
+            }
+            // Now create the package.
+            pkg = Packages.createPackage(packageName);
+            // Add the nicknames.
+            while (nicknames != NIL) {
+                String nick = javaString(nicknames.car());
+                pkg.addNickname(nick);
+                nicknames = nicknames.cdr();
+            }
+            // Create the use list.
+            while (use != NIL) {
+                LispObject obj = use.car();
+                if (obj instanceof Package)
+                    pkg.usePackage((Package)obj);
+                else {
+                    String s = javaString(obj);
+                    Package p = Packages.findPackage(s);
+                    if (p == null)
+                        throw new LispError(String.valueOf(obj) +
+                                            " is not the name of a package");
+                    pkg.usePackage(p);
+                }
+                use = use.cdr();
+            }
             return pkg;
         }
     };
