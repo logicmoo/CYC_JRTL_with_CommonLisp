@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: FindInFiles.java,v 1.15 2004-04-02 03:24:21 piso Exp $
+ * $Id: FindInFiles.java,v 1.16 2004-04-26 19:49:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -874,7 +874,12 @@ public final class FindInFiles extends Replacement implements Constants,
         new Thread(findInFiles).start();
         Buffer outputBuffer = findInFiles.getOutputBuffer();
         if (outputBuffer != null) {
-            editor.makeNext(outputBuffer);
+            Editor otherEditor = editor.getOtherEditor();
+            if (otherEditor != null) {
+                outputBuffer.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
+                otherEditor.makeNext(outputBuffer);
+            } else
+                outputBuffer.setUnsplitOnClose(true);
             editor.activateInOtherWindow(outputBuffer);
         }
         editor.status("Press Escape to cancel search");
