@@ -2,7 +2,7 @@
  * MessageBuffer.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: MessageBuffer.java,v 1.9 2002-10-25 02:45:10 piso Exp $
+ * $Id: MessageBuffer.java,v 1.10 2002-11-15 17:19:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1019,7 +1019,7 @@ public class MessageBuffer extends Buffer
         renumber();
     }
 
-    private void appendHeaderLines(String headers)
+    protected void appendHeaderLines(String headers)
     {
         if (headers != null) {
             FastStringReader reader = new FastStringReader(headers);
@@ -1029,7 +1029,7 @@ public class MessageBuffer extends Buffer
         }
     }
 
-    private void appendHeaderLine(String s)
+    protected void appendHeaderLine(String s)
     {
         appendLine(new MessageHeaderLine(s));
     }
