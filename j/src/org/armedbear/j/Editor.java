@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.6 2002-10-11 01:04:28 piso Exp $
+ * $Id: Editor.java,v 1.7 2002-10-11 16:12:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6804,7 +6804,14 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public final void setDefaultCursor()
     {
-        display.setCursor(displayReady ? buffer.getDefaultCursor() : waitCursor);
+        if (buffer == null)
+            Debug.bug();
+        final Cursor cursor;
+        if (displayReady && buffer != null)
+            cursor = buffer.getDefaultCursor();
+        else
+            cursor = waitCursor;
+        display.setCursor(cursor);
     }
 
     public final void setCursor(Cursor cursor)
