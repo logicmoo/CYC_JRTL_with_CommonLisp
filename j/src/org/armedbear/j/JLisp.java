@@ -2,7 +2,7 @@
  * JLisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: JLisp.java,v 1.19 2004-08-31 23:24:20 piso Exp $
+ * $Id: JLisp.java,v 1.20 2004-08-31 23:27:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ public final class JLisp extends LispShell
     {
         super();
         this.initialDir = initialDir;
+        title = "jlisp";
         mode = LispShellMode.getMode();
         formatter = mode.getFormatter(this);
         setInitialized(true);
