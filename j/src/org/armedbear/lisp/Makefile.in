@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.8 2003-03-14 18:45:27 piso Exp $
+# $Id: Makefile.in,v 1.9 2003-03-17 18:27:01 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,7 +21,8 @@ JAVAC = @JAVAC@
 JAVACFLAGS = @JAVACFLAGS@
 COMPILER_CLASSPATH = @COMPILER_CLASSPATH@
 
-CLASSFILES =	AbstractVector.class \
+CLASSFILES =	AbstractArray.class \
+		AbstractVector.class \
 		ArrayType.class \
 		Bignum.class \
 		Binding.class \
