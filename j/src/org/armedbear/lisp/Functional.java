@@ -2,7 +2,7 @@
  * Functional.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Functional.java,v 1.2 2003-06-01 01:35:56 piso Exp $
+ * $Id: Functional.java,v 1.3 2003-12-10 21:34:12 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ public abstract class Functional extends LispObject
 {
     private LispObject lambdaName;
 
+    private LispObject arglist;
+
     public final LispObject getLambdaName()
     {
         return lambdaName;
@@ -35,4 +37,15 @@ public abstract class Functional extends LispObject
     {
         lambdaName = obj;
     }
+
+    public final LispObject getArglist()
+    {
+        return arglist;
+    }
+
+    public final void setArglist(LispObject obj)
+    {
+        arglist = obj;
+    }
+
 }
