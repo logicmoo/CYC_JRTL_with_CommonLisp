@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.5 2003-07-10 13:43:29 piso Exp $
+;;; $Id: defstruct.lisp,v 1.6 2003-07-10 17:50:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,8 +42,10 @@
       (make-access-function name slot index)
       (incf index))))
 
-(defmacro defstruct (name &rest slots)
-  `(progn
-     (make-constructor ',name ',slots)
-     (make-access-functions ',name ',slots)
-     ',name))
+(defmacro defstruct (name-and-options &rest slots)
+  (let ((name (if (atom name-and-options)
+                  name-and-options (car name-and-options))))
+    `(progn
+       (make-constructor ',name ',slots)
+       (make-access-functions ',name ',slots)
+       ',name)))
