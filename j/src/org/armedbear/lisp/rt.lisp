@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.33 2003-03-06 00:10:00 piso Exp $
+;;; $Id: rt.lisp,v 1.34 2003-03-06 04:19:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -193,6 +193,12 @@
 
 (defun odddigitp (c)
   (notnot (find c "13579")))
+
+(defun is-eq-p (x) #'(lambda (y) (eqt x y)))
+(defun is-not-eq-p (x) #'(lambda (y) (not (eqt x y))))
+
+(defun is-eql-p (x) #'(lambda (y) (eqlt x y)))
+(defun is-not-eql-p (x) #'(lambda (y) (not (eqlt x y))))
 
 (defun check-sublis (a al &key (key 'no-key) test test-not)
   "Apply sublis al a with various keys.  Check that
