@@ -456,6 +456,7 @@ string=
 string>
 string>=
 stringp
+sublis
 subseq
 subst
 substitute
