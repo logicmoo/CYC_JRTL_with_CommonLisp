@@ -1,8 +1,8 @@
 /*
  * ModeList.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: ModeList.java,v 1.9 2003-04-10 23:24:42 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: ModeList.java,v 1.10 2003-06-06 15:33:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,8 @@ public final class ModeList implements Constants
         addEntry(VHDL_MODE, VHDL_MODE_NAME, "VHDLMode", true, ".+\\.vhdl?");
         addEntry(WEB_MODE, WEB_MODE_NAME, "WebMode", false, null);
         addEntry(WORD_MODE, WORD_MODE_NAME, "WordMode", false, null);
-        addEntry(XML_MODE, XML_MODE_NAME, "XmlMode", true, ".+\\.x[msu]l");
+        addEntry(XML_MODE, XML_MODE_NAME, "XmlMode", true,
+            ".+\\.x[msu]l|.+\\.dtd");
     }
 
     public synchronized Mode getMode(int id)
