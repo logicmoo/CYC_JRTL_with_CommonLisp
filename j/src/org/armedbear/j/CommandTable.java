@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.5 2002-10-15 16:28:28 piso Exp $
+ * $Id: CommandTable.java,v 1.6 2002-10-16 02:39:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -265,6 +265,7 @@ public class CommandTable
             addCommand("imageZoomOut", "ImageMode");
             addCommand("insertRegister", "Registers");
             addCommand("jdkHelp", "JDKHelp");
+            addCommand("jlisp", "JLisp");
             addCommand("jumpToColumn", "JumpCommands");
             addCommand("jumpToLine", "JumpCommands");
             addCommand("jumpToOffset", "JumpCommands");
