@@ -2,7 +2,7 @@
  * CompoundTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompoundTypeSpecifier.java,v 1.4 2003-08-14 01:56:27 piso Exp $
+ * $Id: CompoundTypeSpecifier.java,v 1.5 2003-08-14 17:23:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,8 @@ public abstract class CompoundTypeSpecifier extends TypeSpecifier
             return new AndTypeSpecifier(cons);
         if (car == Symbol.OR)
             return new OrTypeSpecifier(cons);
+        if (car == Symbol.NOT)
+            return new NotTypeSpecifier(cons);
         if (car == Symbol.ARRAY || car == Symbol.SIMPLE_ARRAY)
             return new ArrayTypeSpecifier(cons);
         if (car == Symbol.VECTOR)
