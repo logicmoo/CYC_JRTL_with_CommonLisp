@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.16 2003-05-25 17:20:05 piso Exp $
+ * $Id: Package.java,v 1.17 2003-05-31 19:16:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,6 +201,8 @@ public final class Package extends LispObject
             sb.append(name);
             throw new PackageError(sb.toString());
         }
+        if (symbol.isExternal())
+            return; // Nothing to do.
         String symbolName = symbol.getName();
         for (Iterator it = usedByList.iterator(); it.hasNext();) {
             Package pkg = (Package) it.next();
