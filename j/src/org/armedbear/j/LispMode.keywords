@@ -25,6 +25,7 @@ array-has-fill-pointer-p
 array-in-bounds-p
 array-rank
 array-row-major-index
+array-total-size
 arrayp
 ash
 assert
