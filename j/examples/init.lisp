@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.3 2003-04-01 02:39:47 piso Exp $
+;;; $Id: init.lisp,v 1.4 2003-04-03 19:03:16 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -18,8 +18,16 @@
     (reset-display)
     t))
 
-;; (load-theme "AnokhaClassic")
-(load-theme "Kodiak")
+(defun hostname ()
+  (when (probe-file "/etc/hostname")
+    (with-open-file (f "/etc/hostname")
+      (read-line f))))
+
+;; Use Kodiak on prufrock, AnokhaClassic on the laptops.
+(let ((hostname (hostname)))
+  (if (and hostname (search "prufrock" hostname))
+      (load-theme "Kodiak")
+      (load-theme "AnokhaClassic")))
 
 (defun java-version ()
   (jstatic "getProperty" "java.lang.System" "java.version"))
