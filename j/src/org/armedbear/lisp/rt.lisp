@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.99 2003-08-12 13:01:41 piso Exp $
+;;; $Id: rt.lisp,v 1.100 2003-08-14 17:37:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,10 @@
 
 ;;; Adapted from rt.lsp and ansi-aux.lsp in the GCL ANSI test suite.
 
+#+armedbear
 (require 'defstruct)
+
+#+armedbear
 (require 'loop)
 
 (unless (find-package :regression-test)
@@ -310,7 +313,7 @@
                               "psetf"
                               "psetq"
                               "push"
-                              "push-new"
+                              "pushnew"
                               "rassoc"
                               "rassoc-if"
                               "rassoc-if-not"
@@ -381,7 +384,7 @@
                               "when"
                               "zerop"))))
     (dolist (test tests)
-             (load (concatenate 'string rt::*prefix* test suffix)))
+      (load (concatenate 'string rt::*prefix* test suffix)))
     (format t "~A tests: ~A passed, ~A failed~%"
             (+ rt::*passed* rt::*failed*)
             rt::*passed*
@@ -393,6 +396,7 @@
   (let ((rt::*compile-tests* compile-tests))
     (time (do-tests))))
 
+#+armedbear
 (when (and (find-package "JVM")
            (fboundp 'jvm::jvm-compile))
   (mapcar #'jvm::jvm-compile '(sys::list-remove-duplicates*
@@ -417,6 +421,7 @@
 (load (concatenate 'string rt::*prefix* "numbers-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "string-aux.lsp"))
 
+#+armedbear
 (when (and (find-package "JVM")
            (fboundp 'jvm::jvm-compile))
   (mapcar #'jvm::jvm-compile '(rt::equalp-with-case
