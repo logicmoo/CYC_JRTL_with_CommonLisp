@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.4 2004-09-03 19:37:07 piso Exp $
+;;; $Id: slime.lisp,v 1.5 2004-09-04 02:22:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,10 +40,6 @@
 (defun slime-connected-p ()
   (not (null *stream*)))
 
-(defun remote-eval (form)
-  (swank-protocol:encode-message form *stream*)
-  (swank-protocol:decode-message *stream*))
-
 (defun connect (host port)
   (when *stream*
     (disconnect))
@@ -60,8 +56,15 @@
      (close *stream*))
     (setf *stream* nil)))
 
+(defun slime-eval (form)
+  (handler-case
+      (progn
+        (swank-protocol:encode-message form *stream*)
+        (swank-protocol:decode-message *stream*))
+    (stream-error () (disconnect))))
+
 (defun slime-read-port-and-connect (retries)
-  (invoke-later #'(lambda () (status "Slime polling for connection...")))
+  (status "Slime polling for connection...")
   (dotimes (i retries)
     (when (probe-file (swank-protocol:port-file))
       (with-open-file (s (swank-protocol:port-file)
@@ -77,14 +80,14 @@
   (make-thread #'(lambda ()
                   (progn
                     (slime-read-port-and-connect 20)
-                    (invoke-later #'(lambda () (status "Slime connected")))))))
+                    (status "Slime connected!")))))
 
 (defvar *prefix* nil)
 (defvar *completions* ())
 (defvar *completion-index* 0)
 
 (defun completions (prefix)
-  (remote-eval `(swank::completion-set ,prefix ,(package-name *package*))))
+  (slime-eval `(swank::completion-set ,prefix ,(package-name *package*))))
 
 (defun delimiter-p (c)
   (member c '(#\space #\( #\) #\')))
@@ -100,6 +103,9 @@
           (return-from completion-prefix (subseq string start end)))))))
 
 (defun complete-symbol ()
+  (unless (slime-connected-p)
+    (status "Slime not connected")
+    (return-from complete-symbol))
   (cond ((eq *last-command* 'complete)
          (unless (> (length *completions*) 1)
            (return-from complete-symbol))
@@ -175,10 +181,11 @@
    (when (slime-connected-p)
      (let ((names (enclosing-operator-names)))
        (when names
-         (let ((message (remote-eval `(swank:arglist-for-echo-area (quote ,names)))))
+         (let ((message (slime-eval `(swank:arglist-for-echo-area (quote ,names)))))
            (when message
-             (invoke-later #'(lambda () (status message))))))))
+             (status message))))))
    (insert #\space)))
 
 (j::map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
+(j::map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
 (j::map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
