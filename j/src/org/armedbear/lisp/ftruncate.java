@@ -1,8 +1,8 @@
 /*
  * ftruncate.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: ftruncate.java,v 1.3 2004-06-05 02:08:28 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: ftruncate.java,v 1.4 2005-03-12 15:57:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,6 @@ public final class ftruncate extends Primitive
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        if (arg instanceof LispFloat)
-            return ((LispFloat)arg).ftruncate(Fixnum.ONE);
         LispObject q = arg.truncate(Fixnum.ONE); // an integer
         if (q instanceof Fixnum)
             q = new LispFloat(((Fixnum)q).value);
@@ -48,8 +46,6 @@ public final class ftruncate extends Primitive
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        if (first instanceof LispFloat)
-            return ((LispFloat)first).ftruncate(second);
         LispObject q = first.truncate(second); // an integer
         if (q instanceof Fixnum)
             q = new LispFloat(((Fixnum)q).value);
