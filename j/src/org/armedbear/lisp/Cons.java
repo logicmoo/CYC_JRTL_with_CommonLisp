@@ -1,8 +1,8 @@
 /*
  * Cons.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.34 2003-12-12 19:41:31 piso Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: Cons.java,v 1.35 2004-01-09 18:08:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -263,6 +263,12 @@ public final class Cons extends LispObject
     public String toString()
     {
         try {
+            final LispObject printLength = _PRINT_LENGTH_.symbolValue();
+            final int limit;
+            if (printLength instanceof Fixnum)
+                limit = ((Fixnum)printLength).getValue();
+            else
+                limit = Integer.MAX_VALUE;
             StringBuffer sb = new StringBuffer();
             if (car == Symbol.QUOTE) {
                 if (cdr instanceof Cons) {
@@ -284,17 +290,31 @@ public final class Cons extends LispObject
                     }
                 }
             }
+            int count = 0;
+            boolean truncated = false;
             sb.append('(');
-            LispObject p = this;
-            sb.append(p.car());
-            while ((p = p.cdr()) instanceof Cons) {
-                sb.append(' ');
+            if (count < limit) {
+                LispObject p = this;
                 sb.append(p.car());
-            }
-            if (p != NIL) {
-                sb.append(" . ");
-                sb.append(p);
-            }
+                ++count;
+                while ((p = p.cdr()) instanceof Cons) {
+                    if (count < limit) {
+                        sb.append(' ');
+                        sb.append(p.car());
+                        ++count;
+                    } else {
+                        truncated = true;
+                        break;
+                    }
+                }
+                if (!truncated && p != NIL) {
+                    sb.append(" . ");
+                    sb.append(p);
+                }
+            } else
+                truncated = true;
+            if (truncated)
+                sb.append(" ...");
             sb.append(')');
             return sb.toString();
         }
