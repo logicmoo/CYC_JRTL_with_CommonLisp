@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.95 2003-08-24 19:17:53 piso Exp $
+;;; $Id: boot.lisp,v 1.96 2003-08-25 13:03:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -209,8 +209,35 @@
                      ,@(rest clause)))))
            clauses)))))
 
-(defmacro case (keyform &body clauses)
+(defmacro case (keyform &rest clauses)
   (case-expand 'case 'eql keyform clauses))
+
+
+;; CCASE (from CLISP)
+
+(defun parenthesize-keys (clauses)
+  ;; PARENTHESIZE-KEYS is necessary to avoid confusing
+  ;; the symbols OTHERWISE and T used as keys, with the same
+  ;; symbols used in the syntax of the non exhaustive CASE.
+  (mapcar #'(lambda (c)
+             (cond ((or (eq (car c) 't)
+                        (eq (car c) 'otherwise))
+                    (cons (list (car c)) (cdr c)))
+                   (t c)))
+          clauses))
+
+(defmacro ccase (keyplace &rest clauses)
+  (let ((g (gensym))
+        (h (gensym)))
+    `(block ,g
+            (tagbody
+             ,h
+             (return-from ,g
+                          (case ,keyplace
+                            ,@(parenthesize-keys clauses)
+                            (otherwise
+                             (error 'type-error "CCASE error") ;; FIXME
+                             (go ,h))))))))
 
 
 ;;; TYPECASE (from CLISP)
