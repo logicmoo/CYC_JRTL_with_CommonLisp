@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.28 2003-09-28 16:28:51 piso Exp $
+ * $Id: LispCharacter.java,v 1.29 2003-09-29 16:20:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,6 +156,9 @@ public final class LispCharacter extends LispObject
                     break;
                 case ' ':
                     sb.append("Space");
+                    break;
+                case '\b':
+                    sb.append("Backspace");
                     break;
                 default:
                     sb.append(c);
