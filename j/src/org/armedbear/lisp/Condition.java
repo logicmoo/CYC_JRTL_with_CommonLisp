@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Condition.java,v 1.15 2003-12-12 16:16:29 piso Exp $
+ * $Id: Condition.java,v 1.16 2003-12-12 17:30:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ package org.armedbear.lisp;
 
 public class Condition extends StandardObject
 {
-    private LispObject formatControl;
-    private LispObject formatArguments;
+    private LispObject formatControl = NIL;
+    private LispObject formatArguments = NIL;
 
     private String message = null;
 
@@ -115,9 +115,16 @@ public class Condition extends StandardObject
 
     public String toString()
     {
-        String s = getMessage();
-        if (s != null)
-            return s;
+        try {
+            if (_PRINT_ESCAPE_.symbolValue() == NIL) {
+                String s = getMessage();
+                if (s != null)
+                    return s;
+                if (formatControl != NIL)
+                    return format(formatControl, formatArguments);
+            }
+        }
+        catch (Throwable t) {}
         return unreadableString(String.valueOf(typeOf()));
     }
 }
