@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.94 2003-08-24 18:36:34 piso Exp $
+;;; $Id: boot.lisp,v 1.95 2003-08-24 19:17:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,6 +42,23 @@
 
 (defmacro defparameter (name initial-value &optional docstring)
   (list 'sys::%defparameter (list 'QUOTE name) initial-value docstring))
+
+(sys::%load "autoloads.lisp")
+(sys::%load "early-defuns.lisp")
+(sys::%load "backquote.lisp")
+(sys::%load "setf.lisp")
+(sys::%load "documentation.lisp")
+
+(defmacro defvar (var &optional (val nil valp) (doc nil docp))
+  `(progn
+     (sys::%defvar ',var)
+     ,@(when valp
+	 `((unless (boundp ',var)
+	     (setq ,var ,val))))
+     ,@(when docp
+         `((setf (documentation ',var 'variable) ',doc)))
+     ',var))
+
 
 (defvar *features*
   '(:armedbear))
@@ -84,10 +101,6 @@
 (set-dispatch-macro-character #\# #\- #'read-conditional)
 
 
-(sys::%load "autoloads.lisp")
-(sys::%load "early-defuns.lisp")
-(sys::%load "backquote.lisp")
-(sys::%load "setf.lisp")
 (sys::%load "macros.lisp")
 (sys::%load "fixme.lisp")
 (sys::%load "destructuring-bind.lisp")
