@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Environment.java,v 1.19 2005-02-27 20:01:57 piso Exp $
+ * $Id: Environment.java,v 1.20 2005-02-28 00:58:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,25 @@ public final class Environment extends LispObject
             tags = parent.tags;
         }
         vars = new Binding(symbol, value, vars);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.ENVIRONMENT;
+    }
+
+    public LispObject classOf()
+    {
+        return BuiltInClass.ENVIRONMENT;
+    }
+
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.ENVIRONMENT)
+            return T;
+        if (type == BuiltInClass.ENVIRONMENT)
+            return T;
+        return super.typep(type);
     }
 
     public boolean isEmpty()
@@ -199,9 +218,9 @@ public final class Environment extends LispObject
         return binding != null ? binding.specialp : false;
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
-        return unreadableString("ENVIRONMENT");
+        return unreadableString(Symbol.ENVIRONMENT);
     }
 
     // ### empty-environment-p
@@ -220,9 +239,9 @@ public final class Environment extends LispObject
         }
     };
 
-    // ### environment-vars
+    // ### environment-variables
     private static final Primitive ENVIRONMENT_VARS =
-        new Primitive("environment-vars", PACKAGE_SYS, false, "environment")
+        new Primitive("environment-variables", PACKAGE_SYS, true, "environment")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
