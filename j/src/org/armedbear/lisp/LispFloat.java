@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.8 2003-03-30 16:28:15 piso Exp $
+ * $Id: LispFloat.java,v 1.9 2003-03-30 19:20:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,35 +98,41 @@ public final class LispFloat extends LispObject
 
     public LispObject add(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return new LispFloat(value + ((LispFloat)obj).value);
-        }
-        catch (ClassCastException e) {
-            // obj is not a float.
-            if (obj instanceof Fixnum)
-                return new LispFloat(value + Fixnum.getFloat(obj));
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return new LispFloat(value + ((Fixnum)obj).getValue());
+        if (obj instanceof Bignum)
+            return new LispFloat(value + ((Bignum)obj).getValue().floatValue());
+        if (obj instanceof Ratio)
+            return new LispFloat(value + ((Ratio)obj).floatValue());
+        throw new TypeError(obj, "number");
     }
 
     public LispObject subtract(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return new LispFloat(value - ((LispFloat)obj).value);
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return new LispFloat(value - ((Fixnum)obj).getValue());
+        if (obj instanceof Bignum)
+            return new LispFloat(value - ((Bignum)obj).getValue().floatValue());
+        if (obj instanceof Ratio)
+            return new LispFloat(value - ((Ratio)obj).floatValue());
+        throw new TypeError(obj, "number");
     }
 
     public LispObject multiplyBy(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return new LispFloat(value * ((LispFloat)obj).value);
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return new LispFloat(value * ((Fixnum)obj).getValue());
+        if (obj instanceof Bignum)
+            return new LispFloat(value * ((Bignum)obj).getValue().floatValue());
+        if (obj instanceof Ratio)
+            return new LispFloat(value * ((Ratio)obj).floatValue());
+        throw new TypeError(obj, "number");
     }
 
     public LispObject divideBy(LispObject obj) throws LispError
@@ -144,62 +150,72 @@ public final class LispFloat extends LispObject
 
     public boolean isEqualTo(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return value == ((LispFloat)obj).value;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return value == ((Fixnum)obj).getValue();
+        if (obj instanceof Bignum)
+            return value == ((Bignum)obj).getValue().floatValue();
+        if (obj instanceof Ratio)
+            return value == ((Ratio)obj).floatValue();
+        throw new TypeError(obj, "number");
     }
 
     public boolean isNotEqualTo(LispObject obj) throws LispError
     {
-        try {
-            return value != ((LispFloat)obj).value;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        return !isEqualTo(obj);
     }
 
     public boolean isLessThan(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return value < ((LispFloat)obj).value;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return value < ((Fixnum)obj).getValue();
+        if (obj instanceof Bignum)
+            return value < ((Bignum)obj).getValue().floatValue();
+        if (obj instanceof Ratio)
+            return value < ((Ratio)obj).floatValue();
+        throw new TypeError(obj, "real");
     }
 
     public boolean isGreaterThan(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return value > ((LispFloat)obj).value;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return value > ((Fixnum)obj).getValue();
+        if (obj instanceof Bignum)
+            return value > ((Bignum)obj).getValue().floatValue();
+        if (obj instanceof Ratio)
+            return value > ((Ratio)obj).floatValue();
+        throw new TypeError(obj, "real");
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return value <= ((LispFloat)obj).value;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return value <= ((Fixnum)obj).getValue();
+        if (obj instanceof Bignum)
+            return value <= ((Bignum)obj).getValue().floatValue();
+        if (obj instanceof Ratio)
+            return value <= ((Ratio)obj).floatValue();
+        throw new TypeError(obj, "real");
     }
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
     {
-        try {
+        if (obj instanceof LispFloat)
             return value >= ((LispFloat)obj).value;
-        }
-        catch (ClassCastException e) {
-            throw new TypeError(obj, "number");
-        }
+        if (obj instanceof Fixnum)
+            return value >= ((Fixnum)obj).getValue();
+        if (obj instanceof Bignum)
+            return value >= ((Bignum)obj).getValue().floatValue();
+        if (obj instanceof Ratio)
+            return value >= ((Ratio)obj).floatValue();
+        throw new TypeError(obj, "real");
     }
 
     public LispObject floor(LispObject obj) throws LispError
@@ -262,4 +278,7 @@ public final class LispFloat extends LispObject
             return coerceToFloat(args[0]);
         }
     };
+
+    public static final Symbol PI =
+        exportConstant("PI", PACKAGE_CL, new LispFloat((float)3.141592653589793));
 }

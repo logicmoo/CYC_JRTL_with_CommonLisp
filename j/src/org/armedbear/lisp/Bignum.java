@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.7 2003-03-27 13:55:40 piso Exp $
+ * $Id: Bignum.java,v 1.8 2003-03-30 19:20:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,10 +111,16 @@ public final class Bignum extends LispObject
 
     public LispObject add(LispObject obj) throws LispError
     {
-        if (obj instanceof Bignum)
-            return new Bignum(value.add(((Bignum)obj).value));
         if (obj instanceof Fixnum)
             return new Bignum(value.add(Fixnum.getBigInteger(obj)));
+        if (obj instanceof Bignum)
+            return new Bignum(value.add(((Bignum)obj).value));
+        if (obj instanceof Ratio) {
+            BigInteger numerator = ((Ratio)obj).numerator();
+            BigInteger denominator = ((Ratio)obj).denominator();
+            return number(value.multiply(denominator).add(numerator),
+                denominator);
+        }
         if (obj instanceof LispFloat)
             return new LispFloat(value.floatValue() + ((LispFloat)obj).getValue());
         throw new TypeError(obj, "number");
@@ -122,10 +128,16 @@ public final class Bignum extends LispObject
 
     public LispObject subtract(LispObject obj) throws LispError
     {
-        if (obj instanceof Bignum)
-            return number(value.subtract(((Bignum)obj).value));
         if (obj instanceof Fixnum)
             return number(value.subtract(Fixnum.getBigInteger(obj)));
+        if (obj instanceof Bignum)
+            return number(value.subtract(((Bignum)obj).value));
+        if (obj instanceof Ratio) {
+            BigInteger numerator = ((Ratio)obj).numerator();
+            BigInteger denominator = ((Ratio)obj).denominator();
+            return number(value.multiply(denominator).subtract(numerator),
+                denominator);
+        }
         if (obj instanceof LispFloat)
             return new LispFloat(value.floatValue() - ((LispFloat)obj).getValue());
         throw new TypeError(obj, "number");
@@ -133,10 +145,10 @@ public final class Bignum extends LispObject
 
     public LispObject multiplyBy(LispObject obj) throws LispError
     {
-        if (obj instanceof Bignum)
-            return new Bignum(value.multiply(((Bignum)obj).value));
         if (obj instanceof Fixnum)
             return new Bignum(value.multiply(Fixnum.getBigInteger(obj)));
+        if (obj instanceof Bignum)
+            return new Bignum(value.multiply(((Bignum)obj).value));
         if (obj instanceof Ratio) {
             BigInteger n = ((Ratio)obj).numerator();
             return number(n.multiply(value), ((Ratio)obj).denominator());
@@ -148,10 +160,10 @@ public final class Bignum extends LispObject
 
     public LispObject divideBy(LispObject obj) throws LispError
     {
-        if (obj instanceof Bignum)
-            return number(value, ((Bignum)obj).value);
         if (obj instanceof Fixnum)
             return new Bignum(value.divide(Fixnum.getBigInteger(obj)));
+        if (obj instanceof Bignum)
+            return number(value, ((Bignum)obj).value);
         if (obj instanceof Ratio) {
             BigInteger d = ((Ratio)obj).denominator();
             return number(d.multiply(value), ((Ratio)obj).numerator());
@@ -163,10 +175,12 @@ public final class Bignum extends LispObject
 
     public boolean isEqualTo(LispObject obj) throws LispError
     {
+        if (obj instanceof Fixnum)
+            return false;
         if (obj instanceof Bignum)
             return value.equals(((Bignum)obj).value);
-        if (obj instanceof Fixnum)
-            return value.equals(Fixnum.getBigInteger(obj));
+        if (obj instanceof Ratio)
+            return false;
         if (obj instanceof LispFloat)
             return value.floatValue() == ((LispFloat)obj).getValue();
         throw new TypeError(obj, "number");
@@ -174,10 +188,12 @@ public final class Bignum extends LispObject
 
     public boolean isNotEqualTo(LispObject obj) throws LispError
     {
+        if (obj instanceof Fixnum)
+            return true;
         if (obj instanceof Bignum)
             return !value.equals(((Bignum)obj).value);
-        if (obj instanceof Fixnum)
-            return !value.equals(Fixnum.getBigInteger(obj));
+        if (obj instanceof Ratio)
+            return true;
         if (obj instanceof LispFloat)
             return value.floatValue() != ((LispFloat)obj).getValue();
         throw new TypeError(obj, "number");
@@ -185,46 +201,62 @@ public final class Bignum extends LispObject
 
     public boolean isLessThan(LispObject obj) throws LispError
     {
-        if (obj instanceof Bignum)
-            return value.compareTo(((Bignum)obj).value) < 0;
         if (obj instanceof Fixnum)
             return value.compareTo(Fixnum.getBigInteger(obj)) < 0;
+        if (obj instanceof Bignum)
+            return value.compareTo(((Bignum)obj).value) < 0;
+        if (obj instanceof Ratio) {
+            BigInteger n = value.multiply(((Ratio)obj).denominator());
+            return n.compareTo(((Ratio)obj).numerator()) < 0;
+        }
         if (obj instanceof LispFloat)
             return value.floatValue() < ((LispFloat)obj).getValue();
-        throw new TypeError(obj, "number");
+        throw new TypeError(obj, "real");
     }
 
     public boolean isGreaterThan(LispObject obj) throws LispError
     {
-        if (obj instanceof Bignum)
-            return value.compareTo(((Bignum)obj).value) > 0;
         if (obj instanceof Fixnum)
             return value.compareTo(Fixnum.getBigInteger(obj)) > 0;
+        if (obj instanceof Bignum)
+            return value.compareTo(((Bignum)obj).value) > 0;
+        if (obj instanceof Ratio) {
+            BigInteger n = value.multiply(((Ratio)obj).denominator());
+            return n.compareTo(((Ratio)obj).numerator()) > 0;
+        }
         if (obj instanceof LispFloat)
             return value.floatValue() > ((LispFloat)obj).getValue();
-        throw new TypeError(obj, "number");
+        throw new TypeError(obj, "real");
     }
 
     public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
     {
-        if (obj instanceof Bignum)
-            return value.compareTo(((Bignum)obj).value) <= 0;
         if (obj instanceof Fixnum)
             return value.compareTo(Fixnum.getBigInteger(obj)) <= 0;
+        if (obj instanceof Bignum)
+            return value.compareTo(((Bignum)obj).value) <= 0;
+        if (obj instanceof Ratio) {
+            BigInteger n = value.multiply(((Ratio)obj).denominator());
+            return n.compareTo(((Ratio)obj).numerator()) <= 0;
+        }
         if (obj instanceof LispFloat)
             return value.floatValue() <= ((LispFloat)obj).getValue();
-        throw new TypeError(obj, "number");
+        throw new TypeError(obj, "real");
     }
 
     public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
     {
-        if (obj instanceof Bignum)
-            return value.compareTo(((Bignum)obj).value) >= 0;
         if (obj instanceof Fixnum)
             return value.compareTo(Fixnum.getBigInteger(obj)) >= 0;
+        if (obj instanceof Bignum)
+            return value.compareTo(((Bignum)obj).value) >= 0;
+        if (obj instanceof Ratio) {
+            BigInteger n = value.multiply(((Ratio)obj).denominator());
+            return n.compareTo(((Ratio)obj).numerator()) >= 0;
+        }
         if (obj instanceof LispFloat)
             return value.floatValue() >= ((LispFloat)obj).getValue();
-        throw new TypeError(obj, "number");
+        throw new TypeError(obj, "real");
     }
 
     public LispObject floor(LispObject obj) throws LispError

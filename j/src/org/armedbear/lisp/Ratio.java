@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.4 2003-03-27 13:57:09 piso Exp $
+ * $Id: Ratio.java,v 1.5 2003-03-30 19:20:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,6 +95,11 @@ public final class Ratio extends LispObject
                 numerator.add(BigInteger.valueOf(((Fixnum)obj).getValue()).multiply(denominator));
             return number(n, denominator);
         }
+        if (obj instanceof Bignum) {
+            BigInteger n = ((Bignum)obj).getValue();
+            return number(numerator.add(n.multiply(denominator)),
+                denominator);
+        }
         if (obj instanceof Ratio) {
             BigInteger n = ((Ratio)obj).numerator;
             BigInteger d = ((Ratio)obj).denominator;
@@ -103,6 +108,9 @@ public final class Ratio extends LispObject
             BigInteger common = denominator.multiply(d);
             return number(numerator.multiply(d).add(n.multiply(denominator)),
                 common);
+        }
+        if (obj instanceof LispFloat) {
+            return new LispFloat(floatValue() + ((LispFloat)obj).getValue());
         }
         throw new TypeError(obj, "number");
     }
@@ -128,20 +136,29 @@ public final class Ratio extends LispObject
             return number(numerator.multiply(d).subtract(n.multiply(denominator)),
                 common);
         }
+        if (obj instanceof LispFloat) {
+            return new LispFloat(floatValue() - ((LispFloat)obj).getValue());
+        }
         throw new TypeError(obj, "number");
     }
 
     public LispObject multiplyBy(LispObject obj) throws LispError
     {
         if (obj instanceof Fixnum) {
-            BigInteger n =
-                numerator.multiply(BigInteger.valueOf(((Fixnum)obj).getValue()));
-            return number(n, denominator);
+            BigInteger n = ((Fixnum)obj).getBigInteger();
+            return number(numerator.multiply(n), denominator);
+        }
+        if (obj instanceof Bignum) {
+            BigInteger n = ((Bignum)obj).getValue();
+            return number(numerator.multiply(n), denominator);
         }
         if (obj instanceof Ratio) {
             BigInteger n = ((Ratio)obj).numerator;
             BigInteger d = ((Ratio)obj).denominator;
             return number(numerator.multiply(n), denominator.multiply(d));
+        }
+        if (obj instanceof LispFloat) {
+            return new LispFloat(floatValue() * ((LispFloat)obj).getValue());
         }
         throw new TypeError(obj, "number");
     }
@@ -149,13 +166,20 @@ public final class Ratio extends LispObject
     public LispObject divideBy(LispObject obj) throws LispError
     {
         if (obj instanceof Fixnum) {
-            return number(numerator,
-                denominator.multiply(BigInteger.valueOf(((Fixnum)obj).getValue())));
+            BigInteger n = ((Fixnum)obj).getBigInteger();
+            return number(numerator, denominator.multiply(n));
+        }
+        if (obj instanceof Bignum) {
+            BigInteger n = ((Bignum)obj).getValue();
+            return number(numerator, denominator.multiply(n));
         }
         if (obj instanceof Ratio) {
             BigInteger n = ((Ratio)obj).numerator;
             BigInteger d = ((Ratio)obj).denominator;
             return number(numerator.multiply(d), denominator.multiply(n));
+        }
+        if (obj instanceof LispFloat) {
+            return new LispFloat(floatValue() / ((LispFloat)obj).getValue());
         }
         throw new TypeError(obj, "number");
     }
@@ -166,40 +190,39 @@ public final class Ratio extends LispObject
             return numerator.equals(((Ratio)obj).numerator) &&
                 denominator.equals(((Ratio)obj).denominator);
         }
+        if (obj instanceof LispFloat) {
+            return floatValue() == ((LispFloat)obj).getValue();
+        }
         if (obj.typep(Symbol.NUMBER) == T)
             return false;
         throw new TypeError(obj, "number");
     }
 
-//     public boolean isNotEqualTo(LispObject obj) throws LispError
-//     {
-//         try {
-//             return value != ((Fixnum)obj).value;
-//         }
-//         catch (ClassCastException e) {
-//             // obj is not a fixnum.
-//             if (obj instanceof Bignum)
-//                 return !getBigInteger().equals(Bignum.getValue(obj));
-//             if (obj instanceof LispFloat)
-//                 return (float) value != LispFloat.getValue(obj);
-//             throw new TypeError(obj, "number");
-//         }
-//     }
+    public boolean isNotEqualTo(LispObject obj) throws LispError
+    {
+        return !isEqualTo(obj);
+    }
 
-//     public boolean isLessThan(LispObject obj) throws LispError
-//     {
-//         try {
-//             return value < ((Fixnum)obj).value;
-//         }
-//         catch (ClassCastException e) {
-//             // obj is not a fixnum.
-//             if (obj instanceof Bignum)
-//                 return getBigInteger().compareTo(Bignum.getValue(obj)) < 0;
-//             if (obj instanceof LispFloat)
-//                 return (float) value < LispFloat.getValue(obj);
-//             throw new TypeError(obj, "number");
-//         }
-//     }
+    public boolean isLessThan(LispObject obj) throws LispError
+    {
+        if (obj instanceof Fixnum) {
+            BigInteger n2 = ((Fixnum)obj).getBigInteger().multiply(denominator);
+            return numerator.compareTo(n2) < 0;
+        }
+        if (obj instanceof Bignum) {
+            BigInteger n = ((Bignum)obj).getValue().multiply(denominator);
+            return numerator.compareTo(n) < 0;
+        }
+        if (obj instanceof Ratio) {
+            BigInteger n1 = numerator.multiply(((Ratio)obj).denominator);
+            BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
+            return n1.compareTo(n2) < 0;
+        }
+        if (obj instanceof LispFloat) {
+            return floatValue() < ((LispFloat)obj).getValue();
+        }
+        throw new TypeError(obj, "real");
+    }
 
     public boolean isGreaterThan(LispObject obj) throws LispError
     {
@@ -207,44 +230,62 @@ public final class Ratio extends LispObject
             BigInteger n2 = ((Fixnum)obj).getBigInteger().multiply(denominator);
             return numerator.compareTo(n2) > 0;
         }
+        if (obj instanceof Bignum) {
+            BigInteger n = ((Bignum)obj).getValue().multiply(denominator);
+            return numerator.compareTo(n) > 0;
+        }
         if (obj instanceof Ratio) {
             BigInteger n1 = numerator.multiply(((Ratio)obj).denominator);
             BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
             return n1.compareTo(n2) > 0;
         }
-        Thread.dumpStack();
-        throw new TypeError(obj, "number");
+        if (obj instanceof LispFloat) {
+            return floatValue() > ((LispFloat)obj).getValue();
+        }
+        throw new TypeError(obj, "real");
     }
 
-//     public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
-//     {
-//         try {
-//             return value <= ((Fixnum)obj).value;
-//         }
-//         catch (ClassCastException e) {
-//             // obj is not a fixnum.
-//             if (obj instanceof Bignum)
-//                 return getBigInteger().compareTo(Bignum.getValue(obj)) <= 0;
-//             if (obj instanceof LispFloat)
-//                 return (float) value <= LispFloat.getValue(obj);
-//             throw new TypeError(obj, "number");
-//         }
-//     }
+    public boolean isLessThanOrEqualTo(LispObject obj) throws LispError
+    {
+        if (obj instanceof Fixnum) {
+            BigInteger n2 = ((Fixnum)obj).getBigInteger().multiply(denominator);
+            return numerator.compareTo(n2) <= 0;
+        }
+        if (obj instanceof Bignum) {
+            BigInteger n = ((Bignum)obj).getValue().multiply(denominator);
+            return numerator.compareTo(n) <= 0;
+        }
+        if (obj instanceof Ratio) {
+            BigInteger n1 = numerator.multiply(((Ratio)obj).denominator);
+            BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
+            return n1.compareTo(n2) <= 0;
+        }
+        if (obj instanceof LispFloat) {
+            return floatValue() <= ((LispFloat)obj).getValue();
+        }
+        throw new TypeError(obj, "real");
+    }
 
-//     public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
-//     {
-//         try {
-//             return value >= ((Fixnum)obj).value;
-//         }
-//         catch (ClassCastException e) {
-//             // obj is not a fixnum.
-//             if (obj instanceof Bignum)
-//                 return getBigInteger().compareTo(Bignum.getValue(obj)) >= 0;
-//             if (obj instanceof LispFloat)
-//                 return (float) value >= LispFloat.getValue(obj);
-//             throw new TypeError(obj, "number");
-//         }
-//     }
+    public boolean isGreaterThanOrEqualTo(LispObject obj) throws LispError
+    {
+        if (obj instanceof Fixnum) {
+            BigInteger n2 = ((Fixnum)obj).getBigInteger().multiply(denominator);
+            return numerator.compareTo(n2) >= 0;
+        }
+        if (obj instanceof Bignum) {
+            BigInteger n = ((Bignum)obj).getValue().multiply(denominator);
+            return numerator.compareTo(n) >= 0;
+        }
+        if (obj instanceof Ratio) {
+            BigInteger n1 = numerator.multiply(((Ratio)obj).denominator);
+            BigInteger n2 = ((Ratio)obj).numerator.multiply(denominator);
+            return n1.compareTo(n2) >= 0;
+        }
+        if (obj instanceof LispFloat) {
+            return floatValue() >= ((LispFloat)obj).getValue();
+        }
+        throw new TypeError(obj, "real");
+    }
 
     public LispObject floor(LispObject obj) throws LispError
     {
