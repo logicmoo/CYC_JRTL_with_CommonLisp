@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: rt.lisp,v 1.152 2004-02-27 02:44:03 piso Exp $
+;;; $Id: rt.lisp,v 1.153 2004-03-04 11:35:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -500,8 +500,8 @@
 
 #+armedbear
 (when (and (fboundp 'jvm::jvm-compile) (not (autoloadp 'jvm::jvm-compile)))
-  (mapcar #'jvm::jvm-compile '(sys::list-remove-duplicates*
-                               sys::vector-remove-duplicates*
+  (mapcar #'jvm::jvm-compile '(sys::list-remove-duplicates
+                               sys::vector-remove-duplicates
                                remove-duplicates
                                union
                                nunion
