@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.1 2003-08-11 17:58:19 piso Exp $
+;;; $Id: numbers.lisp,v 1.2 2003-08-22 14:04:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,23 +53,21 @@
 
 (defun round (number &optional (divisor 1))
   "Rounds number (or number/divisor) to nearest integer.
-  The second returned value is the remainder."
-  (if (eql divisor 1)
-      (round number)
-      (multiple-value-bind (tru rem) (truncate number divisor)
-	(let ((thresh (/ (abs divisor) 2)))
-	  (cond ((or (> rem thresh)
-		     (and (= rem thresh) (oddp tru)))
-		 (if (minusp divisor)
-		     (values (- tru 1) (+ rem divisor))
-		     (values (+ tru 1) (- rem divisor))))
-		((let ((-thresh (- thresh)))
-		   (or (< rem -thresh)
-		       (and (= rem -thresh) (oddp tru))))
-		 (if (minusp divisor)
-		     (values (+ tru 1) (- rem divisor))
-		     (values (- tru 1) (+ rem divisor))))
-		(t (values tru rem)))))))
+   The second returned value is the remainder."
+  (multiple-value-bind (tru rem) (truncate number divisor)
+    (let ((thresh (/ (abs divisor) 2)))
+      (cond ((or (> rem thresh)
+                 (and (= rem thresh) (oddp tru)))
+             (if (minusp divisor)
+                 (values (- tru 1) (+ rem divisor))
+                 (values (+ tru 1) (- rem divisor))))
+            ((let ((-thresh (- thresh)))
+               (or (< rem -thresh)
+                   (and (= rem -thresh) (oddp tru))))
+             (if (minusp divisor)
+                 (values (+ tru 1) (- rem divisor))
+                 (values (- tru 1) (+ rem divisor))))
+            (t (values tru rem))))))
 
 
 (defun rem (number divisor)
