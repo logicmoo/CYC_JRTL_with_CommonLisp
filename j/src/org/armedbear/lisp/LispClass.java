@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.35 2003-12-11 19:10:29 piso Exp $
+ * $Id: LispClass.java,v 1.36 2003-12-11 20:37:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,6 +155,15 @@ public class LispClass extends StandardObject
     {
         Debug.assertTrue(obj1 == this);
         classPrecedenceList = list7(obj1, obj2, obj3, obj4, obj5, obj6, obj7);
+    }
+
+    public final void setCPL(LispObject obj1, LispObject obj2, LispObject obj3,
+                             LispObject obj4, LispObject obj5, LispObject obj6,
+                             LispObject obj7, LispObject obj8)
+    {
+        Debug.assertTrue(obj1 == this);
+        classPrecedenceList =
+            list8(obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8);
     }
 
     public String getName()
