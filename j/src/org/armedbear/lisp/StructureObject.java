@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StructureObject.java,v 1.41 2004-11-29 18:42:49 piso Exp $
+ * $Id: StructureObject.java,v 1.42 2004-11-29 18:44:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,7 +159,7 @@ public final class StructureObject extends LispObject
                 final int limit;
                 if (printLength instanceof Fixnum)
                     limit = Math.min(slots.length,
-                                     ((Fixnum)printLength).getValue());
+                                     ((Fixnum)printLength).value);
                 else
                     limit = slots.length;
                 final boolean printCircle =
