@@ -2,7 +2,7 @@
  * CVS.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: CVS.java,v 1.5 2004-08-08 00:54:04 piso Exp $
+ * $Id: CVS.java,v 1.6 2004-12-06 17:48:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -529,7 +529,8 @@ public final class CVS implements Constants
             if (parentBuffer.getFile() == null)
                 return;
             final String name = parentBuffer.getFile().getName();
-            sb.append(' ');
+            if (sb.charAt(sb.length() - 1) != ' ')
+                sb.append(' ');
             if (name.indexOf(' ') >= 0) {
                 // Enclose filename in double quotes since it contains an
                 // embedded space.
