@@ -1,7 +1,7 @@
 ;;; ed.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: ed.lisp,v 1.4 2004-10-17 18:47:33 piso Exp $
+;;; $Id: ed.lisp,v 1.5 2004-10-17 19:36:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,10 +92,11 @@ the file system."
                            (let ((text (read-line s nil s)))
                              (cond ((eq text s)
                                     (return))
-                                   ((string-equal what (read-from-string text nil nil))
+                                   ((eq what (read-from-string text nil nil))
                                     ;; Found it!
-                                    (with-input-from-string (string-stream text :start (length (string what)))
-                                      (let* ((file (read string-stream text nil nil))
+                                    (with-input-from-string (string-stream text)
+                                      (let* ((symbol (read string-stream text nil nil)) ; Ignored.
+                                             (file (read string-stream text nil nil))
                                              (line-number (read string-stream text nil nil)))
                                         (when (pathnamep file)
                                           (setf file (namestring file)))
