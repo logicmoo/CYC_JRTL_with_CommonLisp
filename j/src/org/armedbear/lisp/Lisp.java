@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.259 2004-06-23 01:51:03 piso Exp $
+ * $Id: Lisp.java,v 1.260 2004-06-24 14:49:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1935,6 +1935,14 @@ public abstract class Lisp
     // ### *saved-backtrace*
     public static final Symbol _SAVED_BACKTRACE_ =
         exportSpecial("*SAVED-BACKTRACE*", PACKAGE_EXT, NIL);
+
+    // ### *speed* compiler policy
+    public static final Symbol _SPEED_ =
+        internSpecial("*SPEED*", PACKAGE_JVM, Fixnum.ONE);
+
+    // ### *safety* compiler policy
+    public static final Symbol _SAFETY_ =
+        internSpecial("*SAFETY*", PACKAGE_JVM, Fixnum.ONE);
 
     public static final LispObject UNBOUND = new LispObject()
     {
