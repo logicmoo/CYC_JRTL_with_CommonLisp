@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Utilities.java,v 1.6 2004-01-05 02:11:34 piso Exp $
+ * $Id: Utilities.java,v 1.7 2004-01-05 16:31:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,28 +74,8 @@ public final class Utilities extends Lisp
         return false;
     }
 
-    public static File getFile(LispObject pathspec) throws ConditionThrowable
+    public static File getFile(Pathname pathname) throws ConditionThrowable
     {
-        String namestring;
-        if (pathspec instanceof LispString)
-            namestring = ((LispString)pathspec).getValue();
-        else if (pathspec instanceof Pathname)
-            namestring = ((Pathname)pathspec).getNamestring();
-        else {
-            signal(new TypeError(pathspec, "pathname designator"));
-            // Not reached.
-            return null;
-        }
-        if (isFilenameAbsolute(namestring)) {
-            if (isPlatformUnix()) {
-                if (namestring.length() > 0 && namestring.charAt(0) == '~') {
-                    namestring =
-                        System.getProperty("user.home").concat(namestring.substring(1));
-                }
-            }
-            return new File(namestring);
-        }
-        Pathname pathname = Pathname.coerceToPathname(pathspec);
         Pathname defaultPathname =
             Pathname.coerceToPathname(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
         Pathname merged =
