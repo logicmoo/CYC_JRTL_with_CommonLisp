@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.28 2003-12-10 14:52:25 piso Exp $
+;;; $Id: clos.lisp,v 1.29 2003-12-10 16:33:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -583,8 +583,9 @@
       (%set-find-class name class))
     class))
 
-(defmacro defclass (name direct-superclasses direct-slots
-                         &rest options)
+(defmacro defclass (&whole form name direct-superclasses direct-slots &rest options)
+  (unless (>= (length form) 3)
+    (error 'program-error "wrong number of arguments for DEFCLASS"))
   `(ensure-class ',name
                  :direct-superclasses
                  ,(canonicalize-direct-superclasses direct-superclasses)
