@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.59 2003-06-20 14:05:24 piso Exp $
+;;; $Id: boot.lisp,v 1.60 2003-06-20 16:44:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -97,8 +97,7 @@
     (setq size array-dimension-limit))
   (%make-hash-table test size rehash-size rehash-threshold))
 
-(dolist (name '("documentation.lisp"
-                "exports.lisp"
+(dolist (name '("exports.lisp"
                 "early-defuns.lisp"
                 "backquote.lisp"
                 "setf.lisp"
@@ -130,6 +129,7 @@
 (autoload '(remprop get-properties copy-symbol) "symbol.lisp")
 (autoload '(open sort merge parse-integer))
 (autoload 'tree-equal)
+(autoload 'documentation)
 
 ;;; Miscellany.
 
