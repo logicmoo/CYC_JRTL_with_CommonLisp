@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.13 2003-06-23 11:51:35 piso Exp $
+ * $Id: Cons.java,v 1.14 2003-07-29 18:03:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,6 +155,11 @@ public final class Cons extends LispObject
     public final boolean listp()
     {
         return true;
+    }
+
+    public final LispObject LISTP()
+    {
+        return T;
     }
 
     public LispObject remove(LispObject item) throws LispError

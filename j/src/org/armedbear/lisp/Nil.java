@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.16 2003-06-22 16:15:14 piso Exp $
+ * $Id: Nil.java,v 1.17 2003-07-29 18:03:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,6 +100,11 @@ public final class Nil extends Symbol
     public boolean listp()
     {
         return true;
+    }
+
+    public LispObject LISTP()
+    {
+        return T;
     }
 
     public final LispObject getSymbolFunction()
