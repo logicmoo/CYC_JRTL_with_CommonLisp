@@ -29,7 +29,6 @@
   (do ((i 0 (1+ i))
        (l (apply #'min (mapcar #'length more-sequences))))
     ((>= i l) nil)
-    (declare (fixnum i l))
     (let ((that-value
            (apply predicate
                   (mapcar #'(lambda (z) (elt z i)) more-sequences))))
@@ -40,7 +39,6 @@
   (do ((i 0 (1+ i))
        (l (apply #'min (mapcar #'length more-sequences))))
     ((>= i l) t)
-    (declare (fixnum i l))
     (unless (apply predicate (mapcar #'(lambda (z) (elt z i)) more-sequences))
       (return nil))))
 
@@ -120,19 +118,28 @@
 (defun vector-reverse* (sequence)
   (vector-reverse sequence (type-of sequence)))
 
-;; FIXME
+(defmacro list-nreverse-macro (list)
+  `(do ((1st (cdr ,list) (if (atom 1st) 1st (cdr 1st)))
+        (2nd ,list 1st)
+        (3rd '() 2nd))
+     ((atom 2nd) 3rd)
+     (rplacd 2nd 3rd)))
+
+(defun list-nreverse* (sequence)
+  (list-nreverse-macro sequence))
+
 (defun nreverse (sequence)
-  (reverse sequence))
+  (seq-dispatch sequence
+		(list-nreverse* sequence)
+		(vector-nreverse* sequence)))
 
 (defmacro vector-locater-macro (sequence body-form return-type)
   `(let ((incrementer (if from-end -1 1))
 	 (start (if from-end (1- (the fixnum end)) start))
 	 (end (if from-end (1- (the fixnum start)) end)))
-     (declare (fixnum start end incrementer))
      (do ((index start (+ index incrementer))
 	  ,@(case return-type (:position nil) (:element '(current))))
        ((= index end) ())
-       (declare (fixnum index))
        ,@(case return-type
 	   (:position nil)
 	   (:element `((setf current (aref ,sequence index)))))
@@ -238,12 +245,10 @@
 
 
 (defun list-position* (item sequence from-end test test-not start end key)
-  (declare (fixnum start))
   (when (null end) (setf end (length sequence)))
   (list-position item sequence))
 
 (defun vector-position* (item sequence from-end test test-not start end key)
-  (declare (fixnum start))
   (when (null end) (setf end (length sequence)))
   (vector-position item sequence))
 
@@ -254,9 +259,7 @@
   `(list-locater-if ,test ,sequence :position))
 
 (defun position-if (test sequence &key from-end (start 0) key end)
-  (declare (fixnum start))
   (let ((end (or end (length sequence))))
-    (declare (type index end))
     (seq-dispatch sequence
 		  (list-position-if test sequence)
 		  (vector-position-if test sequence))))
