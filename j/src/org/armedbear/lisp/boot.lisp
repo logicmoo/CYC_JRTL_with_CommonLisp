@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.31 2003-03-25 17:17:54 piso Exp $
+;;; $Id: boot.lisp,v 1.32 2003-03-29 18:05:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -110,6 +110,7 @@
                 "sort.lisp"
                 "arrays.lisp"
                 "destructuring-bind.lisp"
+                "loop.lisp"
                 "compiler.lisp"))
   (cl::%load name))
 
