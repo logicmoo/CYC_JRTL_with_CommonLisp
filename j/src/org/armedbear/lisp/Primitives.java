@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.428 2003-09-23 14:29:17 piso Exp $
+ * $Id: Primitives.java,v 1.429 2003-09-23 14:55:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1583,6 +1583,17 @@ public final class Primitives extends Module
             int depth = thread.getStackDepth();
             try {
                 LispObject limit = eval(countForm, env, thread);
+                // Look for tags.
+                Binding tags = null;
+                LispObject remaining = bodyForm;
+                while (remaining != NIL) {
+                    LispObject current = remaining.car();
+                    remaining = remaining.cdr();
+                    if (current instanceof Cons)
+                        continue;
+                    // It's a tag.
+                    tags = new Binding(current, remaining, tags);
+                }
                 LispObject result;
                 if (limit instanceof Fixnum) {
                     int count = ((Fixnum)limit).getValue();
@@ -1592,7 +1603,44 @@ public final class Primitives extends Module
                         bind(var, new Fixnum(i), ext);
                         LispObject body = bodyForm;
                         while (body != NIL) {
-                            eval(body.car(), ext, thread);
+                            LispObject current = body.car();
+                            if (current instanceof Cons) {
+                                try {
+                                    // Handle GO inline if possible.
+                                    if (current.car() == Symbol.GO) {
+                                        LispObject code = null;
+                                        LispObject tag = current.cadr();
+                                        for (Binding binding = tags; binding != null; binding = binding.next) {
+                                            if (binding.symbol.eql(tag)) {
+                                                code = binding.value;
+                                                break;
+                                            }
+                                        }
+                                        if (code != null) {
+                                            body = code;
+                                            continue;
+                                        }
+                                        throw new Go(tag);
+                                    }
+                                    eval(current, ext, thread);
+                                }
+                                catch (Go go) {
+                                    LispObject code = null;
+                                    LispObject tag = go.getTag();
+                                    for (Binding binding = tags; binding != null; binding = binding.next) {
+                                        if (binding.symbol.eql(tag)) {
+                                            code = binding.value;
+                                            break;
+                                        }
+                                    }
+                                    if (code != null) {
+                                        body = code;
+                                        thread.setStackDepth(depth);
+                                        continue;
+                                    }
+                                    throw go;
+                                }
+                            }
                             body = body.cdr();
                         }
                     }
@@ -1606,7 +1654,44 @@ public final class Primitives extends Module
                         bind(var, i, ext);
                         LispObject body = bodyForm;
                         while (body != NIL) {
-                            eval(body.car(), ext, thread);
+                            LispObject current = body.car();
+                            if (current instanceof Cons) {
+                                try {
+                                    // Handle GO inline if possible.
+                                    if (current.car() == Symbol.GO) {
+                                        LispObject code = null;
+                                        LispObject tag = current.cadr();
+                                        for (Binding binding = tags; binding != null; binding = binding.next) {
+                                            if (binding.symbol.eql(tag)) {
+                                                code = binding.value;
+                                                break;
+                                            }
+                                        }
+                                        if (code != null) {
+                                            body = code;
+                                            continue;
+                                        }
+                                        throw new Go(tag);
+                                    }
+                                    eval(current, ext, thread);
+                                }
+                                catch (Go go) {
+                                    LispObject code = null;
+                                    LispObject tag = go.getTag();
+                                    for (Binding binding = tags; binding != null; binding = binding.next) {
+                                        if (binding.symbol.eql(tag)) {
+                                            code = binding.value;
+                                            break;
+                                        }
+                                    }
+                                    if (code != null) {
+                                        body = code;
+                                        thread.setStackDepth(depth);
+                                        continue;
+                                    }
+                                    throw go;
+                                }
+                            }
                             body = body.cdr();
                         }
                         i = i.incr();
