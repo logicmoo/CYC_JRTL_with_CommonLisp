@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.500 2003-11-16 18:36:25 piso Exp $
+ * $Id: Primitives.java,v 1.501 2003-11-17 16:13:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4383,7 +4383,8 @@ public final class Primitives extends Module
     };
 
     // ### denominator
-    private static final Primitive1 DENOMINATOR = new Primitive1("denominator") {
+    private static final Primitive1 DENOMINATOR = new Primitive1("denominator")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg.DENOMINATOR();
@@ -4391,7 +4392,8 @@ public final class Primitives extends Module
     };
 
     // ### realpart
-    private static final Primitive1 REALPART = new Primitive1("realpart") {
+    private static final Primitive1 REALPART = new Primitive1("realpart")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof Complex)
@@ -4403,7 +4405,8 @@ public final class Primitives extends Module
     };
 
     // ### imagpart
-    private static final Primitive1 IMAGPART = new Primitive1("imagpart") {
+    private static final Primitive1 IMAGPART = new Primitive1("imagpart")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof Complex)
@@ -4413,8 +4416,8 @@ public final class Primitives extends Module
     };
 
     // ### integer-length
-    private static final Primitive1 INTEGER_LENGTH =
-        new Primitive1("integer-length") {
+    private static final Primitive1 INTEGER_LENGTH = new Primitive1("integer-length")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             BigInteger value;
@@ -4428,8 +4431,8 @@ public final class Primitives extends Module
         }
     };
 
-    private static final Primitive1 COS =
-        new Primitive1("cos") {
+    private static final Primitive1 COS = new Primitive1("cos")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return cos(arg);
@@ -4453,8 +4456,8 @@ public final class Primitives extends Module
         throw new ConditionThrowable(new TypeError(arg, "number"));
     }
 
-    private static final Primitive1 SIN =
-        new Primitive1("sin") {
+    private static final Primitive1 SIN = new Primitive1("sin")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return sin(arg);
@@ -4478,8 +4481,8 @@ public final class Primitives extends Module
         throw new ConditionThrowable(new TypeError(arg, "number"));
     }
 
-    private static final Primitive1 TAN =
-        new Primitive1("tan") {
+    private static final Primitive1 TAN = new Primitive1("tan")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return tan(arg);
@@ -4491,8 +4494,8 @@ public final class Primitives extends Module
         return sin(arg).divideBy(cos(arg));
     }
 
-    private static final Primitive1 EXP =
-        new Primitive1("exp") {
+    private static final Primitive1 EXP = new Primitive1("exp")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return exp(arg);
