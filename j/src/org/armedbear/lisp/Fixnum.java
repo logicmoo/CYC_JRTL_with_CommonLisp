@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.82 2004-01-31 18:29:01 piso Exp $
+ * $Id: Fixnum.java,v 1.83 2004-02-22 19:11:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ public final class Fixnum extends LispObject
     public static final Fixnum TWO       = new Fixnum(2);
     public static final Fixnum MINUS_ONE = new Fixnum(-1);
 
-    private final int value;
+    public final int value;
 
     public Fixnum(int value)
     {
