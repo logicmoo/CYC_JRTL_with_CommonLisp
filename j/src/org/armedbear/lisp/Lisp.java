@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.38 2003-03-14 18:35:55 piso Exp $
+ * $Id: Lisp.java,v 1.39 2003-03-14 20:07:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.lisp;
 
+import java.math.BigInteger;
 import java.util.Random;
 import java.util.Stack;
 
@@ -676,6 +677,16 @@ public abstract class Lisp
     {
         if (n >= Integer.MIN_VALUE && n <= Integer.MAX_VALUE)
             return new Fixnum((int)n);
+        return new Bignum(n);
+    }
+
+    private static final BigInteger INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
+    private static final BigInteger INT_MAX = BigInteger.valueOf(Integer.MAX_VALUE);
+
+    public static final LispObject number(BigInteger n)
+    {
+        if (n.compareTo(INT_MIN) >= 0 && n.compareTo(INT_MAX) <= 0)
+            return new Fixnum(n.intValue());
         return new Bignum(n);
     }
 
