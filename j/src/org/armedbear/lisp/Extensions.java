@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.4 2003-05-27 00:01:35 piso Exp $
+ * $Id: Extensions.java,v 1.5 2003-08-08 13:04:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,23 +21,13 @@
 
 package org.armedbear.lisp;
 
-public final class Extensions extends Module
+public final class Extensions extends Lisp
 {
-    // ### while
-    // Should be a macro.
-    private static final SpecialOperator WHILE = new SpecialOperator("while") {
-        public LispObject execute(LispObject args, Environment env)
-            throws Condition
+    private static final Primitive1 SPECIAL_VARIABLE_P =
+        new Primitive1("special-variable-p", PACKAGE_EXT, true) {
+        public LispObject execute(LispObject arg) throws Condition
         {
-            if (args.length() > 0) {
-                LispObject test = args.car();
-                LispObject body = args.cdr();
-                final LispThread thread = LispThread.currentThread();
-                while (eval(test, env, thread) != NIL)
-                    progn(body, env, thread);
-                return NIL;
-            }
-            throw new WrongNumberOfArgumentsException(this);
+            return arg.isSpecialVariable() ? T : NIL;
         }
     };
 }
