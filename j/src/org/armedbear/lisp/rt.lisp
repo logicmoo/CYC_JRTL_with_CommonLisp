@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.53 2003-03-10 20:45:58 piso Exp $
+;;; $Id: rt.lisp,v 1.54 2003-03-10 20:54:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -449,28 +449,6 @@
    (test (nunion x y :key key :test test))
    (test-not (nunion x y :key key :test-not test-not))
    (t (nunion x y :key key))))
-
-(defun nset-difference-with-check (x y &key (key 'no-key)
-				     test test-not)
-  (setf x (copy-list x))
-  (setf y (copy-list y))
-  (apply #'nset-difference
-	 x y
-	 `(,@(unless (eqt key 'no-key) `(:key ,key))
-	     ,@(when test `(:test ,test))
-	     ,@(when test-not `(:test-not ,test-not)))))
-
-(defun check-nset-difference (x y z &key (key #'identity)
-				(test #'eql))
-  (and
-   (listp x)
-   (listp y)
-   (listp z)
-   (loop for e in z always (member e x :key key :test test))
-   (loop for e in x always (or (member e y :key key :test test)
-			       (member e z :key key :test test)))
-   (loop for e in y never  (member e z :key key :test test))
-   t))
 
 (defun do-random-nset-differences (size niters &optional (maxelem (* 2 size)))
   (let ((state (make-random-state)))
