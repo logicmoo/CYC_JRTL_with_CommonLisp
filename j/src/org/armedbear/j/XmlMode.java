@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: XmlMode.java,v 1.8 2003-06-12 15:54:25 piso Exp $
+ * $Id: XmlMode.java,v 1.9 2003-06-13 00:08:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,6 @@ import org.xml.sax.SAXParseException;
 
 public final class XmlMode extends AbstractMode implements Constants, Mode
 {
-    private static final String MENU_NAME = "XmlMode";
-
     private static final String COMMENT_START = "<!--";
     private static final String COMMENT_END   = "-->";
 
@@ -123,11 +121,6 @@ public final class XmlMode extends AbstractMode implements Constants, Mode
         // build.xml
         km.mapKey(KeyEvent.VK_F9, 0, "compile");
         km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
-    }
-
-    public String getMenuName()
-    {
-        return MENU_NAME;
     }
 
     public void populateModeMenu(Editor editor, Menu menu)
