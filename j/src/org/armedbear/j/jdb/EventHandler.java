@@ -2,7 +2,7 @@
  * EventHandler.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: EventHandler.java,v 1.3 2003-05-17 19:29:32 piso Exp $
+ * $Id: EventHandler.java,v 1.4 2003-05-18 01:32:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,18 +73,6 @@ public final class EventHandler implements Runnable
         eventHandlerThread.start();
     }
 
-    public synchronized void terminate()
-    {
-        connected = false;
-        eventHandlerThread.interrupt();
-        while (!completed) {
-            try {
-                wait();
-            }
-            catch (InterruptedException e) {}
-        }
-    }
-
     public void run()
     {
         EventQueue queue = jdb.getVM().eventQueue();
@@ -130,11 +118,11 @@ public final class EventHandler implements Runnable
                 break;
             }
         }
-        jdb.log("EventHandler.run lost connection");
         synchronized (this) {
             completed = true;
             notifyAll();
         }
+        jdb.setVM(null);
     }
 
     private static ThreadReference getThreadForEvent(Event event)
