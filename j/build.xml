@@ -15,7 +15,6 @@
   <property name="JAVA" value="${java}"/>
   <property name="JAVA_OPTIONS" value="${java_options}"/>
 
-<!--  <property name="LISP_HOME" value="${basedir}/org/armedbear/lisp"/>-->
   <dirname property="LISP_HOME" file="${basedir}/org/armedbear/lisp/Site.java"/>
 
   <property name="debug" value="no"/>
@@ -53,7 +52,7 @@
 
   <target
     name="compile"
-    depends="classes, classes14, jdbclasses, lispclasses, stamp, stamp.hostname"
+    depends="classes, jdbclasses, lispclasses, stamp, stamp.hostname"
   />
 
   <target name="lisp" depends="lispclasses"/>
@@ -65,19 +64,7 @@
       destdir="${basedir}"
       classpath="${basedir}:${jdk}/jre/lib/rt.jar:${extensions}"
       includeAntRuntime="no"
-      excludes="org/armedbear/lisp/**/*, org/armedbear/j/jdb/**/*, org/armedbear/j/MouseWheelListener.java, org/armedbear/j/WindowStateListener.java"
-      debug="${debug}"
-    />
-  </target>
-
-  <target name="classes14" depends="prepare" if="jdk14">
-    <echo message="debug=${debug}" />
-    <javac
-      srcdir="."
-      destdir="${basedir}"
-      classpath="${basedir}:${jdk14}/jre/lib/rt.jar:${extensions}"
-      includeAntRuntime="no"
-      includes="org/armedbear/j/MouseWheelListener.java, org/armedbear/j/WindowStateListener.java"
+      excludes="org/armedbear/lisp/**/*, org/armedbear/j/jdb/**/*"
       debug="${debug}"
     />
   </target>
