@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.143 2003-03-19 15:14:17 piso Exp $
+ * $Id: Primitives.java,v 1.144 2003-03-19 15:14:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2808,21 +2808,6 @@ public final class Primitives extends Module
             return pkg.findSymbol(name);
         }
     };
-
-    // ### remove
-    // remove item sequence &key from-end test test-not start end count key =>
-    // result-sequence
-//     private static final Primitive REMOVE =
-//         new Primitive("remove") {
-//         public LispObject execute(LispObject[] args) throws LispError
-//         {
-//             if (args.length < 2)
-//                 throw new WrongNumberOfArgumentsException(this);
-//             LispObject item = args[0];
-//             SequenceType sequence = checkSequence(args[1]);
-//             return sequence.remove(item);
-//         }
-//     };
 
     // ### make-string
     // make-string size &key initial-element element-type => string
