@@ -2,7 +2,7 @@
  * JavaTagger.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaTagger.java,v 1.4 2002-11-26 02:07:17 piso Exp $
+ * $Id: JavaTagger.java,v 1.5 2002-12-21 15:19:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -334,28 +334,32 @@ public class JavaTagger extends Tagger implements Constants
                 pos.skip(index + explicitTag.length());
                 pos.skipWhitespace();
                 // Now we're looking at the first character of the tag.
-                String tag;
-                if (pos.getChar() == '"') {
-                    FastStringBuffer sb = new FastStringBuffer();
+                FastStringBuffer sb = new FastStringBuffer();
+                char c = pos.getChar();
+                if (c == '"') {
                     while (pos.next()) {
-                        char c = pos.getChar();
+                        c = pos.getChar();
                         if (c == '"')
                             break;
                         sb.append(c);
                     }
-                    tag = sb.toString();
                 } else {
-                    Mode mode = buffer.getMode();
-                    if (mode == null)
-                        mode = JavaMode.getMode();
-                    tag = pos.getIdentifier(mode);
+                    // By default, explicit tags are whitespace-delimited, so
+                    // they can contain characters that are not legal in Java
+                    // identifiers ("symbol-value").
+                    sb.append(c);
+                    while (pos.next()) {
+                        c = pos.getChar();
+                        if (Character.isWhitespace(c))
+                            break;
+                        sb.append(c);
+                    }
                 }
+                final String tag = sb.toString();
+                // Exact location of tag is beginning of text on line
+                // containing tag.
                 pos.setOffset(0);
                 pos.skipWhitespace();
-                if (pos.lookingAt("//") && pos.getNextLine() != null) {
-                    pos.moveTo(pos.getNextLine(), 0);
-                    pos.skipWhitespace();
-                }
                 tags.add(new JavaTag(tag, pos, TAG_EXPLICIT, 0, currentClass));
             }
         }
