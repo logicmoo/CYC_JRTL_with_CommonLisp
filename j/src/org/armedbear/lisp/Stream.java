@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.30 2004-03-02 18:34:51 piso Exp $
+ * $Id: Stream.java,v 1.31 2004-03-02 20:32:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,7 +273,7 @@ public class Stream extends LispObject
             case ':':
                 return readKeyword();
             default:
-                return readToken(c);
+                return makeObject(readToken(c));
         }
     }
 
@@ -502,22 +502,25 @@ public class Stream extends LispObject
                 return readArray(numArg);
             case 'b':
             case 'B':
-                return readBinary();
+                return readRadix(2);
             case 'c':
             case 'C':
                 return readComplex();
             case 'o':
             case 'O':
-                return readOctal();
+                return readRadix(8);
             case 'p':
             case 'P':
                 return readPathname();
+            case 'r':
+            case 'R':
+                return readRadix(numArg);
             case 's':
             case 'S':
                 return readStructure();
             case 'x':
             case 'X':
-                return readHex();
+                return readRadix(16);
             default:
                 //clearInput();
                 //return signal(new LispError("unsupported '#' macro character '" +
@@ -742,22 +745,32 @@ public class Stream extends LispObject
         return PACKAGE_KEYWORD.intern(sb.toString());
     }
 
-    private LispObject readToken(char firstChar) throws ConditionThrowable
+    private final String readToken() throws ConditionThrowable
+    {
+        return readToken(new StringBuffer());
+    }
+
+    private final String readToken(char firstChar) throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         sb.append(Utilities.toUpperCase(firstChar));
+        return readToken(sb);
+    }
+
+    private final String readToken(StringBuffer sb) throws ConditionThrowable
+    {
         while (true) {
             int n = _readChar();
             if (n < 0)
-                return makeObject(sb.toString());
+                return sb.toString();
             char c = (char) n;
             if (Character.isWhitespace(c))
-                return makeObject(sb.toString());
+                return sb.toString();
             switch (c) {
                 case '(':
                 case ')':
                     _unreadChar(c);
-                    return makeObject(sb.toString());
+                    return sb.toString();
                 default:
                     sb.append(Utilities.toUpperCase(c));
             }
@@ -769,17 +782,39 @@ public class Stream extends LispObject
         final LispThread thread = LispThread.currentThread();
         if (_READ_SUPPRESS_.symbolValueNoThrow(thread) != NIL)
             return NIL;
-        char c = token.charAt(0);
-        if ("-+0123456789".indexOf(c) >= 0) {
-            LispObject number = makeNumber(token);
-            if (number != null)
-                return number;
+        final char firstChar = token.charAt(0);
+        final int radix = getReadBase();
+        if (radix == 10) {
+            if ("-+0123456789".indexOf(firstChar) >= 0) {
+                LispObject number = makeNumber(token, radix);
+                if (number != null)
+                    return number;
+            }
+        } else {
+            boolean numeric = true;
+            for (int i = token.length(); i-- > 0;) {
+                char c = token.charAt(i);
+                if (c == '-')
+                    ;
+                else if (c == '+')
+                    ;
+                else if (c == '/')
+                    ;
+                else if (c == '.')
+                    ;
+                else if (Character.digit(c, radix) < 0) {
+                    numeric = false;
+                    break;
+                }
+            }
+            if (numeric)
+                return makeNumber(token, radix);
         }
         if (token.equals("T"))
             return T;
         if (token.equals("NIL"))
             return NIL;
-        if (c == ':')
+        if (firstChar == ':')
             return PACKAGE_KEYWORD.intern(token.substring(1));
         int index = token.indexOf("::");
         if (index > 0) {
@@ -836,56 +871,60 @@ public class Stream extends LispObject
         return readBase;
     }
 
-    private static final LispObject makeNumber(String token)
+    private static final LispObject makeNumber(String token, int radix)
         throws ConditionThrowable
     {
         if (token.indexOf('/') >= 0)
-            return makeRatio(token);
-        if (token.endsWith("."))
+            return makeRatio(token, radix);
+        if (token.endsWith(".")) {
+            radix = 10;
             token = token.substring(0, token.length()-1);
-        LispObject number = makeFloat(token);
-        if (number != null)
-            return number;
-        final int readBase = getReadBase();
+        }
+        boolean numeric = true;
         // The first character was checked in makeObject().
-        if (readBase == 10) {
+        if (radix == 10) {
             for (int i = token.length(); i-- > 1;) {
                 char c = token.charAt(i);
-                if (c < '0' || c > '9')
-                    return null;
+                if (c < '0' || c > '9') {
+                    numeric = false;
+                    break;
+                }
             }
         } else {
             for (int i = token.length(); i-- > 1;) {
                 char c = token.charAt(i);
-                if (Character.digit(c, readBase) < 0)
-                    return null;
+                if (Character.digit(c, radix) < 0) {
+                    numeric = false;
+                    break;
+                }
             }
         }
+        if (!numeric) // Can't be an integer.
+            return makeFloat(token);
         try {
-            return new Fixnum(Integer.parseInt(token, readBase));
+            return new Fixnum(Integer.parseInt(token, radix));
         }
         catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            return new Bignum(new BigInteger(token, readBase));
+            return new Bignum(new BigInteger(token, radix));
         }
         catch (NumberFormatException e) {}
         // Not a number.
         return null;
     }
 
-    private static final LispObject makeRatio(String token)
+    private static final LispObject makeRatio(String token, int radix)
         throws ConditionThrowable
     {
         final int index = token.indexOf('/');
         if (index < 0)
             return null;
-        final int readBase = getReadBase();
         try {
             BigInteger numerator =
-                new BigInteger(token.substring(0, index), readBase);
+                new BigInteger(token.substring(0, index), radix);
             BigInteger denominator =
-                new BigInteger(token.substring(index + 1), readBase);
+                new BigInteger(token.substring(index + 1), radix);
             return number(numerator, denominator);
         }
         catch (NumberFormatException e) {}
@@ -935,93 +974,18 @@ public class Stream extends LispObject
         }
     }
 
-    private LispObject readBinary() throws ConditionThrowable
+    private LispObject readRadix(int radix) throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
-        while (true) {
-            int n = _readChar();
-            if (n < 0)
-                break;
-            char c = (char) n;
-            if (c == '0' || c == '1')
-                sb.append(c);
-            else {
-                _unreadChar(c);
-                break;
-            }
-        }
-        String s = sb.toString();
+        String s = readToken();
+        if (s.indexOf('/') >= 0)
+            return makeRatio(s, radix);
         try {
-            return new Fixnum(Integer.parseInt(s, 2));
+            return new Fixnum(Integer.parseInt(s, radix));
         }
         catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            return new Bignum(new BigInteger(s, 2));
-        }
-        catch (NumberFormatException e) {}
-        // Not a number.
-        return signal(new LispError());
-    }
-
-    // FIXME rationals
-    private LispObject readHex() throws ConditionThrowable
-    {
-        StringBuffer sb = new StringBuffer();
-        while (true) {
-            int n = _readChar();
-            if (n < 0)
-                break;
-            char c = (char) n;
-            if (c >= '0' && c <= '9')
-                sb.append(c);
-            else if (c >= 'A' && c <= 'F')
-                sb.append(c);
-            else if (c >= 'a' && c <= 'f')
-                sb.append(c);
-            else {
-                _unreadChar(c);
-                break;
-            }
-        }
-        String s = sb.toString();
-        try {
-            return new Fixnum(Integer.parseInt(s, 16));
-        }
-        catch (NumberFormatException e) {}
-        // parseInt() failed.
-        try {
-            return new Bignum(new BigInteger(s, 16));
-        }
-        catch (NumberFormatException e) {}
-        // Not a number.
-        return signal(new LispError());
-    }
-
-    // FIXME Need to support rationals e.g. #o37/15 => 31/13
-    private LispObject readOctal() throws ConditionThrowable
-    {
-        StringBuffer sb = new StringBuffer();
-        while (true) {
-            int n = _readChar();
-            if (n < 0)
-                break;
-            char c = (char) n;
-            if (c >= '0' && c <= '7')
-                sb.append(c);
-            else {
-                _unreadChar(c);
-                break;
-            }
-        }
-        String s = sb.toString();
-        try {
-            return new Fixnum(Integer.parseInt(s, 8));
-        }
-        catch (NumberFormatException e) {}
-        // parseInt() failed.
-        try {
-            return new Bignum(new BigInteger(s, 8));
+            return new Bignum(new BigInteger(s, radix));
         }
         catch (NumberFormatException e) {}
         // Not a number.
