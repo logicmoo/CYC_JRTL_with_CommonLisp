@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.175 2003-04-24 17:52:38 piso Exp $
+ * $Id: Primitives.java,v 1.176 2003-04-24 18:55:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3874,11 +3874,16 @@ public final class Primitives extends Module
                 return first;
             if (first.typep(second) == T)
                 return first;
-            if (first instanceof LispString) {
-                if (second == Symbol.CHARACTER) {
+            if (second == Symbol.CHARACTER) {
+                if (first instanceof LispString) {
                     if (first.length() == 1)
                         return ((LispString)first).get(0);
+                } else if (first instanceof Symbol) {
+                    String name = first.getName();
+                    if (name.length() == 1)
+                        return new LispCharacter(name.charAt(0));
                 }
+                throw new TypeError();
             }
             if (first instanceof AbstractVector) {
                 if (second == Symbol.BIT_VECTOR ||
@@ -3944,11 +3949,7 @@ public final class Primitives extends Module
                             new Environment());
                 }
             } else if (first instanceof Symbol) {
-                if (second == Symbol.CHARACTER) {
-                    String name = first.getName();
-                    if (name.length() == 1)
-                        return new LispCharacter(name.charAt(0));
-                } else if (second == Symbol.FUNCTION) {
+                if (second == Symbol.FUNCTION) {
                     LispObject obj = first.getSymbolFunction();
                     if (obj instanceof Function) {
                         if (obj instanceof SpecialOperator)
@@ -3957,12 +3958,6 @@ public final class Primitives extends Module
                             throw new TypeError();
                         return obj;
                     }
-                }
-            } else if (first instanceof Fixnum) {
-                if (second == Symbol.CHARACTER || second == Symbol.BASE_CHAR) {
-                    int n = Fixnum.getValue(first);
-                    if (n >= Character.MIN_VALUE && n <= Character.MAX_VALUE)
-                        return new LispCharacter((char)n);
                 }
             }
             if (second == Symbol.FLOAT || second == Symbol.SINGLE_FLOAT) {
@@ -3976,12 +3971,7 @@ public final class Primitives extends Module
         new Primitive1("standard-char-p") {
         public LispObject execute(LispObject arg) throws LispError
         {
-            char c = LispCharacter.getValue(arg);
-            if (c >= ' ' && c < 127)
-                return T;
-            if (c == '\n')
-                return T;
-            return NIL;
+            return checkCharacter(arg).isStandardChar();
         }
     };
 
