@@ -1,8 +1,8 @@
 /*
  * SystemSelection.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: SystemSelection.java,v 1.2 2002-10-05 18:08:11 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: SystemSelection.java,v 1.3 2003-06-28 01:49:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,17 +21,20 @@
 
 package org.armedbear.j;
 
+import java.awt.AWTEvent;
+import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.Toolkit;
-import java.lang.reflect.Method;
+import java.awt.event.MouseEvent;
+import javax.swing.undo.CompoundEdit;
 
-public final class SystemSelection implements ClipboardOwner
+public final class SystemSelection implements ClipboardOwner, Constants
 {
-    private static SystemSelection instance;
+    private static SystemSelection systemSelection =
+        getSystemSelection();
 
     private final Clipboard clipboard;
     private String primarySelection;
@@ -41,19 +44,16 @@ public final class SystemSelection implements ClipboardOwner
         this.clipboard = clipboard;
     }
 
-    public static SystemSelection getInstance()
+    private static SystemSelection getSystemSelection()
     {
-        if (instance == null) {
-            try {
-                Method method = Toolkit.class.getMethod("getSystemSelection",
-                    new Class[0]);
-                Clipboard clipboard = (Clipboard) method.invoke(
-                    Toolkit.getDefaultToolkit(), new Object[0]);
-                instance = new SystemSelection(clipboard);
-            }
-            catch (Exception e) {}
+        try {
+            Clipboard clipboard =
+                Toolkit.getDefaultToolkit().getSystemSelection();
+            return new SystemSelection(clipboard);
         }
-        return instance;
+        catch (Exception e) {
+            return null;
+        }
     }
 
     public void lostOwnership(Clipboard clipboard, Transferable contents)
@@ -96,5 +96,41 @@ public final class SystemSelection implements ClipboardOwner
             catch (Exception e) {}
         }
         return null;
+    }
+
+    public static void updateSystemSelection(Editor editor)
+    {
+        if (systemSelection != null)
+            systemSelection.update(editor);
+    }
+
+    public static void pastePrimarySelection()
+    {
+        final Editor editor = Editor.currentEditor();
+        if (!editor.checkReadOnly())
+            return;
+        if (systemSelection == null) {
+            Log.debug("pastePrimarySelection systemSelection is null");
+            return;
+        }
+        String s = systemSelection.getPrimarySelection();
+        if (s == null || s.length() == 0) {
+            Log.debug("pastePrimarySelection no selection");
+            return;
+        }
+        KillRing killRing = Editor.getKillRing();
+        killRing.appendNew(s);
+        // We MUST call killRing.pop() here so that killRing.indexOfNextPop
+        // and killRing.lastPaste are set correctly.
+        killRing.pop();
+        AWTEvent e = editor.getDispatcher().getLastEvent();
+        if (e instanceof MouseEvent) {
+            CompoundEdit compoundEdit = editor.beginCompoundEdit();
+            editor.mouseMoveDotToPoint((MouseEvent) e);
+            editor.paste(s);
+            editor.endCompoundEdit(compoundEdit);
+        } else
+            editor.paste(s);
+        editor.setCurrentCommand(COMMAND_PASTE);
     }
 }

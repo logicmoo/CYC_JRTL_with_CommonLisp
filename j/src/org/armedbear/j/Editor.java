@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.75 2003-06-28 01:20:24 piso Exp $
+ * $Id: Editor.java,v 1.76 2003-06-28 01:48:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,8 +187,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     DirectoryTree localDirectoryTree;
 
-    private static SystemSelection systemSelection;
-
     private static ModeList modeList;
 
     public static final ModeList getModeList()
@@ -364,9 +362,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             runStartupScript("org.armedbear.j.BeanShell", "init.bsh");
         }
         DefaultLookAndFeel.setLookAndFeel();
-
-        if (Platform.isJava14())
-            systemSelection = SystemSelection.getInstance();
 
         sessionProperties = new SessionProperties();
 
@@ -5386,41 +5381,6 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             setCurrentCommand(COMMAND_PASTE);
         }
         setDefaultCursor();
-    }
-
-    public void pastePrimarySelection()
-    {
-        Log.debug("pastePrimarySelection");
-        if (!checkReadOnly())
-            return;
-        if (systemSelection == null) {
-            Log.debug("pastePrimarySelection systemSelection is null");
-            return;
-        }
-        String s = systemSelection.getPrimarySelection();
-        if (s == null || s.length() == 0) {
-            Log.debug("pastePrimarySelection no selection");
-            return;
-        }
-        killRing.appendNew(s);
-        // We MUST call killRing.pop() here so that killRing.indexOfNextPop
-        // and killRing.lastPaste are set correctly.
-        killRing.pop();
-        AWTEvent e = dispatcher.getLastEvent();
-        if (e instanceof MouseEvent) {
-            CompoundEdit compoundEdit = beginCompoundEdit();
-            mouseMoveDotToPoint((MouseEvent) e);
-            paste(s);
-            endCompoundEdit(compoundEdit);
-        } else
-            paste(s);
-        setCurrentCommand(COMMAND_PASTE);
-    }
-
-    public final void updateSystemSelection()
-    {
-        if (systemSelection != null)
-            systemSelection.update(this);
     }
 
     public void cyclePaste()
