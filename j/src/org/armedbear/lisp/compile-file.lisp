@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.30 2004-06-24 16:35:40 piso Exp $
+;;; $Id: compile-file.lisp,v 1.31 2004-07-11 16:54:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -68,6 +68,15 @@
                 ;; time."
                 (let ((name (second form)))
                   (%defvar name))))
+           (DEFCONSTANT
+            ;; "If a DEFCONSTANT form appears as a top level form, the compiler
+            ;; must recognize that [the] name names a constant variable. An
+            ;; implementation may choose to evaluate the value-form at compile
+            ;; time, load time, or both. Therefore, users must ensure that the
+            ;; initial-value can be evaluated at compile time (regardless of
+            ;; whether or not references to name appear in the file) and that
+            ;; it always evaluates to the same value."
+            (eval form))
            (DEFUN
             (let ((name (second form)))
               (%format t "; Processing function ~A~%" name)
