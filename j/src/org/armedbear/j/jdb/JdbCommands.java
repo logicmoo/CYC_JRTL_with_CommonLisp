@@ -2,7 +2,7 @@
  * JdbCommands.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbCommands.java,v 1.4 2003-05-16 02:48:32 piso Exp $
+ * $Id: JdbCommands.java,v 1.5 2003-05-17 17:36:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,55 +21,65 @@
 
 package org.armedbear.j.jdb;
 
-public final class JdbCommands
+public final class JdbCommands implements JdbConstants
 {
-    public static String findCommand(String cmd)
+    public static int findCommand(String cmd)
     {
         // Single-letter abbreviations for the most common commands.
         if (cmd.equals("b"))
-            return "stop";
+            return JDB_BREAK;
         if (cmd.equals("c"))
-            return "resume";
+            return JDB_CONTINUE;
         if (cmd.equals("n"))
-            return "next";
+            return JDB_NEXT;
         if (cmd.equals("s"))
-            return "step";
+            return JDB_STEP;
         if (cmd.equals("p"))
-            return "print";
+            return JDB_PRINT;
 
         if ("break".startsWith(cmd))
-            return "stop";
+            return JDB_BREAK;
         if ("clear".startsWith(cmd))
-            return "clear";
+            return JDB_CLEAR;
         if ("continue".startsWith(cmd))
-            return "resume";
+            return JDB_CONTINUE;
         if ("finish".startsWith(cmd))
-            return "finish";
+            return JDB_FINISH;
         if ("go".startsWith(cmd))
-            return "resume";
+            return JDB_CONTINUE;
         if ("locals".startsWith(cmd))
-            return "locals";
+            return JDB_LOCALS;
         if ("next".startsWith(cmd))
-            return "next";
+            return JDB_NEXT;
         if ("print".startsWith(cmd))
-            return "print";
+            return JDB_PRINT;
         if ("quit".startsWith(cmd))
-            return "quit";
+            return JDB_QUIT;
         if ("restart".startsWith(cmd))
-            return "restart";
+            return JDB_RESTART;
         if ("resume".startsWith(cmd))
-            return "resume";
+            return JDB_CONTINUE;
         if ("step".startsWith(cmd))
-            return "step";
+            return JDB_STEP;
         if ("stop".startsWith(cmd))
-            return "stop";
+            return JDB_BREAK;
         if ("suspend".startsWith(cmd))
-            return "suspend";
+            return JDB_SUSPEND;
 
         if (cmd.equals("stdin"))
-            return "stdin";
+            return JDB_STDIN;
 
-        return null;
+        return -1;
+    }
+
+    public static void jdbContinue()
+    {
+        command("continue");
+    }
+
+    public static void jdbFinish()
+    {
+        command("finish");
     }
 
     public static void jdbLocals()
@@ -92,19 +102,9 @@ public final class JdbCommands
         command("restart");
     }
 
-    public static void jdbResume()
-    {
-        command("resume");
-    }
-
     public static void jdbStep()
     {
         command("step");
-    }
-
-    public static void jdbStepOut()
-    {
-        command("step out");
     }
 
     public static void jdbSuspend()
