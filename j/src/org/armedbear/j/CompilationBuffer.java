@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CompilationBuffer.java,v 1.13 2003-06-05 12:34:53 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.14 2003-06-05 17:30:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,19 +37,12 @@ public final class CompilationBuffer extends Buffer implements Runnable
 
     private String command;
     private String expandedCommand;
-
-    private Line lastErrorLine;
-    private String errorFileName;
-    private int errorLineNumber;
-    private int errorOffset;
-
-    private String message;
     private Position posEndOfBuffer;
     private File currentDir;
-
     private Process process;
     private int exitValue;
-    private File exitValueFile = null;
+    private File exitValueFile;
+    private CompilationError compilationError;
 
     private CompilationBuffer(String command, File directory)
     {
@@ -90,16 +83,6 @@ public final class CompilationBuffer extends Buffer implements Runnable
         this.command = command;
     }
 
-    public final int getErrorLineNumber()
-    {
-        return errorLineNumber;
-    }
-
-    public final int getErrorOffset()
-    {
-        return errorOffset;
-    }
-
     public final int exitValue()
     {
         return exitValue;
@@ -120,7 +103,7 @@ public final class CompilationBuffer extends Buffer implements Runnable
             renumber();
             setLoaded(true);
             posEndOfBuffer = new Position(getFirstLine(), 0);
-            lastErrorLine = null;
+            compilationError = null;
         }
         finally {
             unlockWrite();
@@ -309,51 +292,50 @@ public final class CompilationBuffer extends Buffer implements Runnable
         killProcess();
     }
 
-    private void thisError(Line line)
+    private CompilationError thisError(Line line)
     {
-        errorFileName = null;
-        errorLineNumber = 0;
-        errorOffset = 0;
+//         errorFileName = null;
+//         errorLineNumber = 0;
+//         errorOffset = 0;
         CompilationError ce = CompilationError.parseLineAsErrorMessage(line);
         if (ce != null) {
-            errorFileName = ce.getFileName();
-            errorLineNumber = ce.getLineNumber();
-            errorOffset = ce.getOffset();
-            message = ce.getMessage();
-            lastErrorLine = line;
+//             errorFileName = ce.getFileName();
+//             errorLineNumber = ce.getLineNumber();
+//             errorOffset = ce.getOffset();
+//             message = ce.getMessage();
+//             lastErrorLine = line;
         }
+        return ce;
     }
 
-    private void nextErrorInternal()
+    private CompilationError nextErrorInternal()
     {
-        errorFileName = null;
-        errorLineNumber = 0;
-        errorOffset = 0;
-        message = null;
-        Line line = lastErrorLine != null ? lastErrorLine.next() : getFirstLine();
+        Line line;
+        if (compilationError != null) {
+            line = compilationError.getErrorLine();
+            if (line != null)
+                line = line.next();
+        } else
+            line = getFirstLine();
         while (line != null) {
             CompilationError ce =
                 CompilationError.parseLineAsErrorMessage(line);
             if (ce != null) {
-                errorFileName = ce.getFileName();
-                errorLineNumber = ce.getLineNumber();
-                errorOffset = ce.getOffset();
-                message = ce.getMessage();
-                lastErrorLine = line;
-                break;
-            } else
-                line = line.next();
+                compilationError = ce;
+                return ce;
+            }
+            line = line.next();
         }
+        return null;
     }
 
-    public Buffer getSourceBuffer()
+    private Buffer getSourceBuffer(String errorFileName)
     {
         File file = File.getInstance(currentDir, errorFileName);
         if (!file.isFile()) {
             // Strip path prefix.
             file = File.getInstance(errorFileName);
             String name = file.getName();
-
             // Look in current directory.
             file = File.getInstance(currentDir, name);
             if (!file.isFile())
@@ -362,15 +344,21 @@ public final class CompilationBuffer extends Buffer implements Runnable
         return Editor.getBuffer(file);
     }
 
+    public CompilationError getCompilationError()
+    {
+        return compilationError;
+    }
+
     public String getMessage()
     {
-        // Message on same line.
+        String message = compilationError.getMessage();
         if (message != null)
             return message;
 
         // Message on following line.
-        if (lastErrorLine != null && lastErrorLine.next() != null)
-            return lastErrorLine.next().trim();
+        Line line = compilationError.getErrorLine();
+        if (line != null && line.next() != null)
+            return line.next().trim();
 
         return null;
     }
@@ -589,19 +577,21 @@ public final class CompilationBuffer extends Buffer implements Runnable
             editor.mouseMoveDotToPoint((MouseEvent)e);
 
         final CompilationBuffer cb = (CompilationBuffer) buffer;
-        cb.thisError(editor.getDotLine());
-        if (cb.errorFileName != null && cb.errorLineNumber != 0) {
-            Buffer buf = cb.getSourceBuffer();
+        CompilationError ce = cb.thisError(editor.getDotLine());
+        String errorFileName = ce.getFileName();
+        int errorLineNumber = ce.getLineNumber();
+        if (errorFileName != null && errorLineNumber != 0) {
+            Buffer buf = cb.getSourceBuffer(errorFileName);
             if (buf == null)
                 return;
             Editor otherEditor = editor.getOtherEditor();
             if (otherEditor != null)
                 otherEditor.makeNext(buf);
             Editor ed = editor.activateInOtherWindow(buf);
-            int lineNumber = cb.errorLineNumber - 1;
+            int lineNumber = errorLineNumber - 1;
             if (lineNumber < 0)
                 lineNumber = 0;
-            Position pos = buf.findOriginal(lineNumber, cb.errorOffset);
+            Position pos = buf.findOriginal(lineNumber, ce.getOffset());
             ed.moveDotTo(pos);
             ed.setUpdateFlag(REFRAME);
             ed.updateDisplay();
@@ -615,19 +605,18 @@ public final class CompilationBuffer extends Buffer implements Runnable
     {
         if (lastCompilationBuffer == null)
             return;
-
         final Editor editor = Editor.currentEditor();
-
         CompilationBuffer cb = lastCompilationBuffer;
         if (!Editor.getBufferList().contains(cb)) {
             cb.relink();
             Sidebar.setUpdateFlagInAllFrames(SIDEBAR_BUFFER_LIST_CHANGED);
         }
-
-        cb.nextErrorInternal();
-
+        CompilationError ce = cb.nextErrorInternal();
+        if (ce == null) {
+            editor.status("No more errors");
+            return;
+        }
         boolean useOtherWindow = false;
-
         // Find editor displaying compilation buffer (if any).
         Editor ed = null;
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
@@ -635,7 +624,6 @@ public final class CompilationBuffer extends Buffer implements Runnable
             if (ed.getBuffer() == cb)
                 break;
         }
-
         if (ed.getBuffer() != cb) {
             // The compilation buffer is not currently displayed.
             ed = editor.displayInOtherWindow(cb);
@@ -644,23 +632,23 @@ public final class CompilationBuffer extends Buffer implements Runnable
             // compilation buffer.
             useOtherWindow = true;
         }
-
         // Move caret to relevant line of compilation buffer.
-        if (cb.lastErrorLine != null) {
+        Line errorLine = ce.getErrorLine();
+        if (errorLine != null) {
             Debug.assertTrue(ed.getBuffer() == cb);
-            Line line = cb.lastErrorLine;
             ed.addUndo(SimpleEdit.MOVE);
             ed.update(ed.getDotLine());
-            ed.setDot(line, 0);
+            ed.setDot(errorLine, 0);
             ed.update(ed.getDotLine());
             ed.moveCaretToDotCol();
             ed.getDisplay().setUpdateFlag(REFRAME);
             ed.updateDisplay();
         }
-
-        if (cb.errorFileName != null && cb.errorLineNumber != 0) {
+        String errorFileName = ce.getFileName();
+        int errorLineNumber = ce.getLineNumber();
+        if (errorFileName != null && errorLineNumber != 0) {
             // Find or create buffer for source file containing the error.
-            Buffer buf = cb.getSourceBuffer();
+            Buffer buf = cb.getSourceBuffer(errorFileName);
             if (buf == null)
                 return;
             Debug.assertTrue(ed.getBuffer() == cb);
@@ -675,11 +663,10 @@ public final class CompilationBuffer extends Buffer implements Runnable
                 ed.makeNext(buf);
                 ed.activate(buf);
             }
-
-            int lineNumber = cb.errorLineNumber - 1;
+            int lineNumber = errorLineNumber - 1;
             if (lineNumber < 0)
                 lineNumber = 0;
-            Position pos = buf.findOriginal(lineNumber, cb.errorOffset);
+            Position pos = buf.findOriginal(lineNumber, ce.getOffset());
             ed.moveDotTo(pos);
             ed.setUpdateFlag(REFRAME);
             ed.updateDisplay();
