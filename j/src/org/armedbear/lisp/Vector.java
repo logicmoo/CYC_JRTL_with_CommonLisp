@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.11 2003-03-03 20:13:09 piso Exp $
+ * $Id: Vector.java,v 1.12 2003-03-12 19:55:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,8 @@ package org.armedbear.lisp;
 
 public class Vector extends AbstractVector implements SequenceType, VectorType
 {
-    private final LispObject[] elements;
-    private final int capacity;
+    private LispObject[] elements;
+    private int capacity;
 
     public Vector(int capacity)
     {
@@ -93,6 +93,20 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
     {
         for (int i = capacity; i-- > 0;)
             elements[i] = obj;
+    }
+
+    public void shrink(int n) throws LispError
+    {
+        if (n < elements.length) {
+            LispObject[] newArray = new LispObject[n];
+            System.arraycopy(elements, 0, newArray, 0, n);
+            elements = newArray;
+            capacity = n;
+            return;
+        }
+        if (n == elements.length)
+            return;
+        throw new LispError();
     }
 
     public String toString()

@@ -47,6 +47,8 @@ public abstract class AbstractVector extends LispObject
 
     public abstract void fill(LispObject obj) throws LispError;
 
+    public abstract void shrink(int n) throws LispError;
+
     public int checkIndex(int index) throws LispError
     {
         if (index < 0 || index >= capacity())
