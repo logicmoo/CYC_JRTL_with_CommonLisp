@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.12 2002-12-11 02:10:29 piso Exp $
+ * $Id: LispShell.java,v 1.13 2002-12-11 19:11:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,17 @@
 
 package org.armedbear.j;
 
+import gnu.regexp.REMatch;
+import java.io.IOException;
+import javax.swing.SwingUtilities;
+
 public final class LispShell extends Shell
 {
     private static final String DEFAULT_PROMPT_PATTERN =
         "^[^>\\*\\]]*[>\\*\\]] *";
+
+    private static final String ALLEGRO_PROMPT_PATTERN =
+        "^(\\[[0-9+]\\] )?[-a-zA-z]+\\([0-9]+\\): ";
 
     private static final String CLISP_PROMPT_PATTERN =
         "^[^>\\*\\]]*\\[[0-9]+\\]> ";
@@ -32,10 +39,17 @@ public final class LispShell extends Shell
     private static final String CMUCL_PROMPT_PATTERN =
         "^\\* |^[0-9]+\\] ";
 
+    private String exitCommand = "(exit)";
+
     private LispShell(String shellCommand)
     {
         super(shellCommand, LispShellMode.getMode());
         formatter = mode.getFormatter(this);
+    }
+
+    private void setExitCommand(String s)
+    {
+        exitCommand = s;
     }
 
     private static Shell createLispShell(String shellCommand)
@@ -52,12 +66,18 @@ public final class LispShell extends Shell
             MessageDialog.showMessageDialog(message, "Error");
             return null;
         }
-        if (shellCommand.equals("clisp") || shellCommand.equals("/usr/bin/clisp"))
+        if (shellCommand.equals("alisp") || shellCommand.equals("/usr/bin/alisp"))
+            shell.setPromptRE(ALLEGRO_PROMPT_PATTERN);
+        else if (shellCommand.equals("clisp") || shellCommand.equals("/usr/bin/clisp"))
             shell.setPromptRE(CLISP_PROMPT_PATTERN);
-        else if (shellCommand.equals("/usr/bin/lisp"))
+        else if (shellCommand.equals("/usr/bin/lisp")) {
             shell.setPromptRE(CMUCL_PROMPT_PATTERN);
-        else
+            shell.setExitCommand("(quit)");
+        } else {
             shell.setPromptRE(DEFAULT_PROMPT_PATTERN);
+            if (shellCommand.equals("rep") || shellCommand.equals("/usr/bin/rep"))
+                shell.setExitCommand(",quit");
+        }
         shell.needsRenumbering = true;
         return shell;
     }
@@ -122,6 +142,43 @@ public final class LispShell extends Shell
         send(input);
     }
 
+    protected void stdOutUpdate(final String s)
+    {
+        String prompt;
+        int index = s.lastIndexOf('\n');
+        if (index >= 0)
+            prompt = s.substring(index+1);
+        else
+            prompt = s;
+        REMatch match = promptRE.getMatch(prompt);
+        if (match != null) {
+            // Last line of output looks like a prompt.
+            String m = match.toString();
+            if (prompt.startsWith(m)) {
+                if (prompt.substring(m.length()).startsWith(m)) {
+                    // Double prompt. Remove one of them.
+                    prompt = prompt.substring(m.length());
+                }
+            }
+        }
+        final String output;
+        if (index >= 0)
+            output = s.substring(0, index+1) + prompt;
+        else
+            output = prompt;
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                if (output.length() > 0) {
+                    appendString(output);
+                }
+                updateDisplayInAllFrames();
+                resetUndo();
+            }
+        };
+        SwingUtilities.invokeLater(r);
+    }
+
     private void indentLineAtDot(Editor editor)
     {
         final Line dotLine = editor.getDotLine();
@@ -174,6 +231,39 @@ public final class LispShell extends Shell
     protected void updateLineFlags()
     {
         // Nothing to do.
+    }
+
+    public void dispose()
+    {
+        if (!checkProcess()) {
+            Log.debug("checkProcess returned false");
+            return;
+        }
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                try {
+                    stdin.write(3);
+                    stdin.flush();
+                    stdin.write(exitCommand);
+                    stdin.write("\n");
+                    stdin.flush();
+                    stdin.close();
+                    final Process p = getProcess();
+                    if (p != null) {
+                        p.destroy();
+                        p.waitFor();
+                    }
+                }
+                catch (IOException e) {
+                    Log.error(e);
+                }
+                catch (InterruptedException e) {
+                    Log.error(e);
+                }
+            }
+        };
+        new Thread(r).start();
     }
 
     public static void lisp()
