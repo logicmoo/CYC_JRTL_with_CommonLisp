@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.157 2003-04-04 02:18:31 piso Exp $
+ * $Id: Primitives.java,v 1.158 2003-04-06 15:24:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3526,14 +3526,15 @@ public final class Primitives extends Module
         }
     };
 
+    // ### %make-hash-table
     private static final Primitive _MAKE_HASH_TABLE =
         new Primitive("%make-hash-table") {
         public LispObject execute(LispObject[] args) throws LispError
         {
-            if (args.length > 4)
+            if (args.length != 4)
                 throw new WrongNumberOfArgumentsException(this);
             LispObject test = args[0];
-            LispObject size = args[1];
+            int size = Fixnum.getValue(args[1]);
             LispObject rehashSize = args[2];
             LispObject rehashThreshold = args[3];
             return new HashTable(test, size, rehashSize, rehashThreshold);
