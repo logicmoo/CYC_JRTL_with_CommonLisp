@@ -2,7 +2,7 @@
  * Return.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Return.java,v 1.7 2004-07-23 15:27:01 piso Exp $
+ * $Id: Return.java,v 1.8 2004-07-23 18:33:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,14 +23,21 @@ package org.armedbear.lisp;
 
 public final class Return extends ConditionThrowable
 {
-    private final LispObject tag;
-    private final LispObject block;
-    private final LispObject result;
+    public final LispObject tag;
+    public final LispObject block;
+    public final LispObject result;
 
     public Return(LispObject tag, LispObject block, LispObject result)
     {
         this.tag = tag;
         this.block = block;
+        this.result = result;
+    }
+
+    public Return(LispObject tag, LispObject result)
+    {
+        this.tag = tag;
+        this.block = null;
         this.result = result;
     }
 
