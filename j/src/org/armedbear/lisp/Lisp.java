@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.270 2004-08-15 12:41:15 piso Exp $
+ * $Id: Lisp.java,v 1.271 2004-08-17 20:06:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1953,6 +1953,7 @@ public abstract class Lisp
         loadClass("org.armedbear.lisp.Pathname");
         loadClass("org.armedbear.lisp.LispClass");
         loadClass("org.armedbear.lisp.BuiltInClass");
+        loadClass("org.armedbear.lisp.StructureObject");
 
         loadClass("org.armedbear.lisp.ash");
 
