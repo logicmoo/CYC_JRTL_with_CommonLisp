@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.6 2004-09-05 00:16:19 piso Exp $
+;;; $Id: slime.lisp,v 1.7 2004-09-05 20:05:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,7 +31,8 @@
 (defpackage #:slime
   (:use #:cl #:ext #:j)
   (:export #:complete-symbol
-           #:slime-space))
+           #:slime-space
+           #:edit-definition))
 
 (in-package #:slime)
 
@@ -136,11 +137,18 @@
 (defun symbol-name-at-point ()
   (let ((string (line-chars (current-line)))
         (point-charpos (mark-charpos (current-point)))
-        (delimiters '(#\space #\( #\)))
-        begin
+        (begin 0)
         end)
-    (when (delimiter-p (schar string point-charpos))
-      (return-from symbol-name-at-point nil))
+    (when (= point-charpos (length string))
+      (decf point-charpos))
+    (loop
+      (aver (< point-charpos (length string)))
+      (cond ((not (delimiter-p (schar string point-charpos)))
+             (return))
+            ((zerop point-charpos)
+             (return-from symbol-name-at-point nil))
+            (t
+             (decf point-charpos))))
     (dotimes (i point-charpos)
       (let ((c (schar string i)))
         (when (delimiter-p c)
@@ -218,8 +226,64 @@
         (when package-name
           (string package-name))))))
 
+(defstruct (slime-definition (:type list))
+  spec location)
 
-(j::map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
-(j::map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
-(j::map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
-(j::map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
+(defun goto-source-location (name location)
+  (when (eq (car location) :location)
+    (let (file position function-name)
+      (dolist (item (cdr location))
+        (case (car item)
+          (:file
+           (setf file (cadr item)))
+          (:position
+           (setf position (cadr item)))
+          (:function-name
+           (setf function-name (cadr item)))))
+      (when file
+        (let ((buffer (find-file-buffer file)))
+          (when buffer
+            (switch-to-buffer buffer)
+            (with-single-undo
+              (when position
+                (goto-char position))
+              (let* ((pattern (format nil "^\\s*\\(def\\S*\\s+~A"
+                                      (or function-name (string name))))
+                     (pos (re-search-forward pattern
+                                             :ignore-case t
+                                             :whole-words-only t)))
+                (when pos
+                  (goto-char pos))
+                (setf pos (search-forward (string name) :ignore-case t))
+                (when pos
+                  (goto-char pos))))
+            (update-display)))))))
+
+;; FIXME
+(defun find-tag-at-point ()
+  (j::%execute-command "findTagAtDot"))
+
+(defun edit-definition (&optional function-name package-name)
+  (let ((pathname (buffer-pathname (current-buffer))))
+    (when (and pathname
+               (string-equal (pathname-type pathname) "el"))
+      (find-tag-at-point)
+      (return-from edit-definition)))
+  (unless function-name
+    (setf function-name (string-upcase (symbol-name-at-point))))
+  (when function-name
+    (setf function-name (string function-name))
+    (let ((definitions
+            (slime-eval `(swank:find-definitions-for-function-name ,function-name
+                                                                   ,package-name))))
+      (if definitions
+          (goto-source-location function-name
+                                (slime-definition-location (car definitions)))
+          (find-tag-at-point)))))
+
+(map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
+(map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
+(map-key-for-mode "Space" "(slime:slime-space)" "Lisp")
+(map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
+(map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp")
+(map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp Shell")
