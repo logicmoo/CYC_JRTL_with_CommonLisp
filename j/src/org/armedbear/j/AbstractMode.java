@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.19 2003-10-15 14:43:31 piso Exp $
+ * $Id: AbstractMode.java,v 1.20 2003-10-15 14:52:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,7 +304,7 @@ public abstract class AbstractMode implements Constants, Mode
         menu.add(editor, "Close Window", 'C', "killWindow");
     }
 
-    private static void populateSearchMenu(Editor editor, Menu menu)
+    protected void populateSearchMenu(Editor editor, Menu menu)
     {
         final File dir = editor.getCurrentDirectory();
         final boolean local = (dir != null && dir.isLocal());
@@ -321,10 +321,13 @@ public abstract class AbstractMode implements Constants, Mode
                  FindInFiles.getFindInFiles() != null);
         menu.addSeparator();
         final boolean isNotReadOnly = !editor.getBuffer().isReadOnly();
-        menu.add(editor, "Replace...", 'P', "replace", isNotReadOnly);
+        if (!(editor.getBuffer() instanceof Directory))
+            menu.add(editor, "Replace...", 'P', "replace", isNotReadOnly);
         menu.add(editor, "Replace in Files...", 'E', "replaceInFiles", local);
-        menu.addSeparator();
-        menu.add(editor, "Find Tag...", 'A', "findTag");
+        if (!(editor.getBuffer() instanceof Directory)) {
+            menu.addSeparator();
+            menu.add(editor, "Find Tag...", 'A', "findTag");
+        }
     }
 
     private static void populateGoMenu(Editor editor, Menu menu)
