@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.44 2003-11-23 17:59:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.45 2003-11-27 14:44:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1853,9 +1853,13 @@
   (emit-store-value))
 
 (defun compile-progn (form for-effect)
-  (do ((forms (cdr form) (cdr forms)))
-      ((null forms))
-    (compile-form (car forms) (cdr forms))))
+  (cond ((null (cdr form))
+         (emit-push-nil)
+         (emit-store-value))
+        (t
+         (do ((forms (cdr form) (cdr forms)))
+             ((null forms))
+           (compile-form (car forms) (cdr forms))))))
 
 (defun compile-setq (form for-effect)
   (unless (= (length form) 3)
