@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispFormatter.java,v 1.32 2003-08-24 18:30:18 piso Exp $
+ * $Id: LispFormatter.java,v 1.33 2003-10-10 18:57:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,8 +139,8 @@ public final class LispFormatter extends Formatter
 
     // Don't include DEFCONSTANT, DEFPARAMETER or DEFVAR!
     private static final String[] definers = new String[] {
-        "defclass", "define-condition", "defmacro", "defmethod", "defstruct",
-        "deftype", "defun"
+        "defclass", "defgeneric", "define-condition", "defmacro", "defmethod",
+        "defstruct", "deftype", "defun"
     };
 
     private static final boolean isDefiner(String s)

@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: LispMode.java,v 1.57 2003-09-30 10:22:15 piso Exp $
+ * $Id: LispMode.java,v 1.58 2003-10-10 18:59:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,8 +109,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
     }
 
     private static final String[] definers = new String[] {
-        "defclass", "defconstant", "define-condition", "defmacro", "defmethod",
-        "defparameter", "defstruct", "deftype", "defun", "defvar"
+        "defclass", "defconstant", "defgeneric", "define-condition",
+        "defmacro", "defmethod", "defparameter", "defstruct", "deftype",
+        "defun", "defvar"
     };
 
     public static final boolean isDefiner(String s)
