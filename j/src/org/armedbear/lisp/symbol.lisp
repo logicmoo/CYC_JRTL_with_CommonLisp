@@ -1,7 +1,7 @@
 ;;; symbol.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: symbol.lisp,v 1.7 2003-10-02 00:03:54 piso Exp $
+;;; $Id: symbol.lisp,v 1.8 2003-11-07 20:20:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,14 +20,6 @@
 (in-package "SYSTEM")
 
 ;;; From CMUCL.
-
-(defun getf (place indicator &optional (default ()))
-  (do ((plist place (cddr plist)))
-      ((null plist) default)
-    (cond ((atom (cdr plist))
-	   (error 'type-error "malformed property list: ~S" place))
-	  ((eq (car plist) indicator)
-	   (return (cadr plist))))))
 
 (defun %putf (place property new-value)
   (do ((plist place (cddr plist)))
