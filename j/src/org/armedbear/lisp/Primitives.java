@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.315 2003-08-06 19:14:01 piso Exp $
+ * $Id: Primitives.java,v 1.316 2003-08-09 23:45:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3843,77 +3843,6 @@ public final class Primitives extends Module
             }
             catch (IOException e) {
                 throw new LispError(e.getMessage());
-            }
-        }
-    };
-
-    // ### %open-output-file
-    private static final Primitive3 _OPEN_OUTPUT_FILE =
-        new Primitive3("%open-output-file") {
-        public LispObject execute (LispObject first, LispObject second,
-            LispObject third) throws LispError
-        {
-            String pathname = LispString.getValue(first);
-            boolean binary;
-            LispObject elementType = second;
-            if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
-                binary = false;
-            else if (elementType == Symbol.UNSIGNED_BYTE)
-                binary = true;
-            else
-                throw new LispError(String.valueOf(elementType).concat(
-                    " is not a valid stream element type"));
-            File file = new File(pathname);
-            LispObject ifExists = third;
-            if (ifExists == Keyword.SUPERSEDE) {
-                ;
-            } else if (ifExists == Keyword.ERROR) {
-                if (file.exists())
-                    throw new LispError("file already exists: " + pathname);
-            } else if (ifExists == NIL) {
-                if (file.exists())
-                    return NIL;
-            } else {
-                // FIXME
-                throw new LispError(String.valueOf(ifExists) +
-                    " is not a recognized value for :IF-EXISTS");
-            }
-            try {
-                if (binary)
-                    return new BinaryOutputStream(new FileOutputStream(file));
-                else
-                    return new CharacterOutputStream(new FileOutputStream(file));
-            }
-            catch (FileNotFoundException e) {
-                throw new LispError("unable to create file: " + pathname);
-            }
-        }
-    };
-
-    // ### %open-input-file
-    private static final Primitive2 _OPEN_INPUT_FILE =
-        new Primitive2("%open-input-file") {
-        public LispObject execute (LispObject first, LispObject second)
-            throws LispError
-        {
-            String pathname = LispString.getValue(first);
-            boolean binary;
-            LispObject elementType = second;
-            if (elementType == Symbol.BASE_CHAR || elementType == Symbol.CHARACTER)
-                binary = false;
-            else if (elementType == Symbol.UNSIGNED_BYTE)
-                binary = true;
-            else
-                throw new LispError(String.valueOf(elementType).concat(
-                    " is not a valid stream element type"));
-            try {
-                if (binary)
-                    return new BinaryInputStream(new FileInputStream(pathname));
-                else
-                    return new CharacterInputStream(new FileInputStream(pathname));
-            }
-            catch (FileNotFoundException e) {
-                throw new LispError(" file not found: " + pathname);
             }
         }
     };
