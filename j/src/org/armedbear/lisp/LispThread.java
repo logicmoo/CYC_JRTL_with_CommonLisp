@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.3 2003-04-27 17:56:44 piso Exp $
+ * $Id: LispThread.java,v 1.4 2003-05-04 04:47:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,24 +22,48 @@
 package org.armedbear.lisp;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Stack;
 
 public final class LispThread extends LispObject
 {
   private static HashMap map = new HashMap();
+  private static Object lock = new Object();
 
   public static final LispThread currentThread()
   {
     Thread t = Thread.currentThread();
-    synchronized (map)
+    LispThread thread = get(t);
+    if (thread == null)
       {
-        LispThread thread = (LispThread) map.get(t);
-        if (thread == null)
-          {
-            thread = new LispThread(t);
-            map.put(t, thread);
-          }
-        return thread;
+        thread = new LispThread(t);
+        put(t, thread);
+      }
+    return thread;
+  }
+
+  private static void put(Thread t, LispThread thread)
+  {
+    synchronized (lock)
+      {
+        HashMap m = (HashMap) map.clone();
+        m.put(t, thread);
+        map = m;
+      }
+  }
+
+  private static LispThread get(Thread t)
+  {
+    return (LispThread) map.get(t);
+  }
+
+  private static void remove(Thread t)
+  {
+    synchronized (lock)
+      {
+        HashMap m = (HashMap) map.clone();
+        m.remove(t);
+        map = m;
       }
   }
 
@@ -64,14 +88,30 @@ public final class LispThread extends LispObject
           {
             t.printStackTrace();
           }
+        finally
+          {
+            remove(t);
+          }
       }
     };
     t = new Thread(r);
+    put(t, this);
     t.start();
   }
 
+  private boolean destroyed;
   private Environment dynEnv;
   private LispObject[] _values;
+
+  public final synchronized boolean isDestroyed()
+  {
+    return destroyed;
+  }
+
+  private final synchronized void setDestroyed(boolean b)
+  {
+    destroyed = b;
+  }
 
   public final LispObject[] getValues()
   {
@@ -321,6 +361,50 @@ public final class LispThread extends LispObject
           Debug.trace(e);
         }
       return NIL;
+    }
+  };
+
+  private static final Primitive1 MAPCAR_THREADS =
+    new Primitive1("mapcar-threads")
+  {
+    public LispObject execute(LispObject arg) throws Condition
+    {
+      Function fun = checkFunction(arg);
+      LispObject result = NIL;
+      Iterator it = map.values().iterator();
+      while (it.hasNext())
+        {
+          LispThread thread = (LispThread) it.next();
+          LispObject[] args = new LispObject[1];
+          args[0] = thread;
+          result = new Cons(funcall(fun, args), result);
+        }
+      return result;
+    }
+  };
+
+  private static final Primitive1 DESTROY_THREAD =
+    new Primitive1("destroy-thread")
+  {
+    public LispObject execute(LispObject arg) throws Condition
+    {
+      if (arg instanceof LispThread)
+        {
+          LispThread thread = (LispThread) arg;
+          thread.setDestroyed(true);
+          return T;
+        }
+      else
+        throw new TypeError(arg, "Lisp thread");
+    }
+  };
+
+  private static final Primitive0 CURRENT_THREAD =
+    new Primitive0("current-thread")
+  {
+    public LispObject execute() throws Condition
+    {
+      return currentThread();
     }
   };
 }
