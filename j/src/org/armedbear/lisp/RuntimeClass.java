@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- *
+ * $Id: RuntimeClass.java,v 1.5 2004-01-16 02:19:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@ import java.io.File;
 import java.util.Map;
 import java.util.HashMap;
 
-public class RuntimeClass extends Lisp {
-
+public class RuntimeClass extends Lisp
+{
     private static Map classes = new HashMap();
 
     private Map methods = new HashMap();
@@ -57,7 +57,7 @@ public class RuntimeClass extends Lisp {
     private static final Primitive3 _JREDEFINE_METHOD =
         new Primitive3("%jredefine-method", PACKAGE_JAVA, false, "class-name method-name method-def")
     {
-        public LispObject execute(LispObject className, LispObject methodName, LispObject methodDef) 
+        public LispObject execute(LispObject className, LispObject methodName, LispObject methodDef)
             throws ConditionThrowable
         {
 
@@ -116,7 +116,7 @@ public class RuntimeClass extends Lisp {
     public Function getLispMethod(String methodName) {
         return (Function) methods.get(methodName);
     }
-    
+
     private void addLispMethod(String methodName, Function def) {
         methods.put(methodName, def);
     }
@@ -166,5 +166,3 @@ public class RuntimeClass extends Lisp {
         return i ? T : NIL;
     }
 }
-  
-  
