@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.109 2003-09-04 16:21:53 piso Exp $
+;;; $Id: rt.lisp,v 1.110 2003-09-06 16:24:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -103,12 +103,9 @@
         (finish-output))
       (if passed (incf *passed*) (incf *failed*)))))
 
-(unless (find-package :cl-test)
-  (make-package :cl-test)
-  (use-package "COMMON-LISP" :cl-test))
+(in-package :cl-user)
 
-(in-package :cl-test)
-(use-package :rt)
+(intern "==>" "CL-USER")
 
 (defvar *compiled-and-loaded-files* nil)
 
@@ -125,7 +122,14 @@
           (push (list pathname source-write-time) *compiled-and-loaded-files*))
       (load pathname))))
 
-(in-package :cl-user)
+(defpackage :cl-test
+  (:use :cl :regression-test)
+  (:nicknames)
+  (:shadow #:handler-case #:handler-bind)
+  (:import-from "COMMON-LISP-USER" #:compile-and-load "==>")
+  (:export #:random-from-seq #:random-case #:coin #:random-permute))
+
+(load (concatenate 'string rt::*prefix* "ansi-aux-macros.lsp"))
 
 (defun do-tests (&rest args)
   (let ((rt::*passed* 0) (rt::*failed* 0)
@@ -447,7 +451,6 @@
 (load (concatenate 'string rt::*prefix* "char-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbols-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cl-symbol-names.lsp"))
-(load (concatenate 'string rt::*prefix* "ansi-aux-macros.lsp"))
 (load (concatenate 'string rt::*prefix* "universe.lsp"))
 (load (concatenate 'string rt::*prefix* "ansi-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "array-aux.lsp"))
