@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.14 2002-11-30 15:32:42 piso Exp $
+ * $Id: Buffer.java,v 1.15 2002-12-03 17:35:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -556,7 +556,18 @@ public class Buffer extends SystemBuffer
 
     public File getCurrentDirectory()
     {
-        return getFile() != null ? getFile().getParentFile() : Editor.getUserHomeDirectory();
+        return getFile() != null ? getFile().getParentFile() : Directories.getUserHomeDirectory();
+    }
+
+    // Subclasses should override this method if appropriate!
+    public File getCompletionDirectory()
+    {
+        final File file = getFile();
+        if (file != null) {
+            if (file.isLocal() || file instanceof SshFile)
+                return file.isDirectory() ? file : file.getParentFile();
+        }
+        return Directories.getUserHomeDirectory();
     }
 
     public View getInitialView()

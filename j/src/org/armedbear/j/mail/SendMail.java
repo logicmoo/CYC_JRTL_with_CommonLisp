@@ -2,7 +2,7 @@
  * SendMail.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SendMail.java,v 1.3 2002-10-11 01:42:37 piso Exp $
+ * $Id: SendMail.java,v 1.4 2002-12-03 17:36:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1356,7 +1356,12 @@ public final class SendMail extends Buffer
 
     public File getCurrentDirectory()
     {
-        return Editor.getUserHomeDirectory();
+        return Directories.getUserHomeDirectory();
+    }
+
+    public File getCompletionDirectory()
+    {
+        return Directories.getUserHomeDirectory();
     }
 
     // For the buffer list.

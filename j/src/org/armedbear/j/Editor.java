@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.21 2002-11-22 23:53:31 piso Exp $
+ * $Id: Editor.java,v 1.22 2002-12-03 17:35:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -971,6 +971,11 @@ public final class Editor extends JPanel implements Constants, ComponentListener
     public File getCurrentDirectory()
     {
         return buffer.getCurrentDirectory();
+    }
+
+    public File getCompletionDirectory()
+    {
+        return buffer.getCompletionDirectory();
     }
 
     // Cycle through the most plausible possibilities for the tab width of the
