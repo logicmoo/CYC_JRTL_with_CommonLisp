@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.116 2004-04-20 23:58:35 piso Exp $
+;;; $Id: jvm.lisp,v 1.117 2004-04-21 13:07:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -504,12 +504,8 @@
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
   (emit 'aload *thread*)
-
   (emit 'aconst_null)
-  (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
-
-;;   (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V" -1)
-  )
+  (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;"))
 
 (defparameter single-valued-operators (make-hash-table :test 'eq))
 
@@ -725,7 +721,9 @@
         )
        (let ((index (pool-field (first args) (second args) (third args))))
          (inst opcode (u2 index))))
-      (181 ; PUTFIELD class-name field-name type-name
+      ((180 ; GETFIELD
+        181 ; PUTFIELD class-name field-name type-name
+        )
        (let ((index (pool-field (first args) (second args) (third args))))
          (inst opcode (u2 index))))
       ((182 ; INVOKEVIRTUAL class-name method-name descriptor
@@ -821,6 +819,8 @@
      1)
     (179 ; PUTSTATIC
      -1)
+    (180 ; GETFIELD
+     0)
     (181 ; PUTFIELD
      -2)
     (187 ; NEW
@@ -1849,10 +1849,7 @@
       (setf *max-locals* (max *max-locals* (fill-pointer *locals*)))
       (ensure-thread-var-initialized)
       (emit 'aload *thread*)
-      (emit-invokevirtual +lisp-thread-class+
-                          "getDynamicEnvironment"
-                          "()Lorg/armedbear/lisp/Environment;"
-                          0)
+      (emit 'getfield +lisp-thread-class+ "dynEnv" "Lorg/armedbear/lisp/Environment;")
       (emit 'astore env-var))
     (ecase (car form)
       (LET
@@ -1869,10 +1866,7 @@
       ;; Restore dynamic environment.
       (emit 'aload *thread*)
       (emit 'aload env-var)
-      (emit-invokevirtual +lisp-thread-class+
-                          "setDynamicEnvironment"
-                          "(Lorg/armedbear/lisp/Environment;)V"
-                          -2))
+      (emit 'putfield +lisp-thread-class+ "dynEnv" "Lorg/armedbear/lisp/Environment;"))
     ;; Restore fill pointer to its saved value so the slots used by these
     ;; bindings will again be available.
     (setf (fill-pointer *locals*) saved-fp)))
