@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.434 2003-09-23 16:32:04 piso Exp $
+ * $Id: Primitives.java,v 1.435 2003-09-24 22:50:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3819,6 +3819,7 @@ public final class Primitives extends Module
         }
     };
 
+    // ### read
     // read &optional input-stream eof-error-p eof-value recursive-p => object
     private static final Primitive READ = new Primitive("read") {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -3832,6 +3833,37 @@ public final class Primitives extends Module
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
             return stream.read(eofError, eofValue, recursive);
+        }
+    };
+
+    // ### read-char
+    // read-char &optional input-stream eof-error-p eof-value recursive-p => char
+    private static final Primitive READ_CHAR = new Primitive("read-char") {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            int length = args.length;
+            if (length > 4)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            CharacterInputStream stream =
+                length > 0 ? checkInputStream(args[0]) : getStandardInput();
+            boolean eofError = length > 1 ? (args[1] != NIL) : true;
+            LispObject eofValue = length > 2 ? args[2] : NIL;
+            boolean recursive = length > 3 ? (args[3] != NIL) : false;
+            return stream.readChar(eofError, eofValue);
+        }
+    };
+
+    // ### unread-char
+    // unread-char character &optional input-stream => nil
+    private static final Primitive UNREAD_CHAR = new Primitive("unread-char") {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            int length = args.length;
+            if (length < 1)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            CharacterInputStream stream =
+                length > 1 ? checkInputStream(args[1]) : getStandardInput();
+            return stream.unreadChar(checkCharacter(args[0]));
         }
     };
 
