@@ -2,7 +2,7 @@
  * DirectoryMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DirectoryMode.java,v 1.4 2003-05-13 13:50:27 piso Exp $
+ * $Id: DirectoryMode.java,v 1.5 2003-06-12 18:35:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,9 +75,9 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_S, CTRL_MASK, "dirCycleSortBy");
         km.mapKey(KeyEvent.VK_R, CTRL_MASK, "dirRescan");
         km.mapKey(KeyEvent.VK_DELETE, 0, "dirDeleteFiles");
-        km.mapKey(KeyEvent.VK_C, ALT_MASK, "dirCopyFile");
+        km.mapKey('c', "dirCopyFile");
         km.mapKey('g', "dirGetFile");
-        km.mapKey(KeyEvent.VK_M, ALT_MASK, "dirMoveFile");
+        km.mapKey('m', "dirMoveFile");
         km.mapKey('t', "dirTagFile");
         km.mapKey('!', "dirDoShellCommand");
         km.mapKey(KeyEvent.VK_HOME, 0, "dirHome");
@@ -98,10 +98,6 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
             menu.add(editor, "Close All", 'L', "closeAll");
             menu.add(editor, "Close Others", 'H', "closeOthers");
             menu.addSeparator();
-            menu.add(editor, "Copy File...", 'P', "dirCopyFile");
-            menu.add(editor, "Move File...", 'V', "dirMoveFile");
-            menu.add(editor, "Delete File", 'E', "dirDeleteFiles");
-            menu.addSeparator();
             menu.add(editor, "Next Buffer", 'T', "nextBuffer");
             menu.add(editor, "Previous Buffer", 'R', "prevBuffer");
             menu.addSeparator();
@@ -118,8 +114,6 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
         } else if (text == "Edit") {
             menu.add(editor, "Copy", 'C', "copyRegion");
             menu.add(editor, "Copy Append", 'D', "copyAppend");
-            menu.addSeparator();
-            menu.add(editor, "Rescan Directory", 'R', "dirRescan");
         } else if (text == "Search") {
             menu.add(editor, "Find...", 'F', "find");
             menu.add(editor, "Find Next", 'T', "findNext");
@@ -137,6 +131,15 @@ public final class DirectoryMode extends AbstractMode implements Constants, Mode
             menu.add(editor, "Go To Parent Directory", 'P', "dirUpDir");
         } else
             super.populateMenu(editor, menu);
+    }
+
+    public void populateModeMenu(Editor editor, Menu menu)
+    {
+        menu.add(editor, "Copy File...", 'C', "dirCopyFile");
+        menu.add(editor, "Move File...", 'M', "dirMoveFile");
+        menu.add(editor, "Delete File", 'D', "dirDeleteFiles");
+        menu.addSeparator();
+        menu.add(editor, "Rescan Directory", 'R', "dirRescan");
     }
 
     protected ToolBar getDefaultToolBar(Frame frame)
