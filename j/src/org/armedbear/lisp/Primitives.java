@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.522 2003-12-10 21:34:50 asimon Exp $
+ * $Id: Primitives.java,v 1.523 2003-12-11 19:34:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1638,7 +1638,7 @@ public final class Primitives extends Lisp
                     if (thread.isValidCatchTag(tag))
                         throw throwable;
                 }
-                Condition condition = throwable.getCondition();
+                LispObject condition = throwable.getCondition();
                 while (bindings != NIL) {
                     Cons binding = checkCons(bindings.car());
                     LispObject type = binding.car();
@@ -1689,7 +1689,7 @@ public final class Primitives extends Lisp
                     if (thread.isValidCatchTag(tag))
                         throw throwable;
                 }
-                Condition condition = throwable.getCondition();
+                LispObject condition = throwable.getCondition();
                 thread.setStackDepth(depth);
                 while (clauses != NIL) {
                     Cons clause = checkCons(clauses.car());
@@ -1737,7 +1737,7 @@ public final class Primitives extends Lisp
     // upgraded-array-element-type typespec &optional environment
     // => upgraded-typespec
     private static final Primitive UPGRADED_ARRAY_ELEMENT_TYPE =
-        new Primitive("upgraded-array-element-type","typespec &optional environment") {
+        new Primitive("upgraded-array-element-type", "typespec &optional environment") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return getUpgradedArrayElementType(arg);
@@ -1753,7 +1753,7 @@ public final class Primitives extends Lisp
     // ### array-rank
     // array-rank array => rank
     private static final Primitive1 ARRAY_RANK =
-        new Primitive1("array-rank","array") {
+        new Primitive1("array-rank", "array") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new Fixnum(checkArray(arg).getRank());
@@ -1764,7 +1764,7 @@ public final class Primitives extends Lisp
     // array-dimensions array => dimensions
     // Returns a list of integers. Fill pointer (if any) is ignored.
     private static final Primitive1 ARRAY_DIMENSIONS =
-        new Primitive1("array-dimensions","array") {
+        new Primitive1("array-dimensions", "array") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return checkArray(arg).getDimensions();
@@ -1774,7 +1774,7 @@ public final class Primitives extends Lisp
     // ### array-dimension
     // array-dimension array axis-number => dimension
     private static final Primitive2 ARRAY_DIMENSION =
-        new Primitive2("array-dimension","array axis-number") {
+        new Primitive2("array-dimension", "array axis-number") {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
