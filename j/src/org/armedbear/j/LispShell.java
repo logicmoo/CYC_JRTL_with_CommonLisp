@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShell.java,v 1.39 2003-07-06 01:27:55 piso Exp $
+ * $Id: LispShell.java,v 1.40 2003-09-16 00:44:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.SwingUtilities;
 
-public final class LispShell extends Shell
+public class LispShell extends Shell
 {
     private static final String DEFAULT_PROMPT_PATTERN =
         "^[^>\\*\\]]*[:>\\*\\]] *";
@@ -49,6 +49,13 @@ public final class LispShell extends Shell
 
     private String resetCommand = null;
     private String exitCommand = "(exit)";
+
+    // For JLisp.java.
+    protected LispShell()
+    {
+        setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
+        this.title = title;
+    }
 
     private LispShell(String shellCommand, String title)
     {
@@ -295,11 +302,6 @@ public final class LispShell extends Shell
         };
         t.setDaemon(true);
         t.start();
-    }
-
-    public String getTitle()
-    {
-        return title;
     }
 
     public String getFileNameForDisplay()
