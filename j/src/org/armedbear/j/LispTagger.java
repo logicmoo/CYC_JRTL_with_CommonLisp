@@ -117,7 +117,7 @@ public final class LispTagger extends Tagger
     {
         FastStringBuffer sb = new FastStringBuffer();
         char c;
-        while (mode.isIdentifierPart(c = pos.getChar())) {
+        while (mode.isIdentifierPart(c = pos.getChar()) || c == ':') {
             sb.append(c);
             if (!pos.next())
                 break;
