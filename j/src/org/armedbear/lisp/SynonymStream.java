@@ -2,7 +2,7 @@
  * SynonymStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SynonymStream.java,v 1.3 2004-03-10 01:55:10 piso Exp $
+ * $Id: SynonymStream.java,v 1.4 2004-06-22 15:57:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,6 +155,13 @@ public final class SynonymStream extends Stream
     public void _close() throws ConditionThrowable
     {
         checkStream(symbol.symbolValue())._close();
+    }
+
+    public String writeToString() throws ConditionThrowable
+    {
+        StringBuffer sb = new StringBuffer("SYNONYM-STREAM ");
+        sb.append(symbol.writeToString());
+        return unreadableString(sb.toString());
     }
 
     // ### make-synonym-stream symbol => synonym-stream
