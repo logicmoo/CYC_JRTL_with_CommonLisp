@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.7 2003-06-01 15:07:08 piso Exp $
+ * $Id: LispThread.java,v 1.8 2003-07-02 18:16:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -324,7 +324,7 @@ public final class LispThread extends LispObject
 
     // ### make-thread
     private static final Primitive1 MAKE_THREAD =
-        new Primitive1("make-thread") {
+        new Primitive1("make-thread", PACKAGE_EXT, true) {
         public LispObject execute(LispObject arg) throws LispError
         {
             Function fun = checkFunction(arg);
@@ -351,8 +351,9 @@ public final class LispThread extends LispObject
         }
     };
 
+    // ### mapcar-threads
     private static final Primitive1 MAPCAR_THREADS =
-        new Primitive1("mapcar-threads") {
+        new Primitive1("mapcar-threads", PACKAGE_EXT, true) {
         public LispObject execute(LispObject arg) throws Condition
         {
             Function fun = checkFunction(arg);
@@ -368,8 +369,9 @@ public final class LispThread extends LispObject
         }
     };
 
+    // ### destroy-thread
     private static final Primitive1 DESTROY_THREAD =
-        new Primitive1("destroy-thread") {
+        new Primitive1("destroy-thread", PACKAGE_EXT, true) {
         public LispObject execute(LispObject arg) throws Condition
         {
             if (arg instanceof LispThread) {
@@ -381,8 +383,9 @@ public final class LispThread extends LispObject
         }
     };
 
+    // ### current-thread
     private static final Primitive0 CURRENT_THREAD =
-        new Primitive0("current-thread") {
+        new Primitive0("current-thread", PACKAGE_EXT, true) {
         public LispObject execute() throws Condition
         {
             return currentThread();
