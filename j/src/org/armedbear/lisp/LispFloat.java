@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.70 2004-06-19 17:03:57 piso Exp $
+ * $Id: LispFloat.java,v 1.71 2004-06-21 14:20:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -469,7 +469,11 @@ public final class LispFloat extends LispObject
         }
         if (value != value)
             return "#<DOUBLE-FLOAT NaN>";
-        return String.valueOf(value).replace('E', 'd');
+        String s1 = String.valueOf(value);
+        String s2 = s1.replace('E', 'd');
+        if (s1 != s2 || _PRINT_READABLY_.symbolValue() == NIL)
+            return s2;
+        return s2.concat("d0");
     }
 
     // ### integer-decode-float
