@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.166 2004-05-05 19:30:25 piso Exp $
+;;; $Id: boot.lisp,v 1.167 2004-05-26 01:27:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,8 +124,10 @@
            (read stream t nil t)
            (values)))))
 
-(set-dispatch-macro-character #\# #\+ #'read-conditional)
-(set-dispatch-macro-character #\# #\- #'read-conditional)
+(set-dispatch-macro-character #\# #\+ #'read-conditional *standard-readtable*)
+(set-dispatch-macro-character #\# #\- #'read-conditional *standard-readtable*)
+
+(copy-readtable *standard-readtable* *readtable*)
 
 (defvar jvm::*auto-compile* nil)
 (export 'jvm::*auto-compile* "JVM")
