@@ -1,7 +1,7 @@
 ;;; transform.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: transform.lisp,v 1.2 2003-10-24 17:15:25 piso Exp $
+;;; $Id: transform.lisp,v 1.3 2003-10-27 17:28:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -124,7 +124,7 @@
                  (return))
                (when (= 1 (length args))
                  (error "odd number of args to SETQ"))
-               (push (list 'SETQ (first args) (transform1 (second args))) result)
+               (push (transform1 (list 'SETQ (first args) (second args))) result)
                (setq args (cddr args)))
              (setq result (nreverse result))
              (push 'PROGN result)
