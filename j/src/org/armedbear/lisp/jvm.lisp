@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.367 2005-01-24 02:39:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.368 2005-01-24 15:04:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -878,6 +878,7 @@
 (defconstant +lisp-return-class+ "org/armedbear/lisp/Return")
 (defconstant +lisp-go-class+ "org/armedbear/lisp/Go")
 (defconstant +lisp-ctf-class+ "org/armedbear/lisp/ClosureTemplateFunction")
+(defconstant +lisp-compiled-closure-class+ "org/armedbear/lisp/CompiledClosure")
 (defconstant +lisp-compiled-function-class+ "org/armedbear/lisp/CompiledFunction")
 (defconstant +lisp-primitive-class+ "org/armedbear/lisp/Primitive")
 
@@ -3764,12 +3765,7 @@
     (emit-move-from-stack target)))
 
 (defun p2-local-function (compiland local-function)
-  (let* ((name (compiland-name compiland))
-         (lambda-list (cadr (compiland-lambda-expression compiland)))
-         form
-         function
-         pathname
-         class-file)
+  (let ((lambda-list (cadr (compiland-lambda-expression compiland))))
     (when (or (memq '&optional lambda-list)
               (memq '&key lambda-list))
       (let ((state nil))
@@ -3779,13 +3775,18 @@
                 ((memq state '(&optional &key))
                  (when (and (consp arg)
                             (not (constantp (second arg))))
-                   (error "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform.")))))))
+                   (error "P2-LOCAL-FUNCTION: can't handle optional argument with non-constant initform."))))))))
+  (let* ((name (compiland-name compiland))
+         form
+         function
+         pathname
+         class-file)
     (setf form (compiland-lambda-expression compiland))
     (setf pathname (if *compile-file-truename*
                         (sys::next-classfile-name)
                         (prog1
-                         (%format nil "local-~D.class" *child-count*)
-                         (incf *child-count*))))
+                          (%format nil "local-~D.class" *child-count*)
+                          (incf *child-count*))))
 
     (setf class-file (make-class-file :pathname pathname))
     (setf (compiland-class-file compiland) class-file)
@@ -3882,55 +3883,35 @@
                 ((memq state '(&optional &key))
                  (when (and (consp arg)
                             (not (constantp (second arg))))
-                   (error "P2-LAMBDA: can't handle optional argument with non-constant initform.")))))))
-    (cond (*compile-file-truename*
-
-           (aver (null (compiland-class-file compiland)))
-           (setf (compiland-class-file compiland)
-                 (make-class-file :pathname (sys::next-classfile-name)))
-
-           (let ((*current-compiland* compiland)
-                 (*speed* *speed*)
-                 (*safety* *safety*)
-                 (*debug* *debug*)
-                 compiled-function)
-             (p2-compiland compiland))
-
-           (let* ((local-function
-                   (make-local-function :class-file (compiland-class-file compiland)))
-                  (g (declare-local-function local-function)))
-             (emit 'getstatic *this-class* g +lisp-object+)))
-          (t
-           (aver (null (compiland-class-file compiland)))
-           (setf (compiland-class-file compiland)
-                 (make-class-file :pathname
-                                  (prog1
-                                   (%format nil "local-~D.class" *child-count*)
-                                   (incf *child-count*))))
-           (let ((*current-compiland* compiland)
-                 (*speed* *speed*)
-                 (*safety* *safety*)
-                 (*debug* *debug*)
-                 compiled-function)
-             (p2-compiland compiland)
-             (setf compiled-function
-                   (sys:load-compiled-function
-                    (class-file-pathname (compiland-class-file compiland))))
-             (emit 'getstatic *this-class*
-                   (declare-object compiled-function) +lisp-object+))))
-    (cond
-     ((null *closure-variables*)) ; Nothing to do.
-     ((compiland-closure-register *current-compiland*)
-      (emit 'aload (compiland-closure-register *current-compiland*))
-      (emit-invokestatic +lisp-class+ "makeCompiledClosure"
-                         (list +lisp-object+ +lisp-object-array+) +lisp-object+)
-      (emit 'checkcast "org/armedbear/lisp/CompiledClosure")) ; Stack: compiled-closure
-     (t
-      ;; Shouldn't happen.
-      (aver (progn 'unexpected nil))
-      (emit-push-constant-int 0)
-      (emit 'anewarray +lisp-object-class+)))
-    (emit-move-from-stack target)))
+                   (error "P2-LAMBDA: can't handle optional argument with non-constant initform."))))))))
+  (aver (null (compiland-class-file compiland)))
+  (setf (compiland-class-file compiland)
+        (make-class-file :pathname (if *compile-file-truename*
+                                       (sys::next-classfile-name)
+                                       (prog1
+                                         (%format nil "local-~D.class" *child-count*)
+                                         (incf *child-count*)))))
+  (let ((*current-compiland* compiland)
+        (*speed* *speed*)
+        (*safety* *safety*)
+        (*debug* *debug*))
+    (p2-compiland compiland))
+  (let ((class-file (compiland-class-file compiland)))
+    (emit 'getstatic *this-class*
+          (if *compile-file-truename*
+              (declare-local-function (make-local-function :class-file class-file))
+              (declare-object (sys:load-compiled-function (class-file-pathname class-file))))
+          +lisp-object+))
+  (cond ((null *closure-variables*)) ; Nothing to do.
+        ((compiland-closure-register *current-compiland*)
+         (emit 'aload (compiland-closure-register *current-compiland*))
+         (emit-invokestatic +lisp-class+ "makeCompiledClosure"
+                            (list +lisp-object+ +lisp-object-array+)
+                            +lisp-object+)
+         (emit 'checkcast +lisp-compiled-closure-class+)) ; Stack: compiled-closure
+        (t
+         (aver nil))) ;; Shouldn't happen.
+  (emit-move-from-stack target))
 
 (defun p2-function (form &key (target *val*) representation)
   (let ((name (second form))
@@ -4960,7 +4941,7 @@
       (when (eql (char name i) #\-)
         (setf (char name i) #\_)))
     (concatenate 'string "org/armedbear/lisp/" name)))
-  
+
 (defun p2-compiland (compiland)
   (dformat t "p2-compiland ~S~%" (compiland-name compiland))
   (let* ((p1-result (compiland-p1-result compiland))
