@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: setf.lisp,v 1.47 2004-12-16 15:08:01 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: setf.lisp,v 1.48 2005-02-05 18:30:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -131,6 +131,13 @@
     (progn
       (replace sequence v :start1 start :end1 end)
       v)))
+
+(defun %define-setf-macro (name expander inverse doc)
+  (when inverse
+    (%put name 'setf-inverse inverse))
+  (when expander
+    (%put name 'setf-expander expander))
+  name)
 
 (defmacro defsetf (access-function update-function)
   `(eval-when (:load-toplevel :compile-toplevel :execute)
