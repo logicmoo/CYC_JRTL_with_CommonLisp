@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.190 2003-12-12 19:40:33 piso Exp $
+ * $Id: Lisp.java,v 1.191 2003-12-20 14:29:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1072,7 +1072,7 @@ public abstract class Lisp
             if (list.cdr() instanceof Cons)
                 list = list.cddr();
             else
-                signal(new TypeError("malformed property list: " + plist));
+                return signal(new TypeError("Malformed property list: " + plist + "."));
         }
         return defaultValue;
     }
