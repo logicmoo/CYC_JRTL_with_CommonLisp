@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Interpreter.java,v 1.48 2004-01-05 02:09:59 piso Exp $
+ * $Id: Interpreter.java,v 1.49 2004-01-05 14:36:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public final class Interpreter extends Lisp
 {
@@ -169,44 +167,10 @@ public final class Interpreter extends Lisp
                     ++commandNumber;
                     out.writeString(prompt());
                     out.flushOutput();
-                    char c = peekCharNonWhitespace(getStandardInput());
-                    if (c == '\n') {
-                        // Blank line.
-                        getStandardInput().readChar(true, NIL);
-                        --commandNumber;
-                        continue;
-                    }
-                    LispObject object = null;
-                    if (c == ':') {
-                        LispObject input = getStandardInput().readLine(false, EOF);
-                        // Ignore multiple values.
-                        thread.clearValues();
-                        if (input == EOF)
-                            break;
-                        String s = LispString.getValue(input);
-                        Object obj = getHistory(s);
-                        if (obj instanceof String) {
-                            s = (String) obj;
-                            out.writeLine(s);
-                        } else if (obj instanceof LispObject) {
-                            object = (LispObject) obj;
-                            s = null;
-                            out.writeLine(object.toString());
-                        }
-                        if (s != null) {
-                            if (doCommand(s))
-                                addHistory(commandNumber, s);
-                            if (done)
-                                return;
-                            else
-                                continue;
-                        }
-                    }
-                    if (object == null)
+                    LispObject
                         object = getStandardInput().read(false, EOF, false); // Top level read.
                     if (object == EOF)
                         break;
-                    addHistory(commandNumber, object);
                     out.setCharPos(0);
                     Symbol.MINUS.setSymbolValue(object);
                     LispObject result = eval(object, environment, thread);
@@ -317,242 +281,6 @@ public final class Interpreter extends Lisp
             }
         }
         return null;
-    }
-
-    private static boolean doCommand(String s) throws ConditionThrowable
-    {
-        s = s.trim();
-        String command, args;
-        int index = s.indexOf(' ');
-        if (index >= 0) {
-            command = getCommand(s.substring(0, index));
-            args = s.substring(index).trim();
-        } else {
-            command = getCommand(s);
-            args = null;
-        }
-        if (command == null || command.length() == 0)
-            return false;
-        if (command.equals("ld")) {
-            if (args == null || args.length() == 0) {
-                if (ldArgs != null)
-                    args = ldArgs;
-                else {
-                    signal(new LispError("ld: no previous file"));
-                    return true;
-                }
-            }
-            if (args != null && args.length() > 0) {
-                ldArgs = args;
-                LispObject result = NIL;
-                List tokens = tokenize(args);
-                for (Iterator it = tokens.iterator(); it.hasNext();) {
-                    String filename = (String) it.next();
-                    result = eval(list2(Symbol.LOAD, new LispString(filename)),
-                                  new Environment(), LispThread.currentThread());
-                    if (result == NIL)
-                        break;
-                }
-            }
-            return true;
-        }
-        if (command.equals("exit")) {
-            exit();
-            return true;
-        }
-        if (command.equals("pwd")) {
-            LispString string =
-                checkString(_DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue());
-            getStandardOutput().writeLine(string.getValue());
-            return true;
-        }
-        if (command.equals("cd")) {
-            if (args == null || args.length() == 0)
-                args = System.getProperty("user.home");
-            String oldDir = LispString.getValue(
-                _DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue());
-            File file;
-            if (Utilities.isFilenameAbsolute(args))
-                file = new File(args);
-            else
-                file = new File(oldDir, args);
-            if (file.isDirectory()) {
-                try {
-                    _DEFAULT_PATHNAME_DEFAULTS_.setSymbolValue(
-                        new LispString(file.getCanonicalPath()));
-                }
-                catch (IOException e) {
-                    signal(new LispError(e.getMessage()));
-                    return true;
-                }
-            }
-            LispString string =
-                checkString(_DEFAULT_PATHNAME_DEFAULTS_.getSymbolValue());
-            getStandardOutput().writeLine(string.getValue());
-            return true;
-        }
-        if (command.equals("apropos")) {
-            if (args != null && args.length() > 0) {
-                if (args.length() > 1 && args.charAt(0) == '"' &&
-                    args.charAt(args.length()-1) == '"') {
-                    ;
-                } else {
-                    StringBuffer sb = new StringBuffer();
-                    sb.append('"');
-                    int i = args.indexOf(' ');
-                    if (i < 0) {
-                        sb.append(args);
-                        sb.append('"');
-                    } else {
-                        // Two args to APROPOS.
-                        String arg1 = args.substring(0, i);
-                        String arg2 = args.substring(i + 1).trim();
-                        sb.append(arg1);
-                        sb.append('"');
-                        sb.append(' ');
-                        sb.append(arg2);
-                    }
-                    args = sb.toString();
-                }
-                getStandardOutput().setCharPos(0);
-                StringInputStream stream =
-                    new StringInputStream("(apropos " + args + ")");
-                LispObject obj = stream.read(false, EOF, false);
-                if (obj == EOF) {
-                    signal(new EndOfFile());
-                    return true;
-                }
-                eval(obj, new Environment(), LispThread.currentThread());
-                getStandardOutput().freshLine();
-                return true;
-            }
-            return false;
-        }
-        if (command.equals("describe")) {
-            if (args != null && args.length() > 0) {
-                getStandardOutput().setCharPos(0);
-                StringInputStream stream =
-                    new StringInputStream("(describe " + args + ")");
-                LispObject obj = stream.read(false, EOF, false);
-                if (obj == EOF) {
-                    signal(new EndOfFile());
-                    return true;
-                }
-                eval(obj, new Environment(), LispThread.currentThread());
-                return true;
-            }
-            return false;
-        }
-        if (command.equals("package")) {
-            if (args == null || args.length() == 0) {
-                Package pkg = (Package) _PACKAGE_.getSymbolValue();
-                getStandardOutput().writeString("The ");
-                getStandardOutput().writeString(pkg.getName());
-                getStandardOutput().writeLine(" package is current.");
-            } else {
-                if (args.charAt(0) == ':')
-                    args = args.substring(1);
-                args = args.toUpperCase();
-                Package pkg = Packages.findPackage(args);
-                if (pkg != null) {
-                    Environment dynEnv =
-                        LispThread.currentThread().getDynamicEnvironment();
-                    if (dynEnv != null) {
-                        Binding binding = dynEnv.getBinding(_PACKAGE_);
-                        if (binding != null) {
-                            binding.value = pkg;
-                            return true;
-                        }
-                    }
-                    // No dynamic binding.
-                    _PACKAGE_.setSymbolValue(pkg);
-                } else {
-                    getStandardOutput().writeString("Unknown package ");
-                    getStandardOutput().writeLine(s);
-                }
-            }
-            return true;
-        }
-        if (command.equals("history")) {
-            addHistory(commandNumber, s);
-            for (int i = history.size(); i-- > 0;) {
-                HistoryEntry entry = (HistoryEntry) history.get(i);
-                StringBuffer sb = new StringBuffer();
-                sb.append(entry.commandNumber);
-                while (sb.length() < 6)
-                    sb.append(' ');
-                sb.append(entry.obj);
-                getStandardOutput().writeLine(sb.toString());
-            }
-            return false;
-        }
-        return false;
-    }
-
-    private static String getCommand(String s)
-    {
-        if (s == null || s.length() == 0)
-            return null;
-        Debug.assertTrue(s.charAt(0) == ':');
-        s = s.substring(1);
-        if (s.length() == 0)
-            return null;
-        String command = s.toLowerCase();
-        if (command.equals("ld") ||
-            command.equals("cd") ||
-            command.equals("pwd"))
-            return command;
-        if (command.length() >= 3) {
-            if ("history".startsWith(command))
-                return "history";
-        }
-        if (command.length() >= 2) {
-            if ("apropos".startsWith(command))
-                return "apropos";
-            if ("describe".startsWith(command))
-                return "describe";
-            if ("package".startsWith(command))
-                return "package";
-            if ("exit".startsWith(command))
-                return "exit";
-        }
-        return null;
-    }
-
-    private static List tokenize(String s)
-    {
-        ArrayList list = new ArrayList();
-        StringBuffer sb = new StringBuffer();
-        boolean inQuote = false;
-        final int limit = s.length();
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            switch (c) {
-                case ' ':
-                    if (inQuote)
-                        sb.append(c);
-                    else if (sb.length() > 0) {
-                        list.add(sb.toString());
-                        sb.setLength(0);
-                    }
-                    break;
-                case '"':
-                    if (inQuote) {
-                        if (sb.length() > 0) {
-                            list.add(sb.toString());
-                            sb.setLength(0);
-                        }
-                        inQuote = false;
-                    }
-                    break;
-                default:
-                    sb.append(c);
-                    break;
-            }
-        }
-        if (sb.length() > 0)
-            list.add(sb.toString());
-        return list;
     }
 
     public void kill()
