@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Buffer.java,v 1.8 2002-10-11 15:58:01 piso Exp $
+ * $Id: Buffer.java,v 1.9 2002-10-11 16:09:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1927,6 +1927,35 @@ public class Buffer extends SystemBuffer
         final View view = saveViewInternal(editor);
         editor.setView(this, view);
         setLastView(view);
+    }
+
+    protected View saveViewInternal(Editor editor)
+    {
+        final Display display = editor.getDisplay();
+        View view = editor.getView(this);
+        if (view == null)
+            view = new View();
+        final Position dot = editor.getDot();
+        view.dot = dot == null ? null : new Position(dot);
+        final Position mark = editor.getMark();
+        view.mark = mark == null ? null : new Position(mark);
+        view.selection = editor.getSelection();
+        view.setColumnSelection(editor.isColumnSelection());
+        view.topLine = editor.getTopLine();
+        if (view.topLine != null)
+            view.topLineNumber = view.topLine.lineNumber();
+        view.pixelsAboveTopLine = display.getPixelsAboveTopLine();
+        view.shift = display.shift;
+        view.caretCol = display.caretCol;
+        view.timestamp = System.currentTimeMillis();
+        if (view.dot == null) {
+            view.lineNumber = 0;
+            view.offs = 0;
+        } else {
+            view.lineNumber = view.dot.lineNumber();
+            view.offs = view.dot.getOffset();
+        }
+        return view;
     }
 
     public boolean needsParsing()
