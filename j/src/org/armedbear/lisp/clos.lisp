@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.9 2003-11-25 06:41:04 asimon Exp $
+;;; $Id: clos.lisp,v 1.10 2003-12-08 14:41:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -152,40 +152,6 @@
 
 ;;; Slot definition metaobjects
 
-(defun make-direct-slot-definition (&rest properties
-                                          &key name
-                                          (initargs ())
-                                          (initform nil)
-                                          (initfunction nil)
-                                          (readers ())
-                                          (writers ())
-                                          (allocation :instance)
-                                          &allow-other-keys)
-  (let ((slot (copy-list properties))) ; Don't want to side effect &rest list
-    (setf (getf* slot ':name) name)
-    (setf (getf* slot ':initargs) initargs)
-    (setf (getf* slot ':initform) initform)
-    (setf (getf* slot ':initfunction) initfunction)
-    (setf (getf* slot ':readers) readers)
-    (setf (getf* slot ':writers) writers)
-    (setf (getf* slot ':allocation) allocation)
-    slot))
-
-(defun make-effective-slot-definition (&rest properties
-                                             &key name
-                                             (initargs ())
-                                             (initform nil)
-                                             (initfunction nil)
-                                             (allocation :instance)
-                                             &allow-other-keys)
-  (let ((slot (copy-list properties)))  ; Don't want to side effect &rest list
-    (setf (getf* slot ':name) name)
-    (setf (getf* slot ':initargs) initargs)
-    (setf (getf* slot ':initform) initform)
-    (setf (getf* slot ':initfunction) initfunction)
-    (setf (getf* slot ':allocation) allocation)
-    slot))
-
 (defun slot-definition-name (slot)
   (getf slot ':name))
 (defun (setf slot-definition-name) (new-value slot)
@@ -220,6 +186,40 @@
   (getf slot ':allocation))
 (defun (setf slot-definition-allocation) (new-value slot)
   (setf (getf* slot ':allocation) new-value))
+
+(defun make-direct-slot-definition (&rest properties
+                                          &key name
+                                          (initargs ())
+                                          (initform nil)
+                                          (initfunction nil)
+                                          (readers ())
+                                          (writers ())
+                                          (allocation :instance)
+                                          &allow-other-keys)
+  (let ((slot (copy-list properties))) ; Don't want to side effect &rest list
+    (setf (getf* slot ':name) name)
+    (setf (getf* slot ':initargs) initargs)
+    (setf (getf* slot ':initform) initform)
+    (setf (getf* slot ':initfunction) initfunction)
+    (setf (getf* slot ':readers) readers)
+    (setf (getf* slot ':writers) writers)
+    (setf (getf* slot ':allocation) allocation)
+    slot))
+
+(defun make-effective-slot-definition (&rest properties
+                                             &key name
+                                             (initargs ())
+                                             (initform nil)
+                                             (initfunction nil)
+                                             (allocation :instance)
+                                             &allow-other-keys)
+  (let ((slot (copy-list properties)))  ; Don't want to side effect &rest list
+    (setf (getf* slot ':name) name)
+    (setf (getf* slot ':initargs) initargs)
+    (setf (getf* slot ':initform) initform)
+    (setf (getf* slot ':initfunction) initfunction)
+    (setf (getf* slot ':allocation) allocation)
+    slot))
 
 ;;; finalize-inheritance
 
