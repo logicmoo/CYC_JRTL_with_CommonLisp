@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.206 2004-02-15 17:53:33 piso Exp $
+ * $Id: Lisp.java,v 1.207 2004-02-16 12:40:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1160,7 +1160,7 @@ public abstract class Lisp
         while (list != NIL) {
             if (!(list.cdr() instanceof Cons))
                 signal(new ProgramError(String.valueOf(symbol) +
-                                                              " has an odd number of items in its property list"));
+                                        " has an odd number of items in its property list."));
             if (list.car() == indicator) {
                 // Found it!
                 if (prev != null)
@@ -1255,7 +1255,7 @@ public abstract class Lisp
     {
         Package pkg = Packages.findPackage(packageName);
         if (pkg == null)
-            signal(new LispError(packageName + " is not the name of a package"));
+            signal(new LispError(packageName + " is not the name of a package."));
         return pkg.intern(name);
     }
 
@@ -1508,6 +1508,12 @@ public abstract class Lisp
     // internal symbol
     public static final Symbol _AUTOLOAD_VERBOSE_ =
         exportSpecial("*AUTOLOAD-VERBOSE*", PACKAGE_EXT, NIL);
+
+    // ### char-code-limit
+    // "The upper exclusive bound on the value returned by the function CHAR-CODE."
+    public static final int CHAR_MAX = 256;
+    public static final Symbol CHAR_CODE_LIMIT =
+        exportSpecial("CHAR-CODE-LIMIT", PACKAGE_CL, new Fixnum(CHAR_MAX));
 
     // Printer control variables.
     public static final Symbol _PRINT_ARRAY_ =
