@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.31 2003-07-07 13:01:40 piso Exp $
+ * $Id: Package.java,v 1.32 2003-07-07 14:15:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -315,8 +315,9 @@ public final class Package extends LispObject
 
     public synchronized void export(Symbol symbol) throws LispError
     {
+        final String symbolName = symbol.getName();
         if (symbol.getPackage() != this) {
-            Symbol sym = findAccessibleSymbol(symbol.getName());
+            Symbol sym = findAccessibleSymbol(symbolName);
             if (sym == null) {
                 StringBuffer sb = new StringBuffer("the symbol ");
                 sb.append(symbol.getQualifiedName());
@@ -332,9 +333,8 @@ public final class Package extends LispObject
                 sb.append(name);
                 throw new PackageError(sb.toString());
             }
-            internalSymbols.put(symbol.getName(), symbol);
+            internalSymbols.put(symbolName, symbol);
         }
-        final String symbolName = symbol.getName();
         if (internalSymbols.get(symbolName) == symbol) {
             // Found existing internal symbol in this package.
             if (usedByList != null) {
@@ -364,6 +364,29 @@ public final class Package extends LispObject
         sb.append(" is not accessible in package ");
         sb.append(name);
         throw new PackageError(sb.toString());
+    }
+
+    public synchronized void unexport(Symbol symbol) throws LispError
+    {
+        final String symbolName = symbol.getName();
+        if (symbol.getPackage() == this) {
+            if (externalSymbols.get(symbolName) == symbol) {
+                externalSymbols.remove(symbolName);
+                internalSymbols.put(symbolName, symbol);
+            }
+        } else {
+            // Signal an error if symbol is not accessible.
+            for (Iterator it = useList.iterator(); it.hasNext();) {
+                Package pkg = (Package) it.next();
+                if (pkg.findExternalSymbol(symbolName) == symbol)
+                    return; // OK.
+            }
+            StringBuffer sb = new StringBuffer("the symbol ");
+            sb.append(symbol.getQualifiedName());
+            sb.append(" is not accessible in package ");
+            sb.append(name);
+            throw new PackageError(sb.toString());
+        }
     }
 
     public synchronized void shadow(String name) throws LispError
