@@ -1,0 +1,60 @@
+/*
+ * Utilities.java
+ *
+ * Copyright (C) 2003 Peter Graves
+ * $Id: Utilities.java,v 1.1 2003-01-25 16:46:31 piso Exp $
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.armedbear.lisp;
+
+public final class Utilities
+{
+    private static final boolean isPlatformWindows =
+        System.getProperty("os.name").startsWith("Windows");
+
+    public static boolean isPlatformWindows()
+    {
+        return isPlatformWindows;
+    }
+
+    public static boolean isFilenameAbsolute(String filename)
+    {
+        final int length = filename.length();
+        if (length > 0) {
+            char c0 = filename.charAt(0);
+            if (c0 == '\\' || c0 == '/')
+                return true;
+            if (length > 2) {
+                if (isPlatformWindows()) {
+                    // Check for drive letter.
+                    char c1 = filename.charAt(1);
+                    if (c1 == ':') {
+                        if (c0 >= 'a' && c0 <= 'z')
+                            return true;
+                        if (c0 >= 'A' && c0 <= 'Z')
+                            return true;
+                    }
+                } else {
+                    // Unix.
+                    if (filename.equals("~") || filename.startsWith("~/"))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+}
