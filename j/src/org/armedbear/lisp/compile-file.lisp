@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.58 2005-02-22 18:38:14 piso Exp $
+;;; $Id: compile-file.lisp,v 1.59 2005-02-23 04:25:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -242,7 +242,7 @@
            (t
             (when (and (symbolp (car form))
                        (macro-function (car form)))
-              (process-toplevel-form (macroexpand-1 form) stream compile-time-too)
+              (process-toplevel-form (macroexpand form) stream compile-time-too)
               (return-from process-toplevel-form))
             (when compile-time-too
               (eval form))))))
