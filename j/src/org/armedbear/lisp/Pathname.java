@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.65 2004-09-15 13:08:04 piso Exp $
+ * $Id: Pathname.java,v 1.66 2004-09-17 00:43:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,10 @@ public class Pathname extends LispObject
             if (s.startsWith("file:")) {
                 int index = s.indexOf("!/");
                 String container = s.substring(5, index);
+                if (Utilities.isPlatformWindows()) {
+                    if (container.length() > 0 && container.charAt(0) == '/')
+                        container = container.substring(1);
+                }
                 device = new Pathname(container);
                 s = s.substring(index + 1);
                 Pathname p = new Pathname(s);
@@ -267,11 +271,16 @@ public class Pathname extends LispObject
             sb.append("!");
         } else
             Debug.assertTrue(false);
+        final char separatorChar;
+        if (device instanceof Pathname)
+            separatorChar = '/'; // Jar file.
+        else
+            separatorChar = File.separatorChar;
         if (directory != NIL) {
             LispObject temp = directory;
             LispObject part = temp.car();
             if (part == Keyword.ABSOLUTE)
-                sb.append(File.separatorChar);
+                sb.append(separatorChar);
             else if (part == Keyword.RELATIVE)
                 ;
             else
@@ -287,7 +296,7 @@ public class Pathname extends LispObject
                 else
                     signal(new LispError("Unsupported directory component " +
                                          part.writeToString() + "."));
-                sb.append(File.separatorChar);
+                sb.append(separatorChar);
                 temp = temp.cdr();
             }
         }
