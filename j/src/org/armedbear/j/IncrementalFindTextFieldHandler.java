@@ -2,7 +2,7 @@
  * IncrementalFindTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: IncrementalFindTextFieldHandler.java,v 1.1.1.1 2002-09-24 16:09:07 piso Exp $
+ * $Id: IncrementalFindTextFieldHandler.java,v 1.2 2002-12-11 03:07:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,7 @@ public final class IncrementalFindTextFieldHandler extends DefaultTextFieldHandl
         switch (keyCode) {
             case KeyEvent.VK_ESCAPE:
                 escape();
+                e.consume();
                 return;
             case KeyEvent.VK_BACK_SPACE:
                 backspace();
