@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.74 2003-09-25 01:07:49 piso Exp $
+ * $Id: Autoload.java,v 1.75 2003-09-25 13:18:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -231,6 +231,8 @@ public class Autoload extends Function
         autoload("unexport", "PackageFunctions");
         autoload("unuse-package", "PackageFunctions");
         autoload("user-homedir-pathname", "Pathname");
+        autoload(PACKAGE_EXT, "file-directory-p", "probe_file");
+        autoload(PACKAGE_EXT, "probe-directory", "probe_file");
         autoload(PACKAGE_SYS, "%define-condition", "define_condition");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
         autoload(PACKAGE_SYS, "%make-array", "make_array");

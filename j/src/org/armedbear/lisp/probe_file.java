@@ -2,7 +2,7 @@
  * probe_file.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: probe_file.java,v 1.5 2003-09-19 14:44:10 piso Exp $
+ * $Id: probe_file.java,v 1.6 2003-09-25 13:17:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,35 +27,11 @@ import java.io.IOException;
 public final class probe_file extends Lisp
 {
     // ### probe-file
+    // probe-file pathspec => truename
     private static final Primitive1 PROBE_FILE = new Primitive1("probe-file") {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            String namestring;
-            if (arg instanceof LispString)
-                namestring = ((LispString)arg).getValue();
-            else if (arg instanceof Pathname)
-                namestring = ((Pathname)arg).getNamestring();
-            else
-                throw new ConditionThrowable(new TypeError(arg, "pathname designator"));
-            boolean absolute = false;
-            if (System.getProperty("os.name").startsWith("Windows")) {
-                if (namestring.length() >= 3) {
-                    if (namestring.charAt(1) == ':')
-                        if (namestring.charAt(2) == '\\')
-                            absolute = true;
-                }
-            } else if (namestring.length() > 0) {
-                if (namestring.charAt(0) == '/')
-                    absolute = true;
-            }
-            final File file;
-            if (absolute)
-                file = new File(namestring);
-            else {
-                String dirname =
-                    LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue());
-                file = new File(dirname, namestring);
-            }
+            File file = getFile(arg);
             if (!file.exists())
                 return NIL;
             try {
@@ -66,4 +42,67 @@ public final class probe_file extends Lisp
             }
         }
     };
+
+    // ### probe-directory
+    // probe-directory pathspec => truename
+    private static final Primitive1 PROBE_DIRECTORY =
+        new Primitive1("probe-directory", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            File file = getFile(arg);
+            if (!file.isDirectory())
+                return NIL;
+            try {
+                return new LispString(file.getCanonicalPath());
+            }
+            catch (IOException e) {
+                throw new ConditionThrowable(new LispError(e.getMessage()));
+            }
+        }
+    };
+
+    // ### file-directory-p
+    // file-directory-p pathspec => generalized-boolean
+    private static final Primitive1 FILE_DIRECTORY_P =
+        new Primitive1("file-directory-p", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            File file = getFile(arg);
+            return file.isDirectory() ? T : NIL;
+        }
+    };
+
+    private static File getFile(LispObject pathspec) throws ConditionThrowable
+    {
+        String namestring;
+        if (pathspec instanceof LispString)
+            namestring = ((LispString)pathspec).getValue();
+        else if (pathspec instanceof Pathname)
+            namestring = ((Pathname)pathspec).getNamestring();
+        else
+            throw new ConditionThrowable(new TypeError(pathspec,
+                                                       "pathname designator"));
+        if (isNamestringAbsolute(namestring))
+            return new File(namestring);
+        return new File(
+            LispString.getValue(_DEFAULT_PATHNAME_DEFAULTS_.symbolValue()),
+            namestring);
+    }
+
+    private static boolean isNamestringAbsolute(String namestring)
+    {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            if (namestring.length() >= 3) {
+                if (namestring.charAt(1) == ':')
+                    if (namestring.charAt(2) == '\\')
+                        return true;
+            }
+        } else if (namestring.length() > 0) {
+            if (namestring.charAt(0) == '/')
+                return true;
+        }
+        return false;
+    }
 }
