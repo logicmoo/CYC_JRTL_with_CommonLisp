@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.4 2003-02-15 16:48:16 piso Exp $
+ * $Id: Closure.java,v 1.5 2003-02-19 03:40:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,7 +242,7 @@ public class Closure extends Function
             if (keywords > 0) {
                 int argsLeft = args.length - argsUsed;
                 if ((argsLeft % 2) != 0)
-                    throw new LispError("odd number of keyword arguments");
+                    throw new ProgramError("odd number of keyword arguments");
                 while (i < parameterArray.length) {
                     Parameter parameter = parameterArray[i];
                     if (parameter.type != KEYWORD)

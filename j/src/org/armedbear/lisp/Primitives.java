@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.35 2003-02-19 03:35:15 piso Exp $
+ * $Id: Primitives.java,v 1.36 2003-02-19 03:40:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1593,7 +1593,7 @@ public final class Primitives extends Module
                 throw new WrongNumberOfArgumentsException(this);
             if (args.length > 1)
                 if ((args.length - 1) % 2 != 0)
-                    throw new LispError("odd number of keyword arguments");
+                    throw new ProgramError("odd number of keyword arguments");
             long lsize;
             LispObject sizeArg = args[0];
             if (sizeArg instanceof Cons) {
@@ -2304,7 +2304,7 @@ public final class Primitives extends Module
                 throw new WrongNumberOfArgumentsException(this);
             if (args.length > 1)
                 if ((args.length - 1) % 2 != 0)
-                    throw new LispError("odd number of keyword arguments");
+                    throw new ProgramError("odd number of keyword arguments");
             LispObject arg = args[0];
             String packageName = null;
             if (arg instanceof LispString) {
@@ -2481,7 +2481,7 @@ public final class Primitives extends Module
                 throw new WrongNumberOfArgumentsException(this);
             if (args.length > 1)
                 if ((args.length - 1) % 2 != 0)
-                    throw new LispError("odd number of keyword arguments");
+                    throw new ProgramError("odd number of keyword arguments");
             long lsize;
             LispObject sizeArg = args[0];
             if (sizeArg instanceof Cons) {
@@ -3072,7 +3072,7 @@ public final class Primitives extends Module
             LispStream stream = checkStream(args[0]);
             if (length > 1) {
                 if ((length - 1) % 2 != 0)
-                    throw new LispError("odd number of keyword arguments");
+                    throw new ProgramError("odd number of keyword arguments");
                 if (length > 3)
                     throw new WrongNumberOfArgumentsException(this);
                 if (args[1] == Keyword.ABORT)
