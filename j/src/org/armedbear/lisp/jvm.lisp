@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.165 2004-05-14 17:10:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.166 2004-05-24 16:29:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2008,7 +2008,9 @@
         (t
          (do ((forms (cdr form) (cdr forms)))
              ((null forms))
-           (compile-form (car forms) (cdr forms))))))
+           (compile-form (car forms) (cdr forms))
+           (when (cdr forms)
+             (maybe-emit-clear-values (car forms)))))))
 
 (defun rewrite-setq (form)
   (let ((expr (third form)))
