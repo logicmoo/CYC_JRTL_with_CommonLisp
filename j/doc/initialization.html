@@ -10,47 +10,7 @@
 <h1>init.bsh</h1>
 <hr>
 <p>
-<b>NOTE: </b><i>Starting with version 0.20.0, the use of BeanShell to customize
-j is officially deprecated. BeanShell will no longer be bundled with j in
-future versions. Use j's built-in Lisp instead. See
-<a href="init.lisp.html">init.lisp</a>.</i>
-<p>
-Starting with version 0.11.0, j executes the
-<a href="http://www.beanshell.org">BeanShell</a> script ~/.j/init.bsh (Unix)
-or C:\.j\init.bsh (Windows) on startup if it exists. This is done after the
-user's preferences, theme, and custom key maps (if any) have been loaded.
-<p>
-In principle it is possible to execute arbitrary Java code in init.bsh, but
-only the following commands are officially supported:
-<pre>
-        void globalMapKey(String keyText, String command)
-        void globalUnmapKey(String keyText)
-        void mapKeyForMode(String keyText, String command, String modeName)
-        void unmapKeyForMode(String keyText, String modeName)
-</pre>
-You can use these commands to make minor changes to the default key mappings
-without having to define a full set of custom key maps (see
-<a href="keys.html">Key Mappings</a>).
-<p>
-For these commands, the <code>keyText</code> parameter is the name of the key
-or key combination to be mapped or unmapped (e.g. "F7", "Ctrl Shift G",
-"J"). When in doubt, you can use
-<a href="commands.html#insertKeyText">insertKeyText</a> to insert the
-appropriate text string. The <code>command</code> parameter is the name of the
-command to be mapped (e.g. "openFile", "cyclePaste", "jdkHelp"). The
-<code>modeName</code> parameter is the name of the mode, as displayed in the
-status bar when that particular mode is in effect in the current buffer (e.g.
-"Java", "HTML", "Plain Text").
-<p>
-Some examples:
-<pre>
-        globalMapKey("Mouse-1", "mouseSetPoint");
-        globalUnmapKey("F3");
-        mapKeyForMode("Alt Mouse-1", "mouseFindTag", "Java");
-        unmapKeyForMode("F4", "perl");
-</pre>
-If you make changes to init.bsh while j is running, you can use the command
-<a href="commands.html#evalBuffer">evalBuffer</a> to execute the changed
-script without restarting j.
+<i>Starting with version 0.20.0.6, BeanShell is no longer bundled with j. Use
+j's built-in Lisp instead. See <a href="init.lisp.html">init.lisp</a>.</i>
 </body>
 </html>

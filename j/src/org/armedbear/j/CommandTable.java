@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandTable.java,v 1.36 2003-06-28 16:12:13 piso Exp $
+ * $Id: CommandTable.java,v 1.37 2003-07-01 18:40:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -452,9 +452,6 @@ public class CommandTable
             addCommand("mouseFollowLink", "WebBuffer");
             addCommand("viewPage", "WebBuffer");
             addCommand("viewSource", "WebBuffer");
-
-            // BeanShell commmands.
-            addCommand("evalBuffer", "BeanShell");
 
             // Abbreviations.
             addCommand("sr", "Registers", "saveToRegister");
