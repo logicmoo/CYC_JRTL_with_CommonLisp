@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: DisplacedArray.java,v 1.15 2003-10-09 15:21:47 piso Exp $
+ * $Id: DisplacedArray.java,v 1.16 2003-11-16 18:24:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,21 +171,21 @@ public final class DisplacedArray extends AbstractArray
     // ### array-displacement
     // array-displacement array => displaced-to, displaced-index-offset
     private static final Primitive1 ARRAY_DISPLACEMENT =
-        new Primitive1("array-displacement") {
+        new Primitive1("array-displacement")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             AbstractArray array = checkArray(arg);
-            LispObject[] values = new LispObject[2];
+            final LispObject value1, value2;
             if (array instanceof DisplacedArray) {
                 DisplacedArray da = (DisplacedArray) array;
-                values[0] = da.array;
-                values[1] = new Fixnum(da.offset);
+                value1 = da.array;
+                value2 = new Fixnum(da.offset);
             } else {
-                values[0] = NIL;
-                values[1] = Fixnum.ZERO;
+                value1 = NIL;
+                value2 = Fixnum.ZERO;
             }
-            LispThread.currentThread().setValues(values);
-            return values[0];
+            return LispThread.currentThread().setValues(value1, value2);
         }
     };
 }
