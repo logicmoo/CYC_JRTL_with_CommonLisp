@@ -2,7 +2,7 @@
  * ErrorCommands.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationCommands.java,v 1.2 2003-06-06 15:07:08 piso Exp $
+ * $Id: CompilationCommands.java,v 1.3 2003-06-06 15:38:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,11 @@ import java.awt.event.MouseEvent;
 public final class CompilationCommands implements Constants
 {
     private static CompilationBuffer lastCompilationBuffer;
+
+    public static CompilationBuffer getCompilationBuffer()
+    {
+        return lastCompilationBuffer;
+    }
 
     public static void compile()
     {
@@ -121,9 +126,6 @@ public final class CompilationCommands implements Constants
     public static void thisError()
     {
         final Editor editor = Editor.currentEditor();
-        final Buffer buffer = editor.getBuffer();
-        //         if (!(buffer instanceof CompilationBuffer))
-        //             return;
 
         // If this method is invoked via a mouse event mapping, move dot to
         // location of mouse click first.
@@ -131,13 +133,13 @@ public final class CompilationCommands implements Constants
         if (e instanceof MouseEvent)
             editor.mouseMoveDotToPoint((MouseEvent)e);
 
-        //         final CompilationBuffer cb = (CompilationBuffer) buffer;
-        CompilationError ce =
+        CompilationError error =
             CompilationError.parseLineAsErrorMessage(editor.getDotLine());
-        if (ce != null) {
-            String errorFileName = ce.getFileName();
-            int errorLineNumber = ce.getLineNumber();
+        if (error != null) {
+            String errorFileName = error.getFileName();
+            int errorLineNumber = error.getLineNumber();
             if (errorFileName != null && errorLineNumber != 0) {
+                final Buffer buffer = editor.getBuffer();
                 Buffer buf =
                     getSourceBuffer(buffer.getCurrentDirectory(),
                         errorFileName);
@@ -150,7 +152,7 @@ public final class CompilationCommands implements Constants
                 int lineNumber = errorLineNumber - 1;
                 if (lineNumber < 0)
                     lineNumber = 0;
-                Position pos = buf.findOriginal(lineNumber, ce.getOffset());
+                Position pos = buf.findOriginal(lineNumber, error.getOffset());
                 ed.moveDotTo(pos);
                 ed.setUpdateFlag(REFRAME);
                 ed.updateDisplay();
