@@ -1,7 +1,7 @@
 ;;; slime-loader.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime-loader.lisp,v 1.2 2004-09-07 20:14:48 piso Exp $
+;;; $Id: slime-loader.lisp,v 1.3 2004-09-15 17:49:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,19 +17,25 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package #:cl-user)
+(in-package #:system)
 
 (dolist (file '("swank-protocol.lisp"
                 "slime.lisp"))
-  (let* ((source-file (merge-pathnames file *load-truename*))
-         (binary-file (compile-file-pathname source-file)))
-    (if (and (probe-file binary-file)
-             (> (file-write-date binary-file) (file-write-date source-file)))
-        (load binary-file)
-        (load (compile-file source-file)))))
+  (let ((device (pathname-device *load-truename*)))
+    (cond ((and (pathnamep device)
+                (equalp (pathname-type device) "jar"))
+           (load-system-file (pathname-name file)))
+          (t
+           (let* ((source-file (merge-pathnames file *load-truename*))
+                  (binary-file (compile-file-pathname source-file)))
+             (if (and (probe-file binary-file)
+                      (> (file-write-date binary-file)
+                         (file-write-date source-file)))
+                 (load-system-file (file-namestring binary-file))
+                 (load-system-file (file-namestring (compile-file source-file)))))))))
 
 #+j
 (unless (fboundp 'swank:start-server)
-  (sys:load-system-file "swank-loader"))
+  (load-system-file "swank-loader"))
 
 (funcall (intern (string '#:slime) '#:slime))

@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.20 2004-09-13 16:05:53 piso Exp $
+;;; $Id: slime.lisp,v 1.21 2004-09-15 17:51:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,13 +22,14 @@
 
 (in-package #:system)
 
+(defpackage #:j
+  (:use #:cl #:ext #:java))
+
 (eval-when (:compile-toplevel :load-toplevel :execute)
+  (require '#:j)
   (resolve 'with-mutex)
   (require '#:swank-protocol)
   (sys:load-system-file "swank-package"))
-
-(defpackage #:j
-  (:use #:cl #:ext #:java))
 
 (defpackage #:slime
   (:use #:cl #:ext #:j)
