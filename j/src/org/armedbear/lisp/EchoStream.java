@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EchoStream.java,v 1.7 2004-02-13 17:16:23 piso Exp $
+ * $Id: EchoStream.java,v 1.8 2004-02-13 17:21:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,6 +176,11 @@ public final class EchoStream extends Stream
     public LispObject listen() throws ConditionThrowable
     {
         return in.listen();
+    }
+
+    public LispObject freshLine() throws ConditionThrowable
+    {
+        return out.freshLine();
     }
 
     public String toString()
