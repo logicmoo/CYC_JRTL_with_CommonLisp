@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.67 2004-02-10 16:19:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.68 2004-02-16 19:14:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -938,11 +938,11 @@
       bytes)))
 
 (defun write-u1 (n)
-  (write-byte (logand n #xFF) *stream*))
+  (sys::write-8-bits (logand n #xFF) *stream*))
 
 (defun write-u2 (n)
-  (write-byte (ash n -8) *stream*)
-  (write-byte (logand n #xFF) *stream*))
+  (sys::write-8-bits (ash n -8) *stream*)
+  (sys::write-8-bits (logand n #xFF) *stream*))
 
 (defun write-u4 (n)
   (write-u2 (ash n -16))
@@ -2442,9 +2442,10 @@
       (multiple-value-bind (lambda-expression closure-p)
         (function-lambda-expression definition-designator)
         (when closure-p
-          (error "unable to compile function defined in non-null lexical environment"))
+          (error "Unable to compile function defined in non-null lexical environment."))
 	(unless lambda-expression
-	  (error "can't find a definition"))
+	  (error :format-control "Can't find a definition for ~S."
+                 :format-arguments (list definition-designator)))
         lambda-expression)))
 
 (defun load-verbose-prefix ()
@@ -2587,10 +2588,10 @@
           (precompile name definition)
           ))))
 
-(defmacro defun (name lambda-list &rest body)
+(defmacro defun (name lambda-list &rest body &environment environment)
   `(progn
-     (sys::%defun ',name ',lambda-list ',body)
-     (compile ',name)
+     (sys::%defun ',name ',lambda-list ',body ,environment)
+     (ignore-errors (compile ',name))
      ',name))
 
 (let ((*auto-compile* nil))
