@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Display.java,v 1.4 2002-11-18 14:49:38 piso Exp $
+ * $Id: Display.java,v 1.5 2002-12-29 16:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,12 +31,19 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.font.GlyphVector;
-import java.util.Hashtable;
+import java.util.HashMap;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
-public final class Display extends JComponent implements Constants
+public final class Display extends JComponent implements Constants,
+    ActionListener, FocusListener
 {
     private static final int MAX_LINE_NUMBER_CHARS = 6;
 
@@ -68,7 +75,7 @@ public final class Display extends JComponent implements Constants
 
     private static int leftMargin;
 
-    private Hashtable changedLines = new Hashtable();
+    private final HashMap changedLines = new HashMap();
 
     private final Editor editor;
 
@@ -103,6 +110,9 @@ public final class Display extends JComponent implements Constants
     private boolean highlightMatchingBracket;
     private Position posBracket;
     private Position posMatch;
+
+    private Timer timer;
+    private boolean caretVisible = true;
 
     public Display(Editor editor)
     {
@@ -190,7 +200,7 @@ public final class Display extends JComponent implements Constants
             preferences.getIntegerProperty(Property.CHANGE_MARK_WIDTH);
     }
 
-    public void initialize()
+    public synchronized void initialize()
     {
         // Explicitly set this to null here. We might be resetting the display.
         paintLineImage = null;
@@ -201,6 +211,28 @@ public final class Display extends JComponent implements Constants
         int size = Toolkit.getDefaultToolkit().getScreenSize().width * 5 / (minCharWidth * 4);
         textArray = new char[size];
         formatArray = new int[size];
+
+        if (preferences.getBooleanProperty(Property.BLINK_CARET)) {
+            if (timer == null) {
+                timer = new Timer(500, this);
+                addFocusListener(this);
+            }
+        } else {
+            if (timer != null) {
+                timer.stop();
+                timer = null;
+                removeFocusListener(this);
+                setCaretVisible(true);
+            }
+        }
+    }
+
+    protected void finalize() throws Throwable
+    {
+        if (timer != null) {
+            timer.stop();
+            timer = null;
+        }
     }
 
     private static final int getMinCharWidth(FontMetrics fm)
@@ -316,23 +348,25 @@ public final class Display extends JComponent implements Constants
         }
         try {
             Graphics2D g2d = (Graphics2D) getGraphics();
-            Line line = topLine;
-            int y = - pixelsAboveTopLine;
-            while (line != null && y < getHeight()) {
-                if (changedLines.contains(line))
-                    paintLine(line, g2d, y);
-                y += line.getHeight();
-                line = line.nextVisible();
+            if (g2d != null) {
+                Line line = topLine;
+                int y = - pixelsAboveTopLine;
+                while (line != null && y < getHeight()) {
+                    if (changedLines.containsKey(line))
+                        paintLine(line, g2d, y);
+                    y += line.getHeight();
+                    line = line.nextVisible();
+                }
+                if (y < getHeight()) {
+                    g2d.setColor(editor.getFormatter().getBackgroundColor());
+                    final int height = getHeight() - y;
+                    g2d.fillRect(0, y, getWidth(), height);
+                    if (showLineNumbers)
+                        drawGutterBorder(g2d, y, height);
+                    drawVerticalRule(g2d, y, height);
+                }
+                drawCaret(g2d);
             }
-            if (y < getHeight()) {
-                g2d.setColor(editor.getFormatter().getBackgroundColor());
-                final int height = getHeight() - y;
-                g2d.fillRect(0, y, getWidth(), height);
-                if (showLineNumbers)
-                    drawGutterBorder(g2d, y, height);
-                drawVerticalRule(g2d, y, height);
-            }
-            drawCaret(g2d);
         }
         finally {
             buffer.unlockRead();
@@ -502,6 +536,8 @@ public final class Display extends JComponent implements Constants
             return;
         }
 
+        if (!caretVisible)
+            return;
         if (topLine == null)
             return;
         if (editor != Editor.currentEditor())
@@ -511,6 +547,8 @@ public final class Display extends JComponent implements Constants
         if (editor.getMark() != null && !editor.getMark().equals(editor.getDot()))
             return;
         if (caretCol < 0)
+            return;
+        if (!editor.getFrame().isActive())
             return;
         if (editor.getFrame().getFocusedComponent() != this)
             return;
@@ -545,6 +583,47 @@ public final class Display extends JComponent implements Constants
         g2d.fillRect(x, y, 1, charAscent + charDescent);
     }
 
+    public synchronized void setCaretVisible(boolean b)
+    {
+        caretVisible = b;
+        if (b && timer != null && timer.isRunning())
+            timer.restart();
+    }
+
+    private synchronized void blinkCaret()
+    {
+        Position dot = editor.getDot();
+        if (dot != null) {
+            caretVisible = !caretVisible;
+            lineChanged(dot.getLine());
+            Runnable r = new Runnable() {
+                public void run()
+                {
+                    repaintChangedLines();
+                }
+            };
+            SwingUtilities.invokeLater(r);
+        }
+    }
+
+    // Timer event handler.
+    public void actionPerformed(ActionEvent e)
+    {
+        blinkCaret();
+    }
+
+    public synchronized void focusGained(FocusEvent e)
+    {
+        if (timer != null)
+            timer.start();
+    }
+
+    public synchronized void focusLost(FocusEvent e)
+    {
+        if (timer != null)
+            timer.stop();
+    }
+
     private int formatLine(final Line line, final int begin, final int maxCols)
     {
         // Avoid getfield overhead.
@@ -552,7 +631,7 @@ public final class Display extends JComponent implements Constants
         final char[] ta = textArray;
         final int taLength = ta.length;
         Debug.assertTrue(taLength == fa.length);
-        for (int i = taLength-1; i >= 0; i--) {
+        for (int i = taLength; i-- > 0;) {
             ta[i] = ' ';
             fa[i] = 0;
         }
@@ -611,7 +690,8 @@ public final class Display extends JComponent implements Constants
     {
         if (paintLineImage != null &&
             paintLineImageWidth == width &&
-            paintLineImageHeight == height) return;
+            paintLineImageHeight == height)
+            return;
 
         // Otherwise...
         paintLineImage = createImage(width, height);
