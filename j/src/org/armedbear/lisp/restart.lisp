@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: restart.lisp,v 1.7 2003-12-17 16:53:20 piso Exp $
+;;; $Id: restart.lisp,v 1.8 2003-12-17 17:53:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,13 +38,15 @@
   (test-function #'(lambda (c) t)))
 
 (defmacro restart-bind (bindings &body forms)
-  `(let ((*restart-clusters* (cons (list ,@(mapcar #'(lambda (binding)
-                                                      `(make-restart
-                                                        :name ',(car binding)
-                                                        :function ,(cadr binding)
-                                                        ,@(cddr binding)))
-                                                   bindings))
-                                   *restart-clusters*)))
+  `(let ((*restart-clusters*
+          (cons (list
+                 ,@(mapcar #'(lambda (binding)
+                              `(make-restart
+                                :name ',(car binding)
+                                :function ,(cadr binding)
+                                ,@(cddr binding)))
+                           bindings))
+                *restart-clusters*)))
      ,@forms))
 
 (defun compute-restarts (&optional condition)
@@ -91,7 +93,8 @@
 
 (defmacro with-keyword-pairs ((names expression &optional keywords-var) &body forms)
   (let ((temp (member '&rest names)))
-    (unless (= (length temp) 2) (error "&REST keyword is ~:[missing~;misplaced~]." temp))
+    (unless (= (length temp) 2)
+      (error "&REST keyword is ~:[missing~;misplaced~]." temp))
     (let ((key-vars (ldiff names temp))
           (key-var (or keywords-var (gensym)))
           (rest-var (cadr temp)))
@@ -141,7 +144,6 @@
                                   (tag  (nth 1 datum))
                                   (keys (nth 2 datum)))
                               `(,name #'(lambda (&rest temp)
-                                         #+lispm (setq temp (copy-list temp))
                                          (setq ,temp-var temp)
                                          (go ,tag))
                                       ,@keys)))
