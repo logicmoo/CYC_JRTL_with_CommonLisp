@@ -1,8 +1,8 @@
 /*
  * CompiledClosure.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: CompiledClosure.java,v 1.2 2004-07-21 18:10:05 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: CompiledClosure.java,v 1.3 2005-01-10 17:46:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +24,9 @@ package org.armedbear.lisp;
 public class CompiledClosure extends Function
 {
     private final ClosureTemplateFunction ctf;
-    private final LispObject[][] context;
+    private final LispObject[] context;
 
-    public CompiledClosure(ClosureTemplateFunction ctf, LispObject[][] context)
+    public CompiledClosure(ClosureTemplateFunction ctf, LispObject[] context)
     {
         this.ctf = ctf;
         this.context = context;
@@ -40,51 +40,36 @@ public class CompiledClosure extends Function
 
     public LispObject execute() throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[0];
-        return ctf.execute(args, context);
+        return ctf.execute(context);
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[1];
-        args[0] = arg;
-        return ctf.execute(args, context);
+        return ctf.execute(context, arg);
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        return ctf.execute(args, context);
+        return ctf.execute(context, first, second);
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[3];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        return ctf.execute(args, context);
+        return ctf.execute(context, first, second, third);
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
-        LispObject[] args = new LispObject[4];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        return ctf.execute(args, context);
+        return ctf.execute(context, first, second, third, fourth);
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return ctf.execute(args, context);
+        return ctf.execute(context, args);
     }
 }

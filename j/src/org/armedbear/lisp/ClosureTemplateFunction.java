@@ -1,8 +1,8 @@
 /*
  * ClosureTemplateFunction.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: ClosureTemplateFunction.java,v 1.4 2004-11-07 18:06:05 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: ClosureTemplateFunction.java,v 1.5 2005-01-10 17:46:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,13 @@ public abstract class ClosureTemplateFunction extends Closure
         throws ConditionThrowable
     {
         super(lambdaList, NIL, null);
+    }
+
+    public ClosureTemplateFunction(Symbol symbol, LispObject lambdaList,
+                                   LispObject body, Environment env)
+        throws ConditionThrowable
+    {
+        super(null, lambdaList, body, env);
     }
 
     public final LispObject execute() throws ConditionThrowable
@@ -59,16 +66,68 @@ public abstract class ClosureTemplateFunction extends Closure
         return notImplemented();
     }
 
-    public final LispObject execute(LispObject[] args) throws ConditionThrowable
-    {
-        return notImplemented();
-    }
-
     private static final LispObject notImplemented() throws ConditionThrowable
     {
         return signal(new LispError("ClosureTemplateFunction.execute(): not implemented"));
     }
 
-    public abstract LispObject execute(LispObject[] args, LispObject[][] context)
-        throws ConditionThrowable;
+    // Zero args.
+    public LispObject execute(LispObject[] context) throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[0];
+        return execute(context, args);
+    }
+
+    // One arg.
+    public LispObject execute(LispObject[] context, LispObject first)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[1];
+        args[0] = first;
+        return execute(context, args);
+    }
+
+    // Two args.
+    public LispObject execute(LispObject[] context, LispObject first,
+                              LispObject second)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[2];
+        args[0] = first;
+        args[1] = second;
+        return execute(context, args);
+    }
+
+    // Three args.
+    public LispObject execute(LispObject[] context, LispObject first,
+                              LispObject second, LispObject third)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[3];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        return execute(context, args);
+    }
+
+    // Four args.
+    public LispObject execute(LispObject[] context, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth)
+        throws ConditionThrowable
+    {
+        LispObject[] args = new LispObject[4];
+        args[0] = first;
+        args[1] = second;
+        args[2] = third;
+        args[3] = fourth;
+        return execute(context, args);
+    }
+
+    // Arg array.
+    public LispObject execute(LispObject[] context, LispObject[] args)
+        throws ConditionThrowable
+    {
+        return notImplemented();
+    }
 }
