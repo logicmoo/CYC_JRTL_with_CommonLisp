@@ -2,7 +2,7 @@
  * Mode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Mode.java,v 1.2 2002-10-01 19:20:22 piso Exp $
+ * $Id: Mode.java,v 1.3 2002-10-03 17:23:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,16 +159,10 @@ public interface Mode
     public JPopupMenu getContextMenu(Editor editor);
 
     /**
-     * Returns a <code>ToolBar</code> specific for this mode.  Each
-     * button on the <code>ToolBar</code> should be created with the
-     * method {@link ToolBar#addButton(String,String,String) addButton}
-     * instead of using any of the other methods available to a
-     * <code>JToolBar</code>.
+     * Returns a <code>ToolBar</code> for the specified <code>Frame</code>.
      *
-     * @param frame     the frame that the <code>ToolBar</code> will be
-     *                  attached to.
-     * @return          a <code>ToolBar</code> specific to this mode that has
-     *                  been populated with the <code>addButton</code> method.
+     * @param frame     the <code>Frame</code>
+     * @return          the <code>ToolBar</code>
      */
     public ToolBar getToolBar(Frame frame);
 
