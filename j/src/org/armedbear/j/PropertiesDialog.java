@@ -2,7 +2,7 @@
  * PropertiesDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: PropertiesDialog.java,v 1.6 2003-07-27 01:14:00 piso Exp $
+ * $Id: PropertiesDialog.java,v 1.7 2003-08-04 16:15:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,107 +198,106 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
                 label.setLabelFor(tabWidthTextField);
                 flow.add(tabWidthTextField);
 
-                if (!buffer.isReadOnly()) {
-                    flow.add(Box.createHorizontalStrut(5));
+                flow.add(Box.createHorizontalStrut(5));
 
-                    label = new Label("Indent size:");
-                    label.setDisplayedMnemonic('I');
-                    flow.add(label);
-                    flow.add(Box.createHorizontalStrut(5));
-                    indentSizeTextField = new JTextField(3);
-                    dim = indentSizeTextField.getPreferredSize();
-                    indentSizeTextField.setMinimumSize(dim);
-                    indentSizeTextField.setMaximumSize(dim);
-                    indentSizeTextField.setAlignmentX(LEFT_ALIGNMENT);
-                    indentSizeTextField.setText(String.valueOf(buffer.getIndentSize()));
-                    label.setLabelFor(indentSizeTextField);
-                    flow.add(indentSizeTextField);
+                label = new Label("Indent size:");
+                label.setDisplayedMnemonic('I');
+                flow.add(label);
+                flow.add(Box.createHorizontalStrut(5));
+                indentSizeTextField = new JTextField(3);
+                dim = indentSizeTextField.getPreferredSize();
+                indentSizeTextField.setMinimumSize(dim);
+                indentSizeTextField.setMaximumSize(dim);
+                indentSizeTextField.setAlignmentX(LEFT_ALIGNMENT);
+                indentSizeTextField.setText(String.valueOf(buffer.getIndentSize()));
+                label.setLabelFor(indentSizeTextField);
+                flow.add(indentSizeTextField);
 
-                    flow.add(Box.createHorizontalStrut(5));
+                flow.add(Box.createHorizontalStrut(5));
 
-                    label = new Label("Wrap column:");
-                    label.setDisplayedMnemonic('W');
-                    flow.add(label);
-                    flow.add(Box.createHorizontalStrut(5));
-                    wrapColumnTextField = new JTextField(3);
-                    dim = wrapColumnTextField.getPreferredSize();
-                    wrapColumnTextField.setMinimumSize(dim);
-                    wrapColumnTextField.setMaximumSize(dim);
-                    wrapColumnTextField.setAlignmentX(LEFT_ALIGNMENT);
-                    wrapColumnTextField.setText(String.valueOf(buffer.getIntegerProperty(Property.WRAP_COL)));
-                    label.setLabelFor(wrapColumnTextField);
-                    flow.add(wrapColumnTextField);
-                }
+                label = new Label("Wrap column:");
+                label.setDisplayedMnemonic('W');
+                flow.add(label);
+                flow.add(Box.createHorizontalStrut(5));
+                wrapColumnTextField = new JTextField(3);
+                dim = wrapColumnTextField.getPreferredSize();
+                wrapColumnTextField.setMinimumSize(dim);
+                wrapColumnTextField.setMaximumSize(dim);
+                wrapColumnTextField.setAlignmentX(LEFT_ALIGNMENT);
+                wrapColumnTextField.setText(String.valueOf(buffer.getIntegerProperty(Property.WRAP_COL)));
+                label.setLabelFor(wrapColumnTextField);
+                flow.add(wrapColumnTextField);
 
                 addVerticalStrut();
                 mainPanel.add(flow);
 
-                if (!buffer.isReadOnly()) {
-                    useTabsCheckBox = new CheckBox("Use tabs", buffer.getUseTabs());
-                    useTabsCheckBox.setMnemonic('U');
-                    addVerticalStrut();
-                    addCheckBox(useTabsCheckBox);
-                    useTabsCheckBox.setEnabled(true);
+                useTabsCheckBox = new CheckBox("Use tabs", buffer.getUseTabs());
+                useTabsCheckBox.setMnemonic('U');
+                addVerticalStrut();
+                addCheckBox(useTabsCheckBox);
+                useTabsCheckBox.setEnabled(true);
 
-                    switch (modeId) {
-                        case JAVA_MODE:
-                        case JAVASCRIPT_MODE:
-                        case C_MODE:
-                        case CPP_MODE:
-                        case PERL_MODE:
-                        case TCL_MODE:
-                            indentBeforeBraceCheckBox =
-                                new CheckBox("Indent before '{'",
-                                             buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE));
-                            indentBeforeBraceCheckBox.setMnemonic('b');
-                            addVerticalStrut();
-                            addCheckBox(indentBeforeBraceCheckBox);
-                            indentAfterBraceCheckBox =
-                                new CheckBox("Indent after '{'",
-                                             buffer.getBooleanProperty(Property.INDENT_AFTER_BRACE));
-                            indentAfterBraceCheckBox.setMnemonic('a');
-                            addVerticalStrut();
-                            addCheckBox(indentAfterBraceCheckBox);
-                        default:
-                            break;
-                    }
-
-                    addVerticalStrut();
-
-                    // Line separator combo box.
-                    Vector v = new Vector();
-                    v.add(TEXT_LF);
-                    v.add(TEXT_CRLF);
-                    v.add(TEXT_CR);
-                    lineSeparatorComboBox = new JComboBox(v);
-                    dim = lineSeparatorComboBox.getPreferredSize();
-                    lineSeparatorComboBox.setMinimumSize(dim);
-                    lineSeparatorComboBox.setMaximumSize(dim);
-
-                    flow = new JPanel();
-                    flow.setLayout(new BoxLayout(flow, BoxLayout.X_AXIS));
-                    flow.setAlignmentX(LEFT_ALIGNMENT);
-                    label = new Label("Line separator:");
-                    flow.add(label);
-                    label.setDisplayedMnemonic('L');
-
-                    if (buffer.lineSeparator == null)
-                        buffer.lineSeparator = System.getProperty("line.separator");
-
-                    if (buffer.lineSeparator.equals("\n"))
-                        lineSeparatorComboBox.setSelectedItem(TEXT_LF);
-                    else if (buffer.lineSeparator.equals("\r\n"))
-                        lineSeparatorComboBox.setSelectedItem(TEXT_CRLF);
-                    else if (buffer.lineSeparator.equals("\r"))
-                        lineSeparatorComboBox.setSelectedItem(TEXT_CR);
-
-                    label.setLabelFor(lineSeparatorComboBox);
-
-                    flow.add(Box.createHorizontalStrut(5));
-                    flow.add(lineSeparatorComboBox);
-
-                    mainPanel.add(flow);
+                switch (modeId) {
+                    case JAVA_MODE:
+                    case JAVASCRIPT_MODE:
+                    case C_MODE:
+                    case CPP_MODE:
+                    case PERL_MODE:
+                    case TCL_MODE:
+                        indentBeforeBraceCheckBox =
+                            new CheckBox("Indent before '{'",
+                                         buffer.getBooleanProperty(Property.INDENT_BEFORE_BRACE));
+                        indentBeforeBraceCheckBox.setMnemonic('b');
+                        addVerticalStrut();
+                        addCheckBox(indentBeforeBraceCheckBox);
+                        indentAfterBraceCheckBox =
+                            new CheckBox("Indent after '{'",
+                                         buffer.getBooleanProperty(Property.INDENT_AFTER_BRACE));
+                        indentAfterBraceCheckBox.setMnemonic('a');
+                        addVerticalStrut();
+                        addCheckBox(indentAfterBraceCheckBox);
+                    default:
+                        break;
                 }
+
+                addVerticalStrut();
+
+                // Line separator combo box.
+                Vector v = new Vector();
+                v.add(TEXT_LF);
+                v.add(TEXT_CRLF);
+                v.add(TEXT_CR);
+                lineSeparatorComboBox = new JComboBox(v);
+                dim = lineSeparatorComboBox.getPreferredSize();
+                lineSeparatorComboBox.setMinimumSize(dim);
+                lineSeparatorComboBox.setMaximumSize(dim);
+
+                flow = new JPanel();
+                flow.setLayout(new BoxLayout(flow, BoxLayout.X_AXIS));
+                flow.setAlignmentX(LEFT_ALIGNMENT);
+                label = new Label("Use");
+                flow.add(label);
+                label.setDisplayedMnemonic('L');
+
+                if (buffer.lineSeparator == null)
+                    buffer.lineSeparator = System.getProperty("line.separator");
+
+                if (buffer.lineSeparator.equals("\n"))
+                    lineSeparatorComboBox.setSelectedItem(TEXT_LF);
+                else if (buffer.lineSeparator.equals("\r\n"))
+                    lineSeparatorComboBox.setSelectedItem(TEXT_CRLF);
+                else if (buffer.lineSeparator.equals("\r"))
+                    lineSeparatorComboBox.setSelectedItem(TEXT_CR);
+
+                label.setLabelFor(lineSeparatorComboBox);
+
+                flow.add(Box.createHorizontalStrut(5));
+                flow.add(lineSeparatorComboBox);
+
+                flow.add(Box.createHorizontalStrut(5));
+                flow.add(new Label("as line separator when saving file"));
+
+                mainPanel.add(flow);
             }
 
             addVerticalStrut();
