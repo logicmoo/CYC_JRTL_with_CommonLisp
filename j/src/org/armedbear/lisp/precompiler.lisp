@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.58 2004-05-04 18:25:29 piso Exp $
+;;; $Id: precompiler.lisp,v 1.59 2004-05-04 18:31:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -386,9 +386,9 @@
 ;; "If the restartable-form is a list whose car is any of the symbols SIGNAL,
 ;; ERROR, CERROR, or WARN (or is a macro form which macroexpands into such a
 ;; list), then WITH-CONDITION-RESTARTS is used implicitly to associate the
-;; indicated restarts with the condition to be signaled."
+;; indicated restarts with the condition to be signaled." So we need to
+;; precompile the restartable form before macroexpanding RESTART-CASE.
 (defun precompile-restart-case (form)
-  ;; Precompile restartable form before macroexpanding RESTART-CASE.
   (let ((new-form (list* 'RESTART-CASE (precompile1 (cadr form)) (cddr form))))
     (precompile1 (macroexpand new-form))))
 
