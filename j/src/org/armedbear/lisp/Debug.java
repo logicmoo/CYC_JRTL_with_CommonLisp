@@ -2,7 +2,7 @@
  * Debug.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Debug.java,v 1.1 2003-01-17 19:43:11 piso Exp $
+ * $Id: Debug.java,v 1.2 2003-03-11 14:08:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,12 @@ public final class Debug extends Lisp
             e.printStackTrace();
             throw e;
         }
+    }
+
+    // Does not throw an exception.
+    public static void bug()
+    {
+        trace(new Exception("BUG!"));
     }
 
     public static final void trace(String s)
