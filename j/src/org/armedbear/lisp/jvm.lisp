@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.9 2003-11-05 19:34:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.10 2003-11-05 19:41:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -489,7 +489,6 @@
 
 (defun ensure-thread-var-initialized ()
   (unless *thread-var-initialized*
-    (format t "generating thread variable initialization code~%")
     ;; Put the code to initialize the local at the very beginning of the
     ;; function, to guarantee that the local gets initialized even if the code
     ;; at our current location is never executed, since the local may be
