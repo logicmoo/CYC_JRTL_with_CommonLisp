@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractBitVector.java,v 1.6 2004-04-26 17:28:18 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.7 2004-05-16 14:01:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,19 +161,12 @@ public abstract class AbstractBitVector extends AbstractVector
 
     public String writeToString() throws ConditionThrowable
     {
-        try {
-            final int limit = length();
-            StringBuffer sb = new StringBuffer(limit + 2);
-            sb.append("#*");
-            for (int i = 0; i < limit; i++)
-                sb.append(getBit(i) == 1 ? '1' : '0');
-            return sb.toString();
-        }
-        catch (ConditionThrowable t) {
-            // Shouldn't happen.
-            Debug.trace(t);
-            return null;
-        }
+        final int limit = length();
+        StringBuffer sb = new StringBuffer(limit + 2);
+        sb.append("#*");
+        for (int i = 0; i < limit; i++)
+            sb.append(getBit(i) == 1 ? '1' : '0');
+        return sb.toString();
     }
 
     // Ignores fill pointer.
