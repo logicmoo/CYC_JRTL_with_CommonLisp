@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.99 2004-04-18 14:57:01 piso Exp $
+;;; $Id: clos.lisp,v 1.100 2004-04-20 23:08:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -599,11 +599,31 @@
                  ,(canonicalize-direct-slots direct-slots)
                  ,@(canonicalize-defclass-options options)))
 
-(defstruct method-combination
-  name
-  operator
-  identity-with-one-argument
-  documentation)
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (defstruct method-combination
+    name
+    operator
+    identity-with-one-argument
+    documentation)
+
+  (defun expand-short-defcombin (whole)
+    (let* ((name (cadr whole))
+           (documentation
+            (getf (cddr whole) :documentation ""))
+           (identity-with-one-arg
+            (getf (cddr whole) :identity-with-one-argument nil))
+           (operator
+            (getf (cddr whole) :operator name)))
+      `(progn
+         (setf (get ',name 'method-combination-object)
+               (make-method-combination :name ',name
+                                        :operator ',operator
+                                        :identity-with-one-argument ',identity-with-one-arg
+                                        :documentation ',documentation))
+         ',name)))
+
+  (defun expand-long-defcombin (whole)
+    (error "The long form of DEFINE-METHOD-COMBINATION is not implemented.")))
 
 (defmacro define-method-combination (&whole form &rest args)
   (declare (ignore args))
@@ -611,25 +631,6 @@
            (listp (caddr form)))
       (expand-long-defcombin form)
       (expand-short-defcombin form)))
-
-(defun expand-short-defcombin (whole)
-  (let* ((name (cadr whole))
-	 (documentation
-          (getf (cddr whole) :documentation ""))
-	 (identity-with-one-arg
-          (getf (cddr whole) :identity-with-one-argument nil))
-	 (operator
-          (getf (cddr whole) :operator name)))
-    `(progn
-       (setf (get ',name 'method-combination-object)
-             (make-method-combination :name ',name
-                                      :operator ',operator
-                                      :identity-with-one-argument ',identity-with-one-arg
-                                      :documentation ',documentation))
-       ',name)))
-
-(defun expand-long-defcombin (whole)
-  (error "The long form of DEFINE-METHOD-COMBINATION is not implemented."))
 
 (define-method-combination +      :identity-with-one-argument t)
 (define-method-combination and    :identity-with-one-argument t)
@@ -1298,9 +1299,9 @@
                          (funcall emfun args)
                          (slow-method-lookup ,gf args classes))))
                 nil)))))
-    (when (and (fboundp 'jvm:jvm-compile)
-               (not (autoloadp 'jvm:jvm-compile)))
-      (setf code (jvm:jvm-compile nil code)))
+;;     (when (and (fboundp 'jvm:jvm-compile)
+;;                (not (autoloadp 'jvm:jvm-compile)))
+;;       (setf code (jvm:jvm-compile nil code)))
     code))
 
 (defun method-applicable-p (method args)
@@ -1338,7 +1339,7 @@
           (when classes
             (setf (gethash classes (classes-to-emf-table gf)) emfun))
           (funcall emfun args))
-        (error "No applicable methods for generic function ~A with arguments ~S of classes ~S."
+        (error "No applicable method for generic function ~A with arguments ~S of classes ~S."
                (generic-function-name gf) args classes))))
 
 (defun sub-specializer-p (c1 c2 c-arg)
@@ -1503,9 +1504,9 @@
               (apply #'(lambda ,lambda-list ,@declarations ,body) args)))
          (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
                                    (method-environment method))))
-           (when (and (fboundp 'jvm:jvm-compile)
-                      (not (autoloadp 'jvm:jvm-compile)))
-             (setf code (jvm:jvm-compile nil code)))
+;;            (when (and (fboundp 'jvm:jvm-compile)
+;;                       (not (autoloadp 'jvm:jvm-compile)))
+;;              (setf code (jvm:jvm-compile nil code)))
            `(lambda (args next-emfun) (apply ,code args)))))))
 
 ;;; N.B. The function kludge-arglist is used to pave over the differences
