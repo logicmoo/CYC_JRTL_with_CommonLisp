@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.13 2003-09-02 20:02:44 piso Exp $
+ * $Id: Complex.java,v 1.14 2003-09-03 23:55:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,6 +131,9 @@ public final class Complex extends LispObject
             LispObject b = imagpart;
             LispObject c = ((Complex)obj).getRealPart();
             LispObject d = ((Complex)obj).getImaginaryPart();
+            // xy = (ac - bd) + i(ad + bc)
+            // real part = ac - bd
+            // imag part = (a + b)(c + d) - ac - bd
             LispObject ac = a.multiplyBy(c);
             LispObject bd = b.multiplyBy(d);
             return Complex.getInstance(ac.subtract(bd),
@@ -169,9 +172,9 @@ public final class Complex extends LispObject
 
     public LispObject ABS() throws TypeError
     {
-        float real = LispFloat.coerceToFloat(realpart).getValue();
-        float imag = LispFloat.coerceToFloat(imagpart).getValue();
-        return new LispFloat((float)Math.sqrt(real * real + imag * imag));
+        double real = LispFloat.coerceToFloat(realpart).getValue();
+        double imag = LispFloat.coerceToFloat(imagpart).getValue();
+        return new LispFloat(Math.sqrt(real * real + imag * imag));
     }
 
     public LispObject ZEROP() throws TypeError
