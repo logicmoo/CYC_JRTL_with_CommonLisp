@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BuiltInClass.java,v 1.17 2003-12-11 20:18:18 piso Exp $
+ * $Id: BuiltInClass.java,v 1.18 2003-12-11 20:40:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,7 +77,6 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass DIVISION_BY_ZERO                 = addClass(Symbol.DIVISION_BY_ZERO);
     public static final BuiltInClass ECHO_STREAM                      = addClass(Symbol.ECHO_STREAM);
     public static final BuiltInClass END_OF_FILE                      = addClass(Symbol.END_OF_FILE);
-    public static final BuiltInClass FILE_ERROR                       = addClass(Symbol.FILE_ERROR);
     public static final BuiltInClass FILE_STREAM                      = addClass(Symbol.FILE_STREAM);
     public static final BuiltInClass FIXNUM                           = addClass(Symbol.FIXNUM);
     public static final BuiltInClass FLOAT                            = addClass(Symbol.FLOAT);
@@ -94,13 +93,11 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass NULL                             = addClass(Symbol.NULL);
     public static final BuiltInClass NUMBER                           = addClass(Symbol.NUMBER);
     public static final BuiltInClass PACKAGE                          = addClass(Symbol.PACKAGE);
-    public static final BuiltInClass PARSE_ERROR                      = addClass(Symbol.PARSE_ERROR);
     public static final BuiltInClass PATHNAME                         = addClass(Symbol.PATHNAME);
     public static final BuiltInClass PRINT_NOT_READABLE               = addClass(Symbol.PRINT_NOT_READABLE);
     public static final BuiltInClass RANDOM_STATE                     = addClass(Symbol.RANDOM_STATE);
     public static final BuiltInClass RATIO                            = addClass(Symbol.RATIO);
     public static final BuiltInClass RATIONAL                         = addClass(Symbol.RATIONAL);
-    public static final BuiltInClass READER_ERROR                     = addClass(Symbol.READER_ERROR);
     public static final BuiltInClass READTABLE                        = addClass(Symbol.READTABLE);
     public static final BuiltInClass REAL                             = addClass(Symbol.REAL);
     public static final BuiltInClass RESTART                          = addClass(Symbol.RESTART);
@@ -111,7 +108,6 @@ public class BuiltInClass extends LispClass
     public static final BuiltInClass SIMPLE_WARNING                   = addClass(Symbol.SIMPLE_WARNING);
     public static final BuiltInClass STORAGE_CONDITION                = addClass(Symbol.STORAGE_CONDITION);
     public static final BuiltInClass STREAM                           = addClass(Symbol.STREAM);
-    public static final BuiltInClass STREAM_ERROR                     = addClass(Symbol.STREAM_ERROR);
     public static final BuiltInClass STRING                           = addClass(Symbol.STRING);
     public static final BuiltInClass STRING_STREAM                    = addClass(Symbol.STRING_STREAM);
     public static final BuiltInClass STRUCTURE_CLASS                  = addClass(Symbol.STRUCTURE_CLASS);
@@ -174,10 +170,22 @@ public class BuiltInClass extends LispClass
         addClass(Symbol.CONTROL_ERROR, CONTROL_ERROR);
     }
 
+    public static final StandardClass FILE_ERROR =
+        new StandardClass(Symbol.FILE_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.FILE_ERROR, FILE_ERROR);
+    }
+
     public static final StandardClass PACKAGE_ERROR =
         new StandardClass(Symbol.PACKAGE_ERROR, list1(ERROR));
     static {
         addClass(Symbol.PACKAGE_ERROR, PACKAGE_ERROR);
+    }
+
+    public static final StandardClass PARSE_ERROR =
+        new StandardClass(Symbol.PARSE_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.PARSE_ERROR, PARSE_ERROR);
     }
 
     public static final StandardClass PROGRAM_ERROR =
@@ -186,10 +194,22 @@ public class BuiltInClass extends LispClass
         addClass(Symbol.PROGRAM_ERROR, PROGRAM_ERROR);
     }
 
+    public static final StandardClass STREAM_ERROR =
+        new StandardClass(Symbol.STREAM_ERROR, list1(ERROR));
+    static {
+        addClass(Symbol.STREAM_ERROR, STREAM_ERROR);
+    }
+
     public static final StandardClass TYPE_ERROR =
         new StandardClass(Symbol.TYPE_ERROR, list1(ERROR));
     static {
         addClass(Symbol.TYPE_ERROR, TYPE_ERROR);
+    }
+
+    public static final StandardClass READER_ERROR =
+        new StandardClass(Symbol.READER_ERROR, list2(PARSE_ERROR, STREAM_ERROR));
+    static {
+        addClass(Symbol.READER_ERROR, READER_ERROR);
     }
 
     public static final StandardClass GENERIC_FUNCTION =
@@ -245,9 +265,8 @@ public class BuiltInClass extends LispClass
                      CLASS_T);
         FIXNUM.setDirectSuperclass(INTEGER);
         FIXNUM.setCPL(FIXNUM, INTEGER, RATIONAL, REAL, NUMBER, CLASS_T);
-        FILE_ERROR.setDirectSuperclass(ERROR);
         FILE_ERROR.setCPL(FILE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
-                          CLASS_T);
+                          STANDARD_OBJECT, CLASS_T);
         FILE_STREAM.setDirectSuperclass(STREAM);
         FILE_STREAM.setCPL(FILE_STREAM, STREAM, CLASS_T);
         FLOAT.setDirectSuperclass(REAL);
@@ -293,9 +312,8 @@ public class BuiltInClass extends LispClass
         PACKAGE.setCPL(PACKAGE, CLASS_T);
         PACKAGE_ERROR.setCPL(PACKAGE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
                              STANDARD_OBJECT, CLASS_T);
-        PARSE_ERROR.setDirectSuperclass(ERROR);
         PARSE_ERROR.setCPL(PARSE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
-                           CLASS_T);
+                           STANDARD_OBJECT, CLASS_T);
         PATHNAME.setDirectSuperclass(CLASS_T);
         PATHNAME.setCPL(PATHNAME, CLASS_T);
         PRINT_NOT_READABLE.setDirectSuperclass(ERROR);
@@ -309,9 +327,9 @@ public class BuiltInClass extends LispClass
         RATIO.setCPL(RATIO, RATIONAL, REAL, NUMBER, CLASS_T);
         RATIONAL.setDirectSuperclass(REAL);
         RATIONAL.setCPL(RATIONAL, REAL, NUMBER, CLASS_T);
-        READER_ERROR.setDirectSuperclasses(list2(PARSE_ERROR, STREAM_ERROR));
-        READER_ERROR.setCPL(READER_ERROR, PARSE_ERROR, STREAM_ERROR,ERROR,
-                            SERIOUS_CONDITION, CONDITION, CLASS_T);
+        READER_ERROR.setCPL(READER_ERROR, PARSE_ERROR, STREAM_ERROR, ERROR,
+                            SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                            CLASS_T);
         READTABLE.setDirectSuperclass(CLASS_T);
         READTABLE.setCPL(READTABLE, CLASS_T);
         REAL.setDirectSuperclass(NUMBER);
@@ -343,9 +361,8 @@ public class BuiltInClass extends LispClass
                                  CLASS_T);
         STREAM.setDirectSuperclass(CLASS_T);
         STREAM.setCPL(STREAM, CLASS_T);
-        STREAM_ERROR.setDirectSuperclass(ERROR);
         STREAM_ERROR.setCPL(STREAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
-                            CLASS_T);
+                            STANDARD_OBJECT, CLASS_T);
         STRING.setDirectSuperclass(VECTOR);
         STRING.setCPL(STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
         STRING_STREAM.setDirectSuperclass(STREAM);
