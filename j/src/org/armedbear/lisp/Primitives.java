@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.516 2003-12-07 19:13:27 piso Exp $
+ * $Id: Primitives.java,v 1.517 2003-12-08 02:51:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1117,7 +1117,16 @@ public final class Primitives extends Module
     };
 
     // ### format
-    private static final Primitive FORMAT = new Primitive("format") {
+    private static final Primitive FORMAT = new Primitive("format")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            return _FORMAT.execute(args);
+        }
+    };
+
+    private static final Primitive _FORMAT = new Primitive("%format", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
