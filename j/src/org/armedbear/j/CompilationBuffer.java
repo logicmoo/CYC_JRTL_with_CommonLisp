@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.4 2002-10-05 14:07:13 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.5 2002-10-10 16:33:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,8 +59,20 @@ public final class CompilationBuffer extends Buffer implements Runnable
         formatter = new PlainTextFormatter(this);
         readOnly = true;
         setTransient(true);
-        appendLine("");
-        renumber();
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            appendLine("");
+            renumber();
+        }
+        finally {
+            unlockWrite();
+        }
         isLoaded = true;
         posEndOfBuffer = new Position(getFirstLine(), 0);
     }
@@ -93,12 +105,24 @@ public final class CompilationBuffer extends Buffer implements Runnable
 
     public void empty()
     {
-        super.empty();
-        appendLine("");
-        renumber();
-        isLoaded = true;
-        posEndOfBuffer = new Position(getFirstLine(), 0);
-        lastErrorLine = null;
+        try {
+            lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.debug(e);
+            return;
+        }
+        try {
+            super.empty();
+            appendLine("");
+            renumber();
+            isLoaded = true;
+            posEndOfBuffer = new Position(getFirstLine(), 0);
+            lastErrorLine = null;
+        }
+        finally {
+            unlockWrite();
+        }
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();
             if (ed.getBuffer() == this) {
