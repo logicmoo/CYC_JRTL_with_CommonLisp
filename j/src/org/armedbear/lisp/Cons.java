@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.19 2003-08-15 17:12:47 piso Exp $
+ * $Id: Cons.java,v 1.20 2003-08-26 16:49:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,11 @@ public final class Cons extends LispObject
                 if (((Cons)cdr).cdr == NIL)
                     return T;
         }
+        return NIL;
+    }
+
+    public LispObject ATOM()
+    {
         return NIL;
     }
 
