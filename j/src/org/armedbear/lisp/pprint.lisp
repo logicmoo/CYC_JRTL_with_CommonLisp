@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.37 2004-10-04 16:55:10 piso Exp $
+;;; $Id: pprint.lisp,v 1.38 2004-10-04 17:20:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -312,7 +312,7 @@
   (setf (Qright xp) #.(- queue-entry-size))
   (setf (prefix-stack-ptr xp) #.(- prefix-stack-entry-size))
   xp)
-
+
 ;The char-mode stuff is a bit tricky.
 ;one can be in one of the following modes:
 ;NIL no changes to characters output.
@@ -454,10 +454,10 @@
 
 (defun start-block (xp prefix-string on-each-line? suffix-string)
   (when prefix-string (write-string++ prefix-string xp 0 (length prefix-string)))
-  (if (and (char-mode xp) on-each-line?)
-      (setq prefix-string
-	    (subseq (buffer xp) (- (buffer-ptr xp) (length prefix-string))
-		    (buffer-ptr xp))))
+;;   (if (and (char-mode xp) on-each-line?)
+;;       (setq prefix-string
+;; 	    (subseq (buffer xp) (- (buffer-ptr xp) (length prefix-string))
+;; 		    (buffer-ptr xp))))
   (push-block-stack xp)
   (enqueue xp :start-block nil
 	   (if on-each-line? (cons suffix-string prefix-string) suffix-string))
