@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.16 2004-05-11 13:53:11 piso Exp $
+;;; $Id: compile-file.lisp,v 1.17 2004-05-15 19:10:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -112,6 +112,8 @@
                                        (make-macro (load-compiled-function
                                                     ,classfile))))))
                     (%format t ";  Unable to compile macro ~A~%" name)))))
+           (DEFTYPE
+            (eval form))
            (EVAL-WHEN
             (multiple-value-bind (ct lt e) (parse-eval-when-situations (cadr form))
               (%format t "; Processing EVAL-WHEN ~S~%" (cadr form))
