@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.63 2004-02-01 15:57:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.64 2004-02-01 17:12:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2440,7 +2440,7 @@
         lambda-expression)))
 
 (defun load-verbose-prefix ()
-  (let ((s (make-array sys::*load-depth*
+  (let ((s (make-array (max sys::*load-depth* 1)
                        :element-type 'character
                        :initial-element #\space)))
     (setf (char s 0) #\;)
