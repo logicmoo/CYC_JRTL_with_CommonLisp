@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.262 2004-07-11 12:45:40 piso Exp $
+ * $Id: Lisp.java,v 1.263 2004-07-12 19:18:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1228,7 +1228,7 @@ public abstract class Lisp
                     symbol.setPropertyList(list.cddr());
                 return T;
             }
-            prev = list;
+            prev = list.cdr();
             list = list.cddr();
         }
         // Not found.
