@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.45 2003-04-04 15:07:05 piso Exp $
+ * $Id: Editor.java,v 1.46 2003-04-09 16:48:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7207,6 +7207,7 @@ public final class Editor extends JPanel implements Constants, ComponentListener
             if (mode != null) {
                 setWaitCursor();
                 buffer.changeMode(mode);
+                buffer.saveProperties();
                 setDefaultCursor();
             }
         }
