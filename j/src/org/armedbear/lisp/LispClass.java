@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispClass.java,v 1.46 2004-05-23 15:20:31 piso Exp $
+ * $Id: LispClass.java,v 1.47 2004-05-23 17:42:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,8 +68,8 @@ public class LispClass extends StandardObject
     public LispObject getParts() throws ConditionThrowable
     {
         LispObject result = NIL;
-        result = result.push(new Cons("NAME", symbol));
-        result = result.push(new Cons("LAYOUT", layout));
+        result = result.push(new Cons("NAME", symbol != null ? symbol : NIL));
+        result = result.push(new Cons("LAYOUT", layout != null ? layout : NIL));
         result = result.push(new Cons("DIRECT-SUPERCLASSES", directSuperclasses));
         result = result.push(new Cons("DIRECT-SUBCLASSES", directSubclasses));
         result = result.push(new Cons("CLASS-PRECEDENCE-LIST", classPrecedenceList));
