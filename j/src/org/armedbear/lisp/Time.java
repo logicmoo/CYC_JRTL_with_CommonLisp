@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.6 2003-09-19 11:50:19 piso Exp $
+ * $Id: Time.java,v 1.7 2003-09-25 15:37:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public final class Time extends Lisp
                     sb.append('s');
             }
             out.writeString(sb.toString());
-            out.finishOutput();
+            out.flushOutput();
             return result;
         }
     };

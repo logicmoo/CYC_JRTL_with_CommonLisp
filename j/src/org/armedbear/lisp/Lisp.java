@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.149 2003-09-25 14:33:32 piso Exp $
+ * $Id: Lisp.java,v 1.150 2003-09-25 15:37:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1083,11 +1083,11 @@ public abstract class Lisp
                     }
                 }
                 out.writeLine("; Profiling started.");
-                out.finishOutput();
+                out.flushOutput();
                 profiling = true;
             } else {
                 out.writeLine("; Profiling already enabled.");
-                out.finishOutput();
+                out.flushOutput();
             }
             return LispThread.currentThread().nothing();
         }
@@ -1105,7 +1105,7 @@ public abstract class Lisp
                 out.writeLine("; Profiling stopped.");
             } else
                 out.writeLine("; Profiling not enabled.");
-            out.finishOutput();
+            out.flushOutput();
             return LispThread.currentThread().nothing();
         }
     };

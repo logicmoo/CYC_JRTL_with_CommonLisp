@@ -2,7 +2,7 @@
  * BinaryOutputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BinaryOutputStream.java,v 1.3 2003-09-19 12:32:13 piso Exp $
+ * $Id: BinaryOutputStream.java,v 1.4 2003-09-25 15:37:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class BinaryOutputStream extends LispStream
         }
     }
 
-    public void finishOutput() throws ConditionThrowable
+    public void flushOutput() throws ConditionThrowable
     {
         try {
             out.flush();

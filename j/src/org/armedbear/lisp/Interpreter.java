@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.37 2003-09-25 14:33:57 piso Exp $
+ * $Id: Interpreter.java,v 1.38 2003-09-25 15:37:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ public final class Interpreter extends Lisp
                     thread.setDynamicEnvironment(null);
                     ++commandNumber;
                     out.writeString(prompt());
-                    out.finishOutput();
+                    out.flushOutput();
                     char c = peekCharNonWhitespace(getStandardInput());
                     if (c == '\n') {
                         // Blank line.
@@ -189,7 +189,7 @@ public final class Interpreter extends Lisp
                         Symbol.SLASH.setSymbolValue(new Cons(result));
                         out.writeLine(String.valueOf(result));
                     }
-                    out.finishOutput();
+                    out.flushOutput();
                 }
                 catch (StackOverflowError e) {
                     getStandardInput().clearInput();

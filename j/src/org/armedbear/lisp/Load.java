@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.20 2003-09-24 14:16:46 piso Exp $
+ * $Id: Load.java,v 1.21 2003-09-25 15:37:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -184,7 +184,7 @@ public final class Load extends Lisp
                 out.freshLine();
                 out.writeString(semicolons);
                 out.writeLine(" Loading " + truename + " ...");
-                out.finishOutput();
+                out.flushOutput();
             }
             LispObject result = loadStream(in, print);
             if (verbose) {
@@ -197,7 +197,7 @@ public final class Load extends Lisp
                 out.writeString(" (");
                 out.writeString(String.valueOf(((float)elapsed)/1000));
                 out.writeLine(" seconds)");
-                out.finishOutput();
+                out.flushOutput();
             }
             return result;
         }
@@ -222,7 +222,7 @@ public final class Load extends Lisp
                 if (print) {
                     CharacterOutputStream out = getStandardOutput();
                     out.writeLine(String.valueOf(result));
-                    out.finishOutput();
+                    out.flushOutput();
                 }
             }
             return T;

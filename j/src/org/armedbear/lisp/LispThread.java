@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.13 2003-09-19 12:32:13 piso Exp $
+ * $Id: LispThread.java,v 1.14 2003-09-25 15:37:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,7 +229,7 @@ public final class LispThread extends LispObject
             CharacterOutputStream out = getTraceOutput();
             try {
                 out.writeLine("Evaluation stack:");
-                out.finishOutput();
+                out.flushOutput();
                 for (int i = stack.size(); i-- > 0;) {
                     out.writeString("  ");
                     out.writeString(String.valueOf(stack.size() - 1 - i));
@@ -246,7 +246,7 @@ public final class LispThread extends LispObject
                         obj = new Cons(functional, obj);
                     pprint(obj, out.getCharPos(), out);
                     out.terpri();
-                    out.finishOutput();
+                    out.flushOutput();
                 }
             }
             catch (Throwable t) {

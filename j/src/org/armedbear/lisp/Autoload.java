@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.75 2003-09-25 13:18:18 piso Exp $
+ * $Id: Autoload.java,v 1.76 2003-09-25 15:37:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,7 +69,7 @@ public class Autoload extends Function
                 out.writeString("; Loading ");
                 out.writeString(className);
                 out.writeLine(" ...");
-                out.finishOutput();
+                out.flushOutput();
                 long start = System.currentTimeMillis();
                 Class.forName(className);
                 long elapsed = System.currentTimeMillis() - start;
@@ -78,7 +78,7 @@ public class Autoload extends Function
                 out.writeString(" (");
                 out.writeString(String.valueOf(((float)elapsed)/1000));
                 out.writeLine(" seconds)");
-                out.finishOutput();
+                out.flushOutput();
             }
             catch (ClassNotFoundException e) {
                 e.printStackTrace();
