@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: numbers.lisp,v 1.9 2003-09-02 17:49:54 piso Exp $
+;;; $Id: numbers.lisp,v 1.10 2003-09-04 00:17:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -163,6 +163,20 @@
                                rational
                                rationalize)))
 
+
+
+(defun gcd (&rest numbers)
+  "Returns the greatest common divisor of the arguments, which must be
+   integers.  Gcd with no arguments is defined to be 0."
+  (unless (every #'integerp numbers)
+    (error 'type-error))
+  (cond ((null numbers) 0)
+	((null (cdr numbers)) (abs (car numbers)))
+	(t
+	 (do ((gcd (car numbers)
+		   (gcd-2 gcd (car rest)))
+	      (rest (cdr numbers) (cdr rest)))
+	     ((null rest) gcd)))))
 
 
 ;;; From discussion on comp.lang.lisp and Akira Kurihara.
