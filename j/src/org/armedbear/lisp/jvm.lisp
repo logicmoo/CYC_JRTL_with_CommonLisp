@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.261 2004-08-01 15:17:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.262 2004-08-01 19:12:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2322,6 +2322,8 @@
 
 (defun compile-multiple-value-call (form &key (target *val*))
   (case (length form)
+    (1
+     (error "Wrong number of arguments for MULTIPLE-VALUE-CALL."))
     (2
      (compile-form (second form) :target :stack)
      (emit-invokestatic +lisp-class+
@@ -2346,7 +2348,36 @@
                           -2)
        (emit-move-from-stack target)))
     (t
-     (error "COMPILE-MULTIPLE-VALUE-CALL: unsupported case: ~S" form))))
+     ;; The general case.
+     (let* ((*register* *register*)
+            (function-register (allocate-register))
+            (values-register (allocate-register)))
+       (compile-form (second form) :target :stack)
+       (emit-invokestatic +lisp-class+
+                          "coerceToFunction"
+                          "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/Function;"
+                          0)
+       (emit-move-from-stack function-register)
+       (emit 'aconst_null)
+       (emit 'astore values-register)
+       (dolist (values-form (cddr form))
+         (compile-form values-form :target :stack)
+         (emit-push-current-thread)
+         (emit 'swap)
+         (emit 'aload values-register)
+         (emit-invokevirtual +lisp-thread-class+
+                             "accumulateValues"
+                             "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)[Lorg/armedbear/lisp/LispObject;"
+                             -2)
+         (emit 'astore values-register)
+         (maybe-emit-clear-values values-form))
+       (emit 'aload function-register)
+       (emit 'aload values-register)
+       (emit-invokevirtual +lisp-object-class+
+                           "execute"
+                           "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -1)
+       (emit-move-from-stack target)))))
 
 ;; Generates code to bind variable to value at top of runtime stack.
 (defun compile-binding (variable)
