@@ -2,7 +2,7 @@
  * Throw.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Throw.java,v 1.11 2004-06-03 18:51:21 piso Exp $
+ * $Id: Throw.java,v 1.12 2004-06-04 00:34:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,40 +23,27 @@ package org.armedbear.lisp;
 
 public final class Throw extends ConditionThrowable
 {
-    private final LispObject tag;
+    public final LispObject tag;
     private final LispObject result;
     private final LispObject[] values;
 
-    public Throw(LispObject tag, LispObject result) throws ConditionThrowable
+    public Throw(LispObject tag, LispObject result, LispThread thread)
+        throws ConditionThrowable
     {
         this.tag = tag;
         this.result = result;
-        values = LispThread.currentThread().getValues();
+        values = thread._values;
     }
 
-    public LispObject getTag()
+    public LispObject getResult(LispThread thread) throws ConditionThrowable
     {
-        return tag;
-    }
-
-    public LispObject getResult() throws ConditionThrowable
-    {
-        if (values != null)
-            LispThread.currentThread().setValues(values);
-        else
-            LispThread.currentThread().clearValues();
+        thread._values = values;
         return result;
     }
 
     public LispObject getCondition()
     {
-        return new ControlError("attempt to throw to the nonexistent tag " + tag);
-    }
-
-    public static LispObject signalInvalidTag(LispObject tag)
-        throws ConditionThrowable
-    {
-        return Lisp.signal(new ControlError("Attempt to throw to the nonexistent tag " +
-                                            tag.writeToString() + "."));
+        return new ControlError("Attempt to throw to the nonexistent tag " +
+                                tag + ".");
     }
 }
