@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.219 2004-07-19 14:27:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.220 2004-07-19 16:20:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -67,14 +67,13 @@
 (defvar *dump-variables* nil)
 
 (defun dump-1-variable (variable)
-  (%format t "  ~S ~A special-p = ~S register = ~S level = ~S index = ~S arg-index = ~S~%"
+  (%format t "  ~S ~A special-p = ~S register = ~S level = ~S index = ~S~%"
            (variable-name variable)
            (variable-kind variable)
            (variable-special-p variable)
            (variable-register variable)
            (variable-level variable)
-           (variable-index variable)
-           (variable-arg-index variable)))
+           (variable-index variable)))
 
 (defun dump-variables (list caption)
   (when *dump-variables*
@@ -93,8 +92,7 @@
   register ; register number or NIL
 ;;   context
   (level *nesting-level*)
-  index
-  arg-index)
+  index)
 
 ;; True for local functions defined with FLET or LABELS.
 (defvar *child-p* nil)
@@ -741,22 +739,13 @@
                   (emit 'bipush (variable-index variable))
                   (emit 'aaload)
                   (emit-move-from-stack target))
-                 (nil ;;*child-p*
-                  (emit 'aload *context-register*)
-                  (emit 'bipush (variable-index variable))
-                  (emit 'aaload)
-                  (emit-move-from-stack target))
                  (*child-p*
                   ;; The general case.
                   (emit 'aload *context-register*) ; Array of arrays.
                   (assert (fixnump (variable-level variable)))
                   (emit 'bipush (variable-level variable))
                   (emit 'aaload) ; Locals array for level in question.
-                  (let ((index (variable-index variable)))
-                    (unless (fixnump index)
-                      (setf index (variable-arg-index variable)))
-                    (assert (fixnump index))
-                    (emit 'bipush index))
+                  (emit 'bipush (variable-index variable))
                   (emit 'aaload)
                   (emit-move-from-stack target))
                  (t
@@ -788,12 +777,6 @@
                   (emit 'swap) ; array index value
                   (emit 'aastore)
                   )
-                 (nil ;;*child-p*
-                  (emit 'aload *context-register*) ; Stack: value context
-                  (emit 'swap) ; context value
-                  (emit 'bipush (variable-index variable)) ; context value index
-                  (emit 'swap) ; context index value
-                  (emit 'aastore))
                  (*child-p*
                   ;; The general case.
                   (emit 'aload *context-register*) ; Array of arrays.
@@ -3104,20 +3087,18 @@
       (if *hairy-arglist-p*
           (let* ((closure (sys::make-closure precompiled-form nil))
                  (vars (sys::varlist closure))
-                 (arg-index 0))
+                 (index 0))
             (dolist (var vars)
               (let ((variable (make-variable :name var
                                              :kind 'ARG
                                              :special-p nil ;; FIXME
                                              :register nil
-                                             :index ;;(length (context-vars *context*))
-                                             arg-index
-                                             :arg-index arg-index)))
+                                             :index index)))
                 (push variable *all-variables*)
                 (push variable *variables*)
                 (push variable parameters)
                 (add-variable-to-context variable)
-                (incf arg-index))))
+                (incf index))))
           (let ((register 1))
             (dolist (arg args)
               (let ((variable (make-variable :name arg
@@ -3165,52 +3146,35 @@
       ;; Reserve the next available slot for the thread register.
       (setf *thread* (allocate-register))
 
+      ;; Establish dynamic bindings for any variables declared special.
       (dolist (variable parameters)
-        (cond ((variable-special-p variable)
-               ;; Establish dynamic bindings for any variables declared special.
-               (cond ((variable-register variable)
-                      (emit-push-current-thread)
-                      (emit 'getstatic
-                            *this-class*
-                            (declare-symbol (variable-name variable))
-                            +lisp-symbol+)
-                      (emit 'aload (variable-register variable))
-                      (emit-invokevirtual +lisp-thread-class+
-                                          "bindSpecial"
-                                          "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                          -2)
-                      (setf (variable-register variable) nil))
-                     ((variable-index variable)
-                      (emit-push-current-thread)
-                      (emit 'getstatic
-                            *this-class*
-                            (declare-symbol (variable-name variable))
-                            +lisp-symbol+)
-                      (emit 'aload 1)
-                      (emit 'bipush (variable-index variable))
-                      (emit 'aaload)
-                      (emit-invokevirtual +lisp-thread-class+
-                                          "bindSpecial"
-                                          "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                          -2)
-                      (setf (variable-index variable) nil))
-                     (t
-                      (error "error: need to establish dynamic binding"))))
-;;               ;; Copy args to context vector.
-              ;; Don't copy args to context vector!
-              (*child-p*
-;;                ;; Destination.
-;;                (emit 'aload *context-register*)
-;;                (emit 'bipush (variable-index variable))
-;;                ;; Value.
-;;                (emit 'aload 1)
-;;                (emit 'bipush (variable-arg-index variable))
-;;                (emit 'aaload)
-;;                (emit 'aastore)
-;;                (setf (variable-arg-index variable) nil)
-;;                (setf (variable-index variable) nil)
-               )
-              ))
+        (when (variable-special-p variable)
+          (cond ((variable-register variable)
+                 (emit-push-current-thread)
+                 (emit 'getstatic
+                       *this-class*
+                       (declare-symbol (variable-name variable))
+                       +lisp-symbol+)
+                 (emit 'aload (variable-register variable))
+                 (emit-invokevirtual +lisp-thread-class+
+                                     "bindSpecial"
+                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                     -2)
+                 (setf (variable-register variable) nil))
+                ((variable-index variable)
+                 (emit-push-current-thread)
+                 (emit 'getstatic
+                       *this-class*
+                       (declare-symbol (variable-name variable))
+                       +lisp-symbol+)
+                 (emit 'aload 1)
+                 (emit 'bipush (variable-index variable))
+                 (emit 'aaload)
+                 (emit-invokevirtual +lisp-thread-class+
+                                     "bindSpecial"
+                                     "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
+                                     -2)
+                 (setf (variable-index variable) nil)))))
 
       (process-optimization-declarations body)
       (do ((forms body (cdr forms)))
