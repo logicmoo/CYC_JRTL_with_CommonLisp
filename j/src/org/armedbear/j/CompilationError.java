@@ -2,7 +2,7 @@
  * CompilationError.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompilationError.java,v 1.1 2003-06-05 01:43:41 piso Exp $
+ * $Id: CompilationError.java,v 1.2 2003-06-05 17:26:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,25 @@ package org.armedbear.j;
 
 public final class CompilationError
 {
-    private String fileName;
-    private int lineNumber;
-    private int offset;
-    private String message;
+    private final Line errorLine;
+    private final String fileName;
+    private final int lineNumber;
+    private final int offset;
+    private final String message;
 
-    private CompilationError(String fileName, int lineNumber, int offset,
-        String message)
+    private CompilationError(Line errorLine, String fileName, int lineNumber,
+        int offset, String message)
     {
+        this.errorLine = errorLine;
         this.fileName = fileName;
         this.lineNumber = lineNumber;
         this.offset = offset;
         this.message = message;
+    }
+
+    public Line getErrorLine()
+    {
+        return errorLine;
     }
 
     public String getFileName()
@@ -57,7 +64,7 @@ public final class CompilationError
         return message;
     }
 
-    public static CompilationError parseLineAsErrorMessage(Line line)
+    public static CompilationError parseLineAsErrorMessage(final Line line)
     {
         String text = line.trim();
         if (text.startsWith("[javac]")) {
@@ -93,7 +100,7 @@ public final class CompilationError
                         message = remainder.trim();
                     if (message.length() == 0)
                         message = null;
-                    return new CompilationError(fileName, lineNumber, -1,
+                    return new CompilationError(line, fileName, lineNumber, -1,
                         message);
                 }
             }
@@ -141,8 +148,8 @@ public final class CompilationError
                         message = remainder.trim();
                     if (message.length() == 0)
                         message = null;
-                    return new CompilationError(fileName, lineNumber, offset,
-                        message);
+                    return new CompilationError(line, fileName, lineNumber,
+                        offset, message);
                 }
             }
         }
