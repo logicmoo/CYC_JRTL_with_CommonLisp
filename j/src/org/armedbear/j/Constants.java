@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: Constants.java,v 1.8 2003-01-04 17:46:52 piso Exp $
+ * $Id: Constants.java,v 1.9 2003-05-07 01:27:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,7 @@ public interface Constants
     int LOAD_PENDING             = 2;
     int LOAD_FAILED              = 3;
 
+    // LocalTag types.
     int TAG_UNKNOWN              = 0;
     int TAG_INTERFACE            = 1;
     int TAG_CLASS                = 2;
@@ -81,6 +82,17 @@ public interface Constants
 
     int TAG_FUNCTION             = TAG_METHOD;
 
+    // Additional LocalTag types for Lisp.
+    int TAG_CONSTANT             = 8;
+    int TAG_CONDITION            = 9;
+    int TAG_DEFUN                = 10;
+    int TAG_MACRO                = 11;
+    int TAG_PARAMETER            = 12;
+    int TAG_STRUCT               = 13;
+    int TAG_TYPE                 = 14;
+    int TAG_VAR                  = 15;
+
+    // Visibility values (stored in LocalTag flags field).
     int TAG_PUBLIC               = 0x0001;
     int TAG_PROTECTED            = 0x0002;
     int TAG_PRIVATE              = 0x0004;
