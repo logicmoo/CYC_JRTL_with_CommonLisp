@@ -1,8 +1,8 @@
 /*
  * PackageFunctions.java
  *
- * Copyright (C) 2003 Peter Graves
- * $Id: PackageFunctions.java,v 1.23 2003-12-13 00:02:47 piso Exp $
+ * Copyright (C) 2003-2004 Peter Graves
+ * $Id: PackageFunctions.java,v 1.24 2004-02-14 18:55:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,8 @@ public final class PackageFunctions extends Lisp
 {
     // ### packagep
     // packagep object => generalized-boolean
-    private static final Primitive1 PACKAGEP = new Primitive1("packagep","object") {
+    private static final Primitive1 PACKAGEP = new Primitive1("packagep", "object")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof Package ? T : NIL;
@@ -35,7 +36,8 @@ public final class PackageFunctions extends Lisp
     // ### package-name
     // package-name package => nicknames
     private static final Primitive1 PACKAGE_NAME =
-        new Primitive1("package-name","package") {
+        new Primitive1("package-name", "package")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String name = coerceToPackage(arg).getName();
@@ -46,7 +48,8 @@ public final class PackageFunctions extends Lisp
     // ### package-nicknames
     // package-nicknames package => nicknames
     private static final Primitive1 PACKAGE_NICKNAMES =
-        new Primitive1("package-nicknames","package") {
+        new Primitive1("package-nicknames", "package")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).packageNicknames();
@@ -56,7 +59,8 @@ public final class PackageFunctions extends Lisp
     // ### package-use-list
     // package-use-list package => use-list
     private static final Primitive1 PACKAGE_USE_LIST =
-        new Primitive1("package-use-list","package") {
+        new Primitive1("package-use-list", "package")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).getUseList();
@@ -66,7 +70,8 @@ public final class PackageFunctions extends Lisp
     // ### package-used-by-list
     // package-used-by-list package => used-by-list
     private static final Primitive1 PACKAGE_USED_BY_LIST =
-        new Primitive1("package-used-by-list","package") {
+        new Primitive1("package-used-by-list", "package")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).getUsedByList();
@@ -75,7 +80,9 @@ public final class PackageFunctions extends Lisp
 
     // ### import
     // import symbols &optional package => t
-    private static final Primitive IMPORT = new Primitive("import","symbols &optional package") {
+    private static final Primitive IMPORT =
+        new Primitive("import", "symbols &optional package")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
@@ -96,7 +103,9 @@ public final class PackageFunctions extends Lisp
 
     // ### unexport
     // unexport symbols &optional package => t
-    private static final Primitive UNEXPORT = new Primitive("unexport","symbols &optional package") {
+    private static final Primitive UNEXPORT =
+        new Primitive("unexport", "symbols &optional package")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
@@ -117,7 +126,9 @@ public final class PackageFunctions extends Lisp
 
     // ### shadow
     // shadow symbol-names &optional package => t
-    private static final Primitive SHADOW = new Primitive("shadow","symbol-names &optional package") {
+    private static final Primitive SHADOW =
+        new Primitive("shadow", "symbol-names &optional package")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
@@ -139,7 +150,8 @@ public final class PackageFunctions extends Lisp
     // ### shadowing-import
     // shadowing-import symbols &optional package => t
     private static final Primitive SHADOWING_IMPORT =
-        new Primitive("shadowing-import","symbols &optional package") {
+        new Primitive("shadowing-import", "symbols &optional package")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0 || args.length > 2)
@@ -161,7 +173,8 @@ public final class PackageFunctions extends Lisp
     // ### package-shadowing-symbols
     // package-shadowing-symbols package => used-by-list
     private static final Primitive1 PACKAGE_SHADOWING_SYMBOLS =
-        new Primitive1("package-shadowing-symbols","package") {
+        new Primitive1("package-shadowing-symbols", "package")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).getShadowingSymbols();
@@ -170,7 +183,8 @@ public final class PackageFunctions extends Lisp
 
     // ### delete-package
     private static final Primitive1 DELETE_PACKAGE =
-        new Primitive1("delete-package","package") {
+        new Primitive1("delete-package", "package")
+    {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).delete() ? T : NIL;
@@ -180,7 +194,8 @@ public final class PackageFunctions extends Lisp
     // ### unuse-package
     // unuse-package packages-to-unuse &optional package => t
     private static final Primitive USE_PACKAGE =
-        new Primitive("unuse-package","packages-to-unuse &optional package") {
+        new Primitive("unuse-package", "packages-to-unuse &optional package")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1 || args.length > 2)
@@ -205,7 +220,8 @@ public final class PackageFunctions extends Lisp
     // ### rename-package
     // rename-package package new-name &optional new-nicknames => package-object
     private static final Primitive RENAME_PACKAGE =
-        new Primitive("rename-package","package new-name &optional new-nicknames") {
+        new Primitive("rename-package", "package new-name &optional new-nicknames")
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2 || args.length > 3)
@@ -219,7 +235,8 @@ public final class PackageFunctions extends Lisp
     };
 
     private static final Primitive0 LIST_ALL_PACKAGES =
-        new Primitive0("list-all-packages","") {
+        new Primitive0("list-all-packages", "")
+    {
         public LispObject execute()
         {
             return Packages.listAllPackages();
@@ -230,7 +247,8 @@ public final class PackageFunctions extends Lisp
     // %defpackage name nicknames size shadows shadowing-imports use imports
     // interns exports doc-string => package
     private static final Primitive _DEFPACKAGE =
-        new Primitive("%defpackage", PACKAGE_SYS, false) {
+        new Primitive("%defpackage", PACKAGE_SYS, false)
+    {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 10)
@@ -245,37 +263,31 @@ public final class PackageFunctions extends Lisp
             LispObject interns = checkList(args[7]);
             LispObject exports = checkList(args[8]);
             LispObject docString = args[9];
-
             Package pkg = Packages.findPackage(packageName);
             if (pkg != null)
                 return pkg;
-
             if (nicknames != NIL) {
                 LispObject list = nicknames;
                 while (list != NIL) {
                     String nick = javaString(list.car());
                     if (Packages.findPackage(nick) != null) {
-                        return signal(new PackageError("a package named " + nick +
-                                                                      " already exists"));
+                        return signal(new PackageError("A package named " + nick +
+                                                       " already exists."));
                     }
                     list = list.cdr();
                 }
             }
-
             pkg = Packages.createPackage(packageName);
-
             while (nicknames != NIL) {
-                LispString string = string(nicknames.car());
-                pkg.addNickname(string.getValue());
+                LispObject string = string(nicknames.car());
+                pkg.addNickname(string.getStringValue());
                 nicknames = nicknames.cdr();
             }
-
             while (shadows != NIL) {
                 String symbolName = LispString.getValue(shadows.car());
                 pkg.shadow(symbolName);
                 shadows = shadows.cdr();
             }
-
             while (shadowingImports != NIL) {
                 LispObject si = shadowingImports.car();
                 Package otherPkg = coerceToPackage(si.car());
@@ -287,28 +299,26 @@ public final class PackageFunctions extends Lisp
                         pkg.shadowingImport(sym);
                     else
                         return signal(new LispError(symbolName +
-                                                                   " not found in package " +
-                                                                   otherPkg.getName()));
+                                                    " not found in package " +
+                                                    otherPkg.getName() + "."));
                     symbolNames = symbolNames.cdr();
                 }
                 shadowingImports = shadowingImports.cdr();
             }
-
             while (use != NIL) {
                 LispObject obj = use.car();
                 if (obj instanceof Package)
                     pkg.usePackage((Package)obj);
                 else {
-                    LispString string = string(obj);
-                    Package p = Packages.findPackage(string.getValue());
+                    LispObject string = string(obj);
+                    Package p = Packages.findPackage(string.getStringValue());
                     if (p == null)
                         return signal(new LispError(String.valueOf(obj) +
-                                                                   " is not the name of a package"));
+                                                    " is not the name of a package."));
                     pkg.usePackage(p);
                 }
                 use = use.cdr();
             }
-
             while (imports != NIL) {
                 LispObject si = imports.car();
                 Package otherPkg = coerceToPackage(si.car());
@@ -320,26 +330,23 @@ public final class PackageFunctions extends Lisp
                         pkg.importSymbol(sym);
                     else
                         return signal(new LispError(symbolName +
-                                                                   " not found in package " +
-                                                                   otherPkg.getName()));
+                                                    " not found in package " +
+                                                    otherPkg.getName() + "."));
                     symbolNames = symbolNames.cdr();
                 }
                 imports = imports.cdr();
             }
-
             while (interns != NIL) {
                 String symbolName = LispString.getValue(interns.car());
                 pkg.intern(symbolName);
                 interns = interns.cdr();
             }
-
             while (exports != NIL) {
                 LispObject obj = exports.car();
                 String symbolName = LispString.getValue(exports.car());
                 pkg.export(pkg.intern(symbolName));
                 exports = exports.cdr();
             }
-
             return pkg;
         }
     };

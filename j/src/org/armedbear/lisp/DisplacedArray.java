@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.22 2004-02-14 17:28:26 piso Exp $
+ * $Id: DisplacedArray.java,v 1.23 2004-02-14 18:52:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,6 +96,17 @@ public final class DisplacedArray extends AbstractArray
         Debug.assertTrue(array.stringp());
         System.arraycopy(array.chars(), offset, chars, 0, size);
         return chars;
+    }
+
+    public String getStringValue() throws ConditionThrowable
+    {
+        if (!stringp)
+            signal(new TypeError(this, Symbol.STRING));
+        char[] chars = chars();
+        if (fillPointer >= 0)
+            return new String(chars, 0, fillPointer);
+        else
+            return new String(chars);
     }
 
     public boolean vectorp()

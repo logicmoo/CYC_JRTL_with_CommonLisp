@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LispString.java,v 1.78 2004-02-14 15:31:39 piso Exp $
+ * $Id: LispString.java,v 1.79 2004-02-14 18:52:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -272,6 +272,14 @@ public final class LispString extends AbstractVector
     }
 
     public final String getValue()
+    {
+        if (fillPointer >= 0)
+            return new String(chars, 0, fillPointer);
+        else
+            return new String(chars);
+    }
+
+    public String getStringValue()
     {
         if (fillPointer >= 0)
             return new String(chars, 0, fillPointer);
