@@ -2,7 +2,7 @@
  * LispAPI.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispAPI.java,v 1.54 2004-09-16 17:20:23 piso Exp $
+ * $Id: LispAPI.java,v 1.55 2004-09-23 14:34:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1049,6 +1049,7 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### begin-compound-edit
     private static final Primitive0 BEGIN_COMPOUND_EDIT =
         new Primitive0("begin-compound-edit", PACKAGE_J, false)
     {
@@ -1058,6 +1059,7 @@ public final class LispAPI extends Lisp
         }
     };
 
+    // ### end-compound-edit
     private static final Primitive1 END_COMPOUND_EDIT =
         new Primitive1("end-compound-edit", PACKAGE_J, false)
     {
