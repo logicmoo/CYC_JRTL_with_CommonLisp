@@ -2,7 +2,10 @@
 
 (in-package "COMMON-LISP")
 
-(export '(cdddr list-length make-list
+(export '(caadr caaar cdaar cddar cdddr cadar cdadr
+          caaaar caaadr caaddr cadddr cddddr cdaaar cddaar cdddar
+          caadar cadaar cadadr caddar cdaadr cdadar cdaddr cddadr
+          list-length make-list
           copy-list copy-alist copy-tree
           revappend nconc nreconc
           butlast nbutlast
@@ -16,8 +19,29 @@
           acons pairlis
           assoc assoc-if assoc-if-not rassoc rassoc-if rassoc-if-not))
 
-(defun cdddr (list)
-  (cdr (cdr (cdr list))))
+(defun caadr (list) (car (car (cdr list))))
+(defun caaar (list) (car (car (car list))))
+(defun cdaar (list) (cdr (car (car list))))
+(defun cddar (list) (cdr (cdr (car list))))
+(defun cdddr (list) (cdr (cdr (cdr list))))
+(defun cadar (list) (car (cdr (car list))))
+(defun cdadr (list) (cdr (car (cdr list))))
+(defun caaaar (list) (car (car (car (car list)))))
+(defun caaadr (list) (car (car (car (cdr list)))))
+(defun caaddr (list) (car (car (cdr (cdr list)))))
+(defun cadddr (list) (car (cdr (cdr (cdr list)))))
+(defun cddddr (list) (cdr (cdr (cdr (cdr list)))))
+(defun cdaaar (list) (cdr (car (car (car list)))))
+(defun cddaar (list) (cdr (cdr (car (car list)))))
+(defun cdddar (list) (cdr (cdr (cdr (car list)))))
+(defun caadar (list) (car (car (cdr (car list)))))
+(defun cadaar (list) (car (cdr (car (car list)))))
+(defun cadadr (list) (car (cdr (car (cdr list)))))
+(defun caddar (list) (car (cdr (cdr (car list)))))
+(defun cdaadr (list) (cdr (car (car (cdr list)))))
+(defun cdadar (list) (cdr (car (cdr (car list)))))
+(defun cdaddr (list) (cdr (car (cdr (cdr list)))))
+(defun cddadr (list) (cdr (cdr (car (cdr list)))))
 
 (defun list-length (list)
   (do ((n 0 (+ n 2))
