@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.142 2004-01-26 00:33:48 piso Exp $
+ * $Id: Autoload.java,v 1.143 2004-01-26 18:37:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,6 +227,7 @@ public class Autoload extends Function
         autoload("echo-stream-output-stream", "EchoStream");
         autoload("file-author", "file_author");
         autoload("file-error-pathname", "file_error_pathname");
+        autoload("file-length", "file_length");
         autoload("file-write-date", "file_write_date");
         autoload("find-class", "LispClass");
         autoload("get-internal-real-time", "Time");
