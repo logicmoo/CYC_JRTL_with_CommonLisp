@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.176 2004-03-17 16:25:06 piso Exp $
+ * $Id: Autoload.java,v 1.177 2004-03-17 17:54:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -230,6 +230,7 @@ public class Autoload extends Function
         autoload("char-lessp", "CharacterFunctions");
         autoload("char-not-greaterp", "CharacterFunctions");
         autoload("char-not-lessp", "CharacterFunctions");
+        autoload("char<=", "CharacterFunctions");
         autoload("char=", "CharacterFunctions");
         autoload("clrhash", "HashTable");
         autoload("concatenated-stream-streams", "ConcatenatedStream");
