@@ -1,8 +1,8 @@
 /*
  * InsertTagDialog.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: InsertTagDialog.java,v 1.2 2003-06-12 18:50:43 piso Exp $
+ * Copyright (C) 2000-2004 Peter Graves
+ * $Id: InsertTagDialog.java,v 1.3 2004-04-22 14:55:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,37 +27,10 @@ import javax.swing.undo.CompoundEdit;
 
 public final class InsertTagDialog extends InputDialog implements Constants
 {
-    private String tagName;
-    private String extra;
-
     public InsertTagDialog(Editor editor)
     {
         super(editor, "Element:", "Insert Element", null);
         setHistory(new History("insertTag"));
-    }
-
-    public final String getTagName()
-    {
-        return tagName;
-    }
-
-    public final String getExtra()
-    {
-        return extra;
-    }
-
-    protected void enter()
-    {
-        super.enter();
-        String input = getInput();
-        int index = input.indexOf(' ');
-        if (index >= 0) {
-            tagName = input.substring(0, index);
-            extra = input.substring(index);
-        } else {
-            tagName = input;
-            extra = "";
-        }
     }
 
     protected List getCompletions(String prefix)
@@ -75,7 +48,7 @@ public final class InsertTagDialog extends InputDialog implements Constants
     }
 
     public static void insertTag(Editor editor, String tagName, String extra,
-        boolean wantEndTag)
+                                 boolean wantEndTag)
     {
         if (extra == null)
             extra = "";
@@ -121,6 +94,7 @@ public final class InsertTagDialog extends InputDialog implements Constants
             boolean wantNewLine = false;
             if (r.getBeginOffset() == 0 && r.getEndOffset() == 0)
                 wantNewLine = true;
+            final int offset = editor.getDotOffset();
             CompoundEdit compoundEdit = editor.beginCompoundEdit();
             if (wantEndTag) {
                 editor.moveDotTo(r.getEnd());
@@ -134,7 +108,8 @@ public final class InsertTagDialog extends InputDialog implements Constants
             }
             editor.moveDotTo(r.getBegin());
             editor.addUndo(SimpleEdit.INSERT_STRING);
-            editor.insertStringInternal("<" + tagName + extra + ">");
+            String insert = "<" + tagName + extra + ">";
+            editor.insertStringInternal(insert);
             Editor.updateInAllEditors(editor.getDotLine());
             if (wantNewLine) {
                 Line startTagLine = editor.getDotLine();
@@ -148,13 +123,19 @@ public final class InsertTagDialog extends InputDialog implements Constants
                     Position dot = editor.getDot();
                     while (dot.getLine() != null && dot.getLine() != r.getEndLine().next()) {
                         editor.indentLine();
-                        dot.setLine(dot.getNextLine());
+                        dot.moveTo(dot.getNextLine(), 0);
                     }
                 }
                 // Put dot before '>' of start tag.
                 editor.moveDotTo(startTagLine, startTagLine.length()-1);
-            } else
-                editor.moveDotTo(editor.getDotLine(), editor.getDotOffset()-1);
+            } else {
+                int newOffset;
+                if (extra.endsWith(" "))
+                    newOffset = editor.getDotOffset() - 1;
+                else
+                    newOffset = offset + insert.length();
+                editor.moveDotTo(editor.getDotLine(), newOffset);
+            }
             editor.endCompoundEdit(compoundEdit);
         } else {
             CompoundEdit compoundEdit = editor.beginCompoundEdit();
