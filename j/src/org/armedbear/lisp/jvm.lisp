@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.282 2004-08-19 15:19:01 piso Exp $
+;;; $Id: jvm.lisp,v 1.283 2004-08-21 03:27:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,13 +17,18 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(require '#:opcodes)
-
 (in-package "JVM")
 
 (export '(compile-defun *catch-errors* jvm-compile jvm-compile-package))
 
-(import 'sys::%format)
+(import '(sys::%format
+          sys::source-transform
+          sys::define-source-transform
+          sys::expand-source-transform))
+
+(require :source-transform)
+
+(require '#:opcodes)
 
 (shadow '(method variable))
 
@@ -148,14 +153,17 @@
    (when (< *registers-allocated* *register*)
      (setf *registers-allocated* *register*))))
 
-(defvar *local-functions* ())
-
 (defstruct local-function
   name
   function
   classfile
   variable
   (nesting-level (1+ *nesting-level*)))
+
+(defvar *local-functions* ())
+
+(defun find-local-function (name)
+  (find name *local-functions* :key #'local-function-name))
 
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
@@ -316,11 +324,15 @@
                      (t
                       ;; Function call.
                       (let ((new-form (rewrite-function-call form)))
-                        (if (neq new-form form)
-                            (p1 new-form)
-                            (p1-default form))))))
+                        (when (neq new-form form)
+                          (return-from p1 (p1 new-form))))
+                      (let ((source-transform (source-transform op)))
+                        (when source-transform
+                          (let ((new-form (expand-source-transform form)))
+                            (when (neq new-form form)
+                              (return-from p1 (p1 new-form))))))
+                      (p1-default form))))
               ((and (consp op) (eq (car op) 'LAMBDA))
-;;                (format t "P1 form = ~S~%" form)
                (unless (and *current-compiland*
                             (compiland-contains-lambda *current-compiland*))
                  (do ((compiland *current-compiland* (compiland-parent compiland)))
@@ -845,6 +857,7 @@
     (inst (instruction-opcode instruction) (u2 index))))
 
 (defun resolve-instruction (instruction)
+  (declare (optimize speed))
   (let ((resolver (gethash (instruction-opcode instruction) *resolvers*)))
     (if resolver
         (funcall resolver instruction)
@@ -1942,28 +1955,30 @@
                         -2)
      (emit-move-from-stack target)
      t)
-;;     (SYS::%STRUCTURE-SET
-;;      (when (fixnump (second args))
-;;        (compile-form (first args) :target :stack)
-;;        (maybe-emit-clear-values (first args))
-;;        (emit 'sipush (second args))
-;;        (emit-invokevirtual +lisp-object-class+
-;;                            "getSlotValue"
-;;                            "(I)Lorg/armedbear/lisp/LispObject;"
-;;                            -1)
-;;        (emit-move-from-stack target)
-;;        t))
+    (SYS::%STRUCTURE-SET
+     (when (fixnump (second args))
+       (compile-form (first args) :target :stack)
+       (maybe-emit-clear-values (first args))
+       (emit 'sipush (second args))
+       (compile-form (third args) :target :stack)
+       (maybe-emit-clear-values (third args))
+       (emit-invokevirtual +lisp-object-class+
+                           "setSlotValue"
+                           "(ILorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                           -2)
+       (emit-move-from-stack target)
+       t))
     (t
      nil)))
 
 (defvar *toplevel-defuns* nil)
 
 (defun notinline-p (name)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (eq (get name '%inline) 'NOTINLINE))
 
 (defun inline-ok (name)
-  (declare (optimize speed (safety 0)))
+  (declare (optimize speed))
   (cond ((notinline-p name)
          nil)
         ((sys::built-in-function-p name)
@@ -2109,18 +2124,14 @@
                                   -2)))))))
 
 (defun compile-function-call (form &key (target *val*))
-;;   (format t "compile-function-call ~S~%" form)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
-;;       (format t "new-form = ~S~%" new-form)
       (return-from compile-function-call (compile-form new-form :target target))))
   (let ((fun (car form))
         (args (cdr form)))
     (unless (symbolp fun)
       (error "COMPILE-FUNCTION-CALL ~S is not a symbol" fun))
-;;     (format t "compile-function-call looking for ~S~%" fun)
-    (when (find fun *local-functions* :key #'local-function-name)
-;;       (format t "found local function~%")
+    (when (find-local-function fun)
       (return-from compile-function-call (compile-local-function-call form target)))
     (let ((numargs (length args)))
       (when (sys::built-in-function-p fun)
@@ -2159,6 +2170,21 @@
         (maybe-emit-clear-values form))
       (emit-move-from-stack target))))
 
+(define-source-transform funcall (&whole form fun &rest args)
+  (cond ((and (consp fun)
+              (eq (car fun) 'FUNCTION))
+         `(,(cadr fun) ,@args))
+        ((and (consp fun)
+              (eq (car fun) 'QUOTE))
+         (let ((sym (cadr fun)))
+           (if (and (symbolp sym)
+                    (eq (symbol-package sym) (find-package "CL"))
+                    (not (special-operator-p sym)))
+               `(,(cadr fun) ,@args)
+               form)))
+        (t
+         form)))
+
 (defun compile-funcall (form &key (target *val*))
   (unless (> (length form) 1)
     (error "Wrong number of arguments for FUNCALL."))
@@ -2167,10 +2193,12 @@
       (return-from compile-funcall (compile-form new-form :target target))))
   (compile-form (cadr form) :target :stack)
   (maybe-emit-clear-values (cadr form))
-  (emit-invokestatic +lisp-class+
-                     "coerceToFunction"
-                     "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                     0)
+  (unless (and (consp (cadr form))
+               (eq (caadr form) 'FUNCTION))
+    (emit-invokestatic +lisp-class+
+                       "coerceToFunction"
+                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                       0))
   (compile-call (cddr form))
   (unless target
     (maybe-emit-clear-values form))
@@ -2179,7 +2207,7 @@
 (defun compile-local-function-call (form target)
   (let* ((fun (car form))
          (args (cdr form))
-         (local-function (find fun *local-functions* :key #'local-function-name)))
+         (local-function (find-local-function fun)))
     (aver (not (null local-function)))
     (cond ((local-function-variable local-function)
            ;; LABELS
@@ -3229,7 +3257,7 @@
                   *local-functions*)))
         (dolist (definition definitions)
           (let* ((name (car definition))
-                 (local-function (find name *local-functions* :key #'local-function-name)))
+                 (local-function (find-local-function name)))
             (compile-local-function definition local-function)))
         (do ((forms body (cdr forms)))
             ((null forms))
@@ -3321,7 +3349,7 @@
   (let ((name (second form))
         (local-function))
     (cond ((symbolp name)
-           (cond ((setf local-function (find name *local-functions* :key #'local-function-name))
+           (cond ((setf local-function (find-local-function name))
                   (if (local-function-variable local-function)
                       (emit 'var-ref (local-function-variable local-function) :stack)
                       (let ((g (if *compile-file-truename*
