@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.77 2003-04-25 00:36:56 piso Exp $
+;;; $Id: rt.lisp,v 1.78 2003-04-25 02:04:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -643,6 +643,7 @@
                               "character"
                               "cl-symbols"
                               "coerce"
+                              "complement"
                               "concatenate"
                               "cond"
                               "cons"
@@ -689,6 +690,7 @@
                               "getf"
                               "handler-bind"
                               "handler-case"
+                              "hash-table"
                               "identity"
                               "if"
                               "intersection"
@@ -743,6 +745,9 @@
                               "nreverse"
                               "nset-difference"
                               "nset-exclusive-or"
+                              "nstring-capitalize"
+                              "nstring-downcase"
+                              "nstring-upcase"
                               "nsublis"
                               "nsubst"
                               "nsubst-if"
@@ -753,6 +758,7 @@
                               "nth"
                               "nth-value"
                               "nthcdr"
+                              "number-comparison"
                               "nunion"
                               "or"
                               "pairlis"
@@ -793,8 +799,12 @@
                               "some"
                               "sort"
                               "string"
+                              "string-capitalize"
                               "string-comparisons"
                               "string-downcase"
+                              "string-left-trim"
+                              "string-right-trim"
+                              "string-trim"
                               "string-upcase"
                               "sublis"
                               "subseq"
@@ -818,6 +828,7 @@
                               "vector"
                               "vector-pop"
                               "vector-push"
+                              "vector-push-extend"
                               "vectorp"
                               "when"))))
     (dolist (test tests)
@@ -845,4 +856,6 @@
 (load (concatenate 'string rt::*prefix* "universe.lsp"))
 (load (concatenate 'string rt::*prefix* "subseq-aux.lsp"))
 (load (concatenate 'string rt::*prefix* "cons-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "numbers-aux.lsp"))
+(load (concatenate 'string rt::*prefix* "string-aux.lsp"))
 #+armedbear (debug)
