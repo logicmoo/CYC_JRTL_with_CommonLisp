@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.109 2004-04-16 01:13:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.110 2004-04-16 05:57:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -555,7 +555,12 @@
 (defun emit-clear-values ()
   (ensure-thread-var-initialized)
   (emit 'aload *thread*)
-  (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V" -1))
+
+  (emit 'aconst_null)
+  (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
+
+;;   (emit-invokevirtual +lisp-thread-class+ "clearValues" "()V" -1)
+  )
 
 (defparameter single-valued-operators (make-hash-table :test 'eq))
 
@@ -767,6 +772,9 @@
         )
        (let ((index (pool-field (first args) (second args) (third args))))
          (inst opcode (u2 index))))
+      (181 ; PUTFIELD class-name field-name type-name
+       (let ((index (pool-field (first args) (second args) (third args))))
+         (inst opcode (u2 index))))
       ((182 ; INVOKEVIRTUAL class-name method-name descriptor
         183 ; INVOKESPECIAL class-name method-name descriptor
         184 ; INVOKESTATIC class-name method-name descriptor
@@ -860,6 +868,8 @@
      1)
     (179 ; PUTSTATIC
      -1)
+    (181 ; PUTFIELD
+     -2)
     (187 ; NEW
      1)
     (189 ; ANEWARRAY
@@ -2662,6 +2672,7 @@
                   (1 "org.armedbear.lisp.Primitive1")
                   (2 "org.armedbear.lisp.Primitive2")
                   (3 "org.armedbear.lisp.Primitive3")
+                  (4 "org.armedbear.lisp.Primitive4")
                   (t "org.armedbear.lisp.Primitive"))))
            (this-index (pool-class *this-class*))
            (super-index (pool-class super))
