@@ -506,6 +506,7 @@ with-simple-restart
 with-slots
 with-standard-io-syntax
 write
+write-byte
 write-char
 write-line
 write-string
