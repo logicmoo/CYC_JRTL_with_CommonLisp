@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.45 2004-03-12 00:28:29 piso Exp $
+ * $Id: Stream.java,v 1.46 2004-03-12 00:37:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,8 +257,8 @@ public class Stream extends LispObject
         switch (c) {
 //             case '"':
 //                 return LispReader.READ_STRING.execute(this, c);
-            case '\'':
-                return readQuote();
+//             case '\'':
+//                 return readQuote();
             case '(':
                 return readList();
 //             case ')':
@@ -313,10 +313,10 @@ public class Stream extends LispObject
         return signal(new ReaderError("Non-list following #S: " + obj));
     }
 
-    private LispObject readQuote() throws ConditionThrowable
-    {
-        return new Cons(Symbol.QUOTE, new Cons(read(true, NIL, true)));
-    }
+//     private LispObject readQuote() throws ConditionThrowable
+//     {
+//         return new Cons(Symbol.QUOTE, new Cons(read(true, NIL, true)));
+//     }
 
     private LispObject readList() throws ConditionThrowable
     {
@@ -338,7 +338,7 @@ public class Stream extends LispObject
                     continue;
                 } else if (isTokenDelimiter(nextChar)) {
                     if (last == null)
-                        return signal(new LispError("nothing appears before . in list"));
+                        return signal(new ReaderError("Nothing appears before . in list."));
                     LispObject obj = read(true, NIL, true);
                     last.setCdr(obj);
                     continue;
