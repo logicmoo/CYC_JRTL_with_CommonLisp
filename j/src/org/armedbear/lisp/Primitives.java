@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.304 2003-07-28 23:43:46 piso Exp $
+ * $Id: Primitives.java,v 1.305 2003-07-29 15:00:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,16 +100,15 @@ public final class Primitives extends Module
     private static final int UPPER_CASE_P               = 58;
     private static final int VALUES_LIST                = 59;
     private static final int VECTORP                    = 60;
-    private static final int ZEROP                      = 61;
 
     // Primitive2
-    private static final int MEMBER                     = 62;
-    private static final int MOD                        = 63;
-    private static final int RPLACA                     = 64;
-    private static final int RPLACD                     = 65;
-    private static final int SET                        = 66;
-    private static final int _RPLACA                    = 67;
-    private static final int _RPLACD                    = 68;
+    private static final int MEMBER                     = 61;
+    private static final int MOD                        = 62;
+    private static final int RPLACA                     = 63;
+    private static final int RPLACD                     = 64;
+    private static final int SET                        = 65;
+    private static final int _RPLACA                    = 66;
+    private static final int _RPLACD                    = 67;
 
     private Primitives()
     {
@@ -175,7 +174,6 @@ public final class Primitives extends Module
         definePrimitive1("upper-case-p", UPPER_CASE_P);
         definePrimitive1("values-list", VALUES_LIST);
         definePrimitive1("vectorp", VECTORP);
-        definePrimitive1("zerop", ZEROP);
 
         definePrimitive2("member", MEMBER);
         definePrimitive2("mod", MOD);
@@ -410,8 +408,6 @@ public final class Primitives extends Module
                 return (arg.getType() & TYPE_STRING) != 0 ? T : NIL;
             case SIMPLE_STRING_P:               // ### simple-string-p
                 return arg.typep(Symbol.SIMPLE_STRING);
-            case ZEROP:                         // ### zerop
-                return Fixnum.getValue(arg) == 0 ? T : NIL;
             case SUCCESSOR:                     // ### 1+
                 return arg.add(Fixnum.ONE);
             case PREDECESSOR:                   // ### 1-
@@ -560,6 +556,21 @@ public final class Primitives extends Module
         public LispObject execute(LispObject arg) throws LispError
         {
             return arg == NIL ? T : NIL;
+        }
+    };
+
+    // ### zerop
+    private static final Primitive1 ZEROP = new Primitive1("zerop") {
+        public LispObject execute(LispObject arg) throws LispError
+        {
+            try {
+                return ((Fixnum)arg).getValue() == 0 ? T : NIL;
+            }
+            catch (ClassCastException e) {
+                if (arg instanceof LispFloat)
+                    return ((LispFloat)arg).getValue() == 0 ? T : NIL;
+                throw new TypeError(arg, "number");
+            }
         }
     };
 
