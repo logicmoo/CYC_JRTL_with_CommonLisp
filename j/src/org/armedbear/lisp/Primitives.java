@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.6 2003-01-30 17:43:08 piso Exp $
+ * $Id: Primitives.java,v 1.7 2003-01-30 22:23:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2449,8 +2449,7 @@ public final class Primitives extends Module
                     body = new Cons(symbol, body);
                     body = new Cons(Symbol.BLOCK, body);
                     body = new Cons(body, NIL);
-                    Closure closure =
-                        new Closure(symbol.getName(), parameters, body, env);
+                    Closure closure = new Closure(parameters, body, env);
                     ext.bindFunctional(symbol, closure);
                     defs = defs.cdr();
                 }
