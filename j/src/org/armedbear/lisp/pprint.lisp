@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.8 2004-04-25 17:46:51 piso Exp $
+;;; $Id: pprint.lisp,v 1.9 2004-05-10 01:10:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -87,8 +87,11 @@
 #-armedbear
 (provide "XP")
 
-(shadow '(write print #-armedbear prin1 #-armedbear princ #-armedbear pprint #-armedbear format write-to-string #-armedbear princ-to-string
-	  #-armedbear prin1-to-string write-line #-armedbear write-string write-char terpri fresh-line
+(shadow '(write print #-armedbear prin1 #-armedbear princ #-armedbear pprint
+          #-armedbear format
+          #-armedbear write-to-string #-armedbear princ-to-string
+	  #-armedbear prin1-to-string write-line #-armedbear write-string
+          write-char terpri fresh-line
 	  defstruct finish-output force-output clear-output))
 
 (export '(formatter copy-pprint-dispatch pprint-dispatch
@@ -99,13 +102,6 @@
 	  *print-miser-width* *print-lines*
 	  *last-abbreviated-printing*
 	  #+symbolics pp))
-
-#-armedbear
-(defvar *xp-printing-functions*
-	'(write print prin1 princ pprint format write-to-string princ-to-string
-	  prin1-to-string write-line write-string write-char terpri fresh-line
-	  defstruct finish-output force-output clear-output)
-  "printing functions redefined by xp.")
 
 ;must do the following in common lisps not supporting *print-shared*
 
@@ -144,94 +140,94 @@
 (defun output-position  (&optional (s *standard-output*)) (declare (ignore s)) nil) )
 
 
-#+:symbolics(eval-when (eval load compile)
-(defun structure-type-p (x) (and (symbolp x) (get x 'si:defstruct-description)))
-(defun output-width     (&optional (s *standard-output*))
-  (si:send s :send-if-handles :size-in-characters))
-(defun output-position  (&optional (s *standard-output*))
-  (si:send s :send-if-handles :read-cursorpos :character)) )
+;; #+:symbolics(eval-when (eval load compile)
+;; (defun structure-type-p (x) (and (symbolp x) (get x 'si:defstruct-description)))
+;; (defun output-width     (&optional (s *standard-output*))
+;;   (si:send s :send-if-handles :size-in-characters))
+;; (defun output-position  (&optional (s *standard-output*))
+;;   (si:send s :send-if-handles :read-cursorpos :character)) )
 
 
-;XP is being considered for inclusion in Lucid Common Lisp.
-;The prime contact there is Eric Benson "eb@lucid.com".
+;; ;XP is being considered for inclusion in Lucid Common Lisp.
+;; ;The prime contact there is Eric Benson "eb@lucid.com".
 
-#+:lucid(eval-when (eval load compile)
-(defun structure-type-p (x) (subtypep x 'structure))
-(defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
-(defun output-position  (&optional (s *standard-output*)) (declare (ignore s)) nil) )
+;; #+:lucid(eval-when (eval load compile)
+;; (defun structure-type-p (x) (subtypep x 'structure))
+;; (defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
+;; (defun output-position  (&optional (s *standard-output*)) (declare (ignore s)) nil) )
 
 
 ;XP is being included in CMU's Common Lisp.
 ;The prime contact there is Bill Chiles "chiles@cs.cmu.edu"
 ;and/or Blain Burks "mbb@cs.cmu.edu".
 
-#+:cmu(eval-when (eval load compile)
-(defun structure-type-p (x) (and (symbolp x) (get x 'cl::%structure-definition)))
-(defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
-(defun output-position  (&optional (s *standard-output*)) (cl::charpos s)) )
+;; #+:cmu(eval-when (eval load compile)
+;; (defun structure-type-p (x) (and (symbolp x) (get x 'cl::%structure-definition)))
+;; (defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
+;; (defun output-position  (&optional (s *standard-output*)) (cl::charpos s)) )
 
 
 ;Definitions for FRANZ Common Lisp. (Only verified for the version 1.3
 ;(5/31/87) currently running on suns at MIT.)
 
-#+:franz-inc(eval-when (eval load compile)
-(defun structure-type-p (x) (and (symbolp x) (get x 'structure-printer)))
-(defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
-(defun output-position  (&optional (s *standard-output*)) (excl::charpos s)) )
+;; #+:franz-inc(eval-when (eval load compile)
+;; (defun structure-type-p (x) (and (symbolp x) (get x 'structure-printer)))
+;; (defun output-width     (&optional (s *standard-output*)) (declare (ignore s)) nil)
+;; (defun output-position  (&optional (s *standard-output*)) (excl::charpos s)) )
+
+
+;; ; Joachim Laubsch <laubsch%hpljl@hplabs.hp.com> is the contact at HP Labs.
+;; ; He reports that HP COMMON LISP II Development Environment Rev A.02.15 11/10/88
+;; ; requires the following patch due to a bug in REPLACE:
+
+;; #+(and lucid hp (not patched))
+;; (eval-when (eval load)
+;;   (system::defadvice (replace patch)
+;;       (SEQUENCE1 SEQUENCE2 &KEY (START1 0) END1 (START2 0) END2)
+;;     (declare (fixnum START1 START2))
+;;     (let ((copy-length (min (- (or end1 (length SEQUENCE1)) START1)
+;; 			    (- (or end2 (length SEQUENCE2)) START2))))
+;;       (declare (fixnum copy-length))
+;;       (if (= 0 copy-length)
+;; 	  SEQUENCE1
+;; 	(system::apply-advice-continue SEQUENCE1 SEQUENCE2
+;; 				       :START1 START1
+;; 				       :END1 (+ START1 copy-length)
+;; 				       :START2 START2
+;; 				       :END2 (+ START2 copy-length)
+;; 				       ()))
+
+;;       )))
 
+;; #+symbolics
+;; (defvar original-trace-print nil)
 
-; Joachim Laubsch <laubsch%hpljl@hplabs.hp.com> is the contact at HP Labs.
-; He reports that HP COMMON LISP II Development Environment Rev A.02.15 11/10/88
-; requires the following patch due to a bug in REPLACE:
-
-#+(and lucid hp (not patched))
-(eval-when (eval load)
-  (system::defadvice (replace patch)
-      (SEQUENCE1 SEQUENCE2 &KEY (START1 0) END1 (START2 0) END2)
-    (declare (fixnum START1 START2))
-    (let ((copy-length (min (- (or end1 (length SEQUENCE1)) START1)
-			    (- (or end2 (length SEQUENCE2)) START2))))
-      (declare (fixnum copy-length))
-      (if (= 0 copy-length)
-	  SEQUENCE1
-	(system::apply-advice-continue SEQUENCE1 SEQUENCE2
-				       :START1 START1
-				       :END1 (+ START1 copy-length)
-				       :START2 START2
-				       :END2 (+ START2 copy-length)
-				       ()))
-
-      )))
-
-#+symbolics
-(defvar original-trace-print nil)
-
-#-armedbear
-(defun install (&key (package *package*) (macro nil) (shadow T) (remove nil))
-  (when (not (packagep package)) (setq package (find-package package)))
-  (when (not remove)
-    (when macro
-      (set-dispatch-macro-character #\# #\" #'format-string-reader))
-    (when (not (eq package (find-package "XP")))
-      (use-package "XP" package)
-      (when shadow (shadowing-import *xp-printing-functions* package)))
-  #+symbolics
-    (progn
-      (when (null original-trace-print)
-	(setq original-trace-print (symbol-function 'si:trace-print)))
-      (setf (symbol-function 'si:trace-print) (symbol-function 'trace-print))
-      (zl:setq-standard-value scl:*print-pretty-printer* 'pretty-printer)))
-  (when (and remove (member (find-package "XP") (package-use-list package)))
-    (unuse-package "XP" package)
-    (dolist (sym (intersection *xp-printing-functions*
-			       (package-shadowing-symbols package)))
-      (unintern sym package))
-  #+symbolics
-    (progn
-      (when original-trace-print
-	(setf (symbol-function 'si:trace-print) original-trace-print))
-      (zl:setq-standard-value scl:*print-pretty-printer* 'gprint:print-object)))
-  T)
+;; #-armedbear
+;; (defun install (&key (package *package*) (macro nil) (shadow T) (remove nil))
+;;   (when (not (packagep package)) (setq package (find-package package)))
+;;   (when (not remove)
+;;     (when macro
+;;       (set-dispatch-macro-character #\# #\" #'format-string-reader))
+;;     (when (not (eq package (find-package "XP")))
+;;       (use-package "XP" package)
+;;       (when shadow (shadowing-import *xp-printing-functions* package)))
+;;   #+symbolics
+;;     (progn
+;;       (when (null original-trace-print)
+;; 	(setq original-trace-print (symbol-function 'si:trace-print)))
+;;       (setf (symbol-function 'si:trace-print) (symbol-function 'trace-print))
+;;       (zl:setq-standard-value scl:*print-pretty-printer* 'pretty-printer)))
+;;   (when (and remove (member (find-package "XP") (package-use-list package)))
+;;     (unuse-package "XP" package)
+;;     (dolist (sym (intersection *xp-printing-functions*
+;; 			       (package-shadowing-symbols package)))
+;;       (unintern sym package))
+;;   #+symbolics
+;;     (progn
+;;       (when original-trace-print
+;; 	(setf (symbol-function 'si:trace-print) original-trace-print))
+;;       (zl:setq-standard-value scl:*print-pretty-printer* 'gprint:print-object)))
+;;   T)
 
 
 (defvar *locating-circularities* nil
@@ -1036,15 +1032,24 @@
 ;they do not need error checking of fancy stream coercion.  The '++' forms
 ;additionally assume the thing being output does not contain a newline.
 
-(defun write (object &rest pairs &key (stream *standard-output*)
-	      (escape *print-escape*) (radix *print-radix*)
-	      (base *print-base*) (circle *print-circle*)
-	      (pretty *print-pretty*) (level *print-level*)
-	      (length *print-length*) (case *print-case*)
-	      (gensym *print-gensym*) (array *print-array*)
-	      (pprint-dispatch *print-pprint-dispatch*)
-	      (right-margin *print-right-margin*)
-	      (lines *print-lines*) (miser-width *print-miser-width*))
+(defun write (object &rest pairs
+                     &key
+                     (stream *standard-output*)
+                     (escape *print-escape*)
+                     (radix *print-radix*)
+                     (base *print-base*)
+                     (circle *print-circle*)
+                     (pretty *print-pretty*)
+                     (level *print-level*)
+                     (length *print-length*)
+                     (case *print-case*)
+                     (gensym *print-gensym*)
+		     ((:readably *print-readably*) *print-readably*)
+                     (array *print-array*)
+                     (pprint-dispatch *print-pprint-dispatch*)
+                     (right-margin *print-right-margin*)
+                     (lines *print-lines*)
+                     (miser-width *print-miser-width*))
   (setq stream (decode-stream-arg stream))
   (let ((*print-pprint-dispatch* pprint-dispatch) (*print-right-margin* right-margin)
 	(*print-lines* lines) (*print-miser-width* miser-width))
@@ -1124,7 +1129,7 @@
 (defun write+ (object xp)
   (let ((*parents* *parents*))
     (unless (and *circularity-hash-table*
-		(eq (circularity-process xp object nil) :subsequent))
+                 (eq (circularity-process xp object nil) :subsequent))
       (when (and *circularity-hash-table* (consp object))
 	;;avoid possible double check in handle-logical-block.
 	(setq object (cons (car object) (cdr object))))
@@ -1217,42 +1222,21 @@
 
 (defun maybe-print-fast (xp object)
   (cond ((stringp object)
-	 (cond ((null *print-escape*) (write-string+ object xp 0 (length object)) T)
-	       ((every #'(lambda (c) (not (or (char= c #\") (char= c #\\))))
-		       object)
-		(write-char++ #\" xp)
-		(write-string+ object xp 0 (length object))
-		(write-char++ #\" xp) T)))
-	((typep object 'fixnum)
-	 (when (and (null *print-radix*) (= *print-base* 10.))
-	   (when (minusp object)
-	     (write-char++ #\- xp)
-	     (setq object (- object)))
-	   (print-fixnum xp object) T))
+         (let ((s (sys::%write-to-string object)))
+           (write-string++ s xp 0 (length s))
+           t))
+	((ext:fixnump object)
+         (print-fixnum xp object)
+         t)
 	((symbolp object)
-	 (let ((s (symbol-name object))
-	       (p (symbol-package object))
-	       (is-key (keywordp object))
-	       (mode (case *print-case*
-		       (:downcase :down)
-		       (:capitalize :cap1)
-		       (T nil)))) ;note no-escapes-needed requires all caps
-	   (cond ((and (or is-key (eq p *package*)
-			   (and *package* ;can be NIL on symbolics
-				(eq object (find-symbol s))))
-		       (no-escapes-needed s))
-		  (when (and is-key *print-escape*)
-		    (write-char++ #\: xp))
-		  (if mode (push-char-mode xp mode))
-		  (write-string++ s xp 0 (length s))
-		  (if mode (pop-char-mode xp)) T))))))
+         (let ((s (sys::%write-to-string object)))
+           (write-string++ s xp 0 (length s))
+           t)
+         )))
 
 (defun print-fixnum (xp fixnum)
-  (multiple-value-bind (digits d)
-      (truncate fixnum 10)
-    (unless (zerop digits)
-      (print-fixnum xp digits))
-    (write-char++ (code-char (+ #.(char-code #\0) d)) xp)))
+  (let ((s (sys::%write-to-string fixnum)))
+    (write-string++ s xp 0 (length s))))
 
 ;just wants to succeed fast in a lot of common cases.
 ;assumes no funny readtable junk for the characters shown.
@@ -1298,9 +1282,25 @@
     (basic-write object stream))
   (values))
 
-(defun write-to-string (object &rest pairs &key &allow-other-keys)
-  (with-output-to-string (s)
-    (apply #'write object :stream s pairs)))
+(defun write-to-string (object &key
+                               ((:escape *print-escape*) *print-escape*)
+                               ((:radix *print-radix*) *print-radix*)
+                               ((:base *print-base*) *print-base*)
+                               ((:circle *print-circle*) *print-circle*)
+                               ((:pretty *print-pretty*) *print-pretty*)
+                               ((:level *print-level*) *print-level*)
+                               ((:length *print-length*) *print-length*)
+                               ((:case *print-case*) *print-case*)
+                               ((:array *print-array*) *print-array*)
+                               ((:gensym *print-gensym*) *print-gensym*)
+                               ((:readably *print-readably*) *print-readably*)
+                               ((:right-margin *print-right-margin*) *print-right-margin*)
+                               ((:miser-width *print-miser-width*) *print-miser-width*)
+                               ((:lines *print-lines*) *print-lines*)
+                               ((:pprint-dispatch *print-pprint-dispatch*) *print-pprint-dispatch*))
+  (let ((stream (make-string-output-stream)))
+    (sys::output-object object stream)
+    (get-output-stream-string stream)))
 
 (defun prin1-to-string (object)
   (with-output-to-string (stream)
@@ -1356,16 +1356,6 @@
       (cl:write-char char stream))
   char)
 
-#-armedbear
-(defun write-string (string &optional (stream *standard-output*)
-		     &key (start 0) (end (length string)))
-  (setq stream (decode-stream-arg stream))
-  (if (xp-structure-p stream)
-      (write-string+ string stream start end)
-      (cl:write-string string stream :start start :end end))
-  string)
-
-#+armedbear
 (defun write-string (string &optional (stream *standard-output*)
                             &key (start 0) (end (length string)))
   (setq stream (decode-stream-arg stream))
