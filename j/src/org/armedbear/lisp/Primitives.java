@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.383 2003-09-10 18:46:01 piso Exp $
+ * $Id: Primitives.java,v 1.384 2003-09-11 14:58:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -432,16 +432,6 @@ public final class Primitives extends Module
                 Debug.trace("bad index " + index);
                 throw new WrongNumberOfArgumentsException((String)null);
         }
-    }
-
-    private static final LispObject values(LispObject[] args)
-    {
-        if (args.length == 1) {
-            LispThread.currentThread().clearValues();
-            return args[0];
-        }
-        LispThread.currentThread().setValues(args);
-        return args.length > 0 ? args[0] : NIL;
     }
 
     // ### eq
