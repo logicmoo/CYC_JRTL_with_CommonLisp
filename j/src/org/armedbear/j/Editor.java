@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.94 2003-07-18 16:06:46 piso Exp $
+ * $Id: Editor.java,v 1.95 2003-07-18 16:32:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2354,12 +2354,12 @@ public final class Editor extends JPanel implements Constants,
         KeyMapping mapping = getKeyMapping(keyChar, keyCode, modifiers);
         if (mapping != null) {
             Object command = mapping.getCommand();
+            if (isRecordingMacro()) {
+                if (command != "recordMacro" && command != "playbackMacro")
+                    Macro.record(this, command);
+            }
             if (command instanceof String) {
                 String commandString = (String) command;
-                if (isRecordingMacro()) {
-                    if (commandString != "recordMacro" && commandString != "playbackMacro")
-                        Macro.record(this, commandString);
-                }
                 if (commandString.length() > 0 && commandString.charAt(0) == '(') {
                     // Lisp form.
                     executeCommand(commandString);
@@ -3579,7 +3579,7 @@ public final class Editor extends JPanel implements Constants,
             // Shouldn't happen.
             Debug.bug();
             Log.error("insertChar dot offset = " + getDotOffset() +
-                " dotLine length = " + dotLine.length());
+                      " dotLine length = " + dotLine.length());
             // Enforce sanity and carry on.
             dot.setOffset(dotLine.length());
         }
@@ -5583,7 +5583,6 @@ public final class Editor extends JPanel implements Constants,
         updateInAllEditors(dot.getLine());
         moveCaretToDotCol();
         endCompoundEdit(compoundEdit);
-        buffer.modified();
         if (getFormatter().parseBuffer())
             buffer.repaint();
     }
