@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.20 2003-11-08 19:08:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.21 2003-11-08 20:17:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -723,30 +723,45 @@
             )
           ()))))
 
-(defun analyze-stack (code)
-  (sys::require-type code 'vector)
-  (dotimes (i (length code))
-    (let* ((instruction (svref code i))
+(defun analyze-stack ()
+  (sys::require-type *code* 'vector)
+  (dotimes (i (length *code*))
+    (let* ((instruction (svref *code* i))
            (opcode (instruction-opcode instruction)))
       (when (eql opcode 202)
         (let ((label (car (instruction-args instruction))))
           (set label i)))
       (unless (instruction-stack instruction)
         (setf (instruction-stack instruction) (stack-effect opcode)))))
-  (walk-code code 0 0)
+  (walk-code *code* 0 0)
   (let ((max-stack 0))
-    (dotimes (i (length code))
-      (let ((instruction (svref code i)))
+    (dotimes (i (length *code*))
+      (let ((instruction (svref *code* i)))
         (setf max-stack (max max-stack (instruction-depth instruction)))))
 ;;     (format t "max-stack = ~D~%" max-stack)
     max-stack))
+
+(defun finalize-code ()
+  (setf *code* (nreverse (coerce *code* 'vector))))
+
+(defun optimize-code ()
+  (dotimes (i (length *code*))
+    (let ((instruction (svref *code* i)))
+      (when (and (< i (1- (length *code*)))
+                 (= (instruction-opcode instruction) 167) ; GOTO
+                 (let ((next-instruction (svref *code* (1+ i))))
+                   (when (and (= (instruction-opcode next-instruction) 202) ; LABEL
+                              (eq (car (instruction-args instruction))
+                                  (car (instruction-args next-instruction))))
+                     (setf (instruction-opcode instruction) 0)))))))
+
+  (setf *code* (delete 0 *code* :key #'instruction-opcode))
+  )
 
 (defvar *max-stack*)
 
 ;; CODE is a list of INSTRUCTIONs.
 (defun code-bytes (code)
-  (setf code (coerce code 'vector))
-  (setf code (nreverse code))
 
 ;;   (fresh-line)
 ;;   (format t "-- begin code --~%")
@@ -770,17 +785,17 @@
 ;;             (unless (member label branch-targets)
 ;;               (setf (instruction-opcode instruction) 0)))))))
 
-  (dotimes (i (length code))
-    (let ((instruction (svref code i)))
-      (when (and (< i (1- (length code)))
-                 (= (instruction-opcode instruction) 167) ; GOTO
-        (let ((next-instruction (svref code (1+ i))))
-          (when (and (= (instruction-opcode next-instruction) 202) ; LABEL
-                     (eq (car (instruction-args instruction))
-                         (car (instruction-args next-instruction))))
-            (setf (instruction-opcode instruction) 0)))))))
+;;   (dotimes (i (length code))
+;;     (let ((instruction (svref code i)))
+;;       (when (and (< i (1- (length code)))
+;;                  (= (instruction-opcode instruction) 167) ; GOTO
+;;         (let ((next-instruction (svref code (1+ i))))
+;;           (when (and (= (instruction-opcode next-instruction) 202) ; LABEL
+;;                      (eq (car (instruction-args instruction))
+;;                          (car (instruction-args next-instruction))))
+;;             (setf (instruction-opcode instruction) 0)))))))
 
-  (setf code (delete 0 code :key #'instruction-opcode))
+;;   (setf code (delete 0 code :key #'instruction-opcode))
 
 ;;   (fresh-line)
 ;;   (format t "-- begin code --~%")
@@ -791,7 +806,7 @@
 ;;   (setf code (coerce code 'list))
 
   ;; FIXME Do stack analysis here!
-  (setf *max-stack* (analyze-stack code))
+;;   (setf *max-stack* (analyze-stack code))
 
   (let ((code (resolve-opcodes code))
         (length 0))
@@ -911,8 +926,11 @@
                                "<init>"
                                "()V"
                                0)))
-    (setq *code* (append *static-code* *code*))
+    (setf *code* (append *static-code* *code*))
     (emit 'return)
+    (finalize-code)
+    (optimize-code)
+    (setf (method-max-stack constructor) (analyze-stack))
     (setf (method-code constructor) (code-bytes *code*))
     constructor))
 
@@ -2015,8 +2033,11 @@
     (unless (remove-store-value)
       (emit-push-value)) ; leave result on stack
     (emit 'areturn)
+    (finalize-code)
+    (optimize-code)
+    (setf (method-max-stack execute-method) (analyze-stack))
     (setf (method-code execute-method) (code-bytes *code*))
-    (setf (method-max-stack execute-method) *max-stack*)
+;;     (setf (method-max-stack execute-method) *max-stack*)
     (setf (method-max-locals execute-method) *max-locals*)
 
     (let* ((super
