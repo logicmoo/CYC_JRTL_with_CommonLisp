@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.180 2004-06-03 23:23:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.181 2004-06-04 00:37:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2583,6 +2583,11 @@
     (return-from compile-variable-ref)))
 
 (defun compile-catch (form &optional for-effect)
+  (when (= (length form) 2) ; (catch 'foo)
+    (unless for-effect
+      (emit-push-nil)
+      (emit-store-value))
+    (return-from compile-catch))
   (let* ((*locals* *locals*)
          (tag-var (allocate-local nil))
          (label1 (gensym))
@@ -2613,16 +2618,15 @@
     (emit 'label `,label3) ; Start of handler for THROW.
     ;; The Throw object is on the runtime stack. Stack depth is 1.
     (emit 'dup) ; Stack depth is 2.
-    (emit-invokevirtual +lisp-throw-class+
-                        "getTag"
-                        "()Lorg/armedbear/lisp/LispObject;"
-                        0) ; Still 2.
+    (emit 'getfield +lisp-throw-class+ "tag"
+          "Lorg/armedbear/lisp/LispObject;") ; Still 2.
     (emit 'aload tag-var) ; Stack depth is 3.
     (emit 'if_acmpne `,label4) ; Stack depth is 1.
+    (emit 'aload *thread*)
     (emit-invokevirtual +lisp-throw-class+
                         "getResult"
-                        "()Lorg/armedbear/lisp/LispObject;"
-                        0)
+                        "(Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;"
+                        -1)
     (emit-store-value)
     (emit 'goto `,label5)
     (emit 'label `,label4) ; Start of handler for all other Throwables.
@@ -2647,48 +2651,26 @@
           (handler2 (make-handler :from `,label1
                                   :to `,label2
                                   :code `,label4
-                                  :catch-type 0))
-          )
+                                  :catch-type 0)))
       (push handler1 *handlers*)
       (push handler2 *handlers*))))
 
 (defun compile-throw (form &optional for-effect)
-  (let ((tag-var (allocate-local nil))
-        (label1 (gensym))
-        (label2 (gensym)))
     (ensure-thread-var-initialized)
-    (emit 'new +lisp-throw-class+)
-    (emit 'dup)
+    (emit 'aload *thread*)
     (compile-form (second form)) ; Tag.
     (unless (remove-store-value)
       (emit-push-value))
-    (emit 'dup)
-    (emit 'astore tag-var)
     (compile-form (third form)) ; Result.
     (unless (remove-store-value)
       (emit-push-value))
-    (emit-invokespecial +lisp-throw-class+
-                        "<init>"
+    (emit-invokevirtual +lisp-thread-class+
+                        "throwToTag"
                         "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)V"
                         -2)
-    ;; The newly-created Throw object is on the runtime stack at this point.
-    (emit 'aload *thread*)
-    (emit 'aload tag-var)
-    (emit-invokevirtual +lisp-thread-class+
-                        "isValidCatchTag"
-                        "(Lorg/armedbear/lisp/LispObject;)Z"
-                        -1)
-    (emit 'ifeq `,label1)
-    (emit 'athrow)
-    (emit 'label `,label1)
-    ;; Invalid tag.
-    (emit 'pop) ; Drop Throw object.
-    (emit 'aload tag-var)
-    (emit-invokestatic +lisp-throw-class+
-                       "signalInvalidTag"
-                       "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                       -1)
-    (emit 'areturn)))
+    ;; Following code will not be reached.
+    (emit-push-nil)
+    (emit-store-value))
 
 (defun compile-form (form &optional for-effect)
   (cond ((consp form)
@@ -2829,6 +2811,7 @@
     (optimize-code)
     (setf *code* (resolve-opcodes *code*))
     (setf (method-max-stack execute-method)
+          ; If handlers are involved, stack depth must be at least 3.
           (if *handlers*
               (max (analyze-stack) 3)
               (analyze-stack)))
@@ -2851,7 +2834,7 @@
            (constructor (make-constructor super *defun-name* args body)))
       (pool-name "Code") ; Must be in pool!
 
-      ;; Write class file.
+      ;; Write out the class file.
       (with-open-file (*stream* classfile
                                 :direction :output
                                 :element-type '(unsigned-byte 8)
