@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.511 2003-12-07 17:27:33 piso Exp $
+ * $Id: Primitives.java,v 1.512 2003-12-07 17:43:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,12 +56,10 @@ public final class Primitives extends Module
     private static final int LOWER_CASE_P               = 23;
     private static final int MAKE_SYMBOL                = 24;
     private static final int MAKUNBOUND                 = 25;
-    private static final int PREDECESSOR                = 26;
     private static final int SIMPLE_BIT_VECTOR_P        = 28;
     private static final int SIMPLE_STRING_P            = 29;
     private static final int SIMPLE_VECTOR_P            = 30;
     private static final int STRINGP                    = 31;
-    private static final int SUCCESSOR                  = 32;
     private static final int SYMBOL_FUNCTION            = 33;
     private static final int SYMBOL_NAME                = 34;
     private static final int SYMBOL_PACKAGE             = 35;
@@ -76,8 +74,6 @@ public final class Primitives extends Module
         definePrimitive("max", MAX);
         definePrimitive("min", MIN);
 
-        definePrimitive1("1+", SUCCESSOR);
-        definePrimitive1("1-", PREDECESSOR);
         definePrimitive1("abs", ABS);
         definePrimitive1("array-has-fill-pointer-p", ARRAY_HAS_FILL_POINTER_P);
         definePrimitive1("arrayp", ARRAYP);
@@ -252,10 +248,6 @@ public final class Primitives extends Module
                 return arg.STRINGP();
             case SIMPLE_STRING_P:               // ### simple-string-p
                 return arg.SIMPLE_STRING_P();
-            case SUCCESSOR:                     // ### 1+
-                return arg.incr();
-            case PREDECESSOR:                   // ### 1-
-                return arg.decr();
             case EVAL:                          // ### eval
                 return eval(arg, new Environment(), LispThread.currentThread());
             default:
@@ -552,6 +544,14 @@ public final class Primitives extends Module
         }
     };
 
+    private static final Primitive1 SUCCESSOR = new Primitive1("1+")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.incr();
+        }
+    };
+
     // ### -
     private static final Primitive SUBTRACT = new Primitive("-")
     {
@@ -577,6 +577,14 @@ public final class Primitives extends Module
                     return result;
                 }
             }
+        }
+    };
+
+    private static final Primitive1 PREDECESSOR = new Primitive1("1-")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg.decr();
         }
     };
 
