@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.80 2003-03-06 19:14:49 piso Exp $
+ * $Id: Primitives.java,v 1.81 2003-03-06 21:39:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -877,6 +877,66 @@ public final class Primitives extends Module
                     }
                     return T;
             }
+        }
+    };
+
+    // ### char=
+    private static final Primitive CHAR_EQUALS = new Primitive("char=") {
+        public LispObject execute(LispObject[] array) throws LispError
+        {
+            final int length = array.length;
+            if (length == 2)
+                return LispCharacter.getValue(array[0]) == LispCharacter.getValue(array[1]) ? T : NIL;
+            if (length < 1)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] chars = new char[length];
+            // Make sure the arguments are all characters.
+            for (int i = 0; i < length; i++)
+                chars[i] = LispCharacter.getValue(array[i]);
+            final char c1 = chars[0];
+            for (int i = 1; i < length; i++) {
+                if (c1 == chars[i])
+                    continue;
+                return NIL;
+            }
+            return T;
+        }
+    };
+
+    // ### char-equal
+    private static final Primitive CHAR_EQUAL = new Primitive("char-equal") {
+        public LispObject execute(LispObject[] array) throws LispError
+        {
+            final int length = array.length;
+            if (length == 2) {
+                char c1 = LispCharacter.getValue(array[0]);
+                char c2 = LispCharacter.getValue(array[1]);
+                if (c1 == c2)
+                    return T;
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
+                    return T;
+                if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                    return T;
+                return NIL;
+            }
+            if (length < 1)
+                throw new WrongNumberOfArgumentsException(this);
+            char[] chars = new char[length];
+            // Make sure the arguments are all characters.
+            for (int i = 0; i < length; i++)
+                chars[i] = LispCharacter.getValue(array[i]);
+            final char c1 = chars[0];
+            for (int i = 1; i < length; i++) {
+                char c2 = chars[i];
+                if (c1 == c2)
+                    continue;
+                if (Character.toLowerCase(c1) == Character.toLowerCase(c2))
+                    continue;
+                if (Character.toUpperCase(c1) == Character.toUpperCase(c2))
+                    continue;
+                return NIL;
+            }
+            return T;
         }
     };
 
