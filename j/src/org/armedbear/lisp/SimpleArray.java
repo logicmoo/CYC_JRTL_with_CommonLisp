@@ -2,7 +2,7 @@
  * SimpleArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: SimpleArray.java,v 1.7 2004-03-18 13:31:42 piso Exp $
+ * $Id: SimpleArray.java,v 1.8 2004-05-27 20:29:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -258,7 +258,7 @@ public final class SimpleArray extends AbstractArray
             data[i] = obj;
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         sb.append('#');

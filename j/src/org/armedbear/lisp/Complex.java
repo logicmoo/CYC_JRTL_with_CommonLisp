@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Complex.java,v 1.27 2004-05-21 12:23:28 piso Exp $
+ * $Id: Complex.java,v 1.28 2004-05-27 20:30:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,12 +232,12 @@ public final class Complex extends LispObject
         return realpart.hashCode() ^ imagpart.hashCode();
     }
 
-    public String toString()
+    public String writeToString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer("#C(");
-        sb.append(String.valueOf(realpart));
+        sb.append(realpart.writeToString());
         sb.append(' ');
-        sb.append(String.valueOf(imagpart));
+        sb.append(imagpart.writeToString());
         sb.append(')');
         return sb.toString();
     }
