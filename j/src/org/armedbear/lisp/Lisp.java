@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.10 2003-02-10 18:50:36 piso Exp $
+ * $Id: Lisp.java,v 1.11 2003-02-15 16:07:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -158,12 +158,12 @@ public abstract class Lisp
 
     public static final Stack stack = new Stack();
 
-    public void resetStack()
+    public static void resetStack()
     {
         stack.clear();
     }
 
-    public void checkStack() throws LispException
+    public static void checkStack() throws LispException
     {
         if (stack.size() > 0) {
             getStandardOutput().writeLine("stack depth = " + stack.size());
@@ -171,7 +171,7 @@ public abstract class Lisp
         }
     }
 
-    public void backtrace()
+    public static void backtrace()
     {
         if (stack.size() > 0) {
             CharacterOutputStream out = getTraceOutput();
@@ -193,7 +193,7 @@ public abstract class Lisp
         }
     }
 
-    private void pprint(LispObject obj, int indentBy,
+    private static void pprint(LispObject obj, int indentBy,
         CharacterOutputStream stream) throws StreamError
     {
         if (stream.getCharPos() == 0) {
