@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.140 2003-09-19 16:04:50 piso Exp $
+ * $Id: Lisp.java,v 1.141 2003-09-21 02:05:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -274,7 +274,7 @@ public abstract class Lisp
             if (result == null) {
                 result = obj.getSymbolValue();
                 if (result == null)
-                    throw new ConditionThrowable(new UnboundVariable(obj.getName()));
+                    throw new ConditionThrowable(new UnboundVariable(obj));
             }
             return result;
         } else if (obj instanceof Cons) {
@@ -956,6 +956,9 @@ public abstract class Lisp
 
     public static final Symbol _READ_SUPPRESS_ =
         exportSpecial("*READ-SUPPRESS*", PACKAGE_CL, NIL);
+
+    public static final Symbol _DEBUGGER_HOOK_ =
+        exportSpecial("*DEBUGGER-HOOK*", PACKAGE_CL, NIL);
 
     public static final Symbol MOST_POSITIVE_FIXNUM =
         exportConstant("MOST-POSITIVE-FIXNUM", PACKAGE_CL,
