@@ -2,7 +2,7 @@
  * Jdb.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Jdb.java,v 1.23 2003-05-25 00:57:05 piso Exp $
+ * $Id: Jdb.java,v 1.24 2003-05-25 02:09:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1081,7 +1081,7 @@ public final class Jdb extends Buffer implements JdbConstants
                 String fileName = arg.substring(0, index);
                 try {
                     int lineNumber =
-                        Integer.parseInt(arg.substring(index+1).trim());
+                        Integer.parseInt(arg.substring(index + 1).trim());
                     doBreakAtLineNumber(fileName, lineNumber, temporary);
                 }
                 catch (NumberFormatException e) {
@@ -1094,7 +1094,7 @@ public final class Jdb extends Buffer implements JdbConstants
                     return;
                 }
                 String className = arg.substring(0, index);
-                String methodName = arg.substring(index+1);
+                String methodName = arg.substring(index + 1);
                 doBreakAtMethod(className, methodName, temporary);
             }
         }
@@ -1233,64 +1233,111 @@ public final class Jdb extends Buffer implements JdbConstants
     }
 
     // e.g. "clear Jdb.java:877"
-    private void doClear(String args)
+    private void doClear(String arg)
     {
-        if (args == null) {
+        if (arg == null) {
             log("No breakpoint specified");
             return;
         }
-        if (args.equals("all")) {
-            // Disable resolved breakpoints.
-            for (Iterator it = breakpoints.iterator(); it.hasNext();) {
-                Object obj = it.next();
-                if (obj instanceof ResolvableBreakpoint)
-                    ((ResolvableBreakpoint)obj).clear();
-            }
-            // Clear the list.
-            breakpoints.clear();
-            fireBreakpointChanged();
-        } else {
-            int index = args.indexOf(':');
-            if (index < 0) {
-                log("Invalid breakpoint");
-                return;
-            }
-            String fileName = args.substring(0, index);
-            if (!fileName.toLowerCase().endsWith(".java"))
-                fileName = fileName.concat(".java");
-            int lineNumber = -1;
-            try {
-                lineNumber = Integer.parseInt(args.substring(index+1));
-            }
-            catch (NumberFormatException e) {}
-            if (lineNumber < 1) {
-                log("Invalid breakpoint");
-                return;
-            }
-            for (Iterator it = breakpoints.iterator(); it.hasNext();) {
-                Object obj = it.next();
-                if (obj instanceof LineNumberBreakpoint) {
-                    LineNumberBreakpoint bp = (LineNumberBreakpoint) obj;
-                    File file = bp.getFile();
-                    if (file != null) {
-                        if (fileName.equals(file.getName())) {
-                            if (lineNumber == bp.getLineNumber()) {
-                                // Found it.
-                                deleteBreakpoint(bp);
-                                fireBreakpointChanged();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        if (arg.equals("all"))
+            doClearAll();
+        else if (arg.indexOf(':') >= 0)
+            doClearLineNumberBreakpoint(arg);
+        else
+            doClearMethodBreakpoint(arg);
         // Repaint editors with buffers in Java mode.
         for (EditorIterator it = new EditorIterator(); it.hasNext();) {
             Editor ed = it.nextEditor();
             if (ed.getModeId() == JAVA_MODE)
                 ed.repaint();
         }
+    }
+
+    private void doClearAll()
+    {
+        // Disable resolved breakpoints.
+        for (Iterator it = breakpoints.iterator(); it.hasNext();) {
+            Object obj = it.next();
+            if (obj instanceof ResolvableBreakpoint)
+                ((ResolvableBreakpoint)obj).clear();
+        }
+        // Clear the list.
+        breakpoints.clear();
+        fireBreakpointChanged();
+    }
+
+    private void doClearLineNumberBreakpoint(String arg)
+    {
+        int index = arg.indexOf(':');
+        String fileName = arg.substring(0, index);
+        if (!fileName.toLowerCase().endsWith(".java"))
+            fileName = fileName.concat(".java");
+        int lineNumber = -1;
+        try {
+            lineNumber = Integer.parseInt(arg.substring(index + 1));
+        }
+        catch (NumberFormatException e) {}
+        if (lineNumber < 1) {
+            log("Invalid breakpoint");
+            return;
+        }
+        for (Iterator it = breakpoints.iterator(); it.hasNext();) {
+            Object obj = it.next();
+            if (obj instanceof LineNumberBreakpoint) {
+                LineNumberBreakpoint bp = (LineNumberBreakpoint) obj;
+                File file = bp.getFile();
+                if (file != null) {
+                    if (fileName.equals(file.getName())) {
+                        if (lineNumber == bp.getLineNumber()) {
+                            // Found it.
+                            deleteBreakpoint(bp);
+                            fireBreakpointChanged();
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        log("No breakpoint at " + arg);
+    }
+
+    private void doClearMethodBreakpoint(String arg)
+    {
+        String className, methodName;
+        int index = arg.lastIndexOf('.');
+        if (index >= 0) {
+            className = arg.substring(0, index);
+            methodName = arg.substring(index + 1);
+        } else {
+            className = null;
+            methodName = arg;
+        }
+
+        for (Iterator it = breakpoints.iterator(); it.hasNext();) {
+            Object obj = it.next();
+            if (obj instanceof MethodBreakpoint) {
+                MethodBreakpoint bp = (MethodBreakpoint) obj;
+                if (className != null) {
+                    if (className.equals(bp.getClassName())) {
+                        if (methodName.equals(bp.getMethodName())) {
+                            // Found it.
+                            deleteBreakpoint(bp);
+                            fireBreakpointChanged();
+                            return;
+                        }
+                    }
+                } else {
+                    // No class name specified.
+                    if (methodName.equals(bp.getMethodName())) {
+                        // Found it.
+                        deleteBreakpoint(bp);
+                        fireBreakpointChanged();
+                        return;
+                    }
+                }
+            }
+        }
+        log("No breakpoint at " + arg);
     }
 
     private synchronized void doCatch(String arg)
