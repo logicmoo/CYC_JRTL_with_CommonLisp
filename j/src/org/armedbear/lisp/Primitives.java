@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.226 2003-06-02 14:58:37 piso Exp $
+ * $Id: Primitives.java,v 1.227 2003-06-02 16:32:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4730,6 +4730,63 @@ public final class Primitives extends Module
             while (tail != NIL) {
                 if (item == tail.car())
                     return tail;
+                tail = tail.cdr();
+            }
+            return NIL;
+        }
+    };
+
+    // %member item list key test test-not => tail
+    private static final Primitive _MEMBER = new Primitive("%member") {
+        public LispObject execute(LispObject[] args) throws Condition
+        {
+            if (args.length != 5)
+                throw new WrongNumberOfArgumentsException(this);
+            LispObject item = args[0];
+            LispObject tail = checkList(args[1]);
+            LispObject key = args[2];
+            if (key != NIL) {
+                if (key instanceof Symbol)
+                    key = key.getSymbolFunction();
+                if (!(key instanceof Function))
+                    throw new UndefinedFunctionError(args[2]);
+            }
+            LispObject test = args[3];
+            LispObject testNot = args[4];
+            if (test != NIL && testNot != NIL)
+                throw new LispError("MEMBER: test and test-not both supplied");
+            if (test == NIL && testNot == NIL) {
+                test = EQL;
+            } else if (test != NIL) {
+                if (test instanceof Symbol)
+                    test = test.getSymbolFunction();
+                if (!(test instanceof Function))
+                    throw new UndefinedFunctionError(args[3]);
+            } else if (testNot != NIL) {
+                if (testNot instanceof Symbol)
+                    testNot = testNot.getSymbolFunction();
+                if (!(testNot instanceof Function))
+                    throw new UndefinedFunctionError(args[3]);
+            }
+            if (key == NIL && test == EQL) {
+                while (tail != NIL) {
+                    if (item.eql(tail.car()))
+                        return tail;
+                    tail = tail.cdr();
+                }
+                return NIL;
+            }
+            while (tail != NIL) {
+                LispObject candidate = tail.car();
+                if (key != NIL)
+                    candidate = key.execute(candidate);
+                if (test != NIL) {
+                    if (test.execute(item, candidate) == T)
+                        return tail;
+                } else if (testNot != NIL) {
+                    if (testNot.execute(item, candidate) == NIL)
+                        return tail;
+                }
                 tail = tail.cdr();
             }
             return NIL;
