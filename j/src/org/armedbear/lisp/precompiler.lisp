@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.27 2004-02-18 15:33:16 piso Exp $
+;;; $Id: precompiler.lisp,v 1.28 2004-02-21 13:57:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -248,18 +248,14 @@
   (let ((*local-macros* *local-macros*)
         (macros (cadr form))
         (body (cddr form))
-        (res ())
         compiled-body)
     (dolist (macro macros)
       (let ((name (car macro))
             (lambda-list (cadr macro))
             (forms (cddr macro)))
         (push (define-local-macro name lambda-list forms) *local-macros*)
-        (push name *local-macros*)
-        (push (list* name lambda-list (mapcar #'precompile1 forms)) res)))
-    (setf compiled-body (mapcar #'precompile1 body))
-    (setf res (list* 'PROGN compiled-body))
-    res))
+        (push name *local-macros*)))
+    (list* 'PROGN (mapcar #'precompile1 body))))
 
 (defun precompile-symbol-macrolet (form)
   (list* 'SYMBOL-MACROLET (cadr form) (mapcar #'precompile1 (cddr form))))
