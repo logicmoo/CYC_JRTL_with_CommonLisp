@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.197 2004-10-05 17:25:45 piso Exp $
+;;; $Id: boot.lisp,v 1.198 2004-10-10 17:17:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 (export '(decode-stream-arg))
 
-(setq ext:*autoload-verbose* nil)
+(setq *autoload-verbose* nil)
 (setq *load-verbose* nil)
 
 (defmacro in-package (name)
