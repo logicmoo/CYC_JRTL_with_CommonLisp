@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: HashTable.java,v 1.16 2003-09-09 23:16:37 piso Exp $
+ * $Id: HashTable.java,v 1.17 2003-09-17 15:12:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,6 +59,25 @@ public final class HashTable extends LispObject
         // Ignore rehashSize and rehashThreshold.
         buckets = new HashEntry[size];
         threshold = (int) (size * loadFactor);
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.HASH_TABLE;
+    }
+
+    public LispClass classOf()
+    {
+        return LispClass.HASH_TABLE;
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws LispError
+    {
+        if (typeSpecifier == Symbol.HASH_TABLE)
+            return T;
+        if (typeSpecifier == LispClass.HASH_TABLE)
+            return T;
+        return super.typep(typeSpecifier);
     }
 
     // gethash key hash-table &optional default => value, present-p

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.42 2003-09-14 17:36:11 piso Exp $
+ * $Id: LispFloat.java,v 1.43 2003-09-17 15:09:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,16 +35,24 @@ public final class LispFloat extends LispObject
 
     public LispObject typeOf()
     {
-        return Symbol.SINGLE_FLOAT;
+        return Symbol.FLOAT;
     }
 
     public LispClass classOf()
     {
-        return LispClass.findClass(Symbol.SINGLE_FLOAT);
+        return LispClass.FLOAT;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws LispError
     {
+        if (typeSpecifier == Symbol.FLOAT)
+            return T;
+        if (typeSpecifier == LispClass.FLOAT)
+            return T;
+        if (typeSpecifier == Symbol.REAL)
+            return T;
+        if (typeSpecifier == Symbol.NUMBER)
+            return T;
         if (typeSpecifier == Symbol.SINGLE_FLOAT)
             return T;
         if (typeSpecifier == Symbol.DOUBLE_FLOAT)
@@ -52,12 +60,6 @@ public final class LispFloat extends LispObject
         if (typeSpecifier == Symbol.SHORT_FLOAT)
             return T;
         if (typeSpecifier == Symbol.LONG_FLOAT)
-            return T;
-        if (typeSpecifier == Symbol.FLOAT)
-            return T;
-        if (typeSpecifier == Symbol.REAL)
-            return T;
-        if (typeSpecifier == Symbol.NUMBER)
             return T;
         return super.typep(typeSpecifier);
     }
