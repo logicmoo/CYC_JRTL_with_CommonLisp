@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.39 2004-03-24 15:21:39 piso Exp $
+ * $Id: Load.java,v 1.40 2004-03-25 00:56:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -289,33 +289,28 @@ public final class Load extends Lisp
         return null;
     }
 
-    // ### load
-    // Need to support keyword args.
-    // load filespec &key verbose print if-does-not-exist external-format
-    public static final Primitive LOAD =
-        new Primitive("load",
-                      "filespec &key verbose print if-does-not-exist external-format")
+    // ### %load filespec verbose print if-does-not-exist => generalized-boolean
+    public static final Primitive _LOAD =
+        new Primitive("%load", PACKAGE_SYS, false,
+                      "filespec verbose print if-does-not-exist")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
-            if (args.length == 0)
+            if (args.length != 4)
                 return signal(new WrongNumberOfArgumentsException(this));
-            // FIXME Need to support streams as well as pathname designators.
-            String filename;
-            if (args[0] instanceof AbstractString)
-                filename = args[0].getStringValue();
-            else if (args[0] instanceof Pathname)
-                filename = ((Pathname)args[0]).getNamestring();
-            else
-                return signal(new TypeError(args[0], "pathname designator"));
+            Pathname pathname = Pathname.coerceToPathname(args[0]);
+            LispObject verbose = args[1];
+            LispObject print = args[2];
+            LispObject ifDoesNotExist = args[3];
+            String filename = pathname.getNamestring();
             return load(filename,
-                        _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
-                        _LOAD_PRINT_.symbolValueNoThrow() != NIL);
+                        verbose != NIL,
+                        print != NIL);
         }
     };
 
     // ### load-system-file
-    public static final Primitive1 _LOAD =
+    public static final Primitive1 LOAD_SYSTEM_FILE =
         new Primitive1("load-system-file", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
