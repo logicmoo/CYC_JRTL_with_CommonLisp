@@ -1,7 +1,7 @@
 ;;; check-type.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: check-type.lisp,v 1.1 2003-09-22 17:19:20 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: check-type.lisp,v 1.2 2004-01-02 01:48:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,22 +22,31 @@
 ;;; CHECK-TYPE (from CMUCL)
 (defmacro check-type (place type &optional type-string)
   (let ((place-value (gensym)))
-    `(let ((,place-value ,place))
-       (unless (typep ,place-value ',type)
-         (check-type-error ',place ,place-value ',type ,type-string)))))
+    `(loop
+       (let ((,place-value ,place))
+         (when (typep ,place-value ',type)
+           (return nil))
+         (setf ,place
+               (check-type-error ',place ,place-value ',type ,type-string))))))
 
 (defun check-type-error (place place-value type type-string)
   (let ((cond (if type-string
                   (make-condition 'simple-type-error
                                   :datum place :expected-type type
                                   :format-control
-                                  "the value of ~S is ~S, which is not ~A"
+                                  "The value of ~S is ~S, which is not ~A."
                                   :format-arguments
                                   (list place place-value type-string))
 		  (make-condition 'simple-type-error
 				  :datum place :expected-type type
 				  :format-control
-                                  "the value of ~S is ~S, which is not of type ~S"
+                                  "The value of ~S is ~S, which is not of type ~S."
 				  :format-arguments
 				  (list place place-value type)))))
-    (error cond)))
+    (restart-case (error cond)
+                  (store-value (value)
+                               :report (lambda (stream)
+                                         (format stream "Supply a new value for ~S."
+                                                 place))
+                               :interactive read-evaluated-form
+                               value))))
