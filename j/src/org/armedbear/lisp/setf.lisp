@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.48 2005-02-05 18:30:58 piso Exp $
+;;; $Id: setf.lisp,v 1.49 2005-02-11 19:36:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defun get-setf-method-inverse (form inverse setf-function)
   (let ((new-var (gensym))
@@ -98,24 +98,6 @@
 ;;; Redefined in define-modify-macro.lisp.
 (defmacro decf (place &optional (delta 1))
   `(setf ,place (- ,place ,delta)))
-
-(defun fdefinition (name)
-  (cond ((symbolp name)
-         (symbol-function name))
-        ((and (consp name)
-              (eq (car name) 'setf))
-         (or (get (cadr name) '%setf-function)
-             (error 'undefined-function :name name)))
-        (t
-         (error 'type-error))))
-
-(defun %set-fdefinition (name function)
-  (cond ((symbolp name)
-         (fset name function))
-        ((and (consp name) (eq (car name) 'setf))
-         (%put (cadr name) '%setf-function function))
-        (t
-         (error 'type-error))))
 
 ;; (defsetf subseq (sequence start &optional (end nil)) (v)
 ;;   `(progn (replace ,sequence ,v :start1 ,start :end1 ,end)
@@ -225,7 +207,6 @@
 (defsetf nth %set-nth)
 (defsetf svref %svset)
 (defsetf fill-pointer %set-fill-pointer)
-(defsetf fdefinition %set-fdefinition)
 (defsetf subseq %set-subseq)
 (defsetf symbol-value set)
 (defsetf symbol-function fset)
