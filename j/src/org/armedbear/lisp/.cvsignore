@@ -1,4 +1,4 @@
-*.fasl
+*.abcl
 *.cls
 *.class
 build

@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.249 2004-06-04 16:17:32 piso Exp $
+ * $Id: Lisp.java,v 1.250 2004-06-09 12:10:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1670,7 +1670,7 @@ public abstract class Lisp
         exportSpecial("*COMPILE-FILE-TRUENAME*", PACKAGE_CL, NIL);
 
     // ### *compile-file-type*
-    public static final String COMPILE_FILE_TYPE = "fasl";
+    public static final String COMPILE_FILE_TYPE = "abcl";
     public static final Symbol _COMPILE_FILE_TYPE_ =
         internConstant("*COMPILE-FILE-TYPE*", PACKAGE_SYS,
                        new SimpleString(COMPILE_FILE_TYPE));
