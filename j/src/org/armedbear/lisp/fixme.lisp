@@ -1,7 +1,7 @@
 ;;; fixme.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: fixme.lisp,v 1.14 2003-12-16 03:13:49 piso Exp $
+;;; $Id: fixme.lisp,v 1.15 2003-12-19 03:06:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,9 +34,6 @@
 
 (defun proclaim (decl)
   nil)
-
-(defmacro assert (form &rest stuff)
-  `(if (not ,form) (error "assertion failed: ~S" ',form)))
 
 (defun compile-file (&rest args)
   (values nil nil nil))
