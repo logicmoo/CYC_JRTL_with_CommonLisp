@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.144 2004-08-18 17:13:58 piso Exp $
+ * $Id: Symbol.java,v 1.145 2004-08-22 14:22:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -595,7 +595,7 @@ public class Symbol extends LispObject
         boolean seenNonDigit = false;
         for (int i = length; i-- > 0;) {
             char c = s.charAt(i);
-            if ("(),|\\`'\";".indexOf(c) >= 0)
+            if ("(),|\\`'\";:".indexOf(c) >= 0)
                 return true;
             if (Character.isWhitespace(c))
                 return true;
