@@ -2,7 +2,7 @@
  * FindInFiles.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFiles.java,v 1.12 2003-07-26 18:36:03 piso Exp $
+ * $Id: FindInFiles.java,v 1.13 2003-10-15 15:08:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,10 +38,15 @@ import java.util.regex.PatternSyntaxException;
 import javax.swing.SwingUtilities;
 import javax.swing.undo.CompoundEdit;
 
-public class FindInFiles extends Replacement implements Constants,
+public final class FindInFiles extends Replacement implements Constants,
     BackgroundProcess
 {
     private static FindInFiles findInFiles;
+
+    public static final FindInFiles getFindInFiles()
+    {
+        return findInFiles;
+    }
 
     private final Frame frame;
     private String files;
