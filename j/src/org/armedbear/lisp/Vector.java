@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.9 2003-02-28 17:00:52 piso Exp $
+ * $Id: Vector.java,v 1.10 2003-03-01 01:19:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,7 +70,7 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
     {
         long limit = length();
         if (index < 0 || index >= limit)
-            badIndex(index);
+            badIndex(index, limit);
         return elements[(int)index];
     }
 
