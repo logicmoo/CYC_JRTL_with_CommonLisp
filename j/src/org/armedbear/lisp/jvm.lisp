@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.308 2004-12-16 15:09:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.309 2004-12-16 18:13:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -742,6 +742,7 @@
                 maybe-emit-clear-values
                 single-valued-p
                 sys:single-valued-p
+                sys:write-8-bits
                 ))
     (setf (sys:single-valued-p op) t)))
 
@@ -1321,8 +1322,9 @@
 
 (defun write-u2 (n)
   (declare (optimize speed))
-  (sys::write-8-bits (ash n -8) *stream*)
-  (sys::write-8-bits (logand n #xFF) *stream*))
+  (let ((stream *stream*))
+    (sys::write-8-bits (ash n -8) stream)
+    (sys::write-8-bits (logand n #xFF) stream)))
 
 (defun write-u4 (n)
   (declare (optimize speed))
@@ -1967,6 +1969,7 @@
 (define-binary-operator '/=                  "IS_NE")
 (define-binary-operator 'mod                 "MOD")
 (define-binary-operator 'ash                 "ash")
+(define-binary-operator 'logand              "logand")
 (define-binary-operator 'aref                "AREF")
 (define-binary-operator 'sys::simple-typep   "typep")
 (define-binary-operator 'rplaca              "RPLACA")
@@ -1975,7 +1978,9 @@
 (define-binary-operator 'sys::%rplacd        "_RPLACD")
 
 (defun compile-function-call-2 (fun args :target target)
+;;   (%format t "compile-function-call-2 fun = ~S~%" fun)
   (let ((translation (gethash fun binary-operators)))
+;;     (%format t "translation = ~S~%" translation)
     (if translation
         (compile-binary-operation translation args :target target)
         (case fun
@@ -2232,7 +2237,7 @@
     (when (find-local-function fun)
       (return-from compile-function-call (compile-local-function-call form target)))
     (let ((numargs (length args)))
-      (when (sys:built-in-function-p fun)
+;;       (when (sys:built-in-function-p fun)
         (case numargs
           (1
            (when (compile-function-call-1 fun args :target target)
@@ -2242,7 +2247,10 @@
              (return-from compile-function-call)))
           (3
            (when (compile-function-call-3 fun args :target target)
-             (return-from compile-function-call)))))
+             (return-from compile-function-call)
+             ))
+          )
+;;         )
       (cond
        ((eq fun (compiland-name *current-compiland*)) ; recursive call
         (emit 'aload 0)) ; this
@@ -3489,6 +3497,52 @@
           (t
            (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
+(defun compile-ash (form &key (target *val*))
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-ash (compile-form new-form :target target))))
+  (let* ((args (cdr form))
+         (len (length args)))
+    (when (= len 2)
+      (let ((first (first args))
+            (second (second args)))
+        (when (fixnump second)
+          (compile-form first :target :stack)
+          (maybe-emit-clear-values first)
+          (if (<= -32768 second 32767)
+              (emit 'sipush second)
+              (emit 'ldc (pool-int second)))
+          (emit-invokevirtual +lisp-object-class+
+                              "ash"
+                              "(I)Lorg/armedbear/lisp/LispObject;"
+                              -1)
+          (emit-move-from-stack target)
+          (return-from compile-ash t)))))
+  (compile-function-call form :target target))
+
+(defun compile-logand (form &key (target *val*))
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+      (return-from compile-logand (compile-form new-form :target target))))
+  (let* ((args (cdr form))
+         (len (length args)))
+    (when (= len 2)
+      (let ((first (first args))
+            (second (second args)))
+        (when (fixnump second)
+          (compile-form first :target :stack)
+          (maybe-emit-clear-values first)
+          (if (<= -32768 second 32767)
+              (emit 'sipush second)
+              (emit 'ldc (pool-int second)))
+          (emit-invokevirtual +lisp-object-class+
+                              "logand"
+                              "(I)Lorg/armedbear/lisp/LispObject;"
+                              -1)
+          (emit-move-from-stack target)
+          (return-from compile-logand t)))))
+  (compile-function-call form :target target))
+
 (defun compile-plus (form &key (target *val*))
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
@@ -4311,7 +4365,8 @@
       (error "Handler not found: ~S" handler))
     (setf (get symbol 'p2-handler) handler)))
 
-(mapc #'install-p2-handler '(atom
+(mapc #'install-p2-handler '(ash
+                             atom
                              block
                              catch
                              cons
@@ -4323,6 +4378,7 @@
                              if
                              labels
                              locally
+                             logand
                              multiple-value-bind
                              multiple-value-call
                              multiple-value-list
@@ -4332,13 +4388,10 @@
                              return-from
                              rplacd
                              setq
-;;                              tagbody
                              throw
                              unwind-protect
                              values))
 
-;; (install-p2-handler 'let  'compile-let/let*)
-;; (install-p2-handler 'let* 'compile-let/let*)
 (install-p2-handler '+    'compile-plus)
 (install-p2-handler '-    'compile-minus)
 (install-p2-handler 'not  'compile-not/null)
