@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.2 2003-02-27 18:34:09 piso Exp $
+ * $Id: BitVector.java,v 1.3 2003-02-27 18:39:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,13 @@ package org.armedbear.lisp;
 
 public final class BitVector extends Vector
 {
+    public BitVector(int length)
+    {
+        super(length);
+        for (int i = length; i-- > 0;)
+            set(i, new Fixnum(0));
+    }
+
     public BitVector(String s)
     {
         super(s.length());
