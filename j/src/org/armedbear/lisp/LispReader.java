@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.33 2005-02-06 00:54:25 piso Exp $
+ * $Id: LispReader.java,v 1.34 2005-02-06 01:37:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,7 +104,7 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char ignored)
             throws ConditionThrowable
         {
-            return stream.readList();
+            return stream.readList(false);
         }
     };
 
@@ -153,7 +153,7 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char c, int n)
             throws ConditionThrowable
         {
-            LispObject list = stream.readList();
+            LispObject list = stream.readList(true);
             if (_BACKQUOTE_COUNT_.symbolValue().zerop()) {
                 if (n >= 0) {
                     LispObject[] array = new LispObject[n];
