@@ -2,7 +2,7 @@
  * ConfirmSendDialog.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: ConfirmSendDialog.java,v 1.2 2003-07-18 15:22:30 piso Exp $
+ * $Id: ConfirmSendDialog.java,v 1.3 2003-07-23 16:02:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,14 +25,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.armedbear.j.AbstractDialog;
+import org.armedbear.j.CheckBox;
 import org.armedbear.j.Editor;
 import org.armedbear.j.History;
 import org.armedbear.j.HistoryTextField;
 import org.armedbear.j.KeyMapping;
+import org.armedbear.j.Label;
 import org.armedbear.j.MessageDialog;
 import org.armedbear.j.Property;
 import org.armedbear.j.SessionProperties;
@@ -52,8 +52,8 @@ public final class ConfirmSendDialog extends AbstractDialog
     private final SessionProperties sessionProperties;
 
     private final HistoryTextField fromTextField;
-    private final JCheckBox bccAddSenderCheckBox;
-    private final JCheckBox bccAddOtherCheckBox;
+    private final CheckBox bccAddSenderCheckBox;
+    private final CheckBox bccAddOtherCheckBox;
     private final HistoryTextField bccOtherTextField;
     private final HistoryTextField smtpTextField;
 
@@ -73,7 +73,7 @@ public final class ConfirmSendDialog extends AbstractDialog
         this.editor = editor;
         this.sm = sm;
         sessionProperties = Editor.getSessionProperties();
-        JLabel label = new JLabel("From:");
+        Label label = new Label("From:");
         label.setDisplayedMnemonic('F');
         fromTextField = new HistoryTextField(TEXTFIELD_WIDTH);
         fromHistory = new History(fromKey);
@@ -86,12 +86,12 @@ public final class ConfirmSendDialog extends AbstractDialog
         fromTextField.recallLast();
         addLabelAndTextField(label, fromTextField);
         addVerticalStrut();
-        bccAddSenderCheckBox = new JCheckBox("Bcc sender",
+        bccAddSenderCheckBox = new CheckBox("Bcc sender",
             sessionProperties.getBooleanProperty(bccAddSenderKey, false));
         bccAddSenderCheckBox.setMnemonic('S');
         bccAddSenderCheckBox.addKeyListener(this);
         mainPanel.add(bccAddSenderCheckBox);
-        bccAddOtherCheckBox = new JCheckBox("Bcc other:",
+        bccAddOtherCheckBox = new CheckBox("Bcc other:",
             sessionProperties.getBooleanProperty(bccAddOtherKey, false));
         bccAddOtherCheckBox.setMnemonic('O');
         bccAddOtherCheckBox.addKeyListener(this);
@@ -119,7 +119,7 @@ public final class ConfirmSendDialog extends AbstractDialog
         }
         smtpTextField.setHistory(smtpHistory);
         smtpTextField.recallLast();
-        label = new JLabel("SMTP server:");
+        label = new Label("SMTP server:");
         label.setDisplayedMnemonic('M');
         addLabelAndTextField(label, smtpTextField);
         addVerticalStrut();
