@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.573 2004-02-19 00:45:42 piso Exp $
+ * $Id: Primitives.java,v 1.574 2004-02-19 01:35:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1925,7 +1925,7 @@ public final class Primitives extends Lisp
             if (fillPointer >= 0)
                 return new Fixnum(fillPointer);
             if (arg instanceof AbstractArray)
-                return signal(new TypeError("Array does not have a fill pointer."));
+                return ((AbstractArray)arg).noFillPointer();
             else
                 return signal(new TypeError(arg, Symbol.ARRAY));
         }
@@ -1938,9 +1938,8 @@ public final class Primitives extends Lisp
             throws ConditionThrowable
         {
             AbstractVector v = checkVector(first);
-            int fillPointer = v.getFillPointer();
-            if (fillPointer < 0)
-                signal(new TypeError("array does not have a fill pointer"));
+            if (v.getFillPointer() < 0)
+                v.noFillPointer();
             v.setFillPointer(second);
             return second;
         }
@@ -1956,7 +1955,7 @@ public final class Primitives extends Lisp
             AbstractVector v = checkVector(second);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                signal(new TypeError("array does not have a fill pointer"));
+                v.noFillPointer();
             if (fillPointer >= v.capacity())
                 return NIL;
             v.set(fillPointer, first);
@@ -1974,35 +1973,23 @@ public final class Primitives extends Lisp
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            AbstractVector v = checkVector(second);
-            final int fillPointer = v.getFillPointer();
-            if (fillPointer < 0)
-                signal(new TypeError("Array does not have a fill pointer."));
-            if (fillPointer >= v.capacity()) {
-                // Need to extend vector.
-                v.ensureCapacity(v.capacity() * 2 + 1);
+            try {
+                return ((AbstractVector)second).vectorPushExtend(first);
             }
-            v.set(fillPointer, first);
-            v.setFillPointer(fillPointer + 1);
-            return new Fixnum(fillPointer);
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.VECTOR));
+            }
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
-            AbstractVector v = checkVector(second);
-            int extension = Fixnum.getValue(third);
-            final int fillPointer = v.getFillPointer();
-            if (fillPointer < 0)
-                signal(new TypeError("Array does not have a fill pointer."));
-            if (fillPointer >= v.capacity()) {
-                // Need to extend vector.
-                extension = Math.max(extension, v.capacity() + 1);
-                v.ensureCapacity(v.capacity() + extension);
+            try {
+                return ((AbstractVector)second).vectorPushExtend(first, third);
             }
-            v.set(fillPointer, first);
-            v.setFillPointer(fillPointer + 1);
-            return new Fixnum(fillPointer);
+            catch (ClassCastException e) {
+                return signal(new TypeError(second, Symbol.VECTOR));
+            }
         }
     };
 
@@ -2015,7 +2002,7 @@ public final class Primitives extends Lisp
             AbstractVector v = checkVector(arg);
             int fillPointer = v.getFillPointer();
             if (fillPointer < 0)
-                signal(new TypeError("array does not have a fill pointer"));
+                v.noFillPointer();
             if (fillPointer == 0)
                 signal(new LispError("nothing left to pop"));
             int newFillPointer = v.checkIndex(fillPointer - 1);
@@ -2057,7 +2044,7 @@ public final class Primitives extends Lisp
     // ### function-lambda-expression
     // function-lambda-expression function => lambda-expression, closure-p, name
     private static final Primitive1 FUNCTION_LAMBDA_EXPRESSION =
-        new Primitive1("function-lambda-expression","function")
+        new Primitive1("function-lambda-expression", "function")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -2075,7 +2062,7 @@ public final class Primitives extends Lisp
                 if (env == null || env.isEmpty())
                     value2 = NIL;
                 else
-                    value2 = env;
+                    value2 = env; // Return environment as closure-p.
             } else
                 value1 = value2 = NIL;
             return LispThread.currentThread().setValues(value1, value2, value3);
