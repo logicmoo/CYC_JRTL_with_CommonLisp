@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.64 2005-03-15 03:58:55 piso Exp $
+;;; $Id: compile-file.lisp,v 1.65 2005-03-21 00:34:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,8 +20,6 @@
 (in-package #:system)
 
 (require 'jvm)
-
-(defvar *compile-file-environment* nil)
 
 (defvar *fbound-names*)
 
