@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.207 2005-03-14 17:47:33 piso Exp $
+;;; $Id: boot.lisp,v 1.208 2005-03-19 14:39:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,13 +17,13 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(sys::%in-package "SYSTEM")
+(sys::%in-package #:system)
 
 (setq *autoload-verbose* nil)
 (setq *load-verbose* nil)
 
 (defmacro in-package (name)
-  (list 'sys::%in-package (string name)))
+  (list '%in-package (string name)))
 
 (defmacro lambda (lambda-list &rest body)
   (list 'function (list* 'lambda lambda-list body)))
@@ -52,16 +52,16 @@
 
 ;; EVAL is redefined in precompiler.lisp.
 (defun eval (form)
-  (sys::%eval form))
+  (%eval form))
 
 (defun terpri (&optional output-stream)
-  (sys::%terpri output-stream))
+  (%terpri output-stream))
 
 (defun fresh-line (&optional output-stream)
-  (sys::%fresh-line output-stream))
+  (%fresh-line output-stream))
 
 (defun write-char (character &optional output-stream)
-  (sys::%write-char character output-stream))
+  (%write-char character output-stream))
 
 (defun simple-format (destination control-string &rest args)
   (apply *simple-format-function* destination control-string args))
@@ -326,6 +326,12 @@
 (load-system-file "pprint")
 (load-system-file "defsetf")
 
-(unless (sys::featurep :j)
+(defun preload-package (pkg)
+  (%format t "Preloading ~S~%" (find-package pkg))
+  (dolist (sym (package-symbols pkg))
+    (when (autoloadp sym)
+      (resolve sym))))
+
+(unless (featurep :j)
   (load-system-file "top-level")
   (%format t "Startup completed in ~A seconds.~%" (float (/ (ext:uptime) 1000))))
