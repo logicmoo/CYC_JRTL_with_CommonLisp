@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.23 2002-12-08 01:25:08 piso Exp $
+ * $Id: Editor.java,v 1.24 2002-12-14 02:30:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3249,6 +3249,12 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         display.moveCaretToPoint(e.getPoint());
         if (buffer.getBooleanProperty(Property.RESTRICT_CARET))
             moveCaretToDotCol();
+
+        // Dec 13 2002 6:30 PM
+        // Without this, focus ends up in the location bar textfield if you
+        // click in the edit window after using the openFile completion list
+        // to open a file. Weird.
+        Editor.restoreFocus();
     }
 
     public void mouseSelect()
