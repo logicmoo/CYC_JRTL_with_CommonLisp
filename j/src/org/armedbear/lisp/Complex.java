@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Complex.java,v 1.15 2003-09-04 04:28:01 piso Exp $
+ * $Id: Complex.java,v 1.16 2003-09-04 05:06:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,6 +141,25 @@ public final class Complex extends LispObject
         }
         return Complex.getInstance(realpart.multiplyBy(obj),
                                    imagpart.multiplyBy(obj));
+    }
+
+    public LispObject divideBy(LispObject obj) throws LispError
+    {
+        if (obj instanceof Complex) {
+            LispObject a = realpart;
+            LispObject b = imagpart;
+            LispObject c = ((Complex)obj).getRealPart();
+            LispObject d = ((Complex)obj).getImaginaryPart();
+            LispObject ac = a.multiplyBy(c);
+            LispObject bd = b.multiplyBy(d);
+            LispObject bc = b.multiplyBy(c);
+            LispObject ad = a.multiplyBy(d);
+            LispObject denominator = c.multiplyBy(c).add(d.multiplyBy(d));
+            return Complex.getInstance(ac.add(bd).divideBy(denominator),
+                                       bc.subtract(ad).divideBy(denominator));
+        }
+        return Complex.getInstance(realpart.divideBy(obj),
+                                   imagpart.divideBy(obj));
     }
 
     public boolean isEqualTo(LispObject obj) throws LispError
