@@ -1,7 +1,7 @@
 ;;; profiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: profiler.lisp,v 1.9 2003-11-14 18:02:22 piso Exp $
+;;; $Id: profiler.lisp,v 1.10 2004-08-22 01:11:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,7 +38,12 @@
 (defun show-call-count-for-symbol (sym max-count)
   (let ((count (sys::%call-count (fdefinition sym))))
     (if max-count
-        (format t "~A ~A (~A%)~%" sym count
+        (format t "~A ~A ~A (~A%)~%"
+                sym
+                (if (compiled-function-p (fdefinition sym))
+                    ""
+                    "[interpreted function]")
+                count
                 (/ (round (/ (* count 10000.0) max-count)) 100.0))
         (format t "~A ~A~%" sym count))))
 
