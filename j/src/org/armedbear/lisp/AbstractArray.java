@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AbstractArray.java,v 1.20 2004-02-26 19:28:52 piso Exp $
+ * $Id: AbstractArray.java,v 1.21 2004-02-27 02:42:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,12 @@ public abstract class AbstractArray extends LispObject
     public boolean hasFillPointer()
     {
         return false;
+    }
+
+    public int getFillPointer() throws ConditionThrowable
+    {
+        noFillPointer();
+        return -1; // Not reached.
     }
 
     public boolean isAdjustable()
