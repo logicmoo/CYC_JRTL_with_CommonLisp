@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.35 2003-05-28 00:59:14 piso Exp $
+;;; $Id: sequences.lisp,v 1.36 2003-05-30 16:15:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@
 (in-package "COMMON-LISP")
 
 (export '(make-sequence
-          some every notany notevery subseq copy-seq fill
+          subseq copy-seq fill
           replace
           reverse nreverse
           concatenate
@@ -124,33 +124,6 @@
       (dotimes (i size)
         (setf (elt sequence i) initial-element)))
     sequence))
-
-
-;;; SOME, EVERY, NOTANY, NOTEVERY (from ECL)
-
-(defun some (predicate sequence &rest more-sequences)
-  (setq more-sequences (cons sequence more-sequences))
-  (do ((i 0 (1+ i))
-       (l (apply #'min (mapcar #'length more-sequences))))
-    ((>= i l) nil)
-    (let ((that-value
-           (apply predicate
-                  (mapcar #'(lambda (z) (elt z i)) more-sequences))))
-      (when that-value (return that-value)))))
-
-(defun every (predicate sequence &rest more-sequences)
-  (setq more-sequences (cons sequence more-sequences))
-  (do ((i 0 (1+ i))
-       (l (apply #'min (mapcar #'length more-sequences))))
-    ((>= i l) t)
-    (unless (apply predicate (mapcar #'(lambda (z) (elt z i)) more-sequences))
-      (return nil))))
-
-(defun notany (predicate sequence &rest more-sequences)
-  (not (apply #'some predicate sequence more-sequences)))
-
-(defun notevery (predicate sequence &rest more-sequences)
-  (not (apply #'every predicate sequence more-sequences)))
 
 
 (defmacro seq-dispatch (sequence list-form array-form)
