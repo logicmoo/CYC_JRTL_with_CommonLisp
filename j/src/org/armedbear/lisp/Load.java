@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.87 2004-12-16 15:10:21 piso Exp $
+ * $Id: Load.java,v 1.88 2004-12-16 18:13:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -237,7 +237,7 @@ public final class Load extends Lisp
     // ### *fasl-version*
     // internal symbol
     private static final Symbol _FASL_VERSION_ =
-        exportConstant("*FASL-VERSION*", PACKAGE_SYS, new Fixnum(19));
+        exportConstant("*FASL-VERSION*", PACKAGE_SYS, new Fixnum(20));
 
     // ### *fasl-anonymous-package*
     // internal symbol
