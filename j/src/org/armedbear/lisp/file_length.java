@@ -2,7 +2,7 @@
  * file_length.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: file_length.java,v 1.3 2004-01-31 19:07:00 piso Exp $
+ * $Id: file_length.java,v 1.4 2004-05-12 16:45:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,8 +20,6 @@
  */
 
 package org.armedbear.lisp;
-
-import java.io.File;
 
 public final class file_length extends Primitive1
 {
