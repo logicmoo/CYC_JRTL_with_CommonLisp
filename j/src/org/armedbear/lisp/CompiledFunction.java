@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.14 2003-10-25 17:20:09 piso Exp $
+ * $Id: CompiledFunction.java,v 1.15 2003-11-24 01:09:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,6 +128,7 @@ public class CompiledFunction extends Closure
         }
     };
 
+    // ### varlist
     private static final Primitive1 VARLIST =
         new Primitive1("varlist", PACKAGE_SYS, false)
     {
