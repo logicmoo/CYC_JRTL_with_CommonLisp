@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.47 2005-04-05 22:57:24 piso Exp $
+ * $Id: Function.java,v 1.48 2005-04-06 01:10:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,7 +164,7 @@ public abstract class Function extends Operator
     public String writeToString() throws ConditionThrowable
     {
         LispObject name = getLambdaName();
-        if (name != null) {
+        if (name != null && name != NIL) {
             StringBuffer sb = new StringBuffer("#<FUNCTION");
             sb.append(' ');
             sb.append(name.writeToString());
