@@ -2,7 +2,7 @@
  * File.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: File.java,v 1.10 2002-12-08 01:50:22 piso Exp $
+ * $Id: File.java,v 1.11 2002-12-08 02:19:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,22 +35,25 @@ import java.util.StringTokenizer;
 
 public class File implements Comparable
 {
-    public static final int PROTOCOL_FILE       = 0;
-    public static final int PROTOCOL_HTTP       = 1;
-    public static final int PROTOCOL_HTTPS      = 2;
-    public static final int PROTOCOL_FTP        = 3;
-    public static final int PROTOCOL_SSH        = 4;
+    public static final int PROTOCOL_FILE        = 0;
+    public static final int PROTOCOL_HTTP        = 1;
+    public static final int PROTOCOL_HTTPS       = 2;
+    public static final int PROTOCOL_FTP         = 3;
+    public static final int PROTOCOL_SSH         = 4;
 
-    public static final String PREFIX_HTTP      = "http://";
-    public static final String PREFIX_HTTPS     = "https://";
-    public static final String PREFIX_FTP       = "ftp://";
-    public static final String PREFIX_SSH       = "ssh://";
-    public static final String PREFIX_FILE      = "file://";
+    public static final String PREFIX_HTTP       = "http://";
+    public static final String PREFIX_HTTPS      = "https://";
+    public static final String PREFIX_FTP        = "ftp://";
+    public static final String PREFIX_SSH        = "ssh://";
+    public static final String PREFIX_FILE       = "file://";
 
-    public static final int TYPE_UNKNOWN        = 0;
-    public static final int TYPE_FILE           = 1;
-    public static final int TYPE_DIRECTORY      = 2;
-    public static final int TYPE_LINK           = 3;
+    public static final String PREFIX_LOCAL_HOST =
+        LocalFile.getLocalHostName().concat(":");
+
+    public static final int TYPE_UNKNOWN         = 0;
+    public static final int TYPE_FILE            = 1;
+    public static final int TYPE_DIRECTORY       = 2;
+    public static final int TYPE_LINK            = 3;
 
     private static final boolean ignoreCase = Platform.isPlatformWindows();
 
@@ -121,6 +124,11 @@ public class File implements Comparable
         // Local file.
         if (name.startsWith(PREFIX_FILE)) {
             name = name.substring(PREFIX_FILE.length());
+            if (name.length() == 0)
+                return null;
+        }
+        if (name.startsWith(PREFIX_LOCAL_HOST)) {
+            name = name.substring(PREFIX_LOCAL_HOST.length());
             if (name.length() == 0)
                 return null;
         }
@@ -439,6 +447,8 @@ public class File implements Comparable
     {
         if (name.startsWith(PREFIX_FILE))
             return true;
+        if (name.startsWith(PREFIX_LOCAL_HOST))
+            return true;
         return false;
     }
 
@@ -507,7 +517,7 @@ public class File implements Comparable
     {
         switch (protocol) {
             case PROTOCOL_FILE:
-                return canonicalPath();
+                return LocalFile.getLocalHostName() + ':' + canonicalPath();
             case PROTOCOL_HTTP:
                 return PREFIX_HTTP + hostName + canonicalPath;
             case PROTOCOL_HTTPS:
