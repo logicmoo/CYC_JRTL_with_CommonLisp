@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: P4.java,v 1.8 2003-04-21 01:28:05 piso Exp $
+ * $Id: P4.java,v 1.9 2003-04-21 01:35:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public class P4 implements Constants
     {
         if (output != null && output.length() > 0) {
             Buffer buf;
-            if (cmd.startsWith("p4 diff "))
+            if (cmd.startsWith("p4 diff"))
                 buf = new DiffOutputBuffer(parentBuffer, output, VC_P4);
             else
                 buf = OutputBuffer.getOutputBuffer(output);
