@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.8 2004-03-10 20:10:32 piso Exp $
+ * $Id: Readtable.java,v 1.9 2004-03-11 19:42:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +25,14 @@ import java.util.ArrayList;
 
 public final class Readtable extends LispObject
 {
-    private final ArrayList table;
+    private final Function[] readerMacroFunctions = new Function[CHAR_MAX];
+
+    private ArrayList table;
     private LispObject readtableCase;
 
     public Readtable()
     {
+        readerMacroFunctions[';'] = LispReader.READ_COMMENT;
         table = new ArrayList();
         readtableCase = Keyword.UPCASE;
     }
@@ -37,9 +40,28 @@ public final class Readtable extends LispObject
     private Readtable(Readtable rt)
     {
         synchronized (rt) {
+            System.arraycopy(rt.readerMacroFunctions, 0, readerMacroFunctions, 0,
+                             CHAR_MAX);
             table = new ArrayList(rt.table);
             readtableCase = rt.readtableCase;
         }
+    }
+
+    // FIXME synchronization
+    private static void copyReadtable(Readtable from, Readtable to)
+    {
+        System.arraycopy(from.readerMacroFunctions, 0, to.readerMacroFunctions, 0,
+                         CHAR_MAX);
+        to.table = new ArrayList(from.table);
+        to.readtableCase = from.readtableCase;
+    }
+
+    public LispObject getReaderMacroFunction(char c)
+    {
+        if (c < CHAR_MAX)
+            return readerMacroFunctions[c];
+        else
+            return null;
     }
 
     public LispObject getReadtableCase()
@@ -148,9 +170,7 @@ public final class Readtable extends LispObject
             if (second == NIL)
                 return new Readtable(from);
             Readtable to = checkReadtable(second);
-            // FIXME synchronization
-            to.table = new ArrayList(from.table);
-            to.readtableCase = from.readtableCase;
+            copyReadtable(from, to);
             return to;
         }
     };
