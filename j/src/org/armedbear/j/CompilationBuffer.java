@@ -1,8 +1,8 @@
 /*
  * CompilationBuffer.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.12 2003-03-20 15:38:01 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: CompilationBuffer.java,v 1.13 2003-06-05 12:34:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -314,7 +314,14 @@ public final class CompilationBuffer extends Buffer implements Runnable
         errorFileName = null;
         errorLineNumber = 0;
         errorOffset = 0;
-        parseLineAsErrorMessage(line);
+        CompilationError ce = CompilationError.parseLineAsErrorMessage(line);
+        if (ce != null) {
+            errorFileName = ce.getFileName();
+            errorLineNumber = ce.getLineNumber();
+            errorOffset = ce.getOffset();
+            message = ce.getMessage();
+            lastErrorLine = line;
+        }
     }
 
     private void nextErrorInternal()
@@ -325,9 +332,16 @@ public final class CompilationBuffer extends Buffer implements Runnable
         message = null;
         Line line = lastErrorLine != null ? lastErrorLine.next() : getFirstLine();
         while (line != null) {
-            if (parseLineAsErrorMessage(line))
+            CompilationError ce =
+                CompilationError.parseLineAsErrorMessage(line);
+            if (ce != null) {
+                errorFileName = ce.getFileName();
+                errorLineNumber = ce.getLineNumber();
+                errorOffset = ce.getOffset();
+                message = ce.getMessage();
+                lastErrorLine = line;
                 break;
-            else
+            } else
                 line = line.next();
         }
     }
@@ -359,101 +373,6 @@ public final class CompilationBuffer extends Buffer implements Runnable
             return lastErrorLine.next().trim();
 
         return null;
-    }
-
-    private boolean parseLineAsErrorMessage(Line line)
-    {
-        String text = line.trim();
-        if (text.startsWith("[javac]")) {
-            // Ant.
-            text = text.substring(7).trim();
-        }
-        String lookFor = ") : error ";
-        int index = text.indexOf(lookFor);
-        if (index < 0) {
-            lookFor = ") : warning ";
-            index = text.indexOf(lookFor);
-        }
-        if (index >= 0) {
-            // Microsoft C/C++.
-            int end = text.indexOf('(');
-            if (end >= 0) {
-                String filename = text.substring(0, end);
-                String s = text.substring(end + 1, index);
-                int lineNumber = 0;
-                try {
-                    lineNumber = Integer.parseInt(s);
-                }
-                catch (NumberFormatException e) {
-                    return false;
-                }
-                if (lineNumber > 0) {
-                    // We have a winner.
-                    lastErrorLine = line;
-                    errorFileName = filename;
-                    errorLineNumber = lineNumber;
-                    // Look for error message on same line.
-                    String remainder = text.substring(index + lookFor.length());
-                    if ((index = remainder.indexOf(": ")) >= 0)
-                        message = remainder.substring(index + 2).trim();
-                    else
-                        message = remainder.trim();
-                    if (message.length() == 0)
-                        message = null;
-                    return true;
-                }
-            }
-            return false;
-        }
-        index = text.indexOf(':');
-        if (Platform.isPlatformWindows() && index == 1) {
-            // The file name starts with a drive specifier ("c:").
-            // We want the next ':', not this one.
-            index = text.indexOf(':', 2);
-        }
-        if (index >= 0) {
-            String filename = text.substring(0, index).trim();
-            String remainder = text.substring(index + 1);
-            index = remainder.indexOf(':');
-            if (index >= 0) {
-                String s = remainder.substring(0, index);
-                int lineNumber = 0;
-                try {
-                    lineNumber = Integer.parseInt(s);
-                }
-                catch (NumberFormatException e) {
-                    return false;
-                }
-                if (lineNumber > 0) {
-                    // We have a winner.
-                    lastErrorLine = line;
-                    errorFileName = filename;
-                    errorLineNumber = lineNumber;
-                    // Maybe there's a column number too...
-                    remainder = remainder.substring(index + 1);
-                    index = remainder.indexOf(':');
-                    if (index >= 0) {
-                        // Found a colon.
-                        s = remainder.substring(0, index);
-                        try {
-                            errorOffset = Integer.parseInt(s) - 1;
-                        }
-                        catch (NumberFormatException e) {
-                            // No column number.
-                        }
-                    }
-                    // Look for error message on same line.
-                    if ((index = remainder.indexOf(": ")) >= 0)
-                        message = remainder.substring(index + 2).trim();
-                    else
-                        message = remainder.trim();
-                    if (message.length() == 0)
-                        message = null;
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public int load()
