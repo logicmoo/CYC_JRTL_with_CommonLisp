@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StandardObject.java,v 1.23 2004-10-09 14:19:20 piso Exp $
+ * $Id: StandardObject.java,v 1.24 2004-10-10 17:14:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -264,6 +264,8 @@ public class StandardObject extends LispObject
                     SimpleVector slots = (SimpleVector) second;
                     if (symbol == Symbol.STANDARD_GENERIC_FUNCTION)
                         return new GenericFunction((LispClass)first, slots);
+                    if (symbol == Symbol.STANDARD_METHOD)
+                        return new Method((LispClass)first, slots);
                     LispObject cpl = ((LispClass)first).getCPL();
                     while (cpl != NIL) {
                         LispObject obj = cpl.car();
