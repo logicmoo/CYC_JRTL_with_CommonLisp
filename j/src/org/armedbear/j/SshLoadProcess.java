@@ -2,7 +2,7 @@
  * SshLoadProcess.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: SshLoadProcess.java,v 1.4 2002-11-30 16:36:58 piso Exp $
+ * $Id: SshLoadProcess.java,v 1.5 2002-12-07 10:17:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,6 +66,7 @@ public final class SshLoadProcess extends LoadProcess implements BackgroundProce
             }
             return;
         }
+        session.setOutputBuffer(null);
         if (file.canonicalPath() == null || file.canonicalPath().length() == 0)
             file.setCanonicalPath(session.getLoginDirectory());
         String pass = session.getPassphrase();
@@ -113,7 +114,6 @@ public final class SshLoadProcess extends LoadProcess implements BackgroundProce
                 t.start();
             }
         }
-        session.setOutputBuffer(null);
         if (successRunnable != null)
             SwingUtilities.invokeLater(successRunnable);
     }
