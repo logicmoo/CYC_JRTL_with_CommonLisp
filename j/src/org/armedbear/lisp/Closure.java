@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.24 2003-05-31 22:49:55 piso Exp $
+ * $Id: Closure.java,v 1.25 2003-06-01 00:14:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -265,15 +265,44 @@ public class Closure extends Function
 
     public LispObject execute() throws Condition
     {
-        LispObject[] args = new LispObject[0];
-        return execute(args, environment);
+        if (arity == 0) {
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            LispObject prog = body;
+            while (prog != NIL) {
+                result = eval(prog.car(), environment, thread);
+                prog = prog.cdr();
+            }
+            return result;
+        } else {
+            LispObject[] args = new LispObject[0];
+            return execute(args, environment);
+        }
     }
 
     public LispObject execute(LispObject arg) throws Condition
     {
-        LispObject[] args = new LispObject[1];
-        args[0] = arg;
-        return execute(args, environment);
+        if (arity == 1) {
+            final LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Environment ext = new Environment(environment);
+            bind(parameterArray[0].var, arg, ext);
+            if (auxVarArray != null) {
+                bindAuxVars(ext, thread);
+            }
+            LispObject result = NIL;
+            LispObject prog = body;
+            while (prog != NIL) {
+                result = eval(prog.car(), ext, thread);
+                prog = prog.cdr();
+            }
+            thread.setDynamicEnvironment(oldDynEnv);
+            return result;
+        } else {
+            LispObject[] args = new LispObject[1];
+            args[0] = arg;
+            return execute(args, environment);
+        }
     }
 
     public LispObject execute(LispObject first, LispObject second)
@@ -286,15 +315,7 @@ public class Closure extends Function
             bind(parameterArray[0].var, first, ext);
             bind(parameterArray[1].var, second, ext);
             if (auxVarArray != null) {
-                // Aux variable processing is analogous to let* processing.
-                for (int i = 0; i < auxVarArray.length; i++) {
-                    Parameter parameter = auxVarArray[i];
-                    Symbol symbol = parameter.var;
-                    LispObject initForm = parameter.initForm;
-                    LispObject value =
-                        initForm == NIL ? NIL : eval(initForm, ext, thread);
-                    bind(symbol, value, ext);
-                }
+                bindAuxVars(ext, thread);
             }
             LispObject result = NIL;
             LispObject prog = body;
@@ -315,11 +336,31 @@ public class Closure extends Function
     public LispObject execute(LispObject first, LispObject second,
         LispObject third) throws Condition
     {
-        LispObject[] args = new LispObject[3];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        return execute(args, environment);
+        if (arity == 3) {
+            final LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Environment ext = new Environment(environment);
+            bind(parameterArray[0].var, first, ext);
+            bind(parameterArray[1].var, second, ext);
+            bind(parameterArray[2].var, third, ext);
+            if (auxVarArray != null) {
+                bindAuxVars(ext, thread);
+            }
+            LispObject result = NIL;
+            LispObject prog = body;
+            while (prog != NIL) {
+                result = eval(prog.car(), ext, thread);
+                prog = prog.cdr();
+            }
+            thread.setDynamicEnvironment(oldDynEnv);
+            return result;
+        } else {
+            LispObject[] args = new LispObject[3];
+            args[0] = first;
+            args[1] = second;
+            args[2] = third;
+            return execute(args, environment);
+        }
     }
 
     public final LispObject execute(LispObject[] args) throws Condition
@@ -474,15 +515,16 @@ public class Closure extends Function
             }
         }
         if (auxVarArray != null) {
-            // Aux variable processing is analogous to let* processing.
-            for (int i = 0; i < auxVarArray.length; i++) {
-                Parameter parameter = auxVarArray[i];
-                Symbol symbol = parameter.var;
-                LispObject initForm = parameter.initForm;
-                LispObject value =
-                    initForm == NIL ? NIL : eval(initForm, ext, thread);
-                bind(symbol, value, ext);
-            }
+//             // Aux variable processing is analogous to let* processing.
+//             for (int i = 0; i < auxVarArray.length; i++) {
+//                 Parameter parameter = auxVarArray[i];
+//                 Symbol symbol = parameter.var;
+//                 LispObject initForm = parameter.initForm;
+//                 LispObject value =
+//                     initForm == NIL ? NIL : eval(initForm, ext, thread);
+//                 bind(symbol, value, ext);
+//             }
+            bindAuxVars(ext, thread);
         }
         LispObject result = NIL;
         LispObject prog = body;
@@ -492,6 +534,20 @@ public class Closure extends Function
         }
         thread.setDynamicEnvironment(oldDynEnv);
         return result;
+    }
+
+    private final void bindAuxVars(Environment env, LispThread thread)
+        throws Condition
+    {
+        // Aux variable processing is analogous to LET* processing.
+        for (int i = 0; i < auxVarArray.length; i++) {
+            Parameter parameter = auxVarArray[i];
+            Symbol symbol = parameter.var;
+            LispObject initForm = parameter.initForm;
+            LispObject value =
+                initForm == NIL ? NIL : eval(initForm, env, thread);
+            bind(symbol, value, env);
+        }
     }
 
     public String toString()
