@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Constants.java,v 1.11 2003-06-29 17:23:03 piso Exp $
+ * $Id: Constants.java,v 1.12 2003-07-05 15:30:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,10 @@ public interface Constants
     int FILETYPE_GZIP            = 7;
     int FILETYPE_WORD            = 8;
     int FILETYPE_JPEG            = 9;
+
+    int COMPRESSION_NONE         = 0;
+    int COMPRESSION_ZIP          = 1;
+    int COMPRESSION_GZIP         = 2;
 
     int LANGUAGE_JAVA            = 0;
     int LANGUAGE_JAVASCRIPT      = 1;
