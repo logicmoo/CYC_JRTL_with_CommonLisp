@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CommandInterpreter.java,v 1.20 2003-11-21 17:05:16 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.21 2003-11-24 16:05:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -293,12 +293,12 @@ public class CommandInterpreter extends Buffer
             editor.backspace();
     }
 
-    protected void previousInput()
+    private void previousInput()
     {
         getInputFromHistory(-1);
     }
 
-    protected void nextInput()
+    private void nextInput()
     {
         getInputFromHistory(1);
     }
@@ -536,5 +536,55 @@ public class CommandInterpreter extends Buffer
         final Buffer buffer = Editor.currentEditor().getBuffer();
         if (buffer instanceof CommandInterpreter)
             ((CommandInterpreter)buffer).nextInput();
+    }
+
+    public static void shellPreviousPrompt()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer instanceof CommandInterpreter) {
+            RE promptRE = ((CommandInterpreter)buffer).getPromptRE();
+            if (promptRE != null) {
+                Position dot = editor.getDot();
+                if (dot != null) {
+                    Line line = dot.getLine().previous();
+                    while (line != null) {
+                        final REMatch match = promptRE.getMatch(line.getText());
+                        if (match != null && match.getStartIndex() == 0) {
+                            // Found it.
+                            Position pos = new Position(line, match.getEndIndex());
+                            editor.moveDotTo(pos);
+                            return;
+                        }
+                        line = line.previous();
+                    }
+                }
+            }
+        }
+    }
+
+    public static void shellNextPrompt()
+    {
+        final Editor editor = Editor.currentEditor();
+        final Buffer buffer = editor.getBuffer();
+        if (buffer instanceof CommandInterpreter) {
+            RE promptRE = ((CommandInterpreter)buffer).getPromptRE();
+            if (promptRE != null) {
+                Position dot = editor.getDot();
+                if (dot != null) {
+                    Line line = dot.getLine().next();
+                    while (line != null) {
+                        final REMatch match = promptRE.getMatch(line.getText());
+                        if (match != null && match.getStartIndex() == 0) {
+                            // Found it.
+                            Position pos = new Position(line, match.getEndIndex());
+                            editor.moveDotTo(pos);
+                            return;
+                        }
+                        line = line.next();
+                    }
+                }
+            }
+        }
     }
 }
