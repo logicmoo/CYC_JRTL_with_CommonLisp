@@ -1,7 +1,7 @@
 ;;; chars.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: chars.lisp,v 1.1 2003-03-07 19:24:15 piso Exp $
+;;; $Id: chars.lisp,v 1.2 2003-03-14 02:11:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,14 +27,14 @@
 
 ;;; From CMUCL.
 
-(defun digit-char-p (char &optional (radix 10.))
+(defun digit-char-p (char &optional (radix 10))
   "If char is a digit in the specified radix, returns the fixnum for
   which that digit stands, else returns NIL.  Radix defaults to 10
   (decimal)."
   (declare (character char) (type (integer 2 36) radix))
   (let ((m (- (char-code char) 48)))
     (declare (fixnum m))
-    (cond ((<= radix 10.)
+    (cond ((<= radix 10)
 	   ;; Special-case decimal and smaller radices.
 	   (if (and (>= m 0) (< m radix))  m  nil))
 	  ;; Digits 0 - 9 are used as is, since radix is larger.
