@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.40 2003-02-19 18:17:33 piso Exp $
+ * $Id: Primitives.java,v 1.41 2003-02-19 19:48:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1293,6 +1293,40 @@ public final class Primitives extends Module
                 args = args.cdr();
             }
             return NIL;
+        }
+    };
+
+    // ### ecase
+    private static final SpecialOperator ECASE = new SpecialOperator("ecase") {
+        public LispObject execute(LispObject args, Environment env)
+            throws LispError
+        {
+            LispObject key = eval(args.car(), env);
+            args = args.cdr();
+            while (args != NIL) {
+                LispObject clause = args.car();
+                LispObject keys = clause.car();
+                boolean match = false;
+                if (keys instanceof Cons) {
+                    while (keys != NIL) {
+                        LispObject candidate = keys.car();
+                        if (eql(key, candidate)) {
+                            match = true;
+                            break;
+                        }
+                        keys = keys.cdr();
+                    }
+                } else {
+                    LispObject candidate = keys;
+                    if (eql(key, candidate))
+                        match = true;
+                }
+                if (match) {
+                    return progn(clause.cdr(), env);
+                }
+                args = args.cdr();
+            }
+            throw new TypeError("ECASE: no match for " + key);
         }
     };
 
