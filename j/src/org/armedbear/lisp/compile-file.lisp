@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.56 2005-02-18 18:19:39 piso Exp $
+;;; $Id: compile-file.lisp,v 1.57 2005-02-21 18:28:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -59,6 +59,36 @@
          (report-error
           (load-compiled-function classfile)))))
 
+(defun dump-form (form stream)
+  (when (and (consp form) (neq (car form) 'QUOTE))
+    (let ((*print-fasl* t)
+          (*print-level* nil)
+          (*print-length* nil)
+          (*print-circle* nil))
+      (if (eq (car form) 'IMPORT)
+          ;; Make sure package prefix is printed when symbols are imported.
+          (let ((*package* (find-package "COMMON-LISP")))
+            (write form :stream stream))
+          (write form :stream stream)))
+    (terpri stream)))
+
+(defun process-defconstant (form stream)
+  ;; "If a DEFCONSTANT form appears as a top level form, the compiler
+  ;; must recognize that [the] name names a constant variable. An
+  ;; implementation may choose to evaluate the value-form at compile
+  ;; time, load time, or both. Therefore, users must ensure that the
+  ;; initial-value can be evaluated at compile time (regardless of
+  ;; whether or not references to name appear in the file) and that
+  ;; it always evaluates to the same value."
+  (eval form)
+  (cond ((structure-object-p (third form))
+         (format t "PROCESS-DEFCONSTANT calling MAKE-LOAD-FORM ...~%")
+         (multiple-value-bind (creation-form initialization-form)
+             (make-load-form (third form))
+           (dump-form (list 'DEFCONSTANT (second form) creation-form) stream)))
+        (t
+         (dump-form form stream))))
+
 (defun process-toplevel-form (form stream compile-time-too)
   (cond ((atom form)
          (when compile-time-too
@@ -82,14 +112,8 @@
                 (let ((name (second form)))
                   (%defvar name))))
            (DEFCONSTANT
-            ;; "If a DEFCONSTANT form appears as a top level form, the compiler
-            ;; must recognize that [the] name names a constant variable. An
-            ;; implementation may choose to evaluate the value-form at compile
-            ;; time, load time, or both. Therefore, users must ensure that the
-            ;; initial-value can be evaluated at compile time (regardless of
-            ;; whether or not references to name appear in the file) and that
-            ;; it always evaluates to the same value."
-            (eval form))
+            (process-defconstant form stream)
+            (return-from process-toplevel-form))
            (DEFUN
             (let* ((name (second form))
                    (block-name (cond ((symbolp name)
@@ -201,17 +225,19 @@
               (return-from process-toplevel-form))
             (when compile-time-too
               (eval form))))))
-  (when (and (consp form) (neq (car form) 'QUOTE))
-    (let ((*print-fasl* t)
-          (*print-level* nil)
-          (*print-length* nil)
-          (*print-circle* nil))
-      (if (eq (car form) 'IMPORT)
-          ;; Make sure package prefix is printed when symbols are imported.
-          (let ((*package* (find-package "COMMON-LISP")))
-            (write form :stream stream))
-          (write form :stream stream)))
-    (terpri stream)))
+;;   (when (and (consp form) (neq (car form) 'QUOTE))
+;;     (let ((*print-fasl* t)
+;;           (*print-level* nil)
+;;           (*print-length* nil)
+;;           (*print-circle* nil))
+;;       (if (eq (car form) 'IMPORT)
+;;           ;; Make sure package prefix is printed when symbols are imported.
+;;           (let ((*package* (find-package "COMMON-LISP")))
+;;             (write form :stream stream))
+;;           (write form :stream stream)))
+;;     (terpri stream))
+  (dump-form form stream)
+  )
 
 (defun process-toplevel-progn (forms stream compile-time-too)
   (dolist (form forms)
