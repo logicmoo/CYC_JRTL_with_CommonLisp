@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.13 2003-11-07 16:17:24 piso Exp $
+;;; $Id: jvm.lisp,v 1.14 2003-11-07 19:14:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1665,16 +1665,6 @@
            (t
             (error "COMPILE-FUNCTION: unsupported case: ~S" form)))))
 
-(defun compile-return (form)
-   (let* ((rest (cdr form))
-          (block-label nil)
-          (block-exit (cdr (assoc block-label *blocks*)))
-          (result-form (car rest)))
-     (unless block-exit
-       (error "no block named ~S is currently visible" block-label))
-     (compile-form result-form)
-     (emit 'goto `,block-exit)))
-
 (defun compile-return-from (form)
    (let* ((rest (cdr form))
           (block-label (car rest))
@@ -2012,7 +2002,6 @@
                           multiple-value-list
                           progn
                           quote
-                          return
                           return-from
                           setq
                           tagbody))
