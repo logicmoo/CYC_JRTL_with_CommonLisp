@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.2 2003-05-23 18:27:15 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.3 2003-05-27 20:04:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -57,11 +57,11 @@
 				      error-kind error-fun (not anonymousp)
 				      nil env-arg-name)
 	(values
-	 `(let* ,(nreverse *system-lets*)
+	 `(let* ,(list-nreverse *system-lets*)
 	   ,@(when *ignorable-vars*
 	       `((declare (ignorable ,@*ignorable-vars*))))
 	    ,@*arg-tests*
-	    (let* ,(nreverse *user-lets*)
+	    (let* ,(list-nreverse *user-lets*)
 	      ,@declarations
 	      ,@body))
 	 `(,@(when (and env-arg-name (not env-arg-used))
@@ -348,20 +348,20 @@
 	(doc nil))
     (do ((tail body (cdr tail)))
 	((endp tail)
-	 (values tail (nreverse decls) doc))
+	 (values tail (list-nreverse decls) doc))
       (let ((form (car tail)))
 	(cond ((and (stringp form) (cdr tail))
 	       (if doc-string-allowed
 		   (setq doc form
 			 ;; Only one doc string is allowed.
 			 doc-string-allowed nil)
-		   (return (values tail (nreverse decls) doc))))
+		   (return (values tail (list-nreverse decls) doc))))
 	      ((not (and (consp form) (symbolp (car form))))
-	       (return (values tail (nreverse decls) doc)))
+	       (return (values tail (list-nreverse decls) doc)))
 	      ((eq (car form) 'declare)
 	       (push form decls))
 	      (t
-	       (return (values tail (nreverse decls) doc))))))))
+	       (return (values tail (list-nreverse decls) doc))))))))
 
 (defmacro destructuring-bind (lambda-list arg-list &rest body)
   (let* ((arg-list-name (gensym "ARG-LIST-")))
