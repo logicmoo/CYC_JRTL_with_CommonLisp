@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispFloat.java,v 1.68 2004-06-06 19:30:43 piso Exp $
+ * $Id: LispFloat.java,v 1.69 2004-06-13 18:42:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,6 +20,8 @@
  */
 
 package org.armedbear.lisp;
+
+import java.math.BigInteger;
 
 public final class LispFloat extends LispObject
 {
@@ -290,7 +292,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Bignum)
             return value == ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
-            return value == ((Ratio)obj).floatValue();
+            return rational().isEqualTo(obj);
         if (obj instanceof Complex)
             return obj.isEqualTo(this);
         signal(new TypeError(obj, Symbol.NUMBER));
@@ -312,8 +314,8 @@ public final class LispFloat extends LispObject
         if (obj instanceof Bignum)
             return value < ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
-            return value < ((Ratio)obj).floatValue();
-        signal(new TypeError(obj, "real"));
+            return rational().isLessThan(obj);
+        signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -327,8 +329,8 @@ public final class LispFloat extends LispObject
         if (obj instanceof Bignum)
             return value > ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
-            return value > ((Ratio)obj).floatValue();
-        signal(new TypeError(obj, "real"));
+            return rational().isGreaterThan(obj);
+        signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -342,8 +344,8 @@ public final class LispFloat extends LispObject
         if (obj instanceof Bignum)
             return value <= ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
-            return value <= ((Ratio)obj).floatValue();
-        signal(new TypeError(obj, "real"));
+            return rational().isLessThanOrEqualTo(obj);
+        signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -357,7 +359,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Bignum)
             return value >= ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
-            return value >= ((Ratio)obj).floatValue();
+            return rational().isGreaterThanOrEqualTo(obj);
         signal(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
@@ -467,7 +469,7 @@ public final class LispFloat extends LispObject
         }
         if (value != value)
             return "#<DOUBLE-FLOAT NaN>";
-        return String.valueOf(value);
+        return String.valueOf(value).replace('E', 'd');
     }
 
     // ### integer-decode-float
@@ -480,7 +482,7 @@ public final class LispFloat extends LispObject
             if (arg instanceof LispFloat) {
                 LispObject[] values = new LispObject[3];
                 long bits =
-                    Double.doubleToRawLongBits((double)((LispFloat)arg).getValue());
+                    Double.doubleToRawLongBits((double)((LispFloat)arg).value);
                 int s = ((bits >> 63) == 0) ? 1 : -1;
                 int e = (int) ((bits >> 52) & 0x7ffL);
                 long m;
@@ -499,6 +501,47 @@ public final class LispFloat extends LispObject
         }
     };
 
+    public LispObject rational() throws ConditionThrowable
+    {
+        final long bits = Double.doubleToRawLongBits(value);
+        int sign = ((bits >> 63) == 0) ? 1 : -1;
+        int storedExponent = (int) ((bits >> 52) & 0x7ffL);
+        long mantissa;
+        if (storedExponent == 0)
+            mantissa = (bits & 0xfffffffffffffL) << 1;
+        else
+            mantissa = (bits & 0xfffffffffffffL) | 0x10000000000000L;
+        if (mantissa == 0)
+            return Fixnum.ZERO;
+        if (sign < 0)
+            mantissa = -mantissa;
+        // Subtract bias.
+        final int exponent = storedExponent - 1023;
+        BigInteger numerator, denominator;
+        if (exponent < 0) {
+            numerator = BigInteger.valueOf(mantissa);
+            denominator = BigInteger.valueOf(1).shiftLeft(52 - exponent);
+        } else {
+            numerator = BigInteger.valueOf(mantissa).shiftLeft(exponent);
+            denominator = BigInteger.valueOf(0x10000000000000L); // (ash 1 52)
+        }
+        return number(numerator, denominator);
+    }
+
+    // ### rational
+    private static final Primitive1 RATIONAL =
+        new Primitive1("rational", "number")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            if (arg instanceof LispFloat)
+                return ((LispFloat)arg).rational();
+            if (arg.rationalp())
+                return arg;
+            return signal(new TypeError(arg, Symbol.REAL));
+        }
+    };
+
     // ### float-radix
     // float-radix float => float-radix
     private static final Primitive1 FLOAT_RADIX =
@@ -512,6 +555,8 @@ public final class LispFloat extends LispObject
         }
     };
 
+    private static final Fixnum FIXNUM_53 = new Fixnum(53);
+
     // ### float-digits
     // float-digits float => float-digits
     private static final Primitive1 FLOAT_DIGITS =
@@ -520,7 +565,7 @@ public final class LispFloat extends LispObject
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispFloat)
-                return new Fixnum(52);
+                return FIXNUM_53;
             return signal(new TypeError(arg, Symbol.FLOAT));
         }
     };
