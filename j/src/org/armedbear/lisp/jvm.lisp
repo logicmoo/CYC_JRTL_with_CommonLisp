@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.175 2004-05-31 17:35:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.176 2004-05-31 19:19:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -987,6 +987,41 @@
               +lisp-object+)
         (setq *static-code* *code*)
         (setf (gethash symbol *declared-functions*) f)))
+    f))
+
+(defun declare-setf-function (name)
+  (let ((f (gethash name *declared-functions*)))
+    (unless f
+      (let ((symbol (cadr name)))
+        (setf f (symbol-name (gensym)))
+        (let ((s (sanitize symbol)))
+          (when s
+            (setf f (concatenate 'string f "_" s))))
+        (let ((*code* *static-code*)
+              (g (gethash symbol *declared-symbols*)))
+          (cond (g
+                 (emit 'getstatic
+                       *this-class*
+                       g
+                       +lisp-symbol+))
+                (t
+                 (emit 'ldc (pool-string (symbol-name symbol)))
+                 (emit 'ldc (pool-string (package-name (symbol-package symbol))))
+                 (emit-invokestatic +lisp-class+
+                                    "internInPackage"
+                                    "(Ljava/lang/String;Ljava/lang/String;)Lorg/armedbear/lisp/Symbol;"
+                                    -1)))
+          (declare-field f +lisp-object+)
+          (emit-invokevirtual +lisp-symbol-class+
+                              "getSymbolSetfFunctionOrDie"
+                              "()Lorg/armedbear/lisp/LispObject;"
+                              0)
+          (emit 'putstatic
+                *this-class*
+                f
+                +lisp-object+)
+          (setq *static-code* *code*)
+          (setf (gethash symbol *declared-functions*) f))))
     f))
 
 (defun declare-keyword (symbol)
@@ -2285,16 +2320,16 @@
   (compile-function-call form for-effect))
 
 (defun compile-function (form for-effect)
-   (let ((obj (second form)))
-     (cond ((symbolp obj)
-            (if (or (sys::built-in-function-p obj) (memq obj *toplevel-defuns*))
-                (let ((g (declare-function obj)))
+   (let ((name (second form)))
+     (cond ((symbolp name)
+            (if (or (sys::built-in-function-p name) (memq name *toplevel-defuns*))
+                (let ((g (declare-function name)))
                   (emit 'getstatic
                         *this-class*
                         g
                         +lisp-object+)
                   (emit-store-value))
-                (let ((g (declare-symbol obj)))
+                (let ((g (declare-symbol name)))
                   (emit 'getstatic
                         *this-class*
                         g
@@ -2304,10 +2339,21 @@
                                       "()Lorg/armedbear/lisp/LispObject;"
                                       0)
                   (emit-store-value))))
-           ((and (consp obj) (eq (car obj) 'LAMBDA))
+           ((and (consp name) (eq (car name) 'SETF))
+            (if (member name *toplevel-defuns* :test #'equal)
+                (let ((g (declare-setf-function name)))
+                  (emit 'getstatic
+                        *this-class*
+                        g
+                        +lisp-object+)
+                  (emit-store-value))
+                (progn
+                  (format t "*toplevel-defuns* = ~S~%" *toplevel-defuns*)
+                  (error "COMPILE-FUNCTION: unsupported case: ~S" name))))
+           ((and (consp name) (eq (car name) 'LAMBDA))
             (let ((closure-vars (remove-duplicates (union (remove nil (coerce *locals* 'list))
                                                           (remove nil (coerce *args* 'list)))))
-                  (lambda-body (cddr obj)))
+                  (lambda-body (cddr name)))
               (cond (closure-vars
                      (error "COMPILE-FUNCTION: unable to compile LAMBDA form defined in non-null lexical environment."))
                     ((contains-return lambda-body)
@@ -2316,8 +2362,8 @@
                      (fresh-line)
                      (format t "~A Processing LAMBDA form~%" (load-verbose-prefix))
                      (let ((g (if *compile-file-truename*
-                                  (declare-lambda obj)
-                                  (declare-object (sys::coerce-to-function obj)))))
+                                  (declare-lambda name)
+                                  (declare-object (sys::coerce-to-function name)))))
                        (emit 'getstatic
                              *this-class*
                              g
@@ -2325,7 +2371,7 @@
                        (emit-store-value))))))
 ;;             ;; FIXME We need to construct a proper lexical environment here
 ;;             ;; and pass it to coerceToFunction().
-;;             (let ((g (declare-object-as-string obj)))
+;;             (let ((g (declare-object-as-string name)))
 ;;               (emit 'getstatic
 ;;                     *this-class*
 ;;                     g
@@ -2577,7 +2623,7 @@
   (setf form (precompile-form form t))
   (let* ((*defun-name* name)
          (*declared-symbols* (make-hash-table))
-         (*declared-functions* (make-hash-table))
+         (*declared-functions* (make-hash-table :test 'equal))
          (*declared-strings* (make-hash-table :test 'eq))
          (class-name
           (let* ((pathname (pathname classfile))
