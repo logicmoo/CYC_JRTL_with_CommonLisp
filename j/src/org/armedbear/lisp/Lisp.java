@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.109 2003-07-28 20:30:14 piso Exp $
+ * $Id: Lisp.java,v 1.110 2003-07-29 23:29:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,10 +281,12 @@ public abstract class Lisp
         return results[0];
     }
 
-    private static boolean debug = true;
+    private static boolean debug = false;
 
     public static final LispObject eval(final LispObject obj,
-        final Environment env, final LispThread thread) throws Condition
+                                        final Environment env,
+                                        final LispThread thread)
+        throws Condition
     {
         thread.clearValues();
         if (thread.isDestroyed())
@@ -377,7 +379,9 @@ public abstract class Lisp
     }
 
     private static final LispObject[] evalList(LispObject exps,
-        Environment env, LispThread thread) throws Condition
+                                               Environment env,
+                                               LispThread thread)
+        throws Condition
     {
         final int length = exps.length();
         LispObject[] results = new LispObject[length];
@@ -391,7 +395,8 @@ public abstract class Lisp
     }
 
     public static final LispObject progn(LispObject body, Environment env,
-        LispThread thread) throws Condition
+                                         LispThread thread)
+        throws Condition
     {
         LispObject result = NIL;
         while (body != NIL) {
@@ -402,7 +407,8 @@ public abstract class Lisp
     }
 
     // Environment wrappers.
-    public static final void bind(Symbol symbol, LispObject value, Environment env)
+    public static final void bind(Symbol symbol, LispObject value,
+                                  Environment env)
     {
         if (symbol.isSpecialVariable())
             LispThread.currentThread().bindSpecial(symbol, value);
@@ -411,7 +417,7 @@ public abstract class Lisp
     }
 
     public static final void rebind(Symbol symbol, LispObject value,
-        Environment env)
+                                    Environment env)
     {
         if (symbol.isSpecialVariable()) {
             Environment dynEnv =
@@ -428,7 +434,7 @@ public abstract class Lisp
     }
 
     public static final Cons list(LispObject first, LispObject second,
-        LispObject third)
+                                  LispObject third)
     {
         return new Cons(first, new Cons(second, new Cons(third)));
     }
