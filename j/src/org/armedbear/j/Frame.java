@@ -1,8 +1,8 @@
 /*
  * Frame.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Frame.java,v 1.8 2002-12-28 01:29:07 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Frame.java,v 1.9 2003-06-27 17:41:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -784,10 +784,7 @@ public final class Frame extends JFrame implements Constants, WindowListener,
         active = true;
         Editor.setCurrentEditor(currentEditor);
         setFocus(currentEditor.getDisplay());
-        // Show/hide caret.
-        editors[0].repaint();
-        if (editors[1] != null)
-            editors[1].repaint();
+        repaint();
         // 1.4.0-rc hangs if we call reactivate() directly here.
         Runnable r = new Runnable() {
             public void run()
