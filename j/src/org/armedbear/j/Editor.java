@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.142 2005-03-04 19:15:58 piso Exp $
+ * $Id: Editor.java,v 1.143 2005-03-05 17:41:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1332,6 +1332,11 @@ public final class Editor extends JPanel implements Constants,
         final Mode mode = buffer.getMode();
         if (mode.isInComment(buffer, start) || mode.isInQuote(buffer, start))
             return null;
+        final int offset = start.getOffset();
+        if (offset > 0 && start.getLine().charAt(offset - 1) == '\\') {
+            // It's escaped.
+            return null;
+        }
         final String s2 = new String("})]{([");
         final char match = s2.charAt(index);
         final boolean searchBackwards = index > 2;
