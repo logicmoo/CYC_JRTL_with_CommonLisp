@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.9 2003-06-18 15:41:35 piso Exp $
+ * $Id: KeyMap.java,v 1.10 2003-06-18 16:11:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -311,7 +311,10 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_K, ALT_MASK, "describeKey");
 
         mapKey(KeyEvent.VK_SLASH, ALT_MASK, "expand");
-        mapKey(KeyEvent.VK_SPACE, ALT_MASK, "expand");
+
+        // On Windows, Alt Space drops down the window menu.
+        if (!Platform.isPlatformWindows())
+            mapKey(KeyEvent.VK_SPACE, ALT_MASK, "expand");
 
         mapKey(KeyEvent.VK_N, ALT_MASK, "nextFrame");
 
