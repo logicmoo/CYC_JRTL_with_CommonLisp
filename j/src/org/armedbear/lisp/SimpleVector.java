@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.8 2004-02-25 14:50:40 piso Exp $
+ * $Id: SimpleVector.java,v 1.9 2004-02-26 02:17:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,7 +276,6 @@ public final class SimpleVector extends AbstractVector
     public AbstractVector adjustVector(int newCapacity,
                                        AbstractArray displacedTo,
                                        int displacement)
-        throws ConditionThrowable
     {
         return new ComplexVector(newCapacity, displacedTo, displacement);
     }
