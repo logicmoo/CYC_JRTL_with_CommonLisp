@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.68 2003-05-27 02:12:58 piso Exp $
+ * $Id: Lisp.java,v 1.69 2003-05-29 15:08:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,7 @@ public abstract class Lisp
     }
 
     public static final LispObject macroexpand(LispObject form,
-        Environment env, LispThread thread) throws Condition
+        final Environment env, final LispThread thread) throws Condition
     {
         LispObject expanded = NIL;
         while (true) {
@@ -96,8 +96,8 @@ public abstract class Lisp
         }
     }
 
-    public static final LispObject macroexpand_1(LispObject form,
-        Environment env, LispThread thread) throws Condition
+    public static final LispObject macroexpand_1(final LispObject form,
+        final Environment env, final LispThread thread) throws Condition
     {
         LispObject[] results = new LispObject[2];
         if (!(form instanceof Cons)) {
@@ -134,8 +134,8 @@ public abstract class Lisp
 
     private static boolean debug = true;
 
-    public static final LispObject eval(LispObject obj, Environment env,
-        LispThread thread) throws Condition
+    public static final LispObject eval(final LispObject obj,
+        final Environment env, final LispThread thread) throws Condition
     {
         thread.clearValues();
         if (thread.isDestroyed())
