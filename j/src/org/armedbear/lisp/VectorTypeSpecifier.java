@@ -2,7 +2,7 @@
  * VectorTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: VectorTypeSpecifier.java,v 1.1 2003-07-15 03:06:14 piso Exp $
+ * $Id: VectorTypeSpecifier.java,v 1.2 2003-08-14 01:52:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,24 +23,22 @@ package org.armedbear.lisp;
 
 public final class VectorTypeSpecifier extends CompoundTypeSpecifier
 {
-    private final LispObject type;
-    private final LispObject elementType;
+    private final TypeSpecifier elementTypeSpecifier;
     private final LispObject size;
 
     public VectorTypeSpecifier(Cons args) throws LispError
     {
-        this.type = args.car();
         switch (args.length()) {
             case 1:
-                elementType = Symbol.UNSPECIFIED;
+                elementTypeSpecifier = UnspecifiedTypeSpecifier.getInstance();
                 size = Symbol.UNSPECIFIED;
                 break;
             case 2:
-                elementType = args.cadr();
+                elementTypeSpecifier = TypeSpecifier.getInstance(args.cadr());
                 size = Symbol.UNSPECIFIED;
                 break;
             case 3:
-                elementType = args.cadr();
+                elementTypeSpecifier = TypeSpecifier.getInstance(args.cadr());
                 size = args.cddr().car();
                 break;
             default:
@@ -52,9 +50,13 @@ public final class VectorTypeSpecifier extends CompoundTypeSpecifier
     {
         if (obj instanceof AbstractVector) {
             AbstractVector v = (AbstractVector) obj;
-            if (elementType != Symbol.UNSPECIFIED) {
-                if (elementType != v.getElementType())
+            if (elementTypeSpecifier != UnspecifiedTypeSpecifier.getInstance()) {
+                TypeSpecifier ts = TypeSpecifier.getInstance(v.getElementType());
+                if (elementTypeSpecifier.isSubtypeOf(ts) == NIL) {
+                    LispThread.currentThread().setValues(null);
                     return NIL;
+                }
+                LispThread.currentThread().setValues(null);
             }
             if (size == Symbol.UNSPECIFIED)
                 return T;

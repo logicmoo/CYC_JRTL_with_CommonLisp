@@ -2,7 +2,7 @@
  * CompoundTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompoundTypeSpecifier.java,v 1.3 2003-07-15 15:36:35 piso Exp $
+ * $Id: CompoundTypeSpecifier.java,v 1.4 2003-08-14 01:56:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,12 +28,16 @@ public abstract class CompoundTypeSpecifier extends TypeSpecifier
     {
         Cons cons = checkCons(args);
         LispObject car = cons.car();
+        if (car == Symbol.AND)
+            return new AndTypeSpecifier(cons);
         if (car == Symbol.OR)
             return new OrTypeSpecifier(cons);
         if (car == Symbol.ARRAY || car == Symbol.SIMPLE_ARRAY)
             return new ArrayTypeSpecifier(cons);
         if (car == Symbol.VECTOR)
             return new VectorTypeSpecifier(cons);
+        if (car == Symbol.SIMPLE_VECTOR)
+            return new SimpleVectorTypeSpecifier(cons);
         throw new LispError("unsupported compound type specifier " + args);
     }
 }
