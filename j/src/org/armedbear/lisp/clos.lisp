@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.52 2003-12-20 18:12:01 piso Exp $
+;;; $Id: clos.lisp,v 1.53 2003-12-20 18:29:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1165,7 +1165,7 @@
                (funcall
                 (if (eq (class-of gf) the-class-standard-gf)
                     #'std-compute-effective-method-function
-                  #'compute-effective-method-function)
+                    #'compute-effective-method-function)
                 gf applicable-methods)))
           (setf (gethash classes (classes-to-emf-table gf)) emfun)
           (funcall emfun args))
@@ -1198,12 +1198,6 @@
         (method-specializers method2)
         required-classes)
   nil)
-
-;;; apply-methods and compute-effective-method-function
-
-(defun apply-methods (gf args methods)
-  (funcall (compute-effective-method-function gf methods)
-           args))
 
 (defun primary-method-p (method)
   (null (intersection '(:before :after :around) (method-qualifiers method))))
@@ -1339,16 +1333,6 @@
       (let ((next-emfun (compute-primary-emfun (cdr methods))))
         #'(lambda (args)
            (funcall (method-function (car methods)) args next-emfun)))))
-
-;;; apply-method and compute-method-function
-
-(defun apply-method (method args next-methods)
-  (funcall (method-function method)
-           args
-           (if (null next-methods)
-               nil
-               (compute-effective-method-function
-                (method-generic-function method) next-methods))))
 
 (defvar *call-next-method-p*)
 (defvar *next-method-p-p*)
