@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.16 2003-07-26 18:51:52 piso Exp $
+ * $Id: AbstractMode.java,v 1.17 2003-09-04 14:59:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,22 +325,23 @@ public abstract class AbstractMode implements Constants, Mode
 
     private static void populateGoMenu(Editor editor, Menu menu)
     {
-        menu.add(editor, "Go To Line...", 'L', "jumpToLine");
-        menu.add(editor, "Go To Column...", 'C', "jumpToColumn");
+        menu.add(editor, "Go to Line...", 'L', "jumpToLine");
+        menu.add(editor, "Go to Column...", 'C', "jumpToColumn");
+        menu.add(editor, "Go to Offset...", 'O', "jumpToOffset");
         if (editor.getModeId() == HTML_MODE)
-            menu.add(editor, "Go To Matching HTML", 'M', "htmlFindMatch");
+            menu.add(editor, "Go to Matching HTML", 'M', "htmlFindMatch");
         else
-            menu.add(editor, "Go To Matching Character", 'M', "findMatchingChar");
-        menu.add(editor, "Go To Tag", 'A', "findTagAtDot");
-        menu.add(editor, "Go To Next Occurrence of Word", 'T', "findNextWord");
-        menu.add(editor, "Go To Previous Occurrence of Word", 'R', "findPrevWord");
+            menu.add(editor, "Go to Matching Character", 'M', "findMatchingChar");
+        menu.add(editor, "Go to Tag", 'A', "findTagAtDot");
+        menu.add(editor, "Go to Next Occurrence of Word", 'T', "findNextWord");
+        menu.add(editor, "Go to Previous Occurrence of Word", 'R', "findPrevWord");
         if (editor.getBuffer().getBooleanProperty(Property.SHOW_CHANGE_MARKS)) {
-            menu.add(editor, "Go To Next Change", 'H', "nextChange");
-            menu.add(editor, "Go To Previous Change", 'G', "previousChange");
+            menu.add(editor, "Go to Next Change", 'H', "nextChange");
+            menu.add(editor, "Go to Previous Change", 'G', "previousChange");
         }
         menu.addSeparator();
         menu.add(editor, "Push Position", 'U', "pushPosition");
-        menu.add(editor, "Pop Position", 'O', "popPosition");
+        menu.add(editor, "Pop Position", 'P', "popPosition");
     }
 
     public void populateModeMenu(Editor editor, Menu menu)
