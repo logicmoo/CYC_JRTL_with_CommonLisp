@@ -2,7 +2,7 @@
  * AbstractDialog.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: AbstractDialog.java,v 1.1.1.1 2002-09-24 16:09:34 piso Exp $
+ * $Id: AbstractDialog.java,v 1.2 2003-07-24 16:55:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -119,7 +118,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener,
         component.addKeyListener(this);
     }
 
-    protected final void addCheckBox(JCheckBox checkBox)
+    protected final void addCheckBox(CheckBox checkBox)
     {
         mainPanel.add(checkBox);
         checkBox.addKeyListener(this);
