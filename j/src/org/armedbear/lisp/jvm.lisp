@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.104 2004-04-14 15:26:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.105 2004-04-14 16:40:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -501,6 +501,7 @@
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
 (defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
+(defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
 (defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
 
 (defun emit-push-nil ()
@@ -700,6 +701,13 @@
          (t
           (inst 58 *val*))))
       ((1 ; ACONST_NULL
+        2 ; ICONST_M1
+        3 ; ICONST_0
+        4 ; ICONST_1
+        5 ; ICONST_2
+        6 ; ICONST_3
+        7 ; ICONST_4
+        8 ; ICONST_5
         42 ; ALOAD_0
         43 ; ALOAD_1
         44 ; ALOAD_2
@@ -1289,19 +1297,35 @@
 
 (defun declare-fixnum (n)
   (let ((g (symbol-name (gensym)))
-        (s (format nil "~S" n))
         (*code* *static-code*))
-    (declare-field g +lisp-object+)
-
-    (emit 'ldc (pool-int n))
-    (emit-invokestatic +lisp-fixnum-class+
-                       "getInstance"
-                       "(I)Lorg/armedbear/lisp/Fixnum;"
-                       0)
+    (declare-field g +lisp-fixnum+)
+    (emit 'new +lisp-fixnum-class+)
+    (emit 'dup)
+    (case n
+      (-1
+       (emit 'iconst_m1))
+      (0
+       (emit 'iconst_0))
+      (1
+       (emit 'iconst_1))
+      (2
+       (emit 'iconst_2))
+      (3
+       (emit 'iconst_3))
+      (4
+       (emit 'iconst_4))
+      (5
+       (emit 'iconst_5))
+      (t
+       (emit 'ldc (pool-int n))))
+    (emit-invokespecial +lisp-fixnum-class+
+                        "<init>"
+                        "(I)V"
+                        -2)
     (emit 'putstatic
           *this-class*
           g
-          +lisp-object+)
+          +lisp-fixnum+)
     (setq *static-code* *code*)
     g))
 
@@ -1370,32 +1394,19 @@
 (defun compile-constant (form)
   (cond
    ((fixnump form)
-    (let ((n form))
-      (cond ((zerop n)
-             (emit 'getstatic
-                   "org/armedbear/lisp/Fixnum"
-                   "ZERO"
-                   "Lorg/armedbear/lisp/Fixnum;")
-             (emit-store-value))
-            ((= n 1)
-             (emit 'getstatic
-                   "org/armedbear/lisp/Fixnum"
-                   "ONE"
-                   "Lorg/armedbear/lisp/Fixnum;")
-             (emit-store-value))
-            ((= n 2)
-             (emit 'getstatic
-                   "org/armedbear/lisp/Fixnum"
-                   "TWO"
-                   "Lorg/armedbear/lisp/Fixnum;")
-             (emit-store-value))
-            (t
-             (let ((g (declare-fixnum n)))
-               (emit 'getstatic
-                     *this-class*
-                     g
-                     "Lorg/armedbear/lisp/LispObject;")
-               (emit-store-value))))))
+    (let* ((n form)
+           (translations '((0 . "ZERO") (1 . "ONE") (2 . "TWO") (-1 . "MINUS_ONE")))
+           (translation (cdr (assoc n translations))))
+      (if translation
+          (emit 'getstatic
+                +lisp-fixnum-class+
+                translation
+                +lisp-fixnum+)
+          (emit 'getstatic
+                *this-class*
+                (declare-fixnum n)
+                +lisp-fixnum+))
+          (emit-store-value)))
    ((numberp form)
     (let ((g (declare-object-as-string form)))
       (emit 'getstatic
