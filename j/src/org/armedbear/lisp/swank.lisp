@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.8 2004-09-07 00:55:57 piso Exp $
+;;; $Id: swank.lisp,v 1.9 2004-09-07 17:46:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 (defvar *stream* nil)
 
 (defvar *swank-format-function*
-  #+abcl #'sys::%format
+  #+abcl #'sys:simple-format
   #-abcl #'format)
 
 (defun swank-format (destination control-string &rest args)
@@ -186,7 +186,10 @@
 
 (defun format-values-for-echo-area (values)
   (let ((*print-readably* nil))
-    (cond (values
+    (cond ((typep values 'error)
+           (with-output-to-string (s)
+             (swank-format s "; Error [\"~A\"]" values)))
+          (values
            (with-output-to-string (s)
              (do* ((values values (cdr values))
                    (value (car values) (car values)))
@@ -199,12 +202,14 @@
 
 (defun eval-region (string)
   (let (values)
-    (with-input-from-string (stream string)
-      (loop
-        (let ((form (read stream nil stream)))
-          (when (eq form stream)
-            (return values))
-          (setf values (multiple-value-list (eval form))))))))
+    (handler-case
+        (with-input-from-string (stream string)
+          (loop
+            (let ((form (read stream nil stream)))
+              (when (eq form stream)
+                (return values))
+              (setf values (multiple-value-list (eval form))))))
+      (error (e) (return-from eval-region e)))))
 
 (defun interactive-eval-region (string package-name)
   (finish-output)
