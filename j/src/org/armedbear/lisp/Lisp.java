@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.205 2004-02-14 18:57:13 piso Exp $
+ * $Id: Lisp.java,v 1.206 2004-02-15 17:53:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -319,6 +319,11 @@ public abstract class Lisp
                 if (debug)
                     thread.saveBacktrace();
                 throw t;
+            }
+            catch (Throwable t) {
+                if (debug)
+                    thread.saveBacktrace();
+                return signal(new LispError("Caught " + t + "."));
             }
             Debug.assertTrue(result != null);
             Symbol.STAR_STAR_STAR.setSymbolValue(Symbol.STAR_STAR.getSymbolValue());
