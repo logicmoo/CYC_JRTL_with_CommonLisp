@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2000 Peter Graves
-# $Id: Makefile.in,v 1.11 2003-10-24 16:40:19 piso Exp $
+# $Id: Makefile.in,v 1.12 2003-11-16 15:55:13 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -49,7 +49,9 @@ classes:
 	  src/org/armedbear/j/mail \
 	  src/org/armedbear/j/jdb \
 	  src/org/armedbear/j \
-	  src/org/armedbear/lisp src; \
+	  src/org/armedbear/lisp \
+	  src/org/armedbear/lisp/java/awt \
+	  src; \
 	do \
 	  ( cd $$i && $(MAKE) ); \
 	done
@@ -69,7 +71,8 @@ j.jar: classes.stamp
 	  org/armedbear/j/mail/*.class \
 	  org/armedbear/j/jdb/*.class \
 	  org/armedbear/j/*.keywords org/armedbear/j/mail/*.keywords \
-	  org/armedbear/lisp/*.class org/armedbear/lisp/*.lisp org/armedbear/lisp/build
+	  org/armedbear/lisp/*.class org/armedbear/lisp/java/awt/*.class \
+	  org/armedbear/lisp/*.lisp org/armedbear/lisp/build
 
 classes.stamp: classes
 	test -f classes.stamp || touch classes.stamp
@@ -103,6 +106,9 @@ distdir:
 	-cp -p  src/org/armedbear/j/images/*.png $(distdir)/src/org/armedbear/j/images
 	mkdir $(distdir)/src/org/armedbear/lisp
 	-cp -p  src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml src/org/armedbear/lisp/*.java src/org/armedbear/lisp/*.lisp $(distdir)/src/org/armedbear/lisp
+	mkdir $(distdir)/src/org/armedbear/lisp/java
+	mkdir $(distdir)/src/org/armedbear/lisp/java/awt
+	-cp -p  src/org/armedbear/lisp/java/awt/Makefile.in src/org/armedbear/lisp/java/awt/*.java $(distdir)/src/org/armedbear/lisp/java/awt
 	mkdir $(distdir)/src/gnu
 	mkdir $(distdir)/src/gnu/regexp
 	-cp -p  src/gnu/regexp/Makefile.in src/gnu/regexp/*.java  src/gnu/regexp/MessagesBundle.properties $(distdir)/src/gnu/regexp
@@ -193,6 +199,7 @@ clean:
 	-rm -f src/org/armedbear/j/mail/*.class
 	-rm -f src/org/armedbear/j/jdb/*.class
 	-rm -f src/org/armedbear/lisp/*.class
+	-rm -f src/org/armedbear/lisp/java/awt/*.class
 	-rm -f src/org/armedbear/lisp/build
 	-rm -f src/gnu/regexp/*.class
 	-rm -rf $(distdir)
@@ -208,6 +215,7 @@ distclean: clean
 	-rm -f src/org/armedbear/j/mail/Makefile
 	-rm -f src/org/armedbear/j/jdb/Makefile
 	-rm -f src/org/armedbear/lisp/Makefile
+	-rm -f src/org/armedbear/lisp/java/awt/Makefile
 
 j.zip:
 	-rm -f j.zip
@@ -229,6 +237,8 @@ j.zip:
 		src/org/armedbear/j/images/*.png \
 		src/org/armedbear/lisp/Makefile.in src/org/armedbear/lisp/build.xml \
 		src/org/armedbear/lisp/*.java src/org/armedbear/lisp/*.lisp \
+		src/org/armedbear/lisp/java/awt/Makefile.in \
+		src/org/armedbear/lisp/java/awt/*.java \
 		src/bsh/reflect/Makefile.in src/bsh/reflect/*.java \
 		src/gnu/regexp/Makefile.in src/gnu/regexp/*.java src/gnu/regexp/MessagesBundle.properties \
 		doc/*.html doc/*.css \
