@@ -1,7 +1,7 @@
 ;;; print-unreadable-object.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: print-unreadable-object.lisp,v 1.1 2003-11-03 03:00:21 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: print-unreadable-object.lisp,v 1.2 2004-04-03 22:57:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,18 +17,29 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+;;; Adapted from SBCL.
+
+(in-package "SYSTEM")
+
+(defun %print-unreadable-object (object stream type identity body)
+  (when *print-readably*
+    (error 'print-not-readable :object object))
+  (%format stream "#<")
+  (when type
+    (%format stream "~S" (type-of object))
+    (when (or body identity)
+      (%format stream " ")))
+  (when body
+    (funcall body))
+  (when identity
+    (when body
+      (%format stream " "))
+    (%format stream "@ #x~A" (hashcode-to-string object)))
+  (%format stream ">")
+  nil)
+
 (defmacro print-unreadable-object ((object stream &key type identity) &body body)
-  `(let ((s ,stream)
-         (obj ,object))
-     (format s "#<")
-     ,(when type
-        '(format s "~S" (type-of obj)))
-     ,(when (and type (or body identity))
-        '(format s " "))
-     ,@body
-     ,(when (and identity body)
-        '(format s " "))
-     ,(when identity
-        '(format s "@ #x~A" (sys::hashcode-to-string obj)))
-     (format s ">")
-     nil))
+  `(%print-unreadable-object ,object ,stream ,type ,identity
+			     ,(if body
+				  `(lambda () ,@body)
+				  nil)))
