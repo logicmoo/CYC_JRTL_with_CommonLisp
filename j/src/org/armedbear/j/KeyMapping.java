@@ -2,7 +2,7 @@
  * KeyMapping.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMapping.java,v 1.2 2003-07-18 15:16:35 piso Exp $
+ * $Id: KeyMapping.java,v 1.3 2003-07-18 15:19:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public class KeyMapping implements Constants
     private final char keyChar;
     private final int keyCode;
     private final int modifiers;
-    private Object command;
+    private final Object command;
 
     public KeyMapping(int keyCode, int modifiers, Object command)
     {
@@ -61,6 +61,8 @@ public class KeyMapping implements Constants
         modifiers = keyStroke.getModifiers() & 0x0f;
         if (command != null)
             this.command = command.intern();
+        else
+            this.command = null;
     }
 
     // Returns null if string can't be parsed.
