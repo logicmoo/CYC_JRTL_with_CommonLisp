@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: print-object.lisp,v 1.6 2004-04-15 15:46:54 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: print-object.lisp,v 1.7 2005-02-20 14:11:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,53 +17,55 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (require 'clos)
 
 (when (autoloadp 'print-object)
   (fmakunbound 'print-object))
 
-(defgeneric print-object (instance stream))
+(defgeneric print-object (object stream))
 
-(defmethod print-object ((x t) stream)
-  (print-unreadable-object (x stream :type t :identity t)))
+(defmethod print-object ((object t) stream)
+  (print-unreadable-object (object stream :type t :identity t)))
 
-(defmethod print-object ((instance standard-object) stream)
-  (print-unreadable-object (instance stream :identity t)
-                           (format stream "~S"
-                                   (class-name (class-of instance))))
+(defmethod print-object ((object structure-object) stream)
+  (write-string (%write-to-string object) stream))
+
+(defmethod print-object ((object standard-object) stream)
+  (print-unreadable-object (object stream :identity t)
+    (format stream "~S" (class-name (class-of object))))
   instance)
 
 (defmethod print-object ((class standard-class) stream)
   (print-unreadable-object (class stream :identity t)
-                           (format stream "~S ~S"
-                                   (class-name (class-of class))
-                                   (class-name class)))
+    (format stream "~S ~S"
+            (class-name (class-of class))
+            (class-name class)))
   class)
 
 (defmethod print-object ((gf standard-generic-function) stream)
   (print-unreadable-object (gf stream :identity t)
-                           (format stream "~S ~S"
-                                   (class-name (class-of gf))
-                                   (generic-function-name gf)))
+    (format stream "~S ~S"
+            (class-name (class-of gf))
+            (generic-function-name gf)))
   gf)
 
 (defmethod print-object ((method standard-method) stream)
   (print-unreadable-object (method stream :identity t)
-                           (format stream "~S ~S~{ ~S~} ~S"
-                                   (class-name (class-of method))
-                                   (generic-function-name
-                                    (method-generic-function method))
-                                   (method-qualifiers method)
-                                   (mapcar #'class-name
-                                           (method-specializers method))))
+    (format stream "~S ~S~{ ~S~} ~S"
+            (class-name (class-of method))
+            (generic-function-name
+             (method-generic-function method))
+            (method-qualifiers method)
+            (mapcar #'class-name
+                    (method-specializers method))))
   method)
 
 (defmethod print-object ((restart restart) stream)
   (if *print-escape*
       (print-unreadable-object (restart stream :type t :identity t)
-                               (prin1 (restart-name restart) stream))
+        (prin1 (restart-name restart) stream))
       (restart-report restart stream)))
 
 (defmethod print-object ((c condition) stream)
