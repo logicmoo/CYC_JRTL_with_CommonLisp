@@ -75,7 +75,47 @@ editor frame, and a modeless control dialog will appear as a separate,
 always-on-top top-level window (if you put it somewhere convenient, it will try
 to remember where it belongs).
 <p>
+The transcript buffer is read-only. It receives stdout and stderr output from
+the application, as well as debugger messages.
+<p>
+The control dialog has panes with tabs labelled "Stack", "Threads", and
+"Breakpoints".
+<p>
+When the VM is suspended, clicking on one of the stack frames in the stack
+pane will navigate to the corresponding location in an editor window. (Clicking
+on the topmost stack frame is a good way to get back to the current location if
+you've ventured off into the weeds.)
+<p>
+When the VM is suspended, clicking on one of the threads in the threads pane
+selects that thread and updates the stack pane with the selected thread's
+current call stack (if available).
+<p>
+In the breakpoints pane, you can delete breakpoints by selecting them and
+pressing the Delete key. Breakpoints may be labelled "(deferred)"; this means
+that the VM has not yet resolved them. This is normal if the VM has not yet
+loaded the class containing the breakpoint in question, but it might also mean
+that the breakpoint is entirely bogus.
+<p>
+The buttons across the top of the control dialog do, for the most part, what
+their labels suggest.
+<p>
+"Set/Clear Breakpoint" toggles a line-number breakpoint at the location of the
+caret in the current editor, which must be looking at a Java source file.
+<p>
+"Next" executes the current line of code, stepping over method calls.
+<p>
+"Step" executes the current line of code, stepping into any method calls it may
+contain.
+<p>
+"Step Out" continues execution until just after the current method returns.
+<p>
+"Go" resumes execution at the address where the program last stopped.
+<p>
+Then there's the "Command" textfield. See <a href="jdbcommands.html">Debugger
+Commands</a>.
+<p>
 
+<p>
 </body>
 
 </html>
