@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: print-object.lisp,v 1.5 2004-04-01 14:50:04 piso Exp $
+;;; $Id: print-object.lisp,v 1.6 2004-04-15 15:46:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -75,7 +75,18 @@
               (t
                (%format stream "~A" c))))))
 
+(defmethod print-object ((c simple-condition) stream)
+  (if *print-escape*
+      (call-next-method)
+      (let ((format-control (simple-condition-format-control c)))
+        (if format-control
+            (apply #'format stream format-control
+                   (simple-condition-format-arguments c))
+            (call-next-method)))))
+
 (defmethod print-object ((x undefined-function) stream)
   (if *print-escape*
       (call-next-method)
       (format stream "The function ~S is undefined." (cell-error-name x))))
+
+(provide 'print-object)
