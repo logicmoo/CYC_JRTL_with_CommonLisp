@@ -219,6 +219,7 @@ ignore-errors
 import
 in-package
 incf
+input-stream-p
 inspect
 integerp
 intern
@@ -322,6 +323,7 @@ nunion
 oddp
 or
 otherwise
+output-stream-p
 package-name
 package-nicknames
 package-shadowing-symbols
