@@ -2,7 +2,7 @@
  * MessageFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MessageFormatter.java,v 1.6 2003-04-21 02:40:55 piso Exp $
+ * $Id: MessageFormatter.java,v 1.7 2003-05-19 19:38:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -274,5 +274,11 @@ public final class MessageFormatter extends Formatter
             formatTable.addEntryFromPrefs(MESSAGE_FORMAT_SIGNATURE, "signature", "comment");
         }
         return formatTable;
+    }
+
+    public void reset()
+    {
+        diffFormatter.reset();
+        super.reset();
     }
 }
