@@ -2,7 +2,7 @@
  * ComplexArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexArray.java,v 1.1 2004-02-26 00:49:31 piso Exp $
+ * $Id: ComplexArray.java,v 1.2 2004-02-26 01:36:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,15 +104,6 @@ public final class ComplexArray extends AbstractArray
             }
         }
         return index;
-    }
-
-    // FIXME Detect overflow!
-    private static int computeTotalSize(int[] dimensions)
-    {
-        int size = 1;
-        for (int i = dimensions.length; i-- > 0;)
-            size *= dimensions[i];
-        return size;
     }
 
     public LispObject typeOf()
