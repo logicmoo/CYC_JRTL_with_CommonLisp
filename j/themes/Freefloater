@@ -1,6 +1,6 @@
 # Freefloater
 # Mikol Graves
-# $Id: Freefloater,v 1.2 2002-10-05 00:09:12 piso Exp $
+# $Id: Freefloater,v 1.3 2002-12-29 17:04:35 piso Exp $
 
 color.background                        =  51  77 102
 color.disabled                          = 102 128 153
@@ -46,6 +46,11 @@ HtmlMode.color.table                    = 255 153   0
 HtmlMode.color.tableData                = 255 204   0
 HtmlMode.color.tableRow                 = 255 179   0
 HtmlMode.color.tag                      = 230 230 179
+
+LispMode.color.parenthesis              = 179 179 179
+LispMode.color.punctuation              = 179 179 179
+LispMode.color.secondaryKeyword         = 204 102   0
+LispMode.color.substitution             =   0 204 204
 
 color.matchingText                      = 255 255   0
 color.status                            = 102 128 153
