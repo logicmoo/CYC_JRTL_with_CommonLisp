@@ -1,8 +1,8 @@
 /*
  * SortByThread.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: SortByThread.java,v 1.1.1.1 2002-09-24 16:10:15 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: SortByThread.java,v 1.2 2003-05-30 14:59:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.tree.DefaultMutableTreeNode;
 import org.armedbear.j.Debug;
-import org.armedbear.j.FastStringBuffer;
 import org.armedbear.j.Log;
 
 public final class SortByThread
@@ -47,7 +46,6 @@ public final class SortByThread
 
     public void run()
     {
-        long start = System.currentTimeMillis();
         final int count = entries.size();
         // Create all the nodes and populate the ID map.
         ArrayList nodes = new ArrayList(count);
@@ -109,10 +107,6 @@ public final class SortByThread
 
         // Walk the tree and sort the entries by date (or whatever).
         sort(root);
-
-        long elapsed = System.currentTimeMillis() - start;
-        Log.debug("SortByThread.run " + entries.size() + " entries " + elapsed
-            + " ms " + ((float)elapsed/entries.size()) + " ms per entry");
     }
 
     private void removeEmptyContainers(final Node parent)
@@ -128,7 +122,7 @@ public final class SortByThread
             if (node.getMailboxEntry() == null && node.getChildCount() > 0) {
                 Debug.assertTrue(node.getParent() == parent);
                 if (parent != root || node.getChildCount() == 1) {
-                    for (int j = node.getChildCount()-1; j >= 0; j--) {
+                    for (int j = node.getChildCount(); j-- > 0;) {
                         Node child = (Node) node.getChildAt(j);
                         Debug.assertTrue(child.getParent() == node);
                         node.remove(j);
@@ -153,7 +147,7 @@ public final class SortByThread
         HashMap subjectMap = createSubjectMap();
 
         // Iterate through top-level nodes.
-        for (int i = root.getChildCount()-1; i >= 0; i--) {
+        for (int i = root.getChildCount(); i-- > 0; ) {
             final Node node = (Node) root.getChildAt(i);
             MailboxEntry entry = node.getMailboxEntry();
             if (entry == null) {
@@ -171,7 +165,7 @@ public final class SortByThread
 
             if (oldNode.isDummy() && node.isDummy()) {
                 // Add node's children to old node.
-                for (int j = node.getChildCount()-1; j >= 0; j--) {
+                for (int j = node.getChildCount(); j-- > 0;) {
                     Node child = (Node) node.getChildAt(j);
                     node.remove(j);
                     oldNode.add(child);
@@ -208,7 +202,7 @@ public final class SortByThread
             // Make old and new nodes be children of a new dummy node.
             // Create a new container for the old message.
             Node c = new Node(oldEntry);
-            for (int j = oldNode.getChildCount()-1; j >= 0; j--) {
+            for (int j = oldNode.getChildCount(); j-- > 0;) {
                 Node child = (Node) oldNode.getChildAt(j);
                 oldNode.remove(j);
                 c.add(child);
@@ -228,8 +222,7 @@ public final class SortByThread
     private HashMap createSubjectMap()
     {
         HashMap subjectMap = new HashMap();
-        Debug.assertTrue(subjectMap.size() == 0);
-        for (int i = 0; i < root.getChildCount(); i++) {
+        for (int i = 0, limit = root.getChildCount(); i < limit; i++) {
             final Node node = (Node) root.getChildAt(i);
             MailboxEntry entry = node.getMailboxEntry();
             if (entry == null) {
@@ -265,7 +258,7 @@ public final class SortByThread
     private void sort(Node node)
     {
         // Depth first!
-        for (int i = 0; i < node.getChildCount(); i++)
+        for (int i = 0, limit = node.getChildCount(); i < limit; i++)
             sort((Node)node.getChildAt(i));
         if (node.getChildCount() > 1)
             node.sortChildren();
@@ -285,7 +278,7 @@ public final class SortByThread
         }
         final String[] references = entry.getReferences();
         if (references != null) {
-            for (int i = references.length-1; i >= 0; i--) {
+            for (int i = references.length; i-- > 0;) {
                 Node parent = (Node) idMap.get(references[i]);
                 if (parent != null)
                     if (!parent.isNodeAncestor(node))
@@ -313,16 +306,6 @@ public final class SortByThread
                 if (filter == null || filter.accept(entry))
                     mb.appendLine(entry, depth);
             } else {
-//                 FastStringBuffer sb = new FastStringBuffer();
-//                 sb.append(depth);
-//                 sb.append(' ');
-//                 sb.append(node.getChildCount());
-//                 sb.append(" |");
-//                 sb.append(node.getBaseSubject());
-//                 sb.append("| ");
-//                 sb.append(node.getMessageId());
-//                 mb.appendLine(sb.toString());
-
                 if (node.getChildCount() > 0) {
                     Node child = (Node) node.getChildAt(0);
                     MailboxEntry childEntry = child.getMailboxEntry();
@@ -331,9 +314,8 @@ public final class SortByThread
                 }
             }
         }
-        int count = node.getChildCount();
-        for (int i = 0; i < count; i++)
-            addEntriesForNode((Node)node.getChildAt(i), mb, filter, depth+1);
+        for (int i = 0, limit = node.getChildCount(); i < limit; i++)
+            addEntriesForNode((Node)node.getChildAt(i), mb, filter, depth + 1);
     }
 }
 
@@ -400,22 +382,20 @@ class Node extends DefaultMutableTreeNode
 
     void sortChildren()
     {
-        if (children == null)
-            return;
-        sortEntriesByDate(children);
+        if (children != null)
+            sortEntriesByDate(children);
     }
 
-    private static void sortEntriesByDate(List list)
+    private static final Comparator comparator = new Comparator() {
+        public int compare(Object o1, Object o2)
+        {
+            return RFC822Date.compare(((Node)o1).getDate(),
+                ((Node)o2).getDate());
+        }
+    };
+
+    private static final void sortEntriesByDate(List list)
     {
-        Comparator c = new Comparator() {
-            public int compare(Object o1, Object o2)
-            {
-                RFC822Date date1 = ((Node)o1).getDate();
-                RFC822Date date2 = ((Node)o2).getDate();
-                return RFC822Date.compare(date1, date2);
-            }
-        };
-        Debug.assertTrue(list != null);
-        Collections.sort(list, c);
+        Collections.sort(list, comparator);
     }
 }
