@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.6 2003-10-05 17:57:24 piso Exp $
+;;; $Id: top-level.lisp,v 1.7 2003-10-06 01:03:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -86,6 +86,10 @@
   (let ((obj (eval (read-from-string args))))
     (describe obj)))
 
+(defun macroexpand-command (args)
+  (format t "~S~%" (macroexpand (read-from-string args)))
+  (values))
+
 (defun package-command (args)
   (cond ((null args)
          (format *standard-output* "The ~A package is current.~%"
@@ -165,6 +169,7 @@
     ("exit" 2 exit-command "exit lisp")
     ("help" 2 help-command "print this help")
     ("ld" 2 ld-command "load a file")
+    ("macroexpand" 2 macroexpand-command "macroexpand an expression")
     ("package" 2 package-command "change current package")
     ("pwd" 3 pwd-command "print current directory")
     ("reset" 3 reset-command "return to top level")
