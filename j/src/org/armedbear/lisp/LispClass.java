@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispClass.java,v 1.32 2003-10-11 18:48:09 piso Exp $
+ * $Id: LispClass.java,v 1.33 2003-10-13 13:10:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,21 +170,6 @@ public class LispClass extends StandardObject
         return super.typep(type);
     }
 
-    // ### add-class
-    private static final Primitive1 ADD_CLASS =
-        new Primitive1("add-class", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject obj) throws ConditionThrowable
-        {
-            if (obj instanceof LispClass) {
-                LispClass c = (LispClass) obj;
-                addClass(c.getSymbol(), c);
-                return c;
-            }
-            throw new ConditionThrowable(new TypeError(this, "class"));
-        }
-    };
-
     // ### find-class
     // find-class symbol &optional errorp environment => class
     private static final Primitive FIND_CLASS = new Primitive("find-class") {
@@ -218,6 +203,26 @@ public class LispClass extends StandardObject
         {
             // FIXME Ignore environment.
             return execute(symbol, errorp);
+        }
+    };
+
+    // ### %set-find-class
+    private static final Primitive2 _SET_FIND_CLASS =
+        new Primitive2("%set-find-class", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Symbol symbol = checkSymbol(first);
+            if (second instanceof LispClass) {
+                addClass(symbol, (LispClass) second);
+                return second;
+            }
+            if (second == NIL) {
+                map.remove(symbol);
+                return second;
+            }
+            throw new ConditionThrowable(new TypeError(second, "class"));
         }
     };
 
