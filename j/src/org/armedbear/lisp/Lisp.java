@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.128 2003-09-14 16:26:46 piso Exp $
+ * $Id: Lisp.java,v 1.129 2003-09-14 16:45:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,6 @@ public abstract class Lisp
     static final int TYPE_INTEGER  = TYPE_FIXNUM | TYPE_BIGNUM;
     static final int TYPE_RATIONAL = TYPE_INTEGER | TYPE_RATIO;
     static final int TYPE_REAL     = TYPE_RATIONAL | TYPE_FLOAT;
-    static final int TYPE_NUMBER   = TYPE_REAL | TYPE_COMPLEX;
 
     static final int TYPE_LIST     = TYPE_CONS | TYPE_NULL;
     static final int TYPE_SEQUENCE = TYPE_VECTOR | TYPE_LIST;
