@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.197 2004-01-09 18:02:56 piso Exp $
+ * $Id: Lisp.java,v 1.198 2004-01-16 16:54:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1336,10 +1336,10 @@ public abstract class Lisp
     }
 
     private static CharacterInputStream stdin =
-        new CharacterInputStream(System.in);
+        new CharacterInputStream(System.in, true);
 
     private static CharacterOutputStream stdout =
-        new CharacterOutputStream(System.out);
+        new CharacterOutputStream(System.out, true);
 
     public static final Symbol _STANDARD_INPUT_ =
         exportSpecial("*STANDARD-INPUT*", PACKAGE_CL, stdin);
@@ -1355,15 +1355,15 @@ public abstract class Lisp
 
     public static final Symbol _TERMINAL_IO_ =
         exportSpecial("*TERMINAL-IO*", PACKAGE_CL,
-                      new TwoWayStream(stdin, stdout));
+                      new TwoWayStream(stdin, stdout, true));
 
     public static final Symbol _QUERY_IO_ =
         exportSpecial("*QUERY-IO*", PACKAGE_CL,
-                      new TwoWayStream(stdin, stdout));
+                      new TwoWayStream(stdin, stdout, true));
 
     public static final Symbol _DEBUG_IO_ =
         exportSpecial("*DEBUG-IO*", PACKAGE_CL,
-                      new TwoWayStream(stdin, stdout));
+                      new TwoWayStream(stdin, stdout, true));
 
     public void resetIO(CharacterInputStream in, CharacterOutputStream out)
     {
@@ -1373,9 +1373,9 @@ public abstract class Lisp
         _STANDARD_OUTPUT_.setSymbolValue(stdout);
         _ERROR_OUTPUT_.setSymbolValue(stdout);
         _TRACE_OUTPUT_.setSymbolValue(stdout);
-        _TERMINAL_IO_.setSymbolValue(new TwoWayStream(stdin, stdout));
-        _QUERY_IO_.setSymbolValue(new TwoWayStream(stdin, stdout));
-        _DEBUG_IO_.setSymbolValue(new TwoWayStream(stdin, stdout));
+        _TERMINAL_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
+        _QUERY_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
+        _DEBUG_IO_.setSymbolValue(new TwoWayStream(stdin, stdout, true));
     }
 
     public static final TwoWayStream getTerminalIO()
