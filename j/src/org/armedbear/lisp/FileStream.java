@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.7 2004-01-31 19:04:44 piso Exp $
+ * $Id: FileStream.java,v 1.8 2004-02-01 16:51:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,6 +77,11 @@ public final class FileStream extends Stream
     public LispObject typeOf()
     {
         return Symbol.FILE_STREAM;
+    }
+
+    public LispClass classOf()
+    {
+        return BuiltInClass.FILE_STREAM;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
@@ -260,6 +265,11 @@ public final class FileStream extends Stream
         catch (IOException e) {
             signal(new StreamError(e));
         }
+    }
+
+    public String toString()
+    {
+        return unreadableString("FILE-STREAM");
     }
 
     // ### make-file-stream pathname element-type direction => stream
