@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.472 2003-10-13 11:40:12 piso Exp $
+ * $Id: Primitives.java,v 1.473 2003-10-13 13:10:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2086,7 +2086,7 @@ public final class Primitives extends Module
                 fun = arg.getSymbolFunction();
             else
                 fun = arg;
-            if (fun instanceof Function)
+            if (fun instanceof Function || fun instanceof GenericFunction)
                 return funcall0(fun, LispThread.currentThread());
             throw new ConditionThrowable(new UndefinedFunction(arg));
         }
@@ -2098,7 +2098,7 @@ public final class Primitives extends Module
                 fun = first.getSymbolFunction();
             else
                 fun = first;
-            if (fun instanceof Function)
+            if (fun instanceof Function || fun instanceof GenericFunction)
                 return funcall1(fun, second, LispThread.currentThread());
             throw new ConditionThrowable(new UndefinedFunction(first));
         }
@@ -2111,7 +2111,7 @@ public final class Primitives extends Module
                 fun = first.getSymbolFunction();
             else
                 fun = first;
-            if (fun instanceof Function)
+            if (fun instanceof Function || fun instanceof GenericFunction)
                 return funcall2(fun, second, third, LispThread.currentThread());
             throw new ConditionThrowable(new UndefinedFunction(first));
         }
@@ -2124,7 +2124,7 @@ public final class Primitives extends Module
                 fun = args[0].getSymbolFunction();
             else
                 fun = args[0];
-            if (fun instanceof Function) {
+            if (fun instanceof Function || fun instanceof GenericFunction) {
                 final int length = args.length - 1; // Number of arguments.
                 if (length == 3) {
                     return funcall3(fun, args[1], args[2], args[3],
