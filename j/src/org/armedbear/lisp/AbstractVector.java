@@ -36,7 +36,7 @@ public abstract class AbstractVector extends AbstractArray
             if (typeSpecifier == Symbol.SIMPLE_VECTOR)
                 return isSimpleVector() ? T : NIL;
             if (typeSpecifier == Symbol.SIMPLE_ARRAY)
-                return isSimpleVector() ? T : NIL;
+                return fillPointer < 0 ? T : NIL;
         } else if (typeSpecifier instanceof LispClass) {
             final String name = typeSpecifier.getName();
             if (name.equals("VECTOR"))
@@ -63,7 +63,7 @@ public abstract class AbstractVector extends AbstractArray
             if (type == Symbol.ARRAY || type == Symbol.VECTOR)
                 ;
             else if (type == Symbol.SIMPLE_ARRAY) {
-                if (!isSimpleVector())
+                if (fillPointer >= 0)
                     return NIL;
             } else
                 return NIL;
