@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.12 2003-03-30 02:04:52 piso Exp $
+;;; $Id: compiler.lisp,v 1.13 2003-05-26 01:10:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -189,7 +189,10 @@
   t)
 
 
-(defun compile (name &optional (definition (fdefinition name)))
+;; (defun compile (name &optional (definition (fdefinition name)))
+(defun compile (name &optional definition)
+  (unless definition
+    (setq definition (or (macro-function name) (fdefinition name))))
   (let (expr result)
     (cond ((functionp definition)
            (multiple-value-bind (form closure-p)
@@ -207,5 +210,8 @@
     (when (and name (functionp result))
       (%set-lambda-name result name)
       (%set-call-count result (%call-count definition))
-      (setf (fdefinition name) result))
+;;       (setf (fdefinition name) result))
+      (if (macro-function name)
+          (setf (fdefinition name) (make-macro result))
+          (setf (fdefinition name) result)))
     (values (or name result) nil nil)))
