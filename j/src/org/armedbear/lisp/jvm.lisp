@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.366 2005-01-23 19:07:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.367 2005-01-24 02:39:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,6 +74,7 @@
 (defstruct class-file
   pathname ; pathname of output file
   class
+  superclass
   methods)
 
 (defstruct compiland
@@ -81,7 +82,6 @@
   lambda-expression
   arg-vars
   p1-result
-;;   classfile ; the filename of the class-file
   parent
   (children 0) ; Number of local functions defined with FLET or LABELS.
   argument-register
@@ -95,7 +95,6 @@
 (defvar *pool-count* 1)
 (defvar *pool-entries* nil)
 
-;; (defvar *stream* nil)
 (defvar *this-class* nil)
 
 (defvar *code* ())
@@ -3787,7 +3786,6 @@
                         (prog1
                          (%format nil "local-~D.class" *child-count*)
                          (incf *child-count*))))
-;;     (setf (compiland-classfile compiland) pathname)
 
     (setf class-file (make-class-file :pathname pathname))
     (setf (compiland-class-file compiland) class-file)
@@ -3813,10 +3811,11 @@
                    g
                    +lisp-object+)
              (emit 'var-set (local-function-variable local-function))))
-          (t (push (make-local-function :name name
-                                        :function function
-                                        :class-file class-file)
-                   *local-functions*)))))
+          (t
+           (push (make-local-function :name name
+                                      :function function
+                                      :class-file class-file)
+                 *local-functions*)))))
 
 (defun p2-flet (form &key (target *val*) representation)
   (let ((*local-functions* *local-functions*)
@@ -3886,8 +3885,6 @@
                    (error "P2-LAMBDA: can't handle optional argument with non-constant initform.")))))))
     (cond (*compile-file-truename*
 
-;;            (setf (compiland-classfile compiland) (sys::next-classfile-name))
-
            (aver (null (compiland-class-file compiland)))
            (setf (compiland-class-file compiland)
                  (make-class-file :pathname (sys::next-classfile-name)))
@@ -3900,17 +3897,11 @@
              (p2-compiland compiland))
 
            (let* ((local-function
-;;                    (make-local-function :classfile (compiland-classfile compiland))
-                   (make-local-function :class-file (compiland-class-file compiland))
-                   )
+                   (make-local-function :class-file (compiland-class-file compiland)))
                   (g (declare-local-function local-function)))
              (emit 'getstatic *this-class* g +lisp-object+)))
           (t
            (aver (null (compiland-class-file compiland)))
-;;            (setf (compiland-classfile compiland)
-;;                  (prog1
-;;                     (%format nil "local-~D.class" *child-count*)
-;;                     (incf *child-count*)))
            (setf (compiland-class-file compiland)
                  (make-class-file :pathname
                                   (prog1
@@ -3923,9 +3914,8 @@
                  compiled-function)
              (p2-compiland compiland)
              (setf compiled-function
-;;                    (sys:load-compiled-function (compiland-classfile compiland))
-                   (sys:load-compiled-function (class-file-pathname (compiland-class-file compiland)))
-                   )
+                   (sys:load-compiled-function
+                    (class-file-pathname (compiland-class-file compiland))))
              (emit 'getstatic *this-class*
                    (declare-object compiled-function) +lisp-object+))))
     (cond
@@ -4863,8 +4853,7 @@
            (setf *arity* arg-count)
            (get-descriptor (list +lisp-object-array+) +lisp-object+)))))
 
-(defun write-class-file (args execute-method filespec)
-  (dformat t "write-class-file ~S~%" filespec)
+(defun write-class-file (args execute-method class-file)
   (let* ((super (cond (*child-p*
                        (if *closure-variables*
                            +lisp-ctf-class+
@@ -4883,7 +4872,7 @@
     (pool-name "Code") ; Must be in pool!
 
     ;; Write out the class file.
-    (with-open-file (stream filespec
+    (with-open-file (stream (class-file-pathname class-file)
                             :direction :output
                             :element-type '(unsigned-byte 8)
                             :if-exists :supersede)
@@ -4965,6 +4954,13 @@
           (setf (compiland-p1-result compiland)
                 (list* 'LAMBDA lambda-list (mapcar #'p1 body))))))))
 
+(defun class-name-from-filespec (filespec)
+  (let* ((name (pathname-name filespec)))
+    (dotimes (i (length name))
+      (when (eql (char name i) #\-)
+        (setf (char name i) #\_)))
+    (concatenate 'string "org/armedbear/lisp/" name)))
+  
 (defun p2-compiland (compiland)
   (dformat t "p2-compiland ~S~%" (compiland-name compiland))
   (let* ((p1-result (compiland-p1-result compiland))
@@ -4973,13 +4969,7 @@
          (*declared-strings* (make-hash-table :test 'eq))
          (*declared-fixnums* (make-hash-table :test 'eql))
          (filespec (class-file-pathname (compiland-class-file compiland)))
-         (class-name (let* ((name (pathname-name filespec)))
-                       (dotimes (i (length name))
-                         (when (eql (char name i) #\-)
-                           (setf (char name i) #\_)))
-                       name))
-         (*this-class*
-          (concatenate 'string "org/armedbear/lisp/" class-name))
+         (*this-class* (class-name-from-filespec filespec))
          (args (cadr p1-result))
          (body (cddr p1-result))
          (*using-arg-array* nil)
@@ -5256,9 +5246,8 @@
 
     (setf (method-max-locals execute-method) *registers-allocated*)
     (setf (method-handlers execute-method) (nreverse *handlers*))
-    (write-class-file args execute-method filespec)
-    (dformat t "leaving p2-compiland ~S~%" (compiland-name compiland))
-    filespec))
+    (write-class-file args execute-method (compiland-class-file compiland))
+    (dformat t "leaving p2-compiland ~S~%" (compiland-name compiland))))
 
 (defun compile-1 (compiland)
   (dformat t "compile-1 ~S~%" (compiland-name compiland))
@@ -5287,10 +5276,9 @@
           (incf i))))
 
     ;; Pass 2.
-    (prog1
-     (p2-compiland compiland)
-     (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*)))
-    ))
+    (p2-compiland compiland)
+    (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
+    (class-file-pathname (compiland-class-file compiland))))
 
 (defun compile-defun (name form environment &optional (filespec "out.class"))
   (aver (eq (car form) 'LAMBDA))
@@ -5300,7 +5288,6 @@
   (handler-bind ((warning #'handle-warning))
       (compile-1 (make-compiland :name name
                                  :lambda-expression (precompile-form form t)
-;;                                  :classfile filespec
                                  :class-file (make-class-file :pathname filespec)
                                  :parent *current-compiland*))))
 
