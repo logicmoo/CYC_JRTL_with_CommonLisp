@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.47 2003-06-29 00:19:34 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.48 2003-07-03 01:30:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -343,9 +343,9 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             editor.switchToBuffer(buf);
         }
         if (Editor.getEditorList().contains(editor)) {
-            editor.updateLocation();
             editor.ensureActive();
             editor.setFocusToDisplay();
+            editor.updateLocation();
             editor.updateDisplay();
         }
     }
@@ -375,9 +375,9 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             dialog.cancel();
         } else {
             // Using location bar.
+            editor.setFocusToDisplay();
             editor.updateLocation();
             editor.ensureActive();
-            Editor.restoreFocus();
         }
     }
 
