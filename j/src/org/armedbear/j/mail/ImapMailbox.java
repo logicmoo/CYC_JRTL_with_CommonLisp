@@ -2,7 +2,7 @@
  * ImapMailbox.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapMailbox.java,v 1.1.1.1 2002-09-24 16:09:49 piso Exp $
+ * $Id: ImapMailbox.java,v 1.2 2002-09-25 13:59:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,6 +70,11 @@ public final class ImapMailbox extends Mailbox
         super(url);
         this.session = session;
         session.setMailbox(this);
+        String tunnel = getStringProperty(Property.TUNNEL);
+        if (tunnel != null) {
+            Log.debug("tunnel = |" + tunnel + "|");
+            session.setTunnel(tunnel);
+        }
         folderName = session.getFolderName();
         Debug.assertTrue(folderName.equals(url.getFolderName()));
         supportsUndo = false;
