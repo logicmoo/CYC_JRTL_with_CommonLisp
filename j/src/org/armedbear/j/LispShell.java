@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShell.java,v 1.36 2003-05-11 13:03:47 piso Exp $
+ * $Id: LispShell.java,v 1.37 2003-05-11 13:04:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -298,6 +298,11 @@ public final class LispShell extends Shell
     }
 
     public String getTitle()
+    {
+        return title;
+    }
+
+    public String getFileNameForDisplay()
     {
         return title;
     }
