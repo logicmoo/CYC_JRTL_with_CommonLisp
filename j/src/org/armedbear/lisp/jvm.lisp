@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.68 2004-02-16 19:14:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.69 2004-02-17 01:40:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -334,6 +334,9 @@
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
 
+(defvar *env* nil)
+(defvar *closure-vars* nil)
+
 (defvar *val* nil) ; index of value register
 
 (defun clear ()
@@ -501,6 +504,7 @@
 (defconstant +lisp-symbol-class+ "org/armedbear/lisp/Symbol")
 (defconstant +lisp-thread-class+ "org/armedbear/lisp/LispThread")
 (defconstant +lisp-cons-class+ "org/armedbear/lisp/Cons")
+(defconstant +lisp-environment-class+ "org/armedbear/lisp/Environment")
 
 (defun emit-push-nil ()
   (emit 'getstatic
@@ -658,6 +662,7 @@
          instruction))
       ((187 ; NEW class-name
         189 ; ANEWARRAY class-name
+        192 ; CHECKCAST class-name
         193 ; INSTANCEOF class-name
         )
        (let ((index (pool-class (first args))))
@@ -743,6 +748,8 @@
     (187 ; NEW
      1)
     (189 ; ANEWARRAY
+     0)
+    (192 ; CHECKCAST
      0)
     (193 ; INSTANCEOF
      0)
@@ -2016,6 +2023,8 @@
              (emit-push-value)
              (emit 'astore (1+ index))))
       (return-from compile-setq))
+    (when (memq sym *closure-vars*)
+      (error "Unable to compile function defined in non-null lexical environment."))
     ;; still not found
     ;; must be a global variable
     (let ((g (declare-symbol sym)))
@@ -2097,7 +2106,7 @@
       (setf arglist (append args-to-add arglist))
       (setf form (list* 'lambda arglist body)))
     (format t "form = ~S~%" form)
-    (setf function (compile-defun name form "flet.out"))
+    (setf function (compile-defun name form nil "flet.out"))
     (format t "function = ~S~%" function)
     (push (make-local-function :name name
                                :args-to-add args-to-add
@@ -2222,16 +2231,16 @@
           (t
            (compile-function-call (car form) (cdr form))))))
 
-(defun compile-variable-ref (form)
-  (let ((v (find-variable form)))
+(defun compile-variable-ref (var)
+  (let ((v (find-variable var)))
     (unless (and v (variable-special-p v))
-      (let ((index (position form *locals* :from-end t)))
+      (let ((index (position var *locals* :from-end t)))
         (when index
           (emit 'aload index)
           (emit-store-value)
           (return-from compile-variable-ref)))
       ;; Not found in locals; look in args.
-      (let ((index (position form *args*)))
+      (let ((index (position var *args*)))
         (when index
           (cond (*using-arg-array*
                  (emit 'aload 1)
@@ -2243,8 +2252,27 @@
                  (emit 'aload (1+ index))
                  (emit-store-value)
                  (return-from compile-variable-ref))))))
+    (when (memq var *closure-vars*)
+      (let ((g (declare-object *env*)))
+        (emit 'getstatic
+              *this-class*
+              g
+              "Lorg/armedbear/lisp/LispObject;"))
+      ;; Cast it to an Environment object.
+      (emit 'checkcast +lisp-environment-class+)
+      (let ((g (declare-symbol var)))
+        (emit 'getstatic
+              *this-class*
+              g
+              "Lorg/armedbear/lisp/Symbol;"))
+      (emit-invokevirtual +lisp-environment-class+
+                          "lookup"
+                          "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                          -1)
+      (emit-store-value)
+      (return-from compile-variable-ref))
     ;; Otherwise it must be a global variable.
-    (let ((g (declare-symbol form)))
+    (let ((g (declare-symbol var)))
       (emit 'getstatic
             *this-class*
             g
@@ -2317,7 +2345,7 @@
     (t (setq *using-arg-array* t)
        #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
-(defun compile-defun (name form &optional (classfile "out.class"))
+(defun compile-defun (name form environment &optional (classfile "out.class"))
   (unless (eq (car form) 'LAMBDA)
     (return-from compile-defun nil))
   (setf form (precompile-form form t))
@@ -2340,6 +2368,8 @@
          (*args* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
          (*locals* (make-array 256 :fill-pointer 0)) ; FIXME Remove hard limit!
          (*max-locals* 0)
+         (*env* environment)
+         (*closure-vars* (if environment (sys::environment-vars environment) nil))
          (*variables* ())
          (*pool* ())
          (*pool-count* 1)
@@ -2409,7 +2439,7 @@
       ;; Write class file.
       (with-open-file (*stream* classfile
                                 :direction :output
-                                :element-type 'unsigned-byte
+                                :element-type '(unsigned-byte 8)
                                 :if-exists :supersede)
         (write-u4 #xCAFEBABE)
         (write-u2 3)
@@ -2439,14 +2469,14 @@
   (if (and (consp definition-designator)
            (eq (car definition-designator) 'LAMBDA))
       definition-designator
-      (multiple-value-bind (lambda-expression closure-p)
+      (multiple-value-bind (lambda-expression environment)
         (function-lambda-expression definition-designator)
-        (when closure-p
-          (error "Unable to compile function defined in non-null lexical environment."))
+        (when environment
+          (warn "Function defined in non-null lexical environment."))
 	(unless lambda-expression
 	  (error :format-control "Can't find a definition for ~S."
                  :format-arguments (list definition-designator)))
-        lambda-expression)))
+        (values lambda-expression environment))))
 
 (defun load-verbose-prefix ()
   (let ((s (make-array (max sys::*load-depth* 1)
@@ -2479,23 +2509,23 @@
           (%format t "~A Already compiled ~S~%" prefix name))
         (return-from jvm-compile (values name nil nil))))
     (handler-case
-        (let* ((*package* (if (and name (symbol-package name))
-                              (symbol-package name)
-                              *package*))
-               (expr (get-lambda-to-compile definition))
-               (compiled-definition (compile-defun name expr)))
-          (when (and name (functionp compiled-definition))
-            (sys::%set-lambda-name compiled-definition name)
-            (sys::%set-call-count compiled-definition (sys::%call-count definition))
-            (sys::%set-arglist compiled-definition (sys::arglist definition))
-            (if (macro-function name)
-                (setf (fdefinition name) (sys::make-macro compiled-definition))
-                (setf (fdefinition name) compiled-definition)))
-          (when *compile-print*
-            (if name
-                (%format t "~A Compiled ~S~%" prefix name)
-                (%format t "~A Compiled top-level form~%" prefix)))
-          (values (or name compiled-definition) nil nil))
+        (multiple-value-bind (expr env) (get-lambda-to-compile definition)
+          (let* ((*package* (if (and name (symbol-package name))
+                                (symbol-package name)
+                                *package*))
+                 (compiled-definition (compile-defun name expr env)))
+            (when (and name (functionp compiled-definition))
+              (sys::%set-lambda-name compiled-definition name)
+              (sys::%set-call-count compiled-definition (sys::%call-count definition))
+              (sys::%set-arglist compiled-definition (sys::arglist definition))
+              (if (macro-function name)
+                  (setf (fdefinition name) (sys::make-macro compiled-definition))
+                  (setf (fdefinition name) compiled-definition)))
+            (when *compile-print*
+              (if name
+                  (%format t "~A Compiled ~S~%" prefix name)
+                  (%format t "~A Compiled top-level form~%" prefix)))
+            (values (or name compiled-definition) nil nil)))
       (error (c)
              (%format t "Error: ~A~%" c)
              (when name
