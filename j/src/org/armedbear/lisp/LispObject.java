@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.23 2003-08-02 17:17:52 piso Exp $
+ * $Id: LispObject.java,v 1.24 2003-08-02 17:27:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,6 +101,11 @@ public class LispObject extends Lisp
     public int length() throws LispError
     {
         throw new TypeError(this, "sequence");
+    }
+
+    public final LispObject LENGTH() throws LispError
+    {
+        return new Fixnum(length());
     }
 
     public LispObject elt(int index) throws LispError
