@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaObject.java,v 1.8 2003-09-19 11:50:18 piso Exp $
+ * $Id: JavaObject.java,v 1.9 2003-11-04 22:24:18 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +32,11 @@ public class JavaObject extends LispObject
     }
 
     public final Object getObject()
+    {
+        return obj;
+    }
+
+    public Object javaInstance()
     {
         return obj;
     }
