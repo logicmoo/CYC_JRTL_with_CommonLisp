@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.186 2004-09-07 17:45:57 piso Exp $
+;;; $Id: boot.lisp,v 1.187 2004-09-07 20:22:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -130,7 +130,7 @@
 (defun make-keyword (symbol)
   (intern (symbol-name symbol) *keyword-package*))
 
-(defun sys::featurep (form)
+(defun featurep (form)
   (cond ((atom form)
          (ext:memq form *features*))
         ((eq (car form) :not)
@@ -143,6 +143,8 @@
            (when (featurep subform) (return t))))
         (t
          (error "READ-FEATURE"))))
+
+(export 'featurep '#:system)
 
 ;;; READ-CONDITIONAL (from OpenMCL)
 (defun read-feature (stream)
@@ -170,26 +172,26 @@
 (defun sys::%compile (name definition)
   (values (if name name definition) nil nil))
 
-(sys::load-system-file "macros")
-(sys::load-system-file "fixme")
-(sys::load-system-file "destructuring-bind")
-(sys::load-system-file "arrays")
-(sys::load-system-file "compiler-macro")
-(sys::load-system-file "subtypep")
-(sys::load-system-file "typep")
-(sys::load-system-file "precompiler")
+(load-system-file "macros")
+(load-system-file "fixme")
+(load-system-file "destructuring-bind")
+(load-system-file "arrays")
+(load-system-file "compiler-macro")
+(load-system-file "subtypep")
+(load-system-file "typep")
+(load-system-file "precompiler")
 
-(sys::precompile-package "PRECOMPILER")
-(sys::precompile-package "EXTENSIONS")
-(sys::precompile-package "SYSTEM")
-(sys::precompile-package "COMMON-LISP")
+(precompile-package "PRECOMPILER")
+(precompile-package "EXTENSIONS")
+(precompile-package "SYSTEM")
+(precompile-package "COMMON-LISP")
 
-(sys::load-system-file "signal")
-(sys::load-system-file "list")
-(sys::load-system-file "sequences")
-(sys::load-system-file "error")
-(sys::load-system-file "defpackage")
-(sys::load-system-file "define-modify-macro")
+(load-system-file "signal")
+(load-system-file "list")
+(load-system-file "sequences")
+(load-system-file "error")
+(load-system-file "defpackage")
+(load-system-file "define-modify-macro")
 
 ;;; Package definitions.
 (defpackage "FORMAT" (:use "CL" "EXT"))
