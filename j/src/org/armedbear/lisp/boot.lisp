@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.56 2003-06-10 18:40:11 piso Exp $
+;;; $Id: boot.lisp,v 1.57 2003-06-10 19:14:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -110,12 +110,23 @@
                 "list.lisp"
                 "sequences.lisp"
                 "error.lisp"
-                "chars.lisp"
-                "strings.lisp"
                 "defstruct.lisp"
                 "loop.lisp"))
   (%load name))
 
+(autoload '(digit-char-p alphanumericp
+            char/= char< char> char<= char>=
+            char-not-equal
+            char-lessp char-greaterp)
+          "chars.lisp")
+(autoload '(string-upcase string-downcase string-capitalize
+            nstring-upcase nstring-downcase nstring-capitalize
+            string= string/= string-equal string-not-equal
+            string< string>
+            string<= string>=
+            string-lessp string-greaterp
+            string-not-lessp string-not-greaterp)
+          "strings.lisp")
 (autoload '(remprop get-properties copy-symbol) "symbol.lisp")
 (autoload '(open sort merge parse-integer))
 
