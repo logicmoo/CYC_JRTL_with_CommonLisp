@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.92 2005-03-21 21:18:19 piso Exp $
+;;; $Id: precompiler.lisp,v 1.93 2005-03-23 23:13:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -223,12 +223,14 @@
 (defun precompile-dolist (form)
   (if *in-jvm-compile*
       (precompile1 (macroexpand form))
-      (cons 'DOLIST (cons (cadr form) (mapcar #'precompile1 (cddr form))))))
+      (cons 'DOLIST (cons (mapcar #'precompile1 (cadr form))
+                          (mapcar #'precompile1 (cddr form))))))
 
 (defun precompile-dotimes (form)
   (if *in-jvm-compile*
       (precompile1 (macroexpand form))
-      (cons 'DOTIMES (cons (cadr form) (mapcar #'precompile1 (cddr form))))))
+      (cons 'DOTIMES (cons (mapcar #'precompile1 (cadr form))
+                           (mapcar #'precompile1 (cddr form))))))
 
 (defun precompile-do/do*-vars (varlist)
   (let ((result nil))
