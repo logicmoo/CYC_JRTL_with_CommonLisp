@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: Mailbox.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * $Id: Mailbox.java,v 1.3 2002-10-17 13:55:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -358,11 +358,13 @@ public abstract class Mailbox extends Buffer
                     break;
             }
         }
-        for (line = line.next(); line != null; line = line.next()) {
-            if (line instanceof MailboxLine) {
-                MailboxEntry maybe = ((MailboxLine)line).getMailboxEntry();
-                if (!maybe.isDeleted())
-                    return maybe;
+        if (line != null) {
+            for (line = line.next(); line != null; line = line.next()) {
+                if (line instanceof MailboxLine) {
+                    MailboxEntry maybe = ((MailboxLine)line).getMailboxEntry();
+                    if (!maybe.isDeleted())
+                        return maybe;
+                }
             }
         }
         return null;
@@ -377,11 +379,13 @@ public abstract class Mailbox extends Buffer
                     break;
             }
         }
-        for (line = line.previous(); line != null; line = line.previous()) {
-            if (line instanceof MailboxLine) {
-                MailboxEntry maybe = ((MailboxLine)line).getMailboxEntry();
-                if (!maybe.isDeleted())
-                    return maybe;
+        if (line != null) {
+            for (line = line.previous(); line != null; line = line.previous()) {
+                if (line instanceof MailboxLine) {
+                    MailboxEntry maybe = ((MailboxLine)line).getMailboxEntry();
+                    if (!maybe.isDeleted())
+                        return maybe;
+                }
             }
         }
         return null;
