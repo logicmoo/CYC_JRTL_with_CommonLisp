@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.18 2004-01-31 20:13:04 piso Exp $
+ * $Id: Stream.java,v 1.19 2004-02-01 16:50:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,12 +122,12 @@ public class Stream extends LispObject
         return isOutputStream;
     }
 
-    public boolean isCharacterStream()
+    public boolean isCharacterStream() throws ConditionThrowable
     {
         return isCharacterStream;
     }
 
-    public boolean isBinaryStream()
+    public boolean isBinaryStream() throws ConditionThrowable
     {
         return isBinaryStream;
     }
