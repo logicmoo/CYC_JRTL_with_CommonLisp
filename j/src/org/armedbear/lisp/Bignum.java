@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.9 2003-04-09 14:46:01 piso Exp $
+ * $Id: Bignum.java,v 1.10 2003-04-09 14:55:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -161,7 +161,7 @@ public final class Bignum extends LispObject
     public LispObject divideBy(LispObject obj) throws LispError
     {
         if (obj instanceof Fixnum)
-            return new Bignum(value.divide(Fixnum.getBigInteger(obj)));
+            return number(value, Fixnum.getBigInteger(obj));
         if (obj instanceof Bignum)
             return number(value, ((Bignum)obj).value);
         if (obj instanceof Ratio) {
