@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.273 2003-07-02 16:41:27 piso Exp $
+ * $Id: Primitives.java,v 1.274 2003-07-02 17:13:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4554,7 +4554,7 @@ public final class Primitives extends Module
     // ### %compare-elements
     // %compare-elements test key elt1 elt2
     private static final Primitive _COMPARE_ELEMENTS =
-        new Primitive("%compare-elements") {
+        new Primitive("%compare-elements", PACKAGE_SYS, true) {
         public LispObject execute(LispObject args[]) throws Condition
         {
             if (args[1] == NIL) {
