@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.576 2004-02-23 19:56:55 piso Exp $
+ * $Id: Primitives.java,v 1.577 2004-02-24 00:31:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1715,6 +1715,17 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### array-displacement
+    // array-displacement array => displaced-to, displaced-index-offset
+    private static final Primitive1 ARRAY_DISPLACEMENT =
+        new Primitive1("array-displacement", "array")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return checkArray(arg).arrayDisplacement();
+        }
+    };
+
     // ### array-in-bounds-p
     // array-in-bounds-p array &rest subscripts => generalized-boolean
     private static final Primitive ARRAY_IN_BOUNDS_P =
@@ -1798,7 +1809,8 @@ public final class Primitives extends Lisp
     };
 
     private static final int arrayRowMajorIndex(AbstractArray array,
-                                                LispObject[] subscripts) throws ConditionThrowable
+                                                LispObject[] subscripts)
+        throws ConditionThrowable
     {
         final int rank = array.getRank();
         if (rank != subscripts.length) {

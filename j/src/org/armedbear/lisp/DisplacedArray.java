@@ -2,7 +2,7 @@
  * DisplacedArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: DisplacedArray.java,v 1.25 2004-02-23 19:56:55 piso Exp $
+ * $Id: DisplacedArray.java,v 1.26 2004-02-24 00:31:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -241,15 +241,4 @@ public final class DisplacedArray extends AbstractArray
         appendContents(dimv, 0, sb);
         return sb.toString();
     }
-
-    // ### array-displacement
-    // array-displacement array => displaced-to, displaced-index-offset
-    private static final Primitive1 ARRAY_DISPLACEMENT =
-        new Primitive1("array-displacement","array")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return checkArray(arg).arrayDisplacement();
-        }
-    };
 }
