@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.89 2004-10-13 00:22:20 piso Exp $
+ * $Id: Stream.java,v 1.90 2004-10-18 05:29:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1050,7 +1050,7 @@ public class Stream extends LispObject
     // unread-char character &optional input-stream => nil
     public LispObject unreadChar(LispCharacter c) throws ConditionThrowable
     {
-        _unreadChar(c.getValue());
+        _unreadChar(c.value);
         return NIL;
     }
 
