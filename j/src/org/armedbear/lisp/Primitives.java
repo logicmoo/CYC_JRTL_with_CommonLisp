@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.686 2004-09-29 22:26:56 piso Exp $
+ * $Id: Primitives.java,v 1.687 2004-10-01 16:09:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3637,13 +3637,14 @@ public final class Primitives extends Lisp
                 endIndex = s.length();
             StringInputStream in =
                 new StringInputStream(s, startIndex, endIndex);
+            final LispThread thread = LispThread.currentThread();
             LispObject result;
             if (preserveWhitespace)
-                result = in.readPreservingWhitespace(eofError, eofValue, false);
+                result = in.readPreservingWhitespace(eofError, eofValue, false,
+                                                     thread);
             else
                 result = in.read(eofError, eofValue, false);
-            return LispThread.currentThread().setValues(result,
-                                                        new Fixnum(in.getOffset()));
+            return thread.setValues(result, new Fixnum(in.getOffset()));
         }
     };
 
@@ -3703,7 +3704,9 @@ public final class Primitives extends Lisp
             boolean eofError = length > 1 ? (args[1] != NIL) : true;
             LispObject eofValue = length > 2 ? args[2] : NIL;
             boolean recursive = length > 3 ? (args[3] != NIL) : false;
-            return stream.readPreservingWhitespace(eofError, eofValue, recursive);
+            return stream.readPreservingWhitespace(eofError, eofValue,
+                                                   recursive,
+                                                   LispThread.currentThread());
         }
     };
 
