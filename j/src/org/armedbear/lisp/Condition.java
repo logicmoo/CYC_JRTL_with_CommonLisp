@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Condition.java,v 1.20 2004-02-24 01:54:40 piso Exp $
+ * $Id: Condition.java,v 1.21 2004-03-01 23:53:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,4 +128,19 @@ public class Condition extends StandardObject
         catch (Throwable t) {}
         return unreadableString(String.valueOf(typeOf()));
     }
+
+    private static final Primitive1 CONDITION_REPORT =
+        new Primitive1("condition-report", PACKAGE_SYS, false, "condition")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            try {
+                String s = ((Condition)arg).getMessage();
+                return s != null ? new SimpleString(s) : NIL;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.CONDITION));
+            }
+        }
+    };
 }
