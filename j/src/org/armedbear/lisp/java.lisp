@@ -33,6 +33,18 @@
   "Returns the Java class that OBJ belongs to"
   (jcall (jmethod "java.lang.Object" "getClass") obj))
 
+(defun jclass-superclass (class)
+  "Returns the superclass of CLASS, or NIL if it has't got one"
+  (jcall (jmethod "java.lang.Class" "getSuperclass") class))
+
+(defun jclass-interfaces (class)
+  "Returns the vector of interfaces of CLASS"
+  (jcall (jmethod "java.lang.Class" "getInterfaces") class))
+
+(defun jclass-is-interface (class)
+  "Returns T if CLASS is an inteface"
+  (jcall (jmethod "java.lang.Class" "isInterface") class))
+
 (defun jclass-constructors (class)
   "Returns a vector of constructors for CLASS"
   (jcall (jmethod "java.lang.Class" "getConstructors") class))
