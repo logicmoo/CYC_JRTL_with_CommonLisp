@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: top-level.lisp,v 1.24 2004-01-18 18:51:45 piso Exp $
+;;; $Id: top-level.lisp,v 1.25 2004-02-11 00:24:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -134,6 +134,12 @@
           (format t "~A" (namestring *default-pathname-defaults*)))
         (format t "Error: no such directory (~S).~%" args))))
 
+(defun ls-command (args)
+  (let ((args (if (stringp args) args "")))
+    (run-shell-command (concatenate 'string "ls " args)
+                       :directory *default-pathname-defaults*))
+  (values))
+
 (defvar *last-files-loaded* nil)
 
 (defun tokenize (string)
@@ -183,6 +189,7 @@
     ("help" 2 help-command "print this help")
     ("inspect" 2 inspect-command "inspect an object")
     ("ld" 2 ld-command "load a file")
+    ("ls" 2 ls-command "list directory")
     ("macroexpand" 2 macroexpand-command "macroexpand an expression")
     ("package" 2 package-command "change current package")
     ("pwd" 3 pwd-command "print current directory")
