@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.4 2003-05-28 00:58:22 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.5 2003-10-01 01:13:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;;; From CMUCL, via GCL.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
 (export '(destructuring-bind))
 
