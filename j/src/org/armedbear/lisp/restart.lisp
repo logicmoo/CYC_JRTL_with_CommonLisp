@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: restart.lisp,v 1.18 2005-01-31 17:17:30 piso Exp $
+;;; $Id: restart.lisp,v 1.19 2005-02-08 02:41:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -86,11 +86,14 @@
       (when (or (eq restart name) (eq (restart-name restart) name))
         (return-from find-restart restart)))))
 
+(defun find-restart-or-control-error (identifier &optional condition)
+  (or (find-restart identifier condition)
+      (error 'control-error
+	     :format-control "Restart ~S is not active."
+	     :format-arguments (list identifier))))
+
 (defun invoke-restart (restart &rest values)
-  (let ((real-restart (or (find-restart restart)
-                          (error 'control-error
-                                 :format-control "Restart ~s is not active."
-                                 :format-arguments (list restart)))))
+  (let ((real-restart (find-restart-or-control-error restart)))
     (apply (restart-function real-restart) values)))
 
 ;;; INVOKE-RESTART-INTERACTIVELY (from CMUCL)
@@ -234,12 +237,12 @@
        ,@body)))
 
 (defun abort (&optional condition)
-  (invoke-restart 'abort)
+  (invoke-restart (find-restart-or-control-error 'abort condition))
   (error 'control-error
          :format-control "ABORT restart failed to transfer control dynamically."))
 
 (defun muffle-warning (&optional condition)
-  (invoke-restart 'muffle-warning))
+  (invoke-restart (find-restart-or-control-error 'muffle-warning condition)))
 
 (defun continue (&optional condition)
   (let ((restart (find-restart 'continue condition)))

@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
-;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: trace.lisp,v 1.8 2005-01-10 15:42:52 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: trace.lisp,v 1.9 2005-02-08 02:40:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,10 +29,11 @@
   *traced-functions*)
 
 (defmacro trace (&rest args)
-  (setf *trace-depth* 0)
   (if args
-      (expand-trace args)
-      '(list-traced-functions)))
+      `(progn
+        (setf *trace-depth* 0)
+        (expand-trace ',args))
+      `(list-traced-functions)))
 
 (defun expand-trace (args)
   (let ((results ())
@@ -44,7 +45,7 @@
     (dolist (arg args)
       (if (trace-1 arg breakp)
           (push arg results)))
-    `',results))
+    results))
 
 (defun trace-1 (symbol breakp)
   (unless (fboundp symbol)
@@ -55,20 +56,21 @@
              (trace-function
               (lambda (&rest args)
                 (with-standard-io-syntax
-                    (%format t (indent "~D: ~S~%") *trace-depth*
-                             (append (list symbol) args)))
+                    (%format *trace-output* (indent "~D: ~S~%") *trace-depth*
+                             (cons symbol args)))
                 (when breakp
                   (break))
                 (incf *trace-depth*)
                 (let ((r (multiple-value-list (apply untraced-function args))))
                   (decf *trace-depth*)
                   (with-standard-io-syntax
-                    (%format t (indent "~D: ~A returned") *trace-depth* symbol)
+                    (%format *trace-output* (indent "~D: ~A returned") *trace-depth* symbol)
                       (dolist (val r)
-                        (%format t " ~S" val))
-                      (%format t "~%"))
+                        (%format *trace-output* " ~S" val))
+                    (terpri *trace-output*))
                   (values-list r)))))
-        (setf (symbol-function symbol) trace-function)
+        (let ((*warn-on-redefinition* nil))
+          (setf (symbol-function symbol) trace-function))
         (setf (get symbol *untraced-function*) untraced-function)
         (push symbol *traced-functions*)
         symbol)))
@@ -79,20 +81,30 @@
                string))
 
 (defmacro untrace (&rest args)
-  (setf *trace-depth* 0)
-  (if (null args)
-      (untrace-all)
-      (dolist (arg args)
-        (if (member arg *traced-functions*)
-            (untrace-1 arg)
-            (%format t "~S is not being traced.~%" arg)))))
+  (cond ((null args)
+         `(progn
+            (untrace-all)
+            (setf *trace-depth* 0)
+            t))
+        (t
+         `(progn
+            (untrace-n ',args)
+            (setf *trace-depth* 0)
+            t))))
 
 (defun untrace-all ()
   (dolist (arg *traced-functions*)
     (untrace-1 arg)))
 
+(defun untrace-n (args)
+  (dolist (arg args)
+    (if (member arg *traced-functions*)
+        (untrace-1 arg)
+        (%format t "~S is not being traced.~%" arg))))
+
 (defun untrace-1 (symbol)
-  (let ((untraced-function (get symbol *untraced-function*)))
+  (let ((untraced-function (get symbol *untraced-function*))
+        (*warn-on-redefinition* nil))
     (setf (symbol-function symbol) untraced-function)
     (remprop symbol *untraced-function*)
     (setf *traced-functions* (remove symbol *traced-functions*))))
