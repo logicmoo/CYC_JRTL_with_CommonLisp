@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.88 2003-10-10 14:17:32 piso Exp $
+ * $Id: Symbol.java,v 1.89 2003-10-24 18:32:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -439,10 +439,13 @@ public class Symbol extends LispObject
         return sb.toString();
     }
 
-    public boolean equals(Object obj)
+    public final int hashCode()
     {
-        if (obj instanceof Symbol)
-            return ((Symbol)obj).getName() == name;
-        return false;
+        return name.hashCode();
+    }
+
+    public final boolean equals(Object obj)
+    {
+        return this == obj;
     }
 }
