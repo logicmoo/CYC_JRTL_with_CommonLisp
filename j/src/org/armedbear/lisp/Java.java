@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.5 2003-02-15 17:47:28 piso Exp $
+ * $Id: Java.java,v 1.6 2003-03-14 18:51:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -262,9 +262,9 @@ public final class Java extends Module
         if (obj instanceof Boolean)
             return ((Boolean)obj).booleanValue() ? T : NIL;
         if (obj instanceof Long)
-            return new Fixnum(((Long)obj).longValue());
+            return new Bignum(((Long)obj).longValue());
         if (obj instanceof Integer)
-            return new Fixnum(((Integer)obj).longValue());
+            return new Fixnum(((Integer)obj).intValue());
         if (obj instanceof String)
             return new LispString((String)obj);
         return new JavaObject(obj);
