@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.68 2004-06-17 17:42:52 piso Exp $
+;;; $Id: precompiler.lisp,v 1.69 2004-06-23 23:59:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -746,6 +746,7 @@
 (install-handler 'load-time-value      'precompile-load-time-value)
 
 (install-handler 'declare              'precompile-identity)
+(install-handler 'defmethod            'precompile-identity)
 (install-handler 'defun                'precompile-identity)
 (install-handler 'go                   'precompile-identity)
 (install-handler 'quote                'precompile-identity)
