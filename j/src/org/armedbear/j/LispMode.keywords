@@ -489,6 +489,7 @@ simple-condition-format-control
 simple-string-p
 simple-vector-p
 sixth
+sleep
 slot-exists-p
 slot-value
 some
