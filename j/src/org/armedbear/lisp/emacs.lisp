@@ -1,7 +1,7 @@
 ;;; emacs.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: emacs.lisp,v 1.8 2005-03-06 04:38:25 piso Exp $
+;;; $Id: emacs.lisp,v 1.9 2005-03-06 19:40:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,7 +39,6 @@
 (defparameter *control-x-map* (make-keymap))
 (defparameter *help-map* (make-keymap))
 (defparameter *java-mode-map* (make-keymap))
-(defparameter *lisp-mode-map* (make-keymap))
 
 (define-key *global-map* "Escape" *esc-map*)
 (define-key *global-map* "Ctrl X" *control-x-map*)
@@ -372,7 +371,7 @@
 ;; Help.
 (define-keys *help-map*
   '(("a"                        "apropos")
-    ("b"                        "listBindings")
+    ("b"                        "describeBindings")
     ("i"                        "help")
     ("k"                        "describeKey")))
 
@@ -401,6 +400,7 @@
 ;; km.mapKey(KeyEvent.VK_BRACELEFT, CTRL_MASK | SHIFT_MASK, "insertBraces");
 
 ;; km.mapKey(KeyEvent.VK_F12, 0, "wrapComment");
+(define-key *java-mode-map* "F12" "wrapComment")
 
 ;; // Duplicate mapping to support IBM 1.3 for Linux.
 ;; km.mapKey(0xffc9, 0, "wrapComment"); // F12
@@ -444,6 +444,10 @@
 (defun java-mode-map ()
   *java-mode-map*)
 
+;;; Lisp mode
+
+(defparameter *lisp-mode-map* (make-keymap))
+
 ;; km.mapKey(KeyEvent.VK_TAB, 0, "tab");
 (define-key *lisp-mode-map* "Tab" "tab")
 ;; km.mapKey(KeyEvent.VK_TAB, CTRL_MASK, "insertTab");
@@ -474,7 +478,6 @@
 ;; km.mapKey(KeyEvent.VK_0, CTRL_MASK | SHIFT_MASK, "movePastCloseAndReindent");
 
 (defun lisp-mode-map ()
-  (format t "lisp-mode-map called~%")
   *lisp-mode-map*)
 
 (provide 'emacs)
