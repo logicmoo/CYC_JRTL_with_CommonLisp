@@ -231,6 +231,7 @@ macrolet
 make-array
 make-condition
 make-hash-table
+make-list
 make-package
 make-pathname
 make-sequence
