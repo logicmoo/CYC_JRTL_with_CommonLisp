@@ -2,7 +2,7 @@
  * DirectoryTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DirectoryTree.java,v 1.5 2003-05-16 17:03:55 piso Exp $
+ * $Id: DirectoryTree.java,v 1.6 2003-07-23 15:52:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,7 @@ package org.armedbear.j;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -338,43 +339,55 @@ public final class DirectoryTree extends SidebarTree implements NavigationCompon
     }
 
     public void mouseDragged(MouseEvent e) {}
-}
 
-class DirectoryTreeCellRenderer extends DefaultTreeCellRenderer
-{
-    DirectoryTree tree;
-    Editor editor;
-
-    private static Color noFocusSelectionBackground = new Color(208, 208, 208);
-
-    private Color oldBackgroundSelectionColor;
-
-    DirectoryTreeCellRenderer(DirectoryTree tree)
+    private static class DirectoryTreeCellRenderer extends DefaultTreeCellRenderer
     {
-        super();
-        this.tree = tree;
-        editor = tree.getEditor();
-        oldBackgroundSelectionColor = getBackgroundSelectionColor();
+        private DirectoryTree tree;
+        private Editor editor;
 
-        setOpenIcon(Utilities.getIconFromFile("dir_open.png"));
-        setClosedIcon(Utilities.getIconFromFile("dir_close.png"));
-        setLeafIcon(Utilities.getIconFromFile("dir_close.png"));
-    }
+        private static Color noFocusSelectionBackground =
+            new Color(208, 208, 208);
 
-    public Component getTreeCellRendererComponent(JTree tree, Object value,
-        boolean selected, boolean expanded, boolean leaf, int row,
-        boolean hasFocus)
-    {
-        super.getTreeCellRendererComponent(tree, value, selected, expanded,
-            leaf, row, hasFocus);
-        if (selected)
-            super.setForeground(getTextSelectionColor());
-        else
-            super.setForeground(getTextNonSelectionColor());
-        if (editor.getFocusedComponent() == tree)
-            setBackgroundSelectionColor(oldBackgroundSelectionColor);
-        else
-            setBackgroundSelectionColor(noFocusSelectionBackground);
-        return this;
+        private Color oldBackgroundSelectionColor;
+
+        public DirectoryTreeCellRenderer(DirectoryTree tree)
+        {
+            super();
+            this.tree = tree;
+            editor = tree.getEditor();
+            oldBackgroundSelectionColor = getBackgroundSelectionColor();
+
+            setOpenIcon(Utilities.getIconFromFile("dir_open.png"));
+            setClosedIcon(Utilities.getIconFromFile("dir_close.png"));
+            setLeafIcon(Utilities.getIconFromFile("dir_close.png"));
+        }
+
+        public Component getTreeCellRendererComponent(
+            JTree tree,
+            Object value,
+            boolean selected,
+            boolean expanded,
+            boolean leaf,
+            int row,
+            boolean hasFocus)
+        {
+            super.getTreeCellRendererComponent(tree, value, selected, expanded,
+                                               leaf, row, hasFocus);
+            if (selected)
+                super.setForeground(getTextSelectionColor());
+            else
+                super.setForeground(getTextNonSelectionColor());
+            if (editor.getFocusedComponent() == tree)
+                setBackgroundSelectionColor(oldBackgroundSelectionColor);
+            else
+                setBackgroundSelectionColor(noFocusSelectionBackground);
+            return this;
+        }
+
+        public void paintComponent(Graphics g)
+        {
+            Display.setRenderingHints(g);
+            super.paintComponent(g);
+        }
     }
 }
