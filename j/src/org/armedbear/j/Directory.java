@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directory.java,v 1.22 2003-06-16 15:44:00 piso Exp $
+ * $Id: Directory.java,v 1.23 2003-06-17 16:39:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1363,7 +1363,7 @@ public final class Directory extends Buffer
         }
     }
 
-    public void doShellCommand(Editor editor)
+    private void doShellCommand(Editor editor)
     {
         List names = getMarkedNames();
         if (names == null) {
