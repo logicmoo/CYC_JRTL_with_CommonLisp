@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.116 2003-10-06 13:55:22 piso Exp $
+;;; $Id: boot.lisp,v 1.117 2003-10-14 16:04:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -112,6 +112,10 @@
 (sys::%load "define-modify-macro.lisp")
 
 (defpackage "JVM" (:use "COMMON-LISP" "EXTENSIONS"))
+
+(defvar jvm::*auto-compile* nil)
+
+(export 'jvm::*auto-compile* "JVM")
 
 ;;; PROVIDE, REQUIRE (from SBCL)
 (defun provide (module-name)
