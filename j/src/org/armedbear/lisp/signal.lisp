@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: signal.lisp,v 1.2 2004-03-01 17:25:55 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: signal.lisp,v 1.3 2004-03-01 17:26:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
