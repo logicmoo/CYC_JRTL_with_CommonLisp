@@ -2,7 +2,7 @@
  * CommmandInterpreter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandInterpreter.java,v 1.11 2002-12-15 02:22:44 piso Exp $
+ * $Id: CommandInterpreter.java,v 1.12 2002-12-19 02:34:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -284,6 +284,10 @@ public class CommandInterpreter extends Buffer
 
     private void getInputFromHistory(int direction)
     {
+        if (posEndOfOutput == null) {
+            // No prompt yet.
+            return;
+        }
         final Editor editor = Editor.currentEditor();
         final Line dotLine = editor.getDotLine();
         if (dotLine.next() != null) {
