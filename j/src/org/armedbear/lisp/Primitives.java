@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.585 2004-02-27 02:43:31 piso Exp $
+ * $Id: Primitives.java,v 1.586 2004-02-27 14:35:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3795,30 +3795,6 @@ public final class Primitives extends Lisp
         }
         return result.nreverse();
     }
-
-    // ### truncate
-    private static final Primitive TRUNCATE = new Primitive("truncate","number &optional divisor") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            final int length = args.length;
-            if (length < 1 || length > 2) {
-                signal(new WrongNumberOfArgumentsException(this));
-                return NIL;
-            }
-            LispObject n = args[0];
-            LispObject d = length == 1 ? Fixnum.ONE : args[1];
-            if (n instanceof Fixnum)
-                return ((Fixnum)n).truncate(d);
-            if (n instanceof Bignum)
-                return ((Bignum)n).truncate(d);
-            if (n instanceof Ratio)
-                return ((Ratio)n).truncate(d);
-            if (n instanceof LispFloat)
-                return ((LispFloat)n).truncate(d);
-            signal(new TypeError(n, "number"));
-            return NIL;
-        }
-    };
 
     // ### expt
     // expt base-number power-number => result
