@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.28 2003-07-06 17:30:46 piso Exp $
+ * $Id: Autoload.java,v 1.29 2003-07-06 17:38:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,6 +185,7 @@ public final class Autoload extends Function
         autoload("sxhash", "HashTable");
         autoload("two-way-stream-input-stream", "TwoWayStream");
         autoload("two-way-stream-output-stream", "TwoWayStream");
+        autoload("unuse-package", "PackageFunctions");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
         autoload(PACKAGE_SYS, "%make-hash-table", "HashTable");
         autoload(PACKAGE_SYS, "%nstring-capitalize", "StringFunctions");
