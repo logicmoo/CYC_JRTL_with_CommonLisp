@@ -2,7 +2,7 @@
  * BitVector.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: BitVector.java,v 1.10 2003-03-15 03:56:01 piso Exp $
+ * $Id: BitVector.java,v 1.11 2003-03-18 04:00:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public final class BitVector extends Vector
         return fillPointer < 0;
     }
 
-    public boolean equal(LispObject obj)
+    public boolean equal(LispObject obj) throws LispError
     {
         if (this == obj)
             return true;
@@ -124,8 +124,12 @@ public final class BitVector extends Vector
     {
         StringBuffer sb = new StringBuffer("#*");
         final int limit = length();
-        for (int i = 0; i < limit; i++)
-            sb.append(get(i));
+        for (int i = 0; i < limit; i++) {
+            try {
+                sb.append(get(i));
+            }
+            catch (LispError e) {}
+        }
         return sb.toString();
     }
 }
