@@ -2,7 +2,7 @@
  * cxr.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: cxr.java,v 1.8 2004-11-03 15:39:02 piso Exp $
+ * $Id: cxr.java,v 1.9 2004-12-16 15:39:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -174,7 +174,7 @@ public final class cxr extends Lisp
     };
 
     // ### first
-    private static final Primitive FIRST = new Primitive("first","list")
+    private static final Primitive FIRST = new Primitive("first", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -183,7 +183,7 @@ public final class cxr extends Lisp
     };
 
     // ### second
-    private static final Primitive SECOND = new Primitive("second","list")
+    private static final Primitive SECOND = new Primitive("second", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
@@ -192,25 +192,25 @@ public final class cxr extends Lisp
     };
 
     // ### third
-    private static final Primitive THIRD = new Primitive("third","list")
+    private static final Primitive THIRD = new Primitive("third", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return arg.cdr().cdr().car();
+            return arg.cdr().cadr();
         }
     };
 
     // ### fourth
-    private static final Primitive FOURTH = new Primitive("fourth","list")
+    private static final Primitive FOURTH = new Primitive("fourth", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return arg.cdr().cdr().cdr().car();
+            return arg.cdr().cdr().cadr();
         }
     };
 
     // ### rest
-    private static final Primitive REST = new Primitive("rest","list")
+    private static final Primitive REST = new Primitive("rest", "list")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
