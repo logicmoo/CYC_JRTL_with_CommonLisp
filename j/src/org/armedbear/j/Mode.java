@@ -2,7 +2,7 @@
  * Mode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Mode.java,v 1.1.1.1 2002-09-24 16:09:36 piso Exp $
+ * $Id: Mode.java,v 1.2 2002-10-01 19:20:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -174,7 +174,7 @@ public interface Mode
 
     /**
      * Returns a navigation component for the specified <code>Editor</code>,
-     * or <code>null</code> if there is navigation component for this mode.
+     * or <code>null</code> if there is no navigation component for this mode.
      * <p>
      * The navigation component appears in the lower pane of the sidebar.
      *
@@ -185,10 +185,10 @@ public interface Mode
 
     /**
      * Most useful for programming language modes, this method returns
-     * either a <code>Tagger</code> for this mode, or null.  If a
+     * either a <code>Tagger</code> for this mode, or <code>null</code>.  If a
      * <code>Tagger</code> is returned, then
-     * {@link #isTaggable() isTaggable()} needs to return <code>true</code>.
-     * Otherwise is should return <code>false</code>.
+     * {@link #isTaggable() isTaggable()} must return <code>true</code>.
+     * Otherwise it should return <code>false</code>.
      *
      * @param buffer    the current buffer
      * @return          a <code>Tagger</code> specific for this mode or
@@ -199,7 +199,7 @@ public interface Mode
 
     /**
      * Returns whether or not this mode has a {@link Tagger Tagger}
-     * associated with it.  This should return <code>false</code> if
+     * associated with it.  This returns <code>false</code> if
      * {@link #getTagger(SystemBuffer) getTagger()} returns <code>null</code>,
      * and <code>true</code> otherwise.
      *
@@ -230,7 +230,7 @@ public interface Mode
     /**
      * Returns whether or not this mode will potentially perform context
      * sensitive indentation on a given <code>Line</code> in a given
-     * <code>Buffer</code>.  This should return <code>true</code> if
+     * <code>Buffer</code>.  This returns <code>true</code> if
      * {@link #getCorrectIndentation(Line, Buffer) getCorrectIndentation()}
      * might return something other than zero, <code>false</code> otherwise.
      *
@@ -242,7 +242,7 @@ public interface Mode
 
     /**
      * Returns whether or not this mode will potentially perform context
-     * sensitive indentation for a paste operation.  This should return
+     * sensitive indentation for a paste operation.  This returns
      * <code>true</code> if
      * {@link #getCorrectIndentation(Line, Buffer) getCorrectIndentation()}
      * might return something other than zero, <code>false</code> otherwise.
@@ -460,7 +460,8 @@ public interface Mode
 
     /**
      * Returns a string that describes something about the current mouse
-     * position that is suitable to be displayed in the <code>StatusBar</code>.
+     * position that is suitable to be displayed in the <code>StatusBar</code>,
+     * or <code>null</code> if there is none.
      *
      * @param editor    the <code>Editor</code> for context.
      * @return          information relevant to the current mouse position.
@@ -469,7 +470,8 @@ public interface Mode
 
     /**
      * Returns a string that describes something about the current mouse
-     * position that is suitable to be displayed as a tool tip.
+     * position that is suitable to be displayed as a tool tip, or
+     * <code>null</code> if there is none.
      *
      * @param editor    the <code>Editor</code> for context.
      * @return          information relevant to the current mouse position.

@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: AbstractMode.java,v 1.1.1.1 2002-09-24 16:08:19 piso Exp $
+ * $Id: AbstractMode.java,v 1.2 2002-10-01 19:21:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -200,6 +200,25 @@ public abstract class AbstractMode implements Constants, Mode
         return MenuBar.createDefaultMenuBar(frame);
     }
 
+    /**
+     * {@inheritDoc}
+     * In order for this to populate a menu, the text of the menu must be
+     * one of the following:<br>
+     * <ul>
+     * <li>File
+     * <li>Edit
+     * <li>View
+     * <li>Search
+     * <li>Go
+     * <li>Help
+     * </ul>
+     * This does not take into account whether or not <code>menu<code>
+     * currently has items on it, so repeated calls will result in duplicate
+     * menu items.
+     *
+     * @param editor    {@inheritDoc}
+     * @param menu      {@inheritDoc}
+     */
     public void populateMenu(Editor editor, Menu menu)
     {
         final String text = menu.getText();
@@ -343,6 +362,25 @@ public abstract class AbstractMode implements Constants, Mode
         menu.add(editor, "About J", 'A', "about");
     }
 
+    /**
+     * {@inheritDoc}
+     * This creates a menu with the given items:<br>
+     * <li>Cut
+     * <li>Copy
+     * <li>Paste
+     * <li>--separator--
+     * <li>List occurances
+     * <li>Find tag (if applicable)
+     * <li>--separator--
+     * <li>Properties (if applicable)
+     * <ul>
+     * The names and actions are sensitive to whether or not text is currently
+     * selected, the buffer is taggable, if the buffer has properties, and
+     * whether or not there is a search in progress.
+     *
+     * @param editor    {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public JPopupMenu getContextMenu(Editor editor)
     {
         final Buffer buffer = editor.getBuffer();
@@ -418,6 +456,13 @@ public abstract class AbstractMode implements Constants, Mode
         return popup;
     }
 
+    /**
+     * {@inheritDoc}
+     * This returns the default toolbar from <code>frame</code>.
+     *
+     * @param frame     {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public ToolBar getToolBar(Frame frame)
     {
         return frame.getDefaultToolBar();
@@ -431,51 +476,118 @@ public abstract class AbstractMode implements Constants, Mode
             return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>null</code>.
+     *
+     * @param buffer    {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public Tagger getTagger(SystemBuffer buffer)
     {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>false</code>.
+     *
+     * @return          {@inheritDoc}
+     */
     public boolean isTaggable()
     {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>false</code>.
+     *
+     * @return          {@inheritDoc}
+     */
     public boolean hasQualifiedNames()
     {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>true</code> if <code>s</code> contains either
+     * a period '.' or a double colon "::".
+     *
+     * @param s         {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public boolean isQualifiedName(String s)
     {
         return s.indexOf('.') >= 0 || s.indexOf("::") >= 0;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>false</code>.
+     *
+     * @return          {@inheritDoc}
+     */
     public boolean canIndent()
     {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>false</code>.
+     *
+     * @return          {@inheritDoc}
+     */
     public boolean canIndentPaste()
     {
         return canIndent();
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is 0.
+     *
+     * @param line      {@inheritDoc}
+     * @param buffer    {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is to return an instance of
+     * {@link DefaultSyntaxIterator DefaultSyntaxIterator}.
+     *
+     * @param pos       {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public SyntaxIterator getSyntaxIterator(Position pos)
     {
         return new DefaultSyntaxIterator(pos);
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>null</code>.
+     *
+     * @return          {@inheritDoc}
+     */
     public String getCommentStart()
     {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>null</code>.
+     *
+     * @return          {@inheritDoc}
+     */
     public String getCommentEnd()
     {
         return null;
@@ -601,6 +713,14 @@ public abstract class AbstractMode implements Constants, Mode
             return null;
     }
 
+    /**
+     * Sets the given property name to the given property value.  The property
+     * can then be accessed by calling
+     * {@link getStringProperty(Property) getStringProperty}.
+     *
+     * @param property  the property to set.
+     * @param value     the value to set it to.
+     */
     public void setProperty(Property property, String value)
     {
         if (properties == null)
@@ -608,6 +728,14 @@ public abstract class AbstractMode implements Constants, Mode
         properties.setProperty(property, value);
     }
 
+    /**
+     * Sets the given property name to the given property value.  The property
+     * can then be accessed by calling
+     * {@link getBooleanProperty(Property) getBooleanProperty}.
+     *
+     * @param property  the property to set.
+     * @param value     the value to set it to.
+     */
     public void setProperty(Property property, boolean value)
     {
         if (properties == null)
@@ -615,6 +743,14 @@ public abstract class AbstractMode implements Constants, Mode
         properties.setProperty(property, value);
     }
 
+    /**
+     * Sets the given property name to the given property value.  The property
+     * can then be accessed by calling
+     * {@link getIntegerProperty(Property) getIntegerProperty}.
+     *
+     * @param property  the property to set.
+     * @param value     the value to set it to.
+     */
     public void setProperty(Property property, int value)
     {
         if (properties == null)
@@ -622,6 +758,12 @@ public abstract class AbstractMode implements Constants, Mode
         properties.setProperty(property, value);
     }
 
+    /**
+     * Returns the default value for the given <code>Property</code>.
+     *
+     * @param property  the <code>Property</code> to get the default value for.
+     * @return          the default value.
+     */
     protected Object getDefaultValue(Property property)
     {
         return property.getDefaultValue();
@@ -646,16 +788,38 @@ public abstract class AbstractMode implements Constants, Mode
             return fullKey;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is the result of Character.isJavaIdentifierStart(char).
+     *
+     * @return          {@inheritDoc}
+     */
     public boolean isIdentifierStart(char c)
     {
         return Character.isJavaIdentifierStart(c);
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is the result of Character.isJavaIdentifierPart(char).
+     *
+     * @return          {@inheritDoc}
+     */
     public boolean isIdentifierPart(char c)
     {
         return Character.isJavaIdentifierPart(c);
     }
 
+    /**
+     * {@inheritDoc}
+     * The default implementation considers both single and double quotes
+     * (which is wrong for Lisp) and only looks at the current line (which
+     * is wrong for C and C++).
+     *
+     * @param buffer    {@inheritDoc}
+     * @param pos       {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public boolean isInQuote(Buffer buffer, Position pos)
     {
         // The default implementation considers both single and double quotes
@@ -683,21 +847,53 @@ public abstract class AbstractMode implements Constants, Mode
         return inQuote;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>false</code>.
+     *
+     * @param buffer    {@inheritDoc}
+     * @param pos       {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public boolean isInComment(Buffer buffer, Position pos)
     {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>false</code>.
+     *
+     * @param line      {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public boolean isCommentLine(Line line)
     {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is to return the original character.
+     *
+     * @param editor    {@inheritDoc}
+     * @param c         {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public char fixCase(Editor editor, char c)
     {
         return c;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is to return the tag before the cursor position, if the
+     * buffer has tags.
+     *
+     * @param editor    {@inheritDoc}
+     * @param verbose   {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public String getContextString(Editor editor, boolean verbose)
     {
         final List tags = editor.getBuffer().getTags();
@@ -722,16 +918,40 @@ public abstract class AbstractMode implements Constants, Mode
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>null</code>.
+     *
+     * @param editor    {@inheritDoc}
+     * @param pos       {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public String getMouseMovedContextString(Editor editor, Position pos)
     {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is <code>null</code>.
+     *
+     * @param editor    {@inheritDoc}
+     * @param e         {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public String getToolTipText(Editor editor, MouseEvent e)
     {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * The default is to do nothing.
+     *
+     * @param buffer    {@inheritDoc}
+     * @param file      {@inheritDoc}
+     * @return          {@inheritDoc}
+     */
     public void loadFile(Buffer buffer, File file)
     {
     }
