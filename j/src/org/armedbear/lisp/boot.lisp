@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.160 2004-04-02 14:58:02 piso Exp $
+;;; $Id: boot.lisp,v 1.161 2004-04-20 15:11:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@
 (defun make-package (package-name &key nicknames use)
   (sys::%make-package package-name nicknames use))
 
-(defconstant *keyword-package*
+(defconstant sys::*keyword-package*
   (find-package "KEYWORD"))
 
 ;;; READ-CONDITIONAL (from OpenMCL)
@@ -97,7 +97,7 @@
            (values)))))
 
 (defun read-feature (stream)
-  (let* ((f (let* ((*package* *keyword-package*))
+  (let* ((f (let* ((*package* sys::*keyword-package*))
               (read stream t nil t))))
     (labels ((eval-feature (form)
                            (cond ((atom form)
