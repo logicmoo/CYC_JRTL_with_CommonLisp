@@ -86,8 +86,6 @@ public abstract class AbstractVector extends AbstractArray
 
     public abstract int capacity();
 
-    public abstract void ensureCapacity(int minCapacity) throws ConditionThrowable;
-
     public abstract LispObject get(int index) throws ConditionThrowable;
 
     public abstract void set(int index, LispObject newValue) throws ConditionThrowable;
