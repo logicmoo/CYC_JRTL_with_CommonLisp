@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.25 2003-08-22 13:59:12 piso Exp $
+ * $Id: LispFloat.java,v 1.26 2003-08-23 00:55:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,14 +83,14 @@ public final class LispFloat extends LispObject
         return false;
     }
 
-    public boolean equalp(LispObject obj)
+    public boolean equalp(LispObject obj) throws LispError
     {
         if (obj instanceof LispFloat)
             return value == ((LispFloat)obj).value;
         if (obj instanceof Fixnum)
             return value == ((Fixnum)obj).getValue();
         if (obj instanceof Bignum)
-            return value == ((Bignum)obj).getValue().floatValue();
+            return value == ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
             return value == ((Ratio)obj).floatValue();
         return false;
@@ -130,7 +130,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return new LispFloat(value + ((Fixnum)obj).getValue());
         if (obj instanceof Bignum)
-            return new LispFloat(value + ((Bignum)obj).getValue().floatValue());
+            return new LispFloat(value + ((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(value + ((Ratio)obj).floatValue());
         if (obj instanceof Complex) {
@@ -147,7 +147,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return new LispFloat(value - ((Fixnum)obj).getValue());
         if (obj instanceof Bignum)
-            return new LispFloat(value - ((Bignum)obj).getValue().floatValue());
+            return new LispFloat(value - ((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(value - ((Ratio)obj).floatValue());
         if (obj instanceof Complex) {
@@ -165,7 +165,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return new LispFloat(value * ((Fixnum)obj).getValue());
         if (obj instanceof Bignum)
-            return new LispFloat(value * ((Bignum)obj).getValue().floatValue());
+            return new LispFloat(value * ((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(value * ((Ratio)obj).floatValue());
         throw new TypeError(obj, "number");
@@ -178,7 +178,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return new LispFloat(value / ((Fixnum)obj).getValue());
         if (obj instanceof Bignum)
-            return new LispFloat(value / ((Bignum)obj).getValue().floatValue());
+            return new LispFloat(value / ((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(value / ((Ratio)obj).floatValue());
         throw new TypeError(obj, "number");
@@ -191,7 +191,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value == ((Fixnum)obj).getValue();
         if (obj instanceof Bignum)
-            return value == ((Bignum)obj).getValue().floatValue();
+            return value == ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
             return value == ((Ratio)obj).floatValue();
         if (obj instanceof Complex)
@@ -211,7 +211,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value < ((Fixnum)obj).getValue();
         if (obj instanceof Bignum)
-            return value < ((Bignum)obj).getValue().floatValue();
+            return value < ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
             return value < ((Ratio)obj).floatValue();
         throw new TypeError(obj, "real");
@@ -224,7 +224,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value > ((Fixnum)obj).getValue();
         if (obj instanceof Bignum)
-            return value > ((Bignum)obj).getValue().floatValue();
+            return value > ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
             return value > ((Ratio)obj).floatValue();
         throw new TypeError(obj, "real");
@@ -237,7 +237,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value <= ((Fixnum)obj).getValue();
         if (obj instanceof Bignum)
-            return value <= ((Bignum)obj).getValue().floatValue();
+            return value <= ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
             return value <= ((Ratio)obj).floatValue();
         throw new TypeError(obj, "real");
@@ -250,7 +250,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return value >= ((Fixnum)obj).getValue();
         if (obj instanceof Bignum)
-            return value >= ((Bignum)obj).getValue().floatValue();
+            return value >= ((Bignum)obj).floatValue();
         if (obj instanceof Ratio)
             return value >= ((Ratio)obj).floatValue();
         throw new TypeError(obj, "real");
@@ -352,7 +352,7 @@ public final class LispFloat extends LispObject
         if (obj instanceof Fixnum)
             return new LispFloat(((Fixnum)obj).getValue());
         if (obj instanceof Bignum)
-            return new LispFloat(((Bignum)obj).getValue().floatValue());
+            return new LispFloat(((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new LispFloat(((Ratio)obj).floatValue());
         throw new TypeError(obj, "real number");
