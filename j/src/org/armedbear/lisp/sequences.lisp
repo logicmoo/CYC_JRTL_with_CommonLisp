@@ -1,7 +1,7 @@
 ;;; sequences.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sequences.lisp,v 1.44 2003-06-10 16:07:19 piso Exp $
+;;; $Id: sequences.lisp,v 1.45 2003-06-10 16:23:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,9 +24,7 @@
           concatenate
           map map-into
           position position-if position-if-not
-          find find-if find-if-not
-          count count-if count-if-not
-          mismatch))
+          find find-if find-if-not))
 
 (autoload 'make-sequence "make-sequence.lisp")
 
@@ -74,6 +72,33 @@
 
 (autoload 'copy-seq "copy-seq.lisp")
 (autoload 'fill "fill.lisp")
+
+
+(defun bad-seq-limit (x &optional y)
+  (error "bad sequence limit ~a" (if y (list x y) x)))
+
+(defun the-end (x y)
+  (cond ((fixnump x)
+	 (unless (<= x (length y))
+	   (bad-seq-limit x))
+	 x)
+	((null x)
+	 (length y))
+	(t (bad-seq-limit x))))
+
+(defun the-start (x)
+  (cond ((fixnump x)
+	 (unless (>= x 0)
+           (bad-seq-limit x))
+	 x)
+	((null x) 0)
+	(t (bad-seq-limit x))))
+
+(defmacro with-start-end (start end seq &body body)
+  `(let* ((,start (if ,start (the-start ,start) 0))
+          (,end (the-end ,end ,seq)))
+     (unless (<= ,start ,end) (bad-seq-limit ,start ,end))
+     ,@ body))
 
 
 ;;; REPLACE (from ECL)
@@ -368,130 +393,11 @@
 		  (list-find-if-not test sequence)
 		  (vector-find-if-not test sequence))))
 
-(defmacro vector-count-if (not-p from-end-p predicate sequence)
-  (let ((next-index (if from-end-p '(1- index) '(1+ index)))
-        (pred `(funcall ,predicate (apply-key key (aref ,sequence index)))))
-    `(let ((%start ,(if from-end-p '(1- end) 'start))
-           (%end ,(if from-end-p '(1- start) 'end)))
-       (do ((index %start ,next-index)
-            (count 0))
-         ((= index %end) count)
-         (,(if not-p 'unless 'when) ,pred
-           (setq count (1+ count)))))))
 
-(defmacro list-count-if (not-p from-end-p predicate sequence)
-  (let ((pred `(funcall ,predicate (apply-key key (pop sequence)))))
-    `(let ((%start ,(if from-end-p '(- length end) 'start))
-           (%end ,(if from-end-p '(- length start) 'end))
-           (sequence ,(if from-end-p '(reverse sequence) 'sequence)))
-       (do ((sequence (nthcdr %start ,sequence))
-            (index %start (1+ index))
-            (count 0))
-         ((or (= index %end) (null sequence)) count)
-         (,(if not-p 'unless 'when) ,pred
-           (setq count (1+ count)))))))
+(autoload 'count "count.lisp")
+(autoload 'count-if "count.lisp")
+(autoload 'count-if-not "count.lisp")
 
-(defun count (item sequence &key from-end (test #'eql test-p) (test-not nil test-not-p)
-		   (start 0) end key)
-  (when (and test-p test-not-p)
-    (error "test and test-not both supplied"))
-  (let* ((length (length sequence))
-	 (end (or end length)))
-    (let ((%test (if test-not-p
-		     (lambda (x)
-		       (not (funcall test-not item x)))
-		     (lambda (x)
-		       (funcall test item x)))))
-      (if (listp sequence)
-          (if from-end
-              (list-count-if nil t %test sequence)
-              (list-count-if nil nil %test sequence))
-          (if from-end
-              (vector-count-if nil t %test sequence)
-              (vector-count-if nil nil %test sequence))))))
-
-(defun count-if (test sequence &key from-end (start 0) end key)
-  (let* ((length (length sequence))
-	 (end (or end length)))
-    (seq-dispatch sequence
-		  (if from-end
-		      (list-count-if nil t test sequence)
-		      (list-count-if nil nil test sequence))
-		  (if from-end
-		      (vector-count-if nil t test sequence)
-		      (vector-count-if nil nil test sequence)))))
-
-(defun count-if-not (test sequence &key from-end (start 0) end key)
-  (let* ((length (length sequence))
-	 (end (or end length)))
-    (seq-dispatch sequence
-		  (if from-end
-		      (list-count-if t t test sequence)
-		      (list-count-if t nil test sequence))
-		  (if from-end
-		      (vector-count-if t t test sequence)
-		      (vector-count-if t nil test sequence)))))
-
-
-;;; MISMATCH (from ECL)
-
-(defun call-test (test test-not item keyx)
-  (cond (test (funcall test item keyx))
-        (test-not (not (funcall test-not item keyx)))
-        (t (eql item keyx))))
-
-(defun test-error()
-  (error "both test and test are supplied"))
-
-(defun bad-seq-limit (x &optional y)
-  (error "bad sequence limit ~a" (if y (list x y) x)))
-
-(defmacro with-start-end (start end seq &body body)
-  `(let* ((,start (if ,start (the-start ,start) 0))
-          (,end (the-end ,end ,seq)))
-     (unless (<= ,start ,end) (bad-seq-limit ,start ,end))
-     ,@ body))
-
-(defun the-end (x y)
-  (cond ((fixnump x)
-	 (unless (<= x (length y))
-	   (bad-seq-limit x))
-	 x)
-	((null x)
-	 (length y))
-	(t (bad-seq-limit x))))
-
-(defun the-start (x)
-  (cond ((fixnump x)
-	 (unless (>= x 0)
-           (bad-seq-limit x))
-	 x)
-	((null x) 0)
-	(t (bad-seq-limit x))))
-
-(defun mismatch (sequence1 sequence2 &key from-end test test-not
-                           (key #'identity) start1 start2 end1 end2)
-  (and test test-not (test-error))
-  (with-start-end
-   start1 end1 sequence1
-   (with-start-end
-    start2 end2 sequence2
-    (if (not from-end)
-        (do ((i1 start1 (1+ i1))
-             (i2 start2 (1+ i2)))
-          ((or (>= i1 end1) (>= i2 end2))
-           (if (and (>= i1 end1) (>= i2 end2)) nil i1))
-          (unless (call-test test test-not
-                             (funcall key (elt sequence1 i1))
-                             (funcall key (elt sequence2 i2)))
-            (return i1)))
-        (do ((i1 (1- end1) (1- i1))
-             (i2 (1- end2)  (1- i2)))
-          ((or (< i1 start1) (< i2 start2))
-           (if (and (< i1 start1) (< i2 start2)) nil (1+ i1)))
-          (unless (call-test test test-not
-                             (funcall key (elt sequence1 i1))
-                             (funcall key (elt sequence2 i2)))
-            (return (1+ i1))))))))
+(autoload 'mismatch "mismatch.lisp")
 
 (autoload 'search "search.lisp")
