@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.192 2003-05-25 03:00:03 piso Exp $
+ * $Id: Primitives.java,v 1.193 2003-05-25 11:53:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3335,13 +3335,14 @@ public final class Primitives extends Module
                     return T;
                 case 1:
                     return eval(args.car(), env);
-                default:
+                default: {
+                    final LispThread thread = LispThread.currentThread();
                     while (true) {
-                        LispObject result = eval(args.car(), env);
+                        LispObject result = eval(args.car(), env, thread);
                         if (result == NIL) {
                             if (args.cdr() != NIL) {
                                 // Not the last form.
-                                LispThread.currentThread().clearValues();
+                                thread.clearValues();
                             }
                             return NIL;
                         }
@@ -3349,6 +3350,7 @@ public final class Primitives extends Module
                         if (args == NIL)
                             return result;
                     }
+                }
             }
         }
     };
