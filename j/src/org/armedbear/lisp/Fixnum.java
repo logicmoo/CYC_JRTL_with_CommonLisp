@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.85 2004-03-13 17:54:18 piso Exp $
+ * $Id: Fixnum.java,v 1.86 2004-03-14 02:16:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -520,6 +520,31 @@ public final class Fixnum extends LispObject
         return thread.setValues(value1, value2);
     }
 
+    public LispObject MOD(LispObject divisor) throws ConditionThrowable
+    {
+        if (divisor instanceof Fixnum) {
+            final int d = ((Fixnum)divisor).value;
+            final int r;
+            try {
+                r = value % d;
+            }
+            catch (ArithmeticException e) {
+                return signal(new ArithmeticError("Division by zero."));
+            }
+            if (r == 0)
+                return Fixnum.ZERO;
+            if (d < 0) {
+                if (value > 0)
+                    return new Fixnum(r + d);
+            } else {
+                if (value < 0)
+                    return new Fixnum(r + d);
+            }
+            return new Fixnum(r);
+        }
+        return super.MOD(divisor);
+    }
+
     public LispObject ash(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum) {
@@ -543,7 +568,7 @@ public final class Fixnum extends LispObject
         }
         if (obj instanceof Bignum) {
             BigInteger n = BigInteger.valueOf(value);
-            BigInteger count = ((Bignum)obj).getValue();
+            BigInteger count = ((Bignum)obj).value;
             if (count.signum() > 0)
                 return signal(new LispError("Can't represent result of left shift."));
             if (count.signum() < 0)
