@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.62 2003-03-01 03:05:05 piso Exp $
+ * $Id: Primitives.java,v 1.63 2003-03-02 01:49:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2673,6 +2673,15 @@ public final class Primitives extends Module
                 LispObject current = remaining.car();
                 if (current instanceof Cons) {
                     try {
+                        // Handle GO inline if possible.
+                        if (current.car() == Symbol.GO) {
+                            LispObject tag = current.cadr();
+                            LispObject code = tagbody.getCode(tag);
+                            if (code != null) {
+                                remaining = code;
+                                continue;
+                            }
+                        }
                         eval(current, env);
                     }
                     catch (Go go) {
