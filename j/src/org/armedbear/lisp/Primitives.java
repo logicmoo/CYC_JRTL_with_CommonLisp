@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.624 2004-03-31 03:09:00 piso Exp $
+ * $Id: Primitives.java,v 1.625 2004-04-04 00:31:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2793,12 +2793,20 @@ public final class Primitives extends Lisp
     };
 
     // ### fset
-    private static final Primitive2 FSET = new Primitive2("fset", PACKAGE_SYS, false)
+    private static final Primitive2 FSET =
+        new Primitive2("fset", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            checkSymbol(first).setSymbolFunction(second);
+            if (first instanceof Symbol) {
+                ((Symbol)first).setSymbolFunction(second);
+            } else if (first instanceof Cons && first.car() == Symbol.SETF) {
+                // SETF function
+                Symbol symbol = checkSymbol(first.cadr());
+                put(symbol, PACKAGE_SYS.intern("SETF-FUNCTION"), second);
+            } else
+                return signal(new TypeError(first, "valid function name"));
             if (second instanceof Functional)
                 ((Functional)second).setLambdaName(first);
             return second;
