@@ -2,7 +2,7 @@
  * ListOccurrences.java
  *
  * Copyright (C) 2000-2004 Peter Graves
- * $Id: ListOccurrences.java,v 1.7 2004-04-02 03:27:01 piso Exp $
+ * $Id: ListOccurrences.java,v 1.8 2004-04-26 19:51:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -298,7 +298,14 @@ public class ListOccurrences extends Buffer
             editor.setDefaultCursor();
             if (buf != null) {
                 editor.makeNext(buf);
+                Editor otherEditor = editor.getOtherEditor();
+                if (otherEditor != null) {
+                    buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
+                    otherEditor.makeNext(buf);
+                } else
+                    buf.setUnsplitOnClose(true);
                 Editor ed = editor.activateInOtherWindow(buf);
+
                 ed.setDot(buf.getInitialDotPos());
                 ed.moveCaretToDotCol();
                 ed.updateDisplay();
@@ -318,9 +325,16 @@ public class ListOccurrences extends Buffer
             editor.setDefaultCursor();
             if (buf != null) {
                 editor.makeNext(buf);
+                Editor otherEditor = editor.getOtherEditor();
+                if (otherEditor != null) {
+                    buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
+                    otherEditor.makeNext(buf);
+                } else
+                    buf.setUnsplitOnClose(true);
                 Editor ed = editor.activateInOtherWindow(buf);
+
                 ed.setDot(buf.getInitialDotPos(editor.getDotLine(),
-                    editor.getDotOffset()));
+                                               editor.getDotOffset()));
                 ed.moveCaretToDotCol();
                 ed.updateDisplay();
             } else
