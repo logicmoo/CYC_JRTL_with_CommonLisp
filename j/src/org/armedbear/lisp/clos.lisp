@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.26 2003-12-10 13:48:41 piso Exp $
+;;; $Id: clos.lisp,v 1.27 2003-12-10 14:29:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -140,8 +140,9 @@
              (push-on-end (cadr olist) readers)
              (push-on-end `(setf ,(cadr olist)) writers))
             (t
-             (push-on-end `',(car olist) other-options)
-             (push-on-end `',(cadr olist) other-options))))
+             (error 'program-error
+                    "invalid initialization argument ~S for slot named ~S"
+                    (car olist) name))))
         `(list
           :name ',name
           ,@(when initfunction
