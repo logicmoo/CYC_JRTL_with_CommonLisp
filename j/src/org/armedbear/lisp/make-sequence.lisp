@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.4 2003-10-10 02:58:43 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: make-sequence.lisp,v 1.5 2004-01-15 02:14:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package "SYSTEM")
 
-;;; MAKE-SEQUENCE (from ECL)
+;;; Adapted from ECL.
 
 ;;; Returns two values:
 ;;;  VALUE-1 = normalized type name or object
@@ -35,7 +35,6 @@
                (values tp i)))
           (t
            (error "MAKE-SEQUENCE-NORMALIZE-TYPE: bogus type specifier ~A" type)))))
-
 
 (defun make-sequence (type size	&key (initial-element nil iesp))
   (let (element-type sequence)
@@ -62,11 +61,15 @@
                           "the requested length (~A) does not match the specified type NULL"
                           size)))
               (t
+               (when (classp type)
+                 (setf type (class-name type)))
                (setq element-type
                      (cond ((memq type '(BIT-VECTOR SIMPLE-BIT-VECTOR)) 'BIT)
                            ((memq type '(VECTOR SIMPLE-VECTOR)) t)
                            (t
-                            (error 'type-error "~S is not a sequence type" type))))))
+                            (error 'simple-type-error
+                                   :format-control "~S is not a sequence type."
+                                   :format-arguments (list type)))))))
         (multiple-value-bind (name args) (make-sequence-normalize-type type)
           (when (memq name '(LIST CONS))
             (return-from make-sequence
@@ -76,7 +79,9 @@
           (unless (memq name '(ARRAY VECTOR SIMPLE-VECTOR BIT-VECTOR
                                SIMPLE-BIT-VECTOR STRING SIMPLE-STRING
                                BASE-STRING SIMPLE-BASE-STRING))
-            (error 'type-error "~S is not a sequence type" type))
+            (error 'simple-type-error
+                   :format-control "~S is not a sequence type."
+                   :format-arguments (list type)))
           (let ((len nil))
             (cond ((memq name '(STRING SIMPLE-STRING BASE-STRING SIMPLE-BASE-STRING))
                    (setq element-type 'character
