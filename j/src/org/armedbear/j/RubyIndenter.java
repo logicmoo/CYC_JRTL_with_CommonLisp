@@ -3,7 +3,8 @@
  *
  * Copyright (C) 2002 Jens Luedicke <jens@irs-net.com>
  * based on PythonIndenter.java
- * $Id: RubyIndenter.java,v 1.1.1.1 2002-09-24 16:08:22 piso Exp $
+ * Copyright (C) 2005 Peter Graves
+ * $Id: RubyIndenter.java,v 1.2 2005-02-16 11:22:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +47,8 @@ public final class RubyIndenter
             return indentWhen();
         if (lineFirst.equals("end"))
             return indentEnd();
+        if (lineFirst.equals("rescue"))
+            return indentRescue();
         final Line model = findModel(line);
         if (model == null)
             return 0;
@@ -61,7 +64,7 @@ public final class RubyIndenter
         final String modelFirst = getFirstIdentifier(modelText);
         final String[] indentAfter = {
             "begin", "class", "def", "if", "else", "elsif",
-            "for", "module", "unless", "when", "while"
+            "for", "module", "rescue", "unless", "when", "while"
         };
         if (Utilities.isOneOf(modelFirst, indentAfter))
             return modelIndent + indentSize;
@@ -105,6 +108,19 @@ public final class RubyIndenter
                 continue;
             String modelFirst = getFirstIdentifier(model);
             if (modelFirst.equals("def"))
+                return buffer.getIndentation(model);
+            return Math.max(buffer.getIndentation(model) - indentSize, 0);
+        }
+        return 0;
+    }
+
+    private int indentRescue()
+    {
+        for (Line model = line.previous(); model != null; model = model.previous()) {
+            if (model.isBlank() || model.trim().startsWith("#"))
+                continue;
+            String modelFirst = getFirstIdentifier(model);
+            if (modelFirst.equals("begin"))
                 return buffer.getIndentation(model);
             return Math.max(buffer.getIndentation(model) - indentSize, 0);
         }
