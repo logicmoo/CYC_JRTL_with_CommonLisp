@@ -2,7 +2,7 @@
  * OrTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: OrTypeSpecifier.java,v 1.1 2003-07-14 13:19:11 piso Exp $
+ * $Id: OrTypeSpecifier.java,v 1.2 2003-07-15 13:27:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,9 +25,10 @@ public final class OrTypeSpecifier extends CompoundTypeSpecifier
 {
     private final LispObject types;
 
-    public OrTypeSpecifier(LispObject types)
+    public OrTypeSpecifier(Cons args)
     {
-        this.types = types;
+        Debug.assertTrue(args.car() == Symbol.OR);
+        this.types = args.cdr();
     }
 
     public LispObject test(LispObject obj) throws LispError
