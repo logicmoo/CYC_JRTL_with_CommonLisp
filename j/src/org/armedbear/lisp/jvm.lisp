@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.333 2004-12-31 19:13:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.334 2005-01-01 06:07:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -356,15 +356,18 @@
 
 (defun p1-multiple-value-bind (form)
 ;;   (dformat t "p1-multiple-value-bind~%")
-  (let ((*visible-variables* *visible-variables*)
-        (varlist (cadr form))
-        (values-form (caddr form))
-        (body (cdddr form)))
+  (let* ((*visible-variables* *visible-variables*)
+         (block (make-block-node :name '(MULTIPLE-VALUE-BIND)))
+         (*blocks* (cons block *blocks*))
+         (varlist (cadr form))
+         (values-form (caddr form))
+         (body (cdddr form)))
     ;; Process the values-form first. ("The scopes of the name binding and
     ;; declarations do not include the values-form.")
-    (setf values-form (if (consp values-form)
-                          (mapcar #'p1 values-form)
-                          (p1 values-form)))
+;;     (setf values-form (if (consp values-form)
+;;                           (mapcar #'p1 values-form)
+;;                           (p1 values-form)))
+    (setf values-form (p1 values-form))
     (let ((vars ()))
       (dolist (symbol varlist)
         (let ((var (make-variable :name symbol)))
@@ -388,7 +391,8 @@
                    (when (eq sym (variable-name variable))
                      (setf (variable-declared-type variable) (cadr decl)))))))))))
     (setf body (mapcar #'p1 body))
-    (list* 'MULTIPLE-VALUE-BIND varlist values-form body)))
+    (setf (block-form block) (list* 'MULTIPLE-VALUE-BIND varlist values-form body))
+    block))
 
 (defun p1-block (form)
   (let* ((block (make-block-node :name (cadr form)))
@@ -3157,10 +3161,12 @@
         (t
          (aver nil))))
 
-(defun compile-multiple-value-bind (form &key (target *val*) representation)
-  (let* ((block (make-block-node :name '(MULTIPLE-VALUE-BIND)))
+;; (defun compile-multiple-value-bind (form &key (target *val*) representation)
+(defun compile-multiple-value-bind-node (block target)
+  (let* (;;(block (make-block-node :name '(MULTIPLE-VALUE-BIND)))
          (*blocks* (cons block *blocks*))
          (*register* *register*)
+         (form (block-form block))
          (*visible-variables* *visible-variables*)
          (specials ())
          (vars (second form))
@@ -4970,6 +4976,8 @@
                 (compile-tagbody-node form target))
                ((equal (block-name form) '(LET))
                 (compile-let/let*-node form target))
+               ((equal (block-name form) '(MULTIPLE-VALUE-BIND))
+                (compile-multiple-value-bind-node form target))
                (t
                 (compile-block-node form target))))
         ((constantp form)
@@ -5300,7 +5308,10 @@
   (unless (or (null environment) (sys::empty-environment-p environment))
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (handler-bind ((warning #'handle-warning))
-    (let ((precompiled-form (precompile-form form t)))
+;;     (let ((precompiled-form (precompile-form form t)))
+    (let ((precompiled-form (if *current-compiland*
+                               form
+                               (precompile-form form t))))
       (compile-1 (make-compiland :name name
                                  :lambda-expression precompiled-form
                                  :classfile classfile
@@ -5448,7 +5459,7 @@
                              labels
                              length
                              locally
-                             multiple-value-bind
+;;                              multiple-value-bind
                              multiple-value-call
                              multiple-value-list
                              multiple-value-prog1
