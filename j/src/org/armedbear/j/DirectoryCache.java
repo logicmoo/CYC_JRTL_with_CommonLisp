@@ -2,7 +2,7 @@
  * DirectoryCache.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: DirectoryCache.java,v 1.1.1.1 2002-09-24 16:08:19 piso Exp $
+ * $Id: DirectoryCache.java,v 1.2 2002-11-30 15:19:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class DirectoryCache
     public synchronized String getListing(File file)
     {
         String netPath = file.netPath();
-        for (int i = entries.size()-1; i >= 0; i--) {
+        for (int i = entries.size(); i-- > 0;) {
             DirectoryCacheEntry entry = (DirectoryCacheEntry) entries.get(i);
             if (entry.getFile().netPath().equals(netPath)) {
                 if (entry.getWhen() + timeout < System.currentTimeMillis()) {
@@ -62,7 +62,7 @@ public final class DirectoryCache
 
     public synchronized void purge(String hostname)
     {
-        for (int i = entries.size()-1; i >= 0; i--) {
+        for (int i = entries.size(); i-- > 0;) {
             DirectoryCacheEntry entry = (DirectoryCacheEntry) entries.get(i);
             if (entry.getFile().getHostName().equals(hostname)) {
                 Log.debug("removing cache entry for " + entry.getFile().netPath());
@@ -74,7 +74,7 @@ public final class DirectoryCache
     public synchronized void purge(File file)
     {
         String netPath = file.netPath();
-        for (int i = entries.size()-1; i >= 0; i--) {
+        for (int i = entries.size(); i-- > 0;) {
             DirectoryCacheEntry entry = (DirectoryCacheEntry) entries.get(i);
             if (entry.getFile().netPath().equals(netPath)) {
                 Log.debug("removing cache entry for " + netPath);
