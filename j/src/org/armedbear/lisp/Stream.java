@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.86 2004-10-01 16:08:35 piso Exp $
+ * $Id: Stream.java,v 1.87 2004-10-01 18:19:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,24 +509,6 @@ public class Stream extends LispObject
         }
     }
 
-    public LispObject readBitVector() throws ConditionThrowable
-    {
-        StringBuffer sb = new StringBuffer();
-        while (true) {
-            int n = _readChar();
-            if (n < 0)
-                break;
-            char c = (char) n;
-            if (c == '0' || c == '1')
-                sb.append(c);
-            else {
-                _unreadChar(c);
-                break;
-            }
-        }
-        return new SimpleBitVector(sb.toString());
-    }
-
     public LispObject readArray(int rank) throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
@@ -754,7 +736,7 @@ public class Stream extends LispObject
         throws ConditionThrowable
     {
         BitSet flags = null;
-        final Readtable rt = currentReadtable(thread);
+        final Readtable rt = (Readtable) _READTABLE_.symbolValue(thread);
         final LispObject readtableCase = rt.getReadtableCase();
         if (sb.length() > 0) {
             Debug.assertTrue(sb.length() == 1);
@@ -787,8 +769,10 @@ public class Stream extends LispObject
             if (n < 0)
                 break;
             char c = (char) n;
-            if (rt.isWhitespace(c))
+            if (rt.isWhitespace(c)) {
+                _unreadChar(n);
                 break;
+            }
             if (rt.getAttribute(c) == Readtable.ATTR_TERMINATING_MACRO) {
                 _unreadChar(c);
                 break;
