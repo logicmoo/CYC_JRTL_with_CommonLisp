@@ -82,7 +82,6 @@
 ;;; From CMUCL.
 
 (defun do-do-body (varlist endlist code bind step name block)
-  (format t "do-do-body~%")
   (let* ((inits ())
 	 (steps ())
 	 (l1 (gensym))
