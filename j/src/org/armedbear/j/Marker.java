@@ -2,7 +2,7 @@
  * Marker.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Marker.java,v 1.1.1.1 2002-09-24 16:07:45 piso Exp $
+ * $Id: Marker.java,v 1.2 2003-03-15 16:20:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,8 +67,10 @@ public final class Marker implements Constants
 
     public void invalidate()
     {
-        lineNumber = pos.lineNumber();
-        offset = pos.getOffset();
+        if (pos != null) {
+            lineNumber = pos.lineNumber();
+            offset = pos.getOffset();
+        }
         pos = null;
         buffer = null;
     }
