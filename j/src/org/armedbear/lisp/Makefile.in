@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.22 2003-05-29 19:45:06 piso Exp $
+# $Id: Makefile.in,v 1.23 2003-05-31 20:12:38 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -78,7 +78,6 @@ CLASSFILES =	AbstractArray.class \
 		Ratio.class \
 		Readtable.class \
 		Return.class \
-		SequenceType.class \
 		SimpleCondition.class \
 		SimpleError.class \
 		SpecialOperator.class \
@@ -96,7 +95,6 @@ CLASSFILES =	AbstractArray.class \
 		UndefinedFunctionError.class \
 		Utilities.class \
 		Vector.class \
-		VectorType.class \
 		Version.class \
 		WrongNumberOfArgumentsException.class
 
