@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.24 2003-06-10 00:44:05 piso Exp $
+# $Id: Makefile.in,v 1.25 2003-06-20 15:59:54 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -97,7 +97,8 @@ CLASSFILES =	AbstractArray.class \
 		Utilities.class \
 		Vector.class \
 		Version.class \
-		WrongNumberOfArgumentsException.class
+		WrongNumberOfArgumentsException.class \
+		room.class
 
 SOURCEFILES = $(patsubst %.class,%.java,$(CLASSFILES))
 
