@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.61 2004-05-19 14:22:03 piso Exp $
+;;; $Id: precompiler.lisp,v 1.62 2004-05-19 14:32:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -295,6 +295,12 @@
                  (precompile1 (expand-macro form)))))
           (t
            (precompile1 (expand-macro form))))))
+
+(defun precompile-psetf (form)
+  (setf form
+        (list* 'PSETF
+               (mapcar #'precompile1 (cdr form))))
+  (precompile1 (expand-macro form)))
 
 (defun precompile-setq (form)
   (let* ((args (cdr form))
@@ -690,6 +696,7 @@
                             or
                             progn
                             progv
+                            psetf
                             restart-case
                             return
                             return-from
