@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.384 2003-09-11 14:58:46 piso Exp $
+ * $Id: Primitives.java,v 1.385 2003-09-13 17:22:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2310,21 +2310,6 @@ public final class Primitives extends Module
             throws LispError
         {
             return first.typep(second);
-        }
-    };
-
-    // ### subtypep
-    // subtypep type-1 type-2 &optional environment => subtype-p, valid-p
-    private static final Primitive SUBTYPEP = new Primitive("subtypep") {
-        public LispObject execute(LispObject[] args) throws LispError
-        {
-            if (args.length < 2 || args.length > 3)
-                throw new WrongNumberOfArgumentsException(this);
-            if (args[0] == NIL)
-                return T;
-            TypeSpecifier ts1 = TypeSpecifier.getInstance(args[0]);
-            TypeSpecifier ts2 = TypeSpecifier.getInstance(args[1]);
-            return ts1.isSubtypeOf(ts2);
         }
     };
 
