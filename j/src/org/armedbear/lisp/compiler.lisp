@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.19 2003-06-02 19:25:20 piso Exp $
+;;; $Id: compiler.lisp,v 1.20 2003-06-02 19:52:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -119,8 +119,7 @@
       ((LET LET*)
        (let ((vars (cadr form))
              (body (cddr form)))
-         (append (list first)
-                 (list (compile-let-vars vars)) (compile-progn body))))
+         (cons first (cons (compile-let-vars vars) (compile-progn body)))))
       (SETQ
        (compile-setq (cdr form)))
       (PROGN
@@ -135,7 +134,7 @@
       (DOLIST
        (let ((args (cadr form))
              (body (cddr form)))
-         (append (list first) (list args) (compile-progn body))))
+         (cons first (cons args (compile-progn body)))))
       ((DO DO*)
        (let ((second (second form))
              (third (third form))
