@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.11 2004-04-19 18:24:16 piso Exp $
+;;; $Id: compile-file.lisp,v 1.12 2004-04-21 13:51:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
                                  *compile-file-pathname*))))
 
 ;; Dummy function. Should never be called.
-(defun dummy () (assert nil))
+(defun dummy (&rest ignored) (assert nil))
 
 (defun process-toplevel-form (form stream compile-time-too)
   (cond ((atom form)
