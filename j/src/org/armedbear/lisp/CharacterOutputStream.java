@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.12 2004-01-02 19:06:27 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.13 2004-01-16 16:53:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,12 @@ public class CharacterOutputStream extends LispOutputStream
     public CharacterOutputStream(OutputStream out)
     {
         writer = new OutputStreamWriter(out);
+    }
+
+    public CharacterOutputStream(OutputStream out, boolean interactive)
+    {
+        this(out);
+        setInteractive(interactive);
     }
 
     public CharacterOutputStream(OutputStream out, LispObject pathname)
