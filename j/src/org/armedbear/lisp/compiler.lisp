@@ -1,7 +1,7 @@
 ;;; compiler.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: compiler.lisp,v 1.44 2003-10-15 17:20:01 piso Exp $
+;;; $Id: compiler.lisp,v 1.45 2003-10-16 00:33:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -241,13 +241,6 @@
       (values name nil nil)
       (c::%compile name definition)))
 
-;; Redefine DEFUN to compile the definition on the fly.
-(defmacro defun (name lambda-list &rest body)
-  `(progn
-     (sys::%defun ',name ',lambda-list ',body)
-     (compiler::%compile ',name)
-     ',name))
-
 ;; Redefine DEFMACRO to compile the expansion function on the fly.
 (defmacro defmacro (name lambda-list &rest body)
   (let* ((form (gensym))
@@ -266,3 +259,10 @@
 
 ;; Make an exception just this one time...
 (sys::fset 'defmacro (get 'defmacro 'sys::macroexpand-macro))
+
+;; Redefine DEFUN to compile the definition on the fly.
+(defmacro defun (name lambda-list &rest body &environment env)
+  `(progn
+     (sys::%defun ',name ',lambda-list ',body ,env)
+     (compiler::%compile ',name)
+     ',name))
