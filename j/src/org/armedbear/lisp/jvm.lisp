@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.311 2004-12-17 17:16:25 piso Exp $
+;;; $Id: jvm.lisp,v 1.312 2004-12-17 20:43:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1947,7 +1947,7 @@
 (define-unary-operator 'VECTORP         "VECTORP")
 (define-unary-operator 'ZEROP           "ZEROP")
 
-(defun compile-function-call-1 (fun args &key (target *val*))
+(defun compile-function-call-1 (fun args target)
   (let ((s (gethash fun unary-operators)))
     (cond (s
            (compile-form (first args) :target :stack)
@@ -1994,10 +1994,8 @@
 (define-binary-operator 'sys::%rplaca        "_RPLACA")
 (define-binary-operator 'sys::%rplacd        "_RPLACD")
 
-(defun compile-function-call-2 (fun args :target target)
-;;   (%format t "compile-function-call-2 fun = ~S~%" fun)
+(defun compile-function-call-2 (fun args target)
   (let ((translation (gethash fun binary-operators)))
-;;     (%format t "translation = ~S~%" translation)
     (if translation
         (compile-binary-operation translation args :target target)
         (case fun
@@ -2043,7 +2041,7 @@
           (t
            nil)))))
 
-(defun compile-function-call-3 (fun args :target target)
+(defun compile-function-call-3 (fun args target)
   (case fun
     (LIST
      (compile-form (first args) :target :stack)
@@ -2122,130 +2120,62 @@
         form)))
 
 (defun process-args (args)
-  (let ((must-clear-values nil))
-    (dolist (arg args)
-      (compile-form arg :target :stack)
-      (unless must-clear-values
-        (unless (single-valued-p arg)
-          (setf must-clear-values t))))
-    (when must-clear-values
-      (emit-clear-values))))
-
-(defun compile-call (args)
   (let ((numargs (length args)))
-    (cond ((> *speed* *debug*)
-           (case numargs
-             (0
-              (emit-invokevirtual +lisp-object-class+
-                                  "execute"
-                                  "()Lorg/armedbear/lisp/LispObject;"
-                                  0))
-             (1
-              (process-args args)
-              (emit-invokevirtual +lisp-object-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -1))
-             (2
-              (process-args args)
-              (emit-invokevirtual +lisp-object-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -2))
-             (3
-              (process-args args)
-              (emit-invokevirtual +lisp-object-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -3))
-             (4
-              (process-args args)
-              (emit-invokevirtual +lisp-object-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -4))
-             (t
-              (emit 'sipush (length args))
-              (emit 'anewarray "org/armedbear/lisp/LispObject")
-              (let ((i 0)
-                    (must-clear-values nil))
-                (dolist (arg args)
-                  (emit 'dup)
-                  (emit 'sipush i)
-                  (compile-form arg :target :stack)
-                  (emit 'aastore) ; store value in array
-                  (unless must-clear-values
-                    (unless (single-valued-p arg)
-                      (setf must-clear-values t)))
-                  (incf i))
-                (when must-clear-values
-                  (emit-clear-values))) ; array left on stack here
-              ;; Stack: function array
-              (emit-invokevirtual +lisp-object-class+
-                                  "execute"
-                                  "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -1))))
-          (t
-           (emit-push-current-thread)
-           (emit 'swap) ; Stack: thread function
-           (case numargs
-             (0
-              (emit-invokevirtual +lisp-thread-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -1))
-             (1
-              (process-args args)
-              (emit-invokevirtual +lisp-thread-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -2))
-             (2
-              (process-args args)
-              (emit-invokevirtual +lisp-thread-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -3))
-             (3
-              (process-args args)
-              (emit-invokevirtual +lisp-thread-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -4))
-             (4
-              (process-args args)
-              (emit-invokevirtual +lisp-thread-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -5))
-             (t
-              (emit 'sipush (length args))
-              (emit 'anewarray +lisp-object-class+)
-              (let ((i 0)
-                    (must-clear-values nil))
-                (dolist (arg args)
-                  (emit 'dup)
-                  (emit 'sipush i)
-                  (compile-form arg :target :stack)
-                  (emit 'aastore) ; store value in array
-                  (unless must-clear-values
-                    (unless (single-valued-p arg)
-                      (setf must-clear-values t)))
-                  (incf i))
-                ;; Added Dec 9 2004
-                (when must-clear-values
-                  (emit-clear-values))) ; array left on stack here
-              ;; Stack: function array
-              (emit-invokevirtual +lisp-thread-class+
-                                  "execute"
-                                  "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                                  -2)))))))
+    (when (plusp numargs)
+      (let ((must-clear-values nil))
+        (cond ((<= numargs 4)
+               (dolist (arg args)
+                 (compile-form arg :target :stack)
+                 (unless must-clear-values
+                   (unless (single-valued-p arg)
+                     (setf must-clear-values t)))))
+              (t
+               (emit 'sipush numargs)
+               (emit 'anewarray "org/armedbear/lisp/LispObject")
+               (let ((i 0))
+                 (dolist (arg args)
+                   (emit 'dup)
+                   (emit 'sipush i)
+                   (compile-form arg :target :stack)
+                   (emit 'aastore) ; store value in array
+                   (unless must-clear-values
+                     (unless (single-valued-p arg)
+                       (setf must-clear-values t)))
+                   (incf i)))))
+        (when must-clear-values
+          (emit-clear-values))))))
+
+(defun emit-call-execute (numargs)
+  (let ((descriptor
+         (case numargs
+           (0 "()Lorg/armedbear/lisp/LispObject;")
+           (1 "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (2 "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (3 "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (4 "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (t "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")))
+        (stack-effect (if (< numargs 5)
+                          (- numargs)
+                          -1)))
+    (emit-invokevirtual +lisp-object-class+ "execute" descriptor stack-effect)))
+
+(defun emit-call-thread-execute (numargs)
+  (let ((descriptor
+         (case numargs
+           (0 "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (1 "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (2 "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (3 "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (4 "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+           (t "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")))
+        (stack-effect (if (< numargs 5)
+                          (- (1+ numargs))
+                          -2)))
+    (emit-invokevirtual +lisp-thread-class+ "execute" descriptor stack-effect)))
 
 (defun compile-function-call (form &key (target *val*))
-;;   (%format t "compile-function-call form = ~S~%" form)
   (let ((new-form (rewrite-function-call form)))
     (when (neq new-form form)
-;;       (%format t "new-form = ~S~%" new-form)
       (return-from compile-function-call (compile-form new-form :target target))))
   (let ((fun (car form))
         (args (cdr form)))
@@ -2254,36 +2184,47 @@
     (when (find-local-function fun)
       (return-from compile-function-call (compile-local-function-call form target)))
     (let ((numargs (length args)))
-;;       (when (sys:built-in-function-p fun)
-        (case numargs
-          (1
-           (when (compile-function-call-1 fun args :target target)
-             (return-from compile-function-call)))
-          (2
-           (when (compile-function-call-2 fun args :target target)
-             (return-from compile-function-call)))
-          (3
-           (when (compile-function-call-3 fun args :target target)
-             (return-from compile-function-call)
-             ))
-          )
-;;         )
+      (case (length args)
+        (1
+         (when (compile-function-call-1 fun args target)
+           (return-from compile-function-call)))
+        (2
+         (when (compile-function-call-2 fun args target)
+           (return-from compile-function-call)))
+        (3
+         (when (compile-function-call-3 fun args target)
+           (return-from compile-function-call))))
+      (unless (> *speed* *debug*)
+        (emit-push-current-thread))
       (cond
        ((eq fun (compiland-name *current-compiland*)) ; recursive call
         (emit 'aload 0)) ; this
        ((inline-ok fun)
-          (emit 'getstatic
-                *this-class*
-                (declare-function fun)
-                +lisp-object+))
+        (emit 'getstatic
+              *this-class*
+              (declare-function fun)
+              +lisp-object+))
        (t
         (emit 'getstatic
               *this-class*
               (declare-symbol fun)
               +lisp-symbol+)))
-      ;; Stack: function
-      (compile-call args)
+      (process-args args)
+      (if (> *speed* *debug*)
+          (emit-call-execute numargs)
+          (emit-call-thread-execute numargs))
       (emit-move-from-stack target))))
+
+(defun compile-call (args)
+  (let ((numargs (length args)))
+    (cond ((> *speed* *debug*)
+           (process-args args)
+           (emit-call-execute numargs))
+          (t
+           (emit-push-current-thread)
+           (emit 'swap) ; Stack: thread function
+           (process-args args)
+           (emit-call-thread-execute numargs)))))
 
 (define-source-transform funcall (&whole form fun &rest args)
   (cond ((> *debug* *speed*)
@@ -2513,7 +2454,6 @@
          (alternate (fourth form))
          (LABEL1 (gensym))
          (LABEL2 (gensym)))
-;;     (%format t "test = ~S~%" test)
     (cond ((eq test t)
            (compile-form consequent :target target))
           (t
