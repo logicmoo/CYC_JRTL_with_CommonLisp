@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LispShell.java,v 1.8 2002-11-23 19:26:57 piso Exp $
+ * $Id: LispShell.java,v 1.9 2002-11-24 01:33:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -90,7 +90,7 @@ public final class LispShell extends Shell
             editor.newlineAndIndent();
             return; // For now.
         }
-        Position pos = findContainingSexp(editor.getDot());
+        Position pos = findContainingSexp(editor.getBuffer().getEnd());
         int flags = dotLine.flags();
         if (flags == 0 || flags == STATE_AUTOINDENT)
             dotLine.setFlags(STATE_INPUT);
