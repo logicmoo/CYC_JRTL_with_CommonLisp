@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: jvm.lisp,v 1.56 2003-12-08 03:02:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.57 2003-12-08 14:41:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1210,9 +1210,6 @@
       g2)))
 
 (defun declare-string (string)
-;;   (format t "declare-string string = |~S|~%" string)
-;;   (when (position #\0 string)
-;;     (setf string (utf8 string)))
   (let ((g (symbol-name (gensym)))
         (*code* *static-code*))
     (declare-field g "Lorg/armedbear/lisp/LispString;")
