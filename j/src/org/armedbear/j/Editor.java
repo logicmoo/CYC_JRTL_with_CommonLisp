@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.133 2005-02-01 03:20:45 piso Exp $
+ * $Id: Editor.java,v 1.134 2005-02-16 12:30:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1330,7 +1330,7 @@ public final class Editor extends JPanel implements Constants,
         if (index < 0)
             return null;
         final Mode mode = getMode();
-        if (mode.isInComment(getBuffer(), start))
+        if (mode.isInComment(buffer, start))
             return null;
         boolean inQuote = mode.isInQuote(buffer, start);
         if (inQuote)
@@ -1358,8 +1358,6 @@ public final class Editor extends JPanel implements Constants,
                     c = it.nextChar();
             }
             if (c == SyntaxIterator.DONE)
-                return null;
-            if (inQuote && c == '"')
                 return null;
             if (c == origChar)
                 ++count;
