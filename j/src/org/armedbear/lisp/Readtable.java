@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Readtable.java,v 1.17 2004-03-12 17:31:19 piso Exp $
+ * $Id: Readtable.java,v 1.18 2004-03-12 18:48:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -301,6 +301,36 @@ public final class Readtable extends LispObject
             else
                 readtable = currentReadtable();
             return readtable.setDispatchMacroCharacter(dispChar, subChar, function);
+        }
+    };
+
+    // ### set-syntax-from-char
+    // to-char from-char &optional to-readtable from-readtable => t
+    private static final Primitive SET_SYNTAX_FROM_CHAR =
+        new Primitive("set-syntax-from-char",
+                      "to-char from-char &optional to-readtable from-readtable")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 2 || args.length > 4)
+                return signal(new WrongNumberOfArgumentsException(this));
+            char toChar = LispCharacter.getValue(args[0]);
+            char fromChar = LispCharacter.getValue(args[1]);
+            Readtable toReadtable;
+            if (args.length > 2)
+                toReadtable = checkReadtable(args[2]);
+            else
+                toReadtable = currentReadtable();
+            Readtable fromReadtable;
+            if (args.length > 3)
+                fromReadtable = checkReadtable(args[3]);
+            else
+                fromReadtable = new Readtable();
+            // FIXME synchronization
+            toReadtable.attributes[toChar] = fromReadtable.attributes[fromChar];
+            toReadtable.readerMacroFunctions[toChar] =
+                fromReadtable.readerMacroFunctions[fromChar];
+            return T;
         }
     };
 
