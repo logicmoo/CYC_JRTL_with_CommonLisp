@@ -2,7 +2,7 @@
  * FilenameCompletion.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: FilenameCompletion.java,v 1.1.1.1 2002-09-24 16:08:14 piso Exp $
+ * $Id: FilenameCompletion.java,v 1.2 2002-11-30 15:51:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public final class FilenameCompletion
         initialize();
     }
 
-    // Returns vector of File objects.
+    // Returns list of File objects.
     public List listFiles()
     {
         return list;
