@@ -2,7 +2,7 @@
  * JProxy.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JProxy.java,v 1.1 2003-12-24 15:02:56 asimon Exp $
+ * $Id: JProxy.java,v 1.2 2003-12-24 15:58:53 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,6 @@ class LispHandler implements InvocationHandler {
     Map table;
 
     public Object invoke(Object proxy, Method method, Object[] args) {
-
         String methodName = method.getName();
 
         if (methodName.equals("hashCode"))  {
@@ -82,7 +81,8 @@ class LispHandler implements InvocationHandler {
                 for (int i = 0 ; i< args.length; i++)
                     lispArgs[i] = new JavaObject(args[i]);
                 try {
-                    return (f.execute(lispArgs).javaInstance());
+                    LispObject result = f.execute(lispArgs);
+                    return (method.getReturnType() == void.class ? null : result.javaInstance());
                 } 
                 catch (ConditionThrowable t) {
                     t.printStackTrace();
