@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.501 2003-11-17 16:13:55 piso Exp $
+ * $Id: Primitives.java,v 1.502 2003-11-19 02:34:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,6 @@ public final class Primitives extends Module
     private static final int MEMBER                     = 45;
     private static final int RPLACA                     = 46;
     private static final int RPLACD                     = 47;
-    private static final int SET                        = 48;
 
     private Primitives()
     {
@@ -134,7 +133,6 @@ public final class Primitives extends Module
         definePrimitive2("member", MEMBER);
         definePrimitive2("rplaca", RPLACA);
         definePrimitive2("rplacd", RPLACD);
-        definePrimitive2("set", SET);
     }
 
     // Primitive
@@ -329,9 +327,6 @@ public final class Primitives extends Module
             case RPLACD:                        // ### rplacd
                 first.setCdr(second);
                 return first;
-            case SET:                           // ### set
-                checkSymbol(first).setSymbolValue(second);
-                return second;
             default:
                 Debug.trace("bad index " + index);
                 throw new ConditionThrowable(new WrongNumberOfArgumentsException((String)null));
@@ -530,14 +525,37 @@ public final class Primitives extends Module
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg == T)
-                return T;
-            if (arg == NIL)
-                return NIL;
-            LispObject value = checkSymbol(arg).symbolValue();
-            if (value instanceof SymbolMacro)
-                throw new ConditionThrowable(new LispError(arg + " has no dynamic value"));
+            final Symbol symbol = checkSymbol(arg);
+            LispObject value =
+                LispThread.currentThread().lookupSpecial(symbol);
+            if (value == null) {
+                value = symbol.symbolValue();
+                if (value instanceof SymbolMacro)
+                    throw new ConditionThrowable(new LispError(arg + " has no dynamic value"));
+            }
             return value;
+        }
+    };
+
+    // ### set
+    // set symbol value => value
+    private static final Primitive2 SET = new Primitive2("set")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            Symbol symbol = checkSymbol(first);
+            Environment dynEnv =
+                LispThread.currentThread().getDynamicEnvironment();
+            if (dynEnv != null) {
+                Binding binding = dynEnv.getBinding(symbol);
+                if (binding != null) {
+                    binding.value = second;
+                    return second;
+                }
+            }
+            symbol.setSymbolValue(second);
+            return second;
         }
     };
 
