@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: setf.lisp,v 1.45 2004-08-21 03:18:14 piso Exp $
+;;; $Id: setf.lisp,v 1.46 2004-09-04 13:56:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -133,7 +133,8 @@
       v)))
 
 (defmacro defsetf (access-function update-function)
-  `(%put ',access-function 'setf-inverse ',update-function))
+  `(eval-when (:load-toplevel :compile-toplevel :execute)
+     (%put ',access-function 'setf-inverse ',update-function)))
 
 (defun %set-caar (x v) (%rplaca (car x) v))
 (defun %set-cadr (x v) (%rplaca (cdr x) v))
