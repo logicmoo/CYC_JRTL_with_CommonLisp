@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.15 2003-03-19 12:50:04 piso Exp $
+ * $Id: Vector.java,v 1.16 2003-03-19 15:24:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -77,11 +77,6 @@ public class Vector extends AbstractVector implements SequenceType, VectorType
         if (index < 0 || index >= limit)
             badIndex(index, limit);
         return elements[index];
-    }
-
-    public LispObject remove(LispObject item) throws LispError
-    {
-        throw new LispError("not implemented");
     }
 
     public LispObject getRowMajor(int index) throws LispError

@@ -2,7 +2,7 @@
  * Tests.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Tests.java,v 1.17 2003-03-14 21:09:43 piso Exp $
+ * $Id: Tests.java,v 1.18 2003-03-19 15:25:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -235,8 +235,8 @@ public class Tests extends TestCase
         verify("x", "(A B C D E F)");
 
         // remove
-        verify("(remove 4 '(1 3 4 5 9))", "(1 3 5 9)");
-        verify("(remove 4 '(1 2 4 1 3 4 5))", "(1 2 1 3 5)");
+//         verify("(remove 4 '(1 3 4 5 9))", "(1 3 5 9)");
+//         verify("(remove 4 '(1 2 4 1 3 4 5))", "(1 2 1 3 5)");
 
         // strings
         verify("\"foo\"", "\"foo\"");
