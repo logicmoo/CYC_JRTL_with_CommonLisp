@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.7 2002-12-23 07:46:48 piso Exp $
+ * $Id: LispFormatter.java,v 1.8 2002-12-26 13:01:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,7 +75,7 @@ public final class LispFormatter extends Formatter
                     break;
                 case STATE_CAR: {
                     String token = text.substring(tokenBegin, tokenEnd).trim();
-                    if (token.startsWith("def"))
+                    if (token.length() > 3 && token.startsWith("def"))
                         format = LISP_FORMAT_DEFUN;
                     else if (isKeyword(token))
                         format = LISP_FORMAT_KEYWORD;
