@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.232 2003-06-10 01:12:14 piso Exp $
+ * $Id: Primitives.java,v 1.233 2003-06-11 01:01:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3336,11 +3336,16 @@ public final class Primitives extends Module
     private static final SpecialOperator FUNCTION =
         new SpecialOperator("function") {
         public LispObject execute(LispObject args, Environment env)
-            throws LispError
+            throws Condition
         {
             LispObject arg = args.car();
             if (arg instanceof Symbol) {
                 LispObject functional = env.lookupFunctional(arg);
+                if (functional instanceof Autoload) {
+                    Autoload autoload = (Autoload) functional;
+                    Load._load(autoload.getFileName(), true, false);
+                    functional = autoload.getSymbol().getSymbolFunction();
+                }
                 if (functional instanceof Function)
                     return functional;
                 throw new UndefinedFunctionError(arg);
