@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.194 2004-10-01 15:18:03 piso Exp $
+;;; $Id: boot.lisp,v 1.195 2004-10-05 13:18:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -312,7 +312,11 @@
 
 ;;; Package definitions.
 (defpackage "FORMAT" (:use "CL" "EXT"))
-(defpackage "XP" (:use "CL"))
+
+(defpackage "XP"
+  (:use "CL")
+  (:export
+   #:output-pretty-object))
 
 ;;; PROVIDE, REQUIRE (from SBCL)
 (defun provide (module-name)
@@ -360,6 +364,7 @@
 (load-system-file "debug")
 (load-system-file "print")
 (load-system-file "pprint-dispatch")
+(load-system-file "pprint")
 
 (unless (sys::featurep :j)
   (sys::load-system-file "top-level")
