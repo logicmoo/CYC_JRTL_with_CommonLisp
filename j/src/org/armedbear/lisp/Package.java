@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.8 2003-04-05 16:35:42 piso Exp $
+ * $Id: Package.java,v 1.9 2003-04-06 16:01:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,18 +27,24 @@ import java.util.Iterator;
 
 public final class Package extends LispObject
 {
-    private String name;
-    private String nickname;
+    private final String name;
 
-    private HashMap map = new HashMap();
-    private ArrayList nicknames = new ArrayList();
-    private ArrayList useList = new ArrayList();
-    private ArrayList usedByList = new ArrayList();
-    private ArrayList shadowingSymbols = new ArrayList();
+    private final HashMap map;
+    private final ArrayList nicknames = new ArrayList();
+    private final ArrayList useList = new ArrayList();
+    private final ArrayList usedByList = new ArrayList();
+    private final ArrayList shadowingSymbols = new ArrayList();
 
     public Package(String name)
     {
         this.name = name;
+        map = new HashMap();
+    }
+
+    public Package(String name, int size)
+    {
+        this.name = name;
+        map = new HashMap(size);
     }
 
     public LispObject typeOf()
@@ -49,11 +55,6 @@ public final class Package extends LispObject
     public final String getName()
     {
         return name;
-    }
-
-    public final void setName(String name)
-    {
-        this.name = name;
     }
 
     // Returns null if symbol not found in package.
