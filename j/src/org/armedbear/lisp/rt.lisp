@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.134 2003-09-20 00:37:29 piso Exp $
+;;; $Id: rt.lisp,v 1.135 2003-09-20 18:22:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -279,6 +279,7 @@
                               "list"
                               "list-length"
                               "listp"
+                              "load-structures"
                               "logand"
                               "logandc1"
                               "logandc2"
