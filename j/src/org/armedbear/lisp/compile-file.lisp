@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-file.lisp,v 1.10 2004-04-19 17:56:42 piso Exp $
+;;; $Id: compile-file.lisp,v 1.11 2004-04-19 18:24:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -173,29 +173,33 @@
 (defun compile-file (input-file &key output-file verbose print external-format)
   (unless output-file
     (setf output-file (compile-file-pathname input-file)))
-  (with-open-file (in input-file :direction :input)
-    (let ((*compile-file-pathname* (pathname in))
-          (*compile-file-truename* (truename in))
-          (*class-number* 0)
-          (namestring (namestring *compile-file-truename*))
-          (start (get-internal-real-time))
-          elapsed)
-      (%format t "; Compiling ~A ...~%" namestring)
-      (with-open-file (out output-file :direction :output :if-exists :supersede)
-        (let ((*readtable* *readtable*)
-              (*package* *package*)
-              (jvm::*toplevel-defuns* ())
-              (*fbound-names* ()))
-          (write (list 'init-fasl :version *fasl-version*) :stream out)
-          (terpri out)
-          (loop
-            (let ((form (read in nil in)))
-              (when (eq form in)
-                (return))
-              (process-toplevel-form form out nil)))
-          (dolist (name *fbound-names*)
-            (%format t "; Removing dummy function for ~A~%" name)
-            (fmakunbound name))))
-      (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
-      (%format t "; Compiled ~A (~A seconds)~%" namestring elapsed)))
+  (let* ((type (pathname-type output-file))
+         (temp-file (merge-pathnames (make-pathname :type (concatenate 'string type "-tmp"))
+                                     output-file)))
+    (with-open-file (in input-file :direction :input)
+      (let ((*compile-file-pathname* (pathname in))
+            (*compile-file-truename* (truename in))
+            (*class-number* 0)
+            (namestring (namestring *compile-file-truename*))
+            (start (get-internal-real-time))
+            elapsed)
+        (%format t "; Compiling ~A ...~%" namestring)
+        (with-open-file (out temp-file :direction :output :if-exists :supersede)
+          (let ((*readtable* *readtable*)
+                (*package* *package*)
+                (jvm::*toplevel-defuns* ())
+                (*fbound-names* ()))
+            (write (list 'init-fasl :version *fasl-version*) :stream out)
+            (terpri out)
+            (loop
+              (let ((form (read in nil in)))
+                (when (eq form in)
+                  (return))
+                (process-toplevel-form form out nil)))
+            (dolist (name *fbound-names*)
+              (%format t "; Removing dummy function for ~A~%" name)
+              (fmakunbound name))))
+        (setf elapsed (/ (- (get-internal-real-time) start) 1000.0))
+        (rename-file temp-file output-file)
+        (%format t "; Compiled ~A (~A seconds)~%" namestring elapsed))))
   (values (truename output-file) nil nil))
