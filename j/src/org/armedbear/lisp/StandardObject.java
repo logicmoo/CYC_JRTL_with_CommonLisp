@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardObject.java,v 1.14 2003-12-19 18:43:01 piso Exp $
+ * $Id: StandardObject.java,v 1.15 2003-12-19 19:19:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -169,6 +169,43 @@ public class StandardObject extends LispObject
                 return signal(new TypeError(second, Symbol.VECTOR));
             }
             return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+        }
+    };
+
+    // ### instance-ref
+    // instance-ref object index => value
+    private static final Primitive2 INSTANCE_REF =
+        new Primitive2("instance-ref", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            try {
+                return ((StandardObject)first).slots.AREF(second);
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
+        }
+    };
+
+    // ### %set-instance-ref
+    // %set-instance-ref object index new-value => new-value
+    private static final Primitive3 _SET_INSTANCE_REF =
+        new Primitive3("%set-instance-ref", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+            throws ConditionThrowable
+        {
+            try {
+                ((StandardObject)first).slots.set(Fixnum.getValue(second),
+                                                  third);
+                return third;
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(first, Symbol.STANDARD_OBJECT));
+            }
         }
     };
 

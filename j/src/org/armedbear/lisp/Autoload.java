@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.112 2003-12-19 18:29:29 piso Exp $
+ * $Id: Autoload.java,v 1.113 2003-12-19 19:20:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -302,6 +302,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-class-layout", "LispClass");
         autoload(PACKAGE_SYS, "%set-class-slots", "SlotClass");
         autoload(PACKAGE_SYS, "%set-generic-function-discriminating-function", "GenericFunction");
+        autoload(PACKAGE_SYS, "%set-instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "%string-capitalize", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-downcase", "StringFunctions");
         autoload(PACKAGE_SYS, "%string-equal", "StringFunctions");
@@ -335,6 +336,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "default-time-zone", "Time");
         autoload(PACKAGE_SYS, "generic-function-discriminating-function", "GenericFunction");
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTable");
+        autoload(PACKAGE_SYS, "instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "layout-class", "Layout");
         autoload(PACKAGE_SYS, "layout-length", "Layout");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
