@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.32 2004-03-13 22:08:40 piso Exp $
+;;; $Id: precompiler.lisp,v 1.33 2004-03-16 20:15:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -480,11 +480,10 @@
 
 (defun install-handler (fun &optional handler)
   (let ((handler (or handler
-                     (find-symbol (concatenate 'string "PRECOMPILE-"
-                                               (symbol-name fun))
+                     (find-symbol (sys::%format nil "PRECOMPILE-~A" (symbol-name fun))
                                   'precompiler))))
     (unless (and handler (fboundp handler))
-      (error "no handler for ~S" fun))
+      (error "No handler for ~S." fun))
     (setf (get fun 'precompile-handler) handler)))
 
 (mapcar #'install-handler '(block
