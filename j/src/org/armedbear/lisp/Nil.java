@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.28 2003-12-13 00:28:08 piso Exp $
+ * $Id: Nil.java,v 1.29 2004-01-03 18:10:09 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,11 @@ public final class Nil extends Symbol
     public LispClass classOf()
     {
         return BuiltInClass.NULL;
+    }
+
+    public boolean getBooleanValue()
+    {
+        return false;
     }
 
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
