@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.78 2004-03-10 16:30:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.79 2004-03-10 19:56:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2665,3 +2665,5 @@
                         pool-name
                         pool-get
                         compile-form)))
+
+(provide 'jvm)
