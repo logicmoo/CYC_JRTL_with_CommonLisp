@@ -2,7 +2,7 @@
  * OpenFileTextFieldHandler.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.15 2002-12-07 19:29:35 piso Exp $
+ * $Id: OpenFileTextFieldHandler.java,v 1.16 2002-12-08 18:47:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -470,21 +470,14 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             new FilenameCompletion(dir, prefix, sourcePath,
                 completionsIgnoreCase);
         long elapsed = System.currentTimeMillis() - start;
-        Log.debug("new FilenameCompletion " + elapsed + " ms");
         final File currentDirectory = getCurrentDirectory();
         final File currentFile = editor.getBuffer().getFile();
         List files = completion.listFiles();
         if (files != null) {
             final int limit = files.size();
             for (int i = 0; i < limit; i++) {
-                File file = (File) files.get(i);
-                String name;
-                if (currentDirectory != null && currentDirectory.isLocal() &&
-                    currentDirectory.equals(file.getParentFile())) {
-                    name = file.getName();
-                } else {
-                    name = file.netPath();
-                }
+                final File file = (File) files.get(i);
+                final String name = getNameForFile(file, currentDirectory);
                 if (file.isDirectory()) {
                     addCompletion(completions,
                         name.concat(file.getSeparator()));
@@ -520,18 +513,38 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
                         prefix.length());
                 else
                     isMatch = file.getName().startsWith(prefix);
-                if (isMatch) {
-                    String name;
-                    if (currentDirectory != null &&
-                        currentDirectory.equals(file.getParentFile())) {
-                        name = file.getName();
-                    } else {
-                        name = file.canonicalPath();
-                    }
-                    addCompletion(list, name);
-                }
+                if (isMatch)
+                    addCompletion(list, getNameForFile(file, currentDirectory));
             }
         }
+    }
+
+    // Returns file.netPath(), file.canonicalPath(), or file.getName(),
+    // depending on the situation.
+    private String getNameForFile(File file, File currentDirectory)
+    {
+        String name;
+        if (currentDirectory != null) {
+            if (currentDirectory.isLocal()) {
+                // There won't be any remote completions if we're
+                // looking at a local buffer.
+                Debug.bugIf(file.isRemote());
+                if (currentDirectory.equals(file.getParentFile()))
+                    name = file.getName();
+                else
+                    name = file.canonicalPath();
+            } else {
+                // Remote directory. There might be local as well as
+                // remote completions, so we need to use the net path.
+                name = file.netPath();
+            }
+        } else {
+            // Current directory is not remote (it's null), so there
+            // won't be any remote completions.
+            Debug.bugIf(file.isRemote());
+            name = file.canonicalPath();
+        }
+        return name;
     }
 
     // Add string to list if it's not already there.
