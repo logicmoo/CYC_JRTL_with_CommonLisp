@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.82 2003-06-30 00:07:53 piso Exp $
+ * $Id: Editor.java,v 1.83 2003-07-01 12:18:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -374,7 +374,6 @@ public final class Editor extends JPanel implements Constants,
         loadExtensions();
         if (quick == 0) {
             runStartupScript("org.armedbear.j.JLisp", "init.lisp");
-            runStartupScript("org.armedbear.j.BeanShell", "init.bsh");
         }
         DefaultLookAndFeel.setLookAndFeel();
 
