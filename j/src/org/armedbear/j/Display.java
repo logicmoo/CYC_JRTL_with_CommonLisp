@@ -1,8 +1,8 @@
 /*
  * Display.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Display.java,v 1.16 2003-08-07 11:43:07 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: Display.java,v 1.17 2004-04-01 18:48:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -716,7 +716,6 @@ public final class Display extends JComponent implements Constants,
             }
             segmentStart += segmentLength;
         }
-        segmentList.recycleSegments();
         return totalChars;
     }
 
