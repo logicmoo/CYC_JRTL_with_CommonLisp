@@ -2,7 +2,7 @@
  * TypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: TypeSpecifier.java,v 1.4 2003-09-11 16:05:17 piso Exp $
+ * $Id: TypeSpecifier.java,v 1.5 2003-09-12 01:34:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,8 @@ public abstract class TypeSpecifier extends LispObject
     {
         if (arg == Symbol.UNSPECIFIED)
             return UnspecifiedTypeSpecifier.getInstance();
+        if (arg == Symbol.INTEGER)
+            return new IntegerTypeSpecifier();
         if (arg instanceof Symbol)
             return new AtomicTypeSpecifier((Symbol)arg);
         if (arg instanceof LispClass)

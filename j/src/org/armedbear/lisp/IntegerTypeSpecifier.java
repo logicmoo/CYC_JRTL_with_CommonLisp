@@ -2,7 +2,7 @@
  * IntegerTypeSpecifier.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: IntegerTypeSpecifier.java,v 1.3 2003-09-11 23:20:49 piso Exp $
+ * $Id: IntegerTypeSpecifier.java,v 1.4 2003-09-12 01:34:14 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,11 @@ public final class IntegerTypeSpecifier extends CompoundTypeSpecifier
     // These limits are always inclusive.
     private LispObject lowerLimit;
     private LispObject upperLimit;
+
+    public IntegerTypeSpecifier()
+    {
+        lowerLimit = upperLimit = Symbol.UNSPECIFIED;
+    }
 
     public IntegerTypeSpecifier(Cons args) throws LispError
     {
@@ -89,10 +94,13 @@ public final class IntegerTypeSpecifier extends CompoundTypeSpecifier
 
     public LispObject isSubtypeOf(TypeSpecifier ts) throws LispError
     {
-        if (ts instanceof AtomicTypeSpecifier) {
+        if (ts instanceof AtomicTypeSpecifier)
+        {
             AtomicTypeSpecifier ats = (AtomicTypeSpecifier) ts;
             Type type = ats.TYPE();
             if (type == Type.INTEGER)
+                return values(T, T);
+            if (type == Type.RATIONAL)
                 return values(T, T);
             if (type == Type.FIXNUM) {
                 if (lowerLimit.isLessThan(MOST_NEGATIVE_FIXNUM.getSymbolValue()))
@@ -111,11 +119,18 @@ public final class IntegerTypeSpecifier extends CompoundTypeSpecifier
             }
             return values(NIL, T);
         }
-        if (ts instanceof IntegerTypeSpecifier) {
+        if (ts instanceof IntegerTypeSpecifier)
+        {
             IntegerTypeSpecifier its = (IntegerTypeSpecifier) ts;
-            if (lowerLimit.isGreaterThanOrEqualTo(its.lowerLimit))
-                if (upperLimit.isLessThanOrEqualTo(its.upperLimit))
+            if (its.lowerLimit == Symbol.UNSPECIFIED ||
+                lowerLimit.isGreaterThanOrEqualTo(its.lowerLimit))
+            {
+                if (its.upperLimit == Symbol.UNSPECIFIED ||
+                    upperLimit.isLessThanOrEqualTo(its.upperLimit))
+                {
                     return values(T, T);
+                }
+            }
         }
         return values(NIL, T);
     }
