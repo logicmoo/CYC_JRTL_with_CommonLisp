@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.14 2004-09-11 18:55:07 piso Exp $
+;;; $Id: swank.lisp,v 1.15 2004-09-12 17:52:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -261,7 +261,6 @@
       values)))
 
 (defun swank-compile-file (pathname load-p)
-  (swank-format t "swank-compile-file called~%")
   (force-output)
   (write-string ";;;; Compile file ")
   (write-string (namestring pathname))
@@ -272,5 +271,18 @@
                   (when (and load-p output-file)
                     (load output-file)))))
     (list result)))
+
+(defun swank-compile-string (string package-name)
+  (let ((package (if package-name (find-package package-name) *package*)))
+    (let* ((*package* (or package *package*))
+           values)
+      (handler-case
+          (setf values (multiple-value-list
+                        (funcall
+                         (compile nil (read-from-string
+                                       (format nil "(~S () ~A)" 'lambda string))))))
+        (error (e) (setf values e)))
+      (force-output)
+      values)))
 
 (provide '#:swank)
