@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.28 2003-10-20 13:15:13 piso Exp $
+;;; $Id: defclass.lisp,v 1.29 2003-10-20 14:12:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1115,11 +1115,20 @@
                  (dolist (after reverse-afters)
                    (funcall (method-function after) args nil))))))
           (LIST
-             #'(lambda (args)
-                (let ((result ()))
-                  (dolist (primary primaries)
-                    (push (funcall (method-function primary) args nil) result))
-                  (reverse result))))
+           #'(lambda (args)
+              (let ((result ()))
+                (dolist (primary primaries)
+                  (push (funcall (method-function primary) args nil) result))
+                (reverse result))))
+          (AND
+           #'(lambda (args)
+              (let ((result t))
+                (dolist (primary primaries)
+                  (setf result
+                        (and result
+                             (funcall (method-function primary) args nil)))
+                  (unless result (return)))
+                result)))
           (t
            (error "unsupported method combination type ~S~"
                   (generic-function-method-combination gf)))))))
