@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.95 2004-11-13 15:02:01 piso Exp $
+ * $Id: Stream.java,v 1.96 2004-11-25 15:45:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -589,47 +589,13 @@ public class Stream extends LispObject
         final Readtable rt = currentReadtable(thread);
         final LispObject readtableCase = rt.getReadtableCase();
         final String token;
-        if (flags == null) {
-            // No escaped characters.
-            if (readtableCase == Keyword.UPCASE) {
-                token = sb.toString().toUpperCase();
-            } else if (readtableCase == Keyword.DOWNCASE) {
-                token = sb.toString().toLowerCase();
-            } else if (readtableCase == Keyword.PRESERVE) {
-                token = sb.toString();
-            } else if (readtableCase == Keyword.INVERT) {
+        if (readtableCase == Keyword.INVERT) {
+            if (flags == null)
                 token = invert(sb.toString());
-            } else {
-                Debug.assertTrue(false);
-                token = null; // Not reached.
-            }
-        } else {
-            // At least one escaped character.
-            if (readtableCase == Keyword.INVERT) {
+            else
                 token = sb.toString(); // FIXME
-            } else if (readtableCase == Keyword.PRESERVE) {
-                token = sb.toString();
-            } else if (readtableCase == Keyword.UPCASE) {
-                for (int i = 0; i < sb.length(); i++) {
-                    if (!flags.get(i)) {
-                        // Character is not escaped.
-                        sb.setCharAt(i, Utilities.toUpperCase(sb.charAt(i)));
-                    }
-                }
-                token = sb.toString();
-            } else if (readtableCase == Keyword.DOWNCASE) {
-                for (int i = 0; i < sb.length(); i++) {
-                    if (!flags.get(i)) {
-                        // Character is not escaped.
-                        sb.setCharAt(i, Utilities.toLowerCase(sb.charAt(i)));
-                    }
-                }
-                token = sb.toString();
-            } else {
-                Debug.assertTrue(false);
-                token = null; // Not reached.
-            }
-        }
+        } else
+            token = sb.toString();
         final int length = token.length();
         if (length > 0) {
             final char firstChar = token.charAt(0);
