@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.524 2003-12-12 16:18:48 piso Exp $
+ * $Id: Primitives.java,v 1.525 2003-12-12 17:32:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1169,7 +1169,7 @@ public final class Primitives extends Lisp
     };
 
     // ### error
-    private static final Primitive ERROR = new Primitive("error","datum &rest arguments")
+    private static final Primitive ERROR = new Primitive("error", "datum &rest arguments")
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
@@ -1179,30 +1179,30 @@ public final class Primitives extends Lisp
             if (datum instanceof Condition)
                 throw new ConditionThrowable((Condition)datum);
             if (datum instanceof Symbol) {
-                LispObject initargs = NIL;
+                LispObject initArgs = NIL;
                 for (int i = 1; i < args.length; i++)
-                    initargs = new Cons(args[i], initargs);
-                initargs = initargs.nreverse();
+                    initArgs = new Cons(args[i], initArgs);
+                initArgs = initArgs.nreverse();
                 Condition condition;
                 if (datum == Symbol.PACKAGE_ERROR)
-                    condition = new PackageError(initargs);
+                    condition = new PackageError(initArgs);
                 else if (datum == Symbol.PARSE_ERROR)
-                    condition = new ParseError(initargs);
+                    condition = new ParseError(initArgs);
                 else if (datum == Symbol.PROGRAM_ERROR)
-                    condition = new ProgramError(initargs);
+                    condition = new ProgramError(initArgs);
                 else if (datum == Symbol.SIMPLE_CONDITION)
-                    condition = new SimpleCondition(initargs);
+                    condition = new SimpleCondition(initArgs);
                 else if (datum == Symbol.SIMPLE_WARNING)
-                    condition = new SimpleWarning(initargs);
+                    condition = new SimpleWarning(initArgs);
                 else if (datum == Symbol.WARNING)
-                    condition = new Warning(initargs);
+                    condition = new Warning(initArgs);
                 else if (datum == Symbol.SIMPLE_ERROR)
-                    condition = new SimpleError(initargs);
+                    condition = new SimpleError(initArgs);
                 else if (datum == Symbol.TYPE_ERROR)
-                    condition = new TypeError(initargs);
+                    condition = new TypeError(initArgs);
                 else
                     // Default.
-                    condition = new  SimpleError(initargs);
+                    condition = new  SimpleError(initArgs);
                 throw new ConditionThrowable(condition);
             }
             // Default is SIMPLE-ERROR.
@@ -1212,6 +1212,53 @@ public final class Primitives extends Lisp
                 formatArguments = new Cons(formatArguments, new Cons(args[i]));
             throw new ConditionThrowable(new SimpleError(formatControl,
                                                          formatArguments));
+        }
+    };
+
+    // ### warn
+    private static final Primitive WARN = new Primitive("warn", "datum &rest arguments")
+    {
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
+        {
+            if (args.length < 1)
+                throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
+            final CharacterOutputStream out =
+                checkCharacterOutputStream(_ERROR_OUTPUT_.symbolValue());
+            LispObject datum = args[0];
+            Condition condition;
+            if (datum instanceof Condition) {
+                condition = (Condition) datum;
+            } else if (datum instanceof Symbol) {
+                LispObject initArgs = NIL;
+                for (int i = 1; i < args.length; i++)
+                    initArgs = new Cons(args[i], initArgs);
+                initArgs = initArgs.nreverse();
+                if (datum == Symbol.WARNING)
+                    condition = new Warning(initArgs);
+                else if (datum == Symbol.SIMPLE_WARNING)
+                    condition = new SimpleWarning(initArgs);
+                else
+                    throw new ConditionThrowable(new TypeError(datum,
+                                                               Symbol.WARNING));
+            } else {
+                // Default is SIMPLE-WARNING.
+                LispObject formatControl = args[0];
+                LispObject formatArguments = NIL;
+                for (int i = 1; i < args.length; i++)
+                    formatArguments = new Cons(formatArguments, new Cons(args[i]));
+                condition = new SimpleWarning(formatControl, formatArguments);
+            }
+            final LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            thread.bindSpecial(_PRINT_ESCAPE_, NIL);
+            try {
+                out.freshLine();
+                out.princ(condition);
+            }
+            finally {
+                thread.setDynamicEnvironment(oldDynEnv);
+            }
+            return NIL;
         }
     };
 
@@ -1291,70 +1338,12 @@ public final class Primitives extends Lisp
 
     private static final String _format(LispObject[] args) throws ConditionThrowable
     {
-        final LispThread thread = LispThread.currentThread();
-        String control = checkString(args[0]).getValue();
-        StringBuffer sb = new StringBuffer();
-        final int limit = control.length();
-        int j = 1;
-        final int NEUTRAL = 0;
-        final int TILDE = 1;
-        int state = NEUTRAL;
-        for (int i = 0; i < limit; i++) {
-            char c = control.charAt(i);
-            if (state == NEUTRAL) {
-                if (c == '~')
-                    state = TILDE;
-                else
-                    sb.append(c);
-            } else if (state == TILDE) {
-                if (c == 'A' || c == 'a') {
-                    if (j < args.length) {
-                        LispObject obj = args[j++];
-                        Environment oldDynEnv = thread.getDynamicEnvironment();
-                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-                        sb.append(String.valueOf(obj));
-                        thread.setDynamicEnvironment(oldDynEnv);
-                    }
-                } else if (c == 'S' || c == 's') {
-                    if (j < args.length) {
-                        LispObject obj = args[j++];
-                        Environment oldDynEnv = thread.getDynamicEnvironment();
-                        thread.bindSpecial(_PRINT_ESCAPE_, T);
-                        sb.append(String.valueOf(obj));
-                        thread.setDynamicEnvironment(oldDynEnv);
-                    }
-                } else if (c == 'D' || c == 'd') {
-                    if (j < args.length) {
-                        LispObject obj = args[j++];
-                        Environment oldDynEnv = thread.getDynamicEnvironment();
-                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-                        thread.bindSpecial(_PRINT_RADIX_, NIL);
-                        thread.bindSpecial(_PRINT_BASE_, new Fixnum(10));
-                        sb.append(String.valueOf(obj));
-                        thread.setDynamicEnvironment(oldDynEnv);
-                    }
-                } else if (c == 'X' || c == 'x') {
-                    if (j < args.length) {
-                        LispObject obj = args[j++];
-                        Environment oldDynEnv = thread.getDynamicEnvironment();
-                        thread.bindSpecial(_PRINT_ESCAPE_, NIL);
-                        thread.bindSpecial(_PRINT_RADIX_, NIL);
-                        thread.bindSpecial(_PRINT_BASE_, new Fixnum(16));
-                        sb.append(String.valueOf(obj));
-                        thread.setDynamicEnvironment(oldDynEnv);
-                    }
-                } else if (c == '%') {
-                    sb.append(System.getProperty("line.separator"));
-                }
-//                 else
-//                     throw new ConditionThrowable(new LispError("FORMAT: not implemented"));
-                state = NEUTRAL;
-            } else {
-                // There are no other valid states.
-                Debug.assertTrue(false);
-            }
-        }
-        return sb.toString();
+        LispObject formatControl = args[0];
+        LispObject formatArguments = NIL;
+        for (int i = 1; i < args.length; i++)
+            formatArguments = new Cons(args[i], formatArguments);
+        formatArguments = formatArguments.nreverse();
+        return format(formatControl, formatArguments);
     }
 
     // ### %defun
