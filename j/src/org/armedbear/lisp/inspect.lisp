@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: inspect.lisp,v 1.7 2004-05-23 15:18:19 piso Exp $
+;;; $Id: inspect.lisp,v 1.8 2004-05-23 17:42:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package "SYSTEM")
 
-(require 'clos)
+;; (require 'clos)
 
 (require 'format)
 
@@ -148,7 +148,16 @@
                (let* ((index option)
                       (parts (inspected-parts *inspected-object*)))
                  (cond ((null parts)
-                        (format t "Object has no selectable components."))
+                        (if (typep *inspected-object* 'sequence)
+                            (if (or (minusp index)
+                                    (>= index (length *inspected-object*)))
+                                (format t "Invalid index (~D)." index)
+                                (progn
+                                  (push *inspected-object* *inspected-object-stack*)
+                                  (setf *inspected-object*
+                                        (elt *inspected-object* index))
+                                  (display-current)))
+                            (format t "Object has no selectable components.")))
                        ((or (minusp index)
                             (>= index (length parts)))
                         (format t "Invalid index (~D)." index))
