@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.28 2003-10-01 14:01:21 piso Exp $
+;;; $Id: setf.lisp,v 1.29 2003-10-01 14:29:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,25 +19,57 @@
 
 (in-package "SYSTEM")
 
-(defun get-setf-expansion (form &optional environment)
-  (cond ((symbolp form)
-         (let ((new-var (gensym)))
-           (values nil nil (list new-var)
-                   `(setq ,form ,new-var) form)))
-	((get (car form) 'setf-inverse)
-	 (let ((vars (mapcar #'(lambda (x) (gensym)) (cdr form)))
-	       (store (gensym)))
-	   (values vars
-                   (cdr form)
-                   (list store)
-                   `(,(get (car form) 'setf-inverse)
-                      ,@vars ,store)
-		   (cons (car form) vars))))
-        ((get (car form) 'setf-expander)
-         (funcall (get (car form) 'setf-expander) form environment))
-        (t
-         (error "no SETF expansion for ~S" form))))
+(defun get-setf-method-inverse (form inverse setf-function)
+  (let ((new-var (gensym))
+	(vars nil)
+	(vals nil))
+    (dolist (x (cdr form))
+      (push (gensym) vars)
+      (push x vals))
+    (setq vals (nreverse vals))
+    (values vars vals (list new-var)
+	    (if setf-function
+		`(,@inverse ,new-var ,@vars)
+		`(,@inverse ,@vars ,new-var))
+	    `(,(car form) ,@vars))))
 
+(defun get-setf-expansion (form &optional environment)
+  (let (temp)
+    (cond ((symbolp form)
+           (let ((new-var (gensym)))
+             (values nil nil (list new-var)
+                     `(setq ,form ,new-var) form)))
+	  ((setq temp (get (car form) 'setf-inverse))
+	   (get-setf-method-inverse form `(,temp) nil))
+          ((setq temp (get (car form) 'setf-expander))
+           (funcall temp form environment))
+	  (t
+	   (expand-or-get-setf-inverse form environment)))))
+
+;;; If a macro, expand one level and try again.  If not, go for the
+;;; SETF function.
+(defun expand-or-get-setf-inverse (form environment)
+  (multiple-value-bind
+    (expansion expanded)
+    (macroexpand-1 form environment)
+    (if expanded
+	(get-setf-expansion expansion environment)
+	(get-setf-method-inverse form `(funcall #'(setf ,(car form)))
+				 t))))
+
+(defun get-setf-method-inverse (form inverse setf-function)
+  (let ((new-var (gensym))
+	(vars nil)
+	(vals nil))
+    (dolist (x (cdr form))
+      (push (gensym) vars)
+      (push x vals))
+    (setq vals (nreverse vals))
+    (values vars vals (list new-var)
+	    (if setf-function
+		`(,@inverse ,new-var ,@vars)
+		`(,@inverse ,@vars ,new-var))
+	    `(,(car form) ,@vars))))
 
 ;;; ROTATEF (from GCL)
 (defmacro rotatef (&rest rest)
