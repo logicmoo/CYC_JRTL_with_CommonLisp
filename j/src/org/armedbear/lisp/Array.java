@@ -2,7 +2,7 @@
  * Array.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Array.java,v 1.5 2003-05-31 20:22:55 piso Exp $
+ * $Id: Array.java,v 1.6 2003-07-15 03:09:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,50 +135,8 @@ public final class Array extends AbstractArray
             if (name.equals("ARRAY"))
                 return T;
         }
-        if (typeSpecifier instanceof Cons) {
-            final int length = typeSpecifier.length();
-            if (length > 3)
-                throw new WrongNumberOfArgumentsException((LispObject)null);
-            LispObject type = checkSymbol(typeSpecifier.car());
-            if (type == Symbol.ARRAY || type == Symbol.SIMPLE_ARRAY) {
-                if (length == 1)
-                    return T;
-                LispObject elementType = typeSpecifier.cadr();
-                if (elementType == Symbol.UNSPECIFIED || elementType == T)
-                    ;
-                else
-                    return NIL;
-                if (length == 2)
-                    return T;
-                Debug.assertTrue(length == 3);
-                LispObject dimensions = typeSpecifier.cddr().car();
-                int rank = dimv.length;
-                if (dimensions == Symbol.UNSPECIFIED)
-                    return T;
-                if (dimensions == NIL)
-                    return rank == 0 ? T : NIL;
-                if (dimensions instanceof Fixnum)
-                    return ((Fixnum)dimensions).getValue() == rank ? T : NIL;
-                if (dimensions instanceof Cons) {
-                    if (dimensions.length() != rank)
-                        return NIL;
-                    for (int i = 0; i < rank; i++) {
-                        LispObject dim = dimensions.car();
-                        if (dim == Symbol.UNSPECIFIED)
-                            ;
-                        else if (dim instanceof Fixnum) {
-                            if (((Fixnum)dim).getValue() != dimv[i])
-                                return NIL;
-                        } else
-                            return NIL;
-                        dimensions = dimensions.cdr();
-                    }
-                    // No problem found.
-                    return T;
-                }
-            }
-            return NIL;
-        }
+        if (typeSpecifier instanceof Cons)
+            return CompoundTypeSpecifier.getInstance(typeSpecifier).test(this);
         return super.typep(typeSpecifier);
     }
 
