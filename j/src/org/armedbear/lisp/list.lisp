@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.12 2003-03-04 13:12:39 piso Exp $
+;;; $Id: list.lisp,v 1.13 2003-03-06 02:06:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -197,11 +197,6 @@
 	 #'(lambda ()
             value))))
 
-(defmacro with-set-keys (funcall)
-  `(cond ((and testp notp) (error "Test and test-not both supplied."))
-	 (notp ,(append funcall '(:key key :test-not test-not)))
-	 (t ,(append funcall '(:key key :test test)))))
-
 (defmacro satisfies-the-test (item elt)
   (let ((key-tmp (gensym)))
     `(let ((,key-tmp (apply-key key ,elt)))
@@ -363,8 +358,13 @@
       list
       (cons item list)))
 
+(defmacro with-set-keys (funcall)
+  `(cond (notp ,(append funcall '(:key key :test-not test-not)))
+	 (t ,(append funcall '(:key key :test test)))))
+
 (defun union (list1 list2 &key key (test #'eql testp) (test-not nil notp))
-  (when (and testp notp) (error "Test and test-not both supplied."))
+  (when (and testp notp)
+    (error "test and test-not both supplied"))
   (let ((res list2))
     (dolist (elt list1)
       (unless (with-set-keys (member (apply-key key elt) list2))
@@ -378,8 +378,8 @@
 	   ,destination temp)))
 
 (defun nunion (list1 list2 &key key (test #'eql testp) (test-not nil notp))
-  (if (and testp notp)
-      (error "Test and test-not both supplied."))
+  (when (and testp notp)
+    (error "test and test-not both supplied"))
   (let ((res list2)
 	(list1 list1))
     (do ()
@@ -392,8 +392,8 @@
 
 (defun intersection (list1 list2 &key key
 			   (test #'eql testp) (test-not nil notp))
-  (if (and testp notp)
-      (error "Test and test-not both supplied."))
+  (when (and testp notp)
+      (error "test and test-not both supplied"))
   (let ((res nil))
     (dolist (elt list1)
       (if (with-set-keys (member (apply-key key elt) list2))
@@ -402,8 +402,8 @@
 
 (defun nintersection (list1 list2 &key key
 			    (test #'eql testp) (test-not nil notp))
-  (if (and testp notp)
-      (error "Test and test-not both supplied."))
+  (when (and testp notp)
+      (error "test and test-not both supplied"))
   (let ((res nil)
 	(list1 list1))
     (do () ((endp list1))
@@ -414,8 +414,8 @@
 
 (defun set-difference (list1 list2 &key key
 			     (test #'eql testp) (test-not nil notp))
-  (if (and testp notp)
-      (error "Test and test-not both supplied."))
+  (when (and testp notp)
+      (error "test and test-not both supplied"))
   (if (null list2)
       list1
       (let ((res nil))
@@ -427,8 +427,8 @@
 
 (defun nset-difference (list1 list2 &key key
 			      (test #'eql testp) (test-not nil notp))
-  (if (and testp notp)
-      (error "Test and test-not both supplied."))
+  (when (and testp notp)
+      (error "test and test-not both supplied"))
   (let ((res nil)
 	(list1 list1))
     (do () ((endp list1))
@@ -440,6 +440,8 @@
 
 (defun set-exclusive-or (list1 list2 &key key
                                (test #'eql testp) (test-not nil notp))
+  (when (and testp notp)
+    (error "test and test-not both supplied"))
   (let ((result nil)
         (key (when key (coerce key 'function)))
         (test (coerce test 'function))
@@ -488,6 +490,8 @@
 	    (t (setq splicey y))))))
 
 (defun subsetp (list1 list2 &key key (test #'eql testp) (test-not nil notp))
+  (when (and testp notp)
+    (error "test and test-not both supplied"))
   (dolist (elt list1)
     (unless (with-set-keys (member (apply-key key elt) list2))
       (return-from subsetp nil)))
