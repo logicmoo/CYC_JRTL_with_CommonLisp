@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CompiledFunction.java,v 1.28 2004-09-18 18:34:44 piso Exp $
+ * $Id: CompiledFunction.java,v 1.29 2004-09-18 18:43:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,27 +86,6 @@ public class CompiledFunction extends Closure
     {
         return signal(new LispError("CompiledFunction.execute(): not implemented"));
     }
-
-//     // ### make-compiled-function
-//     // make-compiled-function name lambda-list body => object
-//     private static final Primitive3 MAKE_COMPILED_FUNCTION =
-//         new Primitive3("make-compiled-function", PACKAGE_SYS, false)
-//     {
-//         public LispObject execute(LispObject first, LispObject second,
-//                                   LispObject third)
-//             throws ConditionThrowable
-//         {
-//             Symbol symbol;
-//             if (first == NIL)
-//                 symbol = null;
-//             else
-//                 symbol = checkSymbol(first);
-//             LispObject lambdaList = second;
-//             LispObject body = third;
-//             return new CompiledFunction(symbol, lambdaList, body,
-//                                         new Environment());
-//         }
-//     };
 
     // ### load-compiled-function
     private static final Primitive LOAD_COMPILED_FUNCTION =
