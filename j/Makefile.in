@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 1998-2004 Peter Graves
-# $Id: Makefile.in,v 1.19 2004-06-10 13:03:46 piso Exp $
+# $Id: Makefile.in,v 1.20 2004-08-03 00:33:31 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -70,15 +70,18 @@ libabcl.so:
 	cd src/org/armedbear/lisp && $(MAKE) libabcl.so
 
 j.jar: classes.stamp
-	cd src && $(JAR) cmf manifest ../j.jar Main.class org/armedbear/j/*.class \
-	  org/armedbear/j/version org/armedbear/j/build \
-	  org/armedbear/j/images/*.png \
-	  gnu/regexp/*.class gnu/regexp/MessagesBundle.properties \
-	  org/armedbear/j/mail/*.class \
-	  org/armedbear/j/jdb/*.class \
-	  org/armedbear/j/*.keywords org/armedbear/j/mail/*.keywords \
-	  org/armedbear/lisp/*.class org/armedbear/lisp/java/awt/*.class \
-	  org/armedbear/lisp/*.lisp org/armedbear/lisp/build
+	cd src && \
+	  $(JAR) cmf manifest ../j.jar Main.class org/armedbear/j/*.class && \
+	  $(JAR) uf ../j.jar org/armedbear/j/version org/armedbear/j/build \
+	  org/armedbear/j/images/*.png && \
+	  $(JAR) uf ../j.jar gnu/regexp/*.class gnu/regexp/MessagesBundle.properties && \
+	  $(JAR) uf ../j.jar org/armedbear/j/mail/*.class && \
+	  $(JAR) uf ../j.jar org/armedbear/j/jdb/*.class && \
+	  $(JAR) uf ../j.jar org/armedbear/j/*.keywords && \
+	  $(JAR) uf ../j.jar org/armedbear/j/mail/*.keywords && \
+	  $(JAR) uf ../j.jar org/armedbear/lisp/*.class && \
+	  $(JAR) uf ../j.jar org/armedbear/lisp/java/awt/*.class && \
+	  $(JAR) uf ../j.jar org/armedbear/lisp/*.lisp org/armedbear/lisp/build
 
 classes.stamp: classes
 	test -f classes.stamp || touch classes.stamp
