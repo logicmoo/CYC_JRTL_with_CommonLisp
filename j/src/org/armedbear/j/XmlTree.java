@@ -2,7 +2,7 @@
  * XmlTree.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: XmlTree.java,v 1.1.1.1 2002-09-24 16:08:02 piso Exp $
+ * $Id: XmlTree.java,v 1.2 2002-10-02 16:36:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,9 +111,8 @@ public final class XmlTree extends JTree implements Constants, NavigationCompone
                 parser.run();
                 Exception e = parser.getException();
                 if (e != null) {
-                    // An error occurred.  Leave the tree as it was.
-                    Log.debug("parser error");
-                    // Report parser error first time only.
+                    // An error occurred. Leave the tree as it was. Report
+                    // parser error first time only.
                     if (firstTime) {
                         // The exception might be a java.io.EOFException ("no
                         // more input"), which we should ignore.

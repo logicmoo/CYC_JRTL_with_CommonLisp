@@ -2,7 +2,7 @@
  * XmlParserImpl.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: XmlParserImpl.java,v 1.1.1.1 2002-09-24 16:08:57 piso Exp $
+ * $Id: XmlParserImpl.java,v 1.2 2002-10-02 16:36:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -164,7 +164,6 @@ public final class XmlParserImpl extends HandlerBase implements Runnable,
             Log.error("no parser found");
         } else {
             parserClassName = parser.getClass().getName();
-            Log.debug("using ".concat(parserClassName));
             if (parserClassName.equals("org.armedbear.j.aelfred.SAXDriver"))
                 aelfred = true;
             else
