@@ -636,8 +636,8 @@ Comments out each line in the selected region, or the current line if no region 
 <a name="compile">compile</a><dl><dd>
 <p>
 Compiles the source file in the current buffer. You will be prompted for the
-compile command. (On Windows, this command is only supported for Windows 2000
-and Windows XP.)
+compile command. (On Windows, this command is only supported for Windows NT 4,
+Windows 2000 and Windows XP.)
 <p>
 <b>Default key mapping:</b>
 <p>
@@ -1653,12 +1653,25 @@ option was specified.
 
 <a name="findOccurrenceAtDot">findOccurrenceAtDot</a><dl><dd>
 <p>
-Jumps to the line in the source file corresponding to the current line in a
-List Occurrences buffer.
+Jumps to the source line that corresponds to the current line in a List
+Occurrences buffer.
 <p>
 <b>Default key mapping:</b> Enter or Ctrl Shift G in List Occurrences buffers
 <p>
-<b>See also:</b> <a href="#mouseFindOccurrence">mouseFindOccurrence</a>
+<b>See also:</b> <a href="#findOccurrenceAtDotAndKillList">findOccurrenceAtDotAndKillList</a>,
+<a href="#mouseFindOccurrence">mouseFindOccurrence</a>
+<br><br>
+</dl><!--<hr>-->
+
+<a name="findOccurrenceAtDotAndKillList">findOccurrenceAtDotAndKillList</a><dl><dd>
+<p>
+Jumps to the source line that corresponds to the current line in a List
+Occurrences buffer, and closes the List Occurrences buffer.
+<p>
+<b>Default key mapping:</b> Ctrl Enter in List Occurrences buffers
+<p>
+<b>See also:</b> <a href="#findOccurrenceAtDot">findOccurrenceAtDot</a>,
+<a href="#mouseFindOccurrence">mouseFindOccurrence</a>
 <br><br>
 </dl><!--<hr>-->
 
@@ -3464,7 +3477,7 @@ buffer.
 
 <a name="p4Log">p4Log</a><dl><dd>
 <p>
-Runs the Perforce "filelog" command on the file associated with the current
+Runs the Perforce command "filelog -l" on the file associated with the current
 buffer. The output is displayed in a transient output buffer.
 <p>
 <b>Default key mapping:</b> None
@@ -3669,8 +3682,8 @@ buffers with unsaved changes.
 <a name="recompile">recompile</a><dl><dd>
 <p>
 Compiles the source file in the current buffer, using the last specified
-compile command. (On Windows, this command is only supported for Windows 2000
-and Windows XP.)
+compile command. (On Windows, this command is only supported for Windows NT 4,
+Windows 2000 and Windows XP.)
 <p>
 <b>Default key mapping:</b> Ctrl F9
 <p>
