@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: top-level.lisp,v 1.10 2003-10-17 14:06:55 piso Exp $
+;;; $Id: top-level.lisp,v 1.11 2003-10-30 18:40:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,6 +85,10 @@
 (defun describe-command (args)
   (let ((obj (eval (read-from-string args))))
     (describe obj)))
+
+(defun inspect-command (args)
+  (let ((obj (eval (read-from-string args))))
+    (inspect obj)))
 
 (defun macroexpand-command (args)
   (format t "~S~%" (macroexpand (read-from-string args)))
@@ -170,6 +174,7 @@
     ("describe" 2 describe-command "describe an object")
     ("exit" 2 exit-command "exit lisp")
     ("help" 2 help-command "print this help")
+    ("inspect" 2 inspect-command "inspect an object")
     ("ld" 2 ld-command "load a file")
     ("macroexpand" 2 macroexpand-command "macroexpand an expression")
     ("package" 2 package-command "change current package")
