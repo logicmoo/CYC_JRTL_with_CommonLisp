@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.37 2003-02-20 19:47:04 piso Exp $
+ * $Id: Editor.java,v 1.38 2003-02-21 14:52:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -586,8 +586,10 @@ public final class Editor extends JPanel implements Constants, ComponentListener
 
     public void updateLocation()
     {
-        Debug.assertTrue(locationBar != null);
-        locationBar.update();
+        if (locationBar != null)
+            locationBar.update();
+        else
+            Debug.bug();
     }
 
     public boolean isPrimaryEditor()
