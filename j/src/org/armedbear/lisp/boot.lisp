@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.104 2003-09-09 23:19:47 piso Exp $
+;;; $Id: boot.lisp,v 1.105 2003-09-10 18:01:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,6 +155,23 @@
 (defconstant char-code-limit 128)
 
 (defconstant internal-time-units-per-second 1000)
+
+(defconstant boole-clr    0)
+(defconstant boole-set    1)
+(defconstant boole-1      2)
+(defconstant boole-2      3)
+(defconstant boole-c1     4)
+(defconstant boole-c2     5)
+(defconstant boole-and    6)
+(defconstant boole-ior    7)
+(defconstant boole-xor    8)
+(defconstant boole-eqv    9)
+(defconstant boole-nand  10)
+(defconstant boole-nor   11)
+(defconstant boole-andc1 12)
+(defconstant boole-andc2 13)
+(defconstant boole-orc1  14)
+(defconstant boole-orc2  15)
 
 
 ;; AND, OR (from CMUCL)
