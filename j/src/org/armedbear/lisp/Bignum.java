@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Bignum.java,v 1.51 2004-01-17 00:39:29 piso Exp $
+ * $Id: Bignum.java,v 1.52 2004-02-25 23:51:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -428,6 +428,30 @@ public final class Bignum extends LispObject
                 return signal(new ArithmeticError(e.getMessage()));
         }
         return thread.setValues(value1, value2);
+    }
+
+    public LispObject ash(LispObject obj) throws ConditionThrowable
+    {
+        BigInteger n = value;
+        if (obj instanceof Fixnum) {
+            int count = ((Fixnum)obj).value;
+            if (count == 0)
+                return this;
+            // BigInteger.shiftLeft() succumbs to a stack overflow if count
+            // is Integer.MIN_VALUE, so...
+            if (count == Integer.MIN_VALUE)
+                return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
+            return number(n.shiftLeft(count));
+        }
+        if (obj instanceof Bignum) {
+            BigInteger count = ((Bignum)obj).value;
+            if (count.signum() > 0)
+                return signal(new LispError("Can't represent result of left shift."));
+            if (count.signum() < 0)
+                return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
+            Debug.bug(); // Shouldn't happen.
+        }
+        return signal(new TypeError(obj, Symbol.INTEGER));
     }
 
     public int hashCode()

@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Fixnum.java,v 1.83 2004-02-22 19:11:07 piso Exp $
+ * $Id: Fixnum.java,v 1.84 2004-02-25 23:51:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -518,6 +518,39 @@ public final class Fixnum extends LispObject
                 return signal(new ArithmeticError(e.getMessage()));
         }
         return thread.setValues(value1, value2);
+    }
+
+    public LispObject ash(LispObject obj) throws ConditionThrowable
+    {
+        if (obj instanceof Fixnum) {
+            int count = ((Fixnum)obj).value;
+            if (count == 0)
+                return this;
+            long n = value;
+            if (n == 0)
+                return this;
+            if (count < -32) {
+                // Right shift.
+                return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
+            }
+            if (count <= 32)
+                return number(count > 0 ? (n << count) : (n >> -count));
+            // BigInteger.shiftLeft() succumbs to a stack overflow if count
+            // is Integer.MIN_VALUE, so...
+            if (count == Integer.MIN_VALUE)
+                return n >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
+            return number(BigInteger.valueOf(value).shiftLeft(count));
+        }
+        if (obj instanceof Bignum) {
+            BigInteger n = BigInteger.valueOf(value);
+            BigInteger count = ((Bignum)obj).getValue();
+            if (count.signum() > 0)
+                return signal(new LispError("Can't represent result of left shift."));
+            if (count.signum() < 0)
+                return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
+            Debug.bug(); // Shouldn't happen.
+        }
+        return signal(new TypeError(obj, Symbol.INTEGER));
     }
 
     public int hashCode()
