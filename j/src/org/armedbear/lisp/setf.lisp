@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: setf.lisp,v 1.42 2004-06-15 11:58:38 piso Exp $
+;;; $Id: setf.lisp,v 1.43 2004-06-15 18:57:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -127,7 +127,7 @@
          (symbol-function name))
         ((and (consp name)
               (eq (car name) 'setf))
-         (or (get (cadr name) 'setf-function)
+         (or (get (cadr name) '%setf-function)
              (error 'undefined-function :name name)))
         (t
          (error 'type-error))))
@@ -136,8 +136,9 @@
   (cond ((symbolp name)
          (fset name function))
         ((and (consp name) (eq (car name) 'setf))
-         (%put (cadr name) 'setf-function function))
-        (t (error 'type-error))))
+         (%put (cadr name) '%setf-function function))
+        (t
+         (error 'type-error))))
 
 ;; (defsetf subseq (sequence start &optional (end nil)) (v)
 ;;   `(progn (replace ,sequence ,v :start1 ,start :end1 ,end)
