@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.3 2003-01-20 16:07:13 piso Exp $
+ * $Id: Lisp.java,v 1.4 2003-01-25 16:41:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -656,13 +656,16 @@ public abstract class Lisp
     }
 
     public static final Symbol _STANDARD_OUTPUT_ =
-        exportSpecial("*STANDARD-OUTPUT*", PACKAGE_CL, NIL);
+        exportSpecial("*STANDARD-OUTPUT*", PACKAGE_CL,
+            new CharacterOutputStream(System.out));
 
     public static final Symbol _ERROR_OUTPUT_ =
-        exportSpecial("*ERROR-OUTPUT*", PACKAGE_CL, NIL);
+        exportSpecial("*ERROR-OUTPUT*", PACKAGE_CL,
+            new CharacterOutputStream(System.out));
 
     public static final Symbol _TRACE_OUTPUT_ =
-        exportSpecial("*TRACE-OUTPUT*", PACKAGE_CL, NIL);
+        exportSpecial("*TRACE-OUTPUT*", PACKAGE_CL,
+            new CharacterOutputStream(System.out));
 
     public static final CharacterOutputStream getStandardOutput()
     {
