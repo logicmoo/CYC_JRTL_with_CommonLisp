@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.5 2003-10-10 23:35:08 piso Exp $
+;;; $Id: defclass.lisp,v 1.6 2003-10-11 00:16:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -340,7 +340,7 @@
 ;;; references.
 
 (defvar the-slots-of-standard-class) ;standard-class's class-slots
-(defvar the-class-standard-class)    ;standard-class's class metaobject
+(defvar the-class-standard-class (find-class 'standard-class))
 
 (defun slot-location (class slot-name)
   (if (and (eq slot-name 'effective-slots)
@@ -419,8 +419,6 @@
       (slot-exists-p-using-class (class-of object) object slot-name)))
 
 ;;; Standard instance allocation
-
-(defvar the-class-standard-class (find-class 'standard-class))
 
 (defparameter secret-unbound-value (list "slot unbound"))
 
