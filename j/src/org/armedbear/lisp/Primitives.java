@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.257 2003-06-23 11:18:49 piso Exp $
+ * $Id: Primitives.java,v 1.258 2003-06-23 17:41:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -104,17 +104,13 @@ public final class Primitives extends Module
     private static final int ZEROP                      = 62;
 
     // Primitive2
-    private static final int CONS                       = 63;
-    private static final int ELT                        = 64;
-    private static final int EQUAL                      = 65;
-    private static final int EQUALP                     = 66;
-    private static final int MEMBER                     = 67;
-    private static final int MOD                        = 68;
-    private static final int RPLACA                     = 69;
-    private static final int RPLACD                     = 70;
-    private static final int SET                        = 71;
-    private static final int _RPLACA                    = 72;
-    private static final int _RPLACD                    = 73;
+    private static final int MEMBER                     = 63;
+    private static final int MOD                        = 64;
+    private static final int RPLACA                     = 65;
+    private static final int RPLACD                     = 66;
+    private static final int SET                        = 67;
+    private static final int _RPLACA                    = 68;
+    private static final int _RPLACD                    = 69;
 
     private Primitives()
     {
@@ -183,10 +179,6 @@ public final class Primitives extends Module
         definePrimitive1("vectorp", VECTORP);
         definePrimitive1("zerop", ZEROP);
 
-        definePrimitive2("cons", CONS);
-        definePrimitive2("elt", ELT);
-        definePrimitive2("equal", EQUAL);
-        definePrimitive2("equalp", EQUALP);
         definePrimitive2("member", MEMBER);
         definePrimitive2("mod", MOD);
         definePrimitive2("rplaca", RPLACA);
@@ -443,14 +435,6 @@ public final class Primitives extends Module
         throws LispError
     {
         switch (index) {
-            case CONS:                          // ### cons
-                return new Cons(first, second);
-            case ELT:                           // ### elt
-                return first.elt(Fixnum.getValue(second));
-            case EQUAL:                         // ### equal
-                return first.equal(second) ? T : NIL;
-            case EQUALP:                        // ### equalp
-                return first.equalp(second) ? T : NIL;
             case MEMBER: {                      // ### member
                 // member item list &key key test test-not => tail
                 // FIXME Support keyword arguments!
@@ -511,6 +495,42 @@ public final class Primitives extends Module
             throws LispError
         {
             return first.eql(second) ? T : NIL;
+        }
+    };
+
+    // ### equal
+    private static final Primitive2 EQUAL = new Primitive2("equal") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.equal(second) ? T : NIL;
+        }
+    };
+
+    // ### equalp
+    private static final Primitive2 EQUALP = new Primitive2("equalp") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.equalp(second) ? T : NIL;
+        }
+    };
+
+    // ### cons
+    private static final Primitive2 CONS = new Primitive2("cons") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return new Cons(first, second);
+        }
+    };
+
+    // ### elt
+    private static final Primitive2 ELT = new Primitive2("elt") {
+        public LispObject execute(LispObject first, LispObject second)
+            throws LispError
+        {
+            return first.elt(Fixnum.getValue(second));
         }
     };
 
