@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: make-sequence.lisp,v 1.3 2003-06-20 01:25:30 piso Exp $
+;;; $Id: make-sequence.lisp,v 1.4 2003-10-10 02:58:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,16 +17,14 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(export 'make-sequence)
+(in-package "SYSTEM")
 
 ;;; MAKE-SEQUENCE (from ECL)
 
 ;;; Returns two values:
 ;;;  VALUE-1 = normalized type name or object
 ;;;  VALUE-2 = normalized type arguments or nil
-(defun normalize-type (type)
+(defun make-sequence-normalize-type (type)
   (let (tp i fd)
     (cond ((symbolp type)
            (values type nil))
@@ -36,7 +34,7 @@
                (values tp (list (car i) (1- (caadr i))))
                (values tp i)))
           (t
-           (error "normalize-type: bogus type specifier ~A" type)))))
+           (error "MAKE-SEQUENCE-NORMALIZE-TYPE: bogus type specifier ~A" type)))))
 
 
 (defun make-sequence (type size	&key (initial-element nil iesp))
@@ -69,7 +67,7 @@
                            ((memq type '(VECTOR SIMPLE-VECTOR)) t)
                            (t
                             (error 'type-error "~S is not a sequence type" type))))))
-        (multiple-value-bind (name args) (normalize-type type)
+        (multiple-value-bind (name args) (make-sequence-normalize-type type)
           (when (memq name '(LIST CONS))
             (return-from make-sequence
                          (if iesp
