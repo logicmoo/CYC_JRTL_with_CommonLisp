@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.104 2003-08-01 17:33:25 piso Exp $
+ * $Id: Editor.java,v 1.105 2003-08-04 12:57:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1351,58 +1351,110 @@ public final class Editor extends JPanel implements Constants,
 
     public void findMatchingChar()
     {
+        setWaitCursor();
+        Position pos = findDelimiterNearDot();
+        if (pos != null) {
+            Position match = findMatchInternal(pos, 0);
+            if (match != null) {
+                // If the match is a right delimiter, we want to put the caret
+                // beyond it.
+                if ("})]".indexOf(match.getChar()) >= 0)
+                    match.next();
+                addUndo(SimpleEdit.MOVE);
+                unmark();
+                updateDotLine();
+                dot.moveTo(match);
+                updateDotLine();
+                moveCaretToDotCol();
+            } else
+                status("No match");
+        }
+        setDefaultCursor();
+    }
+
+    public void selectSyntax()
+    {
+        setWaitCursor();
+        Position pos = findDelimiterNearDot();
+        if (pos != null) {
+            Position match = findMatchInternal(pos, 0);
+            if (match != null) {
+                if ("})]".indexOf(pos.getChar()) >= 0)
+                    pos.next();
+                else if ("})]".indexOf(match.getChar()) >= 0)
+                    match.next();
+                addUndo(SimpleEdit.MOVE);
+                unmark();
+                dot.moveTo(pos);
+                setMarkAtDot();
+                updateDotLine();
+                dot.moveTo(match);
+                updateDotLine();
+                moveCaretToDotCol();
+                if (dot.getLine() != mark.getLine())
+                    setUpdateFlag(REPAINT);
+            } else
+                status("No match");
+        }
+        setDefaultCursor();
+    }
+
+    private Position findDelimiterNearDot()
+    {
         Position saved = dot.copy();
-        char origChar = getDotChar();
-        final String chars = "{([})]";
-        int index = chars.indexOf(origChar);
-        if (index < 0) {
-            // Not a character we can match.
-            while (dot.getOffset() > 0) {
-                // Look at previous char.
-                dot.prev();
-                origChar = dot.getChar();
-                index = chars.indexOf(origChar);
-                if (index >= 0)
-                    break;
-                if (!Character.isWhitespace(origChar) && origChar != ';') {
-                    break;
-                }
-            }
-            if (index < 0) {
-                // Still no char to match.
-                dot.moveTo(saved);
-                final int limit = dot.getLineLength() - 1;
-                while (dot.getOffset() < limit) {
-                    // Look at next char.
-                    dot.next();
-                    origChar = dot.getChar();
-                    index = chars.indexOf(origChar);
-                    if (index >= 0)
-                        break;
-                    if (!Character.isWhitespace(origChar))
-                        break;
-                }
-            }
-            if (index < 0) {
-                // Give up.
-                dot.moveTo(saved);
-                return;
+        Position pos = dot.copy();
+        final String leftDelimiters = "{([";
+        final String rightDelimiters = "})]";
+        char charToMatch = 0;
+        char c = pos.getChar();
+        if (leftDelimiters.indexOf(c) >= 0) {
+            // The character to the right of the caret is a left delimiter.
+            charToMatch = c;
+        } else if (pos.getOffset() > 0) {
+            pos.prev();
+            c = pos.getChar();
+            if (rightDelimiters.indexOf(c) >= 0) {
+                // The character to the left of the caret is a right delimiter.
+                charToMatch = c;
             }
         }
-        setWaitCursor();
-        Position match = findMatchInternal(dot, 0);
-        setDefaultCursor();
-        // Restore dot to its original position so we can save state for undo.
-        dot.moveTo(saved);
-        if (match != null) {
-            addUndo(SimpleEdit.MOVE);
-            unmark();
-            updateDotLine();
-            dot.moveTo(match);
-            updateDotLine();
-            moveCaretToDotCol();
-        } else
-            status("No match");
+        if (charToMatch == 0) {
+            // The caret is not right before or right after a delimiter.
+            final String delimiters = "{([})]";
+            pos = saved;
+            while (pos.getOffset() > 0) {
+                // Look at previous char.
+                pos.prev();
+                c = pos.getChar();
+                if (delimiters.indexOf(c) >= 0) {
+                    charToMatch = c;
+                    break;
+                }
+                if (!Character.isWhitespace(c) && c != ';')
+                    break;
+            }
+            if (charToMatch == 0) {
+                // Still no char to match.
+                pos.moveTo(saved);
+                final int limit = pos.getLineLength() - 1;
+                while (pos.getOffset() < limit) {
+                    // Look at next char.
+                    pos.next();
+                    c = pos.getChar();
+                    if (delimiters.indexOf(c) >= 0) {
+                        charToMatch = c;
+                        break;
+                    }
+                    if (!Character.isWhitespace(c))
+                        break;
+                }
+                if (charToMatch == 0) {
+                    // Give up.
+                    return null;
+                }
+            }
+        }
+        return pos;
     }
 
     public void closeParen()
