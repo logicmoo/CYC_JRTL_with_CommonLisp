@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.635 2004-05-03 02:01:27 piso Exp $
+ * $Id: Primitives.java,v 1.636 2004-05-05 19:34:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1376,7 +1376,7 @@ public final class Primitives extends Lisp
                 env = new Environment();
             final Symbol symbol;
             if (first instanceof Symbol) {
-                symbol = checkSymbol(first);
+                symbol = (Symbol) first;
                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
                     String message =
                         symbol.getName() + " is a special operator and may not be redefined.";
@@ -1408,12 +1408,8 @@ public final class Primitives extends Lisp
                 body = new Cons(decls.car(), body);
                 decls = decls.cdr();
             }
-            final String name;
-            if (first instanceof Symbol)
-                name = symbol.getName();
-            else
-                name = null;
-            Closure closure = new Closure(name, arglist, body, env);
+            Closure closure = new Closure(first instanceof Symbol ? symbol : null,
+                                          arglist, body, env);
             closure.setArglist(arglist);
             if (first instanceof Symbol)
                 symbol.setSymbolFunction(closure);
