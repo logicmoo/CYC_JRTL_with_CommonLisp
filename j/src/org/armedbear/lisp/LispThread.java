@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.68 2004-11-28 15:43:49 piso Exp $
+ * $Id: LispThread.java,v 1.69 2004-12-07 18:03:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,6 +244,17 @@ public final class LispThread extends LispObject
         return value1;
     }
 
+    public final LispObject setValues(LispObject value1, LispObject value2,
+                                      LispObject value3, LispObject value4)
+    {
+        _values = new LispObject[4];
+        _values[0] = value1;
+        _values[1] = value2;
+        _values[2] = value3;
+        _values[3] = value4;
+        return value1;
+    }
+
     public final LispObject setValues(LispObject[] values)
     {
         if (values == null) {
@@ -313,7 +324,7 @@ public final class LispThread extends LispObject
         symbol.setSymbolValue(value);
         return value;
     }
-    
+
     public final void rebindSpecial(Symbol symbol, LispObject value)
     {
         Binding binding = getSpecialBinding(symbol);
