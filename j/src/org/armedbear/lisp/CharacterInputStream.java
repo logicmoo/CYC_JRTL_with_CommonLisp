@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: CharacterInputStream.java,v 1.63 2004-01-10 15:48:53 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.64 2004-01-16 16:52:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,12 @@ public class CharacterInputStream extends LispInputStream
     {
         reader = new PushbackReader(new BufferedReader(new InputStreamReader(in)),
                                     2);
+    }
+
+    public CharacterInputStream(InputStream in, boolean interactive)
+    {
+        this(in);
+        setInteractive(interactive);
     }
 
     public CharacterInputStream(InputStream in, LispObject pathname)
