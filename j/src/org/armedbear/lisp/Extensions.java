@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Extensions.java,v 1.1 2003-01-17 19:43:12 piso Exp $
+ * $Id: Extensions.java,v 1.2 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@ public final class Extensions extends Module
     // Should be a macro.
     private static final SpecialOperator WHILE = new SpecialOperator("while") {
         public LispObject execute(LispObject args, Environment env)
-            throws LispException
+            throws LispError
         {
             if (args.length() > 0) {
                 LispObject test = args.car();

@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispCharacter.java,v 1.1 2003-01-17 19:43:19 piso Exp $
+ * $Id: LispCharacter.java,v 1.2 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class LispCharacter extends LispObject
         return Symbol.CHARACTER;
     }
 
-    public static char getValue(LispObject obj) throws LispException
+    public static char getValue(LispObject obj) throws LispError
     {
         try {
             return ((LispCharacter)obj).getValue();

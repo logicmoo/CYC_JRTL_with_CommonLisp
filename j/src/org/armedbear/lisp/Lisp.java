@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.11 2003-02-15 16:07:35 piso Exp $
+ * $Id: Lisp.java,v 1.12 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ public abstract class Lisp
     }
 
     public static final LispObject funcall(LispObject fun, LispObject[] args)
-        throws LispException
+        throws LispError
     {
         final int length = args.length;
         switch (fun.getType()) {
@@ -116,7 +116,7 @@ public abstract class Lisp
     }
 
     public static final LispObject macroexpand(LispObject form)
-        throws LispException
+        throws LispError
     {
         LispObject expanded = NIL;
         while (true) {
@@ -131,7 +131,7 @@ public abstract class Lisp
     }
 
     public static final LispObject macroexpand_1(LispObject form)
-        throws LispException
+        throws LispError
     {
         LispObject[] results = new LispObject[2];
         if (!(form instanceof Cons)) {
@@ -163,7 +163,7 @@ public abstract class Lisp
         stack.clear();
     }
 
-    public static void checkStack() throws LispException
+    public static void checkStack() throws LispError
     {
         if (stack.size() > 0) {
             getStandardOutput().writeLine("stack depth = " + stack.size());
@@ -238,7 +238,7 @@ public abstract class Lisp
                 }
                 stream.print(')');
             }
-            catch (LispException e) {
+            catch (LispError e) {
                 Debug.trace(e);
             }
         } else {
@@ -255,7 +255,7 @@ public abstract class Lisp
     private static boolean debug = true;
 
     public static final LispObject eval(LispObject obj, Environment env)
-        throws LispException
+        throws LispError
     {
         if (debug) {
             stack.push(obj);
@@ -346,7 +346,7 @@ public abstract class Lisp
     }
 
     private static final LispObject[] evalList(LispObject exps, Environment env)
-        throws LispException
+        throws LispError
     {
         final int length = exps.length();
         LispObject[] results = new LispObject[length];
@@ -360,7 +360,7 @@ public abstract class Lisp
     }
 
     public static final LispObject progn(LispObject body, Environment env)
-        throws LispException
+        throws LispError
     {
         LispObject result = NIL;
         while (body != NIL) {
@@ -403,7 +403,7 @@ public abstract class Lisp
     }
 
     public static final boolean equal(LispObject first, LispObject second)
-        throws LispException
+        throws LispError
     {
         if (first == second)
             return true;
@@ -437,7 +437,7 @@ public abstract class Lisp
         return new Cons(first, new Cons(second, new Cons(third)));
     }
 
-    public static Symbol checkSymbol(LispObject obj) throws LispException
+    public static Symbol checkSymbol(LispObject obj) throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -449,7 +449,7 @@ public abstract class Lisp
         }
     }
 
-    public static Fixnum checkNumber(LispObject obj) throws LispException
+    public static Fixnum checkNumber(LispObject obj) throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -461,7 +461,7 @@ public abstract class Lisp
         }
     }
 
-    public static final Cons checkCons(LispObject obj) throws LispException
+    public static final Cons checkCons(LispObject obj) throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -474,7 +474,7 @@ public abstract class Lisp
     }
 
     public static final LispObject checkList(LispObject obj)
-        throws LispException
+        throws LispError
     {
         if (obj.listp())
             return obj;
@@ -482,7 +482,7 @@ public abstract class Lisp
     }
 
     public static final SequenceType checkSequence(LispObject obj)
-        throws LispException
+        throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -495,7 +495,7 @@ public abstract class Lisp
     }
 
     public static final AbstractVector checkVector(LispObject obj)
-        throws LispException
+        throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -508,7 +508,7 @@ public abstract class Lisp
     }
 
     public static final LispString checkString(LispObject obj)
-        throws LispException
+        throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -520,7 +520,7 @@ public abstract class Lisp
         }
     }
 
-    public static final LispString string(LispObject arg) throws LispException
+    public static final LispString string(LispObject arg) throws LispError
     {
         if (arg instanceof LispString)
             return (LispString) arg;
@@ -528,12 +528,12 @@ public abstract class Lisp
             return new LispString(((Symbol)arg).getName());
         if (arg instanceof LispCharacter)
             return new LispString(((LispCharacter)arg).getValue());
-        throw new LispException(String.valueOf(arg) +
+        throw new LispError(String.valueOf(arg) +
                                 " cannot be coerced to a string");
     }
 
     public static final LispCharacter checkCharacter(LispObject obj)
-        throws LispException
+        throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -546,7 +546,7 @@ public abstract class Lisp
     }
 
     public static final Package checkPackage(LispObject obj)
-        throws LispException
+        throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -559,7 +559,7 @@ public abstract class Lisp
     }
 
     public static final Function checkFunction(LispObject obj)
-        throws LispException
+        throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -572,7 +572,7 @@ public abstract class Lisp
     }
 
     public static final LispStream checkStream(LispObject obj)
-        throws LispException
+        throws LispError
     {
         if (obj == null)
             throw new NullPointerException();
@@ -598,7 +598,7 @@ public abstract class Lisp
             PACKAGE_CL_USER.usePackage(PACKAGE_CL);
             PACKAGE_CL_USER.usePackage(PACKAGE_JAVA);
         }
-        catch (LispException e) {
+        catch (LispError e) {
             e.printStackTrace();
         }
     }
@@ -648,7 +648,7 @@ public abstract class Lisp
     public static final Symbol _PACKAGE_ =
         exportSpecial("*PACKAGE*", PACKAGE_CL, PACKAGE_CL_USER);
 
-    public static final Package getCurrentPackage() throws LispException
+    public static final Package getCurrentPackage() throws LispError
     {
         return (Package) _PACKAGE_.symbolValueNoThrow();
     }
@@ -686,7 +686,7 @@ public abstract class Lisp
     }
 
     public static final Primitive0 DEBUG = new Primitive0("debug") {
-        public LispObject execute() throws LispException
+        public LispObject execute() throws LispError
         {
             debug = true;
             return nothing();
@@ -694,7 +694,7 @@ public abstract class Lisp
     };
 
     public static final Primitive0 NODEBUG = new Primitive0("nodebug") {
-        public LispObject execute() throws LispException
+        public LispObject execute() throws LispError
         {
             if (debug) {
                 debug = false;

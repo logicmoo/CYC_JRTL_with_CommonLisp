@@ -2,7 +2,7 @@
  * Macro.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Macro.java,v 1.1 2003-01-17 19:43:21 piso Exp $
+ * $Id: Macro.java,v 1.2 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public final class Macro extends Closure
 {
     public Macro(LispObject parameters, LispObject body, Environment env)
-        throws LispException
+        throws LispError
     {
         super(parameters, body, env);
     }

@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Symbol.java,v 1.3 2003-02-14 14:59:22 piso Exp $
+ * $Id: Symbol.java,v 1.4 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,7 +157,7 @@ public final class Symbol extends LispObject
             flags &= ~CONSTANT;
     }
 
-    public static LispObject getPropertyList(LispObject obj) throws LispException
+    public static LispObject getPropertyList(LispObject obj) throws LispError
     {
         try {
             return ((Symbol)obj).propertyList;
@@ -199,7 +199,7 @@ public final class Symbol extends LispObject
     }
 
     // symbol-value
-    public final LispObject symbolValue() throws LispException
+    public final LispObject symbolValue() throws LispError
     {
         if (dynEnv != null) {
             if ((flags & SPECIAL) != 0) {
@@ -210,7 +210,7 @@ public final class Symbol extends LispObject
         }
         if (value != null)
             return value;
-        throw new LispException(toString().concat(" has no dynamic value"));
+        throw new LispError(toString().concat(" has no dynamic value"));
     }
 
     public final LispObject symbolValueNoThrow()

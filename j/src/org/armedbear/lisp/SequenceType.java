@@ -2,7 +2,7 @@
  * Sequence.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SequenceType.java,v 1.1 2003-01-17 19:43:29 piso Exp $
+ * $Id: SequenceType.java,v 1.2 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,9 @@ package org.armedbear.lisp;
 
 public interface SequenceType
 {
-    int length() throws LispException;
+    int length() throws LispError;
 
-    LispObject elt(long index) throws LispException;
+    LispObject elt(long index) throws LispError;
 
-    LispObject remove(LispObject item) throws LispException;
+    LispObject remove(LispObject item) throws LispError;
 }

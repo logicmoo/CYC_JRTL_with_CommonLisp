@@ -2,7 +2,7 @@
  * VectorType.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: VectorType.java,v 1.1 2003-01-17 19:43:35 piso Exp $
+ * $Id: VectorType.java,v 1.2 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,5 +25,5 @@ public interface VectorType extends ArrayType
 {
     int getFillPointer();
 
-    void setFillPointer(LispObject obj) throws LispException;
+    void setFillPointer(LispObject obj) throws LispError;
 }

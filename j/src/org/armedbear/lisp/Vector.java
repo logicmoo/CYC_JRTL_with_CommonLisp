@@ -2,7 +2,7 @@
  * Vector.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Vector.java,v 1.4 2003-02-10 18:49:47 piso Exp $
+ * $Id: Vector.java,v 1.5 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class Vector extends AbstractVector implements SequenceType,
         this.length = length;
     }
 
-    public Vector(LispObject list) throws LispException
+    public Vector(LispObject list) throws LispError
     {
         elements = list.copyToArray();
         length = elements.length;
@@ -62,17 +62,17 @@ public final class Vector extends AbstractVector implements SequenceType,
         return fillPointer >= 0 ? fillPointer : length;
     }
 
-    public LispObject elt(long index) throws LispException
+    public LispObject elt(long index) throws LispError
     {
         long limit = fillPointer >= 0 ? fillPointer : length;
         if (index >= 0 && index < limit)
             return elements[(int)index];
-        throw new LispException("ELT: invalid index " + index + " for " + this);
+        throw new LispError("ELT: invalid index " + index + " for " + this);
     }
 
-    public LispObject remove(LispObject item) throws LispException
+    public LispObject remove(LispObject item) throws LispError
     {
-        throw new LispException("not implemented");
+        throw new LispError("not implemented");
     }
 
     public LispObject get(int index)

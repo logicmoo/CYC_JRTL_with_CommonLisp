@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.2 2003-01-18 18:32:17 piso Exp $
+ * $Id: Function.java,v 1.3 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,20 +73,20 @@ public abstract class Function extends LispObject
     }
 
     // Primitive
-    public LispObject execute(LispObject[] args) throws LispException
+    public LispObject execute(LispObject[] args) throws LispError
     {
         return module.dispatch(args, index);
     }
 
     // Primitive1
-    public LispObject execute(LispObject arg) throws LispException
+    public LispObject execute(LispObject arg) throws LispError
     {
         return module.dispatch(arg, index);
     }
 
     // Primitive2
     public LispObject execute(LispObject first, LispObject second)
-        throws LispException
+        throws LispError
     {
         return module.dispatch(first, second, index);
     }

@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.3 2003-02-10 18:49:20 piso Exp $
+ * $Id: LispString.java,v 1.4 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public final class LispString extends AbstractVector implements SequenceType,
             array[i] = c;
     }
 
-    public void append(LispObject obj) throws LispException
+    public void append(LispObject obj) throws LispError
     {
         if (obj instanceof LispString) {
             LispString s = (LispString) obj;
@@ -96,20 +96,20 @@ public final class LispString extends AbstractVector implements SequenceType,
             throw new WrongTypeException(obj, "sequence");
     }
 
-    public LispObject get(int index) throws LispException
+    public LispObject get(int index) throws LispError
     {
         if (index < 0 || index >= array.length)
             badIndex(index);
         return new LispCharacter(array[index]);
     }
 
-    public void set(int index, LispObject newValue) throws LispException
+    public void set(int index, LispObject newValue) throws LispError
     {
         char c = LispCharacter.getValue(newValue);
         array[index] = c;
     }
 
-    public static String getValue(LispObject obj) throws LispException
+    public static String getValue(LispObject obj) throws LispError
     {
         try {
             return ((LispString)obj).getValue();
@@ -129,7 +129,7 @@ public final class LispString extends AbstractVector implements SequenceType,
         return array.length;
     }
 
-    public LispObject elt(long index) throws LispException
+    public LispObject elt(long index) throws LispError
     {
         long limit = fillPointer >= 0 ? fillPointer : array.length;
         if (index >= 0 && index < limit)
@@ -138,12 +138,12 @@ public final class LispString extends AbstractVector implements SequenceType,
         sb.append(index);
         sb.append(" for ");
         sb.append(this);
-        throw new LispException(sb.toString());
+        throw new LispError(sb.toString());
     }
 
-    public LispObject remove(LispObject item) throws LispException
+    public LispObject remove(LispObject item) throws LispError
     {
-        throw new LispException("not implemented");
+        throw new LispError("not implemented");
     }
 
     public final String toString()
@@ -159,7 +159,7 @@ public final class LispString extends AbstractVector implements SequenceType,
     }
 
     public static LispObject equals(LispObject first, LispObject second)
-        throws LispException
+        throws LispError
     {
         char[] array1, array2;
         try {
@@ -184,7 +184,7 @@ public final class LispString extends AbstractVector implements SequenceType,
     }
 
     public static LispObject equalsIgnoreCase(LispObject first,
-        LispObject second) throws LispException
+        LispObject second) throws LispError
     {
         char[] array1, array2;
         try {

@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.2 2003-02-15 16:14:36 piso Exp $
+ * $Id: Cons.java,v 1.3 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,17 +70,17 @@ public final class Cons extends LispObject implements SequenceType
         this.cdr = cdr;
     }
 
-    public final LispObject cadr() throws LispException
+    public final LispObject cadr() throws LispError
     {
         return cdr.car();
     }
 
-    public final LispObject cddr() throws LispException
+    public final LispObject cddr() throws LispError
     {
         return cdr.cdr();
     }
 
-    public final int length() throws LispException
+    public final int length() throws LispError
     {
         int length = 0;
         LispObject obj = this;
@@ -96,10 +96,10 @@ public final class Cons extends LispObject implements SequenceType
         return length;
     }
 
-    public LispObject elt(long index) throws LispException
+    public LispObject elt(long index) throws LispError
     {
         if (index < 0) {
-            throw new LispException("ELT: invalid index " + index + " for " +
+            throw new LispError("ELT: invalid index " + index + " for " +
                 this);
         }
         long i = 0;
@@ -109,7 +109,7 @@ public final class Cons extends LispObject implements SequenceType
                 return obj.car();
             obj = obj.cdr();
             if (obj == NIL) {
-                throw new LispException("ELT: invalid index " + index +
+                throw new LispError("ELT: invalid index " + index +
                     " for " + this);
             }
             ++i;
@@ -121,7 +121,7 @@ public final class Cons extends LispObject implements SequenceType
         return true;
     }
 
-    public LispObject remove(LispObject item) throws LispException
+    public LispObject remove(LispObject item) throws LispError
     {
         LispObject result = NIL;
         LispObject splice = null;
@@ -141,7 +141,7 @@ public final class Cons extends LispObject implements SequenceType
         return result;
     }
 
-    public final LispObject[] copyToArray() throws LispException
+    public final LispObject[] copyToArray() throws LispError
     {
         final int length = length();
         LispObject[] array = new LispObject[length];

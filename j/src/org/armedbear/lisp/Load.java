@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.3 2003-02-14 19:34:02 piso Exp $
+ * $Id: Load.java,v 1.4 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,14 +52,14 @@ public final class Load extends Lisp
         internSpecial("*LOAD-DEPTH*", PACKAGE_CL, new Fixnum(0));
 
     /*package*/ static final LispObject load(String filename)
-        throws LispException
+        throws LispError
     {
         return load(filename, _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
             _LOAD_PRINT_.symbolValueNoThrow() != NIL);
     }
 
     private static final LispObject load(final String filename,
-        boolean verbose, boolean print) throws LispException
+        boolean verbose, boolean print) throws LispError
     {
         File file = null;
         boolean isFile = false;
@@ -94,7 +94,7 @@ public final class Load extends Lisp
             }
         }
         if (!isFile)
-            throw new LispException("file not found: " + filename);
+            throw new LispError("file not found: " + filename);
         String truename = filename;
         InputStream in = null;
         try {
@@ -102,16 +102,16 @@ public final class Load extends Lisp
             truename = file.getCanonicalPath();
         }
         catch (FileNotFoundException e) {
-            throw new LispException("file not found: " + filename);
+            throw new LispError("file not found: " + filename);
         }
         catch (IOException e) {
-            throw new LispException(e.getMessage());
+            throw new LispError(e.getMessage());
         }
         return loadFileFromStream(truename, in, verbose, print);
     }
 
     /*package*/ static final LispObject _load(final String filename,
-        boolean verbose, boolean print) throws LispException
+        boolean verbose, boolean print) throws LispError
     {
         URL url = Lisp.class.getResource(filename);
         if (url != null) {
@@ -125,11 +125,11 @@ public final class Load extends Lisp
             if (in != null)
                 return loadFileFromStream(url.getPath(), in, verbose, print);
         }
-        throw new LispException("file not found: " + filename);
+        throw new LispError("file not found: " + filename);
     }
 
     private static final LispObject loadFileFromStream(String truename,
-        InputStream in, boolean verbose, boolean print) throws LispException
+        InputStream in, boolean verbose, boolean print) throws LispError
     {
         long start = System.currentTimeMillis();
         Environment oldDynEnv = dynEnv;
@@ -169,7 +169,7 @@ public final class Load extends Lisp
     }
 
     private static final LispObject loadStream(InputStream in, boolean print)
-        throws LispException
+        throws LispError
     {
         LispReader reader = new LispReader(in);
         try {
@@ -186,7 +186,7 @@ public final class Load extends Lisp
             }
             return T;
         }
-        catch (LispException e) {
+        catch (LispError e) {
             CharacterOutputStream out = getStandardOutput();
             String truename = null;
             LispObject obj = _LOAD_TRUENAME_.symbolValueNoThrow();
@@ -233,7 +233,7 @@ public final class Load extends Lisp
 
     // (member string list :test #'string=)
     private static final boolean containsString(LispString string,
-        LispObject list) throws LispException
+        LispObject list) throws LispError
     {
         LispObject rest = checkList(list);
         String s = string.getValue();
@@ -251,7 +251,7 @@ public final class Load extends Lisp
     // Need to support keyword args.
     // load filespec &key verbose print if-does-not-exist external-format
     public static final Primitive LOAD = new Primitive("load") {
-        public LispObject execute(LispObject[] args) throws LispException
+        public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length == 0)
                 throw new WrongNumberOfArgumentsException(this);
@@ -266,7 +266,7 @@ public final class Load extends Lisp
     // ### %load
     // FIXME This function should not be exported from COMMON-LISP!
     public static final Primitive1 _LOAD = new Primitive1("%load") {
-        public LispObject execute(LispObject arg) throws LispException
+        public LispObject execute(LispObject arg) throws LispError
         {
             String filename = LispString.getValue(arg);
             return _load(filename, _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
@@ -276,7 +276,7 @@ public final class Load extends Lisp
 
     // ### provide
     public static final Primitive1 PROVIDE = new Primitive1("provide") {
-        public final LispObject execute(LispObject arg) throws LispException
+        public final LispObject execute(LispObject arg) throws LispError
         {
             LispString string = string(arg);
             LispObject list = _MODULES_.getSymbolValue();
@@ -291,7 +291,7 @@ public final class Load extends Lisp
     // ### require
     // require module-name &optional pathname-list => implementation-dependent
     public static final Primitive REQUIRE = new Primitive("require") {
-        public final LispObject execute(LispObject[] args) throws LispException
+        public final LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);

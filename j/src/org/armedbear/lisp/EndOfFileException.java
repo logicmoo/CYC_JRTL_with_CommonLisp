@@ -2,7 +2,7 @@
  * EndOfFileException.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: EndOfFileException.java,v 1.1 2003-01-17 19:43:11 piso Exp $
+ * $Id: EndOfFileException.java,v 1.2 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class EndOfFileException extends LispException
+public final class EndOfFileException extends LispError
 {
     public EndOfFileException()
     {

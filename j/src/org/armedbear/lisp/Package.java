@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Package.java,v 1.1 2003-01-17 19:43:22 piso Exp $
+ * $Id: Package.java,v 1.2 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,14 +126,14 @@ public final class Package extends LispObject
         return NIL;
     }
 
-    public void export(Symbol symbol) throws LispException
+    public void export(Symbol symbol) throws LispError
     {
         if (symbol.getPackage() != this) {
             StringBuffer sb = new StringBuffer("attempt to export symbol ");
             sb.append(symbol.getQualifiedName());
             sb.append(" from package ");
             sb.append(name);
-            throw new LispException(sb.toString());
+            throw new LispError(sb.toString());
         }
         String symbolName = symbol.getName();
         for (Iterator it = usedByList.iterator(); it.hasNext();) {
@@ -144,7 +144,7 @@ public final class Package extends LispObject
                 sb.append(sym.getQualifiedName());
                 sb.append(" is already accessible in package ");
                 sb.append(pkg.getName());
-                throw new LispException(sb.toString());
+                throw new LispError(sb.toString());
             }
         }
         // No conflicts.
@@ -168,7 +168,7 @@ public final class Package extends LispObject
             useList.remove(pkg);
     }
 
-    public final void addNickname(String s) throws LispException
+    public final void addNickname(String s) throws LispError
     {
         if (!nicknames.contains(s)) {
             nicknames.add(s);

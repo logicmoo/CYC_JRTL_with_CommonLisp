@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Nil.java,v 1.1 2003-01-17 19:43:22 piso Exp $
+ * $Id: Nil.java,v 1.2 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,9 +48,9 @@ public final class Nil extends LispObject implements SequenceType
         return 0;
     }
 
-    public LispObject elt(long index) throws LispException
+    public LispObject elt(long index) throws LispError
     {
-        throw new LispException("ELT: invalid index " + index + " for " + this);
+        throw new LispError("ELT: invalid index " + index + " for " + this);
     }
 
     public LispObject[] copyToArray()
@@ -63,7 +63,7 @@ public final class Nil extends LispObject implements SequenceType
         return true;
     }
 
-    public LispObject remove(LispObject item) throws LispException
+    public LispObject remove(LispObject item) throws LispError
     {
         return NIL;
     }

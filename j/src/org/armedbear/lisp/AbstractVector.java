@@ -24,18 +24,18 @@ public abstract class AbstractVector extends LispObject
 {
     protected int fillPointer = -1; // -1 indicates no fill pointer.
 
-    public abstract LispObject get(int index) throws LispException;
+    public abstract LispObject get(int index) throws LispError;
 
-    public abstract void set(int index, LispObject newValue) throws LispException;
+    public abstract void set(int index, LispObject newValue) throws LispError;
 
-    public int checkIndex(int index) throws LispException
+    public int checkIndex(int index) throws LispError
     {
         if (index < 0 || index >= length())
             badIndex(index);
         return index;
     }
 
-    public int checkIndex(LispObject index) throws LispException
+    public int checkIndex(LispObject index) throws LispError
     {
         long i = Fixnum.getValue(index);
         if (i < 0 || i >= length())
@@ -43,7 +43,7 @@ public abstract class AbstractVector extends LispObject
         return (int) i;
     }
 
-    protected void badIndex(long index) throws LispException
+    protected void badIndex(long index) throws LispError
     {
         StringBuffer sb = new StringBuffer("invalid array index ");
         sb.append(index);
@@ -54,7 +54,7 @@ public abstract class AbstractVector extends LispObject
             sb.append(length());
             sb.append(')');
         }
-        throw new LispException(sb.toString());
+        throw new LispError(sb.toString());
     }
 
     public int getFillPointer()
@@ -67,7 +67,7 @@ public abstract class AbstractVector extends LispObject
         fillPointer = n;
     }
 
-    public void setFillPointer(LispObject obj) throws LispException
+    public void setFillPointer(LispObject obj) throws LispError
     {
         if (obj == T)
             fillPointer = 0;
@@ -79,13 +79,13 @@ public abstract class AbstractVector extends LispObject
                 sb.append(") exceeds the length of the vector (");
                 sb.append(length());
                 sb.append(")");
-                throw new LispException(sb.toString());
+                throw new LispError(sb.toString());
             }
             if (n < 0) {
                 StringBuffer sb = new StringBuffer("the new fill pointer (");
                 sb.append(n);
                 sb.append(") is negative");
-                throw new LispException(sb.toString());
+                throw new LispError(sb.toString());
             }
             fillPointer = (int) n;
         }

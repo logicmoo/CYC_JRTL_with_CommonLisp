@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.3 2003-02-01 00:43:48 piso Exp $
+ * $Id: Closure.java,v 1.4 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,13 +41,13 @@ public class Closure extends Function
     private int keywords;
 
     public Closure(LispObject parameterList, LispObject body, Environment env)
-        throws LispException
+        throws LispError
     {
         this(null, parameterList, body, env);
     }
 
     public Closure(String name, LispObject parameterList, LispObject body,
-        Environment env) throws LispException
+        Environment env) throws LispError
     {
         super(name, getCurrentPackage());
         this.parameterList = parameterList;
@@ -72,7 +72,7 @@ public class Closure extends Function
                         arity = -1;
                         remaining = remaining.cdr();
                         if (remaining == NIL)
-                            throw new LispException(
+                            throw new LispError(
                                 "&REST must be followed by a variable");
                         obj = remaining.car();
                         arrayList.add(new Parameter((Symbol)obj, NIL, REST));
@@ -145,9 +145,9 @@ public class Closure extends Function
     }
 
     private static final void invalidParameter(LispObject obj)
-        throws LispException
+        throws LispError
     {
-        throw new LispException(String.valueOf(obj) +
+        throw new LispError(String.valueOf(obj) +
             " may not be used as a variable in a lambda list");
     }
 
@@ -177,7 +177,7 @@ public class Closure extends Function
         return env;
     }
 
-    public final LispObject execute(LispObject[] args) throws LispException
+    public final LispObject execute(LispObject[] args) throws LispError
     {
         if (arity >= 0) {
             if (args.length != arity)
@@ -242,7 +242,7 @@ public class Closure extends Function
             if (keywords > 0) {
                 int argsLeft = args.length - argsUsed;
                 if ((argsLeft % 2) != 0)
-                    throw new LispException("odd number of keyword arguments");
+                    throw new LispError("odd number of keyword arguments");
                 while (i < parameterArray.length) {
                     Parameter parameter = parameterArray[i];
                     if (parameter.type != KEYWORD)
@@ -293,7 +293,7 @@ public class Closure extends Function
         try {
             sb.append(body.car());
         }
-        catch (LispException e) {
+        catch (LispError e) {
             Debug.trace(e);
         }
         sb.append('>');

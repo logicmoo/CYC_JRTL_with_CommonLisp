@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Java.java,v 1.3 2003-01-18 19:29:48 piso Exp $
+ * $Id: Java.java,v 1.4 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,16 +31,16 @@ public final class Java extends Module
     // ### jclass
     private static final Primitive1 JCLASS =
         new Primitive1("jclass", PACKAGE_JAVA) {
-        public LispObject execute(LispObject arg) throws LispException
+        public LispObject execute(LispObject arg) throws LispError
         {
             try {
                 return new JavaObject(Class.forName(LispString.getValue(arg)));
             }
             catch (ClassNotFoundException e) {
-                throw new LispException("class not found: " + arg);
+                throw new LispError("class not found: " + arg);
             }
             catch (Throwable t) {
-                throw new LispException(getMessage(t));
+                throw new LispError(getMessage(t));
             }
         }
     };
@@ -49,7 +49,7 @@ public final class Java extends Module
     // jconstructor class-name &rest parameter-class-names
     private static final Primitive JCONSTRUCTOR =
         new Primitive("jconstructor", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispException
+        public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);
@@ -64,13 +64,13 @@ public final class Java extends Module
                 return new JavaObject(c.getConstructor(parameterTypes));
             }
             catch (ClassNotFoundException e) {
-                throw new LispException("class not found: " + className);
+                throw new LispError("class not found: " + className);
             }
             catch (NoSuchMethodException e) {
-                throw new LispException("no such constructor");
+                throw new LispError("no such constructor");
             }
             catch (Throwable t) {
-                throw new LispException(getMessage(t));
+                throw new LispError(getMessage(t));
             }
         }
     };
@@ -79,7 +79,7 @@ public final class Java extends Module
     // jmethod class-ref name &rest parameter-class-names
     private static final Primitive JMETHOD =
         new Primitive("jmethod", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispException
+        public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length < 2)
                 throw new WrongNumberOfArgumentsException(this);
@@ -103,17 +103,17 @@ public final class Java extends Module
                         if (method.getName().equals(methodName))
                             return new JavaObject(method);
                     }
-                    throw new LispException("no such method");
+                    throw new LispError("no such method");
                 }
             }
             catch (ClassNotFoundException e) {
-                throw new LispException("class not found: " + className);
+                throw new LispError("class not found: " + className);
             }
             catch (NoSuchMethodException e) {
-                throw new LispException("no such method");
+                throw new LispError("no such method");
             }
             catch (Throwable t) {
-                throw new LispException(getMessage(t));
+                throw new LispError(getMessage(t));
             }
         }
     };
@@ -122,7 +122,7 @@ public final class Java extends Module
     // jstatic method class &rest args
     private static final Primitive JSTATIC =
         new Primitive("jstatic", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispException
+        public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length < 2)
                 throw new WrongNumberOfArgumentsException(this);
@@ -156,7 +156,7 @@ public final class Java extends Module
                             }
                         }
                         if (m == null)
-                            throw new LispException("no such method");
+                            throw new LispError("no such method");
                     }
                 } else
                     throw new WrongTypeException(methodRef);
@@ -174,7 +174,7 @@ public final class Java extends Module
                 return makeLispObject(result);
             }
             catch (Throwable t) {
-                throw new LispException(getMessage(t));
+                throw new LispError(getMessage(t));
             }
         }
     };
@@ -182,7 +182,7 @@ public final class Java extends Module
     // ### jnew
     // jnew constructor &rest args
     private static final Primitive JNEW = new Primitive("jnew", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispException
+        public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);
@@ -198,7 +198,7 @@ public final class Java extends Module
                 return new JavaObject(constructor.newInstance(initargs));
             }
             catch (Throwable t) {
-                throw new LispException(getMessage(t));
+                throw new LispError(getMessage(t));
             }
         }
     };
@@ -206,7 +206,7 @@ public final class Java extends Module
     // ### jcall
     // jcall method instance &rest args
     private static final Primitive JCALL = new Primitive("jcall", PACKAGE_JAVA) {
-        public LispObject execute(LispObject[] args) throws LispException
+        public LispObject execute(LispObject[] args) throws LispError
         {
             if (args.length < 2)
                 throw new WrongNumberOfArgumentsException(this);
@@ -227,7 +227,7 @@ public final class Java extends Module
                 return makeLispObject(result);
             }
             catch (Throwable t) {
-                throw new LispException(getMessage(t));
+                throw new LispError(getMessage(t));
             }
         }
     };

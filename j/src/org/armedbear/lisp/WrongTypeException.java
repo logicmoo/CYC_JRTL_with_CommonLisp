@@ -2,7 +2,7 @@
  * WrongTypeException.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: WrongTypeException.java,v 1.1 2003-01-17 19:43:38 piso Exp $
+ * $Id: WrongTypeException.java,v 1.2 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public final class WrongTypeException extends LispException
+public final class WrongTypeException extends LispError
 {
     private final LispObject object;
     private final String expectedType;

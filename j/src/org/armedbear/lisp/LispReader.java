@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispReader.java,v 1.4 2003-02-14 02:19:16 piso Exp $
+ * $Id: LispReader.java,v 1.5 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,7 @@ public final class LispReader extends Lisp
         --offset;
     }
 
-    private void clearInput() throws LispException
+    private void clearInput() throws LispError
     {
         try {
             while (reader.ready())
@@ -78,7 +78,7 @@ public final class LispReader extends Lisp
 
     // Throws EndOfFileException if the file ends in the middle of an object
     // representation, otherwise returns EOF at end of file.
-    public LispObject readObject(boolean recursive) throws LispException
+    public LispObject readObject(boolean recursive) throws LispError
     {
         String token;
         try {
@@ -98,14 +98,14 @@ public final class LispReader extends Lisp
         if (token.equals("("))
             return readList();
         if (token.equals(")"))
-            throw new LispException("unmatched ')'");
+            throw new LispError("unmatched ')'");
         if (token.equals("\""))
             return readString();
         return makeObject(token);
     }
 
     // Never returns null.
-    public String readLine() throws LispException
+    public String readLine() throws LispError
     {
         StringBuffer sb = new StringBuffer();
         while (true) {
@@ -127,7 +127,7 @@ public final class LispReader extends Lisp
         }
     }
 
-    private String readToken() throws LispException
+    private String readToken() throws LispError
     {
         while (true) {
             try {
@@ -179,7 +179,7 @@ public final class LispReader extends Lisp
         }
     }
 
-    private LispObject dispatchMacroChar() throws LispException
+    private LispObject dispatchMacroChar() throws LispError
     {
         int ch;
         try {
@@ -211,13 +211,13 @@ public final class LispReader extends Lisp
                 return eval(readObject(true), new Environment());
             default:
                 clearInput();
-                throw new LispException("unsupported '#' macro character '" +
+                throw new LispError("unsupported '#' macro character '" +
                                         (char) ch + '\'');
         }
     }
 
     // FIXME
-    private LispObject handleFeature(char c) throws LispException
+    private LispObject handleFeature(char c) throws LispError
     {
         LispObject feature = readObject(true);
         LispObject form = readObject(true);
@@ -238,7 +238,7 @@ public final class LispReader extends Lisp
         return NIL;
     }
 
-    private LispObject readUninternedSymbol() throws LispException
+    private LispObject readUninternedSymbol() throws LispError
     {
         return new Symbol(readToken());
     }
@@ -315,7 +315,7 @@ public final class LispReader extends Lisp
         }
     }
 
-    private LispObject makeObject(String token) throws LispException
+    private LispObject makeObject(String token) throws LispError
     {
         char c = token.charAt(0);
         if (c == '-' || Character.isDigit(token.charAt(0))) {
@@ -343,7 +343,7 @@ public final class LispReader extends Lisp
             String symbolName = token.substring(index + 2);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                throw new LispException("package \"" + packageName +
+                throw new LispError("package \"" + packageName +
                     "\" not found");
             return intern(symbolName, pkg);
         }
@@ -353,21 +353,21 @@ public final class LispReader extends Lisp
             String symbolName = token.substring(index + 1);
             Package pkg = Packages.findPackage(packageName);
             if (pkg == null)
-                throw new LispException("package \"" + packageName +
+                throw new LispError("package \"" + packageName +
                     "\" not found");
             Symbol symbol = pkg.findSymbol(symbolName);
             if (symbol == null)
-                throw new LispException("symbol \"" + symbolName +
+                throw new LispError("symbol \"" + symbolName +
                     "\" not found in package " + packageName);
             if (!symbol.isExternal())
-                throw new LispException("symbol \"" + symbolName +
+                throw new LispError("symbol \"" + symbolName +
                     "\" is not external in package " + packageName);
             return symbol;
         }
         return intern(token, getCurrentPackage());
     }
 
-    private LispObject readList() throws LispException
+    private LispObject readList() throws LispError
     {
         Cons first = null;
         Cons last = null;
@@ -409,7 +409,7 @@ public final class LispReader extends Lisp
     }
 
     // We've just read the opening quote char.
-    private LispObject readString() throws LispException
+    private LispObject readString() throws LispError
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -439,7 +439,7 @@ public final class LispReader extends Lisp
     }
 
     // We've just read "#\".
-    private LispObject readChar() throws LispException
+    private LispObject readChar() throws LispError
     {
         try {
             int ch = read();
@@ -462,14 +462,14 @@ public final class LispReader extends Lisp
                 return new LispCharacter('\r');
             if (lower.equals("space"))
                 return new LispCharacter(' ');
-            throw new LispException("bad character");
+            throw new LispError("bad character");
         }
         catch (IOException e) {
             throw new StreamError(e);
         }
     }
 
-    private static Symbol symbol(String token) throws LispException
+    private static Symbol symbol(String token) throws LispError
     {
         if (token.equals("'"))
             return Symbol.QUOTE;
@@ -481,6 +481,6 @@ public final class LispReader extends Lisp
             return Symbol.COMMA_ATSIGN;
         if (token.equals(",."))
             return Symbol.COMMA_DOT;
-        throw new LispException("internal error");
+        throw new LispError("internal error");
     }
 }

@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.1 2003-01-17 19:43:20 piso Exp $
+ * $Id: LispObject.java,v 1.2 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,47 +38,47 @@ public class LispObject extends Lisp
         return null;
     }
 
-    public LispObject car() throws LispException
+    public LispObject car() throws LispError
     {
         throw new WrongTypeException(this, "list");
     }
 
-    public void setCar(LispObject obj) throws LispException
+    public void setCar(LispObject obj) throws LispError
     {
         throw new WrongTypeException(this, "list");
     }
 
-    public LispObject cdr() throws LispException
+    public LispObject cdr() throws LispError
     {
         throw new WrongTypeException(this, "list");
     }
 
-    public void setCdr(LispObject obj) throws LispException
+    public void setCdr(LispObject obj) throws LispError
     {
         throw new WrongTypeException(this, "list");
     }
 
-    public LispObject cadr() throws LispException
+    public LispObject cadr() throws LispError
     {
         throw new WrongTypeException(this, "list");
     }
 
-    public LispObject cddr() throws LispException
+    public LispObject cddr() throws LispError
     {
         throw new WrongTypeException(this, "list");
     }
 
-    public int length() throws LispException
+    public int length() throws LispError
     {
         throw new WrongTypeException(this, "sequence");
     }
 
-    public LispObject elt(long index) throws LispException
+    public LispObject elt(long index) throws LispError
     {
         throw new WrongTypeException(this, "sequence");
     }
 
-    public LispObject[] copyToArray() throws LispException
+    public LispObject[] copyToArray() throws LispError
     {
         throw new WrongTypeException(this, "list");
     }
@@ -93,12 +93,12 @@ public class LispObject extends Lisp
         return false;
     }
 
-    public LispObject getSymbolValue() throws LispException
+    public LispObject getSymbolValue() throws LispError
     {
         throw new WrongTypeException(this, "symbol");
     }
 
-    public LispObject getSymbolFunction() throws LispException
+    public LispObject getSymbolFunction() throws LispError
     {
         throw new WrongTypeException(this, "symbol");
     }
@@ -110,40 +110,40 @@ public class LispObject extends Lisp
 
     // Special operator
     public LispObject execute(LispObject args, Environment env)
-        throws LispException
+        throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
     // Primitive
-    public LispObject execute(LispObject[] args) throws LispException
+    public LispObject execute(LispObject[] args) throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
     // Primitive0
-    public LispObject execute() throws LispException
+    public LispObject execute() throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
     // Primitive1
-    public LispObject execute(LispObject arg) throws LispException
+    public LispObject execute(LispObject arg) throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
     // Primitive2
     public LispObject execute(LispObject first, LispObject second)
-        throws LispException
+        throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
     // Primitive3
     public LispObject execute(LispObject first, LispObject second,
-        LispObject third) throws LispException
+        LispObject third) throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 }

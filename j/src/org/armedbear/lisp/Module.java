@@ -2,7 +2,7 @@
  * Module.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Module.java,v 1.1 2003-01-17 19:43:22 piso Exp $
+ * $Id: Module.java,v 1.2 2003-02-15 16:48:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,26 +26,26 @@ public abstract class Module extends Lisp
     protected Module() {}
 
     public LispObject dispatch(LispObject args, Environment env, int index)
-        throws LispException
+        throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
     public LispObject dispatch(LispObject[] args, int index)
-        throws LispException
+        throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
-    public LispObject dispatch(LispObject arg, int index) throws LispException
+    public LispObject dispatch(LispObject arg, int index) throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
     public LispObject dispatch(LispObject first, LispObject second, int index)
-        throws LispException
+        throws LispError
     {
-        throw new LispException();
+        throw new LispError();
     }
 
     protected void definePrimitive(String name, int index)

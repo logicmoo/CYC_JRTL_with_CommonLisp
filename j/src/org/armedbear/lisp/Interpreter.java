@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.7 2003-02-15 16:14:52 piso Exp $
+ * $Id: Interpreter.java,v 1.8 2003-02-15 16:48:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,7 +147,7 @@ public final class Interpreter extends Lisp
                 catch (StackOverflowError e) {
                     out.writeLine("Stack overflow");
                 }
-                catch (LispException e) {
+                catch (LispError e) {
                     String message = e.getMessage();
                     if (message != null)
                         out.writeLine("Error: " + e.getMessage() + ".");
@@ -186,7 +186,7 @@ public final class Interpreter extends Lisp
     private static String ldArgs;
 
     private static void executeCommand(String command, LispReader reader)
-        throws LispException
+        throws LispError
     {
         if (command.equals("ld")) {
             String s = reader.readLine().trim();
@@ -194,7 +194,7 @@ public final class Interpreter extends Lisp
                 if (ldArgs != null)
                     s = ldArgs;
                 else
-                    throw new LispException("ld: no previous file");
+                    throw new LispError("ld: no previous file");
             }
             if (s.length() > 0) {
                 ldArgs = s;
@@ -230,7 +230,7 @@ public final class Interpreter extends Lisp
                         new LispString(file.getCanonicalPath()));
                 }
                 catch (IOException e) {
-                    throw new LispException(e.getMessage());
+                    throw new LispError(e.getMessage());
                 }
             }
             LispString string =
@@ -293,7 +293,7 @@ public final class Interpreter extends Lisp
     }
 
     // Used only by JLisp.runStartupScript() and JLisp.runLispCommand().
-    public static LispObject evaluate(String s) throws LispException
+    public static LispObject evaluate(String s) throws LispError
     {
         LispReader reader = new LispReader(s);
         // Use readObject(false) here to simulate top level.
