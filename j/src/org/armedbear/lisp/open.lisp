@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: open.lisp,v 1.2 2003-08-09 23:43:08 piso Exp $
+;;; $Id: open.lisp,v 1.3 2003-10-17 15:35:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,8 +27,8 @@
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
   (cond ((eq direction :input)
-         (%open-input-file filename element-type))
+         (%open-input-file (pathname filename) element-type))
         ((eq direction :output)
-         (%open-output-file filename element-type if-exists))
+         (%open-output-file (pathname filename) element-type if-exists))
         (t
-         (error "operation not supported"))))
+         (error "OPEN: operation not supported"))))
