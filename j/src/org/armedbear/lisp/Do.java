@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Do.java,v 1.6 2004-03-16 02:36:23 piso Exp $
+ * $Id: Do.java,v 1.7 2004-05-29 18:43:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,6 +196,8 @@ public final class Do extends Lisp
                         }
                     }
                 }
+                if (interrupted)
+                    handleInterrupt();
             }
             LispObject result = progn(resultForms, ext, thread);
             return result;
