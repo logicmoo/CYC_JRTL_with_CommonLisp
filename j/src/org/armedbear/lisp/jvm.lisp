@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.351 2005-01-15 07:20:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.352 2005-01-16 00:36:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -517,7 +517,8 @@
            (dformat t "p1-function local function ~S~%" (cadr form))
            (let ((variable (local-function-variable local-function)))
              (when variable
-               (unless (eq (variable-compiland variable) *current-compiland*)
+               (unless (or (eq (variable-compiland variable) *current-compiland*)
+                           (eq (local-function-compiland local-function) *current-compiland*))
                  (dformat t "p1-function ~S used non-locally~%" (variable-name variable))
                  (setf (variable-used-non-locally-p variable) t))))
            form)
@@ -2127,7 +2128,7 @@
             *this-class*
             g1
             +lisp-string+)
-      (emit 'dup)
+;;       (emit 'dup)
       (emit-invokestatic +lisp-class+
                          "recall"
                          "(Lorg/armedbear/lisp/SimpleString;)Lorg/armedbear/lisp/LispObject;"
@@ -2136,10 +2137,10 @@
             *this-class*
             g2
             +lisp-object+)
-      (emit-invokestatic +lisp-class+
-                         "forget"
-                         "(Lorg/armedbear/lisp/SimpleString;)V"
-                         -1)
+;;       (emit-invokestatic +lisp-class+
+;;                          "forget"
+;;                          "(Lorg/armedbear/lisp/SimpleString;)V"
+;;                          -1)
       (setf *static-code* *code*)
       g2)))
 
@@ -4122,80 +4123,80 @@
 (defun p2-function (form &key (target *val*) representation)
   (let ((name (second form))
         (local-function))
-    (cond
-     ((symbolp name)
-      (cond
-       ((setf local-function (find-local-function name))
-        (when (eq (local-function-compiland local-function) *current-compiland*)
-          (emit 'aload 0) ; this
-          (emit-move-from-stack target)
-          (return-from p2-function))
-        (if (local-function-variable local-function)
-            (emit 'var-ref (local-function-variable local-function) :stack)
-            (let ((g (if *compile-file-truename*
-                         (declare-local-function local-function)
-                         (declare-object (local-function-function local-function)))))
-              (emit 'getstatic
-                    *this-class*
-                    g
-                    +lisp-object+))) ; Stack: template-function
-        (cond
-         ((null *closure-variables*)) ; Nothing to do.
-         ((compiland-closure-register *current-compiland*)
-          (emit 'aload (compiland-closure-register *current-compiland*))
-          (emit-invokestatic +lisp-class+
-                             "makeCompiledClosure"
-                             "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
-                             -1)) ; Stack: compiled-closure
-         (t
-          (aver (progn 'unexpected nil))))
-        (emit-move-from-stack target))
-       ((inline-ok name)
-        (emit 'getstatic
-              *this-class*
-              (declare-function name)
-              +lisp-object+)
-        (emit-move-from-stack target))
-       (t
-        (emit 'getstatic
-              *this-class*
-              (declare-symbol name)
-              +lisp-symbol+)
-        (emit-invokevirtual +lisp-object-class+
-                            "getSymbolFunctionOrDie"
-                            "()Lorg/armedbear/lisp/LispObject;"
-                            0)
-        (emit-move-from-stack target))))
-     ((and (consp name) (eq (car name) 'SETF))
-      ; FIXME Need to check for NOTINLINE declaration!
-      (cond
-       ((member name *toplevel-defuns* :test #'equal)
-        (emit 'getstatic
-              *this-class*
-              (declare-setf-function name)
-              +lisp-object+)
-        (emit-move-from-stack target))
-       ((and (null *compile-file-truename*)
-             (fdefinition name))
-        (emit 'getstatic
-              *this-class*
-              (declare-object (fdefinition name))
-              +lisp-object+)
-        (emit-move-from-stack target))
-       (t
-        (emit 'getstatic
-              *this-class*
-              (declare-symbol (cadr name))
-              +lisp-symbol+)
-        (emit-invokevirtual +lisp-symbol-class+
-                            "getSymbolSetfFunctionOrDie"
-                            "()Lorg/armedbear/lisp/LispObject;"
-                            0)
-        (emit-move-from-stack target))))
-     ((compiland-p name)
-      (p2-lambda name target))
-     (t
-      (error "p2-function: unsupported case: ~S" form)))))
+    (cond ((symbolp name)
+           (cond ((setf local-function (find-local-function name))
+                  (dformat t "p2-function 1~%")
+                  (when (eq (local-function-compiland local-function) *current-compiland*)
+                    (emit 'aload 0) ; this
+                    (emit-move-from-stack target)
+                    (return-from p2-function))
+                  (cond ((local-function-variable local-function)
+                         (dformat t "p2-function 2~%")
+                         (emit 'var-ref (local-function-variable local-function) :stack))
+                        (t
+                         (let ((g (if *compile-file-truename*
+                                      (declare-local-function local-function)
+                                      (declare-object (local-function-function local-function)))))
+                           (emit 'getstatic
+                                 *this-class*
+                                 g
+                                 +lisp-object+)))) ; Stack: template-function
+                  (cond ((null *closure-variables*)) ; Nothing to do.
+                        ((compiland-closure-register *current-compiland*)
+                         (dformat t "p2-function 3~%")
+                         (emit 'aload (compiland-closure-register *current-compiland*))
+                         (emit-invokestatic +lisp-class+
+                                            "makeCompiledClosure"
+                                            "(Lorg/armedbear/lisp/LispObject;[Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
+                                            -1)) ; Stack: compiled-closure
+                        (t
+                         (aver (progn 'unexpected nil))))
+                  (emit-move-from-stack target))
+                 ((inline-ok name)
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-function name)
+                        +lisp-object+)
+                  (emit-move-from-stack target))
+                 (t
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-symbol name)
+                        +lisp-symbol+)
+                  (emit-invokevirtual +lisp-object-class+
+                                      "getSymbolFunctionOrDie"
+                                      "()Lorg/armedbear/lisp/LispObject;"
+                                      0)
+                  (emit-move-from-stack target))))
+          ((and (consp name) (eq (car name) 'SETF))
+           ; FIXME Need to check for NOTINLINE declaration!
+           (cond ((member name *toplevel-defuns* :test #'equal)
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-setf-function name)
+                        +lisp-object+)
+                  (emit-move-from-stack target))
+                 ((and (null *compile-file-truename*)
+                       (fdefinition name))
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-object (fdefinition name))
+                        +lisp-object+)
+                  (emit-move-from-stack target))
+                 (t
+                  (emit 'getstatic
+                        *this-class*
+                        (declare-symbol (cadr name))
+                        +lisp-symbol+)
+                  (emit-invokevirtual +lisp-symbol-class+
+                                      "getSymbolSetfFunctionOrDie"
+                                      "()Lorg/armedbear/lisp/LispObject;"
+                                      0)
+                  (emit-move-from-stack target))))
+          ((compiland-p name)
+           (p2-lambda name target))
+          (t
+           (error "p2-function: unsupported case: ~S" form)))))
 
 (defun p2-ash (form &key (target *val*) representation)
   (dformat t "p2-ash form = ~S representation = ~S~%" form representation)
