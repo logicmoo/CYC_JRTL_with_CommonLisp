@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: autoloads.lisp,v 1.41 2003-10-05 00:28:31 piso Exp $
+;;; $Id: autoloads.lisp,v 1.42 2003-10-05 00:38:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -87,6 +87,7 @@
 (autoload 'write)
 (autoload '(decode-universal-time get-decoded-time encode-universal-time)
           "time.lisp")
+(autoload '(break invoke-debugger) "debug.lisp")
 
 (autoload '(tpl::top-level-loop) "top-level.lisp")
 
