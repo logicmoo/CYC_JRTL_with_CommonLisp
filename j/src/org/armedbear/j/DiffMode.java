@@ -1,8 +1,8 @@
 /*
  * DiffMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: DiffMode.java,v 1.2 2003-04-04 14:05:22 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: DiffMode.java,v 1.3 2003-04-04 16:05:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@ package org.armedbear.j;
 import java.awt.AWTEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public final class DiffMode extends AbstractMode implements Constants, Mode
 {
@@ -50,6 +51,66 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "diffGotoFile");
         km.mapKey(VK_DOUBLE_MOUSE_1, 0, "diffGotoFile");
         km.mapKey(VK_MOUSE_2, 0, "diffGotoFile");
+    }
+
+    public static void diff()
+    {
+        diff("--help");
+    }
+
+    public static void diff(String args)
+    {
+        final Editor editor = Editor.currentEditor();
+        Buffer parentBuffer = null;
+        List argList = Utilities.tokenize(args);
+        for (int i = 0; i < argList.size(); i++) {
+            String arg = (String) argList.get(i);
+            if (arg.equals("%")) {
+                File file = editor.getBuffer().getFile();
+                if (file == null) {
+                    MessageDialog.showMessageDialog(
+                        "There is no file associated with the current buffer.",
+                        "Error");
+                    return;
+                }
+                if (file.isRemote()) {
+                    MessageDialog.showMessageDialog(
+                        file.netPath() + " is a remote file.",
+                        "Error");
+                    return;
+                }
+                if (file.isDirectory()) {
+                    MessageDialog.showMessageDialog(
+                        file.canonicalPath() + " is a directory.",
+                        "Error");
+                    return;
+                }
+                // OK.
+                argList.set(i, file.canonicalPath());
+                parentBuffer = editor.getBuffer();
+            }
+        }
+        editor.setWaitCursor();
+        FastStringBuffer sb = new FastStringBuffer("diff ");
+        for (int i = 0; i < argList.size(); i++) {
+            String s = (String) argList.get(i);
+            if (s.indexOf(' ') >= 0) {
+                sb.append('"');
+                sb.append(s);
+                sb.append('"');
+            } else
+                sb.append(s);
+            sb.append(' ');
+        }
+        String cmdline = sb.toString().trim();
+        ShellCommand shellCommand = new ShellCommand(cmdline);
+        shellCommand.run();
+        String output = shellCommand.getOutput();
+        DiffOutputBuffer buf = new DiffOutputBuffer(parentBuffer, output, 0);
+        buf.setTitle(cmdline);
+        editor.makeNext(buf);
+        editor.activateInOtherWindow(buf);
+        editor.setDefaultCursor();
     }
 
     public static void gotoFile()
