@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: defstruct.lisp,v 1.56 2004-08-18 14:03:05 piso Exp $
+;;; $Id: defstruct.lisp,v 1.57 2004-08-21 03:24:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,8 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "SYSTEM")
+
+(require :source-transform)
 
 ;;; DEFSTRUCT-DESCRIPTION
 
@@ -306,7 +308,7 @@
            `((defun ,accessor-name (instance) (aref instance ,index))))
           (t
            `((defun ,accessor-name (instance) (%structure-ref instance ,index))
-             (define-compiler-macro ,accessor-name (instance)
+             (define-source-transform ,accessor-name (instance)
                `(%structure-ref ,instance ,,index)))))))
 
 (defun define-writer (slot)
@@ -325,7 +327,9 @@
                (%aset instance ,index value))))
           (t
            `((defun (setf ,accessor-name) (value instance)
-               (%structure-set instance ,index value)))))))
+               (%structure-set instance ,index value))
+             (define-source-transform (setf ,accessor-name) (value instance)
+               `(%structure-set ,instance ,,index ,value)))))))
 
 (defun define-access-functions ()
   (let ((result ()))
