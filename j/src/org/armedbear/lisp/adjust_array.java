@@ -2,7 +2,7 @@
  * adjust_array.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.8 2004-02-24 21:00:29 piso Exp $
+ * $Id: adjust_array.java,v 1.9 2004-02-25 13:50:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,68 +52,32 @@ public final class adjust_array extends Primitive
         {
             return signal(new LispError("ADJUST-ARRAY: incompatible element type."));
         }
-        final int displacement;
-        if (displacedIndexOffset == NIL)
-            displacement = 0;
-        else
-            displacement = Fixnum.getValue(displacedIndexOffset);
         if (array.getRank() == 1) {
             final int newSize;
             if (dimensions instanceof Cons && dimensions.length() == 1)
                 newSize = Fixnum.getValue(dimensions.car());
             else
                 newSize = Fixnum.getValue(dimensions);
-            if (array instanceof SimpleVector) {
-                SimpleVector v = (SimpleVector) array;
+            if (array instanceof AbstractVector) {
+                AbstractVector v = (AbstractVector) array;
                 AbstractVector v2;
-                if (displacedTo != NIL)
-                    v2 = (AbstractVector) v.adjustArray(newSize,
-                                                        checkArray(displacedTo),
-                                                        displacement);
-                else
-                    v2 = (AbstractVector) v.adjustArray(newSize,
-                                                        initialElement,
-                                                        initialContents);
+                if (displacedTo != NIL) {
+                    final int displacement;
+                    if (displacedIndexOffset == NIL)
+                        displacement = 0;
+                    else
+                        displacement = Fixnum.getValue(displacedIndexOffset);
+                    v2 = v.adjustVector(newSize,
+                                        checkArray(displacedTo),
+                                        displacement);
+                } else {
+                    v2 = v.adjustVector(newSize,
+                                        initialElement,
+                                        initialContents);
+                }
                 if (fillPointer != NIL)
                     v2.setFillPointer(fillPointer);
                 return v2;
-            }
-            if (array instanceof ComplexVector) {
-                ComplexVector v = (ComplexVector) array;
-                if (displacedTo != NIL)
-                    v.adjustArray(newSize, checkArray(displacedTo),
-                                  displacement);
-                else
-                    v.adjustArray(newSize, initialElement, initialContents);
-                if (fillPointer != NIL)
-                    v.setFillPointer(fillPointer);
-                return v;
-            }
-            if (array instanceof SimpleString) {
-                SimpleString s = (SimpleString) array;
-                AbstractString s2;
-                if (displacedTo != NIL)
-                    s2 = (AbstractString) s.adjustArray(newSize,
-                                                        checkArray(displacedTo),
-                                                        displacement);
-                else
-                    s2 = (AbstractString) s.adjustArray(newSize,
-                                                        initialElement,
-                                                        initialContents);
-                if (fillPointer != NIL)
-                    s2.setFillPointer(fillPointer);
-                return s2;
-            }
-            if (array instanceof ComplexString) {
-                ComplexString s = (ComplexString) array;
-                if (displacedTo != NIL)
-                    s.adjustArray(newSize, checkArray(displacedTo),
-                                  displacement);
-                else
-                    s.adjustArray(newSize, initialElement, initialContents);
-                if (fillPointer != NIL)
-                    s.setFillPointer(fillPointer);
-                return s;
             }
         }
         return signal(new LispError("ADJUST-ARRAY: unsupported case."));

@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexVector.java,v 1.6 2004-02-25 03:06:52 piso Exp $
+ * $Id: ComplexVector.java,v 1.7 2004-02-25 13:50:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,8 +127,8 @@ public final class ComplexVector extends AbstractVector
         return capacity;
     }
 
-    public AbstractArray adjustArray(int size, LispObject initialElement,
-                                     LispObject initialContents)
+    public AbstractVector adjustVector(int size, LispObject initialElement,
+                                       LispObject initialContents)
         throws ConditionThrowable
     {
         if (elements == null) {
@@ -168,8 +168,8 @@ public final class ComplexVector extends AbstractVector
         return this;
     }
 
-    public AbstractArray adjustArray(int size, AbstractArray displacedTo,
-                                     int displacement)
+    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
+                                       int displacement)
         throws ConditionThrowable
     {
         capacity = size;

@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: NilVector.java,v 1.7 2004-02-24 16:33:33 piso Exp $
+ * $Id: NilVector.java,v 1.8 2004-02-25 13:50:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,6 +204,25 @@ public final class NilVector extends AbstractString
     {
         if (capacity == 0)
             return Fixnum.ZERO;
+        accessError();
+        // Not reached.
+        return null;
+    }
+
+    public AbstractVector adjustVector(int newCapacity,
+                                       LispObject initialElement,
+                                       LispObject initialContents)
+        throws ConditionThrowable
+    {
+        accessError();
+        // Not reached.
+        return null;
+    }
+
+    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
+                                       int displacement)
+        throws ConditionThrowable
+    {
         accessError();
         // Not reached.
         return null;

@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.8 2004-02-25 01:22:43 piso Exp $
+ * $Id: SimpleString.java,v 1.9 2004-02-25 13:50:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -314,8 +314,8 @@ public final class SimpleString extends AbstractString
         return capacity;
     }
 
-    public AbstractArray adjustArray(int size, LispObject initialElement,
-                                     LispObject initialContents)
+    public AbstractVector adjustVector(int size, LispObject initialElement,
+                                       LispObject initialContents)
         throws ConditionThrowable
     {
         SimpleString s = new SimpleString(size);
@@ -343,8 +343,8 @@ public final class SimpleString extends AbstractString
         return s;
     }
 
-    public AbstractArray adjustArray(int size, AbstractArray displacedTo,
-                                     int displacement)
+    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
+                                       int displacement)
         throws ConditionThrowable
     {
         return new ComplexString(size, displacedTo, displacement);

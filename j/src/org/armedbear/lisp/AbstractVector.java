@@ -162,6 +162,16 @@ public abstract class AbstractVector extends AbstractArray
         return this;
     }
 
+    public abstract AbstractVector adjustVector(int size,
+                                                LispObject initialElement,
+                                                LispObject initialContents)
+        throws ConditionThrowable;
+
+    public abstract AbstractVector adjustVector(int size,
+                                                AbstractArray displacedTo,
+                                                int displacement)
+        throws ConditionThrowable;
+
     public LispObject vectorPushExtend(LispObject element)
         throws ConditionThrowable
     {

@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexBitVector.java,v 1.2 2004-02-25 03:08:42 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.3 2004-02-25 13:50:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,13 +295,89 @@ public final class ComplexBitVector extends AbstractBitVector
                 if ((minCapacity & LONG_MASK) != 0)
                     ++size;
                 bits = new long[size];
-                for (int i = 0; i < capacity; i++)
-                    bits[i] = Fixnum.getValue(array.getRowMajor(displacement + i));
+                for (int i = 0; i < capacity; i++) {
+                    int n = Fixnum.getValue(array.getRowMajor(displacement + i));
+                    if (n == 1)
+                        setBit(i);
+                    else
+                        clearBit(i);
+                }
                 capacity = minCapacity;
                 array = null;
                 displacement = 0;
                 isDisplaced = false;
             }
         }
+    }
+
+    public AbstractVector adjustVector(int newCapacity,
+                                       LispObject initialElement,
+                                       LispObject initialContents)
+        throws ConditionThrowable
+    {
+        if (bits == null) {
+            // Copy array.
+            int size = capacity >>> 6;
+            if ((capacity & LONG_MASK) != 0)
+                ++size;
+            bits = new long[size];
+            for (int i = 0; i < capacity; i++) {
+                int n = Fixnum.getValue(array.getRowMajor(displacement + i));
+                if (n == 1)
+                    setBit(i);
+                else
+                    clearBit(i);
+            }
+            array = null;
+            displacement = 0;
+            isDisplaced = false;
+        }
+        if (capacity != newCapacity) {
+            int size = newCapacity >>> 6;
+            if ((newCapacity & LONG_MASK) != 0)
+                ++size;
+            if (initialContents != NIL) {
+                bits = new long[size];
+                if (initialContents.listp()) {
+                    LispObject list = initialContents;
+                    for (int i = 0; i < newCapacity; i++) {
+                        set(i, list.car());
+                        list = list.cdr();
+                    }
+                } else if (initialContents.vectorp()) {
+                    for (int i = 0; i < newCapacity; i++)
+                        set(i, initialContents.elt(i));
+                } else
+                    signal(new TypeError(initialContents, Symbol.SEQUENCE));
+            } else {
+                long[] newBits = new long[size];
+                System.arraycopy(bits, 0, newBits, 0,
+                                 Math.min(bits.length, newBits.length));
+                bits = newBits;
+                if (newCapacity > capacity) {
+                    int n = Fixnum.getValue(initialElement);
+                    if (n == 1)
+                        for (int i = capacity; i < newCapacity; i++)
+                            setBit(i);
+                    else
+                        for (int i = capacity; i < newCapacity; i++)
+                            clearBit(i);
+                }
+            }
+            capacity = newCapacity;
+        }
+        return this;
+    }
+
+    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
+                                       int displacement)
+        throws ConditionThrowable
+    {
+        capacity = size;
+        array = displacedTo;
+        this.displacement = displacement;
+        bits = null;
+        isDisplaced = true;
+        return this;
     }
 }

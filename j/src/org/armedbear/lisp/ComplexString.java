@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: ComplexString.java,v 1.7 2004-02-24 21:00:28 piso Exp $
+ * $Id: ComplexString.java,v 1.8 2004-02-25 13:50:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,8 +288,8 @@ public final class ComplexString extends AbstractString
         return capacity;
     }
 
-    public AbstractArray adjustArray(int size, LispObject initialElement,
-                                     LispObject initialContents)
+    public AbstractVector adjustVector(int size, LispObject initialElement,
+                                       LispObject initialContents)
         throws ConditionThrowable
     {
         if (chars == null) {
@@ -344,8 +344,8 @@ public final class ComplexString extends AbstractString
         return this;
     }
 
-    public AbstractArray adjustArray(int size, AbstractArray displacedTo,
-                                     int displacement)
+    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
+                                       int displacement)
         throws ConditionThrowable
     {
         capacity = size;

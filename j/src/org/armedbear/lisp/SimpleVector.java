@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: SimpleVector.java,v 1.6 2004-02-24 21:00:29 piso Exp $
+ * $Id: SimpleVector.java,v 1.7 2004-02-25 13:50:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,7 +95,7 @@ public final class SimpleVector extends AbstractVector
         return capacity;
     }
 
-    public AbstractArray adjustArray(int size, LispObject initialElement,
+    public AbstractVector adjustVector(int size, LispObject initialElement,
                                      LispObject initialContents)
         throws ConditionThrowable
     {
@@ -115,9 +115,9 @@ public final class SimpleVector extends AbstractVector
                 signal(new TypeError(initialContents, Symbol.SEQUENCE));
         } else {
             System.arraycopy(elements, 0, newArray, 0,
-                             Math.min(elements.length, size));
-            if (size > elements.length) {
-                for (int i = elements.length; i < size; i++)
+                             Math.min(capacity, size));
+            if (size > capacity) {
+                for (int i = capacity; i < size; i++)
                     newArray[i] = initialElement;
             }
         }
@@ -126,7 +126,7 @@ public final class SimpleVector extends AbstractVector
         return v;
     }
 
-    public AbstractArray adjustArray(int size, AbstractArray displacedTo,
+    public AbstractVector adjustVector(int size, AbstractArray displacedTo,
                                      int displacement)
         throws ConditionThrowable
     {
