@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.36 2003-11-20 19:04:24 piso Exp $
+;;; $Id: defstruct.lisp,v 1.37 2003-11-21 01:19:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,18 +23,20 @@
 (defvar *ds-conc-name*)
 (defvar *ds-constructors*)
 (defvar *ds-copier*)
+(defvar *ds-include*)
 (defvar *ds-type*)
 (defvar *ds-named*)
 (defvar *ds-initial-offset*)
 (defvar *ds-predicate*)
 (defvar *ds-print-function*)
 (defvar *ds-direct-slots*)
+(defvar *ds-slots*)
 
 (defun define-constructor (constructor)
   (let* ((constructor-name (intern (car constructor)))
          (keys ())
          (elements ()))
-    (dolist (slot *ds-direct-slots*)
+    (dolist (slot *ds-slots*)
       (let ((name (getf slot :name))
             (initform (getf slot :initform)))
         (push (list name initform) keys)
@@ -139,11 +141,11 @@
     `((setf (symbol-function ',accessor) ,(get-slot-accessor index))
       (%put ',accessor 'setf-inverse ,(get-slot-mutator index )))))
 
-(defun define-access-functions (slots)
+(defun define-access-functions ()
   (let ((index 0)
         (result ()))
-    (dolist (slot slots)
-      (let ((slot-name (if (atom slot) slot (car slot))))
+    (dolist (slot *ds-slots*)
+      (let ((slot-name (getf slot :name)))
         (setf result (nconc result (define-access-function slot-name index))))
       (incf index))
     result))
@@ -185,6 +187,8 @@
             (numargs (length args)))
        (when (= numargs 1)
           (setf *ds-copier* (car args)))))
+    (:include
+     (setf *ds-include* (cdr option)))
     (:initial-offset
      (setf *ds-initial-offset* (cadr option)))
     (:predicate
@@ -219,12 +223,14 @@
         (*ds-conc-name* nil)
         (*ds-constructors* nil)
         (*ds-copier* nil)
+        (*ds-include* nil)
         (*ds-type* nil)
         (*ds-named* nil)
         (*ds-initial-offset* nil)
         (*ds-predicate* nil)
         (*ds-print-function* nil)
-        (*ds-direct-slots* ()))
+        (*ds-direct-slots* ())
+        (*ds-slots* ()))
     (parse-name-and-options (if (atom name-and-options)
                                 (list name-and-options)
                                 name-and-options))
@@ -236,10 +242,11 @@
                                   (list :name (car slot) :initform (cadr slot)))))
         (push slot-description *ds-direct-slots*)))
     (setf *ds-direct-slots* (nreverse *ds-direct-slots*))
+    (setf *ds-slots* *ds-direct-slots*)
     `(progn
-       (make-structure-class ',*ds-name* ',*ds-direct-slots*)
+       (make-structure-class ',*ds-name* ',*ds-direct-slots* ',*ds-slots*)
        ,@(define-constructors)
        ,@(define-predicate)
-       ,@(define-access-functions slots)
+       ,@(define-access-functions)
        ,@(define-copier)
        ',*ds-name*)))
