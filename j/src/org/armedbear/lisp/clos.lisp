@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.36 2003-12-15 16:25:48 piso Exp $
+;;; $Id: clos.lisp,v 1.37 2003-12-15 17:11:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1590,5 +1590,34 @@
 (defgeneric compute-applicable-methods (gf args))
 (defmethod compute-applicable-methods ((gf standard-generic-function) args)
   (compute-applicable-methods-using-classes gf (mapcar #'class-of args)))
+
+;;; Conditions.
+
+(defmacro define-condition (name (&rest parent-types) (&rest slot-specs)
+				 &body options)
+  (let ((parent-types (or parent-types '(condition)))
+        (report nil))
+    (dolist (option options)
+      (format t "option = ~S~%" option)
+      (when (eq (car option) :report)
+        (let ((arg (cadr option)))
+          (setf report
+                (if (stringp arg)
+                    `#'(lambda (condition stream)
+                        (declare (ignore condition))
+                        (write-string ,arg stream))
+                    `#'(lambda (condition stream)
+                        (funcall #',arg condition stream)))))))
+    `(progn
+       (defclass ,name ,parent-types ,slot-specs ,@options)
+       (defmethod print-object ((condition ,name) stream)
+         (if *print-escape*
+             (call-next-method)
+             (funcall ,report condition stream)))
+       ',name)))
+
+(defun make-condition (type &rest initargs)
+  (or (%make-condition type initargs)
+      (apply #'make-instance (find-class type) initargs)))
 
 (provide 'clos)
