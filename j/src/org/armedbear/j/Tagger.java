@@ -2,7 +2,7 @@
  * Tagger.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Tagger.java,v 1.5 2003-06-14 01:46:11 piso Exp $
+ * $Id: Tagger.java,v 1.6 2003-10-11 17:26:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,7 @@ public abstract class Tagger implements Constants, Runnable
                         case TAG_METHOD:
                         case TAG_EXPLICIT:
                         case TAG_DEFUN: // Lisp.
+                        case TAG_GENERIC_FUNCTION: // Lisp.
                         case TAG_MACRO: // Lisp.
                         case TAG_STRUCT: // Lisp.
                             writer.write(localTag.getName());
