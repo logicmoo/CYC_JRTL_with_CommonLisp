@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Editor.java,v 1.11 2002-10-13 16:56:42 piso Exp $
+ * $Id: Editor.java,v 1.12 2002-10-30 18:47:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -6140,9 +6140,34 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         } else
             setFocusToTextField();
     }
+    
+    private static Method evaluateMethod;
 
     public void executeCommand(String input)
     {
+        input = input.trim();
+        if (input.length() == 0)
+            return;
+        if (input.charAt(0) == '(') {
+            // Lisp form.
+            try {
+                if (evaluateMethod == null) {
+                    Class c = Class.forName("org.armedbear.lisp.Interpreter");
+                    if (c != null) {
+                        Class[] parameterTypes = new Class[] {
+                            Class.forName("java.lang.String")
+                        };
+                        evaluateMethod = c.getMethod("evaluate", parameterTypes);
+                    }
+                }
+                if (evaluateMethod != null)
+                    invoke(evaluateMethod, input);
+            }
+            catch (Throwable t) {
+                Log.debug(t);
+                return;
+            }
+        }
         int index = input.indexOf('=');
         if (index >= 0) {
             String key = input.substring(0, index).trim();
