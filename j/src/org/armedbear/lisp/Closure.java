@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.23 2003-05-29 14:55:31 piso Exp $
+ * $Id: Closure.java,v 1.24 2003-05-31 22:49:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,10 +279,37 @@ public class Closure extends Function
     public LispObject execute(LispObject first, LispObject second)
         throws Condition
     {
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        return execute(args, environment);
+        if (arity == 2) {
+            final LispThread thread = LispThread.currentThread();
+            Environment oldDynEnv = thread.getDynamicEnvironment();
+            Environment ext = new Environment(environment);
+            bind(parameterArray[0].var, first, ext);
+            bind(parameterArray[1].var, second, ext);
+            if (auxVarArray != null) {
+                // Aux variable processing is analogous to let* processing.
+                for (int i = 0; i < auxVarArray.length; i++) {
+                    Parameter parameter = auxVarArray[i];
+                    Symbol symbol = parameter.var;
+                    LispObject initForm = parameter.initForm;
+                    LispObject value =
+                        initForm == NIL ? NIL : eval(initForm, ext, thread);
+                    bind(symbol, value, ext);
+                }
+            }
+            LispObject result = NIL;
+            LispObject prog = body;
+            while (prog != NIL) {
+                result = eval(prog.car(), ext, thread);
+                prog = prog.cdr();
+            }
+            thread.setDynamicEnvironment(oldDynEnv);
+            return result;
+        } else {
+            LispObject[] args = new LispObject[2];
+            args[0] = first;
+            args[1] = second;
+            return execute(args, environment);
+        }
     }
 
     public LispObject execute(LispObject first, LispObject second,
