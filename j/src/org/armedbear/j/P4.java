@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: P4.java,v 1.5 2003-01-16 18:06:33 piso Exp $
+ * $Id: P4.java,v 1.6 2003-01-31 02:10:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -858,8 +858,16 @@ public class P4 implements Constants
         return false;
     }
 
+    private static int haveP4 = -1;
+
     private static boolean haveP4()
     {
-        return Utilities.have("p4");
+        if (haveP4 > 0)
+            return true;
+        if (Utilities.have("p4")) {
+            haveP4 = 1; // Cache positive result.
+            return true;
+        }
+        return false;
     }
 }
