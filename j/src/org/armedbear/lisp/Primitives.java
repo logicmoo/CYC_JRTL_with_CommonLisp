@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.713 2004-12-07 01:23:52 piso Exp $
+ * $Id: Primitives.java,v 1.714 2004-12-07 01:47:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -847,13 +847,41 @@ public final class Primitives extends Lisp
     };
 
     // ### nconc
-    private static final Primitive NCONC = new Primitive("nconc","&rest lists") {
+    private static final Primitive NCONC = new Primitive("nconc","&rest lists")
+    {
+        public LispObject execute()
+        {
+            return NIL;
+        }
+        public LispObject execute(LispObject arg)
+        {
+            return arg;
+        }
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first == NIL)
+                return second;
+            if (first instanceof Cons) {
+                LispObject result = first;
+                LispObject splice = null;
+                while (first instanceof Cons) {
+                    splice = first;
+                    first = first.cdr();
+                }
+                splice.setCdr(second);
+                return result;
+            }
+            return signal(new TypeError(first, Symbol.LIST));
+        }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
             switch (array.length) {
                 case 0:
+                    Debug.assertTrue(false);
                     return NIL;
                 case 1:
+                    Debug.assertTrue(false);
                     return array[0];
                 default: {
                     LispObject result = null;
@@ -879,7 +907,7 @@ public final class Primitives extends Lisp
                                 list = list.cdr();
                             }
                         } else
-                            signal(new TypeError(list, "list"));
+                            signal(new TypeError(list, Symbol.LIST));
                     }
                     if (result == null)
                         return array[i];
