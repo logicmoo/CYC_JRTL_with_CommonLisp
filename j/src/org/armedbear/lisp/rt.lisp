@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: rt.lisp,v 1.108 2003-09-03 23:27:37 piso Exp $
+;;; $Id: rt.lisp,v 1.109 2003-09-04 16:21:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -195,6 +195,7 @@
                               "defun"
                               "defvar"
                               "destructuring-bind"
+                              "divide"
                               "ecase"
                               "elt"
                               "endp"
