@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.49 2003-12-20 02:18:13 piso Exp $
+;;; $Id: clos.lisp,v 1.50 2003-12-20 03:08:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -253,12 +253,14 @@
                      #'std-compute-slots
                      #'compute-slots)
                  class))
-  (let ((length 0))
+  (let ((length 0)
+        (instance-slots ()))
     (dolist (slot (class-slots class))
       (case (slot-definition-allocation slot)
         (:instance
          (setf (slot-definition-location slot) length)
-         (incf length))
+         (incf length)
+         (push (slot-definition-name slot) instance-slots))
         (:class
          (unless (slot-definition-location slot)
            (let ((allocation-class (slot-definition-allocation-class slot)))
@@ -267,7 +269,7 @@
                        (cons (slot-definition-name slot) +slot-unbound+)
                        (slot-location allocation-class (slot-definition-name slot)))))))))
     (setf (class-layout class)
-          (make-layout class length)))
+          (make-layout class length (nreverse instance-slots))))
   (setf (class-default-initargs class)
         (compute-class-default-initargs class)))
 
@@ -418,8 +420,15 @@
         (slot-definition-location slot)
         nil)))
 
+(defun instance-slot-location (instance slot-name)
+  (let* ((layout (std-instance-layout instance))
+         (location (and layout (instance-slot-index layout slot-name))))
+    (if location
+        location
+        (slot-location (class-of instance) slot-name))))
+
 (defun std-slot-value (instance slot-name)
-  (let* ((location (slot-location (class-of instance) slot-name))
+  (let* ((location (instance-slot-location instance slot-name))
          (value (cond ((fixnump location)
                        (instance-ref instance location))
                       ((consp location)
@@ -436,7 +445,7 @@
       (slot-value-using-class (class-of object) object slot-name)))
 
 (defun %set-std-slot-value (instance slot-name new-value)
-  (let ((location (slot-location (class-of instance) slot-name)))
+  (let ((location (instance-slot-location instance slot-name)))
     (cond ((fixnump location)
            (setf (instance-ref instance location) new-value))
           ((consp location)
@@ -454,7 +463,7 @@
        new-value (class-of object) object slot-name)))
 
 (defun std-slot-boundp (instance slot-name)
-  (let ((location (slot-location (class-of instance) slot-name)))
+  (let ((location (instance-slot-location instance slot-name)))
     (cond ((fixnump location)
            (neq +slot-unbound+ (instance-ref instance location)))
           ((consp location)
@@ -468,7 +477,7 @@
       (slot-boundp-using-class (class-of object) object slot-name)))
 
 (defun std-slot-makunbound (instance slot-name)
-  (let ((location (slot-location (class-of instance) slot-name)))
+  (let ((location (instance-slot-location instance slot-name)))
     (cond ((fixnump location)
            (setf (instance-ref instance location) +slot-unbound+))
           ((consp location)
