@@ -155,6 +155,7 @@
     <li><a href="commands.html#insertRegister">insertRegister</a></li>
     <li><a href="commands.html#insertString">insertString</a></li>
     <li><a href="commands.html#insertTab">insertTab</a></li>
+    <li><a href="commands.html#jdb">jdb</a></li>
     <li><a href="commands.html#jdkHelp">jdkHelp</a></li>
     <li><a href="commands.html#jmips">jmips</a></li>
     <li><a href="commands.html#jumpToColumn">jumpToColumn</a></li>
@@ -340,8 +341,6 @@
     <li><a href="commands.html#xmlInsertTag">xmlInsertTag</a></li>
     <li><a href="commands.html#xmlParseBuffer">xmlParseBuffer</a></li>
 </ul>
-
-<hr>
 
 <a name="about">about</a><dl><dd>
 <p>
@@ -2211,6 +2210,26 @@ Buffer-specific settings such as <code>useTabs</code> and
 (see <a href="#properties">properties</a>).
 <br><br>
 <b>Default key mapping:</b> Ctrl Tab in Java and HTML modes
+<br><br>
+</dl><!--<hr>-->
+
+<a name="jdb">jdb</a><dl><dd>
+<p>
+Invokes j's built-in Java debugger, or, if the debugger is already running,
+ensures that the debugger transcript buffer is visible.
+<p>
+If an argument is supplied, it is passed as a command to the running instance
+of the debugger. For example:
+<pre>
+        jdb restart</pre>
+<p>
+It is an error to use this command with an argument unless the debugger has
+already been started.
+<p>
+<b>Default key mapping:</b> None
+<p>
+<b>See also:</b> <a href="jdb.html">The Java Debugger</a>,
+<a href="jdbcommands.html">Debugger Commands</a>
 <br><br>
 </dl><!--<hr>-->
 
