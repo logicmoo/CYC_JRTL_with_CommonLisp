@@ -204,6 +204,8 @@ finish-output
 first
 flet
 float
+float-radix
+floatp
 floor
 fmakunbound
 force-output
