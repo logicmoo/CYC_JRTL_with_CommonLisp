@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.24 2003-06-18 16:31:39 piso Exp $
+ * $Id: Interpreter.java,v 1.25 2003-06-18 17:09:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -302,7 +302,8 @@ public final class Interpreter extends Lisp
                 List tokens = tokenize(args);
                 for (Iterator it = tokens.iterator(); it.hasNext();) {
                     String filename = (String) it.next();
-                    result = evaluate("(load \"" + filename + "\")");
+                    result = eval(list(Symbol.LOAD, new LispString(filename)),
+                        new Environment(), LispThread.currentThread());
                     if (result == NIL)
                         break;
                 }
@@ -346,7 +347,12 @@ public final class Interpreter extends Lisp
         if (command.equals("describe")) {
             if (args != null && args.length() > 0) {
                 getStandardOutput().setCharPos(0);
-                evaluate("(describe " + args + ")");
+                StringInputStream stream =
+                    new StringInputStream("(describe " + args + ")");
+                LispObject obj = stream.read(false, EOF, false);
+                if (obj == EOF)
+                    throw new EndOfFileException();
+                eval(obj, new Environment(), LispThread.currentThread());
                 return true;
             }
             return false;
@@ -478,6 +484,7 @@ public final class Interpreter extends Lisp
         System.err.println("Interpreter.finalize");
     }
 
+    // Used only by org.armedbear.j.Editor.executeCommand().
     public static LispObject evaluate(String s) throws Condition
     {
         if (!initialized)
