@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.111 2003-03-12 19:57:50 piso Exp $
+ * $Id: Primitives.java,v 1.112 2003-03-12 21:13:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Random;
 
 public final class Primitives extends Module
 {
@@ -4031,6 +4032,30 @@ public final class Primitives extends Module
             int size = (int) Fixnum.getValue(second);
             v.shrink(size);
             return v;
+        }
+    };
+
+    // ### random
+    // random limit &optional random-state => random-number
+    private static final Primitive RANDOM = new Primitive("random") {
+        public LispObject execute(LispObject[] args) throws Condition
+        {
+            int length = args.length;
+            if (length < 1 || length > 2)
+                throw new WrongNumberOfArgumentsException(this);
+            long limit = Fixnum.getValue(args[0]);
+            // FIXME Ignore RANDOM-STATE argument for now.
+            Random random =
+                (Random) JavaObject.getObject(_RANDOM_STATE_.symbolValueNoThrow());
+            if (limit <= Integer.MAX_VALUE) {
+                int n = random.nextInt((int)limit);
+                Debug.assertTrue(n < limit);
+                return new Fixnum(n);
+            }
+            double d = random.nextDouble();
+            long n = (long) (d * limit);
+            Debug.assertTrue(n < limit);
+            return new Fixnum(n);
         }
     };
 
