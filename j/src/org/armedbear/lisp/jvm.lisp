@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.392 2005-02-05 17:45:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.393 2005-02-08 16:42:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2757,10 +2757,10 @@
            (return-from compile-function-call))))
       (unless (> *speed* *debug*)
         (emit-push-current-thread))
-      (cond ((eq op (compiland-name *current-compiland*)) ; recursive call
-             (emit 'aload 0)) ; this
-            ((inline-ok op)
-             (emit 'getstatic *this-class* (declare-function op) +lisp-object+))
+      (cond ((inline-ok op)
+             (if (eq op (compiland-name *current-compiland*)) ; recursive call
+                 (emit 'aload 0) ; this
+                 (emit 'getstatic *this-class* (declare-function op) +lisp-object+)))
             ((null (symbol-package op))
              (let ((g (if *compile-file-truename*
                           (declare-object-as-string op)
