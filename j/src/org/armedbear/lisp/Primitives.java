@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.204 2003-05-29 19:26:20 piso Exp $
+ * $Id: Primitives.java,v 1.205 2003-05-29 19:44:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2252,8 +2252,6 @@ public final class Primitives extends Module
             if (args.length != 1)
                 throw new WrongNumberOfArgumentsException(this);
             LispObject obj = args[0].getSymbolFunction();
-            if (obj instanceof Macro)
-                return obj;
             if (obj instanceof MacroObject)
                 return ((MacroObject)obj).getExpander();
             return NIL;
@@ -2337,7 +2335,7 @@ public final class Primitives extends Module
             LispObject fun;
             if (args[0] instanceof Symbol) {
                 fun = args[0].getSymbolFunction();
-                if (fun instanceof Macro || fun instanceof SpecialOperator)
+                if (fun instanceof SpecialOperator)
                     throw new UndefinedFunctionError(args[0]);
             } else
                 fun = args[0];
@@ -2362,18 +2360,16 @@ public final class Primitives extends Module
             if (fun instanceof Symbol)
                 fun = fun.getSymbolFunction();
             if (fun instanceof Function) {
-                if (!(fun instanceof Macro)) {
-                    final int length = args.length - 2 + spread.length();
-                    final LispObject[] funArgs = new LispObject[length];
-                    int j = 0;
-                    for (int i = 1; i < args.length - 1; i++)
-                        funArgs[j++] = args[i];
-                    while (spread != NIL) {
-                        funArgs[j++] = spread.car();
-                        spread = spread.cdr();
-                    }
-                    return funcall(fun, funArgs, LispThread.currentThread());
+                final int length = args.length - 2 + spread.length();
+                final LispObject[] funArgs = new LispObject[length];
+                int j = 0;
+                for (int i = 1; i < args.length - 1; i++)
+                    funArgs[j++] = args[i];
+                while (spread != NIL) {
+                    funArgs[j++] = spread.car();
+                    spread = spread.cdr();
                 }
+                return funcall(fun, funArgs, LispThread.currentThread());
             }
             throw new TypeError(fun, "function");
         }
@@ -3328,9 +3324,6 @@ public final class Primitives extends Module
                 function = obj.getSymbolFunction();
                 if (function == null)
                     throw new UndefinedFunctionError(obj);
-                if (function instanceof Macro)
-                    throw new LispError(String.valueOf(obj) +
-                        "is a macro, not a function");
             } else if (obj instanceof Function) {
                 function = obj;
             } else
@@ -4013,8 +4006,6 @@ public final class Primitives extends Module
                     LispObject obj = first.getSymbolFunction();
                     if (obj instanceof Function) {
                         if (obj instanceof SpecialOperator)
-                            throw new TypeError();
-                        if (obj instanceof Macro)
                             throw new TypeError();
                         return obj;
                     }
