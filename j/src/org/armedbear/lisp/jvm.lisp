@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.91 2004-03-27 19:14:54 piso Exp $
+;;; $Id: jvm.lisp,v 1.92 2004-03-28 00:12:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1371,7 +1371,7 @@
    ((symbolp form)
     (when (null (symbol-package form))
       ;; An uninterned symbol.
-      (let ((g (declare-object form)))
+      (let ((g (declare-object-as-string form)))
         (emit 'getstatic
               *this-class*
               g
