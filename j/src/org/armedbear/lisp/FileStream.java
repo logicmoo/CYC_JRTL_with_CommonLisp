@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.20 2004-10-13 00:22:18 piso Exp $
+ * $Id: FileStream.java,v 1.21 2004-10-18 19:13:06 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,12 @@ public final class FileStream extends Stream
     private final RandomAccessFile raf;
     private final Pathname pathname;
     private final int bytesPerUnit;
+    private final byte[] inputBuffer;
     private final byte[] outputBuffer;
 
+    private long inputBufferFilePosition;
+    private int inputBufferOffset;
+    private int inputBufferCount;
     private int outputBufferOffset;
 
     public FileStream(Pathname pathname, String namestring,
@@ -82,7 +86,15 @@ public final class FileStream extends Stream
             }
             bytesPerUnit = width / 8;
         }
+        if (isBinaryStream && isInputStream && !isOutputStream && bytesPerUnit == 1)
+            inputBuffer = new byte[BUFSIZE];
+        else if (isCharacterStream && isInputStream && !isOutputStream)
+            inputBuffer = new byte[BUFSIZE];
+        else
+            inputBuffer = null;
         if (isBinaryStream && isOutputStream && !isInputStream && bytesPerUnit == 1)
+            outputBuffer = new byte[BUFSIZE];
+        else if (isCharacterStream && isOutputStream && !isInputStream)
             outputBuffer = new byte[BUFSIZE];
         else
             outputBuffer = null;
@@ -156,19 +168,24 @@ public final class FileStream extends Stream
     {
         try {
             if (Utilities.isPlatformWindows) {
-                int c = raf.read();
+                int c = _readByte();
                 if (c == '\r') {
-                    int c2 = raf.read();
+                    int c2 = _readByte();
                     if (c2 == '\n')
                         return c2;
                     // '\r' was not followed by '\n'
-                    long pos = raf.getFilePointer();
-                    if (pos > 0)
-                        raf.seek(pos - 1);
+                    if (inputBuffer != null && inputBufferOffset > 0) {
+                        --inputBufferOffset;
+                    } else {
+                        clearInputBuffer();
+                        long pos = raf.getFilePointer();
+                        if (pos > 0)
+                            raf.seek(pos - 1);
+                    }
                 }
                 return c;
             } else
-                return raf.read();
+                return _readByte();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -179,8 +196,29 @@ public final class FileStream extends Stream
 
     protected void _unreadChar(int n) throws ConditionThrowable
     {
+        if (inputBuffer != null && inputBufferOffset > 0) {
+            --inputBufferOffset;
+            if (n != '\n')
+                return;
+            if (!Utilities.isPlatformWindows)
+                return;
+            // Check for preceding '\r'.
+            if (inputBufferOffset > 0) {
+                if (inputBuffer[--inputBufferOffset] != '\r')
+                    ++inputBufferOffset;
+                return;
+            }
+            // We can't go back far enough in the buffered input. Reset and
+            // fall through...
+            ++inputBufferOffset;
+        }
         try {
-            long pos = raf.getFilePointer();
+            long pos;
+            if (inputBuffer != null && inputBufferFilePosition >= 0)
+                pos = inputBufferFilePosition + inputBufferOffset;
+            else
+                pos = raf.getFilePointer();
+            clearInputBuffer();
             if (pos > 0)
                 raf.seek(pos - 1);
             if (Utilities.isPlatformWindows && n == '\n') {
@@ -206,80 +244,87 @@ public final class FileStream extends Stream
 
     public void _writeChar(char c) throws ConditionThrowable
     {
-        try {
-            if (c == '\n' && Utilities.isPlatformWindows)
-                raf.write((byte)'\r');
-            raf.write((byte)c);
-            if (c == '\n')
-                charPos = 0;
-            else
-                ++charPos;
-        }
-        catch (IOException e) {
-            signal(new StreamError(this, e));
+        if (c == '\n') {
+            if (Utilities.isPlatformWindows)
+                _writeByte((byte)'\r');
+            _writeByte((byte)c);
+            charPos = 0;
+        } else {
+            _writeByte((byte)c);
+            ++charPos;
         }
     }
 
     public void _writeChars(char[] chars, int start, int end)
         throws ConditionThrowable
     {
-        _writeString(new String(chars, start, end - start));
+        if (Utilities.isPlatformWindows) {
+            for (int i = start; i < end; i++) {
+                char c = chars[i];
+                if (c == '\n') {
+                    _writeByte((byte)'\r');
+                    _writeByte((byte)c);
+                    charPos = 0;
+                } else {
+                    _writeByte((byte)c);
+                    ++charPos;
+                }
+            }
+        } else {
+            // We're not on Windows, so no newline conversion is necessary.
+            for (int i = start; i < end; i++) {
+                char c = chars[i];
+                _writeByte((byte)c);
+                if (c == '\n')
+                    charPos = 0;
+                else
+                    ++charPos;
+            }
+        }
     }
 
     public void _writeString(String s) throws ConditionThrowable
     {
-        try {
-            final int length = s.length();
-            final int index = s.lastIndexOf('\n');
-            if (index < 0) {
-                // No newlines in string.
-                raf.writeBytes(s);
-                charPos += length;
-            } else if (Utilities.isPlatformWindows) {
-                for (int i = 0; i < length; i++) {
-                    char c = s.charAt(i);
-                    if (c == '\n') {
-                        raf.write((byte)'\r');
-                        raf.write((byte)c);
-                        charPos = 0;
-                    } else {
-                        raf.write((byte)c);
-                        ++charPos;
-                    }
+        final int length = s.length();
+        if (Utilities.isPlatformWindows) {
+            for (int i = 0; i < length; i++) {
+                char c = s.charAt(i);
+                if (c == '\n') {
+                    _writeByte((byte)'\r');
+                    _writeByte((byte)c);
+                    charPos = 0;
+                } else {
+                    _writeByte((byte)c);
+                    ++charPos;
                 }
-            } else {
-                // We're not on Windows, so no newline conversion is necessary.
-                raf.writeBytes(s);
-                charPos = length - (index + 1);
             }
-        }
-        catch (IOException e) {
-            signal(new StreamError(this, e));
+        } else {
+            // We're not on Windows, so no newline conversion is necessary.
+            for (int i = 0; i < length; i++) {
+                char c = s.charAt(i);
+                _writeByte((byte)c);
+                if (c == '\n')
+                    charPos = 0;
+                else
+                    ++charPos;
+            }
         }
     }
 
     public void _writeLine(String s) throws ConditionThrowable
     {
-        try {
-            if (Utilities.isPlatformWindows) {
-                // Convert newlines.
-                _writeString(s);
-                raf.write((byte)'\r');
-                raf.write((byte)'\n');
-            } else {
-                raf.writeBytes(s);
-                raf.write((byte)'\n');
-            }
-            charPos = 0;
-        }
-        catch (IOException e) {
-            signal(new StreamError(this, e));
-        }
+        _writeString(s);
+        if (Utilities.isPlatformWindows)
+            _writeByte((byte)'\r');
+        _writeByte((byte)'\n');
+        charPos = 0;
     }
 
     // Reads an 8-bit byte.
     public int _readByte() throws ConditionThrowable
     {
+        if (inputBuffer != null)
+            return readByteFromBuffer();
         try {
             return raf.read(); // Reads an 8-bit byte.
         }
@@ -315,6 +360,7 @@ public final class FileStream extends Stream
     {
         try {
             raf.seek(raf.length());
+            clearInputBuffer();
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -323,6 +369,10 @@ public final class FileStream extends Stream
 
     protected long _getFilePosition() throws ConditionThrowable
     {
+        if (inputBuffer != null) {
+            if (inputBufferFilePosition >= 0)
+                return inputBufferFilePosition + inputBufferOffset;
+        }
         if (outputBuffer != null)
             flushOutputBuffer();
         try {
@@ -340,6 +390,8 @@ public final class FileStream extends Stream
     {
         if (outputBuffer != null)
             flushOutputBuffer();
+        if (inputBuffer != null)
+            clearInputBuffer();
         try {
             long pos;
             if (arg == Keyword.START)
@@ -371,6 +423,35 @@ public final class FileStream extends Stream
         }
     }
 
+    private byte readByteFromBuffer() throws ConditionThrowable
+    {
+        if (inputBufferOffset >= inputBufferCount) {
+            fillInputBuffer();
+            if (inputBufferCount < 0)
+                return -1;
+        }
+        return inputBuffer[inputBufferOffset++];
+    }
+
+    private void fillInputBuffer() throws ConditionThrowable
+    {
+        try {
+            inputBufferFilePosition = raf.getFilePointer();
+            inputBufferOffset = 0;
+            inputBufferCount = raf.read(inputBuffer, 0, BUFSIZE);
+        }
+        catch (IOException e) {
+            signal(new StreamError(this, e));
+        }
+    }
+
+    private void clearInputBuffer()
+    {
+        inputBufferFilePosition = -1;
+        inputBufferOffset = 0;
+        inputBufferCount = 0;
+    }
+
     private void writeByteToBuffer(byte b) throws ConditionThrowable
     {
         if (outputBufferOffset == BUFSIZE)
@@ -391,7 +472,7 @@ public final class FileStream extends Stream
         }
     }
 
-    public String toString()
+    public String writeToString()
     {
         return unreadableString("FILE-STREAM");
     }
