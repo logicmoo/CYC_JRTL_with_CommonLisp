@@ -2,7 +2,7 @@
  * LispFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispFormatter.java,v 1.16 2003-01-02 15:31:28 piso Exp $
+ * $Id: LispFormatter.java,v 1.17 2003-01-02 15:49:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -318,12 +318,8 @@ public final class LispFormatter extends Formatter
             char c = pos.getChar();
             if (c == EOL) {
                 if (pos.nextLine()) {
-                    Line line = pos.getLine();
-                    int oldflags = line.flags();
-                    if (state != oldflags) {
-                        line.setFlags(state);
-                        changed = true;
-                    }
+                    changed =
+                        setLineFlags(pos.getLine(), state) || changed;
                     continue;
                 } else
                     break; // Reached end of buffer.
@@ -338,12 +334,8 @@ public final class LispFormatter extends Formatter
             if (c == ';') {
                 // Single-line comment beginning. Ignore rest of line.
                 if (pos.nextLine()) {
-                    Line line = pos.getLine();
-                    int oldflags = line.flags();
-                    if (state != oldflags) {
-                        line.setFlags(state);
-                        changed = true;
-                    }
+                    changed =
+                        setLineFlags(pos.getLine(), state) || changed;
                     continue;
                 } else {
                     pos.moveTo(pos.getLine(), pos.getLine().length());
@@ -402,12 +394,8 @@ public final class LispFormatter extends Formatter
             char c = pos.getChar();
             if (c == EOL) {
                 if (pos.nextLine()) {
-                    Line line = pos.getLine();
-                    int oldflags = line.flags();
-                    if (oldflags != STATE_QUOTE) {
-                        line.setFlags(STATE_QUOTE);
-                        changed = true;
-                    }
+                    changed =
+                        setLineFlags(pos.getLine(), STATE_QUOTE) || changed;
                     continue;
                 } else
                     break; // Reached end of buffer.
@@ -417,12 +405,8 @@ public final class LispFormatter extends Formatter
                 pos.skip();
                 if (pos.getChar() == EOL) {
                     if (pos.nextLine()) {
-                        Line line = pos.getLine();
-                        int oldflags = line.flags();
-                        if (oldflags != STATE_QUOTE) {
-                            line.setFlags(STATE_QUOTE);
-                            changed = true;
-                        }
+                        changed =
+                            setLineFlags(pos.getLine(), STATE_QUOTE) || changed;
                         continue;
                     } else
                         break; // End of buffer.
@@ -449,12 +433,8 @@ public final class LispFormatter extends Formatter
             char c = pos.getChar();
             if (c == EOL) {
                 if (pos.nextLine()) {
-                    Line line = pos.getLine();
-                    int oldflags = line.flags();
-                    if (oldflags != STATE_COMMENT) {
-                        line.setFlags(STATE_COMMENT);
-                        changed = true;
-                    }
+                    changed =
+                        setLineFlags(pos.getLine(), STATE_COMMENT) || changed;
                     continue;
                 } else
                     break; // End of buffer.
@@ -524,12 +504,8 @@ public final class LispFormatter extends Formatter
             char c = pos.getChar();
             if (c == EOL) {
                 if (pos.nextLine()) {
-                    Line line = pos.getLine();
-                    int oldflags = line.flags();
-                    if (oldflags != STATE_QUOTED_LIST) {
-                        line.setFlags(STATE_QUOTED_LIST);
-                        changed = true;
-                    }
+                    changed =
+                        setLineFlags(pos.getLine(), STATE_QUOTED_LIST) || changed;
                     continue;
                 } else
                     break; // End of buffer.
@@ -566,6 +542,14 @@ public final class LispFormatter extends Formatter
             pos.skip();
         }
         return changed;
+    }
+
+    private static boolean setLineFlags(Line line, int newFlags)
+    {
+        if (line.flags() == newFlags)
+            return false; // No change.
+        line.setFlags(newFlags);
+        return true;
     }
 
     private static void skipToken(Position pos)
