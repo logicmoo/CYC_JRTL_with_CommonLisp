@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Cons.java,v 1.16 2003-08-09 16:55:42 piso Exp $
+ * $Id: Cons.java,v 1.17 2003-08-09 17:58:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,16 +198,24 @@ public final class Cons extends LispObject
     {
         try {
             StringBuffer sb = new StringBuffer();
-            if (length() == 2) {
-                if (car == Symbol.QUOTE) {
-                    sb.append('\'');
-                    sb.append(cdr.car());
-                    return sb.toString();
+            if (car == Symbol.QUOTE) {
+                if (cdr instanceof Cons) {
+                    // Not a dotted list.
+                    if (cdr.cdr() == NIL) {
+                        sb.append('\'');
+                        sb.append(cdr.car());
+                        return sb.toString();
+                    }
                 }
-                if (car == Symbol.FUNCTION) {
-                    sb.append("#'");
-                    sb.append(cdr.car());
-                    return sb.toString();
+            }
+            if (car == Symbol.FUNCTION) {
+                if (cdr instanceof Cons) {
+                    // Not a dotted list.
+                    if (cdr.cdr() == NIL) {
+                        sb.append("#'");
+                        sb.append(cdr.car());
+                        return sb.toString();
+                    }
                 }
             }
             sb.append('(');
