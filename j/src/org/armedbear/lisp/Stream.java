@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.93 2004-11-03 15:39:01 piso Exp $
+ * $Id: Stream.java,v 1.94 2004-11-04 11:22:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -415,11 +415,9 @@ public class Stream extends LispObject
             return ((DispatchMacroFunction)fun).execute(this, c, numArg);
         if (fun != NIL) {
             final LispThread thread = LispThread.currentThread();
-            LispObject result = funcall3(fun,
-                                         this,
-                                         LispCharacter.getInstance(c),
-                                         (numArg < 0) ? NIL : new Fixnum(numArg),
-                                         thread);
+            LispObject result =
+                thread.execute(fun, this, LispCharacter.getInstance(c),
+                               (numArg < 0) ? NIL : new Fixnum(numArg));
             LispObject[] values = thread.getValues();
             if (values != null && values.length == 0)
                 result = null;
