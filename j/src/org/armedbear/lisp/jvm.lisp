@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.73 2004-02-19 17:39:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.74 2004-02-19 18:16:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1309,7 +1309,7 @@
               g
               "Lorg/armedbear/lisp/LispObject;")
         (emit-store-value))))
-   ((or (classp form) (typep form 'generic-function))
+   ((or (classp form) (hash-table-p form) (typep form 'generic-function))
     (let ((g (declare-object form)))
       (emit 'getstatic
             *this-class*
