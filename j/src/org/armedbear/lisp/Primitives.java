@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.186 2003-05-23 17:34:01 piso Exp $
+ * $Id: Primitives.java,v 1.187 2003-05-23 18:27:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2228,7 +2228,11 @@ public final class Primitives extends Module
             if (args.length != 1)
                 throw new WrongNumberOfArgumentsException(this);
             LispObject obj = args[0].getSymbolFunction();
-            return (obj instanceof Macro) ? obj : NIL;
+            if (obj instanceof Macro)
+                return obj;
+            if (obj instanceof MacroObject)
+                return ((MacroObject)obj).getExpander();
+            return NIL;
         }
     };
 
