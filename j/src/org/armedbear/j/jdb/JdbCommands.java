@@ -1,8 +1,8 @@
 /*
  * JdbCommands.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: JdbCommands.java,v 1.1.1.1 2002-09-24 16:09:39 piso Exp $
+ * Copyright (C) 2002-2003 Peter Graves
+ * $Id: JdbCommands.java,v 1.2 2003-05-11 02:46:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,6 +55,9 @@ public final class JdbCommands
             return "stop";
         if ("suspend".startsWith(cmd))
             return "suspend";
+
+        if (cmd.equals("stdin"))
+            return "stdin";
 
         return null;
     }
