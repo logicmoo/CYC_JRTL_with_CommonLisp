@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.29 2003-03-30 18:39:03 piso Exp $
+ * $Id: Fixnum.java,v 1.30 2003-04-09 14:46:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -390,6 +390,14 @@ public final class Fixnum extends LispObject
 
     public String toString()
     {
-        return String.valueOf(value);
+        int radix;
+        try {
+            radix = Fixnum.getValue(_PRINT_BASE_.symbolValueNoThrow());
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+            radix = 10;
+        }
+        return Integer.toString(value, radix);
     }
 }

@@ -2,7 +2,7 @@
  * Ratio.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Ratio.java,v 1.5 2003-03-30 19:20:46 piso Exp $
+ * $Id: Ratio.java,v 1.6 2003-04-09 14:45:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,9 +338,17 @@ public final class Ratio extends LispObject
 
     public String toString()
     {
-        StringBuffer sb = new StringBuffer(String.valueOf(numerator));
+        int radix;
+        try {
+            radix = Fixnum.getValue(_PRINT_BASE_.symbolValueNoThrow());
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+            radix = 10;
+        }
+        StringBuffer sb = new StringBuffer(numerator.toString(radix));
         sb.append('/');
-        sb.append(String.valueOf(denominator));
+        sb.append(denominator.toString(radix));
         return sb.toString();
     }
 }

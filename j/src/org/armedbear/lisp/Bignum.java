@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.8 2003-03-30 19:20:18 piso Exp $
+ * $Id: Bignum.java,v 1.9 2003-04-09 14:46:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -298,6 +298,14 @@ public final class Bignum extends LispObject
 
     public String toString()
     {
-        return value.toString();
+        int radix;
+        try {
+            radix = Fixnum.getValue(_PRINT_BASE_.symbolValueNoThrow());
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+            radix = 10;
+        }
+        return value.toString(radix);
     }
 }
