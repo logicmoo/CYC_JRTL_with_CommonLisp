@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.168 2004-05-24 17:32:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.169 2004-05-29 15:31:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -170,16 +170,17 @@
 
 (defstruct instruction opcode args stack depth)
 
-(defun inst (opcode &optional args)
-  (unless (listp args)
-    (setq args (list args)))
-  (make-instruction :opcode opcode :args args :stack nil :depth nil))
+(defun inst (instr &optional args)
+  (let ((opcode (if (numberp instr)
+                    instr
+                    (opcode-number instr))))
+    (unless (listp args)
+      (setf args (list args)))
+    (make-instruction :opcode opcode :args args :stack nil :depth nil)))
 
 (defun emit (instr &rest args)
-  (unless (numberp instr)
-    (setf instr (opcode-number instr)))
   (let ((instruction (inst instr args)))
-    (setq *code* (cons instruction *code*))
+    (push instruction *code*)
     instruction))
 
 (defmacro emit-store-value ()
@@ -386,7 +387,7 @@
         ((memq (car form) '(and or))
          (every #'single-valued-p (cdr form)))
         (t
-         (gethash (car form) single-valued-operators))))
+         (values (gethash (car form) single-valued-operators)))))
 
 (defun maybe-emit-clear-values (form)
   (unless (single-valued-p form)
@@ -1924,7 +1925,8 @@
                  (error "COMPILE-TAGBODY: tag not found: ~S" f))
                (emit 'label label)))
             (t
-             (compile-form f t))))
+             (compile-form f t)
+             (maybe-emit-clear-values f))))
     (setf (fill-pointer *tags*) saved-fp))
   ;; TAGBODY returns NIL.
   (emit-clear-values)
