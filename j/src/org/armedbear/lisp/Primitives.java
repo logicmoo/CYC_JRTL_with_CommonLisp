@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.679 2004-09-20 18:45:49 piso Exp $
+ * $Id: Primitives.java,v 1.680 2004-09-20 18:57:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2830,10 +2830,17 @@ public final class Primitives extends Lisp
 
     // ### %put
     // %put symbol indicator value => value
-    private static final Primitive3 _PUT = new Primitive3("%put", PACKAGE_SYS, false)
+    private static final Primitive _PUT =
+        new Primitive("%put", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject symbol, LispObject indicator,
                                   LispObject value)
+            throws ConditionThrowable
+        {
+            return put(checkSymbol(symbol), indicator, value);
+        }
+        public LispObject execute(LispObject symbol, LispObject indicator,
+                                  LispObject defaultValue, LispObject value)
             throws ConditionThrowable
         {
             return put(checkSymbol(symbol), indicator, value);
