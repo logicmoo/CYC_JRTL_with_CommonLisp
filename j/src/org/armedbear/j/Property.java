@@ -1,8 +1,8 @@
 /*
  * Property.java
  *
- * Copyright (C) 2000-2004 Peter Graves
- * $Id: Property.java,v 1.29 2004-11-07 15:11:23 piso Exp $
+ * Copyright (C) 2000-2005 Peter Graves
+ * $Id: Property.java,v 1.30 2005-02-16 13:49:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,6 +163,8 @@ public final class Property implements Comparable, Constants
         createProperty("indentBeforeBrace", false);
     public static final Property INDENT_LINE_FIX_WHITESPACE =
         createProperty("indentLineFixWhitespace", false);
+    public static final Property INDENT_STRINGS =
+        createProperty("indentStrings", false);
     public static final Property LINEUP_ARGLIST =
         createProperty("lineupArglist", true);
     public static final Property LOG_ENABLED =
