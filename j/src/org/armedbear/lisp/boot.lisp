@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.20 2003-03-09 02:35:40 piso Exp $
+;;; $Id: boot.lisp,v 1.21 2003-03-09 17:37:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,8 +19,58 @@
 
 (in-package "COMMON-LISP")
 
+(export '(lambda
+          *features*
+          plusp minusp integerp
+          character
+          open
+          read-from-string
+          call-arguments-limit
+          lambda-parameters-limit
+          multiple-values-limit
+          char-code-limit))
+
+
 (defmacro lambda (lambda-list &rest body)
   (list 'FUNCTION (append (list 'LAMBDA lambda-list) body)))
+
+
+(defvar *features*
+  '(:armedbear))
+
+
+;;; READ-CONDITIONAL (from OpenMCL)
+
+(defconstant *keyword-package*
+  (find-package "KEYWORD"))
+
+(defun read-conditional (stream subchar int)
+  (cond (*read-suppress* (read stream t nil t) (values))
+        ((eql subchar (read-feature stream)) (read stream t nil t))
+        (t (let* ((*read-suppress* t))
+             (read stream t nil t)
+             (values)))))
+
+(defun read-feature (stream)
+  (let* ((f (let* ((*package* *keyword-package*))
+              (read stream t nil t))))
+    (labels ((eval-feature (form)
+                           (cond ((atom form)
+                                  (member form *features*))
+                                 ((eq (car form) :not)
+                                  (not (eval-feature (cadr form))))
+                                 ((eq (car form) :and)
+                                  (dolist (subform (cdr form) t)
+                                    (unless (eval-feature subform) (return))))
+                                 ((eq (car form) :or)
+                                  (dolist (subform (cdr form) nil)
+                                    (when (eval-feature subform) (return t))))
+                                 (t (error "READ-FEATURE")))))
+            (if (eval-feature f) #\+ #\-))))
+
+(set-dispatch-macro-character #\# #\+ #'read-conditional)
+(set-dispatch-macro-character #\# #\- #'read-conditional)
+
 
 (dolist (name '("documentation.lisp"
                 "backquote.lisp"
@@ -38,16 +88,7 @@
   (cl::%load name))
 
 
-;; Miscellany.
-
-(export '(plusp minusp integerp
-          character
-          open
-          read-from-string
-          call-arguments-limit
-          lambda-parameters-limit
-          multiple-values-limit
-          char-code-limit))
+;;; Miscellany.
 
 (defun plusp (n)
   (> n 0))
