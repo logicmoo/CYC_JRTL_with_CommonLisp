@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Primitives.java,v 1.694 2004-10-22 17:36:25 piso Exp $
+ * $Id: Primitives.java,v 1.695 2004-10-22 17:44:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2178,50 +2178,31 @@ public final class Primitives extends Lisp
     private static final Primitive MAPCAR =
         new Primitive("mapcar", "function &rest lists")
     {
-        public LispObject execute(LispObject op, LispObject list)
+        public LispObject execute(LispObject fun, LispObject list)
             throws ConditionThrowable
         {
-            LispObject fun;
-            if (op instanceof Symbol)
-                fun = op.getSymbolFunction();
-            else
-                fun = op;
-            if (fun instanceof Function || fun instanceof GenericFunction) {
-                final LispThread thread = LispThread.currentThread();
-                LispObject result = NIL;
-                LispObject splice = null;
-                while (list != NIL) {
-                    LispObject obj = funcall1(fun, list.car(), thread);
-                    if (splice == null) {
-                        result = new Cons(obj, result);
-                        splice = result;
-                    } else {
-                        Cons cons = new Cons(obj);
-                        splice.setCdr(cons);
-                        splice = cons;
-                    }
-                    list = list.cdr();
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            LispObject splice = null;
+            while (list != NIL) {
+                LispObject obj = funcall1(fun, list.car(), thread);
+                if (splice == null) {
+                    result = new Cons(obj, result);
+                    splice = result;
+                } else {
+                    Cons cons = new Cons(obj);
+                    splice.setCdr(cons);
+                    splice = cons;
                 }
-                thread.clearValues();
-                return result;
+                list = list.cdr();
             }
-            signal(new UndefinedFunction(op));
-            return NIL;
+            thread.clearValues();
+            return result;
         }
-
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
+        public LispObject execute(LispObject fun, LispObject list1,
+                                  LispObject list2)
             throws ConditionThrowable
         {
-            // First argument must be a function.
-            LispObject fun = first;
-            if (fun instanceof Symbol)
-                fun = fun.getSymbolFunction();
-            if (!(fun instanceof Function || fun instanceof GenericFunction))
-                signal(new UndefinedFunction(first));
-            // Remaining arguments must be lists.
-            LispObject list1 = checkList(second);
-            LispObject list2 = checkList(third);
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
             LispObject splice = null;
@@ -2242,19 +2223,11 @@ public final class Primitives extends Lisp
             thread.clearValues();
             return result;
         }
-
         public LispObject execute(final LispObject[] args) throws ConditionThrowable
         {
             final int numArgs = args.length;
             if (numArgs < 2)
                 signal(new WrongNumberOfArgumentsException(this));
-            // First argument must be a function.
-            LispObject fun = args[0];
-            if (fun instanceof Symbol)
-                fun = fun.getSymbolFunction();
-            if (!(fun instanceof Function || fun instanceof GenericFunction))
-                signal(new UndefinedFunction(args[0]));
-            // Remaining arguments must be lists.
             int commonLength = -1;
             for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
@@ -2272,7 +2245,7 @@ public final class Primitives extends Lisp
             for (int i = 0; i < commonLength; i++) {
                 for (int j = 0; j < numFunArgs; j++)
                     funArgs[j] = args[j+1].car();
-                results[i] = funcall(fun, funArgs, thread);
+                results[i] = funcall(args[0], funArgs, thread);
                 for (int j = 1; j < numArgs; j++)
                     args[j] = args[j].cdr();
             }
