@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.248 2004-07-27 16:18:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.249 2004-07-28 13:31:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -497,6 +497,7 @@
 (defconstant +lisp-environment+ "Lorg/armedbear/lisp/Environment;")
 (defconstant +lisp-throw-class+ "org/armedbear/lisp/Throw")
 (defconstant +lisp-return-class+ "org/armedbear/lisp/Return")
+(defconstant +lisp-go-class+ "org/armedbear/lisp/Go")
 
 (defun emit-push-nil ()
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
@@ -630,7 +631,8 @@
                 aref elt
                 not null endp
                 concatenate
-                format prin1 princ print write
+                format sys::%format
+                prin1 princ print write
                 compute-restarts find-restart restart-name
                 string
                 string=
@@ -2536,50 +2538,35 @@
     (when (eql name (tag-name tag))
       (return tag))))
 
-#+nil
-(defun compile-tagbody (form &key (target *val*))
-  (format t "COMPILE-TAGBODY called~S~%")
-  (assert nil)
-  (let ((*visible-tags* *visible-tags*)
-        (body (cdr form)))
-    ;; Scan for tags.
-    (dolist (subform body)
-      (when (or (symbolp subform) (integerp subform))
-        (let* ((tag (make-tag :name subform :label (gensym))))
-          (push tag *visible-tags*))))
-    (do* ((rest body (cdr rest))
-          (subform (car rest) (car rest)))
-         ((null rest))
-      (cond ((or (symbolp subform) (integerp subform))
-             (let ((tag (find-tag subform)))
-               (unless tag
-                 (error "COMPILE-TAGBODY: tag not found: ~S~%" subform))
-               (label (tag-label tag))))
-            (t
-             (when (and (null (cdr rest)) ;; Last subform.
-                        (consp subform)
-                        (eq (car subform) 'GO))
-               (generate-interrupt-check))
-             (compile-form subform :target nil)
-             (maybe-emit-clear-values subform)))))
-  ;; TAGBODY returns NIL.
-  (emit-clear-values)
-  (when target
-    (emit-push-nil)
-    (emit-move-from-stack target)))
-
 (defun compile-tagbody-node (block target)
   (let* ((*blocks* (cons block *blocks*))
          (*visible-tags* *visible-tags*)
+         (*register* *register*)
          (form (block-form block))
-         (body (cdr form)))
+         (body (cdr form))
+         (local-tags ())
+         (BEGIN-BLOCK (gensym))
+         (END-BLOCK (gensym))
+         (EXIT (gensym))
+         environment-register)
 ;;     (format t "COMPILE-TAGBODY-NODE non-local-go-p = ~S~%"
-;;             (tagbody-non-local-go-p tagbody))
+;;             (block-non-local-go-p block))
     ;; Scan for tags.
     (dolist (subform body)
       (when (or (symbolp subform) (integerp subform))
         (let* ((tag (make-tag :name subform :label (gensym) :block block)))
+          (push tag local-tags)
           (push tag *visible-tags*))))
+
+    ;; FIXME Pass 1 doesn't detect all non-local GOs! (HANDLER-CASE.17)
+    ;; So we do this unconditionally for now...
+    (when (or t (block-non-local-go-p block))
+      (setf environment-register (allocate-register))
+      (emit-push-current-thread)
+      (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+      (emit 'astore environment-register))
+
+    (label BEGIN-BLOCK)
     (do* ((rest body (cdr rest))
           (subform (car rest) (car rest)))
          ((null rest))
@@ -2594,12 +2581,57 @@
                         (eq (car subform) 'GO))
                (generate-interrupt-check))
              (compile-form subform :target nil)
-             (maybe-emit-clear-values subform)))))
-  ;; TAGBODY returns NIL.
-  (emit-clear-values)
-  (when target
-    (emit-push-nil)
-    (emit-move-from-stack target)))
+             (maybe-emit-clear-values subform))))
+    (label END-BLOCK)
+    (emit 'goto EXIT)
+    (when (block-non-local-go-p block)
+      ; We need a handler to catch non-local GOs.
+      (let ((HANDLER (gensym))
+            (*register* *register*)
+            (go-register (allocate-register))
+            (tag-register (allocate-register)))
+        (label HANDLER)
+        ;; The Go object is on the runtime stack. Stack depth is 1.
+        (emit 'dup)
+        (emit 'astore go-register)
+        ;; Get the tag.
+        (emit 'checkcast +lisp-go-class+)
+        (emit 'getfield +lisp-go-class+ "tag" +lisp-object+) ; Stack depth is still 1.
+        (emit 'astore tag-register)
+
+        (dolist (tag local-tags)
+          (let ((NEXT (gensym)))
+            (emit 'aload tag-register)
+            (emit 'getstatic
+                  *this-class*
+                  (if *compile-file-truename*
+                      (declare-object-as-string (tag-label tag))
+                      (declare-object (tag-label tag)))
+                  +lisp-object+)
+
+            (emit 'if_acmpne NEXT) ;; Jump if not EQ.
+            ;; Restore dynamic environment.
+            (emit-push-current-thread)
+            (assert (fixnump environment-register))
+            (emit 'aload environment-register)
+            (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+            (emit 'goto (tag-label tag))
+            (label NEXT)))
+        ;; Not found. Re-throw Go.
+        (emit 'aload go-register)
+        (emit 'athrow)
+
+        ;; Finally...
+        (push (make-handler :from BEGIN-BLOCK
+                            :to END-BLOCK
+                            :code HANDLER
+                            :catch-type (pool-class +lisp-go-class+))
+              *handlers*)))
+    (label EXIT)
+    ;; TAGBODY returns NIL.
+    (when target
+      (emit-push-nil)
+      (emit-move-from-stack target))))
 
 (defun compile-go (form &key target)
   (let* ((name (cadr form))
@@ -2607,7 +2639,25 @@
     (unless tag
       (error "COMPILE-GO: tag not found: ~S" name))
     (unless (eq (tag-compiland tag) *current-compiland*)
-      (error "COMPILE-GO: tag not local: ~S" name))
+;;       (error "COMPILE-GO: tag not local: ~S" name)
+;;       (format t "----- COMPILE-GO: non-local case -----~%")
+
+      ;; FIXME How is the dynamic environment unwound in the non-local case? ***************
+
+      (emit 'new +lisp-go-class+)
+      (emit 'dup)
+      (compile-form `',(tag-label tag) :target :stack) ; Tag.
+      (emit-invokespecial +lisp-go-class+
+                          "<init>"
+                          "(Lorg/armedbear/lisp/LispObject;)V"
+                          -2)
+      (emit 'athrow)
+      ;; Following code will not be reached, but is needed for JVM stack
+      ;; consistency.
+      (when target
+        (emit-push-nil)
+        (emit-move-from-stack target))
+      (return-from compile-go))
     (progn
 ;;       (%format t "COMPILE-GO tag-block = ~S~%" (block-name (tag-block tag)))
       (let ((tag-block (tag-block tag))
@@ -2677,14 +2727,10 @@
     (format t "type-of block = ~S~%" (type-of block))
     (assert (block-node-p block)))
   (let* ((*blocks* (cons block *blocks*))
-         (*register* *register*)
-;;          env-register
-         )
+         (*register* *register*))
     (setf (block-target block) target)
-;;     (push block *blocks*)
     (when (block-return-p block)
       ;; Save current dynamic environment.
-;;       (setf env-register (allocate-register))
       (setf (block-environment-register block) (allocate-register))
       (emit-push-current-thread)
       (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
@@ -2844,8 +2890,9 @@
       (emit-move-from-stack target))))
 
 (defun compile-declare (form &key target)
-  ;; Nothing to do.
-  )
+  (when target
+    (emit-push-nil)
+    (emit-move-from-stack target)))
 
 (defun compile-local-function (definition local-function)
   (let* ((name (car definition))
@@ -2871,11 +2918,11 @@
     (let ((*nesting-level* (1+ *nesting-level*)))
       (if *compile-file-truename*
           (setf classfile (compile-defun name form nil (sys::next-classfile-name)))
-          (progn
-            (setf function
-                  (sys::load-compiled-function (compile-defun name form nil
-                                                              (format nil "local-~D.class" *child-count*))))
-            (incf *child-count*))))
+          (setf function
+                (sys::load-compiled-function (compile-defun name form nil
+                                                            (prog1
+                                                             (format nil "local-~D.class" *child-count*)
+                                                             (incf *child-count*)))))))
     (cond (local-function
            (setf (local-function-classfile local-function) classfile)
            (let ((g (if *compile-file-truename*
@@ -2885,15 +2932,17 @@
                    *this-class*
                    g
                    +lisp-object+)
-;;              (format t "*nesting-level* = ~S~%" *nesting-level*)
-;;              (format t "setting LABELS variable...~%")
-;;              (dump-1-variable (local-function-variable local-function))
+             ;;              (format t "*nesting-level* = ~S~%" *nesting-level*)
+             ;;              (format t "setting LABELS variable...~%")
+             ;;              (dump-1-variable (local-function-variable local-function))
              (emit 'var-set (local-function-variable local-function))))
           (t
            (push (make-local-function :name name
                                       :function function
                                       :classfile classfile)
                  *local-functions*)))))
+
+
 
 (defun compile-flet (form &key (target *val*))
   (if *use-locals-vector*
@@ -2971,7 +3020,8 @@
                      (error "COMPILE-LAMBDA: can't handle optional argument with non-constant initform.")))))))
 
 ;;       (format t "compiling lambda form...~%")
-      (let* ((classfile (format nil "local-~D.class" *child-count*))
+      (let* ((classfile
+              (prog1 (format nil "local-~D.class" *child-count*) (incf *child-count*)))
              (compiled-function (sys::load-compiled-function
                                  (let ((*nesting-level* (1+ *nesting-level*)))
                                    (compile-defun nil form nil classfile)))))
@@ -3016,7 +3066,7 @@
                            -1) ; Stack: compiled-closure
 
         (emit-move-from-stack target)
-        (incf *child-count*)
+;;         (incf *child-count*)
         (return-from compile-lambda)))
 
     (when closure-vars
@@ -3676,11 +3726,13 @@
        #.(format nil "([~A)~A" +lisp-object+ +lisp-object+))))
 
 (defun compile-defun (name form environment &optional (classfile "out.class"))
+;;   (%format t "COMPILE-DEFUN ~S ~S~%" name classfile)
   (unless (eq (car form) 'LAMBDA)
     (return-from compile-defun nil))
   (unless (null environment)
     (error "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
-  (multiple-value-bind (precompiled-form obstacles) (precompile-form form t)
+;;   (prog1
+  (let ((precompiled-form (precompile-form form t)))
     (let ((*current-compiland* (make-compiland :name name
                                                :lambda-expression precompiled-form
                                                :parent *current-compiland*)))
@@ -3829,7 +3881,7 @@
                    (emit-invokevirtual +lisp-thread-class+
                                        "bindSpecial"
                                        "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                       -2)
+                                       -3)
                    (setf (variable-register variable) nil))
                   ((variable-index variable)
                    (emit-push-current-thread)
@@ -3843,7 +3895,7 @@
                    (emit-invokevirtual +lisp-thread-class+
                                        "bindSpecial"
                                        "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;)V"
-                                       -2)
+                                       -3)
                    (setf (variable-index variable) nil)))))
 
         (process-optimization-declarations body)
@@ -3900,7 +3952,10 @@
 
         (setf (method-max-locals execute-method) *registers-allocated*)
         (setf (method-handlers execute-method) (nreverse *handlers*))
-        (write-class-file args body execute-method classfile)))))
+        (write-class-file args body execute-method classfile))))
+;;    (%format t "leaving COMPILE-DEFUN ~S~%" name)
+;;   )
+  )
 
 (defun write-class-file (args body execute-method classfile)
   (let* ((super
