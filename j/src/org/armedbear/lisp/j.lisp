@@ -12,7 +12,6 @@
           update-display
           update-location-bar
           location-bar-cancel-input
-          restore-focus
           status
           defcommand
           open-file-hook
