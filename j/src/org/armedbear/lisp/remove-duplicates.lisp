@@ -1,7 +1,7 @@
 ;;; remove-duplicates.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: remove-duplicates.lisp,v 1.6 2004-03-04 12:57:09 piso Exp $
+;;; $Id: remove-duplicates.lisp,v 1.7 2004-03-13 17:51:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -20,19 +20,6 @@
 (in-package "SYSTEM")
 
 ;;; Adapted from CMUCL.
-
-(defun simple-list-remove-duplicates (list)
-  (let* ((result (list ()))
-	 (splice result))
-    (do ((current list (cdr current)))
-        ((atom current))
-      (unless (do ((it (car current))
-                   (l (cdr current) (cdr l)))
-                  ((atom l) nil)
-                (if (eql it (car l))
-                    (return t)))
-        (setq splice (cdr (rplacd splice (list (car current)))))))
-    (cdr result)))
 
 (defun list-remove-duplicates (list test test-not start end key from-end)
   (let* ((result (list ()))
