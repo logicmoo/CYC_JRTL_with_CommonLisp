@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.11 2003-06-28 01:30:45 piso Exp $
+ * $Id: KeyMap.java,v 1.12 2003-07-17 23:58:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -479,7 +479,7 @@ public final class KeyMap implements Constants
         return false;
     }
 
-    // For API.java.
+    // For Lisp API.
     public synchronized boolean mapKey(String keyText, String command)
     {
         KeyStroke keyStroke = Utilities.getKeyStroke(keyText);
@@ -544,7 +544,7 @@ public final class KeyMap implements Constants
         }
     }
 
-    // For API.java.
+    // For Lisp API.
     public synchronized boolean unmapKey(String keyText)
     {
         KeyStroke keyStroke = Utilities.getKeyStroke(keyText);
