@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: FileStream.java,v 1.17 2004-10-02 16:54:53 piso Exp $
+ * $Id: FileStream.java,v 1.18 2004-10-02 19:37:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -210,6 +210,8 @@ public final class FileStream extends Stream
     public void _writeChar(char c) throws ConditionThrowable
     {
         try {
+            if (c == '\n' && isPlatformWindows)
+                raf.write((byte)'\r');
             raf.write((byte)c);
             if (c == '\n')
                 charPos = 0;
@@ -230,12 +232,29 @@ public final class FileStream extends Stream
     public void _writeString(String s) throws ConditionThrowable
     {
         try {
-            raf.writeBytes(s);
-            int index = s.lastIndexOf('\n');
-            if (index < 0)
-                charPos += s.length();
-            else
-                charPos = s.length() - (index + 1);
+            final int length = s.length();
+            final int index = s.lastIndexOf('\n');
+            if (index < 0) {
+                // No newlines in string.
+                raf.writeBytes(s);
+                charPos += length;
+            } else if (isPlatformWindows) {
+                for (int i = 0; i < length; i++) {
+                    char c = s.charAt(i);
+                    if (c == '\n') {
+                        raf.write((byte)'\r');
+                        raf.write((byte)c);
+                        charPos = 0;
+                    } else {
+                        raf.write((byte)c);
+                        ++charPos;
+                    }
+                }
+            } else {
+                // We're not on Windows, so no newline conversion is necessary.
+                raf.writeBytes(s);
+                charPos = length - (index + 1);
+            }
         }
         catch (IOException e) {
             signal(new StreamError(this, e));
@@ -245,8 +264,15 @@ public final class FileStream extends Stream
     public void _writeLine(String s) throws ConditionThrowable
     {
         try {
-            raf.writeBytes(s);
-            raf.write((byte)'\n');
+            if (isPlatformWindows) {
+                // Convert newlines.
+                _writeString(s);
+                raf.write((byte)'\r');
+                raf.write((byte)'\n');
+            } else {
+                raf.writeBytes(s);
+                raf.write((byte)'\n');
+            }
             charPos = 0;
         }
         catch (IOException e) {
