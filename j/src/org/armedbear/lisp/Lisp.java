@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Lisp.java,v 1.267 2004-08-09 18:45:35 piso Exp $
+ * $Id: Lisp.java,v 1.268 2004-08-10 03:26:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -299,7 +299,7 @@ public abstract class Lisp
                     if (profiling)
                         if (!sampling)
                             expander.incrementCallCount();
-                    Function hook =
+                    LispObject hook =
                         coerceToFunction(_MACROEXPAND_HOOK_.symbolValue(thread));
                     return thread.setValues(hook.execute(expander, form, env),
                                             T);
@@ -1054,11 +1054,13 @@ public abstract class Lisp
         }
     }
 
-    public static final Function coerceToFunction(LispObject obj)
+    public static final LispObject coerceToFunction(LispObject obj)
         throws ConditionThrowable
     {
         if (obj instanceof Function)
-            return (Function) obj;
+            return obj;
+        if (obj instanceof GenericFunction)
+            return obj;
         if (obj instanceof Symbol) {
             LispObject fun = obj.getSymbolFunction();
             if (fun instanceof Function)
