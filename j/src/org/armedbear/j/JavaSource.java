@@ -1,8 +1,8 @@
 /*
  * JavaSource.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: JavaSource.java,v 1.4 2003-02-15 15:42:25 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: JavaSource.java,v 1.5 2003-05-18 18:08:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -143,7 +143,7 @@ public final class JavaSource implements Constants
         }
         list.add(s);
         String[] array = new String[list.size()];
-        return (String []) list.toArray(array);
+        return (String[]) list.toArray(array);
     }
 
     public static String getPackageName(Buffer buffer)
