@@ -166,6 +166,111 @@
 	 (check-scaffold-copy (car x) (scaffold-car xcopy))
 	 (check-scaffold-copy (cdr x) (scaffold-cdr xcopy))))))
 
+(defun check-sublis (a al &key (key 'no-key) test test-not)
+  "Apply sublis al a with various keys.  Check that
+   the arguments are not themselves changed.  Return nil
+   if the arguments do get changed."
+  (setf a (copy-tree a))
+  (setf al (copy-tree al))
+  (let ((acopy (make-scaffold-copy a))
+	(alcopy (make-scaffold-copy al)))
+    (let ((as
+	   (apply #'sublis al a
+		  `(,@(when test `(:test ,test))
+                      ,@(when test-not `(:test-not ,test-not))
+                      ,@(unless (eqt key 'no-key) `(:key ,key))))))
+      (and
+       (check-scaffold-copy a acopy)
+       (check-scaffold-copy al alcopy)
+       as))))
+
+(defun check-nsublis (a al &key (key 'no-key) test test-not)
+  "Apply nsublis al a, copying these arguments first."
+  (setf a (copy-tree a))
+  (setf al (copy-tree al))
+  (let ((as
+	 (apply #'sublis (copy-tree al) (copy-tree a)
+		`(,@(when test `(:test ,test))
+		    ,@(when test-not `(:test-not ,test-not))
+		    ,@(unless (eqt key 'no-key) `(:key ,key))))))
+    as))
+
+(defun check-subst (new old tree &key (key 'no-key) test test-not)
+  "Call subst new old tree, with keyword arguments if present.
+   Check that the arguments are not changed."
+  (setf new (copy-tree new))
+  (setf old (copy-tree old))
+  (setf tree (copy-tree tree))
+  (let ((newcopy (make-scaffold-copy new))
+	(oldcopy (make-scaffold-copy old))
+	(treecopy (make-scaffold-copy tree)))
+    (let ((result
+	   (apply #'subst new old tree
+		  `(,@(unless (eqt key 'no-key) `(:key ,key))
+                      ,@(when test `(:test ,test))
+                      ,@(when test-not `(:test-not ,test-not))))))
+      (and (check-scaffold-copy new newcopy)
+	   (check-scaffold-copy old oldcopy)
+	   (check-scaffold-copy tree treecopy)
+	   result))))
+
+
+(defun check-subst-if (new pred tree &key (key 'no-key))
+  "Call subst-if new pred tree, with various keyword arguments
+   if present.  Check that the arguments are not changed."
+  (setf new (copy-tree new))
+  (setf tree (copy-tree tree))
+  (let ((newcopy (make-scaffold-copy new))
+	(predcopy (make-scaffold-copy pred))
+	(treecopy (make-scaffold-copy tree)))
+    (let ((result
+	   (apply #'subst-if new pred tree
+		  (unless (eqt key 'no-key) `(:key ,key)))))
+      (and (check-scaffold-copy new newcopy)
+	   (check-scaffold-copy pred predcopy)
+	   (check-scaffold-copy tree treecopy)
+	   result))))
+
+(defun check-subst-if-not (new pred tree &key (key 'no-key))
+  "Call subst-if-not new pred tree, with various keyword arguments
+   if present.  Check that the arguments are not changed."
+  (setf new (copy-tree new))
+  (setf tree (copy-tree tree))
+  (let ((newcopy (make-scaffold-copy new))
+	(predcopy (make-scaffold-copy pred))
+	(treecopy (make-scaffold-copy tree)))
+    (let ((result
+	   (apply #'subst-if-not new pred tree
+		  (unless (eqt key 'no-key) `(:key ,key)))))
+      (and (check-scaffold-copy new newcopy)
+	   (check-scaffold-copy pred predcopy)
+	   (check-scaffold-copy tree treecopy)
+	   result))))
+
+(defun check-nsubst (new old tree &key (key 'no-key) test test-not)
+  "Call nsubst new old tree, with keyword arguments if present."
+  (setf new (copy-tree new))
+  (setf old (copy-tree old))
+  (setf tree (copy-tree tree))
+  (apply #'nsubst new old tree
+	 `(,@(unless (eqt key 'no-key) `(:key ,key))
+	     ,@(when test `(:test ,test))
+	     ,@(when test-not `(:test-not ,test-not)))))
+
+(defun check-nsubst-if (new pred tree &key (key 'no-key))
+  "Call nsubst-if new pred tree, with keyword arguments if present."
+  (setf new (copy-tree new))
+  (setf tree (copy-tree tree))
+  (apply #'nsubst-if new pred tree
+	 (unless (eqt key 'no-key) `(:key ,key))))
+
+(defun check-nsubst-if-not (new pred tree &key (key 'no-key))
+  "Call nsubst-if-not new pred tree, with keyword arguments if present."
+  (setf new (copy-tree new))
+  (setf tree (copy-tree tree))
+  (apply #'nsubst-if-not new pred tree
+         (unless (eqt key 'no-key) `(:key ,key))))
+
 (defun check-copy-list-copy (x y)
   "Check that y is a copy of the list x."
   (if
@@ -203,9 +308,12 @@
                               "case"
                               "catch"
                               "cond"
+                              "cons-test-02"
                               "cons-test-03"
                               "cons-test-07"
+                              "cons-test-16"
                               "copy-seq"
+                              "defvar"
                               "equal"
                               "equalp"
                               "eql"
