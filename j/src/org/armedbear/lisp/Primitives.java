@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.493 2003-11-07 20:20:14 piso Exp $
+ * $Id: Primitives.java,v 1.494 2003-11-14 00:00:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2242,34 +2242,35 @@ public final class Primitives extends Module
     };
 
     // ### mapcar
-    private static final Primitive MAPCAR = new Primitive("mapcar") {
-        public LispObject execute(LispObject first, LispObject second)
+    private static final Primitive MAPCAR = new Primitive("mapcar")
+    {
+        public LispObject execute(LispObject op, LispObject list)
             throws ConditionThrowable
         {
-            // First argument must be a function.
-            LispObject fun = first;
-            if (fun instanceof Symbol)
-                fun = fun.getSymbolFunction();
-            if (!(fun instanceof Function || fun instanceof GenericFunction))
-                throw new ConditionThrowable(new UndefinedFunction(first));
-            // Second argument must be a list.
-            LispObject list = checkList(second);
-            final LispThread thread = LispThread.currentThread();
-            LispObject result = NIL;
-            LispObject splice = null;
-            while (list != NIL) {
-                LispObject obj = funcall1(fun, list.car(), thread);
-                if (splice == null) {
-                    result = new Cons(obj, result);
-                    splice = result;
-                } else {
-                    Cons cons = new Cons(obj);
-                    splice.setCdr(cons);
-                    splice = cons;
+            LispObject fun;
+            if (op instanceof Symbol)
+                fun = op.getSymbolFunction();
+            else
+                fun = op;
+            if (fun instanceof Function || fun instanceof GenericFunction) {
+                final LispThread thread = LispThread.currentThread();
+                LispObject result = NIL;
+                LispObject splice = null;
+                while (list != NIL) {
+                    LispObject obj = funcall1(fun, list.car(), thread);
+                    if (splice == null) {
+                        result = new Cons(obj, result);
+                        splice = result;
+                    } else {
+                        Cons cons = new Cons(obj);
+                        splice.setCdr(cons);
+                        splice = cons;
+                    }
+                    list = list.cdr();
                 }
-                list = list.cdr();
+                return result;
             }
-            return result;
+            throw new ConditionThrowable(new UndefinedFunction(op));
         }
         public LispObject execute(LispObject first, LispObject second,
             LispObject third) throws ConditionThrowable
