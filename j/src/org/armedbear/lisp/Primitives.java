@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.489 2003-10-28 16:02:31 piso Exp $
+ * $Id: Primitives.java,v 1.490 2003-11-04 01:42:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2838,47 +2838,36 @@ public final class Primitives extends Module
 
     // ### get
     // get symbol indicator &optional default => value
-    private static final Primitive GET = new Primitive("get") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
+    private static final Primitive GET = new Primitive("get")
+    {
+        public LispObject execute(LispObject symbol, LispObject indicator)
+            throws ConditionThrowable
         {
-            Symbol symbol;
-            LispObject indicator;
-            LispObject defaultValue;
-            switch (args.length) {
-                case 2:
-                    symbol = checkSymbol(args[0]);
-                    indicator = args[1];
-                    defaultValue = NIL;
-                    break;
-                case 3:
-                    symbol = checkSymbol(args[0]);
-                    indicator = args[1];
-                    defaultValue = args[2];
-                    break;
-                default:
-                    throw new ConditionThrowable(new WrongNumberOfArgumentsException(this));
-            }
-            return get(symbol, indicator, defaultValue);
+            return get(checkSymbol(symbol), indicator, NIL);
+        }
+        public LispObject execute(LispObject symbol, LispObject indicator,
+                                  LispObject defaultValue)
+            throws ConditionThrowable
+        {
+            return get(checkSymbol(symbol), indicator, defaultValue);
         }
     };
 
     // ### %put
-    // %put symbol indicator value
-    private static final Primitive3 _PUT =
-        new Primitive3("%put", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws ConditionThrowable
+    // %put symbol indicator value => value
+    private static final Primitive3 _PUT = new Primitive3("%put", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject symbol, LispObject indicator,
+                                  LispObject value)
+            throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(first);
-            LispObject indicator = second;
-            LispObject value = third;
-            return put(symbol, indicator, value);
+            return put(checkSymbol(symbol), indicator, value);
         }
     };
 
     // ### macrolet
-    private static final SpecialOperator MACROLET =
-        new SpecialOperator("macrolet") {
+    private static final SpecialOperator MACROLET = new SpecialOperator("macrolet")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
@@ -2917,8 +2906,8 @@ public final class Primitives extends Module
     };
 
     // ### tagbody
-    private static final SpecialOperator TAGBODY =
-        new SpecialOperator("tagbody") {
+    private static final SpecialOperator TAGBODY = new SpecialOperator("tagbody")
+    {
         public LispObject execute(LispObject args, Environment env)
             throws ConditionThrowable
         {
