@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.119 2003-08-14 18:17:06 piso Exp $
+ * $Id: Lisp.java,v 1.120 2003-08-15 15:17:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -890,6 +890,16 @@ public abstract class Lisp
 
     public static final Symbol _TERMINAL_IO_ =
         exportSpecial("*TERMINAL-IO*", PACKAGE_CL,
+                      new TwoWayStream(new CharacterInputStream(System.in),
+                                       new CharacterOutputStream(System.out)));
+
+    public static final Symbol _QUERY_IO_ =
+        exportSpecial("*QUERY-IO*", PACKAGE_CL,
+                      new TwoWayStream(new CharacterInputStream(System.in),
+                                       new CharacterOutputStream(System.out)));
+
+    public static final Symbol _DEBUG_IO_ =
+        exportSpecial("*DEBUG-IO*", PACKAGE_CL,
                       new TwoWayStream(new CharacterInputStream(System.in),
                                        new CharacterOutputStream(System.out)));
 
