@@ -2,7 +2,7 @@
  * CompilationBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CompilationBuffer.java,v 1.2 2002-10-02 17:07:50 piso Exp $
+ * $Id: CompilationBuffer.java,v 1.3 2002-10-05 00:40:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,30 +112,24 @@ public final class CompilationBuffer extends Buffer implements Runnable
     public void run()
     {
         long start = System.currentTimeMillis();
-
         startProcess();
-
         if (process != null) {
-            CBReaderThread stdoutThread = new CBReaderThread(this, process.getInputStream());
+            CompilationBufferReaderThread stdoutThread =
+                new CompilationBufferReaderThread(process.getInputStream());
             stdoutThread.start();
-
-            CBReaderThread stderrThread = new CBReaderThread(this, process.getErrorStream());
+            CompilationBufferReaderThread stderrThread =
+                new CompilationBufferReaderThread(process.getErrorStream());
             stderrThread.start();
-
             try {
                 exitValue = process.waitFor();
-
                 if (exitValueFile != null && exitValueFile.isFile()) {
                     exitValue = getExitValueFromFile(exitValueFile);
                     exitValueFile.delete();
                     exitValueFile = null;
                 }
-
                 stdoutThread.join();
                 stderrThread.join();
-
                 long elapsed = System.currentTimeMillis() - start;
-
                 FastStringBuffer sb = new FastStringBuffer();
                 sb.append("\nCompilation ");
                 if (exitValue == 0) {
@@ -494,20 +488,16 @@ public final class CompilationBuffer extends Buffer implements Runnable
         return false;
     }
 
-    class CBReaderThread extends ReaderThread
+    private class CompilationBufferReaderThread extends ReaderThread
     {
-        CompilationBuffer cb;
-
-        // If this constructor is private, we run into jikes 1.15 bug #2256.
-        CBReaderThread(CompilationBuffer cb, InputStream inputStream)
+        public CompilationBufferReaderThread(InputStream inputStream)
         {
             super(inputStream);
-            this.cb = cb;
         }
 
         public void update(final String s)
         {
-            cb.appendLater(s);
+            appendLater(s);
         }
     }
 
