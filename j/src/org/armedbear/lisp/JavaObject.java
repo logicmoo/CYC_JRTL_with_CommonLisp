@@ -1,8 +1,8 @@
 /*
  * JavaObject.java
  *
- * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaObject.java,v 1.14 2004-01-24 22:51:00 asimon Exp $
+ * Copyright (C) 2002-2004 Peter Graves
+ * $Id: JavaObject.java,v 1.15 2004-04-12 23:05:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,16 +80,15 @@ public class JavaObject extends LispObject
     {
         if (obj instanceof ConditionThrowable)
             return obj.toString();
-
         StringBuffer sb = new StringBuffer("#<JAVAOBJECT ");
-	if (obj == null) {
+        if (obj == null)
             sb.append("null");
-	} else {
+        else {
             sb.append(obj.getClass().getName());
-            sb.append(" \"");
-            sb.append(obj.toString());
-	}
-        sb.append("\">");
+            sb.append(" @ #x");
+            sb.append(Integer.toHexString(System.identityHashCode(obj)));
+        }
+        sb.append(">");
         return sb.toString();
     }
 }
