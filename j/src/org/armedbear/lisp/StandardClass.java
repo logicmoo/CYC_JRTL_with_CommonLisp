@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: StandardClass.java,v 1.8 2003-10-10 17:01:33 piso Exp $
+ * $Id: StandardClass.java,v 1.9 2003-10-10 18:56:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,8 +102,8 @@ public class StandardClass extends LispClass
         {
             if (arg instanceof StandardClass)
                 return ((StandardClass)arg).effectiveSlots;
-            if (arg == BuiltInClass.STANDARD_CLASS)
-                return NIL; // FIXME
+            if (arg instanceof BuiltInClass)
+                return NIL;
             throw new ConditionThrowable(new TypeError(arg, "standard class"));
         }
     };
