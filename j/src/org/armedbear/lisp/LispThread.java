@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.29 2004-01-28 20:19:19 piso Exp $
+ * $Id: LispThread.java,v 1.30 2004-03-07 02:00:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,7 +94,7 @@ public final class LispThread extends LispObject
 
     private boolean destroyed;
     private Environment dynEnv;
-    private LispObject[] _values;
+    public LispObject[] _values;
 
     public final synchronized boolean isDestroyed()
     {
