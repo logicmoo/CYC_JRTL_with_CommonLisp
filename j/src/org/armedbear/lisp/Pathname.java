@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Pathname.java,v 1.42 2004-01-08 18:07:50 piso Exp $
+ * $Id: Pathname.java,v 1.43 2004-01-16 15:21:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -812,9 +812,9 @@ public final class Pathname extends LispObject
                                             boolean errorIfDoesNotExist)
         throws ConditionThrowable
     {
-        Pathname pathname = Pathname.coerceToPathname(arg);
+        final Pathname pathname = Pathname.coerceToPathname(arg);
         if (pathname.isWild())
-            signal(new FileError("Bad place for a wild pathname."));
+            signal(new FileError("Bad place for a wild pathname.", pathname));
         File file = Utilities.getFile(pathname);
         if (file.isDirectory())
             return Utilities.getDirectoryPathname(file);
@@ -830,7 +830,7 @@ public final class Pathname extends LispObject
             StringBuffer sb = new StringBuffer("The file ");
             sb.append(pathname);
             sb.append(" does not exist.");
-            return signal(new FileError(sb.toString()));
+            return signal(new FileError(sb.toString(), pathname));
         }
         return NIL;
     }
