@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: boot.lisp,v 1.101 2003-08-26 14:39:34 piso Exp $
+;;; $Id: boot.lisp,v 1.102 2003-09-07 01:31:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -316,6 +316,18 @@
        `(block nil (let* ,vl ,@decl (tagbody ,@body))))
       (push (car body) decl)
       (pop body)))
+
+
+;;; DOTIMES (from CMUCL)
+(defmacro dotimes ((var count &optional (result nil)) &body body)
+  (cond ((numberp count)
+         `(do ((,var 0 (1+ ,var)))
+              ((>= ,var ,count) ,result)
+            ,@body))
+        (t (let ((v1 (gensym)))
+             `(do ((,var 0 (1+ ,var)) (,v1 ,count))
+                  ((>= ,var ,v1) ,result)
+                ,@body)))))
 
 
 ;;; DOLIST (from CMUCL)
