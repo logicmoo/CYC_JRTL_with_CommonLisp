@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.157 2004-05-08 00:31:49 piso Exp $
+;;; $Id: jvm.lisp,v 1.158 2004-05-08 01:02:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1809,21 +1809,35 @@
     (emit 'label `,label2)
     (emit-store-value)))
 
+(defun contains-return (form)
+  (if (atom form)
+      nil
+      (case (car form)
+        (QUOTE
+         nil)
+        (RETURN-FROM
+         t)
+        (t
+         (dolist (subform form)
+           (when (contains-return subform)
+             (return t)))))))
+
 (defun compile-block (form for-effect)
-  (let* ((rest (cdr form))
-         (block-label (car rest))
+  (let* ((block-label (cadr form))
+         (body (cddr form))
          (block-exit (gensym))
          (*blocks* (acons block-label block-exit *blocks*))
          (*locals* *locals*)
          env-var)
-    ;; Save current dynamic environment.
-    (setf env-var (allocate-local nil))
-    (ensure-thread-var-initialized)
-    (emit 'aload *thread*)
-    (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
-    (emit 'astore env-var)
+    (when (contains-return body)
+      ;; Save current dynamic environment.
+      (setf env-var (allocate-local nil))
+      (ensure-thread-var-initialized)
+      (emit 'aload *thread*)
+      (emit 'getfield +lisp-thread-class+ "dynEnv" +lisp-environment+)
+      (emit 'astore env-var))
     ;; Compile subforms.
-    (do ((subforms (cdr rest) (cdr subforms)))
+    (do ((subforms body (cdr subforms)))
         ((null subforms))
       (let ((subform (car subforms))
             (really-for-effect (or (cdr subforms) for-effect)))
@@ -1831,10 +1845,11 @@
         (when really-for-effect
           (maybe-emit-clear-values subform))))
     (emit 'label `,block-exit)
-    ;; Restore dynamic environment.
-    (emit 'aload *thread*)
-    (emit 'aload env-var)
-    (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+)))
+    (when env-var
+      ;; Restore dynamic environment.
+      (emit 'aload *thread*)
+      (emit 'aload env-var)
+      (emit 'putfield +lisp-thread-class+ "dynEnv" +lisp-environment+))))
 
 (defun compile-return-from (form for-effect)
   (let* ((rest (cdr form))
