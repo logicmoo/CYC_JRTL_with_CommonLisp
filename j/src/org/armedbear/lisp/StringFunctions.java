@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringFunctions.java,v 1.18 2004-02-23 14:24:48 piso Exp $
+ * $Id: StringFunctions.java,v 1.19 2004-02-23 14:53:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -885,11 +885,14 @@ public final class StringFunctions extends Lisp
             throws ConditionThrowable
         {
             char c = LispCharacter.getValue(first);
-            LispString string = checkString(second);
+            AbstractString string;
+            if (second instanceof AbstractString)
+                string = (AbstractString) second;
+            else
+                return signal(new TypeError(second, Symbol.STRING));
             int start = Fixnum.getValue(third);
-            char[] chars = string.chars();
-            for (int i = start, limit = chars.length; i < limit; i++) {
-                if (chars[i] == c)
+            for (int i = start, limit = string.length(); i < limit; i++) {
+                if (string.getChar(i) == c)
                     return number(i);
             }
             return NIL;
