@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.40 2003-09-14 15:33:05 piso Exp $
+ * $Id: LispFloat.java,v 1.41 2003-09-14 17:07:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,11 @@ public final class LispFloat extends LispObject
     }
 
     public boolean numberp()
+    {
+        return true;
+    }
+
+    public boolean realp()
     {
         return true;
     }
