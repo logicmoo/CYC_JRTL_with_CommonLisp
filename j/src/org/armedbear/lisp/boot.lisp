@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: boot.lisp,v 1.143 2004-01-09 16:46:55 piso Exp $
+;;; $Id: boot.lisp,v 1.144 2004-01-20 15:39:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,6 +46,10 @@
 
 (defmacro defparameter (name initial-value &optional docstring)
   (list 'sys::%defparameter (list 'QUOTE name) initial-value docstring))
+
+;; CLASS-NAME is redefined as a generic function when CLOS is loaded.
+(defun class-name (class)
+  (sys::%class-name class))
 
 (sys::%load "autoloads.lisp")
 (sys::%load "early-defuns.lisp")

@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: clos.lisp,v 1.57 2004-01-02 01:25:19 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: clos.lisp,v 1.58 2004-01-20 15:38:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -68,7 +68,6 @@
       (cons (funcall fun (car x) (cadr x))
             (mapplist fun (cddr x)))))
 
-(defsetf class-name %set-class-name)
 (defsetf class-layout %set-class-layout)
 (defsetf class-direct-superclasses %set-class-direct-superclasses)
 (defsetf class-direct-subclasses %set-class-direct-subclasses)
@@ -521,7 +520,7 @@
                                      &allow-other-keys)
   (declare (ignore metaclass))
   (let ((class (std-allocate-instance (find-class 'standard-class))))
-    (setf (class-name class) name)
+    (%set-class-name class name)
     (setf (class-direct-subclasses class) ())
     (setf (class-direct-methods class) ())
     (std-after-initialization-for-classes class
@@ -579,8 +578,8 @@
          ((null names))
       (when (memq name (cdr names))
         (error 'program-error
-               "duplicate initialization argument name ~S in :DEFAULT-INITARGS"
-               name))))
+               :format-control "Duplicate initialization argument name ~S in :DEFAULT-INITARGS."
+               :format-arguments (list name)))))
   (let ((class (find-class name nil)))
     (unless class
       (setf class (apply #'make-instance-standard-class (find-class 'standard-class)
@@ -1371,6 +1370,18 @@
           (append lambda-list '(&key &allow-other-keys))
           lambda-list)))
 
+(fmakunbound 'class-name)
+
+(defgeneric class-name (class))
+
+(defmethod class-name ((class class))
+  (%class-name class))
+
+(defgeneric (setf class-name) (new-value class))
+
+(defmethod (setf class-name) (new-value (class class))
+  (%set-class-name class new-value))
+
 ;;; Slot access
 
 (defun setf-slot-value-using-class (new-value class instance slot-name)
@@ -1428,7 +1439,7 @@
   (std-allocate-instance class))
 
 (defmethod allocate-instance ((class structure-class) &rest initargs)
-  (%make-structure (class-name class)
+  (%make-structure (%class-name class)
                    (make-list (length (class-slots class))
                               :initial-element +slot-unbound+)))
 
