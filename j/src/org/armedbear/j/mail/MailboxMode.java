@@ -2,7 +2,7 @@
  * MailboxMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: MailboxMode.java,v 1.2 2002-10-03 17:40:26 piso Exp $
+ * $Id: MailboxMode.java,v 1.3 2002-11-15 20:23:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,9 +22,7 @@
 package org.armedbear.j.mail;
 
 import java.awt.event.KeyEvent;
-import javax.swing.ButtonGroup;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 import org.armedbear.j.AbstractMode;
 import org.armedbear.j.Buffer;
 import org.armedbear.j.Constants;
@@ -42,13 +40,18 @@ import org.armedbear.j.Property;
 import org.armedbear.j.ToolBar;
 import org.armedbear.j.View;
 
-public final class MailboxMode extends AbstractMode implements Constants, Mode
+public class MailboxMode extends AbstractMode implements Constants, Mode
 {
     private static final MailboxMode mode = new MailboxMode();
 
     private MailboxMode()
     {
-        super(MAILBOX_MODE, MAILBOX_MODE_NAME);
+        this(MAILBOX_MODE, MAILBOX_MODE_NAME);
+    }
+
+    protected MailboxMode(int id, String displayName)
+    {
+        super(id, displayName);
         setProperty(Property.VERTICAL_RULE, 0);
         setProperty(Property.SHOW_LINE_NUMBERS, false);
         setProperty(Property.SHOW_CHANGE_MARKS, false);
@@ -56,7 +59,7 @@ public final class MailboxMode extends AbstractMode implements Constants, Mode
         setProperty(Property.HIGHLIGHT_BRACKETS, false);
     }
 
-    public static final MailboxMode getMode()
+    public static Mode getMode()
     {
         return mode;
     }

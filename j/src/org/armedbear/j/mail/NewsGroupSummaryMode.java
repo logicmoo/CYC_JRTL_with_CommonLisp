@@ -2,7 +2,7 @@
  * NewsGroupSummaryMode.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummaryMode.java,v 1.2 2002-11-15 17:35:47 piso Exp $
+ * $Id: NewsGroupSummaryMode.java,v 1.3 2002-11-15 20:24:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,28 +22,20 @@
 package org.armedbear.j.mail;
 
 import java.awt.event.KeyEvent;
-import org.armedbear.j.AbstractMode;
-import org.armedbear.j.Buffer;
-import org.armedbear.j.Constants;
 import org.armedbear.j.Editor;
-import org.armedbear.j.Formatter;
+import org.armedbear.j.Frame;
 import org.armedbear.j.KeyMap;
-import org.armedbear.j.Line;
 import org.armedbear.j.Mode;
-import org.armedbear.j.Position;
-import org.armedbear.j.Property;
+import org.armedbear.j.NavigationComponent;
+import org.armedbear.j.ToolBar;
 
-public final class NewsGroupSummaryMode extends AbstractMode
-    implements Constants, Mode
+public final class NewsGroupSummaryMode extends MailboxMode
 {
-    private static final Mode mode = new NewsGroupSummaryMode();
+    private static final NewsGroupSummaryMode mode = new NewsGroupSummaryMode();
 
     private NewsGroupSummaryMode()
     {
         super(NEWS_GROUP_SUMMARY_MODE, NEWS_GROUP_SUMMARY_MODE_NAME);
-        setProperty(Property.VERTICAL_RULE, 0);
-        setProperty(Property.SHOW_LINE_NUMBERS, false);
-        setProperty(Property.SHOW_CHANGE_MARKS, false);
     }
 
     public static final Mode getMode()
@@ -51,27 +43,19 @@ public final class NewsGroupSummaryMode extends AbstractMode
         return mode;
     }
 
-    public final Formatter getFormatter(Buffer buffer)
+    public NavigationComponent getSidebarComponent(Editor editor)
     {
-        return new MailboxFormatter(buffer);
+        return null;
     }
 
     protected final void setKeyMapDefaults(KeyMap km)
     {
-        km.mapKey(KeyEvent.VK_ENTER, 0, "readArticle");
+        km.mapKey(KeyEvent.VK_ENTER, 0, "readArticleOtherWindow");
+        km.mapKey(KeyEvent.VK_ENTER, CTRL_MASK, "readArticle");
     }
 
-    public String getContextString(Editor editor, boolean verbose)
+    protected ToolBar getDefaultToolBar(Frame frame)
     {
-        Position dot = editor.getDot();
-        if (dot != null) {
-            final Line dotLine = dot.getLine();
-            if (dotLine instanceof MailboxLine) {
-                MailboxEntry entry = ((MailboxLine)dotLine).getMailboxEntry();
-                if (entry != null)
-                    return entry.getSubject();
-            }
-        }
-        return null;
+        return frame.getDefaultToolBar();
     }
 }
