@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.170 2003-10-26 18:55:35 piso Exp $
+ * $Id: Lisp.java,v 1.171 2003-10-26 19:13:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -352,7 +352,7 @@ public abstract class Lisp
                     throw new ConditionThrowable(new UnboundVariable(obj));
             }
             if (result instanceof SymbolMacro)
-                return ((SymbolMacro)result).getExpansion();
+                return eval(((SymbolMacro)result).getExpansion(), env, thread);
             return result;
         } else if (obj instanceof Cons) {
             LispObject first = obj.car();
