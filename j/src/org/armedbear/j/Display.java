@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Display.java,v 1.14 2003-07-27 00:43:32 piso Exp $
+ * $Id: Display.java,v 1.15 2003-08-01 17:35:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1507,6 +1507,7 @@ public final class Display extends JComponent implements Constants,
         }
         scrollPixelsUp(actual * charHeight);
         setTopLine(line);
+        editor.maybeScrollCaret();
         editor.updateDisplay();
     }
 
@@ -1568,6 +1569,7 @@ public final class Display extends JComponent implements Constants,
         }
         scrollPixelsDown(actual * charHeight);
         setTopLine(top);
+        editor.maybeScrollCaret();
         editor.updateDisplay();
     }
 
