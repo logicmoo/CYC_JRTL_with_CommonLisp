@@ -30,6 +30,8 @@ public abstract class AbstractVector extends LispObject
             return T;
         if (typeSpecifier == Symbol.SEQUENCE)
             return T;
+        if (typeSpecifier == Symbol.SIMPLE_VECTOR)
+            return isSimpleVector() ? T : NIL;
         return super.typep(typeSpecifier);
     }
 
