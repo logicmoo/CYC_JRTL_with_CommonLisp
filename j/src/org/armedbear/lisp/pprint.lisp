@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: pprint.lisp,v 1.42 2004-10-08 14:21:38 piso Exp $
+;;; $Id: pprint.lisp,v 1.43 2004-10-12 13:55:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -869,12 +869,15 @@
     (pprint-newline+ kind stream))
   nil)
 
+;; "If stream is a pretty printing stream and the value of *PRINT-PRETTY* is
+;; true, PPRINT-INDENT sets the indentation in the innermost dynamically
+;; enclosing logical block; otherwise, PPRINT-INDENT has no effect."
 (defun pprint-indent (relative-to n &optional (stream *standard-output*))
   (setq stream (sys:decode-stream-arg stream))
   (when (not (member relative-to '(:block :current)))
     (error "Invalid KIND argument ~A to PPRINT-INDENT" relative-to))
-  (when (xp-structure-p stream)
-    (pprint-indent+ relative-to n stream))
+  (when (and (xp-structure-p stream) *print-pretty*)
+    (pprint-indent+ relative-to (truncate n) stream))
   nil)
 
 (defun pprint-tab (kind colnum colinc &optional (stream *standard-output*))
