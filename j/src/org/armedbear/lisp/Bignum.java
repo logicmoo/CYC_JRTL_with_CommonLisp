@@ -1,8 +1,8 @@
 /*
  * Bignum.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: Bignum.java,v 1.60 2004-12-16 17:26:37 piso Exp $
+ * Copyright (C) 2003-2005 Peter Graves
+ * $Id: Bignum.java,v 1.61 2005-02-14 04:02:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -213,6 +213,11 @@ public final class Bignum extends LispObject
         return number(value.subtract(BigInteger.ONE));
     }
 
+    public LispObject add(int n) throws ConditionThrowable
+    {
+        return number(value.add(BigInteger.valueOf(n)));
+    }
+
     public LispObject add(LispObject obj) throws ConditionThrowable
     {
         if (obj instanceof Fixnum)
@@ -254,6 +259,15 @@ public final class Bignum extends LispObject
                                        Fixnum.ZERO.subtract(c.getImaginaryPart()));
         }
         return signal(new TypeError(obj, Symbol.NUMBER));
+    }
+
+    public LispObject multiplyBy(int n) throws ConditionThrowable
+    {
+        if (n == 0)
+            return Fixnum.ZERO;
+        if (n == 1)
+            return this;
+        return new Bignum(value.multiply(BigInteger.valueOf(n)));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -391,15 +405,7 @@ public final class Bignum extends LispObject
         final LispThread thread = LispThread.currentThread();
         LispObject value1, value2;
 	try {
-            if (obj instanceof Ratio) {
-                Ratio divisor = (Ratio) obj;
-                LispObject quotient =
-                    multiplyBy(divisor.DENOMINATOR()).truncate(divisor.NUMERATOR());
-                LispObject remainder =
-                    subtract(quotient.multiplyBy(divisor));
-                value1 = quotient;
-                value2 = remainder;
-            } else if (obj instanceof Fixnum) {
+            if (obj instanceof Fixnum) {
                 BigInteger divisor = ((Fixnum)obj).getBigInteger();
                 BigInteger[] results = value.divideAndRemainder(divisor);
                 BigInteger quotient = results[0];
