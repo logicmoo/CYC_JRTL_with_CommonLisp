@@ -1,8 +1,8 @@
 /*
  * MenuBar.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: MenuBar.java,v 1.1.1.1 2002-09-24 16:09:02 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: MenuBar.java,v 1.2 2003-06-12 14:30:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,6 @@ import javax.swing.JMenuBar;
 
 public final class MenuBar extends JMenuBar
 {
-    public static final String DEFAULT = "Default";
-
     private static MenuListener listener = new MenuListener();
 
     private final String menuName;
@@ -44,17 +42,5 @@ public final class MenuBar extends JMenuBar
     public String getMenuName()
     {
         return menuName;
-    }
-
-    public static MenuBar createDefaultMenuBar(Frame frame)
-    {
-        MenuBar menuBar = new MenuBar(DEFAULT);
-        menuBar.add(new Menu("File", 'F'));
-        menuBar.add(new Menu("Edit", 'E'));
-        menuBar.add(new Menu("View", 'V'));
-        menuBar.add(new Menu("Search", 'S'));
-        menuBar.add(new Menu("Go", 'G'));
-        menuBar.add(new Menu("Help", 'H'));
-        return menuBar;
     }
 }
