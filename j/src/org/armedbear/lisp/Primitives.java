@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.182 2003-04-27 17:17:19 piso Exp $
+ * $Id: Primitives.java,v 1.183 2003-04-28 00:53:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -4339,6 +4340,27 @@ public final class Primitives extends Module
                 result = result.or(n);
             }
             return number(result);
+        }
+    };
+
+    // ### make-socket
+    // host port => stream
+    private static final Primitive2 MAKE_SOCKET = new Primitive2("make-socket") {
+        public LispObject execute(LispObject first, LispObject second) throws LispError
+        {
+            String host = LispString.getValue(first);
+            int port = Fixnum.getValue(second);
+            try {
+                Socket socket = new Socket(host, port);
+                CharacterInputStream in =
+                    new CharacterInputStream(socket.getInputStream());
+                CharacterOutputStream out =
+                    new CharacterOutputStream(socket.getOutputStream());
+                return new TwoWayStream(in, out);
+            }
+            catch (Exception e) {
+                throw new LispError(e.getMessage());
+            }
         }
     };
 
