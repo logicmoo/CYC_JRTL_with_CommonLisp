@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.112 2004-10-13 00:01:08 piso Exp $
+;;; $Id: clos.lisp,v 1.113 2004-10-13 02:18:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1271,32 +1271,36 @@
              (let ((emf-table (classes-to-emf-table gf))
                    (number-required (length (gf-required-args gf))))
                (make-closure
-                `(lambda (&rest args)
-                   (when (< (length args) ,number-required)
-                     (error 'program-error
-                            :format-control "Not enough arguments for generic function ~S."
-                            :format-arguments (list (generic-function-name ,gf))))
-;;                    (let* ((classes (mapcar #'class-of (subseq args 0 ,number-required)))
-;;                           (emfun (gethash classes ,emf-table)))
-;;                      (if emfun
-;;                          (funcall emfun args)
-;;                          (slow-method-lookup ,gf args classes))))
-                   (let ((classes ())
-                         (i 0)
-                         emfun)
-                     (dolist (arg args)
-                       (push (class-of arg) classes)
-                       (when (= (incf i) ,number-required)
-                         (return)))
-                     (setf classes (nreverse classes))
-                     (setf emfun (gethash classes ,emf-table))
-                     (if emfun
-                         (funcall emfun args)
-                         (slow-method-lookup ,gf args classes))))
+                (cond ((= number-required 1)
+                       `(lambda (&rest args)
+                          (when (null args)
+                            (error 'program-error
+                                   :format-control "Not enough arguments for generic function ~S."
+                                   :format-arguments (list (generic-function-name ,gf))))
+                          (let* ((classes (list (class-of (car args))))
+                                 (emfun (gethash classes ,emf-table)))
+                            (if emfun
+                                (funcall emfun args)
+                                (slow-method-lookup ,gf args classes)))))
+                      (t
+                       `(lambda (&rest args)
+                          (when (< (length args) ,number-required)
+                            (error 'program-error
+                                   :format-control "Not enough arguments for generic function ~S."
+                                   :format-arguments (list (generic-function-name ,gf))))
+                          (let ((classes ())
+                                (i 0)
+                                emfun)
+                            (dolist (arg args)
+                              (push (class-of arg) classes)
+                              (when (= (incf i) ,number-required)
+                                (return)))
+                            (setf classes (nreverse classes))
+                            (setf emfun (gethash classes ,emf-table))
+                            (if emfun
+                                (funcall emfun args)
+                                (slow-method-lookup ,gf args classes))))))
                 nil)))))
-;;     (when (and (fboundp 'jvm:jvm-compile)
-;;                (not (autoloadp 'jvm:jvm-compile)))
-;;       (setf code (jvm:jvm-compile nil code)))
 
     (when (and (fboundp 'compile)
                (not (autoloadp 'compile)))
