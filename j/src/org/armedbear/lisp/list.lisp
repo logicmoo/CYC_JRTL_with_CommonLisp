@@ -1,7 +1,7 @@
 ;;; list.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: list.lisp,v 1.30 2003-06-02 17:45:55 piso Exp $
+;;; $Id: list.lisp,v 1.31 2003-06-10 17:13:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,7 +27,6 @@
           butlast nbutlast
           ldiff
           complement constantly
-          subst subst-if subst-if-not nsubst nsubst-if nsubst-if-not
           sublis nsublis
           member member-if member-if-not tailp adjoin
           union nunion intersection nintersection
@@ -173,94 +172,12 @@
 (defun constantly (x)
   #'(lambda (&rest args) x))
 
-
-(defmacro satisfies-the-test (item elt)
-  (let ((key-tmp (gensym)))
-    `(let ((,key-tmp (apply-key key ,elt)))
-       (cond (testp (funcall test ,item ,key-tmp))
-             (notp (not (funcall test-not ,item ,key-tmp)))
-             (t (funcall test ,item ,key-tmp))))))
-
-(defun subst (new old tree &key key (test #'eql testp) (test-not nil notp))
-  (labels ((s (subtree)
-	      (cond ((satisfies-the-test old subtree) new)
-		    ((atom subtree) subtree)
-		    (t (let ((car (s (car subtree)))
-			     (cdr (s (cdr subtree))))
-			 (if (and (eq car (car subtree))
-				  (eq cdr (cdr subtree)))
-			     subtree
-			     (cons car cdr)))))))
-          (s tree)))
-
-(defun subst-if (new test tree &key key)
-  (labels ((s (subtree)
-	      (cond ((funcall test (apply-key key subtree)) new)
-		    ((atom subtree) subtree)
-		    (t (let ((car (s (car subtree)))
-			     (cdr (s (cdr subtree))))
-			 (if (and (eq car (car subtree))
-				  (eq cdr (cdr subtree)))
-			     subtree
-			     (cons car cdr)))))))
-          (s tree)))
-
-(defun subst-if-not (new test tree &key key)
-  (labels ((s (subtree)
-	      (cond ((not (funcall test (apply-key key subtree))) new)
-		    ((atom subtree) subtree)
-		    (t (let ((car (s (car subtree)))
-			     (cdr (s (cdr subtree))))
-			 (if (and (eq car (car subtree))
-				  (eq cdr (cdr subtree)))
-			     subtree
-			     (cons car cdr)))))))
-          (s tree)))
-
-(defun nsubst (new old tree &key key (test #'eql testp) (test-not nil notp))
-  (labels ((s (subtree)
-	      (cond ((satisfies-the-test old subtree) new)
-		    ((atom subtree) subtree)
-		    (t (do* ((last nil subtree)
-			     (subtree subtree (cdr subtree)))
-                            ((atom subtree)
-                             (if (satisfies-the-test old subtree)
-                                 (setf (cdr last) new)))
-			 (if (satisfies-the-test old subtree)
-			     (return (setf (cdr last) new))
-			     (setf (car subtree) (s (car subtree)))))
-		       subtree))))
-          (s tree)))
-
-(defun nsubst-if (new test tree &key key)
-  (labels ((s (subtree)
-	      (cond ((funcall test (apply-key key subtree)) new)
-		    ((atom subtree) subtree)
-		    (t (do* ((last nil subtree)
-			     (subtree subtree (cdr subtree)))
-                            ((atom subtree)
-                             (if (funcall test (apply-key key subtree))
-                                 (setf (cdr last) new)))
-			 (if (funcall test (apply-key key subtree))
-			     (return (setf (cdr last) new))
-			     (setf (car subtree) (s (car subtree)))))
-		       subtree))))
-          (s tree)))
-
-(defun nsubst-if-not (new test tree &key key)
-  (labels ((s (subtree)
-	      (cond ((not (funcall test (apply-key key subtree))) new)
-		    ((atom subtree) subtree)
-		    (t (do* ((last nil subtree)
-			     (subtree subtree (cdr subtree)))
-                            ((atom subtree)
-                             (if (not (funcall test (apply-key key subtree)))
-                                 (setf (cdr last) new)))
-			 (if (not (funcall test (apply-key key subtree)))
-			     (return (setf (cdr last) new))
-			     (setf (car subtree) (s (car subtree)))))
-		       subtree))))
-          (s tree)))
+(autoload 'subst "subst.lisp")
+(autoload 'subst-if "subst.lisp")
+(autoload 'subst-if-not "subst.lisp")
+(autoload 'nsubst "subst.lisp")
+(autoload 'nsubst-if "subst.lisp")
+(autoload 'nsubst-if-not "subst.lisp")
 
 (defun sublis (alist tree &key key (test #'eql) (test-not nil notp))
   (labels ((s (subtree)
