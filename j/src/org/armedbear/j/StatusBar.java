@@ -1,8 +1,8 @@
 /*
  * StatusBar.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: StatusBar.java,v 1.4 2003-07-25 18:47:28 piso Exp $
+ * Copyright (C) 1998-2004 Peter Graves
+ * $Id: StatusBar.java,v 1.5 2004-09-16 18:32:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,16 +37,7 @@ import javax.swing.border.MatteBorder;
 
 public final class StatusBar extends JComponent implements PreferencesChangeListener
 {
-    private static final int fontSize;
-
-    static {
-        if (System.getProperty("os.name").equals("Linux"))
-            fontSize = 12;
-        else
-            fontSize = 11;
-    }
-
-    private static final Font font = new Font("SansSerif", Font.PLAIN, fontSize);
+    private static final Font font = new Font("SansSerif", Font.PLAIN, 12);
     private static final int LEFT_MARGIN = 2;
     private static final int RIGHT_MARGIN = 2;
 
