@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.92 2004-02-19 19:16:16 piso Exp $
+;;; $Id: clos.lisp,v 1.93 2004-03-01 17:28:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1022,7 +1022,7 @@
     (when (< (length args) number-required)
       (error 'program-error
              :format-control "Not enough arguments for generic function ~S."
-             :format-arguments (list gf)))
+             :format-arguments (list (generic-function-name gf))))
     (subseq args 0 number-required)))
 
 (defun extract-lambda-list (specialized-lambda-list)
@@ -1293,7 +1293,7 @@
                    (when (< (length args) ,number-required)
                      (error 'program-error
                             :format-control "Not enough arguments for generic function ~S."
-                            :format-arguments (list ,gf)))
+                            :format-arguments (list (generic-function-name ,gf))))
                    (let* ((classes (mapcar #'class-of (subseq args 0 ,number-required)))
                           (emfun (gethash classes ,emf-table)))
                      (if emfun
@@ -1839,6 +1839,37 @@
 (defun make-condition (type &rest initargs)
   (or (%make-condition type initargs)
       (apply #'make-instance (find-class type) initargs)))
+
+;; Adapted from SBCL.
+;; Originally defined in signal.lisp. Redefined here now that we have MAKE-CONDITION.
+(defun coerce-to-condition (datum arguments default-type fun-name)
+  (cond ((typep datum 'condition)
+	 (when arguments
+           (error 'simple-type-error
+                  :datum arguments
+                  :expected-type 'null
+                  :format-control "You may not supply additional arguments when giving ~S to ~S."
+                  :format-arguments (list datum fun-name)))
+	 datum)
+	((symbolp datum)
+	 (apply #'make-condition datum arguments))
+	((or (stringp datum) (functionp datum))
+	 (make-condition default-type
+                         :format-control datum
+                         :format-arguments arguments))
+	(t
+	 (error 'simple-type-error
+		:datum datum
+		:expected-type '(or symbol string)
+		:format-control "Bad argument to ~S: ~S."
+		:format-arguments (list fun-name datum)))))
+
+;; Originally defined in Primitives.java. Redefined here to support arbitrary
+;; conditions.
+(defun error (datum &rest arguments)
+  (let ((condition (coerce-to-condition datum arguments 'simple-error 'error)))
+    (signal condition)
+    (invoke-debugger condition)))
 
 (defgeneric make-load-form (object &optional environment))
 
