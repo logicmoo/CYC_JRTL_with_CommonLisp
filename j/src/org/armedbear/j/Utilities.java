@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Utilities.java,v 1.10 2002-12-24 16:59:31 piso Exp $
+ * $Id: Utilities.java,v 1.11 2003-01-09 15:35:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1137,11 +1137,14 @@ public final class Utilities implements Constants
             if (Platform.isPlatformWindows()) {
                 String[] cmdarray = {"bash", "-c", "echo $HOME"};
                 String output = exec(cmdarray);
-                if (output != null && output.length() > 0) {
-                    if (output.indexOf('/') >= 0)
-                        userHome = uncygnify(output);
-                    else
-                        userHome = output;
+                if (output != null) {
+                    output = output.trim();
+                    if (output.length() > 0) {
+                        if (output.indexOf('/') >= 0)
+                            userHome = uncygnify(output);
+                        else
+                            userHome = output;
+                    }
                 }
             }
             if (userHome == null) {
@@ -1171,7 +1174,7 @@ public final class Utilities implements Constants
 
     public static String exec(String[] cmdarray)
     {
-        FastStringBuffer output = new FastStringBuffer();
+        FastStringBuffer sb = new FastStringBuffer();
         try {
             Process process = Runtime.getRuntime().exec(cmdarray);
             BufferedReader reader =
@@ -1179,8 +1182,11 @@ public final class Utilities implements Constants
             if (reader != null){
                 String s;
                 while ((s = reader.readLine()) != null) {
-                    if (s.length() > 0)
-                        output.append(s);
+                    if (s.length() > 0) {
+                        if (sb.length() > 0)
+                            sb.append('\n');
+                        sb.append(s);
+                    }
                 }
             }
             process.waitFor();
@@ -1189,7 +1195,7 @@ public final class Utilities implements Constants
             Log.error(t);
             return null;
         }
-        return output.toString();
+        return sb.toString();
     }
 
     public static ImageIcon getIconFromFile(String iconFile)
