@@ -1,8 +1,8 @@
 /*
  * Mode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Mode.java,v 1.3 2002-10-03 17:23:59 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Mode.java,v 1.4 2003-03-31 16:35:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -245,6 +245,8 @@ public interface Mode
      *          indentation of pasted text.
      */
     public boolean canIndentPaste();
+    
+    public boolean acceptsLinePaste(Editor editor);
 
     /**
      * Returns the amount of indentation (in columns) needed to indent the

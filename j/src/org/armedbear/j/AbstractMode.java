@@ -1,8 +1,8 @@
 /*
  * AbstractMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: AbstractMode.java,v 1.3 2002-10-03 17:35:06 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: AbstractMode.java,v 1.4 2003-03-31 16:36:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -559,6 +559,11 @@ public abstract class AbstractMode implements Constants, Mode
     public boolean canIndentPaste()
     {
         return canIndent();
+    }
+    
+    public boolean acceptsLinePaste(Editor editor)
+    {
+        return true;
     }
 
     /**
