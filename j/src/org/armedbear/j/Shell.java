@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Shell.java,v 1.32 2004-09-17 18:28:24 piso Exp $
+ * $Id: Shell.java,v 1.33 2004-09-19 14:13:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,7 +140,7 @@ public class Shell extends CommandInterpreter implements Constants
         Process p = null;
         try {
             p = Runtime.getRuntime().exec(cmdArray, null,
-                new java.io.File(initialDir.canonicalPath()));
+                                          new java.io.File(initialDir.canonicalPath()));
             setProcess(p);
         }
         catch (Throwable t) {
