@@ -2,7 +2,7 @@
  * MessageFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MessageFormatter.java,v 1.3 2003-04-19 18:29:19 piso Exp $
+ * $Id: MessageFormatter.java,v 1.4 2003-04-20 16:03:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,6 @@ public final class MessageFormatter extends Formatter
     private static final RE headerRE = new UncheckedRE("^ *[a-zA-Z\\-/]+:");
 
     private Line startOfBody;
-    private Line startOfSignature;
 
     private final DiffFormatter diffFormatter;
 
@@ -69,6 +68,10 @@ public final class MessageFormatter extends Formatter
             return diffFormatter.formatLine(line);
         final String text = getDetabbedText(line);
         clearSegmentList();
+        if (line.flags() == MESSAGE_FORMAT_SIGNATURE) {
+            addSegment(text, MESSAGE_FORMAT_SIGNATURE);
+            return segmentList;
+        }
         String trim = text.trim();
         if (trim.length() == 0) {
             // Line is empty or all whitespace.
@@ -92,10 +95,6 @@ public final class MessageFormatter extends Formatter
                 addSegment(text, MESSAGE_FORMAT_HEADER_VALUE);
             else
                 addSegment(text, MESSAGE_FORMAT_COMMENT);
-            return segmentList;
-        }
-        if (startOfSignature != null && line.lineNumber() >= startOfSignature.lineNumber()) {
-            addSegment(text, MESSAGE_FORMAT_SIGNATURE);
             return segmentList;
         }
         char c = trim.charAt(0);
@@ -125,8 +124,8 @@ public final class MessageFormatter extends Formatter
     public synchronized boolean parseBuffer()
     {
         startOfBody = null;
-        startOfSignature = null;
         boolean inDiff = false;
+        boolean inSig = false;
         if (buffer.needsRenumbering())
             buffer.renumber();
         for (Line line = buffer.getFirstLine(); line != null; line = line.next()) {
@@ -157,10 +156,10 @@ public final class MessageFormatter extends Formatter
                 }
             } else {
                 // We're in the body of the message.
-                line.setFlags(0);
                 if (text.equals("-- ")) {
-                    startOfSignature = line;
-                    break;
+                    inSig = true;
+                    line.setFlags(MESSAGE_FORMAT_SIGNATURE);
+                    continue;
                 }
                 if (inDiff) {
                     if (isDiffContinuation(line)) {
@@ -169,14 +168,19 @@ public final class MessageFormatter extends Formatter
                     }
                     inDiff = false;
                     // Fall through...
-                } else {
-                    // Not in diff.
-                    if (isDiffStart(line)) {
-                        inDiff = true;
-                        line.setFlags(MESSAGE_FORMAT_DIFF);
-                        continue;
-                    }
+                } else if (isDiffStart(line)) {
+                    inDiff = true;
+                    line.setFlags(MESSAGE_FORMAT_DIFF);
+                    continue;
                 }
+                if (inDiff)
+                    Debug.bug();
+                if (inSig) {
+                    line.setFlags(MESSAGE_FORMAT_SIGNATURE);
+                    continue;
+                }
+                // Neutral state.
+                line.setFlags(0);
                 text = text.trim();
                 if (text.length() == 0)
                     continue;
@@ -191,10 +195,10 @@ public final class MessageFormatter extends Formatter
                                 break;
                             }
                         }
-                        // '-' by itself may be part of a diff.
-                        if (all /*&& text.length() > 1*/) {
-                            startOfSignature = line;
-                            break;
+                        if (all) {
+                            inSig = true;
+                            line.setFlags(MESSAGE_FORMAT_SIGNATURE);
+                            continue;
                         }
                     }
                 }
