@@ -1,7 +1,7 @@
 ;;; deftype.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: deftype.lisp,v 1.3 2004-05-19 20:06:09 piso Exp $
+;;; Copyright (C) 2004-2005 Peter Graves
+;;; $Id: deftype.lisp,v 1.4 2005-02-26 17:36:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+(in-package #:system)
 
 (defmacro deftype (name lambda-list &rest body)
   ;; Optional parameters default to * rather than NIL.
@@ -38,3 +38,14 @@
   `(progn
      (setf (get ',name 'deftype-definition) #'(lambda ,lambda-list ,@body))
      ',name))
+
+(defun expand-deftype (type)
+  (let (tp i)
+    (loop
+      (if (consp type)
+          (setf tp (car type) i (cdr type))
+          (setf tp type i nil))
+      (if (and (symbolp tp) (get tp 'deftype-definition))
+          (setf type (apply (get tp 'deftype-definition) i))
+          (return))))
+  type)
