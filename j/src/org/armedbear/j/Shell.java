@@ -1,8 +1,8 @@
 /*
  * Shell.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.24 2003-01-04 17:48:05 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: Shell.java,v 1.25 2003-05-11 13:12:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -216,8 +216,7 @@ public class Shell extends CommandInterpreter implements Constants
         // current directory.
         if (type == TYPE_SHELL) {
             ShellTokenizer st = new ShellTokenizer(s);
-            String commandLine = s.trim();
-            command = commandLine;
+            command = s.trim();
             String arg = null;
             if (st.hasMoreTokens()) {
                 command = st.nextToken();
@@ -359,9 +358,9 @@ public class Shell extends CommandInterpreter implements Constants
             index = s.indexOf('\n');
             if (index >= 0)
                 s = s.substring(0, index);
-            if (command.equals("pwd"))
+            if (command.equals("pwd") || command.equals("cd")) {
                 changeDirectory(s);
-            else if (command.equals("popd")) {
+            } else if (command.equals("popd")) {
                 // BUG! Directory names with embedded spaces will not be
                 // handled correctly!
                 index = s.indexOf(' ');
@@ -427,6 +426,11 @@ public class Shell extends CommandInterpreter implements Constants
                 sb.append(c);
         }
         return sb.toString();
+    }
+
+    public String getFileNameForDisplay()
+    {
+        return (currentDir != null) ? currentDir.canonicalPath() : "";
     }
 
     // For the buffer list.
