@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.12 2004-06-03 21:39:43 asimon Exp $
+;;; $Id: compile-system.lisp,v 1.13 2004-06-06 21:52:47 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -100,6 +100,7 @@
                             "fixme.lisp"
                             ;;"format.lisp"
                             "gentemp.lisp"
+                            "gray-streams.lisp"
                             "inspect.lisp"
                             ;;"j.lisp"
                             "java.lisp"
