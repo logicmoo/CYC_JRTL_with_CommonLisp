@@ -2,7 +2,7 @@
  * CharacterOutputStream.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: CharacterOutputStream.java,v 1.6 2003-09-25 15:37:08 piso Exp $
+ * $Id: CharacterOutputStream.java,v 1.7 2003-09-28 19:53:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
-public class CharacterOutputStream extends LispStream
+public class CharacterOutputStream extends LispOutputStream
 {
     private static final String lineSeparator =
         System.getProperty("line.separator");
