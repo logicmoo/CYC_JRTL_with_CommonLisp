@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.146 2005-03-06 21:29:09 piso Exp $
+ * $Id: Editor.java,v 1.147 2005-03-07 19:49:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2468,12 +2468,10 @@ public final class Editor extends JPanel implements Constants,
         char keyChar = event.getKeyChar();
         int keyCode = event.getKeyCode();
         int modifiers = event.getModifiers();
-
         if (insertingKeyText) {
             insertKeyTextInternal(keyChar, keyCode, modifiers);
             return true;
         }
-
         KeyMapping mapping = null;
         if (requestedKeyMap != null) {
             if (checkKeyboardQuit(event)) {
@@ -2509,7 +2507,6 @@ public final class Editor extends JPanel implements Constants,
                 mapping = KeyMap.getGlobalKeyMap().lookup(keyChar, keyCode,
                                                           modifiers);
         }
-
         if (mapping == null) {
             if (event.getID() == JEvent.KEY_TYPED) {
                 // Reset.
@@ -2530,10 +2527,8 @@ public final class Editor extends JPanel implements Constants,
                 status(currentEventSequence.getStatusText() + "-");
                 return true;
             }
-            if (isRecordingMacro()) {
-                if (command != "recordMacro" && command != "playbackMacro")
-                    Macro.record(this, command);
-            }
+            if (isRecordingMacro())
+                Macro.record(this, command);
             if (command instanceof String) {
                 requestedKeyMap = null;
                 currentEventSequence = null;
