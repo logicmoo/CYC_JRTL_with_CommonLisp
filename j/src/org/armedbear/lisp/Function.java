@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Function.java,v 1.32 2004-02-23 14:24:46 piso Exp $
+ * $Id: Function.java,v 1.33 2004-04-05 01:06:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,12 @@ public abstract class Function extends Functional
     {
         this.name = name != null ? name.toUpperCase() : null;
         index = 0;
-        if (name != null)
-            setLambdaName(Symbol.addFunction(this.name, this));
+        if (name != null) {
+            Symbol symbol = Symbol.addFunction(this.name, this);
+            if (cold)
+                symbol.setBuiltInFunction(true);
+            setLambdaName(symbol);
+        }
     }
 
     public Function(String name, String arglist)
@@ -74,6 +78,8 @@ public abstract class Function extends Functional
         if (name != null) {
             Symbol symbol = pkg.intern(this.name);
             symbol.setSymbolFunction(this);
+            if (cold)
+                symbol.setBuiltInFunction(true);
             setLambdaName(symbol);
             if (exported) {
                 try {
