@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: LispThread.java,v 1.58 2004-09-09 12:43:23 piso Exp $
+ * $Id: LispThread.java,v 1.59 2004-10-03 17:17:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -715,7 +715,7 @@ public final class LispThread extends LispObject
                 return signal(new TypeError(arg, "non-negative real"));
             long millis = d < Long.MAX_VALUE ? (long) d : Long.MAX_VALUE;
             try {
-                Thread.currentThread().sleep(millis);
+                Thread.sleep(millis);
             }
             catch (InterruptedException e) {
                 currentThread().processThreadInterrupts();
