@@ -1,4 +1,21 @@
 ;;; j.lisp
+;;;
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: j.lisp,v 1.32 2004-08-31 23:31:15 piso Exp $
+;;;
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the GNU General Public License
+;;; as published by the Free Software Foundation; either version 2
+;;; of the License, or (at your option) any later version.
+;;;
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; GNU General Public License for more details.
+;;;
+;;; You should have received a copy of the GNU General Public License
+;;; along with this program; if not, write to the Free Software
+;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package "J")
 
@@ -20,7 +37,8 @@
           variable-value
           with-editor
           with-other-editor
-          with-single-undo))
+          with-single-undo
+          save-excursion))
 
 (defun set-global-property (&rest args)
   (let ((count (length args)) key value)
@@ -121,6 +139,8 @@
 
 (defsetf current-editor %set-current-editor)
 
+(defsetf line-flags %set-line-flags)
+
 (defmacro with-editor (editor &rest forms)
   (let ((old-editor (gensym)))
   `(let ((,old-editor (current-editor)))
@@ -152,5 +172,13 @@
         (progn ,@forms)
         (end-compound-edit ,info)))))
 
+(defmacro save-excursion (&rest forms)
+  (let ((old-point (gensym)))
+    `(let ((,old-point (point)))
+       (unwind-protect
+        (progn ,@forms)
+        (goto-char ,old-point)))))
+
 (in-package "COMMON-LISP-USER")
+
 (use-package "J")
