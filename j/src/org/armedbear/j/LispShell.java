@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispShell.java,v 1.45 2003-10-04 17:30:08 piso Exp $
+ * $Id: LispShell.java,v 1.46 2003-10-06 15:21:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,7 @@ public class LispShell extends Shell
     protected LispShell()
     {
         setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
+        setResetCommand(":reset");
         this.title = title;
     }
 
