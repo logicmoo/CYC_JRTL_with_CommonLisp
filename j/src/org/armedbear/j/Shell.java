@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Shell.java,v 1.27 2003-06-29 00:19:34 piso Exp $
+ * $Id: Shell.java,v 1.28 2003-09-16 00:44:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ public class Shell extends CommandInterpreter implements Constants
     {
         this();
         this.shellCommand = shellCommand;
-        if (shellCommand.indexOf("tcsh") >= 0)
+        if (shellCommand != null && shellCommand.indexOf("tcsh") >= 0)
             promptIsStderr = false;
     }
 
@@ -81,7 +81,7 @@ public class Shell extends CommandInterpreter implements Constants
     {
         String s =
             Editor.preferences().getStringProperty(Property.SHELL_FILE_NAME);
-        if (s != null)
+        if (s != null && s.length() > 0)
             return s;
         return Platform.isPlatformWindows() ? "cmd.exe" : "bash -i";
     }
@@ -93,6 +93,10 @@ public class Shell extends CommandInterpreter implements Constants
 
     private static Shell createShell(String shellCommand)
     {
+        if (shellCommand == null) {
+            Debug.bug();
+            return null;
+        }
         Shell shell = new Shell(shellCommand);
         shell.startProcess();
         if (shell.getProcess() == null) {
@@ -108,10 +112,13 @@ public class Shell extends CommandInterpreter implements Constants
 
     protected void startProcess()
     {
+        if (shellCommand == null) {
+            Debug.bug();
+            return;
+        }
         if (Platform.isPlatformWindows())
             if (shellCommand.toLowerCase().indexOf("cmd.exe") < 0)
                 cygnify = true;
-
         // Only set initialDir the first time we run, so that if we restart
         // this shell, it will start up in the same directory each time.
         if (initialDir == null) {
@@ -119,10 +126,8 @@ public class Shell extends CommandInterpreter implements Constants
             if (initialDir == null || initialDir.isRemote())
                 initialDir = Directories.getUserHomeDirectory();
         }
-
         // Shell command may contain a space (e.g. "bash -i").
         StringTokenizer st = new StringTokenizer(shellCommand);
-
         String[] cmdArray;
         int i = 0;
         if (Utilities.haveJpty()) {
@@ -132,7 +137,6 @@ public class Shell extends CommandInterpreter implements Constants
             cmdArray = new String[st.countTokens()];
         while (st.hasMoreTokens())
             cmdArray[i++] = st.nextToken();
-
         Process p = null;
         try {
             p = Runtime.getRuntime().exec(cmdArray, null,
@@ -143,10 +147,8 @@ public class Shell extends CommandInterpreter implements Constants
             setProcess(null);
             return;
         }
-
         currentDir = initialDir;
         startWatcherThread();
-
         // See if the process exits right away (meaning jpty couldn't launch
         // the shell command).
         try {
@@ -159,10 +161,8 @@ public class Shell extends CommandInterpreter implements Constants
         // so check the value of getProcess() here.
         if (getProcess() == null)
             return; // Process exited.
-
         setPromptRE(Editor.preferences().getStringProperty(
             Property.SHELL_PROMPT_PATTERN));
-
         try {
             stdin  = new OutputStreamWriter(p.getOutputStream());
             stdoutThread = new StdoutThread(p.getInputStream());
@@ -436,18 +436,7 @@ public class Shell extends CommandInterpreter implements Constants
     // For the buffer list.
     public String toString()
     {
-        return shellCommand;
-    }
-
-    public String getTitle()
-    {
-        String dir = currentDir.toString();
-
-        // Upper case drive letter.
-        if (Platform.isPlatformWindows() && dir.length() >= 2 && dir.charAt(1) == ':')
-            dir = Character.toUpperCase(dir.charAt(0)) + dir.substring(1);
-
-        return shellCommand + "   " + dir;
+        return shellCommand != null ? shellCommand : "";
     }
 
     public File getCurrentDirectory()
@@ -587,6 +576,10 @@ public class Shell extends CommandInterpreter implements Constants
 
     public static void shell(String shellCommand)
     {
+        if (shellCommand == null) {
+            Debug.bug();
+            return;
+        }
         if (!Editor.checkExperimental())
             return;
         if (Platform.isPlatformWindows()) {
@@ -604,7 +597,7 @@ public class Shell extends CommandInterpreter implements Constants
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
             Buffer b = it.nextBuffer();
             if (b instanceof Shell) {
-                if (((Shell)b).shellCommand.equals(shellCommand)) {
+                if (shellCommand.equals(((Shell)b).shellCommand)) {
                     buf = b;
                     break;
                 }
