@@ -22,6 +22,12 @@ package org.armedbear.lisp;
 
 public abstract class AbstractVector extends LispObject
 {
+    protected int fillPointer = -1; // -1 indicates no fill pointer.
+
+    public abstract LispObject get(int index) throws LispException;
+
+    public abstract void set(int index, LispObject newValue) throws LispException;
+
     public int checkIndex(int index) throws LispException
     {
         if (index < 0 || index >= length())
@@ -49,5 +55,44 @@ public abstract class AbstractVector extends LispObject
             sb.append(')');
         }
         throw new LispException(sb.toString());
+    }
+
+    public int getFillPointer()
+    {
+        return fillPointer;
+    }
+
+    public void setFillPointer(int n)
+    {
+        fillPointer = n;
+    }
+
+    public void setFillPointer(LispObject obj) throws LispException
+    {
+        if (obj == T)
+            fillPointer = 0;
+        else {
+            long n = Fixnum.getValue(obj);
+            if (n > length()) {
+                StringBuffer sb = new StringBuffer("the new fill pointer (");
+                sb.append(n);
+                sb.append(") exceeds the length of the vector (");
+                sb.append(length());
+                sb.append(")");
+                throw new LispException(sb.toString());
+            }
+            if (n < 0) {
+                StringBuffer sb = new StringBuffer("the new fill pointer (");
+                sb.append(n);
+                sb.append(") is negative");
+                throw new LispException(sb.toString());
+            }
+            fillPointer = (int) n;
+        }
+    }
+
+    public boolean isSimpleVector()
+    {
+        return false;
     }
 }
