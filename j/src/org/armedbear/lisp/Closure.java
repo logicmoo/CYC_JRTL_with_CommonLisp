@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.25 2003-06-01 00:14:46 piso Exp $
+ * $Id: Closure.java,v 1.26 2003-06-01 00:15:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -515,15 +515,6 @@ public class Closure extends Function
             }
         }
         if (auxVarArray != null) {
-//             // Aux variable processing is analogous to let* processing.
-//             for (int i = 0; i < auxVarArray.length; i++) {
-//                 Parameter parameter = auxVarArray[i];
-//                 Symbol symbol = parameter.var;
-//                 LispObject initForm = parameter.initForm;
-//                 LispObject value =
-//                     initForm == NIL ? NIL : eval(initForm, ext, thread);
-//                 bind(symbol, value, ext);
-//             }
             bindAuxVars(ext, thread);
         }
         LispObject result = NIL;
