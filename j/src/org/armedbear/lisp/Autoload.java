@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.154 2004-02-12 10:27:48 piso Exp $
+ * $Id: Autoload.java,v 1.155 2004-02-12 12:44:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,8 +207,10 @@ public class Autoload extends Function
     };
 
     static {
+        autoload("acos", "MathFunctions");
         autoload("array-displacement", "DisplacedArray");
         autoload("ash", "ash");
+        autoload("asin", "MathFunctions");
         autoload("atan", "MathFunctions");
         autoload("broadcast-stream-streams", "BroadcastStream");
         autoload("cell-error-name", "cell_error_name");
