@@ -1,7 +1,7 @@
 ;;; slime-loader.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime-loader.lisp,v 1.1 2004-09-01 20:00:22 piso Exp $
+;;; $Id: slime-loader.lisp,v 1.2 2004-09-07 20:14:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,5 +27,9 @@
              (> (file-write-date binary-file) (file-write-date source-file)))
         (load binary-file)
         (load (compile-file source-file)))))
+
+#+j
+(unless (fboundp 'swank:start-server)
+  (sys:load-system-file "swank-loader"))
 
 (funcall (intern (string '#:slime) '#:slime))
