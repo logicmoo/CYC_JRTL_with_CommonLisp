@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: compile-system.lisp,v 1.29 2004-10-05 13:16:58 piso Exp $
+;;; $Id: compile-system.lisp,v 1.30 2004-10-11 18:39:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -55,8 +55,8 @@
      (load "clos.lisp")
      ;; Order matters for these files.
      (mapc #'maybe-compile-file '("collect.lisp"
-                            "macros.lisp"
-                            "loop.lisp"))
+                                  "macros.lisp"
+                                  "loop.lisp"))
 ;;      (mapc #'maybe-compile-file '("pprint.lisp"
 ;;                                   "format.lisp"))
      (load (maybe-compile-file "typep.lisp"))
