@@ -1,7 +1,7 @@
 ;;; defclass.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defclass.lisp,v 1.29 2003-10-20 14:12:26 piso Exp $
+;;; $Id: defclass.lisp,v 1.30 2003-10-20 15:03:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -890,15 +890,15 @@
 ;;   (format t "ENSURE-METHOD ~S all-keys = ~S~%" (generic-function-name gf) all-keys)
 ;;   (format t "ENSURE-METHOD gf type = ~S~%" (generic-function-method-combination gf))
 ;;   (format t "ENSURE-METHOD qualifiers = ~S~%" (getf all-keys :qualifiers))
-  (let ((gf-method-combination-type (generic-function-method-combination gf))
-        (qualifiers (getf all-keys :qualifiers)))
-    (if (eq gf-method-combination-type 'standard)
-        (unless (or (null qualifiers)
-                    (and (= (length qualifiers) 1)
-                         (memq (car qualifiers) '(:before :after :around))))
-          (error "method combination type mismatch"))
-        (unless (memq gf-method-combination-type qualifiers)
-          (error "method combination type mismatch"))))
+;;   (let ((gf-method-combination-type (generic-function-method-combination gf))
+;;         (qualifiers (getf all-keys :qualifiers)))
+;;     (if (eq gf-method-combination-type 'standard)
+;;         (unless (or (null qualifiers)
+;;                     (and (= (length qualifiers) 1)
+;;                          (memq (car qualifiers) '(:before :after :around))))
+;;           (error "method combination type mismatch"))
+;;         (unless (memq gf-method-combination-type qualifiers)
+;;           (error "method combination type mismatch"))))
   (let ((new-method
          (apply
           (if (eq (generic-function-method-class gf) the-class-standard-method)
@@ -1088,8 +1088,19 @@
   (equal '(:around) (method-qualifiers method)))
 
 (defun std-compute-effective-method-function (gf methods)
-  (let ((primaries (remove-if-not #'primary-method-p methods))
-        (around (find-if #'around-method-p methods)))
+;;   (let ((primaries (remove-if-not #'primary-method-p methods))
+;;         (around (find-if #'around-method-p methods)))
+  (let ((primaries ())
+        (arounds ())
+        around)
+    (dolist (m methods)
+      (cond ((around-method-p m)
+             (push m arounds))
+            ((primary-method-p m)
+             (push m primaries))))
+    (setq primaries (nreverse primaries))
+    (setq arounds (nreverse arounds))
+    (setq around (car arounds))
     (when (null primaries)
       (error "no primary methods for the generic function ~S" gf))
     (if around
