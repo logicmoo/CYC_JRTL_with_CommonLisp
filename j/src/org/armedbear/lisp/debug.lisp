@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.4 2003-10-01 13:59:23 piso Exp $
+;;; $Id: debug.lisp,v 1.5 2003-10-04 10:53:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,39 +19,25 @@
 
 (in-package "SYSTEM")
 
-(defun debug-prompt (stream)
-  (format stream "~%> "))
+(defun debug-loop ()
+  (let ((tpl::*break-level* (1+ tpl::*break-level*)))
+  (fresh-line *debug-io*)
+  (format *debug-io* "Type :CONTINUE to return from break or :RESET to return to top level.~%")
+    (loop
+      (catch 'debug-loop-catcher
+        (handler-case
+            (tpl::repl)
+          (error (c) (format t "Error: ~S.~%" c) (break) (throw 'debug-loop-catcher nil)))))))
 
 (defun invoke-debugger (condition)
   (when *debugger-hook*
     (let ((hook-function *debugger-hook*)
           (*debugger-hook* nil))
       (funcall hook-function condition hook-function)))
-  (catch 'continue
-    (debugger-loop)))
-
-(defun debugger-loop ()
-  (fresh-line *debug-io*)
-  (format *debug-io* "Type :continue to continue...")
-  (loop
-    (catch 'debug-loop-catcher
-      (handler-bind ((error (lambda (condition)
-                              (format *debug-io* "~%Error: ~S.~%" condition)
-                              (throw 'debug-loop-catcher nil))))
-        (debug-prompt *debug-io*)
-        (finish-output *debug-io*)
-        (let* ((exp (read *debug-io*)))
-          (when (memq exp '(:co :continue))
-            (return-from debugger-loop))
-          (let* ((values (multiple-value-list (eval exp)))
-                 (*standard-output* *debug-io*))
-            (fresh-line)
-            (if values (prin1 (car values)))
-            (dolist (x (cdr values))
-              (fresh-line)
-              (prin1 x))))))))
+  (catch 'tpl::continue-catcher
+    (debug-loop)))
 
 (defun break (&optional format-control &rest format-arguments)
   (fresh-line *debug-io*)
-  (format *debug-io* "break called~%")
+  (format *debug-io* "BREAK called.~%")
   (invoke-debugger nil))
