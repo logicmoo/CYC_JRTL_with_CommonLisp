@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Constants.java,v 1.13 2003-08-01 16:13:25 piso Exp $
+ * $Id: Constants.java,v 1.14 2003-10-10 18:57:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -92,11 +92,12 @@ public interface Constants
     int TAG_CONSTANT             = 8;
     int TAG_CONDITION            = 9;
     int TAG_DEFUN                = 10;
-    int TAG_MACRO                = 11;
-    int TAG_PARAMETER            = 12;
-    int TAG_STRUCT               = 13;
-    int TAG_TYPE                 = 14;
-    int TAG_VAR                  = 15;
+    int TAG_GENERIC_FUNCTION     = 11;
+    int TAG_MACRO                = 12;
+    int TAG_PARAMETER            = 13;
+    int TAG_STRUCT               = 14;
+    int TAG_TYPE                 = 15;
+    int TAG_VAR                  = 16;
 
     // Visibility values (stored in LocalTag flags field).
     int TAG_PUBLIC               = 0x0001;
