@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.29 2005-03-08 02:22:31 piso Exp $
+;;; $Id: slime.lisp,v 1.30 2005-03-08 16:33:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -442,9 +442,10 @@
     (slime-eval-async
      `(swank:swank-compile-file ,pathname t) 'display-eval-result)))
 
-(unless (find-package '#:emacs)
-  (defpackage #:emacs
-    (:use #:cl #:ext #:j)))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (unless (find-package '#:emacs)
+    (defpackage #:emacs
+      (:use #:cl #:ext #:j))))
 
 (let ((emulation (variable-value 'emulation)))
   (cond ((null emulation)
