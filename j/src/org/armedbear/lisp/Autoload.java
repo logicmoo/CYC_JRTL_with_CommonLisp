@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Autoload.java,v 1.66 2003-09-16 17:41:35 piso Exp $
+ * $Id: Autoload.java,v 1.67 2003-09-19 00:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,7 +61,7 @@ public class Autoload extends Function
             "org.armedbear.lisp.".concat(className)));
     }
 
-    public void load() throws Condition
+    public void load() throws ConditionThrowable
     {
         if (className != null) {
             try {
@@ -158,7 +158,7 @@ public class Autoload extends Function
     private static final Primitive1 RESOLVE =
         new Primitive1("resolve", PACKAGE_SYS, false)
     {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Symbol symbol = checkSymbol(arg);
             LispObject fun = symbol.getSymbolFunction();

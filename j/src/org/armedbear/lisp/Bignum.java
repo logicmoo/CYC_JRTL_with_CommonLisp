@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Bignum.java,v 1.41 2003-09-17 19:19:52 piso Exp $
+ * $Id: Bignum.java,v 1.42 2003-09-19 00:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -367,7 +367,7 @@ public final class Bignum extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public LispObject truncate(LispObject obj) throws Condition
+    public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];

@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SimpleCondition.java,v 1.1 2003-03-03 02:43:34 piso Exp $
+ * $Id: SimpleCondition.java,v 1.2 2003-09-19 00:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class SimpleCondition extends Condition
+public class SimpleCondition extends ConditionThrowable
 {
     public SimpleCondition()
     {

@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CompiledFunction.java,v 1.9 2003-09-18 13:11:26 piso Exp $
+ * $Id: CompiledFunction.java,v 1.10 2003-09-19 00:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,7 @@ public class CompiledFunction extends Closure
         return super.typep(typeSpecifier);
     }
 
-    public LispObject execute(LispObject arg) throws Condition
+    public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         LispObject[] args = new LispObject[1];
         args[0] = arg;
@@ -45,7 +45,7 @@ public class CompiledFunction extends Closure
     }
 
     public LispObject execute(LispObject first, LispObject second)
-        throws Condition
+        throws ConditionThrowable
     {
         LispObject[] args = new LispObject[2];
         args[0] = first;
@@ -55,7 +55,7 @@ public class CompiledFunction extends Closure
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
-        throws Condition
+        throws ConditionThrowable
     {
         LispObject[] args = new LispObject[3];
         args[0] = first;
@@ -64,7 +64,7 @@ public class CompiledFunction extends Closure
         return execute(args);
     }
 
-    public LispObject execute(LispObject[] args) throws Condition
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         throw new LispError("not implemented");
     }

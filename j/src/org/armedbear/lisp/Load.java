@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Load.java,v 1.16 2003-08-16 13:23:40 piso Exp $
+ * $Id: Load.java,v 1.17 2003-09-19 00:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,7 +52,7 @@ public final class Load extends Lisp
         internSpecial("*LOAD-DEPTH*", PACKAGE_SYS, new Fixnum(0));
 
     /*package*/ static final LispObject load(String filename)
-        throws Condition
+        throws ConditionThrowable
     {
         return load(filename,
                     _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,
@@ -61,7 +61,7 @@ public final class Load extends Lisp
 
     private static final LispObject load(final String filename,
                                          boolean verbose, boolean print)
-        throws Condition
+        throws ConditionThrowable
     {
         File file = null;
         boolean isFile = false;
@@ -121,7 +121,7 @@ public final class Load extends Lisp
 
     /*package*/ static final LispObject _load(final String filename,
                                               boolean verbose, boolean print)
-        throws Condition
+        throws ConditionThrowable
     {
         InputStream in = null;
         String truename = null;
@@ -165,7 +165,7 @@ public final class Load extends Lisp
                                                        InputStream in,
                                                        boolean verbose,
                                                        boolean print)
-        throws Condition
+        throws ConditionThrowable
     {
         long start = System.currentTimeMillis();
         LispThread thread = LispThread.currentThread();
@@ -205,7 +205,7 @@ public final class Load extends Lisp
     }
 
     private static final LispObject loadStream(InputStream inputStream,
-        boolean print) throws Condition
+        boolean print) throws ConditionThrowable
     {
         CharacterInputStream in = new CharacterInputStream(inputStream);
         try {
@@ -275,7 +275,7 @@ public final class Load extends Lisp
     // Need to support keyword args.
     // load filespec &key verbose print if-does-not-exist external-format
     public static final Primitive LOAD = new Primitive("load") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length == 0)
                 throw new WrongNumberOfArgumentsException(this);
@@ -294,7 +294,7 @@ public final class Load extends Lisp
     // FIXME This function should not be exported from COMMON-LISP!
     public static final Primitive1 _LOAD =
         new Primitive1("%load", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return _load(LispString.getValue(arg),
                          _LOAD_VERBOSE_.symbolValueNoThrow() != NIL,

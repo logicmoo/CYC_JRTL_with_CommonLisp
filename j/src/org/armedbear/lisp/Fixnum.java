@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.68 2003-09-17 19:20:24 piso Exp $
+ * $Id: Fixnum.java,v 1.69 2003-09-19 00:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -439,7 +439,7 @@ public final class Fixnum extends LispObject
         throw new TypeError(obj, "number");
     }
 
-    public LispObject truncate(LispObject obj) throws Condition
+    public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];

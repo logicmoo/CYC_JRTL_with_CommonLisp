@@ -2,7 +2,7 @@
  * CharacterInputStream.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CharacterInputStream.java,v 1.45 2003-09-10 00:42:14 piso Exp $
+ * $Id: CharacterInputStream.java,v 1.46 2003-09-19 00:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public class CharacterInputStream extends LispStream
     }
 
     public LispObject read(boolean eofError, LispObject eofValue,
-        boolean recursive) throws Condition
+        boolean recursive) throws ConditionThrowable
     {
         try {
             LispObject result = readPreservingWhitespace(eofError, eofValue,
@@ -83,7 +83,7 @@ public class CharacterInputStream extends LispStream
     }
 
     public LispObject readPreservingWhitespace(boolean eofError,
-        LispObject eofValue, boolean recursive) throws Condition
+        LispObject eofValue, boolean recursive) throws ConditionThrowable
     {
         while (true) {
             int n;
@@ -108,7 +108,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject processChar(char c) throws Condition
+    private LispObject processChar(char c) throws ConditionThrowable
     {
         switch (c) {
             case '"':
@@ -165,12 +165,12 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readQuote() throws Condition
+    private LispObject readQuote() throws ConditionThrowable
     {
         return new Cons(Symbol.QUOTE, new Cons(read(true, NIL, true)));
     }
 
-    private LispObject readList() throws Condition
+    private LispObject readList() throws ConditionThrowable
     {
         try {
             Cons first = null;
@@ -253,7 +253,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readComma() throws Condition
+    private LispObject readComma() throws ConditionThrowable
     {
         try {
             int n = read();
@@ -278,12 +278,12 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readBackquote() throws Condition
+    private LispObject readBackquote() throws ConditionThrowable
     {
         return new Cons(Symbol.BACKQUOTE, new Cons(read(true, NIL, true)));
     }
 
-    private LispObject readSharp() throws Condition
+    private LispObject readSharp() throws ConditionThrowable
     {
         try {
             int numArg = 0;
@@ -357,7 +357,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readCharacterLiteral() throws Condition
+    private LispObject readCharacterLiteral() throws ConditionThrowable
     {
         try {
             int n = read();
@@ -393,7 +393,7 @@ public class CharacterInputStream extends LispStream
     }
 
     // FIXME
-    private LispObject handleFeature(char c) throws Condition
+    private LispObject handleFeature(char c) throws ConditionThrowable
     {
         LispObject feature = read(true, NIL, true);
         LispObject form = read(true, NIL, true);
@@ -504,7 +504,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readArray(int rank) throws Condition
+    private LispObject readArray(int rank) throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
         if (rank == 1)
@@ -512,7 +512,7 @@ public class CharacterInputStream extends LispStream
         return new Array(rank, obj);
     }
 
-    private LispObject readComplex() throws Condition
+    private LispObject readComplex() throws ConditionThrowable
     {
         LispObject obj = read(true, NIL, true);
         if (obj instanceof Cons && obj.length() == 2)
@@ -520,7 +520,7 @@ public class CharacterInputStream extends LispStream
         throw new LispError("invalid complex number format #C" + obj);
     }
 
-    private String readMultipleEscape() throws Condition
+    private String readMultipleEscape() throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer();
@@ -540,7 +540,7 @@ public class CharacterInputStream extends LispStream
         }
     }
 
-    private LispObject readKeyword() throws Condition
+    private LispObject readKeyword() throws ConditionThrowable
     {
         try {
             StringBuffer sb = new StringBuffer();

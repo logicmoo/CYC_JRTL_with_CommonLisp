@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Time.java,v 1.3 2003-08-10 00:48:23 piso Exp $
+ * $Id: Time.java,v 1.4 2003-09-19 00:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ public final class Time extends Lisp
     // ### %time
     private static final Primitive1 _TIME =
         new Primitive1("%time", PACKAGE_SYS, true) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Cons.setCount(0);
             long start = System.currentTimeMillis();
@@ -55,7 +55,7 @@ public final class Time extends Lisp
 
     private static final Primitive0 GET_INTERNAL_REAL_TIME =
         new Primitive0("get-internal-real-time") {
-        public LispObject execute() throws Condition
+        public LispObject execute() throws ConditionThrowable
         {
             return number(System.currentTimeMillis());
         }

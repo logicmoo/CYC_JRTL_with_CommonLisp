@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Function.java,v 1.21 2003-09-17 15:00:45 piso Exp $
+ * $Id: Function.java,v 1.22 2003-09-19 00:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,7 @@ public abstract class Function extends Functional
     }
 
     // Primitive
-    public LispObject execute(LispObject[] args) throws Condition
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         if (module != null)
             return module.dispatch(args, index);
@@ -141,7 +141,7 @@ public abstract class Function extends Functional
     }
 
     // Primitive1
-    public LispObject execute(LispObject arg) throws Condition
+    public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         if (module != null)
             return module.dispatch(arg, index);
@@ -152,7 +152,7 @@ public abstract class Function extends Functional
 
     // Primitive2
     public LispObject execute(LispObject first, LispObject second)
-        throws Condition
+        throws ConditionThrowable
     {
         if (module != null)
             return module.dispatch(first, second, index);

@@ -2,7 +2,7 @@
  * ThreadDestroyed.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ThreadDestroyed.java,v 1.1 2003-05-04 04:44:46 piso Exp $
+ * $Id: ThreadDestroyed.java,v 1.2 2003-09-19 00:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-public class ThreadDestroyed extends Condition
+public class ThreadDestroyed extends ConditionThrowable
 {
     public ThreadDestroyed()
     {

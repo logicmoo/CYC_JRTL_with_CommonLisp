@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Interpreter.java,v 1.30 2003-09-18 18:56:25 piso Exp $
+ * $Id: Interpreter.java,v 1.31 2003-09-19 00:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,7 +207,7 @@ public final class Interpreter extends Lisp
                     getStandardInput().clearInput();
                     out.writeLine("Stack overflow");
                 }
-                catch (Condition c) {
+                catch (ConditionThrowable c) {
                     getStandardInput().clearInput();
                     String message = c.getMessage();
                     if (message != null)
@@ -276,7 +276,7 @@ public final class Interpreter extends Lisp
         return null;
     }
 
-    private static boolean doCommand(String s) throws Condition
+    private static boolean doCommand(String s) throws ConditionThrowable
     {
         s = s.trim();
         String command, args;
@@ -523,7 +523,7 @@ public final class Interpreter extends Lisp
     }
 
     // Used only by org.armedbear.j.Editor.executeCommand().
-    public static LispObject evaluate(String s) throws Condition
+    public static LispObject evaluate(String s) throws ConditionThrowable
     {
         if (!initialized)
             initialize(true);

@@ -2,7 +2,7 @@
  * LispFloat.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispFloat.java,v 1.43 2003-09-17 15:09:56 piso Exp $
+ * $Id: LispFloat.java,v 1.44 2003-09-19 00:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -306,7 +306,7 @@ public final class LispFloat extends LispObject
         throw new TypeError(obj, "real");
     }
 
-    public LispObject truncate(LispObject obj) throws Condition
+    public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         LispObject[] values = new LispObject[2];

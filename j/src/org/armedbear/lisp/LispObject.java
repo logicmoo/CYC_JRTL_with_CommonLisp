@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.55 2003-09-17 15:12:15 piso Exp $
+ * $Id: LispObject.java,v 1.56 2003-09-19 00:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -346,39 +346,39 @@ public class LispObject extends Lisp
 
     // Special operator
     public LispObject execute(LispObject args, Environment env)
-        throws Condition
+        throws ConditionThrowable
     {
         throw new LispError();
     }
 
     // Primitive
-    public LispObject execute(LispObject[] args) throws Condition
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         throw new LispError();
     }
 
     // Primitive0
-    public LispObject execute() throws Condition
+    public LispObject execute() throws ConditionThrowable
     {
         throw new LispError();
     }
 
     // Primitive1
-    public LispObject execute(LispObject arg) throws Condition
+    public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         throw new LispError();
     }
 
     // Primitive2
     public LispObject execute(LispObject first, LispObject second)
-        throws Condition
+        throws ConditionThrowable
     {
         throw new LispError();
     }
 
     // Primitive3
     public LispObject execute(LispObject first, LispObject second,
-        LispObject third) throws Condition
+        LispObject third) throws ConditionThrowable
     {
         throw new LispError();
     }
@@ -473,7 +473,7 @@ public class LispObject extends Lisp
         return isGreaterThanOrEqualTo(obj) ? T : NIL;
     }
 
-    public LispObject truncate(LispObject obj) throws Condition
+    public LispObject truncate(LispObject obj) throws ConditionThrowable
     {
         throw new TypeError(this, "real number");
     }

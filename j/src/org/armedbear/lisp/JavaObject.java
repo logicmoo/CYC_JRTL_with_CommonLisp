@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JavaObject.java,v 1.6 2003-07-03 18:06:57 piso Exp $
+ * $Id: JavaObject.java,v 1.7 2003-09-19 00:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public class JavaObject extends LispObject
 
     public String toString()
     {
-        if (obj instanceof Condition)
+        if (obj instanceof ConditionThrowable)
             return obj.toString();
 
         StringBuffer sb = new StringBuffer("#<JAVAOBJECT ");

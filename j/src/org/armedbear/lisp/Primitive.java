@@ -2,7 +2,7 @@
  * Primitive.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitive.java,v 1.5 2003-09-14 17:36:12 piso Exp $
+ * $Id: Primitive.java,v 1.6 2003-09-19 00:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,13 +47,13 @@ public class Primitive extends Function
         super(module, name, index);
     }
 
-    public LispObject execute() throws Condition
+    public LispObject execute() throws ConditionThrowable
     {
         LispObject[] args = new LispObject[0];
         return execute(args);
     }
 
-    public LispObject execute(LispObject arg) throws Condition
+    public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         LispObject[] args = new LispObject[1];
         args[0] = arg;
@@ -61,7 +61,7 @@ public class Primitive extends Function
     }
 
     public LispObject execute(LispObject first, LispObject second)
-        throws Condition
+        throws ConditionThrowable
     {
         LispObject[] args = new LispObject[2];
         args[0] = first;
@@ -70,7 +70,7 @@ public class Primitive extends Function
     }
 
     public LispObject execute(LispObject first, LispObject second,
-        LispObject third) throws Condition
+        LispObject third) throws ConditionThrowable
     {
         LispObject[] args = new LispObject[3];
         args[0] = first;

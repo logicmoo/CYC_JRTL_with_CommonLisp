@@ -2,7 +2,7 @@
  * room.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: room.java,v 1.1 2003-06-20 15:59:22 piso Exp $
+ * $Id: room.java,v 1.2 2003-09-19 00:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public final class room extends Lisp
 {
     private static final Primitive ROOM = new Primitive("room") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             Runtime runtime = Runtime.getRuntime();
             long total = 0;

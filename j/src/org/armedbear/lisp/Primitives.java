@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.401 2003-09-18 15:40:15 piso Exp $
+ * $Id: Primitives.java,v 1.402 2003-09-19 00:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,7 +166,7 @@ public final class Primitives extends Module
 
     // SpecialOperator
     public LispObject dispatch(LispObject args, Environment env, int index)
-        throws Condition
+        throws ConditionThrowable
     {
         switch (index) {
             case DO:
@@ -244,7 +244,7 @@ public final class Primitives extends Module
 
     // Primitive1
     public LispObject dispatch(LispObject arg, int index)
-        throws Condition
+        throws ConditionThrowable
     {
         switch (index) {
             case IDENTITY:                      // ### identity
@@ -604,7 +604,7 @@ public final class Primitives extends Module
     // ### if
     private static final SpecialOperator IF = new SpecialOperator("if") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             switch (args.length()) {
@@ -627,7 +627,7 @@ public final class Primitives extends Module
     // ### when
     private static final SpecialOperator WHEN = new SpecialOperator("when") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args == NIL)
                 throw new WrongNumberOfArgumentsException(this);
@@ -648,7 +648,7 @@ public final class Primitives extends Module
     private static final SpecialOperator UNLESS =
         new SpecialOperator("unless") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args == NIL)
                 throw new WrongNumberOfArgumentsException(this);
@@ -1165,7 +1165,7 @@ public final class Primitives extends Module
 
     // ### signal
     private static final Primitive SIGNAL = new Primitive("signal") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);
@@ -1436,7 +1436,7 @@ public final class Primitives extends Module
     // ### cond
     private static final SpecialOperator COND = new SpecialOperator("cond") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
@@ -1461,7 +1461,7 @@ public final class Primitives extends Module
     // ### case
     private static final SpecialOperator CASE = new SpecialOperator("case") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             LispObject key = eval(args.car(), env, thread);
@@ -1498,7 +1498,7 @@ public final class Primitives extends Module
     // ### ecase
     private static final SpecialOperator ECASE = new SpecialOperator("ecase") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             LispObject key = eval(args.car(), env, thread);
@@ -1532,7 +1532,7 @@ public final class Primitives extends Module
 
     private static final LispObject _do(LispObject args, Environment env,
                                         boolean sequential)
-        throws Condition
+        throws ConditionThrowable
     {
         // Process variable specifications.
         LispObject first = args.car();
@@ -1622,7 +1622,7 @@ public final class Primitives extends Module
     // ### dolist
     private static final SpecialOperator DOLIST = new SpecialOperator("dolist") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject bodyForm = args.cdr();
             args = args.car();
@@ -1664,7 +1664,7 @@ public final class Primitives extends Module
     private static final SpecialOperator DOTIMES =
         new SpecialOperator("dotimes") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject bodyForm = args.cdr();
             args = args.car();
@@ -1706,7 +1706,7 @@ public final class Primitives extends Module
     private static final SpecialOperator HANDLER_BIND =
         new SpecialOperator("handler-bind") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject bindings = checkList(args.car());
             final LispThread thread = LispThread.currentThread();
@@ -1717,7 +1717,7 @@ public final class Primitives extends Module
             catch (Return ret) {
                 throw ret;
             }
-            catch (Condition c) {
+            catch (ConditionThrowable c) {
                 while (bindings != NIL) {
                     Cons binding = checkCons(bindings.car());
                     LispObject type = binding.car();
@@ -1747,7 +1747,7 @@ public final class Primitives extends Module
     private static final SpecialOperator HANDLER_CASE =
         new SpecialOperator("handler-case") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject form = args.car();
             LispObject clauses = args.cdr();
@@ -1756,7 +1756,7 @@ public final class Primitives extends Module
             try {
                 return eval(form, env, thread);
             }
-            catch (Condition c) {
+            catch (ConditionThrowable c) {
                 thread.setStackDepth(depth);
                 while (clauses != NIL) {
                     Cons clause = checkCons(clauses.car());
@@ -1785,7 +1785,7 @@ public final class Primitives extends Module
         }
     };
 
-    private static boolean isConditionOfType(Condition c, LispObject type)
+    private static boolean isConditionOfType(ConditionThrowable c, LispObject type)
     {
         if (type == Symbol.END_OF_FILE)
             return c instanceof EndOfFileException;
@@ -2211,7 +2211,7 @@ public final class Primitives extends Module
     // ### funcall
     // This needs to be public for LispAPI.java.
     public static final Primitive FUNCALL = new Primitive("funcall") {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             LispObject fun;
             if (arg instanceof Symbol)
@@ -2223,7 +2223,7 @@ public final class Primitives extends Module
             throw new UndefinedFunctionError(arg);
         }
         public LispObject execute(LispObject first, LispObject second)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject fun;
             if (first instanceof Symbol)
@@ -2236,7 +2236,7 @@ public final class Primitives extends Module
         }
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject fun;
             if (first instanceof Symbol)
@@ -2247,7 +2247,7 @@ public final class Primitives extends Module
                 return funcall2(fun, second, third, LispThread.currentThread());
             throw new UndefinedFunctionError(first);
         }
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
                 throw new WrongNumberOfArgumentsException(this);
@@ -2274,7 +2274,7 @@ public final class Primitives extends Module
     // ### apply
     private static final Primitive APPLY = new Primitive("apply") {
         public LispObject execute(LispObject first, LispObject second)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject spread = checkList(second);
             LispObject fun = first;
@@ -2304,7 +2304,7 @@ public final class Primitives extends Module
             }
             throw new TypeError(fun, "function");
         }
-        public LispObject execute(final LispObject[] args) throws Condition
+        public LispObject execute(final LispObject[] args) throws ConditionThrowable
         {
             final int numArgs = args.length;
             if (numArgs < 2)
@@ -2332,7 +2332,7 @@ public final class Primitives extends Module
     // ### mapcar
     private static final Primitive MAPCAR = new Primitive("mapcar") {
         public LispObject execute(LispObject first, LispObject second)
-            throws Condition
+            throws ConditionThrowable
         {
             // First argument must be a function.
             LispObject fun = first;
@@ -2360,7 +2360,7 @@ public final class Primitives extends Module
             return result;
         }
         public LispObject execute(LispObject first, LispObject second,
-            LispObject third) throws Condition
+            LispObject third) throws ConditionThrowable
         {
             // First argument must be a function.
             LispObject fun = first;
@@ -2390,7 +2390,7 @@ public final class Primitives extends Module
             }
             return result;
         }
-        public LispObject execute(final LispObject[] args) throws Condition
+        public LispObject execute(final LispObject[] args) throws ConditionThrowable
         {
             final int numArgs = args.length;
             if (numArgs < 2)
@@ -2432,7 +2432,7 @@ public final class Primitives extends Module
 
     // ### macroexpand
     private static final Primitive MACROEXPAND = new Primitive("macroexpand") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
             if (length < 1 || length > 2)
@@ -2447,7 +2447,7 @@ public final class Primitives extends Module
     // ### macroexpand-1
     private static final Primitive MACROEXPAND_1 =
         new Primitive("macroexpand-1") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
             if (length < 1 || length > 2)
@@ -2726,7 +2726,7 @@ public final class Primitives extends Module
     private static final SpecialOperator DO_EXTERNAL_SYMBOLS =
         new SpecialOperator("do-external-symbols") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             return doSymbols(args, env, true);
         }
@@ -2739,7 +2739,7 @@ public final class Primitives extends Module
     private static final SpecialOperator DO_SYMBOLS =
         new SpecialOperator("do-symbols") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             return doSymbols(args, env, false);
         }
@@ -2747,7 +2747,7 @@ public final class Primitives extends Module
 
     private static final LispObject doSymbols(LispObject args, Environment env,
                                               boolean externalOnly)
-        throws Condition
+        throws ConditionThrowable
     {
         LispObject bodyForm = args.cdr();
         args = args.car();
@@ -2799,7 +2799,7 @@ public final class Primitives extends Module
     // ### package-symbols
     private static final Primitive1 PACKAGE_SYMBOLS =
         new Primitive1("package-symbols", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).getSymbols();
         }
@@ -2808,7 +2808,7 @@ public final class Primitives extends Module
     // ### package-internal-symbols
     private static final Primitive1 PACKAGE_INTERNAL_SYMBOLS =
         new Primitive1("package-internal-symbols", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).PACKAGE_INTERNAL_SYMBOLS();
         }
@@ -2817,7 +2817,7 @@ public final class Primitives extends Module
     // ### package-external-symbols
     private static final Primitive1 PACKAGE_EXTERNAL_SYMBOLS =
         new Primitive1("package-external-symbols", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).PACKAGE_EXTERNAL_SYMBOLS();
         }
@@ -2826,7 +2826,7 @@ public final class Primitives extends Module
     // ### package-inherited-symbols
     private static final Primitive1 PACKAGE_INHERITED_SYMBOLS =
         new Primitive1("package-inherited-symbols", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToPackage(arg).PACKAGE_INHERITED_SYMBOLS();
         }
@@ -2961,7 +2961,7 @@ public final class Primitives extends Module
 
     private static final SpecialOperator LET = new SpecialOperator("let") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             return _let(args, env, false);
         }
@@ -2969,14 +2969,14 @@ public final class Primitives extends Module
 
     private static final SpecialOperator LETX = new SpecialOperator("let*") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             return _let(args, env, true);
         }
     };
 
     private static final LispObject _let(LispObject args, Environment env,
-        boolean sequential) throws Condition
+        boolean sequential) throws ConditionThrowable
     {
         LispObject varList = checkList(args.car());
         final LispThread thread = LispThread.currentThread();
@@ -3012,7 +3012,7 @@ public final class Primitives extends Module
     }
 
     private static final LispObject _flet(LispObject args, Environment env,
-        boolean recursive) throws Condition
+        boolean recursive) throws ConditionThrowable
     {
         // First argument is a list of local function definitions.
         LispObject defs = checkList(args.car());
@@ -3050,7 +3050,7 @@ public final class Primitives extends Module
     private static final SpecialOperator MACROLET =
         new SpecialOperator("macrolet") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject defs = checkList(args.car());
             final LispThread thread = LispThread.currentThread();
@@ -3090,7 +3090,7 @@ public final class Primitives extends Module
     private static final SpecialOperator TAGBODY =
         new SpecialOperator("tagbody") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             Binding tags = null;
             LispObject body = args;
@@ -3165,7 +3165,7 @@ public final class Primitives extends Module
     // ### block
     private static final SpecialOperator BLOCK = new SpecialOperator("block") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args == NIL)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3209,7 +3209,7 @@ public final class Primitives extends Module
     private static final SpecialOperator RETURN_FROM =
         new SpecialOperator("return-from") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             final int length = args.length();
             if (length < 1 || length > 2)
@@ -3236,7 +3236,7 @@ public final class Primitives extends Module
     private static final SpecialOperator RETURN =
         new SpecialOperator("return") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             switch (args.length()) {
                 case 0:
@@ -3254,7 +3254,7 @@ public final class Primitives extends Module
     // ### catch
     private static final SpecialOperator CATCH = new SpecialOperator("catch") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args.length() < 1)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3286,7 +3286,7 @@ public final class Primitives extends Module
     // ### throw
     private static final SpecialOperator THROW = new SpecialOperator("throw") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args.length() < 2)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3301,7 +3301,7 @@ public final class Primitives extends Module
     private static final SpecialOperator UNWIND_PROTECT =
         new SpecialOperator("unwind-protect") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             LispObject result;
@@ -3326,7 +3326,7 @@ public final class Primitives extends Module
     private static final SpecialOperator FUNCTION =
         new SpecialOperator("function") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject arg = args.car();
             if (arg instanceof Symbol) {
@@ -3351,7 +3351,7 @@ public final class Primitives extends Module
     // ### setq
     private static final SpecialOperator SETQ = new SpecialOperator("setq") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject value = Symbol.NIL;
             final LispThread thread = LispThread.currentThread();
@@ -3391,7 +3391,7 @@ public final class Primitives extends Module
     private static final SpecialOperator MULTIPLE_VALUE_BIND =
         new SpecialOperator("multiple-value-bind") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             LispObject vars = args.car();
             args = args.cdr();
@@ -3436,7 +3436,7 @@ public final class Primitives extends Module
     private static final SpecialOperator MULTIPLE_VALUE_SETQ =
         new SpecialOperator("multiple-value-setq") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args.length() != 2)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3487,7 +3487,7 @@ public final class Primitives extends Module
     private static final SpecialOperator MULTIPLE_VALUE_PROG1 =
         new SpecialOperator("multiple-value-prog1") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args.length() == 0)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3505,7 +3505,7 @@ public final class Primitives extends Module
     private static final SpecialOperator MULTIPLE_VALUE_CALL =
         new SpecialOperator("multiple-value-call") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args.length() == 0)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3543,7 +3543,7 @@ public final class Primitives extends Module
     // Should be a macro.
     private static final SpecialOperator AND = new SpecialOperator("and") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             LispObject result = T;
@@ -3566,7 +3566,7 @@ public final class Primitives extends Module
     // Should be a macro.
     private static final SpecialOperator OR = new SpecialOperator("or") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
             LispObject result = NIL;
@@ -3590,7 +3590,7 @@ public final class Primitives extends Module
     private static final SpecialOperator ASSERT =
         new SpecialOperator("assert") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args.length() != 1)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3713,7 +3713,7 @@ public final class Primitives extends Module
     private static final SpecialOperator MULTIPLE_VALUE_LIST =
         new SpecialOperator("multiple-value-list") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args.length() != 1)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3738,7 +3738,7 @@ public final class Primitives extends Module
     private static final SpecialOperator NTH_VALUE =
         new SpecialOperator("nth-value") {
         public LispObject execute(LispObject args, Environment env)
-            throws Condition
+            throws ConditionThrowable
         {
             if (args.length() != 2)
                 throw new WrongNumberOfArgumentsException(this);
@@ -3802,7 +3802,7 @@ public final class Primitives extends Module
     // => line, missing-newline-p
     private static final Primitive READ_LINE =
         new Primitive("read-line") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
             if (length > 4)
@@ -3828,7 +3828,7 @@ public final class Primitives extends Module
     // preserve-whitespace => object, position
     private static final Primitive _READ_FROM_STRING =
         new Primitive("%read-from-string", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 6)
                 throw new WrongNumberOfArgumentsException(this);
@@ -4009,7 +4009,7 @@ public final class Primitives extends Module
 
     // read &optional input-stream eof-error-p eof-value recursive-p => object
     private static final Primitive READ = new Primitive("read") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
             if (length > 4)
@@ -4064,7 +4064,7 @@ public final class Primitives extends Module
     // ### random
     // random limit &optional random-state => random-number
     private static final Primitive RANDOM = new Primitive("random") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             int length = args.length;
             if (length < 1 || length > 2)
@@ -4102,7 +4102,7 @@ public final class Primitives extends Module
     // ### make-random-state
     private static final Primitive MAKE_RANDOM_STATE =
         new Primitive("make-random-state") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             // FIXME Ignore arguments (or lack thereof).
             return new JavaObject(new Random());
@@ -4111,7 +4111,7 @@ public final class Primitives extends Module
 
     // ### truncate
     private static final Primitive TRUNCATE = new Primitive("truncate") {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             final int length = args.length;
             if (length < 1 || length > 2)
@@ -4397,7 +4397,7 @@ public final class Primitives extends Module
     // ### maptree
     private static final Primitive2 MAPTREE = new Primitive2("maptree") {
         public LispObject execute(LispObject fun, LispObject x)
-            throws Condition
+            throws ConditionThrowable
         {
             if (x instanceof Cons) {
                 LispObject a = fun.execute(x.car());
@@ -4416,7 +4416,7 @@ public final class Primitives extends Module
     private static final Primitive2 _MAKE_LIST =
         new Primitive2("%make-list", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
-            throws Condition
+            throws ConditionThrowable
         {
             int size = Fixnum.getValue(first);
             if (size < 0)
@@ -4447,7 +4447,7 @@ public final class Primitives extends Module
     // %member item list key test test-not => tail
     private static final Primitive _MEMBER =
         new Primitive("%member", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 5)
                 throw new WrongNumberOfArgumentsException(this);
@@ -4507,7 +4507,7 @@ public final class Primitives extends Module
     private static final Primitive2 FUNCALL_KEY =
         new Primitive2("funcall-key", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
-            throws Condition
+            throws ConditionThrowable
         {
             if (first != NIL)
                 return funcall1(first, second, LispThread.currentThread());
@@ -4518,7 +4518,7 @@ public final class Primitives extends Module
     // ### coerce-to-function
     private static final Primitive1 COERCE_TO_FUNCTION =
         new Primitive1("coerce-to-function", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return coerceToFunction(arg);
         }
@@ -4527,7 +4527,7 @@ public final class Primitives extends Module
     // ### arglist
     private static final Primitive1 ARGLIST =
         new Primitive1("arglist", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Function function = coerceToFunction(arg);
             LispObject arglist = function.getArglist();
@@ -4547,7 +4547,7 @@ public final class Primitives extends Module
     private static final Primitive2 _SET_ARGLIST =
         new Primitive2("%set-arglist", PACKAGE_SYS, false) {
         public LispObject execute(LispObject first, LispObject second)
-            throws Condition
+            throws ConditionThrowable
         {
             coerceToFunction(first).setArglist(second);
             return second;

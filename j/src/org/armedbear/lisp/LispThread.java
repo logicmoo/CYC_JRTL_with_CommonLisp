@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LispThread.java,v 1.9 2003-09-03 23:45:26 piso Exp $
+ * $Id: LispThread.java,v 1.10 2003-09-19 00:05:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -354,7 +354,7 @@ public final class LispThread extends LispObject
     // ### mapcar-threads
     private static final Primitive1 MAPCAR_THREADS =
         new Primitive1("mapcar-threads", PACKAGE_EXT, true) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             Function fun = checkFunction(arg);
             final LispThread thread = LispThread.currentThread();
@@ -372,7 +372,7 @@ public final class LispThread extends LispObject
     // ### destroy-thread
     private static final Primitive1 DESTROY_THREAD =
         new Primitive1("destroy-thread", PACKAGE_EXT, true) {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispThread) {
                 LispThread thread = (LispThread) arg;
@@ -386,7 +386,7 @@ public final class LispThread extends LispObject
     // ### current-thread
     private static final Primitive0 CURRENT_THREAD =
         new Primitive0("current-thread", PACKAGE_EXT, true) {
-        public LispObject execute() throws Condition
+        public LispObject execute() throws ConditionThrowable
         {
             return currentThread();
         }

@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Pathname.java,v 1.10 2003-09-15 15:48:25 piso Exp $
+ * $Id: Pathname.java,v 1.11 2003-09-19 00:05:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,7 +89,7 @@ public final class Pathname extends LispObject
     // namestring pathname => namestring
     // FIXME arg can be a stream, too...
     private static final Primitive1 NAMESTRING = new Primitive1("namestring") {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispString)
                 return arg;
@@ -105,7 +105,7 @@ public final class Pathname extends LispObject
     private static final Primitive1 DIRECTORY_NAMESTRING =
         new Primitive1("directory-namestring")
     {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             String namestring;
             if (arg instanceof LispString)
@@ -129,7 +129,7 @@ public final class Pathname extends LispObject
     // pathname pathspec => pathname
     // FIXME pathspec can be a stream, too...
     private static final Primitive1 PATHNAME = new Primitive1("pathname") {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof Pathname)
                 return arg;
@@ -145,7 +145,7 @@ public final class Pathname extends LispObject
     // FIXME Very incomplete.
     private static final Primitive _MAKE_PATHNAME =
         new Primitive("%make-pathname", PACKAGE_SYS, false) {
-        public LispObject execute(LispObject[] args) throws Condition
+        public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 8)
                 throw new WrongNumberOfArgumentsException(this);
@@ -194,7 +194,7 @@ public final class Pathname extends LispObject
 
     // ### pathnamep
     private static final Primitive1 PATHNAMEP = new Primitive1("pathnamep") {
-        public LispObject execute(LispObject arg) throws Condition
+        public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return arg instanceof Pathname ? T : NIL;
         }

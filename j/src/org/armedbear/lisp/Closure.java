@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.53 2003-09-14 17:36:11 piso Exp $
+ * $Id: Closure.java,v 1.54 2003-09-19 00:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -298,7 +298,7 @@ public class Closure extends Function
         return environment;
     }
 
-    public LispObject execute() throws Condition
+    public LispObject execute() throws ConditionThrowable
     {
         if (arity == 0) {
             final LispThread thread = LispThread.currentThread();
@@ -313,7 +313,7 @@ public class Closure extends Function
             return execute(new LispObject[0]);
     }
 
-    public LispObject execute(LispObject arg) throws Condition
+    public LispObject execute(LispObject arg) throws ConditionThrowable
     {
         if (minArgs == 1) {
             final LispThread thread = LispThread.currentThread();
@@ -346,7 +346,7 @@ public class Closure extends Function
     }
 
     public LispObject execute(LispObject first, LispObject second)
-        throws Condition
+        throws ConditionThrowable
     {
         if (minArgs == 2) {
             final LispThread thread = LispThread.currentThread();
@@ -382,7 +382,7 @@ public class Closure extends Function
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
-        throws Condition
+        throws ConditionThrowable
     {
         if (minArgs == 3) {
             final LispThread thread = LispThread.currentThread();
@@ -419,7 +419,7 @@ public class Closure extends Function
     }
 
     public LispObject execute(LispObject args, Environment env)
-        throws Condition
+        throws ConditionThrowable
     {
         LispObject array[] = new LispObject[2];
         array[0] = args;
@@ -427,7 +427,7 @@ public class Closure extends Function
         return execute(array);
     }
 
-    public LispObject execute(LispObject[] args) throws Condition
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         Environment oldDynEnv = thread.getDynamicEnvironment();
@@ -448,7 +448,7 @@ public class Closure extends Function
         return result;
     }
 
-    protected LispObject[] processArgs(LispObject[] args) throws Condition
+    protected LispObject[] processArgs(LispObject[] args) throws ConditionThrowable
     {
         final LispThread thread = LispThread.currentThread();
         if (arity >= 0) {
@@ -608,7 +608,7 @@ public class Closure extends Function
 
     private final void bindOptionalParameterDefaults(Environment env,
                                                      LispThread thread)
-        throws Condition
+        throws ConditionThrowable
     {
         for (int i = 0; i < optionalParameters.length; i++) {
             Parameter parameter = optionalParameters[i];
@@ -623,7 +623,7 @@ public class Closure extends Function
 
     private final void bindKeywordParameterDefaults(Environment env,
                                                     LispThread thread)
-        throws Condition
+        throws ConditionThrowable
     {
         for (int i = 0; i < keywordParameters.length; i++) {
             Parameter parameter = keywordParameters[i];
@@ -637,7 +637,7 @@ public class Closure extends Function
     }
 
     private final void bindAuxVars(Environment env, LispThread thread)
-        throws Condition
+        throws ConditionThrowable
     {
         // Aux variable processing is analogous to LET* processing.
         for (int i = 0; i < auxVars.length; i++) {

@@ -2,7 +2,7 @@
  * AutoloadMacro.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AutoloadMacro.java,v 1.1 2003-09-16 16:16:42 piso Exp $
+ * $Id: AutoloadMacro.java,v 1.2 2003-09-19 00:05:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class AutoloadMacro extends Autoload
         super(symbol, fileName, null);
     }
 
-    public void load() throws Condition
+    public void load() throws ConditionThrowable
     {
         Load._load(getFileName(), true, false);
     }
