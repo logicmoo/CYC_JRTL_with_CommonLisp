@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: setf.lisp,v 1.27 2003-10-01 01:27:20 piso Exp $
+;;; $Id: setf.lisp,v 1.28 2003-10-01 14:01:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,12 +33,14 @@
                    `(,(get (car form) 'setf-inverse)
                       ,@vars ,store)
 		   (cons (car form) vars))))
+        ((get (car form) 'setf-expander)
+         (funcall (get (car form) 'setf-expander) form environment))
         (t
          (error "no SETF expansion for ~S" form))))
 
 
 ;;; ROTATEF (from GCL)
-(defmacro rotatef (&rest rest )
+(defmacro rotatef (&rest rest)
   (do ((r rest (cdr r))
        (pairs nil)
        (stores nil)
@@ -66,23 +68,19 @@
     (cond
      ((= count 2)
       (let ((place (first args))
-            (value (second args)))
-        (cond
-         ((symbolp place)
-          `(setq ,place ,value))
-         ((consp place)
-          (when (macro-function (car place))
-            (setq place (macroexpand place)))
-          (let ((inverse (get (car place) 'setf-inverse)))
-            (cond ((null inverse)
-                   (error "no SETF expansion for ~A" place))
-                  ((symbolp inverse)
-                   `(,inverse ,@(cdr place) ,value))
-                  ((functionp inverse)
-                   `(funcall ,inverse ,@(cdr place) ,value))
-                  (t
-                   (error "SETF: unhandled case")))))
-         (t nil))))
+            (value-form (second args)))
+        (if (atom place)
+            `(setq ,place ,value-form)
+            (multiple-value-bind (dummies vals newval setter getter)
+              (get-setf-expansion place nil)
+              (let ((inverse (get (car place) 'setf-inverse)))
+                (if (and inverse (eq inverse (car setter)))
+                    (if (functionp inverse)
+                        `(funcall ,inverse ,@(cdr place) ,value-form)
+                        `(,inverse ,@(cdr place) ,value-form))
+		    `(let* (,@(mapcar #'list dummies vals))
+		       (multiple-value-bind ,newval ,value-form
+			 ,setter))))))))
      ((oddp count)
       (error "odd number of args to SETF"))
      (t

@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: debug.lisp,v 1.3 2003-09-30 11:00:27 piso Exp $
+;;; $Id: debug.lisp,v 1.4 2003-10-01 13:59:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@
         (debug-prompt *debug-io*)
         (finish-output *debug-io*)
         (let* ((exp (read *debug-io*)))
-          (when (eq exp :CONTINUE)
+          (when (memq exp '(:co :continue))
             (return-from debugger-loop))
           (let* ((values (multiple-value-list (eval exp)))
                  (*standard-output* *debug-io*))
