@@ -1,8 +1,8 @@
 /*
  * WrapText.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: WrapText.java,v 1.5 2002-11-06 18:13:40 piso Exp $
+ * Copyright (C) 1998-2003 Peter Graves
+ * $Id: WrapText.java,v 1.6 2003-06-18 14:50:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -480,6 +480,7 @@ public final class WrapText implements Constants
                 s.startsWith("</li>") ||
                 s.startsWith("<dl>") ||
                 s.startsWith("</dl>") ||
+                s.startsWith("</body>") ||
                 s.startsWith("<pre>")) {
                 return new Position(line, 0);
             }
