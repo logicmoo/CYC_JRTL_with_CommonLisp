@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Directory.java,v 1.10 2002-12-09 03:43:32 piso Exp $
+ * $Id: Directory.java,v 1.11 2003-01-02 18:08:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,17 +93,21 @@ public final class Directory extends Buffer
         RESyntax syntax = new RESyntax(RESyntax.RE_SYNTAX_PERL5);
         syntax.set(RESyntax.RE_CHAR_CLASSES);
 
-        String normal = "[0-9]+" + s + monthAndDay + s + timeOrYear + s;
+        String traditional = "[0-9]+" + s + monthAndDay + s + timeOrYear + s;
 
         // --time-style=long-iso
         // -rw-r--r--    1 peter    peter         147 2002-11-13 13:10 notes
         // --time-style=iso
         // -rw-r--r--    1 peter    peter       69016 11-16 18:29 Directory.java
         // -rw-r--r--    1 peter    peter       13274 2001-09-08  thinbox.tar.gz
-        String iso = "[0-9]+" + s + "[0-9\\-]+" + s + "(" + HHMM + ")? *";
+        final String isoMaybeYear = "(" + yyyy + "-)?";
+        final String isoMonthAndDay = "[01][0-9]-[0-3][0-9]";
+        final String isoMaybeTime = "(" + HHMM + ")?";
+        String iso = "[0-9]+" + s + isoMaybeYear + isoMonthAndDay + s +
+            isoMaybeTime + " *";
 
         nativeMoveToFilenameRegExp =
-            new UncheckedRE("(" + normal + ")|(" + iso + ")", 0, syntax);
+            new UncheckedRE("(" + traditional + ")|(" + iso + ")", 0, syntax);
         internalMoveToFilenameRegExp = new UncheckedRE(":[0-5][0-9]" + s);
     }
 
