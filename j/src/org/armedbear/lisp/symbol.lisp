@@ -1,7 +1,7 @@
 ;;; symbol.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: symbol.lisp,v 1.3 2003-04-24 15:54:25 piso Exp $
+;;; $Id: symbol.lisp,v 1.4 2003-07-15 18:28:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,11 +17,10 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
-(export '(remprop get-properties copy-symbol))
+;;; From CMUCL.
 
-;;; REMPROP (from CMUCL)
 (defun remprop (symbol indicator)
   (do ((pl (symbol-plist symbol) (cddr pl))
        (prev nil pl))
@@ -34,7 +33,23 @@
 		  (setf (symbol-plist symbol) (cddr pl))))
 	   (return t)))))
 
-;;; GET-PROPERTIES (from CMUCL)
+(defun getf (place indicator &optional (default ()))
+  (do ((plist place (cddr plist)))
+      ((null plist) default)
+    (cond ((atom (cdr plist))
+	   (error 'type-error "malformed property list: ~S" place)
+	  ((eq (car plist) indicator)
+	   (return (cadr plist)))))))
+
+(defun %putf (place property new-value)
+  (do ((plist place (cddr plist)))
+      ((endp plist) (list* property new-value place))
+    (when (eq (car plist) property)
+      (setf (cadr plist) new-value)
+      (return place))))
+
+(defsetf getf %putf)
+
 (defun get-properties (place indicator-list)
   (do ((plist place (cddr plist)))
       ((null plist) (values nil nil nil))
@@ -44,7 +59,6 @@
 	  ((memq (car plist) indicator-list)
 	   (return (values (car plist) (cadr plist) plist))))))
 
-;;; COPY-SYMBOL (from CMUCL)
 (defun copy-symbol (symbol &optional (copy-props nil) &aux new-symbol)
   (setq new-symbol (make-symbol (symbol-name symbol)))
   (when copy-props
