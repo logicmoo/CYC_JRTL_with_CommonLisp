@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.114 2004-10-14 12:54:22 piso Exp $
+;;; $Id: clos.lisp,v 1.115 2004-10-14 16:50:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1480,6 +1480,8 @@
          (walk-form (car form))
          (walk-form (cdr form)))))
 
+(defvar *compile-method-functions* nil)
+
 (defun std-compute-method-function (method gf)
   (let ((body (method-body method))
         (declarations (method-declarations method))
@@ -1500,20 +1502,20 @@
         (let ((code (make-closure `(lambda ,lambda-list ,@declarations ,body)
                                   (method-environment method))))
 
-;;            (progn
-;;              (sys:simple-format t "STD-COMPUTE-METHOD-FUNCTION ~S ~S "
-;;                                 (if gf (generic-function-name gf) nil)
-;;                                 (method-specializers method))
-;;              (cond ((or (not (fboundp 'compile))
-;;                         (autoloadp 'compile))
-;;                     (sys:simple-format t "compiler not available~%"))
-;;                    ((or (null (method-environment method))
-;;                         (sys::empty-environment-p (method-environment method)))
-;;                     (setf code (or (compile nil code) code))
-;;                     (sys:simple-format t "compiled-function-p is ~S~%"
-;;                                        (compiled-function-p code)))
-;;                    (t
-;;                     (sys:simple-format t "environment is not empty~%"))))
+          (when *compile-method-functions*
+            (sys:simple-format t "STD-COMPUTE-METHOD-FUNCTION ~S ~S "
+                               (if gf (generic-function-name gf) nil)
+                               (method-specializers method))
+            (cond ((or (not (fboundp 'compile))
+                       (autoloadp 'compile))
+                   (sys:simple-format t "compiler not available~%"))
+                  ((or (null (method-environment method))
+                       (sys::empty-environment-p (method-environment method)))
+                   (setf code (or (compile nil code) code))
+                   (sys:simple-format t "compiled-function-p is ~S~%"
+                                      (compiled-function-p code)))
+                  (t
+                   (sys:simple-format t "environment is not empty~%"))))
 
           `(lambda (args next-emfun) (apply ,code args))))))
 
