@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: print.lisp,v 1.2 2004-04-25 18:04:45 piso Exp $
+;;; $Id: print.lisp,v 1.3 2004-05-16 13:04:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -41,8 +41,15 @@
 (defun output-integer (integer stream)
   (%output-object integer stream))
 
+(defvar *current-level-in-print* 0)
+
 (defun output-list (list stream)
-;;   (descend-into (stream)
+  (cond ((and (null *print-readably*)
+              *print-level*
+              (>= *current-level-in-print* *print-level*))
+         (write-char #\# stream))
+        (t
+         (let ((*current-level-in-print* (1+ *current-level-in-print*)))
                 (write-char #\( stream)
                 (let ((length 0)
                       (list list))
@@ -58,8 +65,7 @@
                       (return))
                     (write-char #\space stream)
                     (incf length)))
-                (write-char #\) stream))
-;; )
+                (write-char #\) stream)))))
 
 (defun output-ugly-object (object stream)
   (if (consp object)
