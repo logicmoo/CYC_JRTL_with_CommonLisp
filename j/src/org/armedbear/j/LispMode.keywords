@@ -265,6 +265,7 @@ make-hash-table
 make-list
 make-package
 make-pathname
+make-random-state
 make-sequence
 make-string
 make-string-input-stream
