@@ -2,7 +2,7 @@
  * coerce.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: coerce.java,v 1.1 2003-06-20 17:24:06 piso Exp $
+ * $Id: coerce.java,v 1.2 2003-06-20 17:54:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
