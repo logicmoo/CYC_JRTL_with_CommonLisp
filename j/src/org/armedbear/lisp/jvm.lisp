@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.386 2005-02-03 02:28:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.387 2005-02-03 17:13:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1167,6 +1167,7 @@
                 single-valued-p
                 sys:single-valued-p
                 sys:write-8-bits
+                sys::require-type
                 ))
     (setf (sys:single-valued-p op) t)))
 
@@ -1676,6 +1677,19 @@
           (set label i)))
       (incf i))))
 
+(defun label-p (instruction)
+;;   (declare (optimize safety))
+;;   (declare (type instruction instruction))
+  (and instruction
+       (= (the fixnum (instruction-opcode (the instruction instruction))) 202)))
+
+(defun instruction-label (instruction)
+  (declare (optimize safety))
+;;   (declare (type instruction instruction))
+  (and instruction
+       (= (instruction-opcode (the instruction instruction)) 202)
+       (car (instruction-args instruction))))
+
 ;; Remove unused labels.
 (defun optimize-1 ()
   (let ((code (coerce *code* 'list))
@@ -1730,6 +1744,37 @@
                  (setf (cadr tail) nil)
                  (setf changed t)))))
       (setf tail (cdr tail)))
+    (when changed
+      (setf *code* (delete nil code))
+      t)))
+
+(defun optimize-2a ()
+  (let* ((code (coerce *code* 'list))
+         (tail code)
+         (changed nil))
+    (dolist (instruction code)
+      (when (and instruction (= (instruction-opcode instruction) 167)) ; GOTO
+        (let* ((target-label (car (instruction-args instruction)))
+               (target-instruction nil)
+               (next-instruction nil))
+          (dolist (instr code)
+            (when target-instruction
+              (setf next-instruction instr)
+              (return))
+            (when (and instr
+                       (label-p instr)
+                       (eq (car (instruction-args instr)) target-label))
+              (setf target-instruction instr)))
+          (when next-instruction
+            (case (instruction-opcode next-instruction)
+              (167 ; GOTO
+               (setf (instruction-args instruction)
+                     (instruction-args next-instruction)
+                     changed t))
+              (176 ; ARETURN
+               (setf (instruction-opcode instruction) 176
+                     (instruction-args instruction) nil
+                     changed t)))))))
     (when changed
       (setf *code* (delete nil code))
       t)))
@@ -1804,6 +1849,7 @@
       (let ((changed-p nil))
         (setf changed-p (or (optimize-1) changed-p))
         (setf changed-p (or (optimize-2) changed-p))
+        (setf changed-p (or (optimize-2a) changed-p))
         (setf changed-p (or (optimize-3) changed-p))
         (setf changed-p (or (delete-unreachable-code) changed-p))
         (unless changed-p
@@ -2954,41 +3000,15 @@
         (args (cdr form)))
     (case (length args)
       (2
+       (dformat t "p2-numeric-comparison form = ~S~%" form)
        (let ((first (first args))
              (second (second args))
              var1 var2)
          (cond ((and (fixnump first) (fixnump second))
-                (dformat t "p2-numeric-comparison form = ~S~%" form)
                 (if (funcall op first second)
                     (emit-push-t)
                     (emit-push-nil))
-                (return-from p2-numeric-comparison))
-               ((fixnump second)
-                (dformat t "p2-numeric-comparison form = ~S~%" form)
-                (compile-form (car args) :target :stack)
-                (unless (single-valued-p first)
-                  (emit-clear-values))
-                (emit-push-constant-int second)
-                (emit-invokevirtual +lisp-object-class+
-                                    (case op
-                                      (<  "isLessThan")
-                                      (<= "isLessThanOrEqualTo")
-                                      (>  "isGreaterThan")
-                                      (>= "isGreaterThanOrEqualTo")
-                                      (=  "isEqualTo")
-                                      (/= "isNotEqualTo"))
-                                    '("I")
-                                    "Z")
-                ;; Java boolean on stack here
-                (let ((LABEL1 (gensym))
-                      (LABEL2 (gensym)))
-                  (emit 'ifeq LABEL1)
-                  (emit-push-t)
-                  (emit 'goto LABEL2)
-                  (label LABEL1)
-                  (emit-push-nil)
-                  (label LABEL2)
-                  (emit-move-from-stack target))
+                (emit-move-from-stack target)
                 (return-from p2-numeric-comparison))
                ((and (setf var1 (unboxed-fixnum-variable first))
                      (setf var2 (unboxed-fixnum-variable second)))
@@ -3011,7 +3031,56 @@
                   (emit-push-nil)
                   (label LABEL2)
                   (emit-move-from-stack target)
-                  (return-from p2-numeric-comparison))))))))
+                  (return-from p2-numeric-comparison)))
+               ((and (subtypep (derive-type first) 'FIXNUM)
+                     (subtypep (derive-type second) 'FIXNUM))
+                (let ((LABEL1 (gensym))
+                      (LABEL2 (gensym)))
+                  (compile-form first :target :stack :representation :unboxed-fixnum)
+                  (compile-form second :target :stack :representation :unboxed-fixnum)
+                  (unless (and (single-valued-p first) (single-valued-p second))
+                    (emit-clear-values))
+                  (emit (case op
+                          (<  'if_icmpge)
+                          (<= 'if_icmpgt)
+                          (>  'if_icmple)
+                          (>= 'if_icmplt)
+                          (=  'if_icmpne)
+                          (/= 'if_icmpeq))
+                        LABEL1)
+                  (emit-push-t)
+                  (emit 'goto LABEL2)
+                  (label LABEL1)
+                  (emit-push-nil)
+                  (label LABEL2)
+                  (emit-move-from-stack target)
+                  (return-from p2-numeric-comparison)))
+               ((fixnump second)
+                (compile-form first :target :stack)
+                (maybe-emit-clear-values first)
+                (emit-push-constant-int second)
+                (emit-invokevirtual +lisp-object-class+
+                                    (case op
+                                      (<  "isLessThan")
+                                      (<= "isLessThanOrEqualTo")
+                                      (>  "isGreaterThan")
+                                      (>= "isGreaterThanOrEqualTo")
+                                      (=  "isEqualTo")
+                                      (/= "isNotEqualTo"))
+                                    '("I")
+                                    "Z")
+                ;; Java boolean on stack here
+                (let ((LABEL1 (gensym))
+                      (LABEL2 (gensym)))
+                  (emit 'ifeq LABEL1)
+                  (emit-push-t)
+                  (emit 'goto LABEL2)
+                  (label LABEL1)
+                  (emit-push-nil)
+                  (label LABEL2)
+                  (emit-move-from-stack target))
+                (return-from p2-numeric-comparison))
+               )))))
   ;; Still here?
   (compile-function-call form target representation))
 
