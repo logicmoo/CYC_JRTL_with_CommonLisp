@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.265 2004-08-03 16:48:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.266 2004-08-04 03:09:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1364,7 +1364,7 @@
            (emit-invokespecial super
                                "<init>"
                                "(Lorg/armedbear/lisp/LispObject;)V"
-                               0))
+                               -2))
           (*hairy-arglist-p*
            (emit 'aload_0) ;; this
            (emit 'aconst_null) ;; name
@@ -1383,13 +1383,13 @@
                                "<init>"
 ;;                                "(Lorg/armedbear/lisp/Symbol;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/Environment;)V"
                                `((,+lisp-symbol+ ,+lisp-object+ ,+lisp-object+ ,+lisp-environment+) nil)
-                               -4))
+                               -5))
           (t
            (emit 'aload_0)
            (emit-invokespecial super
                                "<init>"
                                "()V"
-                               0)))
+                               -1)))
     (setf *code* (append *static-code* *code*))
     (emit 'return)
     (finalize-code)
