@@ -1,7 +1,7 @@
 ;;; defmacro.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defmacro.lisp,v 1.2 2003-05-26 00:29:03 piso Exp $
+;;; $Id: defmacro.lisp,v 1.3 2003-05-27 20:05:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 (defmacro defmacro (name lambda-list &rest body)
   (let* ((form (gensym))
          (env (gensym))
-         (expander
-          `(lambda (,form ,env)
-             (destructuring-bind ,lambda-list (cdr ,form) ,@body))))
+         (body (parse-defmacro lambda-list form body name 'defmacro
+                               :environment env))
+         (expander `(lambda (,form ,env) (block ,name ,body))))
     `(fset ',name (make-macro ,expander))))
