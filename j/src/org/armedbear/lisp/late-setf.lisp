@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: late-setf.lisp,v 1.4 2004-03-19 00:55:37 piso Exp $
+;;; Copyright (C) 2003-2004 Peter Graves
+;;; $Id: late-setf.lisp,v 1.5 2004-08-21 03:19:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -55,13 +55,6 @@
   (let ((list ()))
     (dotimes (i n list)
       (push (gensym) list))))
-
-(defun %putf (place property new-value)
-  (do ((plist place (cddr plist)))
-      ((endp plist) (list* property new-value place))
-    (when (eq (car plist) property)
-      (setf (cadr plist) new-value)
-      (return place))))
 
 (define-setf-expander getf (place prop &optional default &environment env)
   (multiple-value-bind (temps values stores set get)
