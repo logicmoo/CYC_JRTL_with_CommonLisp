@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.164 2004-05-10 12:57:39 piso Exp $
+;;; $Id: jvm.lisp,v 1.165 2004-05-14 17:10:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1156,6 +1156,15 @@
         (emit-store-value))))
    ((or (classp form) (hash-table-p form) (typep form 'generic-function))
     (let ((g (declare-object form)))
+      (emit 'getstatic
+            *this-class*
+            g
+            +lisp-object+)
+      (emit-store-value)))
+   ((pathnamep form)
+    (let ((g (if *compile-file-truename*
+                 (declare-object-as-string form)
+                 (declare-object form))))
       (emit 'getstatic
             *this-class*
             g
