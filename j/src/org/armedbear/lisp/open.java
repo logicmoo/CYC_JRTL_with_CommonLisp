@@ -2,7 +2,7 @@
  * open.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: open.java,v 1.12 2004-01-24 19:53:28 piso Exp $
+ * $Id: open.java,v 1.13 2004-01-25 15:54:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,9 +53,9 @@ public final class open extends Lisp
                                             " is not a recognized value for :IF-EXISTS"));
             }
             try {
-                return new Stream(new FileOutputStream(file),
-                                  binary ? Symbol.INTEGER : Symbol.CHARACTER,
-                                  pathname);
+                return new FileStream(new FileOutputStream(file),
+                                      binary ? Symbol.INTEGER : Symbol.CHARACTER,
+                                      pathname);
             }
             catch (FileNotFoundException e) {
                 return signal(new LispError("unable to create file: " + first));
@@ -73,9 +73,9 @@ public final class open extends Lisp
             File file = Utilities.getFile(pathname);
             boolean binary = checkBinaryElementType(second);
             try {
-                return new Stream(new FileInputStream(file),
-                                  binary ? Symbol.INTEGER : Symbol.CHARACTER,
-                                  pathname);
+                return new FileStream(new FileInputStream(file),
+                                      binary ? Symbol.INTEGER : Symbol.CHARACTER,
+                                      pathname);
             }
             catch (FileNotFoundException e) {
                 return signal(new LispError("file not found: " + first));
