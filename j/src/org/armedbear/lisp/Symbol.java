@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.177 2005-03-19 20:00:32 piso Exp $
+ * $Id: Symbol.java,v 1.178 2005-03-28 19:14:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -916,5 +916,11 @@ public class Symbol extends LispObject
             return signal(new UndefinedFunction(this));
         Debug.trace(e);
         return signal(new LispError("Null pointer exception"));
+    }
+
+    public void incrementCallCount()
+    {
+        if (function != null)
+            function.incrementCallCount();
     }
 }
