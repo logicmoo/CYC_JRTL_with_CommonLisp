@@ -2,7 +2,7 @@
  * LocationBar.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LocationBar.java,v 1.6 2003-06-26 00:43:48 piso Exp $
+ * $Id: LocationBar.java,v 1.7 2003-07-04 15:53:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,6 +21,7 @@
 
 package org.armedbear.j;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -129,6 +130,18 @@ public final class LocationBar extends JPanel implements Constants,
             label.setText(prompts[index]);
         else
             Debug.bug();
+    }
+
+    public void paintComponent(java.awt.Graphics g)
+    {
+        if (editor == Editor.currentEditor()) {
+            label.setForeground(Color.black);
+            textField.setForeground(Color.black);
+        } else {
+            label.setForeground(Color.gray);
+            textField.setForeground(Color.gray);
+        }
+        super.paintComponent(g);
     }
 
     public void update()
