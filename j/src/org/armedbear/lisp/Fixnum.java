@@ -2,7 +2,7 @@
  * Fixnum.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Fixnum.java,v 1.14 2003-03-14 02:26:09 piso Exp $
+ * $Id: Fixnum.java,v 1.15 2003-03-14 02:56:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,6 +71,16 @@ public final class Fixnum extends LispObject
         }
     }
 
+    public static float getFloat(LispObject obj) throws LispError
+    {
+        try {
+            return (float) ((Fixnum)obj).value;
+        }
+        catch (ClassCastException e) {
+            throw new TypeError(obj, "fixnum");
+        }
+    }
+
     public final long getValue()
     {
         return value;
@@ -82,7 +92,10 @@ public final class Fixnum extends LispObject
             return new Fixnum(value + ((Fixnum)obj).value);
         }
         catch (ClassCastException e) {
-            throw new TypeError(obj, "fixnum");
+            // obj is not a Fixnum.
+            if (obj instanceof LispFloat)
+                return new LispFloat(((float)value) + LispFloat.getValue(obj));
+            throw new TypeError(obj, "number");
         }
     }
 
