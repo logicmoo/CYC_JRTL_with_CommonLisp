@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.317 2004-12-27 00:27:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.318 2004-12-27 02:30:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -404,13 +404,33 @@
     (error "Too many arguments for SETQ."))
   (list 'SETQ (second form) (p1 (third form))))
 
+;; (defun p1-the (form)
+;; ;;   (dformat t "p1-the form = ~S~%" form)
+;; ;;   (if (= *safety* 3)
+;;       (list 'THE (second form) (p1 (third form)))
+;; ;;       (p1 (third form))
+;; ;;       )
+;; )
 (defun p1-the (form)
-;;   (dformat t "p1-the form = ~S~%" form)
-;;   (if (= *safety* 3)
-      (list 'THE (second form) (p1 (third form)))
-;;       (p1 (third form))
-;;       )
-)
+  (dformat t "p1-the form = ~S~%" form)
+  (let ((type (second form))
+        (expr (third form)))
+    (cond
+     ((and (listp type) (eq (car type) 'VALUES))
+      ;; FIXME
+      (p1 expr))
+     ((= *safety* 3)
+      (dformat t "p1-the expr = ~S~%" expr)
+      (let* ((sym (gensym))
+             (new-expr
+              `(let ((,sym ,expr))
+                 (sys::require-type ,sym ',type)
+                 ,sym)))
+        (dformat t "p1-the new-expr = ~S~%" new-expr)
+        (p1 new-expr)))
+     (t
+      (dformat t "p1-the t case expr = ~S~%" expr)
+      (p1 expr)))))
 
 (defun p1-default (form)
   (list* (car form) (mapcar #'p1 (cdr form))))
@@ -2465,9 +2485,9 @@
     (emit-invokevirtual +lisp-thread-class+ "execute" descriptor stack-effect)))
 
 (defun compile-function-call (form target representation)
-  (let ((new-form (rewrite-function-call form)))
-    (when (neq new-form form)
-      (return-from compile-function-call (compile-form new-form :target target))))
+;;   (let ((new-form (rewrite-function-call form)))
+;;     (when (neq new-form form)
+;;       (return-from compile-function-call (compile-form new-form :target target))))
   (let ((fun (car form))
         (args (cdr form)))
     (unless (symbolp fun)
@@ -4085,9 +4105,10 @@
          (emit-invoke-method "incr" target representation))
         ((arg-is-fixnum-p arg1)
          (dformat t "compile-plus case 6~%")
+         (emit-push-int arg1)
          (compile-form arg2 :target :stack)
          (maybe-emit-clear-values arg2)
-         (emit-push-int arg1)
+         (emit 'swap)
          (emit-invokevirtual +lisp-object-class+
                              "add"
                              "(I)Lorg/armedbear/lisp/LispObject;"
@@ -4408,23 +4429,24 @@
              (emit-move-from-stack target))))))
 
 (defun p2-the (form &key (target *val*) representation)
-;;   (dformat t "p2-the form = ~S~%" form)
-  (let ((type (second form))
-        (expr (third form)))
-  (cond
-   ((and (listp type) (eq (car type) 'VALUES))
-    ;; FIXME
-    (compile-form expr :target target :representation representation))
-   ((= *safety* 3)
-    (let* ((sym (gensym))
-           (new-expr
-            `(let ((,sym ,expr))
-               (sys::require-type ,sym ',type)
-               ,sym)))
-;;       (dformat t "new-expr = ~S~%" new-expr)
-      (compile-form (p1 new-expr) :target target :representation representation)))
-   (t
-    (compile-form expr :target target :representation representation)))))
+  (dformat t "p2-the form = ~S~%" form)
+;;   (let ((type (second form))
+;;         (expr (third form)))
+;;   (cond
+;;    ((and (listp type) (eq (car type) 'VALUES))
+;;     ;; FIXME
+;;     (compile-form expr :target target :representation representation))
+;;    ((= *safety* 3)
+;;     (let* ((sym (gensym))
+;;            (new-expr
+;;             `(let ((,sym ,expr))
+;;                (sys::require-type ,sym ',type)
+;;                ,sym)))
+;; ;;       (dformat t "new-expr = ~S~%" new-expr)
+;;       (compile-form (p1 new-expr) :target target :representation representation)))
+;;    (t
+;;     (compile-form expr :target target :representation representation)))))
+  (compile-form (third form) :target target :representation representation))
 
 (defun compile-catch (form &key (target *val*) representation)
   (when (= (length form) 2) ; (catch 'foo)
@@ -4727,13 +4749,19 @@
 (defun compile-1 (compiland)
   (let ((*current-compiland* compiland)
         (precompiled-form (compiland-lambda-expression compiland))
-        (classfile (compiland-classfile compiland)))
+        (classfile (compiland-classfile compiland))
+        (*speed* *speed*)
+        (*safety* *safety*)
+        (*debug* *debug*)
+        )
+    (process-optimization-declarations (cddr precompiled-form))
     ;; Pass 1.
     (setf precompiled-form (p1 precompiled-form))
     ;; Pass 2.
-    (let* ((*speed* *speed*)
-           (*safety* *safety*)
-           (*debug* *debug*)
+    (let* (
+;;            (*speed* *speed*)
+;;            (*safety* *safety*)
+;;            (*debug* *debug*)
            (*declared-symbols* (make-hash-table :test 'eq))
            (*declared-functions* (make-hash-table :test 'equal))
            (*declared-strings* (make-hash-table :test 'eq))
@@ -4906,7 +4934,7 @@
                                      -3)
                  (setf (variable-index variable) nil)))))
 
-      (process-optimization-declarations body)
+;;       (process-optimization-declarations body)
 
       (compile-progn-body body :stack)
 
@@ -5124,7 +5152,7 @@
       (unless (and (consp form) (eq (car form) 'declare))
         (return))
       (let ((decl (cadr form)))
-        (when (eq (car decl) 'optimize)
+        (when (eq (car decl) 'OPTIMIZE)
           (dolist (spec (cdr decl))
             (let ((val 3)
                   (quantity spec))
