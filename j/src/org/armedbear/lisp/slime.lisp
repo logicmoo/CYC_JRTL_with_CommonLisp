@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: slime.lisp,v 1.15 2004-09-11 03:50:21 piso Exp $
+;;; $Id: slime.lisp,v 1.16 2004-09-11 19:18:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,7 +36,9 @@
            #:slime-space
            #:edit-definition
            #:eval-region
-           #:eval-last-expression))
+           #:eval-last-expression
+           #:slime-compile-file
+           #:slime-compile-and-load-file))
 
 (in-package #:slime)
 
@@ -124,17 +126,17 @@
         (stream-error () (disconnect)))))
 
 (defun slime-eval-async (form continuation)
-    (if (slime-local-p)
-        nil ;; FIXME
-        (handler-case
-            (with-mutex (*continuations-lock*)
-              (let ((continuations *continuations*)
-                    (id (incf *continuation-counter*)))
-                (push (cons id 'display-eval-result) *continuations*)
-                (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
-                (unless continuations
-                  (make-thread #'(lambda () (dispatch-loop))))))
-          (stream-error () (disconnect)))))
+  (if (slime-local-p)
+      nil ;; FIXME
+      (handler-case
+          (with-mutex (*continuations-lock*)
+            (let ((continuations *continuations*)
+                  (id (incf *continuation-counter*)))
+              (push (cons id 'display-eval-result) *continuations*)
+              (swank-protocol:encode-message `(:eval-async ,form ,id) *stream*)
+              (unless continuations
+                (make-thread #'(lambda () (dispatch-loop))))))
+        (stream-error () (disconnect)))))
 
 (defun read-port-and-connect (retries)
   (status "Slime polling for connection...")
@@ -388,6 +390,18 @@
     (slime-eval-async
      `(swank:eval-string-async ,string ,package) 'display-eval-result)))
 
+(defun slime-compile-file ()
+  (let ((pathname (buffer-pathname)))
+    (sys::%format t "pathname = ~S~%" pathname)
+    (slime-eval-async
+     `(swank:swank-compile-file ,pathname nil) 'display-eval-result)))
+
+(defun slime-compile-and-load-file ()
+  (let ((pathname (buffer-pathname)))
+    (sys::%format t "pathname = ~S~%" pathname)
+    (slime-eval-async
+     `(swank:swank-compile-file ,pathname t) 'display-eval-result)))
+
 (map-key-for-mode "Tab" "(slime:complete-symbol)" "Lisp Shell")
 (map-key-for-mode "Ctrl Alt I" "(slime:complete-symbol)" "Lisp")
 (map-key-for-mode "Space" "(slime:slime-space)" "Lisp Shell")
@@ -396,3 +410,4 @@
 (map-key-for-mode "Alt ." "(slime:edit-definition)" "Lisp")
 (map-key-for-mode "Ctrl Alt R" "(slime:eval-region)" "Lisp")
 (map-key-for-mode "Ctrl Alt E" "(slime:eval-last-expression)" "Lisp")
+(map-key-for-mode "Ctrl Alt K" "(slime:slime-compile-and-load-file)" "Lisp")
