@@ -2,7 +2,7 @@
  * WebMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebMode.java,v 1.2 2002-10-03 17:40:26 piso Exp $
+ * $Id: WebMode.java,v 1.3 2003-01-18 17:46:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@ public final class WebMode extends AbstractMode implements Constants, Mode
         setProperty(Property.SHOW_LINE_NUMBERS, false);
         setProperty(Property.HIGHLIGHT_MATCHING_BRACKET, false);
         setProperty(Property.HIGHLIGHT_BRACKETS, false);
+        setProperty(Property.P4_AUTO_EDIT, false);
     }
 
     public static final WebMode getMode()
