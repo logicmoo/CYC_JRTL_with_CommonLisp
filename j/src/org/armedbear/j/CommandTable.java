@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.13 2002-12-29 16:30:09 piso Exp $
+ * $Id: CommandTable.java,v 1.14 2003-01-09 16:16:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -288,6 +288,7 @@ public class CommandTable
             addCommand("listProperties", "PropertiesDialog");
             addCommand("listRegisters", "Registers");
             addCommand("listTags", "ListTagsDialog");
+            addCommand("listThreads", "Debug");
             addCommand("loadSession", "Session");
             addCommand("lowerCaseRegion", "RegionCommands");
             addCommand("makeTagFile", "TagCommands");
