@@ -16,28 +16,49 @@
 <h1>Debugger Commands</h1>
 
 <hr>
+<p>
+The commands described here may be used in the "Command" textfield of the
+debugger control dialog. The debugger must actually be running first; use Alt X,
+<a href="commands.html#jdb">jdb</a>, without any arguments, to start it.
+<p>
+If you're working in an editor source window, you can use Alt X, "jdb
+[command]" to send a command to the running instance of the debugger (for
+example, Alt X, "jdb continue", or Alt X, "jdb restart"). Several frequently
+used debugger commands are also available on the right-button context menu in
+Java source buffers.
+<p>
+Any command may be shortened to the first few letters of its name, as long as
+the abbreviation is unambiguous.
+<p>
+Certain frequently used commands may be invoked with their first letter, even
+if there are other commands that start with the same letter (e.g.
+<a href="jdbcommands.html#continue">continue</a>,
+<a href="jdbcommands.html#step">step</a>).
+<p>
+The <a href="jdbcommands.html#continue">continue</a>,
+<a href="jdbcommand.html#next">next</a> and
+<a href="jdbcommands.html#step">step</a> commands may be repeated by just
+pressing Enter in the "Command" textfield.
 
 <ul>
-    <li><a href="jdbcommands.html#break">break</a></li>
+    <li><a href="jdbcommands.html#break">break</a>, <a href="jdbcommands.html#break">b</a></li>
     <li><a href="jdbcommands.html#clear">clear</a></li>
     <li><a href="jdbcommands.html#clearall">clear all</a></li>
-    <li><a href="jdbcommands.html#continue">continue</a></li>
-    <li><a href="jdbcommands.html#finish">finish</a></li>
+    <li><a href="jdbcommands.html#continue">continue</a>, <a href="jdbcommands.html#continue">c</a></li>
+    <li><a href="jdbcommands.html#finish">finish</a>, <a href="jdbcommands.html#finish">f</a></li>
     <li><a href="jdbcommands.html#go">go</a></li>
     <li><a href="jdbcommands.html#locals">locals</a></li>
-    <li><a href="jdbcommands.html#next">next</a></li>
-    <li><a href="jdbcommands.html#print">print</a></li>
-    <li><a href="jdbcommands.html#quit">quit</a></li>
+    <li><a href="jdbcommands.html#next">next</a>, <a href="jdbcommands.html#next">n</a></li>
+    <li><a href="jdbcommands.html#print">print</a>, <a href="jdbcommands.html#print">p</a></li>
+    <li><a href="jdbcommands.html#quit">quit</a>, <a href="jdbcommands.html#quit">q</a></li>
     <li><a href="jdbcommands.html#resume">resume</a></li>
     <li><a href="jdbcommands.html#stdin">stdin</a></li>
-    <li><a href="jdbcommands.html#step">step</a></li>
+    <li><a href="jdbcommands.html#step">step</a>, <a href="jdbcommands.html#step">s</a></li>
     <li><a href="jdbcommands.html#stepout">step out</a></li>
     <li><a href="jdbcommands.html#stop">stop</a></li>
     <li><a href="jdbcommands.html#suspend">suspend</a></li>
     <li><a href="jdbcommands.html#tbreak">tbreak</a></li>
 </ul>
-
-<hr>
 
 <a name="break">break</a><dl><dd>
 <p>
@@ -49,8 +70,8 @@ Sets a breakpoint.
         break <i>class.method</i></pre>
 <b>Examples:</b>
 <pre>
-        break Lisp.java:138
-        break org.armedbear.lisp.Main.main</pre>
+        b Lisp.java:138
+        b org.armedbear.lisp.Main.main</pre>
 <p>
 <b>Aliases:</b> <a href="#stop">stop</a>
 <p>
@@ -86,13 +107,15 @@ Resumes execution at the address where the program last stopped.
 Continues execution until just after the current method returns.
 <p>
 <b>Aliases:</b> step out
+<p>
+<b>Abbreviation:</b> f
 </dl>
 
 <a name="go">go</a><dl><dd>
 <p>
 Resumes execution at the address where the program last stopped.
 <p>
-<b>Aliases:</b> <a href="#continue">continue</a>, <a href="#resume">resume</a>
+<b>Alias for:</b> <a href="#continue">continue</a>
 </dl>
 
 <a name="locals">locals</a><dl><dd>
@@ -112,8 +135,8 @@ Executes the current line of code, stepping over method calls.
         next <i>count</i></pre>
 <b>Examples:</b>
 <pre>
-        next
-        next 5</pre>
+        n
+        n 5</pre>
 <p>
 <b>Aliases:</b> None
 <p>
@@ -129,8 +152,8 @@ Prints the value of a variable.
         print <i>expr</i></pre>
 <b>Examples:</b>
 <pre>
-        print line
-        print line.lineNumber</pre>
+        p foo
+        p foo.bar</pre>
 <p>
 <b>Aliases:</b> None
 <p>
@@ -144,13 +167,15 @@ buffer. (If you want to keep the transcript, copy it somewhere before quitting.)
 <p>
 <p>
 <b>Aliases:</b> None
+<p>
+<b>Abbreviation:</b> q
 </dl>
 
 <a name="resume">resume</a><dl><dd>
 <p>
 Resumes execution at the address where the program last stopped.
 <p>
-<b>Aliases:</b> <a href="#continue">continue</a>, <a href="#go">go</a>
+<b>Alias for:</b> <a href="#continue">continue</a>
 </dl>
 
 <a name="stdin">stdin</a><dl><dd>
@@ -178,8 +203,8 @@ contain.
         step <i>count</i></pre>
 <b>Examples:</b>
 <pre>
-        step
-        step 3</pre>
+        s
+        s 3</pre>
 <p>
 <b>Aliases:</b> None
 <p>
@@ -190,7 +215,7 @@ contain.
 <p>
 Continues execution until just after the current method returns.
 <p>
-<b>Aliases:</b> <a href="#finish">finish</a>
+<b>Alias for:</b> <a href="#finish">finish</a>
 </dl>
 
 <a name="stop">stop</a><dl><dd>
@@ -206,7 +231,7 @@ Sets a breakpoint.
         stop Lisp.java:138
         stop org.armedbear.lisp.Main.main</pre>
 <p>
-<b>Aliases:</b> <a href="#break">break</a>
+<b>Alias for:</b> <a href="#break">break</a>
 </dl>
 
 <a name="suspend">suspend</a><dl><dd>
