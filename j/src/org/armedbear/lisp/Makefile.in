@@ -1,7 +1,7 @@
 # Makefile.in
 
 # Copyright (C) 2003 Peter Graves
-# $Id: Makefile.in,v 1.125 2004-01-17 13:14:25 piso Exp $
+# $Id: Makefile.in,v 1.126 2004-01-18 20:09:09 piso Exp $
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -100,6 +100,7 @@ CLASSFILES =	AbstractArray.class \
 		ProgramError.class \
 		RandomState.class \
 		Ratio.class \
+		ReaderError.class \
 		Readtable.class \
 		Return.class \
 		RuntimeClass.class \
