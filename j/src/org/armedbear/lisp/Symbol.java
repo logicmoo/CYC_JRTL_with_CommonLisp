@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.111 2004-03-08 02:50:50 piso Exp $
+ * $Id: Symbol.java,v 1.112 2004-03-08 19:51:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -452,10 +452,9 @@ public class Symbol extends LispObject
         else if (name.charAt(0) == '#')
             escape = true;
         else {
-
             for (int i = length; i-- > 0;) {
                 char c = name.charAt(i);
-                if (c == '(' || c == ')' || c == ',') {
+                if (c == '(' || c == ')' || c == ',' || c == '|' || c == '\\') {
                     escape = true;
                     break;
                 }
@@ -469,7 +468,19 @@ public class Symbol extends LispObject
                 }
             }
         }
-        String s = escape ? ("|" + name + "|") : name;
+        String s;
+        if (escape) {
+            StringBuffer sb = new StringBuffer("|");
+            for (int i = 0; i < length; i++) {
+                char c = name.charAt(i);
+                if (c == '|' || c == '\\')
+                    sb.append('\\');
+                sb.append(c);
+            }
+            sb.append('|');
+            s = sb.toString();
+        } else
+            s = name;
         if (!escape) {
             if (printCase == Keyword.DOWNCASE)
                 s = s.toLowerCase();
