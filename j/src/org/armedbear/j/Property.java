@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Property.java,v 1.25 2003-06-30 17:02:05 piso Exp $
+ * $Id: Property.java,v 1.26 2003-09-16 01:32:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,6 +181,8 @@ public final class Property implements Comparable, Constants
         createProperty("restrictCaret", true);
     public static final Property SAVE_IN_PLACE =
         createProperty("saveInPlace", false);
+    public static final Property SCROLL_CARET =
+        createProperty("scrollCaret", true);
     public static final Property SELECT_COMPLETION =
         createProperty("selectCompletion", true);
     public static final Property SHOW_CHANGE_MARKS =
