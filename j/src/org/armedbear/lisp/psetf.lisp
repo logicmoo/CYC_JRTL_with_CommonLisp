@@ -1,7 +1,7 @@
 ;;; psetf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: psetf.lisp,v 1.2 2005-02-02 16:53:09 piso Exp $
+;;; $Id: psetf.lisp,v 1.3 2005-02-02 16:54:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
                ((endp a))
              (when (endp (cdr a))
                (error 'simple-program-error
-                      :format-control "Odd number of args to PSETF."))
+                      :format-control "Odd number of arguments to PSETF."))
              (multiple-value-bind
                (dummies vals newval setter getter)
                (get-setf-expansion (car a) env)
