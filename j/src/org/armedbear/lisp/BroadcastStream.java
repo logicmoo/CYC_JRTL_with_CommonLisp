@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: BroadcastStream.java,v 1.7 2004-03-10 01:54:45 piso Exp $
+ * $Id: BroadcastStream.java,v 1.8 2004-10-06 23:20:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,6 +181,11 @@ public final class BroadcastStream extends Stream
     private void notSupported() throws ConditionThrowable
     {
         signal(new TypeError("Operation is not supported for streams of type BROADCAST-STREAM."));
+    }
+
+    public String writeToString()
+    {
+        return unreadableString("BROADCAST-STREAM");
     }
 
     // ### make-broadcast-stream &rest streams => broadcast-stream
