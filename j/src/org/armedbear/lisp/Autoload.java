@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Autoload.java,v 1.204 2004-11-03 15:38:52 piso Exp $
+ * $Id: Autoload.java,v 1.205 2004-11-06 20:04:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -470,6 +470,8 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "instance-ref", "StandardObject");
         autoload(PACKAGE_SYS, "layout-class", "Layout");
         autoload(PACKAGE_SYS, "layout-length", "Layout");
+        autoload(PACKAGE_SYS, "layout-slot-index", "Layout");
+        autoload(PACKAGE_SYS, "layout-slot-location", "Layout");
         autoload(PACKAGE_SYS, "make-case-frob-stream", "CaseFrobStream");
         autoload(PACKAGE_SYS, "make-file-stream", "FileStream");
         autoload(PACKAGE_SYS, "make-fill-pointer-output-stream", "FillPointerOutputStream");
@@ -480,5 +482,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "puthash", "HashTable");
         autoload(PACKAGE_SYS, "simple-list-remove-duplicates", "simple_list_remove_duplicates");
         autoload(PACKAGE_SYS, "std-instance-slots", "StandardObject");
+        autoload(PACKAGE_SYS, "std-slot-value", "StandardObject");
     }
 }
