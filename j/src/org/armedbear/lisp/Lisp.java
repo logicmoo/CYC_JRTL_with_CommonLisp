@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.314 2005-01-24 14:04:10 asimon Exp $
+ * $Id: Lisp.java,v 1.315 2005-01-31 16:32:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1863,6 +1863,10 @@ public abstract class Lisp
 
     public static final Symbol BOOLE_ORC2 =
         exportConstant("BOOLE-ORC2", PACKAGE_CL, new Fixnum(15));
+
+    // ### *warn-on-redefinition*
+    public static final Symbol _WARN_ON_REDEFINITION_ =
+        exportSpecial("*WARN-ON-REDEFINITION*", PACKAGE_EXT, NIL);
 
     // ### *saved-backtrace*
     public static final Symbol _SAVED_BACKTRACE_ =
