@@ -2,7 +2,7 @@
  * LispString.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispString.java,v 1.51 2003-08-10 17:43:29 piso Exp $
+ * $Id: LispString.java,v 1.52 2003-08-10 17:45:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -303,7 +303,8 @@ public final class LispString extends AbstractVector
         if (_PRINT_ESCAPE_.symbolValueNoThrow() != NIL) {
             StringBuffer sb = new StringBuffer();
             sb.append('"');
-            for (int i = 0, limit = array.length; i < limit; i++) {
+            final int limit = fillPointer >= 0 ? fillPointer : array.length;
+            for (int i = 0; i < limit; i++) {
                 char c = array[i];
                 if (c == '\"')
                     sb.append('\\');
