@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.31 2003-03-29 01:16:49 piso Exp $
+ * $Id: LispMode.java,v 1.32 2003-03-29 02:38:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,9 +140,9 @@ public class LispMode extends AbstractMode implements Constants, Mode
     }
 
     private final String[] specials = new String[] {
-        "case", "ecase", "do", "do*", "do-all-symbols", "do-external-symbols",
-        "do-symbols", "dolist", "dotimes", "flet", "lambda", "let", "let*",
-        "loop", "multiple-value-bind", "progn", "typecase", "unless", "when"
+        "case", "ecase", "do-all-symbols", "do-external-symbols", "do-symbols",
+        "dolist", "dotimes", "flet", "lambda", "let", "let*", "loop",
+        "multiple-value-bind", "progn", "typecase", "unless", "when"
     };
 
     private final String[] elispSpecials = new String[] {
@@ -171,7 +171,8 @@ public class LispMode extends AbstractMode implements Constants, Mode
         if (modelTrim.charAt(0) == ';')
             return modelIndent;
         final int indentSize = buffer.getIndentSize();
-        Position pos = findContainingSexp(new Position(line, 0));
+        Position here = new Position(line, 0);
+        Position pos = findContainingSexp(here);
         if (pos == null) // Top level.
             return 0;
         Debug.bugIfNot(pos.getChar() == '(');
@@ -187,6 +188,26 @@ public class LispMode extends AbstractMode implements Constants, Mode
             }
             // Otherwise...
             String token = gatherToken(posFirst);
+            if (token.equals("do") || token.equals("do*")) {
+                // Skip DO/DO*.
+                Position p1 = forwardSexp(posFirst);
+                if (p1 != null) {
+                    // Skip whitespace to get to opening '(' of variable list.
+                    p1.skipWhitespace();
+                    // Skip past variable list.
+                    Position p2 = forwardSexp(p1);
+                    if (p2 != null) {
+                        // Skip past end test form.
+                        p2 = forwardSexp(p2);
+                        if (p2 != null && here.isBefore(p2)) {
+                            // This is the end test form. Indent it under the
+                            // opening '(' of the variable list
+                            return buffer.getCol(p1);
+                        }
+                    }
+                }
+                return buffer.getCol(pos) + indentSize;
+            }
             if (token.startsWith("def") ||
                 Utilities.isOneOf(token, specials) ||
                 Utilities.isOneOf(token, elispSpecials) ||
