@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractString.java,v 1.4 2004-04-24 12:44:09 piso Exp $
+ * $Id: AbstractString.java,v 1.5 2004-05-09 16:35:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public abstract class AbstractString extends AbstractVector
         limit = length();
         if (endIndex > limit)
             endIndex = limit;
-        if (_PRINT_ESCAPE_.symbolValue() != NIL) {
+        if (_PRINT_ESCAPE_.symbolValue() != NIL || _PRINT_READABLY_.symbolValue() != NIL) {
             StringBuffer sb = new StringBuffer();
             sb.append('"');
             for (int i = beginIndex; i < endIndex; i++) {
