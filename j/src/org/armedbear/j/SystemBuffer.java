@@ -2,7 +2,7 @@
  * SystemBuffer.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SystemBuffer.java,v 1.6 2002-10-11 01:37:49 piso Exp $
+ * $Id: SystemBuffer.java,v 1.7 2002-10-11 16:00:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,6 @@ public class SystemBuffer implements Constants
     private File file;
     private String loadEncoding;
     private List tags;
-    private View lastView;
 
     protected SystemBuffer()
     {
@@ -128,12 +127,12 @@ public class SystemBuffer implements Constants
         return mode == null ? null : mode.toString();
     }
 
-    public final List getTags()
+    public synchronized final List getTags()
     {
         return tags;
     }
 
-    public final void setTags(List tags)
+    public synchronized final void setTags(List tags)
     {
         this.tags = tags;
     }
@@ -146,26 +145,6 @@ public class SystemBuffer implements Constants
     public String getLineSeparator()
     {
         return lineSeparator;
-    }
-
-    public final View getLastView()
-    {
-        if (lastView != null)
-            return (View) lastView.clone();
-        else
-            return null;
-    }
-
-    public final void setLastView(View view)
-    {
-        lastView = (View) view.clone();
-    }
-
-    public void saveView(Editor editor)
-    {
-        final View view = saveViewInternal(editor);
-        editor.setView(this, view);
-        setLastView(view);
     }
 
     protected View saveViewInternal(Editor editor)
@@ -567,27 +546,6 @@ public class SystemBuffer implements Constants
             }
         }
         return bytes;
-    }
-
-    public void empty()
-    {
-        _empty();
-        setTags(null);
-        // Invalidate any stored views that are referencing the old contents
-        // of this buffer.
-        if (lastView != null)
-            lastView.invalidate();
-        for (EditorIterator it = new EditorIterator(); it.hasNext();) {
-            Editor ed = it.nextEditor();
-            View view = ed.getView(this);
-            if (view != null)
-                view.invalidate();
-            if (ed.getBuffer() == this) {
-                ed.setDot(null);
-                ed.setMark(null);
-                ed.setTopLine(null);
-            }
-        }
     }
 
     /*package*/ void _empty()
