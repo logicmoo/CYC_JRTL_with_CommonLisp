@@ -1,8 +1,8 @@
 /*
  * LocalMailbox.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: LocalMailbox.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * Copyright (C) 2000-2003 Peter Graves
+ * $Id: LocalMailbox.java,v 1.3 2003-05-30 14:34:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -659,6 +659,8 @@ public class LocalMailbox extends Mailbox
         final String name;
         if (isOwned())
             name = mailboxFile.getParentFile().getName();
+        else if (mailboxFile.isLocal())
+            name = mailboxFile.canonicalPath();
         else
             name = mailboxFile.netPath();
         final int newMessageCount = getNewMessageCount();
