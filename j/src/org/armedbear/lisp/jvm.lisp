@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: jvm.lisp,v 1.173 2004-05-31 02:10:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.174 2004-05-31 03:04:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2466,9 +2466,11 @@
               (compile-form (car args))
               (unless (remove-store-value)
                 (emit-push-value))
+              (maybe-emit-clear-values (car args))
               (compile-form (cadr args))
               (unless (remove-store-value)
-                (emit-push-value))))
+                (emit-push-value))
+              (maybe-emit-clear-values (cadr args))))
        (emit-invokevirtual +lisp-thread-class+
                            "setValues"
                            "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;"
