@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Editor.java,v 1.124 2004-05-20 00:05:43 piso Exp $
+ * $Id: Editor.java,v 1.125 2004-05-21 16:49:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4558,12 +4558,22 @@ public final class Editor extends JPanel implements Constants,
             }
         }
 
-        // Check for remote buffer before checking for background process.
         if (buffer instanceof RemoteBuffer && buffer.isEmpty()) {
             killBuffer();
             return;
         }
 
+        if (escapeInternal())
+            return;
+
+        if (selection != null && selection.getSavedDot() != null)
+            moveDotTo(selection.getSavedDot());
+        else if (mark != null)
+            moveDotTo(mark);
+    }
+
+    public boolean escapeInternal()
+    {
         if (buffer instanceof CompilationBuffer) {
             if (buffer.unsplitOnClose()) {
                 buffer.windowClosing();
@@ -4573,9 +4583,8 @@ public final class Editor extends JPanel implements Constants,
             maybeKillBuffer(buffer);
             restoreFocus();
             Sidebar.refreshSidebarInAllFrames();
-            return;
+            return true;
         }
-
         if (buffer.isTransient()) {
             if (buffer.unsplitOnClose()) {
                 buffer.windowClosing();
@@ -4585,18 +4594,16 @@ public final class Editor extends JPanel implements Constants,
             maybeKillBuffer(buffer);
             restoreFocus();
             Sidebar.refreshSidebarInAllFrames();
-            return;
+            return true;
         }
-
         if (buffer.getModeId() == CHECKIN_MODE) {
             otherWindow();
             unsplitWindow();
             if (!buffer.isModified())
                 maybeKillBuffer(buffer);
             restoreFocus();
-            return;
+            return true;
         }
-
         // Check for transient buffer in other editor in current frame.
         Editor ed = getOtherEditor();
         if (ed != null) {
@@ -4608,29 +4615,28 @@ public final class Editor extends JPanel implements Constants,
                 if (!buf.unsplitOnClose())
                     ed.updateDisplay();
                 Sidebar.refreshSidebarInAllFrames();
-                return;
+                return true;
             }
             if (buf.isTransient()) {
-                if (buf.unsplitOnClose())
+                Log.debug("transient in other editor");
+                if (buf.unsplitOnClose()) {
+                    Log.debug("unsplit on close");
                     unsplitWindow();
+                }
                 maybeKillBuffer(buf);
                 if (!buf.unsplitOnClose())
                     ed.updateDisplay();
                 Sidebar.refreshSidebarInAllFrames();
-                return;
+                return true;
             }
             if (buf.getModeId() == CHECKIN_MODE) {
                 unsplitWindow();
                 if (!buf.isModified())
                     maybeKillBuffer(buf);
-                return;
+                return true;
             }
         }
-
-        if (selection != null && selection.getSavedDot() != null)
-            moveDotTo(selection.getSavedDot());
-        else if (mark != null)
-            moveDotTo(mark);
+        return false;
     }
 
     public void stamp()
