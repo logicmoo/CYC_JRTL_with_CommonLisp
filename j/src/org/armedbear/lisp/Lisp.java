@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Lisp.java,v 1.166 2003-10-17 13:14:11 piso Exp $
+ * $Id: Lisp.java,v 1.167 2003-10-17 14:08:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -266,7 +266,7 @@ public abstract class Lisp
         return results[0];
     }
 
-    public static boolean debug = false;
+    public static boolean debug = true;
 
     private static final Primitive1 INTERACTIVE_EVAL =
         new Primitive1("interactive-eval", PACKAGE_SYS, false)
