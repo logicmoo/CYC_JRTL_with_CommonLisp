@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.99 2004-11-30 05:07:58 piso Exp $
+ * $Id: Stream.java,v 1.100 2004-12-07 01:10:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -745,7 +745,7 @@ public class Stream extends LispObject
         }
         return flags;
     }
-    
+
     public static final String invert(String s, BitSet flags)
     {
         // Section 23.1.2: "When the readtable case is :INVERT, then if all of
@@ -1006,6 +1006,14 @@ public class Stream extends LispObject
 
     // read-char &optional stream eof-error-p eof-value recursive-p => char
     // recursive-p is ignored
+    public LispObject readChar() throws ConditionThrowable
+    {
+        int n = _readChar();
+        if (n < 0)
+            return signal(new EndOfFile(this));
+        return LispCharacter.getInstance((char)n);
+    }
+
     public LispObject readChar(boolean eofError, LispObject eofValue)
         throws ConditionThrowable
     {
