@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Frame.java,v 1.11 2003-06-29 00:50:37 piso Exp $
+ * $Id: Frame.java,v 1.12 2003-06-29 01:26:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -818,7 +818,13 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
 
     public void windowStateChanged(WindowEvent e)
     {
-        storeExtendedState(e.getNewState());
+        int newState = e.getNewState();
+        if (newState == 0) {
+            // Not maximized.
+            if (rect != null)
+                setBounds(rect);
+        }
+        storeExtendedState(newState);
     }
 
     private JComponent focusedComponent;
