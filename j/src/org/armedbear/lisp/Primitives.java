@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.531 2003-12-14 17:18:22 piso Exp $
+ * $Id: Primitives.java,v 1.532 2003-12-15 00:37:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4081,6 +4081,7 @@ public final class Primitives extends Lisp
         }
     };
 
+    // ### %member
     // %member item list key test test-not => tail
     private static final Primitive _MEMBER =
         new Primitive("%member", PACKAGE_SYS, false) {
