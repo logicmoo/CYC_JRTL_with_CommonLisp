@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: P4.java,v 1.14 2004-08-08 00:54:04 piso Exp $
+ * $Id: P4.java,v 1.15 2004-08-18 02:19:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -294,11 +294,11 @@ public class P4 implements Constants
             DiffOutputBuffer buf = new DiffOutputBuffer(parentBuffer, output, VC_P4);
             buf.setTitle(title);
             Editor otherEditor = editor.getOtherEditor();
-            if (otherEditor != null) {
+            if (otherEditor != null)
                 buf.setUnsplitOnClose(otherEditor.getBuffer().unsplitOnClose());
-                otherEditor.makeNext(buf);
-            } else
+            else
                 buf.setUnsplitOnClose(true);
+            editor.makeNext(buf);
             editor.activateInOtherWindow(buf);
             editor.setDefaultCursor();
         }
