@@ -2,7 +2,7 @@
  * AbstractMode.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: AbstractMode.java,v 1.5 2003-05-13 16:39:06 piso Exp $
+ * $Id: AbstractMode.java,v 1.6 2003-05-14 00:08:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -465,17 +465,29 @@ public abstract class AbstractMode implements Constants, Mode
             popup.add(menuItem);
         }
 
+        // Folding.
+        popup.addSeparator();
+        addPopupMenuItem("Fold", "fold", popup, dispatcher);
+        addPopupMenuItem("Unfold", "unfold", popup, dispatcher);
+        addPopupMenuItem("Unfold all", "unfoldAll", popup, dispatcher);
+
         // Properties.
         if (buffer.getFile() != null && !(buffer instanceof Directory)) {
             popup.addSeparator();
-            menuItem = new JMenuItem("Properties");
-            menuItem.setActionCommand("properties");
-            menuItem.addActionListener(dispatcher);
-            popup.add(menuItem);
+            addPopupMenuItem("Properties", "properties", popup, dispatcher);
         }
 
         popup.pack();
         return popup;
+    }
+
+    private void addPopupMenuItem(String text, String command,
+        JPopupMenu popup, Dispatcher dispatcher)
+    {
+        JMenuItem menuItem = new JMenuItem(text);
+        menuItem.setActionCommand(command);
+        menuItem.addActionListener(dispatcher);
+        popup.add(menuItem);
     }
 
     public ToolBar getToolBar(Frame frame)
