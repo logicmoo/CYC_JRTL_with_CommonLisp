@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.15 2003-12-04 19:41:34 piso Exp $
+;;; $Id: init.lisp,v 1.16 2003-12-17 00:10:57 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -97,7 +97,11 @@
             (add-incoming-filter "inbox"
                                  "~C linux-kernel"
                                  "move"
-                                 "{annie}mail/linux-kernel")))
+                                 "{annie}mail/linux-kernel")
+            (add-incoming-filter "inbox"
+                                 "~C ix.netcom.com"
+                                 "move"
+                                 "{annie}mail/netcom")))
 
 (when (probe-file "/home/peter/.j/key-pressed.lisp")
   (load "/home/peter/.j/key-pressed.lisp"))
