@@ -15,6 +15,7 @@
           status
           defcommand
           open-file-hook
+          buffer-activated-hook
           after-save-hook
           key-pressed-hook
           variable-value
@@ -38,21 +39,6 @@
 
 (defun log-debug (control-string &rest args)
   (%log-debug (apply 'format nil control-string args)))
-
-(defun add-hook (hook function)
-  (when (symbolp hook)
-    (unless (boundp hook) (set hook nil))
-    (let ((hook-functions (symbol-value hook)))
-      (unless (memq function hook-functions)
-        (setq hook-functions (cons function hook-functions))
-        (set hook hook-functions)))))
-
-(defun invoke-hook (hook &rest args)
-  (when (symbolp hook)
-    (unless (boundp hook) (set hook nil))
-    (let ((hooks (symbol-value hook)))
-      (dolist (function hooks)
-        (apply function args)))))
 
 (defun update-display (&optional ed)
   (let ((method (jmethod "org.armedbear.j.Editor" "updateDisplay"))
@@ -86,7 +72,25 @@
   `(setf (symbol-function ',name)
          (lambda () (execute-command ,command))))
 
+;;; HOOKS
+(defun add-hook (hook function)
+  (when (symbolp hook)
+    (unless (boundp hook) (set hook nil))
+    (let ((hook-functions (symbol-value hook)))
+      (unless (memq function hook-functions)
+        (setq hook-functions (cons function hook-functions))
+        (set hook hook-functions)))))
+
+(defun invoke-hook (hook &rest args)
+  (when (symbolp hook)
+    (unless (boundp hook) (set hook nil))
+    (let ((hooks (symbol-value hook)))
+      (dolist (function hooks)
+        (apply function args)))))
+
 (defvar open-file-hook nil)
+
+(defvar buffer-activated-hook nil)
 
 (defvar after-save-hook nil)
 

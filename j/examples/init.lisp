@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.14 2003-10-07 14:30:16 piso Exp $
+;;; $Id: init.lisp,v 1.15 2003-12-04 19:41:34 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -45,6 +45,36 @@
       (setf (variable-value 'remove-trailing-whitespace :buffer) nil))))
 
 (add-hook 'open-file-hook 'my-open-file-hook)
+
+;; Helper function for MY-BUFFER-ACTIVATED-HOOK.
+(defun sub-p (pathname dirname)
+  "Returns T if PATHNAME is in DIRNAME or one of its subdirectories"
+  (let ((dirname-length (length dirname)))
+    (and (> (length pathname) dirname-length)
+         (string= (subseq pathname 0 dirname-length) dirname))))
+
+(defun my-buffer-activated-hook (buf)
+  (let ((pathname (buffer-pathname buf)))
+    ;; PATHNAME might be NIL (not all buffers have associated files).
+    (when pathname
+      (let ((type (pathname-type pathname)))
+        ;; We only care about Lisp and Java buffers.
+        (when (member type '("lisp" "lsp" "cl" "java") :test 'string=)
+          (let ((tagpath
+                 (cond ((sub-p pathname "/home/peter/cmucl/src/")
+                        "/home/peter/cmucl/src/code:/home/peter/cmucl/src/compiler:/home/peter/cmucl/src/pcl")
+                       ((sub-p pathname "/home/peter/cl-bench/")
+                        "/home/peter/cl-bench:/home/peter/cl-bench/files:/home/peter/depot/j/src/org/armedbear/lisp")
+                       (t ; default case: no change
+                        nil))))
+            ;; If we end up here with a non-NIL TAGPATH, use it to set the
+            ;; buffer-specific value of the TAG-PATH preference for the current
+            ;; buffer.
+            (when tagpath
+              (setf (variable-value 'tag-path :buffer) tagpath))))))))
+
+;; Install our hook function.
+(add-hook 'buffer-activated-hook 'my-buffer-activated-hook)
 
 ;; Call ADJUST-APPEARANCE after saving ~/.j/prefs.
 (defun my-after-save-hook (buf)
