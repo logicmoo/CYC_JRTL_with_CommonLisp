@@ -10,8 +10,6 @@
   <property name="JAVA" value="${java}"/>
   <property name="JAVA_OPTIONS" value="${java_options}"/>
 
-  <dirname property="LISP_HOME" file="${basedir}/org/armedbear/lisp/Site.java"/>
-
   <property name="debug" value="yes"/>
   <property name="build.compiler.emacs" value="yes"/>
 
@@ -26,9 +24,6 @@
 
   <target name="lisp" depends="prepare">
     <echo message="debug=${debug}" />
-    <filter token="LISP_HOME" value="${LISP_HOME}"/>
-    <copy file="${LISP_HOME}/Site.java.in" tofile="${LISP_HOME}/Site.java" filtering="yes" overwrite="yes"/>
-    <replace file="${LISP_HOME}/Site.java" token="&#92;" value="&#92;&#92;" summary="yes"/>
     <javac
       srcdir="."
       destdir="${basedir}"
