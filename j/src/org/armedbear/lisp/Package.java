@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Package.java,v 1.54 2004-04-20 15:08:35 piso Exp $
+ * $Id: Package.java,v 1.55 2004-05-22 19:32:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,17 @@ public final class Package extends LispObject
     public LispClass classOf()
     {
         return BuiltInClass.PACKAGE;
+    }
+
+    public LispObject getDescription()
+    {
+        if (name != null) {
+            StringBuffer sb = new StringBuffer("The ");
+            sb.append(name);
+            sb.append(" package");
+            return new SimpleString(sb);
+        }
+        return new SimpleString("PACKAGE");
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable

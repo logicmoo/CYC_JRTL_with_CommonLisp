@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SimpleString.java,v 1.14 2004-05-22 17:24:57 piso Exp $
+ * $Id: SimpleString.java,v 1.15 2004-05-22 19:32:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,8 +91,7 @@ public final class SimpleString extends AbstractString
         sb.append(capacity);
         sb.append(") \"");
         sb.append(chars);
-        sb.append("\" at #x");
-        sb.append(Integer.toHexString(System.identityHashCode(this)));
+        sb.append('"');
         return new SimpleString(sb);
     }
 

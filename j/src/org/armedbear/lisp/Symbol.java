@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.129 2004-05-22 17:27:40 piso Exp $
+ * $Id: Symbol.java,v 1.130 2004-05-22 19:30:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -221,6 +221,13 @@ public class Symbol extends LispObject
     public LispClass classOf()
     {
         return BuiltInClass.SYMBOL;
+    }
+
+    public LispObject getDescription()
+    {
+        StringBuffer sb = new StringBuffer("The symbol ");
+        sb.append(name);
+        return new SimpleString(sb);
     }
 
     public LispObject typep(LispObject type) throws ConditionThrowable
@@ -634,8 +641,6 @@ public class Symbol extends LispObject
         }
         return sb.toString();
     }
-
-    private static final LispObject UNBOUND = new SimpleString("..unbound..");
 
     public LispObject getParts() throws ConditionThrowable
     {
