@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Load.java,v 1.68 2004-08-25 17:44:06 piso Exp $
+ * $Id: Load.java,v 1.69 2004-08-26 16:37:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -177,7 +177,7 @@ public final class Load extends Lisp
             if (url != null) {
                 try {
                     in = url.openStream();
-                    truename = url.getPath();
+                    truename = getPath(url);
                 }
                 catch (IOException e) {
                     in = null;
@@ -381,7 +381,7 @@ public final class Load extends Lisp
         if (url != null) {
             String path = url.getPath();
             if (path != null) {
-                if (System.getProperty("os.name").startsWith("Windows")) {
+                if (Utilities.isPlatformWindows()) {
                     if (path.length() > 0 && path.charAt(0) == '/')
                         path = path.substring(1);
                 }
