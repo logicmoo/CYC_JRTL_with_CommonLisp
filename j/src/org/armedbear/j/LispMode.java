@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LispMode.java,v 1.80 2004-09-12 17:45:15 piso Exp $
+ * $Id: LispMode.java,v 1.81 2004-09-13 01:51:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,9 @@ package org.armedbear.j;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.StringTokenizer;
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispObject;
 
 public class LispMode extends AbstractMode implements Constants, Mode
 {
@@ -96,6 +99,21 @@ public class LispMode extends AbstractMode implements Constants, Mode
         menu.add(editor, "Load File", 'L', "loadLispFile", enabled);
         menu.add(editor, "Compile File", 'F', "compileLispFile", enabled);
         menu.add(editor, "Compile and Load File", 'A', "compileAndLoadLispFile", enabled);
+    }
+
+    private static final boolean isSlimeLoaded()
+    {
+        if (Editor.isLispInitialized()) {
+            try {
+                LispObject result =
+                    Interpreter.evaluate("(sys:featurep :slime)");
+                return (result != Lisp.NIL) ? true : false;
+            }
+            catch (Throwable t) {
+                Log.debug(t);
+            }
+        }
+        return false;
     }
 
     public boolean isTaggable()
