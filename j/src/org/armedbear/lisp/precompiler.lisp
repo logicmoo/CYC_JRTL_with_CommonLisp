@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: precompiler.lisp,v 1.31 2004-03-09 18:59:56 piso Exp $
+;;; $Id: precompiler.lisp,v 1.32 2004-03-13 22:08:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -177,10 +177,15 @@
                      result))))))
     (nreverse result)))
 
+(defun precompile-do/do*-end-form (end-form)
+  (let ((end-test-form (car end-form))
+        (result-forms (cdr end-form)))
+    (list* end-test-form (mapcar #'precompile1 result-forms))))
+
 (defun precompile-do/do* (form)
   (list* (car form)
          (precompile-do/do*-vars (cadr form))
-         (caddr form)
+         (precompile-do/do*-end-form (caddr form))
          (mapcar #'precompile1 (cdddr form))))
 
 (defun precompile-do-symbols (form)
