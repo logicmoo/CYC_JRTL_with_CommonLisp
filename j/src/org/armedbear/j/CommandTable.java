@@ -2,7 +2,7 @@
  * CommandTable.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: CommandTable.java,v 1.7 2002-11-15 20:19:53 piso Exp $
+ * $Id: CommandTable.java,v 1.8 2002-11-20 17:57:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -314,6 +314,7 @@ public class CommandTable
             addCommand("properties", "PropertiesDialog");
             addCommand("recentFiles", "RecentFilesDialog");
             addCommand("recompile", "CompilationBuffer");
+            addCommand("renumber", "RegionCommands");
             addCommand("replace", "ReplaceDialog");
             addCommand("replaceInFiles", "FindInFiles");
             addCommand("resetDisplay", "Display");
