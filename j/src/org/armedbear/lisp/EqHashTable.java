@@ -2,7 +2,7 @@
  * EqHashTable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EqHashTable.java,v 1.3 2004-08-19 18:13:15 piso Exp $
+ * $Id: EqHashTable.java,v 1.4 2004-11-23 17:39:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,12 @@ public class EqHashTable extends HashTable
     public EqHashTable(int size, LispObject rehashSize,
                        LispObject rehashThreshold)
     {
-        super(TEST_EQ, size, rehashSize, rehashThreshold);
+        super(size, rehashSize, rehashThreshold);
+    }
+    
+    public Symbol getTest()
+    {
+        return Symbol.EQ;
     }
 
     protected final boolean equals(LispObject o1, LispObject o2)

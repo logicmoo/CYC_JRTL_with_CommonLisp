@@ -2,7 +2,7 @@
  * EqlHashTable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EqlHashTable.java,v 1.2 2004-08-19 18:11:48 piso Exp $
+ * $Id: EqlHashTable.java,v 1.3 2004-11-23 17:39:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,12 @@ public final class EqlHashTable extends HashTable
     public EqlHashTable(int size, LispObject rehashSize,
                         LispObject rehashThreshold)
     {
-        super(TEST_EQL, size, rehashSize, rehashThreshold);
+        super(size, rehashSize, rehashThreshold);
+    }
+
+    public Symbol getTest()
+    {
+        return Symbol.EQL;
     }
 
     protected final boolean equals(LispObject o1, LispObject o2)

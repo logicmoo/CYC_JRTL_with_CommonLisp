@@ -2,7 +2,7 @@
  * EqualHashTable.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: EqualHashTable.java,v 1.3 2004-08-19 18:14:02 piso Exp $
+ * $Id: EqualHashTable.java,v 1.4 2004-11-23 17:39:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,12 @@ public class EqualHashTable extends HashTable
     public EqualHashTable(int size, LispObject rehashSize,
                           LispObject rehashThreshold)
     {
-        super(TEST_EQUAL, size, rehashSize, rehashThreshold);
+        super(size, rehashSize, rehashThreshold);
+    }
+
+    public Symbol getTest()
+    {
+        return Symbol.EQUAL;
     }
 
     protected final boolean equals(LispObject o1, LispObject o2)

@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: HashTable.java,v 1.45 2004-11-12 13:57:06 piso Exp $
+ * $Id: HashTable.java,v 1.46 2004-11-23 17:39:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,6 @@ package org.armedbear.lisp;
 
 public abstract class HashTable extends LispObject
 {
-    protected static final int TEST_EQ     = 0;
-    protected static final int TEST_EQL    = 1;
-    protected static final int TEST_EQUAL  = 2;
-    protected static final int TEST_EQUALP = 3;
-
-    private int test;
-
     protected final LispObject rehashSize;
     protected final LispObject rehashThreshold;
 
@@ -43,12 +36,11 @@ public abstract class HashTable extends LispObject
     protected HashEntry[] buckets;
 
     // The number of key-value pairs.
-    private int count;
+    protected int count;
 
-    protected HashTable(int test, int size, LispObject rehashSize,
+    protected HashTable(int size, LispObject rehashSize,
                         LispObject rehashThreshold)
     {
-        this.test = test;
         this.rehashSize = rehashSize;
         this.rehashThreshold = rehashThreshold;
         buckets = new HashEntry[size];
@@ -87,7 +79,7 @@ public abstract class HashTable extends LispObject
             HashTable ht = (HashTable) obj;
             if (count != ht.count)
                 return false;
-            if (test != ht.test)
+            if (getTest() != ht.getTest())
                 return false;
             LispObject entries = ENTRIES();
             while (entries != NIL) {
@@ -147,31 +139,16 @@ public abstract class HashTable extends LispObject
     }
 
     // remhash key hash-table => generalized-boolean
-    public synchronized LispObject remhash(LispObject key) throws ConditionThrowable
+    public synchronized LispObject remhash(LispObject key)
+        throws ConditionThrowable
     {
         // A value in a Lisp hash table can never be null, so...
         return remove(key) != null ? T : NIL;
     }
 
-    public String writeToString()
+    public String writeToString() throws ConditionThrowable
     {
-        StringBuffer sb = new StringBuffer();
-        switch (test) {
-            case TEST_EQ:
-                sb.append("EQ");
-                break;
-            case TEST_EQL:
-                sb.append("EQL");
-                break;
-            case TEST_EQUAL:
-                sb.append("EQUAL");
-                break;
-            case TEST_EQUALP:
-                sb.append("EQUALP");
-                break;
-            default:
-                Debug.bug();
-        }
+        StringBuffer sb = new StringBuffer(getTest().writeToString());
         sb.append(" hash table, ");
         sb.append(count);
         if (count == 1)
@@ -246,7 +223,7 @@ public abstract class HashTable extends LispObject
     protected abstract boolean equals(LispObject o1, LispObject o2)
         throws ConditionThrowable;
 
-    private void rehash() throws ConditionThrowable
+    protected void rehash() throws ConditionThrowable
     {
         HashEntry[] oldBuckets = buckets;
         int newCapacity = buckets.length * 2 + 1;
@@ -311,7 +288,7 @@ public abstract class HashTable extends LispObject
     {
         long result = 2062775257; // Chosen at random.
         result = mix(result, count);
-        result = mix(result, test);
+        result = mix(result, getTest().sxhash());
         return (int) (result & 0x7fffffff);
     }
 
@@ -486,33 +463,28 @@ public abstract class HashTable extends LispObject
         new Primitive("hash-table-entries", PACKAGE_SYS, false) {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof HashTable)
+            try {
                 return ((HashTable)arg).ENTRIES();
-            return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
         }
     };
+    
+    public abstract Symbol getTest();
 
     private static final Primitive HASH_TABLE_TEST =
         new Primitive("hash-table-test", "hash-table")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof HashTable) {
-                switch (((HashTable)arg).test) {
-                    case TEST_EQ:
-                        return Symbol.EQ;
-                    case TEST_EQL:
-                        return Symbol.EQL;
-                    case TEST_EQUAL:
-                        return Symbol.EQUAL;
-                    case TEST_EQUALP:
-                        return Symbol.EQUALP;
-                    default:
-                        Debug.assertTrue(false);
-                        return NIL;
-                }
+            try {
+                return ((HashTable)arg).getTest();
             }
-            return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
         }
     };
 
@@ -521,9 +493,12 @@ public abstract class HashTable extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof HashTable)
+            try {
                 return new Fixnum(((HashTable)arg).buckets.length);
-            return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
         }
     };
 
@@ -532,9 +507,12 @@ public abstract class HashTable extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof HashTable)
+            try {
                 return ((HashTable)arg).rehashSize;
-            return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
         }
     };
 
@@ -543,9 +521,12 @@ public abstract class HashTable extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (arg instanceof HashTable)
+            try {
                 return ((HashTable)arg).rehashThreshold;
-            return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
+            catch (ClassCastException e) {
+                return signal(new TypeError(arg, Symbol.HASH_TABLE));
+            }
         }
     };
 }
