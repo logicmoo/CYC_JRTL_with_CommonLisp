@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispMode.java,v 1.5 2002-10-14 02:11:57 piso Exp $
+ * $Id: LispMode.java,v 1.6 2002-10-14 03:42:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,20 +115,43 @@ public final class LispMode extends AbstractMode implements Constants, Mode
 
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
+        Position here = new Position(line, 0);
+        Position pos = findContainingSexp(here);
+        if (pos != null && pos.getOffset() > 0) {
+            SyntaxIterator it = getSyntaxIterator(pos);
+            while (true) {
+                char c = it.nextChar();
+                if (Character.isWhitespace(c))
+                    continue;
+                if (c == '(') {
+                    // First element of containing sexp is a list. Indent
+                    // under that list.
+                    return buffer.getCol(it.getPosition());
+                }
+                // Otherwise...
+                if (pos.lineNumber() == here.lineNumber() - 1) {
+                    pos = forwardSexp(pos);
+                    if (pos != null)
+                        return buffer.getCol(pos);
+                }
+                break; // Fall through.
+            }
+        }
+        
         int depth = depth(new Position(line, 0), buffer);
         if (depth > 0)
             return buffer.getIndentSize() * depth;
         return 0;
     }
 
-    private static int depth(Position pos, Buffer buffer)
+    private int depth(Position pos, Buffer buffer)
     {
         if (buffer.needsRenumbering())
             buffer.renumber();
         Position start = findStartOfDefun(pos);
         if (pos.equals(start))
             return 0;
-        LispSyntaxIterator it = new LispSyntaxIterator(start);
+        SyntaxIterator it = getSyntaxIterator(start);
         int depth = 1;
         while (true) {
             char c = it.nextChar();
@@ -153,5 +176,47 @@ public final class LispMode extends AbstractMode implements Constants, Mode
                 return new Position(line, 0);
             line = prev;
         }
+    }
+    
+    protected Position findContainingSexp(Position start)
+    {
+        SyntaxIterator it = getSyntaxIterator(start);
+        int parenCount = 0;
+        while (true) {
+            switch (it.prevChar()) {
+                case ')':
+                    ++parenCount;
+                    break;
+                case '(':
+                    if (parenCount == 0)
+                        return it.getPosition(); // Found unmatched '('.
+                    if (it.getPosition().getOffset() == 0)
+                        return null;
+                    --parenCount;
+                    break;
+                case SyntaxIterator.DONE:
+                    return null;
+                default:
+                    break;
+            }
+        }
+    }
+    
+    protected Position forwardSexp(Position start)
+    {
+        // Skip to whitespace.
+        Position pos = start.copy();
+        while (pos.next()) {
+            char c = pos.getChar();
+            if (Character.isWhitespace(c))
+                break;
+        }
+        // Skip whitespace.
+        while (pos.next()) {
+            char c = pos.getChar();
+            if (!Character.isWhitespace(c))
+                break;
+        }
+        return pos;
     }
 }
