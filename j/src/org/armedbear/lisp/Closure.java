@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Closure.java,v 1.47 2003-07-16 17:20:55 piso Exp $
+ * $Id: Closure.java,v 1.48 2003-07-29 22:43:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,6 @@ public class Closure extends Function
     private final Parameter[] auxVars;
     private final LispObject body;
     private final Environment environment;
-    private final LispObject function;
     private final boolean allowOtherKeys;
     private Symbol restVar;
     private int arity;
@@ -61,7 +60,8 @@ public class Closure extends Function
     }
 
     public Closure(String name, LispObject lambdaList, LispObject body,
-        Environment env) throws LispError
+                   Environment env)
+        throws LispError
     {
         super(name, getCurrentPackage());
         this.lambdaList = lambdaList;
@@ -220,7 +220,6 @@ public class Closure extends Function
         }
         this.body = body;
         this.environment = env;
-        this.function = new Cons(Symbol.LAMBDA, new Cons(lambdaList, body));
         this.allowOtherKeys = allowOtherKeys;
 
         minArgs = requiredParameters != null ? requiredParameters.length : 0;
@@ -250,11 +249,6 @@ public class Closure extends Function
     public final LispObject getParameterList()
     {
         return lambdaList;
-    }
-
-    public final LispObject getFunction()
-    {
-        return function;
     }
 
     // Returns body as a list.
