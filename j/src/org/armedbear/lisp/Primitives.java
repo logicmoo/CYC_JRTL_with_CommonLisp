@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Primitives.java,v 1.112 2003-03-12 21:13:44 piso Exp $
+ * $Id: Primitives.java,v 1.113 2003-03-12 21:38:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -4044,9 +4044,11 @@ public final class Primitives extends Module
             if (length < 1 || length > 2)
                 throw new WrongNumberOfArgumentsException(this);
             long limit = Fixnum.getValue(args[0]);
-            // FIXME Ignore RANDOM-STATE argument for now.
-            Random random =
-                (Random) JavaObject.getObject(_RANDOM_STATE_.symbolValueNoThrow());
+            Random random;
+            if (length == 2)
+                random = (Random) JavaObject.getObject(args[1]);
+            else
+                random = (Random) JavaObject.getObject(_RANDOM_STATE_.symbolValueNoThrow());
             if (limit <= Integer.MAX_VALUE) {
                 int n = random.nextInt((int)limit);
                 Debug.assertTrue(n < limit);
@@ -4056,6 +4058,16 @@ public final class Primitives extends Module
             long n = (long) (d * limit);
             Debug.assertTrue(n < limit);
             return new Fixnum(n);
+        }
+    };
+
+    // ### make-random-state
+    private static final Primitive MAKE_RANDOM_STATE =
+        new Primitive("make-random-state") {
+        public LispObject execute(LispObject[] args) throws Condition
+        {
+            // FIXME Ignore arguments (or lack thereof).
+            return new JavaObject(new Random());
         }
     };
 
