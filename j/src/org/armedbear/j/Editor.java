@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Editor.java,v 1.66 2003-06-13 15:26:42 piso Exp $
+ * $Id: Editor.java,v 1.67 2003-06-13 16:16:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -7159,9 +7159,9 @@ public final class Editor extends JPanel implements Constants, ComponentListener
         }
     }
 
-    public static void runHooks(String hook, String args)
+    public static void invokeHook(String hook, String args)
     {
-        FastStringBuffer sb = new FastStringBuffer("(run-hooks '");
+        FastStringBuffer sb = new FastStringBuffer("(invoke-hook '");
         sb.append(hook);
         if (args != null && args.length() > 0) {
             sb.append(' ');

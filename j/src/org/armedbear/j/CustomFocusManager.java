@@ -1,8 +1,8 @@
 /*
  * CustomFocusManager.java
  *
- * Copyright (C) 1999-2002 Peter Graves
- * $Id: CustomFocusManager.java,v 1.3 2003-02-23 01:21:55 piso Exp $
+ * Copyright (C) 1999-2003 Peter Graves
+ * $Id: CustomFocusManager.java,v 1.4 2003-06-13 16:17:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public final class CustomFocusManager extends DefaultFocusManager
                     km = new KeyMapping(keyCode, e.getModifiers(), null);
                 else
                     km = new KeyMapping(e.getKeyChar(), null);
-                Editor.runHooks("key-pressed-hook",
+                Editor.invokeHook("key-pressed-hook",
                     "\"" + km.toString() + "\"");
             }
         }
