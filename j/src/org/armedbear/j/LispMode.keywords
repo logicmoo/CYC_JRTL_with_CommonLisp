@@ -10,6 +10,7 @@
 >
 >=
 abort
+adjoin
 and
 append
 apply
