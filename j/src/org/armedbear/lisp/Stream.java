@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: Stream.java,v 1.26 2004-02-24 22:22:23 piso Exp $
+ * $Id: Stream.java,v 1.27 2004-02-25 01:23:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,7 +277,7 @@ public class Stream extends LispObject
         }
     }
 
-    private String _readString() throws ConditionThrowable
+    private SimpleString readString() throws ConditionThrowable
     {
         StringBuffer sb = new StringBuffer();
         while (true) {
@@ -304,12 +304,7 @@ public class Stream extends LispObject
             // Default.
             sb.append(c);
         }
-        return sb.toString();
-    }
-
-    private SimpleString readString() throws ConditionThrowable
-    {
-        return new SimpleString(_readString());
+        return new SimpleString(sb);
     }
 
     private LispObject readPathname() throws ConditionThrowable
