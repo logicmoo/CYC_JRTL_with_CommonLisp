@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: Shell.java,v 1.21 2003-01-04 02:17:07 piso Exp $
+ * $Id: Shell.java,v 1.22 2003-01-04 02:33:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,11 +96,8 @@ public class Shell extends CommandInterpreter implements Constants
         shell.startProcess();
         if (shell.getProcess() == null) {
             Editor.getBufferList().remove(shell);
-            String message;
-            if (Utilities.haveJpty())
-                message = "Unable to start shell process \"" + shell.shellCommand + "\"";
-            else
-                message = JPTY_NOT_FOUND;
+            String message =
+                "Unable to start shell process \"" + shell.shellCommand + "\"";
             MessageDialog.showMessageDialog(message, "Error");
             return null;
         }
@@ -118,44 +115,30 @@ public class Shell extends CommandInterpreter implements Constants
                 initialDir = Editor.getUserHomeDirectory();
         }
 
-        Process p = null;
-        
         // Shell command may contain a space (e.g. "bash -i").
         StringTokenizer st = new StringTokenizer(shellCommand);
-        
+
         String[] cmdArray;
+        int i = 0;
         if (Utilities.haveJpty()) {
-            cmdArray = new String[st.countTokens() + 3];
-            int i = 0;
+            cmdArray = new String[st.countTokens() + 1];
             cmdArray[i++] = "jpty";
-            cmdArray[i++] = "-cd";
-            cmdArray[i++] = initialDir.canonicalPath();
-            while (st.hasMoreTokens())
-                cmdArray[i++] = st.nextToken();
-            try {
-                p = Runtime.getRuntime().exec(cmdArray);
-                setProcess(p);
-            }
-            catch (Throwable t) {
-                setProcess(null);
-                return;
-            }
-        } else {
+        } else
             cmdArray = new String[st.countTokens()];
-            int i = 0;
-            while (st.hasMoreTokens())
-                cmdArray[i++] = st.nextToken();
-            try {
-                p = Runtime.getRuntime().exec(cmdArray, null,
-                    new java.io.File(initialDir.canonicalPath()));
-                setProcess(p);
-            }
-            catch (Throwable t) {
-                setProcess(null);
-                return;
-            }            
+        while (st.hasMoreTokens())
+            cmdArray[i++] = st.nextToken();
+
+        Process p = null;
+        try {
+            p = Runtime.getRuntime().exec(cmdArray, null,
+                new java.io.File(initialDir.canonicalPath()));
+            setProcess(p);
         }
-        
+        catch (Throwable t) {
+            setProcess(null);
+            return;
+        }
+
         currentDir = initialDir;
         startWatcherThread();
 
@@ -531,7 +514,8 @@ public class Shell extends CommandInterpreter implements Constants
     protected void updateLineFlags()
     {
         Debug.assertTrue(SwingUtilities.isEventDispatchThread());
-        Debug.assertTrue(posEndOfOutput != null);
+        if (posEndOfOutput == null)
+            return;
         final Line last = posEndOfOutput.getLine();
         if (isPasswordPrompt(last)) {
             last.setFlags(STATE_PASSWORD_PROMPT);
@@ -589,9 +573,16 @@ public class Shell extends CommandInterpreter implements Constants
     {
         if (!Editor.checkExperimental())
             return;
-        if (Platform.isPlatformWindows())
+        if (Platform.isPlatformWindows()) {
             if (!Platform.isPlatformWindows5())
                 return;
+        } else {
+            // Unix.
+            if (!Utilities.haveJpty()) {
+                MessageDialog.showMessageDialog(JPTY_NOT_FOUND, "Error");
+                return;
+            }
+        }
         // Look for existing shell buffer.
         Buffer buf = null;
         for (BufferIterator it = new BufferIterator(); it.hasNext();) {
