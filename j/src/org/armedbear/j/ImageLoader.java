@@ -2,7 +2,7 @@
  * ImageLoader.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImageLoader.java,v 1.1.1.1 2002-09-24 16:08:12 piso Exp $
+ * $Id: ImageLoader.java,v 1.2 2002-11-27 23:59:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class ImageLoader
     {
         final Editor editor = Editor.currentEditor();
         editor.setWaitCursor();
-        image = Toolkit.getDefaultToolkit().getImage(file.canonicalPath());
+        image = Toolkit.getDefaultToolkit().createImage(file.canonicalPath());
         mt = new MediaTracker(editor);
         try {
             mt.addImage(image, 0);
