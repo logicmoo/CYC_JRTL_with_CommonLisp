@@ -2,7 +2,7 @@
  * MailboxProperties.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: MailboxProperties.java,v 1.1.1.1 2002-09-24 16:09:54 piso Exp $
+ * $Id: MailboxProperties.java,v 1.2 2003-02-25 16:52:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,8 +214,10 @@ public final class MailboxProperties
                     while (it.hasNext()) {
                         Property property = (Property) it.next();
                         Object value = properties.getProperty(property);
-                        sb.append(propertyToXml(property.getDisplayName(),
-                            value.toString()));
+                        if (value != null) {
+                            sb.append(propertyToXml(property.getDisplayName(),
+                                value.toString()));
+                        }
                     }
                 }
             }
@@ -260,11 +262,15 @@ public final class MailboxProperties
             } else if (name.equals("property")) {
                 Debug.assertTrue(currentEntry != null);
                 String key = attributes.getValue("name");
-                String value = attributes.getValue("value");
-                Property property = Property.findProperty(key);
-                if (property != null)
-                    currentEntry.properties.setPropertyFromString(property,
-                        value);
+                if (key != null) {
+                    String value = attributes.getValue("value");
+                    if (value != null) {
+                        Property property = Property.findProperty(key);
+                        if (property != null)
+                            currentEntry.properties.setPropertyFromString(property,
+                                value);
+                    }
+                }
             }
         }
 
