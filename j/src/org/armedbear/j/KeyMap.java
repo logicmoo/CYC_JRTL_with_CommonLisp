@@ -2,7 +2,7 @@
  * KeyMap.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: KeyMap.java,v 1.17 2003-10-15 12:54:35 piso Exp $
+ * $Id: KeyMap.java,v 1.18 2003-10-15 14:56:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,7 +187,6 @@ public final class KeyMap implements Constants
             mapKey(KeyEvent.VK_F, CTRL_MASK, "find");
         mapKey(KeyEvent.VK_F3, ALT_MASK, "find");
 
-        mapKey(KeyEvent.VK_L, ALT_MASK, "listOccurrences");
         mapKey(KeyEvent.VK_L, CTRL_MASK | ALT_MASK, "listOccurrencesOfPatternAtDot");
 
         mapKey(KeyEvent.VK_F3, 0, "findNext");
@@ -196,7 +195,7 @@ public final class KeyMap implements Constants
         mapKey(KeyEvent.VK_H, CTRL_MASK, "findPrev");
         mapKey(KeyEvent.VK_F6, 0, "findInFiles");
         mapKey(KeyEvent.VK_F, CTRL_MASK | SHIFT_MASK, "findInFiles");
-        mapKey(KeyEvent.VK_L, CTRL_MASK, "listFiles");
+        mapKey(KeyEvent.VK_L, CTRL_MASK, "listOccurrences");
         mapKey(KeyEvent.VK_L, CTRL_MASK | SHIFT_MASK, "listFiles");
         mapKey(KeyEvent.VK_R, CTRL_MASK, "replace");
         mapKey(KeyEvent.VK_R, CTRL_MASK | SHIFT_MASK, "replaceInFiles");
