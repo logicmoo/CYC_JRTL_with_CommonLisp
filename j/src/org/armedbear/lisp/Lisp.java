@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.311 2005-01-22 09:55:17 asimon Exp $
+ * $Id: Lisp.java,v 1.312 2005-01-22 11:39:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -801,7 +801,8 @@ public abstract class Lisp
                 }
                 return signal(new LispError("Unable to load " +
                                             pathname.writeToString()));
-            }
+            } else
+                return signal(new FileError("File not found: " + namestring));
         }
         return signal(new LispError("Unable to load " + namestring));
      }
