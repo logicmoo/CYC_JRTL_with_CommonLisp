@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.34 2003-11-18 03:18:47 piso Exp $
+;;; $Id: defstruct.lisp,v 1.35 2003-11-20 18:42:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
 (defvar *ds-initial-offset*)
 (defvar *ds-predicate*)
 (defvar *ds-print-function*)
+(defvar *ds-slot-descriptions*)
 
 (defun define-constructor (constructor slots)
   (let* ((constructor-name (intern (car constructor)))
@@ -218,14 +219,21 @@
         (*ds-named* nil)
         (*ds-initial-offset* nil)
         (*ds-predicate* nil)
-        (*ds-print-function* nil))
+        (*ds-print-function* nil)
+        (*ds-slot-descriptions* ()))
     (parse-name-and-options (if (atom name-and-options)
                                 (list name-and-options)
                                 name-and-options))
     (when (stringp (car slots))
       (setf (documentation *ds-name* 'structure) (pop slots)))
+    (dolist (slot slots)
+      (let ((slot-description (if (atom slot)
+                                  (list :name slot :initform nil)
+                                  (list :name (car slot) :initform (cadr slot)))))
+        (push slot-description *ds-slot-descriptions*)))
+    (setf *ds-slot-descriptions* (nreverse *ds-slot-descriptions*))
     `(progn
-       (make-structure-class ',*ds-name*)
+       (make-structure-class ',*ds-name* ',*ds-slot-descriptions*)
        ,@(define-constructors slots)
        ,@(define-predicate)
        ,@(define-access-functions slots)
