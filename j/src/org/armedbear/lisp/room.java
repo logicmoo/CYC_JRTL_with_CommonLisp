@@ -2,7 +2,7 @@
  * room.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: room.java,v 1.3 2003-09-25 15:37:08 piso Exp $
+ * $Id: room.java,v 1.4 2003-10-14 12:48:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,47 +21,53 @@
 
 package org.armedbear.lisp;
 
-public final class room extends Lisp
+// ### room
+public final class room extends Primitive
 {
-    private static final Primitive ROOM = new Primitive("room") {
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            Runtime runtime = Runtime.getRuntime();
-            long total = 0;
-            long free = 0;
-            long maxFree = 0;
-            while (true) {
-                try {
-                    runtime.gc();
-                    Thread.currentThread().sleep(100);
-                    runtime.runFinalization();
-                    Thread.currentThread().sleep(100);
-                    runtime.gc();
-                    Thread.currentThread().sleep(100);
-                }
-                catch (InterruptedException e) {}
-                total = runtime.totalMemory();
-                free = runtime.freeMemory();
-                if (free > maxFree)
-                    maxFree = free;
-                else
-                    break;
+    private room()
+    {
+        super("room");
+    }
+
+    public LispObject execute(LispObject[] args) throws ConditionThrowable
+    {
+        Runtime runtime = Runtime.getRuntime();
+        long total = 0;
+        long free = 0;
+        long maxFree = 0;
+        while (true) {
+            try {
+                runtime.gc();
+                Thread.currentThread().sleep(100);
+                runtime.runFinalization();
+                Thread.currentThread().sleep(100);
+                runtime.gc();
+                Thread.currentThread().sleep(100);
             }
-            long used = total - free;
-            CharacterOutputStream out = getStandardOutput();
-            StringBuffer sb = new StringBuffer("Total memory ");
-            sb.append(total);
-            sb.append(" bytes");
-            sb.append(System.getProperty("line.separator"));
-            sb.append(used);
-            sb.append(" bytes used");
-            sb.append(System.getProperty("line.separator"));
-            sb.append(free);
-            sb.append(" bytes free");
-            sb.append(System.getProperty("line.separator"));
-            out.writeString(sb.toString());
-            out.flushOutput();
-            return number(used);
+            catch (InterruptedException e) {}
+            total = runtime.totalMemory();
+            free = runtime.freeMemory();
+            if (free > maxFree)
+                maxFree = free;
+            else
+                break;
         }
-    };
+        long used = total - free;
+        CharacterOutputStream out = getStandardOutput();
+        StringBuffer sb = new StringBuffer("Total memory ");
+        sb.append(total);
+        sb.append(" bytes");
+        sb.append(System.getProperty("line.separator"));
+        sb.append(used);
+        sb.append(" bytes used");
+        sb.append(System.getProperty("line.separator"));
+        sb.append(free);
+        sb.append(" bytes free");
+        sb.append(System.getProperty("line.separator"));
+        out.writeString(sb.toString());
+        out.flushOutput();
+        return number(used);
+    }
+
+    private static final room ROOM = new room();
 }
