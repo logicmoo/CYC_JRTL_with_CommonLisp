@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: clos.lisp,v 1.66 2004-02-07 18:05:08 piso Exp $
+;;; $Id: clos.lisp,v 1.67 2004-02-07 19:50:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -718,7 +718,8 @@
    (body :initarg :body)                   ; :accessor method-body
    (environment :initarg :environment)     ; :accessor method-environment
    (generic-function :initform nil)        ; :accessor method-generic-function
-   (function)))                            ; :accessor method-function
+   (function)                              ; :accessor method-function
+   (documentation)))                       ; :accessor method-documentation
 
 (defvar the-class-standard-method (find-class 'standard-method))
 
@@ -755,6 +756,12 @@
 
 (defun (setf method-function) (new-value method)
   (setf (slot-value method 'function) new-value))
+
+(defun method-documentation (method)
+  (slot-value method 'documentation))
+
+(defun (setf method-documentation) (new-value method)
+  (setf (slot-value method 'documentation) new-value))
 
 ;;; defgeneric
 
@@ -882,7 +889,8 @@
 ;;; defmethod
 
 (defmacro defmethod (&rest args)
-  (multiple-value-bind (function-name qualifiers lambda-list specializers body)
+  (multiple-value-bind
+    (function-name qualifiers lambda-list specializers documentation body)
     (parse-defmethod args)
     `(progn
       (ensure-generic-function
@@ -892,6 +900,7 @@
                      :lambda-list ',lambda-list
                      :qualifiers ',qualifiers
                      :specializers ',specializers
+                     :documentation ,documentation
                      :body ',body
                      :environment (top-level-environment)))))
 
@@ -932,15 +941,18 @@
         (:body (push-on-end arg body))))
     (setf specializers
           (canonicalize-specializers (extract-specializers specialized-lambda-list)))
-    (values function-name
-            qualifiers
-            (extract-lambda-list specialized-lambda-list)
-            specializers
-            (list* 'block
-                   (if (consp function-name)
-                       (cadr function-name)
-                       function-name)
-                   body))))
+    (multiple-value-bind (real-body declarations documentation)
+      (parse-body body)
+      (values function-name
+              qualifiers
+              (extract-lambda-list specialized-lambda-list)
+              specializers
+              documentation
+              (list* 'block
+                     (if (consp function-name)
+                         (cadr function-name)
+                         function-name)
+                     real-body)))))
 
 ;;; Several tedious functions for analyzing lambda lists
 
@@ -1108,13 +1120,15 @@
     new-method))
 
 (defun make-instance-standard-method (method-class
-                                      &key lambda-list qualifiers
-                                      specializers body environment)
+                                      &key
+                                      lambda-list qualifiers specializers
+                                      documentation body environment)
   (declare (ignore method-class))
   (let ((method (std-allocate-instance the-class-standard-method)))
     (setf (method-lambda-list method) lambda-list)
     (setf (method-qualifiers method) qualifiers)
     (setf (method-specializers method) specializers)
+    (setf (method-documentation method) documentation)
     (setf (method-body method) (precompile-form body nil))
     (setf (method-environment method) environment)
     (setf (method-generic-function method) nil)
@@ -1419,6 +1433,36 @@
 
 (defmethod (setf class-name) (new-value (class class))
   (%set-class-name class new-value))
+
+(fmakunbound 'documentation)
+
+(defgeneric documentation (x doc-type))
+
+(defgeneric (setf documentation) (new-value x doc-type))
+
+(defmethod documentation ((x symbol) doc-type)
+  (case doc-type
+    (FUNCTION
+     (get x '%function-documentation))
+    (VARIABLE
+     (get x '%variable-documentation))
+    (STRUCTURE
+     (get x '%structure-documentation))))
+
+(defmethod (setf documentation) (new-value (x symbol) doc-type)
+  (case doc-type
+    (FUNCTION
+     (setf (get x '%function-documentation) docstring))
+    (VARIABLE
+     (setf (get x '%variable-documentation) docstring))
+    (STRUCTURE
+     (setf (get x '%structure-documentation) docstring))))
+
+(defmethod documentation ((x standard-method) (doc-type (eql 't)))
+  (method-documentation x))
+
+(defmethod (setf documentation) (new-value (x standard-method) (doc-type (eql 't)))
+  (setf (method-documentation x) new-value))
 
 ;;; Slot access
 
