@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defstruct.lisp,v 1.24 2003-10-01 13:59:52 piso Exp $
+;;; $Id: defstruct.lisp,v 1.25 2003-10-05 15:36:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,21 +21,32 @@
 
 (defvar *ds-name*)
 (defvar *ds-conc-name*)
-(defvar *ds-constructor*)
+(defvar *ds-constructors*)
 (defvar *ds-copier*)
 (defvar *ds-named*)
 (defvar *ds-predicate*)
 (defvar *ds-print-function*)
 
-(defun define-constructor (slots)
-  (when *ds-constructor*
-    (let* ((constructor (intern *ds-constructor*))
-           (slot-names (mapcar #'(lambda (x) (if (atom x) x (car x))) slots))
-           (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
-           (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
-           (keys (cons '&key slot-descriptions)))
-      `((defun ,constructor ,keys
-          (%make-structure ',*ds-name* (list ,@slot-names)))))))
+(defun define-constructor (constructor slots)
+  (let* ((constructor-name (intern (car constructor)))
+         (slot-names (mapcar #'(lambda (x) (if (atom x) x (car x))) slots))
+         (inits (mapcar #'(lambda (x) (if (atom x) nil (cadr x))) slots))
+         (slot-descriptions (mapcar #'(lambda (x y) (list x y)) slot-names inits))
+         (keys (cons '&key slot-descriptions)))
+    `((defun ,constructor-name ,keys
+        (%make-structure ',*ds-name* (list ,@slot-names))))))
+
+(defun default-constructor-name ()
+  (concatenate 'string "MAKE-" (symbol-name *ds-name*)))
+
+(defun define-constructors (slots)
+  (if *ds-constructors*
+      (let ((results ()))
+        (dolist (constructor *ds-constructors*)
+          (when (car constructor)
+            (setf results (append results (define-constructor constructor slots)))))
+        results)
+      (define-constructor (cons (default-constructor-name) nil) slots)))
 
 (defun define-predicate ()
   (when *ds-predicate*
@@ -73,7 +84,7 @@
         (result ()))
     (dolist (slot slots)
       (let ((slot-name (if (atom slot) slot (car slot))))
-        (setq result (append result (define-access-function slot-name index))))
+        (setf result (append result (define-access-function slot-name index))))
       (incf index))
     result))
 
@@ -88,10 +99,21 @@
                               (cadr option)
                               (make-symbol (string (cadr option))))))
     (:constructor
-     (when (= (length option) 2)
-       (if (null (cadr option))
-           (setf *ds-constructor* nil)
-           (setf *ds-constructor* (symbol-name (cadr option))))))
+     (let* ((args (cdr option))
+            (numargs (length args))
+            name arglist)
+       (case numargs
+         (0 ; Use default name.
+          (setf name (default-constructor-name))
+          (setf arglist nil)
+          (push (list name arglist) *ds-constructors*))
+         (1
+          (if (null (car args))
+              (setf name nil) ; No constructor.
+              (setf name (symbol-name (car args))))
+          (setf arglist nil)
+          (push (list name arglist) *ds-constructors*))
+         (2))))
     (:predicate
      (when (= (length option) 2)
        (if (null (cadr option))
@@ -101,7 +123,6 @@
 (defun parse-name-and-options (name-and-options)
   (setf *ds-name* (car name-and-options))
   (setf *ds-conc-name* (make-symbol (concatenate 'string (symbol-name *ds-name*) "-")))
-  (setf *ds-constructor* (concatenate 'string "MAKE-" (symbol-name *ds-name*)))
   (setf *ds-predicate* (concatenate 'string (symbol-name *ds-name*) "-P"))
   (let ((options (cdr name-and-options)))
     (dolist (option options)
@@ -118,7 +139,7 @@
 (defmacro defstruct (name-and-options &rest slots)
   (let ((*ds-name* nil)
         (*ds-conc-name* nil)
-        (*ds-constructor* nil)
+        (*ds-constructors* nil)
         (*ds-copier* nil)
         (*ds-predicate* nil)
         (*ds-print-function* nil))
@@ -129,7 +150,7 @@
       (setf (documentation *ds-name* 'structure) (pop slots)))
     `(progn
        (make-structure-class ',*ds-name*)
-       ,@(define-constructor slots)
+       ,@(define-constructors slots)
        ,@(define-predicate)
        ,@(define-access-functions slots)
        ,@(define-copier)
