@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispObject.java,v 1.112 2004-12-21 18:03:20 piso Exp $
+ * $Id: LispObject.java,v 1.113 2004-12-21 20:25:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -575,6 +575,11 @@ public class LispObject extends Lisp
         return signal(new TypeError(this, Symbol.NUMBER));
     }
 
+    public boolean isEqualTo(int n) throws ConditionThrowable
+    {
+        return isEqualTo(new Fixnum(n));
+    }
+
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
     {
         signal(new TypeError(this, Symbol.NUMBER));
@@ -585,6 +590,11 @@ public class LispObject extends Lisp
     public LispObject IS_E(LispObject obj) throws ConditionThrowable
     {
         return isEqualTo(obj) ? T : NIL;
+    }
+
+    public boolean isNotEqualTo(int n) throws ConditionThrowable
+    {
+        return isNotEqualTo(new Fixnum(n));
     }
 
     public boolean isNotEqualTo(LispObject obj) throws ConditionThrowable
