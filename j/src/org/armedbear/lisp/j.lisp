@@ -113,7 +113,8 @@
        (setq where (car rest)
              new-value (cadr rest)))
       (t
-       (error 'program-error "SET-VARIABLE-VALUE: wrong number of arguments")))
+       (error 'program-error
+              :format-control "Wrong number of arguments.")))
     (%set-variable-value name kind where new-value)))
 
 (defsetf variable-value set-variable-value)
