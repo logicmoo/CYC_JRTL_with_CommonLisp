@@ -2,7 +2,7 @@
 
 (in-package "COMMON-LISP")
 
-(export '(push prog1 pop the declare declaim locally defstruct))
+(export '(push prog1 pop the declare declaim locally))
 
 (defmacro push (x place)
   `(setf ,place (cons ,x ,place)))
@@ -23,7 +23,5 @@
 
 (defmacro locally (&rest forms) ; FIXME
   `(progn ,@forms))
-
-(defmacro defstruct (&rest ignored) nil) ; FIXME
 
 (provide "macros")
