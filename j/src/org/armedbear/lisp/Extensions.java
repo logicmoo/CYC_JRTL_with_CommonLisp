@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Extensions.java,v 1.25 2004-06-15 02:41:22 piso Exp $
+ * $Id: Extensions.java,v 1.26 2004-06-15 11:26:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,8 +111,7 @@ public final class Extensions extends Lisp
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            Symbol symbol = checkSymbol(arg);
-            return get(symbol, PACKAGE_SYS.intern("SOURCE"), NIL);
+            return get(checkSymbol(arg), Symbol.SOURCE, NIL);
         }
     };
 
