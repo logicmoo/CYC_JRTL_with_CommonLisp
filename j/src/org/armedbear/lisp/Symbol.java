@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: Symbol.java,v 1.117 2004-03-24 01:08:32 piso Exp $
+ * $Id: Symbol.java,v 1.118 2004-03-26 17:35:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -512,8 +512,11 @@ public class Symbol extends LispObject
         if (pkg == currentPackage)
             return s;
         if (currentPackage != null && currentPackage.uses(pkg)) {
-            if (((Package)pkg).findExternalSymbol(name) != null)
-                return s;
+            // Check for name conflict in current package.
+            if (currentPackage.findExternalSymbol(name) == null)
+                if (currentPackage.findInternalSymbol(name) == null)
+                    if (((Package)pkg).findExternalSymbol(name) != null)
+                        return s;
         }
         // Package prefix is necessary.
         String packageName = pkg.getName();
