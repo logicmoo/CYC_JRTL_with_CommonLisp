@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Shell.java,v 1.25 2003-05-11 13:12:17 piso Exp $
+ * $Id: Shell.java,v 1.26 2003-05-16 17:42:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -563,10 +563,10 @@ public class Shell extends CommandInterpreter implements Constants
 
     protected void checkPasswordPrompt()
     {
-        if (isPasswordPrompt(posEndOfOutput.getLine())) {
+        if (posEndOfOutput != null && isPasswordPrompt(posEndOfOutput.getLine())) {
             String password =
                 PasswordDialog.showPasswordDialog(Editor.currentEditor(),
-                                                  "Password:", "Password");
+                    "Password:", "Password");
             if (password != null) {
                 try {
                     stdin.write(password + "\n");
